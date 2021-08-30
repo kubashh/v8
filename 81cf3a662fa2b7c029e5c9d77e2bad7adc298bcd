@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4025e99a_8a70ddee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T12:22:42Z",
+      "side": 1,
+      "message": "Discussion basis",
+      "revId": "81cf3a662fa2b7c029e5c9d77e2bad7adc298bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0a52d5c_128ff0a3",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-30T12:22:42Z",
+      "side": 1,
+      "message": "Suggestions welcome on how to best organize this. Currently we have\n\n--trace-opt: reports bailouts (but not the failing dependency)\n--trace-deopt-verbose: reports late invalidations\n--trace-code-dependencies: reports installation\n\nand added here\n\n--trace-invalid-dependencies: reports early invalidations",
+      "revId": "81cf3a662fa2b7c029e5c9d77e2bad7adc298bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
