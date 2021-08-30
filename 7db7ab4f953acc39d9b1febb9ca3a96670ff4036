@@ -70,6 +70,24 @@
       "parentUuid": "571de780_2a499ce8",
       "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa7af9dd_24877275",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-30T11:33:13Z",
+      "side": 1,
+      "message": "I think we\u0027re discussing member by-value vs by-pointer, not include vs fwd decl, which is not covered by the style guide (\"However, if it would otherwise make sense to use a type as a member by-value, don\u0027t convert it to a pointer just to be able to forward-declare the type.\").\nRegardless, let\u0027s keep it as is for now.",
+      "parentUuid": "c4237c9b_78370844",
+      "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
