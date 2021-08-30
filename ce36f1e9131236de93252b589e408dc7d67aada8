@@ -39,6 +39,30 @@
       },
       "revId": "ce36f1e9131236de93252b589e408dc7d67aada8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c809da33_6d061c3a",
+        "filename": "src/heap/cppgc/page-memory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-30T18:46:29Z",
+      "side": 1,
+      "message": "With the old code we couldn\u0027t because of a recursive lock. Turns out it can be easily restructured to avoid the recursive call and allow for the guard.",
+      "parentUuid": "c4c04607_7987b6cb",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 13
+      },
+      "revId": "ce36f1e9131236de93252b589e408dc7d67aada8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
