@@ -9,6 +9,7 @@
 #include "src/flags/flags.h"
 #if ENABLE_SPARKPLUG
 
+#include "src/base/small-vector.h"
 #include "src/baseline/baseline-compiler.h"
 #include "src/codegen/compiler.h"
 #include "src/execution/isolate.h"
@@ -44,8 +45,7 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
 
   // Immediately compile the function if batch compilation is disabled.
   if (!is_enabled()) {
-    IsCompiledScope is_compiled_scope(
-        function->shared().is_compiled_scope(isolate_));
+    IsCompiledScope is_compiled_scope(shared->is_compiled_scope(isolate_));
     return Compiler::CompileBaseline(
         isolate_, function, Compiler::CLEAR_EXCEPTION, &is_compiled_scope);
   }
@@ -68,18 +68,16 @@ bool BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
            FLAG_baseline_batch_compilation_threshold);
   }
   if (ShouldCompileBatch()) {
-    if (FLAG_trace_baseline_batch_compilation) {
-      CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
-      PrintF(trace_scope.file(),
-             "[Baseline batch compilation] Compiling current batch of %d "
-             "functions\n",
-             (last_index_ + 1));
-    }
-    CompileBatch(function);
+    // CompileBatch(function);
+    CompileHottest(function);
+    ClearBatch();
     return true;
   }
   EnsureQueueCapacity();
-  compilation_queue_->Set(last_index_++, HeapObjectReference::Weak(*shared));
+  // compilation_queue_->Set(
+  //    last_index_++, HeapObjectReference::Weak(function->shared()));
+  compilation_queue_->Set(
+      last_index_++, HeapObjectReference::Weak(function->feedback_vector()));
   return false;
 }
 
@@ -99,20 +97,78 @@ void BaselineBatchCompiler::EnsureQueueCapacity() {
   }
 }
 
-void BaselineBatchCompiler::CompileBatch(Handle<JSFunction> function) {
-  CodePageCollectionMemoryModificationScope batch_allocation(isolate_->heap());
-  {
-    IsCompiledScope is_compiled_scope(
-        function->shared().is_compiled_scope(isolate_));
-    Compiler::CompileBaseline(isolate_, function, Compiler::CLEAR_EXCEPTION,
-                              &is_compiled_scope);
+void BaselineBatchCompiler::CompileHottest(Handle<JSFunction> function) {
+  base::SmallVector<Handle<FeedbackVector>, kInitialQueueSize> hottest;
+  hottest.resize_no_init(last_index_ + 1);
+  hottest[0] = handle(function->feedback_vector(), isolate_);
+  int alive_fbv_count = 1;
+  for (int i = 0; i < last_index_; i++) {
+    MaybeObject maybe_fbv = compilation_queue_->Get(i);
+    HeapObject fbv;
+    if (!maybe_fbv.GetHeapObjectIfWeak(&fbv)) continue;
+    Handle<FeedbackVector> fbv_handle =
+        handle(FeedbackVector::cast(fbv), isolate_);
+    hottest[alive_fbv_count++] = fbv_handle;
+    compilation_queue_->Set(i, HeapObjectReference::ClearedValue(isolate_));
   }
+  // Adjust back in hottest to match the actual number of elements.
+  hottest.pop_back(last_index_ + 1 - alive_fbv_count);
+
+  // hottest is measured by profiler ticks first and invocation count second.
+  std::sort(hottest.begin(), hottest.end(),
+            [](Handle<FeedbackVector> a, Handle<FeedbackVector> b) {
+              return a->profiler_ticks() != b->profiler_ticks()
+                         ? a->profiler_ticks() > b->profiler_ticks()
+                         : a->invocation_count() > b->invocation_count();
+            });
+
+  auto last =
+      std::unique(hottest.begin(), hottest.end(),
+                  [](Handle<FeedbackVector> a, Handle<FeedbackVector> b) {
+                    return a.is_identical_to(b);
+                  });
+  const int unique_cnt = static_cast<int>(last - hottest.begin());
+  const int batch_size = FLAG_baseline_batch_compilation_unique_hottest
+                             ? unique_cnt
+                             : last_index_ + 1;
+  const int hottest_n = std::max(
+      static_cast<int>(batch_size *
+                       FLAG_baseline_batch_compilation_compile_fraction),
+      1);
+  if (FLAG_trace_baseline_batch_compilation) {
+    CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+    PrintF(trace_scope.file(),
+           "[Baseline batch compilation] Compiling hottest %d of current "
+           "batch of %d "
+           "functions (%d unique)\n",
+           hottest_n, (last_index_ + 1), unique_cnt);
+  }
+  CodePageCollectionMemoryModificationScope batch_allocation(isolate_->heap());
+  int compiled = 0;
+  for (auto fbv_iter = hottest.begin();
+       compiled < hottest_n && fbv_iter != last; ++compiled, ++fbv_iter) {
+    Handle<FeedbackVector> fbv = *fbv_iter;
+    CompileFunction(handle(fbv->shared_function_info(), isolate_));
+  }
+}
+
+void BaselineBatchCompiler::CompileBatch(Handle<JSFunction> function) {
+  if (FLAG_trace_baseline_batch_compilation) {
+    CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+    PrintF(trace_scope.file(),
+           "[Baseline batch compilation] Compiling current "
+           "batch of %d "
+           "functions\n",
+           (last_index_ + 1));
+  }
+  CodePageCollectionMemoryModificationScope batch_allocation(isolate_->heap());
+
+  CompileFunction(handle(function->shared(), isolate_));
   for (int i = 0; i < last_index_; i++) {
     MaybeObject maybe_sfi = compilation_queue_->Get(i);
     MaybeCompileFunction(maybe_sfi);
     compilation_queue_->Set(i, HeapObjectReference::ClearedValue(isolate_));
   }
-  ClearBatch();
 }
 
 bool BaselineBatchCompiler::ShouldCompileBatch() const {
@@ -120,17 +176,21 @@ bool BaselineBatchCompiler::ShouldCompileBatch() const {
          FLAG_baseline_batch_compilation_threshold;
 }
 
-bool BaselineBatchCompiler::MaybeCompileFunction(MaybeObject maybe_sfi) {
+void BaselineBatchCompiler::MaybeCompileFunction(MaybeObject maybe_sfi) {
   HeapObject heapobj;
   // Skip functions where the weak reference is no longer valid.
-  if (!maybe_sfi.GetHeapObjectIfWeak(&heapobj)) return false;
+  if (!maybe_sfi.GetHeapObjectIfWeak(&heapobj)) return;
   Handle<SharedFunctionInfo> shared =
       handle(SharedFunctionInfo::cast(heapobj), isolate_);
+  CompileFunction(shared);
+}
+
+void BaselineBatchCompiler::CompileFunction(Handle<SharedFunctionInfo> shared) {
   // Skip functions where the bytecode has been flushed.
-  if (!shared->is_compiled()) return false;
+  if (!shared->is_compiled()) return;
 
   IsCompiledScope is_compiled_scope(shared->is_compiled_scope(isolate_));
-  return Compiler::CompileSharedWithBaseline(
+  Compiler::CompileSharedWithBaseline(
       isolate_, shared, Compiler::CLEAR_EXCEPTION, &is_compiled_scope);
 }
 
