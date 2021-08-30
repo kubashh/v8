@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c680593_e0199ca2",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "\u003e This didn\u0027t happen, did it? \n\nI introduced v8::internal::compiler::AtomicMemoryOrder [0] in the previous CL  [1]. I thought you were arguing against using that here, but looks like I misunderstood you. Do you have any concerns with the current naming in there? Note that it doesn\u0027t distinguish Acquire from Release because it\u0027s distinguished from whether an instruction is a store or a load.\n\nI\u0027m happy to convert this CL to use that enum.\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/atomic-memory-order.h\n[1] https://chromium-review.googlesource.com/c/v8/v8/+/3101765",
+      "parentUuid": "2889cea2_8ffe9c42",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "171aa13a_05252ec6",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 12

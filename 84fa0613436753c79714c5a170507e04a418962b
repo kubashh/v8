@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad4fc13_8cb5c46a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "Sorry about that, added a description.",
+      "parentUuid": "6fb9cdcd_c780577a",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3123900_c89c975a",
@@ -48,6 +66,30 @@
       "writtenOn": "2021-08-30T11:04:33Z",
       "side": 1,
       "message": "GetTSANStoreStub",
+      "range": {
+        "startLine": 513,
+        "startChar": 44,
+        "endLine": 513,
+        "endChar": 66
+      },
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d5614c_d2606750",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3123900_c89c975a",
       "range": {
         "startLine": 513,
         "startChar": 44,
@@ -83,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b864791e_8b3dcc93",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "That\u0027s possible, but I think an if is easier to read, and the compiler will generate the right code (I hope!) anyway since `order` is a template parameter.\n\nThe only reason I specialized the template below is because there\u0027s no way to emit a SeqCst store on an Operand and an Immediate. I can\u0027t use an if, so I explicitly specialized the template to avoid a compile error.",
+      "parentUuid": "f116b854_2635a722",
+      "range": {
+        "startLine": 330,
+        "startChar": 0,
+        "endLine": 377,
+        "endChar": 1
+      },
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5db0279b_62a600b7",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 14
@@ -94,6 +160,24 @@
       "writtenOn": "2021-08-30T11:04:33Z",
       "side": 1,
       "message": "nit: const",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b2b2f4_9bba82fd",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5db0279b_62a600b7",
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -111,6 +195,42 @@
       "writtenOn": "2021-08-30T11:04:33Z",
       "side": 1,
       "message": "Are these additions actually needed here?",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "586681d8_0ef76eaa",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "I admit not understanding why they\u0027re needed for Relaxed (this was from Santiago\u0027s original CL I think). But why would they be needed for Relaxed but not for SeqCst?",
+      "parentUuid": "6d248303_d70ea074",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3da9bbc_20b27251",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:07:11Z",
+      "side": 1,
+      "message": "Good question, I don\u0027t actually know. Given that Relaxed helpers are already on the list, should we remove those as well? Indeed, I do expect to use these in builtins, which would show up in the snapshot eventually. Also happy to relax this at the point when we need it instead of now.",
+      "parentUuid": "6d248303_d70ea074",
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
