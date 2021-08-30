@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003470ee_243ad94b",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-30T23:46:06Z",
+      "side": 1,
+      "message": "Naming thoughts: this name (specifically \"DIFF\" used here) doesn\u0027t evoke what this does to me (thanks for the comment!). How many of these ops are there? If it\u0027s only these three I wonder if writing explicit code for them would be clearer.",
+      "range": {
+        "startLine": 172,
+        "startChar": 8,
+        "endLine": 172,
+        "endChar": 23
+      },
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3e34d8e_1f3dc603",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-08-30T23:46:06Z",
+      "side": 1,
+      "message": "Should there be an #undef down here for the new macro (and what about the other ones)?",
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
