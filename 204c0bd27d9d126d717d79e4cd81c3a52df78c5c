@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f10474de_f1bcdab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-30T15:55:26Z",
+      "side": 1,
+      "message": "Found this one while diagnosing another TSAN issue...\n\nThe lock should be almost always uncontended as we only use the HeapRegistry for verifying pointers.",
+      "revId": "204c0bd27d9d126d717d79e4cd81c3a52df78c5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
