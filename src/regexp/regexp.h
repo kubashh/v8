@@ -75,7 +75,7 @@ class RegExp final : public AllStatic {
   template <class CharT>
   static bool VerifySyntax(Zone* zone, uintptr_t stack_limit,
                            const CharT* input, int input_length,
-                           RegExpFlags flags, const char** error_message_out,
+                           RegExpFlags flags, RegExpError* regexp_error_out,
                            const DisallowGarbageCollection& no_gc);
 
   // Parses the RegExp pattern and prepares the JSRegExp object with
