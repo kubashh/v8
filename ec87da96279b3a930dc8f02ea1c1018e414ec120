@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f49e34e2_a816920a",
+        "filename": "src/builtins/frame-arguments.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "I chose two different names here on purpose.\n`length` because in the Torque world there is no place were we care about the receiver (we always want to use length without receiver). \nI don\u0027t mind changing `length` to `length_without_receiver` though if you prefer it for consistency.\n`actual_count` because \"actual\" implies (although it might not be that obvious) that it is the count that was *actually* passed/is on the stack (without any guarantee wether the receiver is included or not).\n\nIMO using the same name and just suffixing one \"_without_receiver\" might easier lead to wrongly using the property without suffix (especially if we use length, as the same name then has different semantics than before).\nJust my opinion though and if you think anything else makes more sense, I can change the naming.",
+      "parentUuid": "cb1d17c1_2a03ba09",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69b7623c_fdce3fe9",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 4
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f1ee5c2_bed8f725",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14088,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "There is no flag (yet).\nOnce it is introduced, yes at these locations we will need to conditionally sub/add the receiver.\nThats also why the function is not just \"return argc_\". I just removed the lines that modify the return value based on the flags. But agree for now it looks weird, so changed to simply return here and at other locations you mentioned.",
+      "parentUuid": "69b7623c_fdce3fe9",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7f359f8_73f8eee6",
         "filename": "src/codegen/code-stub-assembler.cc",
         "patchSetId": 4
@@ -65,6 +101,24 @@
       "writtenOn": "2021-08-30T13:07:13Z",
       "side": 1,
       "message": "return IntPtrAdd(argc_, ...)",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce16e3e_3fa24c20",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14093,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7f359f8_73f8eee6",
       "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11a0cfaa_f47deaed",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "formal_parameter_count is also used below in line 1373 to push extra arguments (were we don\u0027t want to push the receiver).\nIMO without receiver is better suited here until the receiver is included on all architectures (and we can assume the receiver is included everywhere unconditionally).",
+      "parentUuid": "3d617cce_fdc44cfb",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a03ab0ac_5a35b7fc",
         "filename": "src/objects/shared-function-info-inl.h",
         "patchSetId": 4
@@ -99,6 +171,24 @@
       "writtenOn": "2021-08-30T13:07:13Z",
       "side": 1,
       "message": "just \u0027return ..\u0027",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5766de42_2f8c4a06",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a03ab0ac_5a35b7fc",
       "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -116,6 +206,24 @@
       "writtenOn": "2021-08-30T13:07:13Z",
       "side": 1,
       "message": "Just \u0027return ...\u0027",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e5fefe3_252b3084",
+        "filename": "src/objects/shared-function-info.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-08-30T14:01:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36112e92_9a007d0e",
       "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
