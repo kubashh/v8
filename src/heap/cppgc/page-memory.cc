@@ -193,6 +193,7 @@ PageBackend::PageBackend(PageAllocator& allocator,
 PageBackend::~PageBackend() = default;
 
 Address PageBackend::AllocateNormalPageMemory(size_t bucket) {
+  v8::base::MutexGuard guard(&mutex_);
   std::pair<NormalPageMemoryRegion*, Address> result = page_pool_.Take(bucket);
   if (!result.first) {
     auto pmr =
@@ -210,6 +211,7 @@ Address PageBackend::AllocateNormalPageMemory(size_t bucket) {
 }
 
 void PageBackend::FreeNormalPageMemory(size_t bucket, Address writeable_base) {
+  v8::base::MutexGuard guard(&mutex_);
   auto* pmr = static_cast<NormalPageMemoryRegion*>(
       page_memory_region_tree_.Lookup(writeable_base));
   pmr->Free(writeable_base);
@@ -217,6 +219,7 @@ void PageBackend::FreeNormalPageMemory(size_t bucket, Address writeable_base) {
 }
 
 Address PageBackend::AllocateLargePageMemory(size_t size) {
+  v8::base::MutexGuard guard(&mutex_);
   auto pmr =
       std::make_unique<LargePageMemoryRegion>(allocator_, oom_handler_, size);
   const PageMemory pm = pmr->GetPageMemory();
@@ -227,6 +230,7 @@ Address PageBackend::AllocateLargePageMemory(size_t size) {
 }
 
 void PageBackend::FreeLargePageMemory(Address writeable_base) {
+  v8::base::MutexGuard guard(&mutex_);
   PageMemoryRegion* pmr = page_memory_region_tree_.Lookup(writeable_base);
   page_memory_region_tree_.Remove(pmr);
   auto size = large_page_memory_regions_.erase(pmr);
