@@ -538,6 +538,7 @@ DEFINE_BOOL(assert_types, false,
 DEFINE_BOOL(trace_code_dependencies, false, "trace code dependencies")
 // Depend on --trace-deopt-verbose for reporting dependency invalidations.
 DEFINE_IMPLICATION(trace_code_dependencies, trace_deopt_verbose)
+DEFINE_BOOL(trace_invalid_dependencies, false, "trace invalid dependencies")
 
 #ifdef V8_ALLOCATION_SITE_TRACKING
 #define V8_ALLOCATION_SITE_TRACKING_BOOL true
