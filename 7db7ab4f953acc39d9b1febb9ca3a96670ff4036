@@ -34,6 +34,24 @@
       "parentUuid": "d83e99bb_859386d3",
       "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "571de780_2a499ce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-08-30T08:07:02Z",
+      "side": 1,
+      "message": "If I remember correctly, the choice between unique_ptr or not was mostly random so far.\nWe discussed persisting/not-persisting everything in the past. I looked into that a few months ago. We can\u0027t persist everything because the Marker doesn\u0027t support it. Not-persisting everything is also non-trivial due to calls to Compactor::EnableForNextGCForTesting (although we can get around this one).\n\nCppgc is relatively small. Do you think having these additional includes in heap-base.h would actually be noticeable in build times?\n\nI think it would be good if we can establish a guideline for what we persist and what not. Performance-critical is one option. Alternatively we can decide to persist/not-persist everything that we can (personally I lean towards persisting everything that we can since all these objects live as long as the heap is alive anyway, it simplifies the code, and persisting everything should be better for performance).",
+      "parentUuid": "25e80031_90f2c993",
+      "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
