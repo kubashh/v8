@@ -16,6 +16,24 @@
       "message": "I saw that we always assume a non-null oom_handler and always pass around a reference. Is there are a reason not to embed the oom_handler into HeapBase?",
       "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e80031_90f2c993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-08-30T07:30:54Z",
+      "side": 1,
+      "message": "We used unique_ptr and fwd declarations for non-performance critical pieces (PageBackend, PreFinalizerHandler, StatsCollector...) as hea-base.h is included in a lot of places. Unfortuantely, the src/heap/platform.h include sneaked in due to autocomplete.\n\nI\u0027d just remove the include and use the pattern that we alrady have in place for other parts. Thoughts? (Seems fine either way)",
+      "parentUuid": "d83e99bb_859386d3",
+      "revId": "7db7ab4f953acc39d9b1febb9ca3a96670ff4036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
