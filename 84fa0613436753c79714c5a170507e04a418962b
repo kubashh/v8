@@ -233,6 +233,24 @@
       "parentUuid": "6d248303_d70ea074",
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677fe0fc_110ae95a",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-08-30T22:08:47Z",
+      "side": 1,
+      "message": "Oops, I typed two different responses at different times of the day and forgot. :)",
+      "parentUuid": "d3da9bbc_20b27251",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
