@@ -1065,8 +1065,6 @@ class CodeRef : public HeapObjectRef {
   DEFINE_REF_CONSTRUCTOR(Code, HeapObjectRef)
 
   Handle<Code> object() const;
-
-  unsigned GetInlinedBytecodeSize() const;
 };
 
 // CodeDataContainerRef doesn't appear to be used, but it is used via CodeT when

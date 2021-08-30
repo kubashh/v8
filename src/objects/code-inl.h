@@ -623,17 +623,6 @@ void Code::set_builtin_id(Builtin builtin) {
 
 bool Code::is_builtin() const { return builtin_id() != Builtin::kNoBuiltinId; }
 
-unsigned Code::inlined_bytecode_size() const {
-  unsigned size = RELAXED_READ_UINT_FIELD(*this, kInlinedBytecodeSizeOffset);
-  DCHECK(CodeKindIsOptimizedJSFunction(kind()) || size == 0);
-  return size;
-}
-
-void Code::set_inlined_bytecode_size(unsigned size) {
-  DCHECK(CodeKindIsOptimizedJSFunction(kind()) || size == 0);
-  RELAXED_WRITE_UINT_FIELD(*this, kInlinedBytecodeSizeOffset, size);
-}
-
 bool Code::has_safepoint_info() const {
   return is_turbofanned() || is_wasm_code();
 }

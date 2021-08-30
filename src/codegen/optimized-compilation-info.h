@@ -186,12 +186,6 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     return optimization_id_;
   }
 
-  unsigned inlined_bytecode_size() const { return inlined_bytecode_size_; }
-
-  void set_inlined_bytecode_size(unsigned size) {
-    inlined_bytecode_size_ = size;
-  }
-
   struct InlinedFunctionHolder {
     Handle<SharedFunctionInfo> shared_info;
     Handle<BytecodeArray> bytecode_array;  // Explicit to prevent flushing.
@@ -291,7 +285,6 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
 
   static constexpr int kNoOptimizationId = -1;
   const int optimization_id_;
-  unsigned inlined_bytecode_size_ = 0;
 
   base::Vector<const char> debug_name_;
   std::unique_ptr<char[]> trace_turbo_filename_;

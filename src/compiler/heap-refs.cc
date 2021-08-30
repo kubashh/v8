@@ -3299,16 +3299,6 @@ std::ostream& operator<<(std::ostream& os, const ObjectRef& ref) {
   }
 }
 
-unsigned CodeRef::GetInlinedBytecodeSize() const {
-  unsigned value = object()->inlined_bytecode_size();
-  if (value > 0) {
-    // Don't report inlined bytecode size if the code object was already
-    // deoptimized.
-    value = object()->marked_for_deoptimization() ? 0 : value;
-  }
-  return value;
-}
-
 #undef BIMODAL_ACCESSOR
 #undef BIMODAL_ACCESSOR_B
 #undef BIMODAL_ACCESSOR_C

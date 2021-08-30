@@ -343,9 +343,6 @@ class Code : public HeapObject {
   inline void set_builtin_id(Builtin builtin);
   inline bool is_builtin() const;
 
-  inline unsigned inlined_bytecode_size() const;
-  inline void set_inlined_bytecode_size(unsigned size);
-
   inline bool has_safepoint_info() const;
 
   // [stack_slots]: If {has_safepoint_info()}, the number of stack slots
@@ -522,7 +519,6 @@ class Code : public HeapObject {
   V(kMetadataSizeOffset, kIntSize)                                            \
   V(kFlagsOffset, kInt32Size)                                                 \
   V(kBuiltinIndexOffset, kIntSize)                                            \
-  V(kInlinedBytecodeSizeOffset, kIntSize)                                     \
   /* Offsets describing inline metadata tables, relative to MetadataStart. */ \
   V(kHandlerTableOffsetOffset, kIntSize)                                      \
   V(kConstantPoolOffsetOffset,                                                \
@@ -541,13 +537,13 @@ class Code : public HeapObject {
   // This documents the amount of free space we have in each Code object header
   // due to padding for code alignment.
 #if V8_TARGET_ARCH_ARM64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 16 : 30;
 #elif V8_TARGET_ARCH_MIPS64
   static constexpr int kHeaderPaddingSize = 24;
 #elif V8_TARGET_ARCH_LOONG64
   static constexpr int kHeaderPaddingSize = 24;
 #elif V8_TARGET_ARCH_X64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 16 : 30;
 #elif V8_TARGET_ARCH_ARM
   static constexpr int kHeaderPaddingSize = 12;
 #elif V8_TARGET_ARCH_IA32

@@ -1401,7 +1401,6 @@ struct InliningPhase {
       AddReducer(data, &graph_reducer, &inlining);
     }
     graph_reducer.ReduceGraph();
-    info->set_inlined_bytecode_size(inlining.total_inlined_bytecode_size());
 
     // Skip the "wasm-inlining" phase if there are no Wasm functions calls.
     if (call_reducer.has_wasm_calls()) {

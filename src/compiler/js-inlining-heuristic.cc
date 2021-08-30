@@ -22,8 +22,8 @@ namespace compiler {
   } while (false)
 
 namespace {
-bool IsSmall(int const size) {
-  return size <= FLAG_max_inlined_bytecode_size_small;
+bool IsSmall(BytecodeArrayRef const& bytecode) {
+  return bytecode.length() <= FLAG_max_inlined_bytecode_size_small;
 }
 
 bool CanConsiderForInlining(JSHeapBroker* broker,
@@ -192,14 +192,7 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
       can_inline_candidate = true;
       BytecodeArrayRef bytecode = candidate.bytecode[i].value();
       candidate.total_size += bytecode.length();
-      unsigned inlined_bytecode_size = 0;
-      if (candidate.functions[i].has_value()) {
-        JSFunctionRef function = candidate.functions[i].value();
-        inlined_bytecode_size = function.code().GetInlinedBytecodeSize();
-        candidate.total_size += inlined_bytecode_size;
-      }
-      candidate_is_small = candidate_is_small &&
-                           IsSmall(bytecode.length() + inlined_bytecode_size);
+      candidate_is_small = candidate_is_small && IsSmall(bytecode);
     }
   }
   if (!can_inline_candidate) return NoChange();
@@ -789,15 +782,6 @@ void JSInliningHeuristic::PrintCandidates() {
       os << "  - target: " << shared;
       if (candidate.bytecode[i].has_value()) {
         os << ", bytecode size: " << candidate.bytecode[i]->length();
-        if (candidate.functions[i].has_value()) {
-          JSFunctionRef function = candidate.functions[i].value();
-          unsigned inlined_bytecode_size =
-              function.code().GetInlinedBytecodeSize();
-          if (inlined_bytecode_size > 0) {
-            os << ", existing opt code's inlined bytecode size: "
-               << inlined_bytecode_size;
-          }
-        }
       } else {
         os << ", no bytecode";
       }

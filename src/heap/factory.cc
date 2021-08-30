@@ -157,10 +157,6 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     raw_code.initialize_flags(kind_, is_turbofanned_, stack_slots_,
                               kIsNotOffHeapTrampoline);
     raw_code.set_builtin_id(builtin_);
-    // This might impact direct concurrent reads from TF if we are resetting
-    // this field. We currently assume it's immutable thus a relaxed read (after
-    // passing IsPendingAllocation).
-    raw_code.set_inlined_bytecode_size(inlined_bytecode_size_);
     raw_code.set_code_data_container(*data_container, kReleaseStore);
     raw_code.set_deoptimization_data(*deoptimization_data_);
     if (kind_ == CodeKind::BASELINE) {
