@@ -16,6 +16,40 @@
       "message": "LGTM",
       "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "732c2ed2_7b7eaae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-08-31T12:34:38Z",
+      "side": 1,
+      "message": "Started riscv64 tests and one comment.",
+      "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece3160e_919d45fa",
+        "filename": "src/baseline/riscv64/baseline-assembler-riscv64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-08-31T12:34:38Z",
+      "side": 1,
+      "message": "Do we also need to generate the cmp instruction here like the other architectures do?",
+      "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
