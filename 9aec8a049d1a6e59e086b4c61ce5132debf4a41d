@@ -16,6 +16,23 @@
       "message": "Hello,\n\nI noticed that tracing the v8.turbofan category would crash d8 and chrome 93, since this CL: https://chromium-review.googlesource.com/c/v8/v8/+/2912779. The issue turned to be that the PipelineRunScope isn\u0027t able to nest.\n\nWDYT?\n\nThanks,\nPierre",
       "revId": "9aec8a049d1a6e59e086b4c61ce5132debf4a41d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5161a85_4e1f44ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-31T13:56:14Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "9aec8a049d1a6e59e086b4c61ce5132debf4a41d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
