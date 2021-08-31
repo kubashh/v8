@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e1834fc_cfdf96f0",
+        "filename": "src/builtins/frame-arguments.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-31T06:24:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f49e34e2_a816920a",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69b7623c_fdce3fe9",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "There is no flag (yet).\nOnce it is introduced, yes at these locations we will need to conditionally sub/add the receiver.\nThats also why the function is not just \"return argc_\". I just removed the lines that modify the return value based on the flags. But agree for now it looks weird, so changed to simply return here and at other locations you mentioned.",
       "parentUuid": "69b7623c_fdce3fe9",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ec556b_60ddcdfd",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 14088,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-31T06:24:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1f1ee5c2_bed8f725",
       "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +190,24 @@
       "side": 1,
       "message": "formal_parameter_count is also used below in line 1373 to push extra arguments (were we don\u0027t want to push the receiver).\nIMO without receiver is better suited here until the receiver is included on all architectures (and we can assume the receiver is included everywhere unconditionally).",
       "parentUuid": "3d617cce_fdc44cfb",
+      "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec5edbcc_0b5ec57b",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-31T06:24:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "11a0cfaa_f47deaed",
       "revId": "ec87da96279b3a930dc8f02ea1c1018e414ec120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
