@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2805518_01dbb91b",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-31T00:04:43Z",
+      "side": 1,
+      "message": "I will use this more in https://chromium-review.googlesource.com/c/v8/v8/+/3125434/2\nI think there will be around 5-8 total.\n\nI can rename this to something more verbose, AVX_OP_WITH_DIFF_SSE_INSTR?",
+      "parentUuid": "003470ee_243ad94b",
+      "range": {
+        "startLine": 172,
+        "startChar": 8,
+        "endLine": 172,
+        "endChar": 23
+      },
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3e34d8e_1f3dc603",
         "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2021-08-30T23:46:06Z",
       "side": 1,
       "message": "Should there be an #undef down here for the new macro (and what about the other ones)?",
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9adeac7_deb6219e",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-08-31T00:04:43Z",
+      "side": 1,
+      "message": "We should, but these macros are used in macro-assembler-x64.h and macro-assembler-ia32.h. As we clean up more stuff, we can remove those usages, and then we can #undef them here too.",
+      "parentUuid": "c3e34d8e_1f3dc603",
       "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
