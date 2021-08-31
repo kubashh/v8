@@ -33,6 +33,24 @@
       "message": "Suggestions welcome on how to best organize this. Currently we have\n\n--trace-opt: reports bailouts (but not the failing dependency)\n--trace-deopt-verbose: reports late invalidations\n--trace-code-dependencies: reports installation\n\nand added here\n\n--trace-invalid-dependencies: reports early invalidations",
       "revId": "81cf3a662fa2b7c029e5c9d77e2bad7adc298bcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4572be4b_56a77b06",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-08-31T09:10:44Z",
+      "side": 1,
+      "message": "I\u0027d like to avoid yet another flag. Let\u0027s use --trace-code-dependencies for this CL, perhaps rename it to the more general --trace-compilation-dependencies (not every compilation dependency results in a code dependency).",
+      "parentUuid": "c0a52d5c_128ff0a3",
+      "revId": "81cf3a662fa2b7c029e5c9d77e2bad7adc298bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
