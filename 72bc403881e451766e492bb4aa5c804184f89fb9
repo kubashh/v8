@@ -214,6 +214,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a11d1772_978f42fa",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-31T06:21:20Z",
+      "side": 1,
+      "message": "Ack.. Using std::memory_order in this CL is fine with be but let\u0027s decide and switch to something consistent soon.\n\nTo clarify, I was arguing *for* a custom V8 enum :)",
+      "parentUuid": "1ca1953d_7cef2ed3",
+      "revId": "72bc403881e451766e492bb4aa5c804184f89fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "171aa13a_05252ec6",

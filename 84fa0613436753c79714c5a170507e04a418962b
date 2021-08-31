@@ -251,6 +251,24 @@
       "parentUuid": "d3da9bbc_20b27251",
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aee11e06_6481ce0a",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-08-31T06:21:20Z",
+      "side": 1,
+      "message": "So, if they\u0027re not need (and I don\u0027t think they are), please remove them. This list should be as restrictive as possible. See the comment above, adding here is only needed if the full builtin is somehow pulled into the actual snapshot, i.e. not embedded builtins.",
+      "parentUuid": "677fe0fc_110ae95a",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
