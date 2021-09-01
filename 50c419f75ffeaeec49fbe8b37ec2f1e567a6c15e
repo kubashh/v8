@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b556673_95f6ffb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T01:16:51Z",
+      "side": 1,
+      "message": "Please rename the -util files to -utils (plural)",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "412a591f_883ad765",
+        "filename": "src/objects/option-util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T01:16:51Z",
+      "side": 1,
+      "message": "I would prefer these methods to be named \u0027IntlOptions\u0027 instead of \u0027Options\u0027 to avoid accidental misuse. ecma262 doesn\u0027t yet have a uniform way of dealing with options bags (for example, Error.cause has a Has and a Get, resizable ArrayBuffers have a plain Get) unlike ecma402+Temporal. The 262 editors will talk about what to name these AOs eventually, and when we decide that we can rename these functions to match. Until then I don\u0027t want to give the impression that these are for all options bags.",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
