@@ -34,6 +34,24 @@
       "parentUuid": "9ef8b422_d517efc6",
       "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30875609_7713e004",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-01T10:40:32Z",
+      "side": 1,
+      "message": "Leaving that to owner of bot... FYI, skyostil@",
+      "parentUuid": "9ef11099_17774b3b",
+      "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
