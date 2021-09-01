@@ -269,6 +269,24 @@
       "parentUuid": "677fe0fc_110ae95a",
       "revId": "84fa0613436753c79714c5a170507e04a418962b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa53196_f41ad0f4",
+        "filename": "src/snapshot/startup-serializer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T00:51:33Z",
+      "side": 1,
+      "message": "Turns out relaxed ones _are_ needed, I imagine they\u0027re transitively reachable from the interpreter entry. I\u0027ve removed the SeqCst helpers, which are not reachable.",
+      "parentUuid": "aee11e06_6481ce0a",
+      "revId": "84fa0613436753c79714c5a170507e04a418962b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
