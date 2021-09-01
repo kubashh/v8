@@ -18,6 +18,63 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e933d66_48e69dda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T01:24:35Z",
+      "side": 1,
+      "message": "Sorry, I accidentally pressed send before I finished typing out other comments.\n\nIdeally, we will have unified options bag handling AOs with various options eventually in ecma262 that both ecma402, Temporal, and ecma262 will use, and options-utils should implement those. Until then, I think we should rename them to reflect the fact they are only used by Intl and Temporal.",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a3c603a_32975a66",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T01:24:35Z",
+      "side": 1,
+      "message": "BUILD.bazel needs similar changes.",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2a2918_e6275fc2",
+        "filename": "src/objects/option-util.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-01T01:24:35Z",
+      "side": 1,
+      "message": "This is existing, but is the fact an empty object created actually observable in Intl and Temporal? It might be easier to spec that way, but in the implementation we shouldn\u0027t be creating an empty object only to look up known non-existing properties on it and getting undefined out. We should be directly returning an undefined.\n\nNo urgency, but would be good to do in a followup if this isn\u0027t observable.",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 58
+      },
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "412a591f_883ad765",
