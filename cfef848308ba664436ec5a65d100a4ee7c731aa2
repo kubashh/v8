@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad57da7_614d7d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-09-01T18:42:00Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ece3160e_919d45fa",
@@ -66,6 +83,24 @@
       "side": 1,
       "message": "No need to generate because RISCV64 will take the flow:\n1. Assert(Condition cc, AbortReason reason, Register rs,Operand rt);\n2. Check(cc, reason, rs, rt);\n3. BranchShort(\u0026L, cc, rs, rt); \n4. BranchShortCheck(offset, nullptr, cond, rs, rt);\n\nFinal in BranchShortCheck, the beq/bne/bge/bgt/blt/ble/bgeu/bgtu/bltu/bleu will be generated, so the \"cmp\" and \"branch\" would merged together.",
       "parentUuid": "ece3160e_919d45fa",
+      "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ebfc47a_660931c6",
+        "filename": "src/baseline/riscv64/baseline-assembler-riscv64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1474349
+      },
+      "writtenOn": "2021-09-01T18:42:00Z",
+      "side": 1,
+      "message": "Makes sense. Thanks for the explanation!",
+      "parentUuid": "6f1d6fa3_95bde1ee",
       "revId": "cfef848308ba664436ec5a65d100a4ee7c731aa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
