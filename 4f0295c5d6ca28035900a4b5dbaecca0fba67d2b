@@ -16,6 +16,46 @@
       "message": "I added a new method with similar logic to ParseAndClassifyIdentifier to be used on the shorthand case.",
       "revId": "4f0295c5d6ca28035900a4b5dbaecca0fba67d2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01f2642a_4dd5376b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-09-02T08:45:53Z",
+      "side": 1,
+      "message": "very nice, thanks! one nit, otherwise lgtm",
+      "revId": "4f0295c5d6ca28035900a4b5dbaecca0fba67d2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad47b488_166c6967",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-09-02T08:45:53Z",
+      "side": 1,
+      "message": "Please add a short comment in this function body saying that updates here must be reflected in ParseAndClassifyIdentifier (and a comment in ParseAndClassifyIdentifier saying the same thing)",
+      "range": {
+        "startLine": 1643,
+        "startChar": 23,
+        "endLine": 1643,
+        "endChar": 49
+      },
+      "revId": "4f0295c5d6ca28035900a4b5dbaecca0fba67d2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
