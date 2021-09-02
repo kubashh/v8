@@ -33,6 +33,7 @@ class V8_NODISCARD RegExpStackScope {
 
  private:
   RegExpStack* regexp_stack_;
+  const bool owns_regexp_stack_;
 };
 
 class RegExpStack {
