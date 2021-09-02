@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f0bf38_4dc51bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-02T12:45:46Z",
+      "side": 1,
+      "message": "LGTM with one comment/question",
+      "revId": "49466ea3489567c5eada597fe50b4247243a49cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b978df_cf44dc5b",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-02T12:45:46Z",
+      "side": 1,
+      "message": "Why not FLAG_regexp_tier_up \u003d false?",
+      "revId": "49466ea3489567c5eada597fe50b4247243a49cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
