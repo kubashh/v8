@@ -76,6 +76,7 @@
 #include "src/objects/synthetic-module-inl.h"
 #include "src/profiler/cpu-profiler.h"
 #include "src/profiler/symbolizer.h"
+#include "src/regexp/regexp.h"
 #include "src/strings/unicode-inl.h"
 #include "src/utils/utils.h"
 #include "test/cctest/heap/heap-tester.h"
@@ -21734,11 +21735,53 @@ TEST(RegExpInterruptAndMakeSubjectTwoByteExternal) {
   // experimental engine.
   i::FLAG_enable_experimental_regexp_engine_on_excessive_backtracks = false;
   RegExpInterruptTest test;
-  // We want to be stuck regexp execution, so no fallback to linear-time
-  // engine.
-  // TODO(mbid,v8:10765): Find a way to test interrupt support of the
-  // experimental engine.
   test.RunTest(RegExpInterruptTest::MakeSubjectTwoByteExternal);
+}
+
+namespace {
+
+struct ReenterRegExpData {
+  i::Isolate* isolate;
+  i::Handle<i::JSRegExp> regexp;
+  i::Handle<i::String> subject;
+};
+
+void ReenterRegExp(v8::Isolate* isolate, void* data) {
+  ReenterRegExpData* d = static_cast<ReenterRegExpData*>(data);
+  i::Handle<i::Object> result =
+      i::RegExp::Exec(d->isolate, d->regexp, d->subject, 0,
+                      d->isolate->regexp_last_match_info())
+          .ToHandleChecked();
+  CHECK(result->IsNull());
+}
+
+}  // namespace
+
+// Tests reentrant irregexp calls.
+TEST(RegExpInterruptReentrantExecution) {
+  i::FLAG_regexp_tier_up_ticks = 0;  // Enter irregexp, not the interpreter.
+  LocalContext context;
+  v8::Isolate* isolate = context->GetIsolate();
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  v8::HandleScope scope(isolate);
+
+  i::Handle<i::String> subject = v8::Utils::OpenHandle(*v8_str("aaaa"));
+  i::Handle<i::JSRegExp> regexp = v8::Utils::OpenHandle(
+      *v8::RegExp::New(context.local(), v8_str("(a*)*x"), v8::RegExp::kNone)
+           .ToLocalChecked());
+
+  ReenterRegExpData d;
+  d.isolate = i_isolate;
+  d.regexp = regexp;
+  d.subject = subject;
+
+  isolate->RequestInterrupt(&ReenterRegExp, &d);
+
+  i::Handle<i::Object> result =
+      i::RegExp::Exec(d.isolate, d.regexp, d.subject, 0,
+                      d.isolate->regexp_last_match_info())
+          .ToHandleChecked();
+  CHECK(result->IsNull());
 }
 
 class RequestInterruptTestBase {
