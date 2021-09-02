@@ -16,6 +16,24 @@
       "message": "Hi Clemens,\nJust wanted to double check `emit_s128_set_if_nan` stores only when all lanes are NaN correct?",
       "revId": "ee9ff7ee5d5b0c1815814f9a953a89efd0ec9bf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c552647_cef198c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-02T10:40:29Z",
+      "side": 1,
+      "message": "No, it should store if there is *any* NaN in {src} (see comment in liftoff-assembler.h).\nThibaud, do we have a unit test for this specifically?",
+      "parentUuid": "1801c0b7_98a79de2",
+      "revId": "ee9ff7ee5d5b0c1815814f9a953a89efd0ec9bf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
