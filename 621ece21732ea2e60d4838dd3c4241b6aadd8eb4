@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac5f9e11_3ff1c79c",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T11:17:45Z",
+      "side": 1,
+      "message": "nit: Here and above, do we still need the default arg?",
+      "range": {
+        "startLine": 464,
+        "startChar": 43,
+        "endLine": 464,
+        "endChar": 48
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a73880_272f9361",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T11:17:45Z",
+      "side": 1,
+      "message": "Why can\u0027t we just call the TracedReferenceBase variant of VisitForVisibility in line 840 below?\nWe should only get here with a TracedReference, so I think it\u0027s safe to assume that and crash otherwise.",
+      "range": {
+        "startLine": 821,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 39
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f4bcf57_bfd22d8f",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T11:17:45Z",
+      "side": 1,
+      "message": "Why does this need to be a new visitor? I think we can reuse |object_visitor|.",
+      "range": {
+        "startLine": 882,
+        "startChar": 27,
+        "endLine": 882,
+        "endChar": 62
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
