@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae7ca41_7a9c7af0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-03T12:17:45Z",
+      "side": 1,
+      "message": "Thanks, comment addressed.",
+      "parentUuid": "ffb9ae0a_07214146",
+      "revId": "522819740cb2725f04b0dc36fe442210435c60af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a9ff5ce_a7ebd444",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-03T12:13:53Z",
       "side": 1,
       "message": "Is this needed? Shouldn\u0027t the kExprThrow make the rest of the block unreachable?",
+      "revId": "522819740cb2725f04b0dc36fe442210435c60af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10e0965f_38a32048",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-03T12:17:45Z",
+      "side": 1,
+      "message": "Right, that\u0027s not needed, I removed it.",
+      "parentUuid": "9a9ff5ce_a7ebd444",
       "revId": "522819740cb2725f04b0dc36fe442210435c60af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
