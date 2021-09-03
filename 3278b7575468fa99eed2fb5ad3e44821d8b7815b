@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ec71930_39e93646",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T11:23:05Z",
+      "side": 1,
+      "message": "Thanks. I looked for something like that but missed this method in Heap.",
+      "parentUuid": "9812bc64_cbbaf8c1",
+      "range": {
+        "startLine": 1098,
+        "startChar": 7,
+        "endLine": 1098,
+        "endChar": 11
+      },
+      "revId": "3278b7575468fa99eed2fb5ad3e44821d8b7815b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "653d3764_0f42998f",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-09-03T11:13:08Z",
       "side": 1,
       "message": "I don\u0027t think we need this one, alternatively the list of spaces is different. We could at least encounter:\n- A regular old genertaion object (handled by DCHECK)\n- A large object in the old generation.\n- A read-only object.",
+      "range": {
+        "startLine": 1100,
+        "startChar": 4,
+        "endLine": 1100,
+        "endChar": 48
+      },
+      "revId": "3278b7575468fa99eed2fb5ad3e44821d8b7815b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f700811_d8d87e40",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T11:23:05Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "653d3764_0f42998f",
       "range": {
         "startLine": 1100,
         "startChar": 4,
