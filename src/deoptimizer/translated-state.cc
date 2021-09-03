@@ -1976,12 +1976,12 @@ TranslatedFrame* TranslatedState::GetArgumentsInfoFromJSFrameIndex(
 
           // The argument count for this special case is always the second
           // to last value in the TranslatedFrame. It should also always be
-          // {1}, as the GenericLazyDeoptContinuation builtin has one explicit
-          // argument (the result); the receiver is implicit.
+          // {2}, as the GenericLazyDeoptContinuation builtin has two arguments
+          // (the receiver and the result).
           static constexpr int kTheContext = 1;
           const int height = frames_[i].height() + kTheContext;
           *args_count = frames_[i].ValueAt(height - 1)->GetSmiValue();
-          DCHECK_EQ(*args_count, 1);
+          DCHECK_EQ(*args_count, 1 + kArgcReceiverSlots);
         } else {
           *args_count = frames_[i]
                             .shared_info()

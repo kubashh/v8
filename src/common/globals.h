@@ -1779,7 +1779,15 @@ constexpr int kSwissNameDictionaryInitialCapacity = 4;
 constexpr int kSmallOrderedHashSetMinCapacity = 4;
 constexpr int kSmallOrderedHashMapMinCapacity = 4;
 
-static const uint16_t kDontAdaptArgumentsSentinel = static_cast<uint16_t>(-1);
+#ifdef V8_INCLUDE_RECEIVER_IN_ARGC
+constexpr bool kArgcIncludesReceiver = true;
+constexpr int kArgcReceiverSlots = 1;
+constexpr uint16_t kDontAdaptArgumentsSentinel = 0;
+#else
+constexpr bool kArgcIncludesReceiver = false;
+constexpr int kArgcReceiverSlots = 0;
+constexpr uint16_t kDontAdaptArgumentsSentinel = static_cast<uint16_t>(-1);
+#endif
 
 // Opaque data type for identifying stack frames. Used extensively
 // by the debugger.
