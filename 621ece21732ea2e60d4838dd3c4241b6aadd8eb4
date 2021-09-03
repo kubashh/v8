@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3e4255e_ce0a541f",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T12:35:14Z",
+      "side": 1,
+      "message": "\u003e I didn\u0027t mean set an invariant. I meant to implicitly assume that by calling VisitForVisibility directly. We have implementations for GCed objects and for TraceReferences. If we get a new type, it will fail and crash (or not even build), which will tell us that there\u0027s a problem. I\u0027m just not convinced we need the added abstractions here of initializing another visitor and dispatching. wdyt?\n\nWe would be casting a void* to TraceReferenceBase* here which is not correct as we have a TraceWrapperV8Reference* on the Blink side [1]. There\u0027s no compile time failure but we may or may not crash depending on object layouts.\n\nAlso, this still generally compiles as it uses the same patter as we use to make TraceWrapperV8Reference work:\n  class Foo {\n    DISALLOW_NEW();\n   public:\n    void Trace(Visitor*) const {}\n  };\n  // Adjust TraceTrait.\n  HeapHashMap\u003cWeakMember\u003cA\u003e, Foo\u003e;\n\nI *don\u0027t* think it should work like that but that\u0027s what we have right now because of TraceWrapperV8Reference.\n\nIdeally, we don\u0027t use TraceWrapperV8Reference but just TracedReference (relatively straight forward) and also rely on our EphemeronPair which we would specialize for WeakMemember + Member/TracedReference (seems harder because of Blink collections). This would allow making us all of this more explicit.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/bindings/dom_data_store.h;l\u003d203;drc\u003df6f22e82bcd0d50f390b23ee9688c58de5ae0bdc",
+      "parentUuid": "1e856af5_833ff62e",
+      "range": {
+        "startLine": 821,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 39
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f4bcf57_bfd22d8f",
         "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
         "patchSetId": 2
