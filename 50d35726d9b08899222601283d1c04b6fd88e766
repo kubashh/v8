@@ -16,6 +16,63 @@
       "message": "Hi, shu, I\u0027ve tested that both SpiderMonkey and JSC passed these test262 suites. PTAL, thanks :)",
       "revId": "50d35726d9b08899222601283d1c04b6fd88e766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d05e3c_6a95751d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-03T22:18:48Z",
+      "side": 1,
+      "message": "lgtm modulo nits, thanks for the patch.",
+      "revId": "50d35726d9b08899222601283d1c04b6fd88e766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "896c782f_0782ce65",
+        "filename": "src/builtins/builtins-dataview.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-03T22:18:48Z",
+      "side": 1,
+      "message": "\"Cannot perform DataView Construct on a detached ArrayBuffer\" sounds pretty weird.\n\nLet\u0027s change this to \"DataView constructor\". It\u0027s not that much better, though.",
+      "revId": "50d35726d9b08899222601283d1c04b6fd88e766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c4c0845_f232067f",
+        "filename": "src/builtins/builtins-dataview.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-03T22:18:48Z",
+      "side": 1,
+      "message": "Prefer non-abbreviations, please use data_view here.",
+      "range": {
+        "startLine": 95,
+        "startChar": 21,
+        "endLine": 95,
+        "endChar": 23
+      },
+      "revId": "50d35726d9b08899222601283d1c04b6fd88e766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
