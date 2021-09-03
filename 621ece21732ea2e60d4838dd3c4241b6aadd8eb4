@@ -143,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08401671_26e1b267",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-03T12:59:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3e4255e_ce0a541f",
+      "range": {
+        "startLine": 821,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 39
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f4bcf57_bfd22d8f",
