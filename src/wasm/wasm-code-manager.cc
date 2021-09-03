@@ -2123,6 +2123,12 @@ bool WasmCodeManager::HasMemoryProtectionKeySupport() const {
   return memory_protection_key_ != kNoMemoryProtectionKey;
 }
 
+void WasmCodeManager::InitializeMemoryProtectionKeyForTesting() {
+  if (memory_protection_key_ == kNoMemoryProtectionKey) {
+    memory_protection_key_ = AllocateMemoryProtectionKey();
+  }
+}
+
 std::shared_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     Isolate* isolate, const WasmFeatures& enabled, size_t code_size_estimate,
     std::shared_ptr<const WasmModule> module) {
