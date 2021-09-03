@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbab23b0_2a5b4a93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-09-03T08:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6c2479b_6384b755",
+      "revId": "bc364bd5720b086a4464642e2adc907c9f2131f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feb37606_5bcc90f6",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-09-02T16:45:52Z",
       "side": 1,
       "message": "Unless requested otherwise, please only use this standard testing. Also below.\n\nDuplicating all those other test configs on each builds blows up the test matrix...",
+      "range": {
+        "startLine": 348,
+        "startChar": 6,
+        "endLine": 348,
+        "endChar": 41
+      },
+      "revId": "bc364bd5720b086a4464642e2adc907c9f2131f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "251c1e17_b5383523",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-09-03T08:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feb37606_5bcc90f6",
       "range": {
         "startLine": 348,
         "startChar": 6,
