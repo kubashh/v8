@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ecd652_bf3104d0",
+        "filename": "test/unittests/heap/cppgc/heap-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T13:41:19Z",
+      "side": 1,
+      "message": "yip, done.",
+      "parentUuid": "2f61b983_97c8d7e7",
+      "range": {
+        "startLine": 336,
+        "startChar": 2,
+        "endLine": 336,
+        "endChar": 77
+      },
+      "revId": "699e1a08e793d85d6768b06c340cae18d248a2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9f10c92_74cc4607",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-09-03T13:11:13Z",
       "side": 1,
       "message": "nit: Why do you need a new heap for these tests? I would expect that you pass GetAllocationHandle() or GetHeap() instead of GetPlatformHandle() and reuse GCHeapTests\u0027s heap like in the LargeChainOfNewStates tests.",
+      "range": {
+        "startLine": 353,
+        "startChar": 7,
+        "endLine": 353,
+        "endChar": 11
+      },
+      "revId": "699e1a08e793d85d6768b06c340cae18d248a2cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356fe9d2_349d42f1",
+        "filename": "test/unittests/heap/cppgc/heap-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T13:41:19Z",
+      "side": 1,
+      "message": "Terminate() makes the heap unusable as it enters a disallow-gc scope which prohibits allocations.",
+      "parentUuid": "b9f10c92_74cc4607",
       "range": {
         "startLine": 353,
         "startChar": 7,
