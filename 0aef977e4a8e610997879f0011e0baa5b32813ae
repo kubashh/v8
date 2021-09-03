@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c199b471_9a5b6e95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-03T13:45:51Z",
+      "side": 1,
+      "message": "Yes the goal of having a small CL for flipping the flag was the reason why the changes are guarded by the flag everywhere in the first place.\nThe goal is to get rid of it though as soon as we are sure nothing breaks (and other platforms have been ported), to increase readability of the code again (all those ifs are not that pleasing to look at).\nI am also fine with setting the flag with this CL for some/all architectures, if you prefer that.",
+      "parentUuid": "a9d6580d_08700ff2",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "0aef977e4a8e610997879f0011e0baa5b32813ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6dccb9d8_d465b4b4",
