@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dea4741_b64d6d55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-09-03T14:12:12Z",
+      "side": 1,
+      "message": "Easily revertible CL sgtm, reverting this one because of a small bug would be a much bigger pain.",
+      "parentUuid": "c199b471_9a5b6e95",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "0aef977e4a8e610997879f0011e0baa5b32813ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6dccb9d8_d465b4b4",
