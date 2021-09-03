@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f09b4d0_3521d4ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-03T15:54:33Z",
+      "side": 1,
+      "message": "Thibaud, PTAL.\nZhi FYI (currently on vacation).",
+      "revId": "405d930a648b2a5a5aaff09f3de2016992e79113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
