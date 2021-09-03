@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea2e626e_8d90bca4",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T11:39:57Z",
+      "side": 1,
+      "message": "There\u0027s no invariant that guarantees us that it\u0027s a TracedReference at this point. In Blink we only use it for that type right now but it would work for anything that\u0027s eagerly traced.\n\nSimilarly, we don\u0027t assume anything in the marker and just delegate to TraceTrait.",
+      "parentUuid": "c7a73880_272f9361",
+      "range": {
+        "startLine": 821,
+        "startChar": 2,
+        "endLine": 822,
+        "endChar": 39
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f4bcf57_bfd22d8f",
         "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
         "patchSetId": 2
