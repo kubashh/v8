@@ -1095,6 +1095,12 @@ RUNTIME_FUNCTION(Runtime_PretenureAllocationSite) {
   JSObject object = JSObject::cast(arg);
 
   Heap* heap = object.GetHeap();
+  if (!heap->new_space()->Contains(object)) {
+    // Object is not in new space, thus there is no memento and nothing to do.
+    DCHECK(heap->old_space()->Contains(object));
+    return ReturnFuzzSafe(ReadOnlyRoots(isolate).false_value(), isolate);
+  }
+
   AllocationMemento memento =
       heap->FindAllocationMemento<Heap::kForRuntime>(object.map(), object);
   if (memento.is_null())
