@@ -310,7 +310,7 @@ namespace internal {
   CPP(Illegal)                                                                 \
   CPP(StrictPoisonPillThrower)                                                 \
   CPP(UnsupportedThrower)                                                      \
-  TFJ(ReturnReceiver, 0, kReceiver)                                            \
+  TFJ(ReturnReceiver, kArgcReceiverSlots, kReceiver)                           \
                                                                                \
   /* Array */                                                                  \
   TFC(ArrayConstructor, JSTrampoline)                                          \
@@ -381,13 +381,13 @@ namespace internal {
   TFS(CloneFastJSArrayFillingHoles, kSource)                                   \
   TFS(ExtractFastJSArray, kSource, kBegin, kCount)                             \
   /* ES6 #sec-array.prototype.entries */                                       \
-  TFJ(ArrayPrototypeEntries, 0, kReceiver)                                     \
+  TFJ(ArrayPrototypeEntries, kArgcReceiverSlots, kReceiver)                    \
   /* ES6 #sec-array.prototype.keys */                                          \
-  TFJ(ArrayPrototypeKeys, 0, kReceiver)                                        \
+  TFJ(ArrayPrototypeKeys, kArgcReceiverSlots, kReceiver)                       \
   /* ES6 #sec-array.prototype.values */                                        \
-  TFJ(ArrayPrototypeValues, 0, kReceiver)                                      \
+  TFJ(ArrayPrototypeValues, kArgcReceiverSlots, kReceiver)                     \
   /* ES6 #sec-%arrayiteratorprototype%.next */                                 \
-  TFJ(ArrayIteratorPrototypeNext, 0, kReceiver)                                \
+  TFJ(ArrayIteratorPrototypeNext, kArgcReceiverSlots, kReceiver)               \
   /* https://tc39.github.io/proposal-flatMap/#sec-FlattenIntoArray */          \
   TFS(FlattenIntoArray, kTarget, kSource, kSourceLength, kStart, kDepth)       \
   TFS(FlatMapIntoArray, kTarget, kSource, kSourceLength, kStart, kDepth,       \
@@ -412,8 +412,10 @@ namespace internal {
   TFC(AsyncFunctionLazyDeoptContinuation, AsyncFunctionStackParameter)         \
   TFS(AsyncFunctionAwaitCaught, kAsyncFunctionObject, kValue)                  \
   TFS(AsyncFunctionAwaitUncaught, kAsyncFunctionObject, kValue)                \
-  TFJ(AsyncFunctionAwaitRejectClosure, 1, kReceiver, kSentError)               \
-  TFJ(AsyncFunctionAwaitResolveClosure, 1, kReceiver, kSentValue)              \
+  TFJ(AsyncFunctionAwaitRejectClosure, kArgcReceiverSlots + 1, kReceiver,      \
+      kSentError)                                                              \
+  TFJ(AsyncFunctionAwaitResolveClosure, kArgcReceiverSlots + 1, kReceiver,     \
+      kSentValue)                                                              \
                                                                                \
   /* BigInt */                                                                 \
   CPP(BigIntConstructor)                                                       \
@@ -479,45 +481,45 @@ namespace internal {
   /* ES #sec-date-constructor */                                               \
   CPP(DateConstructor)                                                         \
   /* ES6 #sec-date.prototype.getdate */                                        \
-  TFJ(DatePrototypeGetDate, 0, kReceiver)                                      \
+  TFJ(DatePrototypeGetDate, kArgcReceiverSlots, kReceiver)                     \
   /* ES6 #sec-date.prototype.getday */                                         \
-  TFJ(DatePrototypeGetDay, 0, kReceiver)                                       \
+  TFJ(DatePrototypeGetDay, kArgcReceiverSlots, kReceiver)                      \
   /* ES6 #sec-date.prototype.getfullyear */                                    \
-  TFJ(DatePrototypeGetFullYear, 0, kReceiver)                                  \
+  TFJ(DatePrototypeGetFullYear, kArgcReceiverSlots, kReceiver)                 \
   /* ES6 #sec-date.prototype.gethours */                                       \
-  TFJ(DatePrototypeGetHours, 0, kReceiver)                                     \
+  TFJ(DatePrototypeGetHours, kArgcReceiverSlots, kReceiver)                    \
   /* ES6 #sec-date.prototype.getmilliseconds */                                \
-  TFJ(DatePrototypeGetMilliseconds, 0, kReceiver)                              \
+  TFJ(DatePrototypeGetMilliseconds, kArgcReceiverSlots, kReceiver)             \
   /* ES6 #sec-date.prototype.getminutes */                                     \
-  TFJ(DatePrototypeGetMinutes, 0, kReceiver)                                   \
+  TFJ(DatePrototypeGetMinutes, kArgcReceiverSlots, kReceiver)                  \
   /* ES6 #sec-date.prototype.getmonth */                                       \
-  TFJ(DatePrototypeGetMonth, 0, kReceiver)                                     \
+  TFJ(DatePrototypeGetMonth, kArgcReceiverSlots, kReceiver)                    \
   /* ES6 #sec-date.prototype.getseconds */                                     \
-  TFJ(DatePrototypeGetSeconds, 0, kReceiver)                                   \
+  TFJ(DatePrototypeGetSeconds, kArgcReceiverSlots, kReceiver)                  \
   /* ES6 #sec-date.prototype.gettime */                                        \
-  TFJ(DatePrototypeGetTime, 0, kReceiver)                                      \
+  TFJ(DatePrototypeGetTime, kArgcReceiverSlots, kReceiver)                     \
   /* ES6 #sec-date.prototype.gettimezoneoffset */                              \
-  TFJ(DatePrototypeGetTimezoneOffset, 0, kReceiver)                            \
+  TFJ(DatePrototypeGetTimezoneOffset, kArgcReceiverSlots, kReceiver)           \
   /* ES6 #sec-date.prototype.getutcdate */                                     \
-  TFJ(DatePrototypeGetUTCDate, 0, kReceiver)                                   \
+  TFJ(DatePrototypeGetUTCDate, kArgcReceiverSlots, kReceiver)                  \
   /* ES6 #sec-date.prototype.getutcday */                                      \
-  TFJ(DatePrototypeGetUTCDay, 0, kReceiver)                                    \
+  TFJ(DatePrototypeGetUTCDay, kArgcReceiverSlots, kReceiver)                   \
   /* ES6 #sec-date.prototype.getutcfullyear */                                 \
-  TFJ(DatePrototypeGetUTCFullYear, 0, kReceiver)                               \
+  TFJ(DatePrototypeGetUTCFullYear, kArgcReceiverSlots, kReceiver)              \
   /* ES6 #sec-date.prototype.getutchours */                                    \
-  TFJ(DatePrototypeGetUTCHours, 0, kReceiver)                                  \
+  TFJ(DatePrototypeGetUTCHours, kArgcReceiverSlots, kReceiver)                 \
   /* ES6 #sec-date.prototype.getutcmilliseconds */                             \
-  TFJ(DatePrototypeGetUTCMilliseconds, 0, kReceiver)                           \
+  TFJ(DatePrototypeGetUTCMilliseconds, kArgcReceiverSlots, kReceiver)          \
   /* ES6 #sec-date.prototype.getutcminutes */                                  \
-  TFJ(DatePrototypeGetUTCMinutes, 0, kReceiver)                                \
+  TFJ(DatePrototypeGetUTCMinutes, kArgcReceiverSlots, kReceiver)               \
   /* ES6 #sec-date.prototype.getutcmonth */                                    \
-  TFJ(DatePrototypeGetUTCMonth, 0, kReceiver)                                  \
+  TFJ(DatePrototypeGetUTCMonth, kArgcReceiverSlots, kReceiver)                 \
   /* ES6 #sec-date.prototype.getutcseconds */                                  \
-  TFJ(DatePrototypeGetUTCSeconds, 0, kReceiver)                                \
+  TFJ(DatePrototypeGetUTCSeconds, kArgcReceiverSlots, kReceiver)               \
   /* ES6 #sec-date.prototype.valueof */                                        \
-  TFJ(DatePrototypeValueOf, 0, kReceiver)                                      \
+  TFJ(DatePrototypeValueOf, kArgcReceiverSlots, kReceiver)                     \
   /* ES6 #sec-date.prototype-@@toprimitive */                                  \
-  TFJ(DatePrototypeToPrimitive, 1, kReceiver, kHint)                           \
+  TFJ(DatePrototypeToPrimitive, kArgcReceiverSlots + 1, kReceiver, kHint)      \
   CPP(DatePrototypeGetYear)                                                    \
   CPP(DatePrototypeSetYear)                                                    \
   CPP(DateNow)                                                                 \
@@ -586,9 +588,9 @@ namespace internal {
   CPP(GlobalUnescape)                                                          \
   CPP(GlobalEval)                                                              \
   /* ES6 #sec-isfinite-number */                                               \
-  TFJ(GlobalIsFinite, 1, kReceiver, kNumber)                                   \
+  TFJ(GlobalIsFinite, kArgcReceiverSlots + 1, kReceiver, kNumber)              \
   /* ES6 #sec-isnan-number */                                                  \
-  TFJ(GlobalIsNaN, 1, kReceiver, kNumber)                                      \
+  TFJ(GlobalIsNaN, kArgcReceiverSlots + 1, kReceiver, kNumber)                 \
                                                                                \
   /* JSON */                                                                   \
   CPP(JsonParse)                                                               \
@@ -651,23 +653,23 @@ namespace internal {
   /* Map */                                                                    \
   TFS(FindOrderedHashMapEntry, kTable, kKey)                                   \
   TFJ(MapConstructor, kDontAdaptArgumentsSentinel)                             \
-  TFJ(MapPrototypeSet, 2, kReceiver, kKey, kValue)                             \
-  TFJ(MapPrototypeDelete, 1, kReceiver, kKey)                                  \
-  TFJ(MapPrototypeGet, 1, kReceiver, kKey)                                     \
-  TFJ(MapPrototypeHas, 1, kReceiver, kKey)                                     \
+  TFJ(MapPrototypeSet, kArgcReceiverSlots + 2, kReceiver, kKey, kValue)        \
+  TFJ(MapPrototypeDelete, kArgcReceiverSlots + 1, kReceiver, kKey)             \
+  TFJ(MapPrototypeGet, kArgcReceiverSlots + 1, kReceiver, kKey)                \
+  TFJ(MapPrototypeHas, kArgcReceiverSlots + 1, kReceiver, kKey)                \
   CPP(MapPrototypeClear)                                                       \
   /* ES #sec-map.prototype.entries */                                          \
-  TFJ(MapPrototypeEntries, 0, kReceiver)                                       \
+  TFJ(MapPrototypeEntries, kArgcReceiverSlots, kReceiver)                      \
   /* ES #sec-get-map.prototype.size */                                         \
-  TFJ(MapPrototypeGetSize, 0, kReceiver)                                       \
+  TFJ(MapPrototypeGetSize, kArgcReceiverSlots, kReceiver)                      \
   /* ES #sec-map.prototype.forEach */                                          \
   TFJ(MapPrototypeForEach, kDontAdaptArgumentsSentinel)                        \
   /* ES #sec-map.prototype.keys */                                             \
-  TFJ(MapPrototypeKeys, 0, kReceiver)                                          \
+  TFJ(MapPrototypeKeys, kArgcReceiverSlots, kReceiver)                         \
   /* ES #sec-map.prototype.values */                                           \
-  TFJ(MapPrototypeValues, 0, kReceiver)                                        \
+  TFJ(MapPrototypeValues, kArgcReceiverSlots, kReceiver)                       \
   /* ES #sec-%mapiteratorprototype%.next */                                    \
-  TFJ(MapIteratorPrototypeNext, 0, kReceiver)                                  \
+  TFJ(MapIteratorPrototypeNext, kArgcReceiverSlots, kReceiver)                 \
   TFS(MapIteratorToList, kSource)                                              \
                                                                                \
   /* ES #sec-number-constructor */                                             \
@@ -739,28 +741,28 @@ namespace internal {
   CPP(ObjectDefineProperties)                                                  \
   CPP(ObjectDefineProperty)                                                    \
   CPP(ObjectDefineSetter)                                                      \
-  TFJ(ObjectEntries, 1, kReceiver, kObject)                                    \
+  TFJ(ObjectEntries, kArgcReceiverSlots + 1, kReceiver, kObject)               \
   CPP(ObjectFreeze)                                                            \
   TFJ(ObjectGetOwnPropertyDescriptor, kDontAdaptArgumentsSentinel)             \
   CPP(ObjectGetOwnPropertyDescriptors)                                         \
-  TFJ(ObjectGetOwnPropertyNames, 1, kReceiver, kObject)                        \
+  TFJ(ObjectGetOwnPropertyNames, kArgcReceiverSlots + 1, kReceiver, kObject)   \
   CPP(ObjectGetOwnPropertySymbols)                                             \
-  TFJ(ObjectHasOwn, 2, kReceiver, kObject, kKey)                               \
-  TFJ(ObjectIs, 2, kReceiver, kLeft, kRight)                                   \
+  TFJ(ObjectHasOwn, kArgcReceiverSlots + 2, kReceiver, kObject, kKey)          \
+  TFJ(ObjectIs, kArgcReceiverSlots + 2, kReceiver, kLeft, kRight)              \
   CPP(ObjectIsFrozen)                                                          \
   CPP(ObjectIsSealed)                                                          \
-  TFJ(ObjectKeys, 1, kReceiver, kObject)                                       \
+  TFJ(ObjectKeys, kArgcReceiverSlots + 1, kReceiver, kObject)                  \
   CPP(ObjectLookupGetter)                                                      \
   CPP(ObjectLookupSetter)                                                      \
   /* ES6 #sec-object.prototype.hasownproperty */                               \
-  TFJ(ObjectPrototypeHasOwnProperty, 1, kReceiver, kKey)                       \
-  TFJ(ObjectPrototypeIsPrototypeOf, 1, kReceiver, kValue)                      \
+  TFJ(ObjectPrototypeHasOwnProperty, kArgcReceiverSlots + 1, kReceiver, kKey)  \
+  TFJ(ObjectPrototypeIsPrototypeOf, kArgcReceiverSlots + 1, kReceiver, kValue) \
   CPP(ObjectPrototypePropertyIsEnumerable)                                     \
   CPP(ObjectPrototypeGetProto)                                                 \
   CPP(ObjectPrototypeSetProto)                                                 \
   CPP(ObjectSeal)                                                              \
   TFS(ObjectToString, kReceiver)                                               \
-  TFJ(ObjectValues, 1, kReceiver, kObject)                                     \
+  TFJ(ObjectValues, kArgcReceiverSlots + 1, kReceiver, kObject)                \
                                                                                \
   /* instanceof */                                                             \
   TFC(OrdinaryHasInstance, Compare)                                            \
@@ -792,14 +794,15 @@ namespace internal {
   CPP(RegExpCapture8Getter)                                                    \
   CPP(RegExpCapture9Getter)                                                    \
   /* ES #sec-regexp-pattern-flags */                                           \
-  TFJ(RegExpConstructor, 2, kReceiver, kPattern, kFlags)                       \
+  TFJ(RegExpConstructor, kArgcReceiverSlots + 2, kReceiver, kPattern, kFlags)  \
   CPP(RegExpInputGetter)                                                       \
   CPP(RegExpInputSetter)                                                       \
   CPP(RegExpLastMatchGetter)                                                   \
   CPP(RegExpLastParenGetter)                                                   \
   CPP(RegExpLeftContextGetter)                                                 \
   /* ES #sec-regexp.prototype.compile */                                       \
-  TFJ(RegExpPrototypeCompile, 2, kReceiver, kPattern, kFlags)                  \
+  TFJ(RegExpPrototypeCompile, kArgcReceiverSlots + 2, kReceiver, kPattern,     \
+      kFlags)                                                                  \
   CPP(RegExpPrototypeToString)                                                 \
   CPP(RegExpRightContextGetter)                                                \
                                                                                \
@@ -811,20 +814,20 @@ namespace internal {
                                                                                \
   /* Set */                                                                    \
   TFJ(SetConstructor, kDontAdaptArgumentsSentinel)                             \
-  TFJ(SetPrototypeHas, 1, kReceiver, kKey)                                     \
-  TFJ(SetPrototypeAdd, 1, kReceiver, kKey)                                     \
-  TFJ(SetPrototypeDelete, 1, kReceiver, kKey)                                  \
+  TFJ(SetPrototypeHas, kArgcReceiverSlots + 1, kReceiver, kKey)                \
+  TFJ(SetPrototypeAdd, kArgcReceiverSlots + 1, kReceiver, kKey)                \
+  TFJ(SetPrototypeDelete, kArgcReceiverSlots + 1, kReceiver, kKey)             \
   CPP(SetPrototypeClear)                                                       \
   /* ES #sec-set.prototype.entries */                                          \
-  TFJ(SetPrototypeEntries, 0, kReceiver)                                       \
+  TFJ(SetPrototypeEntries, kArgcReceiverSlots, kReceiver)                      \
   /* ES #sec-get-set.prototype.size */                                         \
-  TFJ(SetPrototypeGetSize, 0, kReceiver)                                       \
+  TFJ(SetPrototypeGetSize, kArgcReceiverSlots, kReceiver)                      \
   /* ES #sec-set.prototype.foreach */                                          \
   TFJ(SetPrototypeForEach, kDontAdaptArgumentsSentinel)                        \
   /* ES #sec-set.prototype.values */                                           \
-  TFJ(SetPrototypeValues, 0, kReceiver)                                        \
+  TFJ(SetPrototypeValues, kArgcReceiverSlots, kReceiver)                       \
   /* ES #sec-%setiteratorprototype%.next */                                    \
-  TFJ(SetIteratorPrototypeNext, 0, kReceiver)                                  \
+  TFJ(SetIteratorPrototypeNext, kArgcReceiverSlots, kReceiver)                 \
   TFS(SetOrSetIteratorToList, kSource)                                         \
                                                                                \
   /* SharedArrayBuffer */                                                      \
@@ -833,16 +836,17 @@ namespace internal {
   /* https://tc39.es/proposal-resizablearraybuffer/ */                         \
   CPP(SharedArrayBufferPrototypeGrow)                                          \
                                                                                \
-  TFJ(AtomicsLoad, 2, kReceiver, kArray, kIndex)                               \
-  TFJ(AtomicsStore, 3, kReceiver, kArray, kIndex, kValue)                      \
-  TFJ(AtomicsExchange, 3, kReceiver, kArray, kIndex, kValue)                   \
-  TFJ(AtomicsCompareExchange, 4, kReceiver, kArray, kIndex, kOldValue,         \
-      kNewValue)                                                               \
-  TFJ(AtomicsAdd, 3, kReceiver, kArray, kIndex, kValue)                        \
-  TFJ(AtomicsSub, 3, kReceiver, kArray, kIndex, kValue)                        \
-  TFJ(AtomicsAnd, 3, kReceiver, kArray, kIndex, kValue)                        \
-  TFJ(AtomicsOr, 3, kReceiver, kArray, kIndex, kValue)                         \
-  TFJ(AtomicsXor, 3, kReceiver, kArray, kIndex, kValue)                        \
+  TFJ(AtomicsLoad, kArgcReceiverSlots + 2, kReceiver, kArray, kIndex)          \
+  TFJ(AtomicsStore, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue) \
+  TFJ(AtomicsExchange, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex,      \
+      kValue)                                                                  \
+  TFJ(AtomicsCompareExchange, kArgcReceiverSlots + 4, kReceiver, kArray,       \
+      kIndex, kOldValue, kNewValue)                                            \
+  TFJ(AtomicsAdd, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue)   \
+  TFJ(AtomicsSub, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue)   \
+  TFJ(AtomicsAnd, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue)   \
+  TFJ(AtomicsOr, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue)    \
+  TFJ(AtomicsXor, kArgcReceiverSlots + 3, kReceiver, kArray, kIndex, kValue)   \
   CPP(AtomicsNotify)                                                           \
   CPP(AtomicsIsLockFree)                                                       \
   CPP(AtomicsWait)                                                             \
@@ -856,11 +860,12 @@ namespace internal {
   /* ES6 #sec-string.prototype.lastindexof */                                  \
   CPP(StringPrototypeLastIndexOf)                                              \
   /* ES #sec-string.prototype.matchAll */                                      \
-  TFJ(StringPrototypeMatchAll, 1, kReceiver, kRegexp)                          \
+  TFJ(StringPrototypeMatchAll, kArgcReceiverSlots + 1, kReceiver, kRegexp)     \
   /* ES6 #sec-string.prototype.localecompare */                                \
   CPP(StringPrototypeLocaleCompare)                                            \
   /* ES6 #sec-string.prototype.replace */                                      \
-  TFJ(StringPrototypeReplace, 2, kReceiver, kSearch, kReplace)                 \
+  TFJ(StringPrototypeReplace, kArgcReceiverSlots + 2, kReceiver, kSearch,      \
+      kReplace)                                                                \
   /* ES6 #sec-string.prototype.split */                                        \
   TFJ(StringPrototypeSplit, kDontAdaptArgumentsSentinel)                       \
   /* ES6 #sec-string.raw */                                                    \
@@ -876,15 +881,15 @@ namespace internal {
                                                                                \
   /* TypedArray */                                                             \
   /* ES #sec-typedarray-constructors */                                        \
-  TFJ(TypedArrayBaseConstructor, 0, kReceiver)                                 \
+  TFJ(TypedArrayBaseConstructor, kArgcReceiverSlots, kReceiver)                \
   TFJ(TypedArrayConstructor, kDontAdaptArgumentsSentinel)                      \
   CPP(TypedArrayPrototypeBuffer)                                               \
   /* ES6 #sec-get-%typedarray%.prototype.bytelength */                         \
-  TFJ(TypedArrayPrototypeByteLength, 0, kReceiver)                             \
+  TFJ(TypedArrayPrototypeByteLength, kArgcReceiverSlots, kReceiver)            \
   /* ES6 #sec-get-%typedarray%.prototype.byteoffset */                         \
-  TFJ(TypedArrayPrototypeByteOffset, 0, kReceiver)                             \
+  TFJ(TypedArrayPrototypeByteOffset, kArgcReceiverSlots, kReceiver)            \
   /* ES6 #sec-get-%typedarray%.prototype.length */                             \
-  TFJ(TypedArrayPrototypeLength, 0, kReceiver)                                 \
+  TFJ(TypedArrayPrototypeLength, kArgcReceiverSlots, kReceiver)                \
   /* ES6 #sec-%typedarray%.prototype.copywithin */                             \
   CPP(TypedArrayPrototypeCopyWithin)                                           \
   /* ES6 #sec-%typedarray%.prototype.fill */                                   \
@@ -898,7 +903,7 @@ namespace internal {
   /* ES6 #sec-%typedarray%.prototype.reverse */                                \
   CPP(TypedArrayPrototypeReverse)                                              \
   /* ES6 #sec-get-%typedarray%.prototype-@@tostringtag */                      \
-  TFJ(TypedArrayPrototypeToStringTag, 0, kReceiver)                            \
+  TFJ(TypedArrayPrototypeToStringTag, kArgcReceiverSlots, kReceiver)           \
   /* ES6 %TypedArray%.prototype.map */                                         \
   TFJ(TypedArrayPrototypeMap, kDontAdaptArgumentsSentinel)                     \
                                                                                \
@@ -916,16 +921,16 @@ namespace internal {
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, kDontAdaptArgumentsSentinel)                         \
   TFS(WeakMapLookupHashIndex, kTable, kKey)                                    \
-  TFJ(WeakMapGet, 1, kReceiver, kKey)                                          \
-  TFJ(WeakMapPrototypeHas, 1, kReceiver, kKey)                                 \
-  TFJ(WeakMapPrototypeSet, 2, kReceiver, kKey, kValue)                         \
-  TFJ(WeakMapPrototypeDelete, 1, kReceiver, kKey)                              \
+  TFJ(WeakMapGet, kArgcReceiverSlots + 1, kReceiver, kKey)                     \
+  TFJ(WeakMapPrototypeHas, kArgcReceiverSlots + 1, kReceiver, kKey)            \
+  TFJ(WeakMapPrototypeSet, kArgcReceiverSlots + 2, kReceiver, kKey, kValue)    \
+  TFJ(WeakMapPrototypeDelete, kArgcReceiverSlots + 1, kReceiver, kKey)         \
                                                                                \
   /* WeakSet */                                                                \
   TFJ(WeakSetConstructor, kDontAdaptArgumentsSentinel)                         \
-  TFJ(WeakSetPrototypeHas, 1, kReceiver, kKey)                                 \
-  TFJ(WeakSetPrototypeAdd, 1, kReceiver, kValue)                               \
-  TFJ(WeakSetPrototypeDelete, 1, kReceiver, kValue)                            \
+  TFJ(WeakSetPrototypeHas, kArgcReceiverSlots + 1, kReceiver, kKey)            \
+  TFJ(WeakSetPrototypeAdd, kArgcReceiverSlots + 1, kReceiver, kValue)          \
+  TFJ(WeakSetPrototypeDelete, kArgcReceiverSlots + 1, kReceiver, kValue)       \
                                                                                \
   /* WeakSet / WeakMap Helpers */                                              \
   TFS(WeakCollectionDelete, kCollection, kKey)                                 \
@@ -956,12 +961,18 @@ namespace internal {
   /* specific to Async Generators. Internal / Not exposed to JS code. */       \
   TFS(AsyncGeneratorAwaitCaught, kAsyncGeneratorObject, kValue)                \
   TFS(AsyncGeneratorAwaitUncaught, kAsyncGeneratorObject, kValue)              \
-  TFJ(AsyncGeneratorAwaitResolveClosure, 1, kReceiver, kValue)                 \
-  TFJ(AsyncGeneratorAwaitRejectClosure, 1, kReceiver, kValue)                  \
-  TFJ(AsyncGeneratorYieldResolveClosure, 1, kReceiver, kValue)                 \
-  TFJ(AsyncGeneratorReturnClosedResolveClosure, 1, kReceiver, kValue)          \
-  TFJ(AsyncGeneratorReturnClosedRejectClosure, 1, kReceiver, kValue)           \
-  TFJ(AsyncGeneratorReturnResolveClosure, 1, kReceiver, kValue)                \
+  TFJ(AsyncGeneratorAwaitResolveClosure, kArgcReceiverSlots + 1, kReceiver,    \
+      kValue)                                                                  \
+  TFJ(AsyncGeneratorAwaitRejectClosure, kArgcReceiverSlots + 1, kReceiver,     \
+      kValue)                                                                  \
+  TFJ(AsyncGeneratorYieldResolveClosure, kArgcReceiverSlots + 1, kReceiver,    \
+      kValue)                                                                  \
+  TFJ(AsyncGeneratorReturnClosedResolveClosure, kArgcReceiverSlots + 1,        \
+      kReceiver, kValue)                                                       \
+  TFJ(AsyncGeneratorReturnClosedRejectClosure, kArgcReceiverSlots + 1,         \
+      kReceiver, kValue)                                                       \
+  TFJ(AsyncGeneratorReturnResolveClosure, kArgcReceiverSlots + 1, kReceiver,   \
+      kValue)                                                                  \
                                                                                \
   /* Async-from-Sync Iterator */                                               \
                                                                                \
@@ -974,7 +985,7 @@ namespace internal {
   /* #sec-%asyncfromsynciteratorprototype%.return */                           \
   TFJ(AsyncFromSyncIteratorPrototypeReturn, kDontAdaptArgumentsSentinel)       \
   /* #sec-async-iterator-value-unwrap-functions */                             \
-  TFJ(AsyncIteratorValueUnwrap, 1, kReceiver, kValue)                          \
+  TFJ(AsyncIteratorValueUnwrap, kArgcReceiverSlots + 1, kReceiver, kValue)     \
                                                                                \
   /* CEntry */                                                                 \
   ASM(CEntry_Return1_DontSaveFPRegs_ArgvOnStack_NoBuiltinExit, Dummy)          \
@@ -1166,7 +1177,7 @@ namespace internal {
   /* ecma402 #sup-string.prototype.tolocaleuppercase */                \
   CPP(StringPrototypeToLocaleUpperCase)                                \
   /* ES #sec-string.prototype.tolowercase */                           \
-  TFJ(StringPrototypeToLowerCaseIntl, 0, kReceiver)                    \
+  TFJ(StringPrototypeToLowerCaseIntl, kArgcReceiverSlots, kReceiver)   \
   /* ES #sec-string.prototype.touppercase */                           \
   CPP(StringPrototypeToUpperCaseIntl)                                  \
   TFS(StringToLowerCaseIntl, kString)                                  \

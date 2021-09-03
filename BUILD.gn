@@ -346,6 +346,8 @@ declare_args() {
 
   # Enable global allocation site tracking.
   v8_allocation_site_tracking = true
+
+  v8_include_receiver_in_argc = false
 }
 
 # Derived defaults.
@@ -953,6 +955,9 @@ config("features") {
   }
   if (v8_advanced_bigint_algorithms) {
     defines += [ "V8_ADVANCED_BIGINT_ALGORITHMS" ]
+  }
+  if (v8_include_receiver_in_argc) {
+    defines += [ "V8_INCLUDE_RECEIVER_IN_ARGC" ]
   }
 }
 
