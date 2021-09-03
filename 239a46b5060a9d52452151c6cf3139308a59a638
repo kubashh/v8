@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35c52f6b_4e0ab557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-03T15:16:20Z",
+      "side": 1,
+      "message": "Jakob, PTAL.\nMatt, FYI.\n\nSignal handler tests are coming next.",
+      "revId": "239a46b5060a9d52452151c6cf3139308a59a638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
