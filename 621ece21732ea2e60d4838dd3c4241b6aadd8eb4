@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98211b38_5c38afda",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T12:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac5f9e11_3ff1c79c",
+      "range": {
+        "startLine": 464,
+        "startChar": 43,
+        "endLine": 464,
+        "endChar": 48
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7a73880_272f9361",
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "There\u0027s no strict need. The alternative is setting the edge_name on the existing visitor here.",
       "parentUuid": "3f4bcf57_bfd22d8f",
+      "range": {
+        "startLine": 882,
+        "startChar": 27,
+        "endLine": 882,
+        "endChar": 62
+      },
+      "revId": "621ece21732ea2e60d4838dd3c4241b6aadd8eb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e67562_2e748708",
+        "filename": "src/heap/cppgc-js/cpp-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T12:18:53Z",
+      "side": 1,
+      "message": "Used a setter now. In the current case it doesn\u0027t matter. If we reuse the visitor, we should reset the edge name again to get auto indexing.",
+      "parentUuid": "e738ab3c_e640a57b",
       "range": {
         "startLine": 882,
         "startChar": 27,
