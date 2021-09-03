@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0d78b1_4b60627b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-03T11:26:10Z",
+      "side": 1,
+      "message": "lgtm, please mark the bug as non-security issue",
+      "revId": "38eef3dc86d927fe9927308ad8494b3710630bcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
