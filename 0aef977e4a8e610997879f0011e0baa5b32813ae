@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d6580d_08700ff2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-09-03T13:39:28Z",
+      "side": 1,
+      "message": "Maybe it\u0027d be better to just land those minor changes in a separate CL? Or is there a secondary aim of having the flag flip be an easily revertible CL (in case something is wrong here)?",
+      "parentUuid": "f0acae4e_2bfb5e4f",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 0
+      },
+      "revId": "0aef977e4a8e610997879f0011e0baa5b32813ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6dccb9d8_d465b4b4",
