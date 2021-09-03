@@ -261,16 +261,17 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
 #define CSA_ASSERT_BRANCH(csa, gen, ...) \
   (csa)->Assert(gen, #gen, __FILE__, __LINE__, CSA_ASSERT_ARGS(__VA_ARGS__))
 
-#define CSA_ASSERT_JS_ARGC_OP(csa, Op, op, expected)                    \
-  (csa)->Assert(                                                        \
-      [&]() -> TNode<BoolT> {                                           \
-        const TNode<Word32T> argc = (csa)->UncheckedParameter<Word32T>( \
-            Descriptor::kJSActualArgumentsCount);                       \
-        return (csa)->Op(argc, (csa)->Int32Constant(expected));         \
-      },                                                                \
-      "argc " #op " " #expected, __FILE__, __LINE__,                    \
-      {{SmiFromInt32((csa)->UncheckedParameter<Int32T>(                 \
-            Descriptor::kJSActualArgumentsCount)),                      \
+#define CSA_ASSERT_JS_ARGC_OP(csa, Op, op, expected)                           \
+  (csa)->Assert(                                                               \
+      [&]() -> TNode<BoolT> {                                                  \
+        const TNode<Word32T> argc = (csa)->UncheckedParameter<Word32T>(        \
+            Descriptor::kJSActualArgumentsCount);                              \
+        return (csa)->Op(argc,                                                 \
+                         (csa)->Int32Constant(expected + kArgcReceiverSlots)); \
+      },                                                                       \
+      "argc " #op " " #expected, __FILE__, __LINE__,                           \
+      {{SmiFromInt32((csa)->UncheckedParameter<Int32T>(                        \
+            Descriptor::kJSActualArgumentsCount)),                             \
         "argc"}})
 
 #define CSA_ASSERT_JS_ARGC_EQ(csa, expected) \
@@ -3640,8 +3641,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Object> GetArgumentValue(TorqueStructArguments args,
                                  TNode<IntPtrT> index);
 
-  TorqueStructArguments GetFrameArguments(TNode<RawPtrT> frame,
-                                          TNode<IntPtrT> argc);
+  enum class FrameArgumentsArgcType {
+    kCountIncludesReceiver,
+    kCountExcludesReceiver
+  };
+
+  TorqueStructArguments GetFrameArguments(
+      TNode<RawPtrT> frame, TNode<IntPtrT> argc,
+      FrameArgumentsArgcType argc_type =
+          FrameArgumentsArgcType::kCountExcludesReceiver);
 
   // Support for printf-style debugging
   void Print(const char* s);

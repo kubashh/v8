@@ -66,8 +66,11 @@ operator '.caller' macro LoadCallerFromFrame(f: Frame): Frame {
 
 const kStandardFrameArgCOffset: constexpr int31
     generates 'StandardFrameConstants::kArgCOffset';
+const kArgcReceiverSlots: constexpr int31
+    generates 'kArgcReceiverSlots';
+
 operator '.argument_count' macro LoadArgCFromFrame(f: Frame): intptr {
-  return LoadIntptrFromFrame(f, kStandardFrameArgCOffset);
+  return LoadIntptrFromFrame(f, kStandardFrameArgCOffset) - kArgcReceiverSlots;
 }
 
 type ContextOrFrameType = Context|FrameType;

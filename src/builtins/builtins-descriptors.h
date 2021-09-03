@@ -24,7 +24,8 @@ namespace internal {
       kContext,                                                         \
       kParameterCount,                                                  \
     };                                                                  \
-    static_assert((Argc) == static_cast<uint16_t>(kParameterCount - 4), \
+    static_assert((Argc) == static_cast<uint16_t>(kParameterCount - 4 + \
+                                                  kArgcReceiverSlots),  \
                   "Inconsistent set of arguments");                     \
     static_assert(kJSTarget == -1, "Unexpected kJSTarget index value"); \
   };
