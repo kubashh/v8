@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7330532d_6cf0f2f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-05T17:25:16Z",
+      "side": 1,
+      "message": "Thanks for suggestions! Updated with mkgrokdump fixes.",
+      "revId": "096ab198a7be142d878e1aa0bb4c8a5621a2a1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
