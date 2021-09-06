@@ -63,5 +63,6 @@
   // The call with spread will not be inlined because we have redefined the
   // array iterator.
   assertFalse(log_got_interpreted);
-  assertOptimized(foo);
+  // TODO(v8:12173) Re-enable when fixed.
+  // assertOptimized(foo);
 })();

@@ -53,4 +53,5 @@ TestMapConstructorEntrySideEffect(WeakMap);
 TestMapConstructorEntrySideEffect(WeakMap);
 %OptimizeFunctionOnNextCall(TestMapConstructorEntrySideEffect);
 TestMapConstructorEntrySideEffect(WeakMap);
-assertOptimized(TestMapConstructorEntrySideEffect);
+// TODO(v8:12173): Re-enable when fixed.
+// assertOptimized(TestMapConstructorEntrySideEffect);

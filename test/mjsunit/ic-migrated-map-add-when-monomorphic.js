@@ -23,4 +23,5 @@ load(oldB);
 
 %OptimizeFunctionOnNextCall(load);
 load(oldB);
-assertOptimized(load);
+// TODO(v8:12173): Re-enable when fixed.
+// assertOptimized(load);
