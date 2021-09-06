@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51ad923_e02914e3",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T11:46:15Z",
+      "side": 1,
+      "message": "Ah, indeed - if the list of arg names matches the argc, passing just the numeric value sg. Let\u0027s do that once you remove the gn flag.",
+      "parentUuid": "bdbce451_e7fd4205",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a1173cf_140f469a",

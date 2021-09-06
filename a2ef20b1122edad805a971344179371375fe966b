@@ -16,6 +16,29 @@
       "message": "Thanks for your feedback!",
       "revId": "a2ef20b1122edad805a971344179371375fe966b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b7ef77_b3c35dc3",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T11:46:15Z",
+      "side": 1,
+      "message": "What about all these spots? Maybe we could move the helper function out of the SFI and apply it to all these places too? Looking through the changed files, there\u0027s quite a few of these.",
+      "range": {
+        "startLine": 1349,
+        "startChar": 25,
+        "endLine": 1349,
+        "endChar": 77
+      },
+      "revId": "a2ef20b1122edad805a971344179371375fe966b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
