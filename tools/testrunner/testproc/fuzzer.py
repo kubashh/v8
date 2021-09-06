@@ -94,12 +94,14 @@ class Fuzzer(object):
 
 # TODO(majeski): Allow multiple subtests to run at once.
 class FuzzerProc(base.TestProcProducer):
-  def __init__(self, rng, count, fuzzers, disable_analysis=False):
+  def __init__(self, rng, count, fuzzers, default_flags,
+               disable_analysis=False):
     """
     Args:
       rng: random number generator used to select flags and values for them
       count: number of tests to generate based on each base test
       fuzzers: list of FuzzerConfig instances
+      default_flags: List of default flags passed to all runs.
       disable_analysis: disable analysis phase and filtering base on it. When
         set, processor passes None as analysis result to fuzzers
     """
@@ -108,6 +110,7 @@ class FuzzerProc(base.TestProcProducer):
     self._rng = rng
     self._count = count
     self._fuzzer_configs = fuzzers
+    self._default_flags = default_flags
     self._disable_analysis = disable_analysis
     self._gens = {}
 
@@ -137,8 +140,8 @@ class FuzzerProc(base.TestProcProducer):
         analysis_flags += fuzzer_config.analyzer.get_analysis_flags()
 
     if analysis_flags:
-      analysis_flags = list(set(analysis_flags))
-      return self._create_subtest(test, 'analysis', flags=analysis_flags,
+      flags = self._default_flags + list(set(analysis_flags))
+      return self._create_subtest(test, 'analysis', flags=flags,
                                   keep_output=True)
 
   def _result_for(self, test, subtest, result):
@@ -180,7 +183,8 @@ class FuzzerProc(base.TestProcProducer):
       main_index = self._rng.choice(indexes)
       _, main_gen = gens[main_index]
 
-      flags = random_extra_flags(self._rng) + next(main_gen)
+      flags = (self._default_flags + random_extra_flags(self._rng) +
+               next(main_gen))
       for index, (p, gen) in enumerate(gens):
         if index == main_index:
           continue

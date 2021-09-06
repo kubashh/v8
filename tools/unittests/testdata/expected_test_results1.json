@@ -24,7 +24,7 @@
       "stdout": "--test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner\n", 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }, 
     {
       "command": "/usr/bin/python out/build/d8_mocked.py --test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner", 
@@ -49,7 +49,7 @@
       "stdout": "--test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner\n", 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }, 
     {
       "command": "/usr/bin/python out/build/d8_mocked.py --test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner", 
@@ -74,7 +74,7 @@
       "stdout": "--test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner\n", 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }
   ], 
   "slowest_tests": [ 
@@ -100,7 +100,7 @@
       "run": 1, 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }, 
     {
       "command": "/usr/bin/python out/build/d8_mocked.py --test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner", 
@@ -124,7 +124,7 @@
       "run": 2, 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }, 
     {
       "command": "/usr/bin/python out/build/d8_mocked.py --test strawberries --random-seed=123 --nohard-abort --testing-d8-test-runner", 
@@ -148,7 +148,7 @@
       "run": 3, 
       "target_name": "d8_mocked.py", 
       "variant": "default", 
-      "variant_flags": []
+      "variant_flags": ["--testing-d8-test-runner"]
     }
   ], 
   "test_total": 3

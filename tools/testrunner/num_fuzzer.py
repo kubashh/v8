@@ -122,13 +122,6 @@ class NumFuzzer(base_runner.BaseTestRunner):
   def _get_default_suite_names(self):
     return DEFAULT_SUITES
 
-  def _runner_flags(self):
-    """Extra default flags specific to the test runner implementation."""
-    flags = ['--no-abort-on-contradictory-flags']
-    if self.infra_staging:
-      flags.append('--no-fail')
-    return flags
-
   def _get_statusfile_variables(self, options):
     variables = (
         super(NumFuzzer, self)._get_statusfile_variables(options))
@@ -204,11 +197,15 @@ class NumFuzzer(base_runner.BaseTestRunner):
                         options.tests_count)
 
   def _create_fuzzer(self, rng, options):
+    flags = ['--no-abort-on-contradictory-flags']
+    if self.infra_staging:
+      flags.append('--no-fail')
     return fuzzer.FuzzerProc(
-        rng,
-        self._tests_count(options),
-        self._create_fuzzer_configs(options),
-        self._disable_analysis(options),
+        rng=rng,
+        count=self._tests_count(options),
+        fuzzers=self._create_fuzzer_configs(options),
+        default_flags=flags,
+        disable_analysis=self._disable_analysis(options),
     )
 
   def _tests_count(self, options):
