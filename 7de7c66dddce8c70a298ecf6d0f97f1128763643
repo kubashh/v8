@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e455017_d08a4938",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1477547
+      },
+      "writtenOn": "2021-09-06T12:06:13Z",
+      "side": 1,
+      "message": "Would you mind first file a bug then add it to the commit log?",
+      "revId": "7de7c66dddce8c70a298ecf6d0f97f1128763643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
