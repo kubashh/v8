@@ -33,6 +33,24 @@
       "message": "Why not FLAG_regexp_tier_up \u003d false?",
       "revId": "49466ea3489567c5eada597fe50b4247243a49cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e89df8d_89389173",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2374,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T06:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23b978df_cf44dc5b",
+      "revId": "49466ea3489567c5eada597fe50b4247243a49cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
