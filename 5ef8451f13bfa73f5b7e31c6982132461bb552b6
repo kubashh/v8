@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17de6278_fd80aecd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T10:33:12Z",
+      "side": 1,
+      "message": "Skimmed everything and overall lgtm.",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f69a9d4_8f462b49",
