@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "a4238e3fd3f58d3e53b73567a24e5f36b42d67f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad65c47d_b3584529",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-06T09:26:31Z",
+      "side": 1,
+      "message": "LGTM with one comment, thanks!",
+      "revId": "a4238e3fd3f58d3e53b73567a24e5f36b42d67f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f9137a6_f8a40aef",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-06T09:26:31Z",
+      "side": 1,
+      "message": "You can use the helper function PrintParameters(sig) here.",
+      "range": {
+        "startLine": 480,
+        "startChar": 34,
+        "endLine": 486,
+        "endChar": 12
+      },
+      "revId": "a4238e3fd3f58d3e53b73567a24e5f36b42d67f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
