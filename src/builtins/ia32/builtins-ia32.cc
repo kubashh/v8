@@ -89,7 +89,11 @@ void Generate_PushArguments(MacroAssembler* masm, Register array, Register argc,
   DCHECK(!AreAliased(array, argc, scratch1, scratch2));
   Register counter = scratch1;
   Label loop, entry;
-  __ mov(counter, argc);
+  if (kArgcIncludesReceiver) {
+    __ lea(counter, Operand(argc, -kArgcReceiverSlots));
+  } else {
+    __ mov(counter, argc);
+  }
   __ jmp(&entry);
   __ bind(&loop);
   Operand value(array, counter, times_system_pointer_size, 0);
@@ -159,7 +163,9 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
   // Remove caller arguments from the stack and return.
   __ DropArguments(edx, ecx, TurboAssembler::kCountIsSmi,
-                   TurboAssembler::kCountExcludesReceiver);
+                   kArgcIncludesReceiver
+                       ? TurboAssembler::kCountIncludesReceiver
+                       : TurboAssembler::kCountExcludesReceiver);
   __ ret(0);
 
   __ bind(&stack_overflow);
@@ -314,7 +320,9 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
 
   // Remove caller arguments from the stack and return.
   __ DropArguments(edx, ecx, TurboAssembler::kCountIsSmi,
-                   TurboAssembler::kCountExcludesReceiver);
+                   kArgcIncludesReceiver
+                       ? TurboAssembler::kCountIncludesReceiver
+                       : TurboAssembler::kCountExcludesReceiver);
   __ ret(0);
 
   // Otherwise we do a smi check and fall through to check if the return value
@@ -667,6 +675,9 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
     __ mov(ecx, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
     __ movzx_w(ecx, FieldOperand(
                         ecx, SharedFunctionInfo::kFormalParameterCountOffset));
+    if (kArgcIncludesReceiver) {
+      __ dec(ecx);
+    }
     __ mov(ebx,
            FieldOperand(edx, JSGeneratorObject::kParametersAndRegistersOffset));
     {
@@ -783,7 +794,7 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ mov(actual_params_size, Operand(ebp, StandardFrameConstants::kArgCOffset));
   __ lea(actual_params_size,
          Operand(actual_params_size, times_system_pointer_size,
-                 kSystemPointerSize));
+                 kArgcIncludesReceiver ? 0 : kSystemPointerSize));
 
   // If actual is bigger than formal, then we should use it to free up the stack
   // arguments.
@@ -1034,7 +1045,7 @@ static void MaybeOptimizeCodeOrTailCallOptimizedCodeSlot(
 // stack left to right.
 //
 // The live registers are:
-//   o eax: actual argument count (not including the receiver)
+//   o eax: actual argument count
 //   o edi: the JS function object being called
 //   o edx: the incoming new target or generator object
 //   o esi: our context
@@ -1329,7 +1340,7 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
     InterpreterPushArgsMode mode) {
   DCHECK(mode != InterpreterPushArgsMode::kArrayFunction);
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- ecx : the address of the first argument to be pushed. Subsequent
   //           arguments should be consecutive above this, in the same order as
   //           they are to be pushed onto the stack.
@@ -1347,18 +1358,21 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
 
   // Add a stack check before pushing the arguments.
   __ StackOverflowCheck(eax, scratch, &stack_overflow, true);
-
   __ movd(xmm0, eax);  // Spill number of arguments.
 
   // Compute the expected number of arguments.
-  __ mov(scratch, eax);
+  int argc_modification = kArgcIncludesReceiver ? 0 : 1;
+  if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
+    argc_modification -= 1;
+  }
+  if (argc_modification != 0) {
+    __ lea(scratch, Operand(eax, argc_modification));
+  } else {
+    __ mov(scratch, eax);
+  }
 
   // Pop return address to allow tail-call after pushing arguments.
   __ PopReturnAddressTo(eax);
-
-  if (receiver_mode != ConvertReceiverMode::kNullOrUndefined) {
-    __ add(scratch, Immediate(1));  // Add one for receiver.
-  }
 
   // Find the address of the last argument.
   __ shl(scratch, kSystemPointerSizeLog2);
@@ -1411,9 +1425,10 @@ void Generate_InterpreterPushZeroAndArgsAndReturnAddress(
     Label* stack_overflow) {
   // We have to move return address and the temporary registers above it
   // before we can copy arguments onto the stack. To achieve this:
-  // Step 1: Increment the stack pointer by num_args + 1 (for receiver).
-  // Step 2: Move the return address and values around it to the top of stack.
-  // Step 3: Copy the arguments into the correct locations.
+  // Step 1: Increment the stack pointer by num_args + 1 for receiver (if it is
+  // not included in argc already). Step 2: Move the return address and values
+  // around it to the top of stack. Step 3: Copy the arguments into the correct
+  // locations.
   //  current stack    =====>    required stack layout
   // |             |            | return addr   | (2) <-- esp (1)
   // |             |            | addtl. slot   |
@@ -1428,8 +1443,10 @@ void Generate_InterpreterPushZeroAndArgsAndReturnAddress(
 
   // Step 1 - Update the stack pointer.
 
+  constexpr int receiver_offset =
+      kArgcIncludesReceiver ? 0 : kSystemPointerSize;
   __ lea(scratch1,
-         Operand(num_args, times_system_pointer_size, kSystemPointerSize));
+         Operand(num_args, times_system_pointer_size, receiver_offset));
   __ AllocateStackSpace(scratch1);
 
   // Step 2 move return_address and slots around it to the correct locations.
@@ -1438,7 +1455,7 @@ void Generate_InterpreterPushZeroAndArgsAndReturnAddress(
   // extra slot for receiver, so no extra checks are required to avoid copy.
   for (int i = 0; i < num_slots_to_move + 1; i++) {
     __ mov(scratch1, Operand(esp, num_args, times_system_pointer_size,
-                             (i + 1) * kSystemPointerSize));
+                             i * kSystemPointerSize + receiver_offset));
     __ mov(Operand(esp, i * kSystemPointerSize), scratch1);
   }
 
@@ -1460,7 +1477,11 @@ void Generate_InterpreterPushZeroAndArgsAndReturnAddress(
   __ bind(&loop_check);
   __ inc(scratch1);
   __ cmp(scratch1, eax);
-  __ j(less_equal, &loop_header, Label::kNear);
+  if (kArgcIncludesReceiver) {
+    __ j(less, &loop_header, Label::kNear);
+  } else {
+    __ j(less_equal, &loop_header, Label::kNear);
+  }
 }
 
 }  // anonymous namespace
@@ -1469,7 +1490,7 @@ void Generate_InterpreterPushZeroAndArgsAndReturnAddress(
 void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
     MacroAssembler* masm, InterpreterPushArgsMode mode) {
   // ----------- S t a t e -------------
-  //  -- eax     : the number of arguments (not including the receiver)
+  //  -- eax     : the number of arguments
   //  -- ecx     : the address of the first argument to be pushed. Subsequent
   //               arguments should be consecutive above this, in the same order
   //               as they are to be pushed onto the stack.
@@ -1858,7 +1879,8 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
     // the LAZY deopt point. eax contains the arguments count, the return value
     // from LAZY is always the last argument.
     __ movd(Operand(esp, eax, times_system_pointer_size,
-                    BuiltinContinuationFrameConstants::kFixedFrameSize),
+                    BuiltinContinuationFrameConstants::kFixedFrameSize -
+                        (kArgcIncludesReceiver ? kSystemPointerSize : 0)),
             xmm0);
   }
   __ mov(
@@ -1920,23 +1942,29 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
     Label no_arg_array, no_this_arg;
     StackArgumentsAccessor args(eax);
     // Spill receiver to allow the usage of edi as a scratch register.
-    __ movd(xmm0, args[0]);
+    __ movd(xmm0, args.GetReceiverOperand());
 
     __ LoadRoot(edx, RootIndex::kUndefinedValue);
     __ mov(edi, edx);
-    __ test(eax, eax);
-    __ j(zero, &no_this_arg, Label::kNear);
+    if (kArgcIncludesReceiver) {
+      __ cmp(eax, Immediate(kArgcReceiverSlots));
+      __ j(equal, &no_this_arg, Label::kNear);
+    } else {
+      __ test(eax, eax);
+      __ j(zero, &no_this_arg, Label::kNear);
+    }
     {
       __ mov(edi, args[1]);
-      __ cmp(eax, Immediate(1));
+      __ cmp(eax, Immediate(kArgcReceiverSlots + 1));
       __ j(equal, &no_arg_array, Label::kNear);
       __ mov(edx, args[2]);
       __ bind(&no_arg_array);
     }
     __ bind(&no_this_arg);
-    __ DropArgumentsAndPushNewReceiver(eax, edi, ecx,
-                                       TurboAssembler::kCountIsInteger,
-                                       TurboAssembler::kCountExcludesReceiver);
+    __ DropArgumentsAndPushNewReceiver(
+        eax, edi, ecx, TurboAssembler::kCountIsInteger,
+        kArgcIncludesReceiver ? TurboAssembler::kCountIncludesReceiver
+                              : TurboAssembler::kCountExcludesReceiver);
 
     // Restore receiver to edi.
     __ movd(edi, xmm0);
@@ -1966,7 +1994,7 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   // arguments to the receiver.
   __ bind(&no_arguments);
   {
-    __ Move(eax, 0);
+    __ Move(eax, kArgcReceiverSlots);
     __ Jump(masm->isolate()->builtins()->Call(), RelocInfo::CODE_TARGET);
   }
 }
@@ -1980,7 +2008,7 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   //  ...
   // esp[8 * n]       : Argument n-1
   // esp[8 * (n + 1)] : Argument n
-  // eax contains the number of arguments, n, not counting the receiver.
+  // eax contains the number of arguments, n.
 
   // 1. Get the callable to call (passed as receiver) from the stack.
   {
@@ -1995,8 +2023,13 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   // 3. Make sure we have at least one argument.
   {
     Label done;
-    __ test(eax, eax);
-    __ j(not_zero, &done, Label::kNear);
+    if (kArgcIncludesReceiver) {
+      __ cmp(eax, Immediate(kArgcReceiverSlots));
+      __ j(greater, &done, Label::kNear);
+    } else {
+      __ test(eax, eax);
+      __ j(not_zero, &done, Label::kNear);
+    }
     __ PushRoot(RootIndex::kUndefinedValue);
     __ inc(eax);
     __ bind(&done);
@@ -2030,12 +2063,12 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
     __ LoadRoot(edi, RootIndex::kUndefinedValue);
     __ mov(edx, edi);
     __ mov(ecx, edi);
-    __ cmp(eax, Immediate(1));
+    __ cmp(eax, Immediate(kArgcReceiverSlots + 1));
     __ j(below, &done, Label::kNear);
     __ mov(edi, args[1]);  // target
     __ j(equal, &done, Label::kNear);
     __ mov(ecx, args[2]);  // thisArgument
-    __ cmp(eax, Immediate(3));
+    __ cmp(eax, Immediate(kArgcReceiverSlots + 3));
     __ j(below, &done, Label::kNear);
     __ mov(edx, args[3]);  // argumentsList
     __ bind(&done);
@@ -2043,9 +2076,10 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
     // Spill argumentsList to use edx as a scratch register.
     __ movd(xmm0, edx);
 
-    __ DropArgumentsAndPushNewReceiver(eax, ecx, edx,
-                                       TurboAssembler::kCountIsInteger,
-                                       TurboAssembler::kCountExcludesReceiver);
+    __ DropArgumentsAndPushNewReceiver(
+        eax, ecx, edx, TurboAssembler::kCountIsInteger,
+        kArgcIncludesReceiver ? TurboAssembler::kCountIncludesReceiver
+                              : TurboAssembler::kCountExcludesReceiver);
 
     // Restore argumentsList.
     __ movd(edx, xmm0);
@@ -2087,13 +2121,13 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
     __ LoadRoot(edi, RootIndex::kUndefinedValue);
     __ mov(edx, edi);
     __ mov(ecx, edi);
-    __ cmp(eax, Immediate(1));
+    __ cmp(eax, Immediate(kArgcReceiverSlots + 1));
     __ j(below, &done, Label::kNear);
     __ mov(edi, args[1]);  // target
     __ mov(edx, edi);
     __ j(equal, &done, Label::kNear);
     __ mov(ecx, args[2]);  // argumentsList
-    __ cmp(eax, Immediate(3));
+    __ cmp(eax, Immediate(kArgcReceiverSlots + 3));
     __ j(below, &done, Label::kNear);
     __ mov(edx, args[3]);  // new.target
     __ bind(&done);
@@ -2104,7 +2138,8 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
     __ DropArgumentsAndPushNewReceiver(
         eax, masm->RootAsOperand(RootIndex::kUndefinedValue), ecx,
         TurboAssembler::kCountIsInteger,
-        TurboAssembler::kCountExcludesReceiver);
+        kArgcIncludesReceiver ? TurboAssembler::kCountIncludesReceiver
+                              : TurboAssembler::kCountExcludesReceiver);
 
     // Restore argumentsList.
     __ movd(ecx, xmm0);
@@ -2151,7 +2186,9 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
   __ lea(new_space, Operand(count, times_system_pointer_size, 0));
   __ AllocateStackSpace(new_space);
 
-  __ inc(argc_in_out);  // Include the receiver.
+  if (!kArgcIncludesReceiver) {
+    __ inc(argc_in_out);
+  }
   Register current = scratch1;
   Register value = scratch2;
 
@@ -2171,8 +2208,13 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
   __ lea(
       pointer_to_new_space_out,
       Operand(esp, argc_in_out, times_system_pointer_size, kSystemPointerSize));
-  // Update the total number of arguments, subtracting the receiver again.
-  __ lea(argc_in_out, Operand(argc_in_out, count, times_1, -1));
+  // Update the total number of arguments.
+  if (kArgcIncludesReceiver) {
+    __ add(argc_in_out, count);
+  } else {
+    // Also subtract the receiver again.
+    __ lea(argc_in_out, Operand(argc_in_out, count, times_1, -1));
+  }
 }
 
 }  // namespace
@@ -2184,7 +2226,7 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   // ----------- S t a t e -------------
   //  -- edi    : target
   //  -- esi    : context for the Call / Construct builtin
-  //  -- eax    : number of parameters on the stack (not including the receiver)
+  //  -- eax    : number of parameters on the stack
   //  -- ecx    : len (number of elements to from args)
   //  -- edx    : new.target (checked to be constructor or undefined)
   //  -- esp[4] : arguments list (a FixedArray)
@@ -2277,7 +2319,7 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
                                                       CallOrConstructMode mode,
                                                       Handle<Code> code) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edi : the target to call (can be any Object)
   //  -- esi : context for the Call / Construct builtin
   //  -- edx : the new target (for [[Construct]] calls)
@@ -2311,12 +2353,14 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
 
   Label stack_done, stack_overflow;
   __ mov(edx, Operand(ebp, StandardFrameConstants::kArgCOffset));
+  if (kArgcIncludesReceiver) {
+    __ dec(edx);
+  }
   __ sub(edx, ecx);
   __ j(less_equal, &stack_done);
   {
     // ----------- S t a t e -------------
-    //  -- eax : the number of arguments already in the stack (not including the
-    //  receiver)
+    //  -- eax : the number of arguments already in the stack
     //  -- ecx : start index (to support rest parameters)
     //  -- edx : number of arguments to copy, i.e. arguments count - start index
     //  -- edi : the target to call (can be any Object)
@@ -2380,7 +2424,7 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
 void Builtins::Generate_CallFunction(MacroAssembler* masm,
                                      ConvertReceiverMode mode) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edi : the function to call (checked to be a JSFunction)
   // -----------------------------------
   StackArgumentsAccessor args(eax);
@@ -2406,7 +2450,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   __ j(not_zero, &done_convert);
   {
     // ----------- S t a t e -------------
-    //  -- eax : the number of arguments (not including the receiver)
+    //  -- eax : the number of arguments
     //  -- edx : the shared function info.
     //  -- edi : the function to call (checked to be a JSFunction)
     //  -- esi : the function context.
@@ -2464,7 +2508,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   __ bind(&done_convert);
 
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edx : the shared function info.
   //  -- edi : the function to call (checked to be a JSFunction)
   //  -- esi : the function context.
@@ -2486,7 +2530,7 @@ namespace {
 
 void Generate_PushBoundArguments(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edx : new.target (only in case of [[Construct]])
   //  -- edi : target (checked to be a JSBoundFunction)
   // -----------------------------------
@@ -2501,7 +2545,7 @@ void Generate_PushBoundArguments(MacroAssembler* masm) {
   __ j(zero, &no_bound_arguments);
   {
     // ----------- S t a t e -------------
-    //  -- eax  : the number of arguments (not including the receiver)
+    //  -- eax  : the number of arguments
     //  -- xmm0 : new.target (only in case of [[Construct]])
     //  -- edi  : target (checked to be a JSBoundFunction)
     //  -- ecx  : the [[BoundArguments]] (implemented as FixedArray)
@@ -2569,7 +2613,7 @@ void Generate_PushBoundArguments(MacroAssembler* masm) {
 // static
 void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edi : the function to call (checked to be a JSBoundFunction)
   // -----------------------------------
   __ AssertBoundFunction(edi);
@@ -2591,7 +2635,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
 // static
 void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edi : the target to call (can be any Object).
   // -----------------------------------
   StackArgumentsAccessor args(eax);
@@ -2648,7 +2692,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
 // static
 void Builtins::Generate_ConstructFunction(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edx : the new target (checked to be a constructor)
   //  -- edi : the constructor to call (checked to be a JSFunction)
   // -----------------------------------
@@ -2680,7 +2724,7 @@ void Builtins::Generate_ConstructFunction(MacroAssembler* masm) {
 // static
 void Builtins::Generate_ConstructBoundFunction(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edx : the new target (checked to be a constructor)
   //  -- edi : the constructor to call (checked to be a JSBoundFunction)
   // -----------------------------------
@@ -2707,7 +2751,7 @@ void Builtins::Generate_ConstructBoundFunction(MacroAssembler* masm) {
 // static
 void Builtins::Generate_Construct(MacroAssembler* masm) {
   // ----------- S t a t e -------------
-  //  -- eax : the number of arguments (not including the receiver)
+  //  -- eax : the number of arguments
   //  -- edx : the new target (either the same as the constructor or
   //           the JSFunction on which new was invoked initially)
   //  -- edi : the constructor to call (can be any Object)

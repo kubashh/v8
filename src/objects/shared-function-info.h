@@ -281,6 +281,9 @@ class SharedFunctionInfo
   inline void set_internal_formal_parameter_count(int value);
   inline uint16_t internal_formal_parameter_count_with_receiver() const;
   inline uint16_t internal_formal_parameter_count_without_receiver() const;
+  static constexpr int JSFormalParameterCount(int value) {
+    return value + kArgcReceiverSlots;
+  }
 
  private:
   using TorqueGeneratedSharedFunctionInfo::formal_parameter_count;

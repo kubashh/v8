@@ -236,7 +236,8 @@ Handle<JSFunction> CreateBoundFunction(Isolate* isolate,
   Handle<SharedFunctionInfo> info =
       isolate->factory()->NewSharedFunctionInfoForBuiltin(
           isolate->factory()->empty_string(), builtin, kNormalFunction);
-  info->set_internal_formal_parameter_count(len);
+  info->set_internal_formal_parameter_count(
+      SharedFunctionInfo::JSFormalParameterCount(len));
   info->set_length(len);
 
   return Factory::JSFunctionBuilder{isolate, info, context}

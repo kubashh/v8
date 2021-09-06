@@ -3679,9 +3679,14 @@ Node* EffectControlLinearizer::LowerToBoolean(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerArgumentsLength(Node* node) {
-  return ChangeIntPtrToSmi(
+  Node* arguments_length = ChangeIntPtrToSmi(
       __ Load(MachineType::Pointer(), __ LoadFramePointer(),
               __ IntPtrConstant(StandardFrameConstants::kArgCOffset)));
+  if (kArgcIncludesReceiver) {
+    arguments_length =
+        __ SmiSub(arguments_length, __ SmiConstant(kArgcReceiverSlots));
+  }
+  return arguments_length;
 }
 
 Node* EffectControlLinearizer::LowerRestLength(Node* node) {
@@ -3694,6 +3699,10 @@ Node* EffectControlLinearizer::LowerRestLength(Node* node) {
   Node* arguments_length = ChangeIntPtrToSmi(
       __ Load(MachineType::Pointer(), frame,
               __ IntPtrConstant(StandardFrameConstants::kArgCOffset)));
+  if (kArgcIncludesReceiver) {
+    arguments_length =
+        __ SmiSub(arguments_length, __ SmiConstant(kArgcReceiverSlots));
+  }
   Node* rest_length =
       __ SmiSub(arguments_length, __ SmiConstant(formal_parameter_count));
   __ GotoIf(__ SmiLessThan(rest_length, __ SmiConstant(0)), &done,

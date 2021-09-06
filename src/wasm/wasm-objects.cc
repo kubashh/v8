@@ -2025,7 +2025,8 @@ Handle<WasmExportedFunction> WasmExportedFunction::New(
   // method. This does not apply to functions exported from asm.js however.
   DCHECK_EQ(is_asm_js_module, js_function->IsConstructor());
   shared->set_length(arity);
-  shared->set_internal_formal_parameter_count(arity);
+  shared->set_internal_formal_parameter_count(
+      SharedFunctionInfo::JSFormalParameterCount(arity));
   shared->set_script(instance->module_object().script());
   return Handle<WasmExportedFunction>::cast(js_function);
 }
@@ -2139,7 +2140,8 @@ Handle<WasmJSFunction> WasmJSFunction::New(Isolate* isolate,
       Factory::JSFunctionBuilder{isolate, shared, context}
           .set_map(function_map)
           .Build();
-  js_function->shared().set_internal_formal_parameter_count(parameter_count);
+  js_function->shared().set_internal_formal_parameter_count(
+      SharedFunctionInfo::JSFormalParameterCount(parameter_count));
   return Handle<WasmJSFunction>::cast(js_function);
 }
 
