@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f69a9d4_8f462b49",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T10:32:40Z",
+      "side": 1,
+      "message": "Please add a short description, and perhaps a TODO(bug) for when to remove this flag.",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0923efcf_334ed6f6",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T10:32:40Z",
+      "side": 1,
+      "message": "I\u0027m tempted to suggest a constant for these -1\u0027s too, but if they\u0027ll be removed soon I\u0027m fine with this.",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1113d7b0_09457b4a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T10:32:40Z",
+      "side": 1,
+      "message": "Not too happy with the changes in this list, it\u0027s way less intuitive to have to include the receiver count here. Also, other places add the receiver slot at lower levels and \u0027users\u0027 operate on argc without the receiver.\n\nIs there a way we could preserve kDontAdaptArgumentsSentinel as -1? Then we could keep the list as it was previously.",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1173cf_140f469a",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2377,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-06T10:32:40Z",
+      "side": 1,
+      "message": "Wdyt about wrapping the `kArgcReceiverSlots + foo` pattern in an `ActualParameterCount(foo)` function? And change `kArgcReceiverSlots` back to `ActualParameterCount(0)`. \n\n(Maybe someone can think of a better name than ActualParameterCount - JSParameterCount?)",
+      "revId": "5ef8451f13bfa73f5b7e31c6982132461bb552b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
