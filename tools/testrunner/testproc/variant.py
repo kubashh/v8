@@ -23,11 +23,12 @@ class VariantProc(base.TestProcProducer):
   after the VariantProc.
   """
 
-  def __init__(self, variants):
+  def __init__(self, variants, default_flags):
     super(VariantProc, self).__init__('VariantProc')
     self._next_variant = {}
     self._variant_gens = {}
     self._variants = variants
+    self._default_flags = default_flags
 
   def setup(self, requirement=base.DROP_RESULT):
     super(VariantProc, self).setup(requirement)
@@ -51,8 +52,9 @@ class VariantProc(base.TestProcProducer):
 
   def _try_send_new_subtest(self, test, variants_gen):
     for variant, flags, suffix in variants_gen:
-      subtest = self._create_subtest(test, '%s-%s' % (variant, suffix),
-                                     variant=variant, flags=flags)
+      subtest = self._create_subtest(
+          test, '%s-%s' % (variant, suffix),
+          variant=variant, flags=self._default_flags + flags)
       if self._send_test(subtest):
         return True
 

@@ -736,17 +736,13 @@ class BaseTestRunner(object):
       "virtual_memory_cage": self.build_config.virtual_memory_cage,
     }
 
-  def _runner_flags(self):
-    """Extra default flags specific to the test runner implementation."""
-    return []
-
   def _create_test_config(self, options):
     timeout = options.timeout * self._timeout_scalefactor(options)
     return TestConfig(
         command_prefix=options.command_prefix,
         extra_flags=options.extra_flags,
         isolates=options.isolates,
-        mode_flags=self.mode_options.flags + self._runner_flags(),
+        mode_flags=self.mode_options.flags,
         no_harness=options.no_harness,
         noi18n=self.build_config.no_i18n,
         random_seed=options.random_seed,

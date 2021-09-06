@@ -232,9 +232,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
           prefix="v8-test-runner-")
       options.json_test_results = self._temporary_json_output_file.name
 
-  def _runner_flags(self):
-    return EXTRA_DEFAULT_FLAGS
-
   def _parse_variants(self, aliases_str):
     # Use developer defaults if no variant was specified.
     aliases_str = aliases_str or 'dev'
@@ -301,7 +298,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       loader,
       NameFilterProc(args) if args else None,
       StatusFileFilterProc(options.slow_tests, options.pass_fail_tests),
-      VariantProc(self._variants),
+      VariantProc(self._variants, EXTRA_DEFAULT_FLAGS),
       StatusFileFilterProc(options.slow_tests, options.pass_fail_tests),
       self._create_predictable_filter(),
       self._create_shard_proc(options),
