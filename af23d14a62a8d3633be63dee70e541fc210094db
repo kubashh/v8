@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c0563d_f198c62b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-07T16:01:30Z",
+      "side": 1,
+      "message": "Hi, shu. I\u0027ve tested that both SpiderMonkey and JSC passed these test262 suites. PTAL :)",
+      "revId": "af23d14a62a8d3633be63dee70e541fc210094db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
