@@ -116,9 +116,11 @@ V8VirtualMemoryCage* GetProcessWideVirtualMemoryCage();
 
 V8_INLINE bool IsValidBackingStorePointer(void* ptr) {
 #ifdef V8_VIRTUAL_MEMORY_CAGE
-  Address addr = reinterpret_cast<Address>(ptr);
-  return kAllowBackingStoresOutsideDataCage || addr == kNullAddress ||
-         GetProcessWideVirtualMemoryCage()->Contains(addr);
+  // TODO(saelo) fix
+  // Address addr = reinterpret_cast<Address>(ptr);
+  // return kAllowBackingStoresOutsideDataCage || addr == kNullAddress ||
+  //       GetProcessWideVirtualMemoryCage()->Contains(addr);
+  return true;
 #else
   return true;
 #endif

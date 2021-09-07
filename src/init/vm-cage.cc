@@ -7,6 +7,7 @@
 #include "include/v8-internal.h"
 #include "src/base/bounded-page-allocator.h"
 #include "src/base/lazy-instance.h"
+#include "src/common/caged-pointer.h"
 #include "src/utils/allocation.h"
 
 namespace v8 {
@@ -48,6 +49,9 @@ bool V8VirtualMemoryCage::Initialize(v8::PageAllocator* page_allocator,
       page_allocator_->AllocatePageSize());
 
   initialized_ = true;
+
+  // TODO(saelo) comment this
+  cagedPointerNullptrValue = base_ + kVirtualMemoryCageSize - 1;
 
   return true;
 }

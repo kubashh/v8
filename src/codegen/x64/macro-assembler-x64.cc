@@ -376,6 +376,35 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
   }
 }
 
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+
+void TurboAssembler::LoadCagedPointerField(Register destination,
+                                           Operand field_operand) {
+  ASM_CODE_COMMENT(this);
+  movq(destination, field_operand);
+  shrq(destination, Immediate(kCagedPointerShift));
+  addq(destination, kPtrComprCageBaseRegister);
+}
+
+void TurboAssembler::StoreCagedPointerField(Operand dst_field_operand,
+                                            Immediate value) {
+  ASM_CODE_COMMENT(this);
+  movq(kScratchRegister, value);
+  subq(kScratchRegister, kPtrComprCageBaseRegister);
+  shlq(kScratchRegister, Immediate(kCagedPointerShift));
+  movq(dst_field_operand, kScratchRegister);
+}
+
+void TurboAssembler::StoreCagedPointerField(Operand dst_field_operand,
+                                            Register value) {
+  ASM_CODE_COMMENT(this);
+  subq(value, kPtrComprCageBaseRegister);
+  shlq(value, Immediate(kCagedPointerShift));
+  movq(dst_field_operand, value);
+}
+
+#endif  // V8_VIRTUAL_MEMORY_CAGE
+
 void TurboAssembler::LoadExternalPointerField(
     Register destination, Operand field_operand, ExternalPointerTag tag,
     Register scratch, IsolateRootLocation isolateRootLocation) {

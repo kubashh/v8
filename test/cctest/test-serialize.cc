@@ -1150,7 +1150,9 @@ UNINITIALIZED_TEST(CustomSnapshotDataBlobOnOrOffHeapTypedArray) {
       i::Handle<i::JSArrayBuffer> buffer =
           GetBufferFromTypedArray(CompileRun("x"));
       // The resulting buffer should be on-heap.
-      CHECK_NULL(buffer->backing_store());
+      CHECK_EQ(buffer->backing_store(),
+               reinterpret_cast<void*>(
+                   cagedPointerNullptrValue));  // TODO(saelo) emptyBackingStore
       creator.SetDefaultContext(
           context, v8::SerializeInternalFieldsCallback(
                        SerializeInternalFields, reinterpret_cast<void*>(2016)));
@@ -1177,10 +1179,14 @@ UNINITIALIZED_TEST(CustomSnapshotDataBlobOnOrOffHeapTypedArray) {
     i::Handle<i::JSArrayBuffer> buffer =
         GetBufferFromTypedArray(CompileRun("x"));
     // The resulting buffer should be on-heap.
-    CHECK_NULL(buffer->backing_store());
+    CHECK_EQ(buffer->backing_store(),
+             reinterpret_cast<void*>(
+                 cagedPointerNullptrValue));  // TODO(saelo) emptyBackingStore
 
     buffer = GetBufferFromTypedArray(CompileRun("y"));
-    CHECK_NULL(buffer->backing_store());
+    CHECK_EQ(buffer->backing_store(),
+             reinterpret_cast<void*>(
+                 cagedPointerNullptrValue));  // TODO(saelo) emptyBackingStore
 
     buffer = GetBufferFromTypedArray(CompileRun("z"));
     // The resulting buffer should be off-heap.
