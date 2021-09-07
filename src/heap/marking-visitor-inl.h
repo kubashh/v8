@@ -508,6 +508,17 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitTransitionArray(
   return size;
 }
 
+template <typename ConcreteVisitor, typename MarkingState>
+void MarkingVisitorBase<ConcreteVisitor, MarkingState>::
+    VisitDescriptorArrayForWriteBarrier(DescriptorArray descriptors,
+                                        int number_of_own_descriptors) {
+  // This is necessary because the Scavenger records slots only for the
+  // promoted black objects and the marking visitor of DescriptorArray skips
+  // the descriptors marked by the visitor.VisitDescriptors() below.
+  this->MarkDescriptorArrayBlack(descriptors);
+  this->VisitDescriptors(descriptors, number_of_own_descriptors);
+}
+
 }  // namespace internal
 }  // namespace v8
 

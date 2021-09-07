@@ -4,6 +4,7 @@
 
 #include "src/heap/marking-barrier.h"
 
+#include "src/base/logging.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
@@ -12,6 +13,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-barrier-inl.h"
+#include "src/heap/marking-visitor-inl.h"
 #include "src/heap/marking-worklist-inl.h"
 #include "src/heap/marking-worklist.h"
 #include "src/heap/safepoint.h"
@@ -71,15 +73,60 @@ void MarkingBarrier::Write(JSArrayBuffer host,
   extension->Mark();
 }
 
+// Visitor that is similar to ConcurrentMarkingVisitor for the sole purpose of
+// visiting DescriptorArray off the main thread.
+class DescriptorArrayMarkingBarrierVisitor final
+    : public MarkingVisitorBase<DescriptorArrayMarkingBarrierVisitor,
+                                MarkCompactCollector::MarkingState> {
+ public:
+  DescriptorArrayMarkingBarrierVisitor(
+      MarkingWorklists::Local* local_marking_worklists, Heap* heap,
+      unsigned mark_compact_epoch,
+      MarkCompactCollector::MarkingState* marking_state)
+      : MarkingVisitorBase(-1, local_marking_worklists, nullptr, heap,
+                           mark_compact_epoch, base::EnumSet<CodeFlushMode>{},
+                           false, false),
+        marking_state_(marking_state) {}
+
+ private:
+  MarkCompactCollector::MarkingState* marking_state() { return marking_state_; }
+
+  void SynchronizePageAccess(HeapObject heap_object) const {
+#ifdef THREAD_SANITIZER
+    // This is needed because TSAN does not process the memory fence
+    // emitted after page initialization.
+    BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
+#endif
+  }
+
+  TraceRetainingPathMode retaining_path_mode() const {
+    return TraceRetainingPathMode::kDisabled;
+  }
+
+  template <typename TSlot>
+  void RecordSlot(HeapObject object, TSlot slot, HeapObject target) {
+    MarkCompactCollector::RecordSlot(object, slot, target);
+  }
+
+  void RecordRelocSlot(Code, RelocInfo*, HeapObject) { UNREACHABLE(); }
+
+  MarkCompactCollector::MarkingState* const marking_state_;
+
+  friend class MarkingVisitorBase<DescriptorArrayMarkingBarrierVisitor,
+                                  MarkCompactCollector::MarkingState>;
+};
+
 void MarkingBarrier::Write(DescriptorArray descriptor_array,
                            int number_of_own_descriptors) {
   DCHECK(IsCurrentMarkingBarrier());
-  DCHECK(is_main_thread_barrier_);
   int16_t raw_marked = descriptor_array.raw_number_of_marked_descriptors();
   if (NumberOfMarkedDescriptors::decode(collector_->epoch(), raw_marked) <
       number_of_own_descriptors) {
-    collector_->MarkDescriptorArrayFromWriteBarrier(descriptor_array,
-                                                    number_of_own_descriptors);
+    MarkingWorklists::Local local_lists(collector_->marking_worklists());
+    DescriptorArrayMarkingBarrierVisitor visitor(
+        &local_lists, heap_, collector_->epoch(), &marking_state_);
+    visitor.VisitDescriptorArrayForWriteBarrier(descriptor_array,
+                                                number_of_own_descriptors);
   }
 }
 
