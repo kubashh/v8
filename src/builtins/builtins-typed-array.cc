@@ -80,11 +80,14 @@ BUILTIN(TypedArrayPrototypeCopyWithin) {
   if (count <= 0) return *array;
 
   // TypedArray buffer may have been transferred/detached during parameter
-  // processing above. Return early in this case, to prevent potential UAF error
-  // TODO(caitp): throw here, as though the full algorithm were performed (the
-  // throw would have come from ecma262/#sec-integerindexedelementget)
-  // (see )
-  if (V8_UNLIKELY(array->WasDetached())) return *array;
+  // processing above. Return early in this case, to prevent potential UAF
+  // error.
+  if (V8_UNLIKELY(array->WasDetached())) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate,
+        NewTypeError(MessageTemplate::kDetachedOperation,
+                     isolate->factory()->NewStringFromAsciiChecked(method)));
+  }
 
   // Ensure processed indexes are within array bounds
   DCHECK_GE(from, 0);
@@ -157,7 +160,10 @@ BUILTIN(TypedArrayPrototypeFill) {
       THROW_NEW_ERROR_RETURN_FAILURE(isolate, NewTypeError(message, operation));
     }
   } else if (V8_UNLIKELY(array->WasDetached())) {
-    return *array;
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate,
+        NewTypeError(MessageTemplate::kDetachedOperation,
+                     isolate->factory()->NewStringFromAsciiChecked(method)));
   }
 
   int64_t count = end - start;
@@ -194,10 +200,6 @@ BUILTIN(TypedArrayPrototypeIncludes) {
         isolate, num, Object::ToInteger(isolate, args.at<Object>(2)));
     index = CapRelativeIndex(num, 0, len);
   }
-
-  // TODO(cwhan.tunz): throw. See the above comment in CopyWithin.
-  if (V8_UNLIKELY(array->WasDetached()))
-    return ReadOnlyRoots(isolate).false_value();
 
   Handle<Object> search_element = args.atOrUndefined(isolate, 1);
   ElementsAccessor* elements = array->GetElementsAccessor();
