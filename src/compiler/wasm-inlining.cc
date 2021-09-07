@@ -16,10 +16,12 @@ namespace internal {
 namespace compiler {
 
 Reduction WasmInliner::Reduce(Node* node) {
-  if (node->opcode() == IrOpcode::kCall) {
-    return ReduceCall(node);
-  } else {
-    return NoChange();
+  switch (node->opcode()) {
+    case IrOpcode::kCall:
+    case IrOpcode::kTailCall:
+      return ReduceCall(node);
+    default:
+      return NoChange();
   }
 }
 
@@ -60,10 +62,12 @@ Reduction WasmInliner::ReduceCall(Node* call) {
   return InlineCall(call, inlinee_start, inlinee_end);
 }
 
-// TODO(12166): Handle exceptions and tail calls.
+// TODO(12166): Handle exceptions.
 Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
                                   Node* callee_end) {
-  DCHECK_EQ(call->opcode(), IrOpcode::kCall);
+  DCHECK(call->opcode() == IrOpcode::kCall ||
+         call->opcode() == IrOpcode::kTailCall);
+  bool is_tail_call = call->opcode() == IrOpcode::kTailCall;
 
   /* 1) Rewire callee formal parameters to the call-site real parameters. Rewire
    * effect and control dependencies of callee's start node with the respective
@@ -93,15 +97,13 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
     }
   }
 
-  /* 2) Rewire uses of the call node to the return values of the callee. Since
-   * there might be multiple return nodes in the callee, we have to create Merge
-   * and Phi nodes for them.
-   */
+  /* 2) Handle all graph terminators for the callee. */
   NodeVector return_nodes(zone());
   for (Node* const input : callee_end->inputs()) {
     DCHECK(IrOpcode::IsGraphTerminator(input->opcode()));
     switch (input->opcode()) {
       case IrOpcode::kReturn:
+        // Returns are collected to be rewired into the caller graph later.
         return_nodes.push_back(input);
         break;
       case IrOpcode::kDeoptimize:
@@ -111,9 +113,15 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
         Revisit(graph()->end());
         break;
       case IrOpcode::kTailCall: {
-        // A tail call in the inlined function has to be transformed into a
-        // regular call, and then returned from the inlinee. It will then be
-        // handled like any other return.
+        if (is_tail_call) {
+          // Nested tail calls reduce to a tail call of the inner function.
+          NodeProperties::MergeControlToEnd(graph(), common(), input);
+          Revisit(graph()->end());
+          break;
+        }
+        // A tail call in the callee inlined in a regular call in the caller has
+        // to be transformed into a regular call, and then returned from the
+        // inlinee. It will then be handled like any other return.
         auto descriptor = CallDescriptorOf(input->op());
         NodeProperties::ChangeOp(input, common()->Call(descriptor));
         int return_arity = static_cast<int>(inlinee()->sig->return_count());
@@ -141,6 +149,8 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
   }
 
   if (return_nodes.size() > 0) {
+    /* 3) Collect all return site value, effect, and control inputs into phis
+     * and merges. */
     int const return_count = static_cast<int>(return_nodes.size());
     NodeVector controls(zone());
     NodeVector effects(zone());
@@ -176,6 +186,29 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
           common()->Phi(repr, return_count),
           static_cast<int>(ith_values.size()), &ith_values.front());
       values.push_back(ith_value_output);
+    }
+
+    /* 4) Rewire the returns into the continuation after the function call. */
+    if (is_tail_call) {
+      // If the inlined call is a tail call, there is no continuation in the
+      // caller. We just have to create a Return node.
+      NodeVector return_inputs(return_arity + 3, zone());
+      return_inputs[0] = graph()->NewNode(common()->Int32Constant(0));
+      for (int i = 0; i < return_arity; i++) {
+        return_inputs[i + 1] = values[i];
+      }
+      return_inputs[return_arity + 1] = effect_output;
+      return_inputs[return_arity + 2] = control_output;
+      // TODO(12166): Consider adding tracing information to this return.
+      Node* ret = graph()->NewNode(common()->Return(return_arity),
+                                   return_arity + 3, return_inputs.data());
+      // Replace the edge from end to the tail call with an edge to the new
+      // return node.
+      for (Edge edge : call->use_edges()) {
+        DCHECK_EQ(edge.from(), graph()->end());
+        edge.UpdateTo(ret);
+      }
+      return Changed(graph()->end());
     }
 
     if (return_arity == 0) {
