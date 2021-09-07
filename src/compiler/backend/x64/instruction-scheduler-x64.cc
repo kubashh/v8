@@ -391,6 +391,10 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kX64MovqDecompressTaggedPointer:
     case kX64MovqDecompressAnyTagged:
     case kX64MovqCompressTagged:
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+    case kX64MovqUncagePointer:
+    case kX64MovqCagePointer:
+#endif
     case kX64Movq:
     case kX64Movsd:
     case kX64Movss:

@@ -134,7 +134,7 @@ struct SharedWasmMemoryData {
 };
 
 void BackingStore::Clear() {
-  buffer_start_ = nullptr;
+  buffer_start_ = nullptr;  // TODO(saelo) emptybackingstore
   byte_length_ = 0;
   has_guard_regions_ = false;
   if (holds_shared_ptr_to_allocator_) {
@@ -148,7 +148,7 @@ void BackingStore::Clear() {
 BackingStore::~BackingStore() {
   GlobalBackingStoreRegistry::Unregister(this);
 
-  if (buffer_start_ == nullptr) {
+  if (buffer_start_ == nullptr) {  // TODO(saelo) empty backing store
     Clear();
     return;
   }
@@ -235,7 +235,7 @@ BackingStore::~BackingStore() {
 std::unique_ptr<BackingStore> BackingStore::Allocate(
     Isolate* isolate, size_t byte_length, SharedFlag shared,
     InitializedFlag initialized) {
-  void* buffer_start = nullptr;
+  void* buffer_start = nullptr;  // TODO(saelo) make EmptyBackingStore constant
   auto allocator = isolate->array_buffer_allocator();
   CHECK_NOT_NULL(allocator);
   if (byte_length != 0) {

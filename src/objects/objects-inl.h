@@ -16,6 +16,7 @@
 #include "src/base/memory.h"
 #include "src/base/numbers/double.h"
 #include "src/builtins/builtins.h"
+#include "src/common/caged-pointer-inl.h"
 #include "src/common/external-pointer-inl.h"
 #include "src/common/globals.h"
 #include "src/handles/handles-inl.h"
@@ -620,6 +621,24 @@ MaybeHandle<Object> Object::SetElement(Isolate* isolate, Handle<Object> object,
       SetProperty(&it, value, StoreOrigin::kMaybeKeyed, Just(should_throw)));
   return value;
 }
+
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+Address Object::ReadCagedPointerField(size_t offset,
+                                      PtrComprCageBase cage_base) const {
+  return i::ReadCagedPointerField(field_address(offset), cage_base);
+}
+
+void Object::WriteCagedPointerField(size_t offset, PtrComprCageBase cage_base,
+                                    Address value) {
+  i::WriteCagedPointerField(field_address(offset), cage_base, value);
+}
+
+void Object::WriteCagedPointerField(size_t offset, Isolate* isolate,
+                                    Address value) {
+  i::WriteCagedPointerField(field_address(offset), PtrComprCageBase(isolate),
+                            value);
+}
+#endif  // V8_VIRTUAL_MEMORY_CAGE
 
 void Object::InitExternalPointerField(size_t offset, Isolate* isolate) {
   i::InitExternalPointerField(field_address(offset), isolate);

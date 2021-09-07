@@ -500,7 +500,8 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
       auto backing_store = backing_stores_[store_index];
       auto start = backing_store
                        ? reinterpret_cast<byte*>(backing_store->buffer_start())
-                       : nullptr;
+                       //: nullptr;
+                       : reinterpret_cast<byte*>(cagedPointerNullptrValue);
       typed_array->SetOffHeapDataPtr(main_thread_isolate(), start,
                                      typed_array->byte_offset());
     }
@@ -510,7 +511,9 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
     if (buffer->GetBackingStoreRefForDeserialization() != kNullRefSentinel) {
       new_off_heap_array_buffers_.push_back(buffer);
     } else {
-      buffer->set_backing_store(main_thread_isolate(), nullptr);
+      buffer->set_backing_store(
+          main_thread_isolate(),
+          reinterpret_cast<void*>(cagedPointerNullptrValue));
     }
   } else if (InstanceTypeChecker::IsBytecodeArray(instance_type)) {
     // TODO(mythria): Remove these once we store the default values for these

@@ -1195,6 +1195,7 @@ const kFixedDoubleArrayMap: Map = FixedDoubleArrayMapConstant();
 const kCOWMap: Map = FixedCOWArrayMapConstant();
 const kEmptyByteArray: ByteArray = EmptyByteArrayConstant();
 const kEmptyFixedArray: EmptyFixedArray = EmptyFixedArrayConstant();
+// TODO(saelo) EmptyBackingStoreConstant(); ??
 const kPromiseCapabilityMap: Map = PromiseCapabilityMapConstant();
 // The map of a non-internalized internal SeqOneByteString.
 const kOneByteStringMap: Map = OneByteStringMapConstant();

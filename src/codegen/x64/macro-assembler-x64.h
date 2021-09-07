@@ -616,6 +616,12 @@ class V8_EXPORT_PRIVATE TurboAssembler
   // ---------------------------------------------------------------------------
   // V8 Heap sandbox support
 
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+  void LoadCagedPointerField(Register destination, Operand field_operand);
+  void StoreCagedPointerField(Operand dst_field_operand, Immediate immediate);
+  void StoreCagedPointerField(Operand dst_field_operand, Register value);
+#endif
+
   enum class IsolateRootLocation { kInScratchRegister, kInRootRegister };
   // Loads a field containing off-heap pointer and does necessary decoding
   // if V8 heap sandbox is enabled.
