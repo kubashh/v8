@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc171dc9_36c05b4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-07T14:29:49Z",
+      "side": 1,
+      "message": "You can use no-try...",
+      "revId": "c84a9c83d4df807ae90641df038f38614fea03d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5a7f98a_b9f51a34",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 2216,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-07T14:29:49Z",
+      "side": 1,
+      "message": "You could also add it to all the combined step with a weight of 1.",
+      "revId": "c84a9c83d4df807ae90641df038f38614fea03d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
