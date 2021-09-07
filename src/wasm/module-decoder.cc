@@ -550,47 +550,30 @@ class ModuleDecoderImpl : public Decoder {
   }
 
   void DecodeTypeSection() {
-    uint32_t signatures_count = consume_count("types count", kV8MaxWasmTypes);
-    module_->types.reserve(signatures_count);
-    for (uint32_t i = 0; ok() && i < signatures_count; ++i) {
+    uint32_t types_count = consume_count("types count", kV8MaxWasmTypes);
+    module_->types.reserve(types_count);
+    for (uint32_t i = 0; ok() && i < types_count; ++i) {
       TRACE("DecodeSignature[%d] module+%d\n", i,
             static_cast<int>(pc_ - start_));
       uint8_t kind = consume_u8("type kind");
       switch (kind) {
-        case kWasmFunctionTypeCode: {
-          const FunctionSig* s = consume_sig(module_->signature_zone.get());
-          module_->add_signature(s);
-          break;
-        }
+        case kWasmFunctionTypeCode:
         case kWasmFunctionExtendingTypeCode: {
-          if (!enabled_features_.has_gc()) {
-            errorf(pc(),
-                   "invalid function type definition, enable with "
-                   "--experimental-wasm-gc");
-            break;
-          }
           const FunctionSig* s = consume_sig(module_->signature_zone.get());
-          module_->add_signature(s);
-          uint32_t super_index = consume_u32v("supertype");
-          if (!module_->has_signature(super_index)) {
-            errorf(pc(), "invalid function supertype index: %d", super_index);
-            break;
+          uint32_t super_index = kNoSuperType;
+          if (kind == kWasmFunctionExtendingTypeCode) {
+            if (!enabled_features_.has_gc()) {
+              errorf(pc(),
+                     "invalid function type definition, enable with "
+                     "--experimental-wasm-gc");
+              break;
+            }
+            super_index = consume_u32v("supertype");
           }
+          module_->add_signature(s, kNoSuperType);
           break;
         }
-        case kWasmStructTypeCode: {
-          if (!enabled_features_.has_gc()) {
-            errorf(pc(),
-                   "invalid struct type definition, enable with "
-                   "--experimental-wasm-gc");
-            break;
-          }
-          const StructType* s = consume_struct(module_->signature_zone.get());
-          module_->add_struct_type(s);
-          // TODO(7748): Should we canonicalize struct types, like
-          // {signature_map} does for function signatures?
-          break;
-        }
+        case kWasmStructTypeCode:
         case kWasmStructExtendingTypeCode: {
           if (!enabled_features_.has_gc()) {
             errorf(pc(),
@@ -599,25 +582,15 @@ class ModuleDecoderImpl : public Decoder {
             break;
           }
           const StructType* s = consume_struct(module_->signature_zone.get());
-          module_->add_struct_type(s);
-          uint32_t super_index = consume_u32v("supertype");
-          if (!module_->has_struct(super_index)) {
-            errorf(pc(), "invalid struct supertype: %d", super_index);
-            break;
-          }
+          uint32_t super_index = kind == kWasmStructExtendingTypeCode
+                                     ? consume_u32v("supertype")
+                                     : kNoSuperType;
+          module_->add_struct_type(s, super_index);
+          // TODO(7748): Should we canonicalize struct types, like
+          // {signature_map} does for function signatures?
           break;
         }
-        case kWasmArrayTypeCode: {
-          if (!enabled_features_.has_gc()) {
-            errorf(pc(),
-                   "invalid array type definition, enable with "
-                   "--experimental-wasm-gc");
-            break;
-          }
-          const ArrayType* type = consume_array(module_->signature_zone.get());
-          module_->add_array_type(type);
-          break;
-        }
+        case kWasmArrayTypeCode:
         case kWasmArrayExtendingTypeCode: {
           if (!enabled_features_.has_gc()) {
             errorf(pc(),
@@ -626,18 +599,44 @@ class ModuleDecoderImpl : public Decoder {
             break;
           }
           const ArrayType* type = consume_array(module_->signature_zone.get());
-          module_->add_array_type(type);
-          uint32_t super_index = consume_u32v("supertype");
-          if (!module_->has_array(super_index)) {
-            errorf(pc(), "invalid array supertype: %d", super_index);
-            break;
-          }
+          uint32_t super_index = kind == kWasmArrayExtendingTypeCode
+                                     ? consume_u32v("supertype")
+                                     : kNoSuperType;
+          module_->add_array_type(type, super_index);
           break;
         }
         default:
           errorf(pc(), "unknown type form: %d", kind);
           break;
       }
+    }
+    // Check validity of explicitly defined supertypes.
+    const WasmModule* module = module_.get();
+    for (uint32_t i = 0; ok() && i < types_count; ++i) {
+      uint32_t explicit_super = module_->supertype(i);
+      if (explicit_super == kNoSuperType) continue;
+      if (GetSubtypingDepth(module, i) >
+          static_cast<int>(kV8MaxRttSubtypingDepth)) {
+        errorf("type %d: subtyping depth is greater than allowed", i);
+        continue;
+      }
+      switch (module_->type_kinds[i]) {
+        case kWasmStructTypeCode:
+          if (!module->has_struct(explicit_super)) break;
+          if (!StructIsSubtypeOf(i, explicit_super, module, module)) break;
+          continue;
+        case kWasmArrayTypeCode:
+          if (!module->has_array(explicit_super)) break;
+          if (!ArrayIsSubtypeOf(i, explicit_super, module, module)) break;
+          continue;
+        case kWasmFunctionTypeCode:
+          if (!module->has_signature(explicit_super)) break;
+          if (!FunctionIsSubtypeOf(i, explicit_super, module, module)) break;
+          continue;
+        default:
+          UNREACHABLE();
+      }
+      errorf("type %d has invalid explicit supertype %d", i, explicit_super);
     }
     module_->signature_map.Freeze();
   }

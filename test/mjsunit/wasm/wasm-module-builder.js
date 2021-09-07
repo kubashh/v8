@@ -469,13 +469,15 @@ for (let prefix in kPrefixOpcodes) {
 
 // GC opcodes
 let kExprStructNewWithRtt = 0x01;
-let kExprStructNewDefault = 0x02;
+let kExprStructNewDefaultWithRtt = 0x02;
 let kExprStructGet = 0x03;
 let kExprStructGetS = 0x04;
 let kExprStructGetU = 0x05;
 let kExprStructSet = 0x06;
+let kExprStructNew = 0x07;
+let kExprStructNewDefault = 0x08;
 let kExprArrayNewWithRtt = 0x11;
-let kExprArrayNewDefault = 0x12;
+let kExprArrayNewDefaultWithRtt = 0x12;
 let kExprArrayGet = 0x13;
 let kExprArrayGetS = 0x14;
 let kExprArrayGetU = 0x15;
@@ -483,6 +485,9 @@ let kExprArraySet = 0x16;
 let kExprArrayLen = 0x17;
 let kExprArrayCopy = 0x18;
 let kExprArrayInit = 0x19;
+let kExprArrayInitStatic = 0x1a;
+let kExprArrayNew = 0x1b;
+let kExprArrayNewDefault = 0x1c;
 let kExprI31New = 0x20;
 let kExprI31GetS = 0x21;
 let kExprI31GetU = 0x22;
@@ -493,6 +498,10 @@ let kExprRefTest = 0x40;
 let kExprRefCast = 0x41;
 let kExprBrOnCast = 0x42;
 let kExprBrOnCastFail = 0x43;
+let kExprRefTestStatic = 0x44;
+let kExprRefCastStatic = 0x45;
+let kExprBrOnCastStatic = 0x46;
+let kExprBrOnCastStaticFail = 0x47;
 let kExprRefIsFunc = 0x50;
 let kExprRefIsData = 0x51;
 let kExprRefIsI31 = 0x52;
@@ -1004,20 +1013,22 @@ class Binary {
         this.emit_u8(kExprRefNull);
         this.emit_heap_type(expr.value);
         break;
+      case kExprStructNew:
       case kExprStructNewWithRtt:
         for (let operand of expr.operands) {
           this.emit_init_expr_recursive(operand);
         }
         this.emit_u8(kGCPrefix);
-        this.emit_u8(kExprStructNewWithRtt);
+        this.emit_u8(expr.kind);
         this.emit_u32v(expr.value);
         break;
       case kExprArrayInit:
+      case kExprArrayInitStatic:
         for (let operand of expr.operands) {
           this.emit_init_expr_recursive(operand);
         }
         this.emit_u8(kGCPrefix);
-        this.emit_u8(kExprArrayInit);
+        this.emit_u8(expr.kind);
         this.emit_u32v(expr.value);
         this.emit_u32v(expr.operands.length - 1);
         break;
@@ -1170,8 +1181,14 @@ class WasmInitExpr {
   static StructNewWithRtt(type, args) {
     return {kind: kExprStructNewWithRtt, value: type, operands: args};
   }
+  static StructNew(type, args) {
+    return {kind: kExprStructNew, value: type, operands: args};
+  }
   static ArrayInit(type, args) {
     return {kind: kExprArrayInit, value: type, operands: args};
+  }
+  static ArrayInitStatic(type, args) {
+    return {kind: kExprArrayInitStatic, value: type, operands: args};
   }
   static RttCanon(type) {
     return {kind: kExprRttCanon, value: type};

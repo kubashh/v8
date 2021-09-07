@@ -39,6 +39,8 @@ namespace module_decoder_unittest {
   WASM_STRUCT_NEW_WITH_RTT(index, __VA_ARGS__), kExprEnd
 #define WASM_INIT_EXPR_ARRAY_INIT(index, length, ...) \
   WASM_ARRAY_INIT(index, length, __VA_ARGS__), kExprEnd
+#define WASM_INIT_EXPR_ARRAY_INIT_STATIC(index, length, ...) \
+  WASM_ARRAY_INIT_STATIC(index, length, __VA_ARGS__), kExprEnd
 #define WASM_INIT_EXPR_RTT_CANON(index) WASM_RTT_CANON(index), kExprEnd
 
 #define REF_NULL_ELEMENT kExprRefNull, kFuncRefCode, kExprEnd
@@ -1116,6 +1118,13 @@ TEST_F(WasmModuleVerifyTest, ArrayInitInitExpr) {
               WASM_INIT_EXPR_ARRAY_INIT(0, 3, WASM_I32V(10), WASM_I32V(20),
                                         WASM_I32V(30), WASM_RTT_CANON(0)))};
   EXPECT_VERIFIES(basic);
+  static const byte basic_nominal[] = {
+      SECTION(Type, ENTRY_COUNT(1), WASM_ARRAY_DEF(kI16Code, true)),
+      SECTION(Global, ENTRY_COUNT(1),  // --
+              kRefCode, 0, 0,          // type, mutability
+              WASM_INIT_EXPR_ARRAY_INIT_STATIC(0, 3, WASM_I32V(10),
+                                               WASM_I32V(20), WASM_I32V(30)))};
+  EXPECT_VERIFIES(basic_nominal);
 
   static const byte type_error[] = {
       SECTION(Type, ENTRY_COUNT(2),  // --
@@ -1232,6 +1241,84 @@ TEST_F(WasmModuleVerifyTest, InvalidStructTypeDef) {
               kI32Code,              // field type
               2)};                   // invalid mutability value
   EXPECT_FAILURE_WITH_MSG(invalid_mutability, "invalid mutability");
+}
+
+TEST_F(WasmModuleVerifyTest, NominalStructTypeDef) {
+  WASM_FEATURE_SCOPE(reftypes);
+  WASM_FEATURE_SCOPE(typed_funcref);
+  WASM_FEATURE_SCOPE(gc);
+
+  // Inheritance: t1 <: t2 <: t0
+  static const byte all_good[] = {
+      SECTION(Type, ENTRY_COUNT(3),          // --
+              kWasmStructExtendingTypeCode,  // type #0
+              1,                             // field count
+              kI32Code, 1,                   // mut i32
+              U32V_5(kNoSuperType),          // no supertype
+
+              kWasmStructExtendingTypeCode,  // type #1
+              2,                             // field count
+              kI32Code, 1,                   // mut i32 (inherited)
+              kI64Code, 1,                   // mut i32 (added)
+              2,                             // supertype
+
+              kWasmStructExtendingTypeCode,  // type #2
+              1,                             // field count
+              kI32Code, 1,                   // mut i32 (inherited)
+              0)};                           // supertype
+  EXPECT_VERIFIES(all_good);
+
+  static const byte self_or_mutual_ref[] = {
+      SECTION(Type, ENTRY_COUNT(4),    // --
+              kWasmStructTypeCode, 0,  // empty struct
+
+              kWasmStructExtendingTypeCode,  // type1
+              1,                             // field count
+              kOptRefCode, 1, 1,             // mut optref type1
+              0,                             // supertype
+
+              kWasmStructExtendingTypeCode,  // type 2
+              1,                             // field count
+              kOptRefCode, 3, 1,             // mut optref type3
+              0,                             // supertype
+
+              kWasmStructExtendingTypeCode,  // type 3
+              1,                             // field count
+              kOptRefCode, 2, 1,             // mut optref type2
+              0)};                           // supertype
+  EXPECT_VERIFIES(self_or_mutual_ref);
+
+  static const byte mutual_ref_with_subtyping[] = {
+      SECTION(Type,
+              ENTRY_COUNT(3),       // --
+              kWasmStructTypeCode,  //
+              1,                    // field count
+              kOptRefCode, 0, 0,    // ref type0
+
+              kWasmStructExtendingTypeCode,  // --
+              1,                             // field count
+              kOptRefCode, 2, 0,             // ref type2
+              0,                             // supertype
+
+              kWasmStructExtendingTypeCode,  // --
+              1,                             // field count
+              kOptRefCode, 1, 0,             // ref type1
+              0)};                           // supertype
+  EXPECT_VERIFIES(mutual_ref_with_subtyping);
+
+  static const byte inheritance_cycle[] = {
+      SECTION(Type, ENTRY_COUNT(2),                  // --
+              kWasmStructExtendingTypeCode, 0, 1,    // no fields, supertype 1
+              kWasmStructExtendingTypeCode, 0, 0)};  // no fields, supertype 0
+  EXPECT_FAILURE_WITH_MSG(inheritance_cycle, "depth is greater than allowed");
+
+  static const byte invalid_field[] = {
+      SECTION(Type, ENTRY_COUNT(2),                         // --
+              kWasmStructTypeCode, U32V_1(1), kI32Code, 1,  // t0: [i32]
+              kWasmStructExtendingTypeCode, U32V_1(2),      // t1:
+              kI64Code, 1,               // i64 (invalid inheritance)
+              kI32Code, 1, U32V_1(0))};  // i32 (added), supertype 0
+  EXPECT_FAILURE_WITH_MSG(invalid_field, "invalid explicit supertype");
 }
 
 TEST_F(WasmModuleVerifyTest, InvalidArrayTypeDef) {
