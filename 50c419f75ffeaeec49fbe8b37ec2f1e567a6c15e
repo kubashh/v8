@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e6e314e_7c3962ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-09-07T18:27:12Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a3c603a_32975a66",
@@ -77,6 +94,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d45ec5f3_8cf5a860",
+        "filename": "src/objects/option-util.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-09-07T18:27:12Z",
+      "side": 1,
+      "message": "https://tc39.es/ecma402/#sec-getoptionsobject\nhttps://tc39.es/proposal-temporal/#sec-getoptionsobject\n\nThe problem is there are fallback and other more complex stuff related to the option reading and optimize it away from the spec text could be pretty tricky to maintain.",
+      "parentUuid": "0b2a2918_e6275fc2",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 58
+      },
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "412a591f_883ad765",
         "filename": "src/objects/option-util.h",
         "patchSetId": 4
@@ -88,6 +129,24 @@
       "writtenOn": "2021-09-01T01:16:51Z",
       "side": 1,
       "message": "I would prefer these methods to be named \u0027IntlOptions\u0027 instead of \u0027Options\u0027 to avoid accidental misuse. ecma262 doesn\u0027t yet have a uniform way of dealing with options bags (for example, Error.cause has a Has and a Get, resizable ArrayBuffers have a plain Get) unlike ecma402+Temporal. The 262 editors will talk about what to name these AOs eventually, and when we decide that we can rename these functions to match. Until then I don\u0027t want to give the impression that these are for all options bags.",
+      "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af1cc127_144df2c6",
+        "filename": "src/objects/option-util.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-09-07T18:27:12Z",
+      "side": 1,
+      "message": "The point is Temporal spec now intend to get what is in ECMA402 and move into ECMA262 and this is part of the Temporal proposal which would be encoperated into 262 not just 402. See \n\nhttps://tc39.es/proposal-temporal/#sec-getoptionsobject\nhttps://tc39.es/proposal-temporal/#sec-getoptionsobject-deleted\n\nthey intend to be the same as those in \n\nhttps://tc39.es/ecma402/#sec-getoptionsobject",
+      "parentUuid": "412a591f_883ad765",
       "revId": "50c419f75ffeaeec49fbe8b37ec2f1e567a6c15e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
