@@ -22,6 +22,30 @@
       },
       "revId": "c1c53f0ca146668accacba889634db5dd5287b85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f00508bf_4b8ed18f",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-07T21:15:26Z",
+      "side": 0,
+      "message": "Clever hack :) \nYet another alternative would be `ps -e | grep -v grep | grep compiler_proxy`, but I think `pgrep` is by far the cleanest solution.",
+      "parentUuid": "79d48f9f_0fdf4d7c",
+      "range": {
+        "startLine": 509,
+        "startChar": 13,
+        "endLine": 509,
+        "endChar": 15
+      },
+      "revId": "c1c53f0ca146668accacba889634db5dd5287b85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
