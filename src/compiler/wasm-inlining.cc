@@ -34,12 +34,11 @@ Reduction WasmInliner::ReduceCall(Node* call) {
   if (static_cast<uint32_t>(info.value()) != inlinee_index_) return NoChange();
 
   CHECK_LT(inlinee_index_, module()->functions.size());
-  const wasm::WasmFunction* function = &module()->functions[inlinee_index_];
   base::Vector<const byte> function_bytes =
-      wire_bytes_->GetCode(function->code);
-  const wasm::FunctionBody inlinee_body(function->sig, function->code.offset(),
-                                        function_bytes.begin(),
-                                        function_bytes.end());
+      wire_bytes_->GetCode(inlinee()->code);
+  const wasm::FunctionBody inlinee_body(
+      inlinee()->sig, inlinee()->code.offset(), function_bytes.begin(),
+      function_bytes.end());
   wasm::WasmFeatures detected;
   WasmGraphBuilder builder(env_, zone(), mcgraph_, inlinee_body.sig, spt_);
   std::vector<WasmLoopInfo> infos;
@@ -111,10 +110,30 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
         NodeProperties::MergeControlToEnd(graph(), common(), input);
         Revisit(graph()->end());
         break;
-      case IrOpcode::kTailCall:
-        // TODO(12166): A tail call in the inlined function has to be
-        // transformed into a regular call in the caller function.
-        UNIMPLEMENTED();
+      case IrOpcode::kTailCall: {
+        // A tail call in the inlined function has to be transformed into a
+        // regular call, and then returned from the inlinee. It will then be
+        // handled like any other return.
+        auto descriptor = CallDescriptorOf(input->op());
+        NodeProperties::ChangeOp(input, common()->Call(descriptor));
+        int return_arity = static_cast<int>(inlinee()->sig->return_count());
+        NodeVector projections(return_arity + 3, zone());
+        projections[0] = graph()->NewNode(common()->Int32Constant(0));
+        if (return_arity == 1) {
+          projections[1] = input;
+        } else if (return_arity > 1) {
+          for (uint32_t i = 0; i < projections.size(); i++) {
+            projections[i + 1] =
+                graph()->NewNode(common()->Projection(i), input, input);
+          }
+        }
+        projections[return_arity + 1] = input;
+        projections[return_arity + 2] = input;
+        Node* ret = graph()->NewNode(common()->Return(return_arity),
+                                     return_arity + 3, projections.data());
+        return_nodes.push_back(ret);
+        break;
+      }
       default:
         UNREACHABLE();
     }
@@ -150,9 +169,8 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
       ith_values.push_back(control_output);
       // Find the correct machine representation for the return values from the
       // inlinee signature.
-      const wasm::WasmFunction* function = &module()->functions[inlinee_index_];
       MachineRepresentation repr =
-          function->sig->GetReturn(i).machine_representation();
+          inlinee()->sig->GetReturn(i).machine_representation();
       Node* ith_value_output = graph()->NewNode(
           common()->Phi(repr, return_count),
           static_cast<int>(ith_values.size()), &ith_values.front());
@@ -189,6 +207,10 @@ Reduction WasmInliner::InlineCall(Node* call, Node* callee_start,
 }
 
 const wasm::WasmModule* WasmInliner::module() const { return env_->module; }
+
+const wasm::WasmFunction* WasmInliner::inlinee() const {
+  return &module()->functions[inlinee_index_];
+}
 
 }  // namespace compiler
 }  // namespace internal
