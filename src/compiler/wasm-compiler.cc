@@ -6896,8 +6896,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         // Convert wasm numbers to JS values.
         pos = AddArgumentNodes(base::VectorOf(args), pos, wasm_count, sig_);
 
-        args[pos++] = undefined_node;                        // new target
-        args[pos++] = Int32Constant(wasm_count);             // argument count
+        args[pos++] = undefined_node;  // new target
+        args[pos++] =
+            Int32Constant(JSParameterCount(wasm_count));  // argument count
         args[pos++] = function_context;
         args[pos++] = effect();
         args[pos++] = control();
@@ -6924,8 +6925,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         for (int i = wasm_count; i < expected_arity; ++i) {
           args[pos++] = undefined_node;
         }
-        args[pos++] = undefined_node;                        // new target
-        args[pos++] = Int32Constant(wasm_count);             // argument count
+        args[pos++] = undefined_node;  // new target
+        args[pos++] =
+            Int32Constant(JSParameterCount(wasm_count));  // argument count
 
         Node* function_context =
             gasm_->LoadContextFromJSFunction(callable_node);
@@ -6948,7 +6950,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] =
             gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
         args[pos++] = callable_node;
-        args[pos++] = Int32Constant(wasm_count);             // argument count
+        args[pos++] =
+            Int32Constant(JSParameterCount(wasm_count));     // argument count
         args[pos++] = undefined_node;                        // receiver
 
         auto call_descriptor = Linkage::GetStubCallDescriptor(
@@ -7129,8 +7132,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     int pos = 0;
     args[pos++] = gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
     args[pos++] = callable;
-    args[pos++] = Int32Constant(wasm_count);  // argument count
-    args[pos++] = UndefinedValue();           // receiver
+    args[pos++] =
+        Int32Constant(JSParameterCount(wasm_count));  // argument count
+    args[pos++] = UndefinedValue();                   // receiver
 
     auto call_descriptor = Linkage::GetStubCallDescriptor(
         graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 1,
