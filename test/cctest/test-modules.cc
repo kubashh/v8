@@ -22,6 +22,7 @@ using v8::ModuleRequest;
 using v8::Promise;
 using v8::ScriptCompiler;
 using v8::ScriptOrigin;
+using v8::Source;
 using v8::String;
 using v8::Value;
 
@@ -64,7 +65,7 @@ TEST(ModuleInstantiationFailures1) {
           "import './foo.js';\n"
           "export {} from './bar.js';");
       ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       module = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
       CHECK_EQ(Module::kUninstantiated, module->GetStatus());
       Local<FixedArray> module_requests = module->GetModuleRequests();
@@ -106,7 +107,7 @@ TEST(ModuleInstantiationFailures1) {
           "import './dep1.js';\n"
           "export {} from './bar.js';");
       ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       module = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -114,7 +115,7 @@ TEST(ModuleInstantiationFailures1) {
     {
       Local<String> source_text = v8_str("");
       ScriptOrigin origin = ModuleOrigin(v8_str("dep1.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       dep1 = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -189,7 +190,7 @@ TEST(ModuleInstantiationWithImportAssertions) {
           "import './foo.js' assert { };\n"
           "export {} from './bar.js' assert { a: 'b' };");
       ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       module = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
       CHECK_EQ(Module::kUninstantiated, module->GetStatus());
       Local<FixedArray> module_requests = module->GetModuleRequests();
@@ -234,7 +235,7 @@ TEST(ModuleInstantiationWithImportAssertions) {
     {
       Local<String> source_text = v8_str("Object.expando = 40");
       ScriptOrigin origin = ModuleOrigin(v8_str("foo.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       fooModule =
           ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
@@ -243,7 +244,7 @@ TEST(ModuleInstantiationWithImportAssertions) {
     {
       Local<String> source_text = v8_str("Object.expando += 2");
       ScriptOrigin origin = ModuleOrigin(v8_str("bar.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       barModule =
           ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
@@ -286,7 +287,7 @@ TEST(ModuleInstantiationFailures2) {
       Local<String> source_text =
           v8_str("import './dep1.js'; import './dep2.js'");
       ScriptOrigin origin = ModuleOrigin(v8_str("root1.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       root = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -294,7 +295,7 @@ TEST(ModuleInstantiationFailures2) {
     {
       Local<String> source_text = v8_str("export let x = 42");
       ScriptOrigin origin = ModuleOrigin(v8_str("dep1.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       dep1 = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -302,7 +303,7 @@ TEST(ModuleInstantiationFailures2) {
     {
       Local<String> source_text = v8_str("import {foo} from './dep3.js'");
       ScriptOrigin origin = ModuleOrigin(v8_str("dep2.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       dep2 = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -320,7 +321,7 @@ TEST(ModuleInstantiationFailures2) {
     {
       Local<String> source_text = v8_str("import {foo} from './dep2.js'");
       ScriptOrigin origin = ModuleOrigin(v8_str("dep2.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       dep2 = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -338,7 +339,7 @@ TEST(ModuleInstantiationFailures2) {
     {
       Local<String> source_text = v8_str("import {foo} from './dep3.js'");
       ScriptOrigin origin = ModuleOrigin(v8_str("dep2.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       dep2 = ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     }
 
@@ -360,7 +361,7 @@ static MaybeLocal<Module> CompileSpecifierAsModuleResolveCallback(
     Local<FixedArray> import_assertions, Local<Module> referrer) {
   CHECK_EQ(0, import_assertions->Length());
   ScriptOrigin origin = ModuleOrigin(v8_str("module.js"), CcTest::isolate());
-  ScriptCompiler::Source source(specifier, origin);
+  Source source(specifier, origin);
   return ScriptCompiler::CompileModule(CcTest::isolate(), &source)
       .ToLocalChecked();
 }
@@ -379,7 +380,7 @@ TEST(ModuleEvaluation) {
         "import 'Object.expando = 5';"
         "import 'Object.expando *= 2';");
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -417,7 +418,7 @@ TEST(ModuleEvaluationError1) {
     Local<String> source_text =
         v8_str("Object.x = (Object.x || 0) + 1; throw 'boom';");
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -503,7 +504,7 @@ TEST(ModuleEvaluationError2) {
     Local<String> failure_text = v8_str("throw 'boom';");
     ScriptOrigin failure_origin =
         ModuleOrigin(v8_str("failure.js"), CcTest::isolate());
-    ScriptCompiler::Source failure_source(failure_text, failure_origin);
+    Source failure_source(failure_text, failure_origin);
     failure_module = ScriptCompiler::CompileModule(isolate, &failure_source)
                          .ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, failure_module->GetStatus());
@@ -538,7 +539,7 @@ TEST(ModuleEvaluationError2) {
         v8_str("import './failure.js'; export const c = 123;");
     ScriptOrigin dependent_origin =
         ModuleOrigin(v8_str("dependent.js"), CcTest::isolate());
-    ScriptCompiler::Source dependent_source(dependent_text, dependent_origin);
+    Source dependent_source(dependent_text, dependent_origin);
     dependent_module = ScriptCompiler::CompileModule(isolate, &dependent_source)
                            .ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, dependent_module->GetStatus());
@@ -608,7 +609,7 @@ TEST(ModuleEvaluationCompletion1) {
     for (auto src : sources) {
       Local<String> source_text = v8_str(src);
       ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       Local<Module> module =
           ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
       CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -676,7 +677,7 @@ TEST(ModuleEvaluationCompletion2) {
     for (auto src : sources) {
       Local<String> source_text = v8_str(src);
       ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-      ScriptCompiler::Source source(source_text, origin);
+      Source source(source_text, origin);
       Local<Module> module =
           ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
       CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -731,7 +732,7 @@ TEST(ModuleNamespace) {
         "export let radio = 3;"
         "export var gaga = 4;");
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -846,7 +847,7 @@ TEST(ModuleEvaluationTopLevelAwait) {
   for (auto src : sources) {
     Local<String> source_text = v8_str(src);
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -881,7 +882,7 @@ TEST(ModuleEvaluationTopLevelAwaitError) {
     v8::TryCatch try_catch(isolate);
     Local<String> source_text = v8_str(src);
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -983,7 +984,7 @@ TEST(ModuleEvaluationTopLevelAwaitDynamicImport) {
   for (auto src : sources) {
     Local<String> source_text = v8_str(src);
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -1024,7 +1025,7 @@ TEST(ModuleEvaluationTopLevelAwaitDynamicImportError) {
   for (auto src : sources) {
     Local<String> source_text = v8_str(src);
     ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK_EQ(Module::kUninstantiated, module->GetStatus());
@@ -1071,7 +1072,7 @@ TEST(TerminateExecutionTopLevelAwaitSync) {
 
   Local<String> source_text = v8_str("terminate(); while (true) {}");
   ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-  ScriptCompiler::Source source(source_text, origin);
+  Source source(source_text, origin);
   Local<Module> module =
       ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
   CHECK(module
@@ -1117,7 +1118,7 @@ TEST(TerminateExecutionTopLevelAwaitAsync) {
   Local<String> source_text =
       v8_str("await evalPromise; terminate(); while (true) {}");
   ScriptOrigin origin = ModuleOrigin(v8_str("file.js"), CcTest::isolate());
-  ScriptCompiler::Source source(source_text, origin);
+  Source source(source_text, origin);
   Local<Module> module =
       ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
   CHECK(module
@@ -1180,7 +1181,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
     Local<String> source_text = v8_str("await notExecuted();");
     ScriptOrigin origin =
         ModuleOrigin(v8_str("async_leaf.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     async_leaf_module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK(async_leaf_module
@@ -1194,7 +1195,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
     Local<String> source_text = v8_str("notExecuted();");
     ScriptOrigin origin =
         ModuleOrigin(v8_str("sync_leaf.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     sync_leaf_module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK(sync_leaf_module
@@ -1208,7 +1209,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
     Local<String> source_text = v8_str("import './async_leaf.js'");
     ScriptOrigin origin =
         ModuleOrigin(v8_str("import_async.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK(module
@@ -1222,7 +1223,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
     Local<String> source_text = v8_str("import './sync_leaf.js'");
     ScriptOrigin origin =
         ModuleOrigin(v8_str("import_sync.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     Local<Module> module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK(module
@@ -1238,7 +1239,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
         "import './async_leaf.js'");
     ScriptOrigin origin =
         ModuleOrigin(v8_str("cycle_self.js"), CcTest::isolate());
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     cycle_self_module =
         ScriptCompiler::CompileModule(isolate, &source).ToLocalChecked();
     CHECK(cycle_self_module
@@ -1252,7 +1253,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
     Local<String> source_text1 = v8_str("import './cycle_two.js'");
     ScriptOrigin origin1 =
         ModuleOrigin(v8_str("cycle_one.js"), CcTest::isolate());
-    ScriptCompiler::Source source1(source_text1, origin1);
+    Source source1(source_text1, origin1);
     cycle_one_module =
         ScriptCompiler::CompileModule(isolate, &source1).ToLocalChecked();
     Local<String> source_text2 = v8_str(
@@ -1260,7 +1261,7 @@ TEST(IsGraphAsyncTopLevelAwait) {
         "import './async_leaf.js'");
     ScriptOrigin origin2 =
         ModuleOrigin(v8_str("cycle_two.js"), CcTest::isolate());
-    ScriptCompiler::Source source2(source_text2, origin2);
+    Source source2(source_text2, origin2);
     cycle_two_module =
         ScriptCompiler::CompileModule(isolate, &source2).ToLocalChecked();
     CHECK(cycle_one_module

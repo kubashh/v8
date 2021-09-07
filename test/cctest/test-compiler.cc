@@ -75,9 +75,8 @@ static Handle<JSFunction> Compile(const char* source) {
                                    .ToHandleChecked();
   Handle<SharedFunctionInfo> shared =
       Compiler::GetSharedFunctionInfoForScript(
-          isolate, source_code, ScriptDetails(),
-          v8::ScriptCompiler::kNoCompileOptions,
-          ScriptCompiler::kNoCacheNoReason, NOT_NATIVES_CODE)
+          isolate, source_code, ScriptDetails(), v8::kNoCompileOptions,
+          kNoCacheNoReason, NOT_NATIVES_CODE)
           .ToHandleChecked();
   return Factory::JSFunctionBuilder{isolate, shared, isolate->native_context()}
       .Build();
@@ -433,10 +432,10 @@ TEST(CompileFunctionInContext) {
   CompileRun("var r = 10;");
   v8::Local<v8::Object> math = v8::Local<v8::Object>::Cast(
       env->Global()->Get(env.local(), v8_str("Math")).ToLocalChecked());
-  v8::ScriptCompiler::Source script_source(v8_str(
-      "a = PI * r * r;"
-      "x = r * cos(PI);"
-      "y = r * sin(PI / 2);"));
+  v8::Source script_source(
+      v8_str("a = PI * r * r;"
+             "x = r * cos(PI);"
+             "y = r * sin(PI / 2);"));
   v8::Local<v8::Function> fun =
       v8::ScriptCompiler::CompileFunctionInContext(env.local(), &script_source,
                                                    0, nullptr, 1, &math)
@@ -478,7 +477,7 @@ TEST(CompileFunctionInContextComplex) {
       env->Global()->Get(env.local(), v8_str("a")).ToLocalChecked());
   ext[1] = v8::Local<v8::Object>::Cast(
       env->Global()->Get(env.local(), v8_str("b")).ToLocalChecked());
-  v8::ScriptCompiler::Source script_source(v8_str("result = x + y + z"));
+  v8::Source script_source(v8_str("result = x + y + z"));
   v8::Local<v8::Function> fun =
       v8::ScriptCompiler::CompileFunctionInContext(env.local(), &script_source,
                                                    0, nullptr, 2, ext)
@@ -501,7 +500,7 @@ TEST(CompileFunctionInContextArgs) {
   v8::Local<v8::Object> ext[1];
   ext[0] = v8::Local<v8::Object>::Cast(
       env->Global()->Get(env.local(), v8_str("a")).ToLocalChecked());
-  v8::ScriptCompiler::Source script_source(v8_str("result = x + abc"));
+  v8::Source script_source(v8_str("result = x + abc"));
   v8::Local<v8::String> arg = v8_str("abc");
   v8::Local<v8::Function> fun =
       v8::ScriptCompiler::CompileFunctionInContext(env.local(), &script_source,
@@ -532,7 +531,7 @@ TEST(CompileFunctionInContextComments) {
       env->Global()->Get(env.local(), v8_str("a")).ToLocalChecked());
   v8::Local<v8::String> source =
       CompileRun("'result = /* y + */ x + a\\u4e00 // + z'").As<v8::String>();
-  v8::ScriptCompiler::Source script_source(source);
+  v8::Source script_source(source);
   v8::Local<v8::String> arg = CompileRun("'a\\u4e00'").As<v8::String>();
   v8::Local<v8::Function> fun =
       v8::ScriptCompiler::CompileFunctionInContext(env.local(), &script_source,
@@ -553,7 +552,7 @@ TEST(CompileFunctionInContextNonIdentifierArgs) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   LocalContext env;
-  v8::ScriptCompiler::Source script_source(v8_str("result = 1"));
+  v8::Source script_source(v8_str("result = 1"));
   v8::Local<v8::String> arg = v8_str("b }");
   CHECK(v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 1, &arg, 0, nullptr)
@@ -583,7 +582,7 @@ TEST(CompileFunctionInContextRenderCallSite) {
       "}";
   static const char* expect2 = "TypeError: a[0] is not a function";
   {
-    v8::ScriptCompiler::Source script_source(v8_str(source1));
+    v8::Source script_source(v8_str(source1));
     v8::Local<v8::Function> fun =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -597,7 +596,7 @@ TEST(CompileFunctionInContextRenderCallSite) {
               .FromJust());
   }
   {
-    v8::ScriptCompiler::Source script_source(v8_str(source2));
+    v8::Source script_source(v8_str(source2));
     v8::Local<v8::Function> fun =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -620,7 +619,7 @@ TEST(CompileFunctionInContextQuirks) {
         "[x, y] = ['ab', 'cd'];"
         "return x + y";
     static const char* expect = "abcd";
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::Local<v8::Function> fun =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -634,7 +633,7 @@ TEST(CompileFunctionInContextQuirks) {
   }
   {
     static const char* source = "'use strict'; var a = 077";
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::TryCatch try_catch(CcTest::isolate());
     CHECK(v8::ScriptCompiler::CompileFunctionInContext(
               env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -643,7 +642,7 @@ TEST(CompileFunctionInContextQuirks) {
   }
   {
     static const char* source = "{ let x; { var x } }";
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::TryCatch try_catch(CcTest::isolate());
     CHECK(v8::ScriptCompiler::CompileFunctionInContext(
               env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -658,13 +657,13 @@ TEST(CompileFunctionInContextScriptOrigin) {
   v8::HandleScope scope(isolate);
   LocalContext env;
   v8::ScriptOrigin origin(isolate, v8_str("test"), 22, 41);
-  v8::ScriptCompiler::Source script_source(v8_str("throw new Error()"), origin);
+  v8::Source script_source(v8_str("throw new Error()"), origin);
   Local<ScriptOrModule> script;
   v8::Local<v8::Function> fun =
       v8::ScriptCompiler::CompileFunctionInContext(
           env.local(), &script_source, 0, nullptr, 0, nullptr,
-          v8::ScriptCompiler::CompileOptions::kNoCompileOptions,
-          v8::ScriptCompiler::NoCacheReason::kNoCacheNoReason, &script)
+          v8::CompileOptions::kNoCompileOptions,
+          v8::NoCacheReason::kNoCacheNoReason, &script)
           .ToLocalChecked();
   CHECK(!fun.IsEmpty());
   CHECK(!script.IsEmpty());
@@ -705,7 +704,7 @@ void TestCompileFunctionInContextToStringImpl() {
     // Regression test for v8:6190
     {
       v8::ScriptOrigin origin(isolate, v8_str("test"), 22, 41);
-      v8::ScriptCompiler::Source script_source(v8_str("return event"), origin);
+      v8::Source script_source(v8_str("return event"), origin);
 
       v8::Local<v8::String> params[] = {v8_str("event")};
       v8::TryCatch try_catch(CcTest::isolate());
@@ -732,7 +731,7 @@ void TestCompileFunctionInContextToStringImpl() {
     // With no parameters:
     {
       v8::ScriptOrigin origin(isolate, v8_str("test"), 17, 31);
-      v8::ScriptCompiler::Source script_source(v8_str("return 0"), origin);
+      v8::Source script_source(v8_str("return 0"), origin);
 
       v8::TryCatch try_catch(CcTest::isolate());
       v8::MaybeLocal<v8::Function> maybe_fun =
@@ -757,7 +756,7 @@ void TestCompileFunctionInContextToStringImpl() {
     // With a name:
     {
       v8::ScriptOrigin origin(isolate, v8_str("test"), 17, 31);
-      v8::ScriptCompiler::Source script_source(v8_str("return 0"), origin);
+      v8::Source script_source(v8_str("return 0"), origin);
 
       v8::TryCatch try_catch(CcTest::isolate());
       v8::MaybeLocal<v8::Function> maybe_fun =
@@ -823,10 +822,10 @@ TEST(ShallowEagerCompilation) {
       "  return x + x;"
       "}"
       "f(2)");
-  v8::ScriptCompiler::Source script_source(source);
+  v8::Source script_source(source);
   v8::Local<v8::Script> script =
       v8::ScriptCompiler::Compile(env.local(), &script_source,
-                                  v8::ScriptCompiler::kEagerCompile)
+                                  v8::kEagerCompile)
           .ToLocalChecked();
   {
     v8::internal::DisallowCompilation no_compile_expected(isolate);
@@ -852,10 +851,10 @@ TEST(DeepEagerCompilation) {
       "  return g(x) + g(x);"
       "}"
       "f(2)");
-  v8::ScriptCompiler::Source script_source(source);
+  v8::Source script_source(source);
   v8::Local<v8::Script> script =
       v8::ScriptCompiler::Compile(env.local(), &script_source,
-                                  v8::ScriptCompiler::kEagerCompile)
+                                  v8::kEagerCompile)
           .ToLocalChecked();
   {
     v8::internal::DisallowCompilation no_compile_expected(isolate);
@@ -892,7 +891,7 @@ TEST(DeepEagerCompilationPeakMemory) {
       "    }"
       "  }"
       "}");
-  v8::ScriptCompiler::Source script_source(source);
+  v8::Source script_source(source);
   CcTest::i_isolate()->compilation_cache()->DisableScriptAndEval();
 
   v8::HeapStatistics heap_statistics;
@@ -901,7 +900,7 @@ TEST(DeepEagerCompilationPeakMemory) {
   printf("peak memory after init:          %8zu\n", peak_mem_1);
 
   v8::ScriptCompiler::Compile(env.local(), &script_source,
-                              v8::ScriptCompiler::kNoCompileOptions)
+                              v8::kNoCompileOptions)
       .ToLocalChecked();
 
   CcTest::isolate()->GetHeapStatistics(&heap_statistics);
@@ -909,15 +908,14 @@ TEST(DeepEagerCompilationPeakMemory) {
   printf("peak memory after lazy compile:  %8zu\n", peak_mem_2);
 
   v8::ScriptCompiler::Compile(env.local(), &script_source,
-                              v8::ScriptCompiler::kNoCompileOptions)
+                              v8::kNoCompileOptions)
       .ToLocalChecked();
 
   CcTest::isolate()->GetHeapStatistics(&heap_statistics);
   size_t peak_mem_3 = heap_statistics.peak_malloced_memory();
   printf("peak memory after lazy compile:  %8zu\n", peak_mem_3);
 
-  v8::ScriptCompiler::Compile(env.local(), &script_source,
-                              v8::ScriptCompiler::kEagerCompile)
+  v8::ScriptCompiler::Compile(env.local(), &script_source, v8::kEagerCompile)
       .ToLocalChecked();
 
   CcTest::isolate()->GetHeapStatistics(&heap_statistics);
@@ -935,7 +933,7 @@ TEST(DeepEagerCompilationPeakMemory) {
 namespace {
 
 // Dummy external source stream which returns the whole source in one go.
-class DummySourceStream : public v8::ScriptCompiler::ExternalSourceStream {
+class DummySourceStream : public v8::ExternalSourceStream {
  public:
   explicit DummySourceStream(const char* source) : done_(false) {
     source_length_ = static_cast<int>(strlen(source));
@@ -970,10 +968,9 @@ TEST(ProfilerEnabledDuringBackgroundCompile) {
   v8::HandleScope scope(isolate);
   const char* source = "var a = 0;";
 
-  v8::ScriptCompiler::StreamedSource streamed_source(
-      std::make_unique<DummySourceStream>(source),
-      v8::ScriptCompiler::StreamedSource::UTF8);
-  std::unique_ptr<v8::ScriptCompiler::ScriptStreamingTask> task(
+  v8::StreamedSource streamed_source(
+      std::make_unique<DummySourceStream>(source), v8::StreamedSource::UTF8);
+  std::unique_ptr<v8::ScriptStreamingTask> task(
       v8::ScriptCompiler::StartStreaming(isolate, &streamed_source));
 
   // Run the background compilation task on the main thread.

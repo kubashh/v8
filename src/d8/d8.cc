@@ -478,8 +478,7 @@ base::LazyMutex Shell::isolate_status_lock_;
 std::map<v8::Isolate*, bool> Shell::isolate_status_;
 std::map<v8::Isolate*, int> Shell::isolate_running_streaming_tasks_;
 base::LazyMutex Shell::cached_code_mutex_;
-std::map<std::string, std::unique_ptr<ScriptCompiler::CachedData>>
-    Shell::cached_code_map_;
+std::map<std::string, std::unique_ptr<CachedData>> Shell::cached_code_map_;
 std::atomic<int> Shell::unhandled_promise_rejections_{0};
 
 Global<Context> Shell::evaluation_context_;
@@ -488,8 +487,7 @@ bool check_d8_flag_contradictions = true;
 ShellOptions Shell::options;
 base::OnceType Shell::quit_once_ = V8_ONCE_INIT;
 
-ScriptCompiler::CachedData* Shell::LookupCodeCache(Isolate* isolate,
-                                                   Local<Value> source) {
+CachedData* Shell::LookupCodeCache(Isolate* isolate, Local<Value> source) {
   base::MutexGuard lock_guard(cached_code_mutex_.Pointer());
   CHECK(source->IsString());
   v8::String::Utf8Value key(isolate, source);
@@ -499,15 +497,15 @@ ScriptCompiler::CachedData* Shell::LookupCodeCache(Isolate* isolate,
     int length = entry->second->length;
     uint8_t* cache = new uint8_t[length];
     memcpy(cache, entry->second->data, length);
-    ScriptCompiler::CachedData* cached_data = new ScriptCompiler::CachedData(
-        cache, length, ScriptCompiler::CachedData::BufferOwned);
+    CachedData* cached_data =
+        new CachedData(cache, length, CachedData::BufferOwned);
     return cached_data;
   }
   return nullptr;
 }
 
 void Shell::StoreInCodeCache(Isolate* isolate, Local<Value> source,
-                             const ScriptCompiler::CachedData* cache_data) {
+                             const CachedData* cache_data) {
   base::MutexGuard lock_guard(cached_code_mutex_.Pointer());
   CHECK(source->IsString());
   if (cache_data == nullptr) return;
@@ -516,14 +514,13 @@ void Shell::StoreInCodeCache(Isolate* isolate, Local<Value> source,
   int length = cache_data->length;
   uint8_t* cache = new uint8_t[length];
   memcpy(cache, cache_data->data, length);
-  cached_code_map_[*key] = std::unique_ptr<ScriptCompiler::CachedData>(
-      new ScriptCompiler::CachedData(cache, length,
-                                     ScriptCompiler::CachedData::BufferOwned));
+  cached_code_map_[*key] = std::unique_ptr<CachedData>(
+      new CachedData(cache, length, CachedData::BufferOwned));
 }
 
 // Dummy external source stream which returns the whole source in one go.
 // TODO(leszeks): Also test chunking the data.
-class DummySourceStream : public v8::ScriptCompiler::ExternalSourceStream {
+class DummySourceStream : public v8::ExternalSourceStream {
  public:
   explicit DummySourceStream(Local<String> source) : done_(false) {
     source_buffer_ = Utils::OpenHandle(*source)->ToCString(
@@ -548,8 +545,7 @@ class DummySourceStream : public v8::ScriptCompiler::ExternalSourceStream {
 
 class StreamingCompileTask final : public v8::Task {
  public:
-  StreamingCompileTask(Isolate* isolate,
-                       v8::ScriptCompiler::StreamedSource* streamed_source,
+  StreamingCompileTask(Isolate* isolate, v8::StreamedSource* streamed_source,
                        v8::ScriptType type)
       : isolate_(isolate),
         script_streaming_task_(v8::ScriptCompiler::StartStreaming(
@@ -573,20 +569,18 @@ class StreamingCompileTask final : public v8::Task {
   };
 
   Isolate* isolate_;
-  std::unique_ptr<v8::ScriptCompiler::ScriptStreamingTask>
-      script_streaming_task_;
+  std::unique_ptr<v8::ScriptStreamingTask> script_streaming_task_;
 };
 
 namespace {
 template <class T>
-MaybeLocal<T> CompileStreamed(Local<Context> context,
-                              ScriptCompiler::StreamedSource* v8_source,
+MaybeLocal<T> CompileStreamed(Local<Context> context, StreamedSource* v8_source,
                               Local<String> full_source_string,
                               const ScriptOrigin& origin) {}
 
 template <>
 MaybeLocal<Script> CompileStreamed(Local<Context> context,
-                                   ScriptCompiler::StreamedSource* v8_source,
+                                   StreamedSource* v8_source,
                                    Local<String> full_source_string,
                                    const ScriptOrigin& origin) {
   return ScriptCompiler::Compile(context, v8_source, full_source_string,
@@ -595,7 +589,7 @@ MaybeLocal<Script> CompileStreamed(Local<Context> context,
 
 template <>
 MaybeLocal<Module> CompileStreamed(Local<Context> context,
-                                   ScriptCompiler::StreamedSource* v8_source,
+                                   StreamedSource* v8_source,
                                    Local<String> full_source_string,
                                    const ScriptOrigin& origin) {
   return ScriptCompiler::CompileModule(context, v8_source, full_source_string,
@@ -603,19 +597,17 @@ MaybeLocal<Module> CompileStreamed(Local<Context> context,
 }
 
 template <class T>
-MaybeLocal<T> Compile(Local<Context> context, ScriptCompiler::Source* source,
-                      ScriptCompiler::CompileOptions options) {}
+MaybeLocal<T> Compile(Local<Context> context, Source* source,
+                      CompileOptions options) {}
 template <>
-MaybeLocal<Script> Compile(Local<Context> context,
-                           ScriptCompiler::Source* source,
-                           ScriptCompiler::CompileOptions options) {
+MaybeLocal<Script> Compile(Local<Context> context, Source* source,
+                           CompileOptions options) {
   return ScriptCompiler::Compile(context, source, options);
 }
 
 template <>
-MaybeLocal<Module> Compile(Local<Context> context,
-                           ScriptCompiler::Source* source,
-                           ScriptCompiler::CompileOptions options) {
+MaybeLocal<Module> Compile(Local<Context> context, Source* source,
+                           CompileOptions options) {
   return ScriptCompiler::CompileModule(context->GetIsolate(), source, options);
 }
 
@@ -626,9 +618,8 @@ MaybeLocal<T> Shell::CompileString(Isolate* isolate, Local<Context> context,
                                    Local<String> source,
                                    const ScriptOrigin& origin) {
   if (options.streaming_compile) {
-    v8::ScriptCompiler::StreamedSource streamed_source(
-        std::make_unique<DummySourceStream>(source),
-        v8::ScriptCompiler::StreamedSource::UTF8);
+    v8::StreamedSource streamed_source(
+        std::make_unique<DummySourceStream>(source), v8::StreamedSource::UTF8);
     PostBlockingBackgroundTask(std::make_unique<StreamingCompileTask>(
         isolate, &streamed_source,
         std::is_same<T, Module>::value ? v8::ScriptType::kModule
@@ -638,15 +629,14 @@ MaybeLocal<T> Shell::CompileString(Isolate* isolate, Local<Context> context,
     return CompileStreamed<T>(context, &streamed_source, source, origin);
   }
 
-  ScriptCompiler::CachedData* cached_code = nullptr;
-  if (options.compile_options == ScriptCompiler::kConsumeCodeCache) {
+  CachedData* cached_code = nullptr;
+  if (options.compile_options == kConsumeCodeCache) {
     cached_code = LookupCodeCache(isolate, source);
   }
-  ScriptCompiler::Source script_source(source, origin, cached_code);
+  Source script_source(source, origin, cached_code);
   MaybeLocal<T> result =
       Compile<T>(context, &script_source,
-                 cached_code ? ScriptCompiler::kConsumeCodeCache
-                             : ScriptCompiler::kNoCompileOptions);
+                 cached_code ? kConsumeCodeCache : kNoCompileOptions);
   if (cached_code) CHECK(!cached_code->rejected);
   return result;
 }
@@ -669,7 +659,7 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
             i_isolate, true, i::construct_language_mode(i::FLAG_use_strict),
             i::REPLMode::kNo, ScriptType::kClassic, i::FLAG_lazy);
 
-    if (options.compile_options == v8::ScriptCompiler::kEagerCompile) {
+    if (options.compile_options == v8::kEagerCompile) {
       flags.set_is_eager(true);
     }
 
@@ -728,7 +718,7 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
     if (options.code_cache_options ==
         ShellOptions::CodeCacheOptions::kProduceCache) {
       // Serialize and store it in memory for the next execution.
-      ScriptCompiler::CachedData* cached_data =
+      CachedData* cached_data =
           ScriptCompiler::CreateCodeCache(script->GetUnboundScript());
       StoreInCodeCache(isolate, source, cached_data);
       delete cached_data;
@@ -740,7 +730,7 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
     if (options.code_cache_options ==
         ShellOptions::CodeCacheOptions::kProduceCacheAfterExecute) {
       // Serialize and store it in memory for the next execution.
-      ScriptCompiler::CachedData* cached_data =
+      CachedData* cached_data =
           ScriptCompiler::CreateCodeCache(script->GetUnboundScript());
       StoreInCodeCache(isolate, source, cached_data);
       delete cached_data;
@@ -1008,7 +998,7 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
 
   Local<Module> module;
   if (module_type == ModuleType::kJavaScript) {
-    ScriptCompiler::Source source(source_text, origin);
+    Source source(source_text, origin);
     if (!CompileString<Module>(isolate, context, source_text, origin)
              .ToLocal(&module)) {
       return MaybeLocal<Module>();
@@ -1830,7 +1820,7 @@ void Shell::RealmEval(const v8::FunctionCallbackInfo<v8::Value>& args) {
   ScriptOrigin origin(isolate,
                       String::NewFromUtf8Literal(isolate, "(d8)",
                                                  NewStringType::kInternalized));
-  ScriptCompiler::Source script_source(source, origin);
+  Source script_source(source, origin);
   Local<UnboundScript> script;
   if (!ScriptCompiler::CompileUnboundScript(isolate, &script_source)
            .ToLocal(&script)) {
@@ -4289,19 +4279,19 @@ bool Shell::SetOptions(int argc, char* argv[]) {
                strncmp(argv[i], "--cache=", 8) == 0) {
       const char* value = argv[i] + 7;
       if (!*value || strncmp(value, "=code", 6) == 0) {
-        options.compile_options = v8::ScriptCompiler::kNoCompileOptions;
+        options.compile_options = v8::kNoCompileOptions;
         options.code_cache_options =
             ShellOptions::CodeCacheOptions::kProduceCache;
       } else if (strncmp(value, "=none", 6) == 0) {
-        options.compile_options = v8::ScriptCompiler::kNoCompileOptions;
+        options.compile_options = v8::kNoCompileOptions;
         options.code_cache_options =
             ShellOptions::CodeCacheOptions::kNoProduceCache;
       } else if (strncmp(value, "=after-execute", 15) == 0) {
-        options.compile_options = v8::ScriptCompiler::kNoCompileOptions;
+        options.compile_options = v8::kNoCompileOptions;
         options.code_cache_options =
             ShellOptions::CodeCacheOptions::kProduceCacheAfterExecute;
       } else if (strncmp(value, "=full-code-cache", 17) == 0) {
-        options.compile_options = v8::ScriptCompiler::kEagerCompile;
+        options.compile_options = v8::kEagerCompile;
         options.code_cache_options =
             ShellOptions::CodeCacheOptions::kProduceCache;
       } else {
@@ -5218,19 +5208,16 @@ int Shell::Main(int argc, char* argv[]) {
         isolate2->Dispose();
 
         // Change the options to consume cache
-        DCHECK(options.compile_options == v8::ScriptCompiler::kEagerCompile ||
-               options.compile_options ==
-                   v8::ScriptCompiler::kNoCompileOptions);
-        options.compile_options.Overwrite(
-            v8::ScriptCompiler::kConsumeCodeCache);
+        DCHECK(options.compile_options == v8::kEagerCompile ||
+               options.compile_options == v8::kNoCompileOptions);
+        options.compile_options.Overwrite(v8::kConsumeCodeCache);
         options.code_cache_options.Overwrite(
             ShellOptions::CodeCacheOptions::kNoProduceCache);
 
         printf("============ Run: Consume code cache ============\n");
         // Second run to consume the cache in current isolate
         result = RunMain(isolate, true);
-        options.compile_options.Overwrite(
-            v8::ScriptCompiler::kNoCompileOptions);
+        options.compile_options.Overwrite(v8::kNoCompileOptions);
       } else {
         bool last_run = true;
         result = RunMain(isolate, last_run);

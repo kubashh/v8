@@ -10,6 +10,9 @@
 #include "src/snapshot/snapshot-data.h"
 
 namespace v8 {
+
+struct CachedData;
+
 namespace internal {
 
 class PersistentHandles;
@@ -60,7 +63,7 @@ class CodeSerializer : public Serializer {
 
   CodeSerializer(const CodeSerializer&) = delete;
   CodeSerializer& operator=(const CodeSerializer&) = delete;
-  V8_EXPORT_PRIVATE static ScriptCompiler::CachedData* Serialize(
+  V8_EXPORT_PRIVATE static CachedData* Serialize(
       Handle<SharedFunctionInfo> info);
 
   AlignedCachedData* SerializeSharedFunctionInfo(

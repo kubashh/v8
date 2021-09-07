@@ -68,7 +68,7 @@ class DeserializeTest : public testing::Test {
 
 // Check that deserialization works.
 TEST_F(DeserializeTest, Deserialize) {
-  std::unique_ptr<v8::ScriptCompiler::CachedData> cached_data;
+  std::unique_ptr<v8::CachedData> cached_data;
 
   {
     IsolateAndContextScope scope(this);
@@ -88,10 +88,9 @@ TEST_F(DeserializeTest, Deserialize) {
     IsolateAndContextScope scope(this);
 
     Local<String> source_code = NewString("function foo() { return 42; }");
-    ScriptCompiler::Source source(source_code, cached_data.release());
+    Source source(source_code, cached_data.release());
     Local<Script> script =
-        ScriptCompiler::Compile(context(), &source,
-                                ScriptCompiler::kConsumeCodeCache)
+        ScriptCompiler::Compile(context(), &source, kConsumeCodeCache)
             .ToLocalChecked();
 
     CHECK(!source.GetCachedData()->rejected);
@@ -103,7 +102,7 @@ TEST_F(DeserializeTest, Deserialize) {
 // Check that deserialization with a different script rejects the cache but
 // still works via standard compilation.
 TEST_F(DeserializeTest, DeserializeRejectsDifferentSource) {
-  std::unique_ptr<v8::ScriptCompiler::CachedData> cached_data;
+  std::unique_ptr<v8::CachedData> cached_data;
 
   {
     IsolateAndContextScope scope(this);
@@ -125,10 +124,9 @@ TEST_F(DeserializeTest, DeserializeRejectsDifferentSource) {
     // The source hash is based on the source length, so have to make sure that
     // this is different here.
     Local<String> source_code = NewString("function bar() { return 142; }");
-    ScriptCompiler::Source source(source_code, cached_data.release());
+    Source source(source_code, cached_data.release());
     Local<Script> script =
-        ScriptCompiler::Compile(context(), &source,
-                                ScriptCompiler::kConsumeCodeCache)
+        ScriptCompiler::Compile(context(), &source, kConsumeCodeCache)
             .ToLocalChecked();
 
     CHECK(source.GetCachedData()->rejected);
@@ -139,22 +137,20 @@ TEST_F(DeserializeTest, DeserializeRejectsDifferentSource) {
 
 class DeserializeThread : public base::Thread {
  public:
-  explicit DeserializeThread(ScriptCompiler::ConsumeCodeCacheTask* task)
+  explicit DeserializeThread(ConsumeCodeCacheTask* task)
       : Thread(base::Thread::Options("DeserializeThread")), task_(task) {}
 
   void Run() override { task_->Run(); }
 
-  std::unique_ptr<ScriptCompiler::ConsumeCodeCacheTask> TakeTask() {
-    return std::move(task_);
-  }
+  std::unique_ptr<ConsumeCodeCacheTask> TakeTask() { return std::move(task_); }
 
  private:
-  std::unique_ptr<ScriptCompiler::ConsumeCodeCacheTask> task_;
+  std::unique_ptr<ConsumeCodeCacheTask> task_;
 };
 
 // Check that off-thread deserialization works.
 TEST_F(DeserializeTest, OffThreadDeserialize) {
-  std::unique_ptr<v8::ScriptCompiler::CachedData> cached_data;
+  std::unique_ptr<v8::CachedData> cached_data;
 
   {
     IsolateAndContextScope scope(this);
@@ -175,18 +171,17 @@ TEST_F(DeserializeTest, OffThreadDeserialize) {
 
     DeserializeThread deserialize_thread(
         ScriptCompiler::StartConsumingCodeCache(
-            isolate(), std::make_unique<ScriptCompiler::CachedData>(
-                           cached_data->data, cached_data->length,
-                           ScriptCompiler::CachedData::BufferNotOwned)));
+            isolate(),
+            std::make_unique<CachedData>(cached_data->data, cached_data->length,
+                                         CachedData::BufferNotOwned)));
     CHECK(deserialize_thread.Start());
     deserialize_thread.Join();
 
     Local<String> source_code = NewString("function foo() { return 42; }");
-    ScriptCompiler::Source source(source_code, cached_data.release(),
-                                  deserialize_thread.TakeTask().release());
+    Source source(source_code, cached_data.release(),
+                  deserialize_thread.TakeTask().release());
     Local<Script> script =
-        ScriptCompiler::Compile(context(), &source,
-                                ScriptCompiler::kConsumeCodeCache)
+        ScriptCompiler::Compile(context(), &source, kConsumeCodeCache)
             .ToLocalChecked();
 
     CHECK(!source.GetCachedData()->rejected);
@@ -197,7 +192,7 @@ TEST_F(DeserializeTest, OffThreadDeserialize) {
 
 // Check that off-thread deserialization works.
 TEST_F(DeserializeTest, OffThreadDeserializeRejectsDifferentSource) {
-  std::unique_ptr<v8::ScriptCompiler::CachedData> cached_data;
+  std::unique_ptr<v8::CachedData> cached_data;
 
   {
     IsolateAndContextScope scope(this);
@@ -218,18 +213,17 @@ TEST_F(DeserializeTest, OffThreadDeserializeRejectsDifferentSource) {
 
     DeserializeThread deserialize_thread(
         ScriptCompiler::StartConsumingCodeCache(
-            isolate(), std::make_unique<ScriptCompiler::CachedData>(
-                           cached_data->data, cached_data->length,
-                           ScriptCompiler::CachedData::BufferNotOwned)));
+            isolate(),
+            std::make_unique<CachedData>(cached_data->data, cached_data->length,
+                                         CachedData::BufferNotOwned)));
     CHECK(deserialize_thread.Start());
     deserialize_thread.Join();
 
     Local<String> source_code = NewString("function bar() { return 142; }");
-    ScriptCompiler::Source source(source_code, cached_data.release(),
-                                  deserialize_thread.TakeTask().release());
+    Source source(source_code, cached_data.release(),
+                  deserialize_thread.TakeTask().release());
     Local<Script> script =
-        ScriptCompiler::Compile(context(), &source,
-                                ScriptCompiler::kConsumeCodeCache)
+        ScriptCompiler::Compile(context(), &source, kConsumeCodeCache)
             .ToLocalChecked();
 
     CHECK(source.GetCachedData()->rejected);

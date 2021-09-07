@@ -1949,28 +1949,28 @@ void ObjectTemplate::SetCodeLike() {
 // Internally, UnboundScript is a SharedFunctionInfo, and Script is a
 // JSFunction.
 
-ScriptCompiler::CachedData::CachedData(const uint8_t* data_, int length_,
-                                       BufferPolicy buffer_policy_)
+CachedData::CachedData(const uint8_t* data_, int length_,
+                       BufferPolicy buffer_policy_)
     : data(data_),
       length(length_),
       rejected(false),
       buffer_policy(buffer_policy_) {}
 
-ScriptCompiler::CachedData::~CachedData() {
+CachedData::~CachedData() {
   if (buffer_policy == BufferOwned) {
     delete[] data;
   }
 }
 
-bool ScriptCompiler::ExternalSourceStream::SetBookmark() { return false; }
+bool ExternalSourceStream::SetBookmark() { return false; }
 
-void ScriptCompiler::ExternalSourceStream::ResetToBookmark() { UNREACHABLE(); }
+void ExternalSourceStream::ResetToBookmark() { UNREACHABLE(); }
 
-ScriptCompiler::StreamedSource::StreamedSource(
-    std::unique_ptr<ExternalSourceStream> stream, Encoding encoding)
+StreamedSource::StreamedSource(std::unique_ptr<ExternalSourceStream> stream,
+                               Encoding encoding)
     : impl_(new i::ScriptStreamingData(std::move(stream), encoding)) {}
 
-ScriptCompiler::StreamedSource::~StreamedSource() = default;
+StreamedSource::~StreamedSource() = default;
 
 Local<Script> UnboundScript::BindToCurrentContext() {
   auto function_info =
@@ -2462,8 +2462,8 @@ i::ScriptDetails GetScriptDetails(i::Isolate* isolate,
 }  // namespace
 
 MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
-    Isolate* v8_isolate, Source* source, CompileOptions options,
-    NoCacheReason no_cache_reason) {
+    Isolate* v8_isolate, v8::Source* source, v8::CompileOptions options,
+    v8::NoCacheReason no_cache_reason) {
   auto isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.ScriptCompiler");
   ENTER_V8_NO_SCRIPT(isolate, v8_isolate->GetCurrentContext(), ScriptCompiler,
@@ -2516,8 +2516,8 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
 }
 
 MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundScript(
-    Isolate* v8_isolate, Source* source, CompileOptions options,
-    NoCacheReason no_cache_reason) {
+    Isolate* v8_isolate, v8::Source* source, v8::CompileOptions options,
+    v8::NoCacheReason no_cache_reason) {
   Utils::ApiCheck(
       !source->GetResourceOptions().IsModule(),
       "v8::ScriptCompiler::CompileUnboundScript",
@@ -2526,9 +2526,9 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundScript(
 }
 
 MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
-                                           Source* source,
-                                           CompileOptions options,
-                                           NoCacheReason no_cache_reason) {
+                                           v8::Source* source,
+                                           v8::CompileOptions options,
+                                           v8::NoCacheReason no_cache_reason) {
   Utils::ApiCheck(
       !source->GetResourceOptions().IsModule(), "v8::ScriptCompiler::Compile",
       "v8::ScriptCompiler::CompileModule must be used to compile modules");
@@ -2542,8 +2542,8 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
 }
 
 MaybeLocal<Module> ScriptCompiler::CompileModule(
-    Isolate* isolate, Source* source, CompileOptions options,
-    NoCacheReason no_cache_reason) {
+    Isolate* isolate, v8::Source* source, v8::CompileOptions options,
+    v8::NoCacheReason no_cache_reason) {
   Utils::ApiCheck(options == kNoCompileOptions || options == kConsumeCodeCache,
                   "v8::ScriptCompiler::CompileModule",
                   "Invalid CompileOptions");
@@ -2584,10 +2584,10 @@ bool IsIdentifier(i::Isolate* isolate, i::Handle<i::String> string) {
 }  // anonymous namespace
 
 MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
-    Local<Context> v8_context, Source* source, size_t arguments_count,
+    Local<Context> v8_context, v8::Source* source, size_t arguments_count,
     Local<String> arguments[], size_t context_extension_count,
-    Local<Object> context_extensions[], CompileOptions options,
-    NoCacheReason no_cache_reason,
+    Local<Object> context_extensions[], v8::CompileOptions options,
+    v8::NoCacheReason no_cache_reason,
     Local<ScriptOrModule>* script_or_module_out) {
   Local<Function> result;
 
@@ -2596,9 +2596,9 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
                           Function);
     TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.ScriptCompiler");
 
-    DCHECK(options == CompileOptions::kConsumeCodeCache ||
-           options == CompileOptions::kEagerCompile ||
-           options == CompileOptions::kNoCompileOptions);
+    DCHECK(options == v8::CompileOptions::kConsumeCodeCache ||
+           options == v8::CompileOptions::kEagerCompile ||
+           options == v8::CompileOptions::kNoCompileOptions);
 
     i::Handle<i::Context> context = Utils::OpenHandle(*v8_context);
 
@@ -2664,10 +2664,11 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
   return result;
 }
 
-void ScriptCompiler::ScriptStreamingTask::Run() { data_->task->Run(); }
+void ScriptStreamingTask::Run() { data_->task->Run(); }
 
-ScriptCompiler::ScriptStreamingTask* ScriptCompiler::StartStreaming(
-    Isolate* v8_isolate, StreamedSource* source, v8::ScriptType type) {
+ScriptStreamingTask* ScriptCompiler::StartStreaming(Isolate* v8_isolate,
+                                                    v8::StreamedSource* source,
+                                                    v8::ScriptType type) {
   if (!i::FLAG_script_streaming) return nullptr;
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   ASSERT_NO_SCRIPT_NO_EXCEPTION(isolate);
@@ -2675,30 +2676,30 @@ ScriptCompiler::ScriptStreamingTask* ScriptCompiler::StartStreaming(
   std::unique_ptr<i::BackgroundCompileTask> task =
       std::make_unique<i::BackgroundCompileTask>(data, isolate, type);
   data->task = std::move(task);
-  return new ScriptCompiler::ScriptStreamingTask(data);
+  return new v8::ScriptStreamingTask(data);
 }
 
-ScriptCompiler::ConsumeCodeCacheTask::ConsumeCodeCacheTask(
+ConsumeCodeCacheTask::ConsumeCodeCacheTask(
     std::unique_ptr<i::BackgroundDeserializeTask> impl)
     : impl_(std::move(impl)) {}
 
-ScriptCompiler::ConsumeCodeCacheTask::~ConsumeCodeCacheTask() = default;
+ConsumeCodeCacheTask::~ConsumeCodeCacheTask() = default;
 
-void ScriptCompiler::ConsumeCodeCacheTask::Run() { impl_->Run(); }
+void ConsumeCodeCacheTask::Run() { impl_->Run(); }
 
-ScriptCompiler::ConsumeCodeCacheTask* ScriptCompiler::StartConsumingCodeCache(
-    Isolate* v8_isolate, std::unique_ptr<CachedData> cached_data) {
+ConsumeCodeCacheTask* ScriptCompiler::StartConsumingCodeCache(
+    Isolate* v8_isolate, std::unique_ptr<v8::CachedData> cached_data) {
   if (!i::FLAG_concurrent_cache_deserialization) return nullptr;
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   ASSERT_NO_SCRIPT_NO_EXCEPTION(isolate);
-  return new ScriptCompiler::ConsumeCodeCacheTask(
+  return new v8::ConsumeCodeCacheTask(
       std::make_unique<i::BackgroundDeserializeTask>(isolate,
                                                      std::move(cached_data)));
 }
 
 namespace {
 i::MaybeHandle<i::SharedFunctionInfo> CompileStreamedSource(
-    i::Isolate* isolate, ScriptCompiler::StreamedSource* v8_source,
+    i::Isolate* isolate, StreamedSource* v8_source,
     Local<String> full_source_string, const ScriptOrigin& origin) {
   i::Handle<i::String> str = Utils::OpenHandle(*(full_source_string));
   i::ScriptDetails script_details =
@@ -2713,7 +2714,7 @@ i::MaybeHandle<i::SharedFunctionInfo> CompileStreamedSource(
 }  // namespace
 
 MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
-                                           StreamedSource* v8_source,
+                                           v8::StreamedSource* v8_source,
                                            Local<String> full_source_string,
                                            const ScriptOrigin& origin) {
   PREPARE_FOR_EXECUTION(context, ScriptCompiler, Compile, Script);
@@ -2734,7 +2735,7 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
 }
 
 MaybeLocal<Module> ScriptCompiler::CompileModule(
-    Local<Context> context, StreamedSource* v8_source,
+    Local<Context> context, v8::StreamedSource* v8_source,
     Local<String> full_source_string, const ScriptOrigin& origin) {
   PREPARE_FOR_EXECUTION(context, ScriptCompiler, Compile, Module);
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.ScriptCompiler");
@@ -2757,7 +2758,7 @@ uint32_t ScriptCompiler::CachedDataVersionTag() {
       static_cast<uint32_t>(internal::CpuFeatures::SupportedFeatures())));
 }
 
-ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCache(
+CachedData* ScriptCompiler::CreateCodeCache(
     Local<UnboundScript> unbound_script) {
   i::Handle<i::SharedFunctionInfo> shared =
       i::Handle<i::SharedFunctionInfo>::cast(
@@ -2768,7 +2769,7 @@ ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCache(
 }
 
 // static
-ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCache(
+CachedData* ScriptCompiler::CreateCodeCache(
     Local<UnboundModuleScript> unbound_module_script) {
   i::Handle<i::SharedFunctionInfo> shared =
       i::Handle<i::SharedFunctionInfo>::cast(
@@ -2778,15 +2779,14 @@ ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCache(
   return i::CodeSerializer::Serialize(shared);
 }
 
-ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCacheForFunction(
+CachedData* ScriptCompiler::CreateCodeCacheForFunction(
     Local<Function> function) {
   auto js_function =
       i::Handle<i::JSFunction>::cast(Utils::OpenHandle(*function));
   i::Handle<i::SharedFunctionInfo> shared(js_function->shared(),
                                           js_function->GetIsolate());
   ASSERT_NO_SCRIPT_NO_EXCEPTION(shared->GetIsolate());
-  Utils::ApiCheck(shared->is_wrapped(),
-                  "v8::ScriptCompiler::CreateCodeCacheForFunction",
+  Utils::ApiCheck(shared->is_wrapped(), "v8::CreateCodeCacheForFunction",
                   "Expected SharedFunctionInfo with wrapped source code.");
   return i::CodeSerializer::Serialize(shared);
 }
@@ -2794,10 +2794,10 @@ ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCacheForFunction(
 MaybeLocal<Script> Script::Compile(Local<Context> context, Local<String> source,
                                    ScriptOrigin* origin) {
   if (origin) {
-    ScriptCompiler::Source script_source(source, *origin);
+    Source script_source(source, *origin);
     return ScriptCompiler::Compile(context, &script_source);
   }
-  ScriptCompiler::Source script_source(source);
+  Source script_source(source);
   return ScriptCompiler::Compile(context, &script_source);
 }
 

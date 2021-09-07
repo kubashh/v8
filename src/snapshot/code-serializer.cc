@@ -48,8 +48,7 @@ CodeSerializer::CodeSerializer(Isolate* isolate, uint32_t source_hash)
       source_hash_(source_hash) {}
 
 // static
-ScriptCompiler::CachedData* CodeSerializer::Serialize(
-    Handle<SharedFunctionInfo> info) {
+CachedData* CodeSerializer::Serialize(Handle<SharedFunctionInfo> info) {
   Isolate* isolate = info->GetIsolate();
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.Execute");
   NestedTimedHistogramScope histogram_timer(
@@ -86,9 +85,8 @@ ScriptCompiler::CachedData* CodeSerializer::Serialize(
     PrintF("[Serializing to %d bytes took %0.3f ms]\n", length, ms);
   }
 
-  ScriptCompiler::CachedData* result =
-      new ScriptCompiler::CachedData(cached_data->data(), cached_data->length(),
-                                     ScriptCompiler::CachedData::BufferOwned);
+  CachedData* result = new CachedData(
+      cached_data->data(), cached_data->length(), CachedData::BufferOwned);
   cached_data->ReleaseDataOwnership();
   delete cached_data;
 

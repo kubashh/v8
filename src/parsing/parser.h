@@ -7,6 +7,7 @@
 
 #include <cstddef>
 
+#include "include/v8-script.h"
 #include "src/ast/ast-source-ranges.h"
 #include "src/ast/ast-value-factory.h"
 #include "src/ast/ast.h"
@@ -1059,7 +1060,7 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
 
   friend class ParserTargetScope;
 
-  ScriptCompiler::CompileOptions compile_options_;
+  CompileOptions compile_options_;
 
   // For NextInternalNamespaceExportName().
   int number_of_named_namespace_exports_ = 0;

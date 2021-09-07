@@ -75,7 +75,7 @@ v8::Local<v8::Module> BytecodeExpectationsPrinter::CompileModule(
     const char* program) const {
   ScriptOrigin origin(isolate_, Local<v8::Value>(), 0, 0, false, -1,
                       Local<v8::Value>(), false, false, true);
-  v8::ScriptCompiler::Source source(V8StringFromUTF8(program), origin);
+  v8::Source source(V8StringFromUTF8(program), origin);
   return v8::ScriptCompiler::CompileModule(isolate_, &source).ToLocalChecked();
 }
 

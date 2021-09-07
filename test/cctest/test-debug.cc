@@ -3035,7 +3035,7 @@ TEST(DebugBreakInWrappedScript) {
   ChangeBreakOnException(isolate, true, true);
 
   {
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::Local<v8::Function> fun =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -3609,8 +3609,7 @@ TEST(AfterCompileEventOnBindToContext) {
   ScriptCompiledDelegate delegate;
   v8::debug::SetDebugDelegate(isolate, &delegate);
 
-  v8::ScriptCompiler::Source script_source(
-      v8::String::NewFromUtf8Literal(isolate, "var a=1"));
+  v8::Source script_source(v8::String::NewFromUtf8Literal(isolate, "var a=1"));
 
   v8::Local<v8::UnboundScript> unbound =
       v8::ScriptCompiler::CompileUnboundScript(isolate, &script_source)
@@ -5369,7 +5368,7 @@ TEST(TerminateOnResumeAtException) {
     v8::TryCatch try_catch(env->GetIsolate());
     const char* source = "throw new Error(); while(true){};";
 
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::Local<v8::Function> foo =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -5616,7 +5615,7 @@ TEST(TerminateOnResumeFromOtherThread) {
     v8::TryCatch try_catch(env->GetIsolate());
     const char* source = "debugger; while(true){};";
 
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::Local<v8::Function> foo =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)
@@ -5671,7 +5670,7 @@ TEST(TerminateOnResumeAtInterruptFromOtherThread) {
     v8::TryCatch try_catch(env->GetIsolate());
     const char* source = "while(true){}";
 
-    v8::ScriptCompiler::Source script_source(v8_str(source));
+    v8::Source script_source(v8_str(source));
     v8::Local<v8::Function> foo =
         v8::ScriptCompiler::CompileFunctionInContext(
             env.local(), &script_source, 0, nullptr, 0, nullptr)

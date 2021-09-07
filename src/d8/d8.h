@@ -405,8 +405,8 @@ class ShellOptions {
 #endif
   DisallowReassignment<bool> enable_inspector = {"enable-inspector", false};
   int num_isolates = 1;
-  DisallowReassignment<v8::ScriptCompiler::CompileOptions, true>
-      compile_options = {"cache", v8::ScriptCompiler::kNoCompileOptions};
+  DisallowReassignment<v8::CompileOptions, true> compile_options = {
+      "cache", v8::kNoCompileOptions};
   DisallowReassignment<CodeCacheOptions, true> code_cache_options = {
       "cache", CodeCacheOptions::kNoProduceCache};
   DisallowReassignment<bool> streaming_compile = {"streaming-compile", false};
@@ -722,10 +722,9 @@ class Shell : public i::AllStatic {
                                      Local<String> source,
                                      const ScriptOrigin& origin);
 
-  static ScriptCompiler::CachedData* LookupCodeCache(Isolate* isolate,
-                                                     Local<Value> name);
+  static CachedData* LookupCodeCache(Isolate* isolate, Local<Value> name);
   static void StoreInCodeCache(Isolate* isolate, Local<Value> name,
-                               const ScriptCompiler::CachedData* data);
+                               const CachedData* data);
   // We may have multiple isolates running concurrently, so the access to
   // the isolate_status_ needs to be concurrency-safe.
   static base::LazyMutex isolate_status_lock_;
@@ -733,8 +732,7 @@ class Shell : public i::AllStatic {
   static std::map<Isolate*, int> isolate_running_streaming_tasks_;
 
   static base::LazyMutex cached_code_mutex_;
-  static std::map<std::string, std::unique_ptr<ScriptCompiler::CachedData>>
-      cached_code_map_;
+  static std::map<std::string, std::unique_ptr<CachedData>> cached_code_map_;
   static std::atomic<int> unhandled_promise_rejections_;
 };
 

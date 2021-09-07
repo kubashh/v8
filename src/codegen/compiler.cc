@@ -1687,14 +1687,14 @@ Handle<Script> BackgroundCompileTask::GetScript(Isolate* isolate) {
 }
 
 BackgroundDeserializeTask::BackgroundDeserializeTask(
-    Isolate* isolate, std::unique_ptr<ScriptCompiler::CachedData> cached_data)
+    Isolate* isolate, std::unique_ptr<CachedData> cached_data)
     : isolate_for_local_isolate_(isolate),
       cached_data_(cached_data->data, cached_data->length) {
   // If the passed in cached data has ownership of the buffer, move it to the
   // task.
-  if (cached_data->buffer_policy == ScriptCompiler::CachedData::BufferOwned &&
+  if (cached_data->buffer_policy == CachedData::BufferOwned &&
       !cached_data_.HasDataOwnership()) {
-    cached_data->buffer_policy = ScriptCompiler::CachedData::BufferNotOwned;
+    cached_data->buffer_policy = CachedData::BufferNotOwned;
     cached_data_.AcquireDataOwnership();
   }
 }
@@ -2469,8 +2469,8 @@ struct ScriptCompileTimerScope {
     kCount
   };
 
-  explicit ScriptCompileTimerScope(
-      Isolate* isolate, ScriptCompiler::NoCacheReason no_cache_reason)
+  explicit ScriptCompileTimerScope(Isolate* isolate,
+                                   NoCacheReason no_cache_reason)
       : isolate_(isolate),
         all_scripts_histogram_scope_(isolate->counters()->compile_script()),
         no_cache_reason_(no_cache_reason),
@@ -2512,7 +2512,7 @@ struct ScriptCompileTimerScope {
   // TODO(leszeks): This timer is the sum of the other times, consider removing
   // it to save space.
   NestedTimedHistogramScope all_scripts_histogram_scope_;
-  ScriptCompiler::NoCacheReason no_cache_reason_;
+  NoCacheReason no_cache_reason_;
   bool hit_isolate_cache_;
   bool producing_code_cache_;
   bool consuming_code_cache_;
@@ -2537,42 +2537,42 @@ struct ScriptCompileTimerScope {
     }
 
     if (hit_isolate_cache_) {
-      if (no_cache_reason_ == ScriptCompiler::kNoCacheBecauseStreamingSource) {
+      if (no_cache_reason_ == kNoCacheBecauseStreamingSource) {
         return CacheBehaviour::kHitIsolateCacheWhenStreamingSource;
       }
       return CacheBehaviour::kHitIsolateCacheWhenNoCache;
     }
 
     switch (no_cache_reason_) {
-      case ScriptCompiler::kNoCacheBecauseInlineScript:
+      case kNoCacheBecauseInlineScript:
         return CacheBehaviour::kNoCacheBecauseInlineScript;
-      case ScriptCompiler::kNoCacheBecauseScriptTooSmall:
+      case kNoCacheBecauseScriptTooSmall:
         return CacheBehaviour::kNoCacheBecauseScriptTooSmall;
-      case ScriptCompiler::kNoCacheBecauseCacheTooCold:
+      case kNoCacheBecauseCacheTooCold:
         return CacheBehaviour::kNoCacheBecauseCacheTooCold;
-      case ScriptCompiler::kNoCacheNoReason:
+      case kNoCacheNoReason:
         return CacheBehaviour::kNoCacheNoReason;
-      case ScriptCompiler::kNoCacheBecauseNoResource:
+      case kNoCacheBecauseNoResource:
         return CacheBehaviour::kNoCacheBecauseNoResource;
-      case ScriptCompiler::kNoCacheBecauseInspector:
+      case kNoCacheBecauseInspector:
         return CacheBehaviour::kNoCacheBecauseInspector;
-      case ScriptCompiler::kNoCacheBecauseCachingDisabled:
+      case kNoCacheBecauseCachingDisabled:
         return CacheBehaviour::kNoCacheBecauseCachingDisabled;
-      case ScriptCompiler::kNoCacheBecauseModule:
+      case kNoCacheBecauseModule:
         return CacheBehaviour::kNoCacheBecauseModule;
-      case ScriptCompiler::kNoCacheBecauseStreamingSource:
+      case kNoCacheBecauseStreamingSource:
         return CacheBehaviour::kNoCacheBecauseStreamingSource;
-      case ScriptCompiler::kNoCacheBecauseV8Extension:
+      case kNoCacheBecauseV8Extension:
         return CacheBehaviour::kNoCacheBecauseV8Extension;
-      case ScriptCompiler::kNoCacheBecauseExtensionModule:
+      case kNoCacheBecauseExtensionModule:
         return CacheBehaviour::kNoCacheBecauseExtensionModule;
-      case ScriptCompiler::kNoCacheBecausePacScript:
+      case kNoCacheBecausePacScript:
         return CacheBehaviour::kNoCacheBecausePacScript;
-      case ScriptCompiler::kNoCacheBecauseInDocumentWrite:
+      case kNoCacheBecauseInDocumentWrite:
         return CacheBehaviour::kNoCacheBecauseInDocumentWrite;
-      case ScriptCompiler::kNoCacheBecauseResourceWithNoCacheHandler:
+      case kNoCacheBecauseResourceWithNoCacheHandler:
         return CacheBehaviour::kNoCacheBecauseResourceWithNoCacheHandler;
-      case ScriptCompiler::kNoCacheBecauseDeferredProduceCodeCache: {
+      case kNoCacheBecauseDeferredProduceCodeCache: {
         if (hit_isolate_cache_) {
           return CacheBehaviour::kHitIsolateCacheWhenProduceCodeCache;
         } else {
@@ -2704,7 +2704,7 @@ class StressBackgroundCompileThread : public base::Thread {
             base::Thread::Options("StressBackgroundCompileThread", 2 * i::MB)),
         source_(source),
         streamed_source_(std::make_unique<SourceStream>(source, isolate),
-                         v8::ScriptCompiler::StreamedSource::UTF8) {
+                         v8::StreamedSource::UTF8) {
     data()->task =
         std::make_unique<i::BackgroundCompileTask>(data(), isolate, type);
   }
@@ -2716,7 +2716,7 @@ class StressBackgroundCompileThread : public base::Thread {
  private:
   // Dummy external source stream which returns the whole source in one go.
   // TODO(leszeks): Also test chunking the data.
-  class SourceStream : public v8::ScriptCompiler::ExternalSourceStream {
+  class SourceStream : public v8::ExternalSourceStream {
    public:
     SourceStream(Handle<String> source, Isolate* isolate) : done_(false) {
       source_buffer_ = source->ToCString(ALLOW_NULLS, FAST_STRING_TRAVERSAL,
@@ -2740,19 +2740,17 @@ class StressBackgroundCompileThread : public base::Thread {
   };
 
   Handle<String> source_;
-  v8::ScriptCompiler::StreamedSource streamed_source_;
+  v8::StreamedSource streamed_source_;
 };
 
 bool CanBackgroundCompile(const ScriptDetails& script_details,
                           v8::Extension* extension,
-                          ScriptCompiler::CompileOptions compile_options,
-                          NativesFlag natives) {
+                          CompileOptions compile_options, NativesFlag natives) {
   // TODO(leszeks): Remove the module check once background compilation of
   // modules is supported.
   return !script_details.origin_options.IsModule() && !extension &&
          script_details.repl_mode == REPLMode::kNo &&
-         compile_options == ScriptCompiler::kNoCompileOptions &&
-         natives == NOT_NATIVES_CODE;
+         compile_options == kNoCompileOptions && natives == NOT_NATIVES_CODE;
 }
 
 bool CompilationExceptionIsRangeError(Isolate* isolate, Handle<Object> obj) {
@@ -2835,16 +2833,16 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     Isolate* isolate, Handle<String> source,
     const ScriptDetails& script_details, v8::Extension* extension,
     AlignedCachedData* cached_data, BackgroundDeserializeTask* deserialize_task,
-    ScriptCompiler::CompileOptions compile_options,
-    ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
+    CompileOptions compile_options, NoCacheReason no_cache_reason,
+    NativesFlag natives) {
   ScriptCompileTimerScope compile_timer(isolate, no_cache_reason);
 
-  if (compile_options == ScriptCompiler::kNoCompileOptions ||
-      compile_options == ScriptCompiler::kEagerCompile) {
+  if (compile_options == kNoCompileOptions ||
+      compile_options == kEagerCompile) {
     DCHECK_NULL(cached_data);
     DCHECK_NULL(deserialize_task);
   } else {
-    DCHECK_EQ(compile_options, ScriptCompiler::kConsumeCodeCache);
+    DCHECK_EQ(compile_options, kConsumeCodeCache);
     // Have to have exactly one of cached_data or deserialize_task.
     DCHECK(cached_data || deserialize_task);
     DCHECK(!(cached_data && deserialize_task));
@@ -2864,8 +2862,7 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
   MaybeHandle<SharedFunctionInfo> maybe_result;
   IsCompiledScope is_compiled_scope;
   if (use_compilation_cache) {
-    bool can_consume_code_cache =
-        compile_options == ScriptCompiler::kConsumeCodeCache;
+    bool can_consume_code_cache = compile_options == kConsumeCodeCache;
     if (can_consume_code_cache) {
       compile_timer.set_consuming_code_cache();
     }
@@ -2927,7 +2924,7 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
                                                        : ScriptType::kClassic,
               FLAG_lazy);
 
-      flags.set_is_eager(compile_options == ScriptCompiler::kEagerCompile);
+      flags.set_is_eager(compile_options == kEagerCompile);
 
       maybe_result =
           CompileScriptOnMainThread(flags, source, script_details, natives,
@@ -2951,9 +2948,8 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
 
 MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
     Isolate* isolate, Handle<String> source,
-    const ScriptDetails& script_details,
-    ScriptCompiler::CompileOptions compile_options,
-    ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
+    const ScriptDetails& script_details, CompileOptions compile_options,
+    NoCacheReason no_cache_reason, NativesFlag natives) {
   return GetSharedFunctionInfoForScriptImpl(
       isolate, source, script_details, nullptr, nullptr, nullptr,
       compile_options, no_cache_reason, natives);
@@ -2963,18 +2959,18 @@ MaybeHandle<SharedFunctionInfo>
 Compiler::GetSharedFunctionInfoForScriptWithExtension(
     Isolate* isolate, Handle<String> source,
     const ScriptDetails& script_details, v8::Extension* extension,
-    ScriptCompiler::CompileOptions compile_options, NativesFlag natives) {
+    CompileOptions compile_options, NativesFlag natives) {
   return GetSharedFunctionInfoForScriptImpl(
       isolate, source, script_details, extension, nullptr, nullptr,
-      compile_options, ScriptCompiler::kNoCacheBecauseV8Extension, natives);
+      compile_options, kNoCacheBecauseV8Extension, natives);
 }
 
 MaybeHandle<SharedFunctionInfo>
 Compiler::GetSharedFunctionInfoForScriptWithCachedData(
     Isolate* isolate, Handle<String> source,
     const ScriptDetails& script_details, AlignedCachedData* cached_data,
-    ScriptCompiler::CompileOptions compile_options,
-    ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
+    CompileOptions compile_options, NoCacheReason no_cache_reason,
+    NativesFlag natives) {
   return GetSharedFunctionInfoForScriptImpl(
       isolate, source, script_details, nullptr, cached_data, nullptr,
       compile_options, no_cache_reason, natives);
@@ -2984,9 +2980,8 @@ MaybeHandle<SharedFunctionInfo>
 Compiler::GetSharedFunctionInfoForScriptWithDeserializeTask(
     Isolate* isolate, Handle<String> source,
     const ScriptDetails& script_details,
-    BackgroundDeserializeTask* deserialize_task,
-    ScriptCompiler::CompileOptions compile_options,
-    ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
+    BackgroundDeserializeTask* deserialize_task, CompileOptions compile_options,
+    NoCacheReason no_cache_reason, NativesFlag natives) {
   return GetSharedFunctionInfoForScriptImpl(
       isolate, source, script_details, nullptr, nullptr, deserialize_task,
       compile_options, no_cache_reason, natives);
@@ -2996,17 +2991,16 @@ Compiler::GetSharedFunctionInfoForScriptWithDeserializeTask(
 MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
     Handle<String> source, Handle<FixedArray> arguments,
     Handle<Context> context, const ScriptDetails& script_details,
-    AlignedCachedData* cached_data,
-    v8::ScriptCompiler::CompileOptions compile_options,
-    v8::ScriptCompiler::NoCacheReason no_cache_reason) {
+    AlignedCachedData* cached_data, v8::CompileOptions compile_options,
+    v8::NoCacheReason no_cache_reason) {
   Isolate* isolate = context->GetIsolate();
   ScriptCompileTimerScope compile_timer(isolate, no_cache_reason);
 
-  if (compile_options == ScriptCompiler::kNoCompileOptions ||
-      compile_options == ScriptCompiler::kEagerCompile) {
+  if (compile_options == kNoCompileOptions ||
+      compile_options == kEagerCompile) {
     DCHECK_NULL(cached_data);
   } else {
-    DCHECK(compile_options == ScriptCompiler::kConsumeCodeCache);
+    DCHECK(compile_options == kConsumeCodeCache);
     DCHECK(cached_data);
   }
 
@@ -3016,8 +3010,7 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
   LanguageMode language_mode = construct_language_mode(FLAG_use_strict);
 
   MaybeHandle<SharedFunctionInfo> maybe_result;
-  bool can_consume_code_cache =
-      compile_options == ScriptCompiler::kConsumeCodeCache;
+  bool can_consume_code_cache = compile_options == kConsumeCodeCache;
   if (can_consume_code_cache) {
     compile_timer.set_consuming_code_cache();
     // Then check cached code provided by embedder.
@@ -3046,7 +3039,7 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
     // functions fully non-lazy instead thus preventing source positions from
     // being omitted.
     flags.set_collect_source_positions(true);
-    // flags.set_eager(compile_options == ScriptCompiler::kEagerCompile);
+    // flags.set_eager(compile_options == kEagerCompile);
 
     UnoptimizedCompileState compile_state(isolate);
     ParseInfo parse_info(isolate, flags, &compile_state);
@@ -3094,8 +3087,8 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
   ScriptOriginOptions origin_options = script_details.origin_options;
   DCHECK(!origin_options.IsWasm());
 
-  ScriptCompileTimerScope compile_timer(
-      isolate, ScriptCompiler::kNoCacheBecauseStreamingSource);
+  ScriptCompileTimerScope compile_timer(isolate,
+                                        kNoCacheBecauseStreamingSource);
   PostponeInterruptsScope postpone(isolate);
 
   int source_length = source->length();
@@ -3388,8 +3381,8 @@ void Compiler::PostInstantiation(Handle<JSFunction> function) {
 // Implementation of ScriptStreamingData
 
 ScriptStreamingData::ScriptStreamingData(
-    std::unique_ptr<ScriptCompiler::ExternalSourceStream> source_stream,
-    ScriptCompiler::StreamedSource::Encoding encoding)
+    std::unique_ptr<ExternalSourceStream> source_stream,
+    StreamedSource::Encoding encoding)
     : source_stream(std::move(source_stream)), encoding(encoding) {}
 
 ScriptStreamingData::~ScriptStreamingData() = default;

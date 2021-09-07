@@ -8,6 +8,7 @@
 #include <forward_list>
 #include <memory>
 
+#include "include/v8-script.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/codegen/bailout-reason.h"
 #include "src/common/globals.h"
@@ -137,9 +138,8 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> GetWrappedFunction(
       Handle<String> source, Handle<FixedArray> arguments,
       Handle<Context> context, const ScriptDetails& script_details,
-      AlignedCachedData* cached_data,
-      v8::ScriptCompiler::CompileOptions compile_options,
-      v8::ScriptCompiler::NoCacheReason no_cache_reason);
+      AlignedCachedData* cached_data, v8::CompileOptions compile_options,
+      v8::NoCacheReason no_cache_reason);
 
   // Create a (bound) function for a String source within a context for eval.
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> GetFunctionFromString(
@@ -161,18 +161,15 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   // Create a shared function info object for a String source.
   static MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScript(
       Isolate* isolate, Handle<String> source,
-      const ScriptDetails& script_details,
-      ScriptCompiler::CompileOptions compile_options,
-      ScriptCompiler::NoCacheReason no_cache_reason,
-      NativesFlag is_natives_code);
+      const ScriptDetails& script_details, CompileOptions compile_options,
+      NoCacheReason no_cache_reason, NativesFlag is_natives_code);
 
   // Create a shared function info object for a String source.
   static MaybeHandle<SharedFunctionInfo>
   GetSharedFunctionInfoForScriptWithExtension(
       Isolate* isolate, Handle<String> source,
       const ScriptDetails& script_details, v8::Extension* extension,
-      ScriptCompiler::CompileOptions compile_options,
-      NativesFlag is_natives_code);
+      CompileOptions compile_options, NativesFlag is_natives_code);
 
   // Create a shared function info object for a String source and serialized
   // cached data. The cached data may be rejected, in which case this function
@@ -181,8 +178,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   GetSharedFunctionInfoForScriptWithCachedData(
       Isolate* isolate, Handle<String> source,
       const ScriptDetails& script_details, AlignedCachedData* cached_data,
-      ScriptCompiler::CompileOptions compile_options,
-      ScriptCompiler::NoCacheReason no_cache_reason,
+      CompileOptions compile_options, NoCacheReason no_cache_reason,
       NativesFlag is_natives_code);
 
   // Create a shared function info object for a String source and a task that
@@ -194,8 +190,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
       Isolate* isolate, Handle<String> source,
       const ScriptDetails& script_details,
       BackgroundDeserializeTask* deserialize_task,
-      ScriptCompiler::CompileOptions compile_options,
-      ScriptCompiler::NoCacheReason no_cache_reason,
+      CompileOptions compile_options, NoCacheReason no_cache_reason,
       NativesFlag is_natives_code);
 
   // Create a shared function info object for a Script source that has already
@@ -574,18 +569,17 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
 // Contains all data which needs to be transmitted between threads for
 // background parsing and compiling and finalizing it on the main thread.
 struct ScriptStreamingData {
-  ScriptStreamingData(
-      std::unique_ptr<ScriptCompiler::ExternalSourceStream> source_stream,
-      ScriptCompiler::StreamedSource::Encoding encoding);
+  ScriptStreamingData(std::unique_ptr<ExternalSourceStream> source_stream,
+                      StreamedSource::Encoding encoding);
   ScriptStreamingData(const ScriptStreamingData&) = delete;
   ScriptStreamingData& operator=(const ScriptStreamingData&) = delete;
   ~ScriptStreamingData();
 
   void Release();
 
-  // Internal implementation of v8::ScriptCompiler::StreamedSource.
-  std::unique_ptr<ScriptCompiler::ExternalSourceStream> source_stream;
-  ScriptCompiler::StreamedSource::Encoding encoding;
+  // Internal implementation of v8::StreamedSource.
+  std::unique_ptr<ExternalSourceStream> source_stream;
+  StreamedSource::Encoding encoding;
 
   // Task that performs background parsing and compilation.
   std::unique_ptr<BackgroundCompileTask> task;
@@ -593,8 +587,7 @@ struct ScriptStreamingData {
 
 class V8_EXPORT_PRIVATE BackgroundDeserializeTask {
  public:
-  BackgroundDeserializeTask(Isolate* isolate,
-                            std::unique_ptr<ScriptCompiler::CachedData> data);
+  BackgroundDeserializeTask(Isolate* isolate, std::unique_ptr<CachedData> data);
 
   void Run();
 

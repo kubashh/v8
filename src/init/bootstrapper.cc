@@ -4127,7 +4127,7 @@ bool Genesis::CompileExtension(Isolate* isolate, v8::Extension* extension) {
     MaybeHandle<SharedFunctionInfo> maybe_function_info =
         Compiler::GetSharedFunctionInfoForScriptWithExtension(
             isolate, source, ScriptDetails(script_name), extension,
-            ScriptCompiler::kNoCompileOptions, EXTENSION_CODE);
+            kNoCompileOptions, EXTENSION_CODE);
     if (!maybe_function_info.ToHandle(&function_info)) return false;
     cache->Add(isolate, name, function_info);
   }

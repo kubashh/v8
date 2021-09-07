@@ -12,7 +12,6 @@
 #include "include/v8-inspector.h"
 #include "include/v8-local-handle.h"
 #include "include/v8-platform.h"
-#include "include/v8-script.h"
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
 #include "src/base/vector.h"
@@ -22,6 +21,7 @@ namespace v8 {
 class Context;
 class Isolate;
 class ObjectTemplate;
+class Source;
 class StartupData;
 
 namespace internal {
@@ -66,8 +66,7 @@ class InspectorIsolateData : public v8_inspector::V8InspectorClient {
   v8::Local<v8::Context> GetDefaultContext(int context_group_id);
   int GetContextGroupId(v8::Local<v8::Context> context);
   void RegisterModule(v8::Local<v8::Context> context,
-                      std::vector<uint16_t> name,
-                      v8::ScriptCompiler::Source* source);
+                      std::vector<uint16_t> name, v8::Source* source);
 
   // Working with V8Inspector api.
   int ConnectSession(int context_group_id,

@@ -107,9 +107,8 @@ v8::MaybeLocal<v8::Script> V8InspectorImpl::compileScript(
     const String16& fileName) {
   v8::ScriptOrigin origin(m_isolate, toV8String(m_isolate, fileName), 0, 0,
                           false);
-  v8::ScriptCompiler::Source source(toV8String(m_isolate, code), origin);
-  return v8::ScriptCompiler::Compile(context, &source,
-                                     v8::ScriptCompiler::kNoCompileOptions);
+  v8::Source source(toV8String(m_isolate, code), origin);
+  return v8::ScriptCompiler::Compile(context, &source, v8::kNoCompileOptions);
 }
 
 void V8InspectorImpl::enableStackCapturingIfNeeded() {

@@ -23,6 +23,7 @@ class Function;
 class Object;
 class PrimitiveArray;
 class Script;
+class ScriptCompiler;
 
 namespace internal {
 class BackgroundDeserializeTask;
@@ -350,225 +351,232 @@ class V8_EXPORT Script {
 enum class ScriptType { kClassic, kModule };
 
 /**
+ * Compilation data that the embedder can cache and pass back to speed up
+ * future compilations. The data is produced if the CompilerOptions passed to
+ * the compilation functions in ScriptCompiler contains produce_data_to_cache
+ * = true. The data to cache can then can be retrieved from
+ * UnboundScript.
+ */
+struct V8_EXPORT CachedData {
+  enum BufferPolicy { BufferNotOwned, BufferOwned };
+
+  CachedData()
+      : data(nullptr),
+        length(0),
+        rejected(false),
+        buffer_policy(BufferNotOwned) {}
+
+  // If buffer_policy is BufferNotOwned, the caller keeps the ownership of
+  // data and guarantees that it stays alive until the CachedData object is
+  // destroyed. If the policy is BufferOwned, the given data will be deleted
+  // (with delete[]) when the CachedData object is destroyed.
+  CachedData(const uint8_t* data, int length,
+             BufferPolicy buffer_policy = BufferNotOwned);
+  ~CachedData();
+  // TODO(marja): Async compilation; add constructors which take a callback
+  // which will be called when V8 no longer needs the data.
+  const uint8_t* data;
+  int length;
+  bool rejected;
+  BufferPolicy buffer_policy;
+
+  // Prevent copying.
+  CachedData(const CachedData&) = delete;
+  CachedData& operator=(const CachedData&) = delete;
+};
+
+/**
+ * A task which the embedder must run on a background thread to consume a V8
+ * code cache. Returned by ScriptCompiler::StartConsumingCodeCache.
+ */
+class V8_EXPORT ConsumeCodeCacheTask final {
+ public:
+  ~ConsumeCodeCacheTask();
+
+  void Run();
+
+ private:
+  friend class ScriptCompiler;
+
+  explicit ConsumeCodeCacheTask(
+      std::unique_ptr<internal::BackgroundDeserializeTask> impl);
+
+  std::unique_ptr<internal::BackgroundDeserializeTask> impl_;
+};
+
+/**
+ * Source code which can be then compiled to a UnboundScript or Script.
+ */
+class Source {
+ public:
+  // Source takes ownership of both CachedData and CodeCacheConsumeTask.
+  V8_INLINE Source(Local<String> source_string, const ScriptOrigin& origin,
+                   CachedData* cached_data = nullptr,
+                   ConsumeCodeCacheTask* consume_cache_task = nullptr);
+  // Source takes ownership of both CachedData and CodeCacheConsumeTask.
+  V8_INLINE explicit Source(Local<String> source_string,
+                            CachedData* cached_data = nullptr,
+                            ConsumeCodeCacheTask* consume_cache_task = nullptr);
+  V8_INLINE ~Source() = default;
+
+  // Ownership of the CachedData or its buffers is *not* transferred to the
+  // caller. The CachedData object is alive as long as the Source object is
+  // alive.
+  V8_INLINE const CachedData* GetCachedData() const;
+
+  V8_INLINE const ScriptOriginOptions& GetResourceOptions() const;
+
+ private:
+  friend class ScriptCompiler;
+
+  Local<String> source_string;
+
+  // Origin information
+  Local<Value> resource_name;
+  int resource_line_offset;
+  int resource_column_offset;
+  ScriptOriginOptions resource_options;
+  Local<Value> source_map_url;
+  Local<PrimitiveArray> host_defined_options;
+
+  // Cached data from previous compilation (if a kConsume*Cache flag is set), or
+  // hold newly generated cache data (kProduce*Cache flags) are set when calling
+  // a compile method.
+  std::unique_ptr<CachedData> cached_data;
+  std::unique_ptr<ConsumeCodeCacheTask> consume_cache_task;
+};
+
+/**
+ * For streaming incomplete script data to V8. The embedder should implement a
+ * subclass of this class.
+ */
+class V8_EXPORT ExternalSourceStream {
+ public:
+  virtual ~ExternalSourceStream() = default;
+
+  /**
+   * V8 calls this to request the next chunk of data from the embedder. This
+   * function will be called on a background thread, so it's OK to block and
+   * wait for the data, if the embedder doesn't have data yet. Returns the
+   * length of the data returned. When the data ends, GetMoreData should return
+   * 0. Caller takes ownership of the data.
+   *
+   * When streaming UTF-8 data, V8 handles multi-byte characters split between
+   * two data chunks, but doesn't handle multi-byte characters split between
+   * more than two data chunks. The embedder can avoid this problem by always
+   * returning at least 2 bytes of data.
+   *
+   * When streaming UTF-16 data, V8 does not handle characters split between two
+   * data chunks. The embedder has to make sure that chunks have an even length.
+   *
+   * If the embedder wants to cancel the streaming, they should make the next
+   * GetMoreData call return 0. V8 will interpret it as end of data (and most
+   * probably, parsing will fail). The streaming task will return as soon as V8
+   * has parsed the data it received so far.
+   */
+  virtual size_t GetMoreData(const uint8_t** src) = 0;
+
+  /**
+   * V8 calls this method to set a 'bookmark' at the current position in the
+   * source stream, for the purpose of (maybe) later calling ResetToBookmark. If
+   * ResetToBookmark is called later, then subsequent calls to GetMoreData
+   * should return the same data as they did when SetBookmark was called
+   * earlier.
+   *
+   * The embedder may return 'false' to indicate it cannot provide this
+   * functionality.
+   */
+  virtual bool SetBookmark();
+
+  /**
+   * V8 calls this to return to a previously set bookmark.
+   */
+  virtual void ResetToBookmark();
+};
+
+/**
+ * Source code which can be streamed into V8 in pieces. It will be parsed while
+ * streaming and compiled after parsing has completed. StreamedSource must be
+ * kept alive while the streaming task is run (see ScriptStreamingTask below).
+ */
+class V8_EXPORT StreamedSource {
+ public:
+  enum Encoding { ONE_BYTE, TWO_BYTE, UTF8, WINDOWS_1252 };
+
+  StreamedSource(std::unique_ptr<ExternalSourceStream> source_stream,
+                 Encoding encoding);
+  ~StreamedSource();
+
+  internal::ScriptStreamingData* impl() const { return impl_.get(); }
+
+  // Prevent copying.
+  StreamedSource(const StreamedSource&) = delete;
+  StreamedSource& operator=(const StreamedSource&) = delete;
+
+ private:
+  std::unique_ptr<internal::ScriptStreamingData> impl_;
+};
+
+/**
+ * A streaming task which the embedder must run on a background thread to stream
+ * scripts into V8. Returned by ScriptCompiler::StartStreaming.
+ */
+class V8_EXPORT ScriptStreamingTask final {
+ public:
+  void Run();
+
+ private:
+  friend class ScriptCompiler;
+
+  explicit ScriptStreamingTask(internal::ScriptStreamingData* data)
+      : data_(data) {}
+
+  internal::ScriptStreamingData* data_;
+};
+
+enum CompileOptions { kNoCompileOptions = 0, kConsumeCodeCache, kEagerCompile };
+
+/**
+ * The reason for which we are not requesting or providing a code cache.
+ */
+enum NoCacheReason {
+  kNoCacheNoReason = 0,
+  kNoCacheBecauseCachingDisabled,
+  kNoCacheBecauseNoResource,
+  kNoCacheBecauseInlineScript,
+  kNoCacheBecauseModule,
+  kNoCacheBecauseStreamingSource,
+  kNoCacheBecauseInspector,
+  kNoCacheBecauseScriptTooSmall,
+  kNoCacheBecauseCacheTooCold,
+  kNoCacheBecauseV8Extension,
+  kNoCacheBecauseExtensionModule,
+  kNoCacheBecausePacScript,
+  kNoCacheBecauseInDocumentWrite,
+  kNoCacheBecauseResourceWithNoCacheHandler,
+  kNoCacheBecauseDeferredProduceCodeCache
+};
+
+/**
  * For compiling scripts.
  */
 class V8_EXPORT ScriptCompiler {
  public:
-  class ConsumeCodeCacheTask;
-
-  /**
-   * Compilation data that the embedder can cache and pass back to speed up
-   * future compilations. The data is produced if the CompilerOptions passed to
-   * the compilation functions in ScriptCompiler contains produce_data_to_cache
-   * = true. The data to cache can then can be retrieved from
-   * UnboundScript.
-   */
-  struct V8_EXPORT CachedData {
-    enum BufferPolicy { BufferNotOwned, BufferOwned };
-
-    CachedData()
-        : data(nullptr),
-          length(0),
-          rejected(false),
-          buffer_policy(BufferNotOwned) {}
-
-    // If buffer_policy is BufferNotOwned, the caller keeps the ownership of
-    // data and guarantees that it stays alive until the CachedData object is
-    // destroyed. If the policy is BufferOwned, the given data will be deleted
-    // (with delete[]) when the CachedData object is destroyed.
-    CachedData(const uint8_t* data, int length,
-               BufferPolicy buffer_policy = BufferNotOwned);
-    ~CachedData();
-    // TODO(marja): Async compilation; add constructors which take a callback
-    // which will be called when V8 no longer needs the data.
-    const uint8_t* data;
-    int length;
-    bool rejected;
-    BufferPolicy buffer_policy;
-
-    // Prevent copying.
-    CachedData(const CachedData&) = delete;
-    CachedData& operator=(const CachedData&) = delete;
-  };
-
-  /**
-   * Source code which can be then compiled to a UnboundScript or Script.
-   */
-  class Source {
-   public:
-    // Source takes ownership of both CachedData and CodeCacheConsumeTask.
-    V8_INLINE Source(Local<String> source_string, const ScriptOrigin& origin,
-                     CachedData* cached_data = nullptr,
-                     ConsumeCodeCacheTask* consume_cache_task = nullptr);
-    // Source takes ownership of both CachedData and CodeCacheConsumeTask.
-    V8_INLINE explicit Source(
-        Local<String> source_string, CachedData* cached_data = nullptr,
-        ConsumeCodeCacheTask* consume_cache_task = nullptr);
-    V8_INLINE ~Source() = default;
-
-    // Ownership of the CachedData or its buffers is *not* transferred to the
-    // caller. The CachedData object is alive as long as the Source object is
-    // alive.
-    V8_INLINE const CachedData* GetCachedData() const;
-
-    V8_INLINE const ScriptOriginOptions& GetResourceOptions() const;
-
-   private:
-    friend class ScriptCompiler;
-
-    Local<String> source_string;
-
-    // Origin information
-    Local<Value> resource_name;
-    int resource_line_offset;
-    int resource_column_offset;
-    ScriptOriginOptions resource_options;
-    Local<Value> source_map_url;
-    Local<PrimitiveArray> host_defined_options;
-
-    // Cached data from previous compilation (if a kConsume*Cache flag is
-    // set), or hold newly generated cache data (kProduce*Cache flags) are
-    // set when calling a compile method.
-    std::unique_ptr<CachedData> cached_data;
-    std::unique_ptr<ConsumeCodeCacheTask> consume_cache_task;
-  };
-
-  /**
-   * For streaming incomplete script data to V8. The embedder should implement a
-   * subclass of this class.
-   */
-  class V8_EXPORT ExternalSourceStream {
-   public:
-    virtual ~ExternalSourceStream() = default;
-
-    /**
-     * V8 calls this to request the next chunk of data from the embedder. This
-     * function will be called on a background thread, so it's OK to block and
-     * wait for the data, if the embedder doesn't have data yet. Returns the
-     * length of the data returned. When the data ends, GetMoreData should
-     * return 0. Caller takes ownership of the data.
-     *
-     * When streaming UTF-8 data, V8 handles multi-byte characters split between
-     * two data chunks, but doesn't handle multi-byte characters split between
-     * more than two data chunks. The embedder can avoid this problem by always
-     * returning at least 2 bytes of data.
-     *
-     * When streaming UTF-16 data, V8 does not handle characters split between
-     * two data chunks. The embedder has to make sure that chunks have an even
-     * length.
-     *
-     * If the embedder wants to cancel the streaming, they should make the next
-     * GetMoreData call return 0. V8 will interpret it as end of data (and most
-     * probably, parsing will fail). The streaming task will return as soon as
-     * V8 has parsed the data it received so far.
-     */
-    virtual size_t GetMoreData(const uint8_t** src) = 0;
-
-    /**
-     * V8 calls this method to set a 'bookmark' at the current position in
-     * the source stream, for the purpose of (maybe) later calling
-     * ResetToBookmark. If ResetToBookmark is called later, then subsequent
-     * calls to GetMoreData should return the same data as they did when
-     * SetBookmark was called earlier.
-     *
-     * The embedder may return 'false' to indicate it cannot provide this
-     * functionality.
-     */
-    virtual bool SetBookmark();
-
-    /**
-     * V8 calls this to return to a previously set bookmark.
-     */
-    virtual void ResetToBookmark();
-  };
-
-  /**
-   * Source code which can be streamed into V8 in pieces. It will be parsed
-   * while streaming and compiled after parsing has completed. StreamedSource
-   * must be kept alive while the streaming task is run (see ScriptStreamingTask
-   * below).
-   */
-  class V8_EXPORT StreamedSource {
-   public:
-    enum Encoding { ONE_BYTE, TWO_BYTE, UTF8, WINDOWS_1252 };
-
-    StreamedSource(std::unique_ptr<ExternalSourceStream> source_stream,
-                   Encoding encoding);
-    ~StreamedSource();
-
-    internal::ScriptStreamingData* impl() const { return impl_.get(); }
-
-    // Prevent copying.
-    StreamedSource(const StreamedSource&) = delete;
-    StreamedSource& operator=(const StreamedSource&) = delete;
-
-   private:
-    std::unique_ptr<internal::ScriptStreamingData> impl_;
-  };
-
-  /**
-   * A streaming task which the embedder must run on a background thread to
-   * stream scripts into V8. Returned by ScriptCompiler::StartStreaming.
-   */
-  class V8_EXPORT ScriptStreamingTask final {
-   public:
-    void Run();
-
-   private:
-    friend class ScriptCompiler;
-
-    explicit ScriptStreamingTask(internal::ScriptStreamingData* data)
-        : data_(data) {}
-
-    internal::ScriptStreamingData* data_;
-  };
-
-  /**
-   * A task which the embedder must run on a background thread to
-   * consume a V8 code cache. Returned by
-   * ScriptCompiler::StarConsumingCodeCache.
-   */
-  class V8_EXPORT ConsumeCodeCacheTask final {
-   public:
-    ~ConsumeCodeCacheTask();
-
-    void Run();
-
-   private:
-    friend class ScriptCompiler;
-
-    explicit ConsumeCodeCacheTask(
-        std::unique_ptr<internal::BackgroundDeserializeTask> impl);
-
-    std::unique_ptr<internal::BackgroundDeserializeTask> impl_;
-  };
-
-  enum CompileOptions {
-    kNoCompileOptions = 0,
-    kConsumeCodeCache,
-    kEagerCompile
-  };
-
-  /**
-   * The reason for which we are not requesting or providing a code cache.
-   */
-  enum NoCacheReason {
-    kNoCacheNoReason = 0,
-    kNoCacheBecauseCachingDisabled,
-    kNoCacheBecauseNoResource,
-    kNoCacheBecauseInlineScript,
-    kNoCacheBecauseModule,
-    kNoCacheBecauseStreamingSource,
-    kNoCacheBecauseInspector,
-    kNoCacheBecauseScriptTooSmall,
-    kNoCacheBecauseCacheTooCold,
-    kNoCacheBecauseV8Extension,
-    kNoCacheBecauseExtensionModule,
-    kNoCacheBecausePacScript,
-    kNoCacheBecauseInDocumentWrite,
-    kNoCacheBecauseResourceWithNoCacheHandler,
-    kNoCacheBecauseDeferredProduceCodeCache
-  };
+  using CachedData V8_DEPRECATE_SOON("Use v8::CachedData instead") =
+      v8::CachedData;
+  using Source V8_DEPRECATE_SOON("Use v8::Source instead") = v8::Source;
+  using ExternalSourceStream V8_DEPRECATE_SOON(
+      "Use v8::ExternalSourceStream instead") = v8::ExternalSourceStream;
+  using StreamedSource V8_DEPRECATE_SOON("Use v8::StreamedSource instead") =
+      v8::StreamedSource;
+  using ScriptStreamingTask V8_DEPRECATE_SOON(
+      "Use v8::ScriptStreamingTask instead") = v8::ScriptStreamingTask;
+  using ConsumeCodeCacheTask V8_DEPRECATE_SOON(
+      "Use v8::ConsumeCodeCacheTask instead") = v8::ConsumeCodeCacheTask;
+  using CompileOptions V8_DEPRECATE_SOON("Use v8::CompileOptions instead") =
+      v8::CompileOptions;
+  using NoCacheReason V8_DEPRECATE_SOON("Use v8::NoCacheReason instead") =
+      v8::NoCacheReason;
 
   /**
    * Compiles the specified script (context-independent).
@@ -584,10 +592,11 @@ class V8_EXPORT ScriptCompiler {
    * \return Compiled script object (context independent; for running it must be
    *   bound to a context).
    */
-  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> CompileUnboundScript(
-      Isolate* isolate, Source* source,
-      CompileOptions options = kNoCompileOptions,
-      NoCacheReason no_cache_reason = kNoCacheNoReason);
+  static V8_WARN_UNUSED_RESULT MaybeLocal<v8::UnboundScript>
+  CompileUnboundScript(
+      Isolate* isolate, v8::Source* source,
+      v8::CompileOptions options = v8::kNoCompileOptions,
+      v8::NoCacheReason no_cache_reason = v8::kNoCacheNoReason);
 
   /**
    * Compiles the specified script (bound to current context).
@@ -601,9 +610,9 @@ class V8_EXPORT ScriptCompiler {
    *   context.
    */
   static V8_WARN_UNUSED_RESULT MaybeLocal<Script> Compile(
-      Local<Context> context, Source* source,
-      CompileOptions options = kNoCompileOptions,
-      NoCacheReason no_cache_reason = kNoCacheNoReason);
+      Local<Context> context, v8::Source* source,
+      v8::CompileOptions options = v8::kNoCompileOptions,
+      v8::NoCacheReason no_cache_reason = v8::kNoCacheNoReason);
 
   /**
    * Returns a task which streams script data into V8, or NULL if the script
@@ -616,12 +625,12 @@ class V8_EXPORT ScriptCompiler {
    * This API allows to start the streaming with as little data as possible, and
    * the remaining data (for example, the ScriptOrigin) is passed to Compile.
    */
-  static ScriptStreamingTask* StartStreaming(
-      Isolate* isolate, StreamedSource* source,
+  static v8::ScriptStreamingTask* StartStreaming(
+      Isolate* isolate, v8::StreamedSource* source,
       ScriptType type = ScriptType::kClassic);
 
-  static ConsumeCodeCacheTask* StartConsumingCodeCache(
-      Isolate* isolate, std::unique_ptr<CachedData> source);
+  static v8::ConsumeCodeCacheTask* StartConsumingCodeCache(
+      Isolate* isolate, std::unique_ptr<v8::CachedData> source);
 
   /**
    * Compiles a streamed script (bound to current context).
@@ -631,7 +640,7 @@ class V8_EXPORT ScriptCompiler {
    * during streaming, so the embedder needs to pass the full source here.
    */
   static V8_WARN_UNUSED_RESULT MaybeLocal<Script> Compile(
-      Local<Context> context, StreamedSource* source,
+      Local<Context> context, v8::StreamedSource* source,
       Local<String> full_source_string, const ScriptOrigin& origin);
 
   /**
@@ -662,9 +671,9 @@ class V8_EXPORT ScriptCompiler {
    * ECMAScript specification.
    */
   static V8_WARN_UNUSED_RESULT MaybeLocal<Module> CompileModule(
-      Isolate* isolate, Source* source,
-      CompileOptions options = kNoCompileOptions,
-      NoCacheReason no_cache_reason = kNoCacheNoReason);
+      Isolate* isolate, v8::Source* source,
+      v8::CompileOptions options = v8::kNoCompileOptions,
+      v8::NoCacheReason no_cache_reason = v8::kNoCacheNoReason);
 
   /**
    * Compiles a streamed module script.
@@ -674,7 +683,7 @@ class V8_EXPORT ScriptCompiler {
    * during streaming, so the embedder needs to pass the full source here.
    */
   static V8_WARN_UNUSED_RESULT MaybeLocal<Module> CompileModule(
-      Local<Context> context, StreamedSource* v8_source,
+      Local<Context> context, v8::StreamedSource* v8_source,
       Local<String> full_source_string, const ScriptOrigin& origin);
 
   /**
@@ -688,26 +697,26 @@ class V8_EXPORT ScriptCompiler {
    * example).
    */
   static V8_WARN_UNUSED_RESULT MaybeLocal<Function> CompileFunctionInContext(
-      Local<Context> context, Source* source, size_t arguments_count,
+      Local<Context> context, v8::Source* source, size_t arguments_count,
       Local<String> arguments[], size_t context_extension_count,
       Local<Object> context_extensions[],
-      CompileOptions options = kNoCompileOptions,
-      NoCacheReason no_cache_reason = kNoCacheNoReason,
+      v8::CompileOptions options = v8::kNoCompileOptions,
+      v8::NoCacheReason no_cache_reason = v8::kNoCacheNoReason,
       Local<ScriptOrModule>* script_or_module_out = nullptr);
 
   /**
    * Creates and returns code cache for the specified unbound_script.
-   * This will return nullptr if the script cannot be serialized. The
-   * CachedData returned by this function should be owned by the caller.
+   * This will return {} if the script cannot be serialized. The CachedData
+   * returned by this function should be owned by the caller.
    */
-  static CachedData* CreateCodeCache(Local<UnboundScript> unbound_script);
+  static v8::CachedData* CreateCodeCache(Local<UnboundScript> unbound_script);
 
   /**
    * Creates and returns code cache for the specified unbound_module_script.
-   * This will return nullptr if the script cannot be serialized. The
-   * CachedData returned by this function should be owned by the caller.
+   * This will return {} if the script cannot be serialized. The CachedData
+   * returned by this function should be owned by the caller.
    */
-  static CachedData* CreateCodeCache(
+  static v8::CachedData* CreateCodeCache(
       Local<UnboundModuleScript> unbound_module_script);
 
   /**
@@ -716,17 +725,17 @@ class V8_EXPORT ScriptCompiler {
    * This will return nullptr if the script cannot be serialized. The
    * CachedData returned by this function should be owned by the caller.
    */
-  static CachedData* CreateCodeCacheForFunction(Local<Function> function);
+  static v8::CachedData* CreateCodeCacheForFunction(Local<Function> function);
 
  private:
-  static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> CompileUnboundInternal(
-      Isolate* isolate, Source* source, CompileOptions options,
-      NoCacheReason no_cache_reason);
+  static V8_WARN_UNUSED_RESULT MaybeLocal<v8::UnboundScript>
+  CompileUnboundInternal(Isolate* isolate, v8::Source* source,
+                         v8::CompileOptions options,
+                         v8::NoCacheReason no_cache_reason);
 };
 
-ScriptCompiler::Source::Source(Local<String> string, const ScriptOrigin& origin,
-                               CachedData* data,
-                               ConsumeCodeCacheTask* consume_cache_task)
+Source::Source(Local<String> string, const ScriptOrigin& origin,
+               CachedData* data, ConsumeCodeCacheTask* consume_cache_task)
     : source_string(string),
       resource_name(origin.ResourceName()),
       resource_line_offset(origin.LineOffset()),
@@ -737,18 +746,15 @@ ScriptCompiler::Source::Source(Local<String> string, const ScriptOrigin& origin,
       cached_data(data),
       consume_cache_task(consume_cache_task) {}
 
-ScriptCompiler::Source::Source(Local<String> string, CachedData* data,
-                               ConsumeCodeCacheTask* consume_cache_task)
+Source::Source(Local<String> string, CachedData* data,
+               ConsumeCodeCacheTask* consume_cache_task)
     : source_string(string),
       cached_data(data),
       consume_cache_task(consume_cache_task) {}
 
-const ScriptCompiler::CachedData* ScriptCompiler::Source::GetCachedData()
-    const {
-  return cached_data.get();
-}
+const CachedData* Source::GetCachedData() const { return cached_data.get(); }
 
-const ScriptOriginOptions& ScriptCompiler::Source::GetResourceOptions() const {
+const ScriptOriginOptions& Source::GetResourceOptions() const {
   return resource_options;
 }
 

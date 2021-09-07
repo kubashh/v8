@@ -151,8 +151,7 @@ class TestingStream {
 template <typename Char>
 class ChunkedStream {
  public:
-  explicit ChunkedStream(ScriptCompiler::ExternalSourceStream* source)
-      : source_(source) {}
+  explicit ChunkedStream(ExternalSourceStream* source) : source_(source) {}
 
   ChunkedStream(const ChunkedStream&) V8_NOEXCEPT {
     // TODO(rmcilroy): Implement cloning for chunked streams.
@@ -223,7 +222,7 @@ class ChunkedStream {
     ProcessChunk(data, position, length);
   }
 
-  ScriptCompiler::ExternalSourceStream* source_;
+  ExternalSourceStream* source_;
 
  protected:
   std::vector<struct Chunk> chunks_;
@@ -459,8 +458,7 @@ static const base::uc16 kWindows1252ToUC16[256] = {
 
 class Windows1252CharacterStream final : public Utf16CharacterStream {
  public:
-  Windows1252CharacterStream(
-      size_t pos, ScriptCompiler::ExternalSourceStream* source_stream)
+  Windows1252CharacterStream(size_t pos, ExternalSourceStream* source_stream)
       : byte_stream_(source_stream) {
     buffer_pos_ = pos;
   }
@@ -523,8 +521,7 @@ class Windows1252CharacterStream final : public Utf16CharacterStream {
 
 class Utf8ExternalStreamingStream final : public BufferedUtf16CharacterStream {
  public:
-  Utf8ExternalStreamingStream(
-      ScriptCompiler::ExternalSourceStream* source_stream)
+  explicit Utf8ExternalStreamingStream(ExternalSourceStream* source_stream)
       : current_({0, {0, 0, 0, unibrow::Utf8::State::kAccept}}),
         source_stream_(source_stream) {}
   ~Utf8ExternalStreamingStream() final {
@@ -583,7 +580,7 @@ class Utf8ExternalStreamingStream final : public BufferedUtf16CharacterStream {
 
   std::vector<Chunk> chunks_;
   Position current_;
-  ScriptCompiler::ExternalSourceStream* source_stream_;
+  ExternalSourceStream* source_stream_;
 };
 
 bool Utf8ExternalStreamingStream::SkipToPosition(size_t position) {
@@ -924,19 +921,19 @@ std::unique_ptr<Utf16CharacterStream> ScannerStream::ForTesting(
 }
 
 Utf16CharacterStream* ScannerStream::For(
-    ScriptCompiler::ExternalSourceStream* source_stream,
-    v8::ScriptCompiler::StreamedSource::Encoding encoding) {
+    ExternalSourceStream* source_stream,
+    v8::StreamedSource::Encoding encoding) {
   switch (encoding) {
-    case v8::ScriptCompiler::StreamedSource::TWO_BYTE:
+    case v8::StreamedSource::TWO_BYTE:
       return new UnbufferedCharacterStream<ChunkedStream>(
           static_cast<size_t>(0), source_stream);
-    case v8::ScriptCompiler::StreamedSource::ONE_BYTE:
+    case v8::StreamedSource::ONE_BYTE:
       return new BufferedCharacterStream<ChunkedStream>(static_cast<size_t>(0),
                                                         source_stream);
-    case v8::ScriptCompiler::StreamedSource::WINDOWS_1252:
+    case v8::StreamedSource::WINDOWS_1252:
       return new Windows1252CharacterStream(static_cast<size_t>(0),
                                             source_stream);
-    case v8::ScriptCompiler::StreamedSource::UTF8:
+    case v8::StreamedSource::UTF8:
       return new Utf8ExternalStreamingStream(source_stream);
   }
   UNREACHABLE();

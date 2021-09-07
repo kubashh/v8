@@ -428,7 +428,7 @@ static inline v8::Local<v8::Script> CompileWithOrigin(
     bool is_shared_cross_origin) {
   v8::Isolate* isolate = v8::Isolate::GetCurrent();
   v8::ScriptOrigin origin(isolate, origin_url, 0, 0, is_shared_cross_origin);
-  v8::ScriptCompiler::Source script_source(source, origin);
+  v8::Source script_source(source, origin);
   return v8::ScriptCompiler::Compile(isolate->GetCurrentContext(),
                                      &script_source)
       .ToLocalChecked();
@@ -482,10 +482,9 @@ static inline v8::Local<v8::Value> CompileRun(const char* source) {
   return CompileRun(v8_str(source));
 }
 
-
-static inline v8::Local<v8::Value> CompileRun(
-    v8::Local<v8::Context> context, v8::ScriptCompiler::Source* script_source,
-    v8::ScriptCompiler::CompileOptions options) {
+static inline v8::Local<v8::Value> CompileRun(v8::Local<v8::Context> context,
+                                              v8::Source* script_source,
+                                              v8::CompileOptions options) {
   v8::Local<v8::Value> result;
   if (v8::ScriptCompiler::Compile(context, script_source, options)
           .ToLocalChecked()
@@ -496,7 +495,6 @@ static inline v8::Local<v8::Value> CompileRun(
   return v8::Local<v8::Value>();
 }
 
-
 // Helper functions that compile and run the source with given origin.
 static inline v8::Local<v8::Value> CompileRunWithOrigin(const char* source,
                                                         const char* origin_url,
@@ -506,9 +504,8 @@ static inline v8::Local<v8::Value> CompileRunWithOrigin(const char* source,
   v8::Local<v8::Context> context = isolate->GetCurrentContext();
   v8::ScriptOrigin origin(isolate, v8_str(origin_url), line_number,
                           column_number);
-  v8::ScriptCompiler::Source script_source(v8_str(source), origin);
-  return CompileRun(context, &script_source,
-                    v8::ScriptCompiler::CompileOptions());
+  v8::Source script_source(v8_str(source), origin);
+  return CompileRun(context, &script_source, v8::CompileOptions());
 }
 
 
@@ -516,10 +513,9 @@ static inline v8::Local<v8::Value> CompileRunWithOrigin(
     v8::Local<v8::String> source, const char* origin_url) {
   v8::Isolate* isolate = v8::Isolate::GetCurrent();
   v8::Local<v8::Context> context = isolate->GetCurrentContext();
-  v8::ScriptCompiler::Source script_source(
-      source, v8::ScriptOrigin(isolate, v8_str(origin_url)));
-  return CompileRun(context, &script_source,
-                    v8::ScriptCompiler::CompileOptions());
+  v8::Source script_source(source,
+                           v8::ScriptOrigin(isolate, v8_str(origin_url)));
+  return CompileRun(context, &script_source, v8::CompileOptions());
 }
 
 

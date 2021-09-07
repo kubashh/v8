@@ -599,7 +599,7 @@ UNINITIALIZED_TEST(LogInterpretedFramesNativeStackWithSerialization) {
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
 
-  v8::ScriptCompiler::CachedData* cache = nullptr;
+  v8::CachedData* cache = nullptr;
 
   bool has_cache = cache != nullptr;
   // NOTE(mmarchini): Runs the test two times. The first time it will compile
@@ -614,9 +614,8 @@ UNINITIALIZED_TEST(LogInterpretedFramesNativeStackWithSerialization) {
       ScopedLoggerInitializer logger(isolate);
 
       has_cache = cache != nullptr;
-      v8::ScriptCompiler::CompileOptions options =
-          has_cache ? v8::ScriptCompiler::kConsumeCodeCache
-                    : v8::ScriptCompiler::kEagerCompile;
+      v8::CompileOptions options =
+          has_cache ? v8::kConsumeCodeCache : v8::kEagerCompile;
 
       v8::HandleScope scope(isolate);
       v8::Isolate::Scope isolate_scope(isolate);
@@ -631,7 +630,7 @@ UNINITIALIZED_TEST(LogInterpretedFramesNativeStackWithSerialization) {
                           reinterpret_cast<i::Isolate*>(isolate))
                     : nullptr;
 
-      v8::ScriptCompiler::Source script_source(source, origin, cache);
+      v8::Source script_source(source, origin, cache);
       v8::Local<v8::Function> fun =
           v8::ScriptCompiler::CompileFunctionInContext(
               context, &script_source, 1, &arg_str, 0, nullptr, options)
@@ -709,7 +708,7 @@ UNINITIALIZED_TEST(ExternalCodeEventListenerInnerFunctions) {
   i::FLAG_log = false;
   i::FLAG_prof = false;
 
-  v8::ScriptCompiler::CachedData* cache;
+  v8::CachedData* cache;
   static const char* source_cstring =
       "(function f1() { return (function f2() {}); })()";
 
@@ -727,7 +726,7 @@ UNINITIALIZED_TEST(ExternalCodeEventListenerInnerFunctions) {
 
     v8::Local<v8::String> source_string = v8_str(source_cstring);
     v8::ScriptOrigin origin(isolate1, v8_str("test"));
-    v8::ScriptCompiler::Source source(source_string, origin);
+    v8::Source source(source_string, origin);
     v8::Local<v8::UnboundScript> script =
         v8::ScriptCompiler::CompileUnboundScript(isolate1, &source)
             .ToLocalChecked();
@@ -753,12 +752,12 @@ UNINITIALIZED_TEST(ExternalCodeEventListenerInnerFunctions) {
 
     v8::Local<v8::String> source_string = v8_str(source_cstring);
     v8::ScriptOrigin origin(isolate2, v8_str("test"));
-    v8::ScriptCompiler::Source source(source_string, origin, cache);
+    v8::Source source(source_string, origin, cache);
     {
       i::DisallowCompilation no_compile_expected(
           reinterpret_cast<i::Isolate*>(isolate2));
-      v8::ScriptCompiler::CompileUnboundScript(
-          isolate2, &source, v8::ScriptCompiler::kConsumeCodeCache)
+      v8::ScriptCompiler::CompileUnboundScript(isolate2, &source,
+                                               v8::kConsumeCodeCache)
           .ToLocalChecked();
     }
     CHECK_EQ(code_event_handler.CountLines("Function", "f1"), 1);

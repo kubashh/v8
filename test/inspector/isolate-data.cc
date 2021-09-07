@@ -7,6 +7,7 @@
 #include "include/v8-context.h"
 #include "include/v8-exception.h"
 #include "include/v8-microtask-queue.h"
+#include "include/v8-script.h"
 #include "include/v8-template.h"
 #include "src/base/vector.h"
 #include "src/inspector/test-interface.h"
@@ -125,7 +126,7 @@ int InspectorIsolateData::GetContextGroupId(v8::Local<v8::Context> context) {
 
 void InspectorIsolateData::RegisterModule(v8::Local<v8::Context> context,
                                           std::vector<uint16_t> name,
-                                          v8::ScriptCompiler::Source* source) {
+                                          v8::Source* source) {
   v8::Local<v8::Module> module;
   if (!v8::ScriptCompiler::CompileModule(isolate(), source).ToLocal(&module))
     return;
@@ -443,8 +444,7 @@ void InspectorIsolateData::installAdditionalCommandLineAPI(
   v8::Context::Scope context_scope(context);
   v8::ScriptOrigin origin(isolate(), v8::String::NewFromUtf8Literal(
                                          isolate(), "internal-console-api"));
-  v8::ScriptCompiler::Source scriptSource(
-      additional_console_api_.Get(isolate()), origin);
+  v8::Source scriptSource(additional_console_api_.Get(isolate()), origin);
   v8::MaybeLocal<v8::Script> script =
       v8::ScriptCompiler::Compile(context, &scriptSource);
   CHECK(!script.ToLocalChecked()->Run(context).IsEmpty());

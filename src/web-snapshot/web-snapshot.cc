@@ -223,7 +223,7 @@ bool WebSnapshotSerializer::TakeSnapshot(v8::Local<v8::Context> context,
     if (str.IsEmpty()) {
       continue;
     }
-    v8::ScriptCompiler::Source source(str);
+    v8::Source source(str);
     auto script = ScriptCompiler::Compile(context, &source).ToLocalChecked();
     v8::MaybeLocal<v8::Value> script_result = script->Run(context);
     v8::Local<v8::Object> v8_object;
