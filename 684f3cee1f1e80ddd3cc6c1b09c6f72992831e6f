@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be0ea5bb_52e27298",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-09-07T21:44:14Z",
+      "side": 0,
+      "message": "fyi the other hack I learned is to do `grep [c]ompiler_proxy` :)",
+      "range": {
+        "startLine": 509,
+        "startChar": 21,
+        "endLine": 509,
+        "endChar": 40
+      },
+      "revId": "684f3cee1f1e80ddd3cc6c1b09c6f72992831e6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
