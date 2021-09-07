@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "825dcc88_4a88b3d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-07T14:39:14Z",
+      "side": 1,
+      "message": "The problem that is open is that the DescriptorArray write barrier actually performs weak processing on the weak slots in the DescriptorArray. In that sense it\u0027s not a regular write barrier but also requires proper WeakObjects and a task id for pushing.\n\nIdeally we wouldn\u0027t need a task id which was tried before (and reverted): https://chromium-review.googlesource.com/c/v8/v8/+/2452749",
+      "revId": "4951e40a4b61471283a904d4eb36b5bc3ea61eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7476eb86_f587c57e",
         "filename": "src/heap/marking-barrier.cc",
         "patchSetId": 2
@@ -14,6 +31,30 @@
       "writtenOn": "2021-09-07T11:49:24Z",
       "side": 1,
       "message": "Why is this new visitor needed?\nAfaict there\u0027s nothing here that specific to DescriptorArray. What is the diff between this visitor and a general-purpose visitor?",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 42
+      },
+      "revId": "4951e40a4b61471283a904d4eb36b5bc3ea61eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b269dda5_d12e3e0a",
+        "filename": "src/heap/marking-barrier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-07T14:39:14Z",
+      "side": 1,
+      "message": "It\u0027s actually the same now and we could reuse.",
+      "parentUuid": "7476eb86_f587c57e",
       "range": {
         "startLine": 78,
         "startChar": 6,
