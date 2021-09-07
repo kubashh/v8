@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6091f8a1_b284d7b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-07T20:36:58Z",
+      "side": 1,
+      "message": "PTAL. This touches many lines, but the majority of changes is quite mechanical/\"boring\" (in particular renaming the existing {Struct,Array}NewDefault to ...NewDefaultWithRtt).\n\nYou may want to start the review at wasm-opcodes.h, which gives an overview of what to expect in the rest of the patch.",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6493bef0_1b38037d",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-07T20:36:58Z",
+      "side": 1,
+      "message": "Copied from above, and adapted for rtt-less/\"static\" instructions.",
+      "range": {
+        "startLine": 470,
+        "startChar": 13,
+        "endLine": 470,
+        "endChar": 30
+      },
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a93a21c4_c940286c",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-07T20:36:58Z",
+      "side": 1,
+      "message": "Just adding _WITH_RTT here, and formatting as needed.",
+      "range": {
+        "startLine": 1019,
+        "startChar": 36,
+        "endLine": 1019,
+        "endChar": 45
+      },
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96269f5c_b364796a",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-07T20:36:58Z",
+      "side": 1,
+      "message": "Copied from above and adapted.",
+      "range": {
+        "startLine": 1386,
+        "startChar": 24,
+        "endLine": 1386,
+        "endChar": 45
+      },
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
