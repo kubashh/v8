@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4801ce29_ad398579",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-07T16:43:09Z",
+      "side": 1,
+      "message": "A Tailcall node has 1 control output. A Call has 0 control outputs if the call descriptor has kNoThrow property, otherwise it has 2 control outputs.\n\nSo this doesn\u0027t look quite right to me. Even if we assume we are in the kNoThrow case, we\u0027ll end up with a Call node that produces no control but has two control uses: End (from before the change) and Return (see below).",
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62de8233_cb12f191",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-07T16:43:09Z",
+      "side": 1,
+      "message": "The Call has Operator::ZeroIfPure(call_descriptor-\u003eproperties()) effect outputs, i.e. possibly 0.",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 131,
+        "endChar": 47
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d382cebe_76510c22",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-07T16:43:09Z",
+      "side": 1,
+      "message": "See above.",
+      "range": {
+        "startLine": 132,
+        "startChar": 42,
+        "endLine": 132,
+        "endChar": 47
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3053e4f0_c995b269",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-07T16:43:09Z",
+      "side": 1,
+      "message": "Again I\u0027d prefer return_inputs.size().",
+      "range": {
+        "startLine": 134,
+        "startChar": 37,
+        "endLine": 134,
+        "endChar": 53
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
