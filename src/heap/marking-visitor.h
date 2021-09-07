@@ -164,6 +164,11 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
     // reconstructed after GC.
   }
 
+  // Ensures that all descriptors int range [0, number_of_own_descriptors)
+  // are visited.
+  V8_INLINE void VisitDescriptorArrayForWriteBarrier(
+      DescriptorArray descriptors, int number_of_own_descriptors);
+
  protected:
   ConcreteVisitor* concrete_visitor() {
     return static_cast<ConcreteVisitor*>(this);
