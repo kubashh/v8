@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9c7fc26_7aa91c39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-07T16:58:27Z",
+      "side": 1,
+      "message": "fwiw, I think we can just strongly mark the DescriptorArray for the current cycle if we are in a GC. That will simplify the barrier and not likely not require any visitors.\n\nWill ping when this is done.",
+      "parentUuid": "825dcc88_4a88b3d5",
+      "revId": "4951e40a4b61471283a904d4eb36b5bc3ea61eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7476eb86_f587c57e",
         "filename": "src/heap/marking-barrier.cc",
         "patchSetId": 2
