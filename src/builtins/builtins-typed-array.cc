@@ -43,32 +43,49 @@ int64_t CapRelativeIndex(Handle<Object> num, int64_t minimum, int64_t maximum) {
 
 }  // namespace
 
+// https://tc39.es/ecma262/#sec-%typedarray%.prototype.copywithin
 BUILTIN(TypedArrayPrototypeCopyWithin) {
   HandleScope scope(isolate);
 
+  // 1. Let O be the this value.
+  // 2. Perform ? ValidateTypedArray(O).
   Handle<JSTypedArray> array;
   const char* method = "%TypedArray%.prototype.copyWithin";
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, array, JSTypedArray::Validate(isolate, args.receiver(), method));
 
+  // 3. Let len be O.[[ArrayLength]].
   int64_t len = array->length();
   int64_t to = 0;
   int64_t from = 0;
   int64_t final = len;
 
   if (V8_LIKELY(args.length() > 1)) {
+    // 4. Let relativeTarget be ? ToIntegerOrInfinity(target).
     Handle<Object> num;
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
         isolate, num, Object::ToInteger(isolate, args.at<Object>(1)));
+    // 5. If relativeTarget is -∞, let to be 0.
+    // 6. Else if relativeTarget < 0, let to be max(len + relativeTarget, 0).
+    // 7. Else, let to be min(relativeTarget, len).
     to = CapRelativeIndex(num, 0, len);
 
     if (args.length() > 2) {
+      // 8. Let relativeStart be ? ToIntegerOrInfinity(start).
       ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
           isolate, num, Object::ToInteger(isolate, args.at<Object>(2)));
+      // 9. If relativeStart is -∞, let from be 0.
+      // 10. Else if relativeStart < 0, let from be max(len + relativeStart, 0).
+      // 11. Else, let from be min(relativeStart, len).
       from = CapRelativeIndex(num, 0, len);
 
+      // 12. If end is undefined, let relativeEnd be len; else let relativeEnd
+      // be ? ToIntegerOrInfinity(end).
       Handle<Object> end = args.atOrUndefined(isolate, 3);
       if (!end->IsUndefined(isolate)) {
+        // 13. If relativeEnd is -∞, let final be 0.
+        // 14. Else if relativeEnd < 0, let final be max(len + relativeEnd, 0).
+        // 15. Else, let final be min(relativeEnd, len).
         ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, num,
                                            Object::ToInteger(isolate, end));
         final = CapRelativeIndex(num, 0, len);
@@ -76,15 +93,24 @@ BUILTIN(TypedArrayPrototypeCopyWithin) {
     }
   }
 
+  // 16. Let count be min(final - from, len - to).
   int64_t count = std::min<int64_t>(final - from, len - to);
+  // 17. If count > 0, then
+  // Early return here.
+  // 18. Return O.
   if (count <= 0) return *array;
 
+  // 17b. Let buffer be O.[[ViewedArrayBuffer]].
+  // 17c. If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   // TypedArray buffer may have been transferred/detached during parameter
-  // processing above. Return early in this case, to prevent potential UAF error
-  // TODO(caitp): throw here, as though the full algorithm were performed (the
-  // throw would have come from ecma262/#sec-integerindexedelementget)
-  // (see )
-  if (V8_UNLIKELY(array->WasDetached())) return *array;
+  // processing above. Return early in this case, to prevent potential UAF
+  // error.
+  if (V8_UNLIKELY(array->WasDetached())) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate,
+        NewTypeError(MessageTemplate::kDetachedOperation,
+                     isolate->factory()->NewStringFromAsciiChecked(method)));
+  }
 
   // Ensure processed indexes are within array bounds
   DCHECK_GE(from, 0);
@@ -93,11 +119,40 @@ BUILTIN(TypedArrayPrototypeCopyWithin) {
   DCHECK_LT(to, len);
   DCHECK_GE(len - count, 0);
 
+  // 17d. Let typedArrayName be the String value of O.[[TypedArrayName]].
+  // 17e. Let elementSize be the Element Size value specified in Table 72 for
+  // typedArrayName.
   size_t element_size = array->element_size();
+  // 17f. Let byteOffset be O.[[ByteOffset]].
+  // NOTE: array->DataPtr already shifted by byteOffset at construction.
+  // 17g. Let toByteIndex be to × elementSize + byteOffset.
   to = to * element_size;
+  // 17h. Let fromByteIndex be from × elementSize + byteOffset.
   from = from * element_size;
+  // 17i. Let countBytes be count × elementSize.
   count = count * element_size;
 
+  // 17j. If fromByteIndex < toByteIndex and toByteIndex < fromByteIndex +
+  // countBytes, then
+  // 17j.i.   Let direction be -1.
+  // 17j.ii.  Set fromByteIndex to fromByteIndex + countBytes - 1.
+  // 17j.iii. Set toByteIndex to toByteIndex + countBytes - 1.
+  // 17k. Else,
+  // 17k.i.   Let direction be 1.
+  //
+  // Overlapping is taken care by both base::Relaxed_Memmove and std::memmove.
+
+  // 17l. Repeat, while countBytes > 0,
+  // 17l.i.   Let value be GetValueFromBuffer(buffer, fromByteIndex, Uint8,
+  // true, Unordered).
+  // 17l.ii.  Perform SetValueInBuffer(buffer, toByteIndex, Uint8, value, true,
+  // Unordered).
+  // 17l.iii. Set fromByteIndex to fromByteIndex + direction.
+  // 17l.iv.  Set toByteIndex to toByteIndex + direction.
+  // 17l.v.   Set countBytes to countBytes - 1.
+  //
+  // All steps defined in 17l are covered by both base::Relaxed_Memmove and
+  // std::memmove.
   uint8_t* data = static_cast<uint8_t*>(array->DataPtr());
   if (array->buffer().is_shared()) {
     base::Relaxed_Memmove(reinterpret_cast<base::Atomic8*>(data + to),
@@ -106,6 +161,7 @@ BUILTIN(TypedArrayPrototypeCopyWithin) {
     std::memmove(data + to, data + from, count);
   }
 
+  // 18. Return O.
   return *array;
 }
 
