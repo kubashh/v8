@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7476eb86_f587c57e",
+        "filename": "src/heap/marking-barrier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-07T11:49:24Z",
+      "side": 1,
+      "message": "Why is this new visitor needed?\nAfaict there\u0027s nothing here that specific to DescriptorArray. What is the diff between this visitor and a general-purpose visitor?",
+      "range": {
+        "startLine": 78,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 42
+      },
+      "revId": "4951e40a4b61471283a904d4eb36b5bc3ea61eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8271f132_40f659b5",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-09-07T11:49:24Z",
+      "side": 1,
+      "message": "in",
+      "range": {
+        "startLine": 167,
+        "startChar": 34,
+        "endLine": 167,
+        "endChar": 37
+      },
+      "revId": "4951e40a4b61471283a904d4eb36b5bc3ea61eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
