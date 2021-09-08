@@ -16,6 +16,40 @@
       "message": "PTAL, thanks!",
       "revId": "71491b48f1c9689853ad77348659e2620110fd91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c36652a_f597546e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-08T11:15:56Z",
+      "side": 1,
+      "message": "Rubberstamp LGTM with a comment.",
+      "revId": "71491b48f1c9689853ad77348659e2620110fd91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abad6244_5f894e95",
+        "filename": "src/execution/loong64/frame-constants-loong64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-08T11:15:56Z",
+      "side": 1,
+      "message": "The ellipsis seems a bit arbitrary. Why not \"{a0 .. a7, t0 .. t5, s0, s1, s2, s5, s7, s8}\"?",
+      "revId": "71491b48f1c9689853ad77348659e2620110fd91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
