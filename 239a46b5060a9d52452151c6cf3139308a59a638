@@ -33,6 +33,24 @@
       "message": "LGTM. Have you checked locally that ASSERT_DEATH_IF_SUPPORTED works as expected (in particular, that it is in fact supported)?",
       "revId": "239a46b5060a9d52452151c6cf3139308a59a638",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa806add_3d355530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-08T11:27:44Z",
+      "side": 1,
+      "message": "Yes, I verified that the code runs on Linux, also in a VM that support PKU.",
+      "parentUuid": "10557d2e_2359f792",
+      "revId": "239a46b5060a9d52452151c6cf3139308a59a638",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
