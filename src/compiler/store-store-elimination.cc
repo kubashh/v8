@@ -332,9 +332,10 @@ UnobservablesSet RedundantStoreFinder::RecomputeSet(
 
 bool RedundantStoreFinder::CannotObserveStoreField(Node* node) {
   IrOpcode::Value opcode = node->opcode();
-  return opcode == IrOpcode::kLoadElement || opcode == IrOpcode::kLoad ||
-         opcode == IrOpcode::kLoadImmutable || opcode == IrOpcode::kStore ||
-         opcode == IrOpcode::kEffectPhi || opcode == IrOpcode::kStoreElement ||
+  return opcode == IrOpcode::kAllocateRaw || opcode == IrOpcode::kLoadElement ||
+         opcode == IrOpcode::kLoad || opcode == IrOpcode::kLoadImmutable ||
+         opcode == IrOpcode::kStore || opcode == IrOpcode::kEffectPhi ||
+         opcode == IrOpcode::kStoreElement ||
          opcode == IrOpcode::kUnsafePointerAdd || opcode == IrOpcode::kRetain;
 }
 
