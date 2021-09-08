@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f332218e_6ba23a2c",
+        "filename": "src/objects/feedback-cell-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-08T13:28:24Z",
+      "side": 1,
+      "message": "I think this was already needed before.",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
