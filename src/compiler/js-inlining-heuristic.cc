@@ -43,7 +43,7 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
 
 bool CanConsiderForInlining(JSHeapBroker* broker,
                             JSFunctionRef const& function) {
-  if (!function.has_feedback_vector(broker->dependencies())) {
+  if (!function.feedback_vector(broker->dependencies()).has_value()) {  // XXX
     TRACE("Cannot consider " << function
                              << " for inlining (no feedback vector)");
     return false;
@@ -51,7 +51,7 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
 
   return CanConsiderForInlining(
       broker, function.shared(),
-      function.feedback_vector(broker->dependencies()));
+      *function.feedback_vector(broker->dependencies()));
 }
 
 }  // namespace
@@ -98,9 +98,11 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
   if (m.IsCheckClosure()) {
     DCHECK(!out.functions[0].has_value());
     FeedbackCellRef feedback_cell = MakeRef(broker(), FeedbackCellOf(m.op()));
-    SharedFunctionInfoRef shared_info = *feedback_cell.shared_function_info();
+    SharedFunctionInfoRef shared_info =
+        feedback_cell.shared_function_info().value();
     out.shared_info = shared_info;
-    if (CanConsiderForInlining(broker(), shared_info, *feedback_cell.value())) {
+    if (CanConsiderForInlining(broker(), shared_info,
+                               feedback_cell.feedback_vector().value())) {
       out.bytecode[0] = shared_info.GetBytecodeArray();
     }
     out.num_functions = 1;
@@ -113,8 +115,10 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
     FeedbackCellRef feedback_cell = n.GetFeedbackCellRefChecked(broker());
     SharedFunctionInfoRef shared_info = p.shared_info(broker());
     out.shared_info = shared_info;
-    if (feedback_cell.value().has_value() &&
-        CanConsiderForInlining(broker(), shared_info, *feedback_cell.value())) {
+    base::Optional<FeedbackVectorRef> feedback_vector =
+        feedback_cell.feedback_vector();
+    if (feedback_vector.has_value() &&
+        CanConsiderForInlining(broker(), shared_info, *feedback_vector)) {
       out.bytecode[0] = shared_info.GetBytecodeArray();
     }
     out.num_functions = 1;
