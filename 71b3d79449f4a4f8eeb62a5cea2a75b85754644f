@@ -16,6 +16,74 @@
       "message": "PTAL.",
       "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d08778_ee988555",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-08T05:03:38Z",
+      "side": 1,
+      "message": "Please put that also at the top of ReduceCall.",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf1fd83_db807c5c",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-08T05:03:38Z",
+      "side": 1,
+      "message": "Nit: const, to make it clear that this doesn\u0027t change (since the use is much further down)",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5249758_e944885f",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-08T05:03:38Z",
+      "side": 1,
+      "message": "Shouldn\u0027t you also remove the edge to the subgraph end?",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85d57a1_f9ac1290",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-08T05:03:38Z",
+      "side": 1,
+      "message": "Have you considered reusing the original return nodes instead of creating a new return and phis?",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
