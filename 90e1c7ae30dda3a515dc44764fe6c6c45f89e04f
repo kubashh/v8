@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46e64b8_7b44c677",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-09-08T17:06:00Z",
+      "side": 1,
+      "message": "Ok, new more verbose name makes me happier with this, thanks.",
+      "parentUuid": "e2805518_01dbb91b",
+      "range": {
+        "startLine": 172,
+        "startChar": 8,
+        "endLine": 172,
+        "endChar": 23
+      },
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3e34d8e_1f3dc603",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "We should, but these macros are used in macro-assembler-x64.h and macro-assembler-ia32.h. As we clean up more stuff, we can remove those usages, and then we can #undef them here too.",
       "parentUuid": "c3e34d8e_1f3dc603",
+      "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2287eb7_53d08ee3",
+        "filename": "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-09-08T17:06:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9adeac7_deb6219e",
       "revId": "90e1c7ae30dda3a515dc44764fe6c6c45f89e04f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
