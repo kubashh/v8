@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "344ac14f_b722cad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-08T12:14:05Z",
+      "side": 1,
+      "message": "Hey, I tried to add call_ref and wanted to ask if the same approach as in call function is applicable to call_ref? It should generate signature arguments and then function reference, yes? Let me know if the approach is wrong. Thanks!\n\nSorry for removing you from reviewers, was having some problems.",
+      "revId": "a6a8c988f7dee09c33591d9a31771fdd80ee274d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
