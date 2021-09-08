@@ -1399,6 +1399,8 @@
   # it. In the slow path, this results in one runtime call per element, which
   # takes several minutes overall.
   'regress/wasm/regress-9017': [SKIP],
+  # --force-slow-path disables optimizations needed for this test.
+  'regress/regress-v8-12194': [SKIP],
 }],  # variant == slow_path
 
 ['((arch == mipsel or arch == mips64el or arch == mips or arch == mips64) and not simd_mips) or (arch in [ppc64, s390x])', {

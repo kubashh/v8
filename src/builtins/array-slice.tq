@@ -130,17 +130,6 @@ macro HandleFastSlice(
 transitioning javascript builtin
 ArrayPrototypeSlice(
     js-implicit context: NativeContext, receiver: JSAny)(...arguments): JSAny {
-  // Handle array cloning case if the receiver is a fast array.
-  if (arguments.length == 0) {
-    typeswitch (receiver) {
-      case (a: FastJSArrayForCopy): {
-        return CloneFastJSArray(context, a);
-      }
-      case (JSAny): {
-      }
-    }
-  }
-
   // 1. Let O be ? ToObject(this value).
   const o: JSReceiver = ToObject_Inline(context, receiver);
 
@@ -150,6 +139,19 @@ ArrayPrototypeSlice(
   // 3. Let relativeStart be ? ToInteger(start).
   const start: JSAny = arguments[0];
   const relativeStart: Number = ToInteger_Inline(start);
+
+  // Handle array cloning case if the receiver is a fast array. This logic
+  // should be in sync with ReduceArrayPrototypeSlice (to a reasonable degree)
+  // to avoid deopts.
+  if (arguments.length == 0 || (relativeStart == 0 && arguments.length == 1)) {
+    typeswitch (receiver) {
+      case (a: FastJSArrayForCopy): {
+        return CloneFastJSArray(context, a);
+      }
+      case (JSAny): {
+      }
+    }
+  }
 
   // 4. If relativeStart < 0, let k be max((len + relativeStart), 0);
   //    else let k be min(relativeStart, len).
