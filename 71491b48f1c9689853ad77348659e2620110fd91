@@ -50,6 +50,24 @@
       "message": "The ellipsis seems a bit arbitrary. Why not \"{a0 .. a7, t0 .. t5, s0, s1, s2, s5, s7, s8}\"?",
       "revId": "71491b48f1c9689853ad77348659e2620110fd91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff53d4a4_d9a90a48",
+        "filename": "src/execution/loong64/frame-constants-loong64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2021-09-08T12:07:19Z",
+      "side": 1,
+      "message": "Done. I made the ellipsis just to keep this comment in a line, it\u0027s indeed kind of strange.",
+      "parentUuid": "abad6244_5f894e95",
+      "revId": "71491b48f1c9689853ad77348659e2620110fd91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
