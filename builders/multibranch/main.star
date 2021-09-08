@@ -214,11 +214,22 @@ in_category(
 
 in_category(
     "Mac",
+
+    main_multibranch_builder(
+        name = "V8 Mac64 - builder",
+        triggered_by_gitiles = True,
+        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        properties = {"binary_size_tracking": {"category": "mac64", "binary": "d8"}},
+    ),
     main_multibranch_builder(
         name = "V8 Mac64",
         triggered_by_gitiles = True,
         dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
-        properties = {"binary_size_tracking": {"category": "mac64", "binary": "d8"}},
+    ),
+    main_multibranch_builder(
+        name = "V8 Mac64 - debug builder",
+        triggered_by_gitiles = True,
+        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
     ),
     main_multibranch_builder(
         name = "V8 Mac64 - debug",
