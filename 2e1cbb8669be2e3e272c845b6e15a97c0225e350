@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "2e1cbb8669be2e3e272c845b6e15a97c0225e350",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f38624a_10d28f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-08T12:09:43Z",
+      "side": 1,
+      "message": "Btw, after the MB change, the MB parts should be inferred... I\u0027m also testing this here. I\u0027ll adapt the split instructions afterwards, but I think they are even simpler...",
+      "revId": "2e1cbb8669be2e3e272c845b6e15a97c0225e350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
