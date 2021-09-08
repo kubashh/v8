@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41b27c91_5c454b4d",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-08T15:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eed43708_91a3d19b",
+      "range": {
+        "startLine": 537,
+        "startChar": 7,
+        "endLine": 537,
+        "endChar": 17
+      },
+      "revId": "a6a8c988f7dee09c33591d9a31771fdd80ee274d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1be5b91a_35fd5b1d",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-09-08T12:37:02Z",
       "side": 1,
       "message": "Let\u0027s also rename the argument to call_kind.",
+      "range": {
+        "startLine": 586,
+        "startChar": 63,
+        "endLine": 586,
+        "endChar": 74
+      },
+      "revId": "a6a8c988f7dee09c33591d9a31771fdd80ee274d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a561e3bd_b68d9fe0",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-08T15:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be5b91a_35fd5b1d",
       "range": {
         "startLine": 586,
         "startChar": 63,
