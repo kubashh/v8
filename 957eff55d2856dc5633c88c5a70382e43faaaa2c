@@ -39,6 +39,30 @@
       },
       "revId": "957eff55d2856dc5633c88c5a70382e43faaaa2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a889a4_e6c123ad",
+        "filename": "builders/experiments.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1002224
+      },
+      "writtenOn": "2021-09-08T11:12:09Z",
+      "side": 1,
+      "message": "CACHE_SILO is needed for the builders to compare performance with Goma, but it is not needed for anything else.  When we start experiment_builder migration, others won\u0027t have CACHE_SILO because we do not need to compare its performance with Goma.\nThus, let me leave DEFAULT as-is.",
+      "parentUuid": "cc8efabd_0b335098",
+      "range": {
+        "startLine": 319,
+        "startChar": 23,
+        "endLine": 319,
+        "endChar": 33
+      },
+      "revId": "957eff55d2856dc5633c88c5a70382e43faaaa2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
