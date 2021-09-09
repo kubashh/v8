@@ -3,6 +3,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b591ed6d_2de0fa63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T05:34:08Z",
+      "side": 1,
+      "message": "Please mention the other part of the fix here too.",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3671b5e7_079eb9c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T05:34:08Z",
+      "side": 1,
+      "message": "lgtm with a comment, thanks.",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a156f341_bae9fdf5",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T05:34:08Z",
+      "side": 1,
+      "message": "This was the other part of the fix?",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f332218e_6ba23a2c",
         "filename": "src/objects/feedback-cell-inl.h",
         "patchSetId": 5
@@ -14,6 +65,24 @@
       "writtenOn": "2021-09-08T13:28:24Z",
       "side": 1,
       "message": "I think this was already needed before.",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75ef01f_6a0de220",
+        "filename": "src/objects/feedback-cell-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T05:34:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f332218e_6ba23a2c",
       "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
