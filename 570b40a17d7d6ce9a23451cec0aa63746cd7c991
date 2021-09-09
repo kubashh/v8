@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a96b420d_0b0169ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-09T16:58:04Z",
+      "side": 1,
+      "message": "Hello Michael,\n\nI\u0027m interested to hear what you think of this idea, when you have time. It\u0027s not high priority; I\u0027m sure you have plenty of more important things to catch up on when returning from your OOO tomorrow. Thanks!",
+      "revId": "570b40a17d7d6ce9a23451cec0aa63746cd7c991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
