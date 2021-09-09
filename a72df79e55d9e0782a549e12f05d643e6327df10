@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5173b1b4_35e396b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-09T12:57:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b591ed6d_2de0fa63",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3671b5e7_079eb9c4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-09T05:34:08Z",
       "side": 1,
       "message": "This was the other part of the fix?",
+      "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddff7f18_7cfae5b6",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-09T12:57:03Z",
+      "side": 1,
+      "message": "I guess so. The point of this is to make sure feedback_cell won\u0027t change (see other comment below).",
+      "parentUuid": "a156f341_bae9fdf5",
       "revId": "a72df79e55d9e0782a549e12f05d643e6327df10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
