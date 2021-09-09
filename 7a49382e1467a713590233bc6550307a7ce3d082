@@ -20,6 +20,97 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9f8be48a_7aa4ac06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T10:22:59Z",
+      "side": 1,
+      "message": "LGTM with some comments.",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35f3049d_f6375e0d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T10:22:59Z",
+      "side": 1,
+      "message": "This should be super_index. Maybe add a test to catch it?",
+      "range": {
+        "startLine": 573,
+        "startChar": 36,
+        "endLine": 573,
+        "endChar": 48
+      },
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bcf05a2_84d4f168",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T10:22:59Z",
+      "side": 1,
+      "message": "nit: Maybe add a specific error message for circular subtyping.",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b0af69_fb984707",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T10:22:59Z",
+      "side": 1,
+      "message": "I think this is inconsistent with allowing explicit function supertypes?",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ba1056c_e163572e",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T10:22:59Z",
+      "side": 1,
+      "message": "nit: I think you should save the original type_index, and if you encounter it again, exit immediately with a \"circular dependency\" code (maybe kNoSuperType).",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6493bef0_1b38037d",
         "filename": "test/cctest/wasm/test-gc.cc",
         "patchSetId": 1
