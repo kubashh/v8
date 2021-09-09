@@ -16,6 +16,97 @@
       "message": "i heard you like cows; ptal",
       "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3057c1_a34fde33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T07:10:34Z",
+      "side": 1,
+      "message": "Thanks, lgtm with comments",
+      "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f708c80a_b6cdc1b4",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T07:10:34Z",
+      "side": 1,
+      "message": "Might be worth adding a similar comment in ReduceArrayPSlice too, since the deopt problem is not clear when reading the code.",
+      "range": {
+        "startLine": 144,
+        "startChar": 28,
+        "endLine": 144,
+        "endChar": 53
+      },
+      "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba208498_17de104b",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T07:10:34Z",
+      "side": 1,
+      "message": "Please mention the deopt reason (\u003d that CloneFastJSArray may produce cow) here.",
+      "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46317dd8_8925540d",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T07:10:34Z",
+      "side": 1,
+      "message": "To more closely match TF conditions, the branch could move here and we check `end \u003d\u003d Undefined` too.",
+      "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b2e1a90_e6b189e4",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-09T07:10:34Z",
+      "side": 1,
+      "message": "If possible, just pass --no-force-slow-path in the test flags (it should work without the .status file update due to the incompat flags defined in variants.py).",
+      "revId": "5ab8cac0c824ff7049265de7748a0c420f2149ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
