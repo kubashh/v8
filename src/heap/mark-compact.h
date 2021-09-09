@@ -36,7 +36,8 @@ class MarkBitCellIterator {
       : chunk_(chunk) {
     last_cell_index_ =
         Bitmap::IndexToCell(chunk_->AddressToMarkbitIndex(chunk_->area_end()));
-    cell_base_ = chunk_->address();
+    cell_base_ = chunk_->address() + Bitmap::FirstMarkableOffset();
+    DCHECK_LE(cell_base_, chunk_->area_start());
     cell_index_ =
         Bitmap::IndexToCell(chunk_->AddressToMarkbitIndex(cell_base_));
     cells_ = bitmap->cells();

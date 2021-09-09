@@ -13,6 +13,7 @@ const uint32_t kBlackCell = 0xAAAAAAAA;
 const uint32_t kWhiteCell = 0x00000000;
 const uint32_t kBlackByte = 0xAA;
 const uint32_t kWhiteByte = 0x00;
+const size_t kFirstBit = Bitmap::FirstCellIndex() * Bitmap::kBitsPerCell;
 
 template <typename T>
 using BitmapTest = TestWithBitmap<T>;
@@ -32,7 +33,7 @@ TEST_F(NonAtomicBitmapTest, IsZeroInitialized) {
 
 TEST_F(NonAtomicBitmapTest, Cells) {
   auto bm = bitmap();
-  bm->cells()[1] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex() + 1] = kBlackCell;
   uint8_t* raw = raw_bitmap();
   int second_cell_base = Bitmap::kBytesPerCell;
   for (size_t i = 0; i < Bitmap::kBytesPerCell; i++) {
@@ -41,8 +42,7 @@ TEST_F(NonAtomicBitmapTest, Cells) {
 }
 
 TEST_F(NonAtomicBitmapTest, CellsCount) {
-  size_t last_cell_index = bitmap()->CellsCount() - 1;
-  bitmap()->cells()[last_cell_index] = kBlackCell;
+  bitmap()->cells()[Bitmap::LastCellIndex()] = kBlackCell;
   // Manually verify on raw memory.
   uint8_t* raw = raw_bitmap();
   for (size_t i = 0; i < Bitmap::kSize; i++) {
@@ -58,7 +58,7 @@ TEST_F(NonAtomicBitmapTest, CellsCount) {
 TEST_F(NonAtomicBitmapTest, IsClean) {
   auto bm = bitmap();
   EXPECT_TRUE(bm->IsClean());
-  bm->cells()[0] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex()] = kBlackCell;
   EXPECT_FALSE(bm->IsClean());
 }
 
@@ -83,36 +83,37 @@ TYPED_TEST(BitmapTest, MarkAllBits) {
 
 TYPED_TEST(BitmapTest, ClearRange1) {
   auto bm = this->bitmap();
-  bm->cells()[0] = kBlackCell;
-  bm->cells()[1] = kBlackCell;
-  bm->cells()[2] = kBlackCell;
-  bm->ClearRange(0, Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
-  EXPECT_EQ(bm->cells()[0], kWhiteCell);
-  EXPECT_EQ(bm->cells()[1], 0xAAAA0000);
-  EXPECT_EQ(bm->cells()[2], kBlackCell);
+  bm->cells()[Bitmap::FirstCellIndex() + 0] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex() + 1] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex() + 2] = kBlackCell;
+  bm->ClearRange(kFirstBit,
+                 kFirstBit + Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 0], kWhiteCell);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 1], 0xAAAA0000);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 2], kBlackCell);
 }
 
 TYPED_TEST(BitmapTest, ClearRange2) {
   auto bm = this->bitmap();
-  bm->cells()[0] = kBlackCell;
-  bm->cells()[1] = kBlackCell;
-  bm->cells()[2] = kBlackCell;
-  bm->ClearRange(Bitmap::kBitsPerCell,
-                 Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
-  EXPECT_EQ(bm->cells()[0], kBlackCell);
-  EXPECT_EQ(bm->cells()[1], 0xAAAA0000);
-  EXPECT_EQ(bm->cells()[2], kBlackCell);
+  bm->cells()[Bitmap::FirstCellIndex() + 0] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex() + 1] = kBlackCell;
+  bm->cells()[Bitmap::FirstCellIndex() + 2] = kBlackCell;
+  bm->ClearRange(kFirstBit + Bitmap::kBitsPerCell,
+                 kFirstBit + Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 0], kBlackCell);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 1], 0xAAAA0000);
+  EXPECT_EQ(bm->cells()[Bitmap::FirstCellIndex() + 2], kBlackCell);
 }
 
 TYPED_TEST(BitmapTest, SetAndClearRange) {
   auto bm = this->bitmap();
   for (int i = 0; i < 3; i++) {
-    bm->SetRange(i, Bitmap::kBitsPerCell + i);
-    CHECK_EQ(bm->cells()[0], 0xFFFFFFFFu << i);
-    CHECK_EQ(bm->cells()[1], (1u << i) - 1);
-    bm->ClearRange(i, Bitmap::kBitsPerCell + i);
-    CHECK_EQ(bm->cells()[0], 0x0u);
-    CHECK_EQ(bm->cells()[1], 0x0u);
+    bm->SetRange(kFirstBit + i, kFirstBit + Bitmap::kBitsPerCell + i);
+    CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 0], 0xFFFFFFFFu << i);
+    CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 1], (1u << i) - 1);
+    bm->ClearRange(kFirstBit + i, kFirstBit + Bitmap::kBitsPerCell + i);
+    CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 0], 0x0u);
+    CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 1], 0x0u);
   }
 }
 
@@ -121,41 +122,46 @@ TYPED_TEST(BitmapTest, SetAndClearRange) {
 TEST_F(NonAtomicBitmapTest, ClearMultipleRanges) {
   auto bm = this->bitmap();
 
-  bm->SetRange(0, Bitmap::kBitsPerCell * 3);
-  CHECK(bm->AllBitsSetInRange(0, Bitmap::kBitsPerCell));
+  bm->SetRange(kFirstBit, kFirstBit + Bitmap::kBitsPerCell * 3);
+  CHECK(bm->AllBitsSetInRange(kFirstBit, kFirstBit + Bitmap::kBitsPerCell));
 
-  bm->ClearRange(Bitmap::kBitsPerCell / 2, Bitmap::kBitsPerCell);
-  bm->ClearRange(Bitmap::kBitsPerCell,
-                 Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
-  bm->ClearRange(Bitmap::kBitsPerCell * 2 + 8, Bitmap::kBitsPerCell * 2 + 16);
-  bm->ClearRange(Bitmap::kBitsPerCell * 2 + 24, Bitmap::kBitsPerCell * 3);
+  bm->ClearRange(kFirstBit + Bitmap::kBitsPerCell / 2,
+                 kFirstBit + Bitmap::kBitsPerCell);
+  bm->ClearRange(kFirstBit + Bitmap::kBitsPerCell,
+                 kFirstBit + Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2);
+  bm->ClearRange(kFirstBit + Bitmap::kBitsPerCell * 2 + 8,
+                 kFirstBit + Bitmap::kBitsPerCell * 2 + 16);
+  bm->ClearRange(kFirstBit + Bitmap::kBitsPerCell * 2 + 24,
+                 kFirstBit + Bitmap::kBitsPerCell * 3);
 
-  CHECK_EQ(bm->cells()[0], 0xFFFFu);
-  CHECK(bm->AllBitsSetInRange(0, Bitmap::kBitsPerCell / 2));
-  CHECK(
-      bm->AllBitsClearInRange(Bitmap::kBitsPerCell / 2, Bitmap::kBitsPerCell));
+  CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex()], 0xFFFFu);
+  CHECK(bm->AllBitsSetInRange(kFirstBit, kFirstBit + Bitmap::kBitsPerCell / 2));
+  CHECK(bm->AllBitsClearInRange(kFirstBit + Bitmap::kBitsPerCell / 2,
+                                kFirstBit + Bitmap::kBitsPerCell));
 
-  CHECK_EQ(bm->cells()[1], 0xFFFF0000u);
+  CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 1], 0xFFFF0000u);
   CHECK(bm->AllBitsClearInRange(
-      Bitmap::kBitsPerCell, Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2));
-  CHECK(bm->AllBitsSetInRange(Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2,
-                              Bitmap::kBitsPerCell * 2));
+      kFirstBit + Bitmap::kBitsPerCell,
+      kFirstBit + Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2));
+  CHECK(bm->AllBitsSetInRange(
+      kFirstBit + Bitmap::kBitsPerCell + Bitmap::kBitsPerCell / 2,
+      kFirstBit + Bitmap::kBitsPerCell * 2));
 
-  CHECK_EQ(bm->cells()[2], 0xFF00FFu);
+  CHECK_EQ(bm->cells()[Bitmap::FirstCellIndex() + 2], 0xFF00FFu);
   CHECK(bm->AllBitsSetInRange(
-      Bitmap::kBitsPerCell * 2,
-      Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 4));
+      kFirstBit + Bitmap::kBitsPerCell * 2,
+      kFirstBit + Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 4));
   CHECK(bm->AllBitsClearInRange(
-      Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 4,
-      Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2));
+      kFirstBit + Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 4,
+      kFirstBit + Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2));
   CHECK(bm->AllBitsSetInRange(
-      Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2,
-      Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2 +
+      kFirstBit + Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2,
+      kFirstBit + Bitmap::kBitsPerCell * 2 + Bitmap::kBitsPerCell / 2 +
           Bitmap::kBitsPerCell / 4));
-  CHECK(bm->AllBitsClearInRange(Bitmap::kBitsPerCell * 2 +
+  CHECK(bm->AllBitsClearInRange(kFirstBit + Bitmap::kBitsPerCell * 2 +
                                     Bitmap::kBitsPerCell / 2 +
                                     Bitmap::kBitsPerCell / 4,
-                                Bitmap::kBitsPerCell * 3));
+                                kFirstBit + Bitmap::kBitsPerCell * 3));
 }
 
 }  // namespace internal
