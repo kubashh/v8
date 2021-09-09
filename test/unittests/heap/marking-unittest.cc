@@ -12,6 +12,8 @@
 namespace v8 {
 namespace internal {
 
+const size_t kFirstBit = Bitmap::FirstCellIndex() * Bitmap::kBitsPerCell;
+
 template <typename T>
 using MarkingTest = TestWithBitmap<T>;
 
@@ -23,7 +25,7 @@ TYPED_TEST(MarkingTest, TransitionWhiteBlackWhite) {
   int position[kLocationsSize] = {
       Bitmap::kBitsPerCell - 2, Bitmap::kBitsPerCell - 1, Bitmap::kBitsPerCell};
   for (int i = 0; i < kLocationsSize; i++) {
-    MarkBit mark_bit = bitmap->MarkBitFromIndex(position[i]);
+    MarkBit mark_bit = bitmap->MarkBitFromIndex(kFirstBit + position[i]);
     CHECK(Marking::IsWhite(mark_bit));
     CHECK(!Marking::IsImpossible(mark_bit));
     Marking::WhiteToBlack<AccessMode::NON_ATOMIC>(mark_bit);
@@ -41,7 +43,7 @@ TYPED_TEST(MarkingTest, TransitionWhiteGreyBlack) {
   int position[kLocationsSize] = {
       Bitmap::kBitsPerCell - 2, Bitmap::kBitsPerCell - 1, Bitmap::kBitsPerCell};
   for (int i = 0; i < kLocationsSize; i++) {
-    MarkBit mark_bit = bitmap->MarkBitFromIndex(position[i]);
+    MarkBit mark_bit = bitmap->MarkBitFromIndex(kFirstBit + position[i]);
     CHECK(Marking::IsWhite(mark_bit));
     CHECK(!Marking::IsBlackOrGrey(mark_bit));
     CHECK(!Marking::IsImpossible(mark_bit));
