@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3521d7af_37d38db1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-09T09:25:23Z",
+      "side": 1,
+      "message": "LGTM. As a next step, we need to generate call_ref and other instructions also when the requested type is a reference type.",
+      "revId": "6552bd78187c37f360b520d973067fbfaa261d2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
