@@ -99,18 +99,18 @@ class V8_EXPORT_PRIVATE Bitmap {
   static const uint32_t kBytesPerCell = kBitsPerCell / kBitsPerByte;
   static const uint32_t kBytesPerCellLog2 = kBitsPerCellLog2 - kBitsPerByteLog2;
 
-  // The length is the number of bits in this bitmap. (+1) accounts for
-  // the case where the markbits are queried for a one-word filler at the
-  // end of the page.
-  static const size_t kLength = ((1 << kPageSizeBits) >> kTaggedSizeLog2) + 1;
   // The size of the bitmap in bytes is CellsCount() * kBytesPerCell.
   static const size_t kSize;
 
-  static constexpr size_t CellsForLength(int length) {
-    return (length + kBitsPerCell - 1) >> kBitsPerCellLog2;
-  }
+  static constexpr size_t CellsCount() { return kCells; }
 
-  static constexpr size_t CellsCount() { return CellsForLength(kLength); }
+  // The cells are not indexed from 0 to CellsCount() - 1.
+  static constexpr size_t FirstCellIndex() { return kFirstCellIndex; }
+  static constexpr size_t LastCellIndex() { return kLastCellIndex; }
+
+  // The first byte offset within a page which has a corresponding marking bit
+  // allocated, based on the selected FirstCellIndex().
+  static constexpr size_t FirstMarkableOffset() { return kFirstMarkableOffset; }
 
   V8_INLINE static uint32_t IndexToCell(uint32_t index) {
     return index >> kBitsPerCellLog2;
@@ -126,7 +126,7 @@ class V8_EXPORT_PRIVATE Bitmap {
   }
 
   V8_INLINE MarkBit::CellType* cells() {
-    return reinterpret_cast<MarkBit::CellType*>(this);
+    return reinterpret_cast<MarkBit::CellType*>(this) - kFirstCellIndex;
   }
 
   V8_INLINE static Bitmap* FromAddress(Address addr) {
@@ -138,6 +138,32 @@ class V8_EXPORT_PRIVATE Bitmap {
     MarkBit::CellType* cell = this->cells() + (index >> kBitsPerCellLog2);
     return MarkBit(cell, mask);
   }
+
+ private:
+  // Markbits are in the page header, and we don't need to mark liveness for the
+  // page header, so let's try to compute how many cells of bits we actually
+  // need. Each cell consumes kBytesPerCell of header space and represents
+  // liveness for kTaggedSize * kBitsPerCell bytes of data, so we can compute
+  // the number of cells by dividing the page size by that number of consumed
+  // bytes and rounding up. There is also an extra cell at the end to contain
+  // the second marking bit for an object that starts in the very last slot.
+  // Each cell represents liveness for a maximally-aligned block of data, to
+  // keep the math simple.
+  static const size_t kHeaderAndPageBytesPerCell =
+      kBytesPerCell + kTaggedSize * kBitsPerCell;
+  static const size_t kPageSizeInBytes = 1 << kPageSizeBits;
+  static const size_t kCells =
+      (kPageSizeInBytes + kHeaderAndPageBytesPerCell - 1) /
+          kHeaderAndPageBytesPerCell +
+      1;
+
+  // Indices are computed based on an object's position within the page, with no
+  // regard for the page header size, so the first cell is not index 0.
+  static const size_t kLastCellIndex =
+      1 << (kPageSizeBits - kTaggedSizeLog2 - kBitsPerCellLog2);
+  static const size_t kFirstCellIndex = kLastCellIndex + 1 - kCells;
+  static const size_t kFirstMarkableOffset =
+      kFirstCellIndex * kTaggedSize * kBitsPerCell;
 };
 
 template <AccessMode mode>
@@ -225,7 +251,7 @@ inline void ConcurrentBitmap<AccessMode::NON_ATOMIC>::SetCellRangeRelaxed(
 
 template <AccessMode mode>
 inline void ConcurrentBitmap<mode>::Clear() {
-  ClearCellRangeRelaxed(0, CellsCount());
+  ClearCellRangeRelaxed(FirstCellIndex(), LastCellIndex() + 1);
   if (mode == AccessMode::ATOMIC) {
     // This fence prevents re-ordering of publishing stores with the mark-bit
     // setting stores.
@@ -235,7 +261,7 @@ inline void ConcurrentBitmap<mode>::Clear() {
 
 template <AccessMode mode>
 inline void ConcurrentBitmap<mode>::MarkAllBits() {
-  SetCellRangeRelaxed(0, CellsCount());
+  SetCellRangeRelaxed(FirstCellIndex(), LastCellIndex() + 1);
   if (mode == AccessMode::ATOMIC) {
     // This fence prevents re-ordering of publishing stores with the mark-bit
     // setting stores.

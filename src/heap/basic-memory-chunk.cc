@@ -61,6 +61,7 @@ BasicMemoryChunk* BasicMemoryChunk::Initialize(Heap* heap, Address base,
   BasicMemoryChunk* chunk = FromAddress(base);
   DCHECK_EQ(base, chunk->address());
   new (chunk) BasicMemoryChunk(size, area_start, area_end);
+  DCHECK_LE(base + Bitmap::FirstMarkableOffset(), chunk->area_start());
 
   chunk->heap_ = heap;
   chunk->set_owner(owner);

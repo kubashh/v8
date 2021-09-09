@@ -120,7 +120,7 @@ class CellPrinter {
 template <>
 void ConcurrentBitmap<AccessMode::NON_ATOMIC>::Print() {
   CellPrinter printer;
-  for (size_t i = 0; i < CellsCount(); i++) {
+  for (size_t i = FirstCellIndex(); i <= LastCellIndex(); i++) {
     printer.Print(i, cells()[i]);
   }
   printer.Flush();
@@ -129,7 +129,7 @@ void ConcurrentBitmap<AccessMode::NON_ATOMIC>::Print() {
 
 template <>
 bool ConcurrentBitmap<AccessMode::NON_ATOMIC>::IsClean() {
-  for (size_t i = 0; i < CellsCount(); i++) {
+  for (size_t i = FirstCellIndex(); i <= LastCellIndex(); i++) {
     if (cells()[i] != 0) {
       return false;
     }
