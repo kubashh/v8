@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b04f2dd_668c8298",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T07:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39d08778_ee988555",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edf1fd83_db807c5c",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-08T05:03:38Z",
       "side": 1,
       "message": "Nit: const, to make it clear that this doesn\u0027t change (since the use is much further down)",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b613c967_51bf392e",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T07:28:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edf1fd83_db807c5c",
       "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "219601e4_f0d7ec72",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T07:28:30Z",
+      "side": 1,
+      "message": "Is it not fine to keep it if it is unreachable?",
+      "parentUuid": "d5249758_e944885f",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b85d57a1_f9ac1290",
         "filename": "src/compiler/wasm-inlining.cc",
         "patchSetId": 1
@@ -82,6 +136,24 @@
       "writtenOn": "2021-09-08T05:03:38Z",
       "side": 1,
       "message": "Have you considered reusing the original return nodes instead of creating a new return and phis?",
+      "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66563ed0_cd1a3c3b",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T07:28:30Z",
+      "side": 1,
+      "message": "You are right, the whole process for tail calls should just be to connect terminators of the inlined graph to the end of the caller graph.",
+      "parentUuid": "b85d57a1_f9ac1290",
       "revId": "71b3d79449f4a4f8eeb62a5cea2a75b85754644f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

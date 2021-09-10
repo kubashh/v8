@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d4fa572_38f3a1af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T07:28:30Z",
+      "side": 1,
+      "message": "Thanks for the review. I restructured the code a bit since the implementation for calls vs. tail calls diverges after the changes.",
+      "revId": "205d8aceb15bbacb6379cbef4e8758c132f453e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
