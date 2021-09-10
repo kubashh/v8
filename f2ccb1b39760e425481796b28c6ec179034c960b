@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "370d9b10_bfc65e1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-10T18:06:27Z",
+      "side": 1,
+      "message": "Thanks for the review! I\u0027ve addressed your comments.\n\nI\u0027ll make a few more changes to align with the most recent changes to the spec document (e.g. renaming _extending to _subtype).",
+      "revId": "f2ccb1b39760e425481796b28c6ec179034c960b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

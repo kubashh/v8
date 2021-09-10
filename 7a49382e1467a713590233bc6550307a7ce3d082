@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f37649aa_15b839b0",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-10T18:06:27Z",
+      "side": 1,
+      "message": "Good catch! Done.",
+      "parentUuid": "35f3049d_f6375e0d",
+      "range": {
+        "startLine": 573,
+        "startChar": 36,
+        "endLine": 573,
+        "endChar": 48
+      },
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bcf05a2_84d4f168",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-09-09T10:22:59Z",
       "side": 1,
       "message": "nit: Maybe add a specific error message for circular subtyping.",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03269abe_d02c281b",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-10T18:06:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bcf05a2_84d4f168",
       "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0122ecf3_c9f14113",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-10T18:06:27Z",
+      "side": 1,
+      "message": "I think so too; but it\u0027s just the existing code shuffled around, and changing its behavior is out of scope for this CL.\n(We may want to rethink our funcref implementation more substantially in order to further improve call_ref performance.)",
+      "parentUuid": "a8b0af69_fb984707",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba1056c_e163572e",
@@ -105,6 +165,24 @@
       "writtenOn": "2021-09-09T10:22:59Z",
       "side": 1,
       "message": "nit: I think you should save the original type_index, and if you encounter it again, exit immediately with a \"circular dependency\" code (maybe kNoSuperType).",
+      "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af167c3_18d740ec",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-10T18:06:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba1056c_e163572e",
       "revId": "7a49382e1467a713590233bc6550307a7ce3d082",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
