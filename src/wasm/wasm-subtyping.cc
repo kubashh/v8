@@ -223,6 +223,8 @@ V8_INLINE bool EquivalentIndices(uint32_t index1, uint32_t index2,
   }
 }
 
+}  // namespace
+
 bool StructIsSubtypeOf(uint32_t subtype_index, uint32_t supertype_index,
                        const WasmModule* sub_module,
                        const WasmModule* super_module) {
@@ -234,8 +236,10 @@ bool StructIsSubtypeOf(uint32_t subtype_index, uint32_t supertype_index,
     return false;
   }
 
-  TypeJudgementCache::instance()->cache_subtype(subtype_index, supertype_index,
-                                                sub_module, super_module);
+  if (!sub_module->has_supertype(subtype_index)) {
+    TypeJudgementCache::instance()->cache_subtype(
+        subtype_index, supertype_index, sub_module, super_module);
+  }
   for (uint32_t i = 0; i < super_struct->field_count(); i++) {
     bool sub_mut = sub_struct->mutability(i);
     bool super_mut = super_struct->mutability(i);
@@ -261,8 +265,10 @@ bool ArrayIsSubtypeOf(uint32_t subtype_index, uint32_t supertype_index,
       super_module->types[supertype_index].array_type;
   bool sub_mut = sub_array->mutability();
   bool super_mut = super_array->mutability();
-  TypeJudgementCache::instance()->cache_subtype(subtype_index, supertype_index,
-                                                sub_module, super_module);
+  if (!sub_module->has_supertype(subtype_index)) {
+    TypeJudgementCache::instance()->cache_subtype(
+        subtype_index, supertype_index, sub_module, super_module);
+  }
   if (sub_mut != super_mut ||
       (sub_mut &&
        !EquivalentTypes(sub_array->element_type(), super_array->element_type(),
@@ -294,8 +300,10 @@ bool FunctionIsSubtypeOf(uint32_t subtype_index, uint32_t supertype_index,
     return false;
   }
 
-  TypeJudgementCache::instance()->cache_subtype(subtype_index, supertype_index,
-                                                sub_module, super_module);
+  if (!sub_module->has_supertype(subtype_index)) {
+    TypeJudgementCache::instance()->cache_subtype(
+        subtype_index, supertype_index, sub_module, super_module);
+  }
 
   for (uint32_t i = 0; i < sub_func->parameter_count(); i++) {
     // Contravariance for params.
@@ -318,7 +326,6 @@ bool FunctionIsSubtypeOf(uint32_t subtype_index, uint32_t supertype_index,
 
   return true;
 }
-}  // namespace
 
 V8_NOINLINE V8_EXPORT_PRIVATE bool IsSubtypeOfImpl(
     ValueType subtype, ValueType supertype, const WasmModule* sub_module,
@@ -414,6 +421,20 @@ V8_NOINLINE V8_EXPORT_PRIVATE bool IsSubtypeOfImpl(
   uint8_t sub_kind = sub_module->type_kinds[sub_index];
 
   if (sub_kind != super_module->type_kinds[super_index]) return false;
+
+  // Types with explicit supertypes just check those.
+  if (sub_module->has_supertype(sub_index)) {
+    // TODO(7748): Figure out cross-module story.
+    if (sub_module != super_module) return false;
+
+    uint32_t explicit_super = sub_module->supertype(sub_index);
+    while (true) {
+      if (explicit_super == super_index) return true;
+      // Reached the end of the explicitly defined inheritance chain.
+      if (explicit_super == kNoSuperType) return false;
+      explicit_super = sub_module->supertype(explicit_super);
+    }
+  }
 
   // Accessing the caches for subtyping and equivalence from multiple background
   // threads is protected by a lock.
