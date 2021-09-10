@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c92088ef_3dba8cbf",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T03:37:34Z",
+      "side": 1,
+      "message": "The End() from before (i.e., the end of the callee subgraph) the change will be unreachable after this transformation, so I think this should not be an issue.\n\nRegarding the number of control outputs: As discussed offline, Webassembly emits graphs which are not quite within Turbofan spec when it comes to Call, but work anyway:\n- if the Call node is not kNoThrow, things work as expected.\n- if the Call node is not kNoThrow and within a try scope, things work as expected.\n- if the Call node is not kNoThrow and not within a try scope, the IfSuccess node is omitted and the Call node is linked directly to the control continuation beyond IfSuccess. The IfFailure node is omitted completely.\n\nNote that the verifier currently is missing the implementation for Call nodes.\n\nWe could maintain this behavior, or add the missing IfSuccess nodes everywhere in the code. I think trying to add IfFailure nodes would be complicated and not worth the effort, given that the current code works.",
+      "parentUuid": "4801ce29_ad398579",
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62de8233_cb12f191",
         "filename": "src/compiler/wasm-inlining.cc",
         "patchSetId": 4
@@ -31,6 +49,30 @@
       "writtenOn": "2021-09-07T16:43:09Z",
       "side": 1,
       "message": "The Call has Operator::ZeroIfPure(call_descriptor-\u003eproperties()) effect outputs, i.e. possibly 0.",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 131,
+        "endChar": 47
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34aba4b9_d8dd41cf",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T03:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62de8233_cb12f191",
       "range": {
         "startLine": 131,
         "startChar": 42,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed9342fb_1068a672",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T03:37:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d382cebe_76510c22",
+      "range": {
+        "startLine": 132,
+        "startChar": 42,
+        "endLine": 132,
+        "endChar": 47
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3053e4f0_c995b269",
@@ -77,6 +143,30 @@
       "writtenOn": "2021-09-07T16:43:09Z",
       "side": 1,
       "message": "Again I\u0027d prefer return_inputs.size().",
+      "range": {
+        "startLine": 134,
+        "startChar": 37,
+        "endLine": 134,
+        "endChar": 53
+      },
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e15e3d9_7b99c5e0",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-10T03:37:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3053e4f0_c995b269",
       "range": {
         "startLine": 134,
         "startChar": 37,
