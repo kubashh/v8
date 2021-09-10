@@ -16,6 +16,24 @@
       "message": "Hi Clemens,\n\nThe newly added test \"CodeNotWritableAfterCompilation\" has been failing intermittently on our PPC machine. The test case is expecting a `segmentation fault` but occasionally the code region gets overwritten successfully without an error and test fails.\n\nI noticed the same could also happen on an x64 machine using gdb, I have documented the process here:\nhttps://bugs.chromium.org/p/v8/issues/detail?id\u003d12216\n\nProblem seems to be related to a racing condition while multi threading.\nI also noticed it does not happen when \"--no-liftoff\" or \"--liftoff-only\" gets used.\n\nI wanted to bring this to your attention before further investigation in case it is a known limitation.",
       "revId": "c9704cf792fedf13e690f8c1cfb494bec5874f5c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e8c3b69_4f56b657",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-09-10T21:23:06Z",
+      "side": 1,
+      "message": "Ah I think it\u0027s already fixed here: https://crrev.com/c/3151959 , sorry about the noise.",
+      "parentUuid": "3a91de1d_764c5c5d",
+      "revId": "c9704cf792fedf13e690f8c1cfb494bec5874f5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
