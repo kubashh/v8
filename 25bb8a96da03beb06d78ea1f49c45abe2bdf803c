@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23cba491_e7da469c",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-13T06:01:03Z",
+      "side": 1,
+      "message": "The first bullet above should be \"if the Call node is kNoThrow\".",
+      "parentUuid": "c92088ef_3dba8cbf",
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62de8233_cb12f191",
         "filename": "src/compiler/wasm-inlining.cc",
         "patchSetId": 4
