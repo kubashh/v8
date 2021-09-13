@@ -101,7 +101,9 @@ bool DataRange::get() {
 }
 
 ValueType GetValueType(uint32_t num_types, DataRange* data,
-                       bool liftoff_as_reference) {
+                       bool liftoff_as_reference,
+                       const std::vector<uint32_t> functions_,
+                       uint32_t num_structs_and_arrays) {
   constexpr ValueType types[] = {
       kWasmI32,     kWasmI64,
       kWasmF32,     kWasmF64,
@@ -112,9 +114,17 @@ ValueType GetValueType(uint32_t num_types, DataRange* data,
 
   if (liftoff_as_reference) {
     // TODO(11954): Only generate signature types that correspond to functions
-    uint32_t id = data->get<uint8_t>() % (arraysize(types) + num_types);
+    uint8_t random_byte = data->get<uint8_t>();
+    uint8_t id = random_byte % (arraysize(types) + num_types);
     if (id >= arraysize(types)) {
-      return ValueType::Ref(id - arraysize(types), kNullable);
+      if (id - arraysize(types) >= num_structs_and_arrays) {
+        int func_index = (id - arraysize(types)) % functions_.size();
+        uint32_t sig_index = functions_[func_index];
+        return ValueType::Ref(sig_index, kNullable);
+      } else {
+        uint32_t type_index = id - arraysize(types);
+        return ValueType::Ref(type_index, kNullable);
+      }
     }
     return types[id];
   }
@@ -524,7 +534,8 @@ class WasmGenerator {
 
   void drop(DataRange* data) {
     Generate(GetValueType(builder_->builder()->NumTypes(), data,
-                          liftoff_as_reference_),
+                          liftoff_as_reference_, functions_,
+                          num_structs_ + num_arrays_),
              data);
     builder_->Emit(kExprDrop);
   }
@@ -851,7 +862,6 @@ class WasmGenerator {
           return;
         }
       }
-      ref_null(type, data);
     }
   }
 
@@ -1025,7 +1035,8 @@ class WasmGenerator {
     locals_.resize(data->get<uint8_t>() % kMaxLocals);
     for (ValueType& local : locals_) {
       local = GetValueType(builder_->builder()->NumTypes(), data,
-                           liftoff_as_reference_);
+                           liftoff_as_reference_, functions_,
+                           num_structs_ + num_arrays_);
       fn->AddLocal(local);
     }
   }
@@ -1844,11 +1855,9 @@ void WasmGenerator::GenerateOptRef(HeapType type, DataRange* data) {
       break;
     }
     case HeapType::kFunc: {
-      uint32_t num_signatures =
-          builder_->builder()->NumTypes() - num_structs_ - num_arrays_;
-      uint32_t random = data->get<uint32_t>() % (num_signatures + 1);
+      uint32_t random = data->get<uint32_t>() % (functions_.size() + 1);
       if (random > 0) {
-        uint32_t signature_index = random + num_arrays_ + num_structs_ - 1;
+        uint32_t signature_index = functions_[random - 1];
         DCHECK(builder_->builder()->IsSignature(signature_index));
         GenerateOptRef(HeapType(signature_index), data);
         return;
@@ -1886,7 +1895,8 @@ std::vector<ValueType> WasmGenerator::GenerateTypes(DataRange* data) {
   int num_params = int{data->get<uint8_t>()} % (kMaxParameters + 1);
   for (int i = 0; i < num_params; ++i) {
     types.push_back(GetValueType(builder_->builder()->NumTypes(), data,
-                                 liftoff_as_reference_));
+                                 liftoff_as_reference_, functions_,
+                                 num_structs_ + num_arrays_));
   }
   return types;
 }
@@ -1941,7 +1951,9 @@ void WasmGenerator::ConsumeAndGenerate(
 enum SigKind { kFunctionSig, kExceptionSig };
 
 FunctionSig* GenerateSig(Zone* zone, DataRange* data, SigKind sig_kind,
-                         uint32_t num_types, bool liftoff_as_reference) {
+                         uint32_t num_types, bool liftoff_as_reference,
+                         const std::vector<uint32_t> functions,
+                         int num_structs_and_arrays) {
   // Generate enough parameters to spill some to the stack.
   int num_params = int{data->get<uint8_t>()} % (kMaxParameters + 1);
   int num_returns = sig_kind == kFunctionSig
@@ -1950,10 +1962,12 @@ FunctionSig* GenerateSig(Zone* zone, DataRange* data, SigKind sig_kind,
 
   FunctionSig::Builder builder(zone, num_returns, num_params);
   for (int i = 0; i < num_returns; ++i) {
-    builder.AddReturn(GetValueType(num_types, data, liftoff_as_reference));
+    builder.AddReturn(GetValueType(num_types, data, liftoff_as_reference,
+                                   functions, num_structs_and_arrays));
   }
   for (int i = 0; i < num_params; ++i) {
-    builder.AddParam(GetValueType(num_types, data, liftoff_as_reference));
+    builder.AddParam(GetValueType(num_types, data, liftoff_as_reference,
+                                  functions, num_structs_and_arrays));
   }
   return builder.Build();
 }
@@ -2002,8 +2016,9 @@ class WasmCompileFuzzer : public WasmExecutionFuzzer {
     int num_functions = 1 + (range.get<uint8_t>() % kMaxFunctions);
 
     for (int i = 1; i < num_functions; ++i) {
-      FunctionSig* sig = GenerateSig(zone, &range, kFunctionSig,
-                                     builder.NumTypes(), liftoff_as_reference);
+      FunctionSig* sig = GenerateSig(
+          zone, &range, kFunctionSig, builder.NumTypes(), liftoff_as_reference,
+          function_signatures, num_structs + num_arrays);
       uint32_t signature_index = builder.AddSignature(sig);
       function_signatures.push_back(signature_index);
     }
@@ -2016,14 +2031,16 @@ class WasmCompileFuzzer : public WasmExecutionFuzzer {
 
     int num_exceptions = 1 + (range.get<uint8_t>() % kMaxExceptions);
     for (int i = 0; i < num_exceptions; ++i) {
-      FunctionSig* sig = GenerateSig(zone, &range, kExceptionSig,
-                                     builder.NumTypes(), liftoff_as_reference);
+      FunctionSig* sig = GenerateSig(
+          zone, &range, kExceptionSig, builder.NumTypes(), liftoff_as_reference,
+          function_signatures, num_structs + num_arrays);
       builder.AddException(sig);
     }
 
     for (int i = 0; i < num_globals; ++i) {
       ValueType type =
-          GetValueType(builder.NumTypes(), &range, liftoff_as_reference);
+          GetValueType(builder.NumTypes(), &range, liftoff_as_reference,
+                       function_signatures, num_structs + num_arrays);
       // 1/8 of globals are immutable.
       const bool mutability = (range.get<uint8_t>() % 8) != 0;
       builder.AddGlobal(type, mutability, WasmInitExpr());
