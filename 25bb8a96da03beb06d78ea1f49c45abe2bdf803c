@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac2b681d_f235126b",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-13T09:25:57Z",
+      "side": 1,
+      "message": "Ok, I agree about dead nodes. I am adding Kill() invocations to remove them explicitly.",
+      "parentUuid": "5b571464_0905a0ba",
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62de8233_cb12f191",
