@@ -33,6 +33,24 @@
       "message": "do you think my reply reasonable?",
       "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "682ca0ee_06e00b3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-13T23:05:33Z",
+      "side": 1,
+      "message": "I\u0027m still uncomfortable with the bare name GetOptionsObject, CoerceOptionsToObject. These are for a specific style of options object used in 402 and Temporal, but not the rest of 262.\n\nHow about GetIntlStyleOptionsObject and GetIntlStyleFooOption, etc. Until such time it\u0027s unified among all JS builtin objects, I want to avoid giving the perception that these handle all options objects.",
+      "parentUuid": "a8a90e97_35959d7f",
+      "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
