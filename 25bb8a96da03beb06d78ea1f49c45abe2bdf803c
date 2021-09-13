@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b571464_0905a0ba",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2021-09-13T08:57:10Z",
+      "side": 1,
+      "message": "Regarding End, I leave it up to you. I find it a bit sloppy to keep the edge around and rely on no other code caring about it, but perhaps this is already done elsewhere. If you keep it please add a comment at least.\n\nLet\u0027s discuss the other issue tomorrow. You can land the CL in the meantime.",
+      "parentUuid": "23cba491_e7da469c",
+      "revId": "25bb8a96da03beb06d78ea1f49c45abe2bdf803c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62de8233_cb12f191",
         "filename": "src/compiler/wasm-inlining.cc",
         "patchSetId": 4
