@@ -50,6 +50,24 @@
       "message": "Can we wrap the test body in a loop to test all lanes?",
       "revId": "752791b7be12bcca711cb4e4db572f967a64e377",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10935941_2f1b23fc",
+        "filename": "test/cctest/wasm/test-liftoff-for-fuzzing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-13T15:29:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eed54de1_96ca3076",
+      "revId": "752791b7be12bcca711cb4e4db572f967a64e377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
