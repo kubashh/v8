@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca0991d9_cd42abb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-13T20:17:03Z",
+      "side": 1,
+      "message": "Please take another look at the delta from patch set 2-\u003e3, which should reflect the latest changes to the spec doc. Notably:\n- renaming \"_extending\" to \"_subtype\"\n- disallowing subtyping between structural and nominal types (in either direction)",
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
