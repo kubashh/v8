@@ -16,6 +16,24 @@
       "message": "Think this is going to fail for nosse builds (where Wasm SIMD isn\u0027t supported, and we bail out to TF), ptal https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux%20-%20debug/36712/overview",
       "revId": "deb66c84c0fc69309de69be4e9e7e040ab648871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfcc319f_a258550e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-13T17:54:06Z",
+      "side": 1,
+      "message": "Ack, we should just update the skipped tests in cctest.status.\nReverting for now.",
+      "parentUuid": "5f5743f9_69977c5b",
+      "revId": "deb66c84c0fc69309de69be4e9e7e040ab648871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
