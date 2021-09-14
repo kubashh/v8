@@ -58,6 +58,19 @@ bool CanConsiderForInlining(JSHeapBroker* broker,
 }
 
 bool CanConsiderForInlining(JSHeapBroker* broker,
+                            FeedbackCellRef const& feedback_cell) {
+  base::Optional<FeedbackVectorRef> feedback_vector =
+      feedback_cell.feedback_vector();
+  if (!feedback_vector.has_value()) {
+    TRACE("Cannot consider " << feedback_cell
+                             << " for inlining (no feedback vector)");
+    return false;
+  }
+  return CanConsiderForInlining(broker, feedback_vector->shared_function_info(),
+                                feedback_cell);
+}
+
+bool CanConsiderForInlining(JSHeapBroker* broker,
                             JSFunctionRef const& function) {
   return CanConsiderForInlining(
       broker, function.shared(),
@@ -75,8 +88,8 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
 
   HeapObjectMatcher m(callee);
   if (m.HasResolvedValue() && m.Ref(broker()).IsJSFunction()) {
-    out.functions[0] = m.Ref(broker()).AsJSFunction();
-    JSFunctionRef function = out.functions[0].value();
+    JSFunctionRef function = m.Ref(broker()).AsJSFunction();
+    out.functions[0] = function;
     if (CanConsiderForInlining(broker(), function)) {
       out.bytecode[0] = function.shared().GetBytecodeArray();
       out.num_functions = 1;
@@ -108,11 +121,9 @@ JSInliningHeuristic::Candidate JSInliningHeuristic::CollectFunctions(
   if (m.IsCheckClosure()) {
     DCHECK(!out.functions[0].has_value());
     FeedbackCellRef feedback_cell = MakeRef(broker(), FeedbackCellOf(m.op()));
-    SharedFunctionInfoRef shared_info =
-        feedback_cell.shared_function_info().value();
-    out.shared_info = shared_info;
-    if (CanConsiderForInlining(broker(), shared_info, feedback_cell)) {
-      out.bytecode[0] = shared_info.GetBytecodeArray();
+    if (CanConsiderForInlining(broker(), feedback_cell)) {
+      out.shared_info = feedback_cell.shared_function_info().value();
+      out.bytecode[0] = out.shared_info->GetBytecodeArray();
     }
     out.num_functions = 1;
     return out;
