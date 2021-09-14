@@ -61,6 +61,11 @@ class BaselineCompiler {
   MaybeHandle<Code> Build(Isolate* isolate);
   static int EstimateInstructionSize(BytecodeArray bytecode);
 
+  void set_local_isolate(LocalIsolate* isolate) { local_isolate_ = isolate; }
+  Handle<SharedFunctionInfo> shared_function_info() {
+    return shared_function_info_;
+  }
+
  private:
   void Prologue();
   void PrologueFillFrame();
@@ -157,7 +162,10 @@ class BaselineCompiler {
   INTRINSICS_LIST(DECLARE_VISITOR)
 #undef DECLARE_VISITOR
 
-  const interpreter::BytecodeArrayIterator& iterator() { return iterator_; }
+  const interpreter::BytecodeArrayIterator& iterator() {
+    DCHECK_NOT_NULL(iterator_);
+    return *iterator_;
+  }
 
   LocalIsolate* local_isolate_;
   RuntimeCallStats* stats_;
@@ -166,7 +174,7 @@ class BaselineCompiler {
   Handle<BytecodeArray> bytecode_;
   MacroAssembler masm_;
   BaselineAssembler basm_;
-  interpreter::BytecodeArrayIterator iterator_;
+  interpreter::BytecodeArrayIterator* iterator_ = nullptr;
   BytecodeOffsetTableBuilder bytecode_offset_table_builder_;
   Zone zone_;
 
