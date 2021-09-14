@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c6ee94_0e54f59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-09-14T14:51:07Z",
+      "side": 1,
+      "message": "PTAL, I\u0027m not 100% convinced this is the way to go, but it does not make sense to enable asm without wasm from what I see.\n\nMaybe we really just need a separate flag to disable it for correctness fuzzing when comparing against --jitless.",
+      "revId": "87d3265ee2354e2e91a4d12e06260423725b5768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
