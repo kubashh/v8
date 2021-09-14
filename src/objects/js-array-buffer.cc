@@ -56,7 +56,7 @@ void JSArrayBuffer::Setup(SharedFlag shared, ResizableFlag resizable,
   }
   set_extension(nullptr);
   if (!backing_store) {
-    set_backing_store(GetIsolate(), nullptr);
+    set_backing_store(GetIsolate(), EmptyBackingStoreBuffer());
     set_byte_length(0);
     set_max_byte_length(0);
   } else {
@@ -77,6 +77,7 @@ void JSArrayBuffer::Attach(std::shared_ptr<BackingStore> backing_store) {
       backing_store->byte_length() == backing_store->max_byte_length());
   DCHECK(!was_detached());
   Isolate* isolate = GetIsolate();
+  DCHECK(IsValidBackingStorePointer(backing_store->buffer_start()));
   set_backing_store(isolate, backing_store->buffer_start());
   if (is_shared() && is_resizable()) {
     // GSABs need to read their byte_length from the BackingStore. Maintain the
@@ -122,7 +123,7 @@ void JSArrayBuffer::Detach(bool force_for_wasm_memory) {
 
   DCHECK(!is_shared());
   DCHECK(!is_asmjs_memory());
-  set_backing_store(isolate, nullptr);
+  set_backing_store(isolate, EmptyBackingStoreBuffer());
   set_byte_length(0);
   set_was_detached(true);
 }
@@ -185,7 +186,7 @@ Handle<JSArrayBuffer> JSTypedArray::GetBuffer() {
   DCHECK(!array_buffer->is_resizable());
 
   // The existing array buffer should be empty.
-  DCHECK_NULL(array_buffer->backing_store());
+  DCHECK_EQ(array_buffer->backing_store(), EmptyBackingStoreBuffer());
 
   // Allocate a new backing store and attach it to the existing array buffer.
   size_t byte_length = self->byte_length();

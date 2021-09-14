@@ -39,12 +39,22 @@ void JSArrayBuffer::set_byte_length(size_t value) {
 }
 
 DEF_GETTER(JSArrayBuffer, backing_store, void*) {
-  return reinterpret_cast<void*>(ReadField<Address>(kBackingStoreOffset));
+#ifdef V8_HEAP_SANDBOX
+  Address value = ReadCagedPointerField(kBackingStoreOffset, cage_base);
+#else
+  Address value = ReadField<Address>(kBackingStoreOffset);
+#endif
+  return reinterpret_cast<void*>(value);
 }
 
 void JSArrayBuffer::set_backing_store(Isolate* isolate, void* value) {
   DCHECK(IsValidBackingStorePointer(value));
-  WriteField<Address>(kBackingStoreOffset, reinterpret_cast<Address>(value));
+  Address addr = reinterpret_cast<Address>(value);
+#ifdef V8_HEAP_SANDBOX
+  WriteCagedPointerField(kBackingStoreOffset, isolate, addr);
+#else
+  WriteField<Address>(kBackingStoreOffset, addr);
+#endif
 }
 
 uint32_t JSArrayBuffer::GetBackingStoreRefForDeserialization() const {
@@ -118,16 +128,15 @@ uint32_t* JSArrayBuffer::extension_hi() const {
 #endif
 
 size_t JSArrayBuffer::allocation_length() const {
-  if (backing_store() == nullptr) {
+  // if (backing_store() == nullptr) {
+  // TODO(saelo) fix
+  if (GetBackingStoreRefForDeserialization() == 0xffffffff) {
     return 0;
   }
   return byte_length();
 }
 
 void* JSArrayBuffer::allocation_base() const {
-  if (backing_store() == nullptr) {
-    return nullptr;
-  }
   return backing_store();
 }
 
@@ -243,7 +252,11 @@ void JSTypedArray::set_length(size_t value) {
 }
 
 DEF_GETTER(JSTypedArray, external_pointer, Address) {
+#ifdef V8_HEAP_SANDBOX
+  return ReadCagedPointerField(kExternalPointerOffset, cage_base);
+#else
   return ReadField<Address>(kExternalPointerOffset);
+#endif
 }
 
 DEF_GETTER(JSTypedArray, external_pointer_raw, Address) {
@@ -252,7 +265,11 @@ DEF_GETTER(JSTypedArray, external_pointer_raw, Address) {
 
 void JSTypedArray::set_external_pointer(Isolate* isolate, Address value) {
   DCHECK(IsValidBackingStorePointer(reinterpret_cast<void*>(value)));
+#ifdef V8_HEAP_SANDBOX
+  WriteCagedPointerField(kExternalPointerOffset, isolate, value);
+#else
   WriteField<Address>(kExternalPointerOffset, value);
+#endif
 }
 
 Address JSTypedArray::ExternalPointerCompensationForOnHeapArray(
@@ -277,13 +294,10 @@ void JSTypedArray::SetExternalBackingStoreRefForSerialization(uint32_t ref) {
 void JSTypedArray::RemoveExternalPointerCompensationForSerialization(
     Isolate* isolate) {
   DCHECK(is_on_heap());
-  // TODO(v8:10391): once we have an external table, avoid the need for
-  // compensation by replacing external_pointer and base_pointer fields
-  // with one data_pointer field which can point to either external data
-  // backing store or into on-heap backing store.
   Address offset =
       external_pointer() - ExternalPointerCompensationForOnHeapArray(isolate);
 #ifdef V8_HEAP_SANDBOX
+  // TODO(saelo) is this correct?
   // Write decompensated offset directly to the external pointer field, thus
   // allowing the offset to be propagated through serialization-deserialization.
   WriteField<ExternalPointer_t>(kExternalPointerOffset, offset);
@@ -372,12 +386,22 @@ MaybeHandle<JSTypedArray> JSTypedArray::Validate(Isolate* isolate,
 }
 
 DEF_GETTER(JSDataView, data_pointer, void*) {
-  return reinterpret_cast<void*>(ReadField<Address>(kDataPointerOffset));
+#ifdef V8_HEAP_SANDBOX
+  CagedPointer_t value = ReadCagedPointerField(kDataPointerOffset, cage_base);
+#else
+  Address value = ReadField<Address>(kDataPointerOffset);
+#endif
+  return reinterpret_cast<void*>(value);
 }
 
-void JSDataView::set_data_pointer(Isolate* isolate, void* value) {
-  DCHECK(IsValidBackingStorePointer(value));
-  WriteField<Address>(kDataPointerOffset, reinterpret_cast<Address>(value));
+void JSDataView::set_data_pointer(Isolate* isolate, void* ptr) {
+  DCHECK(IsValidBackingStorePointer(ptr));
+  Address value = reinterpret_cast<Address>(ptr);
+#ifdef V8_HEAP_SANDBOX
+  WriteCagedPointerField(kDataPointerOffset, isolate, value);
+#else
+  WriteField<Address>(kDataPointerOffset, value);
+#endif
 }
 
 }  // namespace internal
