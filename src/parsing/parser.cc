@@ -3377,6 +3377,7 @@ void Parser::SetLanguageMode(Scope* scope, LanguageMode mode) {
 
 #if V8_ENABLE_WEBASSEMBLY
 void Parser::SetAsmModule() {
+  DCHECK(FLAG_expose_wasm);
   // Store the usage count; The actual use counter on the isolate is
   // incremented after parsing is done.
   ++use_counts_[v8::Isolate::kUseAsm];

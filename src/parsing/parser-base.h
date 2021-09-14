@@ -5088,7 +5088,7 @@ void ParserBase<Impl>::ParseStatementList(StatementListT* body,
       use_strict = true;
 #if V8_ENABLE_WEBASSEMBLY
     } else if (scanner()->NextLiteralExactlyEquals("use asm")) {
-      use_asm = true;
+      if (FLAG_expose_wasm) use_asm = true;
 #endif  // V8_ENABLE_WEBASSEMBLY
     }
 
