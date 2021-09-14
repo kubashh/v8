@@ -69,6 +69,41 @@
       "parentUuid": "682ca0ee_06e00b3a",
       "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b423bf9_d82eec61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-14T17:55:13Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabde586_49ae1e8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-14T17:55:13Z",
+      "side": 1,
+      "message": "We chatted about this offline. I\u0027m now fine with leaving this named as is, without qualifiers.",
+      "parentUuid": "f2555ddf_72a52e89",
+      "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
