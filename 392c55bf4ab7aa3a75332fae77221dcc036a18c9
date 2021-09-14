@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "597e19c9_38400382",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Thanks for the review! Comments addressed, landing. (Any further spec updates will come as follow-ups.)",
+      "revId": "392c55bf4ab7aa3a75332fae77221dcc036a18c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

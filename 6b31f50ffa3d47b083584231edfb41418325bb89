@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d617be58_90cc2d28",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Done. Thanks for catching that! I thought it\u0027d be equivalent, but you\u0027re right, it isn\u0027t.",
+      "parentUuid": "86a3ccc5_8bcdf888",
+      "range": {
+        "startLine": 597,
+        "startChar": 26,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "412b7400_872cd369",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-09-14T04:57:05Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 613,
+        "startChar": 26,
+        "endLine": 613,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f613ca4c_11cee7a5",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "412b7400_872cd369",
       "range": {
         "startLine": 613,
         "startChar": 26,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20739242_aac6d5c7",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed9d85f5_c55f156f",
+      "range": {
+        "startLine": 626,
+        "startChar": 26,
+        "endLine": 626,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df7e43e6_6fa424a8",
@@ -117,6 +189,24 @@
       "writtenOn": "2021-09-14T04:57:05Z",
       "side": 1,
       "message": "This is checked already in IsSubtypeOf. If you are calling this function elsewhere, maybe it needs to be checked here as well.",
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48808c50_8a0e6584",
+        "filename": "src/wasm/wasm-subtyping.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Not quite: IsSubtypeOf checks ValueType equality, which doesn\u0027t catch (ref 0) being a valid subtype of (ref null 0). Added a comment to explain that here.\n(This does imply that we\u0027ve been putting some easily-avoidable load on the TypeJudgementCache.)",
+      "parentUuid": "df7e43e6_6fa424a8",
       "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd05f729_6f12759f",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "601f47a1_73db86a4",
+      "range": {
+        "startLine": 1676,
+        "startChar": 29,
+        "endLine": 1676,
+        "endChar": 33
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc6333c4_d86699e4",
@@ -157,6 +271,30 @@
       "writtenOn": "2021-09-14T04:57:05Z",
       "side": 1,
       "message": "same here.",
+      "range": {
+        "startLine": 1687,
+        "startChar": 29,
+        "endLine": 1687,
+        "endChar": 33
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef0c4906_838b6a64",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-14T19:59:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc6333c4_d86699e4",
       "range": {
         "startLine": 1687,
         "startChar": 29,
