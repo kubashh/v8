@@ -191,8 +191,6 @@ static Object SliceHelper(BuiltinArguments args, Isolate* isolate,
   // * [SAB] If IsSharedArrayBuffer(O) is false, throw a TypeError exception.
   CHECK_SHARED(is_shared, array_buffer, kMethodName);
 
-  CHECK_RESIZABLE(false, array_buffer, kMethodName);
-
   // * [AB] If IsDetachedBuffer(buffer) is true, throw a TypeError exception.
   if (!is_shared && array_buffer->was_detached()) {
     THROW_NEW_ERROR_RETURN_FAILURE(
