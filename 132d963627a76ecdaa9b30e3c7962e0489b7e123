@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a99b0e40_ea0fa708",
+        "filename": "src/builtins/builtins-typed-array.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-14T01:31:48Z",
+      "side": 0,
+      "message": "Please also delete this outdated comment: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/elements.cc;l\u003d3330-3331;drc\u003da9641800e0e8f7a2ea9a5f55f831b632e990a0e0;bpv\u003d1;bpt\u003d1?q\u003dIncludesValueImpl\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "revId": "132d963627a76ecdaa9b30e3c7962e0489b7e123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b0171a8_2a61a0aa",
+        "filename": "test/mjsunit/es6/regress/regress-5929-1.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-14T01:31:48Z",
+      "side": 0,
+      "message": "Don\u0027t delete this test. Please modify it to test that it throws instead.",
+      "revId": "132d963627a76ecdaa9b30e3c7962e0489b7e123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
