@@ -16,6 +16,23 @@
       "message": "Thanks for suggestions! Updated with mkgrokdump fixes.",
       "revId": "096ab198a7be142d878e1aa0bb4c8a5621a2a1ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a378c10_b7deb4cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-14T02:21:01Z",
+      "side": 1,
+      "message": "Hey, shu, if this CL looks good to you, can you submit it as I don\u0027t have access to the CQ? Thanks!",
+      "revId": "096ab198a7be142d878e1aa0bb4c8a5621a2a1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
