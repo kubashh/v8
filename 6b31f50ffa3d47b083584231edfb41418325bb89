@@ -16,6 +16,155 @@
       "message": "Please take another look at the delta from patch set 2-\u003e3, which should reflect the latest changes to the spec doc. Notably:\n- renaming \"_extending\" to \"_subtype\"\n- disallowing subtyping between structural and nominal types (in either direction)",
       "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17c7165b_e484426f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "Nice, thanks! A couple of comments, otherwise LGTM. ",
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a3ccc5_8bcdf888",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "Should be i32v",
+      "range": {
+        "startLine": 597,
+        "startChar": 26,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "412b7400_872cd369",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 613,
+        "startChar": 26,
+        "endLine": 613,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed9d85f5_c55f156f",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 626,
+        "startChar": 26,
+        "endLine": 626,
+        "endChar": 30
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df7e43e6_6fa424a8",
+        "filename": "src/wasm/wasm-subtyping.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "This is checked already in IsSubtypeOf. If you are calling this function elsewhere, maybe it needs to be checked here as well.",
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "601f47a1_73db86a4",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1676,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "Should be i32",
+      "range": {
+        "startLine": 1676,
+        "startChar": 29,
+        "endLine": 1676,
+        "endChar": 33
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc6333c4_d86699e4",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-14T04:57:05Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 1687,
+        "startChar": 29,
+        "endLine": 1687,
+        "endChar": 33
+      },
+      "revId": "6b31f50ffa3d47b083584231edfb41418325bb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
