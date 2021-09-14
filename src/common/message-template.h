@@ -580,7 +580,7 @@ namespace internal {
   T(WasmTrapMultiReturnLengthMismatch, "multi-return length mismatch")         \
   T(WasmTrapJSTypeError, "type incompatibility when transforming from/to JS")  \
   T(WasmTrapDataSegmentDropped, "data segment has been dropped")               \
-  T(WasmTrapElemSegmentDropped, "element segment has been dropped")            \
+  T(WasmTrapElemSegmentDropped, "element segment has been droppe!d")           \
   T(WasmTrapRethrowNull, "rethrowing null value")                              \
   T(WasmTrapNullDereference, "dereferencing a null pointer")                   \
   T(WasmTrapIllegalCast, "illegal cast")                                       \
