@@ -51,6 +51,24 @@
       "parentUuid": "a8a90e97_35959d7f",
       "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2555ddf_72a52e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-09-14T17:52:41Z",
+      "side": 1,
+      "message": "I am ok to rename it, but not comfortable the result to have \"Intl\" in it since up to now all (hopfully) the function name with Intl is inside #ifdef V8_INTL_SUPPORT in v8. Could we use some other name without the stem of \"Intl\" in it?",
+      "parentUuid": "682ca0ee_06e00b3a",
+      "revId": "c7fc64d1699109294a4e563584110d37ef931d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
