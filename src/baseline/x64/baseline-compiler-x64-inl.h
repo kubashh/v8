@@ -34,8 +34,8 @@ void BaselineCompiler::PrologueFillFrame() {
       bytecode_->incoming_new_target_or_generator_register();
   if (FLAG_debug_code) {
     __ masm()->Cmp(kInterpreterAccumulatorRegister,
-                   handle(ReadOnlyRoots(local_isolate_).undefined_value(),
-                          local_isolate_));
+                   local_isolate_->heap()->NewPersistentHandle(
+                       ReadOnlyRoots(local_isolate_).undefined_value()));
     __ masm()->Assert(equal, AbortReason::kUnexpectedValue);
   }
   int register_count = bytecode_->register_count();

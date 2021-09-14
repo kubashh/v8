@@ -15,6 +15,7 @@
 #include "src/base/vlq.h"
 #include "src/baseline/baseline-assembler.h"
 #include "src/handles/handles.h"
+#include "src/handles/persistent-handles.h"
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/interpreter-intrinsics.h"
@@ -60,6 +61,16 @@ class BaselineCompiler {
   void GenerateCode();
   MaybeHandle<Code> Build(Isolate* isolate);
   static int EstimateInstructionSize(BytecodeArray bytecode);
+
+  void set_local_isolate(LocalIsolate* isolate) { local_isolate_ = isolate; }
+  Handle<SharedFunctionInfo> shared_function_info() {
+    return shared_function_info_;
+  }
+
+  // Attach persistent handles to the compiler lifetime.
+  void attach_persistent_handles(std::unique_ptr<PersistentHandles> ph) {
+    persistent_handles_ = std::move(ph);
+  }
 
  private:
   void Prologue();
@@ -157,7 +168,10 @@ class BaselineCompiler {
   INTRINSICS_LIST(DECLARE_VISITOR)
 #undef DECLARE_VISITOR
 
-  const interpreter::BytecodeArrayIterator& iterator() { return iterator_; }
+  const interpreter::BytecodeArrayIterator& iterator() {
+    DCHECK_NOT_NULL(iterator_);
+    return *iterator_;
+  }
 
   LocalIsolate* local_isolate_;
   RuntimeCallStats* stats_;
@@ -166,9 +180,10 @@ class BaselineCompiler {
   Handle<BytecodeArray> bytecode_;
   MacroAssembler masm_;
   BaselineAssembler basm_;
-  interpreter::BytecodeArrayIterator iterator_;
+  interpreter::BytecodeArrayIterator* iterator_ = nullptr;
   BytecodeOffsetTableBuilder bytecode_offset_table_builder_;
   Zone zone_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
 
   int max_call_args_ = 0;
 

@@ -5,12 +5,16 @@
 #ifndef V8_BASELINE_BASELINE_BATCH_COMPILER_H_
 #define V8_BASELINE_BASELINE_BATCH_COMPILER_H_
 
+#include <atomic>
+
 #include "src/handles/global-handles.h"
 #include "src/handles/handles.h"
 
 namespace v8 {
 namespace internal {
 namespace baseline {
+
+class BaselineCompiler;
 
 class BaselineBatchCompiler {
  public:
@@ -25,6 +29,8 @@ class BaselineBatchCompiler {
 
   void set_enabled(bool enabled) { enabled_ = enabled; }
   bool is_enabled() { return enabled_; }
+
+  void FinishConcurrentCompilation();
 
  private:
   // Ensure there is enough space in the compilation queue to enqueue another
@@ -60,6 +66,13 @@ class BaselineBatchCompiler {
   // Flag indicating whether batch compilation is enabled.
   // Batch compilation can be dynamically disabled e.g. when creating snapshots.
   bool enabled_;
+
+  // Handle to the background compilation tasks.
+  std::unique_ptr<JobHandle> current_job_;
+
+  // TODO(victorgomes): While we finalize in the main thread, we need to keep
+  // track of the BaselineCompiler objects created by the background threads.
+  std::vector<BaselineCompiler*> compilers_;
 };
 
 }  // namespace baseline
