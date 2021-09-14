@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a7f6269_705748b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-09-14T10:11:57Z",
+      "side": 1,
+      "message": "lgtm.",
+      "revId": "7a39877f5bee4aaa357e02120ce599cfb7fe1675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "674371a6_a894e872",
+        "filename": "src/compiler/js-inlining-heuristic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2021-09-14T10:11:57Z",
+      "side": 1,
+      "message": "thx for these great comments at a tricky point.",
+      "revId": "7a39877f5bee4aaa357e02120ce599cfb7fe1675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
