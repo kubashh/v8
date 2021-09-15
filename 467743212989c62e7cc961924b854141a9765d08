@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ead80d42_917decca",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-15T06:38:18Z",
+      "side": 1,
+      "message": "No AssumeMemoryFence?",
+      "revId": "467743212989c62e7cc961924b854141a9765d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
