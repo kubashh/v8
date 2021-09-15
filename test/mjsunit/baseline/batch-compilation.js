@@ -10,7 +10,7 @@
 // Flags to drive Fuzzers into the right direction
 // TODO(v8:11853): Remove these flags once fuzzers handle flag implications
 // better.
-// Flags: --lazy-feedback-allocation --no-stress-concurrent-inlining
+// Flags: --lazy-feedback-allocation --no-stress-concurrent-inlining --no-concurrent-sparkplug
 
 // Basic test
 (function() {

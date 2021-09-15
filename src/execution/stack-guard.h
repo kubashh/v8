@@ -45,15 +45,16 @@ class V8_EXPORT_PRIVATE V8_NODISCARD StackGuard final {
   // Sets up the default stack guard for this thread.
   void InitThread(const ExecutionAccess& lock);
 
-#define INTERRUPT_LIST(V)                                         \
-  V(TERMINATE_EXECUTION, TerminateExecution, 0)                   \
-  V(GC_REQUEST, GC, 1)                                            \
-  V(INSTALL_CODE, InstallCode, 2)                                 \
-  V(API_INTERRUPT, ApiInterrupt, 3)                               \
-  V(DEOPT_MARKED_ALLOCATION_SITES, DeoptMarkedAllocationSites, 4) \
-  V(GROW_SHARED_MEMORY, GrowSharedMemory, 5)                      \
-  V(LOG_WASM_CODE, LogWasmCode, 6)                                \
-  V(WASM_CODE_GC, WasmCodeGC, 7)
+#define INTERRUPT_LIST(V)                                          \
+  V(TERMINATE_EXECUTION, TerminateExecution, 0)                    \
+  V(GC_REQUEST, GC, 1)                                             \
+  V(INSTALL_CODE, InstallCode, 2)                                  \
+  V(FINALIZE_BASELINE_COMPILATION, FinalizeBaselineCompilation, 3) \
+  V(API_INTERRUPT, ApiInterrupt, 4)                                \
+  V(DEOPT_MARKED_ALLOCATION_SITES, DeoptMarkedAllocationSites, 5)  \
+  V(GROW_SHARED_MEMORY, GrowSharedMemory, 6)                       \
+  V(LOG_WASM_CODE, LogWasmCode, 7)                                 \
+  V(WASM_CODE_GC, WasmCodeGC, 8)
 
 #define V(NAME, Name, id)                                    \
   inline bool Check##Name() { return CheckInterrupt(NAME); } \

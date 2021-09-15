@@ -278,7 +278,6 @@ BaselineCompiler::BaselineCompiler(
       masm_(isolate, CodeObjectRequired::kNo,
             AllocateBuffer(isolate, bytecode, code_location)),
       basm_(&masm_),
-      iterator_(bytecode_),
       zone_(isolate->allocator(), ZONE_NAME),
       labels_(zone_.NewArray<BaselineLabels*>(bytecode_->length())) {
   MemsetPointer(labels_, nullptr, bytecode_->length());
@@ -294,12 +293,17 @@ BaselineCompiler::BaselineCompiler(
 #define __ basm_.
 
 void BaselineCompiler::GenerateCode() {
+  interpreter::BytecodeArrayIterator iterator(bytecode_);
+  iterator_ = &iterator;
   {
-    RCS_SCOPE(stats_, RuntimeCallCounterId::kCompileBaselinePreVisit);
-    for (; !iterator_.done(); iterator_.Advance()) {
+    RCS_SCOPE(stats_,
+              concurrent_
+                  ? RuntimeCallCounterId::kCompileBackgroundBaselinePreVisit
+                  : RuntimeCallCounterId::kCompileBaselinePreVisit);
+    for (; !iterator.done(); iterator.Advance()) {
       PreVisitSingleBytecode();
     }
-    iterator_.Reset();
+    iterator.Reset();
   }
 
   // No code generated yet.
@@ -307,10 +311,13 @@ void BaselineCompiler::GenerateCode() {
   __ CodeEntry();
 
   {
-    RCS_SCOPE(stats_, RuntimeCallCounterId::kCompileBaselineVisit);
+    RCS_SCOPE(stats_,
+              concurrent_
+                  ? RuntimeCallCounterId::kCompileBackgroundBaselineVisit
+                  : RuntimeCallCounterId::kCompileBaselineVisit);
     Prologue();
     AddPosition();
-    for (; !iterator_.done(); iterator_.Advance()) {
+    for (; !iterator.done(); iterator.Advance()) {
       VisitSingleBytecode();
       AddPosition();
     }
@@ -361,8 +368,10 @@ void BaselineCompiler::StoreRegisterPair(int operand_index, Register val0,
 }
 template <typename Type>
 Handle<Type> BaselineCompiler::Constant(int operand_index) {
-  return Handle<Type>::cast(
+  Handle<Type> constant = Handle<Type>::cast(
       iterator().GetConstantForIndexOperand(operand_index, local_isolate_));
+  if (concurrent_) return local_isolate_->heap()->NewPersistentHandle(constant);
+  return constant;
 }
 Smi BaselineCompiler::ConstantSmi(int operand_index) {
   return iterator().GetConstantAtIndexAsSmi(operand_index);

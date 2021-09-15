@@ -14,7 +14,9 @@
 #include "src/base/threaded-list.h"
 #include "src/base/vlq.h"
 #include "src/baseline/baseline-assembler.h"
+#include "src/execution/local-isolate.h"
 #include "src/handles/handles.h"
+#include "src/handles/persistent-handles.h"
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/interpreter-intrinsics.h"
@@ -61,6 +63,22 @@ class BaselineCompiler {
   MaybeHandle<Code> Build(Isolate* isolate);
   static int EstimateInstructionSize(BytecodeArray bytecode);
 
+  void SetLocalIsolate(LocalIsolate* local) {
+    DCHECK(!local->is_main_thread());
+    local_isolate_ = local;
+    concurrent_ = true;
+  }
+
+  // TODO(victorgomes): Remove these two functions if we manage to finalize
+  // compilation on the background thread.
+  // Attach persistent handles to the compiler lifetime.
+  void AttachPersistentHandles(std::unique_ptr<PersistentHandles> ph) {
+    persistent_handles_ = std::move(ph);
+  }
+  Handle<SharedFunctionInfo> shared_function_info() {
+    return shared_function_info_;
+  }
+
  private:
   void Prologue();
   void PrologueFillFrame();
@@ -71,6 +89,9 @@ class BaselineCompiler {
 
   void VerifyFrame();
   void VerifyFrameSize();
+
+  template <typename T>
+  Handle<T> NewHandle(T);
 
   // Register operands.
   interpreter::Register RegisterOperand(int operand_index);
@@ -157,7 +178,10 @@ class BaselineCompiler {
   INTRINSICS_LIST(DECLARE_VISITOR)
 #undef DECLARE_VISITOR
 
-  const interpreter::BytecodeArrayIterator& iterator() { return iterator_; }
+  const interpreter::BytecodeArrayIterator& iterator() {
+    DCHECK_NOT_NULL(iterator_);
+    return *iterator_;
+  }
 
   LocalIsolate* local_isolate_;
   RuntimeCallStats* stats_;
@@ -166,9 +190,11 @@ class BaselineCompiler {
   Handle<BytecodeArray> bytecode_;
   MacroAssembler masm_;
   BaselineAssembler basm_;
-  interpreter::BytecodeArrayIterator iterator_;
+  interpreter::BytecodeArrayIterator* iterator_ = nullptr;
   BytecodeOffsetTableBuilder bytecode_offset_table_builder_;
   Zone zone_;
+  std::unique_ptr<PersistentHandles> persistent_handles_;
+  bool concurrent_ = false;
 
   int max_call_args_ = 0;
 
