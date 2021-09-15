@@ -33,6 +33,24 @@
       "message": "wasm-module-builder.js does not define emit_i32v, but there is a function called wasmSignedLeb which should do the same.",
       "revId": "392c55bf4ab7aa3a75332fae77221dcc036a18c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb51479_cd31ffb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-15T13:00:45Z",
+      "side": 1,
+      "message": "Or even better: emit_heap_type",
+      "parentUuid": "1f793e52_75527c24",
+      "revId": "392c55bf4ab7aa3a75332fae77221dcc036a18c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
