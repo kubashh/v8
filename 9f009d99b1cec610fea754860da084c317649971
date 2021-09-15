@@ -16,6 +16,23 @@
       "message": "PTAL.\nNot including a regression test because that would necessarily be fairly slow (it would have to create and then parse a huge string), and I don\u0027t think this issue is worth spending the try bot time for that.",
       "revId": "9f009d99b1cec610fea754860da084c317649971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55616084_56f7c328",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-09-15T13:17:48Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nIs there a regression test we could add as well?",
+      "revId": "9f009d99b1cec610fea754860da084c317649971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
