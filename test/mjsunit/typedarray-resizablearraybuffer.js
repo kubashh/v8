@@ -1224,3 +1224,107 @@ function TestIterationAndResize(ta, expected, rab, resize_after,
     assertEquals(undefined, AtHelper(lengthTracking, evil));
   }
 })();
+
+(function Slice() {
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    const fixedLength = new ctor(rab, 0, 4);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    const lengthTracking = new ctor(rab, 0);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+
+    // Write some data into the array.
+    const ta_write = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(ta_write, i, i);
+    }
+
+    const fixedLengthSlice = fixedLength.slice();
+    assertEquals([0, 1, 2, 3], ToNumbers(fixedLengthSlice));
+    assertFalse(fixedLengthSlice.buffer.resizable);
+
+    const fixedLengthWithOffsetSlice = fixedLengthWithOffset.slice();
+    assertEquals([2, 3], ToNumbers(fixedLengthWithOffsetSlice));
+    assertFalse(fixedLengthWithOffsetSlice.buffer.resizable);
+
+    const lengthTrackingSlice = lengthTracking.slice();
+    assertEquals([0, 1, 2, 3], ToNumbers(lengthTrackingSlice));
+    assertFalse(lengthTrackingSlice.buffer.resizable);
+
+    const lengthTrackingWithOffsetSlice = lengthTrackingWithOffset.slice();
+    assertEquals([2, 3], ToNumbers(lengthTrackingWithOffsetSlice));
+    assertFalse(lengthTrackingWithOffsetSlice.buffer.resizable);
+
+    // Shrink so that fixed length TAs go out of bounds.
+    rab.resize(3 * ctor.BYTES_PER_ELEMENT);
+
+    assertThrows(() => { fixedLength.slice(); });
+    assertThrows(() => { fixedLengthWithOffset.slice(); });
+    assertEquals([0, 1, 2], ToNumbers(lengthTracking.slice()));
+    assertEquals([2], ToNumbers(lengthTrackingWithOffset.slice()));
+
+    // Shrink so that the TAs with offset go out of bounds.
+    rab.resize(1 * ctor.BYTES_PER_ELEMENT);
+
+    assertThrows(() => { fixedLength.slice(); });
+    assertThrows(() => { fixedLengthWithOffset.slice(); });
+    assertEquals([0], ToNumbers(lengthTracking.slice()));
+    assertThrows(() => { lengthTrackingWithOffset.slice(); });
+
+     // Shrink to zero.
+    rab.resize(0);
+
+    assertThrows(() => { fixedLength.slice(); });
+    assertThrows(() => { fixedLengthWithOffset.slice(); });
+    assertEquals([], ToNumbers(lengthTracking.slice()));
+    assertThrows(() => { lengthTrackingWithOffset.slice(); });
+
+    // Verify that the previously created slices aren't affected by the
+    // shrinking.
+    assertEquals([0, 1, 2, 3], ToNumbers(fixedLengthSlice));
+    assertEquals([2, 3], ToNumbers(fixedLengthWithOffsetSlice));
+    assertEquals([0, 1, 2, 3], ToNumbers(lengthTrackingSlice));
+    assertEquals([2, 3], ToNumbers(lengthTrackingWithOffsetSlice));
+
+    // Grow so that all TAs are back in-bounds. New memory is zeroed.
+    rab.resize(6 * ctor.BYTES_PER_ELEMENT);
+    assertEquals([0, 0, 0, 0], ToNumbers(fixedLength.slice()));
+    assertEquals([0, 0], ToNumbers(fixedLengthWithOffset.slice()));
+    assertEquals([0, 0, 0, 0, 0, 0], ToNumbers(lengthTracking.slice()));
+    assertEquals([0, 0, 0, 0], ToNumbers(lengthTrackingWithOffset.slice()));
+  }
+})();
+
+(function SliceSpeciesCreateResizes() {
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+
+    class MyArray extends ctor {
+      constructor(ab, start, length) {
+        super(ab, start, length);
+        rab.resize(2);
+      }
+    };
+
+    const fixedLength = new MyArray(rab, 0, 4);
+    assertThrows(() => { fixedLength.slice(); }, TypeError);
+  }
+
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+
+    class MyArray extends ctor {
+      constructor(ab, start, length) {
+        super(ab, start, length);
+        rab.resize(2 * ctor.BYTES_PER_ELEMENT);
+      }
+    };
+
+    const lengthTracking = new MyArray(rab);
+    let a = lengthTracking.slice();
+    assertEquals(2, a.length);
+  }
+})();
