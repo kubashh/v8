@@ -717,3 +717,57 @@ function TestIterationAndGrow(ta, expected, gsab, grow_after,
     assertEquals(0, AtHelper(lengthTrackingWithOffset, -1));
   }
 })();
+
+(function Slice() {
+  for (let ctor of ctors) {
+    const gsab = CreateGrowableSharedArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                                 8 * ctor.BYTES_PER_ELEMENT);
+    const fixedLength = new ctor(gsab, 0, 4);
+    const fixedLengthWithOffset = new ctor(gsab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    const lengthTracking = new ctor(gsab, 0);
+    const lengthTrackingWithOffset = new ctor(gsab, 2 * ctor.BYTES_PER_ELEMENT);
+
+    // Write some data into the array.
+    const taWrite = new ctor(gsab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, i);
+    }
+
+    const fixedLengthSlice = fixedLength.slice();
+    assertEquals([0, 1, 2, 3], ToNumbers(fixedLengthSlice));
+    assertTrue(fixedLengthSlice.buffer instanceof ArrayBuffer);
+    assertFalse(fixedLengthSlice.buffer instanceof SharedArrayBuffer);
+    assertFalse(fixedLengthSlice.buffer.resizable);
+
+    const fixedLengthWithOffsetSlice = fixedLengthWithOffset.slice();
+    assertEquals([2, 3], ToNumbers(fixedLengthWithOffsetSlice));
+    assertTrue(fixedLengthWithOffsetSlice.buffer instanceof ArrayBuffer);
+    assertFalse(fixedLengthWithOffsetSlice.buffer instanceof SharedArrayBuffer);
+    assertFalse(fixedLengthWithOffsetSlice.buffer.resizable);
+
+    const lengthTrackingSlice = lengthTracking.slice();
+    assertEquals([0, 1, 2, 3], ToNumbers(lengthTrackingSlice));
+    assertTrue(lengthTrackingSlice.buffer instanceof ArrayBuffer);
+    assertFalse(lengthTrackingSlice.buffer instanceof SharedArrayBuffer);
+    assertFalse(lengthTrackingSlice.buffer.resizable);
+
+    const lengthTrackingWithOffsetSlice = lengthTrackingWithOffset.slice();
+    assertEquals([2, 3], ToNumbers(lengthTrackingWithOffsetSlice));
+    assertTrue(lengthTrackingWithOffsetSlice.buffer instanceof ArrayBuffer);
+    assertFalse(lengthTrackingWithOffsetSlice.buffer instanceof
+        SharedArrayBuffer);
+    assertFalse(lengthTrackingWithOffsetSlice.buffer.resizable);
+
+    gsab.grow(6 * ctor.BYTES_PER_ELEMENT);
+    assertEquals([0, 1, 2, 3], ToNumbers(fixedLength.slice()));
+    assertEquals([2, 3], ToNumbers(fixedLengthWithOffset.slice()));
+    assertEquals([0, 1, 2, 3, 0, 0], ToNumbers(lengthTracking.slice()));
+    assertEquals([2, 3, 0, 0], ToNumbers(lengthTrackingWithOffset.slice()));
+
+    // Verify that the previously created slices aren't affected by the growing.
+    assertEquals([0, 1, 2, 3], ToNumbers(fixedLengthSlice));
+    assertEquals([2, 3], ToNumbers(fixedLengthWithOffsetSlice));
+    assertEquals([0, 1, 2, 3], ToNumbers(lengthTrackingSlice));
+    assertEquals([2, 3], ToNumbers(lengthTrackingWithOffsetSlice));
+  }
+})();
