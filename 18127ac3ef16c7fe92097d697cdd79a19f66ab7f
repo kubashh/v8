@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f797a8d4_1b601de0",
+        "filename": ".vpython",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-15T19:32:16Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 27,
+        "startChar": 46,
+        "endLine": 27,
+        "endChar": 49
+      },
+      "revId": "18127ac3ef16c7fe92097d697cdd79a19f66ab7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
