@@ -684,8 +684,13 @@ DEFINE_STRING(sparkplug_filter, "*", "filter for Sparkplug baseline compiler")
 DEFINE_BOOL(sparkplug_needs_short_builtins, false,
             "only enable Sparkplug baseline compiler when "
             "--short-builtin-calls are also enabled")
-DEFINE_INT(baseline_batch_compilation_threshold, 4 * KB,
+DEFINE_INT(baseline_batch_compilation_threshold, (4 * KB) / .8,
            "the estimated instruction size of a batch to trigger compilation")
+DEFINE_FLOAT(baseline_batch_compilation_compile_fraction, .8,
+             "fraction of batch to compile")
+DEFINE_BOOL(
+    baseline_batch_compilation_unique_hottest, false,
+    "consider only unique functions to determine the fraction to compile")
 DEFINE_BOOL(trace_baseline, false, "trace baseline compilation")
 DEFINE_BOOL(trace_baseline_batch_compilation, false,
             "trace baseline batch compilation")
