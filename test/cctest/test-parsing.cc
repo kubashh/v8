@@ -4338,6 +4338,7 @@ i::Scope* DeserializeFunctionScope(i::Isolate* isolate, i::Zone* zone,
 
 TEST(AsmModuleFlag) {
   i::FLAG_validate_asm = false;
+  if (!FLAG_expose_wasm) return;
   i::Isolate* isolate = CcTest::i_isolate();
   i::HandleScope scope(isolate);
   LocalContext env;
@@ -4357,10 +4358,12 @@ TEST(AsmModuleFlag) {
 
   // The asm.js module should be marked as such.
   i::Scope* s = DeserializeFunctionScope(isolate, &zone, m, "f");
-  CHECK(s->IsAsmModule() && s->AsDeclarationScope()->is_asm_module());
+  CHECK(s->IsAsmModule());
+  CHECK(s->AsDeclarationScope()->is_asm_module());
 }
 
 TEST(UseAsmUseCount) {
+  if (!FLAG_expose_wasm) return;
   i::Isolate* isolate = CcTest::i_isolate();
   i::HandleScope scope(isolate);
   LocalContext env;
