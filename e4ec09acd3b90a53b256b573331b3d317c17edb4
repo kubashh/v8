@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af79eef_7ebc0f9d",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-16T15:46:42Z",
+      "side": 1,
+      "message": "Please remove the \"_\", the convention is that this indicates that the symbol is a private class member. Also this could be a reference.",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1381934_aa996caf",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-16T15:46:42Z",
+      "side": 1,
+      "message": "You can remove this TODO now.",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cadf6c4b_768c1f78",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-16T15:46:42Z",
+      "side": 1,
+      "message": "We should get rid of \"num_types\" altogether, and rely on functions_.size() instead like this:\n\n  uint8_t id \u003d random_byte % (array_size(types) + num_structs_and_arrays + functions_.size());\n\nThen if it falls in the \"array_size(types)\" range or the \"num_structs_and_arrays\" range you do as before, and if it falls in the last range you can extract the function index directly with:\n\n  int func_index \u003d id - arraysize(types) - num_structs_and_arrays;",
+      "range": {
+        "startLine": 118,
+        "startChar": 51,
+        "endLine": 118,
+        "endChar": 60
+      },
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61a077a5_73e2877b",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-16T15:46:42Z",
+      "side": 1,
+      "message": "You can insert an \"UNREACHABLE()\" here to check that we always find a function with the expected signature.",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
