@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "127e61ba_9d4fd7ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-16T15:24:45Z",
+      "side": 1,
+      "message": "ptal:\n\nsyg: esp from spec point of view + tests\njkummerow: everything? (except maybe syg could review the tests in more detail?)\n\nthanks in advance!",
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
