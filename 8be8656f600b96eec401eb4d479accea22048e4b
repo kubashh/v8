@@ -16,6 +16,184 @@
       "message": "PTAL.",
       "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71968454_24d69265",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c17de9a3_e4e68de4",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "nit: the style guide disallows multiple pointer-typed variables declared on one line (and, besides, we\u0027re very consistent about not doing that), so please declare these on separate lines:\n\n  TFNode* success_control;\n  TFNode* failure_control;\n\nhttps://google.github.io/styleguide/cppguide.html#Pointer_and_Reference_Expressions",
+      "range": {
+        "startLine": 675,
+        "startChar": 10,
+        "endLine": 675,
+        "endChar": 12
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b1466ee_0905c9d5",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "Same nit here.",
+      "range": {
+        "startLine": 733,
+        "startChar": 4,
+        "endLine": 733,
+        "endChar": 46
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c1262f4_0d4a337d",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "nit: maybe use `h` here, to distinguish from `f` below?",
+      "range": {
+        "startLine": 267,
+        "startChar": 5,
+        "endLine": 267,
+        "endChar": 6
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a9d13d_61e74ea1",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "This one character here hints at a pretty big open question for nominal function types...",
+      "range": {
+        "startLine": 275,
+        "startChar": 45,
+        "endLine": 275,
+        "endChar": 46
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d63db2_fa0cb336",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "I think this should be kExprReturnCallRef.",
+      "range": {
+        "startLine": 301,
+        "startChar": 44,
+        "endLine": 301,
+        "endChar": 56
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6245499c_f89df565",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 311,
+        "startChar": 5,
+        "endLine": 311,
+        "endChar": 6
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "378d8911_f62e8c9b",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T14:57:44Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 325,
+        "startChar": 44,
+        "endLine": 325,
+        "endChar": 56
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
