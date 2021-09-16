@@ -72,13 +72,13 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   void PushRegister(int register_index,
                     StackCheckFlag check_stack_limit) override;
   void ReadCurrentPositionFromRegister(int reg) override;
+  void WriteStackPointerToRegister(int reg) override;
   void ReadStackPointerFromRegister(int reg) override;
   void SetCurrentPositionFromEnd(int by) override;
   void SetRegister(int register_index, int to) override;
   bool Succeed() override;
   void WriteCurrentPositionToRegister(int reg, int cp_offset) override;
   void ClearRegisters(int reg_from, int reg_to) override;
-  void WriteStackPointerToRegister(int reg) override;
 
   // Called from RegExp if the stack-guard is triggered.
   // If the code object is relocated, the return address is fixed before
@@ -155,9 +155,11 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   static const int kStringStartMinusOne =
       kSuccessfulCaptures - kSystemPointerSize;
   static const int kBacktrackCount = kStringStartMinusOne - kSystemPointerSize;
+  static const int kRegExpStackBasePointer =
+      kBacktrackCount - kSystemPointerSize;
 
   // First register address. Following registers are below it on the stack.
-  static const int kRegisterZero = kBacktrackCount - kSystemPointerSize;
+  static const int kRegisterZero = kRegExpStackBasePointer - kSystemPointerSize;
 
   // Initial size of code buffer.
   static const int kRegExpCodeSize = 1024;
@@ -229,7 +231,6 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   Isolate* isolate() const { return masm_.isolate(); }
 
   MacroAssembler masm_;
-  NoRootArrayScope no_root_array_scope_;
 
   ZoneChunkList<int> code_relative_fixup_positions_;
 
