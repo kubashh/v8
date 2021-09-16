@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25e65726_32addf76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-16T08:53:42Z",
+      "side": 1,
+      "message": "I am not convinced that this is the right fix. The --expose-wasm flag is really just there to control whether the \"WebAssembly\" global is created or not. For asm.js validation, we have --validate-asm.\n\nI also commented on the issue, as it looks to me like there is another issue here which should be fixed instead.",
+      "revId": "c4c7ce99e57fd0833a499701aa6603286c802212",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
