@@ -308,7 +308,7 @@ int NativeRegExpMacroAssembler::Execute(
     int* output, int output_size, Isolate* isolate, JSRegExp regexp) {
   // Ensure that the minimum stack has been allocated.
   RegExpStackScope stack_scope(isolate);
-  Address stack_base = stack_scope.stack()->stack_base();
+  Address stack_base = stack_scope.stack()->memory_top();
 
   bool is_one_byte = String::IsOneByteRepresentationUnderneath(input);
   Code code = FromCodeT(CodeT::cast(regexp.Code(is_one_byte)));
@@ -383,20 +383,19 @@ const byte NativeRegExpMacroAssembler::word_character_map[] = {
 // clang-format on
 
 Address NativeRegExpMacroAssembler::GrowStack(Address stack_pointer,
-                                              Address* stack_base,
                                               Isolate* isolate) {
+  DisallowGarbageCollection no_gc;
+
   RegExpStack* regexp_stack = isolate->regexp_stack();
-  size_t size = regexp_stack->stack_capacity();
-  Address old_stack_base = regexp_stack->stack_base();
-  DCHECK(old_stack_base == *stack_base);
-  DCHECK(stack_pointer <= old_stack_base);
-  DCHECK(static_cast<size_t>(old_stack_base - stack_pointer) <= size);
-  Address new_stack_base = regexp_stack->EnsureCapacity(size * 2);
-  if (new_stack_base == kNullAddress) {
-    return kNullAddress;
-  }
-  *stack_base = new_stack_base;
-  intptr_t stack_content_size = old_stack_base - stack_pointer;
+  const size_t old_size = regexp_stack->memory_size();
+  const Address old_stack_top = regexp_stack->memory_top();
+  DCHECK_LE(stack_pointer, old_stack_top);
+  DCHECK_LE(static_cast<size_t>(old_stack_top - stack_pointer), old_size);
+
+  Address new_stack_base = regexp_stack->EnsureCapacity(old_size * 2);
+  if (new_stack_base == kNullAddress) return kNullAddress;
+
+  const intptr_t stack_content_size = old_stack_top - stack_pointer;
   return new_stack_base - stack_content_size;
 }
 
