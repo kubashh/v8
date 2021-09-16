@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89bdbfad_60b88afa",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c17de9a3_e4e68de4",
+      "range": {
+        "startLine": 675,
+        "startChar": 10,
+        "endLine": 675,
+        "endChar": 12
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b1466ee_0905c9d5",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c593ef9f_e6770002",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b1466ee_0905c9d5",
+      "range": {
+        "startLine": 733,
+        "startChar": 4,
+        "endLine": 733,
+        "endChar": 46
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c1262f4_0d4a337d",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-09-16T14:57:44Z",
       "side": 1,
       "message": "nit: maybe use `h` here, to distinguish from `f` below?",
+      "range": {
+        "startLine": 267,
+        "startChar": 5,
+        "endLine": 267,
+        "endChar": 6
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3801f4be_dc29fb1f",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c1262f4_0d4a337d",
       "range": {
         "startLine": 267,
         "startChar": 5,
@@ -150,6 +222,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "486aaf00_94c2454b",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Thanks, actually testing tail calls fleshed out a bug.",
+      "parentUuid": "94d63db2_fa0cb336",
+      "range": {
+        "startLine": 301,
+        "startChar": 44,
+        "endLine": 301,
+        "endChar": 56
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62634b55_4a7ffe0e",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94d63db2_fa0cb336",
+      "range": {
+        "startLine": 301,
+        "startChar": 44,
+        "endLine": 301,
+        "endChar": 56
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6245499c_f89df565",
@@ -173,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab2e284_107ea42b",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6245499c_f89df565",
+      "range": {
+        "startLine": 311,
+        "startChar": 5,
+        "endLine": 311,
+        "endChar": 6
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "378d8911_f62e8c9b",
@@ -186,6 +330,30 @@
       "writtenOn": "2021-09-16T14:57:44Z",
       "side": 1,
       "message": "same here",
+      "range": {
+        "startLine": 325,
+        "startChar": 44,
+        "endLine": 325,
+        "endChar": 56
+      },
+      "revId": "8be8656f600b96eec401eb4d479accea22048e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91bfd230_0dab77ec",
+        "filename": "test/mjsunit/wasm/inlining.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-16T15:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "378d8911_f62e8c9b",
       "range": {
         "startLine": 325,
         "startChar": 44,
