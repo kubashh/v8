@@ -67,6 +67,24 @@
       "message": "accidental edit",
       "revId": "87d3265ee2354e2e91a4d12e06260423725b5768",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d65cbf1_8414af6e",
+        "filename": "src/common/message-template.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-09-16T07:28:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce968045_14be8974",
+      "revId": "87d3265ee2354e2e91a4d12e06260423725b5768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
