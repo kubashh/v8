@@ -16,6 +16,69 @@
       "message": "PTAL.",
       "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f142c2c_a41ea6e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T17:58:13Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac8aa89e_2b77ade1",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T17:58:13Z",
+      "side": 1,
+      "message": "nit: I\u0027d move the reference-to-pointer conversion into this function, i.e. s/*/\u0026/ here and in line 1531, and move the \u0027\u0026\u0027 operator from lines 645, 654, 662, 720 to 1527 and 1533. That would keep the CallInfo interface clean and expressive (documenting that index_value/funcref_value are non-nullable), and encapsulate the implementation detail that index_or_caller_value_ must be nullable.",
+      "range": {
+        "startLine": 1525,
+        "startChar": 44,
+        "endLine": 1525,
+        "endChar": 45
+      },
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd18ea94_5c392c8a",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-16T17:58:13Z",
+      "side": 1,
+      "message": "Isn\u0027t this line redundant?",
+      "range": {
+        "startLine": 1631,
+        "startChar": 6,
+        "endLine": 1631,
+        "endChar": 67
+      },
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
