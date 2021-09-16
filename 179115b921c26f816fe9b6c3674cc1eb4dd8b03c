@@ -16,6 +16,161 @@
       "message": "ptal:\n\nsyg: esp from spec point of view + tests\njkummerow: everything? (except maybe syg could review the tests in more detail?)\n\nthanks in advance!",
       "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "439ccd84_c8403cb0",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "Please assign new_array_buffer-\u003eGetByteLength() to a local above and use that in the DCHECK, to avoid doing another seq_cst load in DEBUG builds. It might create a synchronization edge only on DEBUG builds and hide races until release.",
+      "range": {
+        "startLine": 328,
+        "startChar": 2,
+        "endLine": 328,
+        "endChar": 60
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd691e8c_8f6d3d64",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "Please put this whole block in a `if (!is_shared)`. Since GSABs can\u0027t shrink, the spec draft doesn\u0027t re-read the GSAB\u0027s length. Re-reading it in the GSAB case is observable since the seq_cst load creates a synchronization edge.\n\nThat\u0027s not technically a correctness problem because the program will behave stronger than required, but if another impl doesn\u0027t have this extra synchronization edge, the same code may exhibit different behavior in the other impl. So I\u0027d prefer to not have this extra observable read.",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 5
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a11fb4bf_ca1c83a9",
+        "filename": "src/builtins/typed-array-slice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "This should probably go to the slow case, because what the spec draft says in the case of a shrunk RAB is:\n\n1. Do byte-wise copy for all bytes that are still in-bounds after the shrinking.\n2. For the remaining, go through Get/Set.\n\nFor TAs, an OOB Get returns undefined. For integer TAs, Set(undefined) sets 0, fine. For floating point TAs, Set(undefined) coerces to a *NaN*. Does SlowCopy handle that case?",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 7
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a0cd5c_f4de47c8",
+        "filename": "src/builtins/typed-array-slice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "Similar to the above case, the elements in [newLength, final) for floating point TAs actually aren\u0027t 0.",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 26
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3124f8bf_5adb27a9",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "For floating point TAs this is actually NaN due to undefined coercion.",
+      "range": {
+        "startLine": 1346,
+        "startChar": 24,
+        "endLine": 1346,
+        "endChar": 28
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "309f4866_38fd75eb",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "Thanks for testing this. 😊\n\nFor this test, it\u0027d be more interesting to have taWrite be filled with -1 (i.e. all 1 bitss) instead of 1, to test this boundary condition of not accidentally copying over non-aligned bytes.",
+      "range": {
+        "startLine": 1367,
+        "startChar": 10,
+        "endLine": 1367,
+        "endChar": 74
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d144ec_2a329af3",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-16T23:57:34Z",
+      "side": 1,
+      "message": "For completeness, could also test slice with explicit (start, end) arguments to test that they are computed on the initial length.",
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
