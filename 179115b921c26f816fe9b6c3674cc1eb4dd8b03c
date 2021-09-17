@@ -127,6 +127,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac01958_15525346",
+        "filename": "src/builtins/typed-array-slice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-17T15:12:32Z",
+      "side": 1,
+      "message": "Chatted with Marja offline, and I\u0027m convinced we should change the spec draft instead. The current behavior is maximally consistent with Arrays (continue looping on the original length), but this NaN thing is pretty stupid and we should probably just deviate from Arrays in this case, to stop iterating at the new length.",
+      "parentUuid": "a11fb4bf_ca1c83a9",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 7
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72a0cd5c_f4de47c8",
@@ -150,6 +174,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2f4d9ad_ea1f6929",
+        "filename": "src/builtins/typed-array-slice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-17T15:12:32Z",
+      "side": 1,
+      "message": "Resolving in light of planned spec change.",
+      "parentUuid": "72a0cd5c_f4de47c8",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 26
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3124f8bf_5adb27a9",
@@ -163,6 +211,30 @@
       "writtenOn": "2021-09-16T23:57:34Z",
       "side": 1,
       "message": "For floating point TAs this is actually NaN due to undefined coercion.",
+      "range": {
+        "startLine": 1346,
+        "startChar": 24,
+        "endLine": 1346,
+        "endChar": 28
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d47026_27d1ed74",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-17T15:12:32Z",
+      "side": 1,
+      "message": "Resolving in light of planned spec change.",
+      "parentUuid": "3124f8bf_5adb27a9",
       "range": {
         "startLine": 1346,
         "startChar": 24,
