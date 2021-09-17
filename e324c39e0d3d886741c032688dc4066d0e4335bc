@@ -16,6 +16,57 @@
       "message": "Thanks for suggestions, I applied them.",
       "revId": "e324c39e0d3d886741c032688dc4066d0e4335bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898825bd_064e2141",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-17T13:18:54Z",
+      "side": 1,
+      "message": "Thanks for the changes, just a couple of additional comments.",
+      "revId": "e324c39e0d3d886741c032688dc4066d0e4335bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b5e7d04_ffbd60c0",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-17T13:18:54Z",
+      "side": 1,
+      "message": "Please also make the parameter pass-by-reference to avoid unnecessary copies:\n const std::vector\u003cuint32_t\u003e\u0026 functions,",
+      "revId": "e324c39e0d3d886741c032688dc4066d0e4335bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45044898_dac94d49",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-09-17T13:18:54Z",
+      "side": 1,
+      "message": "The control-flow is a bit hard to understand now, here is a suggestion:\n\n  if (id \u003c arraysize(types)) {\n    return types[id];\n  } else if (id \u003c arraysize(types) + num_structs_and_arrays) {\n    // handle structs and arrays\n  } else {\n    // handle function signatures\n  }\n\nThis removes one level of nesting, and is more consistent about how we handle each case.",
+      "revId": "e324c39e0d3d886741c032688dc4066d0e4335bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
