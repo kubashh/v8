@@ -39,6 +39,30 @@
       },
       "revId": "8d3eba3ebc9820e32a213224363d94621c1aa47a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91cee782_683f8a1c",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 4906,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-09-17T13:43:11Z",
+      "side": 1,
+      "message": "we agreed to pretty much allow everything of Abseil that\u0027s not explicitly disallowed by chromium (up to best judgement, maybe maintain our own allow list if we have issues); this has afaik been the policy of other chromium internal third-parties. See https://docs.google.com/document/d/1YJh_lb-V36PE1oebPEb4nj9s1qFvuDlDvvMghHqnPQg/edit#",
+      "parentUuid": "814e99ec_b505a45b",
+      "range": {
+        "startLine": 4906,
+        "startChar": 20,
+        "endLine": 4906,
+        "endChar": 29
+      },
+      "revId": "8d3eba3ebc9820e32a213224363d94621c1aa47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
