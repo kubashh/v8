@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "954e1ba8_6385160f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-17T11:09:57Z",
+      "side": 1,
+      "message": "LGTM % Shu\u0027s comments, and with a comment of my own that you may choose to ignore since it\u0027s about existing code.",
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856e21e2_0729fa6c",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-17T11:09:57Z",
+      "side": 1,
+      "message": "This is a bit surprising, given that we created\n\n  Handle\u003cObject\u003e first_obj \u003d isolate-\u003efactory()-\u003eNewNumber(first);\n\nin line 216 and haven\u0027t touched it since. Feel free to optimize that while you\u0027re here (drop the allocation, `first_size \u003d first`); I\u0027m also fine with leaving it as-is.\n\n(Same for new_len -\u003e new_len_size, except in that case the HeapNumber can\u0027t be dropped because it\u0027s needed for the constructor call.)",
+      "range": {
+        "startLine": 326,
+        "startChar": 2,
+        "endLine": 326,
+        "endChar": 50
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "439ccd84_c8403cb0",
