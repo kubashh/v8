@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a09ef0c0_5bd764f8",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-17T10:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0af79eef_7ebc0f9d",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1381934_aa996caf",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-16T15:46:42Z",
       "side": 1,
       "message": "You can remove this TODO now.",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ecde0c_bf705992",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-17T10:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1381934_aa996caf",
       "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5dd9b1_9d786c30",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-17T10:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cadf6c4b_768c1f78",
+      "range": {
+        "startLine": 118,
+        "startChar": 51,
+        "endLine": 118,
+        "endChar": 60
+      },
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61a077a5_73e2877b",
@@ -71,6 +131,24 @@
       "writtenOn": "2021-09-16T15:46:42Z",
       "side": 1,
       "message": "You can insert an \"UNREACHABLE()\" here to check that we always find a function with the expected signature.",
+      "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d29dea1_92371a6a",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1516577
+      },
+      "writtenOn": "2021-09-17T10:31:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61a077a5_73e2877b",
       "revId": "e4ec09acd3b90a53b256b573331b3d317c17edb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
