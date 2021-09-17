@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b455b2f_6b8a7f6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-09-17T17:28:07Z",
+      "side": 1,
+      "message": "Hi Leszek,\n\nGCC is failing to compile the source on both x64 and s390 Linux:\nTried with gcc 8.4.0:\n../../src/objects/js-objects.cc:4239:79:   required from here\n../../third_party/abseil-cpp/absl/types/optional.h:318:13: internal compiler error: Segmentation fault\n             typename \u003d typename std::enable_if\u003cabsl::conjunction\u003c\n             ^~~~~~~~\nPlease submit a full bug report,\nwith preprocessed source if appropriate.\nSee \u003cfile:///usr/share/doc/gcc-8/README.Bugs\u003e for instructions.",
+      "revId": "f2e25f8a0935fd390b941d0f11559c3b515e80fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
