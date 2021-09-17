@@ -325,11 +325,18 @@ deps = {
 
 include_rules = [
   # Everybody can use some things.
-  '+absl',
   '+include',
   '+unicode',
   '+third_party/fdlibm',
-  '+third_party/ittapi/include'
+  '+third_party/ittapi/include',
+  # Abseil features are allow-listed. Please use your best judgement when adding
+  # to this set -- if in doubt, email v8-dev@.
+  '+absl/types/optional.h',
+  '+absl/types/variant.h',
+  '+absl/status',
+  # Some abseil features are explicitly banned.
+  '-absl/types/any.h', # Requires RTTI.
+  '-absl/types/flags', # Requires RTTI.
 ]
 
 # checkdeps.py shouldn't check for includes in these directories:
