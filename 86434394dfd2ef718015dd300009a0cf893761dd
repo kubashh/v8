@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59344ade_6f25cfff",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-17T09:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac8aa89e_2b77ade1",
+      "range": {
+        "startLine": 1525,
+        "startChar": 44,
+        "endLine": 1525,
+        "endChar": 45
+      },
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd18ea94_5c392c8a",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-09-16T17:58:13Z",
       "side": 1,
       "message": "Isn\u0027t this line redundant?",
+      "range": {
+        "startLine": 1631,
+        "startChar": 6,
+        "endLine": 1631,
+        "endChar": 67
+      },
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1b078ed_1ec560bf",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-17T09:09:07Z",
+      "side": 1,
+      "message": "Unfortunately, the way Value is set up, its copy constructor/assignment does not copy the node field. This is why I also pass pointers in CallInfo instead of copying. I don\u0027t know how this can be improved without breaking the trivially copiable condition.",
+      "parentUuid": "dd18ea94_5c392c8a",
       "range": {
         "startLine": 1631,
         "startChar": 6,
