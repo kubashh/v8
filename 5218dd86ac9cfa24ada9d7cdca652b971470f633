@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae8811e_58fe5aae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-09-17T17:47:02Z",
+      "side": 1,
+      "message": "Ah, soon when the proposal is merged we can remove the tests anyways.",
+      "revId": "5218dd86ac9cfa24ada9d7cdca652b971470f633",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
