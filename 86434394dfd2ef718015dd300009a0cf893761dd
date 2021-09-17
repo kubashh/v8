@@ -127,6 +127,30 @@
       },
       "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b58233c8_d3c7f46d",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-17T11:26:35Z",
+      "side": 1,
+      "message": "I see. OK then.\n\n(I do find this surprising, and would like to somehow guard against accidents (or wasted time due to developer confusion) here, but it seems difficult, and is certainly out of scope for this CL.)",
+      "parentUuid": "a1b078ed_1ec560bf",
+      "range": {
+        "startLine": 1631,
+        "startChar": 6,
+        "endLine": 1631,
+        "endChar": 67
+      },
+      "revId": "86434394dfd2ef718015dd300009a0cf893761dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
