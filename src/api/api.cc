@@ -3380,10 +3380,10 @@ ValueDeserializer::ValueDeserializer(Isolate* isolate, const uint8_t* data,
 
 ValueDeserializer::ValueDeserializer(Isolate* isolate, const uint8_t* data,
                                      size_t size, Delegate* delegate) {
-  if (base::IsValueInRangeForNumericType<int>(size)) {
+  if (base::IsValueInRangeForNumericType<size_t>(size)) {
     private_ = new PrivateData(
         reinterpret_cast<i::Isolate*>(isolate),
-        base::Vector<const uint8_t>(data, static_cast<int>(size)), delegate);
+        base::Vector<const uint8_t>(data, static_cast<size_t>(size)), delegate);
   } else {
     private_ =
         new PrivateData(reinterpret_cast<i::Isolate*>(isolate),

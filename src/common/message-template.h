@@ -602,6 +602,8 @@ namespace internal {
   T(DataCloneErrorSharedArrayBufferTransferred,                                \
     "A SharedArrayBuffer could not be cloned. SharedArrayBuffer must not be "  \
     "transferred.")                                                            \
+  T(DataCloneErrorObjectTooLarge,                                              \
+    "Unable to serialize object, requested buffer too large.")                 \
   T(DataCloneDeserializationError, "Unable to deserialize cloned data.")       \
   T(DataCloneDeserializationVersionError,                                      \
     "Unable to deserialize cloned data due to invalid or unsupported "         \
