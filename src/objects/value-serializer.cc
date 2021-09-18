@@ -359,6 +359,10 @@ Maybe<bool> ValueSerializer::ExpandBuffer(size_t required_capacity) {
       std::max(required_capacity, buffer_capacity_ * 2) + 64;
   size_t provided_capacity = 0;
   void* new_buffer = nullptr;
+  if (requested_capacity > v8::TypedArray::kMaxLength) {
+    object_too_large_ = true;
+    return Nothing<bool>();
+  }
   if (delegate_) {
     new_buffer = delegate_->ReallocateBufferMemory(buffer_, requested_capacity,
                                                    &provided_capacity);
@@ -401,6 +405,9 @@ void ValueSerializer::TransferArrayBuffer(uint32_t transfer_id,
 }
 
 Maybe<bool> ValueSerializer::WriteObject(Handle<Object> object) {
+  // Length of node::Buffer should be no larger than TypedArray::kMaxLength.
+  if (V8_UNLIKELY(object_too_large_)) return ThrowIfObjectTooLarge();
+
   // There is no sense in trying to proceed if we've previously run out of
   // memory. Bail immediately, as this likely implies that some write has
   // previously failed and so the buffer is corrupt.
@@ -1099,6 +1106,14 @@ Maybe<bool> ValueSerializer::ThrowIfOutOfMemory() {
   return Just(true);
 }
 
+Maybe<bool> ValueSerializer::ThrowIfObjectTooLarge() {
+  if (object_too_large_) {
+    ThrowDataCloneError(MessageTemplate::kDataCloneErrorObjectTooLarge);
+    return Nothing<bool>();
+  }
+  return Just(true);
+}
+
 void ValueSerializer::ThrowDataCloneError(MessageTemplate index,
                                           Handle<Object> arg0) {
   Handle<String> message = MessageFormatter::Format(isolate_, index, arg0);
@@ -1119,7 +1134,7 @@ ValueDeserializer::ValueDeserializer(Isolate* isolate,
     : isolate_(isolate),
       delegate_(delegate),
       position_(data.begin()),
-      end_(data.begin() + data.length()),
+      end_(data.begin() + data.size()),
       id_map_(isolate->global_handles()->Create(
           ReadOnlyRoots(isolate_).empty_fixed_array())) {}
 
