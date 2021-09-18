@@ -157,6 +157,7 @@ class ValueSerializer {
                                        Handle<Object> arg0);
 
   Maybe<bool> ThrowIfOutOfMemory();
+  Maybe<bool> ThrowIfObjectTooLarge();
 
   Isolate* const isolate_;
   v8::ValueSerializer::Delegate* const delegate_;
@@ -165,6 +166,7 @@ class ValueSerializer {
   size_t buffer_capacity_ = 0;
   bool treat_array_buffer_views_as_host_objects_ = false;
   bool out_of_memory_ = false;
+  bool object_too_large_ = false;
   Zone zone_;
 
   // To avoid extra lookups in the identity map, ID+1 is actually stored in the
