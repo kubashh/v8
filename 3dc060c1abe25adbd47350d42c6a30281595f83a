@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21efbf01_ae3451e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-18T16:59:08Z",
+      "side": 1,
+      "message": "It\u0027s my first contribution to v8. Glad to have your advices!",
+      "revId": "3dc060c1abe25adbd47350d42c6a30281595f83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
