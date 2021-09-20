@@ -16,6 +16,29 @@
       "message": "Hi Deepti, Marat, ptal, thanks!",
       "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c7c621e_abf0cd78",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-09-20T19:00:02Z",
+      "side": 1,
+      "message": "On AVX if is better to use VPUNPCKLQDQ to avoid mixing integer and FP instructions",
+      "range": {
+        "startLine": 1664,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 11
+      },
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
