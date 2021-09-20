@@ -39,6 +39,30 @@
       },
       "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49174cdc_64d5e252",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-09-20T19:34:12Z",
+      "side": 1,
+      "message": "We don\u0027t know for sure that a v128.const is used as input into a integer or fp instruction, do we?",
+      "parentUuid": "1c7c621e_abf0cd78",
+      "range": {
+        "startLine": 1664,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 11
+      },
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
