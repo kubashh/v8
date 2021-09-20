@@ -63,6 +63,30 @@
       },
       "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa17d86c_a0594eb3",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-09-20T19:38:48Z",
+      "side": 1,
+      "message": "Yes, but VMOVQ counts as an integer instruction",
+      "parentUuid": "49174cdc_64d5e252",
+      "range": {
+        "startLine": 1664,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 11
+      },
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
