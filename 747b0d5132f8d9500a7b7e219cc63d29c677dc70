@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c0f301_d64ad89a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-09-20T17:56:23Z",
+      "side": 1,
+      "message": "Hi Deepti, Marat, ptal, thanks!",
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
