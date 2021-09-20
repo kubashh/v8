@@ -20,6 +20,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b600d74_9a8f15d5",
+        "filename": "src/api/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-20T17:25:37Z",
+      "side": 1,
+      "message": "{size} is a {size_t}, so checking whether its value is in range for a {size_t} is pointless (it\u0027ll always return true). So that means you could drop the check and the {else}-branch; however I\u0027m not sure we really want no size limit at all here. Keep in mind that V8 mostly runs on 64-bit platforms these days, so if we want a 4GB limit here, we have to explicitly check for that.",
+      "range": {
+        "startLine": 3383,
+        "startChar": 6,
+        "endLine": 3383,
+        "endChar": 54
+      },
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39070097_35affe64",
+        "filename": "src/api/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3386,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-20T17:25:37Z",
+      "side": 1,
+      "message": "{size} is a {size_t}, so static_casting it to {size_t} is pointless.",
+      "range": {
+        "startLine": 3386,
+        "startChar": 42,
+        "endLine": 3386,
+        "endChar": 67
+      },
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d874459d_3716b3c7",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-20T17:25:37Z",
+      "side": 1,
+      "message": "Why is this tied to TypedArray::kMaxLength? I think if we want such a limit here, then it should be a custom limit defined and used by the serializer. That said, what\u0027s wrong with just trying to serialize however much we can without running out of memory? The heap size will create an upper bound anyway.",
+      "range": {
+        "startLine": 362,
+        "startChar": 27,
+        "endLine": 362,
+        "endChar": 53
+      },
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e27b669_7f9b7a41",
         "filename": "src/objects/value-serializer.cc",
         "patchSetId": 4
@@ -31,6 +100,24 @@
       "writtenOn": "2021-09-20T16:27:59Z",
       "side": 1,
       "message": "It\u0027s unclear to me why this needs to be added here, and why out_of_memory_ isn\u0027t good enough.",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40fa76ed_16187a7b",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-20T17:25:37Z",
+      "side": 1,
+      "message": "Agreed; especially since we detect the error condition when trying to grow the buffer, and the buffer holds more than one object. A single error condition should be enough.",
+      "parentUuid": "0e27b669_7f9b7a41",
       "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
