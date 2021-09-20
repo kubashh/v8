@@ -33,6 +33,24 @@
       "message": "This macro is being used for both SSE \u0026 SSE2 instructions - I don\u0027t have a problem with as this but that\u0027s different from the convention in the rest of the file wdyt about adding a comment with \"Generic macro for SSE/SSE2 unops\"?",
       "revId": "77ee49ead63863e96fec321a96ddd1aeac90a2c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7d5894_0eb61805",
+        "filename": "src/codegen/ia32/sse-instr.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-09-20T17:16:45Z",
+      "side": 1,
+      "message": "Good catch, I just updated the comment above to say SSE/SSE2.",
+      "parentUuid": "66081363_dd270de7",
+      "revId": "77ee49ead63863e96fec321a96ddd1aeac90a2c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
