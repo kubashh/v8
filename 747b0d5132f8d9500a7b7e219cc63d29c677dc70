@@ -111,6 +111,30 @@
       },
       "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e24411ba_1cafde06",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1358878
+      },
+      "writtenOn": "2021-09-20T19:53:55Z",
+      "side": 1,
+      "message": "I just checked, and PUNPCKLQDQ(xmm, xmm) encodes in as many bytes as MOVDDUP(xmm, xmm), so it is safe to use [V]PUNPCKLQDQ on both SSE and AVX.",
+      "parentUuid": "3998dcb8_2cd98888",
+      "range": {
+        "startLine": 1664,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 11
+      },
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
