@@ -135,6 +135,30 @@
       },
       "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8ee99d_567b5f63",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-09-20T20:18:41Z",
+      "side": 1,
+      "message": "Yea, both are 4 byte long (at least), thanks!",
+      "parentUuid": "e24411ba_1cafde06",
+      "range": {
+        "startLine": 1664,
+        "startChar": 4,
+        "endLine": 1664,
+        "endChar": 11
+      },
+      "revId": "747b0d5132f8d9500a7b7e219cc63d29c677dc70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
