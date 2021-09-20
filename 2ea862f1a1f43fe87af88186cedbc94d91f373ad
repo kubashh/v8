@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba339d6e_b9cfcc88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-09-20T16:27:59Z",
+      "side": 1,
+      "message": "I\u0027d expected changes related to serializing/deserializing the length of array buffers, and checks on deserialized length instead of serialized length (it fit in a typed array, it\u0027s hopefully correct? If not, the deserializer should catch it?)",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e27b669_7f9b7a41",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-09-20T16:27:59Z",
+      "side": 1,
+      "message": "It\u0027s unclear to me why this needs to be added here, and why out_of_memory_ isn\u0027t good enough.",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
