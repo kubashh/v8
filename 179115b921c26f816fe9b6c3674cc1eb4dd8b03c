@@ -193,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e5a36dd_d2b196cf",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T10:45:11Z",
+      "side": 1,
+      "message": "... I mean, if (V8_UNLIKELY(!is_shared \u0026\u0026 array_buffer-\u003eis_resizable()))",
+      "parentUuid": "1aa2602d_bb778e29",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 5
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a11fb4bf_ca1c83a9",
