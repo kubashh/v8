@@ -41,6 +41,7 @@ class HeapObject : public Object {
   // new space, or if the value is an immortal immutable object, like the maps
   // of primitive (non-JS) objects like strings, heap numbers etc.
   inline void set_map_no_write_barrier(Map value);
+  inline void set_map_no_write_barrier(Map value, ReleaseStoreTag);
 
   // Access the map using acquire load and release store.
   DECL_ACQUIRE_GETTER(map, Map)
@@ -72,6 +73,8 @@ class HeapObject : public Object {
   // This version is intended to be used for the isolate values produced by
   // i::GetPtrComprCageBase(HeapObject) function which may return nullptr.
   inline ReadOnlyRoots GetReadOnlyRoots(PtrComprCageBase cage_base) const;
+
+  V8_INLINE bool InSharedHeap() const;
 
 #define IS_TYPE_FUNCTION_DECL(Type) \
   V8_INLINE bool Is##Type() const;  \

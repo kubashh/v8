@@ -71,6 +71,10 @@ bool Object::IsTaggedIndex() const {
   return IsSmi() && TaggedIndex::IsValid(TaggedIndex(ptr()).value());
 }
 
+bool Object::InSharedHeap() const {
+  return IsHeapObject() && HeapObject::cast(*this).InSharedHeap();
+}
+
 #define IS_TYPE_FUNCTION_DEF(type_)                                        \
   bool Object::Is##type_() const {                                         \
     return IsHeapObject() && HeapObject::cast(*this).Is##type_();          \
@@ -133,6 +137,11 @@ bool Object::IsPrivateSymbol() const {
 
 bool Object::IsNoSharedNameSentinel() const {
   return *this == SharedFunctionInfo::kNoSharedNameSentinel;
+}
+
+bool HeapObject::InSharedHeap() const {
+  if (IsReadOnlyHeapObject(*this)) return V8_SHARED_RO_HEAP_BOOL;
+  return BasicMemoryChunk::FromHeapObject(*this)->InSharedHeap();
 }
 
 bool HeapObject::IsNullOrUndefined(Isolate* isolate) const {
@@ -758,6 +767,15 @@ void HeapObject::set_map_no_write_barrier(Map value) {
   }
 #endif
   set_map_word(MapWord::FromMap(value), kRelaxedStore);
+}
+
+void HeapObject::set_map_no_write_barrier(Map value, ReleaseStoreTag tag) {
+#ifdef VERIFY_HEAP
+  if (FLAG_verify_heap && !value.is_null()) {
+    GetHeapFromWritableObject(*this)->VerifyObjectLayoutChange(*this, value);
+  }
+#endif
+  set_map_word(MapWord::FromMap(value), tag);
 }
 
 void HeapObject::set_map_after_allocation(Map value, WriteBarrierMode mode) {

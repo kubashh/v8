@@ -268,6 +268,11 @@ class FullMarkingVerifier : public MarkingVerifier {
         BasicMemoryChunk::FromHeapObject(heap_object)->InSharedHeap())
       return;
 
+    if (!heap_->isolate()->OwnsStringTable() && heap_object.IsString() &&
+        !Heap::InYoungGeneration(heap_object)) {
+      CHECK(BasicMemoryChunk::FromHeapObject(heap_object)->InSharedHeap());
+    }
+
     CHECK(marking_state_->IsBlackOrGrey(heap_object));
   }
 
