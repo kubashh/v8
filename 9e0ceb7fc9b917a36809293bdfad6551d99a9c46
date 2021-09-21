@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2bf88b9_0362279a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-21T13:55:50Z",
+      "side": 1,
+      "message": "Hi Patrick, ptal - x64 only for now but I\u0027ll port arm/arm64/ia32 before landing.",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
