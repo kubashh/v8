@@ -228,6 +228,24 @@
       "parentUuid": "24f10131_cf6d9161",
       "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb847f05_965f6e8a",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-21T21:26:51Z",
+      "side": 1,
+      "message": "Sounds good to me.",
+      "parentUuid": "2e346f02_ba3393ba",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
