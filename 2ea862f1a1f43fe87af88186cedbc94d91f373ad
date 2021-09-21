@@ -210,6 +210,24 @@
       "parentUuid": "40fa76ed_16187a7b",
       "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e346f02_ba3393ba",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-09-21T12:22:38Z",
+      "side": 1,
+      "message": "I don\u0027t think we need serializer-specific limits. We just need to make sure that what we deserialize doesn\u0027t break the object model: in the case someone manages to write garbage into the intermediate format we have to make sure we fail gracefully.",
+      "parentUuid": "24f10131_cf6d9161",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
