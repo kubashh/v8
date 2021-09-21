@@ -236,6 +236,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) FactoryBase
 
   MaybeHandle<Map> GetInPlaceInternalizedStringMap(Map from_string_map);
 
+  bool IsInPlaceInternalizableString(HeapObject obj);
+
   AllocationType RefineAllocationTypeForInPlaceInternalizableString(
       AllocationType allocation, Map string_map);
 

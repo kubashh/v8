@@ -31,8 +31,9 @@ void StartupDeserializer::DeserializeIntoIsolate() {
     isolate()->heap()->IterateRoots(
         this,
         base::EnumSet<SkipRoot>{SkipRoot::kUnserializable, SkipRoot::kWeak});
-    Iterate(isolate(), this);
-    DeserializeStringTable();
+    IterateStartupObjectCache(isolate(), this);
+    // TODO(syg)
+    // DeserializeStringTable();
 
     isolate()->heap()->IterateWeakRoots(
         this, base::EnumSet<SkipRoot>{SkipRoot::kUnserializable});
@@ -70,7 +71,7 @@ void StartupDeserializer::DeserializeIntoIsolate() {
   WeakenDescriptorArrays();
 
   if (FLAG_rehash_snapshot && can_rehash()) {
-    // Hash seed was initalized in ReadOnlyDeserializer.
+    // Hash seed was initialized in ReadOnlyDeserializer.
     Rehash();
   }
 }

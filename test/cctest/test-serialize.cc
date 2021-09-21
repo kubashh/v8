@@ -57,6 +57,8 @@
 #include "src/snapshot/context-serializer.h"
 #include "src/snapshot/read-only-deserializer.h"
 #include "src/snapshot/read-only-serializer.h"
+#include "src/snapshot/shareable-deserializer.h"
+#include "src/snapshot/shareable-serializer.h"
 #include "src/snapshot/snapshot-compression.h"
 #include "src/snapshot/snapshot.h"
 #include "src/snapshot/startup-deserializer.h"
@@ -64,6 +66,7 @@
 #include "test/cctest/cctest.h"
 #include "test/cctest/heap/heap-utils.h"
 #include "test/cctest/setup-isolate-for-tests.h"
+#include "test/cctest/shared-isolate-utils.h"
 
 namespace v8 {
 namespace internal {
@@ -81,10 +84,12 @@ void DisableAlwaysOpt() {
 struct StartupBlobs {
   base::Vector<const byte> startup;
   base::Vector<const byte> read_only;
+  base::Vector<const byte> shareable;
 
   void Dispose() {
     startup.Dispose();
     read_only.Dispose();
+    shareable.Dispose();
   }
 };
 
@@ -98,19 +103,21 @@ class TestSerializer {
     v8::Isolate* v8_isolate = NewIsolate(kEnableSerializer, kGenerateHeap);
     v8::Isolate::Scope isolate_scope(v8_isolate);
     i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-    isolate->Init(nullptr, nullptr, false);
+    isolate->Init(nullptr, nullptr, nullptr, false);
     return v8_isolate;
   }
 
   static v8::Isolate* NewIsolateFromBlob(const StartupBlobs& blobs) {
     SnapshotData startup_snapshot(blobs.startup);
     SnapshotData read_only_snapshot(blobs.read_only);
+    SnapshotData shareable_snapshot(blobs.shareable);
     const bool kEnableSerializer = false;
     const bool kGenerateHeap = false;
     v8::Isolate* v8_isolate = NewIsolate(kEnableSerializer, kGenerateHeap);
     v8::Isolate::Scope isolate_scope(v8_isolate);
     i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-    isolate->Init(&startup_snapshot, &read_only_snapshot, false);
+    isolate->Init(&startup_snapshot, &read_only_snapshot, &shareable_snapshot,
+                  false);
     return v8_isolate;
   }
 
@@ -182,16 +189,24 @@ static StartupBlobs Serialize(v8::Isolate* isolate) {
                                           Snapshot::kDefaultSerializerFlags);
   read_only_serializer.SerializeReadOnlyRoots();
 
+  ShareableSerializer shareable_serializer(internal_isolate,
+                                           Snapshot::kDefaultSerializerFlags,
+                                           &read_only_serializer);
+
   StartupSerializer ser(internal_isolate, Snapshot::kDefaultSerializerFlags,
-                        &read_only_serializer);
+                        &read_only_serializer, &shareable_serializer);
   ser.SerializeStrongReferences(no_gc);
 
   ser.SerializeWeakReferencesAndDeferred();
+
+  shareable_serializer.FinalizeSerialization();
   read_only_serializer.FinalizeSerialization();
   SnapshotData startup_snapshot(&ser);
   SnapshotData read_only_snapshot(&read_only_serializer);
+  SnapshotData shareable_snapshot(&shareable_serializer);
   return {WritePayload(startup_snapshot.RawData()),
-          WritePayload(read_only_snapshot.RawData())};
+          WritePayload(read_only_snapshot.RawData()),
+          WritePayload(shareable_snapshot.RawData())};
 }
 
 base::Vector<const char> ConstructSource(base::Vector<const char> head,
@@ -327,6 +342,7 @@ UNINITIALIZED_TEST(StartupSerializerTwiceRunScript) {
 
 static void SerializeContext(base::Vector<const byte>* startup_blob_out,
                              base::Vector<const byte>* read_only_blob_out,
+                             base::Vector<const byte>* shareable_blob_out,
                              base::Vector<const byte>* context_blob_out) {
   v8::Isolate* v8_isolate = TestSerializer::NewIsolateInitialized();
   Isolate* isolate = reinterpret_cast<Isolate*>(v8_isolate);
@@ -367,9 +383,13 @@ static void SerializeContext(base::Vector<const byte>* startup_blob_out,
                                             Snapshot::kDefaultSerializerFlags);
     read_only_serializer.SerializeReadOnlyRoots();
 
+    ShareableSerializer shareable_serializer(
+        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer);
+
     SnapshotByteSink startup_sink;
     StartupSerializer startup_serializer(
-        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer);
+        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer,
+        &shareable_serializer);
     startup_serializer.SerializeStrongReferences(no_gc);
 
     SnapshotByteSink context_sink;
@@ -380,15 +400,18 @@ static void SerializeContext(base::Vector<const byte>* startup_blob_out,
 
     startup_serializer.SerializeWeakReferencesAndDeferred();
 
+    shareable_serializer.FinalizeSerialization();
     read_only_serializer.FinalizeSerialization();
 
     SnapshotData read_only_snapshot(&read_only_serializer);
+    SnapshotData shareable_snapshot(&shareable_serializer);
     SnapshotData startup_snapshot(&startup_serializer);
     SnapshotData context_snapshot(&context_serializer);
 
     *context_blob_out = WritePayload(context_snapshot.RawData());
     *startup_blob_out = WritePayload(startup_snapshot.RawData());
     *read_only_blob_out = WritePayload(read_only_snapshot.RawData());
+    *shareable_blob_out = WritePayload(shareable_snapshot.RawData());
   }
   v8_isolate->Dispose();
 }
@@ -397,8 +420,10 @@ UNINITIALIZED_TEST(SnapshotCompression) {
   DisableAlwaysOpt();
   base::Vector<const byte> startup_blob;
   base::Vector<const byte> read_only_blob;
+  base::Vector<const byte> shareable_blob;
   base::Vector<const byte> context_blob;
-  SerializeContext(&startup_blob, &read_only_blob, &context_blob);
+  SerializeContext(&startup_blob, &read_only_blob, &shareable_blob,
+                   &context_blob);
   SnapshotData original_snapshot_data(context_blob);
   SnapshotData compressed =
       i::SnapshotCompression::Compress(&original_snapshot_data);
@@ -408,6 +433,7 @@ UNINITIALIZED_TEST(SnapshotCompression) {
 
   startup_blob.Dispose();
   read_only_blob.Dispose();
+  shareable_blob.Dispose();
   context_blob.Dispose();
 }
 
@@ -415,10 +441,12 @@ UNINITIALIZED_TEST(ContextSerializerContext) {
   DisableAlwaysOpt();
   base::Vector<const byte> startup_blob;
   base::Vector<const byte> read_only_blob;
+  base::Vector<const byte> shareable_blob;
   base::Vector<const byte> context_blob;
-  SerializeContext(&startup_blob, &read_only_blob, &context_blob);
+  SerializeContext(&startup_blob, &read_only_blob, &shareable_blob,
+                   &context_blob);
 
-  StartupBlobs blobs = {startup_blob, read_only_blob};
+  StartupBlobs blobs = {startup_blob, read_only_blob, shareable_blob};
   v8::Isolate* v8_isolate = TestSerializer::NewIsolateFromBlob(blobs);
   CHECK(v8_isolate);
   {
@@ -459,6 +487,7 @@ UNINITIALIZED_TEST(ContextSerializerContext) {
 
 static void SerializeCustomContext(base::Vector<const byte>* startup_blob_out,
                                    base::Vector<const byte>* read_only_blob_out,
+                                   base::Vector<const byte>* shareable_blob_out,
                                    base::Vector<const byte>* context_blob_out) {
   v8::Isolate* v8_isolate = TestSerializer::NewIsolateInitialized();
   Isolate* isolate = reinterpret_cast<Isolate*>(v8_isolate);
@@ -521,9 +550,13 @@ static void SerializeCustomContext(base::Vector<const byte>* startup_blob_out,
                                             Snapshot::kDefaultSerializerFlags);
     read_only_serializer.SerializeReadOnlyRoots();
 
+    ShareableSerializer shareable_serializer(
+        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer);
+
     SnapshotByteSink startup_sink;
     StartupSerializer startup_serializer(
-        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer);
+        isolate, Snapshot::kDefaultSerializerFlags, &read_only_serializer,
+        &shareable_serializer);
     startup_serializer.SerializeStrongReferences(no_gc);
 
     SnapshotByteSink context_sink;
@@ -534,15 +567,18 @@ static void SerializeCustomContext(base::Vector<const byte>* startup_blob_out,
 
     startup_serializer.SerializeWeakReferencesAndDeferred();
 
+    shareable_serializer.FinalizeSerialization();
     read_only_serializer.FinalizeSerialization();
 
     SnapshotData read_only_snapshot(&read_only_serializer);
+    SnapshotData shareable_snapshot(&shareable_serializer);
     SnapshotData startup_snapshot(&startup_serializer);
     SnapshotData context_snapshot(&context_serializer);
 
     *context_blob_out = WritePayload(context_snapshot.RawData());
     *startup_blob_out = WritePayload(startup_snapshot.RawData());
     *read_only_blob_out = WritePayload(read_only_snapshot.RawData());
+    *shareable_blob_out = WritePayload(shareable_snapshot.RawData());
   }
   v8_isolate->Dispose();
 }
@@ -551,10 +587,12 @@ UNINITIALIZED_TEST(ContextSerializerCustomContext) {
   DisableAlwaysOpt();
   base::Vector<const byte> startup_blob;
   base::Vector<const byte> read_only_blob;
+  base::Vector<const byte> shareable_blob;
   base::Vector<const byte> context_blob;
-  SerializeCustomContext(&startup_blob, &read_only_blob, &context_blob);
+  SerializeCustomContext(&startup_blob, &read_only_blob, &shareable_blob,
+                         &context_blob);
 
-  StartupBlobs blobs = {startup_blob, read_only_blob};
+  StartupBlobs blobs = {startup_blob, read_only_blob, shareable_blob};
   v8::Isolate* v8_isolate = TestSerializer::NewIsolateFromBlob(blobs);
   CHECK(v8_isolate);
   {
@@ -4275,6 +4313,64 @@ UNINITIALIZED_TEST(NoStackFrameCacheSerialization) {
       creator.CreateBlob(v8::SnapshotCreator::FunctionCodeHandling::kKeep);
 
   delete[] blob.data;
+}
+
+namespace {
+void CheckShareableObjectsAreShared(Isolate* isolate) {
+  HeapObjectIterator iterator(isolate->heap());
+  DisallowGarbageCollection no_gc;
+  for (HeapObject obj = iterator.Next(); !obj.is_null();
+       obj = iterator.Next()) {
+    if (ShareableSerializer::IsShareable(isolate, obj)) {
+      CHECK(obj.InSharedHeap());
+    }
+  }
+}
+}  // namespace
+
+UNINITIALIZED_TEST(SharedStrings) {
+  // Test that deserializing with --shared-string-table deserializes into the
+  // shared Isolate.
+
+  if (!ReadOnlyHeap::IsReadOnlySpaceShared()) return;
+  if (!COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) return;
+
+  DisableAlwaysOpt();
+  DisableEmbeddedBlobRefcounting();
+
+  v8::StartupData blob;
+  {
+    v8::SnapshotCreator creator;
+    v8::Isolate* isolate = creator.GetIsolate();
+    {
+      v8::HandleScope handle_scope(isolate);
+      v8::Local<v8::Context> context = v8::Context::New(isolate);
+      v8::Context::Scope context_scope(context);
+      creator.SetDefaultContext(context, v8::SerializeInternalFieldsCallback());
+    }
+    blob =
+        creator.CreateBlob(v8::SnapshotCreator::FunctionCodeHandling::kClear);
+  }
+
+  FLAG_shared_string_table = true;
+
+  {
+    MultiClientIsolateTest test;
+    v8::Isolate* isolate1 = test.NewClientIsolate(&blob);
+    v8::Isolate* isolate2 = test.NewClientIsolate(&blob);
+    Isolate* i_isolate1 = reinterpret_cast<Isolate*>(isolate1);
+    Isolate* i_isolate2 = reinterpret_cast<Isolate*>(isolate2);
+
+    HandleScope scope1(i_isolate1);
+    HandleScope scope2(i_isolate2);
+
+    CHECK_EQ(i_isolate1->string_table(), i_isolate2->string_table());
+    CheckShareableObjectsAreShared(i_isolate1);
+    CheckShareableObjectsAreShared(i_isolate2);
+  }
+
+  delete[] blob.data;
+  FreeCurrentEmbeddedBlob();
 }
 
 }  // namespace internal

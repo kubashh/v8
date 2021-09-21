@@ -90,6 +90,7 @@
 #include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/embedded/embedded-file-writer-interface.h"
 #include "src/snapshot/read-only-deserializer.h"
+#include "src/snapshot/shareable-deserializer.h"
 #include "src/snapshot/startup-deserializer.h"
 #include "src/strings/string-builder-inl.h"
 #include "src/strings/string-stream.h"
@@ -3492,14 +3493,19 @@ void Isolate::TearDownEmbeddedBlob() {
   }
 }
 
-bool Isolate::InitWithoutSnapshot() { return Init(nullptr, nullptr, false); }
+bool Isolate::InitWithoutSnapshot() {
+  return Init(nullptr, nullptr, nullptr, false);
+}
 
 bool Isolate::InitWithSnapshot(SnapshotData* startup_snapshot_data,
                                SnapshotData* read_only_snapshot_data,
+                               SnapshotData* shareable_snapshot_data,
                                bool can_rehash) {
   DCHECK_NOT_NULL(startup_snapshot_data);
   DCHECK_NOT_NULL(read_only_snapshot_data);
-  return Init(startup_snapshot_data, read_only_snapshot_data, can_rehash);
+  DCHECK_NOT_NULL(shareable_snapshot_data);
+  return Init(startup_snapshot_data, read_only_snapshot_data,
+              shareable_snapshot_data, can_rehash);
 }
 
 static std::string AddressToString(uintptr_t address) {
@@ -3564,11 +3570,13 @@ class BigIntPlatform : public bigint::Platform {
 }  // namespace
 
 bool Isolate::Init(SnapshotData* startup_snapshot_data,
-                   SnapshotData* read_only_snapshot_data, bool can_rehash) {
+                   SnapshotData* read_only_snapshot_data,
+                   SnapshotData* shareable_snapshot_data, bool can_rehash) {
   TRACE_ISOLATE(init);
   const bool create_heap_objects = (read_only_snapshot_data == nullptr);
-  // We either have both or neither.
+  // We either have all or none.
   DCHECK_EQ(create_heap_objects, startup_snapshot_data == nullptr);
+  DCHECK_EQ(create_heap_objects, shareable_snapshot_data == nullptr);
 
   base::ElapsedTimer timer;
   if (create_heap_objects && FLAG_profile_deserialization) timer.Start();
@@ -3681,8 +3689,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   }
 
   if (create_heap_objects) {
-    // Terminate the startup object cache so we can iterate.
+    // Terminate the startup and shareable object caches so we can iterate.
     startup_object_cache_.push_back(ReadOnlyRoots(this).undefined_value());
+    shareable_object_cache_.push_back(ReadOnlyRoots(this).undefined_value());
   }
 
   InitializeThreadLocal();
@@ -3748,6 +3757,10 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
       heap_.read_only_space()->ClearStringPaddingIfNeeded();
       read_only_heap_->OnCreateHeapObjectsComplete(this);
     } else {
+      ShareableDeserializer shareable_deserializer(
+          this, shareable_snapshot_data, can_rehash);
+      shareable_deserializer.DeserializeIntoIsolate();
+
       StartupDeserializer startup_deserializer(this, startup_snapshot_data,
                                                can_rehash);
       startup_deserializer.DeserializeIntoIsolate();

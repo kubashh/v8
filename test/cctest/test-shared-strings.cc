@@ -9,55 +9,11 @@
 #include "src/objects/objects-inl.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/heap/heap-utils.h"
+#include "test/cctest/shared-isolate-utils.h"
 
 namespace v8 {
 namespace internal {
 namespace test_shared_strings {
-
-class MultiClientIsolateTest {
- public:
-  MultiClientIsolateTest() {
-    std::unique_ptr<v8::ArrayBuffer::Allocator> allocator(
-        v8::ArrayBuffer::Allocator::NewDefaultAllocator());
-    v8::Isolate::CreateParams create_params;
-    create_params.array_buffer_allocator = allocator.get();
-    shared_isolate_ =
-        reinterpret_cast<v8::Isolate*>(Isolate::NewShared(create_params));
-  }
-
-  ~MultiClientIsolateTest() {
-    for (v8::Isolate* client_isolate : client_isolates_) {
-      client_isolate->Dispose();
-    }
-    Isolate::Delete(i_shared_isolate());
-  }
-
-  v8::Isolate* shared_isolate() const { return shared_isolate_; }
-
-  Isolate* i_shared_isolate() const {
-    return reinterpret_cast<Isolate*>(shared_isolate_);
-  }
-
-  const std::vector<v8::Isolate*>& client_isolates() const {
-    return client_isolates_;
-  }
-
-  v8::Isolate* NewClientIsolate() {
-    CHECK_NOT_NULL(shared_isolate_);
-    std::unique_ptr<v8::ArrayBuffer::Allocator> allocator(
-        v8::ArrayBuffer::Allocator::NewDefaultAllocator());
-    v8::Isolate::CreateParams create_params;
-    create_params.array_buffer_allocator = allocator.get();
-    create_params.experimental_attach_to_shared_isolate = shared_isolate_;
-    v8::Isolate* client = v8::Isolate::New(create_params);
-    client_isolates_.push_back(client);
-    return client;
-  }
-
- private:
-  v8::Isolate* shared_isolate_;
-  std::vector<v8::Isolate*> client_isolates_;
-};
 
 UNINITIALIZED_TEST(InPlaceInternalizableStringsAreShared) {
   if (!ReadOnlyHeap::IsReadOnlySpaceShared()) return;

@@ -185,6 +185,8 @@ v8_source_set("cctest_sources") {
     "scope-test-helper.h",
     "setup-isolate-for-tests.cc",
     "setup-isolate-for-tests.h",
+    "shared-isolate-utils.cc",
+    "shared-isolate-utils.h",
     "test-access-checks.cc",
     "test-accessor-assembler.cc",
     "test-accessors.cc",
