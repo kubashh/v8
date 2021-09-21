@@ -40,9 +40,6 @@ namespace internal {
  *
  * The registers rax, rbx, r9 and r11 are free to use for computations.
  * If changed to use r12+, they should be saved as callee-save registers.
- * The macro assembler special register r13 (kRootRegister) isn't special
- * during execution of RegExp code (it doesn't hold the value assumed when
- * creating JS code), so Root related macro operations can be used.
  *
  * Each call to a C++ method should retain these registers.
  *
@@ -101,7 +98,6 @@ RegExpMacroAssemblerX64::RegExpMacroAssemblerX64(Isolate* isolate, Zone* zone,
     : NativeRegExpMacroAssembler(isolate, zone),
       masm_(isolate, CodeObjectRequired::kYes,
             NewAssemblerBuffer(kRegExpCodeSize)),
-      no_root_array_scope_(&masm_),
       code_relative_fixup_positions_(zone),
       mode_(mode),
       num_registers_(registers_to_save),
@@ -664,34 +660,73 @@ void RegExpMacroAssemblerX64::Fail() {
   __ jmp(&exit_label_);
 }
 
+void RegExpMacroAssemblerX64::LoadRegExpStackPointerFromMemory(Register dst) {
+  ExternalReference ref =
+      ExternalReference::address_of_regexp_stack_stack_pointer(isolate());
+  __ movq(dst, __ ExternalReferenceAsOperand(ref, dst));
+}
+
+void RegExpMacroAssemblerX64::StoreRegExpStackPointerToMemory(
+    Register src, Register scratch) {
+  ExternalReference ref =
+      ExternalReference::address_of_regexp_stack_stack_pointer(isolate());
+  __ movq(__ ExternalReferenceAsOperand(ref, scratch), src);
+}
+
+void RegExpMacroAssemblerX64::PushRegExpBasePointer(Register sp,
+                                                    Register scratch) {
+  ExternalReference stack_top_address =
+      ExternalReference::address_of_regexp_stack_memory_top_address(isolate());
+  __ movq(scratch, __ ExternalReferenceAsOperand(stack_top_address, scratch));
+  __ subq(scratch, sp);
+  __ negq(scratch);
+  __ movq(Operand(rbp, kRegExpStackBasePointer), scratch);
+}
+
+void RegExpMacroAssemblerX64::PopRegExpBasePointer(Register scratch1,
+                                                   Register scratch2) {
+  ExternalReference stack_top_address =
+      ExternalReference::address_of_regexp_stack_memory_top_address(isolate());
+  __ movq(scratch1, Operand(rbp, kRegExpStackBasePointer));
+  __ movq(scratch2, __ ExternalReferenceAsOperand(stack_top_address, scratch2));
+  __ addq(scratch1, scratch2);
+  StoreRegExpStackPointerToMemory(scratch1, scratch2);
+}
 
 Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   Label return_rax;
-  // Finalize code - write the entry point code now we know how many
-  // registers we need.
-  // Entry code:
+  // Finalize code - write the entry point code now we know how many registers
+  // we need.
   __ bind(&entry_label_);
 
-  // Tell the system that we have a stack frame.  Because the type is MANUAL, no
-  // is generated.
+  // Tell the system that we have a stack frame. Because the type is MANUAL, no
+  // physical frame is generated.
   FrameScope scope(&masm_, StackFrame::MANUAL);
 
-  // Actually emit code to start a new stack frame.
-  __ pushq(rbp);
-  __ movq(rbp, rsp);
-  // Save parameters and callee-save registers. Order here should correspond
-  //  to order of kBackup_ebx etc.
+  {
+    NoRootArrayScope no_root(&masm_);
+
+    // Actually emit code to start a new stack frame.
+    __ pushq(rbp);
+    __ movq(rbp, rsp);
+
+    // Save parameters and callee-save registers. Order here should correspond
+    //  to order of kBackup_ebx etc.
 #ifdef V8_TARGET_OS_WIN
-  // MSVC passes arguments in rcx, rdx, r8, r9, with backing stack slots.
-  // Store register parameters in pre-allocated stack slots,
-  __ movq(Operand(rbp, kInputString), rcx);
-  __ movq(Operand(rbp, kStartIndex), rdx);  // Passed as int32 in edx.
-  __ movq(Operand(rbp, kInputStart), r8);
-  __ movq(Operand(rbp, kInputEnd), r9);
-  // Callee-save on Win64.
-  __ pushq(rsi);
-  __ pushq(rdi);
-  __ pushq(rbx);
+    // MSVC passes arguments in rcx, rdx, r8, r9, with backing stack slots.
+    // Store register parameters in pre-allocated stack slots.
+    __ movq(Operand(rbp, kInputString), arg_reg_1);
+    __ movq(Operand(rbp, kStartIndex), arg_reg_2);  // Passed as int32 in edx.
+    __ movq(Operand(rbp, kInputStart), arg_reg_3);
+    __ movq(Operand(rbp, kInputEnd), arg_reg_4);
+
+    STATIC_ASSERT(kNumCalleeSaveRegisters == 5);
+    __ pushq(rsi);
+    __ pushq(rdi);
+    __ pushq(rbx);
+    __ pushq(r13);
+    __ pushq(r14);
+    STATIC_ASSERT(r13 == kRootRegister);
 #else
   // GCC passes arguments in rdi, rsi, rdx, rcx, r8, r9 (and then on stack).
   // Push register parameters on stack for reference.
@@ -701,14 +736,18 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   DCHECK_EQ(kInputEnd, -4 * kSystemPointerSize);
   DCHECK_EQ(kRegisterOutput, -5 * kSystemPointerSize);
   DCHECK_EQ(kNumOutputRegisters, -6 * kSystemPointerSize);
-  __ pushq(rdi);
-  __ pushq(rsi);
-  __ pushq(rdx);
-  __ pushq(rcx);
+  __ pushq(arg_reg_1);
+  __ pushq(arg_reg_2);
+  __ pushq(arg_reg_3);
+  __ pushq(arg_reg_4);
   __ pushq(r8);
   __ pushq(r9);
 
-  __ pushq(rbx);  // Callee-save
+  STATIC_ASSERT(kNumCalleeSaveRegisters == 3);
+  __ pushq(rbx);
+  __ pushq(r13);
+  __ pushq(r14);
+  STATIC_ASSERT(r13 == kRootRegister);
 #endif
 
   STATIC_ASSERT(kSuccessfulCaptures ==
@@ -716,9 +755,18 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   __ Push(Immediate(0));  // Number of successful matches in a global regexp.
   STATIC_ASSERT(kStringStartMinusOne ==
                 kSuccessfulCaptures - kSystemPointerSize);
-  __ Push(Immediate(0));  // Make room for "string start - 1" constant.
+  __ Push(Immediate(0));
   STATIC_ASSERT(kBacktrackCount == kStringStartMinusOne - kSystemPointerSize);
-  __ Push(Immediate(0));  // The backtrack counter.
+  __ Push(Immediate(0));
+  // The regexp stack base ptr in relative representation.
+  STATIC_ASSERT(kRegExpStackBasePointer ==
+                kBacktrackCount - kSystemPointerSize);
+  __ Push(Immediate(0));
+
+  // When entering from the C++ runtime, the root register has not yet been
+  // initialized.
+  __ InitializeRootRegister();
+  }
 
   // Check if we have space on the stack for registers.
   Label stack_limit_hit;
@@ -808,7 +856,14 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   }
 
   // Initialize backtrack stack pointer.
-  __ movq(backtrack_stackpointer(), Operand(rbp, kStackHighEnd));
+  // TODO(jgruber): Remove the kStackHighEnd parameter (and others like
+  // kIsolate).
+  LoadRegExpStackPointerFromMemory(backtrack_stackpointer());
+
+  // Store the regexp base pointer - we'll later restore it / write it to
+  // memory when returning from this irregexp code object. We store the
+  // position-independent representation `bp = sp - top`.
+  PushRegExpBasePointer(backtrack_stackpointer(), kScratchRegister);
 
   __ jmp(&start_label_);
 
@@ -894,19 +949,30 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   }
 
   __ bind(&return_rax);
+  // Restore the original regexp stack pointer value (effectively, pop the
+  // stored base pointer).
+  PopRegExpBasePointer(rcx, kScratchRegister);
+
 #ifdef V8_TARGET_OS_WIN
   // Restore callee save registers.
   __ leaq(rsp, Operand(rbp, kLastCalleeSaveRegister));
+  STATIC_ASSERT(kNumCalleeSaveRegisters == 5);
+  __ popq(r14);
+  __ popq(r13);
   __ popq(rbx);
   __ popq(rdi);
   __ popq(rsi);
   // Stack now at rbp.
 #else
   // Restore callee save register.
+  STATIC_ASSERT(kNumCalleeSaveRegisters == 3);
+  __ movq(r14, Operand(rbp, kBackup_r14));
+  __ movq(r13, Operand(rbp, kBackup_r13));
   __ movq(rbx, Operand(rbp, kBackup_rbx));
   // Skip rsp to rbp.
   __ movq(rsp, rbp);
 #endif
+
   // Exit function frame, restore previous one.
   __ popq(rbp);
   __ ret(0);
@@ -923,8 +989,9 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
   if (check_preempt_label_.is_linked()) {
     SafeCallTarget(&check_preempt_label_);
 
-    __ pushq(backtrack_stackpointer());
     __ pushq(rdi);
+
+    StoreRegExpStackPointerToMemory(backtrack_stackpointer(), kScratchRegister);
 
     CallCheckStackGuardState();
     __ testq(rax, rax);
@@ -935,7 +1002,9 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
     // Restore registers.
     __ Move(code_object_pointer(), masm_.CodeObject());
     __ popq(rdi);
-    __ popq(backtrack_stackpointer());
+
+    LoadRegExpStackPointerFromMemory(backtrack_stackpointer());
+
     // String might have moved: Reload esi from frame.
     __ movq(rsi, Operand(rbp, kInputEnd));
     SafeReturn();
@@ -953,25 +1022,19 @@ Handle<HeapObject> RegExpMacroAssemblerX64::GetCode(Handle<String> source) {
     __ pushq(rdi);
 #endif
 
-    // Call GrowStack(backtrack_stackpointer())
-    static const int num_arguments = 3;
-    __ PrepareCallCFunction(num_arguments);
-#ifdef V8_TARGET_OS_WIN
-    // Microsoft passes parameters in rcx, rdx, r8.
-    // First argument, backtrack stackpointer, is already in rcx.
-    __ leaq(rdx, Operand(rbp, kStackHighEnd));  // Second argument
-    __ LoadAddress(r8, ExternalReference::isolate_address(isolate()));
-#else
-    // AMD64 ABI passes parameters in rdi, rsi, rdx.
-    __ movq(rdi, backtrack_stackpointer());     // First argument.
-    __ leaq(rsi, Operand(rbp, kStackHighEnd));  // Second argument.
-    __ LoadAddress(rdx, ExternalReference::isolate_address(isolate()));
-#endif
+    // Call GrowStack(isolate).
+
+    StoreRegExpStackPointerToMemory(backtrack_stackpointer(), kScratchRegister);
+
+    static constexpr int kNumArguments = 1;
+    __ PrepareCallCFunction(kNumArguments);
+    __ LoadAddress(arg_reg_1, ExternalReference::isolate_address(isolate()));
+
     ExternalReference grow_stack =
         ExternalReference::re_grow_stack(isolate());
-    __ CallCFunction(grow_stack, num_arguments);
-    // If return nullptr, we have failed to grow the stack, and
-    // must exit with a stack-overflow exception.
+    __ CallCFunction(grow_stack, kNumArguments);
+    // If nullptr is returned, we have failed to grow the stack, and must exit
+    // with a stack-overflow exception.
     __ testq(rax, rax);
     __ j(equal, &exit_with_exception);
     // Otherwise use return value as new stack pointer.
@@ -1085,12 +1148,24 @@ void RegExpMacroAssemblerX64::ReadPositionFromRegister(Register dst, int reg) {
   __ movq(dst, register_location(reg));
 }
 
-
-void RegExpMacroAssemblerX64::ReadStackPointerFromRegister(int reg) {
-  __ movq(backtrack_stackpointer(), register_location(reg));
-  __ addq(backtrack_stackpointer(), Operand(rbp, kStackHighEnd));
+// Preserves a position-independent representation of the stack pointer in reg:
+// reg = top - sp.
+void RegExpMacroAssemblerX64::WriteStackPointerToRegister(int reg) {
+  ExternalReference stack_top_address =
+      ExternalReference::address_of_regexp_stack_memory_top_address(isolate());
+  __ movq(rax, __ ExternalReferenceAsOperand(stack_top_address, rax));
+  __ subq(rax, backtrack_stackpointer());
+  __ movq(register_location(reg), rax);
 }
 
+void RegExpMacroAssemblerX64::ReadStackPointerFromRegister(int reg) {
+  ExternalReference stack_top_address =
+      ExternalReference::address_of_regexp_stack_memory_top_address(isolate());
+  __ movq(backtrack_stackpointer(),
+          __ ExternalReferenceAsOperand(stack_top_address,
+                                        backtrack_stackpointer()));
+  __ subq(backtrack_stackpointer(), register_location(reg));
+}
 
 void RegExpMacroAssemblerX64::SetCurrentPositionFromEnd(int by) {
   Label after_position;
@@ -1135,14 +1210,6 @@ void RegExpMacroAssemblerX64::ClearRegisters(int reg_from, int reg_to) {
     __ movq(register_location(reg), rax);
   }
 }
-
-
-void RegExpMacroAssemblerX64::WriteStackPointerToRegister(int reg) {
-  __ movq(rax, backtrack_stackpointer());
-  __ subq(rax, Operand(rbp, kStackHighEnd));
-  __ movq(register_location(reg), rax);
-}
-
 
 // Private methods:
 
