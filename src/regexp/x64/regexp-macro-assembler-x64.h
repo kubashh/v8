@@ -72,13 +72,13 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   void PushRegister(int register_index,
                     StackCheckFlag check_stack_limit) override;
   void ReadCurrentPositionFromRegister(int reg) override;
+  void WriteStackPointerToRegister(int reg) override;
   void ReadStackPointerFromRegister(int reg) override;
   void SetCurrentPositionFromEnd(int by) override;
   void SetRegister(int register_index, int to) override;
   bool Succeed() override;
   void WriteCurrentPositionToRegister(int reg, int cp_offset) override;
   void ClearRegisters(int reg_from, int reg_to) override;
-  void WriteStackPointerToRegister(int reg) override;
 
   // Called from RegExp if the stack-guard is triggered.
   // If the code object is relocated, the return address is fixed before
@@ -133,19 +133,22 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   static const int kIsolate = kDirectCall + kSystemPointerSize;
 #endif
 
+  // We push callee-save registers that we use after the frame pointer (and
+  // after the parameters).
 #ifdef V8_TARGET_OS_WIN
-  // Microsoft calling convention has three callee-saved registers
-  // (that we are using). We push these after the frame pointer.
   static const int kBackup_rsi = kFramePointer - kSystemPointerSize;
   static const int kBackup_rdi = kBackup_rsi - kSystemPointerSize;
   static const int kBackup_rbx = kBackup_rdi - kSystemPointerSize;
-  static const int kLastCalleeSaveRegister = kBackup_rbx;
+  static const int kBackup_r13 = kBackup_rbx - kSystemPointerSize;
+  static const int kBackup_r14 = kBackup_r13 - kSystemPointerSize;
+  static const int kNumCalleeSaveRegisters = 5;
+  static const int kLastCalleeSaveRegister = kBackup_r14;
 #else
-  // AMD64 Calling Convention has only one callee-save register that
-  // we use. We push this after the frame pointer (and after the
-  // parameters).
   static const int kBackup_rbx = kNumOutputRegisters - kSystemPointerSize;
-  static const int kLastCalleeSaveRegister = kBackup_rbx;
+  static const int kBackup_r13 = kBackup_rbx - kSystemPointerSize;
+  static const int kBackup_r14 = kBackup_r13 - kSystemPointerSize;
+  static const int kNumCalleeSaveRegisters = 3;
+  static const int kLastCalleeSaveRegister = kBackup_r14;
 #endif
 
   // When adding local variables remember to push space for them in
@@ -155,9 +158,14 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   static const int kStringStartMinusOne =
       kSuccessfulCaptures - kSystemPointerSize;
   static const int kBacktrackCount = kStringStartMinusOne - kSystemPointerSize;
+  // Stores the initial value of the regexp stack pointer in a
+  // position-independent representation (in case the regexp stack grows and
+  // thus moves).
+  static const int kRegExpStackBasePointer =
+      kBacktrackCount - kSystemPointerSize;
 
   // First register address. Following registers are below it on the stack.
-  static const int kRegisterZero = kBacktrackCount - kSystemPointerSize;
+  static const int kRegisterZero = kRegExpStackBasePointer - kSystemPointerSize;
 
   // Initial size of code buffer.
   static const int kRegExpCodeSize = 1024;
@@ -175,14 +183,14 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   Operand register_location(int register_index);
 
   // The register containing the current character after LoadCurrentCharacter.
-  inline Register current_character() { return rdx; }
+  static constexpr Register current_character() { return rdx; }
 
   // The register containing the backtrack stack top. Provides a meaningful
   // name to the register.
-  inline Register backtrack_stackpointer() { return rcx; }
+  static constexpr Register backtrack_stackpointer() { return rcx; }
 
   // The registers containing a self pointer to this code's Code object.
-  inline Register code_object_pointer() { return r8; }
+  static constexpr Register code_object_pointer() { return r8; }
 
   // Byte size of chars in the string to match (decided by the Mode argument)
   inline int char_size() { return static_cast<int>(mode_); }
@@ -224,12 +232,16 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerX64
   // Increments the stack pointer (rcx) by a word size.
   inline void Drop();
 
+  void LoadRegExpStackPointerFromMemory(Register dst);
+  void StoreRegExpStackPointerToMemory(Register src, Register scratch);
+  void PushRegExpBasePointer(Register sp, Register scratch);
+  void PopRegExpBasePointer(Register scratch1, Register scratch2);
+
   inline void ReadPositionFromRegister(Register dst, int reg);
 
   Isolate* isolate() const { return masm_.isolate(); }
 
   MacroAssembler masm_;
-  NoRootArrayScope no_root_array_scope_;
 
   ZoneChunkList<int> code_relative_fixup_positions_;
 
