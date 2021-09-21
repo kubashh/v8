@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b376dc1_0b4d90c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "thanks for having a look! syg, ptal again",
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "856e21e2_0729fa6c",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-09-17T11:09:57Z",
       "side": 1,
       "message": "This is a bit surprising, given that we created\n\n  Handle\u003cObject\u003e first_obj \u003d isolate-\u003efactory()-\u003eNewNumber(first);\n\nin line 216 and haven\u0027t touched it since. Feel free to optimize that while you\u0027re here (drop the allocation, `first_size \u003d first`); I\u0027m also fine with leaving it as-is.\n\n(Same for new_len -\u003e new_len_size, except in that case the HeapNumber can\u0027t be dropped because it\u0027s needed for the constructor call.)",
+      "range": {
+        "startLine": 326,
+        "startChar": 2,
+        "endLine": 326,
+        "endChar": 50
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "768d2ff2_fa2c2573",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "856e21e2_0729fa6c",
       "range": {
         "startLine": 326,
         "startChar": 2,
@@ -81,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c2b2a5_c01a4268",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "439ccd84_c8403cb0",
+      "range": {
+        "startLine": 328,
+        "startChar": 2,
+        "endLine": 328,
+        "endChar": 60
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd691e8c_8f6d3d64",
@@ -94,6 +159,30 @@
       "writtenOn": "2021-09-16T23:57:34Z",
       "side": 1,
       "message": "Please put this whole block in a `if (!is_shared)`. Since GSABs can\u0027t shrink, the spec draft doesn\u0027t re-read the GSAB\u0027s length. Re-reading it in the GSAB case is observable since the seq_cst load creates a synchronization edge.\n\nThat\u0027s not technically a correctness problem because the program will behave stronger than required, but if another impl doesn\u0027t have this extra synchronization edge, the same code may exhibit different behavior in the other impl. So I\u0027d prefer to not have this extra observable read.",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 5
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa2602d_bb778e29",
+        "filename": "src/builtins/builtins-arraybuffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "I\u0027m putting this inside if (array_buffer-\u003eis_resizable()).",
+      "parentUuid": "dd691e8c_8f6d3d64",
       "range": {
         "startLine": 331,
         "startChar": 0,
@@ -268,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f65773_9d8a3ab0",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "Ah right, based on endianness the 1-bit might not be in the right place.\n\nIt was a bit tedious to write this test in a generic enough way so that it would work for all value types simultaneously (if I set all bits to 1 for a float array, I get NaNs, and then it\u0027s hard to test we\u0027re preserving the exact bit pattern, also BigInt is randomly painful). So I specialized this test to only test Uint16Array.",
+      "parentUuid": "309f4866_38fd75eb",
+      "range": {
+        "startLine": 1367,
+        "startChar": 10,
+        "endLine": 1367,
+        "endChar": 74
+      },
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87d144ec_2a329af3",
@@ -281,6 +394,24 @@
       "writtenOn": "2021-09-16T23:57:34Z",
       "side": 1,
       "message": "For completeness, could also test slice with explicit (start, end) arguments to test that they are computed on the initial length.",
+      "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee7eea47_54554703",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-21T07:10:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87d144ec_2a329af3",
       "revId": "179115b921c26f816fe9b6c3674cc1eb4dd8b03c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
