@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97baf11d_1cedb43e",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-21T14:45:22Z",
+      "side": 0,
+      "message": "Why were this comments (here and in line 721 below) removed?\nThey seem very useful to understand the code.",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
