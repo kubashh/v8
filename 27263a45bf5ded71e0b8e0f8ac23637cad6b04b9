@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1b1cb68_a39780f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002854
+      },
+      "writtenOn": "2021-09-22T14:45:49Z",
+      "side": 1,
+      "message": "nit: I thought this description referred to ArrayBuffer. Maybe something like \"Enable deserialization of very large serialized values.\" would be clearer.",
+      "revId": "27263a45bf5ded71e0b8e0f8ac23637cad6b04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d9f09a9_89cea70b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002854
+      },
+      "writtenOn": "2021-09-22T14:45:49Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "27263a45bf5ded71e0b8e0f8ac23637cad6b04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0effa68d_27107ae9",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1002854
+      },
+      "writtenOn": "2021-09-22T14:45:49Z",
+      "side": 1,
+      "message": "nit: might as well just use data.end() now that it exists",
+      "revId": "27263a45bf5ded71e0b8e0f8ac23637cad6b04b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
