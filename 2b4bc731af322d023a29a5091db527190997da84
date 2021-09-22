@@ -87,6 +87,24 @@
       "parentUuid": "fc2ea4cc_2c355cb9",
       "revId": "2b4bc731af322d023a29a5091db527190997da84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da845d44_2a0043f5",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T09:38:00Z",
+      "side": 0,
+      "message": "Ah you\u0027re right, good find.",
+      "parentUuid": "7249bd6c_460b16c1",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
