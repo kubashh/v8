@@ -16,6 +16,41 @@
       "message": "Why were this comments (here and in line 721 below) removed?\nThey seem very useful to understand the code.",
       "revId": "2b4bc731af322d023a29a5091db527190997da84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e838536f_e14d3fcc",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 0,
+      "message": "I removed them because the static asserts essentially state the same. Can add them back though.",
+      "parentUuid": "97baf11d_1cedb43e",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc2ea4cc_2c355cb9",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 0,
+      "message": "This is probably an old, undiscovered bug - we never update the kStackHighEnd stack slot when the stack grows. I\u0027m planning to remove that arg/stack slot in a followup completely.",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

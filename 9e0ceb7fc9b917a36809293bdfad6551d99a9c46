@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7534b5fb_9b52650c",
+        "filename": "src/regexp/regexp-stack.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "254a1163_7e5e677e",
+      "range": {
+        "startLine": 44,
+        "startChar": 27,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16e84282_aa5ef7e2",
@@ -75,6 +99,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8712da5_7cb2506c",
+        "filename": "src/regexp/regexp-stack.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16e84282_aa5ef7e2",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d961413c_02022697",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 1,
+      "message": "I had to slightly refactor this and move it up to before the first possible jump to return_rax.",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03689aba_68cb6199",
@@ -88,6 +147,24 @@
       "writtenOn": "2021-09-21T14:45:22Z",
       "side": 1,
       "message": "Q: I understand that we need to backup the root register now. Do we backup r14 because we can call into code that uses r14 as Pointer compression cage base register?",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4628b03_de5f2d41",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T08:17:18Z",
+      "side": 1,
+      "message": "r14 may be clobbered by InitializeRootRegister (the method didn\u0027t originally do that, now the name is no longer ideal).",
+      "parentUuid": "03689aba_68cb6199",
       "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
