@@ -33,6 +33,29 @@
       "message": "Looks good from my side, but let\u0027s wait for input from the other reviewers.",
       "revId": "0bb7bb8a9977d83680402b0bb9584ab00025bb4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff04feeb_d17270cf",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-22T11:02:55Z",
+      "side": 1,
+      "message": "Please drop this useless cast.",
+      "range": {
+        "startLine": 3384,
+        "startChar": 40,
+        "endLine": 3384,
+        "endChar": 65
+      },
+      "revId": "0bb7bb8a9977d83680402b0bb9584ab00025bb4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
