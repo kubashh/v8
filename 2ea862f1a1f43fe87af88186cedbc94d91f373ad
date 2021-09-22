@@ -288,6 +288,24 @@
       "parentUuid": "cb847f05_965f6e8a",
       "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eb83e97_da42c5ae",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-22T05:41:15Z",
+      "side": 1,
+      "message": "I found the test case. Additional work is not needed.",
+      "parentUuid": "23e1384d_8ffae14f",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
