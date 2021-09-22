@@ -152,43 +152,43 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerARM64
 
   // Register holding the current input position as negative offset from
   // the end of the string.
-  Register current_input_offset() { return w21; }
+  static constexpr Register current_input_offset() { return w21; }
 
   // The register containing the current character after LoadCurrentCharacter.
-  Register current_character() { return w22; }
+  static constexpr Register current_character() { return w22; }
 
   // Register holding address of the end of the input string.
-  Register input_end() { return x25; }
+  static constexpr Register input_end() { return x25; }
 
   // Register holding address of the start of the input string.
-  Register input_start() { return x26; }
+  static constexpr Register input_start() { return x26; }
 
   // Register holding the offset from the start of the string where we should
   // start matching.
-  Register start_offset() { return w27; }
+  static constexpr Register start_offset() { return w27; }
 
   // Pointer to the output array's first element.
-  Register output_array() { return x28; }
+  static constexpr Register output_array() { return x28; }
 
   // Register holding the frame address. Local variables, parameters and
   // regexp registers are addressed relative to this.
-  Register frame_pointer() { return fp; }
+  static constexpr Register frame_pointer() { return fp; }
 
   // The register containing the backtrack stack top. Provides a meaningful
   // name to the register.
-  Register backtrack_stackpointer() { return x23; }
+  static constexpr Register backtrack_stackpointer() { return x23; }
 
   // Register holding pointer to the current code object.
-  Register code_pointer() { return x20; }
+  static constexpr Register code_pointer() { return x20; }
 
   // Register holding the value used for clearing capture registers.
-  Register string_start_minus_one() { return w24; }
+  static constexpr Register string_start_minus_one() { return w24; }
   // The top 32 bit of this register is used to store this value
   // twice. This is used for clearing more than one register at a time.
-  Register twice_non_position_value() { return x24; }
+  static constexpr Register twice_non_position_value() { return x24; }
 
   // Byte size of chars in the string to match (decided by the Mode argument)
-  int char_size() { return static_cast<int>(mode_); }
+  int char_size() const { return static_cast<int>(mode_); }
 
   // Equivalent to a conditional branch to the label, unless the label
   // is nullptr, in which case it is a conditional Backtrack.
@@ -254,19 +254,24 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerARM64
   // This assumes that the state of the register is not STACKED.
   inline Register GetCachedRegister(int register_index);
 
+  void LoadRegExpStackPointerFromMemory(Register dst);
+  void StoreRegExpStackPointerToMemory(Register src, Register scratch);
+  void PushRegExpBasePointer(Register scratch1, Register scratch2);
+  void PopRegExpBasePointer(Register scratch1, Register scratch2);
+
   Isolate* isolate() const { return masm_->isolate(); }
 
-  MacroAssembler* masm_;
+  MacroAssembler* const masm_;
 
   // Which mode to generate code for (LATIN1 or UC16).
-  Mode mode_;
+  const Mode mode_;
 
   // One greater than maximal register index actually used.
   int num_registers_;
 
   // Number of registers to output at the end (the saved registers
   // are always 0..num_saved_registers_-1)
-  int num_saved_registers_;
+  iconst nt num_saved_registers_;
 
   // Labels used internally.
   Label entry_label_;
