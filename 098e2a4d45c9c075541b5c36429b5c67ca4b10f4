@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2999917_958ba886",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:54:37Z",
+      "side": 1,
+      "message": "We have an explicit version of Move that takes an ExternalReference as argument.\nBut up to you. Was just a nit.",
+      "parentUuid": "b162ec2d_a992640e",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8be5c98f_58cc318b",
         "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
         "patchSetId": 7
@@ -186,6 +204,24 @@
       "side": 1,
       "message": "You mean because of the x64 impl? The two diverge (I flipped the order on x64 to avoid a neg).",
       "parentUuid": "94a8649a_63409da6",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80c5c146_222433b2",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:54:37Z",
+      "side": 1,
+      "message": "Ah I see. I don\u0027t get why they need to diverge though.\nIIUC now on X64 we store a positive offset on the stack and all other archs a negative offset. Does it even matter if the offset is positive or negative?",
+      "parentUuid": "83ce9284_7a676e5f",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -374,6 +410,24 @@
       "side": 1,
       "message": "I kept it in one file only intentionally because it\u0027s easier to remove that way (see the followup CL).",
       "parentUuid": "248c889d_77cadf94",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "707071a4_0aef13a5",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:54:37Z",
+      "side": 1,
+      "message": "Ack\nDidn\u0027t see that the follow-up is already on the way.",
+      "parentUuid": "433ae7a1_bdfa3448",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
