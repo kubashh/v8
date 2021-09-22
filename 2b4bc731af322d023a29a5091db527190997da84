@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a377fc_e138f98a",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T08:48:06Z",
+      "side": 0,
+      "message": "I think the text comments make it clearer. Thanks for adding them back.",
+      "parentUuid": "e838536f_e14d3fcc",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc2ea4cc_2c355cb9",
@@ -49,6 +67,24 @@
       "writtenOn": "2021-09-22T08:17:18Z",
       "side": 0,
       "message": "This is probably an old, undiscovered bug - we never update the kStackHighEnd stack slot when the stack grows. I\u0027m planning to remove that arg/stack slot in a followup completely.",
+      "revId": "2b4bc731af322d023a29a5091db527190997da84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7249bd6c_460b16c1",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T08:48:06Z",
+      "side": 0,
+      "message": "Really? It looks like the address of the slot was passed as second parameter to GrowStack and the value was correctly updated (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/regexp/regexp-macro-assembler.cc;drc\u003d66a85b8e57e051a45cd55604518ab46a7ef6804e;l\u003d398). Am I missing something?",
+      "parentUuid": "fc2ea4cc_2c355cb9",
       "revId": "2b4bc731af322d023a29a5091db527190997da84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

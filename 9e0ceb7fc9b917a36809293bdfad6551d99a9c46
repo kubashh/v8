@@ -134,6 +134,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee35ef6_623f1e41",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T08:48:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d961413c_02022697",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03689aba_68cb6199",
@@ -165,6 +183,24 @@
       "side": 1,
       "message": "r14 may be clobbered by InitializeRootRegister (the method didn\u0027t originally do that, now the name is no longer ideal).",
       "parentUuid": "03689aba_68cb6199",
+      "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea2aa278_37c7afcc",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T08:48:06Z",
+      "side": 1,
+      "message": "Ah yeah. Thanks for clarifying.",
+      "parentUuid": "d4628b03_de5f2d41",
       "revId": "9e0ceb7fc9b917a36809293bdfad6551d99a9c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
