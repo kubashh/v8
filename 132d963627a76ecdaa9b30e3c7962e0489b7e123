@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2a13f7a_25b654d6",
+        "filename": "src/builtins/builtins-typed-array.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-22T17:04:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a99b0e40_ea0fa708",
+      "revId": "132d963627a76ecdaa9b30e3c7962e0489b7e123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b0171a8_2a61a0aa",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-09-14T01:31:48Z",
       "side": 0,
       "message": "Don\u0027t delete this test. Please modify it to test that it throws instead.",
+      "revId": "132d963627a76ecdaa9b30e3c7962e0489b7e123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9997166_57757a40",
+        "filename": "test/mjsunit/es6/regress/regress-5929-1.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-22T17:04:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "4b0171a8_2a61a0aa",
       "revId": "132d963627a76ecdaa9b30e3c7962e0489b7e123",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

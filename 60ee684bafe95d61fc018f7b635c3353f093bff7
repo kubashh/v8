@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dfb2f1d_8e7ba5ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2021-09-22T17:04:32Z",
+      "side": 1,
+      "message": "Rebased with conflicts resolved. Shu, can you take a look again?",
+      "revId": "60ee684bafe95d61fc018f7b635c3353f093bff7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
