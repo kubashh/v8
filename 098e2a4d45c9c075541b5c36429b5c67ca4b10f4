@@ -33,6 +33,295 @@
       "message": "+Iain fyi. The stack address is no longer tracked in a stack slot, instead we track {top,sp} in RegExpStack and access through external references.",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2917e0f1_68dbd3d9",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: __ Move(dst, ref) is a little simpler (and better should we ever have the root array available)",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be5c98f_58cc318b",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: same as above",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bce25e0_f8d59ac8",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: same as above",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad87889d_00080c8b",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: same as above",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daeefac_a882c3ab",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Move(r0, ExternalReference..)",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514773b6_7a46b55b",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Move",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94a8649a_63409da6",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "Is the ordering here correct? It should be r0 \u003d memory_top - backtrack_stackpointer(), so __ sub(r0, r1, backtrack_stackpointer())?\nAlso: why use two different scratch registers here? Only one is sufficient.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "321ecfba_738f5a4d",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Move",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd93a45_c211ffff",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc2830bf_1fe286a3",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "480a17a3_ff816455",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a911619_f26c1605",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b893cc7_e03290c2",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: kWRegPerXReg \u003d kXRegSize / kWRegSize",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b94d3eda_46b639ff",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d70d2a98_a57ba4fc",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "same as for arm: I think the order is not correct.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be1b83a_34a8f066",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "248c889d_77cadf94",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-09-22T13:05:40Z",
+      "side": 1,
+      "message": "nit: Please also add a TODO to remove kStackHighEnd and kIsolate for the other architectures.\nAlso: I think the TODO should be moved to the constant definition in the header files.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
