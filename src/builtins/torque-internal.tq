@@ -258,7 +258,7 @@ InitializeFieldsFromIterator<char16, UninitializedIterator>(
     _target: MutableSlice<char16>, _originIterator: UninitializedIterator) {}
 
 extern macro IsDoubleHole(HeapObject, intptr): bool;
-extern macro StoreDoubleHole(HeapObject, intptr);
+extern macro StoreDoubleHole(HeapObject, intptr): void;
 
 macro LoadFloat64OrHole(r:&float64_or_hole): float64_or_hole {
   return float64_or_hole{
@@ -297,7 +297,7 @@ macro DownCastForTorqueClass<T : type extends HeapObject>(o: HeapObject):
   return %RawDownCast<T>(o);
 }
 
-extern macro StaticAssert(bool, constexpr string);
+extern macro StaticAssert(bool, constexpr string): void;
 
 // This is for the implementation of the dot operator. In any context where the
 // dot operator is available, the correct way to get the length of an indexed

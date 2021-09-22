@@ -32,13 +32,13 @@ const kNotFoundSentinel:
 extern macro LoadSwissNameDictionaryKey(SwissNameDictionary, intptr): Name;
 
 extern macro StoreSwissNameDictionaryKeyAndValue(
-    SwissNameDictionary, intptr, Object, Object);
+    SwissNameDictionary, intptr, Object, Object): void;
 
 extern macro SwissNameDictionarySetCtrl(
-    SwissNameDictionary, intptr, intptr, uint8);
+    SwissNameDictionary, intptr, intptr, uint8): void;
 
 extern macro StoreSwissNameDictionaryPropertyDetails(
-    SwissNameDictionary, intptr, intptr, uint8);
+    SwissNameDictionary, intptr, intptr, uint8): void;
 
 extern macro
 SwissNameDictionaryIncreaseElementCountOrBailout(
@@ -46,7 +46,7 @@ SwissNameDictionaryIncreaseElementCountOrBailout(
 
 extern macro
 StoreSwissNameDictionaryEnumToEntryMapping(
-    SwissNameDictionary, intptr, intptr, int32);
+    SwissNameDictionary, intptr, intptr, int32): void;
 
 extern macro
 SwissNameDictionaryUpdateCountsForDeletion(ByteArray, intptr): uint32;

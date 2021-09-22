@@ -492,7 +492,7 @@ TEST(Torque, LetShouldBeConstIsSkippedForStructs) {
 TEST(Torque, GenericAbstractType) {
   ExpectSuccessfulCompilation(R"(
     type Foo<T: type> extends HeapObject;
-    extern macro F1(HeapObject);
+    extern macro F1(HeapObject): void;
     macro F2<T: type>(x: Foo<T>) {
       F1(x);
     }
@@ -514,7 +514,7 @@ TEST(Torque, GenericAbstractType) {
 
   ExpectFailingCompilation(R"(
     type Foo<T: type> extends HeapObject;
-    extern macro F1(Foo<HeapObject>);
+    extern macro F1(Foo<HeapObject>): void;
     @export
     macro F2(a: Foo<Smi>) {
       F1(a);
