@@ -16,6 +16,23 @@
       "message": "Ports done, ptal again",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a2ad6a_586aa449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-22T12:06:56Z",
+      "side": 1,
+      "message": "+Iain fyi. The stack address is no longer tracked in a stack slot, instead we track {top,sp} in RegExpStack and access through external references.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
