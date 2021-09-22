@@ -16,6 +16,23 @@
       "message": "Hi Jeremy,\n\nI noticed that lines related to this patch are last changed by you in 2016. At that time, function {Vector::length()} just returned {length_} without {DCHECK_GE} and casting. The current {Vector::length} was updated in 2017 by Mircea Trofin. Perhaps we can safely remove {IsValueInRangeForNumericType} checking here.\n\nWould you like to review this patch and give some advices? Thanks!\n\n",
       "revId": "0bb7bb8a9977d83680402b0bb9584ab00025bb4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e86f964_3ee7a6be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-09-22T08:45:57Z",
+      "side": 1,
+      "message": "Looks good from my side, but let\u0027s wait for input from the other reviewers.",
+      "revId": "0bb7bb8a9977d83680402b0bb9584ab00025bb4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
