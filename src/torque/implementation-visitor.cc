@@ -3929,6 +3929,8 @@ class CppClassGenerator {
   void GenerateClass();
 
  private:
+  SourcePosition Position();
+
   void GenerateClassConstructors();
 
   // Generates getter and setter runtime member functions for the given class
@@ -4001,7 +4003,7 @@ void CppClassGenerator::GenerateClass() {
       stream << "  return o.Is" << name_ << "();";
     });
   }
-
+  hdr_ << "// Definition" << PositionAsString(Position()) << "\n";
   hdr_ << template_decl() << "\n";
   hdr_ << "class " << gen_name_ << " : public P {\n";
   hdr_ << "  static_assert(std::is_same<" << name_ << ", D>::value,\n"
@@ -4180,6 +4182,8 @@ void CppClassGenerator::GenerateClassCasts() {
     stream << "  return bit_cast<D>(object);\n";
   });
 }
+
+SourcePosition CppClassGenerator::Position() { return type_->GetPosition(); }
 
 void CppClassGenerator::GenerateClassConstructors() {
   const ClassType* typecheck_type = type_;
@@ -4619,6 +4623,7 @@ void ImplementationVisitor::GenerateClassDefinitions(
 
     // Emit forward declarations.
     for (const ClassType* type : TypeOracle::GetClasses()) {
+      CurrentSourcePosition::Scope position_activator(type->GetPosition());
       auto& streams = GlobalContext::GeneratedPerFile(type->AttributedToFile());
       std::ostream& header = streams.class_definition_headerfile;
       std::string name = type->GenerateCppClassDefinitions()
@@ -4629,6 +4634,7 @@ void ImplementationVisitor::GenerateClassDefinitions(
     }
 
     for (const ClassType* type : TypeOracle::GetClasses()) {
+      CurrentSourcePosition::Scope position_activator(type->GetPosition());
       auto& streams = GlobalContext::GeneratedPerFile(type->AttributedToFile());
       std::ostream& header = streams.class_definition_headerfile;
       std::ostream& inline_header = streams.class_definition_inline_headerfile;
@@ -4730,6 +4736,7 @@ void ImplementationVisitor::GenerateClassDefinitions(
     }
 
     for (const StructType* type : structs_used_in_classes) {
+      CurrentSourcePosition::Scope position_activator(type->GetPosition());
       std::ostream& header =
           GlobalContext::GeneratedPerFile(type->GetPosition().source)
               .class_definition_headerfile;
@@ -5294,6 +5301,7 @@ void ImplementationVisitor::GenerateExportedMacrosAssembler(
     for (auto& declarable : GlobalContext::AllDeclarables()) {
       TorqueMacro* macro = TorqueMacro::DynamicCast(declarable.get());
       if (!(macro && macro->IsExportedToCSA())) continue;
+      CurrentSourcePosition::Scope position_activator(macro->Position());
 
       cpp::Class assembler("TorqueGeneratedExportedMacrosAssembler");
       std::vector<std::string> generated_parameter_names;
