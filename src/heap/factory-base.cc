@@ -943,6 +943,11 @@ MaybeHandle<Map> FactoryBase<Impl>::GetInPlaceInternalizedStringMap(
 }
 
 template <typename Impl>
+bool FactoryBase<Impl>::IsInPlaceInternalizableString(HeapObject obj) {
+  return !GetInPlaceInternalizedStringMap(obj.map()).is_null();
+}
+
+template <typename Impl>
 AllocationType
 FactoryBase<Impl>::RefineAllocationTypeForInPlaceInternalizableString(
     AllocationType allocation, Map string_map) {

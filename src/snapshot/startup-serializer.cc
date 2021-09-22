@@ -15,6 +15,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots.h"
 #include "src/snapshot/read-only-serializer.h"
+#include "src/snapshot/shareable-serializer.h"
 
 namespace v8 {
 namespace internal {
@@ -64,9 +65,11 @@ class V8_NODISCARD SanitizeIsolateScope final {
 
 StartupSerializer::StartupSerializer(Isolate* isolate,
                                      Snapshot::SerializerFlags flags,
-                                     ReadOnlySerializer* read_only_serializer)
+                                     ReadOnlySerializer* read_only_serializer,
+                                     ShareableSerializer* shareable_serializer)
     : RootsSerializer(isolate, flags, RootIndex::kFirstStrongRoot),
       read_only_serializer_(read_only_serializer),
+      shareable_serializer_(shareable_serializer),
       accessor_infos_(isolate->heap()),
       call_handler_infos_(isolate->heap()) {
   InitializeCodeAddressMap();
@@ -146,6 +149,7 @@ void StartupSerializer::SerializeObjectImpl(Handle<HeapObject> obj) {
   if (SerializeHotObject(obj)) return;
   if (IsRootAndHasBeenSerialized(*obj) && SerializeRoot(obj)) return;
   if (SerializeUsingReadOnlyObjectCache(&sink_, obj)) return;
+  if (SerializeUsingShareableObjectCache(&sink_, obj)) return;
   if (SerializeBackReference(obj)) return;
 
   bool use_simulator = false;
@@ -196,7 +200,8 @@ void StartupSerializer::SerializeWeakReferencesAndDeferred() {
   VisitRootPointer(Root::kStartupObjectCache, nullptr,
                    FullObjectSlot(&undefined));
 
-  SerializeStringTable(isolate()->string_table());
+  // TODO(syg)
+  // SerializeStringTable(isolate()->string_table());
 
   isolate()->heap()->IterateWeakRoots(
       this, base::EnumSet<SkipRoot>{SkipRoot::kUnserializable});
@@ -283,6 +288,11 @@ SerializedHandleChecker::SerializedHandleChecker(Isolate* isolate,
 bool StartupSerializer::SerializeUsingReadOnlyObjectCache(
     SnapshotByteSink* sink, Handle<HeapObject> obj) {
   return read_only_serializer_->SerializeUsingReadOnlyObjectCache(sink, obj);
+}
+
+bool StartupSerializer::SerializeUsingShareableObjectCache(
+    SnapshotByteSink* sink, Handle<HeapObject> obj) {
+  return shareable_serializer_->SerializeUsingShareableObjectCache(sink, obj);
 }
 
 void StartupSerializer::SerializeUsingStartupObjectCache(
