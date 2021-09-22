@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0224e756_daa6a728",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-22T01:24:40Z",
+      "side": 1,
+      "message": "Update code according to the previous discussion.",
+      "revId": "30ddd02e1abac9675bf8fdb9352fe6dd01d7dffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

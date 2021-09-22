@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13ab36ee_cbab5cb8",
+        "filename": "src/api/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-22T01:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09a8daf0_7088e6d2",
+      "range": {
+        "startLine": 3383,
+        "startChar": 6,
+        "endLine": 3383,
+        "endChar": 54
+      },
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39070097_35affe64",
@@ -244,6 +268,24 @@
       "side": 1,
       "message": "Sounds good to me.",
       "parentUuid": "2e346f02_ba3393ba",
+      "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23e1384d_8ffae14f",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-22T01:24:40Z",
+      "side": 1,
+      "message": "Thank you @verwaest @jjummerow! Updated. Now there is no specific limit for serializer/deserializer.\n\nFor buffers violate object model, {ValueDeserializer::ReadObject} has already been able to handle them and throws {DataCloneDeserializationError}. I\u0027ve tested by changing deserializable buffer byte by byte, {ValueDeserializer::ReadObject} works as expected. I\u0027d like to make the error message more specific, perhaps in the later changes.\n\nP.S. Seems there is no unittest for garbage buffer case. If so, I\u0027ll add it.",
+      "parentUuid": "cb847f05_965f6e8a",
       "revId": "2ea862f1a1f43fe87af88186cedbc94d91f373ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
