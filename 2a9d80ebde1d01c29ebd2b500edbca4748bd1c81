@@ -16,6 +16,23 @@
       "message": "mvstanton: Ping",
       "revId": "2a9d80ebde1d01c29ebd2b500edbca4748bd1c81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71993a66_08c75f86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2021-09-22T15:55:29Z",
+      "side": 1,
+      "message": "Changing reviewers since Michael seems to be unresponsive.",
+      "revId": "2a9d80ebde1d01c29ebd2b500edbca4748bd1c81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
