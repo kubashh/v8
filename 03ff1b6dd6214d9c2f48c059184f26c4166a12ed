@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ede2385_3aefda98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-09-23T17:48:24Z",
+      "side": 1,
+      "message": "(Just getting this out of everyone\u0027s CL attention list.)",
+      "revId": "03ff1b6dd6214d9c2f48c059184f26c4166a12ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
