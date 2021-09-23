@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff46657d_7d80b47b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-23T22:53:42Z",
+      "side": 1,
+      "message": "lgtm, thanks. I removed the stale comments myself (see PS 8).",
+      "revId": "fcb7d76a5235f609f228bb21cca8f5a35f2dc59c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
