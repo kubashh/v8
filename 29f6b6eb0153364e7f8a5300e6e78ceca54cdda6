@@ -16,6 +16,23 @@
       "message": "Related Chromium CL: https://chromium-review.googlesource.com/c/chromium/src/+/3178441",
       "revId": "29f6b6eb0153364e7f8a5300e6e78ceca54cdda6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a82660_c97bcadd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-23T11:50:19Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "29f6b6eb0153364e7f8a5300e6e78ceca54cdda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
