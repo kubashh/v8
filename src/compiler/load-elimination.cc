@@ -1068,6 +1068,7 @@ Reduction LoadElimination::ReduceLoadElement(Node* node) {
     case MachineRepresentation::kWord64:
     case MachineRepresentation::kFloat32:
     case MachineRepresentation::kCompressedPointer:
+    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kCompressed:
       // TODO(turbofan): Add support for doing the truncations.
       break;
@@ -1124,6 +1125,7 @@ Reduction LoadElimination::ReduceStoreElement(Node* node) {
     case MachineRepresentation::kWord64:
     case MachineRepresentation::kFloat32:
     case MachineRepresentation::kCompressedPointer:
+    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kCompressed:
       // TODO(turbofan): Add support for doing the truncations.
       break;
@@ -1428,6 +1430,7 @@ LoadElimination::IndexRange LoadElimination::FieldIndexOf(
     case MachineRepresentation::kTagged:
     case MachineRepresentation::kMapWord:
     case MachineRepresentation::kCompressedPointer:
+    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kCompressed:
       break;
   }
