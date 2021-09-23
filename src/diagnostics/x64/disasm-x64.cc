@@ -2882,7 +2882,14 @@ int Disassembler::InstructionDecode(v8::base::Vector<char> buffer,
 }
 
 // The X64 assembler does not use constant pools.
-int Disassembler::ConstantPoolSizeAt(byte* instruction) { return -1; }
+int Disassembler::ConstantPoolSizeAt(byte* instruction) {
+  // 48 c7 c4 <4 byte displacement>
+  /* if (instruction[0] == 0x48 && instruction[1] == 0xc7 && instruction[2] ==
+   * 0xc4) { */
+  /*   return Imm32(&instruction[3]); */
+  /* } */
+  return -1;
+}
 
 void Disassembler::Disassemble(FILE* f, byte* begin, byte* end,
                                UnimplementedOpcodeAction unimplemented_action) {

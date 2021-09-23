@@ -349,16 +349,19 @@ class ConstPool {
   explicit ConstPool(Assembler* assm) : assm_(assm) {}
   // Returns true when partial constant pool is valid for this entry.
   bool TryRecordEntry(intptr_t data, RelocInfo::Mode mode);
-  bool IsEmpty() const { return entries_.empty(); }
+  bool TryRecordEntry(uint64_t high, uint64_t low);
+  bool IsEmpty() const { return entries_.empty() && simd_entries_.empty(); }
 
   void PatchEntries();
   // Discard any pending pool entries.
   void Clear();
+  void EmitAndPatchSimdEntries();
 
  private:
   // Adds a shared entry to entries_. Returns true if this is not the first time
   // we add this entry, false otherwise.
   bool AddSharedEntry(uint64_t data, int offset);
+  bool AddSharedEntry(uint64_t high, uint64_t low, int offset);
 
   // Check if the instruction is a rip-relative move.
   bool IsMoveRipRelative(Address instr);
@@ -368,6 +371,7 @@ class ConstPool {
   // Values, pc offsets of entries.
   using EntryMap = std::multimap<uint64_t, int>;
   EntryMap entries_;
+  std::multimap<std::pair<uint64_t, uint64_t>, int> simd_entries_;
 
   // Number of bytes taken up by the displacement of rip-relative addressing.
   static constexpr int kRipRelativeDispSize = 4;  // 32-bit displacement.
@@ -382,6 +386,9 @@ class ConstPool {
   static constexpr uint32_t kMoveRipRelativeMask = 0x00C7FFFB;
   // The bits for a rip-relative move instruction after mask.
   static constexpr uint32_t kMoveRipRelativeInstr = 0x00058B48;
+
+  static constexpr int kMovdquRipOffset = 4;
+  static constexpr int kMovdquOffset = 3;
 };
 
 class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
@@ -1217,6 +1224,9 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void movdqu(Operand dst, XMMRegister src);
   void movdqu(XMMRegister dst, Operand src);
   void movdqu(XMMRegister dst, XMMRegister src);
+  void movdqu(XMMRegister dst, uint64_t high, uint64_t low) {
+    emit_movdqu(dst, high, low);
+  }
 
   void movapd(XMMRegister dst, XMMRegister src);
   void movupd(XMMRegister dst, Operand src);
@@ -2265,6 +2275,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void emit_mov(Register dst, Immediate value, int size);
   void emit_mov(Operand dst, Immediate value, int size);
   void emit_mov(Register dst, Immediate64 value, int size);
+
+  void emit_movdqu(XMMRegister dst, uint64_t high, uint64_t low);
 
   void emit_movzxb(Register dst, Operand src, int size);
   void emit_movzxb(Register dst, Register src, int size);
