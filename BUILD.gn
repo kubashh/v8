@@ -1216,7 +1216,8 @@ config("toolchain") {
       "-Wmissing-field-initializers",
 
       # TODO(v8:12245): Fix shadowing instances and remove.
-      "-Wno-shadow",
+      "-Wshadow",
+      "-Wno-error=shadow",
     ]
 
     if (v8_current_cpu != "mips" && v8_current_cpu != "mipsel") {
