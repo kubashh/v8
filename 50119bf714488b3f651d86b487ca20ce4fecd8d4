@@ -33,6 +33,40 @@
       "message": "Due to the way the macro lists are written, it\u0027s a bit tricky to compare with the disassembly, there are some workarounds:\n1. lowercase/uppercase everything then compare\n2. compare only the instruction part (no hex)\nI chose 2 here, I wonder if it\u0027s worth comparing the hex at all (arm64 doesn\u0027t)",
       "revId": "50119bf714488b3f651d86b487ca20ce4fecd8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07765399_af692f0d",
+        "filename": "test/cctest/test-disasm-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-09-23T04:31:01Z",
+      "side": 1,
+      "message": "Could you use named constants here, as well as in the macro below for the hard coded offset?",
+      "revId": "50119bf714488b3f651d86b487ca20ce4fecd8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e901d8_9082dec4",
+        "filename": "test/cctest/test-disasm-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-09-23T04:31:01Z",
+      "side": 1,
+      "message": "Here.",
+      "revId": "50119bf714488b3f651d86b487ca20ce4fecd8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
