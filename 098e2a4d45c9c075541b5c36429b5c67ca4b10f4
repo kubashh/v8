@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e75660_6de44beb",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "I\u0027ll keep these since surrounding code also uses the __ mov(, Operand()) style.",
+      "parentUuid": "e2999917_958ba886",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8be5c98f_58cc318b",
@@ -101,6 +119,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: same as above",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b25849b_f3656ca3",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8be5c98f_58cc318b",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -122,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "856652b2_ce3fee12",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6bce25e0_f8d59ac8",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad87889d_00080c8b",
@@ -135,6 +189,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: same as above",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed7da72a_40adad40",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ad87889d_00080c8b",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec5df415_cb20c910",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5daeefac_a882c3ab",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "514773b6_7a46b55b",
@@ -169,6 +259,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Move",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83ac7b04_6acc724b",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "514773b6_7a46b55b",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -226,6 +334,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9e5696_3a2db9ba",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1041,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Right it doesn\u0027t matter as long as Read/Write match up. To clarify, on x64 I changed the logic to emit one less instruction (otherwise we\u0027d need an additional `__ neg()`).",
+      "parentUuid": "80c5c146_222433b2",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "321ecfba_738f5a4d",
@@ -239,6 +365,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Move",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f6ec15_7d4d8e06",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "321ecfba_738f5a4d",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -260,6 +404,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3da9a0_470931b4",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acd93a45_c211ffff",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc2830bf_1fe286a3",
@@ -273,6 +435,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f6b67c9_3b21cd4d",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc2830bf_1fe286a3",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -294,6 +474,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1606a239_60c2afad",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "480a17a3_ff816455",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a911619_f26c1605",
@@ -307,6 +505,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "478ed8c9_f7d3e63b",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a911619_f26c1605",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -328,6 +544,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9218e7a6_2582c4c1",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b893cc7_e03290c2",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b94d3eda_46b639ff",
@@ -341,6 +575,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef30e06_10c5f2a0",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b94d3eda_46b639ff",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -362,6 +614,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c21039f_76d2275b",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d70d2a98_a57ba4fc",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5be1b83a_34a8f066",
@@ -375,6 +645,24 @@
       "writtenOn": "2021-09-22T13:05:40Z",
       "side": 1,
       "message": "nit: Operand() not necessary.",
+      "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ea54bf_181d7884",
+        "filename": "src/regexp/arm64/regexp-macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-23T05:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5be1b83a_34a8f066",
       "revId": "098e2a4d45c9c075541b5c36429b5c67ca4b10f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
