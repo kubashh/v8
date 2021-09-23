@@ -69,6 +69,41 @@ Handle<AccessorPair> FactoryBase<Impl>::NewAccessorPair() {
   return handle(accessors, isolate());
 }
 
+template <>
+Handle<CodeDataContainer> FactoryBase<Factory>::NewCodeDataContainer(
+    int flags, AllocationType allocation) {
+  Map map = read_only_roots().code_data_container_map();
+  int size = map.instance_size();
+  CodeDataContainer data_container = CodeDataContainer::cast(
+      AllocateRawWithImmortalMap(size, allocation, map));
+  DisallowGarbageCollection no_gc;
+  data_container.set_next_code_link(read_only_roots().undefined_value(),
+                                    SKIP_WRITE_BARRIER);
+  data_container.set_kind_specific_flags(flags, kRelaxedStore);
+  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+    data_container.AllocateExternalPointerEntries(isolate());
+    data_container.set_raw_code(Smi::zero(), SKIP_WRITE_BARRIER);
+    data_container.set_code_entry_point(isolate(), kNullAddress);
+  }
+  data_container.clear_padding();
+  return handle(data_container, isolate());
+}
+
+template <>
+Handle<CodeDataContainer> FactoryBase<LocalFactory>::NewCodeDataContainer(
+    int flags, AllocationType allocation) {
+  Map map = read_only_roots().code_data_container_map();
+  int size = map.instance_size();
+  CodeDataContainer data_container = CodeDataContainer::cast(
+      AllocateRawWithImmortalMap(size, allocation, map));
+  DisallowGarbageCollection no_gc;
+  data_container.set_next_code_link(read_only_roots().undefined_value(),
+                                    SKIP_WRITE_BARRIER);
+  data_container.set_kind_specific_flags(flags, kRelaxedStore);
+  data_container.clear_padding();
+  return handle(data_container, isolate());
+}
+
 template <typename Impl>
 Handle<FixedArray> FactoryBase<Impl>::NewFixedArray(int length,
                                                     AllocationType allocation) {

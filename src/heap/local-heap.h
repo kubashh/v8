@@ -95,6 +95,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   MarkingBarrier* marking_barrier() { return marking_barrier_.get(); }
   ConcurrentAllocator* old_space_allocator() { return &old_space_allocator_; }
+  ConcurrentAllocator* code_space_allocator() { return &code_space_allocator_; }
 
   // Mark/Unmark linear allocation areas black. Used for black allocation.
   void MarkLinearAllocationAreaBlack();
@@ -130,6 +131,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
       int size_in_bytes, AllocationType allocation,
       AllocationOrigin origin = AllocationOrigin::kRuntime,
       AllocationAlignment alignment = kWordAligned);
+
+  inline void RegisterCodeObject(Handle<Code> code);
 
   inline void CreateFillerObjectAt(Address addr, int size,
                                    ClearRecordedSlots clear_slots_mode);
@@ -222,6 +225,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
   std::vector<std::pair<GCEpilogueCallback*, void*>> gc_epilogue_callbacks_;
 
   ConcurrentAllocator old_space_allocator_;
+  ConcurrentAllocator code_space_allocator_;
 
   friend class CollectionBarrier;
   friend class ConcurrentAllocator;

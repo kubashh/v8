@@ -647,10 +647,6 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Create an External object for V8's external API.
   Handle<JSObject> NewExternal(void* value);
 
-  // Creates a new CodeDataContainer for a Code object.
-  Handle<CodeDataContainer> NewCodeDataContainer(int flags,
-                                                 AllocationType allocation);
-
   // Allocates a new code object and initializes it as the trampoline to the
   // given off-heap entry point.
   Handle<Code> NewOffHeapTrampolineFor(Handle<Code> code,
@@ -834,7 +830,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // which tries to gracefully handle allocation failure.
   class V8_EXPORT_PRIVATE CodeBuilder final {
    public:
-    CodeBuilder(Isolate* isolate, const CodeDesc& desc, CodeKind kind);
+    CodeBuilder(Isolate* isolate, const CodeDesc& desc, CodeKind kind,
+                LocalIsolate* local_isolate = nullptr);
 
     // Builds a new code object (fully initialized). All header fields of the
     // returned object are immutable and the code object is write protected.
@@ -929,9 +926,12 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
    private:
     MaybeHandle<Code> BuildInternal(bool retry_allocation_or_fail);
     MaybeHandle<Code> AllocateCode(bool retry_allocation_or_fail);
+    MaybeHandle<Code> AllocateConcurrentSparkplugCode(
+        bool retry_allocation_or_fail);
     void FinalizeOnHeapCode(Handle<Code> code, ByteArray reloc_info);
 
     Isolate* const isolate_;
+    LocalIsolate* local_isolate_;
     const CodeDesc& code_desc_;
     const CodeKind kind_;
 
@@ -997,6 +997,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Creates a heap object based on the map. The fields of the heap object are
   // not initialized, it's the responsibility of the caller to do that.
   HeapObject New(Handle<Map> map, AllocationType allocation);
+  HeapObject New(LocalIsolate* local, Handle<Map> map,
+                 AllocationType allocation);
 
   template <typename T>
   Handle<T> CopyArrayWithMap(Handle<T> src, Handle<Map> map);

@@ -523,7 +523,7 @@ bool PagedSpace::TryAllocationFromFreeListMain(size_t size_in_bytes,
   }
 #endif
   // Don't free list allocate if there is linear space available.
-  DCHECK_LT(static_cast<size_t>(limit() - top()), size_in_bytes);
+  // DCHECK_LT(static_cast<size_t>(limit() - top()), size_in_bytes);
 
   // Mark the old linear allocation area with a free space map so it can be
   // skipped when scanning the heap.  This also puts it back in the free list
@@ -568,7 +568,8 @@ base::Optional<std::pair<Address, size_t>> PagedSpace::RawRefillLabBackground(
     LocalHeap* local_heap, size_t min_size_in_bytes, size_t max_size_in_bytes,
     AllocationAlignment alignment, AllocationOrigin origin) {
   DCHECK(!is_compaction_space());
-  DCHECK(identity() == OLD_SPACE || identity() == MAP_SPACE);
+  DCHECK(identity() == OLD_SPACE || identity() == CODE_SPACE ||
+         identity() == MAP_SPACE);
   DCHECK_EQ(origin, AllocationOrigin::kRuntime);
 
   auto result = TryAllocationFromFreeListBackground(
@@ -638,7 +639,8 @@ PagedSpace::TryAllocationFromFreeListBackground(LocalHeap* local_heap,
                                                 AllocationOrigin origin) {
   base::MutexGuard lock(&space_mutex_);
   DCHECK_LE(min_size_in_bytes, max_size_in_bytes);
-  DCHECK(identity() == OLD_SPACE || identity() == MAP_SPACE);
+  DCHECK(identity() == OLD_SPACE || identity() == CODE_SPACE ||
+         identity() == MAP_SPACE);
 
   size_t new_node_size = 0;
   FreeSpace new_node =

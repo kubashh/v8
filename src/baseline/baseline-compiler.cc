@@ -24,6 +24,7 @@
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/common/globals.h"
 #include "src/execution/frame-constants.h"
+#include "src/heap/local-factory-inl.h"
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-flags.h"
 #include "src/logging/runtime-call-stats-scope.h"
@@ -278,7 +279,6 @@ BaselineCompiler::BaselineCompiler(
       masm_(isolate, CodeObjectRequired::kNo,
             AllocateBuffer(isolate, bytecode, code_location)),
       basm_(&masm_),
-      iterator_(bytecode_),
       zone_(isolate->allocator(), ZONE_NAME),
       labels_(zone_.NewArray<BaselineLabels*>(bytecode_->length())) {
   MemsetPointer(labels_, nullptr, bytecode_->length());
@@ -293,13 +293,21 @@ BaselineCompiler::BaselineCompiler(
 
 #define __ basm_.
 
+#define RCS_BASELINE_SCOPE(rcs)                                         \
+  RCS_SCOPE(stats_,                                                     \
+            concurrent_                                                 \
+                ? RuntimeCallCounterId::kCompileBackgroundBaseline##rcs \
+                : RuntimeCallCounterId::kCompileBaseline##rcs)
+
 void BaselineCompiler::GenerateCode() {
+  interpreter::BytecodeArrayIterator iterator(bytecode_);
+  iterator_ = &iterator;
   {
-    RCS_SCOPE(stats_, RuntimeCallCounterId::kCompileBaselinePreVisit);
-    for (; !iterator_.done(); iterator_.Advance()) {
+    RCS_BASELINE_SCOPE(PreVisit);
+    for (; !iterator.done(); iterator.Advance()) {
       PreVisitSingleBytecode();
     }
-    iterator_.Reset();
+    iterator.Reset();
   }
 
   // No code generated yet.
@@ -307,10 +315,10 @@ void BaselineCompiler::GenerateCode() {
   __ CodeEntry();
 
   {
-    RCS_SCOPE(stats_, RuntimeCallCounterId::kCompileBaselineVisit);
+    RCS_BASELINE_SCOPE(Visit);
     Prologue();
     AddPosition();
-    for (; !iterator_.done(); iterator_.Advance()) {
+    for (; !iterator.done(); iterator.Advance()) {
       VisitSingleBytecode();
       AddPosition();
     }
@@ -329,6 +337,26 @@ MaybeHandle<Code> BaselineCompiler::Build(Isolate* isolate) {
   if (shared_function_info_->HasInterpreterData()) {
     code_builder.set_interpreter_data(
         handle(shared_function_info_->interpreter_data(), isolate));
+  } else {
+    code_builder.set_interpreter_data(bytecode_);
+  }
+  return code_builder.TryBuild();
+}
+
+MaybeHandle<Code> BaselineCompiler::Build(Isolate* isolate,
+                                          LocalIsolate* local_isolate) {
+  CodeDesc desc;
+  __ GetCode(isolate, &desc);
+  // Allocate the bytecode offset table.
+  Handle<ByteArray> bytecode_offset_table =
+      bytecode_offset_table_builder_.ToBytecodeOffsetTable(local_isolate);
+
+  Factory::CodeBuilder code_builder(isolate, desc, CodeKind::BASELINE,
+                                    local_isolate);
+  code_builder.set_bytecode_offset_table(bytecode_offset_table);
+  if (shared_function_info_->HasInterpreterData()) {
+    code_builder.set_interpreter_data(
+        handle(shared_function_info_->interpreter_data(), local_isolate));
   } else {
     code_builder.set_interpreter_data(bytecode_);
   }
