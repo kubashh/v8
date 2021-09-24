@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e90abad1_eba4e810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:32:37Z",
+      "side": 1,
+      "message": "PTAL, thanks. This is a change discussed recently in the \"V8 Torque questions\" channel.",
+      "revId": "e801664cbb0e2e3bfbce325e0be10c0ac6ba0052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
