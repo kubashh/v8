@@ -29,6 +29,7 @@ class SourceId {
   friend class SourceFileMap;
 };
 
+#if 0
 struct LineAndColumn {
   int line;
   int column;
@@ -40,6 +41,27 @@ struct LineAndColumn {
   }
   bool operator!=(const LineAndColumn& other) const {
     return !(*this == other);
+  }
+};
+#endif
+
+struct LineAndColumn {
+  int offset;
+  int line;
+  int column;
+
+  static LineAndColumn Invalid() { return {-1, -1, -1}; }
+
+  bool operator==(const LineAndColumn& other) const {
+    if (offset != -1 && other.offset != -1) {
+      DCHECK_IMPLIES(offset == other.offset,
+                     line == other.line && column == other.column);
+      return offset == other.offset;
+    }
+    return line == other.line && column == other.column;
+  }
+  bool operator!=(const LineAndColumn& other) const {
+    return !operator==(other);
   }
 };
 
