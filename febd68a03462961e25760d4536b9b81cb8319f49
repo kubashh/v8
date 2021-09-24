@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d61f68fc_70e3016e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-24T09:33:20Z",
+      "side": 1,
+      "message": "This is the CL to prepare Torque to generate Kythe graph artifacts. Google3 side will implement KytheConsumer interface and use those callbacks to generate the graph.\n\nI did not unify interface with language server in this CL, yet, because I want to get a feature complete version running before designing a final api.\n\nPTAL\nthanks",
+      "revId": "febd68a03462961e25760d4536b9b81cb8319f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
