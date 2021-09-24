@@ -16,6 +16,57 @@
       "message": "PTAL",
       "revId": "06ad0cab443b765199c6621cc281bb75c591a40c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99167b60_8dd6f956",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-24T13:38:16Z",
+      "side": 1,
+      "message": "Since this is a renaming cleanup, we can afford some name bikeshedding :P",
+      "revId": "06ad0cab443b765199c6621cc281bb75c591a40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74212e1c_c104f656",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-24T13:38:16Z",
+      "side": 1,
+      "message": "The \"function\" above is also a wasm function, thus I would recommend a more specific name, like \"exported_function\", or just \"exp_function\".\n\nAlso, it would be better to make this a pointer instead of a copy of the WasmFunction struct (same above for the \"function\" variable).",
+      "revId": "06ad0cab443b765199c6621cc281bb75c591a40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9686302f_622f13ae",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-24T13:38:16Z",
+      "side": 1,
+      "message": "\"frame_instance\" is a bad name. It implies that it\u0027s an instance of a frame. What is this conflicting with? It is the \"instance\" variable in line 576 below? If so, I would recomment just getting rid of that temporary variable in line 576, or alternatively rename it below to \"live_instance\".",
+      "revId": "06ad0cab443b765199c6621cc281bb75c591a40c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
