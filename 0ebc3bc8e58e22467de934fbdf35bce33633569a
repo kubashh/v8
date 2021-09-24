@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22d9c22_3ef23292",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "Looks great, thanks!",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ff231e_3cecc0ba",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "unused?",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ccc919_6fa74d78",
+        "filename": "src/torque/kythe-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "I\u0027m a little surprised to see that AddClassFieldDefinition and AddTypeDefinition are only called by their corresponding Add*Use functions. If something is defined and never used, we still want it to be clickable in CodeSearch, right?",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "730e1997_f35f6c82",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "Passing -1 here invites questions and looks unsafe, even though close inspection of the \u003d\u003d operator on LineAndColumn shows that it\u0027s fine. What do you think of adding a new builder function for this case? Something like `pos \u003d LineAndColumn::WithUnknownOffset(line, character)`.",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc36dd83_24e53098",
+        "filename": "src/torque/source-positions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "nit: I see no reason to keep this version around in the source",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e295065a_8f925360",
+        "filename": "src/torque/source-positions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-24T15:02:09Z",
+      "side": 1,
+      "message": "This could be DCHECK_EQ, which is a little stronger than DCHECK_IMPLIES. If the offsets don\u0027t match, then at least one of line and column must also not match.",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
