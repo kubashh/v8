@@ -279,7 +279,7 @@ void HandleGotoDefinitionRequest(GotoDefinitionRequest request,
     return;
   }
 
-  LineAndColumn pos{request.params().position().line(),
+  LineAndColumn pos{-1, request.params().position().line(),
                     request.params().position().character()};
 
   if (auto maybe_definition = LanguageServerData::FindDefinition(id, pos)) {

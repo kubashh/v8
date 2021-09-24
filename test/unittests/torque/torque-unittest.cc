@@ -224,7 +224,7 @@ using SubstrWithPosition =
 SubstrWithPosition SubstrTester(const std::string& message, int line, int col) {
   // Change line and column from 1-based to 0-based.
   return {::testing::HasSubstr(message),
-          LineAndColumn{line + CountPreludeLines() - 1, col - 1}};
+          LineAndColumn{-1, line + CountPreludeLines() - 1, col - 1}};
 }
 #endif
 
