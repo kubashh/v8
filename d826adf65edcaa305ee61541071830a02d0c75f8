@@ -70,6 +70,23 @@
       "parentUuid": "30875609_7713e004",
       "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03b39328_d44d6f0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-09-24T17:44:23Z",
+      "side": 1,
+      "message": "What is the behavior of tracing without this fix? I\u0027ve been trying to do some tracing today and am running into crashes that seem quite possibly related to this, stack trace looks like:\n\n0x0000000109df69e5\t(Google Chrome Framework -zone-stats.cc:38)\t\tv8::internal::compiler::ZoneStats::StatsScope::GetCurrentAllocatedBytes()\n0x0000000109df69cd\t(Google Chrome Framework -zone-stats.cc:33)\t\tv8::internal::compiler::ZoneStats::StatsScope::GetMaxAllocatedBytes()\n0x0000000109de0d15\t(Google Chrome Framework -pipeline-statistics.cc:50)\t\tv8::internal::compiler::PipelineStatistics::CommonStats::End(v8::internal::compiler::PipelineStatistics*, v8::internal::CompilationStatistics::BasicStats*)\n0x0000000109de12f1\t(Google Chrome Framework -pipeline-statistics.cc:108)\t\tv8::internal::compiler::PipelineStatistics::EndPhase()\n0x00000001065feb1e\t(Google Chrome Framework -pipeline-statistics.h:84)\t\tvoid v8::internal::compiler::PipelineImpl::Run\u003cv8::internal::compiler::EffectControlLinearizationPhase\u003e()\n0x00000001065fbf34\t(Google Chrome Framework -pipeline.cc:2782)\t\tv8::internal::compiler::PipelineImpl::OptimizeGraph(v8::internal::compiler::Linkage*)\n0x00000001065fbb92\t(Google Chrome Framework -pipeline.cc:1246)\t\tv8::internal::compiler::PipelineCompilationJob::ExecuteJobImpl(v8::internal::RuntimeCallStats*, v8::internal::LocalIsolate*)\n\nCurious if this CL is expected to fix such crashes.",
+      "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
