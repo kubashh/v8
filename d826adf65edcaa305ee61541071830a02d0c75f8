@@ -87,6 +87,24 @@
       "message": "What is the behavior of tracing without this fix? I\u0027ve been trying to do some tracing today and am running into crashes that seem quite possibly related to this, stack trace looks like:\n\n0x0000000109df69e5\t(Google Chrome Framework -zone-stats.cc:38)\t\tv8::internal::compiler::ZoneStats::StatsScope::GetCurrentAllocatedBytes()\n0x0000000109df69cd\t(Google Chrome Framework -zone-stats.cc:33)\t\tv8::internal::compiler::ZoneStats::StatsScope::GetMaxAllocatedBytes()\n0x0000000109de0d15\t(Google Chrome Framework -pipeline-statistics.cc:50)\t\tv8::internal::compiler::PipelineStatistics::CommonStats::End(v8::internal::compiler::PipelineStatistics*, v8::internal::CompilationStatistics::BasicStats*)\n0x0000000109de12f1\t(Google Chrome Framework -pipeline-statistics.cc:108)\t\tv8::internal::compiler::PipelineStatistics::EndPhase()\n0x00000001065feb1e\t(Google Chrome Framework -pipeline-statistics.h:84)\t\tvoid v8::internal::compiler::PipelineImpl::Run\u003cv8::internal::compiler::EffectControlLinearizationPhase\u003e()\n0x00000001065fbf34\t(Google Chrome Framework -pipeline.cc:2782)\t\tv8::internal::compiler::PipelineImpl::OptimizeGraph(v8::internal::compiler::Linkage*)\n0x00000001065fbb92\t(Google Chrome Framework -pipeline.cc:1246)\t\tv8::internal::compiler::PipelineCompilationJob::ExecuteJobImpl(v8::internal::RuntimeCallStats*, v8::internal::LocalIsolate*)\n\nCurious if this CL is expected to fix such crashes.",
       "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9637d79_00359c4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2021-09-24T18:10:15Z",
+      "side": 1,
+      "message": "That does look exactly like the sort of crashes I was seeing. In debug mode you would have hit this DCHECK first that ensures the scope doesn\u0027t nest: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/pipeline-statistics.cc;l\u003d22;drc\u003d38e67f1888e1cb5882613561af6a9e05d5889fd1\n\nIIRC, in release mode it would indeed crash a little bit later on GetCurrentAllocatedBytes()\n\nWithout the fix, it would crash as soon as any JS function was compiled with Turbofan, while the v8.turbofan category was on. IIRC at the time I could reproduce it in M93. So yeah, it\u0027s very likely you\u0027re hitting the same bug :-), unless you already have this CL in your build?",
+      "parentUuid": "03b39328_d44d6f0a",
+      "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
