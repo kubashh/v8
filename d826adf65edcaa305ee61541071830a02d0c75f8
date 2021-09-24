@@ -105,6 +105,24 @@
       "parentUuid": "03b39328_d44d6f0a",
       "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d55096f9_48d0ff3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2021-09-24T18:24:15Z",
+      "side": 1,
+      "message": "Thanks for the confirmation, I\u0027m running an M94 stable build (which does not have this CL).",
+      "parentUuid": "e9637d79_00359c4b",
+      "revId": "d826adf65edcaa305ee61541071830a02d0c75f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
