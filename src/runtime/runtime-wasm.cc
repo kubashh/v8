@@ -277,8 +277,8 @@ RUNTIME_FUNCTION(Runtime_WasmCompileWrapper) {
       continue;
     }
     int index = static_cast<int>(exp.index);
-    wasm::WasmFunction function = module->functions[index];
-    if (function.sig == sig && index != function_index) {
+    wasm::WasmFunction wasm_function = module->functions[index];
+    if (wasm_function.sig == sig && index != function_index) {
       ReplaceWrapper(isolate, instance, index, wrapper_code);
     }
   }
@@ -541,10 +541,11 @@ RUNTIME_FUNCTION(Runtime_WasmDebugBreak) {
   FrameFinder<WasmFrame> frame_finder(
       isolate, {StackFrame::EXIT, StackFrame::WASM_DEBUG_BREAK});
   WasmFrame* frame = frame_finder.frame();
-  auto instance = handle(frame->wasm_instance(), isolate);
-  auto script = handle(instance->module_object().script(), isolate);
-  auto* debug_info = instance->module_object().native_module()->GetDebugInfo();
-  isolate->set_context(instance->native_context());
+  auto frame_instance = handle(frame->wasm_instance(), isolate);
+  auto script = handle(frame_instance->module_object().script(), isolate);
+  auto* debug_info =
+      frame_instance->module_object().native_module()->GetDebugInfo();
+  isolate->set_context(frame_instance->native_context());
 
   // Stepping can repeatedly create code, and code GC requires stack guards to
   // be executed on all involved isolates. Proactively do this here.
@@ -561,7 +562,7 @@ RUNTIME_FUNCTION(Runtime_WasmDebugBreak) {
   DebugScope debug_scope(isolate->debug());
 
   // Check for instrumentation breakpoint.
-  DCHECK_EQ(script->break_on_entry(), !!instance->break_on_entry());
+  DCHECK_EQ(script->break_on_entry(), !!frame_instance->break_on_entry());
   if (script->break_on_entry()) {
     MaybeHandle<FixedArray> maybe_on_entry_breakpoints =
         WasmScript::CheckBreakPoints(isolate, script,
@@ -576,7 +577,7 @@ RUNTIME_FUNCTION(Runtime_WasmDebugBreak) {
           weak_instance_list.Get(i)->GetHeapObject());
       instance.set_break_on_entry(false);
     }
-    DCHECK(!instance->break_on_entry());
+    DCHECK(!frame_instance->break_on_entry());
     Handle<FixedArray> on_entry_breakpoints;
     if (maybe_on_entry_breakpoints.ToHandle(&on_entry_breakpoints)) {
       debug_info->ClearStepping(isolate);
