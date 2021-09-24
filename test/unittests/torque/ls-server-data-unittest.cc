@@ -90,7 +90,7 @@ TEST(LanguageServer, GotoLabelDefinitionInSignature) {
       "macro Foo(): never labels Fail {\n"
       "  goto Fail;\n"
       "}\n"
-      "macro Bar() labels Bailout {\n"
+      "macro Bar(): void labels Bailout {\n"
       "  Foo() otherwise Bailout;\n"
       "}\n";
 
@@ -101,7 +101,7 @@ TEST(LanguageServer, GotoLabelDefinitionInSignature) {
   const SourceId id = SourceFileMap::GetSourceId("dummy-filename.tq");
   auto maybe_position = LanguageServerData::FindDefinition(id, {6, 18});
   ASSERT_TRUE(maybe_position.has_value());
-  EXPECT_EQ(*maybe_position, (SourcePosition{id, {5, 19}, {5, 26}}));
+  EXPECT_EQ(*maybe_position, (SourcePosition{id, {5, 25}, {5, 32}}));
 }
 #endif
 
@@ -112,7 +112,7 @@ TEST(LanguageServer, GotoLabelDefinitionInTryBlock) {
       "macro Foo(): never labels Fail {\n"
       "  goto Fail;\n"
       "}\n"
-      "macro Bar() {\n"
+      "macro Bar(): void {\n"
       "  try { Foo() otherwise Bailout; }\n"
       "  label Bailout {}\n"
       "}\n";
@@ -171,7 +171,7 @@ TEST(LanguageServer, GotoLabelDefinitionInTryBlockGoto) {
   const std::string source =
       "type void;\n"
       "type never;\n"
-      "macro Bar() {\n"
+      "macro Bar(): void {\n"
       "  try { goto Bailout; }\n"
       "  label Bailout {}\n"
       "}\n";
@@ -193,7 +193,7 @@ TEST(LanguageServer, GotoLabelDefinitionGotoInOtherwise) {
       "macro Foo(): never labels Fail {\n"
       "  goto Fail;\n"
       "}\n"
-      "macro Bar() {\n"
+      "macro Bar(): void {\n"
       "  try { Foo() otherwise goto Bailout; }\n"
       "  label Bailout {}\n"
       "}\n";
