@@ -51,6 +51,24 @@
       "parentUuid": "5868d0ee_782b80ef",
       "revId": "f2ff0a4ecaf8c8235af29896fdb205fd0e909162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1085e12_c5d13c06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-25T02:38:32Z",
+      "side": 1,
+      "message": "Hi Jakob,\n\nI updated committer\u0027s email, but clicking every {RUN} or {RERUN} link on Checks tab didn\u0027t actually re-trigger presubmit check, what I got was just a toast tip saying\n\n  1 of 1 schedule requests failed. See console logs.\n  \nReading console log on LUCI, I didn\u0027t see my new patchset being picked up. Timestamps were still 13 hours ago.\n\nPerhaps I have no permission to retry a failed check?\nCould you please help me with this? Many thanks!",
+      "parentUuid": "86ffa696_d397e780",
+      "revId": "f2ff0a4ecaf8c8235af29896fdb205fd0e909162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
