@@ -34,6 +34,125 @@
       "parentUuid": "e66974b0_b1ee6057",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c86efcf6_22599116",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "Suggestion: move this to the String class as a static method. Factory is a bit unexpected for this predicate.",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9755839c_834f6e16",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "Thinking out loud.. I wonder whether we need a separate cache per snapshot type at all. It might be nicer to maintain only a single SnapshotObjectCache on the isolate. Again, just an idea for a followup.",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d7728e_de154c2b",
+        "filename": "src/snapshot/serializer-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "0x1d",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96eee1be_5937667b",
+        "filename": "src/snapshot/shareable-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "Wdyt about SharedIsolate{Deserializer,Serializer,...}? Likewise for every related name like shareable_data. I realize this is a big change but unless \u0027Shareable\u0027 is already a thing in V8 I\u0027d like to stay consistent with existing terms.",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d75f250_c694a10a",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "Hmm.. We should update this since neither the RO nor shareable bits are usually per-Isolate. Please either do that in a followup or file a bug, thanks!",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08b56187_c2411755",
+        "filename": "src/snapshot/startup-serializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "nit: while you\u0027re here please make this and the read_only_serializer_ const (ShareableSerializer* const shareable_serializer_).",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81bdf75d_0dd7a664",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-27T09:35:49Z",
+      "side": 1,
+      "message": "nit: I\u0027d remove this in favor of is_shared (kIsShared is potentially confusing because it implies a compile-time constant).",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
