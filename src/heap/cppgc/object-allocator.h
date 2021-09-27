@@ -42,9 +42,10 @@ class V8_EXPORT_PRIVATE ObjectAllocator final : public cppgc::AllocationHandle {
                   StatsCollector& stats_collector,
                   PreFinalizerHandler& prefinalizer_handler);
 
-  inline void* AllocateObject(size_t size, GCInfoIndex gcinfo);
-  inline void* AllocateObject(size_t size, GCInfoIndex gcinfo,
-                              CustomSpaceIndex space_index);
+  __attribute__((always_inline)) inline void* AllocateObject(
+      size_t size, GCInfoIndex gcinfo);
+  __attribute__((always_inline)) inline void* AllocateObject(
+      size_t size, GCInfoIndex gcinfo, CustomSpaceIndex space_index);
 
   void ResetLinearAllocationBuffers();
 
@@ -71,7 +72,8 @@ class V8_EXPORT_PRIVATE ObjectAllocator final : public cppgc::AllocationHandle {
   PreFinalizerHandler& prefinalizer_handler_;
 };
 
-void* ObjectAllocator::AllocateObject(size_t size, GCInfoIndex gcinfo) {
+__attribute__((always_inline)) inline void* ObjectAllocator::AllocateObject(
+    size_t size, GCInfoIndex gcinfo) {
   DCHECK(!in_disallow_gc_scope());
   const size_t allocation_size =
       RoundUp<kAllocationGranularity>(size + sizeof(HeapObjectHeader));
@@ -81,8 +83,8 @@ void* ObjectAllocator::AllocateObject(size_t size, GCInfoIndex gcinfo) {
                                allocation_size, gcinfo);
 }
 
-void* ObjectAllocator::AllocateObject(size_t size, GCInfoIndex gcinfo,
-                                      CustomSpaceIndex space_index) {
+__attribute__((always_inline)) inline void* ObjectAllocator::AllocateObject(
+    size_t size, GCInfoIndex gcinfo, CustomSpaceIndex space_index) {
   DCHECK(!in_disallow_gc_scope());
   const size_t allocation_size =
       RoundUp<kAllocationGranularity>(size + sizeof(HeapObjectHeader));

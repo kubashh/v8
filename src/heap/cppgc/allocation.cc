@@ -16,15 +16,17 @@ STATIC_ASSERT(api_constants::kLargeObjectSizeThreshold ==
               kLargeObjectSizeThreshold);
 
 // static
-void* MakeGarbageCollectedTraitInternal::Allocate(
-    cppgc::AllocationHandle& handle, size_t size, GCInfoIndex index) {
+__attribute__((always_inline)) void*
+MakeGarbageCollectedTraitInternal::Allocate(cppgc::AllocationHandle& handle,
+                                            size_t size, GCInfoIndex index) {
   return static_cast<ObjectAllocator&>(handle).AllocateObject(size, index);
 }
 
 // static
-void* MakeGarbageCollectedTraitInternal::Allocate(
-    cppgc::AllocationHandle& handle, size_t size, GCInfoIndex index,
-    CustomSpaceIndex space_index) {
+__attribute__((always_inline)) void*
+MakeGarbageCollectedTraitInternal::Allocate(cppgc::AllocationHandle& handle,
+                                            size_t size, GCInfoIndex index,
+                                            CustomSpaceIndex space_index) {
   return static_cast<ObjectAllocator&>(handle).AllocateObject(size, index,
                                                               space_index);
 }
