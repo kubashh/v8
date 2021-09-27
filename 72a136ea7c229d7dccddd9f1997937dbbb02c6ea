@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3745c8fc_6a3002c5",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-27T14:56:12Z",
+      "side": 1,
+      "message": "The reason this is on Factory is that it uses the GetInPlaceInternalizedStringMap method, which returns maps. Having it on the String class as a static method duplicates the logic for what instance types are in-place internalizable.\n\nGiven that, do you still prefer the move?",
+      "parentUuid": "c86efcf6_22599116",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9755839c_834f6e16",
         "filename": "src/objects/visitors.h",
         "patchSetId": 4
@@ -100,6 +118,24 @@
       "writtenOn": "2021-09-27T09:35:49Z",
       "side": 1,
       "message": "Wdyt about SharedIsolate{Deserializer,Serializer,...}? Likewise for every related name like shareable_data. I realize this is a big change but unless \u0027Shareable\u0027 is already a thing in V8 I\u0027d like to stay consistent with existing terms.",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d45a5fd_8f214f96",
+        "filename": "src/snapshot/shareable-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-27T14:56:12Z",
+      "side": 1,
+      "message": "The reason I went with \"shareable\" is that I thought \"shared\" suggests it would only be when we have a shared isolate at all (e.g. due to passing --shared-string-table or something), or that the objects in it are always shared. Whereas actually this snapshot is also used when there\u0027s no sharing. (Of course when V8 is running, an object is either shared or not, but to maintain some flexibility while this is still flagged, this snapshot is usable both when sharing or not sharing.)\n\nDo you think SharedIsolate{Deserializer,Serializer} would be misleading in this way?",
+      "parentUuid": "96eee1be_5937667b",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
