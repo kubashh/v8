@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae87d78_187e3d09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-27T09:40:29Z",
+      "side": 1,
+      "message": "Tags (like \"[deserialization]\") have to be the first thing in the subject AFAIK. So you could rewrite this to something like:\n[deserialization] Remove unnecessarily limit on buffer size",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "216077c0_3b1ecdcb",
@@ -14,6 +31,40 @@
       "writtenOn": "2021-09-27T07:57:43Z",
       "side": 1,
       "message": "Hi @clemensb, I add you as a reviewer because your commit 4b0f9c856e7 is related to this patchset. Would you please take a look and give me some advices? Thank you!\n\n@jbroman @verwaest Sorry for deleting you two from reviewers before. Seems this patchset still needs to be discussed. Any suggestions are welcomed!",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd77b41e_9d118eea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-27T09:40:29Z",
+      "side": 1,
+      "message": "Thanks for fixing, LGTM. You got proper review coverage already, let us know if you want this to land. I assume that you do not have permissions to do so, but if you see a \"submit to cq\" button feel free to press it (after fixing the comments).",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09beb4b1_d34c5e97",
+        "filename": "AUTHORS",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-09-27T09:40:29Z",
+      "side": 1,
+      "message": "This file is nearly sorted - apart from the last three lines. Can you put your name in the right place, and if you feel like it, also fix the other two above?",
       "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
