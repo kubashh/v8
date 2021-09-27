@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "198dea65_feedf5bd",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T14:34:02Z",
+      "side": 1,
+      "message": "This is used in the header file. I noticed that I made it static in the header instead of extern, so I changed that. The idea is that I have a unique global index for every binding. I think this should work now. Please review again.",
+      "parentUuid": "94ff231e_3cecc0ba",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72ccc919_6fa74d78",
         "filename": "src/torque/kythe-data.h",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2021-09-24T15:02:09Z",
       "side": 1,
       "message": "I\u0027m a little surprised to see that AddClassFieldDefinition and AddTypeDefinition are only called by their corresponding Add*Use functions. If something is defined and never used, we still want it to be clickable in CodeSearch, right?",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "960ef3b5_1f336eab",
+        "filename": "src/torque/kythe-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T14:34:02Z",
+      "side": 1,
+      "message": "Yes, that\u0027s true. For a few things I did implement that, but some are still missing. Was planning to add more stuff incrementally. Just wanted to prepare a first CL to get something landed so that I can work on Google3 integration simultaneously. Do you think I should do that in this CL before landing?",
+      "parentUuid": "72ccc919_6fa74d78",
       "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70761166_dc4d7201",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T14:34:02Z",
+      "side": 1,
+      "message": "Thought about that, but did not do it because there are so many places where things get much longer, but did change it now.",
+      "parentUuid": "730e1997_f35f6c82",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bc36dd83_24e53098",
         "filename": "src/torque/source-positions.h",
         "patchSetId": 5
@@ -82,6 +136,24 @@
       "writtenOn": "2021-09-24T15:02:09Z",
       "side": 1,
       "message": "nit: I see no reason to keep this version around in the source",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f45c8bb6_95ff0dc7",
+        "filename": "src/torque/source-positions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T14:34:02Z",
+      "side": 1,
+      "message": "Missed to remove that, thanks.",
+      "parentUuid": "bc36dd83_24e53098",
       "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -99,6 +171,30 @@
       "writtenOn": "2021-09-24T15:02:09Z",
       "side": 1,
       "message": "This could be DCHECK_EQ, which is a little stronger than DCHECK_IMPLIES. If the offsets don\u0027t match, then at least one of line and column must also not match.",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 20
+      },
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f39d99f9_49cca07d",
+        "filename": "src/torque/source-positions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T14:34:02Z",
+      "side": 1,
+      "message": "Right",
+      "parentUuid": "e295065a_8f925360",
       "range": {
         "startLine": 57,
         "startChar": 6,
