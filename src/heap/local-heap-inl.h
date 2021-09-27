@@ -36,8 +36,29 @@ AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
   Safepoint();
 
   bool large_object = size_in_bytes > heap_->MaxRegularHeapObjectSize(type);
-  CHECK_EQ(type, AllocationType::kOld);
 
+  if (type == AllocationType::kCode) {
+    AllocationResult alloc =
+        large_object ? heap()->code_lo_space()->AllocateRawBackground(
+                           this, size_in_bytes)
+                     : code_space_allocator()->AllocateRaw(size_in_bytes,
+                                                           alignment, origin);
+
+    HeapObject object;
+    if (alloc.To(&object)) {
+      if (AllocationType::kCode == type && !V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+        // Unprotect the memory chunk of the object if it was not unprotected
+        // already.
+        // TODO(victorgomes): This can race with main thread according to
+        // Dominik. heap()->UnprotectAndRegisterMemoryChunk(
+        //     object, UnprotectMemoryOrigin::kMaybeOffMainThread);
+        heap()->ZapCodeObject(object.address(), size_in_bytes);
+      }
+    }
+    return alloc;
+  }
+
+  CHECK_EQ(type, AllocationType::kOld);
   if (large_object)
     return heap()->lo_space()->AllocateRawBackground(this, size_in_bytes);
   else
@@ -52,6 +73,16 @@ Address LocalHeap::AllocateRawOrFail(int object_size, AllocationType type,
   if (!result.IsRetry()) return result.ToObject().address();
   return PerformCollectionAndAllocateAgain(object_size, type, origin,
                                            alignment);
+}
+
+void LocalHeap::RegisterCodeObject(Handle<Code> code) {
+  Address addr = code->address();
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL &&
+      heap()->code_space()->Contains(addr)) {
+    MemoryChunk::FromHeapObject(*code)
+        ->GetCodeObjectRegistry()
+        ->RegisterNewlyAllocatedCodeObject(addr);
+  }
 }
 
 void LocalHeap::CreateFillerObjectAt(Address addr, int size,

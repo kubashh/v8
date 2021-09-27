@@ -14,6 +14,7 @@
 #include "src/base/threaded-list.h"
 #include "src/base/vlq.h"
 #include "src/baseline/baseline-assembler.h"
+#include "src/execution/local-isolate.h"
 #include "src/handles/handles.h"
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-register.h"
@@ -59,7 +60,15 @@ class BaselineCompiler {
 
   void GenerateCode();
   MaybeHandle<Code> Build(Isolate* isolate);
+  MaybeHandle<Code> Build(Isolate* isolate, LocalIsolate* local_isolate);
   static int EstimateInstructionSize(BytecodeArray bytecode);
+
+  void SetLocalIsolate(LocalIsolate* local) {
+    DCHECK(!local->is_main_thread());
+    local_isolate_ = local;
+    stats_ = local->runtime_call_stats();
+    concurrent_ = true;
+  }
 
  private:
   void Prologue();
@@ -157,7 +166,10 @@ class BaselineCompiler {
   INTRINSICS_LIST(DECLARE_VISITOR)
 #undef DECLARE_VISITOR
 
-  const interpreter::BytecodeArrayIterator& iterator() { return iterator_; }
+  const interpreter::BytecodeArrayIterator& iterator() {
+    DCHECK_NOT_NULL(iterator_);
+    return *iterator_;
+  }
 
   LocalIsolate* local_isolate_;
   RuntimeCallStats* stats_;
@@ -166,9 +178,10 @@ class BaselineCompiler {
   Handle<BytecodeArray> bytecode_;
   MacroAssembler masm_;
   BaselineAssembler basm_;
-  interpreter::BytecodeArrayIterator iterator_;
+  interpreter::BytecodeArrayIterator* iterator_ = nullptr;
   BytecodeOffsetTableBuilder bytecode_offset_table_builder_;
   Zone zone_;
+  bool concurrent_ = false;
 
   int max_call_args_ = 0;
 
