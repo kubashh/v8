@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df3b148e_503a5fb9",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-27T15:53:52Z",
+      "side": 1,
+      "message": "Oh, okay. That makes sense. One more nit: I think that the trailing _ is only for class fields, so perhaps we could omit it here.",
+      "parentUuid": "198dea65_feedf5bd",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72ccc919_6fa74d78",
         "filename": "src/torque/kythe-data.h",
         "patchSetId": 5
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Yes, that\u0027s true. For a few things I did implement that, but some are still missing. Was planning to add more stuff incrementally. Just wanted to prepare a first CL to get something landed so that I can work on Google3 integration simultaneously. Do you think I should do that in this CL before landing?",
       "parentUuid": "72ccc919_6fa74d78",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d6708a_79eda886",
+        "filename": "src/torque/kythe-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-27T15:53:52Z",
+      "side": 1,
+      "message": "Okay, got it. No need to add everything at once in this CL.",
+      "parentUuid": "960ef3b5_1f336eab",
       "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -119,6 +155,24 @@
       "side": 1,
       "message": "Thought about that, but did not do it because there are so many places where things get much longer, but did change it now.",
       "parentUuid": "730e1997_f35f6c82",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a58758_201e73ac",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-27T15:53:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70761166_dc4d7201",
       "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
