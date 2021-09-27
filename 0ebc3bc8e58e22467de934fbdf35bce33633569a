@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7712bfc_5629afc0",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-27T16:14:31Z",
+      "side": 1,
+      "message": "oops. removing it.",
+      "parentUuid": "df3b148e_503a5fb9",
+      "revId": "0ebc3bc8e58e22467de934fbdf35bce33633569a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "72ccc919_6fa74d78",
         "filename": "src/torque/kythe-data.h",
         "patchSetId": 5
