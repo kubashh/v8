@@ -366,10 +366,10 @@ class InternalizedStringKey final : public StringTableKey {
   Handle<String> AsHandle(Isolate* isolate) {
     // Internalize the string if possible.
     MaybeHandle<Map> maybe_map =
-        isolate->factory()->InternalizedStringMapForString(string_);
+        isolate->factory()->InPlaceInternalizedStringMapForString(string_);
     Handle<Map> map;
     if (maybe_map.ToHandle(&map)) {
-      string_->set_map_no_write_barrier(*map);
+      string_->set_map_no_write_barrier(*map, kReleaseStore);
       DCHECK(string_->IsInternalizedString());
       return string_;
     }
@@ -377,9 +377,13 @@ class InternalizedStringKey final : public StringTableKey {
     // contents as long as they are not uncached.
     StringShape shape(*string_);
     if (shape.IsExternalOneByte() && !shape.IsUncachedExternal()) {
+      // TODO(syg): External strings not yet supported.
+      DCHECK(!FLAG_shared_string_table);
       return isolate->factory()
           ->InternalizeExternalString<ExternalOneByteString>(string_);
     } else if (shape.IsExternalTwoByte() && !shape.IsUncachedExternal()) {
+      // TODO(syg): External strings not yet supported.
+      DCHECK(!FLAG_shared_string_table);
       return isolate->factory()
           ->InternalizeExternalString<ExternalTwoByteString>(string_);
     } else {
@@ -454,7 +458,9 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
   // case we'll have a false miss.
   InternalIndex entry = data->FindEntry(isolate, key, key->hash());
   if (entry.is_found()) {
-    return handle(String::cast(data->Get(isolate, entry)), isolate);
+    Handle<String> result(String::cast(data->Get(isolate, entry)), isolate);
+    DCHECK_IMPLIES(FLAG_shared_string_table, result->InSharedHeap());
+    return result;
   }
 
   // No entry found, so adding new string.
@@ -464,6 +470,7 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
   // allocates the same string, the insert will fail, the lookup above will
   // succeed, and this string will be discarded.
   Handle<String> new_string = key->AsHandle(isolate);
+  DCHECK_IMPLIES(FLAG_shared_string_table, new_string->InSharedHeap());
 
   {
     base::MutexGuard table_write_guard(&write_mutex_);

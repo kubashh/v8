@@ -927,6 +927,7 @@ class Heap {
   CodeRange* code_range() { return code_range_.get(); }
 
   LocalHeap* main_thread_local_heap() { return main_thread_local_heap_; }
+
   Heap* AsHeap() { return this; }
 
   // ===========================================================================
@@ -2176,6 +2177,10 @@ class Heap {
   std::vector<WeakArrayList> FindAllRetainedMaps();
   MemoryMeasurement* memory_measurement() { return memory_measurement_.get(); }
 
+  AllocationType allocation_type_for_in_place_internalizable_strings() const {
+    return allocation_type_for_in_place_internalizable_strings_;
+  }
+
   ExternalMemoryAccounting external_memory_;
 
   // This can be calculated directly from a pointer to the heap; however, it is
@@ -2455,6 +2460,8 @@ class Heap {
 
   ExternalStringTable external_string_table_;
 
+  const AllocationType allocation_type_for_in_place_internalizable_strings_;
+
   base::Mutex relocation_mutex_;
 
   std::unique_ptr<CollectionBarrier> collection_barrier_;
@@ -2543,6 +2550,7 @@ class Heap {
 
   // The allocator interface.
   friend class Factory;
+  friend class LocalFactory;
   template <typename IsolateT>
   friend class Deserializer;
 
