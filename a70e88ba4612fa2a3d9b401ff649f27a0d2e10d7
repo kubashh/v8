@@ -20,6 +20,42 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f664b101_d27df3fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-27T09:54:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ae87d78_187e3d09",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea4c25e_83b5ff3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-27T09:54:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ae87d78_187e3d09",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "216077c0_3b1ecdcb",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 13
@@ -65,6 +101,24 @@
       "writtenOn": "2021-09-27T09:40:29Z",
       "side": 1,
       "message": "This file is nearly sorted - apart from the last three lines. Can you put your name in the right place, and if you feel like it, also fix the other two above?",
+      "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54cb44a_244792f3",
+        "filename": "AUTHORS",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1522823
+      },
+      "writtenOn": "2021-09-27T09:54:56Z",
+      "side": 1,
+      "message": "I\u0027v sorted all of the individual contributors. :D",
+      "parentUuid": "09beb4b1_d34c5e97",
       "revId": "a70e88ba4612fa2a3d9b401ff649f27a0d2e10d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
