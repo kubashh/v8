@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe05ddd_2769ce68",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T20:47:27Z",
+      "side": 1,
+      "message": "Ah I think I misunderstood the suggestion. For some reason I figured String::IsInPlaceInternalizable wouldn\u0027t take an Isolate or something whereby you can get to the factory.",
+      "parentUuid": "2885ba3c_3d039d5d",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9755839c_834f6e16",
