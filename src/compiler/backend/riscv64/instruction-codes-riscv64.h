@@ -9,6 +9,8 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+#define TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST(V)  // None.
+
 // RISC-V-specific opcodes that specify which assembly sequence to emit.
 // Most opcodes specify a single instruction.
 #define TARGET_ARCH_OPCODE_LIST(V)          \
