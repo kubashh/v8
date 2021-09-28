@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d6d8c9_9345786c",
+        "filename": "builders/experiments.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-28T14:14:32Z",
+      "side": 1,
+      "message": "ok, now that you called it linux64, could you move it side-by-side with the other heap sandbox builder?",
+      "range": {
+        "startLine": 345,
+        "startChar": 15,
+        "endLine": 345,
+        "endChar": 22
+      },
+      "revId": "7bf6861633c56bbaad2918fda8706bb7462e0d1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
