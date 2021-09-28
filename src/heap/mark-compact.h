@@ -585,7 +585,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // is drained until it is empty.
   template <MarkingWorklistProcessingMode mode =
                 MarkingWorklistProcessingMode::kDefault>
-  size_t ProcessMarkingWorklist(size_t bytes_to_process);
+  size_t ProcessMarkingWorklist(size_t bytes_to_process,
+                                bool* was_object_processed = nullptr);
 
  private:
   void ComputeEvacuationHeuristics(size_t area_size,
@@ -624,15 +625,18 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   // Drains the main thread marking work list. Will mark all pending objects
   // if no concurrent threads are running.
-  void DrainMarkingWorklist() override;
+  void DrainMarkingWorklist() override { DrainMarkingWorklist(nullptr); }
+
+  void DrainMarkingWorklist(bool* was_object_processed);
 
   // Implements ephemeron semantics: Marks value if key is already reachable.
   // Returns true if value was actually marked.
   bool ProcessEphemeron(HeapObject key, HeapObject value);
 
   // Marks ephemerons and drains marking worklist iteratively
-  // until a fixpoint is reached.
-  void ProcessEphemeronsUntilFixpoint();
+  // until a fixpoint is reached. Returns false if too many iterations have been
+  // tried and the linear approach should be used.
+  bool ProcessEphemeronsUntilFixpoint();
 
   // Drains ephemeron and marking worklists. Single iteration of the
   // fixpoint iteration.
