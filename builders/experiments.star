@@ -341,6 +341,20 @@ experiment_builder(
     to_notify = ["yyanagisawa@google.com"],
 )
 
+experiment_builder_pair(
+    name = "V8 Linux arm64 sim - heap sandbox - debug",
+    bucket = "ci",
+    triggered_by = ["v8-trigger"],
+    dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
+    properties = {"builder_group": "client.v8"},
+    use_goma = GOMA.DEFAULT,
+    to_notify = [
+        "saelo@chromium.org",
+        "v8-waterfall-sheriff@grotations.appspotmail.com",
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com",
+    ],
+)
+
 experiment_builder(
     name = "V8 Linux gcc",
     bucket = "ci",
