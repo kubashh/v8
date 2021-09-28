@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c07a19_fe52be95",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-28T13:27:22Z",
+      "side": 1,
+      "message": "You can inline this below and get rid of \"another_iteration\" completely.",
+      "range": {
+        "startLine": 1757,
+        "startChar": 4,
+        "endLine": 1757,
+        "endChar": 21
+      },
+      "revId": "103ce5f3d88b55ae66c9f4737e02d94b107d9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eefb0455_466765c6",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-28T13:27:22Z",
+      "side": 1,
+      "message": "Why can\u0027t we use bytes_processed \u003e 0 ?",
+      "range": {
+        "startLine": 1952,
+        "startChar": 31,
+        "endLine": 1952,
+        "endChar": 51
+      },
+      "revId": "103ce5f3d88b55ae66c9f4737e02d94b107d9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9978e8e_65ca1e89",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2003,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-28T13:27:22Z",
+      "side": 1,
+      "message": "inline below",
+      "range": {
+        "startLine": 2003,
+        "startChar": 7,
+        "endLine": 2003,
+        "endChar": 23
+      },
+      "revId": "103ce5f3d88b55ae66c9f4737e02d94b107d9df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
