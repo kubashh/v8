@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c02e9a3e_0e1ecdb7",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-28T13:29:00Z",
+      "side": 1,
+      "message": "nit: For naming convention: compare with:\nhttps://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20-%20arm64%20-%20sim%20-%20pointer%20compression%20-%20builder\n\ni.e. more dashes.\n\nThe overall order here in this file is a bit odd. win32 stuff in between the linux builders. Maybe this could be rearanged in a follow up?",
+      "range": {
+        "startLine": 345,
+        "startChar": 12,
+        "endLine": 345,
+        "endChar": 53
+      },
+      "revId": "4372304ff40d4e150afc50a79c469ee8c39eaff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
