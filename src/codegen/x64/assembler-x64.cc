@@ -267,6 +267,11 @@ bool ConstPool::AddSharedEntry(uint64_t data, int offset) {
   return true;
 }
 
+bool ConstPool::AddSharedEntry(uint64_t high, uint64_t low, int offset) {
+  simd_entries_.emplace(std::make_pair(high, low), offset + kMovdquRipOffset);
+  return true;
+}
+
 bool ConstPool::TryRecordEntry(intptr_t data, RelocInfo::Mode mode) {
   if (!FLAG_partial_constant_pool) return false;
   DCHECK_WITH_MSG(
@@ -283,6 +288,13 @@ bool ConstPool::TryRecordEntry(intptr_t data, RelocInfo::Mode mode) {
   uint64_t raw_data = static_cast<uint64_t>(data);
   int offset = assm_->pc_offset();
   return AddSharedEntry(raw_data, offset);
+}
+
+bool ConstPool::TryRecordEntry(uint64_t high, uint64_t low) {
+  DCHECK(FLAG_partial_constant_pool);
+  DCHECK(FLAG_text_is_readable);
+  int offset = assm_->pc_offset();
+  return AddSharedEntry(high, low, offset);
 }
 
 bool ConstPool::IsMoveRipRelative(Address instr) {
@@ -320,12 +332,39 @@ void ConstPool::PatchEntries() {
   Clear();
 }
 
+void ConstPool::EmitAndPatchSimdEntries() {
+  ASM_CODE_COMMENT(assm_);
+  assm_->DataAlign(kSimd128Size);
+  // TODO(zhin): align?
+  // get size of constant pool, how many 128 bits
+  // doesn't work right now, need to align
+  /* assm_->movq(rsp, Immediate(static_cast<int32_t>(simd_entries_.size() *
+   * 4))); */
+  // emit prologue
+  // for simplicity (no disasm support, no jumps over pool), just emit entries.
+  for (auto& e : simd_entries_) {
+    USE(e);
+    auto range = simd_entries_.equal_range(e.first);
+    auto pc = assm_->pc_offset();
+    for (auto i = range.first; i != range.second; ++i) {
+      // patch up all instructions
+      WriteUnalignedValue(assm_->addr_at(i->second), pc - (i->second + 4));
+      // TODO(zhin): assm_->GrowBuffer();
+    }
+    // emit the constant
+    assm_->dq(e.first.second);
+    assm_->dq(e.first.first);
+  }
+  simd_entries_.clear();
+}
+
 void Assembler::PatchConstPool() {
   // There is nothing to do if there are no pending entries.
   if (constpool_.IsEmpty()) {
     return;
   }
   constpool_.PatchEntries();
+  constpool_.EmitAndPatchSimdEntries();
 }
 
 bool Assembler::UseConstPoolFor(RelocInfo::Mode rmode) {
@@ -1728,6 +1767,18 @@ void Assembler::emit_mov(Operand dst, Immediate value, int size) {
   emit(0xC7);
   emit_operand(0x0, dst);
   emit(value);
+}
+
+void Assembler::emit_movdqu(XMMRegister dst, uint64_t high, uint64_t low) {
+  if (constpool_.TryRecordEntry(high, low)) {
+    // rip-relative move with offset = 0;
+    Label label;
+    CpuFeatureScope avx(this, AVX);
+    vmovdqu(dst, Operand(&label, 0));
+    bind(&label);
+  } else {
+    UNREACHABLE();
+  }
 }
 
 void Assembler::emit_mov(Register dst, Immediate64 value, int size) {
