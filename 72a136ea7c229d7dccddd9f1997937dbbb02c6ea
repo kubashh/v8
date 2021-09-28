@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2885ba3c_3d039d5d",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-28T09:31:20Z",
+      "side": 1,
+      "message": "The String method could still call Factory::GetInPlaceInternalizedStringMap and avoid the duplication, no? Or did I miss something?",
+      "parentUuid": "91bc1bd1_8f9700f4",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9755839c_834f6e16",
         "filename": "src/objects/visitors.h",
         "patchSetId": 4
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "The startup and shareable object cache are very close in functionality, so those two would be a good candidate to try to combine. RO acts a little different and isn\u0027t iterated by the GC in the same way, so maybe we can leave that out.\n\nThe main challenge I see with a combined cache is that there\u0027s a clear dependence hierarchy: startup objs might depend on shareable objs might depend on RO objs. So with a combine cache, there\u0027d still need to be multiple sections to they get deserialized in the right order.",
       "parentUuid": "9755839c_834f6e16",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a171c67_259d944e",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-28T09:31:20Z",
+      "side": 1,
+      "message": "That might just work out okay by itself, since it\u0027s the natural order the cache is filled (RO first, the others after). If possible, it\u0027d be a good simplification, but ofc it\u0027s out of scope of this CL.",
+      "parentUuid": "c653e341_1667222f",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -208,6 +244,24 @@
       "side": 1,
       "message": "I\u0027ve separated this change out on its own in PS7 and settled on the name SharedHeap instead of SharedIsolate, since to me SharedIsolateSerializer suggested serializing everything in the shared Isolate (the shared Isolate also deserializes the startup snapshot), while this is just about the shared portions.",
       "parentUuid": "5d45a5fd_8f214f96",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e745bf_50519db0",
+        "filename": "src/snapshot/shareable-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-28T09:31:20Z",
+      "side": 1,
+      "message": "Thanks, SharedHeap sounds like a good improvement to me.",
+      "parentUuid": "74c8c8fb_95a18461",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

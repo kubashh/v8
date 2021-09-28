@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a3ab3fa_ebb1ade3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-28T09:31:20Z",
+      "side": 1,
+      "message": "nit: Update shareable-\u003eshared heap in the commit msg too.",
+      "revId": "02e582fb40de004bb22afff448045d86e3f0c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bb6359c_a1109f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-28T09:31:20Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "02e582fb40de004bb22afff448045d86e3f0c333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
