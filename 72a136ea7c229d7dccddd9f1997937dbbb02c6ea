@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91bc1bd1_8f9700f4",
+        "filename": "src/heap/factory-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "I\u0027ve separated out this change on its own in PS6. Let me know what you think.",
+      "parentUuid": "3745c8fc_6a3002c5",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9755839c_834f6e16",
         "filename": "src/objects/visitors.h",
         "patchSetId": 4
@@ -90,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c653e341_1667222f",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "The startup and shareable object cache are very close in functionality, so those two would be a good candidate to try to combine. RO acts a little different and isn\u0027t iterated by the GC in the same way, so maybe we can leave that out.\n\nThe main challenge I see with a combined cache is that there\u0027s a clear dependence hierarchy: startup objs might depend on shareable objs might depend on RO objs. So with a combine cache, there\u0027d still need to be multiple sections to they get deserialized in the right order.",
+      "parentUuid": "9755839c_834f6e16",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80d7728e_de154c2b",
         "filename": "src/snapshot/serializer-deserializer.h",
         "patchSetId": 4
@@ -101,6 +137,24 @@
       "writtenOn": "2021-09-27T09:35:49Z",
       "side": 1,
       "message": "0x1d",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f98e533_e20a6d69",
+        "filename": "src/snapshot/serializer-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80d7728e_de154c2b",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -142,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74c8c8fb_95a18461",
+        "filename": "src/snapshot/shareable-deserializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "I\u0027ve separated this change out on its own in PS7 and settled on the name SharedHeap instead of SharedIsolate, since to me SharedIsolateSerializer suggested serializing everything in the shared Isolate (the shared Isolate also deserializes the startup snapshot), while this is just about the shared portions.",
+      "parentUuid": "5d45a5fd_8f214f96",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1d75f250_c694a10a",
         "filename": "src/snapshot/snapshot.cc",
         "patchSetId": 4
@@ -153,6 +225,24 @@
       "writtenOn": "2021-09-27T09:35:49Z",
       "side": 1,
       "message": "Hmm.. We should update this since neither the RO nor shareable bits are usually per-Isolate. Please either do that in a followup or file a bug, thanks!",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "251a596f_65615464",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "Removed this line and filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d12268",
+      "parentUuid": "1d75f250_c694a10a",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -174,6 +264,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "929ca14f_857c8530",
+        "filename": "src/snapshot/startup-serializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08b56187_c2411755",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81bdf75d_0dd7a664",
@@ -187,6 +295,24 @@
       "writtenOn": "2021-09-27T09:35:49Z",
       "side": 1,
       "message": "nit: I\u0027d remove this in favor of is_shared (kIsShared is potentially confusing because it implies a compile-time constant).",
+      "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc597b0_eec33390",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-28T00:38:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81bdf75d_0dd7a664",
       "revId": "72a136ea7c229d7dccddd9f1997937dbbb02c6ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
