@@ -593,6 +593,14 @@
       {'name': 'd8testing', 'test_args': ['--gc-stress'], 'shards': 12},
     ],
   },
+  'v8_linux_arm64_sim_heap_sandbox_dbg_ng_triggered': {
+    'swarming_dimensions' : {
+      'os': 'Ubuntu-18.04',
+    },
+    'tests': [
+      {'name': 'v8testing', 'shards': 2},
+    ],
+  },
   'v8_linux_arm64_rel_ng_triggered': {
     'swarming_dimensions' : {
       'os': 'Ubuntu-18.04',
@@ -1887,6 +1895,14 @@
         'test_args': ['--gc-stress', '--extra-flags=--verify-heap-skip-remembered-set'],
         'shards': 5
       },
+    ],
+  },
+  'V8 Linux arm64 sim - heap sandbox - debug': {
+    'swarming_dimensions' : {
+      'os': 'Ubuntu-18.04',
+    },
+    'tests': [
+      {'name': 'v8testing', 'shards': 2},
     ],
   },
   'V8 Linux - loong64 - sim': {
