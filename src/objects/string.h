@@ -551,6 +551,12 @@ class String : public TorqueGeneratedString<String, Name> {
                                               Handle<String> string,
                                               bool include_ending_line);
 
+  // Returns true if string can be internalized without copying. In such cases
+  // the string is inserted into the string table and its map is changed to an
+  // internalized equivalent.
+  static inline bool IsInPlaceInternalizable(String string);
+  static inline bool IsInPlaceInternalizable(InstanceType instance_type);
+
  private:
   friend class Name;
   friend class StringTableInsertionKey;

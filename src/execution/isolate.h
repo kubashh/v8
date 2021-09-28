@@ -612,7 +612,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   bool InitWithoutSnapshot();
   bool InitWithSnapshot(SnapshotData* startup_snapshot_data,
-                        SnapshotData* read_only_snapshot_data, bool can_rehash);
+                        SnapshotData* read_only_snapshot_data,
+                        SnapshotData* shareable_snapshot_data, bool can_rehash);
 
   // True if at least one thread Enter'ed this isolate.
   bool IsInUse() { return entry_stack_ != nullptr; }
@@ -1567,6 +1568,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   std::vector<Object>* startup_object_cache() { return &startup_object_cache_; }
 
+  std::vector<Object>* shareable_object_cache() {
+    if (shared_isolate()) return shared_isolate()->shareable_object_cache();
+    return &shareable_object_cache_;
+  }
+
   bool IsGeneratingEmbeddedBuiltins() const {
     return builtins_constants_table_builder() != nullptr;
   }
@@ -1832,7 +1838,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   ~Isolate();
 
   bool Init(SnapshotData* startup_snapshot_data,
-            SnapshotData* read_only_snapshot_data, bool can_rehash);
+            SnapshotData* read_only_snapshot_data,
+            SnapshotData* shareable_snapshot_data, bool can_rehash);
 
   void CheckIsolateLayout();
 
@@ -2169,6 +2176,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   v8::metrics::LongTaskStats long_task_stats_;
 
   std::vector<Object> startup_object_cache_;
+
+  // When sharing data among Isolates (e.g. FLAG_shared_string_table), only the
+  // shared Isolate populates this and client Isolates reference that copy.
+  //
+  // Otherwise this is populated for all Isolates.
+  std::vector<Object> shareable_object_cache_;
 
   // Used during builtins compilation to build the builtins constants table,
   // which is stored on the root list prior to serialization.
