@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "0cdfd9b957aee2550b9ccaf6c5a86d890451ce60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f484fcb5_01590fdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-28T16:37:56Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0cdfd9b957aee2550b9ccaf6c5a86d890451ce60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60f2a12a_c49b0b4f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-09-28T16:37:56Z",
+      "side": 1,
+      "message": "std::ignore",
+      "range": {
+        "startLine": 1784,
+        "startChar": 11,
+        "endLine": 1784,
+        "endChar": 26
+      },
+      "revId": "0cdfd9b957aee2550b9ccaf6c5a86d890451ce60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
