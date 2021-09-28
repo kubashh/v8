@@ -20,8 +20,8 @@ struct TorqueCompilerOptions {
   std::string v8_root = "";
   bool collect_language_server_data = false;
 
-  // assert(...) are only generated for debug builds. The provide
-  // language server support for statements inside asserts, this flag
+  // dcheck(...) are only generated for debug builds. To provide
+  // language server support for statements inside dchecks, this flag
   // can force generate them.
   bool force_assert_statements = false;
 
