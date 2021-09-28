@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc82092_0dbab841",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-28T14:17:48Z",
+      "side": 1,
+      "message": "That was overzealous... I meant to attach the low prio label only at the experimental builder below. The explanation is that that is continuously running and it should not eat up too many resources.\n\nThe opt-in trybot usually does not run. When it runs on request (rarely) it should still respond fast.",
+      "range": {
+        "startLine": 600,
+        "startChar": 4,
+        "endLine": 604,
+        "endChar": 6
+      },
+      "revId": "cefce4d8994c03e8c49de8b6c9229519c3cc857d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
