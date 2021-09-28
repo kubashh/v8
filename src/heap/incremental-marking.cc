@@ -944,7 +944,9 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
     // This ignores that case where the embedder finds new V8-side objects. The
     // assumption is that large graphs are well connected and can mostly be
     // processed on their own. For small graphs, helping is not necessary.
-    v8_bytes_processed = collector_->ProcessMarkingWorklist(bytes_to_process);
+    size_t objects_processed;
+    std::tie(v8_bytes_processed, objects_processed) =
+        collector_->ProcessMarkingWorklist(bytes_to_process);
     StepResult v8_result = local_marking_worklists()->IsEmpty()
                                ? StepResult::kNoImmediateWork
                                : StepResult::kMoreWorkRemaining;
