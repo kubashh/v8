@@ -1717,24 +1717,26 @@ void MarkCompactCollector::RevisitObject(HeapObject obj) {
   marking_visitor_->Visit(obj.map(), obj);
 }
 
-void MarkCompactCollector::ProcessEphemeronsUntilFixpoint() {
-  bool work_to_do = true;
+bool MarkCompactCollector::ProcessEphemeronsUntilFixpoint() {
+  bool another_iteration;
+
   int iterations = 0;
   int max_iterations = FLAG_ephemeron_fixpoint_iterations;
 
-  while (work_to_do) {
+  do {
     PerformWrapperTracing();
 
     if (iterations >= max_iterations) {
       // Give up fixpoint iteration and switch to linear algorithm.
-      ProcessEphemeronsLinear();
-      break;
+      return false;
     }
 
     // Move ephemerons from next_ephemerons into current_ephemerons to
     // drain them in this iteration.
     weak_objects_.current_ephemerons.Swap(weak_objects_.next_ephemerons);
-    heap()->concurrent_marking()->set_ephemeron_marked(false);
+    heap()->concurrent_marking()->set_another_ephemeron_iteration(false);
+
+    bool another_ephemeron_iteration_main_thread;
 
     {
       TRACE_GC(heap()->tracer(),
@@ -1745,47 +1747,56 @@ void MarkCompactCollector::ProcessEphemeronsUntilFixpoint() {
             TaskPriority::kUserBlocking);
       }
 
-      work_to_do = ProcessEphemerons();
+      another_ephemeron_iteration_main_thread = ProcessEphemerons();
       FinishConcurrentMarking();
     }
 
     CHECK(weak_objects_.current_ephemerons.IsEmpty());
     CHECK(weak_objects_.discovered_ephemerons.IsEmpty());
 
-    work_to_do = work_to_do || !local_marking_worklists()->IsEmpty() ||
-                 heap()->concurrent_marking()->ephemeron_marked() ||
-                 !local_marking_worklists()->IsEmbedderEmpty() ||
-                 !heap()->local_embedder_heap_tracer()->IsRemoteTracingDone();
+    another_iteration =
+        another_ephemeron_iteration_main_thread ||
+        heap()->concurrent_marking()->another_ephemeron_iteration() ||
+        !local_marking_worklists()->IsEmpty() ||
+        !local_marking_worklists()->IsEmbedderEmpty() ||
+        !heap()->local_embedder_heap_tracer()->IsRemoteTracingDone();
     ++iterations;
-  }
+  } while (another_iteration);
 
   CHECK(local_marking_worklists()->IsEmpty());
   CHECK(weak_objects_.current_ephemerons.IsEmpty());
   CHECK(weak_objects_.discovered_ephemerons.IsEmpty());
+  return true;
 }
 
 bool MarkCompactCollector::ProcessEphemerons() {
   Ephemeron ephemeron;
-  bool ephemeron_marked = false;
+  bool another_ephemeron_iteration = false;
 
   // Drain current_ephemerons and push ephemerons where key and value are still
   // unreachable into next_ephemerons.
   while (weak_objects_.current_ephemerons.Pop(kMainThreadTask, &ephemeron)) {
     if (ProcessEphemeron(ephemeron.key, ephemeron.value)) {
-      ephemeron_marked = true;
+      another_ephemeron_iteration = true;
     }
   }
 
   // Drain marking worklist and push discovered ephemerons into
   // discovered_ephemerons.
-  DrainMarkingWorklist();
+  bool was_object_processed = false;
+  DrainMarkingWorklist(&was_object_processed);
+
+  // As soon as a single object was processed and potentially marked another
+  // object we need another iteration. Otherwise we might miss to apply
+  // ephemeron semantics on it.
+  if (was_object_processed) another_ephemeron_iteration = true;
 
   // Drain discovered_ephemerons (filled in the drain MarkingWorklist-phase
   // before) and push ephemerons where key and value are still unreachable into
   // next_ephemerons.
   while (weak_objects_.discovered_ephemerons.Pop(kMainThreadTask, &ephemeron)) {
     if (ProcessEphemeron(ephemeron.key, ephemeron.value)) {
-      ephemeron_marked = true;
+      another_ephemeron_iteration = true;
     }
   }
 
@@ -1793,7 +1804,7 @@ bool MarkCompactCollector::ProcessEphemerons() {
   weak_objects_.ephemeron_hash_tables.FlushToGlobal(kMainThreadTask);
   weak_objects_.next_ephemerons.FlushToGlobal(kMainThreadTask);
 
-  return ephemeron_marked;
+  return another_ephemeron_iteration;
 }
 
 void MarkCompactCollector::ProcessEphemeronsLinear() {
@@ -1879,6 +1890,12 @@ void MarkCompactCollector::ProcessEphemeronsLinear() {
   ephemeron_marking_.newly_discovered.shrink_to_fit();
 
   CHECK(local_marking_worklists()->IsEmpty());
+  CHECK(weak_objects_.current_ephemerons.IsEmpty());
+  CHECK(weak_objects_.discovered_ephemerons.IsEmpty());
+
+  // Flush local ephemerons for main task to global pool.
+  weak_objects_.ephemeron_hash_tables.FlushToGlobal(kMainThreadTask);
+  weak_objects_.next_ephemerons.FlushToGlobal(kMainThreadTask);
 }
 
 void MarkCompactCollector::PerformWrapperTracing() {
@@ -1897,10 +1914,13 @@ void MarkCompactCollector::PerformWrapperTracing() {
   }
 }
 
-void MarkCompactCollector::DrainMarkingWorklist() { ProcessMarkingWorklist(0); }
+void MarkCompactCollector::DrainMarkingWorklist(bool* was_object_processed) {
+  ProcessMarkingWorklist(0, was_object_processed);
+}
 
 template <MarkCompactCollector::MarkingWorklistProcessingMode mode>
-size_t MarkCompactCollector::ProcessMarkingWorklist(size_t bytes_to_process) {
+size_t MarkCompactCollector::ProcessMarkingWorklist(
+    size_t bytes_to_process, bool* was_object_processed) {
   HeapObject object;
   size_t bytes_processed = 0;
   bool is_per_context_mode = local_marking_worklists()->IsPerContextMode();
@@ -1929,6 +1949,7 @@ size_t MarkCompactCollector::ProcessMarkingWorklist(size_t bytes_to_process) {
                     kTrackNewlyDiscoveredObjects) {
       AddNewlyDiscovered(object);
     }
+    if (was_object_processed) *was_object_processed = true;
     Map map = object.map(isolate);
     if (is_per_context_mode) {
       Address context;
@@ -1952,10 +1973,11 @@ size_t MarkCompactCollector::ProcessMarkingWorklist(size_t bytes_to_process) {
 // Generate definitions for use in other files.
 template size_t MarkCompactCollector::ProcessMarkingWorklist<
     MarkCompactCollector::MarkingWorklistProcessingMode::kDefault>(
-    size_t bytes_to_process);
+    size_t bytes_to_process, bool* was_object_processed);
 template size_t MarkCompactCollector::ProcessMarkingWorklist<
     MarkCompactCollector::MarkingWorklistProcessingMode::
-        kTrackNewlyDiscoveredObjects>(size_t bytes_to_process);
+        kTrackNewlyDiscoveredObjects>(size_t bytes_to_process,
+                                      bool* was_object_processed);
 
 bool MarkCompactCollector::ProcessEphemeron(HeapObject key, HeapObject value) {
   if (marking_state()->IsBlackOrGrey(key)) {
@@ -1978,7 +2000,24 @@ void MarkCompactCollector::ProcessEphemeronMarking() {
   // buffer, flush it into global pool.
   weak_objects_.next_ephemerons.FlushToGlobal(kMainThreadTask);
 
-  ProcessEphemeronsUntilFixpoint();
+  bool reached_fixpoint = ProcessEphemeronsUntilFixpoint();
+  if (!reached_fixpoint) {
+    // Fixpoint iteration needed too many iterations and was cancelled. Use the
+    // guaranteed linear algorithm.
+    ProcessEphemeronsLinear();
+  }
+
+#ifdef VERIFY_HEAP
+  if (FLAG_verify_heap) {
+    Ephemeron ephemeron;
+
+    weak_objects_.current_ephemerons.Swap(weak_objects_.next_ephemerons);
+
+    while (weak_objects_.current_ephemerons.Pop(kMainThreadTask, &ephemeron)) {
+      CHECK(!ProcessEphemeron(ephemeron.key, ephemeron.value));
+    }
+  }
+#endif
 
   CHECK(local_marking_worklists()->IsEmpty());
   CHECK(heap()->local_embedder_heap_tracer()->IsRemoteTracingDone());
