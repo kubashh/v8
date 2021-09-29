@@ -246,7 +246,7 @@ void CodeAssembler::GenerateCheckMaybeObjectIsObject(TNode<MaybeObject> node,
   SNPrintF(message, "no Object: %s", location);
   TNode<String> message_node = StringConstant(message.begin());
   // This somewhat misuses the AbortCSAAssert runtime function. This will print
-  // "abort: CSA_ASSERT failed: <message>", which is good enough.
+  // "abort: CSA_DCHECK failed: <message>", which is good enough.
   AbortCSAAssert(message_node);
   Unreachable();
   Bind(&ok);
