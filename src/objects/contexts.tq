@@ -57,7 +57,7 @@ extern class NativeContext extends Context;
 type Slot<Container : type extends Context, T : type extends Object> extends
     intptr;
 
-// We cannot use ContextSlot() for initialization since that one asserts the
+// We cannot use ContextSlot() for initialization since that one dchecks the
 // slot has the right type already.
 macro InitContextSlot<
     ArgumentContext: type, AnnotatedContext: type, T: type, U: type>(
@@ -65,7 +65,7 @@ macro InitContextSlot<
   // Make sure the arguments have the right type.
   const context: AnnotatedContext = context;
   const value: T = value;
-  assert(TaggedEqual(context.elements[index], kInitialContextSlotValue));
+  dcheck(TaggedEqual(context.elements[index], kInitialContextSlotValue));
   context.elements[index] = value;
 }
 
