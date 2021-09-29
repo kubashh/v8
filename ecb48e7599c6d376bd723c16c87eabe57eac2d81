@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1869ee_167e6208",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "Maybe you can associate it with the last cleanup Friday\u0027s efforts:\nBug: v8:12244",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c9a7936a_f5a6bb67",
@@ -31,6 +48,132 @@
       "writtenOn": "2021-09-29T12:26:03Z",
       "side": 1,
       "message": "rubberstamp lgtm, thanks!",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7edf036_78d3d071",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "lgtm with suggestions",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c883188_9c48a463",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "Maybe-nit: how about adding a bit of camel case: DCheck?",
+      "range": {
+        "startLine": 771,
+        "startChar": 7,
+        "endLine": 771,
+        "endChar": 13
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87fda843_5126a110",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 4071,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "And here too: DCheckXXX.",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa440bf_af7a7949",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "For completeness: AbortCSADCheck?",
+      "range": {
+        "startLine": 986,
+        "startChar": 30,
+        "endLine": 986,
+        "endChar": 39
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "920cc007_e9230888",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "Maybe also kDCheck?",
+      "range": {
+        "startLine": 724,
+        "startChar": 26,
+        "endLine": 724,
+        "endChar": 33
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86d4208f_cb947c41",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-09-29T20:07:00Z",
+      "side": 1,
+      "message": "DChecks",
+      "range": {
+        "startLine": 452,
+        "startChar": 50,
+        "endLine": 452,
+        "endChar": 57
+      },
       "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
