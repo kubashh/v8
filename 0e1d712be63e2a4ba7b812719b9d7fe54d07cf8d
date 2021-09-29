@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b506c9_fb197e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1268305
+      },
+      "writtenOn": "2021-09-29T03:53:00Z",
+      "side": 1,
+      "message": "\u003e @ukai: lgtm, but I don\u0027t have +1 power?\n\u003e can we validate if builder sets use_rbe\u003dtrue, but has no use_goma\u003dfalse?\n\n@msavigny can you comment on why it doesn\u0027t work like this today? We can probably address this in a separate CL though.\n",
+      "revId": "0e1d712be63e2a4ba7b812719b9d7fe54d07cf8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
