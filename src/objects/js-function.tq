@@ -34,7 +34,6 @@ extern class JSFunction extends JSFunctionOrBoundFunction {
 // raise an exception.
 // See ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList ).
 @doNotGenerateCast
-@noVerifier
 @highestInstanceTypeWithinParentClassRange
 extern class JSClassConstructor extends JSFunction
     generates 'TNode<JSFunction>';
