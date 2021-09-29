@@ -16,6 +16,23 @@
       "message": "ptal:\n\njgruber: all\nnicohartmann: torque\nishell: ic\nsyg: interpreter\n",
       "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15109c1e_c412b11c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-09-29T12:26:03Z",
+      "side": 1,
+      "message": "rubberstamp lgtm, thanks!",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
