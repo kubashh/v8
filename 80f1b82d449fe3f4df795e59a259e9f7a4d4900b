@@ -33,6 +33,24 @@
       "message": "Please add a comment that nullptr either means that we don\u0027t have a shared isolate and we need to iterate the (actually unshared) shared heap object cache, otherwise it is the shared isolate and we need to iterate it.",
       "revId": "80f1b82d449fe3f4df795e59a259e9f7a4d4900b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d29f40c_c143e063",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4894,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-09-29T21:07:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c27e8b81_374fbba3",
+      "revId": "80f1b82d449fe3f4df795e59a259e9f7a4d4900b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
