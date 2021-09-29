@@ -50,6 +50,24 @@
       "message": "Sorry Anton, I forgot to wait for your +1 on this CL.\nSince this is a reland, I\u0027m assuming it\u0027s not critical and I\u0027m moving you to cc.",
       "revId": "d02e8743f8962cccb6bcaba89534fad082be7609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af5ecc8_0945518a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2021-09-29T16:45:13Z",
+      "side": 1,
+      "message": "Lgtm, thanks anyway!",
+      "parentUuid": "d65aa13e_1b2fc725",
+      "revId": "d02e8743f8962cccb6bcaba89534fad082be7609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
