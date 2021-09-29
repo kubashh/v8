@@ -279,7 +279,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   // Compute the matching internalized string map for a string if possible.
   // Empty handle is returned if string is in new space or not flattened.
-  V8_WARN_UNUSED_RESULT MaybeHandle<Map> InternalizedStringMapForString(
+  V8_WARN_UNUSED_RESULT MaybeHandle<Map> InPlaceInternalizedStringMapForString(
       Handle<String> string);
 
   // Creates an internalized copy of an external string. |string| must be
@@ -969,6 +969,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   }
   bool CanAllocateInReadOnlySpace();
   bool EmptyStringRootIsInitialized();
+  AllocationType AllocationTypeForInPlaceInternalizableString();
 
   void AddToScriptList(Handle<Script> shared);
   // ------
