@@ -843,7 +843,7 @@ TF_BUILTIN(CopyDataProperties, SetOrCopyDataPropertiesAssembler) {
   auto source = Parameter<Object>(Descriptor::kSource);
   auto context = Parameter<Context>(Descriptor::kContext);
 
-  CSA_ASSERT(this, TaggedNotEqual(target, source));
+  CSA_DCHECK(this, TaggedNotEqual(target, source));
 
   Label if_runtime(this, Label::kDeferred);
   Return(SetOrCopyDataProperties(context, target, source, &if_runtime, false));
@@ -1234,7 +1234,7 @@ TF_BUILTIN(GetPropertyWithReceiver, CodeStubAssembler) {
   GotoIf(TaggedEqual(on_non_existent,
                      SmiConstant(OnNonExistent::kThrowReferenceError)),
          &throw_reference_error);
-  CSA_ASSERT(this, TaggedEqual(on_non_existent,
+  CSA_DCHECK(this, TaggedEqual(on_non_existent,
                                SmiConstant(OnNonExistent::kReturnUndefined)));
   Return(UndefinedConstant());
 
