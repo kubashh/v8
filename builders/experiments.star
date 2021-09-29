@@ -296,6 +296,7 @@ experiment_builder(
     executable = "recipe:v8/node_integration_ng",
     dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
     properties = {"v8_tot": True, "builder_group": "client.v8"},
+    use_goma = GOMA.NO,
     use_rbe = RECLIENT.CACHE_SILO,
     to_notify = ["yyanagisawa@google.com"],
 )
