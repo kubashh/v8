@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a7936a_f5a6bb67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-29T12:18:49Z",
+      "side": 1,
+      "message": "ptal:\n\njgruber: all\nnicohartmann: torque\nishell: ic\nsyg: interpreter\n",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
