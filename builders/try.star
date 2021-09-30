@@ -60,6 +60,14 @@ try_builder(
 )
 
 try_builder(
+    name = "v8_linux_arm_lite_dbg",
+    bucket = "try",
+    cq_properties = {"cancel_stale": False},
+    dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
+    use_goma = GOMA.DEFAULT,
+)
+
+try_builder(
     name = "v8_linux64_bazel",
     bucket = "try",
     cq_properties = {"includable_only": "true", "cancel_stale": False},
