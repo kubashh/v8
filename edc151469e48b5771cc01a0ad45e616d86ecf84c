@@ -16,6 +16,23 @@
       "message": "Hello Jakob, would you PTAL at third_party? Thanks!",
       "revId": "edc151469e48b5771cc01a0ad45e616d86ecf84c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db350acc_9e67f155",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-30T13:03:10Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "edc151469e48b5771cc01a0ad45e616d86ecf84c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
