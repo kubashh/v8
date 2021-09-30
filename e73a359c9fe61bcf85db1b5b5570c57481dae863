@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "986b1019_49048e4d",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-30T15:16:09Z",
+      "side": 1,
+      "message": "I did both, I think it makes the most sense this way.",
+      "parentUuid": "0c82aa4f_40faddab",
+      "range": {
+        "startLine": 165,
+        "startChar": 24,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6200d7a5_8d95008e",
@@ -83,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "399f4b14_2d7ce04c",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-30T15:16:09Z",
+      "side": 1,
+      "message": "I rewrote this comment along with a sketch. Please tell me if it is more clear now.",
+      "parentUuid": "6200d7a5_8d95008e",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 174,
+        "endChar": 40
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c39211d_0fe74445",
         "filename": "src/compiler/branch-elimination.cc",
         "patchSetId": 2
@@ -94,6 +142,30 @@
       "writtenOn": "2021-09-30T13:43:12Z",
       "side": 1,
       "message": "Please add a DCHECK here that branch\u0027s opcode is actually kBranch.",
+      "range": {
+        "startLine": 251,
+        "startChar": 13,
+        "endLine": 251,
+        "endChar": 21
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f6a130a_f708fb7a",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-09-30T15:16:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c39211d_0fe74445",
       "range": {
         "startLine": 251,
         "startChar": 13,
