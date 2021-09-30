@@ -34,6 +34,41 @@
       "parentUuid": "63647fd0_7da7c19a",
       "revId": "720340c1699fdb26d37c11120974ac77c43f1d7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c2110a_4e37ec35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-30T11:20:20Z",
+      "side": 1,
+      "message": "It\u0027s a race condition: if a CQ dry run succeeds, and then you submit to CQ within some time limit (maybe 24 hours, I\u0027m not sure exactly), then CQ only runs presubmit rather than running all of the try bots again. Even if it did run all of the try bots again, there is still the possibility that another change lands while the bots are running. Unless that other change causes a merge conflict in the source code, CQ will go ahead and land.",
+      "parentUuid": "da41f3f1_09b6fd98",
+      "revId": "720340c1699fdb26d37c11120974ac77c43f1d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14bd0c8_74f9a63b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-30T11:20:20Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "720340c1699fdb26d37c11120974ac77c43f1d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
