@@ -16,6 +16,92 @@
       "message": "Nico, PTAL.",
       "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "745d5f2a_29c7b297",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-30T13:43:12Z",
+      "side": 1,
+      "message": "LGTM with few comments",
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c82aa4f_40faddab",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-30T13:43:12Z",
+      "side": 1,
+      "message": "The name and the preconditions somewhat mismatch as this is not necessarily doing anything. I\u0027d rather prefer one of two options:\n1.) Check that the control input is a kMerge outside of the function and only call it when there actually is a merge to pull the trap into or\n2.) Rename the function in a way that reflects that this attempts to pull trap into merge but it might not succeed in doing so (e.g. TryPullTrapIntoMerge or something along those lines).\n\nSince there are other scenarios in which pulling the trap into the merge may fail, the latter might be the better option.",
+      "range": {
+        "startLine": 165,
+        "startChar": 24,
+        "endLine": 165,
+        "endChar": 41
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6200d7a5_8d95008e",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-30T13:43:12Z",
+      "side": 1,
+      "message": "Not sure I understand this comment. The condition below aborts this function in all cases but when the effect input is the EffectPhi for the given merge, so what do you mean by \"does not depend on the merge\" here?",
+      "range": {
+        "startLine": 173,
+        "startChar": 2,
+        "endLine": 174,
+        "endChar": 40
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c39211d_0fe74445",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-30T13:43:12Z",
+      "side": 1,
+      "message": "Please add a DCHECK here that branch\u0027s opcode is actually kBranch.",
+      "range": {
+        "startLine": 251,
+        "startChar": 13,
+        "endLine": 251,
+        "endChar": 21
+      },
+      "revId": "e73a359c9fe61bcf85db1b5b5570c57481dae863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
