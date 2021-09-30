@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d08d094d_5679fbe2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea1869ee_167e6208",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c9a7936a_f5a6bb67",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -116,6 +134,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "772ddb59_311ef042",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Hmm, we have other occurrences of Dcheck in the code base, more than DCheck.\n\nThese in master:\nmarja@marja-workstation:~/code/v8/v8$ git grep Dcheck | wc -l\n45\nmarja@marja-workstation:~/code/v8/v8$ git grep DCheck | wc -l\n9\n\nE.g., DcheckIntegerPartRange, DefaultDcheckHandler and the objectively surprisingly capitalized V8_Dcheck.\n\n-\u003e Sticking with the majority here and keeping Dcheck.",
+      "parentUuid": "eacebe31_03c37163",
+      "range": {
+        "startLine": 771,
+        "startChar": 7,
+        "endLine": 771,
+        "endChar": 13
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87fda843_5126a110",
@@ -133,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e8fc05_1da6faad",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 4071,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "87fda843_5126a110",
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fa440bf_af7a7949",
@@ -146,6 +206,30 @@
       "writtenOn": "2021-09-29T20:07:00Z",
       "side": 1,
       "message": "For completeness: AbortCSADCheck?",
+      "range": {
+        "startLine": 986,
+        "startChar": 30,
+        "endLine": 986,
+        "endChar": 39
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c2d626d_ee0e52f4",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fa440bf_af7a7949",
       "range": {
         "startLine": 986,
         "startChar": 30,
@@ -179,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d53a5bb_39a3a8c9",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Ditto, keeping Dcheck here too",
+      "parentUuid": "920cc007_e9230888",
+      "range": {
+        "startLine": 724,
+        "startChar": 26,
+        "endLine": 724,
+        "endChar": 33
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86d4208f_cb947c41",
@@ -192,6 +300,30 @@
       "writtenOn": "2021-09-29T20:07:00Z",
       "side": 1,
       "message": "DChecks",
+      "range": {
+        "startLine": 452,
+        "startChar": 50,
+        "endLine": 452,
+        "endChar": 57
+      },
+      "revId": "ecb48e7599c6d376bd723c16c87eabe57eac2d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "464c67c4_4da5fd97",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-09-30T07:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86d4208f_cb947c41",
       "range": {
         "startLine": 452,
         "startChar": 50,
