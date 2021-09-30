@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd99cbb_1f8247e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-09-30T11:34:51Z",
+      "side": 1,
+      "message": "Hello Jakob, would you PTAL at third_party? Thanks!",
+      "revId": "edc151469e48b5771cc01a0ad45e616d86ecf84c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
