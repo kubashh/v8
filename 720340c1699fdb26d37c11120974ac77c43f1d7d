@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63647fd0_7da7c19a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-09-30T08:05:49Z",
+      "side": 1,
+      "message": "Was the annotation you missed to remove the only thing causing the issue? How did this even get past trybots?",
+      "revId": "720340c1699fdb26d37c11120974ac77c43f1d7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
