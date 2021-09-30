@@ -22,6 +22,29 @@
       },
       "revId": "be678926cb1643033e8682a4c90c35171fa52859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46483e2_e9a64363",
+        "filename": "builders/try.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-09-30T13:51:18Z",
+      "side": 1,
+      "message": "Btw, let\u0027s not add this to CQ at once. We should first create the bot, make it 100% experimental and ensure that it works. Then add it to CQ. Also the debug builder in CI should be a tree closer. For that it should be builder/tester split.",
+      "range": {
+        "startLine": 65,
+        "startChar": 20,
+        "endLine": 65,
+        "endChar": 44
+      },
+      "revId": "be678926cb1643033e8682a4c90c35171fa52859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
