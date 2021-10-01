@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeea6eef_237de77c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2021-10-01T11:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07001f72_fb0758a1",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7deded19_5d318ec8",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a73f048_0a930a81",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2021-10-01T11:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7deded19_5d318ec8",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffd9f887_93030869",
@@ -48,6 +84,24 @@
       "writtenOn": "2021-10-01T09:50:07Z",
       "side": 1,
       "message": "The 3 lines between (and including) \"\u003d\u003d\u003d\u003d\u003d\u003d\u003d\" and \"\u003e\u003e\u003e\u003e\u003e\u003e\u003e CHANGE (1054ee [heap] Improve ephemeron processing)\" can be removed as well.",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad1141d_ac878d47",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2021-10-01T11:19:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffd9f887_93030869",
       "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
