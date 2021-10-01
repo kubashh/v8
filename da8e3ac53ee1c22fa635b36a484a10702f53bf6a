@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3a4c07d_f9ccabde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-01T05:22:29Z",
+      "side": 1,
+      "message": "This title is not very clear, and the description does not explain what the problem was. What about:\n\n[fuzzer] ref.func should look up functions by signature\n\nWhen we generate identical signatures in the fuzzer, we generate one function for each of the copies. However, when these functions are added to WasmModulBuilder, all will be assigned the same signature index. Therefore, when ref.func tries to find a function corresponding to a signature index, it will fail, despite a matching signature existing in the module.\nThis CL fixes this issue by looking up functions by signature over signature index.",
+      "revId": "da8e3ac53ee1c22fa635b36a484a10702f53bf6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b3e1c1fc_c22e0b4f",
         "filename": "test/fuzzer/wasm-compile.cc",
         "patchSetId": 3
