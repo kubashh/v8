@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9624bd7f_41f6a996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-10-01T06:18:50Z",
+      "side": 1,
+      "message": "Hey Simon,\n\nHere\u0027s a (surprisingly) straight-forward fix to properly catch the implicit promise rejections in async functions when in side-effect free debug evaluate.\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "56b7e2ef127e59b1c89d6a6608f4ced79b66f722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
