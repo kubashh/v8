@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c4098f_2044358f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1522473
+      },
+      "writtenOn": "2021-10-01T07:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3a4c07d_f9ccabde",
+      "revId": "da8e3ac53ee1c22fa635b36a484a10702f53bf6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3e1c1fc_c22e0b4f",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-10-01T04:59:34Z",
       "side": 1,
       "message": "You are comparing signature pointers here. This will still fail to match a function for the same reason as before. You need to compare the underlying signatures, i.e., dereference both parts of the equality with *.",
+      "range": {
+        "startLine": 853,
+        "startChar": 8,
+        "endLine": 853,
+        "endChar": 76
+      },
+      "revId": "da8e3ac53ee1c22fa635b36a484a10702f53bf6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71b4a323_1619883b",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1522473
+      },
+      "writtenOn": "2021-10-01T07:58:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3e1c1fc_c22e0b4f",
       "range": {
         "startLine": 853,
         "startChar": 8,
