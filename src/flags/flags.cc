@@ -40,6 +40,8 @@ namespace internal {
 
 namespace {
 
+char NormalizeChar(char ch) { return ch == '_' ? '-' : ch; }
+
 struct Flag;
 Flag* FindFlagByPointer(const void* ptr);
 Flag* FindFlagByName(const char* name);
@@ -380,8 +382,6 @@ Flag flags[] = {
 
 const size_t num_flags = sizeof(flags) / sizeof(*flags);
 
-inline char NormalizeChar(char ch) { return ch == '_' ? '-' : ch; }
-
 bool EqualNames(const char* a, const char* b) {
   for (int i = 0; NormalizeChar(a[i]) == NormalizeChar(b[i]); i++) {
     if (a[i] == '\0') {
@@ -429,7 +429,14 @@ static const char* Type2String(Flag::FlagType type) {
   UNREACHABLE();
 }
 
-std::ostream& operator<<(std::ostream& os, const Flag& flag) {
+// Helper for printing flag values.
+struct FlagValue {
+  explicit FlagValue(const Flag& flag) : flag(flag) {}
+  const Flag& flag;
+};
+
+std::ostream& operator<<(std::ostream& os, const FlagValue& flag_value) {
+  const Flag& flag = flag_value.flag;
   switch (flag.type()) {
     case Flag::TYPE_BOOL:
       os << (flag.bool_variable() ? "true" : "false");
@@ -463,26 +470,13 @@ std::ostream& operator<<(std::ostream& os, const Flag& flag) {
   return os;
 }
 
-// static
-std::vector<const char*>* FlagList::argv() {
-  std::vector<const char*>* args = new std::vector<const char*>(8);
-  for (size_t i = 0; i < num_flags; ++i) {
-    Flag* f = &flags[i];
-    if (!f->IsDefault()) {
-      {
-        bool disabled = f->type() == Flag::TYPE_BOOL && !f->bool_variable();
-        std::ostringstream os;
-        os << (disabled ? "--no" : "--") << f->name();
-        args->push_back(StrDup(os.str().c_str()));
-      }
-      if (f->type() != Flag::TYPE_BOOL) {
-        std::ostringstream os;
-        os << *f;
-        args->push_back(StrDup(os.str().c_str()));
-      }
-    }
+std::ostream& operator<<(std::ostream& os, const Flag& flag) {
+  if (flag.type() == Flag::TYPE_BOOL) {
+    os << (flag.bool_variable() ? "--" : "--no") << flag.name();
+  } else {
+    os << "--" << flag.name() << FlagValue(flag);
   }
-  return args;
+  return os;
 }
 
 // Helper function to parse flags: Takes an argument arg and splits it into
@@ -833,6 +827,14 @@ void FlagList::EnforceFlagImplications() {
 #undef FLAG_MODE_DEFINE_IMPLICATIONS
   } while (changed);
   ComputeFlagListHash();
+}
+
+// static
+void FlagList::PrintValues() {
+  StdoutStream os;
+  for (const Flag& f : flags) {
+    os << f << "\n";
+  }
 }
 
 uint32_t FlagList::Hash() { return flag_hash; }

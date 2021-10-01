@@ -1158,6 +1158,8 @@ DEFINE_BOOL(
 DEFINE_BOOL(trace_pending_allocations, false,
             "trace calls to Heap::IsAllocationPending that return true")
 
+DEFINE_BOOL(print_flags, false, "print all flags")
+
 DEFINE_INT(trace_allocation_stack_interval, -1,
            "print stack trace after <n> free-list allocations")
 DEFINE_INT(trace_duplicate_threshold_kb, 0,
