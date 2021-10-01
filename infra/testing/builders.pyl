@@ -2032,7 +2032,6 @@
       'priority': 35,
     },
     'tests': [
-      {'name': 'd8testing_random_gc', 'shards': 2},
       {
         'name': 'numfuzz',
         'suffix': 'marking',
@@ -2086,7 +2085,6 @@
       'priority': 35,
     },
     'tests': [
-      {'name': 'd8testing_random_gc'},
       {
         'name': 'numfuzz',
         'suffix': 'marking',
@@ -2201,7 +2199,6 @@
       'os': 'Ubuntu-18.04',
     },
     'tests': [
-      {'name': 'd8testing_random_gc'},
       {
         'name': 'numfuzz',
         'suffix': 'marking',
