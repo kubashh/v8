@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07001f72_fb0758a1",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-01T09:50:07Z",
+      "side": 1,
+      "message": "This line can be removed.",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7deded19_5d318ec8",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-01T09:50:07Z",
+      "side": 1,
+      "message": "This line can be removed.",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd9f887_93030869",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-01T09:50:07Z",
+      "side": 1,
+      "message": "The 3 lines between (and including) \"\u003d\u003d\u003d\u003d\u003d\u003d\u003d\" and \"\u003e\u003e\u003e\u003e\u003e\u003e\u003e CHANGE (1054ee [heap] Improve ephemeron processing)\" can be removed as well.",
+      "revId": "c713902a08723b69b75207a37a1dd7c6ae857479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
