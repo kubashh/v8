@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9492a2b8_ec7c86ca",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 2035,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-10-01T09:56:27Z",
+      "side": 0,
+      "message": "Please keep the ones in CI. I only meant the numfuzz trybots. If the name is confusing, you can create different CI bots if you want. We still want those tests though.\n\nJust on the trybots they are useless because we want to use the trybots to develop numfuzz...",
+      "range": {
+        "startLine": 2035,
+        "startChar": 6,
+        "endLine": 2035,
+        "endChar": 51
+      },
+      "revId": "0195a5eb4959567a6ef1e8aaf7885979a7d24441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
