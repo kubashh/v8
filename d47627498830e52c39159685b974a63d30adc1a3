@@ -56,6 +56,30 @@
       },
       "revId": "d47627498830e52c39159685b974a63d30adc1a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3f214d0_9d3dbb45",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-10-01T09:45:19Z",
+      "side": 1,
+      "message": "We do want to convert _ to - for the flag names to be slightly less confusing (even though we support both), thus the separate helper.\n\nFor f.comment we don\u0027t need any of this processing.",
+      "parentUuid": "c5d7c267_f13ef718",
+      "range": {
+        "startLine": 434,
+        "startChar": 7,
+        "endLine": 434,
+        "endChar": 15
+      },
+      "revId": "d47627498830e52c39159685b974a63d30adc1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
