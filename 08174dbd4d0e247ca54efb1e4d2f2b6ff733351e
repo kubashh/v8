@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "08174dbd4d0e247ca54efb1e4d2f2b6ff733351e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "260d0711_6eaf6616",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000623
+      },
+      "writtenOn": "2021-10-01T12:13:33Z",
+      "side": 1,
+      "message": "Don\u0027t have owners override for this repo",
+      "revId": "08174dbd4d0e247ca54efb1e4d2f2b6ff733351e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
