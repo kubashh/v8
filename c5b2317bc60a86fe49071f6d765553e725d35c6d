@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "023e1e35_9289ad7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-10-01T09:21:50Z",
+      "side": 1,
+      "message": "Hey Kim,\n\nHere\u0027s a fix (or probably - more accurately - duct tape) for the breakpoint right after closing bracket of function literals. Please take a look.\n\nthanks,\nBenedikt",
+      "revId": "c5b2317bc60a86fe49071f6d765553e725d35c6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
