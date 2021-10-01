@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "d47627498830e52c39159685b974a63d30adc1a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3963d80f_234ad14b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-01T09:40:03Z",
+      "side": 1,
+      "message": "lgtm with some nitting",
+      "revId": "d47627498830e52c39159685b974a63d30adc1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5d7c267_f13ef718",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-01T09:40:03Z",
+      "side": 1,
+      "message": "Nit: I\u0027m not sure if adding FlagName is needed, you could just use f.name() there, no? FlagValue seems to be needed because of the separate overloads for Flag and FlagValue.\n\nThere\u0027s already \"out \u003c\u003c f.comment();\" below, instead of \"out \u003c\u003c FlagComment(f);\".",
+      "range": {
+        "startLine": 434,
+        "startChar": 7,
+        "endLine": 434,
+        "endChar": 15
+      },
+      "revId": "d47627498830e52c39159685b974a63d30adc1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
