@@ -33,6 +33,23 @@
       "message": "Don\u0027t have owners override for this repo",
       "revId": "08174dbd4d0e247ca54efb1e4d2f2b6ff733351e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4ced5a_cd1285c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000623
+      },
+      "writtenOn": "2021-10-01T19:01:30Z",
+      "side": 1,
+      "message": "Looks like you need to move the No Try, No Presubmit etc to the end of the CL description",
+      "revId": "08174dbd4d0e247ca54efb1e4d2f2b6ff733351e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
