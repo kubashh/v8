@@ -13,6 +13,12 @@
 #include "src/tasks/cancelable-task.h"
 #include "src/tasks/task-utils.h"
 
+// This should be after all other #includes.
+#if defined(_WINDOWS_)  // Detect whether windows.h was included.
+// See base/win/windows_h_disallowed.h for details.
+#error Windows.h was included unexpectedly.
+#endif  // defined(_WINDOWS_)
+
 namespace v8 {
 namespace internal {
 
