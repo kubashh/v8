@@ -16,6 +16,7 @@
 #include "src/common/assert-scope.h"
 #include "src/handles/handles.h"
 #include "src/heap/factory.h"
+#include "src/numbers/ryu.cpp"
 #include "src/objects/bigint.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/string-inl.h"
@@ -1035,14 +1036,24 @@ const char* DoubleToCString(double v, base::Vector<char> buffer) {
       SimpleStringBuilder builder(buffer.begin(), buffer.length());
       int decimal_point;
       int sign;
-      const int kV8DtoaBufferCapacity = base::kBase10MaximalLength + 1;
-      char decimal_rep[kV8DtoaBufferCapacity];
       int length;
+      char* decimal_rep;
 
-      base::DoubleToAscii(
-          v, base::DTOA_SHORTEST, 0,
-          base::Vector<char>(decimal_rep, kV8DtoaBufferCapacity), &sign,
-          &length, &decimal_point);
+      if (FLAG_fast_double_to_string) {
+        ecmascript_result res = d2s_buffered_n(v);
+        sign = res.is_negative;
+        length = res.k;
+        decimal_point = res.n;
+        decimal_rep = res.buf;
+      } else {
+        const int kV8DtoaBufferCapacity = base::kBase10MaximalLength + 1;
+        char decimal_rep_temp[kV8DtoaBufferCapacity];
+        decimal_rep = decimal_rep_temp;
+        base::DoubleToAscii(
+            v, base::DTOA_SHORTEST, 0,
+            base::Vector<char>(decimal_rep, kV8DtoaBufferCapacity), &sign,
+            &length, &decimal_point);
+      }
 
       if (sign) builder.AddCharacter('-');
 
