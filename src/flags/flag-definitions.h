@@ -2170,6 +2170,10 @@ DEFINE_INT(dump_allocations_digest_at_alloc, -1,
 DEFINE_BOOL(enable_embedded_constant_pool, V8_EMBEDDED_CONSTANT_POOL,
             "enable use of embedded constant pools (PPC only)")
 
+// conversions.cc
+DEFINE_BOOL(fast_double_to_string, true,
+            "enable fast double to string using Ryu algorirthm")
+
 // Cleanup...
 #undef FLAG_FULL
 #undef FLAG_READONLY

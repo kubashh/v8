@@ -16,6 +16,7 @@
 #include "src/common/assert-scope.h"
 #include "src/handles/handles.h"
 #include "src/heap/factory.h"
+#include "src/numbers/ryu.cpp"
 #include "src/objects/bigint.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/string-inl.h"
@@ -1018,6 +1019,43 @@ template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
     MaybeHandle<BigInt> BigIntLiteral(LocalIsolate* isolate,
                                       const char* string);
 
+const char* FinalizeString(SimpleStringBuilder& builder, int decimal_point,
+                           int sign, int length, char* decimal_rep) {
+  if (sign) builder.AddCharacter('-');
+
+  if (length <= decimal_point && decimal_point <= 21) {
+    // ECMA-262 section 9.8.1 step 6.
+    builder.AddString(decimal_rep);
+    builder.AddPadding('0', decimal_point - length);
+
+  } else if (0 < decimal_point && decimal_point <= 21) {
+    // ECMA-262 section 9.8.1 step 7.
+    builder.AddSubstring(decimal_rep, decimal_point);
+    builder.AddCharacter('.');
+    builder.AddString(decimal_rep + decimal_point);
+
+  } else if (decimal_point <= 0 && decimal_point > -6) {
+    // ECMA-262 section 9.8.1 step 8.
+    builder.AddString("0.");
+    builder.AddPadding('0', -decimal_point);
+    builder.AddString(decimal_rep);
+
+  } else {
+    // ECMA-262 section 9.8.1 step 9 and 10 combined.
+    builder.AddCharacter(decimal_rep[0]);
+    if (length != 1) {
+      builder.AddCharacter('.');
+      builder.AddString(decimal_rep + 1);
+    }
+    builder.AddCharacter('e');
+    builder.AddCharacter((decimal_point >= 0) ? '+' : '-');
+    int exponent = decimal_point - 1;
+    if (exponent < 0) exponent = -exponent;
+    builder.AddDecimalInteger(exponent);
+  }
+  return builder.Finalize();
+}
+
 const char* DoubleToCString(double v, base::Vector<char> buffer) {
   switch (FPCLASSIFY_NAMESPACE::fpclassify(v)) {
     case FP_NAN:
@@ -1035,48 +1073,25 @@ const char* DoubleToCString(double v, base::Vector<char> buffer) {
       SimpleStringBuilder builder(buffer.begin(), buffer.length());
       int decimal_point;
       int sign;
-      const int kV8DtoaBufferCapacity = base::kBase10MaximalLength + 1;
-      char decimal_rep[kV8DtoaBufferCapacity];
       int length;
 
+      if (FLAG_fast_double_to_string) {
+        ecmascript_result res = d2s_buffered_n(v);
+        sign = res.is_negative;
+        length = res.k;
+        decimal_point = res.n;
+        auto decimal_rep = res.buf;
+        return FinalizeString(builder, decimal_point, sign, length,
+                              decimal_rep);
+      }
+      // Fall back to slow path.
+      const int kV8DtoaBufferCapacity = base::kBase10MaximalLength + 1;
+      char decimal_rep[kV8DtoaBufferCapacity];
       base::DoubleToAscii(
           v, base::DTOA_SHORTEST, 0,
           base::Vector<char>(decimal_rep, kV8DtoaBufferCapacity), &sign,
           &length, &decimal_point);
-
-      if (sign) builder.AddCharacter('-');
-
-      if (length <= decimal_point && decimal_point <= 21) {
-        // ECMA-262 section 9.8.1 step 6.
-        builder.AddString(decimal_rep);
-        builder.AddPadding('0', decimal_point - length);
-
-      } else if (0 < decimal_point && decimal_point <= 21) {
-        // ECMA-262 section 9.8.1 step 7.
-        builder.AddSubstring(decimal_rep, decimal_point);
-        builder.AddCharacter('.');
-        builder.AddString(decimal_rep + decimal_point);
-
-      } else if (decimal_point <= 0 && decimal_point > -6) {
-        // ECMA-262 section 9.8.1 step 8.
-        builder.AddString("0.");
-        builder.AddPadding('0', -decimal_point);
-        builder.AddString(decimal_rep);
-
-      } else {
-        // ECMA-262 section 9.8.1 step 9 and 10 combined.
-        builder.AddCharacter(decimal_rep[0]);
-        if (length != 1) {
-          builder.AddCharacter('.');
-          builder.AddString(decimal_rep + 1);
-        }
-        builder.AddCharacter('e');
-        builder.AddCharacter((decimal_point >= 0) ? '+' : '-');
-        int exponent = decimal_point - 1;
-        if (exponent < 0) exponent = -exponent;
-        builder.AddDecimalInteger(exponent);
-      }
-      return builder.Finalize();
+      return FinalizeString(builder, decimal_point, sign, length, decimal_rep);
     }
   }
 }
