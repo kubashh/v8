@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f334e29_99bbbd4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-10-04T22:27:39Z",
+      "side": 1,
+      "message": "Shu, can you ptal at this change to unblock V8 DEPS update? Thanks!",
+      "revId": "75b5d5d858ea30d05ae33926c3ee7d65e098db0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
