@@ -3701,8 +3701,18 @@ void InstructionSelector::VisitI8x16Swizzle(Node* node) {
        IsSupported(AVX) ? g.DefineAsRegister(node) : g.DefineSameAsFirst(node),
        g.UseRegister(node->InputAt(0)), g.UseRegister(node->InputAt(1)));
 }
+
+void InstructionSelector::VisitI8x16RelaxedSwizzle(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64I8x16RelaxedSwizzle,
+       IsSupported(AVX) ? g.DefineAsRegister(node) : g.DefineSameAsFirst(node),
+       g.UseRegister(node->InputAt(0)), g.UseRegister(node->InputAt(1)));
+}
 #else
 void InstructionSelector::VisitI8x16Swizzle(Node* node) { UNREACHABLE(); }
+void InstructionSelector::VisitI8x16RelaxedSwizzle(Node* node) {
+  UNREACHABLE();
+}
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 namespace {

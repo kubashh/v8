@@ -980,6 +980,7 @@
   V(S128Select)                 \
   V(S128AndNot)                 \
   V(I8x16Swizzle)               \
+  V(I8x16RelaxedSwizzle)        \
   V(I8x16Shuffle)               \
   V(V128AnyTrue)                \
   V(I64x2AllTrue)               \
