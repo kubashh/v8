@@ -916,6 +916,10 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   // Relaxed SIMD operators.
   const Operator* I8x16RelaxedSwizzle();
+  const Operator* I8x16RelaxedLaneSelect();
+  const Operator* I16x8RelaxedLaneSelect();
+  const Operator* I32x4RelaxedLaneSelect();
+  const Operator* I64x2RelaxedLaneSelect();
 
   // load [base + index]
   const Operator* Load(LoadRepresentation rep);
