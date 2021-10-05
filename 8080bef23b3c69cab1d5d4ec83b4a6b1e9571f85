@@ -16,6 +16,23 @@
       "message": "Maya, PTAL.",
       "revId": "8080bef23b3c69cab1d5d4ec83b4a6b1e9571f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6753246_1af182b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-05T14:07:59Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "8080bef23b3c69cab1d5d4ec83b4a6b1e9571f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
