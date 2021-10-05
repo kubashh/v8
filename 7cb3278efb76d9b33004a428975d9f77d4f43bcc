@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60346d3_a0e03a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-05T15:31:20Z",
+      "side": 1,
+      "message": "PTAL:\n\nManos as overall reviewer.\nMaya for src/compiler/OWNERS.\nIgor: FYI in case you have comments on the way I\u0027m reinventing the IC wheel here :-)",
+      "revId": "7cb3278efb76d9b33004a428975d9f77d4f43bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
