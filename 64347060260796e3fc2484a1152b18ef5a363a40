@@ -73,6 +73,30 @@
       },
       "revId": "64347060260796e3fc2484a1152b18ef5a363a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae83f65_150cc695",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7583,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-05T17:32:03Z",
+      "side": 1,
+      "message": "Right, the term \"wrapper\" is wrong. I still do not like \"wasm to js\" though, because as you noted we do not necessarily call out to JS. We just call \"an imported function\", which in this case is a Math intrinsic.\nIt\u0027s only a TODO after all, but I changed it to \"WASM_IMPORT_CALL\". The final name can be decided when/if that TODO will be addressed ;)",
+      "parentUuid": "ef4aa784_29368e35",
+      "range": {
+        "startLine": 7583,
+        "startChar": 5,
+        "endLine": 7583,
+        "endChar": 54
+      },
+      "revId": "64347060260796e3fc2484a1152b18ef5a363a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
