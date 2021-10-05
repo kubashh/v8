@@ -65,11 +65,15 @@ static_assert((kLiftoffAssemblerFpCacheRegs &
 
 // rbp-8 holds the stack marker, rbp-16 is the instance parameter.
 constexpr int kInstanceOffset = 16;
+constexpr int kFeedbackVectorOffset = 24;  // rbp-24 is the feedback vector.
 
 inline Operand GetStackSlot(int offset) { return Operand(rbp, -offset); }
 
 // TODO(clemensb): Make this a constexpr variable once Operand is constexpr.
 inline Operand GetInstanceOperand() { return GetStackSlot(kInstanceOffset); }
+inline Operand GetFeedbackVectorOperand() {
+  return GetStackSlot(kFeedbackVectorOffset);
+}
 
 inline Operand GetOSRTargetSlot() { return GetStackSlot(kOSRTargetOffset); }
 

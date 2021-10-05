@@ -752,6 +752,17 @@ class LiftoffCompiler {
                   descriptor_->GetInputLocation(kInstanceParameterIndex)
                       .AsRegister()));
     __ cache_state()->SetInstanceCacheRegister(kWasmInstanceRegister);
+    // Load the feedback vector and cache it in a stack slot.
+    if (FLAG_wasm_speculative_inlining) {
+      UNIMPLEMENTED();
+    } else {
+      LiftoffRegList pinned;
+      for (auto reg : kGpParamRegisters) pinned.set(reg);
+      LiftoffRegister tmp = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+      __ LoadConstant(tmp, WasmValue{0});
+      liftoff::Store(&asm_, liftoff::GetFeedbackVectorOperand(), tmp,
+                     kPointerKind);
+    }
     if (for_debugging_) __ ResetOSRTarget();
 
     // Process parameters.
@@ -2205,7 +2216,7 @@ class LiftoffCompiler {
       state.dec_used(slot_reg);
       dst_slot->MakeStack();
     }
-    DCHECK_EQ(kind, __ local_kind(local_index));
+    DCHECK(CheckCompatibleStackSlotTypes(kind, __ local_kind(local_index)));
     RegClass rc = reg_class_for(kind);
     LiftoffRegister dst_reg = __ GetUnusedRegister(rc, {});
     __ Fill(dst_reg, src_slot.offset(), kind);

@@ -966,6 +966,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
   uint16_t first_tagged_parameter_slot = 0;
   uint16_t num_tagged_parameter_slots = 0;
   bool is_wasm = false;
+  bool has_wasm_feedback_slot = false;
 
 #if V8_ENABLE_WEBASSEMBLY
   if (auto* wasm_code = wasm::GetWasmCodeManager()->LookupCode(inner_pointer)) {
@@ -978,6 +979,9 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
         wasm_code->kind() != wasm::WasmCode::kWasmToCapiWrapper;
     first_tagged_parameter_slot = wasm_code->first_tagged_parameter_slot();
     num_tagged_parameter_slots = wasm_code->num_tagged_parameter_slots();
+    if (wasm_code->is_liftoff() && FLAG_wasm_speculative_inlining) {
+      has_wasm_feedback_slot = true;
+    }
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
@@ -1041,6 +1045,7 @@ void CommonFrame::IterateCompiledFrame(RootVisitor* v) const {
       case WASM:
       case WASM_COMPILE_LAZY:
         frame_header_size = WasmFrameConstants::kFixedFrameSizeFromFp;
+        if (has_wasm_feedback_slot) frame_header_size += kSystemPointerSize;
         break;
       case WASM_EXIT:
         // The last value in the frame header is the calling PC, which should

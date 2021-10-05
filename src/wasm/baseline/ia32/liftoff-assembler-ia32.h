@@ -51,6 +51,7 @@ inline constexpr Condition ToCondition(LiftoffCondition liftoff_cond) {
 
 // ebp-4 holds the stack marker, ebp-8 is the instance parameter.
 constexpr int kInstanceOffset = 8;
+constexpr int kFeedbackVectorOffset = 12;  // ebp-12 is the feedback vector.
 
 inline Operand GetStackSlot(int offset) { return Operand(ebp, -offset); }
 
@@ -62,13 +63,15 @@ inline MemOperand GetHalfStackSlot(int offset, RegPairHalf half) {
 
 // TODO(clemensb): Make this a constexpr variable once Operand is constexpr.
 inline Operand GetInstanceOperand() { return GetStackSlot(kInstanceOffset); }
+inline Operand GetFeedbackVectorOperand() {
+  return GetStackSlot(kFeedbackVectorOffset);
+}
 
 static constexpr LiftoffRegList kByteRegs =
     LiftoffRegList::FromBits<Register::ListOf(eax, ecx, edx)>();
 
-inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
-                 int32_t offset, ValueKind kind) {
-  Operand src(base, offset);
+inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Operand src,
+                 ValueKind kind) {
   switch (kind) {
     case kI32:
     case kOptRef:
@@ -76,10 +79,6 @@ inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
     case kRtt:
     case kRttWithDepth:
       assm->mov(dst.gp(), src);
-      break;
-    case kI64:
-      assm->mov(dst.low_gp(), src);
-      assm->mov(dst.high_gp(), Operand(base, offset + 4));
       break;
     case kF32:
       assm->movss(dst.fp(), src);
@@ -90,14 +89,26 @@ inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
     case kS128:
       assm->movdqu(dst.fp(), src);
       break;
+    case kI64:
+      // Unsupported by this implementation; use the base/offset overload!
     default:
       UNREACHABLE();
   }
 }
 
-inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
-                  LiftoffRegister src, ValueKind kind) {
-  Operand dst(base, offset);
+inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
+                 int32_t offset, ValueKind kind) {
+  Operand src(base, offset);
+  if (kind == kI64) {
+    assm->mov(dst.low_gp(), src);
+    assm->mov(dst.high_gp(), Operand(base, offset + 4));
+  } else {
+    Load(assm, dst, src, kind);
+  }
+}
+
+inline void Store(LiftoffAssembler* assm, Operand dst, LiftoffRegister src,
+                  ValueKind kind) {
   switch (kind) {
     case kI32:
     case kOptRef:
@@ -105,10 +116,6 @@ inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
     case kRtt:
     case kRttWithDepth:
       assm->mov(dst, src.gp());
-      break;
-    case kI64:
-      assm->mov(dst, src.low_gp());
-      assm->mov(Operand(base, offset + 4), src.high_gp());
       break;
     case kF32:
       assm->movss(dst, src.fp());
@@ -119,8 +126,21 @@ inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
     case kS128:
       assm->movdqu(dst, src.fp());
       break;
+    case kI64:
+      // Unsupported by this implementation; use the base/offset overload!
     default:
       UNREACHABLE();
+  }
+}
+
+inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
+                  LiftoffRegister src, ValueKind kind) {
+  Operand dst(base, offset);
+  if (kind == kI64) {
+    assm->mov(dst, src.low_gp());
+    assm->mov(Operand(base, offset + 4), src.high_gp());
+  } else {
+    Store(assm, dst, src, kind);
   }
 }
 
@@ -307,7 +327,7 @@ void LiftoffAssembler::AbortCompilation() {}
 
 // static
 constexpr int LiftoffAssembler::StaticStackFrameSize() {
-  return liftoff::kInstanceOffset;
+  return liftoff::kFeedbackVectorOffset;
 }
 
 int LiftoffAssembler::SlotSizeForType(ValueKind kind) {
