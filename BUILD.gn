@@ -310,7 +310,7 @@ declare_args() {
   # Enable the Virtual Memory Cage, which contains the pointer compression cage
   # as well as ArrayBuffer BackingStores and WASM memory cages.
   # Sets -DV8_VIRTUAL_MEMORY_CAGE.
-  v8_enable_virtual_memory_cage = ""
+  v8_enable_virtual_memory_cage = true  # for testing
 
   # Experimental feature for collecting per-class zone memory stats.
   # Requires use_rtti = true
