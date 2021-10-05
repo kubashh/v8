@@ -276,6 +276,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   V8_INLINE bool IsTaggedIndex() const;
 
+  V8_INLINE bool InSharedHeap() const;
+
 #define IS_TYPE_FUNCTION_DECL(Type) \
   V8_INLINE bool Is##Type() const;  \
   V8_INLINE bool Is##Type(PtrComprCageBase cage_base) const;
