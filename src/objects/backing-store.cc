@@ -157,7 +157,7 @@ struct SharedWasmMemoryData {
 };
 
 void BackingStore::Clear() {
-  buffer_start_ = nullptr;
+  buffer_start_ = EmptyBackingStoreBuffer();
   byte_length_ = 0;
   has_guard_regions_ = false;
   if (holds_shared_ptr_to_allocator_) {
@@ -199,7 +199,7 @@ BackingStore::BackingStore(void* buffer_start, size_t byte_length,
 BackingStore::~BackingStore() {
   GlobalBackingStoreRegistry::Unregister(this);
 
-  if (buffer_start_ == nullptr) {
+  if (IsEmpty()) {
     Clear();
     return;
   }
@@ -285,7 +285,7 @@ BackingStore::~BackingStore() {
 std::unique_ptr<BackingStore> BackingStore::Allocate(
     Isolate* isolate, size_t byte_length, SharedFlag shared,
     InitializedFlag initialized) {
-  void* buffer_start = nullptr;
+  void* buffer_start = EmptyBackingStoreBuffer();
   auto allocator = isolate->array_buffer_allocator();
   CHECK_NOT_NULL(allocator);
   if (byte_length != 0) {
@@ -323,10 +323,9 @@ std::unique_ptr<BackingStore> BackingStore::Allocate(
       counters->array_buffer_new_size_failures()->AddSample(mb_length);
       return {};
     }
-
-    DCHECK(IsValidBackingStorePointer(buffer_start));
   }
 
+  DCHECK(IsValidBackingStorePointer(buffer_start));
   auto result = new BackingStore(buffer_start,                  // start
                                  byte_length,                   // length
                                  byte_length,                   // max length
@@ -751,6 +750,7 @@ BackingStore::ResizeOrGrowResult BackingStore::GrowInPlace(
 std::unique_ptr<BackingStore> BackingStore::WrapAllocation(
     Isolate* isolate, void* allocation_base, size_t allocation_length,
     SharedFlag shared, bool free_on_destruct) {
+  if (allocation_base == nullptr) allocation_base = EmptyBackingStoreBuffer();
   DCHECK(IsValidBackingStorePointer(allocation_base));
   auto result = new BackingStore(allocation_base,               // start
                                  allocation_length,             // length
@@ -773,6 +773,7 @@ std::unique_ptr<BackingStore> BackingStore::WrapAllocation(
     void* allocation_base, size_t allocation_length,
     v8::BackingStore::DeleterCallback deleter, void* deleter_data,
     SharedFlag shared) {
+  if (allocation_base == nullptr) allocation_base = EmptyBackingStoreBuffer();
   DCHECK(IsValidBackingStorePointer(allocation_base));
   bool is_empty_deleter = (deleter == v8::BackingStore::EmptyDeleter);
   auto result = new BackingStore(allocation_base,               // start
@@ -794,7 +795,7 @@ std::unique_ptr<BackingStore> BackingStore::WrapAllocation(
 
 std::unique_ptr<BackingStore> BackingStore::EmptyBackingStore(
     SharedFlag shared) {
-  auto result = new BackingStore(nullptr,                       // start
+  auto result = new BackingStore(EmptyBackingStoreBuffer(),     // start
                                  0,                             // length
                                  0,                             // max length
                                  0,                             // capacity

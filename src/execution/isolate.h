@@ -1076,6 +1076,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return isolate_data()->cage_base();
   }
 
+  Address cage_base_address() {
+    return reinterpret_cast<Address>(&isolate_data_.cage_base_);
+  }
+
   Address code_cage_base() const { return cage_base(); }
 
   // When pointer compression is on, the PtrComprCage used by this

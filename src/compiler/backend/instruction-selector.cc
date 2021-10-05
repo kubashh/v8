@@ -1436,6 +1436,8 @@ void InstructionSelector::VisitNode(Node* node) {
     }
     case IrOpcode::kDelayedStringConstant:
       return MarkAsTagged(node), VisitConstant(node);
+    // case IrOpcode::kCagedPtrConstant:
+    //  return VisitCagedPtrConstant(node);
     case IrOpcode::kCall:
       return VisitCall(node);
     case IrOpcode::kDeoptimizeIf:
