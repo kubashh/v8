@@ -33,6 +33,46 @@
       "message": "LGTM for src/compiler, thanks!",
       "revId": "64347060260796e3fc2484a1152b18ef5a363a40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea6261e_882fe50f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-05T15:46:28Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "64347060260796e3fc2484a1152b18ef5a363a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef4aa784_29368e35",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7583,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-05T15:46:28Z",
+      "side": 1,
+      "message": "IMHO \"wasm to js\" is preferable because it\u0027s unambiguous. \"Wasm import\" could mean \"importing into Wasm\" or \"importing a Wasm function\".\n\nBesides, not all wasm-to-js calls are to imported functions. With the type-reflection proposal, you can pass a WebAssembly.Function as an argument from JS to an exported Wasm function, so it never goes through the import mechanism.",
+      "range": {
+        "startLine": 7583,
+        "startChar": 5,
+        "endLine": 7583,
+        "endChar": 54
+      },
+      "revId": "64347060260796e3fc2484a1152b18ef5a363a40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
