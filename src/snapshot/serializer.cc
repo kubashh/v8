@@ -528,7 +528,7 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
   ArrayBufferExtension* extension = buffer->extension();
 
   // The embedder-allocated backing store only exists for the off-heap case.
-  if (backing_store != nullptr) {
+  if (backing_store != EmptyBackingStoreBuffer()) {
     uint32_t ref = SerializeBackingStore(backing_store, byte_length);
     buffer->SetBackingStoreRefForSerialization(ref);
 
@@ -541,7 +541,7 @@ void Serializer::ObjectSerializer::SerializeJSArrayBuffer() {
 
   SerializeObject();
 
-  buffer->set_backing_store(backing_store);
+  buffer->set_backing_store(isolate(), backing_store);
   buffer->set_extension(extension);
 }
 

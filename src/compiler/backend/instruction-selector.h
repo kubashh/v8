@@ -627,6 +627,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   void VisitPhi(Node* node);
   void VisitProjection(Node* node);
   void VisitConstant(Node* node);
+  // This will XXX TODO(saelo)
+  void VisitCagedPtrConstant(Node* node);
   void VisitCall(Node* call, BasicBlock* handler = nullptr);
   void VisitDeoptimizeIf(Node* node);
   void VisitDeoptimizeUnless(Node* node);

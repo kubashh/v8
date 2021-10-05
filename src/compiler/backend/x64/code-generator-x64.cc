@@ -2369,6 +2369,30 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+    case kX64MovqDecodeCagedPointer: {
+      CHECK(instr->HasOutput());
+      Operand address(i.MemoryOperand());
+      Register dst = i.OutputRegister();
+      __ movq(dst, address);
+      __ DecodeCagedPointer(dst);
+      EmitTSANRelaxedLoadOOLIfNeeded(zone(), this, tasm(), address, i,
+                                     DetermineStubCallMode(),
+                                     kSystemPointerSize);
+      break;
+    }
+    case kX64MovqEncodeCagedPointer: {
+      CHECK(!instr->HasOutput());
+      size_t index = 0;
+      Operand operand = i.MemoryOperand(&index);
+      CHECK(!HasImmediateInput(instr, index));
+      Register value(i.InputRegister(index));
+      __ movq(kScratchRegister, value);
+      __ EncodeCagedPointer(kScratchRegister);
+      EmitTSANAwareStore<std::memory_order_relaxed>(
+          zone(), this, tasm(), operand, kScratchRegister, i,
+          DetermineStubCallMode(), MachineRepresentation::kWord64);
+      break;
+    }
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       if (instr->HasOutput()) {
