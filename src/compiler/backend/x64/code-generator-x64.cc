@@ -2369,6 +2369,27 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+    case kX64MovqDecodeCagedPointer: {
+      // static_assert(!V8_IS_TSAN, "The virtual memory cage is incompatible
+      // with TSAN");
+      CHECK(instr->HasOutput());
+      Operand address(i.MemoryOperand());
+      __ LoadCagedPointerField(i.OutputRegister(), address);
+      break;
+    }
+    case kX64MovqEncodeCagedPointer: {
+      // static_assert(!V8_IS_TSAN, "The virtual memory cage is incompatible
+      // with TSAN");
+      CHECK(!instr->HasOutput());
+      size_t index = 0;
+      Operand operand = i.MemoryOperand(&index);
+      CHECK(!HasImmediateInput(instr, index));
+      Register value(i.InputRegister(index));
+      __ StoreCagedPointerField(operand, value);
+      break;
+    }
+#endif  // V8_VIRTUAL_MEMORY_CAGE
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       if (instr->HasOutput()) {
