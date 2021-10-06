@@ -54,6 +54,11 @@ class CodeDataContainer : public HeapObject {
   DECL_GETTER(code, Code)
   DECL_RELAXED_GETTER(code, Code)
 
+  // When external code space is enabled this field contains code cage base
+  // value.
+  inline PtrComprCageBase code_cage_base() const;
+  inline void set_code_cage_base(Address code_cage_base);
+
   // Cached value of code().InstructionStart().
   // Available only when V8_EXTERNAL_CODE_SPACE is defined.
   DECL_GETTER(code_entry_point, Address)
@@ -77,21 +82,22 @@ class CodeDataContainer : public HeapObject {
   DECL_VERIFIER(CodeDataContainer)
 
 // Layout description.
-#define CODE_DATA_FIELDS(V)                                     \
-  /* Strong pointer fields. */                                  \
-  V(kPointerFieldsStrongEndOffset, 0)                           \
-  /* Weak pointer fields. */                                    \
-  V(kNextCodeLinkOffset, kTaggedSize)                           \
-  V(kPointerFieldsWeakEndOffset, 0)                             \
-  /* Strong Code pointer fields. */                             \
-  V(kCodeOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kTaggedSize : 0) \
-  V(kCodePointerFieldsStrongEndOffset, 0)                       \
-  /* Raw data fields. */                                        \
-  V(kCodeEntryPointOffset,                                      \
-    V8_EXTERNAL_CODE_SPACE_BOOL ? kExternalPointerSize : 0)     \
-  V(kKindSpecificFlagsOffset, kInt32Size)                       \
-  V(kUnalignedSize, OBJECT_POINTER_PADDING(kUnalignedSize))     \
-  /* Total size. */                                             \
+#define CODE_DATA_FIELDS(V)                                       \
+  /* Strong pointer fields. */                                    \
+  V(kPointerFieldsStrongEndOffset, 0)                             \
+  /* Weak pointer fields. */                                      \
+  V(kNextCodeLinkOffset, kTaggedSize)                             \
+  V(kPointerFieldsWeakEndOffset, 0)                               \
+  /* Strong Code pointer fields. */                               \
+  V(kCodeOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kTaggedSize : 0)   \
+  V(kCodePointerFieldsStrongEndOffset, 0)                         \
+  /* Raw data fields. */                                          \
+  V(kCodeHiOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kTaggedSize : 0) \
+  V(kCodeEntryPointOffset,                                        \
+    V8_EXTERNAL_CODE_SPACE_BOOL ? kExternalPointerSize : 0)       \
+  V(kKindSpecificFlagsOffset, kInt32Size)                         \
+  V(kUnalignedSize, OBJECT_POINTER_PADDING(kUnalignedSize))       \
+  /* Total size. */                                               \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, CODE_DATA_FIELDS)
@@ -101,13 +107,25 @@ class CodeDataContainer : public HeapObject {
 
  private:
   DECL_ACCESSORS(raw_code, Object)
-  DECL_RELAXED_ACCESSORS(raw_code, Object)
+  DECL_RELAXED_GETTER(raw_code, Object)
   inline void set_code_entry_point(Isolate* isolate, Address value);
 
   friend Factory;
 
   OBJECT_CONSTRUCTORS(CodeDataContainer, HeapObject);
 };
+
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+static_assert(!V8_EXTERNAL_CODE_SPACE_BOOL ||
+                  (CodeDataContainer::kCodeHiOffset ==
+                   CodeDataContainer::kCodeOffset + kTaggedSize),
+              "CodeDataContainer::code field layout requires updating "
+              "for little endian architectures");
+#elif defined(V8_TARGET_BIG_ENDIAN)
+static_assert(!V8_EXTERNAL_CODE_SPACE_BOOL,
+              "CodeDataContainer::code field layout requires updating "
+              "for big endian architectures");
+#endif
 
 // Code describes objects with on-the-fly generated machine code.
 class Code : public HeapObject {
@@ -408,6 +426,11 @@ class Code : public HeapObject {
   // out the to-be-overwritten header data for reproducible snapshots.
   inline void WipeOutHeader();
 
+  // When external code space is enabled this field contains main cage base
+  // value.
+  inline PtrComprCageBase main_cage_base() const;
+  inline void set_main_cage_base(Address cage_base);
+
   // Clear uninitialized padding space. This ensures that the snapshot content
   // is deterministic. Depending on the V8 build mode there could be no padding.
   inline void clear_padding();
@@ -522,6 +545,7 @@ class Code : public HeapObject {
   /* The serializer needs to copy bytes starting from here verbatim. */       \
   /* Objects embedded into code is visited via reloc info. */                 \
   V(kDataStart, 0)                                                            \
+  V(kPtrComprCageBaseHiOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kTaggedSize : 0) \
   V(kInstructionSizeOffset, kIntSize)                                         \
   V(kMetadataSizeOffset, kIntSize)                                            \
   V(kFlagsOffset, kInt32Size)                                                 \
@@ -545,13 +569,15 @@ class Code : public HeapObject {
   // This documents the amount of free space we have in each Code object header
   // due to padding for code alignment.
 #if V8_TARGET_ARCH_ARM64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 24;
+  static constexpr int kHeaderPaddingSize =
+      V8_EXTERNAL_CODE_SPACE_BOOL ? 8 : (COMPRESS_POINTERS_BOOL ? 12 : 24);
 #elif V8_TARGET_ARCH_MIPS64
   static constexpr int kHeaderPaddingSize = 24;
 #elif V8_TARGET_ARCH_LOONG64
   static constexpr int kHeaderPaddingSize = 24;
 #elif V8_TARGET_ARCH_X64
-  static constexpr int kHeaderPaddingSize = COMPRESS_POINTERS_BOOL ? 12 : 56;
+  static constexpr int kHeaderPaddingSize =
+      V8_EXTERNAL_CODE_SPACE_BOOL ? 8 : (COMPRESS_POINTERS_BOOL ? 12 : 56);
 #elif V8_TARGET_ARCH_ARM
   static constexpr int kHeaderPaddingSize = 12;
 #elif V8_TARGET_ARCH_IA32
