@@ -4,6 +4,7 @@
 
 #include "src/heap/cppgc/marker.h"
 
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 
@@ -201,6 +202,27 @@ MarkerBase::~MarkerBase() {
   marking_worklists_.weak_containers_worklist()->Clear();
 }
 
+class MarkerBase::IncrementalMarkingAllocationObserver final
+    : public StatsCollector::AllocationObserver {
+ public:
+  static constexpr size_t kAllocationBytesStep = 256 * 1024;
+
+  explicit IncrementalMarkingAllocationObserver(MarkerBase& marker)
+      : marker_(marker) {}
+
+  void AllocatedObjectSizeIncreased(size_t delta) final {
+    current_allocated_size_ += delta;
+    if (current_allocated_size_ > kAllocationBytesStep) {
+      marker_.AdvanceMarkingOnAllocation();
+      current_allocated_size_ = 0;
+    }
+  }
+
+ private:
+  MarkerBase& marker_;
+  size_t current_allocated_size_ = 0;
+};
+
 void MarkerBase::StartMarking() {
   DCHECK(!is_marking_);
   StatsCollector::EnabledScope stats_scope(
@@ -227,6 +249,10 @@ void MarkerBase::StartMarking() {
       mutator_marking_state_.Publish();
       concurrent_marker_->Start();
     }
+    incremental_marking_allocation_observer_ =
+        std::make_unique<IncrementalMarkingAllocationObserver>(*this);
+    heap().stats_collector()->RegisterObserver(
+        incremental_marking_allocation_observer_.get());
   }
 }
 
@@ -240,6 +266,9 @@ void MarkerBase::EnterAtomicPause(MarkingConfig::StackState stack_state) {
     // Cancel remaining concurrent/incremental tasks.
     concurrent_marker_->Cancel();
     incremental_marking_handle_.Cancel();
+    heap().stats_collector()->UnregisterObserver(
+        incremental_marking_allocation_observer_.get());
+    incremental_marking_allocation_observer_.reset();
   }
   config_.stack_state = stack_state;
   config_.marking_type = MarkingConfig::MarkingType::kAtomic;
