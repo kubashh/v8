@@ -63,6 +63,30 @@
       },
       "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e185fd3_60ca7502",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-06T15:49:35Z",
+      "side": 1,
+      "message": "We could make isolate_ available in all configurations?",
+      "parentUuid": "1dbb6732_0ce25345",
+      "range": {
+        "startLine": 685,
+        "startChar": 7,
+        "endLine": 685,
+        "endChar": 12
+      },
+      "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
