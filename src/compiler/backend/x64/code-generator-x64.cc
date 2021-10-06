@@ -3696,6 +3696,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                       kScratchRegister, MiscField::decode(instr->opcode()));
       break;
     }
+    case kX64I8x16RelaxedSwizzle: {
+      __ Pshufb(i.OutputSimd128Register(), i.InputSimd128Register(0),
+                i.InputSimd128Register(1));
+      break;
+    }
     case kX64I8x16Shuffle: {
       XMMRegister dst = i.OutputSimd128Register();
       XMMRegister tmp_simd = i.TempSimd128Register(0);
