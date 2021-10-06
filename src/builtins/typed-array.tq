@@ -196,18 +196,8 @@ macro EnsureAttached(array: JSTypedArray): AttachedJSTypedArray
 }
 
 struct AttachedJSTypedArrayWitness {
-  macro Get(): AttachedJSTypedArray {
-    return this.unstable;
-  }
-
   macro GetStable(): JSTypedArray {
     return this.stable;
-  }
-
-  // TODO(v8:11111): Migrate users to use RecheckIndex.
-  macro Recheck(): void labels Detached {
-    if (IsDetachedBuffer(this.stable.buffer)) goto Detached;
-    this.unstable = %RawDownCast<AttachedJSTypedArray>(this.stable);
   }
 
   macro RecheckIndex(index: uintptr): void labels DetachedOrOutOfBounds {
