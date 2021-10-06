@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceae35cf_d1d2d766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T19:29:59Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c5a9eaf6830c2a545d6c59d90ee3b0f6e676e2fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a73d6f4c_c9d5a2b7",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-10-06T18:41:31Z",
       "side": 1,
       "message": "This is the reason of this CL - to use proper base when reading a map.",
+      "range": {
+        "startLine": 3188,
+        "startChar": 20,
+        "endLine": 3188,
+        "endChar": 35
+      },
+      "revId": "c5a9eaf6830c2a545d6c59d90ee3b0f6e676e2fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b565bfe_be3da1e9",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3188,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T19:29:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a73d6f4c_c9d5a2b7",
       "range": {
         "startLine": 3188,
         "startChar": 20,
