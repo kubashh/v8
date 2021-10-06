@@ -16,6 +16,92 @@
       "message": "ptal",
       "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc39416_45cab875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-06T20:57:03Z",
+      "side": 1,
+      "message": "lgtm, with some test code organization suggestions.",
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38f8d544_f925bd55",
+        "filename": "src/builtins/typed-array-filter.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-06T20:57:03Z",
+      "side": 1,
+      "message": "Here and elsewhere, is it possible to have a macro that both returns the length and a AttachedJSTypedArray so we don\u0027t need to have %RawDownCast calls? Maybe using structs for multi-value returns.",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 49
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01f73f81_f720c15e",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-06T20:57:03Z",
+      "side": 1,
+      "message": "A more descriptive name than \u0027myFunc\u0027 would be good. Perhaps \u0027accumulateValuesAndGrow\u0027?",
+      "range": {
+        "startLine": 1482,
+        "startChar": 11,
+        "endLine": 1482,
+        "endChar": 17
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dee9c1a2_2b3b3136",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-06T20:57:03Z",
+      "side": 1,
+      "message": "Here and elsewhere, it would be more concise as\n\n  for (let ta of [fixedLength, fixedLengthWithOffset, lengthTracking, lengthTrackingWithoffset]) { \n    ...\n  }\n  \nBut would conflate some stack traces, so makes eyeballing harder for bot failures.\n\nUp to you if you want to change.",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 3
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
