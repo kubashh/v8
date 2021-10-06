@@ -663,14 +663,18 @@ size_t StringTable::GetCurrentMemoryUsage() const {
 void StringTable::IterateElements(RootVisitor* visitor) {
   // This should only happen during garbage collection when background threads
   // are paused, so the load can be relaxed.
-  DCHECK(isolate_->heap()->safepoint()->IsActive());
+#ifdef DEBUG
+  isolate_->heap()->safepoint()->AssertActive();
+#endif  // DEBUG
   data_.load(std::memory_order_relaxed)->IterateElements(visitor);
 }
 
 void StringTable::DropOldData() {
   // This should only happen during garbage collection when background threads
   // are paused, so the load can be relaxed.
-  DCHECK(isolate_->heap()->safepoint()->IsActive());
+#ifdef DEBUG
+  isolate_->heap()->safepoint()->AssertActive();
+#endif  // DEBUG
   DCHECK_NE(isolate_->heap()->gc_state(), Heap::NOT_IN_GC);
   data_.load(std::memory_order_relaxed)->DropPreviousData();
 }
@@ -678,7 +682,9 @@ void StringTable::DropOldData() {
 void StringTable::NotifyElementsRemoved(int count) {
   // This should only happen during garbage collection when background threads
   // are paused, so the load can be relaxed.
-  DCHECK(isolate_->heap()->safepoint()->IsActive());
+#ifdef DEBUG
+  isolate_->heap()->safepoint()->AssertActive();
+#endif  // DEBUG
   DCHECK_NE(isolate_->heap()->gc_state(), Heap::NOT_IN_GC);
   data_.load(std::memory_order_relaxed)->ElementsRemoved(count);
 }
