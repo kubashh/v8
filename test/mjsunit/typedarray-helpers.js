@@ -45,7 +45,11 @@ function WriteToTypedArray(array, index, value) {
 function ToNumbers(array) {
   let result = [];
   for (let item of array) {
-    result.push(Number(item));
+    if (item == undefined) {
+      result.push(item);
+    } else {
+      result.push(Number(item));
+    }
   }
   return result;
 }
