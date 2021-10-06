@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bed74e5_57703128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-06T12:22:51Z",
+      "side": 1,
+      "message": "Great work! LGTM with a couple of nits.",
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7024913_454196a5",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-06T12:22:51Z",
+      "side": 1,
+      "message": "nit: 2",
+      "range": {
+        "startLine": 490,
+        "startChar": 14,
+        "endLine": 490,
+        "endChar": 15
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc4fa42_7f782c02",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-06T12:22:51Z",
+      "side": 1,
+      "message": "nit: If it is practical, can we parametrize this?",
+      "range": {
+        "startLine": 490,
+        "startChar": 17,
+        "endLine": 490,
+        "endChar": 18
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad337a9e_21fa478a",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-06T12:22:51Z",
+      "side": 1,
+      "message": "nit: This seems like a formatting error. A couple more cases below.",
+      "range": {
+        "startLine": 518,
+        "startChar": 4,
+        "endLine": 519,
+        "endChar": 76
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
