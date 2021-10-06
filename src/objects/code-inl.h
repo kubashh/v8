@@ -19,6 +19,7 @@
 #include "src/objects/fixed-array.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/instance-type-inl.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/map-inl.h"
 #include "src/objects/maybe-object-inl.h"
 #include "src/objects/oddball.h"
@@ -799,7 +800,15 @@ bool Code::CanContainWeakObjects() {
 }
 
 bool Code::IsWeakObject(HeapObject object) {
-  return (CanContainWeakObjects() && IsWeakObjectInOptimizedCode(object));
+  if (!CanContainWeakObjects()) return false;
+  bool is_weak = IsWeakObjectInOptimizedCode(object);
+  bool is_strong = IsStrongObjectInOptimizedCode(object);
+  if (is_weak == is_strong) {
+    std::cerr << "MISMATCH for " << object.map(kAcquireLoad).instance_type()
+              << " weak=" << is_weak << ", strong=" << is_strong << std::endl;
+  }
+  DCHECK_NE(is_weak, is_strong);
+  return is_weak;
 }
 
 bool Code::IsWeakObjectInOptimizedCode(HeapObject object) {
@@ -811,6 +820,25 @@ bool Code::IsWeakObjectInOptimizedCode(HeapObject object) {
   return InstanceTypeChecker::IsPropertyCell(instance_type) ||
          InstanceTypeChecker::IsJSReceiver(instance_type) ||
          InstanceTypeChecker::IsContext(instance_type);
+}
+
+bool Code::IsStrongObjectInOptimizedCode(HeapObject object) {
+  Map map = object.map(kAcquireLoad);
+  InstanceType instance_type = map.instance_type();
+  if (InstanceTypeChecker::IsMap(instance_type)) {
+    return !Map::cast(object).CanTransition();
+  }
+  return InstanceTypeChecker::IsFeedbackVector(instance_type) ||
+         InstanceTypeChecker::IsFeedbackCell(instance_type) ||
+         InstanceTypeChecker::IsString(instance_type) ||
+         InstanceTypeChecker::IsOddball(instance_type) ||
+         InstanceTypeChecker::IsHeapNumber(instance_type) ||
+         InstanceTypeChecker::IsFixedArray(instance_type) ||
+         InstanceTypeChecker::IsScopeInfo(instance_type) ||
+         InstanceTypeChecker::IsArrayBoilerplateDescription(instance_type) ||
+         InstanceTypeChecker::IsCell(instance_type) ||
+         InstanceTypeChecker::IsSharedFunctionInfo(instance_type) ||
+         InstanceTypeChecker::IsCode(instance_type);
 }
 
 bool Code::IsExecutable() {
