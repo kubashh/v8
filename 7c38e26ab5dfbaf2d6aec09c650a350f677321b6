@@ -87,6 +87,30 @@
       },
       "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6727b8ea_cdac5d28",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:57:15Z",
+      "side": 1,
+      "message": "Yes, sg.",
+      "parentUuid": "3e185fd3_60ca7502",
+      "range": {
+        "startLine": 685,
+        "startChar": 7,
+        "endLine": 685,
+        "endChar": 12
+      },
+      "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
