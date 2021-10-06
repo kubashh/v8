@@ -16,6 +16,29 @@
       "message": "ptal, on top we would need to adjust gc_metric.html",
       "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd818c52_bf232834",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-10-06T15:06:09Z",
+      "side": 1,
+      "message": "I think we should report it and let blink ignore it. At the least I think we might want it for UKM. We would need to report it as a new struct though (with batching and everything).\nPart of the case for using a new event name here was imo to not implicitly \"hide\" the events.",
+      "range": {
+        "startLine": 354,
+        "startChar": 9,
+        "endLine": 354,
+        "endChar": 22
+      },
+      "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
