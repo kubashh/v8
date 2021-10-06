@@ -30,6 +30,7 @@ namespace internal {
   V(AtomicCompact)                        \
   V(AtomicSweep)                          \
   V(IncrementalMark)                      \
+  V(IncrementalSweepForAllocation)        \
   V(IncrementalSweep)
 
 #define CPPGC_FOR_ALL_SCOPES(V)             \
@@ -55,7 +56,6 @@ namespace internal {
   V(SweepInvokePreFinalizers)               \
   V(SweepIdleStep)                          \
   V(SweepInTask)                            \
-  V(SweepOnAllocation)                      \
   V(SweepFinalize)
 
 #define CPPGC_FOR_ALL_HISTOGRAM_CONCURRENT_SCOPES(V) \

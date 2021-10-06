@@ -228,7 +228,9 @@ void StatsCollector::NotifySweepingCompleted() {
         previous_.scope_data[kAtomicCompact].InMicroseconds(),
         previous_.scope_data[kAtomicSweep].InMicroseconds(),
         previous_.scope_data[kIncrementalMark].InMicroseconds(),
-        previous_.scope_data[kIncrementalSweep].InMicroseconds(),
+        previous_.scope_data[kIncrementalSweep].InMicroseconds() +
+            previous_.scope_data[kIncrementalSweepForAllocation]
+                .InMicroseconds(),
         previous_.concurrent_scope_data[kConcurrentMark],
         previous_.concurrent_scope_data[kConcurrentSweep],
         previous_.object_size_before_sweep_bytes /* objects_before */,
@@ -349,6 +351,8 @@ void StatsCollector::RecordHistogramSample(ScopeId scope_id_,
       break;
     }
     case kIncrementalSweep: {
+      // Do not report kIncrementalSweepForAllocation as it is only bound by
+      // the number of pages in the worst case.
       MetricRecorder::MainThreadIncrementalSweep event{time.InMicroseconds()};
       metric_recorder_->AddMainThreadEvent(event);
       break;

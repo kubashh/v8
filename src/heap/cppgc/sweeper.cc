@@ -703,10 +703,8 @@ class Sweeper::SweeperImpl final {
     // allocate new memory.
     if (is_sweeping_on_mutator_thread_) return false;
 
-    StatsCollector::EnabledScope stats_scope(stats_collector_,
-                                             StatsCollector::kIncrementalSweep);
-    StatsCollector::EnabledScope inner_scope(
-        stats_collector_, StatsCollector::kSweepOnAllocation);
+    StatsCollector::EnabledScope stats_scope(
+        stats_collector_, StatsCollector::kIncrementalSweepForAllocation);
     MutatorThreadSweepingScope sweeping_in_progresss(*this);
 
     SpaceState& space_state = space_states_[space->index()];
