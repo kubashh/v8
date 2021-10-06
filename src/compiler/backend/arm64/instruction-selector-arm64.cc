@@ -839,6 +839,13 @@ void InstructionSelector::VisitLoad(Node* node) {
       opcode = kArm64Ldr;
       immediate_mode = kLoadStoreImm64;
       break;
+    case MachineRepresentation::kCagedPointer:
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+      opcode = kArm64LdrDecodeCagedPointer;
+      break;
+#else
+      UNREACHABLE();
+#endif
     case MachineRepresentation::kSimd128:
       opcode = kArm64LdrQ;
       immediate_mode = kNoImmediate;
@@ -939,6 +946,13 @@ void InstructionSelector::VisitStore(Node* node) {
         immediate_mode =
             COMPRESS_POINTERS_BOOL ? kLoadStoreImm32 : kLoadStoreImm64;
         break;
+      case MachineRepresentation::kCagedPointer:
+#ifdef V8_VIRTUAL_MEMORY_CAGE
+        opcode = kArm64StrEncodeCagedPointer;
+        break;
+#else
+        UNREACHABLE();
+#endif
       case MachineRepresentation::kWord64:
         opcode = kArm64Str;
         immediate_mode = kLoadStoreImm64;
