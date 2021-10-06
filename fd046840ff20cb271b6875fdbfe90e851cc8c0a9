@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "fd046840ff20cb271b6875fdbfe90e851cc8c0a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a2cff2_d2d4e3b4",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T16:40:24Z",
+      "side": 1,
+      "message": "(Note to self: This breaks with multiple observers that can trigger GC as we remove an observer while we iterate all observers.)",
+      "range": {
+        "startLine": 269,
+        "startChar": 30,
+        "endLine": 269,
+        "endChar": 48
+      },
+      "revId": "fd046840ff20cb271b6875fdbfe90e851cc8c0a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
