@@ -16,6 +16,24 @@
       "message": "Codegen, and the rest of the CL looks good, but at a higher level I\u0027m wondering what you think of reusing some of the machine operator code with an IsRelaxed flag parameter, instead of adding a new set of operators? We can decide how far we want to reflect this, all the way to codegen without new opcodes, or till the arch specific level.",
       "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa77d775_e332fee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-10-06T21:57:10Z",
+      "side": 1,
+      "message": "Any reasons why you would want that? Btw, not everything in the relaxed simd proposal fits neatly into relaxed version of an existing machine operator, e.g. e.g. i8x16.laneselect is not a relaxed version of any existing instruction.",
+      "parentUuid": "8e56307b_b876cfce",
+      "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
