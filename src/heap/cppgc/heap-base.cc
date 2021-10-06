@@ -97,10 +97,6 @@ size_t HeapBase::ObjectPayloadSize() const {
   return ObjectSizeCounter().GetSize(const_cast<RawHeap&>(raw_heap()));
 }
 
-void HeapBase::AdvanceIncrementalGarbageCollectionOnAllocationIfNeeded() {
-  if (marker_) marker_->AdvanceMarkingOnAllocation();
-}
-
 size_t HeapBase::ExecutePreFinalizers() {
 #ifdef CPPGC_ALLOW_ALLOCATIONS_IN_PREFINALIZERS
   // Allocations in pre finalizers should not trigger another GC.
