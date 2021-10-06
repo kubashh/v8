@@ -16,6 +16,63 @@
       "message": "PTAL",
       "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89297616_3f8d17c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:14:33Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53481b0_ca2aebbf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:14:33Z",
+      "side": 1,
+      "message": "nit: std::make_unique?",
+      "range": {
+        "startLine": 216,
+        "startChar": 17,
+        "endLine": 216,
+        "endChar": 20
+      },
+      "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fc7d95_21e0bb9d",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:14:33Z",
+      "side": 1,
+      "message": "nit: final",
+      "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
