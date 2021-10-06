@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "855d3a5c_177b7e47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:19:39Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94687cab_7082c043",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-06T15:19:39Z",
+      "side": 1,
+      "message": "How about moving the DEBUG define into AssertActive() as it was anyways used behind DCHECKs so far.",
+      "range": {
+        "startLine": 685,
+        "startChar": 7,
+        "endLine": 685,
+        "endChar": 12
+      },
+      "revId": "7c38e26ab5dfbaf2d6aec09c650a350f677321b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
