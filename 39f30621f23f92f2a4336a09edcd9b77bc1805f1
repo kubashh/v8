@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f14d6c3_9d48ae9c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-06T17:36:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d53481b0_ca2aebbf",
+      "range": {
+        "startLine": 216,
+        "startChar": 17,
+        "endLine": 216,
+        "endChar": 20
+      },
+      "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32fc7d95_21e0bb9d",
@@ -71,6 +95,24 @@
       "writtenOn": "2021-10-06T15:14:33Z",
       "side": 1,
       "message": "nit: final",
+      "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26df1a70_cbe815f2",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-06T17:36:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32fc7d95_21e0bb9d",
       "revId": "39f30621f23f92f2a4336a09edcd9b77bc1805f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
