@@ -10,6 +10,13 @@
 #include "src/base/lazy-instance.h"
 #include "src/utils/allocation.h"
 
+#if defined(V8_OS_WIN)
+#include <windows.h>
+
+// This has to come after windows.h.
+#include <versionhelpers.h>  // For IsWindows8OrGreater().
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -26,6 +33,19 @@ bool V8VirtualMemoryCage::Initialize(v8::PageAllocator* page_allocator,
   CHECK(!disabled_);
   CHECK(base::bits::IsPowerOfTwo(size));
   CHECK_GE(size, kVirtualMemoryCageMinimumSize);
+
+#if defined(V8_OS_WIN)
+  if (!IsWindows8Point1OrGreater()) {
+    // On Windows pre 8.1, reserving virtual memory is an expensive operation,
+    // possibly because actual page table entries are created for the address
+    // range. For example, a 1TB reservation would cost around 2GB in page table
+    // entries. As such, we can unfortunately only create a minimal cage on
+    // these version, without guard regions and so without any security
+    // guarantees.
+    use_guard_regions = false;
+    size = kVirtualMemoryCageMinimumSize;
+  }
+#endif
 
   // Currently, we allow the cage to be smaller than the requested size. This
   // way, we can gracefully handle cage reservation failures during the initial
