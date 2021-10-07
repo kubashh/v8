@@ -98,6 +98,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6db5913_0583739f",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T14:15:40Z",
+      "side": 1,
+      "message": "I don\u0027t think there\u0027s a good way to read FLAG_* from Torque. I also don\u0027t think that\u0027s a big issue; this value isn\u0027t expected to be one of the knobs that are in particular need of tuning, so recompiling for any experiments is probably fine.",
+      "parentUuid": "dbc4fa42_7f782c02",
+      "range": {
+        "startLine": 490,
+        "startChar": 17,
+        "endLine": 490,
+        "endChar": 18
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1931bec6_36b71ad7",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T14:15:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7024913_454196a5",
+      "range": {
+        "startLine": 490,
+        "startChar": 14,
+        "endLine": 490,
+        "endChar": 15
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad337a9e_21fa478a",
@@ -111,6 +159,30 @@
       "writtenOn": "2021-10-06T12:22:51Z",
       "side": 1,
       "message": "nit: This seems like a formatting error. A couple more cases below.",
+      "range": {
+        "startLine": 518,
+        "startChar": 4,
+        "endLine": 519,
+        "endChar": 76
+      },
+      "revId": "63712f471d235feacd2692a93345f2ec3c2e2a61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc589090_c413bb3f",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T14:15:40Z",
+      "side": 1,
+      "message": "I agree that it looks weird, but it\u0027s created by the auto-formatter, and if I change it manually, it turns it back into this.",
+      "parentUuid": "ad337a9e_21fa478a",
       "range": {
         "startLine": 518,
         "startChar": 4,
