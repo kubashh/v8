@@ -502,6 +502,7 @@ class Code : public HeapObject {
   inline bool IsWeakObject(HeapObject object);
 
   static inline bool IsWeakObjectInOptimizedCode(HeapObject object);
+  static inline bool IsStrongObjectInOptimizedCode(HeapObject object);
 
   // Returns false if this is an embedded builtin Code object that's in
   // read_only_space and hence doesn't have execute permissions.
