@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bada5aa9_3a52461b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-10-07T08:05:23Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd818c52_bf232834",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "YAGNI? :)\n\nWe already implicitly hide all but 2 events in here.",
       "parentUuid": "bd818c52_bf232834",
+      "range": {
+        "startLine": 354,
+        "startChar": 9,
+        "endLine": 354,
+        "endChar": 22
+      },
+      "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f9f41b0_71fe745f",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-10-07T08:05:23Z",
+      "side": 1,
+      "message": "nit: I see it a bit differently. I think ideally on allocation steps would just be kIncrementalSweep events. Right now we\u0027re implicitly filtering between events of conceptually the same type.",
+      "parentUuid": "50fb794f_71d5769c",
       "range": {
         "startLine": 354,
         "startChar": 9,
