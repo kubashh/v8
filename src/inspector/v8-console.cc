@@ -119,37 +119,63 @@ class ConsoleHelper {
     reportCall(ConsoleAPIType::kWarning, arguments);
   }
 
-  bool firstArgToBoolean(bool defaultValue) {
+  bool argToBoolean(int index, bool defaultValue) {
     if (m_info.Length() < 1) return defaultValue;
-    if (m_info[0]->IsBoolean()) return m_info[0].As<v8::Boolean>()->Value();
-    return m_info[0]->BooleanValue(m_context->GetIsolate());
+    if (m_info[index]->IsBoolean())
+      return m_info[index].As<v8::Boolean>()->Value();
+    return m_info[index]->BooleanValue(m_context->GetIsolate());
   }
 
-  String16 firstArgToString(const String16& defaultValue,
-                            bool allowUndefined = true) {
-    if (m_info.Length() < 1 || (!allowUndefined && m_info[0]->IsUndefined())) {
+  v8::Maybe<int64_t> argToInteger(int index, int64_t defaultValue) {
+    if (m_info.Length() < 1) return v8::Just(defaultValue);
+    if (m_info[index]->IsNumber())
+      return v8::Just(m_info[index].As<v8::Integer>()->Value());
+    return m_info[index]->IntegerValue(m_context);
+  }
+
+  String16 argToString(int index, const String16& defaultValue,
+                       bool allowUndefined = true) {
+    if (m_info.Length() < 1 ||
+        (!allowUndefined && m_info[index]->IsUndefined())) {
       return defaultValue;
     }
     v8::Local<v8::String> titleValue;
-    if (!m_info[0]->ToString(m_context).ToLocal(&titleValue))
+    if (!m_info[index]->ToString(m_context).ToLocal(&titleValue))
       return defaultValue;
     return toProtocolString(m_context->GetIsolate(), titleValue);
   }
 
-  v8::MaybeLocal<v8::Object> firstArgAsObject() {
-    if (m_info.Length() < 1 || !m_info[0]->IsObject())
+  v8::MaybeLocal<v8::Object> argAsObject(int index) {
+    if (m_info.Length() < 1 || !m_info[index]->IsObject())
       return v8::MaybeLocal<v8::Object>();
-    return m_info[0].As<v8::Object>();
+    return m_info[index].As<v8::Object>();
   }
 
-  v8::MaybeLocal<v8::Function> firstArgAsFunction() {
-    if (m_info.Length() < 1 || !m_info[0]->IsFunction())
+  v8::MaybeLocal<v8::Function> argAsFunction(int index) {
+    if (m_info.Length() < 1 || !m_info[index]->IsFunction())
       return v8::MaybeLocal<v8::Function>();
-    v8::Local<v8::Function> func = m_info[0].As<v8::Function>();
+    v8::Local<v8::Function> func = m_info[index].As<v8::Function>();
     while (func->GetBoundFunction()->IsFunction())
       func = func->GetBoundFunction().As<v8::Function>();
     return func;
   }
+
+  bool firstArgToBoolean(bool defaultValue) {
+    return argToBoolean(0, defaultValue);
+  }
+
+  v8::Maybe<int64_t> firstArgToInteger(int64_t defaultValue) {
+    return argToInteger(0, defaultValue);
+  }
+
+  String16 firstArgToString(const String16& defaultValue,
+                            bool allowUndefined = true) {
+    return argToString(0, defaultValue, allowUndefined);
+  }
+
+  v8::MaybeLocal<v8::Object> firstArgAsObject() { return argAsObject(0); }
+
+  v8::MaybeLocal<v8::Function> firstArgAsFunction() { return argAsFunction(0); }
 
   void forEachSession(std::function<void(V8InspectorSessionImpl*)> callback) {
     m_inspector->forEachSession(m_groupId, std::move(callback));
@@ -426,6 +452,127 @@ void V8Console::TimeStamp(const v8::debug::ConsoleCallArguments& info,
   ConsoleHelper helper(info, consoleContext, m_inspector);
   String16 title = helper.firstArgToString(String16());
   m_inspector->client()->consoleTimeStamp(toStringView(title));
+}
+
+void V8Console::ScheduleAsyncTask(
+    const v8::debug::ConsoleCallArguments& info,
+    const v8::debug::ConsoleContext& consoleContext) {
+  if (info.Length() != 2) {
+    // TODO: error.
+    return;
+  }
+
+  ConsoleHelper helper(info, consoleContext, m_inspector);
+  String16 argName = helper.argToString(0, String16());
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(1, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    // TODO: error.
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it != m_asyncTaskIds.end()) {
+    // TODO: error.
+    return;
+  }
+
+  StringView taskName = v8_inspector::StringView(
+      reinterpret_cast<const uint16_t*>(argName.characters16()),
+      argName.length());
+
+  int* taskPtr = new int();
+  m_asyncTaskIds.emplace(argId, taskPtr);
+
+  m_inspector->asyncTaskScheduled(taskName, taskPtr, false);
+}
+
+void V8Console::StartAsyncTask(
+    const v8::debug::ConsoleCallArguments& info,
+    const v8::debug::ConsoleContext& consoleContext) {
+  if (info.Length() != 1) {
+    // TODO: error.
+    return;
+  }
+
+  ConsoleHelper helper(info, consoleContext, m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(1, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    // TODO: error.
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    // TODO: error.
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskStarted(taskPtr);
+}
+
+void V8Console::FinishAsyncTask(
+    const v8::debug::ConsoleCallArguments& info,
+    const v8::debug::ConsoleContext& consoleContext) {
+  if (info.Length() != 1) {
+    // TODO: error.
+    return;
+  }
+
+  ConsoleHelper helper(info, consoleContext, m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(1, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    // TODO: error.
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    // TODO: error.
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskFinished(taskPtr);
+
+  delete taskPtr;
+  m_asyncTaskIds.erase(argId);
+}
+
+void V8Console::CancelAsyncTask(
+    const v8::debug::ConsoleCallArguments& info,
+    const v8::debug::ConsoleContext& consoleContext) {
+  if (info.Length() != 1) {
+    // TODO: error.
+    return;
+  }
+
+  ConsoleHelper helper(info, consoleContext, m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(1, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    // TODO: error.
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    // TODO: error.
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskCanceled(taskPtr);
+
+  delete taskPtr;
+  m_asyncTaskIds.erase(argId);
 }
 
 void V8Console::memoryGetterCallback(

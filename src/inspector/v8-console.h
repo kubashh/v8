@@ -5,6 +5,8 @@
 #ifndef V8_INSPECTOR_V8_CONSOLE_H_
 #define V8_INSPECTOR_V8_CONSOLE_H_
 
+#include <map>
+
 #include "include/v8-array-buffer.h"
 #include "include/v8-external.h"
 #include "include/v8-local-handle.h"
@@ -50,6 +52,7 @@ class V8Console : public v8::debug::ConsoleDelegate {
     v8::Local<v8::Object> m_global;
     v8::Local<v8::Set> m_installedMethods;
     v8::Local<v8::ArrayBuffer> m_thisReference;
+    // v8::Local<v8::Array> m_installedMethods;
   };
 
   explicit V8Console(V8InspectorImpl* inspector);
@@ -99,6 +102,17 @@ class V8Console : public v8::debug::ConsoleDelegate {
                const v8::debug::ConsoleContext& consoleContext) override;
   void TimeStamp(const v8::debug::ConsoleCallArguments&,
                  const v8::debug::ConsoleContext& consoleContext) override;
+  void ScheduleAsyncTask(
+      const v8::debug::ConsoleCallArguments&,
+      const v8::debug::ConsoleContext& consoleContext) override;
+  void StartAsyncTask(const v8::debug::ConsoleCallArguments&,
+                      const v8::debug::ConsoleContext& consoleContext) override;
+  void FinishAsyncTask(
+      const v8::debug::ConsoleCallArguments&,
+      const v8::debug::ConsoleContext& consoleContext) override;
+  void CancelAsyncTask(
+      const v8::debug::ConsoleCallArguments&,
+      const v8::debug::ConsoleContext& consoleContext) override;
 
   template <void (V8Console::*func)(const v8::FunctionCallbackInfo<v8::Value>&)>
   static void call(const v8::FunctionCallbackInfo<v8::Value>& info) {
@@ -171,6 +185,8 @@ class V8Console : public v8::debug::ConsoleDelegate {
                             int sessionId);
 
   V8InspectorImpl* m_inspector;
+
+  std::map<int64_t, int*> m_asyncTaskIds;
 };
 
 }  // namespace v8_inspector
