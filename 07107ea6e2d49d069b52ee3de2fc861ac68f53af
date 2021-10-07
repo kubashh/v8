@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d59097_256eee90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-10-07T19:37:17Z",
+      "side": 1,
+      "message": "Unskipping this flaky test since it was a clang bug that has been fixed and rolled into DEPS. Milad, I don\u0027t have a way to check this for ppc, ptal.",
+      "revId": "07107ea6e2d49d069b52ee3de2fc861ac68f53af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
