@@ -167,6 +167,14 @@ class ConsoleDelegate {
                        const ConsoleContext& context) {}
   virtual void TimeStamp(const ConsoleCallArguments& args,
                          const ConsoleContext& context) {}
+  virtual void ScheduleAsyncTask(const ConsoleCallArguments& args,
+                                 const ConsoleContext& context) {}
+  virtual void StartAsyncTask(const ConsoleCallArguments& args,
+                              const ConsoleContext& context) {}
+  virtual void FinishAsyncTask(const ConsoleCallArguments& args,
+                               const ConsoleContext& context) {}
+  virtual void CancelAsyncTask(const ConsoleCallArguments& args,
+                               const ConsoleContext& context) {}
   virtual ~ConsoleDelegate() = default;
 };
 

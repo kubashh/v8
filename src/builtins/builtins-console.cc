@@ -106,6 +106,34 @@ BUILTIN(ConsoleTimeStamp) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+BUILTIN(ConsoleScheduleAsyncTask) {
+  LogTimerEvent(isolate, args, v8::LogEventStatus::kStamp);
+  ConsoleCall(isolate, args, &debug::ConsoleDelegate::ScheduleAsyncTask);
+  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+BUILTIN(ConsoleStartAsyncTask) {
+  LogTimerEvent(isolate, args, v8::LogEventStatus::kStamp);
+  ConsoleCall(isolate, args, &debug::ConsoleDelegate::StartAsyncTask);
+  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+BUILTIN(ConsoleFinishAsyncTask) {
+  LogTimerEvent(isolate, args, v8::LogEventStatus::kStamp);
+  ConsoleCall(isolate, args, &debug::ConsoleDelegate::FinishAsyncTask);
+  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+BUILTIN(ConsoleCancelAsyncTask) {
+  LogTimerEvent(isolate, args, v8::LogEventStatus::kStamp);
+  ConsoleCall(isolate, args, &debug::ConsoleDelegate::CancelAsyncTask);
+  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 namespace {
 
 void InstallContextFunction(Isolate* isolate, Handle<JSObject> target,
@@ -173,6 +201,14 @@ BUILTIN(ConsoleContext) {
                          id, args.at(1));
   InstallContextFunction(isolate, context, "timeStamp",
                          Builtin::kConsoleTimeStamp, id, args.at(1));
+  InstallContextFunction(isolate, context, "scheduleAsyncTask",
+                         Builtin::kConsoleScheduleAsyncTask, id, args.at(1));
+  InstallContextFunction(isolate, context, "startAsyncTask",
+                         Builtin::kConsoleStartAsyncTask, id, args.at(1));
+  InstallContextFunction(isolate, context, "finishAsyncTask",
+                         Builtin::kConsoleFinishAsyncTask, id, args.at(1));
+  InstallContextFunction(isolate, context, "cancelAsyncTask",
+                         Builtin::kConsoleCancelAsyncTask, id, args.at(1));
 
   return *context;
 }
