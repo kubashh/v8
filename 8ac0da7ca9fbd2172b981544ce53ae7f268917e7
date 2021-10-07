@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "887ecfc6_745725b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2021-10-07T18:57:35Z",
+      "side": 1,
+      "message": "Hello Clemens, we finally found the reason for the intermittent failure. Could you please take a look on this CL? Thanks!",
+      "revId": "8ac0da7ca9fbd2172b981544ce53ae7f268917e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
