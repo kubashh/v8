@@ -34,6 +34,24 @@
       "parentUuid": "8e56307b_b876cfce",
       "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a08438_499341aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-10-07T20:54:05Z",
+      "side": 1,
+      "message": "For the ones that don\u0027t have a relaxed equivalent, it makes sense to me that you would need new operators, but for the ones that don\u0027t and we can pass in relaxed as a parameter, it sounds like we can reduce how much code we duplicate. For this case specifically we don\u0027t need the machine operators, the instruction selector has the same Emit code except for a different op being generated, and having shared codegen based on the flag would mean that the codegen exists without having to explicitly implement it for ia32. Is there a reason this doesn\u0027t make sense that I\u0027m missing? \n\nOn a more general note, I see them as being different operators at the Wasm level, but at the compiler layer these are very similar operations and it makes sense to me that this code would be shared.",
+      "parentUuid": "fa77d775_e332fee7",
+      "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
