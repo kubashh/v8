@@ -33,6 +33,47 @@
       "message": "This is the actual fix.",
       "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2bc50e2_f763dad3",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-07T18:54:29Z",
+      "side": 1,
+      "message": "Is this helping the compiler to alias an implementation? If so, what\u0027s the difference between defining it here and out of line in the -inl.h header? Is it not inlining but creating a function?",
+      "parentUuid": "30de6d36_d6634e18",
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ff2ee62_9b5bc706",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-07T18:54:29Z",
+      "side": 1,
+      "message": "AFAIK, that inline is implied by the inlined definition?",
+      "range": {
+        "startLine": 188,
+        "startChar": 2,
+        "endLine": 188,
+        "endChar": 8
+      },
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
