@@ -1,0 +1,10 @@
+Checks that console.scheduleAsyncTask exists.
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : function
+        }
+    }
+}
