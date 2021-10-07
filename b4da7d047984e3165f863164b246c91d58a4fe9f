@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8820921_94bc2c49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-07T16:17:12Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30de6d36_d6634e18",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-07T16:17:12Z",
+      "side": 1,
+      "message": "This is the actual fix.",
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
