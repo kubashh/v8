@@ -106,6 +106,9 @@ class MakeGarbageCollectedTraitBase
    */
   V8_INLINE static void* Allocate(AllocationHandle& handle, size_t size) {
     static_assert(
+        alignof(T) <= 8,
+        "TODO:(v8:12295): alignof(T)>8 which is not yet supported by Oilpan.");
+    static_assert(
         std::is_base_of<typename T::ParentMostGarbageCollectedType, T>::value,
         "U of GarbageCollected<U> must be a base of T. Check "
         "GarbageCollected<T> base class inheritance.");
