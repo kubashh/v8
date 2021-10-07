@@ -52,6 +52,24 @@
       "parentUuid": "fa77d775_e332fee7",
       "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4f7042_626a76d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-10-07T22:14:44Z",
+      "side": 1,
+      "message": "I can make that change, ptal PS 3. IMO the code duplication isn\u0027t bad here. I think I8x16Swizzle and I8x16RelaxedSwizzle are slightly different at the compiler backend level, since I8x16Swizzle has an optimization that can generate extremely different code (no check for ranges). At the machine operator I don\u0027t have much opinions on whether they are 2 different operators, or a single operator with a bool, they are pretty similar, but the instruction selector simplification looks nice. Ptal PS3 and lmk what you think.",
+      "parentUuid": "09a08438_499341aa",
+      "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
