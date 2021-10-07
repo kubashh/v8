@@ -185,7 +185,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
 
   // The pointer compression cage base value used for decompression of all
   // tagged values except references to Code objects.
-  PtrComprCageBase cage_base() const {
+  inline PtrComprCageBase cage_base() const {
 #if V8_COMPRESS_POINTERS
     return cage_base_;
 #else
@@ -195,7 +195,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
 
   // The pointer compression cage base value used for decompression of
   // references to Code objects.
-  PtrComprCageBase code_cage_base() const {
+  inline PtrComprCageBase code_cage_base() const {
 #if V8_EXTERNAL_CODE_SPACE
     return code_cage_base_;
 #else
