@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c32fc623_ac3a6e91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-07T09:44:46Z",
+      "side": 1,
+      "message": "Thanks Zhi! Should we abandon this now?",
+      "revId": "2f33d61ae85d6cae50dbb21b4a6d716017c951f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
