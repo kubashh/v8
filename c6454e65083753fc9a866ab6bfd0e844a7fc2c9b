@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44df5ceb_6b8e5988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38f8d544_f925bd55",
@@ -53,6 +70,52 @@
         "startChar": 8,
         "endLine": 35,
         "endChar": 49
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "560ee39e_25753dd2",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "These explicit toNumber conversions are for Big*64Arrays, right? They\u0027re not needed; comparing BigInts and Numbers works just fine: `2 \u003d\u003d 2n` is true, `2 \u003d\u003d\u003d 2n` is false, no TypeErrors anywhere.\nThat said, I\u0027m also fine with keeping the explicit conversions for consistency.",
+      "range": {
+        "startLine": 1402,
+        "startChar": 13,
+        "endLine": 1402,
+        "endChar": 19
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77fecf99_dc11d450",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "This conversion is needed, because `assertEquals` performs type-strict comparisons.",
+      "range": {
+        "startLine": 1405,
+        "startChar": 20,
+        "endLine": 1405,
+        "endChar": 26
       },
       "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -99,6 +162,122 @@
         "startChar": 0,
         "endLine": 1532,
         "endChar": 3
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbed5af4_527f8ca1",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "Also, the bodies of the existing for-loops are subtly different.\n\nI thought about ways to make these tests less repetitive too, but my conclusion for now is that doing so would require fairly complicated machinery, and that wouldn\u0027t be worth it. In particular, when you have to debug a failing test, you want the test itself to be as simple to understand as possible; verbosity/repetitiveness is less important for test code.",
+      "parentUuid": "dee9c1a2_2b3b3136",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 3
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b63efba_c8fde8b6",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "unnecessary; CollectValuesAndResize already converts to Number.",
+      "range": {
+        "startLine": 1982,
+        "startChar": 11,
+        "endLine": 1982,
+        "endChar": 20
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621fd29a_1c5bde99",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "This could equivalently be `assertEquals(0, Number(taWrite[i]))`, right? IIRC we have test coverage for that behavior elsewhere, so we can also keep this code here as-is.",
+      "range": {
+        "startLine": 2545,
+        "startChar": 6,
+        "endLine": 2545,
+        "endChar": 39
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fafec26_d6513716",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "If you set this to 1 and resizeTo \u003d 2 * BPE, would you get values \u003d\u003d [6, undefined, 2, 0]?",
+      "range": {
+        "startLine": 3079,
+        "startChar": 4,
+        "endLine": 3079,
+        "endChar": 20
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce218a30_5f71e5d3",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 3638,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-07T13:36:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t the test be more interesting if that weren\u0027t the case, such as with `resizeAfter \u003d 1, resizeTo \u003d 2*BPE`?",
+      "range": {
+        "startLine": 3638,
+        "startChar": 7,
+        "endLine": 3638,
+        "endChar": 80
       },
       "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
