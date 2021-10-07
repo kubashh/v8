@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d13f1835_1aae8540",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-07T09:45:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2288f55e_5c21222a",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 10
+      },
+      "revId": "024835a1eef47c3ea4b0e258f86fa70c74605d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f53cee2f_040ab955",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-10-07T09:15:23Z",
       "side": 1,
       "message": "DCHECK_EQ",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 10
+      },
+      "revId": "024835a1eef47c3ea4b0e258f86fa70c74605d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e3634d_7254fd2a",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-07T09:45:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f53cee2f_040ab955",
       "range": {
         "startLine": 160,
         "startChar": 4,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d74128_faf4370e",
+        "filename": "src/base/bounded-page-allocator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-07T09:45:45Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027ll send a follow-up CL for this",
+      "parentUuid": "4c07501c_7a9ab1fe",
+      "range": {
+        "startLine": 19,
+        "startChar": 42,
+        "endLine": 19,
+        "endChar": 70
+      },
+      "revId": "024835a1eef47c3ea4b0e258f86fa70c74605d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e6a72b0_1516ef66",
@@ -100,6 +172,30 @@
       "writtenOn": "2021-10-07T09:15:23Z",
       "side": 1,
       "message": "I think you can replace the call site where CppgcBoundedPageAllocator is allocated with a plain BoundedPageAllocator.\n\nAs you can see below, the only reason for a specialization was to memset() memory on FreePages() to achieve the same effect: having zero initialized pages.",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 31
+      },
+      "revId": "024835a1eef47c3ea4b0e258f86fa70c74605d1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813eed13_ea1952f0",
+        "filename": "src/heap/cppgc/caged-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-07T09:45:45Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027ll send a follow-up CL for this",
+      "parentUuid": "5e6a72b0_1516ef66",
       "range": {
         "startLine": 49,
         "startChar": 6,
