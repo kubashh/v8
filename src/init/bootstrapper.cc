@@ -2835,6 +2835,14 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtin::kConsoleTimeStamp, 0, false, NONE);
     SimpleInstallFunction(isolate_, console, "context",
                           Builtin::kConsoleContext, 1, true, NONE);
+    SimpleInstallFunction(isolate_, console, "scheduleAsyncTask",
+                          Builtin::kConsoleScheduleAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "startAsyncTask",
+                          Builtin::kConsoleStartAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "finishAsyncTask",
+                          Builtin::kConsoleFinishAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "cancelAsyncTask",
+                          Builtin::kConsoleCancelAsyncTask, 0, false, NONE);
     InstallToStringTag(isolate_, console, "Object");
   }
 
