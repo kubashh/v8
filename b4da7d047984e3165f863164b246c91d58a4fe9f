@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfb87de1_46c3f74c",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-08T08:48:37Z",
+      "side": 1,
+      "message": "I found both versions equivalent but the compiler seems to disagree.\nI\u0027ll try to investigate what happens exactly as a follow-up.",
+      "parentUuid": "c2bc50e2_f763dad3",
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ff2ee62_9b5bc706",
         "filename": "src/objects/visitors.h",
         "patchSetId": 1
@@ -66,6 +84,30 @@
       "writtenOn": "2021-10-07T18:54:29Z",
       "side": 1,
       "message": "AFAIK, that inline is implied by the inlined definition?",
+      "range": {
+        "startLine": 188,
+        "startChar": 2,
+        "endLine": 188,
+        "endChar": 8
+      },
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48d88ecc_228912e4",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-08T08:48:37Z",
+      "side": 1,
+      "message": "Yes, I agree. This change has slipped through from my experiments. Removed.",
+      "parentUuid": "7ff2ee62_9b5bc706",
       "range": {
         "startLine": 188,
         "startChar": 2,
