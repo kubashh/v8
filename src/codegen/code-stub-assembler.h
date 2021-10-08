@@ -804,7 +804,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<Code> FromCodeT(TNode<CodeT> code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
-    return LoadObjectField<Code>(code, CodeDataContainer::kCodeOffset);
+#if V8_TARGET_BIG_ENDIAN
+#error "This code requires updating for big-endian architectures"
+#endif
+    DCHECK_EQ(CodeDataContainer::kCodeHiOffset,
+              CodeDataContainer::kCodeOffset + kTaggedSize);
+    TNode<Object> o = BitcastWordToTagged(Load<RawPtrT>(
+        code, IntPtrConstant(CodeDataContainer::kCodeOffset - kHeapObjectTag)));
+    return CAST(o);
 #else
     return code;
 #endif
