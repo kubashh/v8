@@ -33,6 +33,24 @@
       "message": "Cannot yet land that as there\u0027s a case FakeGraphicsLayerClient in Blink that wants alignof(T) \u003d\u003d 16 :/ ",
       "revId": "c9aea9f3fec84a87db1b9bd83dcbf707468bfd0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d8d44a_8d3f9bbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2021-10-08T14:12:32Z",
+      "side": 1,
+      "message": "Can\u0027t you? The CL triggering the issue has been reverted:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3173031\n\nSo this would just block it from getting relanded, which is a feature, not a bug :)",
+      "parentUuid": "12014815_6a23045b",
+      "revId": "c9aea9f3fec84a87db1b9bd83dcbf707468bfd0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
