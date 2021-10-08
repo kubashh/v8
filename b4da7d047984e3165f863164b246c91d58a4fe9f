@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1fdc2f_ae982f22",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-08T12:13:12Z",
+      "side": 1,
+      "message": "TIL. See https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1254494#c12",
+      "parentUuid": "cfb87de1_46c3f74c",
+      "revId": "b4da7d047984e3165f863164b246c91d58a4fe9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ff2ee62_9b5bc706",
