@@ -223,6 +223,7 @@ class Genesis {
   void InitializeGlobal(Handle<JSGlobalObject> global_object,
                         Handle<JSFunction> empty_function);
   void InitializeExperimentalGlobal();
+  void InitializeExperimentalAsyncStackTaggingAPI();
   void InitializeIteratorFunctions();
   void InitializeCallSiteBuiltins();
 
@@ -4083,6 +4084,29 @@ void Genesis::InitializeExperimentalGlobal() {
   InitializeGlobal_regexp_linear_flag();
 }
 
+void Genesis::InitializeExperimentalAsyncStackTaggingAPI() {
+  Factory* factory = isolate()->factory();
+  Handle<String> name = factory->InternalizeUtf8String("console");
+  Handle<NativeContext> context(isolate()->native_context());
+  Handle<SharedFunctionInfo> info =
+      factory->NewSharedFunctionInfoForBuiltin(name, Builtin::kIllegal);
+  Handle<JSFunction> cons =
+      Factory::JSFunctionBuilder{isolate(), info, context}.Build();
+  Handle<JSObject> console = factory->NewJSObject(cons, AllocationType::kOld);
+  DCHECK(console->IsJSObject());
+
+  // if (FLAG_async_stack_tagging_api) {
+    SimpleInstallFunction(isolate_, console, "scheduleAsyncTask",
+                          Builtin::kConsoleScheduleAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "startAsyncTask",
+                          Builtin::kConsoleStartAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "finishAsyncTask",
+                          Builtin::kConsoleFinishAsyncTask, 0, false, NONE);
+    SimpleInstallFunction(isolate_, console, "cancelAsyncTask",
+                          Builtin::kConsoleCancelAsyncTask, 0, false, NONE);
+  // }
+}
+
 bool Genesis::CompileExtension(Isolate* isolate, v8::Extension* extension) {
   Factory* factory = isolate->factory();
   HandleScope scope(isolate);
@@ -4276,9 +4300,8 @@ void Genesis::InitializeIteratorFunctions() {
         native_context->async_function_map(), kReleaseStore);
     async_function_constructor->shared().DontAdaptArguments();
     async_function_constructor->shared().set_length(1);
-    InstallWithIntrinsicDefaultProto(
-        isolate, async_function_constructor,
-        Context::ASYNC_FUNCTION_FUNCTION_INDEX);
+    InstallWithIntrinsicDefaultProto(isolate, async_function_constructor,
+                                     Context::ASYNC_FUNCTION_FUNCTION_INDEX);
 
     native_context->set_async_function_constructor(*async_function_constructor);
     JSObject::ForceSetPrototype(isolate, async_function_constructor,
@@ -5525,6 +5548,7 @@ Genesis::Genesis(
   // them after they have already been deserialized would also fail.
   if (!isolate->serializer_enabled()) {
     InitializeExperimentalGlobal();
+    InitializeExperimentalAsyncStackTaggingAPI();
 
     // Store String.prototype's map again in case it has been changed by
     // experimental natives.
