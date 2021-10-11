@@ -527,6 +527,22 @@ static_assert((kVirtualMemoryCageGuardRegionSize %
 // ArrayBuffer partition and two 10GB WASM memory cages to fit into the cage.
 constexpr size_t kVirtualMemoryCageMinimumSize = size_t{32} << 30;  // 32 GB
 
+// On OSes where reservation virtual memory is too expensive to create a real
+// cage, notably Windows pre 8.1, we create a fake cage that doesn't actually
+// reserve most of the memory, and so doesn't have the desired security
+// properties, but still ensures that objects that should be located inside the
+// cage are allocated within kVirtualMemoryCageSize bytes from the start of the
+// cage, and so appear to be inside the cage. The size of the virtual memory
+// range that is actually reserved for a fake cage is specified by this
+// constant and should be big enough to contain the pointer compression region
+// as well as the ArrayBuffer partition.
+constexpr size_t kFakeVirtualMemoryCageReservationSize = size_t{8} << 30;
+
+static_assert(kFakeVirtualMemoryCageReservationSize >
+                  Internals::kPtrComprCageReservationSize,
+              "The reservation for a fake virtual memory cage must be larger "
+              "than the pointer compression cage contained within it.");
+
 // For now, even if the virtual memory cage is enabled, we still allow backing
 // stores to be allocated outside of it as fallback. This will simplify the
 // initial rollout. However, if the heap sandbox is also enabled, we already use
