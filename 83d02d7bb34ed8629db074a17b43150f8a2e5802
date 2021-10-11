@@ -106,6 +106,24 @@
       "parentUuid": "f0342e09_c58339d0",
       "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b73a19_a049ff06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-10-11T20:57:11Z",
+      "side": 1,
+      "message": "Yes, lgtm with a preference for a shared machine operator.",
+      "parentUuid": "5eb8939d_60ef6c21",
+      "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
