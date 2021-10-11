@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad5b6dbc_8c1a154f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-11T07:20:53Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3db7d023_1f57b5d6",
@@ -71,6 +88,24 @@
       "writtenOn": "2021-10-11T05:55:05Z",
       "side": 1,
       "message": "Please comment briefly how these differ from the normal macros, too. Could we remove the macro and define raw_code manually?",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b964cd3_2756d665",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-11T07:20:53Z",
+      "side": 1,
+      "message": "+1\n\nIIUC, these will always be a one-off, right?",
+      "parentUuid": "6ef9c13e_d9be66cc",
       "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
