@@ -2835,6 +2835,16 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtin::kConsoleTimeStamp, 0, false, NONE);
     SimpleInstallFunction(isolate_, console, "context",
                           Builtin::kConsoleContext, 1, true, NONE);
+    if (FLAG_async_stack_tagging_api) {
+      SimpleInstallFunction(isolate_, console, "scheduleAsyncTask",
+                            Builtin::kConsoleScheduleAsyncTask, 0, false, NONE);
+      SimpleInstallFunction(isolate_, console, "startAsyncTask",
+                            Builtin::kConsoleStartAsyncTask, 0, false, NONE);
+      SimpleInstallFunction(isolate_, console, "finishAsyncTask",
+                            Builtin::kConsoleFinishAsyncTask, 0, false, NONE);
+      SimpleInstallFunction(isolate_, console, "cancelAsyncTask",
+                            Builtin::kConsoleCancelAsyncTask, 0, false, NONE);
+    }
     InstallToStringTag(isolate_, console, "Object");
   }
 
@@ -4276,9 +4286,8 @@ void Genesis::InitializeIteratorFunctions() {
         native_context->async_function_map(), kReleaseStore);
     async_function_constructor->shared().DontAdaptArguments();
     async_function_constructor->shared().set_length(1);
-    InstallWithIntrinsicDefaultProto(
-        isolate, async_function_constructor,
-        Context::ASYNC_FUNCTION_FUNCTION_INDEX);
+    InstallWithIntrinsicDefaultProto(isolate, async_function_constructor,
+                                     Context::ASYNC_FUNCTION_FUNCTION_INDEX);
 
     native_context->set_async_function_constructor(*async_function_constructor);
     JSObject::ForceSetPrototype(isolate, async_function_constructor,
