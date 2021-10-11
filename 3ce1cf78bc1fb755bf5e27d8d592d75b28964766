@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db7d023_1f57b5d6",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "STATIC_ASSERT",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b106f211_d0fbb189",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2050,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Nice trick please add a comment ;) Same on other architectures and in CSA.",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85765c05_5a7746af",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Please update the comment.",
+      "range": {
+        "startLine": 399,
+        "startChar": 7,
+        "endLine": 399,
+        "endChar": 42
+      },
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ef9c13e_d9be66cc",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Please comment briefly how these differ from the normal macros, too. Could we remove the macro and define raw_code manually?",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf82d7a_01617883",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "nit: pass in `tag`.",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8de460_f736d2fe",
+        "filename": "src/objects/code.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "A bit more explanation could be useful here - it sounds like the \u0027code\u0027 part of the name is relevant, please explain why.",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49067f39_4c9368a6",
+        "filename": "src/objects/code.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Please change the name to something that describes the contents, like kCageBaseUpper32Bits.",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb5c1f0d_3a858a55",
+        "filename": "src/objects/code.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Please keep this name consistent with the field name / if it remains `main_cage_base` update the field name to kMainCageBaseUpper32Bits or so.\n\nIs \u0027main_cage_base\u0027 a common term or would explanation be useful?",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9811f009_836d64f1",
+        "filename": "src/objects/code.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-11T05:55:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "3ce1cf78bc1fb755bf5e27d8d592d75b28964766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
