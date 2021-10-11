@@ -32,6 +32,10 @@ console.context() methods:
     [19] : time
     [20] : timeEnd
     [21] : timeStamp
+    [22] : scheduleAsyncTask
+    [23] : startAsyncTask
+    [24] : finishAsyncTask
+    [25] : cancelAsyncTask
 ]
 
 Running test: testDefaultConsoleContext

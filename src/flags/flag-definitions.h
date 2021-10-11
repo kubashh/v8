@@ -1915,6 +1915,9 @@ DEFINE_BOOL(regexp_possessive_quantifier, false,
 // Debugger
 DEFINE_BOOL(print_break_location, false, "print source location on debug break")
 
+DEFINE_BOOL(async_stack_tagging_api, false,
+            "enable experimental async stacks tagging API")
+
 //
 // Logging and profiling flags
 //
