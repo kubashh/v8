@@ -70,6 +70,24 @@
       "parentUuid": "09a08438_499341aa",
       "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0342e09_c58339d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-10-11T19:53:00Z",
+      "side": 1,
+      "message": "I like the simplification in PS3, in the spirit of sharing code across layers I would be in favor of using a single operator at the machine operator level. I agree that they are slightly different at the backend level, but I\u0027m not sure that they\u0027re different enough  - i.e. for move optimizations and other opcodes, we do collapse them into the same opcode based on addressing mores etc. that do generate different code based on constant matching, but I do see that the relaxed vs. non-relaxed is slightly different from that.",
+      "parentUuid": "4c4f7042_626a76d0",
+      "revId": "83d02d7bb34ed8629db074a17b43150f8a2e5802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
