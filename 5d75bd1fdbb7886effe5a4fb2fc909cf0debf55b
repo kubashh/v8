@@ -16,6 +16,24 @@
       "message": "This update causes TSan issues: https://ci.chromium.org/p/v8/builders/luci.v8.ci/V8%20Linux64%20TSAN%20-%20isolates",
       "revId": "5d75bd1fdbb7886effe5a4fb2fc909cf0debf55b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8712ac7f_82ad2c9b",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-11T16:25:23Z",
+      "side": 1,
+      "message": "Fixed: https://chromium-review.googlesource.com/c/v8/v8/+/3217197",
+      "parentUuid": "8f32b89f_7163d69e",
+      "revId": "5d75bd1fdbb7886effe5a4fb2fc909cf0debf55b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
