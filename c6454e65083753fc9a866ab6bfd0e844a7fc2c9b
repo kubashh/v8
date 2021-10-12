@@ -215,6 +215,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc75fdb1_bb80934e",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-12T13:16:10Z",
+      "side": 1,
+      "message": "Yeah, I was thinking about how to make the tests more repetitive, but didn\u0027t come up with anything interesting yet. E.g., I could also add code to generate the expectations automatically, but that\u0027s not a good option either, since I might just have the same bugs in that code as the production code, and also it makes the test harder to understand. So I put those ideas aside for now, let\u0027s see if I come up with something reasonable later.",
+      "parentUuid": "5763d5e8_a8a31561",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 3
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b63efba_c8fde8b6",
