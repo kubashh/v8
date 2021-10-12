@@ -1,0 +1,37 @@
+Checks that async stack tagging APIs are not available without a runtime flag.
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : undefined
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : undefined
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : undefined
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : {
+            type : string
+            value : undefined
+        }
+    }
+}
