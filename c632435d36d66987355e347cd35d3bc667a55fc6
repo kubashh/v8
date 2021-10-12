@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60063f5_939ea3ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-12T17:00:31Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "c632435d36d66987355e347cd35d3bc667a55fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21c7d8a2_29d5e8d0",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-10-12T16:31:46Z",
       "side": 1,
       "message": "Why didn\u0027t you rely on page_allocator_-\u003eGetRandomMmapAddr()?\nOtherwise it\u0027s a bit asymmetrical to set the page_allocator_\u0027s seed but \"never\" use it. \nIf you decide to keep using the rng it would also be nice to initialize it with FLAG_random_seed to make it less flaky.",
+      "range": {
+        "startLine": 65,
+        "startChar": 19,
+        "endLine": 65,
+        "endChar": 35
+      },
+      "revId": "c632435d36d66987355e347cd35d3bc667a55fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2633408_6d4745f1",
+        "filename": "src/init/vm-cage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-12T17:00:31Z",
+      "side": 1,
+      "message": "Made a comment and added SetSeed calls in the constructor and SetRandomMmapSeed",
+      "parentUuid": "21c7d8a2_29d5e8d0",
       "range": {
         "startLine": 65,
         "startChar": 19,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73731c12_f06cd96d",
+        "filename": "src/init/vm-cage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-12T17:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae025317_92d14e54",
+      "range": {
+        "startLine": 73,
+        "startChar": 41,
+        "endLine": 73,
+        "endChar": 47
+      },
+      "revId": "c632435d36d66987355e347cd35d3bc667a55fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b90cd3a7_105551c4",
@@ -87,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa039f4c_7a7a9011",
+        "filename": "src/init/vm-cage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-12T17:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b90cd3a7_105551c4",
+      "range": {
+        "startLine": 145,
+        "startChar": 6,
+        "endLine": 145,
+        "endChar": 12
+      },
+      "revId": "c632435d36d66987355e347cd35d3bc667a55fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26aef950_a3c7a461",
@@ -100,6 +189,30 @@
       "writtenOn": "2021-10-12T16:31:46Z",
       "side": 1,
       "message": "I think it\u0027s fare to use page_allocator_-\u003eGetRandomMmapAddr() here too (which should already respect the value of FLAG_random_seed).",
+      "range": {
+        "startLine": 280,
+        "startChar": 30,
+        "endLine": 280,
+        "endChar": 33
+      },
+      "revId": "c632435d36d66987355e347cd35d3bc667a55fc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae97713_2941985a",
+        "filename": "src/init/vm-cage.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-12T17:00:31Z",
+      "side": 1,
+      "message": "Added a comment here",
+      "parentUuid": "26aef950_a3c7a461",
       "range": {
         "startLine": 280,
         "startChar": 30,
