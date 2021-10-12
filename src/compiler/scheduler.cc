@@ -730,8 +730,6 @@ class SpecialRPONumberer : public ZoneObject {
   bool HasLoopBlocks() const { return loops_.size() != 0; }
 
  private:
-  using Backedge = std::pair<BasicBlock*, size_t>;
-
   // Numbering for BasicBlock::rpo_number for this block traversal:
   static const int kBlockOnStack = -2;
   static const int kBlockVisited1 = -3;
@@ -824,7 +822,12 @@ class SpecialRPONumberer : public ZoneObject {
         if (succ->rpo_number() == kBlockVisited1) continue;
         if (succ->rpo_number() == kBlockOnStack) {
           // The successor is on the stack, so this is a backedge (cycle).
-          backedges_.push_back(Backedge(frame->block, frame->index - 1));
+          // The graph is in edge-split form: if a block has multiple
+          // successors, then all of those successors have only one predecessor.
+          // Thus, any backedge to a loop header is guaranteed to be an
+          // unconditional jump.
+          DCHECK_EQ(frame->index - 1, 0);
+          backedges_.push_back(frame->block);
           if (!HasLoopNumber(succ)) {
             // Assign a new loop number to the header if it doesn't have one.
             SetLoopNumber(succ, num_loops++);
@@ -990,7 +993,7 @@ class SpecialRPONumberer : public ZoneObject {
 
   // Computes loop membership from the backedges of the control flow graph.
   void ComputeLoopInfo(ZoneVector<SpecialRPOStackFrame>* queue,
-                       size_t num_loops, ZoneVector<Backedge>* backedges) {
+                       size_t num_loops, ZoneVector<BasicBlock*>* backedges) {
     // Extend existing loop membership vectors.
     for (LoopInfo& loop : loops_) {
       loop.members->Resize(static_cast<int>(schedule_->BasicBlockCount()),
@@ -1003,8 +1006,8 @@ class SpecialRPONumberer : public ZoneObject {
     // Compute loop membership starting from backedges.
     // O(max(loop_depth) * max(|loop|)
     for (size_t i = 0; i < backedges->size(); i++) {
-      BasicBlock* member = backedges->at(i).first;
-      BasicBlock* header = member->SuccessorAt(backedges->at(i).second);
+      BasicBlock* member = backedges->at(i);
+      BasicBlock* header = member->SuccessorAt(0);
       size_t loop_num = GetLoopNumber(header);
       if (loops_[loop_num].header == nullptr) {
         loops_[loop_num].header = header;
@@ -1145,7 +1148,7 @@ class SpecialRPONumberer : public ZoneObject {
   BasicBlock* order_;
   BasicBlock* beyond_end_;
   ZoneVector<LoopInfo> loops_;
-  ZoneVector<Backedge> backedges_;
+  ZoneVector<BasicBlock*> backedges_;
   ZoneVector<SpecialRPOStackFrame> stack_;
   size_t previous_block_count_;
   ZoneVector<BasicBlock*> const empty_;
