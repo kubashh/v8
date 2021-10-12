@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe278c6d_ec88a031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-12T17:05:43Z",
+      "side": 1,
+      "message": "lgtm with last nit",
+      "revId": "9718b3baedc3247d6e311efecfc5e2948d473f66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf417a66_fbaae20a",
+        "filename": "src/init/vm-cage.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-12T17:05:43Z",
+      "side": 1,
+      "message": "Maybe just\n  hint \u003d RoundDown(hint, page_allocator-\u003eAllocatePageSize()).",
+      "revId": "9718b3baedc3247d6e311efecfc5e2948d473f66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
