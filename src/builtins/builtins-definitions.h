@@ -486,6 +486,10 @@ namespace internal {
   CPP(ConsoleTimeEnd)                                                          \
   CPP(ConsoleTimeStamp)                                                        \
   CPP(ConsoleContext)                                                          \
+  CPP(ConsoleScheduleAsyncTask)                                                \
+  CPP(ConsoleStartAsyncTask)                                                   \
+  CPP(ConsoleFinishAsyncTask)                                                  \
+  CPP(ConsoleCancelAsyncTask)                                                  \
                                                                                \
   /* DataView */                                                               \
   /* ES #sec-dataview-constructor */                                           \
