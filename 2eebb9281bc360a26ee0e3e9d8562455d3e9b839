@@ -50,6 +50,29 @@
       "message": "Simple change to keep windows.h out - PTAL",
       "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d721fd4a_0d8d5465",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-12T15:58:41Z",
+      "side": 1,
+      "message": "In order to avoid picking random file(s), would it make sense to e.g. have separate .cc file that e.g. includes src/heap/heap-inl.h which historically pulled in many other headers and put that guard there?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
