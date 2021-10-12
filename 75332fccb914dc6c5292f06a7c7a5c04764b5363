@@ -22,6 +22,30 @@
       },
       "revId": "75332fccb914dc6c5292f06a7c7a5c04764b5363",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc6435b3_8b1e64b4",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4095,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-12T10:58:18Z",
+      "side": 1,
+      "message": "Thank you Yang! This was updated in a subsequent patchset yesterday, based on the conversations in the JS/Wasm and Friends channel.",
+      "parentUuid": "ab217955_b11abea3",
+      "range": {
+        "startLine": 4095,
+        "startChar": 38,
+        "endLine": 4095,
+        "endChar": 49
+      },
+      "revId": "75332fccb914dc6c5292f06a7c7a5c04764b5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
