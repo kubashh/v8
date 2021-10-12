@@ -97,6 +97,30 @@
       },
       "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a21e1615_76316f24",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-12T19:46:44Z",
+      "side": 1,
+      "message": "Another option would be to put the check in one of the test source files - test-heap.cc comes to mind. If not there then I\u0027m not sure where such a file should go. base/ makes sense but apparently does not normally include heap-inl.h.",
+      "parentUuid": "a869112d_67ce3622",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
