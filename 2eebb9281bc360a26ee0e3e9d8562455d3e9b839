@@ -33,6 +33,23 @@
       "message": "Ping! PTAL, trivial change",
       "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea4c4399_c7193359",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-12T15:19:02Z",
+      "side": 1,
+      "message": "Simple change to keep windows.h out - PTAL",
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
