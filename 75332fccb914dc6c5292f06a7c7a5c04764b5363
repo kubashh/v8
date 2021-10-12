@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab217955_b11abea3",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4095,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-10-12T08:48:02Z",
+      "side": 1,
+      "message": "The console object that you want is already being created here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/init/bootstrapper.cc;l\u003d2778;drc\u003d77e713f5337adcbd082ce14af906595a7c8a8c71\n\nOf course that one is installed before creating the snapshot. You want to add it after deserializing from the snapshot.\n\nYou can retrieve it the same way we e.g. get the Intl object: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/init/bootstrapper.cc;l\u003d5204;drc\u003d77e713f5337adcbd082ce14af906595a7c8a8c71",
+      "range": {
+        "startLine": 4095,
+        "startChar": 38,
+        "endLine": 4095,
+        "endChar": 49
+      },
+      "revId": "75332fccb914dc6c5292f06a7c7a5c04764b5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
