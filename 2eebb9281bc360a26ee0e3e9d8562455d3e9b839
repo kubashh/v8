@@ -73,6 +73,30 @@
       },
       "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a869112d_67ce3622",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-12T17:30:15Z",
+      "side": 1,
+      "message": "We could do that. In Chrome itself one of the source files that I chose to add enforcement to was one that included several hundred header files and had, at one point, included windows.h through at least eleven different paths. That magical source file provided many levels of enforcement, which was great.\n\nOne could argue that the ideal place in v8 would be the equivalent - a source file that includes lots of things.\n\nBut, I understand the desire for a special-purpose file, and if heap-inl.h pulls in \"enough\" headers I can certainly do that instead.\n\nYour call - I\u0027m just a contributor from the Chromium world.",
+      "parentUuid": "d721fd4a_0d8d5465",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
