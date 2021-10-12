@@ -191,6 +191,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5763d5e8_a8a31561",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1532,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-12T00:38:05Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s compelling to me, and I already suspected the harder-to-debug issue. Resolving.",
+      "parentUuid": "fbed5af4_527f8ca1",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1532,
+        "endChar": 3
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b63efba_c8fde8b6",
