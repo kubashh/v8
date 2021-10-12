@@ -494,13 +494,10 @@ constexpr bool VirtualMemoryCageIsEnabled() {
 #endif
 }
 
-#ifdef V8_VIRTUAL_MEMORY_CAGE
+#ifdef V8_VIRTUAL_MEMORY_CAGE_IS_AVAILABLE
+
 // Size of the virtual memory cage, excluding the guard regions surrounding it.
 constexpr size_t kVirtualMemoryCageSize = size_t{1} << 40;  // 1 TB
-
-static_assert(kVirtualMemoryCageSize > Internals::kPtrComprCageReservationSize,
-              "The virtual memory cage must be larger than the pointer "
-              "compression cage contained within it.");
 
 // Required alignment of the virtual memory cage. For simplicity, we require the
 // size of the guard regions to be a multiple of this, so that this specifies
@@ -527,6 +524,30 @@ static_assert((kVirtualMemoryCageGuardRegionSize %
 // ArrayBuffer partition and two 10GB WASM memory cages to fit into the cage.
 constexpr size_t kVirtualMemoryCageMinimumSize = size_t{32} << 30;  // 32 GB
 
+static_assert(kVirtualMemoryCageMinimumSize <= kVirtualMemoryCageSize,
+              "The minimal size of the virtual memory cage must be smaller or "
+              "equal to the regular size.");
+
+// On OSes where reservation virtual memory is too expensive to create a real
+// cage, notably Windows pre 8.1, we create a fake cage that doesn't actually
+// reserve most of the memory, and so doesn't have the desired security
+// properties, but still ensures that objects that should be located inside the
+// cage are allocated within kVirtualMemoryCageSize bytes from the start of the
+// cage, and so appear to be inside the cage. The minimum size of the virtual
+// memory range that is actually reserved for a fake cage is specified by this
+// constant and should be big enough to contain the pointer compression region
+// as well as the ArrayBuffer partition.
+constexpr size_t kFakeVirtualMemoryCageMinReservationSize = size_t{8} << 30;
+
+static_assert(kVirtualMemoryCageMinimumSize >
+                  Internals::kPtrComprCageReservationSize,
+              "The virtual memory cage must be larger than the pointer "
+              "compression cage contained within it.");
+static_assert(kFakeVirtualMemoryCageMinReservationSize >
+                  Internals::kPtrComprCageReservationSize,
+              "The reservation for a fake virtual memory cage must be larger "
+              "than the pointer compression cage contained within it.");
+
 // For now, even if the virtual memory cage is enabled, we still allow backing
 // stores to be allocated outside of it as fallback. This will simplify the
 // initial rollout. However, if the heap sandbox is also enabled, we already use
@@ -537,7 +558,7 @@ constexpr bool kAllowBackingStoresOutsideCage = false;
 constexpr bool kAllowBackingStoresOutsideCage = true;
 #endif  // V8_HEAP_SANDBOX
 
-#endif  // V8_VIRTUAL_MEMORY_CAGE
+#endif  // V8_VIRTUAL_MEMORY_CAGE_IS_AVAILABLE
 
 // Only perform cast check for types derived from v8::Data since
 // other types do not implement the Cast method.
