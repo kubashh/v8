@@ -4564,6 +4564,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
     Handle<JSObject> now = factory()->NewJSObject(isolate_->object_function(),
                                                   AllocationType::kOld);
     JSObject::AddProperty(isolate_, temporal, "Now", now, DONT_ENUM);
+    InstallToStringTag(isolate_, now, "Temporal.Now");
 
     // Note: There are NO Temporal.Now.plainTime
     // See https://github.com/tc39/proposal-temporal/issues/1540
