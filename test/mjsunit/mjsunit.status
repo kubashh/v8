@@ -43,11 +43,17 @@
   ##############################################################################
   # Temporal tests to be implemented
   # https://crbug.com/v8/11544
-  'temporal/plain*': [FAIL],
-  'temporal/duration*': [FAIL],
-  'temporal/calendar*': [FAIL],
-  'temporal/zoned*': [FAIL],
-  'temporal/instant*': [FAIL],
+  'temporal/calendar-merge-fields': [FAIL],
+  'temporal/duration-negated': [FAIL],
+  'temporal/duration-to-json': [FAIL],
+  'temporal/instant-constructor': [FAIL],
+  'temporal/instant-from-epoch-milliseconds': [FAIL],
+  'temporal/instant-from-epoch-seconds': [FAIL],
+  'temporal/instant-to-json': [FAIL],
+  'temporal/plain-date-add': [FAIL],
+  'temporal/plain-date-time-subtract': [FAIL],
+  'temporal/plain-date-to-plain-date-time': [FAIL],
+
 
   ##############################################################################
   # Open bugs.
