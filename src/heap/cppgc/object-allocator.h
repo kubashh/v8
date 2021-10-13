@@ -166,10 +166,7 @@ void* ObjectAllocator::AllocateObjectOnSpace(NormalPageSpace& space,
   if (!lab_allocation_will_succeed &&
       (current_lab_size >= (size + kPaddingSize))) {
     void* filler_memory = current_lab.Allocate(kPaddingSize);
-    auto& filler = Filler::CreateAt(filler_memory, kPaddingSize);
-    NormalPage::From(BasePage::FromPayload(&filler))
-        ->object_start_bitmap()
-        .SetBit<AccessMode::kAtomic>(reinterpret_cast<ConstAddress>(&filler));
+    Filler::CreateAt(filler_memory, kPaddingSize);
     lab_allocation_will_succeed = true;
   }
   if (lab_allocation_will_succeed) {
