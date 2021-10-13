@@ -121,16 +121,15 @@ class V8_EXPORT MakeGarbageCollectedTraitInternal {
   };
 
  private:
-  static void* CPPGC_DEFAULT_ALIGNED Allocate(cppgc::AllocationHandle&, size_t,
-                                              GCInfoIndex);
-  static void* CPPGC_DOUBLE_WORD_ALIGNED Allocate(cppgc::AllocationHandle&,
-                                                  size_t, AlignVal,
-                                                  GCInfoIndex);
-  static void* CPPGC_DEFAULT_ALIGNED Allocate(cppgc::AllocationHandle&, size_t,
-                                              GCInfoIndex, CustomSpaceIndex);
-  static void* CPPGC_DOUBLE_WORD_ALIGNED Allocate(cppgc::AllocationHandle&,
-                                                  size_t, AlignVal, GCInfoIndex,
-                                                  CustomSpaceIndex);
+  static void* Allocate(cppgc::AllocationHandle& handle, size_t size,
+                        GCInfoIndex index);
+  static void* Allocate(cppgc::AllocationHandle& handle, size_t size,
+                        AlignVal alignment, GCInfoIndex index);
+  static void* Allocate(cppgc::AllocationHandle& handle, size_t size,
+                        GCInfoIndex index, CustomSpaceIndex space_index);
+  static void* Allocate(cppgc::AllocationHandle& handle, size_t size,
+                        AlignVal alignment, GCInfoIndex index,
+                        CustomSpaceIndex space_index);
 
   friend class HeapObjectHeader;
 };
@@ -303,8 +302,5 @@ V8_INLINE T* MakeGarbageCollected(AllocationHandle& handle,
 }
 
 }  // namespace cppgc
-
-#undef CPPGC_DEFAULT_ALIGNED
-#undef CPPGC_DOUBLE_WORD_ALIGNED
 
 #endif  // INCLUDE_CPPGC_ALLOCATION_H_
