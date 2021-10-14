@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b118ea35_04185426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-14T21:24:17Z",
+      "side": 1,
+      "message": "Resolving the comment prior to abandoning",
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d721fd4a_0d8d5465",
@@ -137,6 +154,30 @@
       "side": 1,
       "message": "a) heap-inl.h pulls in *a lot* of other headers. It\u0027s essentially a backdoor to V8\u0027s object model as it needs to have exact type information for many things in there. I think it\u0027s a great starter. (Feel free to add the other includes of this file as well but I don\u0027t think it matters.)\nb) I\u0027d suggest src/test/unittest/avoid-windows-h-includes.cc or similar.\n\nThoughts?",
       "parentUuid": "a21e1615_76316f24",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "2eebb9281bc360a26ee0e3e9d8562455d3e9b839",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cb0a38c_14bb646c",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2021-10-14T21:24:17Z",
+      "side": 1,
+      "message": "Landed in https://chromium-review.googlesource.com/c/v8/v8/+/3223960",
+      "parentUuid": "b074aeb6_0b1b2469",
       "range": {
         "startLine": 11,
         "startChar": 0,
