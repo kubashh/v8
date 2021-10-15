@@ -50,6 +50,23 @@
       "message": "if t.src is not been used, you can use  \"GenAndRunTest(t.dst, fn)\"",
       "revId": "93a448d343681bb503a3e974406aa9e439434dd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dcfd9fc_09840203",
+        "filename": "test/cctest/test-assembler-riscv64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-10-15T08:20:52Z",
+      "side": 1,
+      "message": "size not been defined",
+      "revId": "93a448d343681bb503a3e974406aa9e439434dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
