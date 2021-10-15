@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --harmony-rab-gsab --allow-natives-syntax
+// Flags: --harmony-rab-gsab --allow-natives-syntax --harmony-array-find-last
 
 "use strict";
 
@@ -286,5 +286,492 @@ d8.file.execute('test/mjsunit/typedarray-helpers.js');
     detachAfter = 1;
     assertFalse(lengthTrackingWithOffset.some(myFunc));
     assertEquals([4, undefined], values);
+  }
+})();
+
+(function FindDetachMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function myFunc(n) {
+    if (n == undefined) {
+      values.push(n);
+    } else {
+      values.push(Number(n));
+    }
+    if (values.length == detachAfter) {
+      %ArrayBufferDetach(rab);
+    }
+    return false;
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    values = [];
+    detachAfter = 2;
+    assertEquals(undefined, fixedLength.find(myFunc));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    values = [];
+    detachAfter = 1;
+    assertEquals(undefined, fixedLengthWithOffset.find(myFunc));
+    assertEquals([4, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    values = [];
+    detachAfter = 2;
+    assertEquals(undefined, lengthTracking.find(myFunc));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    values = [];
+    detachAfter = 1;
+    assertEquals(undefined, lengthTrackingWithOffset.find(myFunc));
+    assertEquals([4, undefined], values);
+  }
+})();
+
+(function FindIndexDetachMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function myFunc(n) {
+    if (n == undefined) {
+      values.push(n);
+    } else {
+      values.push(Number(n));
+    }
+    if (values.length == detachAfter) {
+      %ArrayBufferDetach(rab);
+    }
+    return false;
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    values = [];
+    detachAfter = 2;
+    assertEquals(-1, fixedLength.findIndex(myFunc));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    values = [];
+    detachAfter = 1;
+    assertEquals(-1, fixedLengthWithOffset.findIndex(myFunc));
+    assertEquals([4, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    values = [];
+    detachAfter = 2;
+    assertEquals(-1, lengthTracking.findIndex(myFunc));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    values = [];
+    detachAfter = 1;
+    assertEquals(-1, lengthTrackingWithOffset.findIndex(myFunc));
+    assertEquals([4, undefined], values);
+  }
+})();
+
+(function FindLastDetachMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function myFunc(n) {
+    if (n == undefined) {
+      values.push(n);
+    } else {
+      values.push(Number(n));
+    }
+    if (values.length == detachAfter) {
+      %ArrayBufferDetach(rab);
+    }
+    return false;
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    values = [];
+    detachAfter = 2;
+    assertEquals(undefined, fixedLength.findLast(myFunc));
+    assertEquals([6, 4, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    values = [];
+    detachAfter = 1;
+    assertEquals(undefined, fixedLengthWithOffset.findLast(myFunc));
+    assertEquals([6, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    values = [];
+    detachAfter = 2;
+    assertEquals(undefined, lengthTracking.findLast(myFunc));
+    assertEquals([6, 4, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    values = [];
+    detachAfter = 1;
+    assertEquals(undefined, lengthTrackingWithOffset.findLast(myFunc));
+    assertEquals([6, undefined], values);
+  }
+})();
+
+(function FindLastIndexDetachMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function myFunc(n) {
+    if (n == undefined) {
+      values.push(n);
+    } else {
+      values.push(Number(n));
+    }
+    if (values.length == detachAfter) {
+      %ArrayBufferDetach(rab);
+    }
+    return false;
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    values = [];
+    detachAfter = 2;
+    assertEquals(-1, fixedLength.findLastIndex(myFunc));
+    assertEquals([6, 4, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    values = [];
+    detachAfter = 1;
+    assertEquals(-1, fixedLengthWithOffset.findLastIndex(myFunc));
+    assertEquals([6, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    values = [];
+    detachAfter = 2;
+    assertEquals(-1, lengthTracking.findLastIndex(myFunc));
+    assertEquals([6, 4, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    values = [];
+    detachAfter = 1;
+    assertEquals(-1, lengthTrackingWithOffset.findLastIndex(myFunc));
+    assertEquals([6, undefined], values);
+  }
+})();
+
+(function FilterShrinkMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function myFunc(n) {
+    if (n == undefined) {
+      values.push(n);
+    } else {
+      values.push(Number(n));
+    }
+    if (values.length == detachAfter) {
+       %ArrayBufferDetach(rab);
+    }
+    return false;
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    values = [];
+    detachAfter = 2;
+    assertEquals([], ToNumbers(fixedLength.filter(myFunc)));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    values = [];
+    detachAfter = 1;
+    assertEquals([], ToNumbers(fixedLengthWithOffset.filter(myFunc)));
+    assertEquals([4, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    values = [];
+    detachAfter = 2;
+    assertEquals([], ToNumbers(lengthTracking.filter(myFunc)));
+    assertEquals([0, 2, undefined, undefined], values);
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    values = [];
+    detachAfter = 1;
+    assertEquals([], ToNumbers(lengthTrackingWithOffset.filter(myFunc)));
+    assertEquals([4, undefined], values);
+  }
+})();
+
+(function ForEachReduceReduceRightDetachMidIteration() {
+  // Orig. array: [0, 2, 4, 6]
+  //              [0, 2, 4, 6] << fixedLength
+  //                    [4, 6] << fixedLengthWithOffset
+  //              [0, 2, 4, 6, ...] << lengthTracking
+  //                    [4, 6, ...] << lengthTrackingWithOffset
+  function CreateRabForTest(ctor) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    // Write some data into the array.
+    const taWrite = new ctor(rab);
+    for (let i = 0; i < 4; ++i) {
+      WriteToTypedArray(taWrite, i, 2 * i);
+    }
+    return rab;
+  }
+
+  let values;
+  let rab;
+  let detachAfter;
+  function CollectValuesAndResize(n) {
+    if (typeof n == 'bigint') {
+      values.push(Number(n));
+    } else {
+      values.push(n);
+    }
+    if (values.length == detachAfter) {
+      %ArrayBufferDetach(rab);
+    }
+    return true;
+  }
+
+  function ForEachHelper(array) {
+    values = [];
+    array.forEach(CollectValuesAndResize);
+    return values;
+  }
+
+  function ReduceHelper(array) {
+    values = [];
+    array.reduce((acc, n) => { CollectValuesAndResize(n); }, "initial value");
+    return values;
+  }
+
+  function ReduceRightHelper(array) {
+    values = [];
+    array.reduceRight((acc, n) => { CollectValuesAndResize(n); },
+                      "initial value");
+    return values;
+  }
+
+  // Test for forEach.
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    detachAfter = 2;
+    assertEquals([0, 2, undefined, undefined], ForEachHelper(fixedLength));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    detachAfter = 1;
+    assertEquals([4, undefined], ForEachHelper(fixedLengthWithOffset));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    detachAfter = 2;
+    assertEquals([0, 2, undefined, undefined], ForEachHelper(lengthTracking));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    detachAfter = 1;
+    assertEquals([4, undefined], ForEachHelper(lengthTrackingWithOffset));
+  }
+
+  // Tests for reduce.
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    detachAfter = 2;
+    assertEquals([0, 2, undefined, undefined], ReduceHelper(fixedLength));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    detachAfter = 1;
+    assertEquals([4, undefined], ReduceHelper(fixedLengthWithOffset));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    detachAfter = 2;
+    assertEquals([0, 2, undefined, undefined], ReduceHelper(lengthTracking));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    detachAfter = 1;
+    assertEquals([4, undefined], ReduceHelper(lengthTrackingWithOffset));
+  }
+
+  // Tests for reduceRight.
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLength = new ctor(rab, 0, 4);
+    detachAfter = 2;
+    assertEquals([6, 4, undefined, undefined], ReduceRightHelper(fixedLength));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    detachAfter = 1;
+    assertEquals([6, undefined], ReduceRightHelper(fixedLengthWithOffset));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTracking = new ctor(rab, 0);
+    detachAfter = 2;
+   assertEquals([6, 4, undefined, undefined], ReduceRightHelper(lengthTracking));
+  }
+
+  for (let ctor of ctors) {
+    rab = CreateRabForTest(ctor);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+    detachAfter = 1;
+    assertEquals([6, undefined], ReduceRightHelper(lengthTrackingWithOffset));
   }
 })();
