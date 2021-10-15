@@ -5960,20 +5960,24 @@ void WasmGraphBuilder::StructSet(Node* struct_object,
 
 void WasmGraphBuilder::BoundsCheckArray(Node* array, Node* index,
                                         wasm::WasmCodePosition position) {
-  Node* length = gasm_->LoadWasmArrayLength(array);
-  TrapIfFalse(wasm::kTrapArrayOutOfBounds, gasm_->Uint32LessThan(index, length),
-              position);
+  if (!FLAG_experimental_wasm_skip_bounds_checks) {
+    Node* length = gasm_->LoadWasmArrayLength(array);
+    TrapIfFalse(wasm::kTrapArrayOutOfBounds,
+                gasm_->Uint32LessThan(index, length), position);
+  }
 }
 
 void WasmGraphBuilder::BoundsCheckArrayCopy(Node* array, Node* index,
                                             Node* length,
                                             wasm::WasmCodePosition position) {
-  Node* array_length = gasm_->LoadWasmArrayLength(array);
-  Node* range_end = gasm_->Int32Add(index, length);
-  Node* range_valid = gasm_->Word32And(
-      gasm_->Uint32LessThanOrEqual(range_end, array_length),
-      gasm_->Uint32LessThanOrEqual(index, range_end));  // No overflow
-  TrapIfFalse(wasm::kTrapArrayOutOfBounds, range_valid, position);
+  if (!FLAG_experimental_wasm_skip_bounds_checks) {
+    Node* array_length = gasm_->LoadWasmArrayLength(array);
+    Node* range_end = gasm_->Int32Add(index, length);
+    Node* range_valid = gasm_->Word32And(
+        gasm_->Uint32LessThanOrEqual(range_end, array_length),
+        gasm_->Uint32LessThanOrEqual(index, range_end));  // No overflow
+    TrapIfFalse(wasm::kTrapArrayOutOfBounds, range_valid, position);
+  }
 }
 
 Node* WasmGraphBuilder::ArrayGet(Node* array_object,
