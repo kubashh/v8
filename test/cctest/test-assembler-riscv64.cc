@@ -2008,6 +2008,499 @@ TEST(RVV_VSETIVLI) {
   };
   GenAndRunTest(fn);
 }
+
+TEST(RVV_VFMV) {
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+  for (float a : compiler::ValueHelper::GetVector<float>()) {
+    float src = a;
+    float dst[8] = {0};
+    float ref[8] = {a, a, a, a, a, a, a, a};
+    auto fn = [](MacroAssembler& assm) {
+      __ VU.set(t0, VSew::E32, Vlmul::m2);
+      __ flw(fa1, a0, 0);
+      __ vfmv_vf(v2, fa1);
+      __ vs(v2, a1, 0, VSew::E32);
+    };
+    GenAndRunTest<int32_t, int64_t>((int64_t)&src, (int64_t)dst, fn);
+    CHECK(!memcmp(ref, dst, sizeof(ref)));
+  }
+}
+
+// Tests for vector integer arithmetic instructions between vector and vector
+#define TEST_RVV_VI_VV(name, width, array)                   \
+  TEST(RVV_VI_VV_##name##width) {                            \
+    constexpr int n = 128 / width;                           \
+    CcTest::InitializeVM();                                  \
+    Isolate* isolate = CcTest::i_isolate();                  \
+    HandleScope scope(isolate);                              \
+    for (int##width##_t a : array) {                         \
+      for (int##width##_t b : array) {                       \
+        struct T {                                           \
+          int##width##_t dst[n] = {0};                       \
+          int##width##_t ref[n] = {0};                       \
+        } t;                                                 \
+        auto fn = [a, b](MacroAssembler& assm) {             \
+          __ VU.set(t0, VSew::E##width, Vlmul::m1);          \
+          __ li(a2, a);                                      \
+          __ vmv_vx(v2, a2);                                 \
+          __ li(a2, b);                                      \
+          __ vmv_vx(v3, a2);                                 \
+          __ name##_vv(v1, v2, v3);                          \
+          __ vs(v1, a0, 0, VSew::E##width);                  \
+        };                                                   \
+        GenAndRunTest<int32_t, int64_t>((int64_t)t.dst, fn); \
+        name##width(n, a, b, t.ref);                         \
+        CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));         \
+      }                                                      \
+    }                                                        \
+  }
+
+// Tests for vector integer arithmetic instructions between vector and scalar
+#define TEST_RVV_VI_VX(name, width, array)                   \
+  TEST(RVV_VI_VX_##name##width) {                            \
+    constexpr int n = 128 / width;                           \
+    CcTest::InitializeVM();                                  \
+    Isolate* isolate = CcTest::i_isolate();                  \
+    HandleScope scope(isolate);                              \
+    for (int##width##_t a : array) {                         \
+      for (int##width##_t b : array) {                       \
+        struct T {                                           \
+          int##width##_t dst[n] = {0};                       \
+          int##width##_t ref[n] = {0};                       \
+        } t;                                                 \
+        auto fn = [a, b](MacroAssembler& assm) {             \
+          __ VU.set(t0, VSew::E##width, Vlmul::m1);          \
+          __ li(a2, a);                                      \
+          __ vmv_vx(v2, a2);                                 \
+          __ li(a2, b);                                      \
+          __ name##_vx(v1, v2, a2);                          \
+          __ vs(v1, a0, 0, VSew::E##width);                  \
+        };                                                   \
+        GenAndRunTest<int32_t, int64_t>((int64_t)t.dst, fn); \
+        name##width(n, a, b, t.ref);                         \
+        CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));         \
+      }                                                      \
+    }                                                        \
+  }
+
+// Tests for vector integer arithmetic instructions between vector and 5-bit
+// immediate
+#define TEST_RVV_VI_VI(name, width, array)                   \
+  TEST(RVV_VI_VI_##name##width) {                            \
+    constexpr int n = 128 / width;                           \
+    CcTest::InitializeVM();                                  \
+    Isolate* isolate = CcTest::i_isolate();                  \
+    HandleScope scope(isolate);                              \
+    for (int##width##_t a : array) {                         \
+      for (int##width##_t b : array) {                       \
+        b = (b > 15) ? 15 : ((b < -16) ? (-16) : b);         \
+        struct T {                                           \
+          int##width##_t dst[n] = {0};                       \
+          int##width##_t ref[n] = {0};                       \
+        } t;                                                 \
+        auto fn = [a, b](MacroAssembler& assm) {             \
+          __ VU.set(t0, VSew::E##width, Vlmul::m1);          \
+          __ li(a2, a);                                      \
+          __ vmv_vx(v2, a2);                                 \
+          __ name##_vi(v1, v2, b);                           \
+          __ vs(v1, a0, 0, VSew::E##width);                  \
+        };                                                   \
+        GenAndRunTest<int32_t, int64_t>((int64_t)t.dst, fn); \
+        name##width(n, a, b, t.ref);                         \
+        CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));         \
+      }                                                      \
+    }                                                        \
+  }
+
+#define RVV_VI_REF(name, width, op)                                          \
+  void name##width(size_t n, const int##width##_t x, const int##width##_t y, \
+                   int##width##_t* z) {                                      \
+    for (size_t i = 0; i < n; i++) {                                         \
+      z[i] = op;                                                             \
+    }                                                                        \
+  }
+
+RVV_VI_REF(vadd, 8, x + y)
+RVV_VI_REF(vadd, 16, x + y)
+RVV_VI_REF(vadd, 32, x + y)
+RVV_VI_REF(vsub, 8, x - y)
+RVV_VI_REF(vsub, 16, x - y)
+RVV_VI_REF(vsub, 32, x - y)
+RVV_VI_REF(vand, 8, x& y)
+RVV_VI_REF(vand, 16, x& y)
+RVV_VI_REF(vand, 32, x& y)
+RVV_VI_REF(vor, 8, x | y)
+RVV_VI_REF(vor, 16, x | y)
+RVV_VI_REF(vor, 32, x | y)
+RVV_VI_REF(vxor, 8, x ^ y)
+RVV_VI_REF(vxor, 16, x ^ y)
+RVV_VI_REF(vxor, 32, x ^ y)
+RVV_VI_REF(vmax, 8, (x > y) ? x : y)
+RVV_VI_REF(vmax, 16, (x > y) ? x : y)
+RVV_VI_REF(vmax, 32, (x > y) ? x : y)
+RVV_VI_REF(vmin, 8, (x > y) ? y : x)
+RVV_VI_REF(vmin, 16, (x > y) ? y : x)
+RVV_VI_REF(vmin, 32, (x > y) ? y : x)
+RVV_VI_REF(vmaxu, 8, ((uint8_t)x > (uint8_t)y) ? (uint8_t)x : (uint8_t)y)
+RVV_VI_REF(vmaxu, 16, ((uint16_t)x > (uint16_t)y) ? (uint16_t)x : (uint16_t)y)
+RVV_VI_REF(vmaxu, 32, ((uint32_t)x > (uint32_t)y) ? (uint32_t)x : (uint32_t)y)
+RVV_VI_REF(vminu, 8, ((uint8_t)x > (uint8_t)y) ? (uint8_t)y : (uint8_t)x)
+RVV_VI_REF(vminu, 16, ((uint16_t)x > (uint16_t)y) ? (uint16_t)y : (uint16_t)x)
+RVV_VI_REF(vminu, 32, ((uint32_t)x > (uint32_t)y) ? (uint32_t)y : (uint32_t)x)
+
+// clang-format off
+#define TEST_RVV_VI(v, x, i, l)                  \
+  v(vadd, 8, l)  v(vadd, 16, l)  v(vadd, 32, l)  \
+  x(vadd, 8, l)  x(vadd, 16, l)  x(vadd, 32, l)  \
+  i(vadd, 8, l)  i(vadd, 16, l)  i(vadd, 32, l)  \
+  v(vsub, 8, l)  v(vsub, 16, l)  v(vsub, 32, l)  \
+  x(vsub, 8, l)  x(vsub, 16, l)  x(vsub, 32, l)  \
+  v(vand, 8, l)  v(vand, 16, l)  v(vand, 32, l)  \
+  x(vand, 8, l)  x(vand, 16, l)  x(vand, 32, l)  \
+  i(vand, 8, l)  i(vand, 16, l)  i(vand, 32, l)  \
+  v(vor,  8, l)  v(vor,  16, l)  v(vor,  32, l)  \
+  x(vor,  8, l)  x(vor,  16, l)  x(vor,  32, l)  \
+  i(vor,  8, l)  i(vor,  16, l)  i(vor,  32, l)  \
+  v(vxor, 8, l)  v(vxor, 16, l)  v(vxor, 32, l)  \
+  x(vxor, 8, l)  x(vxor, 16, l)  x(vxor, 32, l)  \
+  i(vxor, 8, l)  i(vxor, 16, l)  i(vxor, 32, l)  \
+  v(vmax, 8, l)  v(vmax, 16, l)  v(vmax, 32, l)  \
+  x(vmax, 8, l)  x(vmax, 16, l)  x(vmax, 32, l)  \
+  v(vmin, 8, l)  v(vmin, 16, l)  v(vmin, 32, l)  \
+  x(vmin, 8, l)  x(vmin, 16, l)  x(vmin, 32, l)  \
+  v(vmaxu, 8, l) v(vmaxu, 16, l) v(vmaxu, 32, l) \
+  x(vmaxu, 8, l) x(vmaxu, 16, l) x(vmaxu, 32, l) \
+  v(vminu, 8, l) v(vminu, 16, l) v(vminu, 32, l) \
+  x(vminu, 8, l) x(vminu, 16, l) x(vminu, 32, l) \
+// clang-format on
+
+TEST_RVV_VI(TEST_RVV_VI_VV, TEST_RVV_VI_VX, TEST_RVV_VI_VI,
+            compiler::ValueHelper::GetVector<int>())
+
+#undef TEST_RVV_VI_VV
+#undef RVV_VI_REF
+#undef TEST_RVV_VI
+
+// Tests for vector single-width floating-point arithmetic instructions between
+// vector and vector
+#define TEST_RVV_VF_VV(name, array)                                          \
+  TEST(RVV_VF_VV_##name) {                                                   \
+    CcTest::InitializeVM();                                                  \
+    Isolate* isolate = CcTest::i_isolate();                                  \
+    HandleScope scope(isolate);                                              \
+    for (float a : array) {                                                  \
+      for (float b : array) {                                                \
+        struct T {                                                           \
+          float src[2] = {0};                                                \
+          float dst[4] = {0};                                                \
+          float ref[4] = {0};                                                \
+        } t;                                                                 \
+        t.src[0] = a;                                                        \
+        t.src[1] = b;                                                        \
+        auto fn = [](MacroAssembler& assm) {                                 \
+          __ VU.set(t0, VSew::E32, Vlmul::m1);                               \
+          __ flw(fa0, a0, 0);                                                \
+          __ vfmv_vf(v2, fa0);                                               \
+          __ addi(a0, a0, 4);                                                \
+          __ flw(fa0, a0, 0);                                                \
+          __ vfmv_vf(v3, fa0);                                               \
+          __ name##_vv(v1, v2, v3);                                          \
+          __ vs(v1, a1, 0, VSew::E32);                                       \
+        };                                                                   \
+        GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn); \
+        name##_vv(a, b, t.ref);                                              \
+        CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));                         \
+      }                                                                      \
+    }                                                                        \
+  }
+
+// Tests for vector single-width floating-point arithmetic instructions between
+// vector and scalar
+#define TEST_RVV_VF_VF(name, array)                                          \
+  TEST(RVV_VF_VF_##name) {                                                   \
+    CcTest::InitializeVM();                                                  \
+    Isolate* isolate = CcTest::i_isolate();                                  \
+    HandleScope scope(isolate);                                              \
+    for (float a : array) {                                                  \
+      for (float b : array) {                                                \
+        struct T {                                                           \
+          float src[2] = {0};                                                \
+          float dst[4] = {0};                                                \
+          float ref[4] = {0};                                                \
+        } t;                                                                 \
+        t.src[0] = a;                                                        \
+        t.src[1] = b;                                                        \
+        auto fn = [](MacroAssembler& assm) {                                 \
+          __ VU.set(t0, VSew::E32, Vlmul::m1);                               \
+          __ flw(fa0, a0, 0);                                                \
+          __ vfmv_vf(v2, fa0);                                               \
+          __ addi(a0, a0, 4);                                                \
+          __ flw(fa0, a0, 0);                                                \
+          __ name##_vf(v1, v2, fa0);                                         \
+          __ vs(v1, a1, 0, VSew::E32);                                       \
+        };                                                                   \
+        GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn); \
+        name##_vv(a, b, t.ref);                                              \
+        CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));                         \
+      }                                                                      \
+    }                                                                        \
+  }
+
+#define RVV_VF_REF(name, op)                                       \
+  void name##_vv(const float x, const float y, float* z) {         \
+    for (int i = 0; i < 4; i++) z[i] = UseCanonicalNan<float>(op); \
+  }
+
+RVV_VF_REF(vfadd, x + y)
+RVV_VF_REF(vfsub, x - y)
+RVV_VF_REF(vfmul, x* y)
+RVV_VF_REF(vfdiv, x / y)
+
+// clang-format off
+#define TEST_RVV_VF(v, u, l)                      \
+  v(vfadd, l) v(vfsub, l) v(vfmul, l) v(vfdiv, l)
+// clang-format on
+
+TEST_RVV_VF(TEST_RVV_VF_VV, TEST_RVV_VF_VF,
+            compiler::ValueHelper::GetVector<float>())
+
+#undef TEST_RVV_VF_VV
+#undef RVV_VF_REF
+#undef TEST_RVV_VF
+
+// Tests for vector single-width floating-point fused multiply-add arithmetic
+// instructions between vector and vector
+#define TEST_RVV_VF_FMA_VV(name, array)                              \
+  TEST(RVV_VF_FMA_VV_##name) {                                       \
+    CcTest::InitializeVM();                                          \
+    Isolate* isolate = CcTest::i_isolate();                          \
+    HandleScope scope(isolate);                                      \
+    struct T {                                                       \
+      float src1;                                                    \
+      float src2;                                                    \
+      float dst[4];                                                  \
+      float ref[4];                                                  \
+    } t;                                                             \
+    auto fn = [](MacroAssembler& assm) {                             \
+      __ VU.set(t0, VSew::E32, Vlmul::m1);                           \
+      __ flw(fa0, a0, 0);                                            \
+      __ vfmv_vf(v2, fa0);                                           \
+      __ flw(fa1, a1, 0);                                            \
+      __ vfmv_vf(v4, fa1);                                           \
+      __ vl(v6, a2, 0, VSew::E32);                                   \
+      __ name##_vv(v6, v2, v4);                                      \
+      __ vs(v6, a2, 0, VSew::E32);                                   \
+    };                                                               \
+    for (float x : array) {                                          \
+      for (float y : array) {                                        \
+        t.src1 = x;                                                  \
+        t.src2 = y;                                                  \
+        for (float z : array) {                                      \
+          for (int i = 0; i < 4; i++) {                              \
+            t.dst[i] = z;                                            \
+            t.ref[i] = z;                                            \
+          }                                                          \
+          GenAndRunTest<int64_t>((int64_t)&t.src1, (int64_t)&t.src2, \
+                                 (int64_t)t.dst, fn);                \
+          name(4, t.ref, t.src1, t.src2);                            \
+          CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));               \
+        }                                                            \
+      }                                                              \
+    }                                                                \
+  }
+
+// Tests for vector single-width floating-point fused multiply-add arithmetic
+// instructions between vector and scalar
+#define TEST_RVV_VF_FMA_VF(name, array)                              \
+  TEST(RVV_VF_FMA_VF_##name) {                                       \
+    CcTest::InitializeVM();                                          \
+    Isolate* isolate = CcTest::i_isolate();                          \
+    HandleScope scope(isolate);                                      \
+    struct T {                                                       \
+      float src1;                                                    \
+      float src2;                                                    \
+      float dst[4];                                                  \
+      float ref[4];                                                  \
+    } t;                                                             \
+    auto fn = [](MacroAssembler& assm) {                             \
+      __ VU.set(t0, VSew::E32, Vlmul::m1);                           \
+      __ flw(fa0, a0, 0);                                            \
+      __ flw(fa1, a1, 0);                                            \
+      __ vfmv_vf(v2, fa1);                                           \
+      __ vl(v4, a2, 0, VSew::E32);                                   \
+      __ name##_vf(v4, fa0, v2);                                     \
+      __ vs(v4, a2, 0, VSew::E32);                                   \
+    };                                                               \
+    for (float x : array) {                                          \
+      for (float y : array) {                                        \
+        t.src1 = x;                                                  \
+        t.src2 = y;                                                  \
+        for (float z : array) {                                      \
+          for (int i = 0; i < 4; i++) {                              \
+            t.dst[i] = z;                                            \
+            t.ref[i] = z;                                            \
+          }                                                          \
+          GenAndRunTest<int64_t>((int64_t)&t.src1, (int64_t)&t.src2, \
+                                 (int64_t)t.dst, fn);                \
+          name(4, t.ref, t.src1, t.src2);                            \
+          CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));               \
+        }                                                            \
+      }                                                              \
+    }                                                                \
+  }
+
+#define RVV_VF_FMA_REF(name, op)                                      \
+  void name(size_t n, float* z, const float x, const float y) {       \
+    for (size_t i = 0; i < n; i++) z[i] = UseCanonicalNan<float>(op); \
+  }
+
+RVV_VF_FMA_REF(vfmadd, (x * z[i]) + y)
+RVV_VF_FMA_REF(vfnmadd, -(x* z[i]) - y)
+RVV_VF_FMA_REF(vfmsub, (x * z[i]) - y)
+RVV_VF_FMA_REF(vfnmsub, -(x* z[i]) + y)
+RVV_VF_FMA_REF(vfmacc, (x * y) + z[i])
+RVV_VF_FMA_REF(vfnmacc, -(x* y) - z[i])
+RVV_VF_FMA_REF(vfmsac, (x * y) - z[i])
+RVV_VF_FMA_REF(vfnmsac, -(x* y) + z[i])
+
+// clang-format off
+#define TEST_RVV_VF_FMA(v, u, h)                         \
+  v(vfmadd, h) v(vfnmadd, h) v(vfmsub, h)  v(vfnmsub, h) \
+  v(vfmacc, h) v(vfnmacc, h) v(vfmsac, h)  v(vfnmsac, h) \
+  u(vfmadd, h) u(vfnmadd, h) u(vfmsub, h)  u(vfnmsub, h) \
+  u(vfmacc, h) u(vfnmacc, h) u(vfmsac, h)  u(vfnmsac, h)
+// clang-format on
+
+TEST_RVV_VF_FMA(TEST_RVV_VF_FMA_VF, TEST_RVV_VF_FMA_VV,
+                compiler::ValueHelper::GetVector<float>())
+
+#undef TEST_RVV_VF_FMA_VF
+#undef TEST_RVV_VF_FMA_VV
+#undef RVV_VF_FMA_REF
+#undef TEST_RVV_VF_FMA
+
+TEST(RVV_VNCLIP_WI_SATURATED_E32M2_E16M1) {
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+  auto fn = [](MacroAssembler& assm) {
+    __ vsetvli(t0, zero_reg, VSew::E32, Vlmul::m2);
+    __ vl(v2, a0, 0, VSew::E32);
+    __ vsetvli(t0, zero_reg, VSew::E16, Vlmul::m1);
+    __ vnclip_vi(v4, v2, 15);
+    __ vs(v4, a1, 0, VSew::E16);
+  };
+  for (int32_t x : compiler::ValueHelper::GetVector<int>()) {
+    struct T {
+      int32_t src[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      int16_t dst[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      int16_t ref[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    } t;
+    t.src[1] = x;
+    t.src[3] = x;
+    t.src[4] = x;
+    t.src[6] = x;
+    t.ref[1] = base::saturated_cast<int16_t>(x >> 15);
+    t.ref[3] = base::saturated_cast<int16_t>(x >> 15);
+    t.ref[4] = base::saturated_cast<int16_t>(x >> 15);
+    t.ref[6] = base::saturated_cast<int16_t>(x >> 15);
+    GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn);
+    CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));
+  }
+}
+
+TEST(RVV_VNCLIP_WI_UNSATURATED_E32M2_E16M1) {
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+  auto fn = [](MacroAssembler& assm) {
+    __ vsetvli(t0, zero_reg, VSew::E32, Vlmul::m2);
+    __ vl(v2, a0, 0, VSew::E32);
+    __ vsetvli(t0, zero_reg, VSew::E16, Vlmul::m1);
+    __ vnclip_vi(v4, v2, 16);
+    __ vs(v4, a1, 0, VSew::E16);
+  };
+  for (int32_t x : compiler::ValueHelper::GetVector<int>()) {
+    struct T {
+      int32_t src[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      int16_t dst[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      int16_t ref[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    } t;
+    t.src[1] = x;
+    t.src[3] = x;
+    t.src[4] = x;
+    t.src[6] = x;
+    t.ref[1] = base::saturated_cast<int16_t>(x >> 16);
+    t.ref[3] = base::saturated_cast<int16_t>(x >> 16);
+    t.ref[4] = base::saturated_cast<int16_t>(x >> 16);
+    t.ref[6] = base::saturated_cast<int16_t>(x >> 16);
+    GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn);
+    CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));
+  }
+}
+
+TEST(RVV_VNCLIPU_WI_SATURATED_E32M2_E16M1) {
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+  auto fn = [](MacroAssembler& assm) {
+    __ vsetvli(t0, zero_reg, VSew::E32, Vlmul::m2);
+    __ vl(v2, a0, 0, VSew::E32);
+    __ vsetvli(t0, zero_reg, VSew::E16, Vlmul::m1);
+    __ vnclipu_vi(v4, v2, 15);
+    __ vs(v4, a1, 0, VSew::E16);
+  };
+  for (int32_t x : compiler::ValueHelper::GetVector<int32_t>()) {
+    struct T {
+      int32_t src[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      uint16_t dst[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      uint16_t ref[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    } t;
+    t.src[1] = x;
+    t.src[3] = x;
+    t.src[4] = x;
+    t.src[6] = x;
+    t.ref[1] = base::saturated_cast<uint16_t>(x >> 15);
+    t.ref[3] = base::saturated_cast<uint16_t>(x >> 15);
+    t.ref[4] = base::saturated_cast<uint16_t>(x >> 15);
+    t.ref[6] = base::saturated_cast<uint16_t>(x >> 15);
+    GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn);
+    CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));
+  }
+}
+
+TEST(RVV_VNCLIPU_WI_UNSATURATED_E32M2_E16M1) {
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  HandleScope scope(isolate);
+  auto fn = [](MacroAssembler& assm) {
+    __ vsetvli(t0, zero_reg, VSew::E32, Vlmul::m2);
+    __ vl(v2, a0, 0, VSew::E32);
+    __ vsetvli(t0, zero_reg, VSew::E16, Vlmul::m1);
+    __ vnclipu_vi(v4, v2, 16);
+    __ vs(v4, a1, 0, VSew::E16);
+  };
+  for (int32_t x : compiler::ValueHelper::GetVector<uint32_t>()) {
+    struct T {
+      uint32_t src[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      uint16_t dst[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+      uint16_t ref[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    } t;
+    t.src[1] = x;
+    t.src[3] = x;
+    t.src[4] = x;
+    t.src[6] = x;
+    t.ref[1] = base::saturated_cast<uint16_t>(x >> 16);
+    t.ref[3] = base::saturated_cast<uint16_t>(x >> 16);
+    t.ref[4] = base::saturated_cast<uint16_t>(x >> 16);
+    t.ref[6] = base::saturated_cast<uint16_t>(x >> 16);
+    GenAndRunTest<int32_t, int64_t>((int64_t)t.src, (int64_t)t.dst, fn);
+    CHECK(!memcmp(t.dst, t.ref, sizeof(t.ref)));
+  }
+}
+
 #endif
 
 #undef __
