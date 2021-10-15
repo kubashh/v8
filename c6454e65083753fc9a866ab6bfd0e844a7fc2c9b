@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e867a2de_15f71987",
+        "filename": "src/builtins/typed-array-filter.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Did that. Not 100% happy with the end result, I guess it\u0027s a matter of taste which one is better :)\n\nI feel conflicted about whether AttachedJSTypedArrayWitness should know the length or not. (And here we don\u0027t want the length to be updated; in some cases we would.)\n\n(I also made this change in the funcs I modified in a previous CL.)",
+      "parentUuid": "38f8d544_f925bd55",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 49
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "560ee39e_25753dd2",
@@ -88,6 +112,30 @@
       "writtenOn": "2021-10-07T13:36:40Z",
       "side": 1,
       "message": "These explicit toNumber conversions are for Big*64Arrays, right? They\u0027re not needed; comparing BigInts and Numbers works just fine: `2 \u003d\u003d 2n` is true, `2 \u003d\u003d\u003d 2n` is false, no TypeErrors anywhere.\nThat said, I\u0027m also fine with keeping the explicit conversions for consistency.",
+      "range": {
+        "startLine": 1402,
+        "startChar": 13,
+        "endLine": 1402,
+        "endChar": 19
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b12180c9_a8b866e1",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Ah, right, removed Number here.",
+      "parentUuid": "560ee39e_25753dd2",
       "range": {
         "startLine": 1402,
         "startChar": 13,
@@ -134,6 +182,30 @@
       "writtenOn": "2021-10-06T20:57:03Z",
       "side": 1,
       "message": "A more descriptive name than \u0027myFunc\u0027 would be good. Perhaps \u0027accumulateValuesAndGrow\u0027?",
+      "range": {
+        "startLine": 1482,
+        "startChar": 11,
+        "endLine": 1482,
+        "endChar": 17
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "683d9a2d_0de92bcc",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01f73f81_f720c15e",
       "range": {
         "startLine": 1482,
         "startChar": 11,
@@ -264,6 +336,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4a8579b6_6d2c45a8",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1982,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b63efba_c8fde8b6",
+      "range": {
+        "startLine": 1982,
+        "startChar": 11,
+        "endLine": 1982,
+        "endChar": 20
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "621fd29a_1c5bde99",
         "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
         "patchSetId": 4
@@ -275,6 +371,30 @@
       "writtenOn": "2021-10-07T13:36:40Z",
       "side": 1,
       "message": "This could equivalently be `assertEquals(0, Number(taWrite[i]))`, right? IIRC we have test coverage for that behavior elsewhere, so we can also keep this code here as-is.",
+      "range": {
+        "startLine": 2545,
+        "startChar": 6,
+        "endLine": 2545,
+        "endChar": 39
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b4d3dc_0c98eb78",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Leaving this as is",
+      "parentUuid": "621fd29a_1c5bde99",
       "range": {
         "startLine": 2545,
         "startChar": 6,
@@ -308,6 +428,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "222ed30f_5f9cd15d",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Yes. Exactly. That\u0027s an interesting test, added it (and the corresponding test for reduceRight). Thanks for the tip!",
+      "parentUuid": "9fafec26_d6513716",
+      "range": {
+        "startLine": 3079,
+        "startChar": 4,
+        "endLine": 3079,
+        "endChar": 20
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce218a30_5f71e5d3",
@@ -321,6 +465,30 @@
       "writtenOn": "2021-10-07T13:36:40Z",
       "side": 1,
       "message": "Wouldn\u0027t the test be more interesting if that weren\u0027t the case, such as with `resizeAfter \u003d 1, resizeTo \u003d 2*BPE`?",
+      "range": {
+        "startLine": 3638,
+        "startChar": 7,
+        "endLine": 3638,
+        "endChar": 80
+      },
+      "revId": "c6454e65083753fc9a866ab6bfd0e844a7fc2c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4f0a11_830ec6d9",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 3638,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-10-15T11:52:00Z",
+      "side": 1,
+      "message": "Added that test.",
+      "parentUuid": "ce218a30_5f71e5d3",
       "range": {
         "startLine": 3638,
         "startChar": 7,
