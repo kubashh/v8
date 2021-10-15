@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "611789eb_d58a4c14",
+        "filename": "src/execution/riscv64/simulator-riscv64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6335,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-10-15T07:38:48Z",
+      "side": 1,
+      "message": "Please delete comment",
+      "revId": "93a448d343681bb503a3e974406aa9e439434dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "369a035d_a933caba",
+        "filename": "test/cctest/test-assembler-riscv64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2054,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-10-15T07:38:48Z",
+      "side": 1,
+      "message": "if t.src is not been used, you can use  \"GenAndRunTest(t.dst, fn)\"",
+      "revId": "93a448d343681bb503a3e974406aa9e439434dd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
