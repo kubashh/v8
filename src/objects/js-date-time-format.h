@@ -25,6 +25,7 @@ namespace U_ICU_NAMESPACE {
 class DateIntervalFormat;
 class Locale;
 class SimpleDateFormat;
+class TimeZone;
 }  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
@@ -84,6 +85,9 @@ class JSDateTimeFormat
       const char* method_name);
 
   V8_EXPORT_PRIVATE static const std::set<std::string>& GetAvailableLocales();
+
+  Handle<Object> static TimeZoneId(Isolate* isolate, const icu::TimeZone& tz);
+  std::unique_ptr<icu::TimeZone> static CreateTimeZone(const char* timezone);
 
   Handle<String> HourCycleAsString() const;
 
