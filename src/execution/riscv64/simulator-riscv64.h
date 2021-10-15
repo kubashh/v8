@@ -762,6 +762,20 @@ class Simulator : public SimulatorBase {
   type_usew_t<x>::type uimm5 = (type_usew_t<x>::type)(instr_.RvvUimm5()); \
   type_usew_t<x>::type vs2 = Rvvelt<type_usew_t<x>::type>(rvv_vs2_reg(), i);
 
+#define VN_PARAMS(x)                                                    \
+  constexpr int half_x = x >> 1;                                        \
+  type_sew_t<half_x>::type& vd =                                        \
+      Rvvelt<type_sew_t<half_x>::type>(rvv_vd_reg(), i, true);          \
+  type_sew_t<x>::type simm5 = (type_sew_t<x>::type)(instr_.RvvSimm5()); \
+  type_sew_t<x>::type vs2 = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i);
+
+#define VN_UPARAMS(x)                                                     \
+  constexpr int half_x = x >> 1;                                          \
+  type_usew_t<half_x>::type& vd =                                         \
+      Rvvelt<type_usew_t<half_x>::type>(rvv_vd_reg(), i, true);           \
+  type_usew_t<x>::type uimm5 = (type_usew_t<x>::type)(instr_.RvvUimm5()); \
+  type_sew_t<x>::type vs2 = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i);
+
 #define VXI_PARAMS(x)                                                       \
   type_sew_t<x>::type& vd =                                                 \
       Rvvelt<type_sew_t<x>::type>(rvv_vd_reg(), i, true);                   \
