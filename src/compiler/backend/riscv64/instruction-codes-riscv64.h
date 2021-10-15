@@ -10,6 +10,7 @@ namespace internal {
 namespace compiler {
 
 // Opcodes that support a MemoryAccessMode.
+#define HAS_TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST 0
 #define TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST(V)  // None.
 
 // RISC-V-specific opcodes that specify which assembly sequence to emit.

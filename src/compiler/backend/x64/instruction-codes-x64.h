@@ -13,6 +13,7 @@ namespace compiler {
 // Most opcodes specify a single instruction.
 
 // Opcodes that support a MemoryAccessMode.
+#define HAS_TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST 1
 #define TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST(V) \
   V(X64F64x2PromoteLowF32x4)                               \
   V(X64Movb)                                               \
