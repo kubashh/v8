@@ -1,0 +1,131 @@
+Checks that async stack is captured with the userland API.
+{
+    callFrames : [
+        [0] : {
+            columnNumber : 12
+            functionName : someOtherTask
+            lineNumber : 34
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [1] : {
+            columnNumber : 10
+            functionName : workLoop
+            lineNumber : 18
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [2] : {
+            columnNumber : 12
+            functionName : test
+            lineNumber : 43
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [3] : {
+            columnNumber : 0
+            functionName : 
+            lineNumber : 0
+            scriptId : <scriptId>
+            url : expr.js
+        }
+    ]
+    parent : {
+        callFrames : [
+            [0] : {
+                columnNumber : 16
+                functionName : scheduleUnitOfWork
+                lineNumber : 10
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [1] : {
+                columnNumber : 14
+                functionName : businessLogic
+                lineNumber : 39
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [2] : {
+                columnNumber : 2
+                functionName : test
+                lineNumber : 42
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [3] : {
+                columnNumber : 0
+                functionName : 
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : expr.js
+            }
+        ]
+        description : userland1
+    }
+}
+{
+    callFrames : [
+        [0] : {
+            columnNumber : 12
+            functionName : someTask
+            lineNumber : 30
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [1] : {
+            columnNumber : 10
+            functionName : workLoop
+            lineNumber : 18
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [2] : {
+            columnNumber : 12
+            functionName : test
+            lineNumber : 43
+            scriptId : <scriptId>
+            url : test.js
+        }
+        [3] : {
+            columnNumber : 0
+            functionName : 
+            lineNumber : 0
+            scriptId : <scriptId>
+            url : expr.js
+        }
+    ]
+    parent : {
+        callFrames : [
+            [0] : {
+                columnNumber : 16
+                functionName : scheduleUnitOfWork
+                lineNumber : 10
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [1] : {
+                columnNumber : 14
+                functionName : businessLogic
+                lineNumber : 38
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [2] : {
+                columnNumber : 2
+                functionName : test
+                lineNumber : 42
+                scriptId : <scriptId>
+                url : test.js
+            }
+            [3] : {
+                columnNumber : 0
+                functionName : 
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : expr.js
+            }
+        ]
+        description : userland0
+    }
+}

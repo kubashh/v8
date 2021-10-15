@@ -119,37 +119,63 @@ class ConsoleHelper {
     reportCall(ConsoleAPIType::kWarning, arguments);
   }
 
-  bool firstArgToBoolean(bool defaultValue) {
+  bool argToBoolean(int index, bool defaultValue) {
     if (m_info.Length() < 1) return defaultValue;
-    if (m_info[0]->IsBoolean()) return m_info[0].As<v8::Boolean>()->Value();
-    return m_info[0]->BooleanValue(m_context->GetIsolate());
+    if (m_info[index]->IsBoolean())
+      return m_info[index].As<v8::Boolean>()->Value();
+    return m_info[index]->BooleanValue(m_context->GetIsolate());
   }
 
-  String16 firstArgToString(const String16& defaultValue,
-                            bool allowUndefined = true) {
-    if (m_info.Length() < 1 || (!allowUndefined && m_info[0]->IsUndefined())) {
+  v8::Maybe<int64_t> argToInteger(int index, int64_t defaultValue) {
+    if (m_info.Length() < 1) return v8::Just(defaultValue);
+    if (m_info[index]->IsNumber())
+      return v8::Just(m_info[index].As<v8::Integer>()->Value());
+    return m_info[index]->IntegerValue(m_context);
+  }
+
+  String16 argToString(int index, const String16& defaultValue,
+                       bool allowUndefined = true) {
+    if (m_info.Length() < 1 ||
+        (!allowUndefined && m_info[index]->IsUndefined())) {
       return defaultValue;
     }
     v8::Local<v8::String> titleValue;
-    if (!m_info[0]->ToString(m_context).ToLocal(&titleValue))
+    if (!m_info[index]->ToString(m_context).ToLocal(&titleValue))
       return defaultValue;
     return toProtocolString(m_context->GetIsolate(), titleValue);
   }
 
-  v8::MaybeLocal<v8::Object> firstArgAsObject() {
-    if (m_info.Length() < 1 || !m_info[0]->IsObject())
+  v8::MaybeLocal<v8::Object> argAsObject(int index) {
+    if (m_info.Length() < 1 || !m_info[index]->IsObject())
       return v8::MaybeLocal<v8::Object>();
-    return m_info[0].As<v8::Object>();
+    return m_info[index].As<v8::Object>();
   }
 
-  v8::MaybeLocal<v8::Function> firstArgAsFunction() {
-    if (m_info.Length() < 1 || !m_info[0]->IsFunction())
+  v8::MaybeLocal<v8::Function> argAsFunction(int index) {
+    if (m_info.Length() < 1 || !m_info[index]->IsFunction())
       return v8::MaybeLocal<v8::Function>();
-    v8::Local<v8::Function> func = m_info[0].As<v8::Function>();
+    v8::Local<v8::Function> func = m_info[index].As<v8::Function>();
     while (func->GetBoundFunction()->IsFunction())
       func = func->GetBoundFunction().As<v8::Function>();
     return func;
   }
+
+  bool firstArgToBoolean(bool defaultValue) {
+    return argToBoolean(0, defaultValue);
+  }
+
+  v8::Maybe<int64_t> firstArgToInteger(int64_t defaultValue) {
+    return argToInteger(0, defaultValue);
+  }
+
+  String16 firstArgToString(const String16& defaultValue,
+                            bool allowUndefined = true) {
+    return argToString(0, defaultValue, allowUndefined);
+  }
+
+  v8::MaybeLocal<v8::Object> firstArgAsObject() { return argAsObject(0); }
+
+  v8::MaybeLocal<v8::Function> firstArgAsFunction() { return argAsFunction(0); }
 
   void forEachSession(std::function<void(V8InspectorSessionImpl*)> callback) {
     m_inspector->forEachSession(m_groupId, std::move(callback));
@@ -446,6 +472,123 @@ void V8Console::memorySetterCallback(
   // setter just ignores the passed value.  http://crbug.com/468611
 }
 
+void V8Console::ScheduleAsyncTask(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  if (info.Length() != 2) {
+    info.GetIsolate()->ThrowError("Unexpected arguments");
+  }
+
+  v8::debug::ConsoleCallArguments args(info);
+  ConsoleHelper helper(args, v8::debug::ConsoleContext(), m_inspector);
+  String16 argName = helper.argToString(0, String16());
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(1, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    info.GetIsolate()->ThrowError("Task ID should be an integer");
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it != m_asyncTaskIds.end()) {
+    info.GetIsolate()->ThrowError("Task with ID already exists");
+    return;
+  }
+
+  StringView taskName = StringView(argName.characters16(), argName.length());
+
+  int* taskPtr = new int();
+  m_asyncTaskIds.emplace(argId, taskPtr);
+  m_inspector->asyncTaskScheduled(taskName, taskPtr, false);
+}
+
+void V8Console::StartAsyncTask(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  if (info.Length() != 1) {
+    info.GetIsolate()->ThrowError("Unexpected arguments");
+    return;
+  }
+
+  v8::debug::ConsoleCallArguments args(info);
+  ConsoleHelper helper(args, v8::debug::ConsoleContext(), m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(0, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    info.GetIsolate()->ThrowError("Task ID should be an integer");
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    info.GetIsolate()->ThrowError("Task with ID doesn't exist");
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskStarted(taskPtr);
+}
+
+void V8Console::FinishAsyncTask(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  if (info.Length() != 1) {
+    info.GetIsolate()->ThrowError("Unexpected arguments");
+    return;
+  }
+
+  v8::debug::ConsoleCallArguments args(info);
+  ConsoleHelper helper(args, v8::debug::ConsoleContext(), m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(0, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    info.GetIsolate()->ThrowError("Task ID should be an integer");
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    info.GetIsolate()->ThrowError("Task with ID doesn't exist");
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskFinished(taskPtr);
+
+  delete taskPtr;
+  m_asyncTaskIds.erase(argId);
+}
+
+void V8Console::CancelAsyncTask(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  if (info.Length() != 1) {
+    info.GetIsolate()->ThrowError("Unexpected arguments");
+    return;
+  }
+
+  v8::debug::ConsoleCallArguments args(info);
+  ConsoleHelper helper(args, v8::debug::ConsoleContext(), m_inspector);
+  v8::Maybe<int64_t> maybeArgId = helper.argToInteger(0, 0);
+
+  int64_t argId;
+  if (!maybeArgId.To(&argId)) {
+    info.GetIsolate()->ThrowError("Task ID should be an integer");
+    return;
+  }
+
+  auto it = m_asyncTaskIds.find(argId);
+  if (it == m_asyncTaskIds.end()) {
+    info.GetIsolate()->ThrowError("Task with ID doesn't exist");
+    return;
+  }
+
+  int* taskPtr = it->second;
+  m_inspector->asyncTaskCanceled(taskPtr);
+
+  delete taskPtr;
+  m_asyncTaskIds.erase(argId);
+}
+
 void V8Console::keysCallback(const v8::FunctionCallbackInfo<v8::Value>& info,
                              int sessionId) {
   v8::Isolate* isolate = info.GetIsolate();
@@ -664,6 +807,44 @@ void V8Console::installMemoryGetter(v8::Local<v8::Context> context,
                         data, 0, v8::ConstructorBehavior::kThrow)
           .ToLocalChecked(),
       static_cast<v8::PropertyAttribute>(v8::None), v8::DEFAULT);
+}
+
+void V8Console::installAsyncStackTaggingAPI(v8::Local<v8::Context> context,
+                                            v8::Local<v8::Object> console) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::External> data = v8::External::New(isolate, this);
+  console
+      ->Set(context, toV8StringInternalized(isolate, "scheduleAsyncTask"),
+            v8::Function::New(context,
+                              &V8Console::call<&V8Console::ScheduleAsyncTask>,
+                              data, 0, v8::ConstructorBehavior::kThrow,
+                              v8::SideEffectType::kHasNoSideEffect)
+                .ToLocalChecked())
+      .Check();
+  console
+      ->Set(context, toV8StringInternalized(isolate, "startAsyncTask"),
+            v8::Function::New(context,
+                              &V8Console::call<&V8Console::StartAsyncTask>,
+                              data, 0, v8::ConstructorBehavior::kThrow,
+                              v8::SideEffectType::kHasNoSideEffect)
+                .ToLocalChecked())
+      .Check();
+  console
+      ->Set(context, toV8StringInternalized(isolate, "finishAsyncTask"),
+            v8::Function::New(context,
+                              &V8Console::call<&V8Console::FinishAsyncTask>,
+                              data, 0, v8::ConstructorBehavior::kThrow,
+                              v8::SideEffectType::kHasNoSideEffect)
+                .ToLocalChecked())
+      .Check();
+  console
+      ->Set(context, toV8StringInternalized(isolate, "cancelAsyncTask"),
+            v8::Function::New(context,
+                              &V8Console::call<&V8Console::CancelAsyncTask>,
+                              data, 0, v8::ConstructorBehavior::kThrow,
+                              v8::SideEffectType::kHasNoSideEffect)
+                .ToLocalChecked())
+      .Check();
 }
 
 v8::Local<v8::Object> V8Console::createCommandLineAPI(
