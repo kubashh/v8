@@ -5,6 +5,8 @@
 #ifndef V8_INSPECTOR_V8_CONSOLE_H_
 #define V8_INSPECTOR_V8_CONSOLE_H_
 
+#include <map>
+
 #include "include/v8-array-buffer.h"
 #include "include/v8-external.h"
 #include "include/v8-local-handle.h"
@@ -28,6 +30,8 @@ class V8Console : public v8::debug::ConsoleDelegate {
                                              int sessionId);
   void installMemoryGetter(v8::Local<v8::Context> context,
                            v8::Local<v8::Object> console);
+  void installAsyncStackTaggingAPI(v8::Local<v8::Context> context,
+                                   v8::Local<v8::Object> console);
 
   class V8_NODISCARD CommandLineAPIScope {
    public:
@@ -128,6 +132,11 @@ class V8Console : public v8::debug::ConsoleDelegate {
   void memoryGetterCallback(const v8::FunctionCallbackInfo<v8::Value>&);
   void memorySetterCallback(const v8::FunctionCallbackInfo<v8::Value>&);
 
+  void ScheduleAsyncTask(const v8::FunctionCallbackInfo<v8::Value>&);
+  void StartAsyncTask(const v8::FunctionCallbackInfo<v8::Value>&);
+  void FinishAsyncTask(const v8::FunctionCallbackInfo<v8::Value>&);
+  void CancelAsyncTask(const v8::FunctionCallbackInfo<v8::Value>&);
+
   // CommandLineAPI
   void keysCallback(const v8::FunctionCallbackInfo<v8::Value>&, int sessionId);
   void valuesCallback(const v8::FunctionCallbackInfo<v8::Value>&,
@@ -171,6 +180,8 @@ class V8Console : public v8::debug::ConsoleDelegate {
                             int sessionId);
 
   V8InspectorImpl* m_inspector;
+
+  std::map<int64_t, int*> m_asyncTaskIds;
 };
 
 }  // namespace v8_inspector
