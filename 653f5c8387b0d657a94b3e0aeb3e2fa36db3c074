@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "653f5c8387b0d657a94b3e0aeb3e2fa36db3c074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f5bd1c_f7c549ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-15T11:38:39Z",
+      "side": 1,
+      "message": "LGTM with an optional nit.",
+      "revId": "653f5c8387b0d657a94b3e0aeb3e2fa36db3c074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b42a4016_26066018",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5963,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-15T11:38:39Z",
+      "side": 1,
+      "message": "nit: I would have written it as early return:\n\n  if (V8_UNLIKELY(FLAG_experimental_wasm_skip_bounds_checks)) return;\n\nUp to you whether you want to adopt that suggestion or just hit CQ+2 :-)",
+      "range": {
+        "startLine": 5963,
+        "startChar": 2,
+        "endLine": 5963,
+        "endChar": 51
+      },
+      "revId": "653f5c8387b0d657a94b3e0aeb3e2fa36db3c074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
