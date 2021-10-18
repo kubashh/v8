@@ -69,6 +69,24 @@
       "parentUuid": "b7148375_efb43626",
       "revId": "9ab053026b170a3e1ba090b981c636848bc3372e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d4b9e67_9bc5d16c",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-18T13:07:26Z",
+      "side": 1,
+      "message": "Yeah, maybe we should just call it \"V8_ON_M1\" or something like this. I still think we should use the same definition for these two things, as we *have* to use MAP_JIT if it\u0027s there. On iOS we don\u0027t have it though so we should still provide the runtime flag, no?",
+      "parentUuid": "e5ac660f_571b905e",
+      "revId": "9ab053026b170a3e1ba090b981c636848bc3372e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
