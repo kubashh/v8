@@ -51,6 +51,24 @@
       "message": "Note that we have something similar already in build_config.h, called \"V8_HAS_PTHREAD_JIT_WRITE_PROTECT\". It also checks for \"!defined(V8_OS_IOS)\", which seems to be missing here.",
       "revId": "9ab053026b170a3e1ba090b981c636848bc3372e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5ac660f_571b905e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-10-18T12:53:51Z",
+      "side": 1,
+      "message": "Isn\u0027t that (slightly) distinct from \"has to do some sort of W^X exclusion\"?",
+      "parentUuid": "b7148375_efb43626",
+      "revId": "9ab053026b170a3e1ba090b981c636848bc3372e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
