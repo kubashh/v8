@@ -16,6 +16,23 @@
       "message": "Thanks, LGTM.\nMaya, this still needs owners review, can you provide it?",
       "revId": "f5c459ed14118e3d81f757416052dad3e196cee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830b218f_f9ad03a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-18T15:57:40Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "f5c459ed14118e3d81f757416052dad3e196cee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
