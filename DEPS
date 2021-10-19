@@ -6,9 +6,6 @@ use_relative_paths = True
 
 gclient_gn_args_file = 'build/config/gclient_args.gni'
 gclient_gn_args = [
-  # TODO(https://crbug.com/1137662, https://crbug.com/1080854)
-  # Remove when migration is complete.
-  'checkout_fuchsia_for_arm64_host',
 ]
 
 vars = {
@@ -26,12 +23,6 @@ vars = {
   #
   # Wildcards are supported (e.g. "qemu.*").
   'checkout_fuchsia_boot_images': "qemu.x64,qemu.arm64",
-
-  # TODO(https://crbug.com/1137662, https://crbug.com/1080854)
-  # Remove when migration is complete.
-  # By default, do not check out files required to run fuchsia tests in
-  # qemu on linux-arm64 machines.
-  'checkout_fuchsia_for_arm64_host': False,
 
   'checkout_instrumented_libraries': False,
   'checkout_ittapi': False,
@@ -85,7 +76,7 @@ vars = {
 
 deps = {
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + '315c86c03e793e2df93dadbfab2564f95a9d2c41',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'a3111c88a0544bcdbfd19e87f40b823fce525f99',
   'third_party/depot_tools':
     Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'cd3696cf7ee983de86583b898785cea56ffd07fe',
   'third_party/icu':
