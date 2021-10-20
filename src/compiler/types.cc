@@ -6,10 +6,13 @@
 
 #include <iomanip>
 
+#include "src/base/logging.h"
+#include "src/common/globals.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/handles/handles-inl.h"
 #include "src/objects/instance-type.h"
 #include "src/objects/objects-inl.h"
+#include "src/objects/turbofan-types.h"
 #include "src/utils/ostreams.h"
 
 namespace v8 {
@@ -980,8 +983,7 @@ const char* BitsetType::Name(bitset bits) {
 #define RETURN_NAMED_TYPE(type, value) \
   case k##type:                        \
     return #type;
-    PROPER_BITSET_TYPE_LIST(RETURN_NAMED_TYPE)
-    INTERNAL_BITSET_TYPE_LIST(RETURN_NAMED_TYPE)
+    BITSET_TYPE_LIST(RETURN_NAMED_TYPE)
 #undef RETURN_NAMED_TYPE
 
     default:
@@ -1000,8 +1002,7 @@ void BitsetType::Print(std::ostream& os, bitset bits) {
   // clang-format off
   static const bitset named_bitsets[] = {
 #define BITSET_CONSTANT(type, value) k##type,
-    INTERNAL_BITSET_TYPE_LIST(BITSET_CONSTANT)
-    PROPER_BITSET_TYPE_LIST(BITSET_CONSTANT)
+    BITSET_TYPE_LIST(BITSET_CONSTANT)
 #undef BITSET_CONSTANT
   };
   // clang-format on
@@ -1141,6 +1142,40 @@ std::ostream& operator<<(std::ostream& os, Type type) {
   type.PrintTo(os);
   return os;
 }
+
+Handle<TurbofanType> Type::AllocateOnHeap(Factory* factory) {
+  DCHECK(CanBeAsserted());
+  if (IsBitset()) {
+    return factory->NewTurbofanBitsetType(AsBitset(), AllocationType::kYoung);
+  } else if (IsUnion()) {
+    const UnionType* union_type = AsUnion();
+    Handle<TurbofanType> result = union_type->Get(0).AllocateOnHeap(factory);
+    for (int i = 1; i < union_type->Length(); ++i) {
+      result = factory->NewTurbofanUnionType(
+          result, union_type->Get(i).AllocateOnHeap(factory),
+          AllocationType::kYoung);
+    }
+    return result;
+  } else if (IsHeapConstant()) {
+    return factory->NewTurbofanHeapConstantType(AsHeapConstant()->Value(),
+                                                AllocationType::kYoung);
+  } else if (IsOtherNumberConstant()) {
+    return factory->NewTurbofanOtherNumberConstantType(
+        AsOtherNumberConstant()->Value(), AllocationType::kYoung);
+  } else if (IsRange()) {
+    return factory->NewTurbofanRangeType(AsRange()->Min(), AsRange()->Max(),
+                                         AllocationType::kYoung);
+  } else {
+    // Other types are not supported for type assertions.
+    UNREACHABLE();
+  }
+}
+
+#define VERIFY_TORQUE_BITSET_AGREEMENT(Name, _) \
+  STATIC_ASSERT(BitsetType::k##Name == TurbofanTypeBits::k##Name);
+INTERNAL_BITSET_TYPE_LIST(VERIFY_TORQUE_BITSET_AGREEMENT)
+PROPER_ATOMIC_BITSET_TYPE_LIST(VERIFY_TORQUE_BITSET_AGREEMENT)
+#undef VERIFY_TORQUE_BITSET_AGREEMENT
 
 }  // namespace compiler
 }  // namespace internal
