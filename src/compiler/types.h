@@ -11,6 +11,7 @@
 #include "src/handles/handles.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/objects.h"
+#include "src/torque/types.h"
 #include "src/utils/ostreams.h"
 
 namespace v8 {
@@ -102,8 +103,7 @@ namespace compiler {
   V(OtherNumber,     1u << 4)  \
   V(OtherString,     1u << 5)  \
 
-#define PROPER_BITSET_TYPE_LIST(V) \
-  V(None,                     0u)        \
+#define PROPER_ATOMIC_BITSET_TYPE_LIST(V) \
   V(Negative31,               1u << 6)   \
   V(Null,                     1u << 7)   \
   V(Undefined,                1u << 8)   \
@@ -131,7 +131,10 @@ namespace compiler {
   /* TODO(v8:10391): Remove this type once all ExternalPointer usages are */ \
   /* sandbox-ready. */                   \
   V(SandboxedExternalPointer, 1u << 31)  \
-  \
+
+#define PROPER_BITSET_TYPE_LIST(V) \
+  V(None,                     0u)        \
+  PROPER_ATOMIC_BITSET_TYPE_LIST(V) \
   V(Signed31,                     kUnsigned30 | kNegative31) \
   V(Signed32,                     kSigned31 | kOtherUnsigned31 | \
                                   kOtherSigned32) \
@@ -416,9 +419,8 @@ class V8_EXPORT_PRIVATE Type {
            (Is(Type::PlainNumber()) && Min() == Max());
   }
 
-  bool CanBeAsserted() const {
-    return IsRange() || (Is(Type::Integral32()) && !IsNone());
-  }
+  bool CanBeAsserted() const { return Is(Type::NonInternal()); }
+  Handle<TurbofanType> AllocateOnHeap(Factory* factory);
 
   const HeapConstantType* AsHeapConstant() const;
   const OtherNumberConstantType* AsOtherNumberConstant() const;
