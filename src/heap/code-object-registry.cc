@@ -7,11 +7,13 @@
 #include <algorithm>
 
 #include "src/base/logging.h"
+#include "src/heap/memory-chunk.h"
 
 namespace v8 {
 namespace internal {
 
 void CodeObjectRegistry::RegisterNewlyAllocatedCodeObject(Address code) {
+  base::MutexGuard guard(&code_object_registry_mutex_);
   if (is_sorted_) {
     is_sorted_ =
         (code_object_registry_.empty() || code_object_registry_.back() < code);
@@ -20,22 +22,30 @@ void CodeObjectRegistry::RegisterNewlyAllocatedCodeObject(Address code) {
 }
 
 void CodeObjectRegistry::RegisterAlreadyExistingCodeObject(Address code) {
+  // This function is not protected by the mutex, and should only be called
+  // by the sweeper.
+  DCHECK(!MemoryChunk::FromAddress(code)->SweepingDone());
   DCHECK(is_sorted_);
   DCHECK(code_object_registry_.empty() || code_object_registry_.back() < code);
   code_object_registry_.push_back(code);
 }
 
 void CodeObjectRegistry::Clear() {
+  // This function is not protected by the mutex, and should only be called
+  // by the sweeper.
   code_object_registry_.clear();
   is_sorted_ = true;
 }
 
 void CodeObjectRegistry::Finalize() {
+  // This function is not protected by the mutex, and should only be called
+  // by the sweeper.
   DCHECK(is_sorted_);
   code_object_registry_.shrink_to_fit();
 }
 
 bool CodeObjectRegistry::Contains(Address object) const {
+  base::MutexGuard guard(&code_object_registry_mutex_);
   if (!is_sorted_) {
     std::sort(code_object_registry_.begin(), code_object_registry_.end());
     is_sorted_ = true;
@@ -46,6 +56,7 @@ bool CodeObjectRegistry::Contains(Address object) const {
 
 Address CodeObjectRegistry::GetCodeObjectStartFromInnerAddress(
     Address address) const {
+  base::MutexGuard guard(&code_object_registry_mutex_);
   if (!is_sorted_) {
     std::sort(code_object_registry_.begin(), code_object_registry_.end());
     is_sorted_ = true;
