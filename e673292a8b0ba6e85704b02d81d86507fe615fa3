@@ -16,6 +16,23 @@
       "message": "Tentative lgtm ~ build failures... is the failure from the same CL or did something else also roll that broke?",
       "revId": "e673292a8b0ba6e85704b02d81d86507fe615fa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cec03cd_79d1ffb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-10-20T14:01:18Z",
+      "side": 1,
+      "message": "See https://crbug.com/1261773 for an update on the build failures...",
+      "revId": "e673292a8b0ba6e85704b02d81d86507fe615fa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
