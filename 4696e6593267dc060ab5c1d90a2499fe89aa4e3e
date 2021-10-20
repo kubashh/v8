@@ -33,6 +33,23 @@
       "message": "Please add the reasoning why you needed to add the mutex.",
       "revId": "4696e6593267dc060ab5c1d90a2499fe89aa4e3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "097bc8a5_28f35ee4",
+        "filename": "src/heap/code-object-registry.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-10-20T14:41:45Z",
+      "side": 1,
+      "message": "Let\u0027s check whether this causes performance regressions.",
+      "revId": "4696e6593267dc060ab5c1d90a2499fe89aa4e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
