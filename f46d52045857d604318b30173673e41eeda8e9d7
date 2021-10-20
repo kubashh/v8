@@ -16,6 +16,23 @@
       "message": "PTAL, hopefully this finally makes the bot green!",
       "revId": "f46d52045857d604318b30173673e41eeda8e9d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec615899_47d4b68a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-20T09:46:19Z",
+      "side": 1,
+      "message": "lgtm\nThanks!",
+      "revId": "f46d52045857d604318b30173673e41eeda8e9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
