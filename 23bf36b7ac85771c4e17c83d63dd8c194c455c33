@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e55b06b_f020b381",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-10-20T15:50:50Z",
+      "side": 1,
+      "message": "How about we call this `--experimental-stack-tagging-api` instead to make it really 100% clear that this can go away and/or break any time?",
+      "revId": "23bf36b7ac85771c4e17c83d63dd8c194c455c33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97bb6652_6a6ea77f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-10-20T15:50:50Z",
+      "side": 1,
+      "message": "General LGTM with question regarding the flag name.",
+      "revId": "23bf36b7ac85771c4e17c83d63dd8c194c455c33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
