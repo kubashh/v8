@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e87586_38116b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-20T14:08:25Z",
+      "side": 1,
+      "message": "This is ready for review. PTAL.\nSee also for tests blink web tests: https://chromium-review.googlesource.com/c/chromium/src/+/3226418 ",
+      "revId": "e4167195b91d86ad84d12e5356d0b082fdfc0a94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
