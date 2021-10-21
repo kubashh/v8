@@ -39,6 +39,75 @@
       },
       "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d435b2f_bacfb183",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-10-21T14:31:38Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 37
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13174b2e_f2904cca",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-10-21T14:31:38Z",
+      "side": 1,
+      "message": "I think those cases have to be switched, otherwise an other_signed32 number will not be detected correctly if other_number is not set.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 39
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6263017a_74887c7f",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-10-21T14:31:38Z",
+      "side": 1,
+      "message": "Is this correct? I think we return False here for non-integer numbers, instead of going to the float64 check.",
+      "range": {
+        "startLine": 174,
+        "startChar": 6,
+        "endLine": 174,
+        "endChar": 56
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
