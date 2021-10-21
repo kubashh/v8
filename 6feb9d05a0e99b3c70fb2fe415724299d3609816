@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "381cd89f_e66f7bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-21T11:33:08Z",
+      "side": 1,
+      "message": "Maya, PTAL.\nThibaud FYI.",
+      "revId": "6feb9d05a0e99b3c70fb2fe415724299d3609816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
