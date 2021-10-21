@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a04a9e_53767a02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-10-21T12:56:53Z",
+      "side": 1,
+      "message": "Drive by review...",
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08361f56_835e7468",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 3255,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-10-21T12:56:53Z",
+      "side": 1,
+      "message": "Please add these and the tq file above to BUILD.bazel! 😊",
+      "range": {
+        "startLine": 3254,
+        "startChar": 0,
+        "endLine": 3255,
+        "endChar": 35
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
