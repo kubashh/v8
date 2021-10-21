@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86421a6e_f5d82ffe",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 3255,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-21T14:46:52Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "08361f56_835e7468",
+      "range": {
+        "startLine": 3254,
+        "startChar": 0,
+        "endLine": 3255,
+        "endChar": 35
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d435b2f_bacfb183",
         "filename": "src/compiler/types.h",
         "patchSetId": 4
@@ -89,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c2f7ca7_a4bcbde9",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-21T14:46:52Z",
+      "side": 1,
+      "message": "I think the bits are designed to correspond to disjoint sets of values. So other_signed32 is a signed int32 number except for negtive31 and unsigned31. You can see this from how the bits are computed when you create a range type (RangeType::New(Limits lim, Zone* zone)).",
+      "parentUuid": "13174b2e_f2904cca",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 39
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6263017a_74887c7f",
         "filename": "src/objects/turbofan-types.tq",
         "patchSetId": 4
@@ -100,6 +148,30 @@
       "writtenOn": "2021-10-21T14:31:38Z",
       "side": 1,
       "message": "Is this correct? I think we return False here for non-integer numbers, instead of going to the float64 check.",
+      "range": {
+        "startLine": 174,
+        "startChar": 6,
+        "endLine": 174,
+        "endChar": 56
+      },
+      "revId": "cb9c99fd411f29b6d4f7faf78a346ce11b1acbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a3f669d_b83ad315",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-21T14:46:52Z",
+      "side": 1,
+      "message": "Yes, that\u0027s as intended. Only integer numbers are included in a range type. Also here, this follows from the bitset computation for range types.",
+      "parentUuid": "6263017a_74887c7f",
       "range": {
         "startLine": 174,
         "startChar": 6,
