@@ -498,6 +498,37 @@ int FractionalSecondDigitsFromPattern(const std::string& pattern) {
 
 }  // namespace
 
+Handle<Object> JSDateTimeFormat::TimeZoneId(Isolate* isolate,
+                                            const icu::TimeZone& tz) {
+  Factory* factory = isolate->factory();
+  icu::UnicodeString time_zone;
+  tz.getID(time_zone);
+  UErrorCode status = U_ZERO_ERROR;
+  icu::UnicodeString canonical_time_zone;
+  icu::TimeZone::getCanonicalID(time_zone, canonical_time_zone, status);
+  Handle<Object> timezone_value;
+  if (U_SUCCESS(status)) {
+    // In CLDR (http://unicode.org/cldr/trac/ticket/9943), Etc/UTC is made
+    // a separate timezone ID from Etc/GMT even though they're still the same
+    // timezone. We have Etc/UTC because 'UTC', 'Etc/Universal',
+    // 'Etc/Zulu' and others are turned to 'Etc/UTC' by ICU. Etc/GMT comes
+    // from Etc/GMT0, Etc/GMT+0, Etc/GMT-0, Etc/Greenwich.
+    // ecma402#sec-canonicalizetimezonename step 3
+    if (canonical_time_zone == UNICODE_STRING_SIMPLE("Etc/UTC") ||
+        canonical_time_zone == UNICODE_STRING_SIMPLE("Etc/GMT")) {
+      timezone_value = factory->UTC_string();
+    } else {
+      ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+          isolate, timezone_value, Intl::ToString(isolate, canonical_time_zone),
+          Handle<Object>());
+    }
+  } else {
+    // Somehow on Windows we will reach here.
+    timezone_value = factory->undefined_value();
+  }
+  return timezone_value;
+}
+
 // ecma402 #sec-intl.datetimeformat.prototype.resolvedoptions
 MaybeHandle<JSObject> JSDateTimeFormat::ResolvedOptions(
     Isolate* isolate, Handle<JSDateTimeFormat> date_time_format) {
@@ -539,32 +570,8 @@ MaybeHandle<JSObject> JSDateTimeFormat::ResolvedOptions(
     }
   }
 
-  const icu::TimeZone& tz = calendar->getTimeZone();
-  icu::UnicodeString time_zone;
-  tz.getID(time_zone);
-  UErrorCode status = U_ZERO_ERROR;
-  icu::UnicodeString canonical_time_zone;
-  icu::TimeZone::getCanonicalID(time_zone, canonical_time_zone, status);
-  Handle<Object> timezone_value;
-  if (U_SUCCESS(status)) {
-    // In CLDR (http://unicode.org/cldr/trac/ticket/9943), Etc/UTC is made
-    // a separate timezone ID from Etc/GMT even though they're still the same
-    // timezone. We have Etc/UTC because 'UTC', 'Etc/Universal',
-    // 'Etc/Zulu' and others are turned to 'Etc/UTC' by ICU. Etc/GMT comes
-    // from Etc/GMT0, Etc/GMT+0, Etc/GMT-0, Etc/Greenwich.
-    // ecma402#sec-canonicalizetimezonename step 3
-    if (canonical_time_zone == UNICODE_STRING_SIMPLE("Etc/UTC") ||
-        canonical_time_zone == UNICODE_STRING_SIMPLE("Etc/GMT")) {
-      timezone_value = factory->UTC_string();
-    } else {
-      ASSIGN_RETURN_ON_EXCEPTION(isolate, timezone_value,
-                                 Intl::ToString(isolate, canonical_time_zone),
-                                 JSObject);
-    }
-  } else {
-    // Somehow on Windows we will reach here.
-    timezone_value = factory->undefined_value();
-  }
+  Handle<Object> timezone_value =
+      JSDateTimeFormat::TimeZoneId(isolate, calendar->getTimeZone());
 
   // Ugly hack. ICU doesn't expose numbering system in any way, so we have
   // to assume that for given locale NumberingSystem constructor produces the
@@ -1024,20 +1031,8 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::UnwrapDateTimeFormat(
   return Handle<JSDateTimeFormat>::cast(dtf);
 }
 
-namespace {
-
-// ecma-402/#sec-isvalidtimezonename
-bool IsValidTimeZoneName(const icu::TimeZone& tz) {
-  UErrorCode status = U_ZERO_ERROR;
-  icu::UnicodeString id;
-  tz.getID(id);
-  icu::UnicodeString canonical;
-  icu::TimeZone::getCanonicalID(id, canonical, status);
-  return U_SUCCESS(status) &&
-         canonical != icu::UnicodeString("Etc/Unknown", -1, US_INV);
-}
-
-std::unique_ptr<icu::TimeZone> CreateTimeZone(const char* timezone) {
+std::unique_ptr<icu::TimeZone> JSDateTimeFormat::CreateTimeZone(
+    const char* timezone) {
   // Create time zone as specified by the user. We have to re-create time zone
   // since calendar takes ownership.
   if (timezone == nullptr) {
@@ -1050,9 +1045,11 @@ std::unique_ptr<icu::TimeZone> CreateTimeZone(const char* timezone) {
       icu::TimeZone::createTimeZone(canonicalized.c_str()));
   // 18.b If the result of IsValidTimeZoneName(timeZone) is false, then
   // i. Throw a RangeError exception.
-  if (!IsValidTimeZoneName(*tz)) return std::unique_ptr<icu::TimeZone>();
+  if (!Intl::IsValidTimeZoneName(*tz)) return std::unique_ptr<icu::TimeZone>();
   return tz;
 }
+
+namespace {
 
 class CalendarCache {
  public:
@@ -1663,7 +1660,8 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::New(
       isolate, options, "timeZone", empty_values, service, &timezone);
   MAYBE_RETURN(maybe_timezone, Handle<JSDateTimeFormat>());
 
-  std::unique_ptr<icu::TimeZone> tz = CreateTimeZone(timezone.get());
+  std::unique_ptr<icu::TimeZone> tz =
+      JSDateTimeFormat::CreateTimeZone(timezone.get());
   if (tz.get() == nullptr) {
     THROW_NEW_ERROR(
         isolate,
@@ -2291,6 +2289,13 @@ MaybeHandle<JSArray> JSDateTimeFormat::FormatRangeToParts(
     return ret;
   }
   return JSDateTimeFormat::FormatToParts(isolate, date_time_format, x, true);
+}
+
+std::string Intl::CanonicalizeTimeZoneName(Isolate* isolate,
+                                           const std::string& identifier) {
+  std::string ret = CanonicalizeTimeZoneID(identifier);
+  printf("%s\n", ret.c_str());
+  return ret;
 }
 
 }  // namespace internal

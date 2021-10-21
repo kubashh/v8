@@ -37,6 +37,8 @@ namespace internal {
     DCHECK_GE(upper, field);                                                  \
     DCHECK_LE(lower, field);                                                  \
     int hints = data();                                                       \
+    field &= (static_cast<uint32_t>(int32_t{-1})) ^                           \
+             (static_cast<uint32_t>(int32_t{-1}) << B##Bits::kSize);          \
     hints = B##Bits::update(hints, field);                                    \
     set_##data(hints);                                                        \
   }                                                                           \
@@ -90,6 +92,45 @@ BIT_FIELD_ACCESSORS(JSTemporalCalendar, flags, calendar_index,
                     JSTemporalCalendar::CalendarIndexBits)
 
 BOOL_ACCESSORS(JSTemporalTimeZone, flags, is_offset, IsOffsetBit::kShift)
+
+// Special handling of sign
+inline int32_t JSTemporalTimeZone::offset_milliseconds() const {
+  int32_t v = OffsetMillisecondsOrTimeZoneIndexBits::decode(flags());
+  v |= ((int32_t{1} << (OffsetMillisecondsOrTimeZoneIndexBits::kSize - 1) & v)
+            ? (static_cast<uint32_t>(int32_t{-1})
+               << OffsetMillisecondsOrTimeZoneIndexBits::kSize)
+            : 0);
+  CHECK_GE(24 * 60 * 60 * 1000, v);
+  CHECK_LE(-24 * 60 * 60 * 1000, v);
+  return v;
+}
+inline void JSTemporalTimeZone::set_offset_milliseconds(int32_t field) {
+  int hints = flags();
+  field &= (static_cast<uint32_t>(int32_t{-1})) ^
+           (static_cast<uint32_t>(int32_t{-1})
+            << OffsetMillisecondsOrTimeZoneIndexBits::kSize);
+  hints = OffsetMillisecondsOrTimeZoneIndexBits::update(hints, field);
+  set_flags(hints);
+}
+
+inline int32_t JSTemporalTimeZone::offset_sub_milliseconds() const {
+  int32_t v = OffsetSubMillisecondsBits::decode(details());
+  v |= ((int32_t{1} << (OffsetSubMillisecondsBits::kSize - 1) & v)
+            ? (static_cast<uint32_t>(int32_t{-1})
+               << OffsetSubMillisecondsBits::kSize)
+            : 0);
+  CHECK_GE(1000000, v);
+  CHECK_LE(-1000000, v);
+  return v;
+}
+inline void JSTemporalTimeZone::set_offset_sub_milliseconds(int32_t field) {
+  int hints = details();
+  field &=
+      (static_cast<uint32_t>(int32_t{-1})) ^
+      (static_cast<uint32_t>(int32_t{-1}) << OffsetSubMillisecondsBits::kSize);
+  hints = OffsetSubMillisecondsBits::update(hints, field);
+  this->set_details(hints);
+}
 
 BIT_FIELD_ACCESSORS(JSTemporalTimeZone, flags,
                     offset_milliseconds_or_time_zone_index,
