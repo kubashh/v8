@@ -16,6 +16,23 @@
       "message": "Maya, PTAL.\nThibaud FYI.",
       "revId": "6feb9d05a0e99b3c70fb2fe415724299d3609816",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb3eadd_ade09940",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-21T12:17:11Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "6feb9d05a0e99b3c70fb2fe415724299d3609816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
