@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2bbbe1f8_1b82bbf4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 25
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "81dd320f_0c93a71c",
+      "range": {
+        "startLine": 13,
+        "startChar": 19,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fa2cb7fe_253f73dd",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 25
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "858d3459_d11653fc",
+        "filename": "src/inspector/inspected-context.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ad9be32a_20b7b0c9",
+      "range": {
+        "startLine": 71,
+        "startChar": 44,
+        "endLine": 71,
+        "endChar": 66
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "036dd2cf_9d148f1a",
@@ -77,6 +125,30 @@
       "writtenOn": "2021-10-21T06:04:48Z",
       "side": 1,
       "message": "Wouldn\u0027t this approach have a high chance of id collision? Following scenario:\n\n1) schedule task A\n2) schedule task B\n3) clear the queue, but B is not finished (maybe its async)\n4) schedule task C\n\nThen task C would also get Id 1. Maybe it would be more stable to have an m_taskId counter per V8Console object that keeps increasing?",
+      "range": {
+        "startLine": 467,
+        "startChar": 2,
+        "endLine": 467,
+        "endChar": 37
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ebcef6_57bffe51",
+        "filename": "src/inspector/v8-console.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "I was confused about what you mean by \"clear the queue\" at first, but if you mean cancelling task A, then you\u0027re right! Task C\u0027s id would collide with task B\u0027s id.",
+      "parentUuid": "036dd2cf_9d148f1a",
       "range": {
         "startLine": 467,
         "startChar": 2,
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc05e22e_8fa49a46",
+        "filename": "src/inspector/v8-console.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "I like the idea of this refactor, though this particular approach would then end up as two lookups on m_asyncTaskIds. We can address this by returning the id and the taskPtr as a pair, but that\u0027s overkill as this is most likely never going to be a performance issue, and the compiler would likely optimize it away.",
+      "parentUuid": "87eafcb0_c0f40288",
+      "range": {
+        "startLine": 485,
+        "startChar": 0,
+        "endLine": 504,
+        "endChar": 3
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26cf8720_291cb232",
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c6b5732_2d94f432",
+        "filename": "src/inspector/v8-console.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "All the console methods in this class start with an uppercase. However, the memory method callbacks and the CLI methods start with a lowercase. Happy to use either, I\u0027ll switch to lowercase.",
+      "parentUuid": "26cf8720_291cb232",
+      "range": {
+        "startLine": 135,
+        "startChar": 7,
+        "endLine": 135,
+        "endChar": 24
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b296c04b_4f7f04b4",
@@ -146,6 +266,30 @@
       "writtenOn": "2021-10-21T06:04:48Z",
       "side": 1,
       "message": "Lets have a code comment explaining the purpose of this map. I realize the code is mostly temporary, but it might stick around depending on what approach we adapt in the future.",
+      "range": {
+        "startLine": 184,
+        "startChar": 26,
+        "endLine": 184,
+        "endChar": 40
+      },
+      "revId": "2a96b432f646d9b7e6813cbed850ec05f88f2617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d5a9b4e_9ff7c671",
+        "filename": "src/inspector/v8-console.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1513667
+      },
+      "writtenOn": "2021-10-21T07:31:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b296c04b_4f7f04b4",
       "range": {
         "startLine": 184,
         "startChar": 26,
