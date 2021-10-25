@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1b7a24e_0aa4d3e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-25T17:48:49Z",
+      "side": 1,
+      "message": "Bad paste? 3242005 is this CL.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 27
+      },
+      "revId": "8ada1aa032d00a0e22d1406f7daad5a530baa4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "96359902_bb5c5ab9",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-10-25T16:50:59Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "8ada1aa032d00a0e22d1406f7daad5a530baa4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "197f6555_bd82d481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-25T17:48:49Z",
+      "side": 1,
+      "message": "lgtm with commit message fixed.",
       "revId": "8ada1aa032d00a0e22d1406f7daad5a530baa4a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
