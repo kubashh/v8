@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "a7e7d56a0297f05cc53024077be6f74740f11398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a54837_f064926e",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-25T10:59:25Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "a7e7d56a0297f05cc53024077be6f74740f11398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
