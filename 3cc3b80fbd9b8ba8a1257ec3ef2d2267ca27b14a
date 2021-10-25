@@ -16,6 +16,23 @@
       "message": "@Omer: Could you do a 1-line OWNER review for setup-heap-internal.cc?",
       "revId": "3cc3b80fbd9b8ba8a1257ec3ef2d2267ca27b14a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ccd77b_898b3c59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-10-25T14:30:41Z",
+      "side": 1,
+      "message": "lgtm heap (didn\u0027t check the rest)",
+      "revId": "3cc3b80fbd9b8ba8a1257ec3ef2d2267ca27b14a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
