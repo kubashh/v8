@@ -34,6 +34,9 @@ void SameThreadEnabledCheckingPolicyBase::CheckPointerImpl(
     const void* ptr, bool points_to_payload, bool check_off_heap_assignments) {
   // `ptr` must not reside on stack.
   DCHECK(!IsOnStack(ptr));
+  // Users should not use -1 as a sentinel value. Check for the most commonly
+  // used manual sentinel value.
+  DCHECK_NE(reinterpret_cast<void*>(-1), ptr);
   auto* base_page = BasePage::FromPayload(ptr);
   // Large objects do not support mixins. This also means that `base_page` is
   // valid for large objects.
