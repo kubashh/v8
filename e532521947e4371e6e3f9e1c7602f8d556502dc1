@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac33e45a_f6a2cbe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-25T15:25:39Z",
+      "side": 1,
+      "message": "Removing +2 to allow the Blink change to be in first irrespective of CQ speed.",
+      "revId": "e532521947e4371e6e3f9e1c7602f8d556502dc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
