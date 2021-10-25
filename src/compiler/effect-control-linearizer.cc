@@ -30,6 +30,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/oddball.h"
 #include "src/objects/ordered-hash-table.h"
+#include "src/objects/turbofan-types.h"
 
 namespace v8 {
 namespace internal {
@@ -6190,10 +6191,14 @@ Node* EffectControlLinearizer::LowerAssertType(Node* node) {
   Type type = OpParameter<Type>(node->op());
   CHECK(type.CanBeAsserted());
   Node* const input = node->InputAt(0);
-  Node* const min = __ NumberConstant(type.Min());
-  Node* const max = __ NumberConstant(type.Max());
-  CallBuiltin(Builtin::kCheckNumberInRange, node->op()->properties(), input,
-              min, max, __ SmiConstant(node->id()));
+  Node* allocated_type;
+  {
+    DCHECK(isolate()->CurrentLocalHeap()->is_main_thread());
+    UnparkedScope unparked_scope(isolate()->main_thread_local_isolate());
+    allocated_type = __ HeapConstant(type.AllocateOnHeap(factory()));
+  }
+  CallBuiltin(Builtin::kCheckTurbofanType, node->op()->properties(), input,
+              allocated_type, __ SmiConstant(node->id()));
   return input;
 }
 
