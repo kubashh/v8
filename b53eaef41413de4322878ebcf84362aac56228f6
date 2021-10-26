@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf850cf_c877ac35",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T14:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1a0b957_12c5e1fd",
+      "range": {
+        "startLine": 120,
+        "startChar": 15,
+        "endLine": 120,
+        "endChar": 32
+      },
+      "revId": "b53eaef41413de4322878ebcf84362aac56228f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b44f98e_f70ef08f",
