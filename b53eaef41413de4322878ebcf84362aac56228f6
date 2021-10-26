@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "055cf980_342cbfa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T12:28:52Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "b53eaef41413de4322878ebcf84362aac56228f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b44f98e_f70ef08f",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T12:28:52Z",
+      "side": 1,
+      "message": "This is the fix. MemoryAllocator::GetCommitPageSize() might not be AllocatePageSize-aligned.",
+      "range": {
+        "startLine": 125,
+        "startChar": 26,
+        "endLine": 125,
+        "endChar": 34
+      },
+      "revId": "b53eaef41413de4322878ebcf84362aac56228f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
