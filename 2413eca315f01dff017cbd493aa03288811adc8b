@@ -16,6 +16,23 @@
       "message": "Maya, PTAL. This only affects tests.",
       "revId": "2413eca315f01dff017cbd493aa03288811adc8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cbcf0fc_6d18a77f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-26T11:07:05Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "2413eca315f01dff017cbd493aa03288811adc8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
