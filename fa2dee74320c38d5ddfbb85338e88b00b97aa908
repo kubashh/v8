@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4bf432_ac8658a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-26T05:57:44Z",
+      "side": 1,
+      "message": "Hi Mathias, sorry for the chain of fixes. The previous fix introduced empty ranges at a point where irregexp didn\u0027t expect them. I considered modifying the original fix to not mutate the list of ranges; but I *hope* this is the only spot, and in that case this fix is simpler. Wdyt?",
+      "revId": "fa2dee74320c38d5ddfbb85338e88b00b97aa908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
