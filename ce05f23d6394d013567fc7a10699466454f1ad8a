@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "ce05f23d6394d013567fc7a10699466454f1ad8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49621b92_ce200b8f",
+        "filename": "tools/release/list_deprecated.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-10-26T10:09:04Z",
+      "side": 1,
+      "message": "How did this work before? 😮",
+      "range": {
+        "startLine": 123,
+        "startChar": 14,
+        "endLine": 123,
+        "endChar": 27
+      },
+      "revId": "ce05f23d6394d013567fc7a10699466454f1ad8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
