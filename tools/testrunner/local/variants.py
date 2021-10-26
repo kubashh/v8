@@ -78,6 +78,7 @@ INCOMPATIBLE_FLAGS_PER_VARIANT = {
   # There is a negative implication: --perf-prof disables
   # --wasm-write-protect-code-memory.
   "wasm_write_protect_code": ["--perf-prof"],
+  "assert_types": ["--concurrent-recompilation", "--concurrent-inlining", "--stress_concurrent_inlining", "--no-assert-types"],
 }
 
 # Flags that lead to a contradiction under certain build variables.
