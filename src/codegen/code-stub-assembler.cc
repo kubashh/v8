@@ -1539,6 +1539,31 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
+#ifdef V8_CAGED_POINTERS
+
+TNode<CagedPtrT> CodeStubAssembler::LoadCagedPointerFromObject(
+    TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+  return LoadObjectField<CagedPtrT>(object, field_offset);
+}
+
+void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
+                                                  TNode<IntPtrT> offset,
+                                                  TNode<CagedPtrT> pointer) {
+#ifdef DEBUG
+  // Verify pointer points into the cage.
+  TNode<ExternalReference> cage_base_address =
+      ExternalConstant(ExternalReference::cage_base_address(isolate()));
+  TNode<IntPtrT> cage_base = Load<IntPtrT>(cage_base_address);
+  TNode<IntPtrT> cage_end =
+      IntPtrAdd(cage_base, IntPtrConstant(kVirtualMemoryCageSize));
+  CSA_CHECK(this, IntPtrGreaterThanOrEqual(pointer, cage_base));
+  CSA_CHECK(this, IntPtrLessThan(pointer, cage_end));
+#endif
+  StoreObjectFieldNoWriteBarrier<CagedPtrT>(object, offset, pointer);
+}
+
+#endif  // V8_CAGED_POINTERS
+
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
   STATIC_ASSERT(kExternalPointerSize == kSystemPointerSize);
