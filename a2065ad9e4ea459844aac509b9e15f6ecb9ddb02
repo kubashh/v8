@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "406f5a03_611b91e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T13:17:51Z",
+      "side": 1,
+      "message": "PTAL. As discussed, the fix is actually pretty simple, especially since the asm.js spec forbids duplicate parameter names anyway.",
+      "revId": "a2065ad9e4ea459844aac509b9e15f6ecb9ddb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
