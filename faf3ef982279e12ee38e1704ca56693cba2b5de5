@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf447a0_7566daa7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-26T17:34:53Z",
+      "side": 1,
+      "message": "I also renamed the slow runtime name to DefineOwnIC to be more consistent.",
+      "revId": "faf3ef982279e12ee38e1704ca56693cba2b5de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "340bd2c3_49f09ba0",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-10-26T17:12:41Z",
       "side": 1,
       "message": "I think we should call Runtime::DefineClassField for IsDefineOwn() case too.",
+      "range": {
+        "startLine": 1295,
+        "startChar": 24,
+        "endLine": 1295,
+        "endChar": 39
+      },
+      "revId": "faf3ef982279e12ee38e1704ca56693cba2b5de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3385d8b9_215e5ea7",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-26T17:34:53Z",
+      "side": 1,
+      "message": "Good catch, this is also called from the KeyedDefineOwn IC.",
+      "parentUuid": "340bd2c3_49f09ba0",
       "range": {
         "startLine": 1295,
         "startChar": 24,
