@@ -297,6 +297,13 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
     case MachineRepresentation::kWord64:
       opcode = kX64Movq;
       break;
+    case MachineRepresentation::kCagedPointer:
+#ifdef V8_CAGED_POINTERS
+      opcode = kX64MovqDecodeCagedPointer;
+      break;
+#else
+      UNREACHABLE();
+#endif
     case MachineRepresentation::kSimd128:
       opcode = kX64Movdqu;
       break;
@@ -331,6 +338,12 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:
       return kX64MovqCompressTagged;
+    case MachineRepresentation::kCagedPointer:
+#ifdef V8_CAGED_POINTERS
+      return kX64MovqEncodeCagedPointer;
+#else
+      UNREACHABLE();
+#endif
     case MachineRepresentation::kWord64:
       return kX64Movq;
     case MachineRepresentation::kSimd128:
@@ -508,6 +521,13 @@ void InstructionSelector::VisitLoad(Node* node) {
 }
 
 void InstructionSelector::VisitProtectedLoad(Node* node) { VisitLoad(node); }
+
+// void InstructionSelector::VisitCagedPtrConstant(Node* node) {
+/*void InstructionSelector::VisitCagedPtrFromConstantOffsetConstant(Node* node)
+{ InstructionCode code = kX64MovqCagedPointerConstant; InstructionOperand
+outputs[] = {g.DefineAsRegister(node)}; Emit(code, 1, outputs, 1, inputs,
+temp_count, temps);
+}*/
 
 namespace {
 

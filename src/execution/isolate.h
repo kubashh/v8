@@ -1092,6 +1092,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 #endif  // V8_EXTERNAL_CODE_SPACE
   }
 
+  Address cage_base_address() {
+    return reinterpret_cast<Address>(&isolate_data_.cage_base_);
+  }
+
   // When pointer compression is on, the PtrComprCage used by this
   // Isolate. Otherwise nullptr.
   VirtualMemoryCage* GetPtrComprCage() {

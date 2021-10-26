@@ -65,8 +65,14 @@ TNode<JSArrayBuffer> TypedArrayBuiltinsAssembler::AllocateEmptyOnHeapBuffer(
 
   StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kByteLengthOffset,
                                  byte_length);
+#ifdef V8_CAGED_POINTERS
+  // TODO(saelo) EmptyBackingStore?
+  StoreCagedPointerToObject(buffer, JSArrayBuffer::kBackingStoreOffset,
+                            NullCagedPointer());
+#else
   StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBackingStoreOffset,
                                  PointerConstant(nullptr));
+#endif
   StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kExtensionOffset,
                                  IntPtrConstant(0));
   for (int offset = JSArrayBuffer::kHeaderSize;
@@ -441,6 +447,12 @@ void TypedArrayBuiltinsAssembler::SetJSTypedArrayOnHeapDataPtr(
         JSTypedArray::ExternalPointerCompensationForOnHeapArray(isolate()));
     // See JSTypedArray::SetOnHeapDataPtr() for details.
     offset = Unsigned(IntPtrAdd(offset, ptr_compr_cage_base));
+  }
+
+  if (V8_CAGED_POINTERS_BOOL) {
+    // If enabled, the offset is stored as CagedPointer and so must not be
+    // nullptr.
+    CSA_CHECK(this, WordNotEqual(offset, IntPtrConstant(0)));
   }
 
   StoreJSTypedArrayBasePointer(holder, base);
