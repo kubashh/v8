@@ -16,6 +16,23 @@
       "message": "Comments addressed, please confirm if this still LGTY",
       "revId": "5fb2b4cb599ad63e889f0b7a9354fa2a51d970d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69b4b45_6643f137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T10:36:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5fb2b4cb599ad63e889f0b7a9354fa2a51d970d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
