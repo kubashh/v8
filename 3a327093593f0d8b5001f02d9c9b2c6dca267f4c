@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f974cdab_9bbdd8cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-26T15:59:18Z",
+      "side": 1,
+      "message": "@Nico I\u0027m sorry, should have sent you the CL later, but it turned out I had to do quite a bit more changes to get all the tests pass. Could you take another look at the changes since Patchset 5?",
+      "revId": "3a327093593f0d8b5001f02d9c9b2c6dca267f4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
