@@ -2922,6 +2922,18 @@ RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Slow) {
                                           StoreOrigin::kMaybeKeyed));
 }
 
+RUNTIME_FUNCTION(Runtime_KeyedDefineOwnIC_Slow) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  // Runtime functions don't follow the IC's calling convention.
+  Handle<Object> value = args.at(0);
+  Handle<Object> object = args.at(1);
+  Handle<Object> key = args.at(2);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Runtime::DefineClassField(isolate, object, key, value,
+                                         StoreOrigin::kMaybeKeyed));
+}
+
 RUNTIME_FUNCTION(Runtime_StoreInArrayLiteralIC_Slow) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());
