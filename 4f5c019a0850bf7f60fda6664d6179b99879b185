@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b01861e5_67162448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-10-26T11:10:10Z",
+      "side": 1,
+      "message": "Hi Benedikt, hi Yang,\n\nI\u0027m changing the type of the progress counter to fix an overflow issue that we observed in a test. PTAL!",
+      "revId": "4f5c019a0850bf7f60fda6664d6179b99879b185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
