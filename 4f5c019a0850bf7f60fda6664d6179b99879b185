@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf610d8_5e63823f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-10-26T12:10:48Z",
+      "side": 1,
+      "message": "lgtm.\n\nI would like to understand how the overflow causes flakiness, and whether we should avoid overflows in general. uint32_t might overflow too?",
+      "revId": "4f5c019a0850bf7f60fda6664d6179b99879b185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d972869_529a6f65",
@@ -48,6 +65,24 @@
       "writtenOn": "2021-10-26T11:43:28Z",
       "side": 1,
       "message": "Yang: This is changing the ABI. Is this still a concern? (for Node?)",
+      "revId": "4f5c019a0850bf7f60fda6664d6179b99879b185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69334a83_a00beb0a",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-10-26T12:10:48Z",
+      "side": 1,
+      "message": "I don\u0027t think there are many users of this API.",
+      "parentUuid": "4d972869_529a6f65",
       "revId": "4f5c019a0850bf7f60fda6664d6179b99879b185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
