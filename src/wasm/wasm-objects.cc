@@ -1796,7 +1796,8 @@ Handle<Object> WasmExceptionPackage::GetExceptionValues(
   if (JSReceiver::GetProperty(
           isolate, exception_package,
           isolate->factory()->wasm_exception_values_symbol())
-          .ToHandle(&values)) {
+          .ToHandle(&values) &&
+      !values->IsUndefined()) {
     DCHECK(values->IsFixedArray());
     return values;
   }
