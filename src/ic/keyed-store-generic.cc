@@ -1076,8 +1076,8 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
                       value);
     } else if (IsKeyedDefineOwn()) {
       // Currently, KeyedDefineOwn ICs are only used for class instance
-      // fields, hence %DefineClassField.
-      TailCallRuntime(Runtime::kDefineClassField, context, receiver, key,
+      // fields.
+      TailCallRuntime(Runtime::kDefineObjectOwnProperty, context, receiver, key,
                       value);
     } else {
       DCHECK(IsStoreInLiteral());
