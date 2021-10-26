@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f13097_9a27e3fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T18:21:06Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "0d5e08c0f63c1537e52a57729fc3e9c8ab3400c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697902c8_1c08c8b7",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T18:21:06Z",
+      "side": 1,
+      "message": "Please introduce p-\u003eIsAnyStoreOwn() - we have similar predicates in ic.h.",
+      "range": {
+        "startLine": 1295,
+        "startChar": 25,
+        "endLine": 1295,
+        "endChar": 60
+      },
+      "revId": "0d5e08c0f63c1537e52a57729fc3e9c8ab3400c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38e32122_0689fc85",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-26T18:21:06Z",
+      "side": 1,
+      "message": "I guess you\u0027ll have to rename this one too.",
+      "range": {
+        "startLine": 2933,
+        "startChar": 15,
+        "endLine": 2933,
+        "endChar": 40
+      },
+      "revId": "0d5e08c0f63c1537e52a57729fc3e9c8ab3400c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
