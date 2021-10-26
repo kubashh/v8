@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e348d2e0_7949efee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T09:37:33Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 16,
+        "startChar": 23,
+        "endLine": 16,
+        "endChar": 32
+      },
+      "revId": "e3bdb8da4a5d8c3448312e7f88addbb505587542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "aeec889d_67f4efd2",
@@ -14,6 +37,57 @@
       "writtenOn": "2021-10-26T08:47:20Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "e3bdb8da4a5d8c3448312e7f88addbb505587542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "583661c3_f48fcb23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T09:37:33Z",
+      "side": 1,
+      "message": "Thanks for fixing this! LGTM with minor comments.",
+      "revId": "e3bdb8da4a5d8c3448312e7f88addbb505587542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6474a14_b7e324b3",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T09:37:33Z",
+      "side": 1,
+      "message": "This iteration reads quite complicated. Do you think this would be better?\n\nauto merge_region \u003d base::VectorOf(target_begin + stack_base, arity);\nfor (VarState\u0026 var : merge_region) {\n  ...\n}",
+      "revId": "e3bdb8da4a5d8c3448312e7f88addbb505587542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acccc1e3_52c5a555",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T09:37:33Z",
+      "side": 1,
+      "message": "Since we always use {SlotInterference} in such a for loop, can we define a second variant that gets a {base::Vector\u003cconst VarState}} as the second argument, and loops internally? That would also put the whole thing in a DCHECK, instead of leaving an empty loop in release builds.",
       "revId": "e3bdb8da4a5d8c3448312e7f88addbb505587542",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
