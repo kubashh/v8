@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c764dd5_3317b468",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-26T10:34:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "8e188c02190cabfce7a020bb0c4cd57c754eaf95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d607cf17_2a75a960",
+        "filename": "include/v8-object.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-26T10:34:40Z",
+      "side": 1,
+      "message": "Blink doesn\u0027t like this one yet :/",
+      "range": {
+        "startLine": 598,
+        "startChar": 17,
+        "endLine": 598,
+        "endChar": 32
+      },
+      "revId": "8e188c02190cabfce7a020bb0c4cd57c754eaf95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
