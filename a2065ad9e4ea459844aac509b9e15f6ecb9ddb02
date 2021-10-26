@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "35a0b9c2_701b50ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T14:21:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c82484cb_206d55a4",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "a2065ad9e4ea459844aac509b9e15f6ecb9ddb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "406f5a03_611b91e2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2021-10-26T14:08:20Z",
       "side": 1,
       "message": "module1",
+      "range": {
+        "startLine": 507,
+        "startChar": 29,
+        "endLine": 507,
+        "endChar": 36
+      },
+      "revId": "a2065ad9e4ea459844aac509b9e15f6ecb9ddb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "447721f5_35809990",
+        "filename": "test/mjsunit/asm/asm-validation.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-10-26T14:21:32Z",
+      "side": 1,
+      "message": "Argh, I thought I double-checked. Fixed.",
+      "parentUuid": "baa720ac_3e14b33b",
       "range": {
         "startLine": 507,
         "startChar": 29,
