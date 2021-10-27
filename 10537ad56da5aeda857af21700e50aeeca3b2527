@@ -16,6 +16,23 @@
       "message": "Joyee, I think I was the one who requested you rename the runtime function to DefineClassFields. Sorry about that, it would\u0027ve been better off with a generic name from the start.",
       "revId": "10537ad56da5aeda857af21700e50aeeca3b2527",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9d4cd76_8149f794",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-10-27T02:06:47Z",
+      "side": 1,
+      "message": "I think this comment can be removed now since it\u0027s also used for object literals.",
+      "revId": "10537ad56da5aeda857af21700e50aeeca3b2527",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
