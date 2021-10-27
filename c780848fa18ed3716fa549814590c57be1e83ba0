@@ -16,6 +16,46 @@
       "message": "Jakob: PTAL overall.\nMichael: Please approve src/heap/.",
       "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0a730c_ce15abcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-27T09:55:02Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2538ed73_3fa10b2d",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-10-27T09:55:02Z",
+      "side": 1,
+      "message": "nit: unnecessary.",
+      "range": {
+        "startLine": 744,
+        "startChar": 1,
+        "endLine": 744,
+        "endChar": 8
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
