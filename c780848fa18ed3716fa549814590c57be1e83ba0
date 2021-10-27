@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e928639_63a8cd1b",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-27T12:37:53Z",
+      "side": 1,
+      "message": "Sorry, missed that this is an old spac allocation which require the barriers.",
+      "parentUuid": "4882ae09_1e3416c6",
+      "range": {
+        "startLine": 1483,
+        "startChar": 9,
+        "endLine": 1483,
+        "endChar": 27
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8dff00d_a918e436",
