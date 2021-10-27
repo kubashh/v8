@@ -762,6 +762,20 @@ class Simulator : public SimulatorBase {
   type_usew_t<x>::type uimm5 = (type_usew_t<x>::type)(instr_.RvvUimm5()); \
   type_usew_t<x>::type vs2 = Rvvelt<type_usew_t<x>::type>(rvv_vs2_reg(), i);
 
+#define VN_PARAMS(x)                                                    \
+  constexpr int half_x = x >> 1;                                        \
+  type_sew_t<half_x>::type& vd =                                        \
+      Rvvelt<type_sew_t<half_x>::type>(rvv_vd_reg(), i, true);          \
+  type_sew_t<x>::type uimm5 = (type_sew_t<x>::type)(instr_.RvvUimm5()); \
+  type_sew_t<x>::type vs2 = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i);
+
+#define VN_UPARAMS(x)                                                     \
+  constexpr int half_x = x >> 1;                                          \
+  type_usew_t<half_x>::type& vd =                                         \
+      Rvvelt<type_usew_t<half_x>::type>(rvv_vd_reg(), i, true);           \
+  type_usew_t<x>::type uimm5 = (type_usew_t<x>::type)(instr_.RvvUimm5()); \
+  type_sew_t<x>::type vs2 = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i);
+
 #define VXI_PARAMS(x)                                                       \
   type_sew_t<x>::type& vd =                                                 \
       Rvvelt<type_sew_t<x>::type>(rvv_vd_reg(), i, true);                   \
@@ -871,6 +885,21 @@ class Simulator : public SimulatorBase {
   inline void set_rvv_vcsr(uint64_t value, bool trace = true) { vcsr_ = value; }
   inline void set_rvv_vlenb(uint64_t value, bool trace = true) {
     vlenb_ = value;
+  }
+
+  template <typename T, typename Func>
+  inline T CanonicalizeFPUOpFMA(Func fn, T dst, T src1, T src2) {
+    DCHECK(std::is_floating_point<T>::value);
+    auto alu_out = fn(dst, src1, src2);
+    // if any input or result is NaN, the result is quiet_NaN
+    if (std::isnan(alu_out) || std::isnan(src1) || std::isnan(src2) ||
+        std::isnan(dst)) {
+      // signaling_nan sets kInvalidOperation bit
+      if (isSnan(alu_out) || isSnan(src1) || isSnan(src2) || isSnan(dst))
+        set_fflags(kInvalidOperation);
+      alu_out = std::numeric_limits<T>::quiet_NaN();
+    }
+    return alu_out;
   }
 
   template <typename T, typename Func>
