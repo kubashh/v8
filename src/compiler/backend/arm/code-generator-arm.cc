@@ -4,6 +4,7 @@
 
 #include "src/base/numbers/double.h"
 #include "src/codegen/arm/constants-arm.h"
+#include "src/codegen/arm/register-arm.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -807,9 +808,25 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArchCallCFunction: {
       int const num_parameters = MiscField::decode(instr->opcode());
 #if V8_ENABLE_WEBASSEMBLY
+#if DEBUG
+      int initial_offset;
+#endif
+      constexpr int kCallCFunctionCodeSize = 40;
       if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
-        // Put the return address in a stack slot.
-        __ str(pc, MemOperand(fp, WasmExitFrameConstants::kCallingPCOffset));
+        // Put the return address in a stack slot. It needs to be the address
+        // that is recorded in the safepoint below.
+        // TODO(manoskouk): Make this more robust by adding infrastructure
+        // for the ADR instruction.
+        Register scratch_reg = r4;
+        __ Push(scratch_reg);
+        __ Move(scratch_reg, pc);
+        __ add(scratch_reg, scratch_reg, Operand(kCallCFunctionCodeSize));
+#if DEBUG
+        initial_offset = __ pc_offset();
+#endif
+        __ str(scratch_reg,
+               MemOperand(fp, WasmExitFrameConstants::kCallingPCOffset));
+        __ Pop(scratch_reg);
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
       if (instr->InputAt(0)->IsImmediate()) {
@@ -821,6 +838,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
 #if V8_ENABLE_WEBASSEMBLY
       if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
+        // This DCHECK safeguards kCallCFunctionCodeSize against changes in
+        // {TurboAssembler::CallCFunction}.
+        DCHECK_EQ(__ pc_offset() - initial_offset, kCallCFunctionCodeSize);
         RecordSafepoint(instr->reference_map());
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -3696,23 +3716,14 @@ void CodeGenerator::AssembleConstructFrame() {
     } else {
       __ StubPrologue(info()->GetOutputStackFrameType());
 #if V8_ENABLE_WEBASSEMBLY
-      if (call_descriptor->IsWasmFunctionCall()) {
+      if (call_descriptor->IsWasmFunctionCall() ||
+          call_descriptor->IsWasmImportWrapper() ||
+          call_descriptor->IsWasmCapiFunction()) {
         __ Push(kWasmInstanceRegister);
-      } else if (call_descriptor->IsWasmImportWrapper() ||
-                 call_descriptor->IsWasmCapiFunction()) {
-        // Wasm import wrappers are passed a tuple in the place of the instance.
-        // Unpack the tuple into the instance and the target callable.
-        // This must be done here in the codegen because it cannot be expressed
-        // properly in the graph.
-        __ ldr(kJSFunctionRegister,
-               FieldMemOperand(kWasmInstanceRegister, Tuple2::kValue2Offset));
-        __ ldr(kWasmInstanceRegister,
-               FieldMemOperand(kWasmInstanceRegister, Tuple2::kValue1Offset));
-        __ Push(kWasmInstanceRegister);
-        if (call_descriptor->IsWasmCapiFunction()) {
-          // Reserve space for saving the PC later.
-          __ AllocateStackSpace(kSystemPointerSize);
-        }
+      }
+      if (call_descriptor->IsWasmCapiFunction()) {
+        // Reserve space for saving the PC later.
+        __ AllocateStackSpace(kSystemPointerSize);
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
     }
