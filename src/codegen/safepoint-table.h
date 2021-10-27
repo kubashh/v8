@@ -228,6 +228,7 @@ class SafepointTableBuilder {
 
   // Define a new safepoint for the current position in the body.
   Safepoint DefineSafepoint(Assembler* assembler);
+  Safepoint DefineSafepoint(int force_pc_offset);
 
   // Emit the safepoint table after the body. The number of bits per
   // entry must be enough to hold all the pointer indexes.

@@ -580,8 +580,8 @@ bool CodeGenerator::IsNextInAssemblyOrder(RpoNumber block) const {
       .IsNext(instructions()->InstructionBlockAt(block)->ao_number());
 }
 
-void CodeGenerator::RecordSafepoint(ReferenceMap* references) {
-  Safepoint safepoint = safepoints()->DefineSafepoint(tasm());
+void CodeGenerator::RecordSafepointImpl(ReferenceMap* references,
+                                        Safepoint& safepoint) {
   int frame_header_offset = frame()->GetFixedSlotCount();
   for (const InstructionOperand& operand : references->reference_operands()) {
     if (operand.IsStackSlot()) {
@@ -596,6 +596,17 @@ void CodeGenerator::RecordSafepoint(ReferenceMap* references) {
       safepoint.DefinePointerSlot(index);
     }
   }
+}
+
+void CodeGenerator::RecordSafepoint(ReferenceMap* references,
+                                    int force_pc_offset) {
+  Safepoint safepoint = safepoints()->DefineSafepoint(force_pc_offset);
+  RecordSafepointImpl(references, safepoint);
+}
+
+void CodeGenerator::RecordSafepoint(ReferenceMap* references) {
+  Safepoint safepoint = safepoints()->DefineSafepoint(tasm());
+  RecordSafepointImpl(references, safepoint);
 }
 
 bool CodeGenerator::IsMaterializableFromRoot(Handle<HeapObject> object,

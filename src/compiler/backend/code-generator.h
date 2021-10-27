@@ -161,6 +161,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
 
   // Record a safepoint with the given pointer map.
   void RecordSafepoint(ReferenceMap* references);
+  void RecordSafepoint(ReferenceMap* references, int force_pc_offset);
 
   Zone* zone() const { return zone_; }
   TurboAssembler* tasm() { return &tasm_; }
@@ -211,6 +212,8 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // object constant.
   bool IsMaterializableFromRoot(Handle<HeapObject> object,
                                 RootIndex* index_return);
+
+  void RecordSafepointImpl(ReferenceMap* references, Safepoint& safepoint);
 
   enum CodeGenResult { kSuccess, kTooManyDeoptimizationBailouts };
 
