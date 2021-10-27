@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c6181e8_8175f74e",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-27T13:24:15Z",
+      "side": 1,
+      "message": "Ack so the CagedPtrT doesn\u0027t say anything about the representation, only about location guarantees, okay.",
+      "parentUuid": "cdd08c69_2ea128b8",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ca6b2ef_8f09040e",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "No, but CagedPointers are not available on 32-bit platforms. I\u0027ll add a `DCHECK((V8_TARGET_ARCH_64_BIT)` here to make that more clear. Let me know what you think of that.",
       "parentUuid": "2ca6b2ef_8f09040e",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f959538_8dc0bc80",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-10-27T13:24:15Z",
+      "side": 1,
+      "message": "What about kSystemPointerSizeLog2? Even if never used on 32b that seems clearest. (The DCHECK sg in addition too.)",
+      "parentUuid": "cc319bfd_37336a37",
       "revId": "b331910618c9395154bda243c767a600d5fbec1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
