@@ -1,0 +1,63 @@
+--- WebAssembly code ---
+name: anonymous function
+kind: wasm-to-capi
+Body (size = 256 = 228 + 28 padding)
+Instructions (size = 192)
+0x5c882620     0  e3a0c012       mov ip, #18
+0x5c882624     4  e92d4800       stmdb sp!, {fp, lr}
+0x5c882628     8  e1a0b00d       mov fp, sp
+0x5c88262c     c  e52dc004       str ip, [sp, #-4]!
+0x5c882630    10  e52d3004       str r3, [sp, #-4]!
+0x5c882634    14  e24dd004       sub sp, sp, #4
+0x5c882638    18  e24dd010       sub sp, sp, #16
+0x5c88263c    1c  e24b1014       sub r1, fp, #20
+0x5c882640    20  e5810000       str r0, [r1, #+0]
+0x5c882644    24  e593200b       ldr r2, [r3, #+11]
+0x5c882648    28  e592200b       ldr r2, [r2, #+11]
+0x5c88264c    2c  e5922003       ldr r2, [r2, #+3]
+0x5c882650    30  e592000f       ldr r0, [r2, #+15]
+0x5c882654    34  e5934003       ldr r4, [r3, #+3]
+0x5c882658    38  e1a0500b       mov r5, fp
+0x5c88265c    3c  e3016171       movw r6, #4465
+0x5c882660    40  e7845006       str r5, [r4, +r6]
+0x5c882664    44  e5922003       ldr r2, [r2, #+3]
+0x5c882668    48  e1a0c00d       mov ip, sp
+0x5c88266c    4c  e24dd004       sub sp, sp, #4
+0x5c882670    50  e3cdd007       bic sp, sp, #7
+0x5c882674    54  e58dc000       str ip, [sp, #+0]
+0x5c882678    58  e50b301c       str r3, [fp, #-28]
+0x5c88267c    5c  e50b1018       str r1, [fp, #-24]
+0x5c882680    60  e50bf00c       str pc, [fp, #-12]
+0x5c882684    64  e1a00000       mov r0, r0
+0x5c882688    68  e50aff63       str pc, [r10, #-3939]
+0x5c88268c    6c  e50abf67       str fp, [r10, #-3943]
+0x5c882690    70  e12fff32       blx r2
+0x5c882694    74  e52d5004       str r5, [sp, #-4]!
+0x5c882698    78  e3a05000       mov r5, #0
+0x5c88269c    7c  e50a5f67       str r5, [r10, #-3943]
+0x5c8826a0    80  e49d5004       ldr r5, [sp], #+4
+0x5c8826a4    84  e59dd000       ldr sp, [sp, #+0]
+0x5c8826a8    88  e3500000       cmp r0, #0
+0x5c8826ac    8c  1a000004       bne +24 -> 0x5c8826c4  <+0xa4>
+0x5c8826b0    90  e51b2018       ldr r2, [fp, #-24]
+0x5c8826b4    94  e5920000       ldr r0, [r2, #+0]
+0x5c8826b8    98  e1a0d00b       mov sp, fp
+0x5c8826bc    9c  e8bd4800       ldmia sp!, {fp, lr}
+0x5c8826c0    a0  e12fff1e       bx lr
+0x5c8826c4    a4  e51b201c       ldr r2, [fp, #-28]
+0x5c8826c8    a8  e5921007       ldr r1, [r2, #+7]
+0x5c8826cc    ac  e59fc008       ldr ip, [pc, #+8] (addr 0x5c8826dc)    ;; wasm stub: WasmRethrowExplicitContext
+0x5c8826d0    b0  e12fff3c       blx ip
+0x5c8826d4    b4  e1a00000       mov r0, r0
+0x5c8826d8    b8  e7f000f1       constant pool begin (num_const = 1)    ;; constant pool
+0x5c8826dc    bc  5c882180       constant
+
+Safepoints (size = 34)
+0x5c882688    68  10000000 (sp -> fp)
+0x5c8826d4    b4  00000000 (sp -> fp)
+
+RelocInfo (size = 9)
+0x5c8826cc  wasm stub call
+0x5c8826d8  constant pool (size 8)
+
+--- End code ---
