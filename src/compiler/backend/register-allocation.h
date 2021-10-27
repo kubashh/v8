@@ -51,6 +51,7 @@ inline int ByteWidthForStackSlot(MachineRepresentation rep) {
     case MachineRepresentation::kWord16:
     case MachineRepresentation::kWord32:
     case MachineRepresentation::kFloat32:
+    case MachineRepresentation::kCagedPointer:
       return kSystemPointerSize;
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
@@ -60,7 +61,6 @@ inline int ByteWidthForStackSlot(MachineRepresentation rep) {
       // TODO(ishell): kTaggedSize once half size locations are supported.
       return kSystemPointerSize;
     case MachineRepresentation::kWord64:
-    case MachineRepresentation::kCagedPointer:
     case MachineRepresentation::kFloat64:
       return kDoubleSize;
     case MachineRepresentation::kSimd128:

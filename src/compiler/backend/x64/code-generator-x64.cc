@@ -344,6 +344,9 @@ void EmitStore(TurboAssembler* tasm, Operand operand, Register value,
       case MachineRepresentation::kTagged:
         tasm->StoreTaggedField(operand, value);
         break;
+      case MachineRepresentation::kCagedPointer:
+        tasm->StoreCagedPointerField(operand, value);
+        break;
       default:
         UNREACHABLE();
     }
@@ -509,7 +512,15 @@ void EmitTSANStoreOOL(Zone* zone, CodeGenerator* codegen, TurboAssembler* tasm,
 
 template <std::memory_order order>
 Register GetTSANValueRegister(TurboAssembler* tasm, Register value,
-                              X64OperandConverter& i) {
+                              X64OperandConverter& i,
+                              MachineRepresentation rep) {
+  if (rep == MachineRepresentation::kCagedPointer) {
+    // CagedPointers need to be encoded
+    Register value_reg = i.TempRegister(1);
+    tasm->movq(value_reg, value);
+    tasm->EncodeCagedPointer(value_reg);
+    return value_reg;
+  }
   return value;
 }
 
@@ -522,6 +533,10 @@ Register GetTSANValueRegister<std::memory_order_relaxed>(
     TurboAssembler* tasm, Immediate value, X64OperandConverter& i) {
   Register value_reg = i.TempRegister(1);
   tasm->movq(value_reg, value);
+  if (rep == MachineRepresentation::kCagedPointer) {
+    // CagedPointers need to be encoded
+    tasm->EncodeCagedPointer(value_reg);
+  }
   return value_reg;
 }
 
@@ -2386,11 +2401,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       Operand operand = i.MemoryOperand(&index);
       CHECK(!HasImmediateInput(instr, index));
       Register value(i.InputRegister(index));
-      __ movq(kScratchRegister, value);
-      __ EncodeCagedPointer(kScratchRegister);
       EmitTSANAwareStore<std::memory_order_relaxed>(
-          zone(), this, tasm(), operand, kScratchRegister, i,
-          DetermineStubCallMode(), MachineRepresentation::kWord64);
+          zone(), this, tasm(), operand, value, i, DetermineStubCallMode(),
+          MachineRepresentation::kCagedPointer);
       break;
     }
     case kX64Movq:

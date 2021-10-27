@@ -1863,6 +1863,7 @@ filegroup(
         "src/base/sanitizer/lsan-page-allocator.h",
         "src/base/sanitizer/msan.h",
         "src/base/sanitizer/tsan.h",
+        "src/security/caged-pointer.cc",
         "src/security/caged-pointer-inl.h",
         "src/security/caged-pointer.h",
         "src/security/external-pointer-table.cc",

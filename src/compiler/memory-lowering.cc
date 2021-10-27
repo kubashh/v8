@@ -534,7 +534,7 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
   DCHECK_IMPLIES(V8_HEAP_SANDBOX_BOOL,
                  !access.type.Is(Type::ExternalPointer()) &&
                      !access.type.Is(Type::SandboxedExternalPointer()));
-  // CagedPointers are not currently stored by optmized code.
+  // CagedPointers are not currently stored by optimized code.
   DCHECK(!access.type.Is(Type::CagedPointer()));
   MachineType machine_type = access.machine_type;
   Node* object = node->InputAt(0);

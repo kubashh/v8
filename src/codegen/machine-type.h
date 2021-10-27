@@ -8,6 +8,7 @@
 #include <iosfwd>
 
 #include "src/base/bits.h"
+#include "src/base/v8-fallthrough.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
 
@@ -348,8 +349,10 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeLog2Of(
     case MachineRepresentation::kWord32:
     case MachineRepresentation::kFloat32:
       return 2;
-    case MachineRepresentation::kWord64:
     case MachineRepresentation::kCagedPointer:
+      DCHECK(V8_TARGET_ARCH_64_BIT);
+      V8_FALLTHROUGH;
+    case MachineRepresentation::kWord64:
     case MachineRepresentation::kFloat64:
       return 3;
     case MachineRepresentation::kSimd128:

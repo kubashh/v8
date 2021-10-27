@@ -338,14 +338,14 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:
       return kX64MovqCompressTagged;
+    case MachineRepresentation::kWord64:
+      return kX64Movq;
     case MachineRepresentation::kCagedPointer:
 #ifdef V8_CAGED_POINTERS
       return kX64MovqEncodeCagedPointer;
 #else
       UNREACHABLE();
 #endif
-    case MachineRepresentation::kWord64:
-      return kX64Movq;
     case MachineRepresentation::kSimd128:
       return kX64Movdqu;
     case MachineRepresentation::kNone:  // Fall through.
