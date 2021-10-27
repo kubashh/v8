@@ -83,8 +83,11 @@ void SafepointTable::PrintEntry(unsigned index, std::ostream& os) const {
 }
 
 Safepoint SafepointTableBuilder::DefineSafepoint(Assembler* assembler) {
-  deoptimization_info_.push_back(
-      DeoptimizationInfo(zone_, assembler->pc_offset_for_safepoint()));
+  return DefineSafepoint(assembler->pc_offset_for_safepoint());
+}
+
+Safepoint SafepointTableBuilder::DefineSafepoint(int force_pc_offset) {
+  deoptimization_info_.push_back(DeoptimizationInfo(zone_, force_pc_offset));
   DeoptimizationInfo& new_info = deoptimization_info_.back();
   return Safepoint(new_info.stack_indexes, &new_info.register_indexes);
 }
