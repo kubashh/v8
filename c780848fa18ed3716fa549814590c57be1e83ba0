@@ -35,6 +35,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "293a7c99_89572107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-27T10:08:46Z",
+      "side": 1,
+      "message": "lgtm (only looked at heap/)",
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ed95a16_26550e87",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-27T10:08:46Z",
+      "side": 1,
+      "message": "Not sure how fast this needs to be but generally you can avoid the write barriers from factory setters like\n\n  result.set_native_context(*isolate()-\u003enative_context(), SKIP_WRITE_BARRIER)",
+      "range": {
+        "startLine": 1483,
+        "startChar": 9,
+        "endLine": 1483,
+        "endChar": 27
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8dff00d_a918e436",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-27T10:08:46Z",
+      "side": 1,
+      "message": "You need to set the expected undefined value as well in case the callable is null, e.g.\n\n  result.set_callable(!callable.is_null() ? *callable : *undefined_value(), SKIP_WRITE_BARRIER)",
+      "range": {
+        "startLine": 1484,
+        "startChar": 7,
+        "endLine": 1484,
+        "endChar": 15
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2538ed73_3fa10b2d",
