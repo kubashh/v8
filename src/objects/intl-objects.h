@@ -28,6 +28,7 @@ class BreakIterator;
 class Collator;
 class FormattedValue;
 class StringEnumeration;
+class TimeZone;
 class UnicodeString;
 }  // namespace U_ICU_NAMESPACE
 
@@ -289,6 +290,31 @@ class Intl {
   static std::set<std::string> SanctionedSimpleUnits();
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> AvailableCalendars(
+      Isolate* isolate);
+
+  V8_WARN_UNUSED_RESULT static bool IsValidTimeZoneName(
+      const icu::TimeZone& tz);
+  V8_WARN_UNUSED_RESULT static bool IsValidTimeZoneName(Isolate* isolate,
+                                                        const std::string& id);
+
+  // Function to support Temporal
+  V8_WARN_UNUSED_RESULT static std::string TimeZoneIdFromIndex(int32_t index);
+
+  V8_WARN_UNUSED_RESULT static Maybe<bool> GetTimeZoneIndex(
+      Isolate* isolate, const std::string& identifier, int32_t* index);
+
+  V8_WARN_UNUSED_RESULT static Maybe<int64_t> GetTimeZoneOffsetMilliseconds(
+      Isolate* isolate, int32_t time_zone_index, int64_t millisecond);
+
+  V8_WARN_UNUSED_RESULT static Maybe<int64_t>
+  GetTimeZoneOffsetTransitionMilliseconds(Isolate* isolate,
+                                          int32_t time_zone_index,
+                                          int64_t time_ms, bool next);
+
+  V8_WARN_UNUSED_RESULT static std::string CanonicalizeTimeZoneName(
+      Isolate* isolate, const std::string& identifier);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> DefaultTimeZone(
       Isolate* isolate);
 };
 
