@@ -78,6 +78,7 @@ class StatsCounter;
   V(thread_in_wasm_flag_address_address,                                       \
     "Isolate::thread_in_wasm_flag_address_address")                            \
   V(javascript_execution_assert, "javascript_execution_assert")                \
+  V(cage_base_address, "Isolate::cage_base_address()")                         \
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_HEAP_SANDBOX(V)
 
 #ifdef V8_HEAP_SANDBOX

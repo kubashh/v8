@@ -8,6 +8,7 @@
 #include <iosfwd>
 
 #include "src/base/bits.h"
+#include "src/base/v8-fallthrough.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
 
@@ -40,6 +41,7 @@ enum class MachineRepresentation : uint8_t {
   kTagged,             // (uncompressed) Object (Smi or HeapObject)
   kCompressedPointer,  // (compressed) HeapObject
   kCompressed,         // (compressed) Object (Smi or HeapObject)
+  kCagedPointer,       // Guaranteed to point into the virtual memory cage.
   // FP and SIMD representations must be last, and in order of increasing size.
   kFloat32,
   kFloat64,
@@ -204,6 +206,10 @@ class MachineType {
     return MachineType(MachineRepresentation::kTaggedPointer,
                        MachineSemantic::kAny);
   }
+  constexpr static MachineType CagedPointer() {
+    return MachineType(MachineRepresentation::kCagedPointer,
+                       MachineSemantic::kNone);
+  }
   constexpr static MachineType MapInHeader() {
     return MachineType(MachineRepresentation::kMapWord, MachineSemantic::kAny);
   }
@@ -260,6 +266,8 @@ class MachineType {
         return MachineType::AnyCompressed();
       case MachineRepresentation::kCompressedPointer:
         return MachineType::CompressedPointer();
+      case MachineRepresentation::kCagedPointer:
+        return MachineType::CagedPointer();
       default:
         UNREACHABLE();
     }
@@ -353,6 +361,8 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeLog2Of(
     case MachineRepresentation::kCompressedPointer:
     case MachineRepresentation::kCompressed:
       return kTaggedSizeLog2;
+    case MachineRepresentation::kCagedPointer:
+      return kSystemPointerSizeLog2;
     default:
       UNREACHABLE();
   }
