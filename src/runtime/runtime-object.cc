@@ -574,7 +574,7 @@ MaybeHandle<Object> Runtime::DefineObjectOwnProperty(
     DCHECK(name_string->IsString());
     THROW_NEW_ERROR(
         isolate,
-        NewTypeError(MessageTemplate::kInvalidPrivateFieldReitialization,
+        NewTypeError(MessageTemplate::kInvalidPrivateFieldReinitialization,
                      name_string),
         Object);
   }
@@ -1484,7 +1484,8 @@ RUNTIME_FUNCTION(Runtime_AddPrivateField) {
   if (it.IsFound()) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate,
-        NewTypeError(MessageTemplate::kInvalidPrivateFieldReitialization, key));
+        NewTypeError(MessageTemplate::kInvalidPrivateFieldReinitialization,
+                     key));
   }
 
   CHECK(Object::AddDataProperty(&it, value, NONE, Just(kDontThrow),
