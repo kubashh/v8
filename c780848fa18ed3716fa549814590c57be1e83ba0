@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4882ae09_1e3416c6",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-27T12:36:30Z",
+      "side": 1,
+      "message": "I do not know why, but the code breaks if I remove these barriers. This part is not performance critical anyway.",
+      "parentUuid": "9ed95a16_26550e87",
+      "range": {
+        "startLine": 1483,
+        "startChar": 9,
+        "endLine": 1483,
+        "endChar": 27
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8dff00d_a918e436",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e7c561b_32d0005b",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-27T12:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8dff00d_a918e436",
+      "range": {
+        "startLine": 1484,
+        "startChar": 7,
+        "endLine": 1484,
+        "endChar": 15
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2538ed73_3fa10b2d",
@@ -111,6 +159,30 @@
       "writtenOn": "2021-10-27T09:55:02Z",
       "side": 1,
       "message": "nit: unnecessary.",
+      "range": {
+        "startLine": 744,
+        "startChar": 1,
+        "endLine": 744,
+        "endChar": 8
+      },
+      "revId": "c780848fa18ed3716fa549814590c57be1e83ba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f8c05e_55b4de25",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-10-27T12:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2538ed73_3fa10b2d",
       "range": {
         "startLine": 744,
         "startChar": 1,
