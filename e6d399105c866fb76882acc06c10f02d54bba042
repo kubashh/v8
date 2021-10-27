@@ -16,6 +16,24 @@
       "message": "After chatting with you offline, decided the right fix here is to have both a KeyedStoreOwnIC_Slow and a KeyedDefineOwnIC_Slow.",
       "revId": "e6d399105c866fb76882acc06c10f02d54bba042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31592a33_9a06105f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-27T17:31:23Z",
+      "side": 1,
+      "message": "Oops, I had missed that StoreDataPropertyInLiteral already exists, so using that instead. We don\u0027t emit any StoreOwn ICs that involve private fields, so that runtime is fine to use.",
+      "parentUuid": "dd0b498e_422d1d59",
+      "revId": "e6d399105c866fb76882acc06c10f02d54bba042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
