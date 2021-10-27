@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cd81bd1_f40a0b1c",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T13:39:59Z",
+      "side": 1,
+      "message": "Sounds good, I\u0027ll go with kSystemPointerSizeLog2. The DCHECK doesn\u0027t work anyway, because the macro isn\u0027t defined on 32-bit builds...",
+      "parentUuid": "5f959538_8dc0bc80",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bcd15e1_85955ad2",
