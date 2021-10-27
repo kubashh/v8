@@ -508,9 +508,19 @@ RUNTIME_FUNCTION(Runtime_ObjectCreate) {
   return *obj;
 }
 
-MaybeHandle<Object> Runtime::SetObjectProperty(
+namespace {
+enum StoreOwn {
+  // May invoke setters on the prototype.
+  kStoreNormal,
+
+  // Always stores to the object as an own property. This is similar to
+  // [[Define]], but throws when the key is a non-existent private field.
+  kStoreOwn
+};
+
+MaybeHandle<Object> SetObjectPropertyImpl(
     Isolate* isolate, Handle<Object> object, Handle<Object> key,
-    Handle<Object> value, StoreOrigin store_origin,
+    Handle<Object> value, StoreOrigin store_origin, StoreOwn store_own,
     Maybe<ShouldThrow> should_throw) {
   if (object->IsNullOrUndefined(isolate)) {
     MaybeHandle<String> maybe_property =
@@ -534,7 +544,9 @@ MaybeHandle<Object> Runtime::SetObjectProperty(
   bool success = false;
   PropertyKey lookup_key(isolate, key, &success);
   if (!success) return MaybeHandle<Object>();
-  LookupIterator it(isolate, object, lookup_key);
+  LookupIterator it(
+      isolate, object, lookup_key,
+      store_own == kStoreOwn ? LookupIterator::OWN : LookupIterator::DEFAULT);
 
   if (!it.IsFound() && key->IsSymbol() &&
       Symbol::cast(*key).is_private_name()) {
@@ -550,6 +562,23 @@ MaybeHandle<Object> Runtime::SetObjectProperty(
       Object::SetProperty(&it, value, store_origin, should_throw));
 
   return value;
+}
+}  // namespace
+
+MaybeHandle<Object> Runtime::SetObjectProperty(
+    Isolate* isolate, Handle<Object> object, Handle<Object> key,
+    Handle<Object> value, StoreOrigin store_origin,
+    Maybe<ShouldThrow> should_throw) {
+  return SetObjectPropertyImpl(isolate, object, key, value, store_origin,
+                               kStoreNormal, should_throw);
+}
+
+MaybeHandle<Object> Runtime::SetObjectOwnProperty(
+    Isolate* isolate, Handle<Object> object, Handle<Object> key,
+    Handle<Object> value, StoreOrigin store_origin,
+    Maybe<ShouldThrow> should_throw) {
+  return SetObjectPropertyImpl(isolate, object, key, value, store_origin,
+                               kStoreOwn, should_throw);
 }
 
 MaybeHandle<Object> Runtime::DefineClassField(Isolate* isolate,
@@ -576,7 +605,7 @@ MaybeHandle<Object> Runtime::DefineClassField(Isolate* isolate,
     DCHECK(name_string->IsString());
     THROW_NEW_ERROR(
         isolate,
-        NewTypeError(MessageTemplate::kInvalidPrivateFieldReitialization,
+        NewTypeError(MessageTemplate::kInvalidPrivateFieldReinitialization,
                      name_string),
         Object);
   }
@@ -1486,7 +1515,8 @@ RUNTIME_FUNCTION(Runtime_AddPrivateField) {
   if (it.IsFound()) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate,
-        NewTypeError(MessageTemplate::kInvalidPrivateFieldReitialization, key));
+        NewTypeError(MessageTemplate::kInvalidPrivateFieldReinitialization,
+                     key));
   }
 
   CHECK(Object::AddDataProperty(&it, value, NONE, Just(kDontThrow),

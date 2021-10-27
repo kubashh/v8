@@ -640,6 +640,8 @@ namespace internal {
   F(KeyedDefineOwnIC_Miss, 5, 1)             \
   F(StoreInArrayLiteralIC_Miss, 5, 1)        \
   F(KeyedStoreIC_Slow, 3, 1)                 \
+  F(KeyedStoreOwnIC_Slow, 3, 1)              \
+  F(KeyedDefineOwnIC_Slow, 3, 1)             \
   F(LoadElementWithInterceptor, 2, 1)        \
   F(LoadGlobalIC_Miss, 4, 1)                 \
   F(LoadGlobalIC_Slow, 3, 1)                 \
@@ -798,6 +800,12 @@ class Runtime : public AllStatic {
   SetObjectProperty(Isolate* isolate, Handle<Object> object, Handle<Object> key,
                     Handle<Object> value, StoreOrigin store_origin,
                     Maybe<ShouldThrow> should_throw = Nothing<ShouldThrow>());
+
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
+  SetObjectOwnProperty(
+      Isolate* isolate, Handle<Object> object, Handle<Object> key,
+      Handle<Object> value, StoreOrigin store_origin,
+      Maybe<ShouldThrow> should_throw = Nothing<ShouldThrow>());
 
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   DefineClassField(Isolate* isolate, Handle<Object> object, Handle<Object> key,
