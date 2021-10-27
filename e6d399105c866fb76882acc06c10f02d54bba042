@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd0b498e_422d1d59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-27T16:45:21Z",
+      "side": 1,
+      "message": "After chatting with you offline, decided the right fix here is to have both a KeyedStoreOwnIC_Slow and a KeyedDefineOwnIC_Slow.",
+      "revId": "e6d399105c866fb76882acc06c10f02d54bba042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

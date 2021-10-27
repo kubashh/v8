@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0fbac3a_d5a0a800",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-27T16:45:21Z",
+      "side": 1,
+      "message": "Current approach sidesteps the need for this predicate.",
+      "parentUuid": "697902c8_1c08c8b7",
+      "range": {
+        "startLine": 1295,
+        "startChar": 25,
+        "endLine": 1295,
+        "endChar": 60
+      },
+      "revId": "0d5e08c0f63c1537e52a57729fc3e9c8ab3400c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38e32122_0689fc85",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-10-26T18:21:06Z",
       "side": 1,
       "message": "I guess you\u0027ll have to rename this one too.",
+      "range": {
+        "startLine": 2933,
+        "startChar": 15,
+        "endLine": 2933,
+        "endChar": 40
+      },
+      "revId": "0d5e08c0f63c1537e52a57729fc3e9c8ab3400c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1ae2e0_6ea2de6d",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2933,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-10-27T16:45:21Z",
+      "side": 1,
+      "message": "Doing the rename in a followup CL.",
+      "parentUuid": "38e32122_0689fc85",
       "range": {
         "startLine": 2933,
         "startChar": 15,
