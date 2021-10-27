@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdd08c69_2ea128b8",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Encoding/Decoding happens when the pointers are stored to/loaded from an object on the heap. At this point, the pointer are decoded (i.e., raw/full pointers) and they will be encoded at line 1562 (StoreObjectFieldNoWriteBarrier\u003cCagedPtrT\u003e(object, offset, pointer)) which ends up in the MacroAssembler\u0027s StoreCagedPointerField",
+      "parentUuid": "98361187_9693a858",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ca6b2ef_8f09040e",
         "filename": "src/codegen/machine-type.h",
         "patchSetId": 20
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-27T09:18:04Z",
       "side": 1,
       "message": "Is this right for 32-bit platforms?",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc319bfd_37336a37",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "No, but CagedPointers are not available on 32-bit platforms. I\u0027ll add a `DCHECK((V8_TARGET_ARCH_64_BIT)` here to make that more clear. Let me know what you think of that.",
+      "parentUuid": "2ca6b2ef_8f09040e",
       "revId": "b331910618c9395154bda243c767a600d5fbec1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9f5a00_9bd41077",
+        "filename": "src/compiler/backend/register-allocation.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Yep, thanks!",
+      "parentUuid": "2bcd15e1_85955ad2",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "394bc2a2_23871a63",
@@ -82,6 +136,24 @@
       "writtenOn": "2021-10-27T09:18:04Z",
       "side": 1,
       "message": "nit: just MemoryOperand()",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "273cf034_4a75f69d",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Marking as resolved as discussed offline",
+      "parentUuid": "394bc2a2_23871a63",
       "revId": "b331910618c9395154bda243c767a600d5fbec1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e716d19_996d21a2",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027ve moved the encoding logic into EmitTSANAwareStore, which also solves the scratch register problem (because I can use TempRegister(1) there)",
+      "parentUuid": "50893591_efb546bd",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b792fbaf_04aa5734",
@@ -116,6 +206,24 @@
       "writtenOn": "2021-10-27T09:18:04Z",
       "side": 1,
       "message": "nit: for consistency please move below the kWord64 case",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97fb17f5_72273c2d",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b792fbaf_04aa5734",
       "revId": "b331910618c9395154bda243c767a600d5fbec1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +251,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "889a7206_8f9643b5",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f334137_b29e10b7",
+      "range": {
+        "startLine": 537,
+        "startChar": 47,
+        "endLine": 537,
+        "endChar": 55
+      },
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be91018c_01268d02",
@@ -156,6 +288,24 @@
       "writtenOn": "2021-10-27T09:18:04Z",
       "side": 1,
       "message": "There\u0027s an autogenerated cage_base_address() method: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate-data.h;l\u003d108;drc\u003d5539ecff898c79b0771340051d62bf81649e448d",
+      "revId": "b331910618c9395154bda243c767a600d5fbec1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c27c6e8a_a0da08de",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-27T12:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be91018c_01268d02",
       "revId": "b331910618c9395154bda243c767a600d5fbec1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
