@@ -90,25 +90,40 @@ v8_config = rule(
 def _default_args(configs):
     return struct(
         deps = configs + [":define_flags"],
-        copts = [
-            "-fPIC",
-            "-Werror",
-            "-Wextra",
-            "-Wno-bitwise-instead-of-logical",
-            "-Wno-builtin-assume-aligned-alignment",
-            "-Wno-unused-parameter",
-            "-Wno-implicit-int-float-conversion",
-            "-Wno-deprecated-copy",
-            "-Wno-non-virtual-dtor",
-            "-std=c++17",
-            "-isystem .",
-        ],
+        defines = select({
+            "is_windows": [
+                "UNICODE",
+                "_UNICODE",
+                "_CRT_RAND_S",
+                "_WIN32_WINNT=0x0602",
+            ],
+            "//conditions:default": [],
+        }),
+        copts = select({
+            "is_posix": [
+                "-fPIC",
+                "-Werror",
+                "-Wextra",
+                "-Wno-bitwise-instead-of-logical",
+                "-Wno-builtin-assume-aligned-alignment",
+                "-Wno-unused-parameter",
+                "-Wno-implicit-int-float-conversion",
+                "-Wno-deprecated-copy",
+                "-Wno-non-virtual-dtor",
+                "-std=c++17",
+                "-isystem .",
+            ],
+            "//conditions:default": [],
+        }),
         includes = ["include"],
-        linkopts = [
-            "-pthread"
-        ] + select({
-            ":is_macos": [],
-            "//conditions:default": [ "-Wl,--no-as-needed -ldl" ],
+        linkopts = select({
+            ":is_macos": ["-pthread"],
+            ":is_windows": [
+                "Winmm.lib",
+                "DbgHelp.lib",
+                "Advapi32.lib",
+            ],
+            "//conditions:default": [ "-Wl,--no-as-needed -ldl -pthread" ],
         }) + select({
             ":should_add_rdynamic": [ "-rdynamic" ],
             "//conditions:default": [],

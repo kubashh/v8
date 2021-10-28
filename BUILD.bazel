@@ -39,9 +39,14 @@ config_setting(
     values = {"cpu": "darwin"},
 )
 
+config_setting(
+    name = "is_windows_x64",
+    values = {"cpu": "x64_windows"},
+)
+
 selects.config_setting_group(
     name = "is_x64",
-    match_any = [":is_k8", ":is_darwin"],
+    match_any = [":is_k8", ":is_darwin", ":is_windows_x64"],
 )
 
 config_setting(
@@ -88,6 +93,11 @@ config_setting(
     constraint_values = ["@platforms//os:macos"],
 )
 
+config_setting(
+    name = "is_windows",
+    constraint_values = ["@platforms//os:windows"],
+)
+
 selects.config_setting_group(
     name = "is_posix",
     match_any = [":is_linux", ":is_android", ":is_macos"],
@@ -114,6 +124,41 @@ config_setting(
     name = "is_android_x86",
     constraint_values = ["@platforms//os:android"],
     values = {"cpu": "x86"},
+)
+
+selects.config_setting_group(
+    name = "is_inline_asm_x64",
+    match_all = [":is_posix", ":is_x64"],
+)
+
+selects.config_setting_group(
+    name = "is_inline_asm_ia32",
+    match_all = [":is_posix", ":is_ia32"],
+)
+
+selects.config_setting_group(
+    name = "is_inline_asm_arm64",
+    match_all = [":is_posix", ":is_arm64"],
+)
+
+selects.config_setting_group(
+    name = "is_inline_asm_arm",
+    match_all = [":is_posix", ":is_arm"],
+)
+
+selects.config_setting_group(
+    name = "is_msvc_asm_x64",
+    match_all = [":is_windows", ":is_x64"],
+)
+
+selects.config_setting_group(
+    name = "is_msvc_asm_ia32",
+    match_all = [":is_windows", ":is_ia32"],
+)
+
+selects.config_setting_group(
+    name = "is_msvc_asm_arm64",
+    match_all = [":is_windows", ":is_arm64"],
 )
 
 # =================================================
@@ -303,6 +348,14 @@ v8_config(
         ":is_macos": [
             "V8_HAVE_TARGET_OS",
             "V8_TARGET_OS_MACOSX",
+        ],
+        ":is_windows": [
+            "V8_HAVE_TARGET_OS",
+            "V8_TARGET_OS_WIN",
+            "UNICODE",
+            "_UNICODE",
+            "_CRT_RAND_S",
+            "_WIN32_WINNT=0x0602",
         ],
     }) + select({
         ":is_v8_enable_pointer_compression": [
@@ -596,6 +649,11 @@ filegroup(
         "is_macos": [
             "src/base/debug/stack_trace_posix.cc",
             "src/base/platform/platform-macos.cc",
+        ],
+        "is_windows": [
+            "src/base/win32-headers.h",
+            "src/base/debug/stack_trace_win.cc",
+            "src/base/platform/platform-win32.cc",
         ],
     }),
     visibility = ["//visibility:public"],
@@ -2142,6 +2200,18 @@ filegroup(
         ],
         "//conditions:default": [],
     }) + select({
+        "is_windows": [
+            "src/diagnostics/unwinding-info-win64.cc",
+            "src/diagnostics/unwinding-info-win64.h",
+            "src/trap-handler/handler-inside-win.cc",
+            "src/trap-handler/handler-outside-win.cc",
+            "src/trap-handler/handler-inside-win.h",
+            # Needed on windows to work around https://github.com/bazelbuild/bazel/issues/6337
+            "third_party/zlib/google/compression_utils_portable.h",
+            "third_party/zlib/zlib.h",
+            "third_party/zlib/zconf.h",
+        ],
+    }) + select({
         ":is_v8_enable_webassembly": [
             "src/asmjs/asm-js.cc",
             "src/asmjs/asm-names.h",
@@ -2735,10 +2805,13 @@ filegroup(
         "src/heap/base/worklist.h",
         "src/heap/cppgc/globals.h",
     ] + select({
-        ":is_ia32": ["src/heap/base/asm/ia32/push_registers_asm.cc"],
-        ":is_x64": ["src/heap/base/asm/x64/push_registers_asm.cc"],
-        ":is_arm" : ["src/heap/base/asm/arm/push_registers_asm.cc"],
-        ":is_arm64": ["src/heap/base/asm/arm64/push_registers_asm.cc"],
+        ":is_inline_asm_ia32": ["src/heap/base/asm/ia32/push_registers_asm.cc"],
+        ":is_inline_asm_x64": ["src/heap/base/asm/x64/push_registers_asm.cc"],
+        ":is_inline_asm_arm" : ["src/heap/base/asm/arm/push_registers_asm.cc"],
+        ":is_inline_asm_arm64": ["src/heap/base/asm/arm64/push_registers_asm.cc"],
+        ":is_msvc_asm_ia32": ["src/heap/base/asm/ia32/push_registers_masm.S"],
+        ":is_msvc_asm_x64": ["src/heap/base/asm/x64/push_registers_masm.S"],
+        ":is_msvc_asm_arm64": ["src/heap/base/asm/arm64/push_registers_masm.S"],
     }),
 )
 
@@ -2783,6 +2856,7 @@ filegroup(
         "src/snapshot/embedded/platform-embedded-file-writer-mac.h",
         "src/snapshot/embedded/platform-embedded-file-writer-win.cc",
         "src/snapshot/embedded/platform-embedded-file-writer-win.h",
+        "src/diagnostics/unwinding-info-win64.h",
         "src/snapshot/mksnapshot.cc",
         "src/snapshot/snapshot-empty.cc",
         "src/init/setup-isolate-full.cc",
@@ -2970,7 +3044,8 @@ genrule(
         "src/inspector/protocol/Schema.h",
     ],
     message = "Generating inspector files",
-    cmd = "bazel/generate-inspector-files.sh $(@D)",
+    cmd = "bazel\\generate-inspector-files.sh $(@D)",
+    cmd_bat = "bazel\\generate-inspector-files.cmd $(@D)",
     local = 1,
 )
 
@@ -2979,6 +3054,7 @@ genrule(
     srcs = [],
     outs = ["builtins-generated/bytecodes-builtins-list.h"],
     cmd = "$(location :bytecode_builtins_list_generator) $@",
+    cmd_bat = "$(location :bytecode_builtins_list_generator) $@",
     tools = [":bytecode_builtins_list_generator"],
 )
 
@@ -2987,6 +3063,7 @@ genrule(
     srcs = [],
     outs = ["src/regexp/special-case.cc"],
     cmd = "$(location :regexp_special_case_generator) $@",
+    cmd_bat = "$(location :regexp_special_case_generator) $@",
     tools = [":regexp_special_case_generator"],
 )
 
@@ -3020,7 +3097,10 @@ cc_library(
     srcs = [
         ":torque_base_files",
     ],
-    copts = ["-fexceptions"],
+    copts = select({
+        ":is_posix": [ "-fexceptions" ],
+        "//conditions:default": [],
+    }),
     features = ["-use_header_modules"],
     visibility = ["//visibility:public"],
     deps = [
@@ -3122,7 +3202,10 @@ v8_binary(
         ":torque_base_files",
         "src/torque/torque.cc",
     ],
-    copts = [ "-fexceptions" ],
+    copts = select({
+        ":is_posix": [ "-fexceptions" ],
+        "//conditions:default": [],
+    }),
     features = [ "-use_header_modules" ],
     deps = [ "v8_libbase" ],
 )
