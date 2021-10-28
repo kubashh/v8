@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b94c3f67_e0daf7ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-10-28T12:56:35Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you need the runtime call for the ExecutionAccess lock. Isn\u0027t the lock only taken in isolate-\u003estack_guard()-\u003eSetStackLimit()?",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1a842cad_8d451dee",
@@ -14,6 +31,63 @@
       "writtenOn": "2021-10-28T12:14:27Z",
       "side": 1,
       "message": "Sorry, I forgot to also unset the thread-in-wasm flag after the call, this is ready for review now.",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcf0131d_d605bff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-10-28T12:56:35Z",
+      "side": 1,
+      "message": "I understand that we need the second call to Runtime::kWasmSyncStackLimit, but I don’t unterstand why the first one cannot be inlined into Runtime::kWasmAllocateContinuation. Could we not save one runtime call there?",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7ed911_97cac840",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3770,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-10-28T12:56:35Z",
+      "side": 1,
+      "message": "In follow-up work, rax will be the return register.",
+      "range": {
+        "startLine": 3770,
+        "startChar": 38,
+        "endLine": 3770,
+        "endChar": 41
+      },
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9102e0_33ba829e",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-10-28T12:56:35Z",
+      "side": 1,
+      "message": "I think you need a HandleScope here.",
       "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
