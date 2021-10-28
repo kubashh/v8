@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a842cad_8d451dee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-10-28T12:14:27Z",
+      "side": 1,
+      "message": "Sorry, I forgot to also unset the thread-in-wasm flag after the call, this is ready for review now.",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
