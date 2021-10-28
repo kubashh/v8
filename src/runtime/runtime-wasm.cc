@@ -692,5 +692,17 @@ RUNTIME_FUNCTION(Runtime_WasmAllocateContinuation) {
   return *target;
 }
 
+// Update the stack limit after a stack switch, and preserve pending interrupts.
+RUNTIME_FUNCTION(Runtime_WasmSyncStackLimit) {
+  CHECK(FLAG_experimental_wasm_stack_switching);
+  CONVERT_ARG_HANDLE_CHECKED(WasmInstanceObject, instance, 0);
+  auto jmpbuf = Managed<wasm::JumpBuffer>::cast(
+                    instance->active_continuation().managed_jmpbuf())
+                    .get();
+  uintptr_t limit = reinterpret_cast<uintptr_t>(jmpbuf->stack_limit);
+  isolate->stack_guard()->SetStackLimit(limit);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 }  // namespace internal
 }  // namespace v8
