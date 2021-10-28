@@ -16,6 +16,23 @@
       "message": "Hi Zhi, please help to review this CL, Thanks!",
       "revId": "454d9380ebad918f3f5eae2f2577a543ecb2e53b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5168d7d_a4e161df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-10-28T18:05:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "454d9380ebad918f3f5eae2f2577a543ecb2e53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
