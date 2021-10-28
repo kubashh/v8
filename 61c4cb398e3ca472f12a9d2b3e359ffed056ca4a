@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef2a8f8_00f48eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-28T07:18:34Z",
+      "side": 1,
+      "message": "lgtm, please avoid adding further reviewers for the same file. Folks are generally responsive within a few hours/a day.",
+      "revId": "61c4cb398e3ca472f12a9d2b3e359ffed056ca4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb9a611a_a9a04b9f",
+        "filename": "src/execution/riscv64/simulator-riscv64.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-10-28T07:18:34Z",
+      "side": 1,
+      "message": "static_assert?",
+      "range": {
+        "startLine": 892,
+        "startChar": 4,
+        "endLine": 892,
+        "endChar": 10
+      },
+      "revId": "61c4cb398e3ca472f12a9d2b3e359ffed056ca4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
