@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f46f5b3d_5adcad38",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-10-28T13:01:17Z",
+      "side": 1,
+      "message": "It\u0027s also taken by interrupt requests: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/stack-guard.cc;drc\u003d3fc4de00a2477163db394444e51eff3a7a7eeeef;l\u003d137",
+      "parentUuid": "b94c3f67_e0daf7ed",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1a842cad_8d451dee",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31437eef_db39d78c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3770,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-10-28T13:01:17Z",
+      "side": 1,
+      "message": "Ack, I will update it then.",
+      "parentUuid": "4c7ed911_97cac840",
+      "range": {
+        "startLine": 3770,
+        "startChar": 38,
+        "endLine": 3770,
+        "endChar": 41
+      },
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e9102e0_33ba829e",
@@ -88,6 +130,24 @@
       "writtenOn": "2021-10-28T12:56:35Z",
       "side": 1,
       "message": "I think you need a HandleScope here.",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daec5517_b8998c93",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-10-28T13:01:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e9102e0_33ba829e",
       "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
