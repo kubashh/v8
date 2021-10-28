@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be96a879_59dfd6b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1526172
+      },
+      "writtenOn": "2021-10-28T16:45:11Z",
+      "side": 1,
+      "message": "I noticed that this is conflicting with a change set merged yesterday. Are there any more bazel v8 plans in the next week or so? Just so I don\u0027t get another major conflicting change.",
+      "revId": "4a94abfae342c3baaf0026b9ac28b789ab1cedde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
