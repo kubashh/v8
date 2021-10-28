@@ -50,6 +50,46 @@
       "message": "heap/ lgtm",
       "revId": "f06222cd61f50109ad337b472dfef87edbd88278",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdff18ed_2e0006f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-28T15:20:11Z",
+      "side": 1,
+      "message": "LGTM for src/compiler/backend, thanks!\nGreat work fixing the arm issue, too!",
+      "revId": "f06222cd61f50109ad337b472dfef87edbd88278",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4045c08a_abe287af",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-28T15:20:11Z",
+      "side": 1,
+      "message": "nit: it would be awesome to link here to the docs you cited when discussing this in the chat.",
+      "range": {
+        "startLine": 815,
+        "startChar": 11,
+        "endLine": 815,
+        "endChar": 34
+      },
+      "revId": "f06222cd61f50109ad337b472dfef87edbd88278",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
