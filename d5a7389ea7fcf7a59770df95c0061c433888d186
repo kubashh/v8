@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de8a8e2_b3c95fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-10-28T13:55:59Z",
+      "side": 1,
+      "message": "I thought this should happen after loading the jump buffer, but on second thought I think you\u0027re right that it\u0027s safe to do this before to save one runtime call. Done.",
+      "parentUuid": "dcf0131d_d605bff6",
+      "revId": "d5a7389ea7fcf7a59770df95c0061c433888d186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c7ed911_97cac840",
