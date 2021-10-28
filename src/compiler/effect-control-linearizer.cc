@@ -5434,7 +5434,7 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
       call_descriptor, c_arg_count + n.FastCallExtraInputCount() + 1, inputs,
       inputs[0], c_signature, c_arg_count, stack_slot);
 
-  Node* fast_call_result;
+  Node* fast_call_result = nullptr;
   switch (c_signature->ReturnInfo().GetType()) {
     case CTypeInfo::Type::kVoid:
       fast_call_result = __ UndefinedConstant();
@@ -5467,16 +5467,19 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
       UNREACHABLE();
   }
 
-  if (!c_signature->HasOptions()) return fast_call_result;
-
-  DCHECK_NOT_NULL(stack_slot);
-  Node* load =
-      __ Load(MachineType::Int32(), stack_slot,
-              static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)));
-
-  Node* is_zero = __ Word32Equal(load, __ Int32Constant(0));
   auto merge = __ MakeLabel(MachineRepresentation::kTagged);
-  __ Branch(is_zero, &if_success, &if_error);
+  if (c_signature->HasOptions()) {
+    DCHECK_NOT_NULL(stack_slot);
+    Node* load = __ Load(
+        MachineType::Int32(), stack_slot,
+        static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)));
+
+    Node* is_zero = __ Word32Equal(load, __ Int32Constant(0));
+    __ Branch(is_zero, &if_success, &if_error);
+  } else {
+    Node* is_zero = __ WordEqual(c_call_result, __ IntPtrConstant(0));
+    __ Branch(is_zero, &if_success, &if_error);
+  }
 
   __ Bind(&if_success);
   __ Goto(&merge, fast_call_result);
