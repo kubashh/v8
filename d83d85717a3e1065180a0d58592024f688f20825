@@ -16,6 +16,92 @@
       "message": "Hi Tobias, PTAL at this fix + test for the case where we don\u0027t request fallback. The functions converting the arguments might still follow the error case, so we need to generate both in this case, too.",
       "revId": "d83d85717a3e1065180a0d58592024f688f20825",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1fca2be_f9a76fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-29T09:17:54Z",
+      "side": 1,
+      "message": "LGTM, only got very minor nits, feel free to ignore them.",
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27727d72_d5842776",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28886,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-29T09:17:54Z",
+      "side": 1,
+      "message": "nit: static_cast is enough to cast from void*.",
+      "range": {
+        "startLine": 28886,
+        "startChar": 22,
+        "endLine": 28886,
+        "endChar": 38
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf4c1d0_1b7ec883",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28999,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-29T09:17:54Z",
+      "side": 1,
+      "message": "nit: This cast is not actually necessary.",
+      "range": {
+        "startLine": 28999,
+        "startChar": 43,
+        "endLine": 28999,
+        "endChar": 66
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04ee4d75_b914e4ff",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29011,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-10-29T09:17:54Z",
+      "side": 1,
+      "message": "nit: How about using an std::unique_ptr instead?",
+      "range": {
+        "startLine": 29011,
+        "startChar": 2,
+        "endLine": 29011,
+        "endChar": 12
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
