@@ -8700,6 +8700,13 @@ Isolate::DisallowJavascriptExecutionScope::~DisallowJavascriptExecutionScope() {
   }
 }
 
+Isolate::DisallowJavascriptExecutionScope::DisallowJavascriptExecutionScope(
+    DisallowJavascriptExecutionScope&&) = default;
+
+Isolate::DisallowJavascriptExecutionScope&
+Isolate::DisallowJavascriptExecutionScope::operator=(
+    Isolate::DisallowJavascriptExecutionScope&&) = default;
+
 Isolate::AllowJavascriptExecutionScope::AllowJavascriptExecutionScope(
     Isolate* isolate)
     : isolate_(isolate) {
@@ -8718,6 +8725,13 @@ Isolate::AllowJavascriptExecutionScope::~AllowJavascriptExecutionScope() {
   i::NoDumpOnJavascriptExecution::Close(i_isolate, was_execution_allowed_dump_);
 }
 
+Isolate::AllowJavascriptExecutionScope::AllowJavascriptExecutionScope(
+    AllowJavascriptExecutionScope&&) = default;
+
+Isolate::AllowJavascriptExecutionScope&
+Isolate::AllowJavascriptExecutionScope::operator=(
+    Isolate::AllowJavascriptExecutionScope&&) = default;
+
 Isolate::SuppressMicrotaskExecutionScope::SuppressMicrotaskExecutionScope(
     Isolate* isolate, MicrotaskQueue* microtask_queue)
     : isolate_(reinterpret_cast<i::Isolate*>(isolate)),
@@ -8733,6 +8747,13 @@ Isolate::SuppressMicrotaskExecutionScope::~SuppressMicrotaskExecutionScope() {
   isolate_->thread_local_top()->DecrementCallDepth(this);
 }
 
+Isolate::SuppressMicrotaskExecutionScope::SuppressMicrotaskExecutionScope(
+    SuppressMicrotaskExecutionScope&&) = default;
+
+Isolate::SuppressMicrotaskExecutionScope&
+Isolate::SuppressMicrotaskExecutionScope::operator=(
+    Isolate::SuppressMicrotaskExecutionScope&&) = default;
+
 Isolate::SafeForTerminationScope::SafeForTerminationScope(v8::Isolate* isolate)
     : isolate_(reinterpret_cast<i::Isolate*>(isolate)),
       prev_value_(isolate_->next_v8_call_is_safe_for_termination()) {
@@ -8742,6 +8763,12 @@ Isolate::SafeForTerminationScope::SafeForTerminationScope(v8::Isolate* isolate)
 Isolate::SafeForTerminationScope::~SafeForTerminationScope() {
   isolate_->set_next_v8_call_is_safe_for_termination(prev_value_);
 }
+
+Isolate::SafeForTerminationScope::SafeForTerminationScope(
+    Isolate::SafeForTerminationScope&&) = default;
+
+Isolate::SafeForTerminationScope& Isolate::SafeForTerminationScope::operator=(
+    Isolate::SafeForTerminationScope&&) = default;
 
 i::Address* Isolate::GetDataFromSnapshotOnce(size_t index) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
