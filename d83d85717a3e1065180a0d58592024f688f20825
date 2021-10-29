@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "530f2b2c_36b48e92",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28886,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-29T11:50:52Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "27727d72_d5842776",
+      "range": {
+        "startLine": 28886,
+        "startChar": 22,
+        "endLine": 28886,
+        "endChar": 38
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbf4c1d0_1b7ec883",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "972e4580_b4baeecc",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 28999,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-29T11:50:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbf4c1d0_1b7ec883",
+      "range": {
+        "startLine": 28999,
+        "startChar": 43,
+        "endLine": 28999,
+        "endChar": 66
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04ee4d75_b914e4ff",
@@ -94,6 +142,30 @@
       "writtenOn": "2021-10-29T09:17:54Z",
       "side": 1,
       "message": "nit: How about using an std::unique_ptr instead?",
+      "range": {
+        "startLine": 29011,
+        "startChar": 2,
+        "endLine": 29011,
+        "endChar": 12
+      },
+      "revId": "d83d85717a3e1065180a0d58592024f688f20825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1463968_8b59b4f4",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29011,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-29T11:50:52Z",
+      "side": 1,
+      "message": "I followed suit from the other tests, but a unique_ptr is better indeed.",
+      "parentUuid": "04ee4d75_b914e4ff",
       "range": {
         "startLine": 29011,
         "startChar": 2,

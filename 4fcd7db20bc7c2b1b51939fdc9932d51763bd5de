@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c4589d1_3bdd5eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-10-29T11:50:52Z",
+      "side": 1,
+      "message": "Thanks! After making the cctest more robust, I found out the slow path is actually called an extra time in the no-fallback case, because I had swapped the condition in ECL.",
+      "revId": "4fcd7db20bc7c2b1b51939fdc9932d51763bd5de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
