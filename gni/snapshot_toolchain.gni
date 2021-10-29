@@ -118,6 +118,7 @@ assert(v8_snapshot_toolchain != "",
 # the snapshot toolchain is the target toolchain and, hence, can't be used.
 v8_generator_toolchain = v8_snapshot_toolchain
 if (host_cpu == "x64" &&
-    (v8_current_cpu == "mips" || v8_current_cpu == "mips64")) {
+    (v8_current_cpu == "mips" || v8_current_cpu == "mips64" ||
+     v8_current_cpu == "x86")) {
   v8_generator_toolchain = "//build/toolchain/linux:clang_x64"
 }
