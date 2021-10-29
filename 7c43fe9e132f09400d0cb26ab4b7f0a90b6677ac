@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ffb74c7_936b2b96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-10-29T11:26:15Z",
+      "side": 1,
+      "message": "PTAL! The test seems to be passing since last update:\nhttps://fusion2.corp.google.com/invocations/5eb9527c-0c10-48d2-852c-cc501aabefe7/targets/%2F%2Fthird_party%2Fv8%2FHEAD:icu%2Fmjsunit/log",
+      "revId": "7c43fe9e132f09400d0cb26ab4b7f0a90b6677ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
