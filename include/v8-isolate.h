@@ -299,9 +299,10 @@ class V8_EXPORT Isolate {
 
     ~Scope() { isolate_->Exit(); }
 
-    // Prevent copying of Scope objects.
     Scope(const Scope&) = delete;
     Scope& operator=(const Scope&) = delete;
+    Scope(Scope&&) = default;
+    Scope& operator=(Scope&&) = default;
 
    private:
     Isolate* const isolate_;
@@ -317,11 +318,13 @@ class V8_EXPORT Isolate {
     DisallowJavascriptExecutionScope(Isolate* isolate, OnFailure on_failure);
     ~DisallowJavascriptExecutionScope();
 
-    // Prevent copying of Scope objects.
     DisallowJavascriptExecutionScope(const DisallowJavascriptExecutionScope&) =
         delete;
     DisallowJavascriptExecutionScope& operator=(
         const DisallowJavascriptExecutionScope&) = delete;
+    DisallowJavascriptExecutionScope(DisallowJavascriptExecutionScope&&);
+    DisallowJavascriptExecutionScope& operator=(
+        DisallowJavascriptExecutionScope&&);
 
    private:
     OnFailure on_failure_;
@@ -340,11 +343,13 @@ class V8_EXPORT Isolate {
     explicit AllowJavascriptExecutionScope(Isolate* isolate);
     ~AllowJavascriptExecutionScope();
 
-    // Prevent copying of Scope objects.
     AllowJavascriptExecutionScope(const AllowJavascriptExecutionScope&) =
         delete;
     AllowJavascriptExecutionScope& operator=(
         const AllowJavascriptExecutionScope&) = delete;
+    AllowJavascriptExecutionScope(AllowJavascriptExecutionScope&&) = default;
+    AllowJavascriptExecutionScope& operator=(AllowJavascriptExecutionScope&&) =
+        default;
 
    private:
     Isolate* isolate_;
@@ -363,11 +368,13 @@ class V8_EXPORT Isolate {
         Isolate* isolate, MicrotaskQueue* microtask_queue = nullptr);
     ~SuppressMicrotaskExecutionScope();
 
-    // Prevent copying of Scope objects.
     SuppressMicrotaskExecutionScope(const SuppressMicrotaskExecutionScope&) =
         delete;
     SuppressMicrotaskExecutionScope& operator=(
         const SuppressMicrotaskExecutionScope&) = delete;
+    SuppressMicrotaskExecutionScope(SuppressMicrotaskExecutionScope&&);
+    SuppressMicrotaskExecutionScope& operator=(
+        SuppressMicrotaskExecutionScope&&);
 
    private:
     internal::Isolate* const isolate_;
@@ -386,9 +393,10 @@ class V8_EXPORT Isolate {
     explicit SafeForTerminationScope(v8::Isolate* isolate);
     ~SafeForTerminationScope();
 
-    // Prevent copying of Scope objects.
     SafeForTerminationScope(const SafeForTerminationScope&) = delete;
     SafeForTerminationScope& operator=(const SafeForTerminationScope&) = delete;
+    SafeForTerminationScope(SafeForTerminationScope&&);
+    SafeForTerminationScope& operator=(SafeForTerminationScope&&);
 
    private:
     internal::Isolate* isolate_;
