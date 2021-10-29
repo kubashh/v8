@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e52a75d2_f3603654",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "lgtm with nits and one Q regarding TSAN-aware stores",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886170bd_e7b3922c",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "It might be better code size wise to also export cage_end_address.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24e496d_39bb4bee",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "I think these comparisons should be unsigned: UintPtrXXX.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "351bcb79_122a9243",
+        "filename": "src/codegen/machine-type.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "Here and below: please don\u0027t put case kCagedPointer between kCompressedXX cases.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb1addbd_435781c3",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "Doesn\u0027t seem to be used by this CL.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d6e4ec9_6e9d79de",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "Just to be on the safe side:\n  DCHECK(!AreAliased(value, kScratchRegister));\n  DCHECK(!dst_field_operand.AddressUsesRegister(kScratchRegister));",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4caee360_8e069165",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T10:51:35Z",
+      "side": 1,
+      "message": "Given this, I wonder if encoding caged pointer will work correctly. Is it guaranteed that kPtrComprCageBaseRegister will always be initialized?",
+      "range": {
+        "startLine": 550,
+        "startChar": 5,
+        "endLine": 550,
+        "endChar": 63
+      },
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
