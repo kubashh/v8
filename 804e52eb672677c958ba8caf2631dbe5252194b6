@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88709fb2_b9c58c3e",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Sounds good. I also now switched these ExternalReferences to use the V8VirtualMemoryCage instead of the pointer compression cage, which should be more appropriate as well.",
+      "parentUuid": "886170bd_e7b3922c",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f24e496d_39bb4bee",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-10-29T10:51:35Z",
       "side": 1,
       "message": "I think these comparisons should be unsigned: UintPtrXXX.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c187fb71_18d2a060",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f24e496d_39bb4bee",
       "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a22a314f_0001f572",
+        "filename": "src/codegen/machine-type.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Fixed it here, but that seems to be the only location in this file, or did you have other files in mind as well?",
+      "parentUuid": "351bcb79_122a9243",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb1addbd_435781c3",
         "filename": "src/codegen/machine-type.h",
         "patchSetId": 25
@@ -82,6 +136,24 @@
       "writtenOn": "2021-10-29T10:51:35Z",
       "side": 1,
       "message": "Doesn\u0027t seem to be used by this CL.",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4447505_27023fce",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb1addbd_435781c3",
       "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac2c015_1493e019",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d6e4ec9_6e9d79de",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4caee360_8e069165",
@@ -116,6 +206,30 @@
       "writtenOn": "2021-10-29T10:51:35Z",
       "side": 1,
       "message": "Given this, I wonder if encoding caged pointer will work correctly. Is it guaranteed that kPtrComprCageBaseRegister will always be initialized?",
+      "range": {
+        "startLine": 550,
+        "startChar": 5,
+        "endLine": 550,
+        "endChar": 63
+      },
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e55fcbef_e51affce",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-10-29T12:27:11Z",
+      "side": 1,
+      "message": "Yes, I think this should be fine. We use the  kPtrComprCageBaseRegister, not the kRootRegister for CagedPointers. If that isn\u0027t initialized, then I guess even compressed pointers wouldn\u0027t work?",
+      "parentUuid": "4caee360_8e069165",
       "range": {
         "startLine": 550,
         "startChar": 5,
