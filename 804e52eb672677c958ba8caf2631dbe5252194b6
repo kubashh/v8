@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c119923_0e966f38",
+        "filename": "src/codegen/machine-type.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T12:41:45Z",
+      "side": 1,
+      "message": "I meant the other files too.",
+      "parentUuid": "a22a314f_0001f572",
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb1addbd_435781c3",
         "filename": "src/codegen/machine-type.h",
         "patchSetId": 25
@@ -230,6 +248,30 @@
       "side": 1,
       "message": "Yes, I think this should be fine. We use the  kPtrComprCageBaseRegister, not the kRootRegister for CagedPointers. If that isn\u0027t initialized, then I guess even compressed pointers wouldn\u0027t work?",
       "parentUuid": "4caee360_8e069165",
+      "range": {
+        "startLine": 550,
+        "startChar": 5,
+        "endLine": 550,
+        "endChar": 63
+      },
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "904a32df_02c2c200",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-10-29T12:41:45Z",
+      "side": 1,
+      "message": "Ah, right.",
+      "parentUuid": "e55fcbef_e51affce",
       "range": {
         "startLine": 550,
         "startChar": 5,
