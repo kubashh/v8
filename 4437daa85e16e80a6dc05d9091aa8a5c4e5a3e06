@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3b0759_defc8d9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-10-29T08:56:31Z",
+      "side": 1,
+      "message": "Do you know how we could best document the stack switching algorithm? I mean, when we set the new stack limit, why the order of instructions is okay, why there is no data race, ... It would be good to document that in the code somewhere, so that this information can be found. But I don\u0027t know where the best place would be.",
+      "revId": "4437daa85e16e80a6dc05d9091aa8a5c4e5a3e06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
