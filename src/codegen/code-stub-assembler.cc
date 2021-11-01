@@ -1563,7 +1563,33 @@ void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
   StoreObjectFieldNoWriteBarrier<CagedPtrT>(object, offset, pointer);
 }
 
+TNode<CagedPtrT> CodeStubAssembler::NullCagedPointer() {
+  // TODO(saelo) instead, expose a "DecodeCagedPointer" function, then pass it
+  // -1?
+  TNode<ExternalReference> cage_base_address =
+      ExternalConstant(ExternalReference::virtual_memory_cage_base_address());
+  TNode<IntPtrT> cage_base = Load<IntPtrT>(cage_base_address);
+  TNode<IntPtrT> cage_end =
+      IntPtrAdd(cage_base, IntPtrConstant(kVirtualMemoryCageSize - 1));
+  return ReinterpretCast<CagedPtrT>(cage_end);
+}
+
 #endif  // V8_CAGED_POINTERS
+
+TNode<BoolT> CodeStubAssembler::IsEmptyBackingStore(
+    TNode<RawPtrT> backing_store) {
+#ifdef V8_CAGED_POINTERS
+  TNode<ExternalReference> cage_base_address =
+      ExternalConstant(ExternalReference::virtual_memory_cage_base_address());
+  TNode<IntPtrT> cage_base = Load<IntPtrT>(cage_base_address);
+  TNode<IntPtrT> cage_end =
+      IntPtrAdd(cage_base, IntPtrConstant(kVirtualMemoryCageSize));
+  TNode<IntPtrT> empty_backing_store = IntPtrSub(cage_end, IntPtrConstant(1));
+  return WordEqual(backing_store, empty_backing_store);
+#else
+  return WordEqual(backing_store, IntPtrConstant(0));
+#endif
+}
 
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
@@ -13830,8 +13856,13 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
+#ifdef V8_CAGED_POINTERS
+  return ReinterpretCast<RawPtrT>(LoadCagedPointerFromObject(
+      array_buffer, JSArrayBuffer::kBackingStoreOffset));
+#else
   return LoadObjectField<RawPtrT>(array_buffer,
                                   JSArrayBuffer::kBackingStoreOffset);
+#endif
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(
@@ -14069,7 +14100,10 @@ TNode<JSArrayBuffer> CodeStubAssembler::GetTypedArrayBuffer(
   TNode<JSArrayBuffer> buffer = LoadJSArrayBufferViewBuffer(array);
   GotoIf(IsDetachedBuffer(buffer), &call_runtime);
   TNode<RawPtrT> backing_store = LoadJSArrayBufferBackingStorePtr(buffer);
-  GotoIf(WordEqual(backing_store, IntPtrConstant(0)), &call_runtime);
+  // Call into the runtime if this is an on-heap typed array, in which case the
+  // backing store will be empty.
+  // GotoIf(WordEqual(backing_store, IntPtrConstant(0)), &call_runtime);
+  GotoIf(IsEmptyBackingStore(backing_store), &call_runtime);
   var_result = buffer;
   Goto(&done);
 

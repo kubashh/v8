@@ -142,7 +142,15 @@ V8_EXPORT_PRIVATE V8VirtualMemoryCage* GetProcessWideVirtualMemoryCage();
 #endif
 
 V8_INLINE bool IsValidBackingStorePointer(void* ptr) {
-#ifdef V8_VIRTUAL_MEMORY_CAGE
+  // TODO(saelo) remove this function and instead make a IsValidCagedPointer
+  // function once backing stores are always referenced through a CagedPointer
+  // when the cage is enabled.
+#ifdef V8_CAGED_POINTERS
+  // When the heap sandbox is on, backing stores are referenced through caged
+  // pointers and so nullptr is not a valid backing store pointer.
+  Address addr = reinterpret_cast<Address>(ptr);
+  return GetProcessWideVirtualMemoryCage()->Contains(addr);
+#elif V8_VIRTUAL_MEMORY_CAGE
   Address addr = reinterpret_cast<Address>(ptr);
   return kAllowBackingStoresOutsideCage || addr == kNullAddress ||
          GetProcessWideVirtualMemoryCage()->Contains(addr);
