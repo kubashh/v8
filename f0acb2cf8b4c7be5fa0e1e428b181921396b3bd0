@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d17cdf8_0cc1d0cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-01T18:03:58Z",
+      "side": 1,
+      "message": "Thanks for fixing this!",
+      "revId": "f0acb2cf8b4c7be5fa0e1e428b181921396b3bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f00c0759_90b18bdc",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-01T18:03:58Z",
+      "side": 1,
+      "message": "The underlying type of these enums is uint32_t, so casting to int is not guaranteed to work by the C++ standard. Therefore, using uint32_t here would be better.",
+      "range": {
+        "startLine": 1175,
+        "startChar": 28,
+        "endLine": 1175,
+        "endChar": 31
+      },
+      "revId": "f0acb2cf8b4c7be5fa0e1e428b181921396b3bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
