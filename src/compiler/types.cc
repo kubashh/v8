@@ -1171,8 +1171,9 @@ Handle<TurbofanType> Type::AllocateOnHeap(Factory* factory) {
   }
 }
 
-#define VERIFY_TORQUE_BITSET_AGREEMENT(Name, _) \
-  STATIC_ASSERT(BitsetType::k##Name == TurbofanTypeBits::k##Name);
+#define VERIFY_TORQUE_BITSET_AGREEMENT(Name, _)          \
+  STATIC_ASSERT(static_cast<int>(BitsetType::k##Name) == \
+                static_cast<int>(TurbofanTypeBits::k##Name));
 INTERNAL_BITSET_TYPE_LIST(VERIFY_TORQUE_BITSET_AGREEMENT)
 PROPER_ATOMIC_BITSET_TYPE_LIST(VERIFY_TORQUE_BITSET_AGREEMENT)
 #undef VERIFY_TORQUE_BITSET_AGREEMENT
