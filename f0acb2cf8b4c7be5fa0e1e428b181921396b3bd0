@@ -39,6 +39,30 @@
       },
       "revId": "f0acb2cf8b4c7be5fa0e1e428b181921396b3bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a1baf39_8f3edfaf",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-11-01T18:07:42Z",
+      "side": 1,
+      "message": "Thank you for reviewing, I\u0027ve modified it to use uint32_t instead.",
+      "parentUuid": "f00c0759_90b18bdc",
+      "range": {
+        "startLine": 1175,
+        "startChar": 28,
+        "endLine": 1175,
+        "endChar": 31
+      },
+      "revId": "f0acb2cf8b4c7be5fa0e1e428b181921396b3bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
