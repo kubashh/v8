@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "658b7b27_def74e19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-02T09:57:18Z",
+      "side": 1,
+      "message": "lgtm w/ comment but I do not have powers here\n\nJakob, can you have a look?",
+      "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548a25c6_05d49534",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-02T09:57:18Z",
+      "side": 1,
+      "message": "Instead of an explicit reset() call, can we just put the relevant parts in a lexicval scope?",
+      "range": {
+        "startLine": 187,
+        "startChar": 23,
+        "endLine": 187,
+        "endChar": 28
+      },
+      "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
