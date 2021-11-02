@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a78f4cec_90e1d654",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-02T09:08:39Z",
+      "side": 1,
+      "message": "If we move the isolate to another Scope, we should also clear it and check whether it\u0027s null here to avoid the moved-from Scope from also exiting it (the default move for pointers doesn\u0027t clear them)",
+      "range": {
+        "startLine": 300,
+        "startChar": 4,
+        "endLine": 300,
+        "endChar": 34
+      },
+      "revId": "30521fa8f14fbf609f111ffb3917c738cdcfc2a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
