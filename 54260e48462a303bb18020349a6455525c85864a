@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b48623ba_7d411f91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-11-02T21:47:31Z",
+      "side": 1,
+      "message": "The correctness fuzzer found a 2-year-old bug :-)\n\nPTAL.",
+      "revId": "54260e48462a303bb18020349a6455525c85864a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d22c566d_805d1a68",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-11-02T21:47:31Z",
+      "side": 1,
+      "message": "The new code below is copied from here. We need the check in both places.",
+      "range": {
+        "startLine": 555,
+        "startChar": 6,
+        "endLine": 555,
+        "endChar": 19
+      },
+      "revId": "54260e48462a303bb18020349a6455525c85864a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
