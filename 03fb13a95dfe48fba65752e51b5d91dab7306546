@@ -18,6 +18,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "980d9484_bc48f8c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-02T10:08:24Z",
+      "side": 1,
+      "message": "lgtm, thanks! I guess you\u0027ve seen https://docs.google.com/document/d/1ONPfnjVXLT-DD17ygavAhX28RIiBGbyKu8_kp2aOhTo/edit already?",
+      "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fde2ad4_4b11a054",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-02T10:08:24Z",
+      "side": 1,
+      "message": "Minor point, but the ExtractFoo calls are not part of decompression so I\u0027d move the NestedTimedHistogramScope below this block.",
+      "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "548a25c6_05d49534",
@@ -37,6 +71,23 @@
         "endLine": 187,
         "endChar": 28
       },
+      "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaef8daf_58d83465",
+        "filename": "src/snapshot/snapshot.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-02T10:08:24Z",
+      "side": 1,
+      "message": "Might also want to track the context snapshot decompression.",
       "revId": "03fb13a95dfe48fba65752e51b5d91dab7306546",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
