@@ -673,6 +673,7 @@ class Heap {
   }
 
   void DisableUnprotectedMemoryChunksRegistry() {
+    DCHECK(unprotected_memory_chunks_registry_enabled_);
     unprotected_memory_chunks_registry_enabled_ = false;
   }
 
