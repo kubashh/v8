@@ -298,6 +298,30 @@
       },
       "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39820dc1_08440ba7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-02T13:43:22Z",
+      "side": 1,
+      "message": "+1 to Igor\u0027s comment, the kRootRegister and kPtrComprCageRegister are initialized together: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/x64/macro-assembler-x64.h;l\u003d496;drc\u003dafd1554963d2bcb5de8adaf3a5bda10a8223bb07. Do we understand why it (seems to) work nonetheless?",
+      "parentUuid": "904a32df_02c2c200",
+      "range": {
+        "startLine": 550,
+        "startChar": 5,
+        "endLine": 550,
+        "endChar": 63
+      },
+      "revId": "804e52eb672677c958ba8caf2631dbe5252194b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
