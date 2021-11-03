@@ -56,6 +56,30 @@
       },
       "revId": "a078b36d58595c99b1bd0d5e86f431661264a1f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0f8d22c_9ea4a158",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-03T14:49:51Z",
+      "side": 1,
+      "message": "I tried that but we would need to get into the if statement even if tester_close was false, so I checked if it exists instead.",
+      "parentUuid": "a49ef7ff_84af6a68",
+      "range": {
+        "startLine": 489,
+        "startChar": 20,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "a078b36d58595c99b1bd0d5e86f431661264a1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
