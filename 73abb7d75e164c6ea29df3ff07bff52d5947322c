@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d94908b_a4517a24",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 4
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-03T21:41:07Z",
+      "side": 1,
+      "message": "Note that the skip is sensitive to deopt... maybe only to deopt and not the other fuzzers.",
+      "range": {
+        "startLine": 1085,
+        "startChar": 2,
+        "endLine": 1085,
+        "endChar": 40
+      },
+      "revId": "73abb7d75e164c6ea29df3ff07bff52d5947322c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
