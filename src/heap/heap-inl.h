@@ -791,6 +791,7 @@ AlwaysAllocateScopeForTesting::AlwaysAllocateScopeForTesting(Heap* heap)
 
 CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  // TODO(victorgomes): I should guarantee that I am doing a GC here.
   if (heap_->write_protect_code_memory()) {
     heap_->increment_code_space_memory_modification_scope_depth();
     heap_->code_space()->SetCodeModificationPermissions();
@@ -823,7 +824,6 @@ CodePageCollectionMemoryModificationScope::
     : heap_(heap) {
   if (heap_->write_protect_code_memory() &&
       !heap_->code_space_memory_modification_scope_depth()) {
-    heap_->EnableUnprotectedMemoryChunksRegistry();
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
 }
@@ -832,10 +832,10 @@ CodePageCollectionMemoryModificationScope::
     ~CodePageCollectionMemoryModificationScope() {
   if (heap_->write_protect_code_memory() &&
       !heap_->code_space_memory_modification_scope_depth()) {
-    heap_->DecrementCodePageCollectionMemoryModificationScopeDepth();
-    if (heap_->code_page_collection_memory_modification_scope_depth() == 0) {
+    uintptr_t depth =
+        heap_->DecrementCodePageCollectionMemoryModificationScopeDepth();
+    if (depth == 0) {
       heap_->ProtectUnprotectedMemoryChunks();
-      heap_->DisableUnprotectedMemoryChunksRegistry();
     }
   }
 }

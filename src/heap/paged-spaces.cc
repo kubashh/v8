@@ -341,6 +341,8 @@ base::Optional<std::pair<Address, size_t>> PagedSpace::ExpandBackground(
   AddPage(page);
   if (identity() == CODE_SPACE || identity() == CODE_LO_SPACE) {
     heap()->isolate()->AddCodeMemoryChunk(page);
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
   }
   Address object_start = page->area_start();
   CHECK_LE(size_in_bytes, page->area_size());
@@ -505,6 +507,7 @@ void PagedSpace::SetReadable() {
 }
 
 void PagedSpace::SetReadAndExecutable() {
+  base::MutexGuard lock(&space_mutex_);
   DCHECK(identity() == CODE_SPACE);
   for (Page* page : *this) {
     CHECK(heap()->memory_allocator()->IsMemoryChunkExecutable(page));
@@ -513,6 +516,7 @@ void PagedSpace::SetReadAndExecutable() {
 }
 
 void PagedSpace::SetCodeModificationPermissions() {
+  base::MutexGuard lock(&space_mutex_);
   DCHECK(identity() == CODE_SPACE);
   for (Page* page : *this) {
     CHECK(heap()->memory_allocator()->IsMemoryChunkExecutable(page));
@@ -682,6 +686,10 @@ PagedSpace::TryAllocationFromFreeListBackground(LocalHeap* local_heap,
   Address limit = new_node.address() + used_size_in_bytes;
   DCHECK_LE(limit, end);
   DCHECK_LE(min_size_in_bytes, limit - start);
+  if (identity() == CODE_SPACE) {
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
+  }
   if (limit != end) {
     Free(limit, end - limit, SpaceAccountingMode::kSpaceAccounted);
   }

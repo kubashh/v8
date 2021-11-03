@@ -186,6 +186,10 @@ AllocationResult OldLargeObjectSpace::AllocateRawBackground(
       heap()->incremental_marking()->black_allocation(),
       heap()->incremental_marking()->marking_state()->IsBlack(object));
   page->InitializationMemoryFence();
+  if (identity() == CODE_LO_SPACE) {
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
+  }
   return object;
 }
 
