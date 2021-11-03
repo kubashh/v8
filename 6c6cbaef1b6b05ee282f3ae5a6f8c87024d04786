@@ -33,6 +33,23 @@
       "message": "heap/ lgtm, didn\u0027t look at the rest",
       "revId": "6c6cbaef1b6b05ee282f3ae5a6f8c87024d04786",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33c9da3b_33277673",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-03T11:38:05Z",
+      "side": 1,
+      "message": "constexpr",
+      "revId": "6c6cbaef1b6b05ee282f3ae5a6f8c87024d04786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
