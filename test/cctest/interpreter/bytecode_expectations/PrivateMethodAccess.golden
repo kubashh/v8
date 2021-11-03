@@ -56,6 +56,14 @@ bytecodes: [
   /*   44 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   49 S> */ B(Wide), B(LdaSmi), I16(283),
                 B(Star1),
+<<<<<<< HEAD
+=======
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   44 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   49 S> */ B(Wide), B(LdaSmi), I16(285),
+                B(Star3),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star2),
   /*   57 E> */ B(CallRuntime), U16(Runtime::kNewTypeError), R(1), U8(2),
@@ -87,6 +95,14 @@ bytecodes: [
   /*   44 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   49 S> */ B(Wide), B(LdaSmi), I16(283),
                 B(Star1),
+<<<<<<< HEAD
+=======
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   44 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   49 S> */ B(Wide), B(LdaSmi), I16(285),
+                B(Star3),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star2),
                 B(CallRuntime), U16(Runtime::kNewTypeError), R(1), U8(2),

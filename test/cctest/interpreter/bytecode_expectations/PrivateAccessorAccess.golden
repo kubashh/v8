@@ -83,6 +83,14 @@ bytecodes: [
   /*   48 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   53 S> */ B(Wide), B(LdaSmi), I16(285),
                 B(Star1),
+<<<<<<< HEAD
+=======
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   48 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   53 S> */ B(Wide), B(LdaSmi), I16(287),
+                B(Star3),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star2),
                 B(CallRuntime), U16(Runtime::kNewTypeError), R(1), U8(2),
@@ -113,6 +121,14 @@ bytecodes: [
   /*   41 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   46 S> */ B(Wide), B(LdaSmi), I16(284),
                 B(Star1),
+<<<<<<< HEAD
+=======
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   41 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   46 S> */ B(Wide), B(LdaSmi), I16(286),
+                B(Star3),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star2),
                 B(CallRuntime), U16(Runtime::kNewTypeError), R(1), U8(2),
@@ -143,6 +159,14 @@ bytecodes: [
   /*   48 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   53 S> */ B(Wide), B(LdaSmi), I16(285),
                 B(Star1),
+<<<<<<< HEAD
+=======
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   48 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   53 S> */ B(Wide), B(LdaSmi), I16(287),
+                B(Star3),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star2),
   /*   61 E> */ B(CallRuntime), U16(Runtime::kNewTypeError), R(1), U8(2),
@@ -168,11 +192,20 @@ parameter count: 1
 bytecode array length: 23
 bytecodes: [
                 B(LdaImmutableCurrentContextSlot), U8(3),
+<<<<<<< HEAD
                 B(Star0),
                 B(Ldar), R(context),
   /*   41 E> */ B(StaKeyedPropertyAsDefine), R(this), R(0), U8(0),
   /*   46 S> */ B(Wide), B(LdaSmi), I16(284),
                 B(Star2),
+=======
+                B(Star1),
+                B(Mov), R(this), R(0),
+                B(Mov), R(context), R(2),
+  /*   41 E> */ B(CallRuntime), U16(Runtime::kAddPrivateBrand), R(0), U8(3),
+  /*   46 S> */ B(Wide), B(LdaSmi), I16(286),
+                B(Star4),
+>>>>>>> 892051b8ed ([Temporal] Prototype)
                 B(LdaConstant), U8(0),
                 B(Star3),
                 B(CallRuntime), U16(Runtime::kNewTypeError), R(2), U8(2),

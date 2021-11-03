@@ -445,14 +445,157 @@
   'built-ins/TypedArrayConstructors/ctors/typedarray-arg/out-of-bounds-when-species-retrieved-different-type': [FAIL],
   'built-ins/TypedArrayConstructors/ctors/typedarray-arg/out-of-bounds-when-species-retrieved-same-type': [FAIL],
 
+
+  # new tests
+  'built-ins/Temporal/Duration/compare/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/add/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/round/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toString/timezone': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toString/timezone-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/from/zoneddatetime-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toJSON/balance-negative-time-units': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toJSON/offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toString/balance-negative-time-units': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toString/offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/with/offset-property-sub-minute': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/with/receiver-offset-broken': [FAIL],
+
+  # Daylight Saving Time related
+  'built-ins/Temporal/ZonedDateTime/prototype/with/offset-undefined': [FAIL],
+
+  # Calendar in TemporalTimeString
+  # https://github.com/tc39/test262/pull/3257
+  'built-ins/Temporal/PlainTime/from/argument-string-with-calendar': [FAIL],
+
+  # TimeZone getPossibleInstantsFor bug
+  'built-ins/Temporal/Duration/prototype/total/timezone-getpossibleinstantsfor-iterable': [FAIL],
+
+  # Calendar.dateAdd with null instead of undefined
+  # https://github.com/tc39/test262/issues/3262
+  'built-ins/Temporal/Duration/prototype/add/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/dateadd-options': [FAIL],
+
+  # Maybe related to TimeZone daylight saving implementation
+  'built-ins/Temporal/Duration/prototype/round/relativeto-string-datetime': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-string-datetime': [FAIL],
+
+  # Custom TimeZone name
+  # https://github.com/tc39/test262/issues/3265
+  'built-ins/Temporal/Instant/from/timezone-custom': [FAIL],
+
   # https://bugs.chromium.org/p/v8/issues/detail?id=11544
-  'built-ins/Temporal/*': [FAIL],
-  'intl402/Temporal/*': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/mergeFields/arguments-not-object': [FAIL],
+
+  'built-ins/Temporal/Duration/prototype/round/calendar-dateuntil-called-with-singular-largestunit': [FAIL],
+
+  # ???
+  'built-ins/Temporal/Instant/prototype/round/subclassing-ignored': [FAIL],
+
+  'intl402/Temporal/Instant/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/Instant/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/options-undefined': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/toLocaleString/locales-undefined': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/toLocaleString/options-undefined': [FAIL],
+
+  # Need to implement i18n
+  'built-ins/Temporal/Instant/prototype/toLocaleString/options-conflict': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/toLocaleString/options-conflict': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/toLocaleString/options-conflict': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/toLocaleString/options-conflict': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toLocaleString/options-conflict': [FAIL],
+
   'intl402/DateTimeFormat/prototype/formatRange/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatRangeToParts/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/format/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatToParts/temporal-objects-resolved-time-zone': [FAIL],
+  'intl402/Temporal/Calendar/from/basic': [FAIL],
+  'intl402/Temporal/Calendar/prototype/dateAdd/date-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/dateUntil/argument-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/day/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/dayOfWeek/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/dayOfYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/daysInMonth/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/daysInWeek/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/daysInYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/era/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/eraYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/inLeapYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/monthCode/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/month/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/monthsInYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/weekOfYear/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Calendar/prototype/year/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Duration/prototype/add/relativeto-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Duration/prototype/round/relativeto-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Duration/prototype/subtract/relativeto-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/Duration/prototype/total/relativeto-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDate/compare/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDate/from/basic': [FAIL],
+  'intl402/Temporal/PlainDate/from/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/equals/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/since/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/until/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/compare/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/from/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/equals/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/since/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/until/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/withPlainDate/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainMonthDay/from/basic': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/equals/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toPlainDate/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toPlainDateTime/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toZonedDateTime/plaindate-infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainYearMonth/compare/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainYearMonth/from/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/equals/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/since/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/until/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/TimeZone/basic': [FAIL],
+  'intl402/Temporal/TimeZone/from/argument-invalid': [FAIL],
+  'intl402/Temporal/TimeZone/from/argument-valid': [FAIL],
+  'intl402/Temporal/TimeZone/prototype/getInstantFor/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/TimeZone/prototype/getPossibleInstantsFor/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/compare/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/from/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/equals/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/since/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/until/infinity-throws-rangeerror': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/withPlainDate/infinity-throws-rangeerror': [FAIL],
 
+  # https://bugs.chromium.org/p/v8/issues/detail?id=10776
+  'intl402/NumberFormat/constructor-options-roundingMode-invalid': [FAIL],
+  'intl402/NumberFormat/constructor-options-throwing-getters-rounding-mode': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-ceil': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-expand': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-floor': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-half-ceil': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-half-even': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-half-floor': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-half-trunc': [FAIL],
+  'intl402/NumberFormat/prototype/format/format-rounding-mode-trunc': [FAIL],
+  'intl402/NumberFormat/prototype/resolvedOptions/roundingMode': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=11989
   'built-ins/ShadowRealm/constructor': [FAIL],
@@ -494,6 +637,7 @@
   'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-multiple-different-realms': [FAIL],
   'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-proto-from-caller-realm': [FAIL],
   'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-proxied-observes-boundary': [FAIL],
+  'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-throws-typeerror-from-caller-realm': [FAIL],
   'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-throws-typeerror-on-non-primitive-arguments': [FAIL],
   'built-ins/ShadowRealm/prototype/evaluate/wrapped-function-throws-typeerror-on-non-primitive-returns': [FAIL],
   'built-ins/ShadowRealm/prototype/evaluate/nested-realms': [FAIL],
