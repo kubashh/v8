@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "522b5258_dc7d1f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-03T10:43:26Z",
+      "side": 1,
+      "message": "PTAL (haven\u0027t added the [[no_unique_address]] attribute yet)",
+      "revId": "ba6b69d9553bcc3a32786d405c3e3b1103c259a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
