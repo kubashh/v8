@@ -22,6 +22,30 @@
       },
       "revId": "f930ee6404dcdb841a1ca1b59cfb1899711096c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5a6a45e_a9c7082e",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2290,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-11-03T09:40:27Z",
+      "side": 1,
+      "message": "because that somehow would introduce performance regressions. See crbug/1266160. As result I introduced the above NewSlowJSObjectWithNullProto.",
+      "parentUuid": "f31cf410_bfeccfc6",
+      "range": {
+        "startLine": 2290,
+        "startChar": 18,
+        "endLine": 2290,
+        "endChar": 61
+      },
+      "revId": "f930ee6404dcdb841a1ca1b59cfb1899711096c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
