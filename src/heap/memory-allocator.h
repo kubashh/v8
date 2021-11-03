@@ -229,6 +229,7 @@ class MemoryAllocator {
   // Checks if an allocated MemoryChunk was intended to be used for executable
   // memory.
   bool IsMemoryChunkExecutable(MemoryChunk* chunk) {
+    base::SharedMutexGuard<base::kShared> guard(&executable_memory_mutex_);
     return executable_memory_.find(chunk) != executable_memory_.end();
   }
 
@@ -312,14 +313,14 @@ class MemoryAllocator {
   }
 
   void RegisterExecutableMemoryChunk(MemoryChunk* chunk) {
-    base::MutexGuard guard(&executable_memory_mutex_);
+    base::SharedMutexGuard<base::kShared> guard(&executable_memory_mutex_);
     DCHECK(chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE));
     DCHECK_EQ(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.insert(chunk);
   }
 
   void UnregisterExecutableMemoryChunk(MemoryChunk* chunk) {
-    base::MutexGuard guard(&executable_memory_mutex_);
+    base::SharedMutexGuard<base::kShared> guard(&executable_memory_mutex_);
     DCHECK_NE(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.erase(chunk);
     chunk->heap()->UnregisterUnprotectedMemoryChunk(chunk);
@@ -361,7 +362,7 @@ class MemoryAllocator {
 
   // Data structure to remember allocated executable memory chunks.
   std::unordered_set<MemoryChunk*> executable_memory_;
-  base::Mutex executable_memory_mutex_;
+  base::SharedMutex executable_memory_mutex_;
 
   friend class heap::TestCodePageAllocatorScope;
   friend class heap::TestMemoryAllocatorScope;
