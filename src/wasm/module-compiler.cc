@@ -3365,7 +3365,7 @@ void CompilationStateImpl::FinalizeJSToWasmWrappers(
   TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.FinalizeJSToWasmWrappers", "wrappers",
                js_to_wasm_wrapper_units_.size());
-  CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
+  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
   for (auto& unit : js_to_wasm_wrapper_units_) {
     DCHECK_EQ(isolate, unit->isolate());
     Handle<Code> code = unit->Finalize();
@@ -3800,7 +3800,8 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module,
   // TODO(6792): Wrappers below are allocated with {Factory::NewCode}. As an
   // optimization we keep the code space unlocked to avoid repeated unlocking
   // because many such wrapper are allocated in sequence below.
-  CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
+  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  // CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
   for (auto& pair : compilation_units) {
     JSToWasmWrapperKey key = pair.first;
     JSToWasmWrapperCompilationUnit* unit = pair.second.get();

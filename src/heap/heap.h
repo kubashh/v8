@@ -276,6 +276,8 @@ class Heap {
 
   enum class HeapGrowingMode { kSlow, kConservative, kMinimal, kDefault };
 
+  base::Mutex code_protect_scope_mutex_;
+
   enum HeapState {
     NOT_IN_GC,
     SCAVENGE,
@@ -673,6 +675,7 @@ class Heap {
   }
 
   void DisableUnprotectedMemoryChunksRegistry() {
+    DCHECK(unprotected_memory_chunks_registry_enabled_);
     unprotected_memory_chunks_registry_enabled_ = false;
   }
 
@@ -2476,7 +2479,7 @@ class Heap {
 
   base::Mutex unprotected_memory_chunks_mutex_;
   std::unordered_set<MemoryChunk*> unprotected_memory_chunks_;
-  bool unprotected_memory_chunks_registry_enabled_ = false;
+  std::atomic<bool> unprotected_memory_chunks_registry_enabled_{false};
 
 #ifdef V8_ENABLE_ALLOCATION_TIMEOUT
   // If the --gc-interval flag is set to a positive value, this

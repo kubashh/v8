@@ -791,6 +791,7 @@ AlwaysAllocateScopeForTesting::AlwaysAllocateScopeForTesting(Heap* heap)
 
 CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  base::MutexGuard guard(&heap_->code_protect_scope_mutex_);
   if (heap_->write_protect_code_memory()) {
     heap_->increment_code_space_memory_modification_scope_depth();
     heap_->code_space()->SetCodeModificationPermissions();
@@ -805,6 +806,7 @@ CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
 }
 
 CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
+  base::MutexGuard guard(&heap_->code_protect_scope_mutex_);
   if (heap_->write_protect_code_memory()) {
     heap_->decrement_code_space_memory_modification_scope_depth();
     heap_->code_space()->SetDefaultCodePermissions();
@@ -821,6 +823,7 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  base::MutexGuard guard(&heap_->code_protect_scope_mutex_);
   if (heap_->write_protect_code_memory() &&
       !heap_->code_space_memory_modification_scope_depth()) {
     heap_->EnableUnprotectedMemoryChunksRegistry();
@@ -830,6 +833,8 @@ CodePageCollectionMemoryModificationScope::
 
 CodePageCollectionMemoryModificationScope::
     ~CodePageCollectionMemoryModificationScope() {
+  DisallowGarbageCollection no_gc;
+  base::MutexGuard guard(&heap_->code_protect_scope_mutex_);
   if (heap_->write_protect_code_memory() &&
       !heap_->code_space_memory_modification_scope_depth()) {
     heap_->DecrementCodePageCollectionMemoryModificationScopeDepth();
