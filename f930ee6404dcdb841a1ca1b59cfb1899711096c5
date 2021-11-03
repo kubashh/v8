@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f31cf410_bfeccfc6",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2290,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-03T09:24:15Z",
+      "side": 1,
+      "message": "why not the slow_object_with_null_prototype_map?",
+      "range": {
+        "startLine": 2290,
+        "startChar": 18,
+        "endLine": 2290,
+        "endChar": 61
+      },
+      "revId": "f930ee6404dcdb841a1ca1b59cfb1899711096c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
