@@ -70,6 +70,30 @@
       },
       "revId": "f930ee6404dcdb841a1ca1b59cfb1899711096c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbf4d46e_de9eaf60",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2290,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-03T10:00:01Z",
+      "side": 1,
+      "message": "Resolving",
+      "parentUuid": "f54935eb_f02856f4",
+      "range": {
+        "startLine": 2290,
+        "startChar": 18,
+        "endLine": 2290,
+        "endChar": 61
+      },
+      "revId": "f930ee6404dcdb841a1ca1b59cfb1899711096c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
