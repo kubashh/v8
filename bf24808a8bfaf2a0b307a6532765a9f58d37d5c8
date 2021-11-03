@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39fc358e_54f7ac3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-03T09:38:14Z",
+      "side": 1,
+      "message": "ptal, I\u0027d like to land this after the branch cut as I want to remove the explicit barrier from Blink immediately after rolling this CL.",
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d1f0de2_5baa5221",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-03T09:38:14Z",
+      "side": 1,
+      "message": "We could check the mark bit of `host` here which is probably not worth it. (After all we are writing to a live object.)",
+      "range": {
+        "startLine": 51,
+        "startChar": 61,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2628a89_c4a0cf39",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-03T09:38:14Z",
+      "side": 1,
+      "message": "An already marked C++ object would be filtered in Oilpan.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2da3eaa_21a7b791",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-03T09:38:14Z",
+      "side": 1,
+      "message": "This is the explicit (and slower) barrier that should be deprecated after the branch cut.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 55
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
