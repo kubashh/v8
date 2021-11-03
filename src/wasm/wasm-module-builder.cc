@@ -523,7 +523,7 @@ void WriteInitializerExpressionWithEnd(ZoneBuffer* buffer,
       STATIC_ASSERT((kExprStructNewWithRtt >> 8) == kGCPrefix);
       STATIC_ASSERT((kExprStructNewDefault >> 8) == kGCPrefix);
       STATIC_ASSERT((kExprStructNewDefaultWithRtt >> 8) == kGCPrefix);
-      for (const WasmInitExpr& operand : init.operands()) {
+      for (const WasmInitExpr& operand : *init.operands()) {
         WriteInitializerExpressionWithEnd(buffer, operand, kWasmBottom);
       }
       buffer->write_u8(kGCPrefix);
@@ -551,7 +551,7 @@ void WriteInitializerExpressionWithEnd(ZoneBuffer* buffer,
     case WasmInitExpr::kArrayInitStatic:
       STATIC_ASSERT((kExprArrayInit >> 8) == kGCPrefix);
       STATIC_ASSERT((kExprArrayInitStatic >> 8) == kGCPrefix);
-      for (const WasmInitExpr& operand : init.operands()) {
+      for (const WasmInitExpr& operand : *init.operands()) {
         WriteInitializerExpressionWithEnd(buffer, operand, kWasmBottom);
       }
       buffer->write_u8(kGCPrefix);
@@ -559,7 +559,7 @@ void WriteInitializerExpressionWithEnd(ZoneBuffer* buffer,
           init.kind() == WasmInitExpr::kArrayInit ? kExprArrayInit
                                                   : kExprArrayInitStatic));
       buffer->write_u32v(init.immediate().index);
-      buffer->write_u32v(static_cast<uint32_t>(init.operands().size() - 1));
+      buffer->write_u32v(static_cast<uint32_t>(init.operands()->size() - 1));
       break;
     case WasmInitExpr::kRttCanon:
       STATIC_ASSERT((kExprRttCanon >> 8) == kGCPrefix);
@@ -570,7 +570,7 @@ void WriteInitializerExpressionWithEnd(ZoneBuffer* buffer,
     case WasmInitExpr::kRttSub:
     case WasmInitExpr::kRttFreshSub:
       // The operand to rtt.sub must be emitted first.
-      WriteInitializerExpressionWithEnd(buffer, init.operands()[0],
+      WriteInitializerExpressionWithEnd(buffer, (*init.operands())[0],
                                         kWasmBottom);
       STATIC_ASSERT((kExprRttSub >> 8) == kGCPrefix);
       STATIC_ASSERT((kExprRttFreshSub >> 8) == kGCPrefix);
