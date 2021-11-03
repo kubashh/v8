@@ -2658,10 +2658,11 @@ void Heap::ComputeFastPromotionMode() {
 void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
                                            UnprotectMemoryOrigin origin) {
   if (unprotected_memory_chunks_registry_enabled_) {
-    base::Optional<base::MutexGuard> guard;
-    if (origin != UnprotectMemoryOrigin::kMainThread) {
-      guard.emplace(&unprotected_memory_chunks_mutex_);
-    }
+    base::MutexGuard guard(&unprotected_memory_chunks_mutex_);
+    // base::Optional<base::MutexGuard> guard;
+    // if (origin != UnprotectMemoryOrigin::kMainThread) {
+    //   guard.emplace(&unprotected_memory_chunks_mutex_);
+    // }
     if (unprotected_memory_chunks_.insert(chunk).second) {
       chunk->SetCodeModificationPermissions();
     }

@@ -43,8 +43,8 @@ void MemoryChunk::DecrementWriteUnprotectCounterAndMaybeSetPermissions(
     PageAllocator::Permission permission) {
   DCHECK(permission == PageAllocator::kRead ||
          permission == PageAllocator::kReadExecute);
-  DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
-  DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
+  // DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
+  // DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
   // Decrementing the write_unprotect_counter_ and changing the page
   // protection mode has to be atomic.
   base::MutexGuard guard(page_protection_change_mutex_);
