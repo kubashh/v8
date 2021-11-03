@@ -16,6 +16,23 @@
       "message": "PTAL (haven\u0027t added the [[no_unique_address]] attribute yet)",
       "revId": "ba6b69d9553bcc3a32786d405c3e3b1103c259a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1750b06c_9a619ea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-03T10:44:55Z",
+      "side": 1,
+      "message": "Swapped reviewers for a base/ owner, Leszek: review optional, as you like.",
+      "revId": "ba6b69d9553bcc3a32786d405c3e3b1103c259a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
