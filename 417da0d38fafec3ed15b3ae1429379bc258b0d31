@@ -16,6 +16,23 @@
       "message": "lgtm, thanks. We\u0027ll have to look into why the other cases regress; since the way it\u0027s done right now is pretty bad too (but can look good in special cases)",
       "revId": "417da0d38fafec3ed15b3ae1429379bc258b0d31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "074375a0_f2a6f2ce",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-11-03T08:35:47Z",
+      "side": 1,
+      "message": "It would make more sense to use NewJSObjectFromMap rather than NewJSObject + MigrateToMap",
+      "revId": "417da0d38fafec3ed15b3ae1429379bc258b0d31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
