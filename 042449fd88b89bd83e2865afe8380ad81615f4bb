@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "042449fd88b89bd83e2865afe8380ad81615f4bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "501a81d0_aaa0f6c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2021-11-03T08:42:18Z",
+      "side": 1,
+      "message": "Got autosubmitted. I\u0027ll follow up with a new CL to address the comment.",
+      "revId": "042449fd88b89bd83e2865afe8380ad81615f4bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
