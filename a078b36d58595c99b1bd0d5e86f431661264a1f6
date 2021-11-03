@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50cf1d88_2cf56e01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-11-03T13:11:11Z",
+      "side": 1,
+      "message": "LGTM with nit",
+      "revId": "a078b36d58595c99b1bd0d5e86f431661264a1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49ef7ff_84af6a68",
+        "filename": "lib/lib.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2021-11-03T13:11:11Z",
+      "side": 1,
+      "message": "```\nif tester_close:\n```\nshould be enough",
+      "range": {
+        "startLine": 489,
+        "startChar": 20,
+        "endLine": 489,
+        "endChar": 32
+      },
+      "revId": "a078b36d58595c99b1bd0d5e86f431661264a1f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
