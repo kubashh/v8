@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1473efcf_6900839e",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-03T13:52:16Z",
+      "side": 1,
+      "message": "The comment is a bit redundant here. This is a real bug and the test should be skipped until fixed. I\u0027d just keep bug links like in line 1093 - no explanation needed.",
+      "range": {
+        "startLine": 1084,
+        "startChar": 18,
+        "endLine": 1084,
+        "endChar": 60
+      },
+      "revId": "ab23140312c500d5f8038b0261b3feb3d9b59e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
