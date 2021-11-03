@@ -56,6 +56,30 @@
       },
       "revId": "289f351cf778ba8c40df28dcac2c8ad42b045b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be43f5e4_eceb0ec4",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1800,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-03T14:05:41Z",
+      "side": 1,
+      "message": "Done (in the form of a DCHECK_IMPLIES for better error messages).",
+      "parentUuid": "2b325d86_ef4c71b2",
+      "range": {
+        "startLine": 1800,
+        "startChar": 7,
+        "endLine": 1800,
+        "endChar": 28
+      },
+      "revId": "289f351cf778ba8c40df28dcac2c8ad42b045b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
