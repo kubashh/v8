@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9970deb8_60d1df37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-11-04T13:46:50Z",
+      "side": 1,
+      "message": "LGTM. I\u0027ll leave it up to you whether addressing the nit is worth another patch set upload :-)",
+      "revId": "03df9b009a4cbdf64f79773125f4b6ab7d2f17ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f05d2c07_bb58334b",
+        "filename": "test/mjsunit/wasm/serialize-lazy-module.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-11-04T13:46:50Z",
+      "side": 1,
+      "message": "nit: you can add a second (and third, etc) `// Flags:` line to avoid the line overflow.",
+      "range": {
+        "startLine": 7,
+        "startChar": 68,
+        "endLine": 7,
+        "endChar": 81
+      },
+      "revId": "03df9b009a4cbdf64f79773125f4b6ab7d2f17ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
