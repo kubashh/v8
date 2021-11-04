@@ -2273,8 +2273,54 @@ void WasmGenerator::Generate(base::Vector<const ValueType> types,
 void WasmGenerator::ConsumeAndGenerate(
     base::Vector<const ValueType> param_types,
     base::Vector<const ValueType> return_types, DataRange* data) {
-  for (unsigned i = 0; i < param_types.size(); i++) builder_->Emit(kExprDrop);
-  Generate(return_types, data);
+  auto primitive = [](ValueType t) -> bool {
+    switch (t.kind()) {
+      case kI32:
+      case kI64:
+      case kF32:
+      case kF64:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  if (return_types.size() == 0 || param_types.size() == 0 ||
+      !primitive(return_types[0])) {
+    for (unsigned i = 0; i < param_types.size(); i++) {
+      builder_->Emit(kExprDrop);
+    }
+    Generate(return_types, data);
+    return;
+  }
+
+  int bottom_primitives = 0;
+
+  while (static_cast<int>(param_types.size()) > bottom_primitives &&
+         primitive(param_types[bottom_primitives])) {
+    bottom_primitives++;
+  }
+  int return_index =
+      bottom_primitives ? (data->get<uint8_t>() % bottom_primitives) : -1;
+  for (int i = static_cast<int>(param_types.size() - 1); i > return_index;
+       --i) {
+    builder_->Emit(kExprDrop);
+  }
+  for (int i = return_index; i > 0; --i) {
+    Convert(param_types[i], param_types[i - 1]);
+    builder_->EmitI32Const(0);
+    builder_->Emit(kExprSelect);
+  }
+  if (return_types.empty()) {
+    builder_->Emit(kExprDrop);
+  } else {
+    if (return_index >= 0) {
+      Convert(param_types[0], return_types[0]);
+      Generate(return_types + 1, data);
+    } else {
+      Generate(return_types, data);
+    }
+  }
 }
 
 enum SigKind { kFunctionSig, kExceptionSig };
