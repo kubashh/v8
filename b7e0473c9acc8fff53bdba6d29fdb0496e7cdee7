@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76b14211_bd8974f3",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62be55d0_c7d3f212",
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aa17dc8_0c6e187a",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-11-04T09:37:11Z",
       "side": 1,
       "message": "Can we make the vector const? The copy constructor of WasmInitExpr would just copy the pointer, so it could lead to unexpected results if we have copies of the Value and mutate the operands.\nYou mutate it in the static constructors, but this could easily be changed such that we just initialize it via the WasInitExpr constructor instead.",
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59830705_d7bb9cfc",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aa17dc8_0c6e187a",
       "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "283c9474_ba73315c",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2342,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b14f503_f2ee567f",
+      "range": {
+        "startLine": 2342,
+        "startChar": 53,
+        "endLine": 2342,
+        "endChar": 62
+      },
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "609131d9_0ed0624c",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab6557d6_79360e4c",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "I removed the pointer.",
+      "parentUuid": "609131d9_0ed0624c",
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4235141a_6634cea9",
@@ -105,6 +183,24 @@
       "writtenOn": "2021-11-04T09:37:11Z",
       "side": 1,
       "message": "We never expect these interface methods to be called, right? Can we add an UNREACHABLE in the body?",
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecca03ac_ecddbbeb",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "Metafunctions can be called, while non-constant functions cannot. I split the macros to reflect this.",
+      "parentUuid": "4235141a_6634cea9",
       "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +228,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee597377_140c1806",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ec1a7aa_f0b9e710",
+      "range": {
+        "startLine": 367,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 80
+      },
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a1d84eb_844638c5",
@@ -145,6 +265,30 @@
       "writtenOn": "2021-11-04T09:37:11Z",
       "side": 1,
       "message": "This std::move is superfluous because WasmInitExpr is trivially copiable (except for the explicitly-deleted copy constructor). It would even be dangerous if it actually did anything, because rtt is supposed to be const.\n\nI think this answers my question above: this is why we need WasmInitExpr to be trivially copiable even though the Value just stores a pointer to it, we need to copy it here and below.",
+      "range": {
+        "startLine": 392,
+        "startChar": 38,
+        "endLine": 392,
+        "endChar": 47
+      },
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de99c1da_cd39f199",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-04T12:08:09Z",
+      "side": 1,
+      "message": "I don\u0027t think any of this is dangerous based on how the code is structured. The Node* is not const in the normal decoder Value either. However, the code looks better if I change it anyway.",
+      "parentUuid": "8a1d84eb_844638c5",
       "range": {
         "startLine": 392,
         "startChar": 38,
