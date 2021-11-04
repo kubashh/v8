@@ -39,6 +39,30 @@
       },
       "revId": "03df9b009a4cbdf64f79773125f4b6ab7d2f17ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "082496bb_827ea40b",
+        "filename": "test/mjsunit/wasm/serialize-lazy-module.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2021-11-04T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f05d2c07_bb58334b",
+      "range": {
+        "startLine": 7,
+        "startChar": 68,
+        "endLine": 7,
+        "endChar": 81
+      },
+      "revId": "03df9b009a4cbdf64f79773125f4b6ab7d2f17ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
