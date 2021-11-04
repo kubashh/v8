@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cffeaec_504782be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-04T09:59:31Z",
+      "side": 1,
+      "message": "Please wait until https://crrev.com/c/3259529 and https://crrev.com/c/3259663 are landed before landing this.",
+      "revId": "ab97cdb86ac453ac4038a759426210ba55a753d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
