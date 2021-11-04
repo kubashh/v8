@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "14274f87544dcd6bc10e6fe9f3baefef01824c3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca54d9b2_1289256a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-04T14:24:36Z",
+      "side": 1,
+      "message": "lgtm % fix dir name in WATCHLISTS",
+      "revId": "14274f87544dcd6bc10e6fe9f3baefef01824c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c985b48_d175e604",
+        "filename": "WATCHLISTS",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-04T14:24:36Z",
+      "side": 1,
+      "message": "cppgc-js",
+      "range": {
+        "startLine": 111,
+        "startChar": 40,
+        "endLine": 111,
+        "endChar": 45
+      },
+      "revId": "14274f87544dcd6bc10e6fe9f3baefef01824c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
