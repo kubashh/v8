@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e5e3a52_fba0f55e",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-04T13:02:15Z",
+      "side": 1,
+      "message": "👍 as discussed offline I agree FooPolicy both requires less boilerplate to set up and is easier to use. Anyways, sticking with the allocator approach here since in this case it doesn\u0027t really matter.",
+      "parentUuid": "eb5a718d_251f237d",
+      "range": {
+        "startLine": 20,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 74
+      },
+      "revId": "aa90a5b4f2cd8d0c952dc1473e70f1b9f155173c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fad24b99_483611b7",
