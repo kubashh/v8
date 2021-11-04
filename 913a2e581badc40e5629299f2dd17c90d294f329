@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "361073e1_47f64f6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-04T15:06:34Z",
+      "side": 1,
+      "message": "PTAL -- I had a kind of flaky implementation of this SFI copying with only copying the \"important bits\", but it kept being wrong, so I figured I should just go all the way and copy the whole thing.",
+      "revId": "913a2e581badc40e5629299f2dd17c90d294f329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
