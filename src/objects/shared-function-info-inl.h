@@ -94,19 +94,6 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(UncompiledDataWithoutPreparseData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(UncompiledDataWithPreparseData)
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(InterpreterData)
-
-ACCESSORS(InterpreterData, raw_interpreter_trampoline, CodeT,
-          kInterpreterTrampolineOffset)
-
-DEF_GETTER(InterpreterData, interpreter_trampoline, Code) {
-  return FromCodeT(raw_interpreter_trampoline(cage_base));
-}
-
-void InterpreterData::set_interpreter_trampoline(Code code,
-                                                 WriteBarrierMode mode) {
-  set_raw_interpreter_trampoline(ToCodeT(code), mode);
-}
-
 TQ_OBJECT_CONSTRUCTORS_IMPL(SharedFunctionInfo)
 NEVER_READ_ONLY_SPACE_IMPL(SharedFunctionInfo)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(SharedFunctionInfo, Object)
@@ -211,7 +198,7 @@ AbstractCode SharedFunctionInfo::abstract_code(IsolateT* isolate) {
   if (HasBytecodeArray()) {
     return AbstractCode::cast(GetBytecodeArray(isolate));
   } else {
-    return AbstractCode::cast(GetCode());
+    return AbstractCode::cast(FromCodeT(GetCode()));
   }
 }
 
@@ -516,7 +503,8 @@ IsCompiledScope::IsCompiledScope(const SharedFunctionInfo shared,
                                  Isolate* isolate)
     : is_compiled_(shared.is_compiled()) {
   if (shared.HasBaselineCode()) {
-    retain_code_ = handle(shared.baseline_code(kAcquireLoad), isolate);
+    retain_code_ =
+        handle(FromCodeT(shared.baseline_code(kAcquireLoad)), isolate);
   } else if (shared.HasBytecodeArray()) {
     retain_code_ = handle(shared.GetBytecodeArray(isolate), isolate);
   } else {
@@ -531,7 +519,7 @@ IsCompiledScope::IsCompiledScope(const SharedFunctionInfo shared,
     : is_compiled_(shared.is_compiled()) {
   if (shared.HasBaselineCode()) {
     retain_code_ = isolate->heap()->NewPersistentHandle(
-        shared.baseline_code(kAcquireLoad));
+        FromCodeT(shared.baseline_code(kAcquireLoad)));
   } else if (shared.HasBytecodeArray()) {
     retain_code_ =
         isolate->heap()->NewPersistentHandle(shared.GetBytecodeArray(isolate));
@@ -646,7 +634,7 @@ bool SharedFunctionInfo::ShouldFlushCode(
   return bytecode.IsOld();
 }
 
-Code SharedFunctionInfo::InterpreterTrampoline() const {
+CodeT SharedFunctionInfo::InterpreterTrampoline() const {
   DCHECK(HasInterpreterData());
   return interpreter_data().interpreter_trampoline();
 }
@@ -688,21 +676,22 @@ bool SharedFunctionInfo::HasBaselineCode() const {
   return false;
 }
 
-Code SharedFunctionInfo::baseline_code(AcquireLoadTag) const {
+CodeT SharedFunctionInfo::baseline_code(AcquireLoadTag) const {
   DCHECK(HasBaselineCode());
-  return FromCodeT(CodeT::cast(function_data(kAcquireLoad)));
+  return CodeT::cast(function_data(kAcquireLoad));
 }
 
-void SharedFunctionInfo::set_baseline_code(Code baseline_code,
+void SharedFunctionInfo::set_baseline_code(CodeT baseline_code,
                                            ReleaseStoreTag) {
-  DCHECK_EQ(baseline_code.kind(), CodeKind::BASELINE);
-  set_function_data(ToCodeT(baseline_code), kReleaseStore);
+  DCHECK_EQ(FromCodeT(baseline_code).kind(), CodeKind::BASELINE);
+  set_function_data(baseline_code, kReleaseStore);
 }
 
 void SharedFunctionInfo::FlushBaselineCode() {
   DCHECK(HasBaselineCode());
-  set_function_data(baseline_code(kAcquireLoad).bytecode_or_interpreter_data(),
-                    kReleaseStore);
+  set_function_data(
+      FromCodeT(baseline_code(kAcquireLoad)).bytecode_or_interpreter_data(),
+      kReleaseStore);
 }
 
 #if V8_ENABLE_WEBASSEMBLY
