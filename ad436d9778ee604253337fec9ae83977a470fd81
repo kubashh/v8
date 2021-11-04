@@ -22,6 +22,30 @@
       },
       "revId": "ad436d9778ee604253337fec9ae83977a470fd81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01924c89_c3eff8e3",
+        "filename": "WATCHLISTS",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-04T13:51:26Z",
+      "side": 1,
+      "message": "Yeah, I saw that. It pulls in all kinds of unrelated CLs though.\n\nOn second thought, we can just crate a cppgc-js directory in there as well.\n\nWill ping when it\u0027s ready.",
+      "parentUuid": "1403eca4_e8f435c9",
+      "range": {
+        "startLine": 111,
+        "startChar": 40,
+        "endLine": 111,
+        "endChar": 45
+      },
+      "revId": "ad436d9778ee604253337fec9ae83977a470fd81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
