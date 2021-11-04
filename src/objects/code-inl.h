@@ -994,6 +994,35 @@ void CodeDataContainer::clear_padding() {
          kSize - kUnalignedSize);
 }
 
+#if V8_EXTERNAL_CODE_SPACE
+//
+// A collection of getters and predicates that forward queries to associated
+// Code object.
+//
+
+#define DEF_PRIMITIVE_FORWARDING_CDC_GETTER(name, type) \
+  type CodeDataContainer::name() const { return FromCodeT(*this).name(); }
+
+#define DEF_FORWARDING_CDC_GETTER(name, type) \
+  DEF_GETTER(CodeDataContainer, name, type) { \
+    return FromCodeT(*this).name(cage_base);  \
+  }
+
+DEF_PRIMITIVE_FORWARDING_CDC_GETTER(kind, CodeKind)
+DEF_PRIMITIVE_FORWARDING_CDC_GETTER(builtin_id, Builtin)
+DEF_PRIMITIVE_FORWARDING_CDC_GETTER(is_builtin, bool)
+DEF_PRIMITIVE_FORWARDING_CDC_GETTER(is_interpreter_trampoline_builtin, bool)
+
+DEF_FORWARDING_CDC_GETTER(deoptimization_data, FixedArray)
+DEF_FORWARDING_CDC_GETTER(bytecode_or_interpreter_data, HeapObject)
+DEF_FORWARDING_CDC_GETTER(source_position_table, ByteArray)
+DEF_FORWARDING_CDC_GETTER(bytecode_offset_table, ByteArray)
+
+#undef DEF_PRIMITIVE_FORWARDING_CDC_GETTER
+#undef DEF_FORWARDING_CDC_GETTER
+
+#endif  // V8_EXTERNAL_CODE_SPACE
+
 byte BytecodeArray::get(int index) const {
   DCHECK(index >= 0 && index < this->length());
   return ReadField<byte>(kHeaderSize + index * kCharSize);
