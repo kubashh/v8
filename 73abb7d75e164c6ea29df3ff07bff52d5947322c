@@ -22,6 +22,30 @@
       },
       "revId": "73abb7d75e164c6ea29df3ff07bff52d5947322c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86425dda_1a2cb5c5",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 4
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-04T09:45:28Z",
+      "side": 1,
+      "message": "Ack in https://crrev.com/c/3259528",
+      "parentUuid": "4d94908b_a4517a24",
+      "range": {
+        "startLine": 1085,
+        "startChar": 2,
+        "endLine": 1085,
+        "endChar": 40
+      },
+      "revId": "73abb7d75e164c6ea29df3ff07bff52d5947322c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
