@@ -904,47 +904,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       int const fp_param_field = FPParamField::decode(instr->opcode());
       int num_fp_parameters = fp_param_field;
       bool has_function_descriptor = false;
-      int offset = 19 * kInstrSize;
+      Label return_location;
 
-      if (instr->InputAt(0)->IsImmediate() &&
-          !FLAG_enable_embedded_constant_pool) {
-        // If loading an immediate without constant pool then 4 instructions get
-        // emitted instead of a single load (which makes it 3 extra).
-        offset = 22 * kInstrSize;
-      }
-      if (!instr->InputAt(0)->IsImmediate() && !ABI_CALL_VIA_IP) {
-        // On Linux and Sim, there will be an extra
-        // instruction to pass the input using the `ip` register. This
-        // instruction gets emitted under `CallCFunction` or
-        // `CallCFunctionHelper` depending on the type of the input (immediate
-        // or register). This extra move is only emitted on AIX if the input is
-        // an immediate and not a register.
-        offset -= kInstrSize;
-      }
 #if ABI_USES_FUNCTION_DESCRIPTORS
       // AIX/PPC64BE Linux uses a function descriptor
       int kNumFPParametersMask = kHasFunctionDescriptorBitMask - 1;
       num_fp_parameters = kNumFPParametersMask & fp_param_field;
       has_function_descriptor =
           (fp_param_field & kHasFunctionDescriptorBitMask) != 0;
-      // AIX may emit 2 extra Load instructions under CallCFunctionHelper
-      // due to having function descriptor.
-      if (has_function_descriptor) {
-        offset += 2 * kInstrSize;
-      }
 #endif
 #if V8_ENABLE_WEBASSEMBLY
-      Label start_call;
       bool isWasmCapiFunction =
           linkage()->GetIncomingDescriptor()->IsWasmCapiFunction();
       if (isWasmCapiFunction) {
-        __ mflr(r0);
-        __ LoadPC(kScratchReg);
-        __ bind(&start_call);
-        __ addi(kScratchReg, kScratchReg, Operand(offset));
+        __ mov_label_addr(kScratchReg, &return_location);
         __ StoreU64(kScratchReg,
                     MemOperand(fp, WasmExitFrameConstants::kCallingPCOffset));
-        __ mtlr(r0);
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
       if (instr->InputAt(0)->IsImmediate()) {
@@ -956,21 +931,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ CallCFunction(func, num_gp_parameters, num_fp_parameters,
                          has_function_descriptor);
       }
-      // TODO(miladfar): In the above block, kScratchReg must be populated with
-      // the strictly-correct PC, which is the return address at this spot. The
-      // offset is counted from where we are binding to the label and ends at
-      // this spot. If failed, replace it with the correct offset suggested.
-      // More info on f5ab7d3.
+      __ bind(&return_location);
 #if V8_ENABLE_WEBASSEMBLY
       if (isWasmCapiFunction) {
-        // The offset calculated is from pc returned by LoadPC above, until this
-        // location.
-        // LoadPC emits two instructions and pc is the address of its
-        // second emitted instruction. `start_call` is binding to the address
-        // right after the above retrieved pc, therefore there is one less
-        // instruction to count when summing the total size of generated code.
-        int generated_size = offset - kInstrSize;
-        CHECK_EQ(generated_size, __ SizeOfCodeGeneratedSince(&start_call));
         RecordSafepoint(instr->reference_map());
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
