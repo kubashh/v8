@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "869db0c1_1629a0b2",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-04T15:57:35Z",
+      "side": 1,
+      "message": "It just occurred to me that there is an ASSERT_TRIVIALLY_COPYABLE macro that you could replace it with for added guarantee.",
+      "parentUuid": "76b14211_bd8974f3",
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aa17dc8_0c6e187a",
@@ -289,6 +307,30 @@
       "side": 1,
       "message": "I don\u0027t think any of this is dangerous based on how the code is structured. The Node* is not const in the normal decoder Value either. However, the code looks better if I change it anyway.",
       "parentUuid": "8a1d84eb_844638c5",
+      "range": {
+        "startLine": 392,
+        "startChar": 38,
+        "endLine": 392,
+        "endChar": 47
+      },
+      "revId": "b7e0473c9acc8fff53bdba6d29fdb0496e7cdee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b1ceb2_33ceba1f",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-04T15:57:35Z",
+      "side": 1,
+      "message": "What is dangerous IMO is the std::move, because rtt is const so the decoder would expect it to still be valid after the call. Maybe we don\u0027t do that in the graph builder interface, and I would also be in favor of making Node const to ensure that statically. Anyway, removing the pointer also lgtm.",
+      "parentUuid": "de99c1da_cd39f199",
       "range": {
         "startLine": 392,
         "startChar": 38,
