@@ -579,6 +579,12 @@ String::FlatContent String::GetFlatContent(
                    ThreadId::Current() == isolate->thread_id());
   }
 #endif
+  return GetFlatContent(no_gc, SharedStringAccessGuardIfNeeded::NotNeeded());
+}
+
+String::FlatContent String::GetFlatContent(
+    const DisallowGarbageCollection& no_gc,
+    const SharedStringAccessGuardIfNeeded& access_guard) {
   USE(no_gc);
   PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
   int length = this->length();
@@ -610,7 +616,7 @@ String::FlatContent String::GetFlatContent(
   if (shape.encoding_tag() == kOneByteStringTag) {
     const uint8_t* start;
     if (shape.representation_tag() == kSeqStringTag) {
-      start = SeqOneByteString::cast(string).GetChars(no_gc);
+      start = SeqOneByteString::cast(string).GetChars(no_gc, access_guard);
     } else {
       start = ExternalOneByteString::cast(string).GetChars(cage_base);
     }
@@ -619,7 +625,7 @@ String::FlatContent String::GetFlatContent(
     DCHECK_EQ(shape.encoding_tag(), kTwoByteStringTag);
     const base::uc16* start;
     if (shape.representation_tag() == kSeqStringTag) {
-      start = SeqTwoByteString::cast(string).GetChars(no_gc);
+      start = SeqTwoByteString::cast(string).GetChars(no_gc, access_guard);
     } else {
       start = ExternalTwoByteString::cast(string).GetChars(cage_base);
     }
