@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81ba87ba_c5c8b7e5",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-04T11:33:10Z",
+      "side": 1,
+      "message": "wrt starboard: all STL data structures use std::allocator\u003cT\u003e so I guess this works fine on starboard?\n\nwrt policies: interesting, I wasn\u0027t aware of those. I don\u0027t really see why we need them as a competing concept with c++\u0027s Allocator. Wdyt about replacing the AllocationPolicy concept with Allocators (instead of spreading the Policy concept to further places)? Allocators seem superior since they\u0027re compatible with the STL.",
+      "parentUuid": "0df78968_6109c4f6",
+      "range": {
+        "startLine": 20,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 74
+      },
+      "revId": "aa90a5b4f2cd8d0c952dc1473e70f1b9f155173c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fad24b99_483611b7",
         "filename": "src/base/small-vector.h",
         "patchSetId": 6
@@ -54,6 +78,24 @@
       "writtenOn": "2021-11-04T10:54:03Z",
       "side": 1,
       "message": "Suggestion: it\u0027d be nice if you could utilize empty base optimization to let the compiler optimize away this field if the class is stateless.",
+      "revId": "aa90a5b4f2cd8d0c952dc1473e70f1b9f155173c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4185010_17cfe4fd",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-04T11:33:10Z",
+      "side": 1,
+      "message": "Yep that was Leszek\u0027s suggestion (see an earlier comment) and I still plan to do that. (But I also doubt the additional 8 bytes in a stack-allocated data structure matter much.)",
+      "parentUuid": "fad24b99_483611b7",
       "revId": "aa90a5b4f2cd8d0c952dc1473e70f1b9f155173c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
