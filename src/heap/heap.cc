@@ -2650,11 +2650,8 @@ void Heap::ComputeFastPromotionMode() {
 
 void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
                                            UnprotectMemoryOrigin origin) {
-  if (unprotected_memory_chunks_registry_enabled_) {
-    base::Optional<base::MutexGuard> guard;
-    if (origin != UnprotectMemoryOrigin::kMainThread) {
-      guard.emplace(&unprotected_memory_chunks_mutex_);
-    }
+  if (code_page_collection_memory_modification_scope_depth_ > 0) {
+    base::MutexGuard guard(&unprotected_memory_chunks_mutex_);
     if (unprotected_memory_chunks_.insert(chunk).second) {
       chunk->SetCodeModificationPermissions();
     }
@@ -2671,7 +2668,7 @@ void Heap::UnregisterUnprotectedMemoryChunk(MemoryChunk* chunk) {
 }
 
 void Heap::ProtectUnprotectedMemoryChunks() {
-  DCHECK(unprotected_memory_chunks_registry_enabled_);
+  base::MutexGuard guard(&unprotected_memory_chunks_mutex_);
   for (auto chunk = unprotected_memory_chunks_.begin();
        chunk != unprotected_memory_chunks_.end(); chunk++) {
     CHECK(memory_allocator()->IsMemoryChunkExecutable(*chunk));

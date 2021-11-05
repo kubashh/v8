@@ -565,11 +565,11 @@ bool PagedSpace::TryAllocationFromFreeListMain(size_t size_in_bytes,
   Address limit = ComputeLimit(start, end, size_in_bytes);
   DCHECK_LE(limit, end);
   DCHECK_LE(size_in_bytes, limit - start);
+  if (identity() == CODE_SPACE) {
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, GetUnprotectMemoryOrigin(is_compaction_space()));
+  }
   if (limit != end) {
-    if (identity() == CODE_SPACE) {
-      heap()->UnprotectAndRegisterMemoryChunk(
-          page, GetUnprotectMemoryOrigin(is_compaction_space()));
-    }
     Free(limit, end - limit, SpaceAccountingMode::kSpaceAccounted);
   }
   SetLinearAllocationArea(start, limit);
@@ -682,6 +682,10 @@ PagedSpace::TryAllocationFromFreeListBackground(LocalHeap* local_heap,
   Address limit = new_node.address() + used_size_in_bytes;
   DCHECK_LE(limit, end);
   DCHECK_LE(min_size_in_bytes, limit - start);
+  if (identity() == CODE_SPACE) {
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
+  }
   if (limit != end) {
     Free(limit, end - limit, SpaceAccountingMode::kSpaceAccounted);
   }
