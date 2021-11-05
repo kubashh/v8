@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8eeb3b72_825104c6",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-05T08:05:05Z",
+      "side": 1,
+      "message": "sgtm, could we still add a comment though? Otherwise one day I might wonder why we are not doing this here...",
+      "parentUuid": "8d1f0de2_5baa5221",
+      "range": {
+        "startLine": 51,
+        "startChar": 61,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2628a89_c4a0cf39",
         "filename": "src/heap/heap-write-barrier.cc",
         "patchSetId": 1
