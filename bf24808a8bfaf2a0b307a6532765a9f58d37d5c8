@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ae1e34_3074a55e",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-05T09:17:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eeb3b72_825104c6",
+      "range": {
+        "startLine": 51,
+        "startChar": 61,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2628a89_c4a0cf39",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2d0c81a_595d9244",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-05T09:17:59Z",
+      "side": 1,
+      "message": "(resolving)",
+      "parentUuid": "c2628a89_c4a0cf39",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2da3eaa_21a7b791",
@@ -101,6 +149,30 @@
       "writtenOn": "2021-11-03T09:38:14Z",
       "side": 1,
       "message": "This is the explicit (and slower) barrier that should be deprecated after the branch cut.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 55
+      },
+      "revId": "bf24808a8bfaf2a0b307a6532765a9f58d37d5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "621c3328_7904a954",
+        "filename": "test/unittests/heap/unified-heap-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-05T09:17:59Z",
+      "side": 1,
+      "message": "(resolving)",
+      "parentUuid": "c2da3eaa_21a7b791",
       "range": {
         "startLine": 111,
         "startChar": 0,
