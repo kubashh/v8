@@ -43,6 +43,9 @@ def aggregate_builder_tester_console(ctx):
 def is_artifact_builder(builder):
     return builder.endswith("builder")
 
+def is_debug_builder(builder):
+    return "debug" in builder
+
 def add_builder_with_category(builders, builder, category, add_sub_cat):
     subcat = "|builder" if is_artifact_builder(builder) else "|tester"
     if add_sub_cat:
@@ -64,6 +67,13 @@ def mirror_console(original_console, dev_console):
         add_sub_cat = len(builders) > 1 and len(testers) > 1
         for builder in builders + testers:
             add_builder_with_category(dev_console.builders, builder, category, add_sub_cat)
+
+def splice_by_categories(builders):
+    # Key builder lists by categories.
+    categories = dict()
+    for builder in original_console.builders:
+        categories.setdefault(builder.category, []).append(builder.name)
+
 
 def mirror_dev_consoles(ctx):
     """
