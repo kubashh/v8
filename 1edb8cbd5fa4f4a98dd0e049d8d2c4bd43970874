@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5319b1b5_3f7b3c25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-05T08:39:01Z",
+      "side": 1,
+      "message": "LGTM. Only a small suggestion.",
+      "revId": "1edb8cbd5fa4f4a98dd0e049d8d2c4bd43970874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca1ab40f_eac83bcd",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-05T08:39:01Z",
+      "side": 1,
+      "message": "Why don\u0027t you clear the padding inside CopyFrom? Is there a user case where we want to copy and not clear the padding?",
+      "range": {
+        "startLine": 318,
+        "startChar": 2,
+        "endLine": 318,
+        "endChar": 25
+      },
+      "revId": "1edb8cbd5fa4f4a98dd0e049d8d2c4bd43970874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
