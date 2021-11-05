@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a057fee_68b4c9a8",
+        "filename": ".vpython3",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-05T09:25:07Z",
+      "side": 1,
+      "message": "This is all we need, can we cut the rest of the file? Our .vpython is also not the same as chromium\u0027s.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "4d05d04e0ec0ca3c97f5c34b032db7d5da244ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f367988e_4d713439",
