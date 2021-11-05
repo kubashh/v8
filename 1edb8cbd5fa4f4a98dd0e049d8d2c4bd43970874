@@ -39,6 +39,30 @@
       },
       "revId": "1edb8cbd5fa4f4a98dd0e049d8d2c4bd43970874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e013220a_14d398a3",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-05T09:20:51Z",
+      "side": 1,
+      "message": "The reason is that the padding should always be clear after initialisation, so on a non-initialising CopyFrom there\u0027s no need to copy it.",
+      "parentUuid": "ca1ab40f_eac83bcd",
+      "range": {
+        "startLine": 318,
+        "startChar": 2,
+        "endLine": 318,
+        "endChar": 25
+      },
+      "revId": "1edb8cbd5fa4f4a98dd0e049d8d2c4bd43970874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
