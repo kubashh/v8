@@ -33,6 +33,235 @@
       "message": "ishell@ PTAL src/json",
       "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8c59493_787ea74e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "lgtm with suggestions, I\u0027m also fine if you apply them in a follow-up CL",
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e811ae54_1afce333",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "You could try to squeeze even more if you do\n  PtrComprCageBase cage_base(isolate_);\nand them pass it to map() and IsBlah() calls below.",
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f98d956_f1a3a6a2",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "cage_base",
+      "range": {
+        "startLine": 590,
+        "startChar": 48,
+        "endLine": 590,
+        "endChar": 50
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc1d96d7_a5caee39",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "It would be nice if you could wrap this interrupt checking logic into a helper class or function accepting main loop body as a template lambda. Then it might be useful in other places too.",
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "049ac203_1bfe206c",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "get(cage_base, i)",
+      "range": {
+        "startLine": 675,
+        "startChar": 48,
+        "endLine": 675,
+        "endChar": 51
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f600a145_6188e9f7",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "cage_base",
+      "range": {
+        "startLine": 711,
+        "startChar": 37,
+        "endLine": 711,
+        "endChar": 39
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4951c013_52129ac3",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "(object-\u003eelements(cage_base)).get(cage_base, i)",
+      "range": {
+        "startLine": 718,
+        "startChar": 37,
+        "endLine": 718,
+        "endChar": 64
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a27317c6_64a34b82",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "It might make sense to precompute and pass cage_base to map(), HasFastProperties() and elements() too.",
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76e3e753_a4729353",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "cage_base",
+      "range": {
+        "startLine": 689,
+        "startChar": 34,
+        "endLine": 689,
+        "endChar": 36
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9c10d4_f7824e15",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "get(cage_base, i)",
+      "range": {
+        "startLine": 693,
+        "startChar": 68,
+        "endLine": 693,
+        "endChar": 71
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c010f642_9a4a4ea5",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-05T12:48:20Z",
+      "side": 1,
+      "message": "cage_base",
+      "range": {
+        "startLine": 712,
+        "startChar": 36,
+        "endLine": 712,
+        "endChar": 38
+      },
+      "revId": "a237278824c5f6feea68dfc5be776c6bf80c5d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
