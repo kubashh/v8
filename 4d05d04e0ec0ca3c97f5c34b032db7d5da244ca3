@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f367988e_4d713439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-05T08:26:04Z",
+      "side": 1,
+      "message": "Generic LGTM in case fuchsia bot turns gree now. Please link to bug.\nMaybe you can drop a few things from the vpython3 file that are not required? E.g. just keep what we also have in the vpython2 file? https://chromium.googlesource.com/v8/v8/+/c599a99a3d2ca988f65183146e5c23e2c709c0f7/.vpython - just in the newer versions?",
+      "revId": "4d05d04e0ec0ca3c97f5c34b032db7d5da244ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
