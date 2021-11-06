@@ -59,6 +59,7 @@ class StringShape {
   V8_INLINE bool IsSequentialOneByte() const;
   V8_INLINE bool IsSequentialTwoByte() const;
   V8_INLINE bool IsInternalized() const;
+  V8_INLINE bool IsShared() const;
   V8_INLINE StringRepresentationTag representation_tag() const;
   V8_INLINE uint32_t encoding_tag() const;
   V8_INLINE uint32_t full_representation_tag() const;
@@ -275,6 +276,11 @@ class String : public TorqueGeneratedString<String, Name> {
   // Requires: StringShape(this).IsIndirect() && this->IsFlat()
   inline String GetUnderlying() const;
 
+  // Shares the string. Checks inline if the string is already shared or can be
+  // shared by transitioning its map in-place. If neither is possible, flattens
+  // and copies into a new shared sequential string.
+  static inline Handle<String> Share(Isolate* isolate, Handle<String> string);
+
   // String relational comparison, implemented according to ES6 section 7.2.11
   // Abstract Relational Comparison (step 5): The comparison of Strings uses a
   // simple lexicographic ordering on sequences of code unit values. There is no
@@ -443,6 +449,9 @@ class String : public TorqueGeneratedString<String, Name> {
   inline bool IsFlat() const;
   inline bool IsFlat(PtrComprCageBase cage_base) const;
 
+  inline bool IsShared() const;
+  inline bool IsShared(PtrComprCageBase cage_base) const;
+
   // Max char codes.
   static const int32_t kMaxOneByteCharCode = unibrow::Latin1::kMaxChar;
   static const uint32_t kMaxOneByteCharCodeU = unibrow::Latin1::kMaxChar;
@@ -602,6 +611,8 @@ class String : public TorqueGeneratedString<String, Name> {
 
   static Handle<String> SlowCopy(Isolate* isolate, Handle<SeqString> source,
                                  AllocationType allocation);
+
+  static Handle<String> SlowShare(Isolate* isolate, Handle<String> source);
 
   // Slow case of String::Equals.  This implementation works on any strings
   // but it is most efficient on strings that are almost flat.

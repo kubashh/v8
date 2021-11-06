@@ -5,7 +5,7 @@
 @export
 @customCppClass
 @customMap  // Oddballs have one of multiple maps, depending on the kind.
-@apiExposedInstanceTypeValue(0x43)
+@apiExposedInstanceTypeValue(0x83)
 @highestInstanceTypeWithinParentClassRange
 class Oddball extends PrimitiveHeapObject {
   to_number_raw: float64;
