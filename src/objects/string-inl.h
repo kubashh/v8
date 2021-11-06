@@ -170,6 +170,11 @@ bool StringShape::IsUncachedExternal() const {
   return (type_ & kUncachedExternalStringMask) == kUncachedExternalStringTag;
 }
 
+bool StringShape::IsShared() const {
+  return (type_ & kSharedStringMask) == kSharedStringTag ||
+         (FLAG_shared_string_table && IsInternalized());
+}
+
 StringRepresentationTag StringShape::representation_tag() const {
   uint32_t tag = (type_ & kStringRepresentationMask);
   return static_cast<StringRepresentationTag>(tag);
@@ -627,6 +632,24 @@ Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
   return string;
 }
 
+Handle<String> String::Share(Isolate* isolate, Handle<String> string) {
+  DCHECK(FLAG_shared_string_table);
+  MaybeHandle<Map> new_map;
+  switch (
+      isolate->factory()->ComputeSharingStrategyForString(string, &new_map)) {
+    case StringTransitionStrategy::kCopy:
+      return SlowShare(isolate, string);
+    case StringTransitionStrategy::kInPlace:
+      // A relaxed write is sufficient here, because at this point the string
+      // has not yet escaped the current thread.
+      DCHECK(string->InSharedHeap());
+      string->set_map_no_write_barrier(*new_map.ToHandleChecked());
+      V8_FALLTHROUGH;
+    case StringTransitionStrategy::kAlreadyTransitioned:
+      return string;
+  }
+}
+
 uint16_t String::Get(int index) const {
   DCHECK(!SharedStringAccessGuardIfNeeded::IsNeeded(*this));
   return GetImpl(index, GetPtrComprCageBase(*this),
@@ -690,6 +713,14 @@ bool String::IsFlat() const { return IsFlat(GetPtrComprCageBase(*this)); }
 bool String::IsFlat(PtrComprCageBase cage_base) const {
   if (!StringShape(*this, cage_base).IsCons()) return true;
   return ConsString::cast(*this).second(cage_base).length() == 0;
+}
+
+bool String::IsShared() const { return IsShared(GetPtrComprCageBase(*this)); }
+
+bool String::IsShared(PtrComprCageBase cage_base) const {
+  const bool result = StringShape(*this, cage_base).IsShared();
+  DCHECK_IMPLIES(result, InSharedHeap());
+  return result;
 }
 
 String String::GetUnderlying() const {
