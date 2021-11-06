@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52365998_af15a163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-06T01:11:42Z",
+      "side": 1,
+      "message": "I won\u0027t land this yet, but Alternative 2 in the doc seems the most incremental starting point. Will land after getting lgtm both for this CL and on the design doc.",
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
