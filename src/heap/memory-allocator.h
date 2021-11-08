@@ -314,21 +314,23 @@ class MemoryAllocator {
     }
   }
 
-#ifdef DEBUG
   void RegisterExecutableMemoryChunk(MemoryChunk* chunk) {
+#ifdef DEBUG
     base::MutexGuard guard(&executable_memory_mutex_);
     DCHECK(chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE));
     DCHECK_EQ(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.insert(chunk);
+#endif
   }
 
   void UnregisterExecutableMemoryChunk(MemoryChunk* chunk) {
+#ifdef DEBUG
     base::MutexGuard guard(&executable_memory_mutex_);
     DCHECK_NE(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.erase(chunk);
+#endif
     chunk->heap()->UnregisterUnprotectedMemoryChunk(chunk);
   }
-#endif  // DEBUG
 
   Isolate* isolate_;
 
