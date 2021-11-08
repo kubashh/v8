@@ -682,6 +682,10 @@ PagedSpace::TryAllocationFromFreeListBackground(LocalHeap* local_heap,
   Address limit = new_node.address() + used_size_in_bytes;
   DCHECK_LE(limit, end);
   DCHECK_LE(min_size_in_bytes, limit - start);
+  if (identity() == CODE_SPACE) {
+    heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
+  }
   if (limit != end) {
     Free(limit, end - limit, SpaceAccountingMode::kSpaceAccounted);
   }
