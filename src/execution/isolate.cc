@@ -3017,6 +3017,54 @@ v8::PageAllocator* Isolate::page_allocator() const {
   return isolate_allocator_->page_allocator();
 }
 
+namespace {
+
+// Tracks the number of isolates spawned in this process. Currently this is
+// used to sanity-check important flag values.
+std::atomic<uintptr_t> num_isolates_spawned_in_current_process_;
+
+// These flags are all related to --jitless and *must not change within the
+// same process*. See also: crbug.com/v8/9019.
+bool initial_FLAG_jitless_;
+bool initial_FLAG_regexp_interpret_all_;
+#if V8_ENABLE_WEBASSEMBLY
+bool initial_FLAG_expose_wasm_;
+#endif
+std::atomic<bool> initial_FLAG_opt_;
+
+// TODO(all): While jitless flags are especially sensitive and cause
+// hard-to-debug failures if misused, it may be good to check all V8 flags in a
+// similar fashion - or at least have a systematic way of defining flags that
+// must not change. For now, this ad-hoc check for jitless-related flags is
+// intended to avoid trivial and accidental misuses in the future.
+void SanityCheckJitlessFlags() {
+  uintptr_t prev_num_isolates =
+      num_isolates_spawned_in_current_process_.fetch_add(
+          1, std::memory_order_relaxed);
+  if (prev_num_isolates == 0) {
+    initial_FLAG_jitless_ = FLAG_jitless;
+    initial_FLAG_regexp_interpret_all_ = FLAG_regexp_interpret_all;
+#if V8_ENABLE_WEBASSEMBLY
+    initial_FLAG_expose_wasm_ = FLAG_expose_wasm;
+#endif
+    // Keep this last to avoid data races (see below).
+    initial_FLAG_opt_.store(FLAG_opt, std::memory_order_release);
+  } else {
+    // It is invalid to create multiple isolates in the same process with
+    // differing jitless configurations.
+
+    // Keep this first to avoid data races (see above).
+    CHECK_EQ(initial_FLAG_opt_.load(std::memory_order_acquire), FLAG_opt);
+#if V8_ENABLE_WEBASSEMBLY
+    CHECK_EQ(initial_FLAG_expose_wasm_, FLAG_expose_wasm);
+#endif
+    CHECK_EQ(initial_FLAG_regexp_interpret_all_, FLAG_regexp_interpret_all);
+    CHECK_EQ(initial_FLAG_jitless_, FLAG_jitless);
+  }
+}
+
+}  // namespace
+
 Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
                  bool is_shared)
     : isolate_data_(this, isolate_allocator->GetPtrComprCageBase()),
@@ -3041,6 +3089,8 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
       cancelable_task_manager_(new CancelableTaskManager()) {
   TRACE_ISOLATE(constructor);
   CheckIsolateLayout();
+
+  SanityCheckJitlessFlags();
 
   // ThreadManager is initialized early to support locking an isolate
   // before it is entered.
