@@ -121,6 +121,24 @@
       "parentUuid": "c20788d9_1dd7b5cd",
       "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de994e96_24a34567",
+        "filename": "src/heap/paged-spaces.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T16:17:41Z",
+      "side": 1,
+      "message": "Putting this around the condition fails in many tests.\n\nIt fails because we\u0027re creating a filler object later on when creating a LocalAllocationBuffer:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/spaces.cc;drc\u003df78106f1fb37b3aa9e660993c62e645ea92f34f1;l\u003d330\n\nI\u0027ve noticed that in the main thread this seems to be deal by FreeLinearAllocationArea (which is not called in the background thread).",
+      "parentUuid": "8d40031e_4c1d4260",
+      "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
