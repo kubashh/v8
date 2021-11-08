@@ -826,6 +826,7 @@ CodePageCollectionMemoryModificationScope::
     : heap_(heap) {
   if (heap_->write_protect_code_memory() &&
       !heap_->code_space_memory_modification_scope_depth()) {
+    heap_->EnableUnprotectedMemoryChunksRegistry();
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
 }
@@ -837,6 +838,7 @@ CodePageCollectionMemoryModificationScope::
     heap_->DecrementCodePageCollectionMemoryModificationScopeDepth();
     if (heap_->code_page_collection_memory_modification_scope_depth() == 0) {
       heap_->ProtectUnprotectedMemoryChunks();
+      heap_->DisableUnprotectedMemoryChunksRegistry();
     }
   }
 }
