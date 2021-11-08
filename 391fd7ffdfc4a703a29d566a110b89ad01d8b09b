@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d50b1595_3d049f53",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3035,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T10:15:49Z",
+      "side": 1,
+      "message": "Alternatively we could look at all flags (use FlagList::Hash) but I hesitate to open that can of worms due to our tests, among other things.",
+      "revId": "391fd7ffdfc4a703a29d566a110b89ad01d8b09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

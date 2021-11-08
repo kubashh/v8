@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "188335c8_025b650b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T10:15:49Z",
+      "side": 1,
+      "message": "PTAL. Note I tried adding a CHECK in SetFlagsFromString, but - as expected - this fails all over the place in our tests.",
+      "revId": "a4819f9b0eeda1af965e9a498443dfa317b5bbd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
