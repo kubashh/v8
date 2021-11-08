@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba114c2_1f77ce9d",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-08T14:06:39Z",
+      "side": 0,
+      "message": "Since this wasn\u0027t used at all, what about moving this into a separate CL to make this more clear?",
+      "revId": "f0e5e3b282f6fb24af0c2f6832a45c71e39e2fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c18744b_6870815f",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-08T14:06:39Z",
+      "side": 0,
+      "message": "Not sure I understand why we change the default permissions here. Wouldn\u0027t this crash on e.g. M1?",
+      "revId": "f0e5e3b282f6fb24af0c2f6832a45c71e39e2fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
