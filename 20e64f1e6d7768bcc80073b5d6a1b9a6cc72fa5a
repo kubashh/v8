@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef21173_99069d9b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T14:41:54Z",
+      "side": 1,
+      "message": "No, I will remove it.",
+      "parentUuid": "d2c74002_2afbc767",
+      "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c8ef708_c223dbfa",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d011b13d_ed8a6277",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T14:41:54Z",
+      "side": 1,
+      "message": "Done: https://chromium-review.googlesource.com/c/v8/v8/+/3268286",
+      "parentUuid": "1c8ef708_c223dbfa",
+      "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c20788d9_1dd7b5cd",
@@ -65,6 +101,24 @@
       "writtenOn": "2021-11-08T14:06:39Z",
       "side": 1,
       "message": "It seems the main thread only does this in case `limit !\u003d end`, can we do this here as well?",
+      "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d40031e_4c1d4260",
+        "filename": "src/heap/paged-spaces.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T14:41:54Z",
+      "side": 1,
+      "message": "I first did this, but I\u0027ve got some crash. I will reproduce to see the exactly reason.",
+      "parentUuid": "c20788d9_1dd7b5cd",
       "revId": "20e64f1e6d7768bcc80073b5d6a1b9a6cc72fa5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

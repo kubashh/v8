@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c19720_e7e3fc5b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T14:41:54Z",
+      "side": 0,
+      "message": "Done: https://chromium-review.googlesource.com/c/v8/v8/+/3268284",
+      "parentUuid": "8ba114c2_1f77ce9d",
+      "revId": "f0e5e3b282f6fb24af0c2f6832a45c71e39e2fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c18744b_6870815f",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-08T14:06:39Z",
       "side": 0,
       "message": "Not sure I understand why we change the default permissions here. Wouldn\u0027t this crash on e.g. M1?",
+      "revId": "f0e5e3b282f6fb24af0c2f6832a45c71e39e2fc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29d329e3_f5bfae37",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-08T14:41:54Z",
+      "side": 0,
+      "message": "You right, it will crash on M1.\nI will do a `FLAG_write_code_using_rwx ? PageAllocator::kReadWriteExecute : PageAllocator::kReadWrite`",
+      "parentUuid": "2c18744b_6870815f",
       "revId": "f0e5e3b282f6fb24af0c2f6832a45c71e39e2fc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
