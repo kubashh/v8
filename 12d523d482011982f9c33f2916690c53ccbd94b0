@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96517c62_275ab78c",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T11:09:36Z",
+      "side": 1,
+      "message": "crbug.com/v8/12366",
+      "parentUuid": "f3b1c35e_7f6f27b3",
+      "range": {
+        "startLine": 3039,
+        "startChar": 10,
+        "endLine": 3039,
+        "endChar": 13
+      },
+      "revId": "12d523d482011982f9c33f2916690c53ccbd94b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26bca5d4_ef3d4864",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-08T11:00:23Z",
       "side": 1,
       "message": "const bool",
+      "range": {
+        "startLine": 3053,
+        "startChar": 2,
+        "endLine": 3053,
+        "endChar": 6
+      },
+      "revId": "12d523d482011982f9c33f2916690c53ccbd94b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ca5d9d_b6625d0e",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3053,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T11:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26bca5d4_ef3d4864",
       "range": {
         "startLine": 3053,
         "startChar": 2,
