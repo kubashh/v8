@@ -33,6 +33,57 @@
       "message": "Michael, PTAL @ heap",
       "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29e5a5df_0ccc4e7d",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T07:40:46Z",
+      "side": 1,
+      "message": "Should we have the same TODO about avoiding CDC round trips here? `code/maybe_code_` will both be converted to CodeT asap, no? Or are you leaving out the TODO since ToCodeT calls are easy to find anyways?",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea2178c_7ceb208f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T07:40:46Z",
+      "side": 1,
+      "message": "Could you use the CodeT setter?",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d656a95b_a9e1b742",
+        "filename": "src/objects/code.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-08T07:40:46Z",
+      "side": 1,
+      "message": "Suggest #ifdef here and elsewhere",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
