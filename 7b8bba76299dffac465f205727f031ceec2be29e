@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d1864d6_46f59e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-08T09:56:26Z",
+      "side": 1,
+      "message": "Hi Nico, PTAL at this small fix for a test in --stress-concurrent-inlining-attach-code. I didn\u0027t add a specific repro, because existing fast API tests fail with this flag as well.",
+      "revId": "7b8bba76299dffac465f205727f031ceec2be29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
