@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0da73fe_0a29dd7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Adding dinfuehr@ for heap/",
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a867a91_2b8ce3a6",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-11-08T10:28:51Z",
       "side": 1,
       "message": "should we also something like (if this gets more complicated in the future):\n\n  DCHECK(SeqStringT::IsCompatibleMap(map))",
+      "range": {
+        "startLine": 596,
+        "startChar": 19,
+        "endLine": 596,
+        "endChar": 29
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594ff98d_9591c5dd",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Good idea for readability, added.",
+      "parentUuid": "2a867a91_2b8ce3a6",
       "range": {
         "startLine": 596,
         "startChar": 19,
@@ -83,6 +124,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47fd9474_ad3ae9dc",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "+1 sounds like a good Cleanup Friday project.",
+      "parentUuid": "e7318e74_9077580a",
+      "range": {
+        "startLine": 925,
+        "startChar": 0,
+        "endLine": 925,
+        "endChar": 58
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f19bb74_90e62c63",
         "filename": "src/heap/factory.cc",
         "patchSetId": 2
@@ -94,6 +159,30 @@
       "writtenOn": "2021-11-08T10:28:51Z",
       "side": 1,
       "message": "nit: you only need instance_type here (and in the switch below)",
+      "range": {
+        "startLine": 934,
+        "startChar": 15,
+        "endLine": 934,
+        "endChar": 28
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5930f3da_223fd49d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f19bb74_90e62c63",
       "range": {
         "startLine": 934,
         "startChar": 15,
@@ -127,6 +216,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b30a81_a5e67f9c",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bac3f4f_56750c0b",
+      "range": {
+        "startLine": 718,
+        "startChar": 0,
+        "endLine": 718,
+        "endChar": 21
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6045831f_8a46af46",
@@ -140,6 +253,30 @@
       "writtenOn": "2021-11-08T10:28:51Z",
       "side": 1,
       "message": "nit (ok, very nit): having the return case early seems a bit nicer to read.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 18
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "482d7e0e_e4122737",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6045831f_8a46af46",
       "range": {
         "startLine": 124,
         "startChar": 0,
@@ -190,6 +327,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc4cfe11_43c96bd0",
+        "filename": "test/cctest/test-shared-strings.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf18e6a6_584f04e8",
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5326a5db_67ec5d5f",
@@ -203,6 +358,30 @@
       "writtenOn": "2021-11-08T10:28:51Z",
       "side": 1,
       "message": "What do you think about adding a test helper:\n\n  Handle\u003cString\u003e Shared(i::Isolate* isolate, Handle\u003cString\u003e string) {\n\n   Handle\u003cString\u003e shared \u003d String::Share(isolate, string);\n   CHECK(shared-\u003eIsShared());\n#ifdef VERIFY_HEAP\n    shared-\u003eObjectVerify(isolate);\n    string-\u003eObjectVerify(isolate);\n#endif  // VERIFY_HEAP\n   return shared;  \n  }",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 369,
+        "endChar": 76
+      },
+      "revId": "3b677fe02e52f421f73106a8f0ad5d8a9aee746f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4baf97f8_f38db8c0",
+        "filename": "test/cctest/test-shared-strings.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:12:27Z",
+      "side": 1,
+      "message": "Done, named it ShareAndVerify.",
+      "parentUuid": "5326a5db_67ec5d5f",
       "range": {
         "startLine": 369,
         "startChar": 0,
