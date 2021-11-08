@@ -16,6 +16,23 @@
       "message": "Hi Deepti, ptal, thanks!",
       "revId": "fc9a50dd850ded681f5c2cec6a9229a8366a60a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40839d1c_0ea1449f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2021-11-08T19:36:20Z",
+      "side": 1,
+      "message": "Sorry, I thought I had already reviewed this, but did not press send. Lgtm.",
+      "revId": "fc9a50dd850ded681f5c2cec6a9229a8366a60a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
