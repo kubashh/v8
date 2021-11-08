@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6c86cba_620d0b3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-08T05:13:59Z",
+      "side": 1,
+      "message": "Nico: PTAL.\nJakob: FYI.",
+      "revId": "26894cfaf23095dddc9f55efb6ba189a5d1b2712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
