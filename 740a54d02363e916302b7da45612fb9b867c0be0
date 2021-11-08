@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81bc22df_024121fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-08T13:41:31Z",
+      "side": 1,
+      "message": "I was not able to create a way to filter rules for certain files, but this feature seem to already exist in `cpplint.py` using a CFG file.",
+      "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
