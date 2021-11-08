@@ -226,11 +226,14 @@ class MemoryAllocator {
   void PartialFreeMemory(BasicMemoryChunk* chunk, Address start_free,
                          size_t bytes_to_free, Address new_area_end);
 
+#ifdef DEBUG
   // Checks if an allocated MemoryChunk was intended to be used for executable
   // memory.
   bool IsMemoryChunkExecutable(MemoryChunk* chunk) {
+    base::MutexGuard guard(&executable_memory_mutex_);
     return executable_memory_.find(chunk) != executable_memory_.end();
   }
+#endif
 
   // Commit memory region owned by given reservation object.  Returns true if
   // it succeeded and false otherwise.
@@ -312,16 +315,20 @@ class MemoryAllocator {
   }
 
   void RegisterExecutableMemoryChunk(MemoryChunk* chunk) {
+#ifdef DEBUG
     base::MutexGuard guard(&executable_memory_mutex_);
     DCHECK(chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE));
     DCHECK_EQ(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.insert(chunk);
+#endif
   }
 
   void UnregisterExecutableMemoryChunk(MemoryChunk* chunk) {
+#ifdef DEBUG
     base::MutexGuard guard(&executable_memory_mutex_);
     DCHECK_NE(executable_memory_.find(chunk), executable_memory_.end());
     executable_memory_.erase(chunk);
+#endif
     chunk->heap()->UnregisterUnprotectedMemoryChunk(chunk);
   }
 
@@ -359,9 +366,12 @@ class MemoryAllocator {
   VirtualMemory last_chunk_;
   Unmapper unmapper_;
 
+#ifdef DEBUG
   // Data structure to remember allocated executable memory chunks.
+  // This data structure is used only in DCHECKs.
   std::unordered_set<MemoryChunk*> executable_memory_;
   base::Mutex executable_memory_mutex_;
+#endif
 
   friend class heap::TestCodePageAllocatorScope;
   friend class heap::TestMemoryAllocatorScope;
