@@ -86,6 +86,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7aec34_8409e54b",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-08T13:28:55Z",
+      "side": 1,
+      "message": "Once we fully migrate to CodeTs there will be only several places with such conversions. Since we are not there yet, we can just search for To/FromCodeT usages.\nFor now I\u0027m adding TODOs just to some use cases I\u0027m planning to address next.",
+      "parentUuid": "29e5a5df_0ccc4e7d",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eea2178c_7ceb208f",
@@ -103,6 +121,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f675b8_e517c8a2",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-08T13:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eea2178c_7ceb208f",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d656a95b_a9e1b742",
@@ -116,6 +152,24 @@
       "writtenOn": "2021-11-08T07:40:46Z",
       "side": 1,
       "message": "Suggest #ifdef here and elsewhere",
+      "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51221114_b8df728d",
+        "filename": "src/objects/code.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-08T13:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d656a95b_a9e1b742",
       "revId": "c1666785cb980500897dd73bc6ce1692ae670fbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
