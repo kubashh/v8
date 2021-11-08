@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1d0191_43b42cc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-08T11:00:23Z",
+      "side": 1,
+      "message": "lgtm, thanks a lot",
+      "revId": "12d523d482011982f9c33f2916690c53ccbd94b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3b1c35e_7f6f27b3",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-08T11:00:23Z",
+      "side": 1,
+      "message": "Can you file a new feature request for ensuring that flags stay consistent within the same process (or similar). This CL definitely addresses the hotest issue but there\u0027s maybe better ways (e.g. SetFlagsFromString()) which are more work.",
+      "range": {
+        "startLine": 3039,
+        "startChar": 10,
+        "endLine": 3039,
+        "endChar": 13
+      },
+      "revId": "12d523d482011982f9c33f2916690c53ccbd94b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26bca5d4_ef3d4864",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3053,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-08T11:00:23Z",
+      "side": 1,
+      "message": "const bool",
+      "range": {
+        "startLine": 3053,
+        "startChar": 2,
+        "endLine": 3053,
+        "endChar": 6
+      },
+      "revId": "12d523d482011982f9c33f2916690c53ccbd94b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
