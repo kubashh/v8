@@ -114,7 +114,7 @@ void BitwiseXor_NegNeg(RWDigits Z, Digits X, Digits Y) {
   // (At least) one of the next two loops will perform zero iterations:
   for (; i < X.len(); i++) Z[i] = digit_sub(X[i], x_borrow, &x_borrow);
   for (; i < Y.len(); i++) Z[i] = digit_sub(Y[i], y_borrow, &y_borrow);
-  DCHECK(x_borrow == 0);  // NOLINT(readability/check)
+  DCHECK(x_borrow == 0);
   DCHECK(y_borrow == 0);  // NOLINT(readability/check)
   for (; i < Z.len(); i++) Z[i] = 0;
 }
