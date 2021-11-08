@@ -104,6 +104,30 @@
       },
       "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "851d00e6_407ae4b6",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-08T11:36:57Z",
+      "side": 1,
+      "message": "Is this comment bocking this CL? I downgraded it to a nit so that it wouldn\u0027t.",
+      "parentUuid": "1f9f41b0_71fe745f",
+      "range": {
+        "startLine": 354,
+        "startChar": 9,
+        "endLine": 354,
+        "endChar": 22
+      },
+      "revId": "86adeb53b09ee3a105c2735e717e93ae883ae8fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
