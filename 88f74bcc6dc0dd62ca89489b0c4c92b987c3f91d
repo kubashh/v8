@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d323b38_1f7b9ea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-08T18:13:05Z",
+      "side": 1,
+      "message": "+ marja@ for roots.h OWNER stamp",
+      "revId": "88f74bcc6dc0dd62ca89489b0c4c92b987c3f91d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
