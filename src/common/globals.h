@@ -91,7 +91,7 @@ constexpr int64_t TB = static_cast<int64_t>(GB) * 1024;
 #endif
 
 #if defined(USE_SIMULATOR) && defined(V8_TARGET_ARCH_ARM64)
-#define USE_SIMULATOR_WITH_GENERIC_C_CALLS
+#define USE_SIMULATOR_WITH_GENERIC_C_CALLS 1
 #define IF_USE_SIMULATOR(V) , V
 #else
 #define IF_USE_SIMULATOR(V)

@@ -679,6 +679,7 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
 
   switch (redirection->type()) {
     default:
+      printf("Type: %d.\n", static_cast<int>(redirection->type()));
       TraceSim("Type: Unknown.\n");
       UNREACHABLE();
 
