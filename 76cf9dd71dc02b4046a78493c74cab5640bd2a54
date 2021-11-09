@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4ca8138_6bb1d03f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-09T13:03:03Z",
+      "side": 1,
+      "message": "You didn\u0027t update the commit message yet. Could you be more precise and write\n\"the readability/check rule\" instead of \"readability checks\"?\n\nAlso in title.",
+      "parentUuid": "f501265d_212f7698",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ec9f89a_ed184cac",
