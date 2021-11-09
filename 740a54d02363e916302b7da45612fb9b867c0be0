@@ -16,6 +16,46 @@
       "message": "I was not able to create a way to filter rules for certain files, but this feature seem to already exist in `cpplint.py` using a CFG file.",
       "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aa6a5d9_651307ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-09T07:54:00Z",
+      "side": 1,
+      "message": "Guess this might work, though I want to ensure it\u0027s not doing too much, see comment below.\n\nI defer to an owner, since I\u0027m not. Could you paste a link to the cfg format docu if you have one?",
+      "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e14f4aa_0e19efe5",
+        "filename": "src/bigint/CPPLINT.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2021-11-09T07:54:00Z",
+      "side": 1,
+      "message": "What does this line mean? Does it work without it?\n\nIntuitively it looks like it\u0027d generally exclude those files. Could you check that other checks are still checked? (pun intended...)",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
