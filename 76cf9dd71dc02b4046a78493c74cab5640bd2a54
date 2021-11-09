@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f501265d_212f7698",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-09T12:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "483576f1_8d22dd8b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2ec9f89a_ed184cac",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "...and of course I meant:\n\n  filter\u003d-readability/check\n\nThe point is that we don\u0027t want any \"exclude_files\u003d...\" line.",
       "parentUuid": "2ec9f89a_ed184cac",
+      "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "737f3afc_9cebff83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-09T12:55:49Z",
+      "side": 1,
+      "message": "Done, I also tested it locally and it only filters the rule on the folder.",
+      "parentUuid": "d71b76cd_effb155e",
       "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
