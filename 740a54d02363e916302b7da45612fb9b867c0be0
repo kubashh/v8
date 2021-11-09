@@ -56,6 +56,30 @@
       },
       "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e038557_4980b715",
+        "filename": "src/bigint/CPPLINT.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2021-11-09T12:25:52Z",
+      "side": 1,
+      "message": "this will work only on the directory that the cfg file is in (see https://source.chromium.org/chromium/chromium/tools/depot_tools/+/main:cpplint.py;drc\u003d098586197089d3bd63bcdee543c546c5eb4c2bdf;l\u003d162). However it might look more elegant if we move this to the top and modify the regex.",
+      "parentUuid": "5e14f4aa_0e19efe5",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "740a54d02363e916302b7da45612fb9b867c0be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
