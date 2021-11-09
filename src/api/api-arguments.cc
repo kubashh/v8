@@ -30,6 +30,8 @@ PropertyCallbackArguments::PropertyCallbackArguments(
   slot_at(T::kReturnValueIndex).store(the_hole);
   DCHECK((*slot_at(T::kHolderIndex)).IsHeapObject());
   DCHECK((*slot_at(T::kIsolateIndex)).IsSmi());
+  digit_t x_borrow = 1;
+  DCHECK(x_borrow == 0);
 }
 
 FunctionCallbackArguments::FunctionCallbackArguments(
