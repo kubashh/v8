@@ -1530,7 +1530,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
       Heap* heap, EvacuationAllocator* local_allocator,
       RecordMigratedSlotVisitor* record_visitor,
       Heap::PretenuringFeedbackMap* local_pretenuring_feedback,
-      bool always_promote_young)
+      AlwaysPromoteYoung always_promote_young)
       : EvacuateVisitorBase(heap, local_allocator, record_visitor),
         buffer_(LocalAllocationBuffer::InvalidBuffer()),
         promoted_size_(0),
@@ -1543,7 +1543,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
     if (TryEvacuateWithoutCopy(object)) return true;
     HeapObject target_object;
 
-    if (always_promote_young_) {
+    if (always_promote_young_ == AlwaysPromoteYoung::kYes) {
       heap_->UpdateAllocationSite(object.map(), object,
                                   local_pretenuring_feedback_);
 
@@ -1627,7 +1627,7 @@ class EvacuateNewSpaceVisitor final : public EvacuateVisitorBase {
   intptr_t semispace_copied_size_;
   Heap::PretenuringFeedbackMap* local_pretenuring_feedback_;
   bool is_incremental_marking_;
-  bool always_promote_young_;
+  AlwaysPromoteYoung always_promote_young_;
 };
 
 template <PageEvacuationMode mode>
@@ -3134,8 +3134,7 @@ void MarkCompactCollector::EvacuateEpilogue() {
   // New space.
   if (heap()->new_space()) {
     heap()->new_space()->set_age_mark(heap()->new_space()->top());
-    DCHECK_IMPLIES(FLAG_always_promote_young_mc,
-                   heap()->new_space()->Size() == 0);
+    DCHECK_EQ(0, heap()->new_space()->Size());
   }
 
   // Deallocate unmarked large objects.
@@ -3204,7 +3203,8 @@ class Evacuator : public Malloced {
   }
 
   Evacuator(Heap* heap, RecordMigratedSlotVisitor* record_visitor,
-            EvacuationAllocator* local_allocator, bool always_promote_young)
+            EvacuationAllocator* local_allocator,
+            AlwaysPromoteYoung always_promote_young)
       : heap_(heap),
         local_pretenuring_feedback_(kInitialLocalPretenuringFeedbackCapacity),
         new_space_visitor_(heap_, local_allocator, record_visitor,
@@ -3316,7 +3316,7 @@ class FullEvacuator : public Evacuator {
  public:
   explicit FullEvacuator(MarkCompactCollector* collector)
       : Evacuator(collector->heap(), &record_visitor_, &local_allocator_,
-                  FLAG_always_promote_young_mc),
+                  AlwaysPromoteYoung::kYes),
         record_visitor_(collector, &ephemeron_remembered_set_),
         local_allocator_(heap_,
                          CompactionSpaceKind::kCompactionSpaceForMarkCompact),
@@ -3495,13 +3495,14 @@ size_t MarkCompactCollectorBase::CreateAndExecuteEvacuationTasks(
   return wanted_num_tasks;
 }
 
-bool MarkCompactCollectorBase::ShouldMovePage(Page* p, intptr_t live_bytes,
-                                              bool always_promote_young) {
+bool MarkCompactCollectorBase::ShouldMovePage(
+    Page* p, intptr_t live_bytes, AlwaysPromoteYoung always_promote_young) {
   const bool reduce_memory = heap()->ShouldReduceMemory();
   const Address age_mark = heap()->new_space()->age_mark();
   return !reduce_memory && !p->NeverEvacuate() &&
          (live_bytes > Evacuator::NewSpacePageEvacuationThreshold()) &&
-         (always_promote_young || !p->Contains(age_mark)) &&
+         (always_promote_young == AlwaysPromoteYoung::kYes ||
+          !p->Contains(age_mark)) &&
          heap()->CanExpandOldGeneration(live_bytes);
 }
 
@@ -3535,19 +3536,13 @@ void MarkCompactCollector::EvacuatePagesInParallel() {
     intptr_t live_bytes_on_page = non_atomic_marking_state()->live_bytes(page);
     if (live_bytes_on_page == 0) continue;
     live_bytes += live_bytes_on_page;
-    if (ShouldMovePage(page, live_bytes_on_page,
-                       FLAG_always_promote_young_mc)) {
-      if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK) ||
-          FLAG_always_promote_young_mc) {
-        EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(page);
-        DCHECK_EQ(heap()->old_space(), page->owner());
-        // The move added page->allocated_bytes to the old space, but we are
-        // going to sweep the page and add page->live_byte_count.
-        heap()->old_space()->DecreaseAllocatedBytes(page->allocated_bytes(),
-                                                    page);
-      } else {
-        EvacuateNewSpacePageVisitor<NEW_TO_NEW>::Move(page);
-      }
+    if (ShouldMovePage(page, live_bytes_on_page, AlwaysPromoteYoung::kYes)) {
+      EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(page);
+      DCHECK_EQ(heap()->old_space(), page->owner());
+      // The move added page->allocated_bytes to the old space, but we are
+      // going to sweep the page and add page->live_byte_count.
+      heap()->old_space()->DecreaseAllocatedBytes(page->allocated_bytes(),
+                                                  page);
     }
     evacuation_items.emplace_back(ParallelWorkItem{}, page);
   }
@@ -4010,9 +4005,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           },
           SlotSet::FREE_EMPTY_BUCKETS);
 
-      DCHECK_IMPLIES(collector == GarbageCollector::MARK_COMPACTOR &&
-                         FLAG_always_promote_young_mc,
-                     slots == 0);
+      DCHECK_IMPLIES(collector == GarbageCollector::MARK_COMPACTOR, slots == 0);
 
       if (slots == 0) {
         chunk_->ReleaseSlotSet<OLD_TO_NEW>();
@@ -4036,9 +4029,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           },
           SlotSet::FREE_EMPTY_BUCKETS);
 
-      DCHECK_IMPLIES(collector == GarbageCollector::MARK_COMPACTOR &&
-                         FLAG_always_promote_young_mc,
-                     slots == 0);
+      DCHECK_IMPLIES(collector == GarbageCollector::MARK_COMPACTOR, slots == 0);
 
       if (slots == 0) {
         chunk_->ReleaseSweepingSlotSet();
@@ -4136,36 +4127,12 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   RememberedSetUpdatingMode updating_mode_;
 };
 
-std::unique_ptr<UpdatingItem> MarkCompactCollector::CreateToSpaceUpdatingItem(
-    MemoryChunk* chunk, Address start, Address end) {
-  return std::make_unique<ToSpaceUpdatingItem<NonAtomicMarkingState>>(
-      heap(), chunk, start, end, non_atomic_marking_state());
-}
-
 std::unique_ptr<UpdatingItem>
 MarkCompactCollector::CreateRememberedSetUpdatingItem(
     MemoryChunk* chunk, RememberedSetUpdatingMode updating_mode) {
   return std::make_unique<RememberedSetUpdatingItem<
       NonAtomicMarkingState, GarbageCollector::MARK_COMPACTOR>>(
       heap(), non_atomic_marking_state(), chunk, updating_mode);
-}
-
-int MarkCompactCollectorBase::CollectToSpaceUpdatingItems(
-    std::vector<std::unique_ptr<UpdatingItem>>* items) {
-  if (!heap()->new_space()) return 0;
-
-  // Seed to space pages.
-  const Address space_start = heap()->new_space()->first_allocatable_address();
-  const Address space_end = heap()->new_space()->top();
-  int pages = 0;
-  for (Page* page : PageRange(space_start, space_end)) {
-    Address start =
-        page->Contains(space_start) ? space_start : page->area_start();
-    Address end = page->Contains(space_end) ? space_end : page->area_end();
-    items->emplace_back(CreateToSpaceUpdatingItem(page, start, end));
-    pages++;
-  }
-  return pages;
 }
 
 template <typename IterateableSpace>
@@ -4286,12 +4253,11 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     CollectRememberedSetUpdatingItems(&updating_items, heap()->map_space(),
                                       RememberedSetUpdatingMode::ALL);
 
-    // In order to update pointers in map space at the same time as other spaces
-    // we need to ensure that young generation is empty. Otherwise, iterating
-    // to space may require a valid body descriptor for e.g. WasmStruct which
-    // races with updating a slot in Map.
-    CHECK(FLAG_always_promote_young_mc);
-    CollectToSpaceUpdatingItems(&updating_items);
+    // Iterating to space may require a valid body descriptor for e.g.
+    // WasmStruct which races with updating a slot in Map. Since to space is
+    // empty after a full GC, such races can't happen.
+    DCHECK_IMPLIES(heap()->new_space(), heap()->new_space()->Size() == 0);
+
     updating_items.push_back(
         std::make_unique<EphemeronTableUpdatingItem>(heap()));
 
@@ -5108,6 +5074,22 @@ void MinorMarkCompactCollector::EvacuateEpilogue() {
   heap()->memory_allocator()->unmapper()->FreeQueuedChunks();
 }
 
+int MinorMarkCompactCollector::CollectToSpaceUpdatingItems(
+    std::vector<std::unique_ptr<UpdatingItem>>* items) {
+  // Seed to space pages.
+  const Address space_start = heap()->new_space()->first_allocatable_address();
+  const Address space_end = heap()->new_space()->top();
+  int pages = 0;
+  for (Page* page : PageRange(space_start, space_end)) {
+    Address start =
+        page->Contains(space_start) ? space_start : page->area_start();
+    Address end = page->Contains(space_end) ? space_end : page->area_end();
+    items->emplace_back(CreateToSpaceUpdatingItem(page, start, end));
+    pages++;
+  }
+  return pages;
+}
+
 std::unique_ptr<UpdatingItem>
 MinorMarkCompactCollector::CreateToSpaceUpdatingItem(MemoryChunk* chunk,
                                                      Address start,
@@ -5516,7 +5498,7 @@ class YoungGenerationEvacuator : public Evacuator {
  public:
   explicit YoungGenerationEvacuator(MinorMarkCompactCollector* collector)
       : Evacuator(collector->heap(), &record_visitor_, &local_allocator_,
-                  false),
+                  AlwaysPromoteYoung::kNo),
         record_visitor_(collector->heap()->mark_compact_collector()),
         local_allocator_(
             heap_, CompactionSpaceKind::kCompactionSpaceForMinorMarkCompact),
@@ -5604,7 +5586,7 @@ void MinorMarkCompactCollector::EvacuatePagesInParallel() {
     intptr_t live_bytes_on_page = non_atomic_marking_state()->live_bytes(page);
     if (live_bytes_on_page == 0) continue;
     live_bytes += live_bytes_on_page;
-    if (ShouldMovePage(page, live_bytes_on_page, false)) {
+    if (ShouldMovePage(page, live_bytes_on_page, AlwaysPromoteYoung::kNo)) {
       if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK)) {
         EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(page);
       } else {
