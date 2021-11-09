@@ -682,6 +682,11 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
       TraceSim("Type: Unknown.\n");
       UNREACHABLE();
 
+#ifdef V8_USE_MEMORY_SANITIZER
+    // BUG(chromium:1267854) FAST_C_CALL is temporarily handled here as well
+    // until we have a proper fix for MSAN running optimized API calls.
+    case ExternalReference::FAST_C_CALL:
+#endif  // V8_USE_MEMORY_SANITIZER
     case ExternalReference::BUILTIN_CALL:
 #if defined(V8_OS_WIN)
     {
