@@ -16,6 +16,23 @@
       "message": "PTAL, thanks. I\u0027m not sure if this is the right solution, but it\u0027s an option.",
       "revId": "86cf93043414691f8196b064fbb7251995e06bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc0b9edb_957f8bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-09T09:07:41Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "86cf93043414691f8196b064fbb7251995e06bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
