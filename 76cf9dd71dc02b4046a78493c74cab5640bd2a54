@@ -39,6 +39,24 @@
       "message": "Thanks for finding this feature! I like the approach, but I think this does too much currently.\n\nPer the link you gave: https://source.chromium.org/chromium/chromium/tools/depot_tools/+/main:cpplint.py;drc\u003d098586197089d3bd63bcdee543c546c5eb4c2bdf;l\u003d169\nI think CPPLINT.cfg should be in src/bigint/, and should only contain one entry:\n\n  -readability/check\n\nThat way, it\u0027ll disable one rule for one directory. We don\u0027t want any files to be skipped entirely.\n\n(FWIW, you don\u0027t need to upload new patch sets for testing; just commit locally and run `git cl presubmit`.)",
       "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d71b76cd_effb155e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-11-09T12:50:16Z",
+      "side": 1,
+      "message": "...and of course I meant:\n\n  filter\u003d-readability/check\n\nThe point is that we don\u0027t want any \"exclude_files\u003d...\" line.",
+      "parentUuid": "2ec9f89a_ed184cac",
+      "revId": "76cf9dd71dc02b4046a78493c74cab5640bd2a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
