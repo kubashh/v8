@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e424ae_997f34cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-09T11:13:13Z",
+      "side": 1,
+      "message": "Thanks, Jakob and Camillo! Landing this as a quick workaround, will continue to investigate.",
+      "revId": "588337b5eb64b8a9fb060369a33c4eab45d9535a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
