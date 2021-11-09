@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "4d855b19eb0c9e3463a337e13949e8205130ffa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a74f5bcc_0b02cecd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-09T11:46:06Z",
+      "side": 1,
+      "message": "lgtm, thanks a lot",
+      "revId": "4d855b19eb0c9e3463a337e13949e8205130ffa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed5b6c03_909a8814",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3132,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-09T11:46:06Z",
+      "side": 1,
+      "message": "nit: expected value on the LHS",
+      "range": {
+        "startLine": 3132,
+        "startChar": 43,
+        "endLine": 3132,
+        "endChar": 44
+      },
+      "revId": "4d855b19eb0c9e3463a337e13949e8205130ffa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
