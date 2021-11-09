@@ -16,6 +16,23 @@
       "message": "This is the cherry-pick for M97.",
       "revId": "d82512eaf183a39cee2d53b0d0cda0a788149644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d50a183_7fdb8027",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-11-09T12:42:47Z",
+      "side": 1,
+      "message": "I think you\u0027re merging to the wrong branch. For V8 I think the right branch would be branch-heads/9.7 (see https://v8.dev/docs/merge-patch#how-to-create-the-merge-cl for how to back-merge in V8 land).",
+      "revId": "d82512eaf183a39cee2d53b0d0cda0a788149644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
