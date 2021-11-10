@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "943db2ef_d0e5c0f7",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-10T08:08:21Z",
+      "side": 1,
+      "message": "I wonder if this is required? My intuition is that the reducer framework should take care of revisits on changes. I think the respective code is here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/graph-reducer.cc;l\u003d191;drc\u003db6e40f8ab247ea209bcecff994386a70a4169e9d\n\nIs my assumption wrong?",
+      "range": {
+        "startLine": 353,
+        "startChar": 6,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "1014ec3173c3ba81ee916599d5bfddf24955f688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e47edf8e_2c54ca70",
+        "filename": "src/compiler/wasm-escape-analysis.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-10T08:08:21Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 26
+      },
+      "revId": "1014ec3173c3ba81ee916599d5bfddf24955f688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
