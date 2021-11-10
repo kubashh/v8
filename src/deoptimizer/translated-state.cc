@@ -1863,7 +1863,7 @@ void TranslatedState::InitializeJSObjectAt(
   // marker to see if we store an unboxed double.
   DCHECK_EQ(kTaggedSize, JSObject::kPropertiesOrHashOffset);
   for (int i = 2; i < slot->GetChildrenCount(); i++) {
-    TranslatedValue* slot = GetResolvedSlotAndAdvance(frame, value_index);
+    slot = GetResolvedSlotAndAdvance(frame, value_index);
     // Read out the marker and ensure the field is consistent with
     // what the markers in the storage say (note that all heap numbers
     // should be fully initialized by now).
@@ -1903,7 +1903,7 @@ void TranslatedState::InitializeObjectWithTaggedFieldsAt(
 
   // Write the fields to the object.
   for (int i = 1; i < slot->GetChildrenCount(); i++) {
-    TranslatedValue* slot = GetResolvedSlotAndAdvance(frame, value_index);
+    slot = GetResolvedSlotAndAdvance(frame, value_index);
     int offset = i * kTaggedSize;
     uint8_t marker = object_storage->ReadField<uint8_t>(offset);
     Handle<Object> field_value;
