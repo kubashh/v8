@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5639b9_88b198c9",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-10T12:12:45Z",
+      "side": 1,
+      "message": "I thought that returning Replace(replacement) would notify the framework about this new node and trigger revisit, isn\u0027t that we the code I liked did?",
+      "parentUuid": "8c8b7b34_35d7bc56",
+      "range": {
+        "startLine": 353,
+        "startChar": 6,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "1014ec3173c3ba81ee916599d5bfddf24955f688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e47edf8e_2c54ca70",
