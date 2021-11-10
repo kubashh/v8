@@ -684,8 +684,11 @@ bool MemoryAllocator::CommitExecutableMemory(VirtualMemory* vm, Address start,
     if (vm->SetPermissions(pre_guard_page, page_size,
                            PageAllocator::kNoAccess)) {
       // Commit the executable code body.
+      PageAllocator::Permission default_code_perm =
+          FLAG_write_code_using_rwx ? PageAllocator::kReadWriteExecute
+                                    : PageAllocator::kReadWrite;
       if (vm->SetPermissions(code_area, commit_size - pre_guard_offset,
-                             PageAllocator::kReadWrite)) {
+                             default_code_perm)) {
         // Create the post-code guard page.
         if (vm->SetPermissions(post_guard_page, page_size,
                                PageAllocator::kNoAccess)) {

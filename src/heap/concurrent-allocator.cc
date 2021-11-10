@@ -124,10 +124,18 @@ bool ConcurrentAllocator::EnsureLab(AllocationOrigin origin) {
       local_heap_, kLabSize, kMaxLabSize, kWordAligned, origin);
   if (!result) return false;
 
+  Address top = result->first;
+  Page* page = Page::FromAllocationAreaAddress(top);
   if (IsBlackAllocationEnabled()) {
-    Address top = result->first;
     Address limit = top + result->second;
-    Page::FromAllocationAreaAddress(top)->CreateBlackAreaBackground(top, limit);
+    page->CreateBlackAreaBackground(top, limit);
+  }
+
+  // The code page of the linear allocation area needs to be unprotected
+  // because we are going to write a filler into that memory area.
+  if (space_->identity() == CODE_SPACE) {
+    local_heap_->heap()->UnprotectAndRegisterMemoryChunk(
+        page, UnprotectMemoryOrigin::kMaybeOffMainThread);
   }
 
   HeapObject object = HeapObject::FromAddress(result->first);
