@@ -33,7 +33,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
 
   enum CompletionAction { GC_VIA_STACK_GUARD, NO_GC_VIA_STACK_GUARD };
 
-  enum GCRequestType { NONE, COMPLETE_MARKING, FINALIZATION };
+  enum GCRequestType { NO_REQUEST, COMPLETE_MARKING, FINALIZATION };
 
   using MarkingState = MarkCompactCollector::MarkingState;
   using AtomicMarkingState = MarkCompactCollector::AtomicMarkingState;
@@ -133,7 +133,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
 
   GCRequestType request_type() const { return request_type_; }
 
-  void reset_request_type() { request_type_ = NONE; }
+  void reset_request_type() { request_type_ = NO_REQUEST; }
 
   bool CanBeActivated();
 
@@ -310,7 +310,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   bool finalize_marking_completed_ = false;
   IncrementalMarkingJob incremental_marking_job_;
 
-  std::atomic<GCRequestType> request_type_{NONE};
+  std::atomic<GCRequestType> request_type_{NO_REQUEST};
 
   Observer new_generation_observer_;
   Observer old_generation_observer_;
