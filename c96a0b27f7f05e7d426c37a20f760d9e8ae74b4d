@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72f2e812_eee7e85c",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-11T05:50:47Z",
+      "side": 1,
+      "message": "You saw in test failures, but you\u0027ll need a new variable here and below.",
+      "revId": "c96a0b27f7f05e7d426c37a20f760d9e8ae74b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
