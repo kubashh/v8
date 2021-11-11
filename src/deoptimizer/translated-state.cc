@@ -269,7 +269,7 @@ void TranslationArrayPrintSingleFrame(
 TranslatedValue TranslatedValue::NewDeferredObject(TranslatedState* container,
                                                    int length,
                                                    int object_index) {
-  TranslatedValue slot(container, kCapturedObject);
+  TranslatedValue slot(container, Kind::kCapturedObject);
   slot.materialization_info_ = {object_index, length};
   return slot;
 }
@@ -277,7 +277,7 @@ TranslatedValue TranslatedValue::NewDeferredObject(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewDuplicateObject(TranslatedState* container,
                                                     int id) {
-  TranslatedValue slot(container, kDuplicatedObject);
+  TranslatedValue slot(container, Kind::kDuplicatedObject);
   slot.materialization_info_ = {id, -1};
   return slot;
 }
@@ -285,7 +285,7 @@ TranslatedValue TranslatedValue::NewDuplicateObject(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewFloat(TranslatedState* container,
                                           Float32 value) {
-  TranslatedValue slot(container, kFloat);
+  TranslatedValue slot(container, Kind::kFloat);
   slot.float_value_ = value;
   return slot;
 }
@@ -293,7 +293,7 @@ TranslatedValue TranslatedValue::NewFloat(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewDouble(TranslatedState* container,
                                            Float64 value) {
-  TranslatedValue slot(container, kDouble);
+  TranslatedValue slot(container, Kind::kDouble);
   slot.double_value_ = value;
   return slot;
 }
@@ -301,7 +301,7 @@ TranslatedValue TranslatedValue::NewDouble(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewInt32(TranslatedState* container,
                                           int32_t value) {
-  TranslatedValue slot(container, kInt32);
+  TranslatedValue slot(container, Kind::kInt32);
   slot.int32_value_ = value;
   return slot;
 }
@@ -309,7 +309,7 @@ TranslatedValue TranslatedValue::NewInt32(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewInt64(TranslatedState* container,
                                           int64_t value) {
-  TranslatedValue slot(container, kInt64);
+  TranslatedValue slot(container, Kind::kInt64);
   slot.int64_value_ = value;
   return slot;
 }
@@ -317,7 +317,7 @@ TranslatedValue TranslatedValue::NewInt64(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewInt64ToBigInt(TranslatedState* container,
                                                   int64_t value) {
-  TranslatedValue slot(container, kInt64ToBigInt);
+  TranslatedValue slot(container, Kind::kInt64ToBigInt);
   slot.int64_value_ = value;
   return slot;
 }
@@ -325,7 +325,7 @@ TranslatedValue TranslatedValue::NewInt64ToBigInt(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewUInt32(TranslatedState* container,
                                            uint32_t value) {
-  TranslatedValue slot(container, kUInt32);
+  TranslatedValue slot(container, Kind::kUInt32);
   slot.uint32_value_ = value;
   return slot;
 }
@@ -333,7 +333,7 @@ TranslatedValue TranslatedValue::NewUInt32(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewBool(TranslatedState* container,
                                          uint32_t value) {
-  TranslatedValue slot(container, kBoolBit);
+  TranslatedValue slot(container, Kind::kBoolBit);
   slot.uint32_value_ = value;
   return slot;
 }
@@ -341,55 +341,55 @@ TranslatedValue TranslatedValue::NewBool(TranslatedState* container,
 // static
 TranslatedValue TranslatedValue::NewTagged(TranslatedState* container,
                                            Object literal) {
-  TranslatedValue slot(container, kTagged);
+  TranslatedValue slot(container, Kind::kTagged);
   slot.raw_literal_ = literal;
   return slot;
 }
 
 // static
 TranslatedValue TranslatedValue::NewInvalid(TranslatedState* container) {
-  return TranslatedValue(container, kInvalid);
+  return TranslatedValue(container, Kind::kInvalid);
 }
 
 Isolate* TranslatedValue::isolate() const { return container_->isolate(); }
 
 Object TranslatedValue::raw_literal() const {
-  DCHECK_EQ(kTagged, kind());
+  DCHECK_EQ(Kind::kTagged, kind());
   return raw_literal_;
 }
 
 int32_t TranslatedValue::int32_value() const {
-  DCHECK_EQ(kInt32, kind());
+  DCHECK_EQ(Kind::kInt32, kind());
   return int32_value_;
 }
 
 int64_t TranslatedValue::int64_value() const {
-  DCHECK(kInt64 == kind() || kInt64ToBigInt == kind());
+  DCHECK(Kind::kInt64 == kind() || Kind::kInt64ToBigInt == kind());
   return int64_value_;
 }
 
 uint32_t TranslatedValue::uint32_value() const {
-  DCHECK(kind() == kUInt32 || kind() == kBoolBit);
+  DCHECK(kind() == Kind::kUInt32 || kind() == Kind::kBoolBit);
   return uint32_value_;
 }
 
 Float32 TranslatedValue::float_value() const {
-  DCHECK_EQ(kFloat, kind());
+  DCHECK_EQ(Kind::kFloat, kind());
   return float_value_;
 }
 
 Float64 TranslatedValue::double_value() const {
-  DCHECK_EQ(kDouble, kind());
+  DCHECK_EQ(Kind::kDouble, kind());
   return double_value_;
 }
 
 int TranslatedValue::object_length() const {
-  DCHECK_EQ(kind(), kCapturedObject);
+  DCHECK_EQ(kind(), Kind::kCapturedObject);
   return materialization_info_.length_;
 }
 
 int TranslatedValue::object_index() const {
-  DCHECK(kind() == kCapturedObject || kind() == kDuplicatedObject);
+  DCHECK(kind() == Kind::kCapturedObject || kind() == Kind::kDuplicatedObject);
   return materialization_info_.id_;
 }
 
@@ -406,10 +406,10 @@ Object TranslatedValue::GetRawValue() const {
 
   // Otherwise, do a best effort to get the value without allocation.
   switch (kind()) {
-    case kTagged:
+    case Kind::kTagged:
       return raw_literal();
 
-    case kInt32: {
+    case Kind::kInt32: {
       bool is_smi = Smi::IsValid(int32_value());
       if (is_smi) {
         return Smi::FromInt(int32_value());
@@ -417,7 +417,7 @@ Object TranslatedValue::GetRawValue() const {
       break;
     }
 
-    case kInt64: {
+    case Kind::kInt64: {
       bool is_smi = (int64_value() >= static_cast<int64_t>(Smi::kMinValue) &&
                      int64_value() <= static_cast<int64_t>(Smi::kMaxValue));
       if (is_smi) {
@@ -426,11 +426,11 @@ Object TranslatedValue::GetRawValue() const {
       break;
     }
 
-    case kInt64ToBigInt:
+    case Kind::kInt64ToBigInt:
       // Return the arguments marker.
       break;
 
-    case kUInt32: {
+    case Kind::kUInt32: {
       bool is_smi = (uint32_value() <= static_cast<uintptr_t>(Smi::kMaxValue));
       if (is_smi) {
         return Smi::FromInt(static_cast<int32_t>(uint32_value()));
@@ -438,7 +438,7 @@ Object TranslatedValue::GetRawValue() const {
       break;
     }
 
-    case kBoolBit: {
+    case Kind::kBoolBit: {
       if (uint32_value() == 0) {
         return ReadOnlyRoots(isolate()).false_value();
       } else {
@@ -447,7 +447,7 @@ Object TranslatedValue::GetRawValue() const {
       }
     }
 
-    case kFloat: {
+    case Kind::kFloat: {
       int smi;
       if (DoubleToSmiInteger(float_value().get_scalar(), &smi)) {
         return Smi::FromInt(smi);
@@ -455,7 +455,7 @@ Object TranslatedValue::GetRawValue() const {
       break;
     }
 
-    case kDouble: {
+    case Kind::kDouble: {
       int smi;
       if (DoubleToSmiInteger(double_value().get_scalar(), &smi)) {
         return Smi::FromInt(smi);
@@ -500,8 +500,8 @@ Handle<Object> TranslatedValue::GetValue() {
 
   // Otherwise we have to materialize.
 
-  if (kind() == TranslatedValue::kCapturedObject ||
-      kind() == TranslatedValue::kDuplicatedObject) {
+  if (kind() == TranslatedValue::Kind::kCapturedObject ||
+      kind() == TranslatedValue::Kind::kDuplicatedObject) {
     // We need to materialize the object (or possibly even object graphs).
     // To make the object verifier happy, we materialize in two steps.
 
@@ -528,41 +528,42 @@ Handle<Object> TranslatedValue::GetValue() {
   double number = 0;
   Handle<HeapObject> heap_object;
   switch (kind()) {
-    case TranslatedValue::kInt32:
+    case TranslatedValue::Kind::kInt32:
       number = int32_value();
       heap_object = isolate()->factory()->NewHeapNumber(number);
       break;
-    case TranslatedValue::kInt64:
+    case TranslatedValue::Kind::kInt64:
       number = int64_value();
       heap_object = isolate()->factory()->NewHeapNumber(number);
       break;
-    case TranslatedValue::kInt64ToBigInt:
+    case TranslatedValue::Kind::kInt64ToBigInt:
       heap_object = BigInt::FromInt64(isolate(), int64_value());
       break;
-    case TranslatedValue::kUInt32:
+    case TranslatedValue::Kind::kUInt32:
       number = uint32_value();
       heap_object = isolate()->factory()->NewHeapNumber(number);
       break;
-    case TranslatedValue::kFloat:
+    case TranslatedValue::Kind::kFloat:
       number = float_value().get_scalar();
       heap_object = isolate()->factory()->NewHeapNumber(number);
       break;
-    case TranslatedValue::kDouble:
+    case TranslatedValue::Kind::kDouble:
       number = double_value().get_scalar();
       heap_object = isolate()->factory()->NewHeapNumber(number);
       break;
     default:
       UNREACHABLE();
   }
-  DCHECK(!IsSmiDouble(number) || kind() == TranslatedValue::kInt64ToBigInt);
+  DCHECK(!IsSmiDouble(number) ||
+         kind() == TranslatedValue::Kind::kInt64ToBigInt);
   set_initialized_storage(heap_object);
   return storage_;
 }
 
 bool TranslatedValue::IsMaterializedObject() const {
   switch (kind()) {
-    case kCapturedObject:
-    case kDuplicatedObject:
+    case Kind::kCapturedObject:
+    case Kind::kDuplicatedObject:
       return true;
     default:
       return false;
@@ -571,11 +572,11 @@ bool TranslatedValue::IsMaterializedObject() const {
 
 bool TranslatedValue::IsMaterializableByDebugger() const {
   // At the moment, we only allow materialization of doubles.
-  return (kind() == kDouble);
+  return (kind() == Kind::kDouble);
 }
 
 int TranslatedValue::GetChildrenCount() const {
-  if (kind() == kCapturedObject) {
+  if (kind() == Kind::kCapturedObject) {
     return object_length();
   } else {
     return 0;
@@ -612,7 +613,7 @@ Float64 TranslatedState::GetDoubleSlot(Address fp, int slot_offset) {
 }
 
 void TranslatedValue::Handlify() {
-  if (kind() == kTagged && raw_literal().IsHeapObject()) {
+  if (kind() == Kind::kTagged && raw_literal().IsHeapObject()) {
     set_initialized_storage(
         Handle<HeapObject>(HeapObject::cast(raw_literal()), isolate()));
     raw_literal_ = Object();
@@ -622,7 +623,7 @@ void TranslatedValue::Handlify() {
 TranslatedFrame TranslatedFrame::UnoptimizedFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info, int height,
     int return_value_offset, int return_value_count) {
-  TranslatedFrame frame(kUnoptimizedFunction, shared_info, height,
+  TranslatedFrame frame(Kind::kUnoptimizedFunction, shared_info, height,
                         return_value_offset, return_value_count);
   frame.bytecode_offset_ = bytecode_offset;
   return frame;
@@ -630,13 +631,13 @@ TranslatedFrame TranslatedFrame::UnoptimizedFrame(
 
 TranslatedFrame TranslatedFrame::ArgumentsAdaptorFrame(
     SharedFunctionInfo shared_info, int height) {
-  return TranslatedFrame(kArgumentsAdaptor, shared_info, height);
+  return TranslatedFrame(Kind::kArgumentsAdaptor, shared_info, height);
 }
 
 TranslatedFrame TranslatedFrame::ConstructStubFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info,
     int height) {
-  TranslatedFrame frame(kConstructStub, shared_info, height);
+  TranslatedFrame frame(Kind::kConstructStub, shared_info, height);
   frame.bytecode_offset_ = bytecode_offset;
   return frame;
 }
@@ -644,7 +645,7 @@ TranslatedFrame TranslatedFrame::ConstructStubFrame(
 TranslatedFrame TranslatedFrame::BuiltinContinuationFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info,
     int height) {
-  TranslatedFrame frame(kBuiltinContinuation, shared_info, height);
+  TranslatedFrame frame(Kind::kBuiltinContinuation, shared_info, height);
   frame.bytecode_offset_ = bytecode_offset;
   return frame;
 }
@@ -653,7 +654,8 @@ TranslatedFrame TranslatedFrame::BuiltinContinuationFrame(
 TranslatedFrame TranslatedFrame::JSToWasmBuiltinContinuationFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info, int height,
     base::Optional<wasm::ValueKind> return_kind) {
-  TranslatedFrame frame(kJSToWasmBuiltinContinuation, shared_info, height);
+  TranslatedFrame frame(Kind::kJSToWasmBuiltinContinuation, shared_info,
+                        height);
   frame.bytecode_offset_ = bytecode_offset;
   frame.return_kind_ = return_kind;
   return frame;
@@ -663,7 +665,8 @@ TranslatedFrame TranslatedFrame::JSToWasmBuiltinContinuationFrame(
 TranslatedFrame TranslatedFrame::JavaScriptBuiltinContinuationFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info,
     int height) {
-  TranslatedFrame frame(kJavaScriptBuiltinContinuation, shared_info, height);
+  TranslatedFrame frame(Kind::kJavaScriptBuiltinContinuation, shared_info,
+                        height);
   frame.bytecode_offset_ = bytecode_offset;
   return frame;
 }
@@ -671,8 +674,8 @@ TranslatedFrame TranslatedFrame::JavaScriptBuiltinContinuationFrame(
 TranslatedFrame TranslatedFrame::JavaScriptBuiltinContinuationWithCatchFrame(
     BytecodeOffset bytecode_offset, SharedFunctionInfo shared_info,
     int height) {
-  TranslatedFrame frame(kJavaScriptBuiltinContinuationWithCatch, shared_info,
-                        height);
+  TranslatedFrame frame(Kind::kJavaScriptBuiltinContinuationWithCatch,
+                        shared_info, height);
   frame.bytecode_offset_ = bytecode_offset;
   return frame;
 }
@@ -683,7 +686,7 @@ int TranslatedFrame::GetValueCount() {
   static constexpr int kTheFunction = 1;
 
   switch (kind()) {
-    case kUnoptimizedFunction: {
+    case Kind::kUnoptimizedFunction: {
       int parameter_count =
           raw_shared_info_.internal_formal_parameter_count_with_receiver();
       static constexpr int kTheContext = 1;
@@ -692,21 +695,21 @@ int TranslatedFrame::GetValueCount() {
              kTheAccumulator;
     }
 
-    case kArgumentsAdaptor:
+    case Kind::kArgumentsAdaptor:
       return height() + kTheFunction;
 
-    case kConstructStub:
-    case kBuiltinContinuation:
+    case Kind::kConstructStub:
+    case Kind::kBuiltinContinuation:
 #if V8_ENABLE_WEBASSEMBLY
-    case kJSToWasmBuiltinContinuation:
+    case Kind::kJSToWasmBuiltinContinuation:
 #endif  // V8_ENABLE_WEBASSEMBLY
-    case kJavaScriptBuiltinContinuation:
-    case kJavaScriptBuiltinContinuationWithCatch: {
+    case Kind::kJavaScriptBuiltinContinuation:
+    case Kind::kJavaScriptBuiltinContinuationWithCatch: {
       static constexpr int kTheContext = 1;
       return height() + kTheContext + kTheFunction;
     }
 
-    case kInvalid:
+    case Kind::kInvalid:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1425,7 +1428,7 @@ void TranslatedState::InitializeCapturedObjectAt(
   value_index++;
 
   CHECK_EQ(TranslatedValue::kFinished, slot->materialization_state());
-  CHECK_EQ(TranslatedValue::kCapturedObject, slot->kind());
+  CHECK_EQ(TranslatedValue::Kind::kCapturedObject, slot->kind());
 
   // Ensure all fields are initialized.
   int children_init_index = value_index;
@@ -1433,8 +1436,8 @@ void TranslatedState::InitializeCapturedObjectAt(
     // If the field is an object that has not been initialized yet, queue it
     // for initialization (and mark it as such).
     TranslatedValue* child_slot = frame->ValueAt(children_init_index);
-    if (child_slot->kind() == TranslatedValue::kCapturedObject ||
-        child_slot->kind() == TranslatedValue::kDuplicatedObject) {
+    if (child_slot->kind() == TranslatedValue::Kind::kCapturedObject ||
+        child_slot->kind() == TranslatedValue::Kind::kDuplicatedObject) {
       child_slot = ResolveCapturedObject(child_slot);
       if (child_slot->materialization_state() != TranslatedValue::kFinished) {
         DCHECK_EQ(TranslatedValue::kAllocated,
@@ -1449,7 +1452,7 @@ void TranslatedState::InitializeCapturedObjectAt(
   // Read the map.
   // The map should never be materialized, so let us check we already have
   // an existing object here.
-  CHECK_EQ(frame->values_[value_index].kind(), TranslatedValue::kTagged);
+  CHECK_EQ(frame->values_[value_index].kind(), TranslatedValue::Kind::kTagged);
   Handle<Map> map = Handle<Map>::cast(frame->values_[value_index].GetValue());
   CHECK(map->IsMap());
   value_index++;
@@ -1525,7 +1528,7 @@ void TranslatedState::MaterializeFixedDoubleArray(TranslatedFrame* frame,
       isolate()->factory()->NewFixedDoubleArray(length));
   CHECK_GT(length, 0);
   for (int i = 0; i < length; i++) {
-    CHECK_NE(TranslatedValue::kCapturedObject,
+    CHECK_NE(TranslatedValue::Kind::kCapturedObject,
              frame->values_[*value_index].kind());
     Handle<Object> value = frame->values_[*value_index].GetValue();
     if (value->IsNumber()) {
@@ -1542,7 +1545,7 @@ void TranslatedState::MaterializeFixedDoubleArray(TranslatedFrame* frame,
 void TranslatedState::MaterializeHeapNumber(TranslatedFrame* frame,
                                             int* value_index,
                                             TranslatedValue* slot) {
-  CHECK_NE(TranslatedValue::kCapturedObject,
+  CHECK_NE(TranslatedValue::Kind::kCapturedObject,
            frame->values_[*value_index].kind());
   Handle<Object> value = frame->values_[*value_index].GetValue();
   CHECK(value->IsNumber());
@@ -1567,7 +1570,7 @@ void TranslatedState::SkipSlots(int slots_to_skip, TranslatedFrame* frame,
     (*value_index)++;
     slots_to_skip--;
 
-    if (slot->kind() == TranslatedValue::kCapturedObject) {
+    if (slot->kind() == TranslatedValue::Kind::kCapturedObject) {
       slots_to_skip += slot->GetChildrenCount();
     }
   }
@@ -1584,12 +1587,12 @@ void TranslatedState::EnsureCapturedObjectAllocatedAt(
   value_index++;
 
   CHECK_EQ(TranslatedValue::kAllocated, slot->materialization_state());
-  CHECK_EQ(TranslatedValue::kCapturedObject, slot->kind());
+  CHECK_EQ(TranslatedValue::Kind::kCapturedObject, slot->kind());
 
   // Read the map.
   // The map should never be materialized, so let us check we already have
   // an existing object here.
-  CHECK_EQ(frame->values_[value_index].kind(), TranslatedValue::kTagged);
+  CHECK_EQ(frame->values_[value_index].kind(), TranslatedValue::Kind::kTagged);
   Handle<Map> map = Handle<Map>::cast(frame->values_[value_index].GetValue());
   CHECK(map->IsMap());
   value_index++;
@@ -1676,24 +1679,24 @@ void TranslatedState::EnsureCapturedObjectAllocatedAt(
 
       TranslatedValue* properties_slot = frame->ValueAt(value_index);
       value_index++, remaining_children_count--;
-      if (properties_slot->kind() == TranslatedValue::kCapturedObject) {
+      if (properties_slot->kind() == TranslatedValue::Kind::kCapturedObject) {
         // We are materializing the property array, so make sure we put the
         // mutable heap numbers at the right places.
         EnsurePropertiesAllocatedAndMarked(properties_slot, map);
         EnsureChildrenAllocated(properties_slot->GetChildrenCount(), frame,
                                 &value_index, worklist);
       } else {
-        CHECK_EQ(properties_slot->kind(), TranslatedValue::kTagged);
+        CHECK_EQ(properties_slot->kind(), TranslatedValue::Kind::kTagged);
       }
 
       TranslatedValue* elements_slot = frame->ValueAt(value_index);
       value_index++, remaining_children_count--;
-      if (elements_slot->kind() == TranslatedValue::kCapturedObject ||
+      if (elements_slot->kind() == TranslatedValue::Kind::kCapturedObject ||
           !map->IsJSArrayMap()) {
         // Handle this case with the other remaining children below.
         value_index--, remaining_children_count++;
       } else {
-        CHECK_EQ(elements_slot->kind(), TranslatedValue::kTagged);
+        CHECK_EQ(elements_slot->kind(), TranslatedValue::Kind::kTagged);
         elements_slot->GetValue();
         if (purpose_ == kFrameInspection) {
           // We are materializing a JSArray for the purpose of frame inspection.
@@ -1714,7 +1717,7 @@ void TranslatedState::EnsureCapturedObjectAllocatedAt(
 }
 
 void TranslatedValue::ReplaceElementsArrayWithCopy() {
-  DCHECK_EQ(kind(), TranslatedValue::kTagged);
+  DCHECK_EQ(kind(), TranslatedValue::Kind::kTagged);
   DCHECK_EQ(materialization_state(), TranslatedValue::kFinished);
   auto elements = Handle<FixedArrayBase>::cast(GetValue());
   DCHECK(elements->IsFixedArray() || elements->IsFixedDoubleArray());
@@ -1736,8 +1739,8 @@ void TranslatedState::EnsureChildrenAllocated(int count, TranslatedFrame* frame,
     // If the field is an object that has not been allocated yet, queue it
     // for initialization (and mark it as such).
     TranslatedValue* child_slot = frame->ValueAt(*value_index);
-    if (child_slot->kind() == TranslatedValue::kCapturedObject ||
-        child_slot->kind() == TranslatedValue::kDuplicatedObject) {
+    if (child_slot->kind() == TranslatedValue::Kind::kCapturedObject ||
+        child_slot->kind() == TranslatedValue::Kind::kDuplicatedObject) {
       child_slot = ResolveCapturedObject(child_slot);
       if (child_slot->materialization_state() ==
           TranslatedValue::kUninitialized) {
@@ -1817,7 +1820,7 @@ void TranslatedState::EnsureJSObjectAllocated(TranslatedValue* slot,
 TranslatedValue* TranslatedState::GetResolvedSlot(TranslatedFrame* frame,
                                                   int value_index) {
   TranslatedValue* slot = frame->ValueAt(value_index);
-  if (slot->kind() == TranslatedValue::kDuplicatedObject) {
+  if (slot->kind() == TranslatedValue::Kind::kDuplicatedObject) {
     slot = ResolveCapturedObject(slot);
   }
   CHECK_NE(slot->materialization_state(), TranslatedValue::kUninitialized);
@@ -1842,7 +1845,7 @@ void TranslatedState::InitializeJSObjectAt(
     TranslatedFrame* frame, int* value_index, TranslatedValue* slot,
     Handle<Map> map, const DisallowGarbageCollection& no_gc) {
   Handle<HeapObject> object_storage = Handle<HeapObject>::cast(slot->storage_);
-  DCHECK_EQ(TranslatedValue::kCapturedObject, slot->kind());
+  DCHECK_EQ(TranslatedValue::Kind::kCapturedObject, slot->kind());
 
   // The object should have at least a map and some payload.
   CHECK_GE(slot->GetChildrenCount(), 2);
@@ -1923,19 +1926,20 @@ void TranslatedState::InitializeObjectWithTaggedFieldsAt(
 }
 
 TranslatedValue* TranslatedState::ResolveCapturedObject(TranslatedValue* slot) {
-  while (slot->kind() == TranslatedValue::kDuplicatedObject) {
+  while (slot->kind() == TranslatedValue::Kind::kDuplicatedObject) {
     slot = GetValueByObjectIndex(slot->object_index());
   }
-  CHECK_EQ(TranslatedValue::kCapturedObject, slot->kind());
+  CHECK_EQ(TranslatedValue::Kind::kCapturedObject, slot->kind());
   return slot;
 }
 
 TranslatedFrame* TranslatedState::GetFrameFromJSFrameIndex(int jsframe_index) {
   for (size_t i = 0; i < frames_.size(); i++) {
-    if (frames_[i].kind() == TranslatedFrame::kUnoptimizedFunction ||
-        frames_[i].kind() == TranslatedFrame::kJavaScriptBuiltinContinuation ||
+    if (frames_[i].kind() == TranslatedFrame::Kind::kUnoptimizedFunction ||
         frames_[i].kind() ==
-            TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch) {
+            TranslatedFrame::Kind::kJavaScriptBuiltinContinuation ||
+        frames_[i].kind() ==
+            TranslatedFrame::Kind::kJavaScriptBuiltinContinuationWithCatch) {
       if (jsframe_index > 0) {
         jsframe_index--;
       } else {
@@ -1949,17 +1953,18 @@ TranslatedFrame* TranslatedState::GetFrameFromJSFrameIndex(int jsframe_index) {
 TranslatedFrame* TranslatedState::GetArgumentsInfoFromJSFrameIndex(
     int jsframe_index, int* args_count) {
   for (size_t i = 0; i < frames_.size(); i++) {
-    if (frames_[i].kind() == TranslatedFrame::kUnoptimizedFunction ||
-        frames_[i].kind() == TranslatedFrame::kJavaScriptBuiltinContinuation ||
+    if (frames_[i].kind() == TranslatedFrame::Kind::kUnoptimizedFunction ||
         frames_[i].kind() ==
-            TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch) {
+            TranslatedFrame::Kind::kJavaScriptBuiltinContinuation ||
+        frames_[i].kind() ==
+            TranslatedFrame::Kind::kJavaScriptBuiltinContinuationWithCatch) {
       if (jsframe_index > 0) {
         jsframe_index--;
       } else {
         // We have the JS function frame, now check if it has arguments
         // adaptor.
         if (i > 0 &&
-            frames_[i - 1].kind() == TranslatedFrame::kArgumentsAdaptor) {
+            frames_[i - 1].kind() == TranslatedFrame::Kind::kArgumentsAdaptor) {
           *args_count = frames_[i - 1].height();
           return &(frames_[i - 1]);
         }
@@ -1970,7 +1975,7 @@ TranslatedFrame* TranslatedState::GetArgumentsInfoFromJSFrameIndex(
         // a special marker frame state, otherwise the API call wouldn't
         // be shown in a stack trace.
         if (frames_[i].kind() ==
-                TranslatedFrame::kJavaScriptBuiltinContinuation &&
+                TranslatedFrame::Kind::kJavaScriptBuiltinContinuation &&
             frames_[i].shared_info()->IsDontAdaptArguments()) {
           DCHECK(frames_[i].shared_info()->IsApiFunction());
 
@@ -2050,7 +2055,7 @@ void TranslatedState::StoreMaterializedValuesAndDeopt(JavaScriptFrame* frame) {
   if (new_store && value_changed) {
     materialized_store->Set(stack_frame_pointer_,
                             previously_materialized_objects);
-    CHECK_EQ(frames_[0].kind(), TranslatedFrame::kUnoptimizedFunction);
+    CHECK_EQ(frames_[0].kind(), TranslatedFrame::Kind::kUnoptimizedFunction);
     CHECK_EQ(frame->function(), frames_[0].front().GetRawValue());
     Deoptimizer::DeoptimizeFunction(frame->function(), frame->LookupCode());
   }
@@ -2079,7 +2084,7 @@ void TranslatedState::UpdateFromPreviouslyMaterializedObjects() {
           &(frames_[pos.frame_index_].values_[pos.value_index_]);
       CHECK(value_info->IsMaterializedObject());
 
-      if (value_info->kind() == TranslatedValue::kCapturedObject) {
+      if (value_info->kind() == TranslatedValue::Kind::kCapturedObject) {
         Handle<Object> object(previously_materialized_objects->get(i),
                               isolate_);
         CHECK(object->IsHeapObject());
@@ -2094,7 +2099,7 @@ void TranslatedState::VerifyMaterializedObjects() {
   int length = static_cast<int>(object_positions_.size());
   for (int i = 0; i < length; i++) {
     TranslatedValue* slot = GetValueByObjectIndex(i);
-    if (slot->kind() == TranslatedValue::kCapturedObject) {
+    if (slot->kind() == TranslatedValue::Kind::kCapturedObject) {
       CHECK_EQ(slot, GetValueByObjectIndex(slot->object_index()));
       if (slot->materialization_state() == TranslatedValue::kFinished) {
         slot->storage()->ObjectVerify(isolate());

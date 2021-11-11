@@ -67,7 +67,7 @@ class TranslatedValue {
   friend class TranslatedFrame;
   friend class Deoptimizer;
 
-  enum Kind : uint8_t {
+  enum class Kind : uint8_t {
     kInvalid,
     kTagged,
     kInt32,
@@ -175,7 +175,7 @@ class TranslatedValue {
 
 class TranslatedFrame {
  public:
-  enum Kind {
+  enum class Kind {
     kUnoptimizedFunction,
     kArgumentsAdaptor,
     kConstructStub,
