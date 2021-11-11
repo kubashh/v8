@@ -16,6 +16,24 @@
       "message": "You saw in test failures, but you\u0027ll need a new variable here and below.",
       "revId": "c96a0b27f7f05e7d426c37a20f760d9e8ae74b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b7aaa6_0f9ec0a8",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1866,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-11-11T17:53:41Z",
+      "side": 1,
+      "message": "Oh yea oops. Fixed by pulling slot-\u003eGetChildrenCount() out, it is called twice anyway, so assign it to a variable, then we can name this `slot`.",
+      "parentUuid": "72f2e812_eee7e85c",
+      "revId": "c96a0b27f7f05e7d426c37a20f760d9e8ae74b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
