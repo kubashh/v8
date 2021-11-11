@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd62db55_c9a229a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-11T08:19:01Z",
+      "side": 1,
+      "message": "Noticed while following a link on the blog post :) ",
+      "revId": "fa6f1aa7acade1dbfbcd978d68dda41a32f33c0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
