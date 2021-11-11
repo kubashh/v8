@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95ccafb3_bdf47ed5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-11-11T02:51:33Z",
+      "side": 1,
+      "message": "kRiscvI32x4SConvertI16x8High\n\n#\n# Fatal error in ../../src/compiler/backend/riscv64/code-generator-riscv64.cc, line 2586\n# unimplemented code\n#\n#\n#\n#FailureMessage Object: 0x7ffc6f7545b0\n\nIllegal instruction",
+      "parentUuid": "ab41248c_fe089f19",
+      "revId": "adb286afdc7edf03698b070c8d1d0b3fbbaba725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271fb0a5_80fa2f73",
         "filename": "test/cctest/test-assembler-riscv64.cc",
         "patchSetId": 2
