@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "821ce6ab_3f86d19d",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-11T09:45:11Z",
+      "side": 1,
+      "message": "To make sure, I tried removing this line and the code broke. Let me try to explain what I think is going on:\nThe code you linked triggers when replacement \u003d\u003d node. This is not the case here since we return Replace(replacement) where replacement !\u003d node. Instead you go into this code:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/graph-reducer.cc;drc\u003db6e40f8ab247ea209bcecff994386a70a4169e9d;l\u003d206\nThe Replace function itself only triggers revisits to the original node\u0027s uses and not its inputs:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/graph-reducer.cc;drc\u003d65c9257f1777731d6d0669598f6fe6fe65fa61d3;l\u003d228\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/graph-reducer.cc;drc\u003d65c9257f1777731d6d0669598f6fe6fe65fa61d3;l\u003d239",
+      "parentUuid": "1a5639b9_88b198c9",
+      "range": {
+        "startLine": 353,
+        "startChar": 6,
+        "endLine": 353,
+        "endChar": 22
+      },
+      "revId": "1014ec3173c3ba81ee916599d5bfddf24955f688",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e47edf8e_2c54ca70",
