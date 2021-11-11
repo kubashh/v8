@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "455351e2_3e996d78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-11-11T21:34:07Z",
+      "side": 1,
+      "message": "+Dmitry as owner for json_platform_v8.cc",
+      "revId": "7016857836339a231805c959d5c2ddfeb8fedb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
