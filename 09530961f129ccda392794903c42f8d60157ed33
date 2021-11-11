@@ -16,6 +16,24 @@
       "message": "lgtm, an enum class may be better here anyways but feel free to just go ahead as is",
       "revId": "09530961f129ccda392794903c42f8d60157ed33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de17761f_bbc2f533",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1249724
+      },
+      "writtenOn": "2021-11-11T19:08:52Z",
+      "side": 1,
+      "message": "done, ptal!",
+      "parentUuid": "a3918283_87ff78db",
+      "revId": "09530961f129ccda392794903c42f8d60157ed33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
