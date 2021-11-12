@@ -16,6 +16,23 @@
       "message": "This seems like a typo, please take a look, thank you !",
       "revId": "bb4bcfcbb76820ead2201f8ba57ecc5835e7fc84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9bf78b3_53396934",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-12T19:59:52Z",
+      "side": 1,
+      "message": "lgtm. Good catch, thank you!",
+      "revId": "bb4bcfcbb76820ead2201f8ba57ecc5835e7fc84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
