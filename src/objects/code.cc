@@ -798,17 +798,13 @@ Handle<DependentCode> DependentCode::InsertWeakCode(
     return entries;
   }
 
+  // Note: Dependencies are (mostly) deduplicated by the caller. Some duplicate
+  // deps may occur, e.g. for FieldType dependencies when the field owner of
+  // two different fields is the same. We don't check for duplicates here and
+  // simply install all deps as-is.
+
   DCHECK_EQ(group, entries->group());
   int count = entries->count();
-  // Check for existing entry to avoid duplicates.
-  {
-    DisallowHeapAllocation no_gc;
-    HeapObjectReference weak_code_entry =
-        HeapObjectReference::Weak(ToCodeT(*code));
-    for (int i = 0; i < count; i++) {
-      if (entries->object_at(i) == weak_code_entry) return entries;
-    }
-  }
   if (entries->length() < kCodesStartIndex + count + 1) {
     entries = EnsureSpace(isolate, entries);
     // Count could have changed, reload it.
