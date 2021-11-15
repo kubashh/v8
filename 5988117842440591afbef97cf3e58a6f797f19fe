@@ -87,6 +87,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4487ea7d_94deb9c2",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-15T15:55:49Z",
+      "side": 1,
+      "message": "My bad, as discussed \"offline\" this would not type check, because select expects two values of the same type. We have to do all the conversions.",
+      "parentUuid": "49f5ce57_abe73988",
+      "range": {
+        "startLine": 2310,
+        "startChar": 28,
+        "endLine": 2310,
+        "endChar": 46
+      },
+      "revId": "5988117842440591afbef97cf3e58a6f797f19fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c34bcb98_4f61cac2",
