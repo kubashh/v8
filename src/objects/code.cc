@@ -800,15 +800,17 @@ Handle<DependentCode> DependentCode::InsertWeakCode(
 
   DCHECK_EQ(group, entries->group());
   int count = entries->count();
-  // Check for existing entry to avoid duplicates.
+#ifdef DEBUG
+  // Callers must have deduplicated the dependencies prior to installation.
   {
     DisallowHeapAllocation no_gc;
     HeapObjectReference weak_code_entry =
         HeapObjectReference::Weak(ToCodeT(*code));
     for (int i = 0; i < count; i++) {
-      if (entries->object_at(i) == weak_code_entry) return entries;
+      DCHECK_NE(entries->object_at(i), weak_code_entry);
     }
   }
+#endif  // DEBUG
   if (entries->length() < kCodesStartIndex + count + 1) {
     entries = EnsureSpace(isolate, entries);
     // Count could have changed, reload it.
