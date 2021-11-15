@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e331d18_d0ec335b",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1522473
+      },
+      "writtenOn": "2021-11-15T16:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7729c0c7_b6b191a0",
+      "range": {
+        "startLine": 2270,
+        "startChar": 0,
+        "endLine": 2272,
+        "endChar": 37
+      },
+      "revId": "5988117842440591afbef97cf3e58a6f797f19fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74a87cac_61f1d755",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-05T15:00:36Z",
       "side": 1,
       "message": "bottom_primitives \u003e 0 for clarity",
+      "range": {
+        "startLine": 2304,
+        "startChar": 6,
+        "endLine": 2304,
+        "endChar": 23
+      },
+      "revId": "5988117842440591afbef97cf3e58a6f797f19fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d183de_bc31738b",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1522473
+      },
+      "writtenOn": "2021-11-15T16:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74a87cac_61f1d755",
       "range": {
         "startLine": 2304,
         "startChar": 6,
@@ -124,6 +172,24 @@
       "writtenOn": "2021-11-05T15:00:36Z",
       "side": 1,
       "message": "DCHECK(!return_types.empty());\nYou already handled that case above.",
+      "revId": "5988117842440591afbef97cf3e58a6f797f19fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f588d3_cb5f45ba",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2314,
+      "author": {
+        "id": 1522473
+      },
+      "writtenOn": "2021-11-15T16:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c34bcb98_4f61cac2",
       "revId": "5988117842440591afbef97cf3e58a6f797f19fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
