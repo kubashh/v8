@@ -99,6 +99,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
   ConcurrentAllocator* code_space_allocator() {
     return code_space_allocator_.get();
   }
+  ConcurrentAllocator* shared_old_space_allocator() {
+    return shared_old_space_allocator_.get();
+  }
 
   void RegisterCodeObject(Handle<Code> code) {
     heap()->RegisterCodeObject(code);
@@ -305,6 +308,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   std::unique_ptr<ConcurrentAllocator> old_space_allocator_;
   std::unique_ptr<ConcurrentAllocator> code_space_allocator_;
+  std::unique_ptr<ConcurrentAllocator> shared_old_space_allocator_;
 
   friend class CollectionBarrier;
   friend class ConcurrentAllocator;

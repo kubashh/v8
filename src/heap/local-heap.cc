@@ -108,6 +108,12 @@ void LocalHeap::SetUp() {
   code_space_allocator_ =
       std::make_unique<ConcurrentAllocator>(this, heap_->code_space());
 
+  DCHECK_NULL(shared_old_space_allocator_);
+  if (heap_->isolate()->shared_isolate()) {
+    shared_old_space_allocator_ =
+        std::make_unique<ConcurrentAllocator>(this, heap_->shared_old_space());
+  }
+
   DCHECK_NULL(marking_barrier_);
   marking_barrier_ = std::make_unique<MarkingBarrier>(this);
 }
