@@ -801,12 +801,15 @@ Handle<DependentCode> DependentCode::InsertWeakCode(
   DCHECK_EQ(group, entries->group());
   int count = entries->count();
   // Check for existing entry to avoid duplicates.
+  // TODO(jgruber): Avoid iterating all previous deps.
   {
     DisallowHeapAllocation no_gc;
     HeapObjectReference weak_code_entry =
         HeapObjectReference::Weak(ToCodeT(*code));
     for (int i = 0; i < count; i++) {
-      if (entries->object_at(i) == weak_code_entry) return entries;
+      if (V8_UNLIKELY(entries->object_at(i) == weak_code_entry)) {
+        return entries;
+      }
     }
   }
   if (entries->length() < kCodesStartIndex + count + 1) {
