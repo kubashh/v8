@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35416a4_c69e25e1",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-16T14:23:34Z",
+      "side": 1,
+      "message": "The hash functions don\u0027t include the kind. You could add it here.",
+      "range": {
+        "startLine": 96,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 21
+      },
+      "revId": "4c7294afb30b5481c9db064894dd04b1b9eff15f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85191474_724bf2ef",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-16T14:23:34Z",
+      "side": 1,
+      "message": "nit: Why not insert()?",
+      "range": {
+        "startLine": 962,
+        "startChar": 43,
+        "endLine": 962,
+        "endChar": 50
+      },
+      "revId": "4c7294afb30b5481c9db064894dd04b1b9eff15f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
