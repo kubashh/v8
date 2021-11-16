@@ -940,7 +940,7 @@ enum ParseRestriction : bool {
 };
 
 // State for inline cache call sites. Aliased as IC::State.
-enum InlineCacheState {
+enum class InlineCacheState {
   // No feedback will be collected.
   NO_FEEDBACK,
   // Has never been executed.
@@ -962,21 +962,21 @@ enum InlineCacheState {
 // Printing support.
 inline const char* InlineCacheState2String(InlineCacheState state) {
   switch (state) {
-    case NO_FEEDBACK:
+    case InlineCacheState::NO_FEEDBACK:
       return "NOFEEDBACK";
-    case UNINITIALIZED:
+    case InlineCacheState::UNINITIALIZED:
       return "UNINITIALIZED";
-    case MONOMORPHIC:
+    case InlineCacheState::MONOMORPHIC:
       return "MONOMORPHIC";
-    case RECOMPUTE_HANDLER:
+    case InlineCacheState::RECOMPUTE_HANDLER:
       return "RECOMPUTE_HANDLER";
-    case POLYMORPHIC:
+    case InlineCacheState::POLYMORPHIC:
       return "POLYMORPHIC";
-    case MEGAMORPHIC:
+    case InlineCacheState::MEGAMORPHIC:
       return "MEGAMORPHIC";
-    case MEGADOM:
+    case InlineCacheState::MEGADOM:
       return "MEGADOM";
-    case GENERIC:
+    case InlineCacheState::GENERIC:
       return "GENERIC";
   }
   UNREACHABLE();
