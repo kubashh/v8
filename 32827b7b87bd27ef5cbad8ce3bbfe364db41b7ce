@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67b0dc8e_01801819",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-16T16:56:23Z",
+      "side": 1,
+      "message": "Dominik, is this all that\u0027s needed? Seemed simple enough.",
+      "range": {
+        "startLine": 3540,
+        "startChar": 0,
+        "endLine": 3542,
+        "endChar": 5
+      },
+      "revId": "32827b7b87bd27ef5cbad8ce3bbfe364db41b7ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
