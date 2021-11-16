@@ -51,6 +51,24 @@
       "parentUuid": "b7d6eae6_1fa48d6d",
       "revId": "47d6cf07d7d68642ef553568a43c6fde2d894143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca02206_d8b542ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-16T15:53:49Z",
+      "side": 1,
+      "message": "\u003e Do you mean in Heap::PerformSharedGarbageCollection?\nYes, at least indirectly. Heap::PerformSharedGarbageCollection calls Heap::FreeSharedLinearAllocationArea for every client. So I thought Heap::FreeSharedLinearAllocationArea would be a good place to add this such that we can reuse this in the future in other locations as well.\n\n\u003e In any case thank you for the detailed description for what to do. I\u0027ll try to extend this CL to also correctly free the background thread LABs. If I run into trouble I might throw it over to you. 😊\nGreat! Feel free to ping me anytime if I might be of help...",
+      "parentUuid": "087cd377_1aa2108d",
+      "revId": "47d6cf07d7d68642ef553568a43c6fde2d894143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
