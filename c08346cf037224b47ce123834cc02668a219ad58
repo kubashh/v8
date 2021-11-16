@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04902bce_596dbe93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-16T13:44:50Z",
+      "side": 1,
+      "message": "A few more comments.\n@Tobias: Can you please take a look as well, thanks.",
+      "revId": "c08346cf037224b47ce123834cc02668a219ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "178226da_26affeb4",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-16T13:44:50Z",
+      "side": 1,
+      "message": "nit: Move the declaration in front of the initialization in the #ifdef branches.",
+      "range": {
+        "startLine": 1150,
+        "startChar": 4,
+        "endLine": 1151,
+        "endChar": 18
+      },
+      "revId": "c08346cf037224b47ce123834cc02668a219ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36af618e_778850d1",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-16T13:44:50Z",
+      "side": 1,
+      "message": "I think you should already introduce a bitfield struct for the HighBits here so that we can see the full implementation of that change in 1 CL. Fill it with an unused field, for example.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "c08346cf037224b47ce123834cc02668a219ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
