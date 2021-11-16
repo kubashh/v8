@@ -72,20 +72,34 @@ class CompilationDependency : public ZoneObject {
   virtual void PrepareInstall() const {}
   virtual void Install(Handle<Code> code) const = 0;
 
-#ifdef DEBUG
 #define V(Name)                                     \
   bool Is##Name() const { return kind == k##Name; } \
   V8_ALLOW_UNUSED const Name##Dependency* As##Name() const;
   DEPENDENCY_LIST(V)
 #undef V
-#endif
 
   const char* ToString() const {
     return CompilationDependencyKindToString(kind);
   }
 
   const CompilationDependencyKind kind;
+
+ private:
+  virtual size_t Hash() const = 0;
+  virtual bool Equals(const CompilationDependency* that) const = 0;
+  friend struct CompilationDependencies::CompilationDependencyHash;
+  friend struct CompilationDependencies::CompilationDependencyEqual;
 };
+
+size_t CompilationDependencies::CompilationDependencyHash::operator()(
+    const CompilationDependency* dep) const {
+  return dep->Hash();
+}
+
+bool CompilationDependencies::CompilationDependencyEqual::operator()(
+    const CompilationDependency* lhs, const CompilationDependency* rhs) const {
+  return lhs->Equals(rhs);
+}
 
 namespace {
 
@@ -111,8 +125,20 @@ class InitialMapDependency final : public CompilationDependency {
   }
 
  private:
-  JSFunctionRef function_;
-  MapRef initial_map_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(function_), h(initial_map_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsInitialMap()) return false;
+    const InitialMapDependency* const zat = that->AsInitialMap();
+    return function_.equals(zat->function_) &&
+           initial_map_.equals(zat->initial_map_);
+  }
+
+  const JSFunctionRef function_;
+  const MapRef initial_map_;
 };
 
 class PrototypePropertyDependency final : public CompilationDependency {
@@ -153,8 +179,20 @@ class PrototypePropertyDependency final : public CompilationDependency {
   }
 
  private:
-  JSFunctionRef function_;
-  ObjectRef prototype_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(function_), h(prototype_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsPrototypeProperty()) return false;
+    const PrototypePropertyDependency* const zat = that->AsPrototypeProperty();
+    return function_.equals(zat->function_) &&
+           prototype_.equals(zat->prototype_);
+  }
+
+  const JSFunctionRef function_;
+  const ObjectRef prototype_;
 };
 
 class StableMapDependency final : public CompilationDependency {
@@ -176,7 +214,18 @@ class StableMapDependency final : public CompilationDependency {
   }
 
  private:
-  MapRef map_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(map_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsStableMap()) return false;
+    const StableMapDependency* const zat = that->AsStableMap();
+    return map_.equals(zat->map_);
+  }
+
+  const MapRef map_;
 };
 
 class ConstantInDictionaryPrototypeChainDependency final
@@ -296,10 +345,25 @@ class ConstantInDictionaryPrototypeChainDependency final
     return MaybeHandle<JSObject>();
   }
 
-  MapRef receiver_map_;
-  NameRef property_name_;
-  ObjectRef constant_;
-  PropertyKind kind_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(receiver_map_), h(property_name_), h(constant_),
+                              kind_);
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsConstantInDictionaryPrototypeChain()) return false;
+    const ConstantInDictionaryPrototypeChainDependency* const zat =
+        that->AsConstantInDictionaryPrototypeChain();
+    return receiver_map_.equals(zat->receiver_map_) &&
+           property_name_.equals(zat->property_name_) &&
+           constant_.equals(zat->constant_) && kind_ == zat->kind_;
+  }
+
+  const MapRef receiver_map_;
+  const NameRef property_name_;
+  const ObjectRef constant_;
+  const PropertyKind kind_;
 };
 
 class OwnConstantDataPropertyDependency final : public CompilationDependency {
@@ -349,6 +413,21 @@ class OwnConstantDataPropertyDependency final : public CompilationDependency {
   void Install(Handle<Code> code) const override {}
 
  private:
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(holder_), h(map_), representation_.kind(),
+                              index_.bit_field(), h(value_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsOwnConstantDataProperty()) return false;
+    const OwnConstantDataPropertyDependency* const zat =
+        that->AsOwnConstantDataProperty();
+    return holder_.equals(zat->holder_) && map_.equals(zat->map_) &&
+           representation_.Equals(zat->representation_) &&
+           index_ == zat->index_ && value_.equals(zat->value_);
+  }
+
   JSHeapBroker* const broker_;
   JSObjectRef const holder_;
   MapRef const map_;
@@ -406,6 +485,20 @@ class OwnConstantDictionaryPropertyDependency final
   void Install(Handle<Code> code) const override {}
 
  private:
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(holder_), h(map_), index_.raw_value(),
+                              h(value_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsOwnConstantDictionaryProperty()) return false;
+    const OwnConstantDictionaryPropertyDependency* const zat =
+        that->AsOwnConstantDictionaryProperty();
+    return holder_.equals(zat->holder_) && map_.equals(zat->map_) &&
+           index_ == zat->index_ && value_.equals(zat->value_);
+  }
+
   JSHeapBroker* const broker_;
   JSObjectRef const holder_;
   MapRef const map_;
@@ -425,6 +518,18 @@ class ConsistentJSFunctionViewDependency final : public CompilationDependency {
   void Install(Handle<Code> code) const override {}
 
  private:
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(function_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsConsistentJSFunctionView()) return false;
+    const ConsistentJSFunctionViewDependency* const zat =
+        that->AsConsistentJSFunctionView();
+    return function_.equals(zat->function_);
+  }
+
   const JSFunctionRef function_;
 };
 
@@ -444,7 +549,18 @@ class TransitionDependency final : public CompilationDependency {
   }
 
  private:
-  MapRef map_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(map_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsTransition()) return false;
+    const TransitionDependency* const zat = that->AsTransition();
+    return map_.equals(zat->map_);
+  }
+
+  const MapRef map_;
 };
 
 class PretenureModeDependency final : public CompilationDependency {
@@ -467,8 +583,19 @@ class PretenureModeDependency final : public CompilationDependency {
   }
 
  private:
-  AllocationSiteRef site_;
-  AllocationType allocation_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(site_), allocation_);
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsPretenureMode()) return false;
+    const PretenureModeDependency* const zat = that->AsPretenureMode();
+    return site_.equals(zat->site_) && allocation_ == zat->allocation_;
+  }
+
+  const AllocationSiteRef site_;
+  const AllocationType allocation_;
 };
 
 class FieldRepresentationDependency final : public CompilationDependency {
@@ -507,9 +634,23 @@ class FieldRepresentationDependency final : public CompilationDependency {
   }
 
  private:
-  MapRef map_;
-  InternalIndex descriptor_;
-  Representation representation_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(map_), descriptor_.as_int(),
+                              representation_.kind());
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsFieldRepresentation()) return false;
+    const FieldRepresentationDependency* const zat =
+        that->AsFieldRepresentation();
+    return map_.equals(zat->map_) && descriptor_ == zat->descriptor_ &&
+           representation_.Equals(zat->representation_);
+  }
+
+  const MapRef map_;
+  const InternalIndex descriptor_;
+  const Representation representation_;
 };
 
 class FieldTypeDependency final : public CompilationDependency {
@@ -542,9 +683,21 @@ class FieldTypeDependency final : public CompilationDependency {
   }
 
  private:
-  MapRef map_;
-  InternalIndex descriptor_;
-  ObjectRef type_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(map_), descriptor_.as_int(), h(type_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsFieldType()) return false;
+    const FieldTypeDependency* const zat = that->AsFieldType();
+    return map_.equals(zat->map_) && descriptor_ == zat->descriptor_ &&
+           type_.equals(zat->type_);
+  }
+
+  const MapRef map_;
+  const InternalIndex descriptor_;
+  const ObjectRef type_;
 };
 
 class FieldConstnessDependency final : public CompilationDependency {
@@ -578,8 +731,19 @@ class FieldConstnessDependency final : public CompilationDependency {
   }
 
  private:
-  MapRef map_;
-  InternalIndex descriptor_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(map_), descriptor_.as_int());
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsFieldConstness()) return false;
+    const FieldConstnessDependency* const zat = that->AsFieldConstness();
+    return map_.equals(zat->map_) && descriptor_ == zat->descriptor_;
+  }
+
+  const MapRef map_;
+  const InternalIndex descriptor_;
 };
 
 class GlobalPropertyDependency final : public CompilationDependency {
@@ -612,9 +776,21 @@ class GlobalPropertyDependency final : public CompilationDependency {
   }
 
  private:
-  PropertyCellRef cell_;
-  PropertyCellType type_;
-  bool read_only_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(cell_), static_cast<int>(type_), read_only_);
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsGlobalProperty()) return false;
+    const GlobalPropertyDependency* const zat = that->AsGlobalProperty();
+    return cell_.equals(zat->cell_) && type_ == zat->type_ &&
+           read_only_ == zat->read_only_;
+  }
+
+  const PropertyCellRef cell_;
+  const PropertyCellType type_;
+  const bool read_only_;
 };
 
 class ProtectorDependency final : public CompilationDependency {
@@ -634,7 +810,18 @@ class ProtectorDependency final : public CompilationDependency {
   }
 
  private:
-  PropertyCellRef cell_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(cell_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsProtector()) return false;
+    const ProtectorDependency* const zat = that->AsProtector();
+    return cell_.equals(zat->cell_);
+  }
+
+  const PropertyCellRef cell_;
 };
 
 class ElementsKindDependency final : public CompilationDependency {
@@ -661,8 +848,19 @@ class ElementsKindDependency final : public CompilationDependency {
   }
 
  private:
-  AllocationSiteRef site_;
-  ElementsKind kind_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(site_), static_cast<int>(kind_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsElementsKind()) return false;
+    const ElementsKindDependency* const zat = that->AsElementsKind();
+    return site_.equals(zat->site_) && kind_ == zat->kind_;
+  }
+
+  const AllocationSiteRef site_;
+  const ElementsKind kind_;
 };
 
 // Only valid if the holder can use direct reads, since validation uses
@@ -692,6 +890,19 @@ class OwnConstantElementDependency final : public CompilationDependency {
   }
 
  private:
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(holder_), index_, h(element_));
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsOwnConstantElement()) return false;
+    const OwnConstantElementDependency* const zat =
+        that->AsOwnConstantElement();
+    return holder_.equals(zat->holder_) && index_ == zat->index_ &&
+           element_.equals(zat->element_);
+  }
+
   const JSObjectRef holder_;
   const uint32_t index_;
   const ObjectRef element_;
@@ -727,15 +938,28 @@ class InitialMapInstanceSizePredictionDependency final
   }
 
  private:
-  JSFunctionRef function_;
-  int instance_size_;
+  size_t Hash() const override {
+    ObjectRef::Hash h;
+    return base::hash_combine(h(function_), instance_size_);
+  }
+
+  bool Equals(const CompilationDependency* that) const override {
+    if (!that->IsInitialMapInstanceSizePrediction()) return false;
+    const InitialMapInstanceSizePredictionDependency* const zat =
+        that->AsInitialMapInstanceSizePrediction();
+    return function_.equals(zat->function_) &&
+           instance_size_ == zat->instance_size_;
+  }
+
+  const JSFunctionRef function_;
+  const int instance_size_;
 };
 
 }  // namespace
 
 void CompilationDependencies::RecordDependency(
     CompilationDependency const* dependency) {
-  if (dependency != nullptr) dependencies_.push_front(dependency);
+  if (dependency != nullptr) dependencies_.emplace(dependency);
 }
 
 MapRef CompilationDependencies::DependOnInitialMap(
@@ -960,7 +1184,6 @@ void DependOnStablePrototypeChain(CompilationDependencies* deps, MapRef map,
 
 }  // namespace
 
-#ifdef DEBUG
 #define V(Name)                                                     \
   const Name##Dependency* CompilationDependency::As##Name() const { \
     DCHECK(Is##Name());                                             \
@@ -968,7 +1191,6 @@ void DependOnStablePrototypeChain(CompilationDependencies* deps, MapRef map,
   }
 DEPENDENCY_LIST(V)
 #undef V
-#endif  // DEBUG
 
 void CompilationDependencies::DependOnStablePrototypeChains(
     ZoneVector<MapRef> const& receiver_maps, WhereToStart start,
