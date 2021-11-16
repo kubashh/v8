@@ -19,7 +19,7 @@ namespace internal {
 
 class TurbofanTypeBits {
  public:
-  DEFINE_TORQUE_GENERATED_TURBOFAN_TYPE_BITS()
+  DEFINE_TORQUE_GENERATED_TURBOFAN_TYPE_LOW_BITS()
 };
 
 }  // namespace internal
