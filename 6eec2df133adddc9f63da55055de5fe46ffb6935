@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a8cef3d_22e51854",
+        "filename": "src/codegen/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-16T09:36:10Z",
+      "side": 1,
+      "message": "We might still want to scope these deeper. Maybe try adding __LINE__ to ASM_CODE_COMMENT_STRING instead?",
+      "range": {
+        "startLine": 472,
+        "startChar": 8,
+        "endLine": 472,
+        "endChar": 24
+      },
+      "revId": "6eec2df133adddc9f63da55055de5fe46ffb6935",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
