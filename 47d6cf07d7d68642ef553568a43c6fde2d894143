@@ -33,6 +33,24 @@
       "message": "In general this LGTM, however we also need to teach Heap::FreeSharedLinearAllocationAreas that background threads can have shared LABs as well (iterate through all LocalHeaps like Heap::MakeHeapIterable). Without this, shared GCs might crash randomly when performing allocations on background threads.  We should be able to land this CL as-is though, as long as we don\u0027t use that in any test yet.\n\nLet me know whether you need help here and/or whether I should add the handling of shared LABs in a subsequent CL. I knew that we didn\u0027t support this atm but didn\u0027t think it was necessary for now..",
       "revId": "47d6cf07d7d68642ef553568a43c6fde2d894143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "087cd377_1aa2108d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-16T15:40:25Z",
+      "side": 1,
+      "message": "\u003e We should be able to land this CL as-is though, as long as we don\u0027t use that in any test yet.\n\nThis will be used by d8 tests because of background compilation. See test/mjsunit/shared-string.js in https://chromium-review.googlesource.com/c/v8/v8/+/3277250. With --shared_string_table, Worker scripts will end up allocating strings in the shared old space in a background thread.\n\n\u003e In general this LGTM, however we also need to teach Heap::FreeSharedLinearAllocationAreas that background threads can have shared LABs as well (iterate through all LocalHeaps like Heap::MakeHeapIterable).\n\nDo you mean in Heap::PerformSharedGarbageCollection?\n\nIn any case thank you for the detailed description for what to do. I\u0027ll try to extend this CL to also correctly free the background thread LABs. If I run into trouble I might throw it over to you. 😊",
+      "parentUuid": "b7d6eae6_1fa48d6d",
+      "revId": "47d6cf07d7d68642ef553568a43c6fde2d894143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
