@@ -110,6 +110,30 @@
       },
       "revId": "c08346cf037224b47ce123834cc02668a219ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da17b6bf_15d97ee8",
+        "filename": "src/objects/turbofan-types.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-16T17:17:29Z",
+      "side": 1,
+      "message": "I think you can just change the code in turbofan-types.h to avoid this issue.\nJust write\n\n  class TurbofanTypeLowBits {\n   public:\n    DEFINE_TORQUE_GENERATED_TURBOFAN_TYPE_LOW_BITS()\n  };\n  \n  class TurbofanTypeHighBits {\n   public:\n    DEFINE_TORQUE_GENERATED_TURBOFAN_TYPE_HIGH_BITS()\n  };",
+      "parentUuid": "9ca1321e_796375bd",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 21
+      },
+      "revId": "c08346cf037224b47ce123834cc02668a219ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
