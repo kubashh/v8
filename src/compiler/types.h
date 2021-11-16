@@ -96,45 +96,50 @@ namespace compiler {
 // clang-format off
 
 #define INTERNAL_BITSET_TYPE_LIST(V)                                      \
-  V(OtherUnsigned31, 1u << 1)  \
-  V(OtherUnsigned32, 1u << 2)  \
-  V(OtherSigned32,   1u << 3)  \
-  V(OtherNumber,     1u << 4)  \
-  V(OtherString,     1u << 5)  \
+  V(OtherUnsigned31, 1ull << 1)  \
+  V(OtherUnsigned32, 1ull << 2)  \
+  V(OtherSigned32,   1ull << 3)  \
+  V(OtherNumber,     1ull << 4)  \
+  V(OtherString,     1ull << 5)  \
 
-#define PROPER_ATOMIC_BITSET_TYPE_LIST(V) \
-  V(Negative31,               1u << 6)   \
-  V(Null,                     1u << 7)   \
-  V(Undefined,                1u << 8)   \
-  V(Boolean,                  1u << 9)   \
-  V(Unsigned30,               1u << 10)  \
-  V(MinusZero,                1u << 11)  \
-  V(NaN,                      1u << 12)  \
-  V(Symbol,                   1u << 13)  \
-  V(InternalizedString,       1u << 14)  \
-  V(OtherCallable,            1u << 15)  \
-  V(OtherObject,              1u << 16)  \
-  V(OtherUndetectable,        1u << 17)  \
-  V(CallableProxy,            1u << 18)  \
-  V(OtherProxy,               1u << 19)  \
-  V(Function,                 1u << 20)  \
-  V(BoundFunction,            1u << 21)  \
-  V(Hole,                     1u << 22)  \
-  V(OtherInternal,            1u << 23)  \
-  V(ExternalPointer,          1u << 24)  \
-  V(Array,                    1u << 25)  \
-  V(UnsignedBigInt63,         1u << 26)  \
-  V(OtherUnsignedBigInt64,    1u << 27)  \
-  V(NegativeBigInt63,         1u << 28)  \
-  V(OtherBigInt,              1u << 29)  \
+#define PROPER_ATOMIC_BITSET_TYPE_LOW_LIST(V) \
+  V(Negative31,               1ull << 6)   \
+  V(Null,                     1ull << 7)   \
+  V(Undefined,                1ull << 8)   \
+  V(Boolean,                  1ull << 9)   \
+  V(Unsigned30,               1ull << 10)  \
+  V(MinusZero,                1ull << 11)  \
+  V(NaN,                      1ull << 12)  \
+  V(Symbol,                   1ull << 13)  \
+  V(InternalizedString,       1ull << 14)  \
+  V(OtherCallable,            1ull << 15)  \
+  V(OtherObject,              1ull << 16)  \
+  V(OtherUndetectable,        1ull << 17)  \
+  V(CallableProxy,            1ull << 18)  \
+  V(OtherProxy,               1ull << 19)  \
+  V(Function,                 1ull << 20)  \
+  V(BoundFunction,            1ull << 21)  \
+  V(Hole,                     1ull << 22)  \
+  V(OtherInternal,            1ull << 23)  \
+  V(ExternalPointer,          1ull << 24)  \
+  V(Array,                    1ull << 25)  \
+  V(UnsignedBigInt63,         1ull << 26)  \
+  V(OtherUnsignedBigInt64,    1ull << 27)  \
+  V(NegativeBigInt63,         1ull << 28)  \
+  V(OtherBigInt,              1ull << 29)  \
   /* TODO(v8:10391): Remove this type once all ExternalPointer usages are */ \
-  /* sandbox-ready. */                   \
-  V(SandboxedExternalPointer, 1u << 30)  \
-  V(CagedPointer,             1u << 31)  \
+  /* sandbox-ready. */                     \
+  V(SandboxedExternalPointer, 1ull << 30)  \
+  V(CagedPointer,             1ull << 31)
+
+// For future use.
+// Types defined in the high 32 bit are currently only supported in C++.
+#define PROPER_ATOMIC_BITSET_TYPE_HIGH_LIST(V)
 
 #define PROPER_BITSET_TYPE_LIST(V) \
-  V(None,                     0u) \
-  PROPER_ATOMIC_BITSET_TYPE_LIST(V) \
+  V(None,                     0ull) \
+  PROPER_ATOMIC_BITSET_TYPE_LOW_LIST(V) \
+  PROPER_ATOMIC_BITSET_TYPE_HIGH_LIST(V) \
   V(Signed31,                     kUnsigned30 | kNegative31) \
   V(Signed32,                     kSigned31 | kOtherUnsigned31 | \
                                   kOtherSigned32) \
@@ -207,7 +212,7 @@ namespace compiler {
   V(NonInternal,                  kPrimitive | kReceiver) \
   V(NonBigInt,                    kNonBigIntPrimitive | kReceiver) \
   V(NonNumber,                    kBigInt | kUnique | kString | kInternal) \
-  V(Any,                          0xfffffffeu)
+  V(Any,                          0xfffffffffffffffeu)
 
 // clang-format on
 
@@ -243,9 +248,9 @@ class UnionType;
 
 class V8_EXPORT_PRIVATE BitsetType {
  public:
-  using bitset = uint32_t;  // Internal
+  using bitset = uint64_t;  // Internal
 
-  enum : uint32_t {
+  enum : bitset {
 #define DECLARE_TYPE(type, value) k##type = (value),
     BITSET_TYPE_LIST(DECLARE_TYPE)
 #undef DECLARE_TYPE
@@ -469,10 +474,10 @@ class V8_EXPORT_PRIVATE Type {
   friend UnionType;
   friend size_t hash_value(Type type);
 
-  explicit Type(bitset bits) : payload_(bits | 1u) {}
+  explicit Type(bitset bits) : payload_(bits | 1ull) {}
 
   Type(TypeBase* type_base)  // NOLINT(runtime/explicit)
-      : payload_(reinterpret_cast<uintptr_t>(type_base)) {}
+      : payload_(reinterpret_cast<uint64_t>(type_base)) {}
 
   // Internal inspection.
   bool IsKind(TypeBase::Kind kind) const {
@@ -491,7 +496,7 @@ class V8_EXPORT_PRIVATE Type {
 
   bitset AsBitset() const {
     DCHECK(IsBitset());
-    return static_cast<bitset>(payload_) ^ 1u;
+    return static_cast<bitset>(payload_) ^ 1ull;
   }
 
   const UnionType* AsUnion() const;
@@ -526,7 +531,7 @@ class V8_EXPORT_PRIVATE Type {
 
   // If LSB is set, the payload is a bitset; if LSB is clear, the payload is
   // a pointer to a subtype of the TypeBase class.
-  uintptr_t payload_;
+  uint64_t payload_;
 };
 
 inline size_t hash_value(Type type) { return type.payload_; }
