@@ -3677,7 +3677,7 @@ void Assembler::CheckTrampolinePool() {
             bc(&after_pool);
             nop();
           } else {
-            GenPCRelativeJump(t8, t9, 0, RelocInfo::NONE,
+            GenPCRelativeJump(t8, t9, 0, RelocInfo::NO_INFO,
                               BranchDelaySlot::PROTECT);
           }
         }

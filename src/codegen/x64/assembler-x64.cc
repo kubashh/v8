@@ -276,7 +276,7 @@ bool ConstPool::TryRecordEntry(intptr_t data, RelocInfo::Mode mode) {
 
   // Currently, partial constant pool only handles the following kinds of
   // RelocInfo.
-  if (mode != RelocInfo::NONE && mode != RelocInfo::EXTERNAL_REFERENCE &&
+  if (mode != RelocInfo::NO_INFO && mode != RelocInfo::EXTERNAL_REFERENCE &&
       mode != RelocInfo::OFF_HEAP_TARGET)
     return false;
 
@@ -330,7 +330,8 @@ void Assembler::PatchConstPool() {
 
 bool Assembler::UseConstPoolFor(RelocInfo::Mode rmode) {
   if (!FLAG_partial_constant_pool) return false;
-  return (rmode == RelocInfo::NONE || rmode == RelocInfo::EXTERNAL_REFERENCE ||
+  return (rmode == RelocInfo::NO_INFO ||
+          rmode == RelocInfo::EXTERNAL_REFERENCE ||
           rmode == RelocInfo::OFF_HEAP_TARGET);
 }
 
