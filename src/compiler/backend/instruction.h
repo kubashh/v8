@@ -1175,7 +1175,7 @@ class V8_EXPORT_PRIVATE Constant final {
 
  private:
   Type type_;
-  RelocInfo::Mode rmode_ = RelocInfo::NONE;
+  RelocInfo::Mode rmode_ = RelocInfo::NO_INFO;
   int64_t value_;
 };
 
