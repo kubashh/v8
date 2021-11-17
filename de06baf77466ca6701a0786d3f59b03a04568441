@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a327c3a_3d10c2c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-17T10:47:57Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "de06baf77466ca6701a0786d3f59b03a04568441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "841d2cd5_812bcdd1",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2021-11-17T10:47:57Z",
+      "side": 1,
+      "message": "Since you won\u0027t have time for this for your last few days, you can replace this with the bug ID instead, or Manos or me.",
+      "range": {
+        "startLine": 2270,
+        "startChar": 8,
+        "endLine": 2270,
+        "endChar": 15
+      },
+      "revId": "de06baf77466ca6701a0786d3f59b03a04568441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
