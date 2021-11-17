@@ -22,6 +22,30 @@
       },
       "revId": "32827b7b87bd27ef5cbad8ce3bbfe364db41b7ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dab8448_b109847f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3542,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-17T11:28:01Z",
+      "side": 1,
+      "message": "I think so, I hope I am not missing something...",
+      "parentUuid": "67b0dc8e_01801819",
+      "range": {
+        "startLine": 3540,
+        "startChar": 0,
+        "endLine": 3542,
+        "endChar": 5
+      },
+      "revId": "32827b7b87bd27ef5cbad8ce3bbfe364db41b7ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
