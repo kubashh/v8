@@ -63,6 +63,30 @@
       },
       "revId": "e2e14660b0429879065464adab705f358e901439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11aba8d1_cefbf345",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-11-17T15:14:29Z",
+      "side": 1,
+      "message": "Discussed offline.\nFor the record my misconception was, that I thought the result of uint64_t \u0026 0xffffffff was different on big-endian machines. Thanks Tobias for explaining, that this is not the case.\nRemoved all the endianness related stuff now.",
+      "parentUuid": "8ceea0d0_9ece5b33",
+      "range": {
+        "startLine": 1150,
+        "startChar": 0,
+        "endLine": 1150,
+        "endChar": 30
+      },
+      "revId": "e2e14660b0429879065464adab705f358e901439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

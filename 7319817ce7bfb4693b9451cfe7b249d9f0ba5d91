@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "146501c7_277ce4a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-11-17T15:14:29Z",
+      "side": 1,
+      "message": "Thanks Tobias for correcting my wrong assumptions in an offline discussion.\nI removed all the endianness related code now. ",
+      "revId": "7319817ce7bfb4693b9451cfe7b249d9f0ba5d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
