@@ -39,6 +39,30 @@
       },
       "revId": "e2e14660b0429879065464adab705f358e901439",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ceea0d0_9ece5b33",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-11-17T10:57:34Z",
+      "side": 1,
+      "message": "I do think this is necessary, but please correct me if I am wrong (I confused myself multiple times when thinking about it so maybe there is a stupid mistake in my reasoning).\nIf we don\u0027t consider endianness at all, that is we define the class in torque as\n```\nclass TurbofanBitsetType extends TurbofanType {\n  bitset_low: TurbofanTypeLowBits;\n  bitset_high: TurbofanTypeHighBits;\n}\n```\nthen bitset_low will be at offset 4 and bitset_high at offset 8 in memory.\n\nLet\u0027s say we have a type kNull (1 \u003c\u003c 7) on a 64bit big-endian platform.\nThe value of the 64-bit register will be 0x80 00 00 00 00 00 00 00.\nIf we don\u0027t consider the endianness here, low will be 0x0 and high will be 0x80 00 00 00.\n\nSo creating the heap number we get 0x80 00 00 00 00 00 00 00 (omitting the map).\nIf we then load the low bits from offset 4 (were we have kNull in the bitset), the result will be wrong.\n\nIf we do change the layout in Torque (as I did in this CL), bitset_low will be at offset 8 and bitset_high at offset 4.\nSo when we create the number on the heap we will have 0x00 00 00 00 80 00 00 00 in memory.\nWhen we load the low bitset (from offset 8) we will again end up with 0x00 (wrong).\n\nIf we do consider the endianness here (and swap the fields in tq), low will be 0x80 00 00 00 and high will be 0x00 and the offset for bitset_low will be 8 and for bitset_high it will be 4.\nCreating the heap number we will have 0x80 00 00 00 00 00 00 00 in memory.\nWhen loading bitset_low in tq from offset 8 we will get 0x80 00 00 00, matching kNull (1 \u003c\u003c 7)",
+      "parentUuid": "ee1dc6b7_38d7ab6c",
+      "range": {
+        "startLine": 1150,
+        "startChar": 0,
+        "endLine": 1150,
+        "endChar": 30
+      },
+      "revId": "e2e14660b0429879065464adab705f358e901439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
