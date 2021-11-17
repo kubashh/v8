@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6432e43_0dc89af2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-17T10:31:16Z",
+      "side": 1,
+      "message": "LGTM for src/compiler and src/codegen, thanks!",
+      "revId": "0a1c03215496066f59b20188aaa00a442b703d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6e8d7fe_727ef03e",
@@ -48,6 +65,30 @@
       "writtenOn": "2021-11-17T07:57:43Z",
       "side": 1,
       "message": "Should we rename this function as well?",
+      "range": {
+        "startLine": 194,
+        "startChar": 24,
+        "endLine": 194,
+        "endChar": 30
+      },
+      "revId": "0a1c03215496066f59b20188aaa00a442b703d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ae8d196_0f11eb0e",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-17T10:31:16Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e6e8d7fe_727ef03e",
       "range": {
         "startLine": 194,
         "startChar": 24,
