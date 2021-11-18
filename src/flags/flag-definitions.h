@@ -444,7 +444,8 @@ DEFINE_NEG_IMPLICATION(enable_third_party_heap, turbo_allocation_folding)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_recompilation)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_inlining)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, script_streaming)
-DEFINE_NEG_IMPLICATION(enable_third_party_heap, parallel_compile_tasks)
+DEFINE_NEG_IMPLICATION(enable_third_party_heap,
+                       parallel_compile_tasks_for_eager_toplevel)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, use_marking_progress_bar)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, move_object_start)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_marking)
@@ -1565,11 +1566,17 @@ DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
 DEFINE_BOOL(cache_prototype_transitions, true, "cache prototype transitions")
 
 // lazy-compile-dispatcher.cc
-DEFINE_BOOL(parallel_compile_tasks, false, "enable parallel compile tasks")
 DEFINE_BOOL(lazy_compile_dispatcher, false, "enable compiler dispatcher")
-DEFINE_IMPLICATION(parallel_compile_tasks, lazy_compile_dispatcher)
 DEFINE_BOOL(trace_compiler_dispatcher, false,
             "trace compiler dispatcher activity")
+DEFINE_BOOL(
+    parallel_compile_tasks_for_eager_toplevel, false,
+    "spawn parallel compile tasks for eagerly compiled, top-level functions")
+DEFINE_IMPLICATION(parallel_compile_tasks_for_eager_toplevel,
+                   lazy_compile_dispatcher)
+DEFINE_BOOL(parallel_compile_tasks_for_lazy, false,
+            "spawn parallel compile tasks for all lazily compiled functions")
+DEFINE_IMPLICATION(parallel_compile_tasks_for_lazy, lazy_compile_dispatcher)
 
 // cpu-profiler.cc
 DEFINE_INT(cpu_profiler_sampling_interval, 1000,
@@ -2162,9 +2169,10 @@ DEFINE_NEG_IMPLICATION(predictable, memory_reducer)
 // before. Audit them, and remove any unneeded implications.
 DEFINE_IMPLICATION(predictable, single_threaded_gc)
 DEFINE_NEG_IMPLICATION(predictable, concurrent_recompilation)
-DEFINE_NEG_IMPLICATION(predictable, lazy_compile_dispatcher)
-DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks)
 DEFINE_NEG_IMPLICATION(predictable, stress_concurrent_inlining)
+DEFINE_NEG_IMPLICATION(predictable, lazy_compile_dispatcher)
+DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks_for_eager_toplevel)
+DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks_for_lazy)
 
 DEFINE_BOOL(predictable_gc_schedule, false,
             "Predictable garbage collection schedule. Fixes heap growing, "
@@ -2181,9 +2189,11 @@ DEFINE_NEG_IMPLICATION(predictable_gc_schedule, memory_reducer)
 DEFINE_BOOL(single_threaded, false, "disable the use of background tasks")
 DEFINE_IMPLICATION(single_threaded, single_threaded_gc)
 DEFINE_NEG_IMPLICATION(single_threaded, concurrent_recompilation)
-DEFINE_NEG_IMPLICATION(single_threaded, lazy_compile_dispatcher)
-DEFINE_NEG_IMPLICATION(single_threaded, parallel_compile_tasks)
 DEFINE_NEG_IMPLICATION(single_threaded, stress_concurrent_inlining)
+DEFINE_NEG_IMPLICATION(single_threaded, lazy_compile_dispatcher)
+DEFINE_NEG_IMPLICATION(single_threaded,
+                       parallel_compile_tasks_for_eager_toplevel)
+DEFINE_NEG_IMPLICATION(single_threaded, parallel_compile_tasks_for_lazy)
 
 //
 // Parallel and concurrent GC (Orinoco) related flags.
