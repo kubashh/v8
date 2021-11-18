@@ -1519,6 +1519,7 @@ bool CompileTopLevel(Isolate* isolate, Handle<Script> script) {
   UnoptimizedCompileState compile_state(isolate);
   UnoptimizedCompileFlags flags =
       UnoptimizedCompileFlags::ForScriptCompile(isolate, *script);
+  flags.set_is_reparse(true);
   ParseInfo parse_info(isolate, flags, &compile_state);
   IsCompiledScope is_compiled_scope;
   const MaybeHandle<SharedFunctionInfo> maybe_result =

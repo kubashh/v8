@@ -1786,10 +1786,12 @@ bool Compiler::CollectSourcePositions(Isolate* isolate,
   UnoptimizedCompileFlags flags =
       UnoptimizedCompileFlags::ForFunctionCompile(isolate, *shared_info);
   flags.set_collect_source_positions(true);
+  flags.set_is_reparse(true);
   // Prevent parallel tasks from being spawned by this job.
   flags.set_post_parallel_compile_tasks_for_eager_toplevel(false);
   flags.set_post_parallel_compile_tasks_for_lazy(false);
 
+  // This is a reparse, so don't spawn parallel tasks.
   UnoptimizedCompileState compile_state(isolate);
   ParseInfo parse_info(isolate, flags, &compile_state);
 

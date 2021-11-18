@@ -43,6 +43,10 @@ bool ParseProgram(ParseInfo* info, Handle<Script> script,
   DCHECK(info->flags().is_toplevel());
   DCHECK_NULL(info->literal());
 
+  // The SFI array on the script should be empty if this is not a reparse.
+  DCHECK_IMPLIES(!info->flags().is_reparse(),
+                 script->shared_function_infos().length() == 0);
+
   VMState<PARSER> state(isolate);
 
   // Create a character stream for the parser.
