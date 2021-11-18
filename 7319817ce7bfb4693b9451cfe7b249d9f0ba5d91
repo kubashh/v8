@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e1c9b12_e9eb4950",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-11-18T08:07:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecaca45a_120ffe3e",
+      "range": {
+        "startLine": 1187,
+        "startChar": 0,
+        "endLine": 1187,
+        "endChar": 37
+      },
+      "revId": "7319817ce7bfb4693b9451cfe7b249d9f0ba5d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72eaa8bb_66d3215f",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-11-17T17:30:38Z",
       "side": 1,
       "message": "I find these suffixes hard to remember, and their length is not even really standardized. How about using\n\nuint64_t{1}\n\ninstead?",
+      "range": {
+        "startLine": 99,
+        "startChar": 21,
+        "endLine": 99,
+        "endChar": 25
+      },
+      "revId": "7319817ce7bfb4693b9451cfe7b249d9f0ba5d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a8ea996_05f7e6f3",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2021-11-18T08:07:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72eaa8bb_66d3215f",
       "range": {
         "startLine": 99,
         "startChar": 21,
