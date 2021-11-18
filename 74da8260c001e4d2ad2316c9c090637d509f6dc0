@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d75ac2a6_ccbe0839",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-11-18T17:14:44Z",
+      "side": 1,
+      "message": "Hi Victor,\n\nThis is causing compilation failures on ppc/s390 as we don\u0027t have sparkplug enabled yet:\n```\nerror: read-only variable is not assignable\n```\nHow would you recommend relocating the `DEFINE_WEAK_IMPLICATION` snippet?",
+      "revId": "74da8260c001e4d2ad2316c9c090637d509f6dc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
