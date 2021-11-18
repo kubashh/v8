@@ -80,6 +80,9 @@ template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<int32_t>::id =
     ParseResultTypeId::kInt32;
 template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<int64_t>::id =
+    ParseResultTypeId::kInt64;
+template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
     ParseResultHolder<std::vector<std::string>>::id =
         ParseResultTypeId::kStdVectorOfString;
@@ -846,6 +849,24 @@ base::Optional<ParseResult> MakeInt32(ParseResultIterator* child_results) {
     return ParseResult{result};
   } catch (const std::out_of_range&) {
     Error("Integer out of 32-bit range");
+    return ParseResult{result};
+  }
+  // Tokenizer shouldn't have included extra trailing characters.
+  DCHECK_EQ(num_chars_converted, value.size());
+  return ParseResult{result};
+}
+
+base::Optional<ParseResult> MakeInt64(ParseResultIterator* child_results) {
+  std::string value = child_results->NextAs<std::string>();
+  size_t num_chars_converted = 0;
+  int64_t result = 0;
+  try {
+    result = std::stoll(value, &num_chars_converted, 0);
+  } catch (const std::invalid_argument&) {
+    Error("Expected an integer");
+    return ParseResult{result};
+  } catch (const std::out_of_range&) {
+    Error("Integer out of 64-bit range");
     return ParseResult{result};
   }
   // Tokenizer shouldn't have included extra trailing characters.
@@ -1870,6 +1891,13 @@ base::Optional<ParseResult> MakeNumberLiteralExpression(
   return ParseResult{result};
 }
 
+base::Optional<ParseResult> MakeIntegerLiteralExpression(
+    ParseResultIterator* child_results) {
+  const int64_t value = child_results->NextAs<int64_t>();
+  Expression* result = MakeNode<IntegerLiteralExpression>(value);
+  return ParseResult{result};
+}
+
 base::Optional<ParseResult> MakeStringLiteralExpression(
     ParseResultIterator* child_results) {
   auto literal = child_results->NextAs<std::string>();
@@ -2136,6 +2164,19 @@ struct TorqueGrammar : Grammar {
     return false;
   }
 
+  static bool MatchIntegerLiteral(InputPosition* pos) {
+    InputPosition current = *pos;
+    bool found_digit = false;
+    MatchString("-", &current);
+    while (MatchChar(std::isdigit, &current)) found_digit = true;
+    if (found_digit) {
+      std::string s(*pos, current);
+      *pos = current;
+      return true;
+    }
+    return false;
+  }
+
   static bool MatchDecimalLiteral(InputPosition* pos) {
     InputPosition current = *pos;
     bool found_digit = false;
@@ -2183,13 +2224,27 @@ struct TorqueGrammar : Grammar {
   // Result: std::string
   Symbol externalString = {Rule({&stringLiteral}, StringLiteralUnquoteAction)};
 
+  // Result: int64_t
+  Symbol integerLiteral = {Rule({Pattern(MatchIntegerLiteral)}, MakeInt64),
+                           Rule({Pattern(MatchHexLiteral)}, MakeInt64)};
+
   // Result: std::string
-  Symbol decimalLiteral = {
-      Rule({Pattern(MatchDecimalLiteral)}, YieldMatchedInput),
-      Rule({Pattern(MatchHexLiteral)}, YieldMatchedInput)};
+  Symbol floatingPointLiteral = {
+      Rule({Pattern(MatchDecimalLiteral)}, YieldMatchedInput)};
+
+  // Result: std::string
+  //  Symbol decimalLiteral = {
+  //      Rule({Pattern(MatchDecimalLiteral)}, YieldMatchedInput),
+  //     // Rule({Pattern(MatchHexLiteral)}, YieldMatchedInput)
+  //      };
 
   // Result: int32_t
-  Symbol int32Literal = {Rule({&decimalLiteral}, MakeInt32)};
+  Symbol int32Literal = {Rule({Pattern(MatchIntegerLiteral)}, MakeInt32),
+                         Rule({Pattern(MatchHexLiteral)}, MakeInt32)};
+  ////    Rule({&decimalLiteral}, MakeInt32),
+  //    Rule({Pattern(MatchDecimalLiteral)}, MakeInt32),
+  //    Rule({Pattern(MatchHexLiteral)}, MakeInt32)
+  //    };
 
   // Result: AnnotationParameter
   Symbol annotationParameter = {
@@ -2399,20 +2454,19 @@ struct TorqueGrammar : Grammar {
 
   // Result: Expression*
   Symbol primaryExpression = {
-      Rule({&callExpression}),
-      Rule({&callMethodExpression}),
-      Rule({&intrinsicCallExpression}),
-      Rule({&identifierExpression}),
+      Rule({&callExpression}), Rule({&callMethodExpression}),
+      Rule({&intrinsicCallExpression}), Rule({&identifierExpression}),
       Rule({&primaryExpression, Token("."), &name}, MakeFieldAccessExpression),
       Rule({&primaryExpression, Token("->"), &name},
            MakeReferenceFieldAccessExpression),
       Rule({&primaryExpression, Token("["), expression, Token("]")},
            MakeElementAccessExpression),
-      Rule({&decimalLiteral}, MakeNumberLiteralExpression),
+      Rule({&integerLiteral}, MakeIntegerLiteralExpression),
+      Rule({&floatingPointLiteral}, MakeNumberLiteralExpression),
+      //      Rule({&decimalLiteral}, MakeNumberLiteralExpression),
       Rule({&stringLiteral}, MakeStringLiteralExpression),
       Rule({&simpleType, &initializerList}, MakeStructExpression),
-      Rule({&newExpression}),
-      Rule({Token("("), expression, Token(")")})};
+      Rule({&newExpression}), Rule({Token("("), expression, Token(")")})};
 
   // Result: Expression*
   Symbol unaryExpression = {
