@@ -155,10 +155,9 @@ class ChunkedStream {
   explicit ChunkedStream(ScriptCompiler::ExternalSourceStream* source)
       : source_(source) {}
 
-  ChunkedStream(const ChunkedStream&) V8_NOEXCEPT {
-    // TODO(rmcilroy): Implement cloning for chunked streams.
-    UNREACHABLE();
-  }
+  ChunkedStream(const ChunkedStream& other) V8_NOEXCEPT
+      : source_(nullptr),
+        chunks_(other.chunks_) {}
 
   // The no_gc argument is only here because of the templated way this class
   // is used along with other implementations that require V8 heap access.
@@ -167,21 +166,19 @@ class ChunkedStream {
     Chunk chunk = FindChunk(pos, stats);
     size_t buffer_end = chunk.length;
     size_t buffer_pos = std::min(buffer_end, pos - chunk.position);
-    return {&chunk.data[buffer_pos], &chunk.data[buffer_end]};
+    return {&chunk.data.get()[buffer_pos], &chunk.data.get()[buffer_end]};
   }
 
-  ~ChunkedStream() {
-    for (Chunk& chunk : chunks_) delete[] chunk.data;
-  }
-
-  static const bool kCanBeCloned = false;
+  static const bool kCanBeCloned = true;
   static const bool kCanAccessHeap = false;
 
  private:
   struct Chunk {
     Chunk(const Char* const data, size_t position, size_t length)
-        : data(data), position(position), length(length) {}
-    const Char* const data;
+        : data(data, std::default_delete<const Char[]>()),
+          position(position),
+          length(length) {}
+    std::shared_ptr<const Char> data;
     // The logical position of data.
     const size_t position;
     const size_t length;
@@ -215,6 +212,10 @@ class ChunkedStream {
   }
 
   void FetchChunk(size_t position, RuntimeCallStats* stats) {
+    // Cloned ChunkedStreams have a null source, and therefore can't fetch any
+    // new data.
+    DCHECK_NOT_NULL(source_);
+
     const uint8_t* data = nullptr;
     size_t length;
     {
@@ -524,16 +525,14 @@ class Utf8ExternalStreamingStream final : public BufferedUtf16CharacterStream {
       ScriptCompiler::ExternalSourceStream* source_stream)
       : current_({0, {0, 0, 0, unibrow::Utf8::State::kAccept}}),
         source_stream_(source_stream) {}
-  ~Utf8ExternalStreamingStream() final {
-    for (const Chunk& chunk : chunks_) delete[] chunk.data;
-  }
+  ~Utf8ExternalStreamingStream() final = default;
 
   bool can_access_heap() const final { return false; }
 
-  bool can_be_cloned() const final { return false; }
+  bool can_be_cloned() const final { return true; }
 
   std::unique_ptr<Utf16CharacterStream> Clone() const override {
-    UNREACHABLE();
+    return std::make_unique<Utf8ExternalStreamingStream>(*this);
   }
 
  protected:
@@ -563,10 +562,21 @@ class Utf8ExternalStreamingStream final : public BufferedUtf16CharacterStream {
   // - The chunk data (data pointer and length), and
   // - the position at the first byte of the chunk.
   struct Chunk {
-    const uint8_t* data;
+    Chunk(const uint8_t* data, size_t length, StreamPosition start)
+        : data(data, std::default_delete<const uint8_t[]>()),
+          length(length),
+          start(start) {}
+    std::shared_ptr<const uint8_t> data;
     size_t length;
     StreamPosition start;
   };
+
+  friend std::unique_ptr<Utf8ExternalStreamingStream> std::make_unique<
+      Utf8ExternalStreamingStream>(const Utf8ExternalStreamingStream&);
+  Utf8ExternalStreamingStream(const Utf8ExternalStreamingStream& source_stream)
+      V8_NOEXCEPT : chunks_(source_stream.chunks_),
+                    current_({0, {0, 0, 0, unibrow::Utf8::State::kAccept}}),
+                    source_stream_(nullptr) {}
 
   // Within the current chunk, skip forward from current_ towards position.
   bool SkipToPosition(size_t position);
@@ -595,8 +605,8 @@ bool Utf8ExternalStreamingStream::SkipToPosition(size_t position) {
   unibrow::Utf8::State state = chunk.start.state;
   uint32_t incomplete_char = chunk.start.incomplete_char;
   size_t it = current_.pos.bytes - chunk.start.bytes;
-  const uint8_t* cursor = &chunk.data[it];
-  const uint8_t* end = &chunk.data[chunk.length];
+  const uint8_t* cursor = &chunk.data.get()[it];
+  const uint8_t* end = &chunk.data.get()[chunk.length];
 
   size_t chars = current_.pos.chars;
 
@@ -622,7 +632,7 @@ bool Utf8ExternalStreamingStream::SkipToPosition(size_t position) {
     }
   }
 
-  current_.pos.bytes = chunk.start.bytes + (cursor - chunk.data);
+  current_.pos.bytes = chunk.start.bytes + (cursor - chunk.data.get());
   current_.pos.chars = chars;
   current_.pos.incomplete_char = incomplete_char;
   current_.pos.state = state;
@@ -662,8 +672,8 @@ void Utf8ExternalStreamingStream::FillBufferFromCurrentChunk() {
   }
 
   size_t it = current_.pos.bytes - chunk.start.bytes;
-  const uint8_t* cursor = chunk.data + it;
-  const uint8_t* end = chunk.data + chunk.length;
+  const uint8_t* cursor = chunk.data.get() + it;
+  const uint8_t* end = chunk.data.get() + chunk.length;
 
   // Deal with possible BOM.
   if (V8_UNLIKELY(current_.pos.bytes < 3 && current_.pos.chars == 0)) {
@@ -711,7 +721,7 @@ void Utf8ExternalStreamingStream::FillBufferFromCurrentChunk() {
     output_cursor += ascii_length;
   }
 
-  current_.pos.bytes = chunk.start.bytes + (cursor - chunk.data);
+  current_.pos.bytes = chunk.start.bytes + (cursor - chunk.data.get());
   current_.pos.chars += (output_cursor - buffer_end_);
   current_.pos.incomplete_char = incomplete_char;
   current_.pos.state = state;
@@ -725,9 +735,13 @@ bool Utf8ExternalStreamingStream::FetchChunk() {
   DCHECK_EQ(current_.chunk_no, chunks_.size());
   DCHECK(chunks_.empty() || chunks_.back().length != 0);
 
+  // Cloned Utf8ExternalStreamingStreams have a null source stream, and
+  // therefore can't fetch any new data.
+  DCHECK_NOT_NULL(source_stream_);
+
   const uint8_t* chunk = nullptr;
   size_t length = source_stream_->GetMoreData(&chunk);
-  chunks_.push_back({chunk, length, current_.pos});
+  chunks_.emplace_back(chunk, length, current_.pos);
   return length > 0;
 }
 

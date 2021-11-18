@@ -15,10 +15,12 @@ namespace {
 // This will take each string as one chunk. The last chunk must be empty.
 class ChunkSource : public v8::ScriptCompiler::ExternalSourceStream {
  public:
-  explicit ChunkSource(const char** chunks) : current_(0) {
+  template <typename Char>
+  explicit ChunkSource(const Char** chunks) : current_(0) {
     do {
-      chunks_.push_back(
-          {reinterpret_cast<const uint8_t*>(*chunks), strlen(*chunks)});
+      chunks_.push_back({reinterpret_cast<const uint8_t*>(*chunks),
+                         (sizeof(Char) / sizeof(uint8_t)) *
+                             std::char_traits<Char>::length(*chunks)});
       chunks++;
     } while (chunks_.back().len > 0);
   }
@@ -249,7 +251,7 @@ TEST(Utf8SplitBOM) {
 
 TEST(Utf8SplitMultiBOM) {
   // Construct chunks with a split BOM followed by another split BOM.
-  const char* chunks = "\xef\xbb\0\xbf\xef\xbb\0\xbf\0\0";
+  const char* chunks[] = {"\xef\xbb", "\xbf\xef\xbb", "\xbf", ""};
   ChunkSource chunk_source(chunks);
   std::unique_ptr<i::Utf16CharacterStream> stream(
       v8::internal::ScannerStream::For(
@@ -411,7 +413,8 @@ TEST(Utf8SingleByteChunks) {
 #define CHECK_EQU(v1, v2) CHECK_EQ(static_cast<int>(v1), static_cast<int>(v2))
 
 void TestCharacterStream(const char* reference, i::Utf16CharacterStream* stream,
-                         unsigned length, unsigned start, unsigned end) {
+                         unsigned length, unsigned start, unsigned end,
+                         bool includes_eof = true) {
   // Read streams one char at a time
   unsigned i;
   for (i = start; i < end; i++) {
@@ -419,9 +422,15 @@ void TestCharacterStream(const char* reference, i::Utf16CharacterStream* stream,
     CHECK_EQU(reference[i], stream->Advance());
   }
   CHECK_EQU(end, stream->pos());
-  CHECK_EQU(i::Utf16CharacterStream::kEndOfInput, stream->Advance());
-  CHECK_EQU(end + 1, stream->pos());
-  stream->Back();
+
+  // Check that we've finished at kEndOfInput if includes_eof is true.
+  // Otherwise, the stream might not contain the kEndOfInput (e.g. cloned
+  // chunked streams).
+  if (includes_eof) {
+    CHECK_EQU(i::Utf16CharacterStream::kEndOfInput, stream->Advance());
+    CHECK_EQU(end + 1, stream->pos());
+    stream->Back();
+  }
 
   // Pushback, re-read, pushback again.
   while (i > end / 4) {
@@ -447,7 +456,9 @@ void TestCharacterStream(const char* reference, i::Utf16CharacterStream* stream,
     CHECK_EQU(reference[i], stream->Advance());
   }
   CHECK_EQU(i, stream->pos());
-  CHECK(i::Scanner::IsInvalid(stream->Advance()));
+  if (includes_eof) {
+    CHECK(i::Scanner::IsInvalid(stream->Advance()));
+  }
 
   // Seek back, then seek beyond end of stream.
   stream->Seek(start);
@@ -456,25 +467,35 @@ void TestCharacterStream(const char* reference, i::Utf16CharacterStream* stream,
   } else {
     CHECK(i::Scanner::IsInvalid(stream->Advance()));
   }
-  stream->Seek(length + 5);
-  CHECK(i::Scanner::IsInvalid(stream->Advance()));
+  if (includes_eof) {
+    stream->Seek(length + 5);
+    CHECK(i::Scanner::IsInvalid(stream->Advance()));
+  }
 }
 
 void TestCloneCharacterStream(const char* reference,
                               i::Utf16CharacterStream* stream,
                               unsigned length) {
-  std::unique_ptr<i::Utf16CharacterStream> clone = stream->Clone();
-
   unsigned i;
-  unsigned halfway = length / 2;
-  // Advance original half way.
-  for (i = 0; i < halfway; i++) {
+  unsigned one_third = length / 3;
+  // Advance original a third.
+  for (i = 0; i < one_third; i++) {
     CHECK_EQU(i, stream->pos());
     CHECK_EQU(reference[i], stream->Advance());
   }
 
-  // Test advancing original stream didn't affect the clone.
-  TestCharacterStream(reference, clone.get(), length, 0, length);
+  std::unique_ptr<i::Utf16CharacterStream> clone = stream->Clone();
+
+  unsigned two_thirds = length / 2;
+  // Advance original to 2/3.
+  for (; i < two_thirds; i++) {
+    CHECK_EQU(i, stream->pos());
+    CHECK_EQU(reference[i], stream->Advance());
+  }
+
+  // Test advancing original stream didn't affect the clone (which is valid up
+  // to one third).
+  TestCharacterStream(reference, clone.get(), one_third, 0, one_third, false);
 
   // Test advancing clone didn't affect original stream.
   TestCharacterStream(reference, stream, length, i, length);
@@ -879,7 +900,7 @@ TEST(CloneCharacterStreams) {
           ->SetResource(isolate, nullptr);
   }
 
-  // Relocatinable streams aren't clonable.
+  // Relocatable streams are't clonable.
   {
     std::unique_ptr<i::Utf16CharacterStream> string_stream(
         i::ScannerStream::For(isolate, one_byte_string, 0, length));
@@ -892,23 +913,31 @@ TEST(CloneCharacterStreams) {
     CHECK(!two_byte_string_stream->can_be_cloned());
   }
 
-  // Chunk sources currently not cloneable.
+  // Chunk sources are cloneable.
   {
-    const char* chunks[] = {"1234", "\0"};
+    const char* chunks[] = {"1234", "5678", ""};
     ChunkSource chunk_source(chunks);
     std::unique_ptr<i::Utf16CharacterStream> one_byte_streaming_stream(
         i::ScannerStream::For(&chunk_source,
                               v8::ScriptCompiler::StreamedSource::ONE_BYTE));
-    CHECK(!one_byte_streaming_stream->can_be_cloned());
-
+    TestCloneCharacterStream("12345678", one_byte_streaming_stream.get(), 8);
+  }
+  {
+    const char* chunks[] = {"1234", "5678", ""};
+    ChunkSource chunk_source(chunks);
     std::unique_ptr<i::Utf16CharacterStream> utf8_streaming_stream(
         i::ScannerStream::For(&chunk_source,
                               v8::ScriptCompiler::StreamedSource::UTF8));
-    CHECK(!utf8_streaming_stream->can_be_cloned());
-
+    CHECK(utf8_streaming_stream->can_be_cloned());
+    TestCloneCharacterStream("12345678", utf8_streaming_stream.get(), 8);
+  }
+  {
+    const char16_t* chunks[] = {u"1234", u"5678", u""};
+    ChunkSource chunk_source(chunks);
     std::unique_ptr<i::Utf16CharacterStream> two_byte_streaming_stream(
         i::ScannerStream::For(&chunk_source,
                               v8::ScriptCompiler::StreamedSource::TWO_BYTE));
-    CHECK(!two_byte_streaming_stream->can_be_cloned());
+    CHECK(two_byte_streaming_stream->can_be_cloned());
+    TestCloneCharacterStream("12345678", two_byte_streaming_stream.get(), 8);
   }
 }
