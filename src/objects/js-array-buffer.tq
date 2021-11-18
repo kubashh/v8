@@ -45,6 +45,9 @@ extern class JSArrayBufferView extends JSObject {
   buffer: JSArrayBuffer;
   byte_offset: uintptr;
   byte_length: uintptr;
+  foo: uint32;
+  @if(TAGGED_SIZE_8_BYTES) padding2: uint32;
+  @ifnot(TAGGED_SIZE_8_BYTES) padding2: void;
 }
 
 // We have 4 different TypedArrays:

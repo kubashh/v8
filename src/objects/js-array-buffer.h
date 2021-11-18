@@ -332,8 +332,8 @@ class JSTypedArray
   DECL_PRINTER(JSTypedArray)
   DECL_VERIFIER(JSTypedArray)
 
-  STATIC_ASSERT(IsAligned(kLengthOffset, kUIntptrSize));
-  STATIC_ASSERT(IsAligned(kExternalPointerOffset, kSystemPointerSize));
+  //STATIC_ASSERT(IsAligned(kLengthOffset, kUIntptrSize));
+  //STATIC_ASSERT(IsAligned(kExternalPointerOffset, kSystemPointerSize));
 
   static const int kSizeWithEmbedderFields =
       kHeaderSize +
@@ -379,7 +379,7 @@ class JSDataView
   DECL_PRINTER(JSDataView)
   DECL_VERIFIER(JSDataView)
 
-  STATIC_ASSERT(IsAligned(kDataPointerOffset, kUIntptrSize));
+  //STATIC_ASSERT(IsAligned(kDataPointerOffset, kUIntptrSize));
 
   static const int kSizeWithEmbedderFields =
       kHeaderSize +
