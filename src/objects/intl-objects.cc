@@ -912,10 +912,10 @@ MaybeHandle<String> Intl::StringLocaleConvertCase(Isolate* isolate,
 }
 
 // static
+template <class IsolateT>
 Intl::CompareStringsOptions Intl::CompareStringsOptionsFor(
-    LocalIsolate* local_isolate, Handle<Object> locales,
-    Handle<Object> options) {
-  if (!options->IsUndefined(local_isolate)) {
+    IsolateT* isolate, Handle<Object> locales, Handle<Object> options) {
+  if (!options->IsUndefined(isolate)) {
     return CompareStringsOptions::kNone;
   }
 
@@ -933,13 +933,18 @@ Intl::CompareStringsOptions Intl::CompareStringsOptionsFor(
       "sl",    "sv", "sw", "vi",    "en-DE", "en-GB",
   };
 
-  if (locales->IsUndefined(local_isolate)) {
+  if (locales->IsUndefined(isolate)) {
     static bool default_is_fast = false;
 
-    // The default locale is immutable after initialization.
+    // The default may have been explicitly reset.
+    if (isolate->default_locale_has_been_reset()) {
+      return CompareStringsOptions::kNone;
+    }
+
+    // Otherwise, the default locale is immutable after initialization.
     static base::OnceType once = V8_ONCE_INIT;
     base::CallOnce(&once, [&]() {
-      const std::string& default_locale = local_isolate->DefaultLocale();
+      const std::string& default_locale = isolate->DefaultLocale();
       for (const char* fast_locale : kFastLocales) {
         if (strcmp(fast_locale, default_locale.c_str()) == 0) {
           default_is_fast = true;
@@ -956,14 +961,19 @@ Intl::CompareStringsOptions Intl::CompareStringsOptionsFor(
 
   Handle<String> locales_string = Handle<String>::cast(locales);
   for (const char* fast_locale : kFastLocales) {
-    if (locales_string->IsEqualTo(base::CStrVector(fast_locale),
-                                  local_isolate)) {
+    if (locales_string->IsEqualTo(base::CStrVector(fast_locale), isolate)) {
       return CompareStringsOptions::kTryFastPath;
     }
   }
 
   return CompareStringsOptions::kNone;
 }
+
+// Instantiations.
+template Intl::CompareStringsOptions Intl::CompareStringsOptionsFor(
+    Isolate*, Handle<Object>, Handle<Object>);
+template Intl::CompareStringsOptions Intl::CompareStringsOptionsFor(
+    LocalIsolate*, Handle<Object>, Handle<Object>);
 
 base::Optional<int> Intl::StringLocaleCompare(
     Isolate* isolate, Handle<String> string1, Handle<String> string2,
@@ -977,7 +987,7 @@ base::Optional<int> Intl::StringLocaleCompare(
   // We may be able to take the fast path, depending on the `locales` and
   // `options` arguments.
   const CompareStringsOptions compare_strings_options =
-      CompareStringsOptionsFor(isolate->AsLocalIsolate(), locales, options);
+      CompareStringsOptionsFor(isolate, locales, options);
   if (can_cache) {
     // Both locales and options are undefined, check the cache.
     icu::Collator* cached_icu_collator =
@@ -1179,6 +1189,12 @@ bool CharIsAsciiOrOutOfBounds(const String::FlatContent& string,
   return index >= string_length || isascii(string.Get(index));
 }
 
+bool CharCanFastCompareOrOutOfBounds(const String::FlatContent& string,
+                                     int string_length, int index) {
+  DCHECK_EQ(string.length(), string_length);
+  return index >= string_length || CanFastCompare(string.Get(index));
+}
+
 #ifdef DEBUG
 bool USetContainsAllAsciiItem(USet* set) {
   static constexpr int kBufferSize = 64;
@@ -1375,7 +1391,15 @@ base::Optional<UCollationResult> TryFastCompareStrings(
 
   // Strings are L1-equal up to their common length, length differences win.
   UCollationResult length_result = ToUCollationResult(length1 - length2);
-  if (length_result != UCollationResult::UCOL_EQUAL) return length_result;
+  if (length_result != UCollationResult::UCOL_EQUAL) {
+    // Strings of different lengths may still compare as equal if the longer
+    // string has a fully ignored suffix, e.g. "a" vs. "a\u{1}".
+    if (!CharCanFastCompareOrOutOfBounds(flat1, length1, common_length) ||
+        !CharCanFastCompareOrOutOfBounds(flat2, length2, common_length)) {
+      return d.FastCompareFailed(processed_until_out);
+    }
+    return length_result;
+  }
 
   // L1-equal and same length, the L3 result wins.
   return d.l3_result;
