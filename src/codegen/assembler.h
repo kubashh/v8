@@ -468,9 +468,10 @@ class V8_EXPORT_PRIVATE V8_NODISCARD CpuFeatureScope {
 };
 
 #ifdef V8_CODE_COMMENTS
-#define ASM_CODE_COMMENT(asm) ASM_CODE_COMMENT_STRING(asm, __func__)
+#define ASM_CODE_COMMENT(asm) \
+  AssemblerBase::CodeComment asm_code_comment_func(asm, __func__)
 #define ASM_CODE_COMMENT_STRING(asm, comment) \
-  AssemblerBase::CodeComment asm_code_comment##__LINE__(asm, comment)
+  AssemblerBase::CodeComment asm_code_comment(asm, comment)
 #else
 #define ASM_CODE_COMMENT(asm)
 #define ASM_CODE_COMMENT_STRING(asm, ...)
