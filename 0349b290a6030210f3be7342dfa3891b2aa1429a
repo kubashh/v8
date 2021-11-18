@@ -33,6 +33,23 @@
       "message": "Hello Maya,\n\nCould I trouble you for a review of this small fix? I don\u0027t expect that you have any familiarity with this code, but unfortunately most of the folks on my team at Microsoft don\u0027t have permission to vote on code reviews. Suraj said offline that he approves this change.\n\nThe context for this change: v8windbg is a plugin for the Windbg debugger, so the code I\u0027m changing here runs within the debugger, not within V8 itself. This plugin wants to find a module (.exe or .dll) in the program being debugged that contains the V8 symbols. This step is important so that subsequent actions can specify the module when looking up types by name; otherwise, those lookups are very slow.\n\nThanks!",
       "revId": "0349b290a6030210f3be7342dfa3891b2aa1429a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2738252d_0fa3d3df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-18T08:08:46Z",
+      "side": 1,
+      "message": "LGTM, thanks for the great explanation, Seth!\n\nI trust your opinion on this and kind of get the original issue. Just out of curiousity - does this plugin work for debugging Electron based applications, which AFAIK instantiate the V8 module twice (once within their Chromium context and once within Node.js)? Of course this is totally unrelated to this CL, and probably jumping to a symbol from the wrong V8 module is not so much of an issue anyway.",
+      "revId": "0349b290a6030210f3be7342dfa3891b2aa1429a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
