@@ -241,9 +241,14 @@ class Histogram {
 
   Counters* counters() const { return counters_; }
 
-  // Reset the cached internal pointer.
-  void Reset(bool create_new = true) {
-    histogram_ = create_new ? CreateHistogram() : nullptr;
+  // Reset the cached internal pointer. Parameter create_new is used to override
+  // creation for specific histograms. Parameter ensure_created is used to delay
+  // creation of histograms for the first time, if this is called from
+  // Counters::ResetCreateHistogramFunction.
+  void Reset(bool ensure_created, bool create_new = true) {
+    histogram_ = create_new && (ensure_created || histogram_ != nullptr)
+                     ? CreateHistogram()
+                     : nullptr;
   }
 
  private:
@@ -538,6 +543,13 @@ class Counters : public std::enable_shared_from_this<Counters> {
     stats_table_.SetAddHistogramSampleFunction(f);
   }
 
+  // Create histograms for all counters. When |ensure_created| is true, all
+  // histograms are reset. When it is false, only histograms that have already
+  // been created are reset. Note: The first time it is called with
+  // |ensure_created| = true, this must be on the main thread, after the
+  // persistent histogram allocator has been created.
+  void CreateHistograms(bool ensure_created = true);
+
 #define HR(name, caption, min, max, num_buckets) \
   Histogram* name() { return &name##_; }
   HISTOGRAM_RANGE_LIST(HR)
@@ -714,7 +726,6 @@ class Counters : public std::enable_shared_from_this<Counters> {
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Counters);
 };
-
 
 }  // namespace internal
 }  // namespace v8

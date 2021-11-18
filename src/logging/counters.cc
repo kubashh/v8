@@ -294,32 +294,36 @@ void Counters::ResetCounterFunction(CounterLookupCallback f) {
 
 void Counters::ResetCreateHistogramFunction(CreateHistogramCallback f) {
   stats_table_.SetCreateHistogramFunction(f);
+  CreateHistograms(false);
+}
 
-#define HR(name, caption, min, max, num_buckets) name##_.Reset();
+void Counters::CreateHistograms(bool ensure_created) {
+#define HR(name, caption, min, max, num_buckets) name##_.Reset(ensure_created);
   HISTOGRAM_RANGE_LIST(HR)
 #undef HR
 
-#define HT(name, caption, max, res) name##_.Reset();
+#define HT(name, caption, max, res) name##_.Reset(ensure_created);
   NESTED_TIMED_HISTOGRAM_LIST(HT)
 #undef HT
 
-#define HT(name, caption, max, res) name##_.Reset(FLAG_slow_histograms);
+#define HT(name, caption, max, res) \
+  name##_.Reset(ensure_created, FLAG_slow_histograms);
   NESTED_TIMED_HISTOGRAM_LIST_SLOW(HT)
 #undef HT
 
-#define HT(name, caption, max, res) name##_.Reset();
+#define HT(name, caption, max, res) name##_.Reset(ensure_created);
   TIMED_HISTOGRAM_LIST(HT)
 #undef HT
 
-#define AHT(name, caption) name##_.Reset();
+#define AHT(name, caption) name##_.Reset(ensure_created);
   AGGREGATABLE_HISTOGRAM_TIMER_LIST(AHT)
 #undef AHT
 
-#define HP(name, caption) name##_.Reset();
+#define HP(name, caption) name##_.Reset(ensure_created);
   HISTOGRAM_PERCENTAGE_LIST(HP)
 #undef HP
 
-#define HM(name, caption) name##_.Reset();
+#define HM(name, caption) name##_.Reset(ensure_created);
   HISTOGRAM_LEGACY_MEMORY_LIST(HM)
 #undef HM
 }

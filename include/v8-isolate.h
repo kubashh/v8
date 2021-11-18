@@ -1249,6 +1249,12 @@ class V8_EXPORT Isolate {
   void SetAddHistogramSampleFunction(AddHistogramSampleCallback);
 
   /**
+   * Creates histograms for the isolate's counters. This method must be
+   * called once, after the persistent histogram allocator has been created.
+   */
+  void CreateHistogramsForCounters();
+
+  /**
    * Enables the host application to provide a mechanism for recording
    * event based metrics. In order to use this interface
    *   include/v8-metrics.h
