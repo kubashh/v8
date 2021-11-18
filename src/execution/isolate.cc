@@ -5001,6 +5001,7 @@ const std::string& Isolate::DefaultLocale() {
 
 void Isolate::ResetDefaultLocale() {
   default_locale_.clear();
+  default_locale_has_been_reset_ = true;  // Remains true forever.
   clear_cached_icu_objects();
   // We inline fast paths assuming certain locales. Since this path is rarely
   // taken, we deoptimize everything to keep things simple.

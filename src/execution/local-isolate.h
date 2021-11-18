@@ -126,6 +126,8 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
 #ifdef V8_INTL_SUPPORT
   // WARNING: This might be out-of-sync with the main-thread.
   const std::string& DefaultLocale();
+  // Can't reset the LocalIsolate's default locale.
+  bool default_locale_has_been_reset() const { return false; }
 #endif
 
  private:
