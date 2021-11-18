@@ -50,6 +50,41 @@
       "message": "LGTM, thanks for the great explanation, Seth!\n\nI trust your opinion on this and kind of get the original issue. Just out of curiousity - does this plugin work for debugging Electron based applications, which AFAIK instantiate the V8 module twice (once within their Chromium context and once within Node.js)? Of course this is totally unrelated to this CL, and probably jumping to a symbol from the wrong V8 module is not so much of an issue anyway.",
       "revId": "0349b290a6030210f3be7342dfa3891b2aa1429a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "697eba2f_02225a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-11-18T15:26:37Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "0349b290a6030210f3be7342dfa3891b2aa1429a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6739f5a9_8f8fa081",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2021-11-18T15:26:37Z",
+      "side": 1,
+      "message": "Good question! I don\u0027t know of any problems that arise due to the duplicated V8 module in Electron, but I also haven\u0027t spent very much time debugging Electron apps.",
+      "parentUuid": "2738252d_0fa3d3df",
+      "revId": "0349b290a6030210f3be7342dfa3891b2aa1429a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
