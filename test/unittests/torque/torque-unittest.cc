@@ -257,6 +257,26 @@ TEST(Torque, StructNamingConventionLintError) {
                            HasSubstr("\"foo\""));
 }
 
+TEST(Torque, NumericLiterals) {
+  /*
+  ExpectSuccessfulCompilation(R"(
+    macro ExpectInt32(_x : int32) : void {}
+    macro ExpectInt64(_x : int64) : void {}
+    @export
+    macro TestIntegerLiterals() : void {
+      ExpectInt32(0);
+      ExpectInt32(312);
+      ExpectInt32(0xFF33);
+
+      ExpectInt64(0);
+      ExpectInt64(312);
+      ExpectInt64(0xFF33);
+      ExpectInt64(0xFF33FF33FF33FF33);
+    }
+  )");
+  */
+}
+
 TEST(Torque, ClassDefinition) {
   ExpectSuccessfulCompilation(R"(
     extern class TestClassWithAllTypes extends HeapObject {

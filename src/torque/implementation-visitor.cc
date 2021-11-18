@@ -944,7 +944,9 @@ VisitResult ImplementationVisitor::Visit(AssignmentExpression* expr) {
   return scope.Yield(assignment_value);
 }
 
-VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
+VisitResult ImplementationVisitor::Visit(FloatingPointLiteralExpression* expr) {
+  const Type* result_type = TypeOracle::GetFloatingPointLiteralType();
+  /*
   const Type* result_type = TypeOracle::GetConstFloat64Type();
   if (expr->number >= std::numeric_limits<int32_t>::min() &&
       expr->number <= std::numeric_limits<int32_t>::max()) {
@@ -957,9 +959,18 @@ VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
       }
     }
   }
+  */
   std::stringstream str;
   str << std::setprecision(std::numeric_limits<double>::digits10 + 1)
-      << expr->number;
+      << expr->value;
+  return VisitResult{result_type, str.str()};
+}
+
+VisitResult ImplementationVisitor::Visit(IntegerLiteralExpression* expr) {
+  const Type* result_type = TypeOracle::GetIntegerLiteralType();
+  std::stringstream str;
+  str << std::setprecision(std::numeric_limits<int64_t>::digits10 + 1)
+      << expr->value;
   return VisitResult{result_type, str.str()};
 }
 
