@@ -294,7 +294,18 @@ void Counters::ResetCounterFunction(CounterLookupCallback f) {
 
 void Counters::ResetCreateHistogramFunction(CreateHistogramCallback f) {
   stats_table_.SetCreateHistogramFunction(f);
+  // If the histograms were already created, we reset them.
+  if (histograms_created_.test()) ResetHistograms();
+}
 
+void Counters::CreateHistograms() {
+  // If the histograms were already created, do nothing.
+  if (histograms_created_.test_and_set()) return;
+  // Otherwise, we create them now.
+  ResetHistograms();
+}
+
+void Counters::ResetHistograms() {
 #define HR(name, caption, min, max, num_buckets) name##_.Reset();
   HISTOGRAM_RANGE_LIST(HR)
 #undef HR

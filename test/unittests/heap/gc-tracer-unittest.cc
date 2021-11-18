@@ -496,6 +496,7 @@ TEST_F(GCTracerTest, RecordMarkCompactHistograms) {
   if (FLAG_stress_incremental_marking) return;
   isolate()->SetCreateHistogramFunction(&GcHistogram::CreateHistogram);
   isolate()->SetAddHistogramSampleFunction(&GcHistogram::AddHistogramSample);
+  isolate()->CreateHistogramsForCounters();
   GCTracer* tracer = i_isolate()->heap()->tracer();
   tracer->ResetForTesting();
   tracer->current_.scopes[GCTracer::Scope::MC_CLEAR] = 1;
@@ -520,6 +521,7 @@ TEST_F(GCTracerTest, RecordScavengerHistograms) {
   if (FLAG_stress_incremental_marking) return;
   isolate()->SetCreateHistogramFunction(&GcHistogram::CreateHistogram);
   isolate()->SetAddHistogramSampleFunction(&GcHistogram::AddHistogramSample);
+  isolate()->CreateHistogramsForCounters();
   GCTracer* tracer = i_isolate()->heap()->tracer();
   tracer->ResetForTesting();
   tracer->current_.scopes[GCTracer::Scope::SCAVENGER_SCAVENGE_ROOTS] = 1;
@@ -534,6 +536,7 @@ TEST_F(GCTracerTest, RecordGCSumHistograms) {
   if (FLAG_stress_incremental_marking) return;
   isolate()->SetCreateHistogramFunction(&GcHistogram::CreateHistogram);
   isolate()->SetAddHistogramSampleFunction(&GcHistogram::AddHistogramSample);
+  isolate()->CreateHistogramsForCounters();
   GCTracer* tracer = i_isolate()->heap()->tracer();
   tracer->ResetForTesting();
   tracer->current_
