@@ -20,7 +20,7 @@ class MarkingStateBase;
 class MutatorMarkingState;
 class ConcurrentMarkingState;
 
-class V8_EXPORT_PRIVATE MarkingVisitorBase : public VisitorBase {
+class V8_EXPORT_PRIVATE MarkingVisitorBase : public MarkingVisitorBaseBase {
  public:
   MarkingVisitorBase(HeapBase&, MarkingStateBase&);
   ~MarkingVisitorBase() override = default;

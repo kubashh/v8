@@ -20,22 +20,6 @@ class VisitorFactory {
   static constexpr Visitor::Key CreateKey() { return {}; }
 };
 
-// Base visitor that is allowed to create a public cppgc::Visitor object and
-// use its internals.
-class VisitorBase : public cppgc::Visitor {
- public:
-  VisitorBase() : cppgc::Visitor(VisitorFactory::CreateKey()) {}
-  ~VisitorBase() override = default;
-
-  VisitorBase(const VisitorBase&) = delete;
-  VisitorBase& operator=(const VisitorBase&) = delete;
-
-  template <typename Persistent>
-  void TraceRootForTesting(const Persistent& p, const SourceLocation& loc) {
-    TraceRoot(p, loc);
-  }
-};
-
 // Regular visitor that additionally allows for conservative tracing.
 class ConservativeTracingVisitor {
  public:

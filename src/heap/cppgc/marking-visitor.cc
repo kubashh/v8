@@ -10,9 +10,21 @@
 namespace cppgc {
 namespace internal {
 
+MarkingVisitorBaseBase::MarkingVisitorBaseBase(HeapBase& heap,
+                                               MarkingStateBase& marking_state)
+    : marking_state_(marking_state) {
+  is_marking_ = true;
+}
+
+void MarkingVisitorBaseBase::VisitForMarking(const void* object,
+                                             TraceDescriptor desc) {
+  marking_state_.MarkAndPush(object, desc);
+}
+
 MarkingVisitorBase::MarkingVisitorBase(HeapBase& heap,
                                        MarkingStateBase& marking_state)
-    : marking_state_(marking_state) {}
+    : MarkingVisitorBaseBase(heap, marking_state),
+      marking_state_(marking_state) {}
 
 void MarkingVisitorBase::Visit(const void* object, TraceDescriptor desc) {
   marking_state_.MarkAndPush(object, desc);

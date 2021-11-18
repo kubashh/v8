@@ -24,6 +24,8 @@ void Visitor::CheckObjectNotInConstruction(const void* address) {
 
 namespace internal {
 
+VisitorBase::VisitorBase() : cppgc::Visitor(VisitorFactory::CreateKey()) {}
+
 ConservativeTracingVisitor::ConservativeTracingVisitor(
     HeapBase& heap, PageBackend& page_backend, cppgc::Visitor& visitor)
     : heap_(heap), page_backend_(page_backend), visitor_(visitor) {}

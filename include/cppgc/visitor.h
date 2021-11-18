@@ -29,6 +29,7 @@ class BasicPersistent;
 class ConservativeTracingVisitor;
 class VisitorBase;
 class VisitorFactory;
+
 }  // namespace internal
 
 using WeakCallback = void (*)(const LivenessBroker&, const void*);
@@ -68,15 +69,7 @@ class V8_EXPORT Visitor {
    * \param member Reference retaining an object.
    */
   template <typename T>
-  void Trace(const T* t) {
-    static_assert(sizeof(T), "Pointee type must be fully defined.");
-    static_assert(internal::IsGarbageCollectedOrMixinType<T>::value,
-                  "T must be GarbageCollected or GarbageCollectedMixin type");
-    if (!t) {
-      return;
-    }
-    Visit(t, TraceTrait<T>::GetTraceDescriptor(t));
-  }
+  void Trace(const T* t);
 
   /**
    * Trace method for Member.
@@ -307,6 +300,8 @@ class V8_EXPORT Visitor {
                                   WeakCallback callback, const void* data) {}
   virtual void HandleMovableReference(const void**) {}
 
+  bool is_marking_ = false;
+
  private:
   template <typename T, void (T::*method)(const LivenessBroker&)>
   static void WeakCallbackMethodDelegate(const LivenessBroker& info,
@@ -373,6 +368,55 @@ class V8_EXPORT Visitor {
   friend class internal::ConservativeTracingVisitor;
   friend class internal::VisitorBase;
 };
+
+namespace internal {
+
+// Base visitor that is allowed to create a public cppgc::Visitor object and
+// use its internals.
+class VisitorBase : public cppgc::Visitor {
+ public:
+  VisitorBase();
+  ~VisitorBase() override = default;
+
+  VisitorBase(const VisitorBase&) = delete;
+  VisitorBase& operator=(const VisitorBase&) = delete;
+
+  template <typename Persistent>
+  void TraceRootForTesting(const Persistent& p, const SourceLocation& loc) {
+    TraceRoot(p, loc);
+  }
+};
+
+class HeapBase;
+class MarkingStateBase;
+
+class MarkingVisitorBaseBase : public VisitorBase {
+ public:
+  MarkingVisitorBaseBase(HeapBase&, MarkingStateBase&);
+  void VisitForMarking(const void* object, TraceDescriptor desc);
+
+ protected:
+  MarkingStateBase& marking_state_;
+};
+
+}  // namespace internal
+
+template <typename T>
+void Visitor::Trace(const T* t) {
+  static_assert(sizeof(T), "Pointee type must be fully defined.");
+  static_assert(internal::IsGarbageCollectedOrMixinType<T>::value,
+                "T must be GarbageCollected or GarbageCollectedMixin type");
+  if (!t) {
+    return;
+  }
+  if (is_marking_) {
+    static_cast<internal::MarkingVisitorBaseBase*>(this)->VisitForMarking(
+        t, TraceTrait<T>::GetTraceDescriptor(t));
+    return;
+  }
+
+  Visit(t, TraceTrait<T>::GetTraceDescriptor(t));
+}
 
 }  // namespace cppgc
 
