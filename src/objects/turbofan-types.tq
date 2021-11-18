@@ -142,12 +142,11 @@ macro TestTurbofanBitsetType(value: Object, bitset: TurbofanTypeBits): bool {
       return bitset.unsigned_big_int_63 | bitset.other_unsigned_big_int_64 |
           bitset.negative_big_int_63 | bitset.other_big_int;
     }
-    case (Callable): {
-      return bitset.other_callable;
-    }
     case (object: JSObject): {
       if (object.map.IsUndetectable()) {
         return bitset.other_undetectable;
+      } else if (Is<Callable>(object)) {
+        return bitset.other_callable;
       } else {
         return bitset.other_object;
       }
