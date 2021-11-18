@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d786cc_9bbddcd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-18T12:26:50Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5db82b8_e9e90966",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-18T12:26:50Z",
+      "side": 1,
+      "message": "Note the templatization is a third fix - since on the main thread we want to access the current value of default_locale, not the one copied and cached at isolate creation.",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
