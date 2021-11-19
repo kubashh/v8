@@ -48,7 +48,7 @@ bitfield struct TurbofanTypeLowBits extends uint32 {
 }
 
 bitfield struct TurbofanTypeHighBits extends uint32 {
-  _unused_field: bool: 1 bit;
+  wasm_object: bool: 1 bit;
 }
 
 @export
@@ -85,7 +85,7 @@ macro IsMinusZero(x: float64): bool {
 
 macro TestTurbofanBitsetType(
     value: Object, bitsetLow: TurbofanTypeLowBits,
-    _bitsetHigh: TurbofanTypeHighBits): bool {
+    bitsetHigh: TurbofanTypeHighBits): bool {
   typeswitch (value) {
     case (value: Number): {
       const valueF = Convert<float64>(value);
@@ -162,6 +162,9 @@ macro TestTurbofanBitsetType(
       } else {
         return bitsetLow.other_object;
       }
+    }
+    case (WasmObject): {
+      return bitsetHigh.wasm_object;
     }
     case (Object): {
       return false;
