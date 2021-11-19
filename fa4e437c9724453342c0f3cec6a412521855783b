@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5cb31a7d_4464cb87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-19T13:35:24Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d5db82b8_e9e90966",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 2
@@ -31,6 +48,47 @@
       "writtenOn": "2021-11-18T12:26:50Z",
       "side": 1,
       "message": "Note the templatization is a third fix - since on the main thread we want to access the current value of default_locale, not the one copied and cached at isolate creation.",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "692001ec_743e7ea0",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-19T13:35:24Z",
+      "side": 1,
+      "message": "I don\u0027t think this is strictly necessary. My definition of LocalIsolate::DefaultLocale() already forwards to the actual Isolate if it\u0027s the main-thread LocalIsolate, and default_locale_has_been_reset() could do the same.",
+      "parentUuid": "d5db82b8_e9e90966",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059fe253_7f326c68",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-19T13:35:24Z",
+      "side": 1,
+      "message": "We actually currently have a subtle bug: If the default locale is reset, the compiler thread won\u0027t know and the base::CallOnce won\u0027t re-evaluate the default locale. This was wrong before already, I just didn\u0027t notice.\nWould it be possible to remove the CallOnce and simplify the logic? Then you could also remove the default_locale_has_been_reset thing. Going through the list shouldn\u0027t be that slow.",
+      "range": {
+        "startLine": 946,
+        "startChar": 4,
+        "endLine": 946,
+        "endChar": 18
+      },
       "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
