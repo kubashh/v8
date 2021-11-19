@@ -16,6 +16,23 @@
       "message": "Maya for src/compiler, src/common, test/\nIgor for src/ic and src/objects\nPtal, thanks!",
       "revId": "1e6d6314344c1383c096a1baf91182c895e8dea9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6136e098_bdc5eb70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-19T15:09:03Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "1e6d6314344c1383c096a1baf91182c895e8dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
