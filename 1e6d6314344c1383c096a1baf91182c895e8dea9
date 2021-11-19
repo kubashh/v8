@@ -33,6 +33,46 @@
       "message": "LGTM, thanks!",
       "revId": "1e6d6314344c1383c096a1baf91182c895e8dea9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "143d48e5_1f54e4e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-19T16:13:51Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "1e6d6314344c1383c096a1baf91182c895e8dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9836a792_692812c5",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-11-19T16:13:51Z",
+      "side": 1,
+      "message": "to",
+      "range": {
+        "startLine": 54,
+        "startChar": 33,
+        "endLine": 54,
+        "endChar": 37
+      },
+      "revId": "1e6d6314344c1383c096a1baf91182c895e8dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
