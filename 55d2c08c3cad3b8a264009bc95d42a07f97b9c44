@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "727831ad_751309f6",
+        "filename": "src/codegen/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-19T10:25:02Z",
+      "side": 0,
+      "message": "ah, turns out we have a macro for this, UNIQUE_IDENTIFIER in base/macros.h",
+      "range": {
+        "startLine": 473,
+        "startChar": 29,
+        "endLine": 473,
+        "endChar": 55
+      },
+      "revId": "55d2c08c3cad3b8a264009bc95d42a07f97b9c44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
