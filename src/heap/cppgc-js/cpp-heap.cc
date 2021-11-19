@@ -21,6 +21,7 @@
 #include "src/flags/flags.h"
 #include "src/handles/handles.h"
 #include "src/heap/base/stack.h"
+#include "src/heap/cppgc-js/cpp-marking-state.h"
 #include "src/heap/cppgc-js/cpp-snapshot.h"
 #include "src/heap/cppgc-js/unified-heap-marking-state.h"
 #include "src/heap/cppgc-js/unified-heap-marking-verifier.h"
@@ -177,12 +178,16 @@ UnifiedHeapConcurrentMarker::CreateConcurrentMarkingVisitor(
 
 class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
  public:
-  UnifiedHeapMarker(Key, Heap* v8_heap, cppgc::internal::HeapBase& cpp_heap,
+  UnifiedHeapMarker(Heap* v8_heap, cppgc::internal::HeapBase& cpp_heap,
                     cppgc::Platform* platform, MarkingConfig config);
 
   ~UnifiedHeapMarker() final = default;
 
   void AddObject(void*);
+
+  cppgc::internal::MarkingWorklists& GetMarkingWorklists() {
+    return marking_worklists_;
+  }
 
  protected:
   cppgc::Visitor& visitor() final { return marking_visitor_; }
@@ -199,11 +204,11 @@ class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
   cppgc::internal::ConservativeMarkingVisitor conservative_marking_visitor_;
 };
 
-UnifiedHeapMarker::UnifiedHeapMarker(Key key, Heap* v8_heap,
+UnifiedHeapMarker::UnifiedHeapMarker(Heap* v8_heap,
                                      cppgc::internal::HeapBase& heap,
                                      cppgc::Platform* platform,
                                      MarkingConfig config)
-    : cppgc::internal::MarkerBase(key, heap, platform, config),
+    : cppgc::internal::MarkerBase(heap, platform, config),
       unified_heap_marking_state_(v8_heap),
       marking_visitor_(heap, mutator_marking_state_,
                        unified_heap_marking_state_),
@@ -411,7 +416,7 @@ bool ShouldReduceMemory(CppHeap::TraceFlags flags) {
 
 }  // namespace
 
-void CppHeap::TracePrologue(TraceFlags flags) {
+void CppHeap::InitializeTracing(TraceFlags flags) {
   CHECK(!sweeper_.IsSweepingInProgress());
 
 #if defined(CPPGC_YOUNG_GENERATION)
@@ -439,10 +444,13 @@ void CppHeap::TracePrologue(TraceFlags flags) {
     compactor_.InitializeIfShouldCompact(marking_config.marking_type,
                                          marking_config.stack_state);
   }
-  marker_ =
-      cppgc::internal::MarkerFactory::CreateAndStartMarking<UnifiedHeapMarker>(
-          isolate_ ? isolate()->heap() : nullptr, AsBase(), platform_.get(),
-          marking_config);
+  marker_ = std::make_unique<UnifiedHeapMarker>(
+      isolate_ ? isolate()->heap() : nullptr, AsBase(), platform_.get(),
+      marking_config);
+}
+
+void CppHeap::StartTracing() {
+  marker_->StartMarking();
   marking_done_ = false;
 }
 
@@ -589,7 +597,10 @@ void CppHeap::CollectGarbageForTesting(
   } else {
     // Perform an atomic GC, with starting incremental/concurrent marking and
     // immediately finalizing the garbage collection.
-    if (!IsMarking()) TracePrologue(TraceFlags::kForced);
+    if (!IsMarking()) {
+      InitializeTracing(TraceFlags::kForced);
+      StartTracing();
+    }
     EnterFinalPause(stack_state);
     AdvanceTracing(std::numeric_limits<double>::infinity());
     TraceSummary trace_summary;
@@ -612,7 +623,8 @@ void CppHeap::StartIncrementalGarbageCollectionForTesting() {
   DCHECK_NULL(isolate_);
   if (IsMarking()) return;
   force_incremental_marking_for_testing_ = true;
-  TracePrologue(TraceFlags::kForced);
+  InitializeTracing(TraceFlags::kForced);
+  StartTracing();
   force_incremental_marking_for_testing_ = false;
 }
 
@@ -710,6 +722,13 @@ CppHeap::MetricRecorderAdapter* CppHeap::GetMetricRecorder() const {
 }
 
 void CppHeap::FinishSweepingIfRunning() { sweeper_.FinishIfRunning(); }
+
+std::unique_ptr<CppMarkingState> CppHeap::CreateCppMarkingState() {
+  DCHECK(IsMarking());
+  return std::make_unique<CppMarkingState>(
+      *this, wrapper_descriptor_,
+      static_cast<UnifiedHeapMarker*>(marker())->GetMarkingWorklists());
+}
 
 }  // namespace internal
 }  // namespace v8
