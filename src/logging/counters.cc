@@ -120,7 +120,7 @@ bool TimedHistogram::ToggleRunningState(bool expect_to_run) const {
 #endif
 
 Counters::Counters(Isolate* isolate)
-    :
+    : histograms_created_(false),
 #define SC(name, caption) name##_(this, "c:" #caption),
       STATS_COUNTER_TS_LIST(SC)
 #undef SC
@@ -294,7 +294,18 @@ void Counters::ResetCounterFunction(CounterLookupCallback f) {
 
 void Counters::ResetCreateHistogramFunction(CreateHistogramCallback f) {
   stats_table_.SetCreateHistogramFunction(f);
+  // If the histograms were already created, we reset them.
+  if (histograms_created_.load(std::memory_order_relaxed)) ResetHistograms();
+}
 
+void Counters::CreateHistograms() {
+  // If the histograms were already created, do nothing.
+  if (histograms_created_.exchange(true, std::memory_order_relaxed)) return;
+  // Otherwise, we create them now.
+  ResetHistograms();
+}
+
+void Counters::ResetHistograms() {
 #define HR(name, caption, min, max, num_buckets) name##_.Reset();
   HISTOGRAM_RANGE_LIST(HR)
 #undef HR

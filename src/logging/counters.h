@@ -538,6 +538,11 @@ class Counters : public std::enable_shared_from_this<Counters> {
     stats_table_.SetAddHistogramSampleFunction(f);
   }
 
+  // Create all histograms, if they haven't been created yet.
+  // Note: This must be called for the first time after the persistent
+  // histogram allocator has been created. It is thread-safe.
+  void CreateHistograms();
+
 #define HR(name, caption, min, max, num_buckets) \
   Histogram* name() { return &name##_; }
   HISTOGRAM_RANGE_LIST(HR)
@@ -652,6 +657,11 @@ class Counters : public std::enable_shared_from_this<Counters> {
 
   Isolate* isolate() { return isolate_; }
 
+  void ResetHistograms();
+
+  // TODO(nikolaos): Use a std::atomic_flag instead, when we reach C++20.
+  std::atomic<bool> histograms_created_;
+
 #define HR(name, caption, min, max, num_buckets) Histogram name##_;
   HISTOGRAM_RANGE_LIST(HR)
 #undef HR
@@ -714,7 +724,6 @@ class Counters : public std::enable_shared_from_this<Counters> {
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(Counters);
 };
-
 
 }  // namespace internal
 }  // namespace v8
