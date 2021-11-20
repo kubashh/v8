@@ -8490,6 +8490,12 @@ EmbedderHeapTracer* Isolate::GetEmbedderHeapTracer() {
   return isolate->heap()->GetEmbedderHeapTracer();
 }
 
+void Isolate::EmbedderGarbageCollectionForTesting(
+    EmbedderHeapTracer::EmbedderStackState stack_state) {
+  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
+  isolate->heap()->EmbedderGarbageCollectionForTesting(stack_state);
+}
+
 void Isolate::SetEmbedderRootsHandler(EmbedderRootsHandler* handler) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->heap()->SetEmbedderRootsHandler(handler);

@@ -176,6 +176,12 @@ void LocalEmbedderHeapTracer::NotifyEmptyEmbedderStack() {
   isolate_->global_handles()->NotifyEmptyEmbedderStack();
 }
 
+void LocalEmbedderHeapTracer::EmbedderGarbageCollectionForTesting(
+    EmbedderHeapTracer::EmbedderStackState stack_state) {
+  if (!InUse()) return;
+  remote_tracer_->GarbageCollectionForTesting(stack_state);
+}
+
 bool DefaultEmbedderRootsHandler::IsRoot(
     const v8::TracedReference<v8::Value>& handle) {
   return !tracer_ || tracer_->IsRootForNonTracingGC(handle);
