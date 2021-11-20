@@ -139,6 +139,9 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
     return embedder_stack_state_;
   }
 
+  void EmbedderGarbageCollectionForTesting(
+      EmbedderHeapTracer::EmbedderStackState stack_state);
+
  private:
   static constexpr size_t kEmbedderAllocatedThreshold = 128 * KB;
 
