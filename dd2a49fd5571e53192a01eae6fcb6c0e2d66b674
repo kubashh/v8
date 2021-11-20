@@ -16,6 +16,23 @@
       "message": "ptal. The removed DCHECK fails on Pdfium.",
       "revId": "dd2a49fd5571e53192a01eae6fcb6c0e2d66b674",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44631cae_d9c82d46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-20T09:49:20Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "dd2a49fd5571e53192a01eae6fcb6c0e2d66b674",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
