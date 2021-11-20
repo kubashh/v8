@@ -1180,6 +1180,9 @@ class Heap {
   V8_EXPORT_PRIVATE void SetEmbedderHeapTracer(EmbedderHeapTracer* tracer);
   EmbedderHeapTracer* GetEmbedderHeapTracer() const;
 
+  void EmbedderGarbageCollectionForTesting(
+      EmbedderHeapTracer::EmbedderStackState stack_state);
+
   void RegisterExternallyReferencedObject(Address* location);
   V8_EXPORT_PRIVATE void SetEmbedderStackStateForNextFinalization(
       EmbedderHeapTracer::EmbedderStackState stack_state);

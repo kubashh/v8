@@ -5865,6 +5865,12 @@ EmbedderHeapTracer* Heap::GetEmbedderHeapTracer() const {
   return local_embedder_heap_tracer()->remote_tracer();
 }
 
+void Heap::EmbedderGarbageCollectionForTesting(
+    EmbedderHeapTracer::EmbedderStackState stack_state) {
+  return local_embedder_heap_tracer()->EmbedderGarbageCollectionForTesting(
+      stack_state);
+}
+
 void Heap::AttachCppHeap(v8::CppHeap* cpp_heap) {
   CppHeap::From(cpp_heap)->AttachIsolate(isolate());
   cpp_heap_ = cpp_heap;
