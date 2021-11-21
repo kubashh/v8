@@ -15,6 +15,7 @@
 #include "src/execution/isolate-inl.h"
 #include "src/execution/microtask-queue.h"
 #include "src/execution/protectors.h"
+#include "src/extensions/console-extension.h"
 #include "src/extensions/cputracemark-extension.h"
 #include "src/extensions/externalize-string-extension.h"
 #include "src/extensions/gc-extension.h"
@@ -138,6 +139,7 @@ static bool isValidCpuTraceMarkFunctionName() {
 }
 
 void Bootstrapper::InitializeOncePerProcess() {
+  v8::RegisterExtension(std::make_unique<ConsoleExtension>());
   v8::RegisterExtension(std::make_unique<GCExtension>(GCFunctionName()));
   v8::RegisterExtension(std::make_unique<ExternalizeStringExtension>());
   v8::RegisterExtension(std::make_unique<StatisticsExtension>());
@@ -2773,71 +2775,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     InstallConstant(isolate_, math, "SQRT2",
                     factory->NewNumber(std::sqrt(2.0)));
     InstallToStringTag(isolate_, math, "Math");
-  }
-
-  {  // -- C o n s o l e
-    Handle<String> name = factory->InternalizeUtf8String("console");
-
-    Handle<NativeContext> context(isolate()->native_context());
-    Handle<SharedFunctionInfo> info =
-        factory->NewSharedFunctionInfoForBuiltin(name, Builtin::kIllegal);
-    info->set_language_mode(LanguageMode::kStrict);
-
-    Handle<JSFunction> cons =
-        Factory::JSFunctionBuilder{isolate(), info, context}.Build();
-    Handle<JSObject> empty = factory->NewJSObject(isolate_->object_function());
-    JSFunction::SetPrototype(cons, empty);
-
-    Handle<JSObject> console = factory->NewJSObject(cons, AllocationType::kOld);
-    DCHECK(console->IsJSObject());
-    JSObject::AddProperty(isolate_, global, name, console, DONT_ENUM);
-    SimpleInstallFunction(isolate_, console, "debug", Builtin::kConsoleDebug, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "error", Builtin::kConsoleError, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "info", Builtin::kConsoleInfo, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "log", Builtin::kConsoleLog, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "warn", Builtin::kConsoleWarn, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "dir", Builtin::kConsoleDir, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "dirxml", Builtin::kConsoleDirXml,
-                          0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "table", Builtin::kConsoleTable, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "trace", Builtin::kConsoleTrace, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "group", Builtin::kConsoleGroup, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "groupCollapsed",
-                          Builtin::kConsoleGroupCollapsed, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "groupEnd",
-                          Builtin::kConsoleGroupEnd, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "clear", Builtin::kConsoleClear, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "count", Builtin::kConsoleCount, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "countReset",
-                          Builtin::kConsoleCountReset, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "assert",
-                          Builtin::kFastConsoleAssert, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "profile",
-                          Builtin::kConsoleProfile, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "profileEnd",
-                          Builtin::kConsoleProfileEnd, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "time", Builtin::kConsoleTime, 0,
-                          false, NONE);
-    SimpleInstallFunction(isolate_, console, "timeLog",
-                          Builtin::kConsoleTimeLog, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "timeEnd",
-                          Builtin::kConsoleTimeEnd, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "timeStamp",
-                          Builtin::kConsoleTimeStamp, 0, false, NONE);
-    SimpleInstallFunction(isolate_, console, "context",
-                          Builtin::kConsoleContext, 1, true, NONE);
-    InstallToStringTag(isolate_, console, "Object");
   }
 
 #ifdef V8_INTL_SUPPORT

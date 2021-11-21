@@ -464,31 +464,6 @@ namespace internal {
   CPP(CallSitePrototypeIsToplevel)                                             \
   CPP(CallSitePrototypeToString)                                               \
                                                                                \
-  /* Console */                                                                \
-  CPP(ConsoleDebug)                                                            \
-  CPP(ConsoleError)                                                            \
-  CPP(ConsoleInfo)                                                             \
-  CPP(ConsoleLog)                                                              \
-  CPP(ConsoleWarn)                                                             \
-  CPP(ConsoleDir)                                                              \
-  CPP(ConsoleDirXml)                                                           \
-  CPP(ConsoleTable)                                                            \
-  CPP(ConsoleTrace)                                                            \
-  CPP(ConsoleGroup)                                                            \
-  CPP(ConsoleGroupCollapsed)                                                   \
-  CPP(ConsoleGroupEnd)                                                         \
-  CPP(ConsoleClear)                                                            \
-  CPP(ConsoleCount)                                                            \
-  CPP(ConsoleCountReset)                                                       \
-  CPP(ConsoleAssert)                                                           \
-  CPP(ConsoleProfile)                                                          \
-  CPP(ConsoleProfileEnd)                                                       \
-  CPP(ConsoleTime)                                                             \
-  CPP(ConsoleTimeLog)                                                          \
-  CPP(ConsoleTimeEnd)                                                          \
-  CPP(ConsoleTimeStamp)                                                        \
-  CPP(ConsoleContext)                                                          \
-                                                                               \
   /* DataView */                                                               \
   /* ES #sec-dataview-constructor */                                           \
   CPP(DataViewConstructor)                                                     \
