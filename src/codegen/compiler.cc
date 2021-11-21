@@ -168,7 +168,17 @@ class CompilerTracer : public AllStatic {
   static void PrintTracePrefix(const CodeTracer::Scope& scope,
                                const char* header,
                                OptimizedCompilationInfo* info) {
-    PrintTracePrefix(scope, header, info->closure(), info->code_kind());
+    PrintTracePrefix(scope, header, info->closure(), info->code_kind(),
+                     info->osr_offset());
+  }
+
+  static void PrintTracePrefix(const CodeTracer::Scope& scope,
+                               const char* header, Handle<JSFunction> function,
+                               CodeKind code_kind, BytecodeOffset osr_offset) {
+    PrintF(scope.file(), "[%s ", header);
+    function->ShortPrint(scope.file());
+    PrintF(scope.file(), "osr offset %d ", osr_offset.ToInt());
+    PrintF(scope.file(), " (target %s)", CodeKindToString(code_kind));
   }
 
   static void PrintTracePrefix(const CodeTracer::Scope& scope,
@@ -1087,7 +1097,8 @@ MaybeHandle<Code> GetOptimizedCode(
 
   // Reset profiler ticks, function is no longer considered hot.
   DCHECK(shared->is_compiled());
-  function->feedback_vector().set_profiler_ticks(0);
+  if (osr_offset == BytecodeOffset::None() || !FLAG_concurrent_osr)
+    function->feedback_vector().set_profiler_ticks(0);
 
   VMState<COMPILER> state(isolate);
   TimerEventScope<TimerEventOptimizeCode> optimize_code_timer(isolate);
@@ -1113,6 +1124,17 @@ MaybeHandle<Code> GetOptimizedCode(
   if (mode == ConcurrencyMode::kConcurrent) {
     if (GetOptimizedCodeLater(std::move(job), isolate, compilation_info,
                               code_kind, function)) {
+      if (osr_offset != BytecodeOffset::None() && FLAG_concurrent_osr) {
+        if (FLAG_trace_osr) {
+          CodeTracer::Scope scope(isolate->GetCodeTracer());
+          PrintF(scope.file(), "[OSR - Concurrent compiling: ");
+          function->PrintName(scope.file());
+          PrintF(scope.file(), " at OSR bytecode offset %d]\n",
+                 osr_offset.ToInt());
+        }
+        isolate->set_osr_in_queue(true);
+        return {};
+      }
       return ContinuationForConcurrentOptimization(isolate, function);
     }
   } else {
@@ -3186,8 +3208,34 @@ MaybeHandle<Code> Compiler::GetOptimizedCodeForOSR(Isolate* isolate,
                                                    JavaScriptFrame* osr_frame) {
   DCHECK(!osr_offset.IsNone());
   DCHECK_NOT_NULL(osr_frame);
-  return GetOptimizedCode(isolate, function, ConcurrencyMode::kNotConcurrent,
-                          CodeKindForOSR(), osr_offset, osr_frame);
+
+  CodeKind code_kind = CodeKindForOSR();
+
+  // Check the optimized code cache (stored on the SharedFunctionInfo).
+  if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
+    Handle<Code> cached_code;
+    if (GetCodeFromOptimizedCodeCache(function, osr_offset, code_kind)
+            .ToHandle(&cached_code)) {
+      CompilerTracer::TraceOptimizedCodeCacheHit(isolate, function, osr_offset,
+                                                 code_kind);
+      return cached_code;
+    }
+  }
+
+  if (FLAG_concurrent_osr && isolate->osr_in_queue()) {
+    if (FLAG_trace_osr) {
+      CodeTracer::Scope scope(isolate->GetCodeTracer());
+      PrintF(scope.file(),
+             "[OSR - One OSR compilation in queue, won't start another job "
+             "before the current job has been finished.\n");
+    }
+    return {};
+  }
+
+  return GetOptimizedCode(isolate, function,
+                          FLAG_concurrent_osr ? ConcurrencyMode::kConcurrent
+                                              : ConcurrencyMode::kNotConcurrent,
+                          code_kind, osr_offset, osr_frame);
 }
 
 // static
@@ -3206,7 +3254,7 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
   Handle<SharedFunctionInfo> shared = compilation_info->shared_info();
 
   const bool use_result = !compilation_info->discard_result_for_testing();
-  if (V8_LIKELY(use_result)) {
+  if (V8_LIKELY(use_result) && !compilation_info->is_osr()) {
     // Reset profiler ticks, function is no longer considered hot.
     compilation_info->closure()->feedback_vector().set_profiler_ticks(0);
   }
@@ -3229,9 +3277,18 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
       if (V8_LIKELY(use_result)) {
         InsertCodeIntoOptimizedCodeCache(compilation_info);
         CompilerTracer::TraceCompletedJob(isolate, compilation_info);
-        compilation_info->closure()->set_code(*compilation_info->code(),
-                                              kReleaseStore);
+        if (!compilation_info->is_osr()) {
+          compilation_info->closure()->set_code(*compilation_info->code(),
+                                                kReleaseStore);
+        } else {
+          if (compilation_info->closure()->IsInOptimizationQueue()) {
+            compilation_info->closure()->SetOptimizationMarker(
+                OptimizationMarker::kCompileOptimized);
+          }
+        }
       }
+
+      if (compilation_info->is_osr()) isolate->set_osr_in_queue(false);
       return CompilationJob::SUCCEEDED;
     }
   }
@@ -3245,6 +3302,7 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
       compilation_info->closure()->ClearOptimizationMarker();
     }
   }
+  if (compilation_info->is_osr()) isolate->set_osr_in_queue(false);
   return CompilationJob::FAILED;
 }
 

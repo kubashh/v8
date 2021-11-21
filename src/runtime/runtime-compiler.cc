@@ -319,7 +319,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   if (IsSuitableForOnStackReplacement(isolate, function)) {
     if (FLAG_trace_osr) {
       CodeTracer::Scope scope(isolate->GetCodeTracer());
-      PrintF(scope.file(), "[OSR - Compiling: ");
+      PrintF(scope.file(), "[OSR - Compiling or getting optimized: ");
       function->PrintName(scope.file());
       PrintF(scope.file(), " at OSR bytecode offset %d]\n", osr_offset.ToInt());
     }
@@ -329,21 +329,25 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
 
   // Check whether we ended up with usable optimized code.
   Handle<Code> result;
-  if (maybe_result.ToHandle(&result) &&
-      CodeKindIsOptimizedJSFunction(result->kind())) {
-    DeoptimizationData data =
-        DeoptimizationData::cast(result->deoptimization_data());
+  if (maybe_result.ToHandle(&result)) {
+    if (CodeKindIsOptimizedJSFunction(result->kind())) {
+      DeoptimizationData data =
+          DeoptimizationData::cast(result->deoptimization_data());
 
-    if (data.OsrPcOffset().value() >= 0) {
-      DCHECK(BytecodeOffset(data.OsrBytecodeOffset().value()) == osr_offset);
-      if (FLAG_trace_osr) {
-        CodeTracer::Scope scope(isolate->GetCodeTracer());
-        PrintF(scope.file(),
-               "[OSR - Entry at OSR bytecode offset %d, offset %d in optimized "
-               "code]\n",
-               osr_offset.ToInt(), data.OsrPcOffset().value());
+      if (data.OsrPcOffset().value() >= 0) {
+        DCHECK(BytecodeOffset(data.OsrBytecodeOffset().value()) == osr_offset);
+        if (FLAG_trace_osr) {
+          CodeTracer::Scope scope(isolate->GetCodeTracer());
+          PrintF(
+              scope.file(),
+              "[OSR - Entry at OSR bytecode offset %d, offset %d in optimized "
+              "code]\n",
+              osr_offset.ToInt(), data.OsrPcOffset().value());
+        }
       }
-
+      function->feedback_vector().set_profiler_ticks(0);
+    }
+    if (CodeKindIsOptimizedJSFunction(result->kind())) {
       DCHECK(result->is_turbofanned());
       if (function->feedback_vector().invocation_count() <= 1 &&
           function->HasOptimizationMarker()) {
@@ -356,7 +360,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
         // feedback. We cannot do this currently since we OSR only after we mark
         // a function for optimization. We should instead change it to be based
         // based on number of ticks.
-        DCHECK(!function->IsInOptimizationQueue());
+        // DCHECK(!function->IsInOptimizationQueue());
         function->ClearOptimizationMarker();
       }
       // TODO(mythria): Once we have OSR code cache we may not need to mark
@@ -376,8 +380,8 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
         }
         function->SetOptimizationMarker(OptimizationMarker::kCompileOptimized);
       }
-      return *result;
     }
+    return CodeKindIsOptimizedJSFunction(result->kind()) ? *result : Object();
   }
 
   // Failed.
