@@ -93,6 +93,30 @@
       },
       "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c895d734_07ce4321",
+        "filename": "src/logging/counters.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T10:36:48Z",
+      "side": 1,
+      "message": "The atomic exchange is not enough. This could happen without the external locking:\n1) Thread A sets the flag.\n2) Thread B checks the flag, sees that it\u0027s set and returns.\n3) Thread B uses the existing (nullptr) histogram.\n4) Thread A initializes the histograms.",
+      "parentUuid": "872469b7_61effe71",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
