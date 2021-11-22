@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f4af89e_5b3e147d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-22T08:28:02Z",
+      "side": 1,
+      "message": "Drive-by comment...",
+      "revId": "88ee969ec1f96285de3b8e9bbed33e7c97fdeb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a29834_d0f9f60a",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 2934,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-11-22T08:28:02Z",
+      "side": 1,
+      "message": "Please add this to BUILD.bazel! 😊",
+      "range": {
+        "startLine": 2934,
+        "startChar": 0,
+        "endLine": 2934,
+        "endChar": 44
+      },
+      "revId": "88ee969ec1f96285de3b8e9bbed33e7c97fdeb34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
