@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf3925a3_33d560a9",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T09:21:33Z",
+      "side": 1,
+      "message": "nit: If calling it twice is incorrect, you could check that it\u0027s only called once.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 64,
+        "endLine": 1253,
+        "endChar": 16
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d15264_02536e15",
+        "filename": "src/logging/counters.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T09:21:33Z",
+      "side": 1,
+      "message": "The implementation is currently only thread safe because context creation is synchronized. I would drop this.",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
