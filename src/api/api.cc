@@ -9173,6 +9173,10 @@ void Isolate::SetAddHistogramSampleFunction(
       ->SetAddHistogramSampleFunction(callback);
 }
 
+void Isolate::InitializeHistogramsForCounters() {
+  reinterpret_cast<i::Isolate*>(this)->counters()->InitializeHistograms();
+}
+
 void Isolate::SetMetricsRecorder(
     const std::shared_ptr<metrics::Recorder>& metrics_recorder) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
