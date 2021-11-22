@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adc4f8c6_c501a1d8",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-22T07:22:17Z",
+      "side": 1,
+      "message": "Ack. I like the template-on-IsolateT solution since it\u0027s somewhat of a common pattern in V8 (search for \u0027class IsolateT\u0027), and it seems simpler to me than to treat the Isolate as a LocalIsolate. Wdyt about reverting the \u0027is_main_thread\u0027 logic in LocalIsolate?",
+      "parentUuid": "692001ec_743e7ea0",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "059fe253_7f326c68",
@@ -83,6 +101,30 @@
       "writtenOn": "2021-11-19T13:35:24Z",
       "side": 1,
       "message": "We actually currently have a subtle bug: If the default locale is reset, the compiler thread won\u0027t know and the base::CallOnce won\u0027t re-evaluate the default locale. This was wrong before already, I just didn\u0027t notice.\nWould it be possible to remove the CallOnce and simplify the logic? Then you could also remove the default_locale_has_been_reset thing. Going through the list shouldn\u0027t be that slow.",
+      "range": {
+        "startLine": 946,
+        "startChar": 4,
+        "endLine": 946,
+        "endChar": 18
+      },
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb312ff2_487444f7",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-22T07:22:17Z",
+      "side": 1,
+      "message": "Which case do you mean? Resetting the locale will DeoptAll and stop any running compiler jobs. In new jobs after that, the locale reset should be picked up correctly, no?",
+      "parentUuid": "059fe253_7f326c68",
       "range": {
         "startLine": 946,
         "startChar": 4,
