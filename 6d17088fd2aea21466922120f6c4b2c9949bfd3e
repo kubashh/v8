@@ -39,6 +39,30 @@
       },
       "revId": "6d17088fd2aea21466922120f6c4b2c9949bfd3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9b84a2_ae45658f",
+        "filename": "include/v8-embedder-heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T11:45:28Z",
+      "side": 1,
+      "message": "I thought we could mark with DEPRECATE_SOON but I might have been wrong (wondering now whether the linux-rel bot will fail).\nI\u0027ll move the deprecation to another CL.",
+      "parentUuid": "24e02240_57dc6af6",
+      "range": {
+        "startLine": 213,
+        "startChar": 2,
+        "endLine": 213,
+        "endChar": 19
+      },
+      "revId": "6d17088fd2aea21466922120f6c4b2c9949bfd3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
