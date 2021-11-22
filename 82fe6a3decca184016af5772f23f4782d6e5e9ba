@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "569d0778_6ac40297",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T09:32:21Z",
+      "side": 1,
+      "message": "ptal. This is a prerequisite for splitting CppHeap from EmbedderHeapTracer.",
+      "revId": "82fe6a3decca184016af5772f23f4782d6e5e9ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
