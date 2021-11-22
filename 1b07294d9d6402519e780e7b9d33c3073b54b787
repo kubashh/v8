@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb565e48_4f5f9ccc",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T10:11:22Z",
+      "side": 1,
+      "message": "No, calling it again is not incorrect; it just does nothing. I will remove the word \"once\" from the comment.",
+      "parentUuid": "bf3925a3_33d560a9",
+      "range": {
+        "startLine": 1252,
+        "startChar": 64,
+        "endLine": 1253,
+        "endChar": 16
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88d15264_02536e15",
         "filename": "src/logging/counters.h",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2021-11-22T09:21:33Z",
       "side": 1,
       "message": "The implementation is currently only thread safe because context creation is synchronized. I would drop this.",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "872469b7_61effe71",
+        "filename": "src/logging/counters.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T10:11:22Z",
+      "side": 1,
+      "message": "I\u0027m happy to drop this. But, unless I\u0027m missing something, the implementation is thread-safe because there\u0027s an atomic test-and-set (line #303 of counters.cc); it is not because context creation is synchronized.",
+      "parentUuid": "88d15264_02536e15",
       "range": {
         "startLine": 543,
         "startChar": 43,
