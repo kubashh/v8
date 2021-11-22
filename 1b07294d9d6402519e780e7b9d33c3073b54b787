@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a21ffcf_c30a86ee",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T11:25:52Z",
+      "side": 1,
+      "message": "Actually, this sentence went away altogether.",
+      "parentUuid": "fb565e48_4f5f9ccc",
+      "range": {
+        "startLine": 1252,
+        "startChar": 64,
+        "endLine": 1253,
+        "endChar": 16
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88d15264_02536e15",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Btw std::atomic::exchange is not a compare and swap. It\u0027s just a swap that returns the old value. It doesn\u0027t fail if the value changed.\nI guess it works in this case anyway because the only transition is from false to true.\nAlso, if we want to make sure only have thread sets the flag, we need to sync the threads and std::memory_order_relaxed wouldn\u0027t do that. The relaxed order is enough for double checked locking because the mutex will sync the threads.",
       "parentUuid": "c895d734_07ce4321",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adeb450_eb287cdf",
+        "filename": "src/logging/counters.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T11:25:52Z",
+      "side": 1,
+      "message": "I\u0027m dropping the sentence about the persistent histogram allocator, as per previous comment. I scenario above would not be incorrect, in the sense that a nullptr histogram can be used (it\u0027s just dropping samples). But I\u0027m happy to drop the comment about thread-safety altogether, if you prefer. I\u0027m not following what you\u0027re writing about std::atomic::exchange, let\u0027s take this offline.",
+      "parentUuid": "7abea495_006981e1",
       "range": {
         "startLine": 543,
         "startChar": 43,

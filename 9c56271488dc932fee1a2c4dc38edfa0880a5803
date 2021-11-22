@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9789afa0_6e4246de",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T11:25:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c1fdc07_c4ca5c29",
+      "range": {
+        "startLine": 1253,
+        "startChar": 28,
+        "endLine": 1253,
+        "endChar": 58
+      },
+      "revId": "9c56271488dc932fee1a2c4dc38edfa0880a5803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c14ba760_2fce03ef",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "InitializeHistogramsForCounters? We have all sorts of histograms.",
       "parentUuid": "c14ba760_2fce03ef",
+      "range": {
+        "startLine": 1255,
+        "startChar": 7,
+        "endLine": 1255,
+        "endChar": 34
+      },
+      "revId": "9c56271488dc932fee1a2c4dc38edfa0880a5803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd391ac_27c7b4d0",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-22T11:25:52Z",
+      "side": 1,
+      "message": "Renamed.",
+      "parentUuid": "12a47668_448eb1af",
       "range": {
         "startLine": 1255,
         "startChar": 7,
