@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b43883_a48fb00a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-22T11:16:36Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6d17088fd2aea21466922120f6c4b2c9949bfd3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24e02240_57dc6af6",
+        "filename": "include/v8-embedder-heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-22T11:16:36Z",
+      "side": 1,
+      "message": "I was under the impression that we can only deprecate after removing the uses from Blink.",
+      "range": {
+        "startLine": 213,
+        "startChar": 2,
+        "endLine": 213,
+        "endChar": 19
+      },
+      "revId": "6d17088fd2aea21466922120f6c4b2c9949bfd3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
