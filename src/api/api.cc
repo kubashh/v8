@@ -10236,21 +10236,15 @@ void HeapProfiler::SetGetDetachednessCallback(GetDetachednessCallback callback,
                                                                        data);
 }
 
-void EmbedderHeapTracer::SetStackStart(void* stack_start) {
+namespace internal {
+
+void EmbedderHeapTracerBase::SetStackStart(void* stack_start) {
   CHECK(isolate_);
   reinterpret_cast<i::Isolate*>(isolate_)->global_handles()->SetStackStart(
       stack_start);
 }
 
-void EmbedderHeapTracer::NotifyEmptyEmbedderStack() {
-  CHECK(isolate_);
-  reinterpret_cast<i::Isolate*>(isolate_)
-      ->heap()
-      ->local_embedder_heap_tracer()
-      ->NotifyEmptyEmbedderStack();
-}
-
-void EmbedderHeapTracer::FinalizeTracing() {
+void EmbedderHeapTracerBase::FinalizeTracing() {
   if (isolate_) {
     i::Isolate* isolate = reinterpret_cast<i::Isolate*>(isolate_);
     if (isolate->heap()->incremental_marking()->IsMarking()) {
@@ -10260,11 +10254,11 @@ void EmbedderHeapTracer::FinalizeTracing() {
   }
 }
 
-void EmbedderHeapTracer::GarbageCollectionForTesting(
+void EmbedderHeapTracerBase::GarbageCollectionForTesting(
     EmbedderStackState stack_state) {
   CHECK(isolate_);
   Utils::ApiCheck(i::FLAG_expose_gc,
-                  "v8::EmbedderHeapTracer::GarbageCollectionForTesting",
+                  "v8::EmbedderHeapTracerBase::GarbageCollectionForTesting",
                   "Must use --expose-gc");
   i::Heap* const heap = reinterpret_cast<i::Isolate*>(isolate_)->heap();
   heap->SetEmbedderStackStateForNextFinalization(stack_state);
@@ -10273,7 +10267,7 @@ void EmbedderHeapTracer::GarbageCollectionForTesting(
                                  kGCCallbackFlagForced);
 }
 
-void EmbedderHeapTracer::IncreaseAllocatedSize(size_t bytes) {
+void EmbedderHeapTracerBase::IncreaseAllocatedSize(size_t bytes) {
   if (isolate_) {
     i::LocalEmbedderHeapTracer* const tracer =
         reinterpret_cast<i::Isolate*>(isolate_)
@@ -10284,7 +10278,7 @@ void EmbedderHeapTracer::IncreaseAllocatedSize(size_t bytes) {
   }
 }
 
-void EmbedderHeapTracer::DecreaseAllocatedSize(size_t bytes) {
+void EmbedderHeapTracerBase::DecreaseAllocatedSize(size_t bytes) {
   if (isolate_) {
     i::LocalEmbedderHeapTracer* const tracer =
         reinterpret_cast<i::Isolate*>(isolate_)
@@ -10293,6 +10287,16 @@ void EmbedderHeapTracer::DecreaseAllocatedSize(size_t bytes) {
     DCHECK_NOT_NULL(tracer);
     tracer->DecreaseAllocatedSize(bytes);
   }
+}
+
+}  // namespace internal
+
+void EmbedderHeapTracer::NotifyEmptyEmbedderStack() {
+  CHECK(isolate_);
+  reinterpret_cast<i::Isolate*>(isolate_)
+      ->heap()
+      ->local_embedder_heap_tracer()
+      ->NotifyEmptyEmbedderStack();
 }
 
 void EmbedderHeapTracer::RegisterEmbedderReference(

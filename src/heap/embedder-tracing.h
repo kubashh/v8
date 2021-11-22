@@ -9,7 +9,9 @@
 #include "include/v8-embedder-heap.h"
 #include "include/v8-traced-handle.h"
 #include "src/common/globals.h"
+#include "src/execution/isolate.h"
 #include "src/flags/flags.h"
+#include "src/heap/cppgc-js/cpp-heap.h"
 
 namespace v8 {
 namespace internal {
@@ -76,9 +78,13 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
 
   ~LocalEmbedderHeapTracer() {
     if (remote_tracer_) remote_tracer_->isolate_ = nullptr;
+    // CppHeap is not detached from Isolate here. Detaching is done explciitly
+    // on Isolate/Heap/CppHeap destruction.
   }
 
-  bool InUse() const { return remote_tracer_ != nullptr; }
+  bool InUse() const { return HasCppHeap() || (remote_tracer_ != nullptr); }
+  // This method doesn't take CppHeap into account.
+  // TODO(omerkatz): Remove after deprecating Isolate::GetEmbedderHeapTracer.
   EmbedderHeapTracer* remote_tracer() const { return remote_tracer_; }
 
   void SetRemoteTracer(EmbedderHeapTracer* tracer);
@@ -124,6 +130,7 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
   WrapperInfo ExtractWrapperInfo(Isolate* isolate, JSObject js_object);
 
   void SetWrapperDescriptor(const WrapperDescriptor& wrapper_descriptor) {
+    DCHECK(!HasCppHeap());
     wrapper_descriptor_ = wrapper_descriptor;
   }
 
@@ -152,6 +159,25 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
     return WrapperDescriptor(kDefaultWrapperTypeEmbedderIndex,
                              kDefaultWrapperInstanceEmbedderIndex,
                              WrapperDescriptor::kUnknownEmbedderId);
+  }
+
+  bool HasCppHeap() const {
+    if (!isolate_) return false;
+    DCHECK_NOT_NULL(isolate_->heap());
+    return isolate_->heap()->cpp_heap();
+  }
+
+  CppHeap* GetCppHeap() {
+    DCHECK(HasCppHeap());
+    DCHECK_NULL(remote_tracer_);
+    return CppHeap::From(isolate_->heap()->cpp_heap());
+  }
+
+  WrapperDescriptor wrapper_descriptor() {
+    if (HasCppHeap())
+      return GetCppHeap()->wrapper_descriptor();
+    else
+      return wrapper_descriptor_;
   }
 
   Isolate* const isolate_;

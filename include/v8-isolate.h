@@ -920,6 +920,10 @@ class V8_EXPORT Isolate {
   /*
    * Gets the currently active heap tracer for the isolate.
    */
+  V8_DEPRECATE_SOON(
+      "CppHeap doesn't implement EmbedderHeapTracer. If embedders need to act "
+      "on the current tracer they should use other Isolate methods for that "
+      "instead of accessing the tracer directly.")
   EmbedderHeapTracer* GetEmbedderHeapTracer();
 
   /**
