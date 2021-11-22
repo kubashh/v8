@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <map>
 
+#include "src/heap/cppgc-js/cpp-heap.h"
+#include "src/heap/cppgc-js/cpp-marking-state.h"
 #include "src/heap/marking-worklist-inl.h"
 #include "src/objects/heap-object-inl.h"
 #include "src/objects/heap-object.h"
@@ -98,9 +100,14 @@ const Address MarkingWorklists::Local::kSharedContext;
 const Address MarkingWorklists::Local::kOtherContext;
 
 MarkingWorklists::Local::Local(MarkingWorklists* global)
+    : Local(global, nullptr) {}
+
+MarkingWorklists::Local::Local(MarkingWorklists* global, CppHeap* cpp_heap)
     : on_hold_(global->on_hold()),
       embedder_(global->embedder()),
-      is_per_context_mode_(false) {
+      is_per_context_mode_(false),
+      cpp_marking_state_(cpp_heap ? cpp_heap->CreateCppMarkingState()
+                                  : nullptr) {
   if (global->context_worklists().empty()) {
     MarkingWorklist::Local shared(global->shared());
     active_ = std::move(shared);
@@ -141,6 +148,11 @@ void MarkingWorklists::Local::Publish() {
       }
     }
   }
+  PublishToCppHeap();
+}
+
+void MarkingWorklists::Local::PublishToCppHeap() {
+  if (cpp_marking_state_) cpp_marking_state_->Publish();
 }
 
 bool MarkingWorklists::Local::IsEmpty() {
@@ -164,7 +176,11 @@ bool MarkingWorklists::Local::IsEmpty() {
 }
 
 bool MarkingWorklists::Local::IsEmbedderEmpty() const {
-  return embedder_.IsLocalEmpty() && embedder_.IsGlobalEmpty();
+  if (cpp_marking_state_) {
+    DCHECK(embedder_.IsLocalAndGlobalEmpty());
+    return cpp_marking_state_->IsLocalEmpty();
+  }
+  return embedder_.IsLocalAndGlobalEmpty();
 }
 
 void MarkingWorklists::Local::ShareWork() {

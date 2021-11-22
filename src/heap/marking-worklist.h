@@ -15,6 +15,10 @@
 namespace v8 {
 namespace internal {
 
+class CppHeap;
+class CppMarkingState;
+class JSObject;
+
 // The index of the main thread task used by concurrent/parallel GC.
 const int kMainThreadTask = 0;
 
@@ -141,6 +145,7 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
   static const Address kOtherContext = MarkingWorklists::kOtherContext;
 
   explicit Local(MarkingWorklists* global);
+  Local(MarkingWorklists* global, CppHeap* cpp_heap);
   ~Local();
 
   inline void Push(HeapObject object);
@@ -162,6 +167,9 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
   // Merges the on-hold worklist to the shared worklist.
   void MergeOnHold();
 
+  inline void PushToCppHeap(JSObject object);
+  void PublishToCppHeap();
+
   // Returns the context of the active worklist.
   Address Context() const { return active_context_; }
   inline Address SwitchToContext(Address context);
@@ -181,6 +189,8 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
   bool is_per_context_mode_;
   std::unordered_map<Address, std::unique_ptr<MarkingWorklist::Local>>
       worklist_by_context_;
+
+  std::unique_ptr<CppMarkingState> cpp_marking_state_;
 };
 
 }  // namespace internal
