@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "889081ba5f4bbbdb71e65b390d3c9ca55e8695f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aecf4d6d_a1ccad23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-11-22T15:57:40Z",
+      "side": 1,
+      "message": "Is this new type used anywhere? Otherwise LGTM",
+      "revId": "889081ba5f4bbbdb71e65b390d3c9ca55e8695f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
