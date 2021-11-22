@@ -133,6 +133,30 @@
       },
       "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ee8c09d_7e5a3baf",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-22T10:39:46Z",
+      "side": 1,
+      "message": "As discussed offline, this is an issue. How about just removing the CallOnce and default_locale_has_been_reset logic altogether?",
+      "parentUuid": "bb312ff2_487444f7",
+      "range": {
+        "startLine": 946,
+        "startChar": 4,
+        "endLine": 946,
+        "endChar": 18
+      },
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
