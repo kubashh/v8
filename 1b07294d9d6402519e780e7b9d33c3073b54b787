@@ -117,6 +117,30 @@
       },
       "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7abea495_006981e1",
+        "filename": "src/logging/counters.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-22T10:39:57Z",
+      "side": 1,
+      "message": "Btw std::atomic::exchange is not a compare and swap. It\u0027s just a swap that returns the old value. It doesn\u0027t fail if the value changed.\nI guess it works in this case anyway because the only transition is from false to true.\nAlso, if we want to make sure only have thread sets the flag, we need to sync the threads and std::memory_order_relaxed wouldn\u0027t do that. The relaxed order is enough for double checked locking because the mutex will sync the threads.",
+      "parentUuid": "c895d734_07ce4321",
+      "range": {
+        "startLine": 543,
+        "startChar": 43,
+        "endLine": 543,
+        "endChar": 60
+      },
+      "revId": "1b07294d9d6402519e780e7b9d33c3073b54b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
