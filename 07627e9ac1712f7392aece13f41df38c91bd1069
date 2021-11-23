@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "354bc8d1_ecfd859b",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-23T13:36:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "998b5f0a_0137f349",
+      "range": {
+        "startLine": 163,
+        "startChar": 20,
+        "endLine": 163,
+        "endChar": 28
+      },
+      "revId": "07627e9ac1712f7392aece13f41df38c91bd1069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "971655f0_1592427e",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-23T12:57:38Z",
       "side": 1,
       "message": "I\u0027m wondering if this is correct for GSABs - a GSAB might be zero-length now but it might grow in the future. Don\u0027t we need to SerializeBackingStore for them?",
+      "range": {
+        "startLine": 531,
+        "startChar": 2,
+        "endLine": 531,
+        "endChar": 45
+      },
+      "revId": "07627e9ac1712f7392aece13f41df38c91bd1069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70d1c61_0b5a4216",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-23T13:36:31Z",
+      "side": 1,
+      "message": "Right, I think we do. I changed the definition of `IsEmpty` now to cover that. It now returns true only if the corresponding BackingStore is empty (or if there is none), which is defined through the max_byte_length.",
+      "parentUuid": "971655f0_1592427e",
       "range": {
         "startLine": 531,
         "startChar": 2,
