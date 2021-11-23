@@ -112,32 +112,6 @@ TEST(DisasmX64) {
   __ j(less_equal, &Ljcc);
   __ j(greater, &Ljcc);
 
-  // AVX2 instruction
-  {
-    if (CpuFeatures::IsSupported(AVX2)) {
-      CpuFeatureScope scope(&assm, AVX2);
-      __ vbroadcastss(xmm1, xmm2);
-#define EMIT_AVX2_BROADCAST(instruction, notUsed1, notUsed2, notUsed3, \
-                            notUsed4)                                  \
-  __ instruction(xmm0, xmm1);                                          \
-  __ instruction(xmm0, Operand(rbx, rcx, times_4, 10000));
-      AVX2_BROADCAST_LIST(EMIT_AVX2_BROADCAST)
-    }
-  }
-
-  // FMA3 instruction
-  {
-    if (CpuFeatures::IsSupported(FMA3)) {
-      CpuFeatureScope scope(&assm, FMA3);
-#define EMIT_FMA(instr, notUsed1, notUsed2, notUsed3, notUsed4, notUsed5, \
-                 notUsed6)                                                \
-  __ instr(xmm9, xmm10, xmm11);                                           \
-  __ instr(xmm9, xmm10, Operand(rbx, rcx, times_4, 10000));
-      FMA_INSTRUCTION_LIST(EMIT_FMA)
-#undef EMIT_FMA
-    }
-  }
-
   // BMI1 instructions
   {
     if (CpuFeatures::IsSupported(BMI1)) {
@@ -1394,6 +1368,45 @@ UNINITIALIZED_TEST(DisasmX64CheckOutputAVX) {
   COMPARE("c5fa16ca             vmovshdup xmm1,xmm2", vmovshdup(xmm1, xmm2));
   COMPARE("c4e279188c8b10270000 vbroadcastss xmm1,[rbx+rcx*4+0x2710]",
           vbroadcastss(xmm1, Operand(rbx, rcx, times_4, 10000)));
+}
+
+UNINITIALIZED_TEST(DisasmX64CheckOutputAVX2) {
+  if (!CpuFeatures::IsSupported(AVX2)) {
+    return;
+  }
+
+  DisassemblerTester t;
+  std::string actual, exp;
+  CpuFeatureScope scope(&t.assm_, AVX2);
+
+  COMPARE_INSTR("vbroadcastss xmm9,xmm2", vbroadcastss(xmm9, xmm2));
+
+#define COMPARE_AVX2_INSTR(instruction, _, __, ___, ____) \
+  exp = "" #instruction " xmm9,xmm2";                     \
+  COMPARE_INSTR(exp, instruction(xmm9, xmm2));            \
+  exp = "" #instruction " xmm9,[rbx+rcx*4+0x2710]";       \
+  COMPARE_INSTR(exp, instruction(xmm9, Operand(rbx, rcx, times_4, 10000)));
+  AVX2_BROADCAST_LIST(COMPARE_AVX2_INSTR)
+#undef COMPARE_AVX2_INSTR
+}
+
+UNINITIALIZED_TEST(DisasmX64CheckOutputFMA3) {
+  if (!CpuFeatures::IsSupported(FMA3)) {
+    return;
+  }
+
+  DisassemblerTester t;
+  std::string actual, exp;
+  CpuFeatureScope scope(&t.assm_, FMA3);
+
+#define COMPARE_FMA3_INSTR(instruction, _, __, ___, ____, _____, ______) \
+  exp = "" #instruction " xmm9,xmm10,xmm11";                             \
+  COMPARE_INSTR(exp, instruction(xmm9, xmm10, xmm11));                   \
+  exp = "" #instruction " xmm9,xmm10,[rbx+rcx*4+0x2710]";                \
+  COMPARE_INSTR(exp,                                                     \
+                instruction(xmm9, xmm10, Operand(rbx, rcx, times_4, 10000)));
+  FMA_INSTRUCTION_LIST(COMPARE_FMA3_INSTR)
+#undef COMPARE_FMA3_INSTR
 }
 
 UNINITIALIZED_TEST(DisasmX64YMMRegister) {
