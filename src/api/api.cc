@@ -8035,14 +8035,16 @@ size_t v8::ArrayBufferView::CopyContents(void* dest, size_t byte_length) {
   if (bytes_to_copy) {
     i::DisallowGarbageCollection no_gc;
     i::Isolate* isolate = self->GetIsolate();
-    i::Handle<i::JSArrayBuffer> buffer(i::JSArrayBuffer::cast(self->buffer()),
-                                       isolate);
-    const char* source = reinterpret_cast<char*>(buffer->backing_store());
-    if (source == nullptr) {
-      DCHECK(self->IsJSTypedArray());
+    const char* source;
+    if (self->IsJSTypedArray()) {
+      // Use DataPtr since we might be an on-heap typed array.
       i::Handle<i::JSTypedArray> typed_array(i::JSTypedArray::cast(*self),
                                              isolate);
       source = reinterpret_cast<char*>(typed_array->DataPtr());
+    } else {
+      i::Handle<i::JSArrayBuffer> buffer(i::JSArrayBuffer::cast(self->buffer()),
+                                         isolate);
+      source = reinterpret_cast<char*>(buffer->backing_store());
     }
     memcpy(dest, source + byte_offset, bytes_to_copy);
   }

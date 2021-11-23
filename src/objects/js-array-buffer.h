@@ -37,16 +37,12 @@ class JSArrayBuffer
   DECL_PRIMITIVE_ACCESSORS(byte_length, size_t)
 
   // [backing_store]: backing memory for this array
+  // It should not be assumed that this will be nullptr for for empty buffers.
   DECL_GETTER(backing_store, void*)
   inline void set_backing_store(void* value);
 
   // [extension]: extension object used for GC
   DECL_PRIMITIVE_ACCESSORS(extension, ArrayBufferExtension*)
-
-  // For non-wasm, allocation_length and allocation_base are byte_length and
-  // backing_store, respectively.
-  inline size_t allocation_length() const;
-  inline void* allocation_base() const;
 
   // [bit_field]: boolean flags
   DECL_PRIMITIVE_ACCESSORS(bit_field, uint32_t)
@@ -80,6 +76,13 @@ class JSArrayBuffer
   // GrowableSharedArrayBuffer.
   DECL_BOOLEAN_ACCESSORS(is_resizable)
 
+  // [is_empty]: true => backed by a zero-length backing store.
+  // An empty ArrayBuffer will have byte_length of zero but not necessarily a
+  // nullptr backing_store. A ArrayBuffer with a byte_length of zero may not
+  // necessarily be empty though, for example if it is a
+  // GrowableSharedArrayBuffer.
+  DECL_GETTER(is_empty, bool)
+
   // Initializes the fields of the ArrayBuffer. The provided backing_store can
   // be nullptr. If it is not nullptr, then the function registers it with
   // src/heap/array-buffer-tracker.h.
@@ -104,9 +107,9 @@ class JSArrayBuffer
   // Get a reference to backing store of this array buffer, if there is a
   // backing store. Returns nullptr if there is no backing store (e.g. detached
   // or a zero-length array buffer).
-  std::shared_ptr<BackingStore> GetBackingStore() const;
+  inline std::shared_ptr<BackingStore> GetBackingStore() const;
 
-  size_t GetByteLength() const;
+  inline size_t GetByteLength() const;
 
   // Allocates an ArrayBufferExtension for this array buffer, unless it is
   // already associated with an extension.
