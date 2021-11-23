@@ -486,7 +486,7 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
   } else if (InstanceTypeChecker::IsJSDataView(instance_type)) {
     Handle<JSDataView> data_view = Handle<JSDataView>::cast(obj);
     JSArrayBuffer buffer = JSArrayBuffer::cast(data_view->buffer());
-    void* backing_store = nullptr;
+    void* backing_store = EmptyBackingStoreBuffer();
     uint32_t store_index = buffer.GetBackingStoreRefForDeserialization();
     if (store_index != kEmptyBackingStoreRefSentinel) {
       // The backing store of the JSArrayBuffer has not been correctly restored
@@ -512,7 +512,7 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
       auto backing_store = backing_stores_[store_index];
       auto start = backing_store
                        ? reinterpret_cast<byte*>(backing_store->buffer_start())
-                       : nullptr;
+                       : reinterpret_cast<byte*>(EmptyBackingStoreBuffer());
       typed_array->SetOffHeapDataPtr(main_thread_isolate(), start,
                                      typed_array->byte_offset());
     }
@@ -523,7 +523,8 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
         kEmptyBackingStoreRefSentinel) {
       new_off_heap_array_buffers_.push_back(buffer);
     } else {
-      buffer->set_backing_store(nullptr);
+      buffer->set_backing_store(main_thread_isolate(),
+                                EmptyBackingStoreBuffer());
     }
   } else if (InstanceTypeChecker::IsBytecodeArray(instance_type)) {
     // TODO(mythria): Remove these once we store the default values for these

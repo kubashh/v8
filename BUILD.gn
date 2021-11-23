@@ -4347,6 +4347,7 @@ v8_source_set("v8_base_without_compiler") {
     "src/runtime/runtime-typedarray.cc",
     "src/runtime/runtime-weak-refs.cc",
     "src/runtime/runtime.cc",
+    "src/security/caged-pointer.cc",
     "src/security/external-pointer-table.cc",
     "src/security/vm-cage.cc",
     "src/snapshot/code-serializer.cc",

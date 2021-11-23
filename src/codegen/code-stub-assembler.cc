@@ -1563,6 +1563,17 @@ void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
   StoreObjectFieldNoWriteBarrier<CagedPtrT>(object, offset, pointer);
 }
 
+TNode<CagedPtrT> CodeStubAssembler::NullCagedPointer() {
+  // TODO(saelo) instead, expose a "DecodeCagedPointer" function, then pass it
+  // -1?
+  TNode<ExternalReference> cage_base_address =
+      ExternalConstant(ExternalReference::virtual_memory_cage_base_address());
+  TNode<IntPtrT> cage_base = Load<IntPtrT>(cage_base_address);
+  TNode<IntPtrT> cage_end =
+      IntPtrAdd(cage_base, IntPtrConstant(kVirtualMemoryCageSize - 1));
+  return ReinterpretCast<CagedPtrT>(cage_end);
+}
+
 #endif  // V8_CAGED_POINTERS
 
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
@@ -13860,8 +13871,13 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
+#ifdef V8_CAGED_POINTERS
+  return ReinterpretCast<RawPtrT>(LoadCagedPointerFromObject(
+      array_buffer, JSArrayBuffer::kBackingStoreOffset));
+#else
   return LoadObjectField<RawPtrT>(array_buffer,
                                   JSArrayBuffer::kBackingStoreOffset);
+#endif
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(
