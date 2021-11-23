@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9336185_478fd003",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-23T14:14:44Z",
+      "side": 1,
+      "message": "Indeed it does! Thanks!",
+      "parentUuid": "d37828b5_6cc2e561",
+      "range": {
+        "startLine": 167,
+        "startChar": 2,
+        "endLine": 167,
+        "endChar": 47
+      },
+      "revId": "2fb8e143cd924dfbfdf7069d0b0215eea454d571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f70db85_ea7f969f",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-23T13:58:54Z",
       "side": 1,
       "message": "Nit: I guess this should now be IsEmpty too",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 14
+      },
+      "revId": "2fb8e143cd924dfbfdf7069d0b0215eea454d571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e12925e_eb7ce561",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-23T14:14:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f70db85_ea7f969f",
       "range": {
         "startLine": 79,
         "startChar": 6,
