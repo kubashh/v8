@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bfd732b_91090978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T13:58:54Z",
+      "side": 1,
+      "message": "lgtm\n\ndo you think the node failure is unrelated? looks a bit odd, but sometimes node catches things which v8 tests don\u0027t, and sometimes those failures look really weird.",
+      "revId": "2fb8e143cd924dfbfdf7069d0b0215eea454d571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d37828b5_6cc2e561",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T13:58:54Z",
+      "side": 1,
+      "message": "Doesn\u0027t this follow from the previous one?\n\nA -\u003e B \u003c\u003d\u003e\n!B -\u003e !A",
+      "range": {
+        "startLine": 167,
+        "startChar": 2,
+        "endLine": 167,
+        "endChar": 47
+      },
+      "revId": "2fb8e143cd924dfbfdf7069d0b0215eea454d571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f70db85_ea7f969f",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T13:58:54Z",
+      "side": 1,
+      "message": "Nit: I guess this should now be IsEmpty too",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 14
+      },
+      "revId": "2fb8e143cd924dfbfdf7069d0b0215eea454d571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
