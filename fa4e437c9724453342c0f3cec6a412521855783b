@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e037fed0_b1d26113",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-23T15:11:30Z",
+      "side": 1,
+      "message": "SGTM, but then please add an assert to LocalIsolate that this method is not called from the main thread.",
+      "parentUuid": "adc4f8c6_c501a1d8",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "059fe253_7f326c68",
