@@ -16,48 +16,48 @@
 namespace v8 {
 namespace internal {
 
-void Scavenger::PromotionList::View::PushRegularObject(HeapObject object,
-                                                       int size) {
-  promotion_list_->PushRegularObject(task_id_, object, size);
+void Scavenger::PromotionList::Local::PushRegularObject(HeapObject object,
+                                                        int size) {
+  regular_object_promotion_list_.Push({object, size});
 }
 
-void Scavenger::PromotionList::View::PushLargeObject(HeapObject object, Map map,
-                                                     int size) {
-  promotion_list_->PushLargeObject(task_id_, object, map, size);
+void Scavenger::PromotionList::Local::PushLargeObject(HeapObject object,
+                                                      Map map, int size) {
+  large_object_promotion_list_.Push({object, map, size});
 }
 
-bool Scavenger::PromotionList::View::IsEmpty() {
-  return promotion_list_->IsEmpty();
+size_t Scavenger::PromotionList::Local::LocalPushSegmentSize() {
+  return regular_object_promotion_list_.PushSegmentSize() +
+         large_object_promotion_list_.PushSegmentSize();
 }
 
-size_t Scavenger::PromotionList::View::LocalPushSegmentSize() {
-  return promotion_list_->LocalPushSegmentSize(task_id_);
+bool Scavenger::PromotionList::Local::Pop(struct PromotionListEntry* entry) {
+  ObjectAndSize regular_object;
+  if (regular_object_promotion_list_.Pop(&regular_object)) {
+    entry->heap_object = regular_object.first;
+    entry->size = regular_object.second;
+    entry->map = entry->heap_object.map();
+    return true;
+  }
+  return large_object_promotion_list_.Pop(entry);
 }
 
-bool Scavenger::PromotionList::View::Pop(struct PromotionListEntry* entry) {
-  return promotion_list_->Pop(task_id_, entry);
+void Scavenger::PromotionList::Local::Publish() {
+  regular_object_promotion_list_.Publish();
+  large_object_promotion_list_.Publish();
 }
 
-void Scavenger::PromotionList::View::FlushToGlobal() {
-  promotion_list_->FlushToGlobal(task_id_);
+bool Scavenger::PromotionList::Local::IsGlobalPoolEmpty() {
+  return regular_object_promotion_list_.IsGlobalEmpty() &&
+         large_object_promotion_list_.IsGlobalEmpty();
 }
 
-bool Scavenger::PromotionList::View::IsGlobalPoolEmpty() {
-  return promotion_list_->IsGlobalPoolEmpty();
-}
-
-bool Scavenger::PromotionList::View::ShouldEagerlyProcessPromotionList() {
-  return promotion_list_->ShouldEagerlyProcessPromotionList(task_id_);
-}
-
-void Scavenger::PromotionList::PushRegularObject(int task_id, HeapObject object,
-                                                 int size) {
-  regular_object_promotion_list_.Push(task_id, ObjectAndSize(object, size));
-}
-
-void Scavenger::PromotionList::PushLargeObject(int task_id, HeapObject object,
-                                               Map map, int size) {
-  large_object_promotion_list_.Push(task_id, {object, map, size});
+bool Scavenger::PromotionList::Local::ShouldEagerlyProcessPromotionList() {
+  // Threshold when to prioritize processing of the promotion list. Right
+  // now we only look into the regular object list.
+  const int kProcessPromotionListThreshold =
+      kRegularObjectPromotionListSegmentSize / 2;
+  return LocalPushSegmentSize() < kProcessPromotionListThreshold;
 }
 
 bool Scavenger::PromotionList::IsEmpty() {
@@ -65,44 +65,9 @@ bool Scavenger::PromotionList::IsEmpty() {
          large_object_promotion_list_.IsEmpty();
 }
 
-size_t Scavenger::PromotionList::LocalPushSegmentSize(int task_id) {
-  return regular_object_promotion_list_.LocalPushSegmentSize(task_id) +
-         large_object_promotion_list_.LocalPushSegmentSize(task_id);
-}
-
-bool Scavenger::PromotionList::Pop(int task_id,
-                                   struct PromotionListEntry* entry) {
-  ObjectAndSize regular_object;
-  if (regular_object_promotion_list_.Pop(task_id, &regular_object)) {
-    entry->heap_object = regular_object.first;
-    entry->size = regular_object.second;
-    entry->map = entry->heap_object.map();
-    return true;
-  }
-  return large_object_promotion_list_.Pop(task_id, entry);
-}
-
-void Scavenger::PromotionList::FlushToGlobal(int task_id) {
-  regular_object_promotion_list_.FlushToGlobal(task_id);
-  large_object_promotion_list_.FlushToGlobal(task_id);
-}
-
-size_t Scavenger::PromotionList::GlobalPoolSize() const {
-  return regular_object_promotion_list_.GlobalPoolSize() +
-         large_object_promotion_list_.GlobalPoolSize();
-}
-
-bool Scavenger::PromotionList::IsGlobalPoolEmpty() {
-  return regular_object_promotion_list_.IsGlobalPoolEmpty() &&
-         large_object_promotion_list_.IsGlobalPoolEmpty();
-}
-
-bool Scavenger::PromotionList::ShouldEagerlyProcessPromotionList(int task_id) {
-  // Threshold when to prioritize processing of the promotion list. Right
-  // now we only look into the regular object list.
-  const int kProcessPromotionListThreshold =
-      kRegularObjectPromotionListSegmentSize / 2;
-  return LocalPushSegmentSize(task_id) < kProcessPromotionListThreshold;
+size_t Scavenger::PromotionList::Size() const {
+  return regular_object_promotion_list_.Size() +
+         large_object_promotion_list_.Size();
 }
 
 void Scavenger::PageMemoryFence(MaybeObject object) {
