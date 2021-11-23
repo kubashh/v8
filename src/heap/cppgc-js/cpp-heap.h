@@ -25,6 +25,8 @@ class Isolate;
 
 namespace internal {
 
+class CppMarkingState;
+
 // A C++ heap implementation used with V8 to implement unified heap.
 class V8_EXPORT_PRIVATE CppHeap final
     : public cppgc::internal::HeapBase,
@@ -106,9 +108,8 @@ class V8_EXPORT_PRIVATE CppHeap final
 
   void FinishSweepingIfRunning();
 
-  void RegisterV8References(
-      const std::vector<std::pair<void*, void*>>& embedder_fields);
-  void TracePrologue(TraceFlags flags);
+  void InitializeTracing(TraceFlags flags);
+  void StartTracing();
   bool AdvanceTracing(double max_duration);
   bool IsTracingDone();
   void TraceEpilogue(TraceSummary* trace_summary);
@@ -126,6 +127,8 @@ class V8_EXPORT_PRIVATE CppHeap final
   v8::WrapperDescriptor wrapper_descriptor() const {
     return wrapper_descriptor_;
   }
+
+  std::unique_ptr<CppMarkingState> CreateCppMarkingState();
 
  private:
   void FinalizeIncrementalGarbageCollectionIfNeeded(

@@ -560,8 +560,8 @@ void MarkCompactCollector::StartMarking() {
   }
   code_flush_mode_ = Heap::GetCodeFlushMode(isolate());
   marking_worklists()->CreateContextWorklists(contexts);
-  local_marking_worklists_ =
-      std::make_unique<MarkingWorklists::Local>(marking_worklists());
+  local_marking_worklists_ = std::make_unique<MarkingWorklists::Local>(
+      marking_worklists(), CppHeap::From(heap_->cpp_heap()));
   marking_visitor_ = std::make_unique<MarkingVisitor>(
       marking_state(), local_marking_worklists(), weak_objects(), heap_,
       epoch(), code_flush_mode(), heap_->local_embedder_heap_tracer()->InUse(),
@@ -912,8 +912,11 @@ void MarkCompactCollector::Prepare() {
   if (!was_marked_incrementally_) {
     {
       TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_EMBEDDER_PROLOGUE);
-      heap_->local_embedder_heap_tracer()->TracePrologue(
-          heap_->flags_for_embedder_tracer());
+      auto embedder_flags = heap_->flags_for_embedder_tracer();
+      // PrepateForTrace should be called before visitor initialization in
+      // StartMarking.
+      heap_->local_embedder_heap_tracer()->PrepareForTrace(embedder_flags);
+      heap_->local_embedder_heap_tracer()->TracePrologue(embedder_flags);
     }
     StartCompaction(StartCompactionMode::kAtomic);
     StartMarking();
@@ -1950,7 +1953,10 @@ void MarkCompactCollector::ProcessEphemeronsLinear() {
 void MarkCompactCollector::PerformWrapperTracing() {
   if (heap_->local_embedder_heap_tracer()->InUse()) {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_EMBEDDER_TRACING);
-    {
+    if (heap_->cpp_heap()) {
+      local_marking_worklists()->PublishToCppHeap();
+      DCHECK(local_marking_worklists()->IsEmbedderEmpty());
+    } else {
       LocalEmbedderHeapTracer::ProcessingScope scope(
           heap_->local_embedder_heap_tracer());
       HeapObject object;

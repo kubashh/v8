@@ -437,7 +437,8 @@ void ConcurrentMarking::Run(JobDelegate* delegate,
   int kObjectsUntilInterrupCheck = 1000;
   uint8_t task_id = delegate->GetTaskId() + 1;
   TaskState* task_state = &task_state_[task_id];
-  MarkingWorklists::Local local_marking_worklists(marking_worklists_);
+  MarkingWorklists::Local local_marking_worklists(
+      marking_worklists_, CppHeap::From(heap_->cpp_heap()));
   ConcurrentMarkingVisitor visitor(
       task_id, &local_marking_worklists, weak_objects_, heap_,
       mark_compact_epoch, code_flush_mode,

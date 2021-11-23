@@ -8,6 +8,7 @@
 #include "src/base/logging.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/gc-tracer.h"
+#include "src/heap/marking-worklist-inl.h"
 #include "src/objects/embedder-data-slot.h"
 #include "src/objects/js-objects-inl.h"
 
@@ -24,13 +25,18 @@ void LocalEmbedderHeapTracer::SetRemoteTracer(EmbedderHeapTracer* tracer) {
     remote_tracer_->isolate_ = reinterpret_cast<v8::Isolate*>(isolate_);
 }
 
+void LocalEmbedderHeapTracer::PrepareForTrace(
+    EmbedderHeapTracer::TraceFlags flags) {
+  if (HasCppHeap()) GetCppHeap()->InitializeTracing(flags);
+}
+
 void LocalEmbedderHeapTracer::TracePrologue(
     EmbedderHeapTracer::TraceFlags flags) {
   if (!InUse()) return;
 
   embedder_worklist_empty_ = false;
   if (HasCppHeap())
-    GetCppHeap()->TracePrologue(flags);
+    GetCppHeap()->StartTracing();
   else
     remote_tracer_->TracePrologue(flags);
 }
@@ -96,11 +102,10 @@ void LocalEmbedderHeapTracer::SetEmbedderStackStateForNextFinalization(
     NotifyEmptyEmbedderStack();
 }
 
-namespace {
-
-bool ExtractWrappableInfo(Isolate* isolate, JSObject js_object,
-                          const WrapperDescriptor& wrapper_descriptor,
-                          LocalEmbedderHeapTracer::WrapperInfo* info) {
+// static
+bool LocalEmbedderHeapTracer::ExtractWrappableInfo(
+    Isolate* isolate, JSObject js_object,
+    const WrapperDescriptor& wrapper_descriptor, WrapperInfo* info) {
   DCHECK(js_object.IsApiWrapper());
   if (js_object.GetEmbedderFieldCount() < 2) return false;
 
@@ -118,20 +123,17 @@ bool ExtractWrappableInfo(Isolate* isolate, JSObject js_object,
   return false;
 }
 
-}  // namespace
-
 LocalEmbedderHeapTracer::ProcessingScope::ProcessingScope(
     LocalEmbedderHeapTracer* tracer)
-    : tracer_(tracer), wrapper_descriptor_(tracer->wrapper_descriptor()) {
+    : tracer_(tracer), wrapper_descriptor_(tracer->wrapper_descriptor_) {
+  DCHECK(!tracer_->HasCppHeap());
   wrapper_cache_.reserve(kWrapperCacheSize);
 }
 
 LocalEmbedderHeapTracer::ProcessingScope::~ProcessingScope() {
+  DCHECK(!tracer_->HasCppHeap());
   if (!wrapper_cache_.empty()) {
-    if (tracer_->HasCppHeap())
-      tracer_->GetCppHeap()->RegisterV8References(std::move(wrapper_cache_));
-    else
-      tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
+    tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
   }
 }
 
@@ -157,11 +159,9 @@ void LocalEmbedderHeapTracer::ProcessingScope::TracePossibleWrapper(
 }
 
 void LocalEmbedderHeapTracer::ProcessingScope::FlushWrapperCacheIfFull() {
+  DCHECK(!tracer_->HasCppHeap());
   if (wrapper_cache_.size() == wrapper_cache_.capacity()) {
-    if (tracer_->HasCppHeap())
-      tracer_->GetCppHeap()->RegisterV8References(std::move(wrapper_cache_));
-    else
-      tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
+    tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
     wrapper_cache_.clear();
     wrapper_cache_.reserve(kWrapperCacheSize);
   }
@@ -194,6 +194,20 @@ void LocalEmbedderHeapTracer::NotifyEmptyEmbedderStack() {
     return;
 
   isolate_->global_handles()->NotifyEmptyEmbedderStack();
+}
+
+void LocalEmbedderHeapTracer::EmbedderWriteBarrier(Heap* heap,
+                                                   JSObject js_object) {
+  DCHECK(InUse());
+  DCHECK(js_object.IsApiWrapper());
+  if (HasCppHeap()) {
+    DCHECK_NOT_NULL(heap->mark_compact_collector());
+    heap->mark_compact_collector()->local_marking_worklists()->PushToCppHeap(
+        js_object);
+    return;
+  }
+  LocalEmbedderHeapTracer::ProcessingScope scope(this);
+  scope.TracePossibleWrapper(js_object);
 }
 
 bool DefaultEmbedderRootsHandler::IsRoot(
