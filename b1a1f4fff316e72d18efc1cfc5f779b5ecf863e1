@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a044fc35_2f8c8626",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-11-23T14:50:00Z",
+      "side": 1,
+      "message": "Aren\u0027t function compiles always recompiles in the sense you don\u0027t want to spin off parallel compiles?",
+      "revId": "b1a1f4fff316e72d18efc1cfc5f779b5ecf863e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
