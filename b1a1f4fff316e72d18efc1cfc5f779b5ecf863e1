@@ -16,6 +16,24 @@
       "message": "Aren\u0027t function compiles always recompiles in the sense you don\u0027t want to spin off parallel compiles?",
       "revId": "b1a1f4fff316e72d18efc1cfc5f779b5ecf863e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "824a16ff_271e0037",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-23T15:07:50Z",
+      "side": 1,
+      "message": "Not in the current spin-off mechanism, where the bytecode generator spins off parallel compiles during its AST visit and therefore only goes one inner function deep on each compile.",
+      "parentUuid": "a044fc35_2f8c8626",
+      "revId": "b1a1f4fff316e72d18efc1cfc5f779b5ecf863e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
