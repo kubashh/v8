@@ -33,6 +33,24 @@
       "message": "Is this new type used anywhere? Otherwise LGTM",
       "revId": "889081ba5f4bbbdb71e65b390d3c9ca55e8695f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed244d02_89252da2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2021-11-23T14:32:49Z",
+      "side": 1,
+      "message": "The type is used as part of Receiver and NonInternal.",
+      "parentUuid": "aecf4d6d_a1ccad23",
+      "revId": "889081ba5f4bbbdb71e65b390d3c9ca55e8695f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
