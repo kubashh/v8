@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd4520e_a2c9e936",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T12:57:38Z",
+      "side": 1,
+      "message": "thanks for simplifying this!",
+      "revId": "07627e9ac1712f7392aece13f41df38c91bd1069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "998b5f0a_0137f349",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T12:57:38Z",
+      "side": 1,
+      "message": "Style nit: since this is not a trivial getter, it should be IsEmpty()",
+      "range": {
+        "startLine": 163,
+        "startChar": 20,
+        "endLine": 163,
+        "endChar": 28
+      },
+      "revId": "07627e9ac1712f7392aece13f41df38c91bd1069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971655f0_1592427e",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-23T12:57:38Z",
+      "side": 1,
+      "message": "I\u0027m wondering if this is correct for GSABs - a GSAB might be zero-length now but it might grow in the future. Don\u0027t we need to SerializeBackingStore for them?",
+      "range": {
+        "startLine": 531,
+        "startChar": 2,
+        "endLine": 531,
+        "endChar": 45
+      },
+      "revId": "07627e9ac1712f7392aece13f41df38c91bd1069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
