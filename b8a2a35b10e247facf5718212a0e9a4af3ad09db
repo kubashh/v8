@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d32485_578f7543",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-23T19:33:47Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b27c4917_2f8cae78",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-23T19:33:47Z",
+      "side": 1,
+      "message": "The only change is that this method doesn\u0027t (racefully) consider locally owned segments anymore. The method is only used in a DCHECK so that should not matter.",
+      "range": {
+        "startLine": 64,
+        "startChar": 31,
+        "endLine": 64,
+        "endChar": 38
+      },
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
