@@ -18,6 +18,7 @@
 #include "src/base/platform/platform.h"
 #include "src/base/platform/time.h"
 #include "src/execution/isolate-inl.h"
+#include "src/execution/isolate.h"
 #include "src/flags/flags.h"
 #include "src/handles/handles.h"
 #include "src/heap/base/stack.h"
@@ -221,10 +222,8 @@ void UnifiedHeapMarker::AddObject(void* object) {
 
 void FatalOutOfMemoryHandlerImpl(const std::string& reason,
                                  const SourceLocation&, HeapBase* heap) {
-  FatalProcessOutOfMemory(
-      reinterpret_cast<v8::internal::Isolate*>(
-          static_cast<v8::internal::CppHeap*>(heap)->isolate()),
-      reason.c_str());
+  FatalProcessOutOfMemory(static_cast<v8::internal::CppHeap*>(heap)->isolate(),
+                          reason.c_str());
 }
 
 }  // namespace
@@ -343,7 +342,7 @@ CppHeap::CppHeap(
 
 CppHeap::~CppHeap() {
   if (isolate_) {
-    isolate_->heap()->DetachCppHeap();
+    isolate()->heap()->DetachCppHeap();
   }
 }
 
@@ -357,16 +356,13 @@ void CppHeap::Terminate() {
 void CppHeap::AttachIsolate(Isolate* isolate) {
   CHECK(!in_detached_testing_mode_);
   CHECK_NULL(isolate_);
-  isolate_ = isolate;
+  isolate_ = reinterpret_cast<v8::Isolate*>(isolate);
   static_cast<CppgcPlatformAdapter*>(platform())
       ->SetIsolate(reinterpret_cast<v8::Isolate*>(isolate_));
-  if (isolate_->heap_profiler()) {
-    isolate_->heap_profiler()->AddBuildEmbedderGraphCallback(
+  if (isolate->heap_profiler()) {
+    isolate->heap_profiler()->AddBuildEmbedderGraphCallback(
         &CppGraphBuilder::Run, this);
   }
-  isolate_->heap()->SetEmbedderHeapTracer(this);
-  isolate_->heap()->local_embedder_heap_tracer()->SetWrapperDescriptor(
-      wrapper_descriptor_);
   SetMetricRecorder(std::make_unique<MetricRecorderAdapter>(*this));
   SetStackStart(base::Stack::GetStackStart());
   oom_handler().SetCustomHandler(&FatalOutOfMemoryHandlerImpl);
@@ -383,14 +379,14 @@ void CppHeap::DetachIsolate() {
   FinalizeTracing();
   sweeper_.FinishIfRunning();
 
-  if (isolate_->heap_profiler()) {
-    isolate_->heap_profiler()->RemoveBuildEmbedderGraphCallback(
-        &CppGraphBuilder::Run, this);
+  auto* heap_profiler = isolate()->heap_profiler();
+  if (heap_profiler) {
+    heap_profiler->RemoveBuildEmbedderGraphCallback(&CppGraphBuilder::Run,
+                                                    this);
   }
   SetMetricRecorder(nullptr);
   isolate_ = nullptr;
   // Any future garbage collections will ignore the V8->C++ references.
-  isolate()->SetEmbedderHeapTracer(nullptr);
   oom_handler().SetCustomHandler(nullptr);
   // Enter no GC scope.
   no_gc_scope_++;
@@ -446,12 +442,12 @@ void CppHeap::TracePrologue(TraceFlags flags) {
   }
   marker_ =
       cppgc::internal::MarkerFactory::CreateAndStartMarking<UnifiedHeapMarker>(
-          isolate_ ? isolate_->heap() : nullptr, AsBase(), platform_.get(),
+          isolate_ ? isolate()->heap() : nullptr, AsBase(), platform_.get(),
           marking_config);
   marking_done_ = false;
 }
 
-bool CppHeap::AdvanceTracing(double deadline_in_ms) {
+bool CppHeap::AdvanceTracing(double max_duration) {
   is_in_v8_marking_step_ = true;
   cppgc::internal::StatsCollector::EnabledScope stats_scope(
       stats_collector(),
@@ -459,7 +455,7 @@ bool CppHeap::AdvanceTracing(double deadline_in_ms) {
                        : cppgc::internal::StatsCollector::kIncrementalMark);
   const v8::base::TimeDelta deadline =
       in_atomic_pause_ ? v8::base::TimeDelta::Max()
-                       : v8::base::TimeDelta::FromMillisecondsD(deadline_in_ms);
+                       : v8::base::TimeDelta::FromMillisecondsD(max_duration);
   const size_t marked_bytes_limit = in_atomic_pause_ ? SIZE_MAX : 0;
   DCHECK_NOT_NULL(marker_);
   // TODO(chromium:1056170): Replace when unified heap transitions to
@@ -495,7 +491,7 @@ void CppHeap::TraceEpilogue(TraceSummary* trace_summary) {
   }
   marker_.reset();
   if (isolate_) {
-    auto* tracer = isolate_->heap()->local_embedder_heap_tracer();
+    auto* tracer = isolate()->heap()->local_embedder_heap_tracer();
     DCHECK_NOT_NULL(tracer);
     tracer->UpdateRemoteStats(
         stats_collector_->marked_bytes(),

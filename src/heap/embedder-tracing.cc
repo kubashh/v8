@@ -15,6 +15,7 @@ namespace v8 {
 namespace internal {
 
 void LocalEmbedderHeapTracer::SetRemoteTracer(EmbedderHeapTracer* tracer) {
+  CHECK(!HasCppHeap());
   if (remote_tracer_) remote_tracer_->isolate_ = nullptr;
 
   remote_tracer_ = tracer;
@@ -28,7 +29,10 @@ void LocalEmbedderHeapTracer::TracePrologue(
   if (!InUse()) return;
 
   embedder_worklist_empty_ = false;
-  remote_tracer_->TracePrologue(flags);
+  if (HasCppHeap())
+    GetCppHeap()->TracePrologue(flags);
+  else
+    remote_tracer_->TracePrologue(flags);
 }
 
 void LocalEmbedderHeapTracer::TraceEpilogue() {
@@ -40,7 +44,10 @@ void LocalEmbedderHeapTracer::TraceEpilogue() {
       EmbedderHeapTracer::EmbedderStackState::kMayContainHeapPointers;
 
   EmbedderHeapTracer::TraceSummary summary;
-  remote_tracer_->TraceEpilogue(&summary);
+  if (HasCppHeap())
+    GetCppHeap()->TraceEpilogue(&summary);
+  else
+    remote_tracer_->TraceEpilogue(&summary);
   if (summary.allocated_size == SIZE_MAX) return;
   UpdateRemoteStats(summary.allocated_size, summary.time);
 }
@@ -60,17 +67,24 @@ void LocalEmbedderHeapTracer::UpdateRemoteStats(size_t allocated_size,
 void LocalEmbedderHeapTracer::EnterFinalPause() {
   if (!InUse()) return;
 
-  remote_tracer_->EnterFinalPause(embedder_stack_state_);
+  if (HasCppHeap())
+    GetCppHeap()->EnterFinalPause(embedder_stack_state_);
+  else
+    remote_tracer_->EnterFinalPause(embedder_stack_state_);
 }
 
-bool LocalEmbedderHeapTracer::Trace(double deadline) {
+bool LocalEmbedderHeapTracer::Trace(double max_duration) {
   if (!InUse()) return true;
 
-  return remote_tracer_->AdvanceTracing(deadline);
+  if (HasCppHeap())
+    return GetCppHeap()->AdvanceTracing(max_duration);
+  else
+    return remote_tracer_->AdvanceTracing(max_duration);
 }
 
 bool LocalEmbedderHeapTracer::IsRemoteTracingDone() {
-  return !InUse() || remote_tracer_->IsTracingDone();
+  return !InUse() || (HasCppHeap() ? GetCppHeap()->IsTracingDone()
+                                   : remote_tracer_->IsTracingDone());
 }
 
 void LocalEmbedderHeapTracer::SetEmbedderStackStateForNextFinalization(
@@ -108,13 +122,16 @@ bool ExtractWrappableInfo(Isolate* isolate, JSObject js_object,
 
 LocalEmbedderHeapTracer::ProcessingScope::ProcessingScope(
     LocalEmbedderHeapTracer* tracer)
-    : tracer_(tracer), wrapper_descriptor_(tracer->wrapper_descriptor_) {
+    : tracer_(tracer), wrapper_descriptor_(tracer->wrapper_descriptor()) {
   wrapper_cache_.reserve(kWrapperCacheSize);
 }
 
 LocalEmbedderHeapTracer::ProcessingScope::~ProcessingScope() {
   if (!wrapper_cache_.empty()) {
-    tracer_->remote_tracer()->RegisterV8References(std::move(wrapper_cache_));
+    if (tracer_->HasCppHeap())
+      tracer_->GetCppHeap()->RegisterV8References(std::move(wrapper_cache_));
+    else
+      tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
   }
 }
 
@@ -122,7 +139,7 @@ LocalEmbedderHeapTracer::WrapperInfo
 LocalEmbedderHeapTracer::ExtractWrapperInfo(Isolate* isolate,
                                             JSObject js_object) {
   WrapperInfo info;
-  if (ExtractWrappableInfo(isolate, js_object, wrapper_descriptor_, &info)) {
+  if (ExtractWrappableInfo(isolate, js_object, wrapper_descriptor(), &info)) {
     return info;
   }
   return {nullptr, nullptr};
@@ -141,7 +158,10 @@ void LocalEmbedderHeapTracer::ProcessingScope::TracePossibleWrapper(
 
 void LocalEmbedderHeapTracer::ProcessingScope::FlushWrapperCacheIfFull() {
   if (wrapper_cache_.size() == wrapper_cache_.capacity()) {
-    tracer_->remote_tracer()->RegisterV8References(std::move(wrapper_cache_));
+    if (tracer_->HasCppHeap())
+      tracer_->GetCppHeap()->RegisterV8References(std::move(wrapper_cache_));
+    else
+      tracer_->remote_tracer_->RegisterV8References(std::move(wrapper_cache_));
     wrapper_cache_.clear();
     wrapper_cache_.reserve(kWrapperCacheSize);
   }

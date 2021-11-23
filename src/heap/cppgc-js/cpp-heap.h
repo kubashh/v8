@@ -29,7 +29,7 @@ namespace internal {
 class V8_EXPORT_PRIVATE CppHeap final
     : public cppgc::internal::HeapBase,
       public v8::CppHeap,
-      public v8::EmbedderHeapTracer,
+      public v8::internal::EmbedderHeapTracerBase,
       public cppgc::internal::StatsCollector::AllocationObserver {
  public:
   class MetricRecorderAdapter final : public cppgc::internal::MetricRecorder {
@@ -106,14 +106,13 @@ class V8_EXPORT_PRIVATE CppHeap final
 
   void FinishSweepingIfRunning();
 
-  // v8::EmbedderHeapTracer interface.
   void RegisterV8References(
-      const std::vector<std::pair<void*, void*> >& embedder_fields) final;
-  void TracePrologue(TraceFlags flags) final;
-  bool AdvanceTracing(double deadline_in_ms) final;
-  bool IsTracingDone() final;
-  void TraceEpilogue(TraceSummary* trace_summary) final;
-  void EnterFinalPause(EmbedderStackState stack_state) final;
+      const std::vector<std::pair<void*, void*>>& embedder_fields);
+  void TracePrologue(TraceFlags flags);
+  bool AdvanceTracing(double max_duration);
+  bool IsTracingDone();
+  void TraceEpilogue(TraceSummary* trace_summary);
+  void EnterFinalPause(EmbedderStackState stack_state);
 
   // StatsCollector::AllocationObserver interface.
   void AllocatedObjectSizeIncreased(size_t) final;
@@ -121,6 +120,12 @@ class V8_EXPORT_PRIVATE CppHeap final
   void ResetAllocatedObjectSize(size_t) final {}
 
   MetricRecorderAdapter* GetMetricRecorder() const;
+
+  Isolate* isolate() const { return reinterpret_cast<Isolate*>(isolate_); }
+
+  v8::WrapperDescriptor wrapper_descriptor() const {
+    return wrapper_descriptor_;
+  }
 
  private:
   void FinalizeIncrementalGarbageCollectionIfNeeded(
@@ -134,7 +139,6 @@ class V8_EXPORT_PRIVATE CppHeap final
   void StartIncrementalGarbageCollectionForTesting() final;
   void FinalizeIncrementalGarbageCollectionForTesting(EmbedderStackState) final;
 
-  Isolate* isolate_ = nullptr;
   bool marking_done_ = false;
   TraceFlags current_flags_ = TraceFlags::kNoFlags;
 

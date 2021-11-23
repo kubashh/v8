@@ -65,6 +65,8 @@ class V8_EXPORT EmbedderRootsHandler {
   virtual void ResetRoot(const v8::TracedReference<v8::Value>& handle) = 0;
 };
 
+namespace internal {
+
 /**
  * Interface for tracing through the embedder heap. During a V8 garbage
  * collection, V8 collects hidden fields of all potential wrappers, and at the
@@ -72,7 +74,7 @@ class V8_EXPORT EmbedderRootsHandler {
  * trace through its heap and use reporter to report each JavaScript object
  * reachable from any of the given wrappers.
  */
-class V8_EXPORT EmbedderHeapTracer {
+class V8_EXPORT EmbedderHeapTracerBase {
  public:
   using EmbedderStackState = cppgc::EmbedderStackState;
 
@@ -80,16 +82,6 @@ class V8_EXPORT EmbedderHeapTracer {
     kNoFlags = 0,
     kReduceMemory = 1 << 0,
     kForced = 1 << 2,
-  };
-
-  /**
-   * Interface for iterating through TracedGlobal handles.
-   */
-  class V8_EXPORT TracedGlobalHandleVisitor {
-   public:
-    virtual ~TracedGlobalHandleVisitor() = default;
-    virtual void VisitTracedGlobalHandle(const TracedGlobal<Value>& handle) {}
-    virtual void VisitTracedReference(const TracedReference<Value>& handle) {}
   };
 
   /**
@@ -110,6 +102,67 @@ class V8_EXPORT EmbedderHeapTracer {
     size_t allocated_size = 0;
   };
 
+  /**
+   * Called by the embedder to set the start of the stack which is e.g. used by
+   * V8 to determine whether handles are used from stack or heap.
+   */
+  void SetStackStart(void* stack_start);
+
+  /*
+   * Called by the embedder to request immediate finalization of the currently
+   * running tracing phase that has been started with TracePrologue and not
+   * yet finished with TraceEpilogue.
+   *
+   * Will be a noop when currently not in tracing.
+   *
+   * This is an experimental feature.
+   */
+  void FinalizeTracing();
+
+  /*
+   * Called by the embedder to immediately perform a full garbage collection.
+   *
+   * Should only be used in testing code.
+   */
+  V8_DEPRECATE_SOON("Use Isolate::RequestGarbageCollectionForTesting instead")
+  void GarbageCollectionForTesting(EmbedderStackState stack_state);
+
+  /*
+   * Called by the embedder to signal newly allocated or freed memory. Not bound
+   * to tracing phases. Embedders should trade off when increments are reported
+   * as V8 may consult global heuristics on whether to trigger garbage
+   * collection on this change.
+   */
+  void IncreaseAllocatedSize(size_t bytes);
+  void DecreaseAllocatedSize(size_t bytes);
+
+ protected:
+  v8::Isolate* isolate_ = nullptr;
+
+  friend class internal::LocalEmbedderHeapTracer;
+};
+
+}  // namespace internal
+
+/**
+ * Interface for tracing through the embedder heap. During a V8 garbage
+ * collection, V8 collects hidden fields of all potential wrappers, and at the
+ * end of its marking phase iterates the collection and asks the embedder to
+ * trace through its heap and use reporter to report each JavaScript object
+ * reachable from any of the given wrappers.
+ */
+class V8_EXPORT EmbedderHeapTracer : public internal::EmbedderHeapTracerBase {
+ public:
+  /**
+   * Interface for iterating through TracedGlobal handles.
+   */
+  class V8_EXPORT TracedGlobalHandleVisitor {
+   public:
+    virtual ~TracedGlobalHandleVisitor() = default;
+    virtual void VisitTracedGlobalHandle(const TracedGlobal<Value>& handle) {}
+    virtual void VisitTracedReference(const TracedReference<Value>& handle) {}
+  };
+
   virtual ~EmbedderHeapTracer() = default;
 
   /**
@@ -117,12 +170,6 @@ class V8_EXPORT EmbedderHeapTracer {
    * attached to.
    */
   void IterateTracedGlobalHandles(TracedGlobalHandleVisitor* visitor);
-
-  /**
-   * Called by the embedder to set the start of the stack which is e.g. used by
-   * V8 to determine whether handles are used from stack or heap.
-   */
-  void SetStackStart(void* stack_start);
 
   /**
    * Called by the embedder to notify V8 of an empty execution stack.
@@ -181,17 +228,6 @@ class V8_EXPORT EmbedderHeapTracer {
    */
   virtual void EnterFinalPause(EmbedderStackState stack_state) = 0;
 
-  /*
-   * Called by the embedder to request immediate finalization of the currently
-   * running tracing phase that has been started with TracePrologue and not
-   * yet finished with TraceEpilogue.
-   *
-   * Will be a noop when currently not in tracing.
-   *
-   * This is an experimental feature.
-   */
-  void FinalizeTracing();
-
   /**
    * See documentation on EmbedderRootsHandler.
    */
@@ -206,32 +242,10 @@ class V8_EXPORT EmbedderHeapTracer {
       const v8::TracedReference<v8::Value>& handle);
 
   /*
-   * Called by the embedder to immediately perform a full garbage collection.
-   *
-   * Should only be used in testing code.
-   */
-  V8_DEPRECATE_SOON("Use Isolate::RequestGarbageCollectionForTesting instead")
-  void GarbageCollectionForTesting(EmbedderStackState stack_state);
-
-  /*
-   * Called by the embedder to signal newly allocated or freed memory. Not bound
-   * to tracing phases. Embedders should trade off when increments are reported
-   * as V8 may consult global heuristics on whether to trigger garbage
-   * collection on this change.
-   */
-  void IncreaseAllocatedSize(size_t bytes);
-  void DecreaseAllocatedSize(size_t bytes);
-
-  /*
    * Returns the v8::Isolate this tracer is attached too and |nullptr| if it
    * is not attached to any v8::Isolate.
    */
   v8::Isolate* isolate() const { return isolate_; }
-
- protected:
-  v8::Isolate* isolate_ = nullptr;
-
-  friend class internal::LocalEmbedderHeapTracer;
 };
 
 }  // namespace v8
