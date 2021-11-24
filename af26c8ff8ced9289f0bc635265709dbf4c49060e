@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f170507f_5b159dc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-24T11:12:10Z",
+      "side": 1,
+      "message": "lgtm overall, couple of optional nits",
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8910a4c_7a6db220",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-24T11:12:10Z",
+      "side": 1,
+      "message": "optional: maybe consider changing this too (e.g. to 0x1 so that a deref still segfaults), to catch any stragglers?",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 56
+      },
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6051c75e_72046d7d",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-11-24T11:12:10Z",
+      "side": 1,
+      "message": "maybe have this DCHECK that it doesn\u0027t return null (and amend IsEmpty to either check the extension manually or access backing_store() directly)?",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
