@@ -1068,6 +1068,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                  TNode<IntPtrT> offset,
                                  TNode<CagedPtrT> pointer);
 
+  TNode<CagedPtrT> EmptyBackingStoreBufferConstant();
+
 #endif  // V8_CAGED_POINTERS
 
   //
@@ -1148,14 +1150,24 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtr(
       TNode<JSTypedArray> holder) {
+#ifdef V8_CAGED_POINTERS
+    return ReinterpretCast<RawPtrT>(LoadCagedPointerFromObject(
+        holder, JSTypedArray::kExternalPointerOffset));
+#else
     return LoadObjectField<RawPtrT>(holder,
                                     JSTypedArray::kExternalPointerOffset);
+#endif
   }
 
   void StoreJSTypedArrayExternalPointerPtr(TNode<JSTypedArray> holder,
                                            TNode<RawPtrT> value) {
-    StoreObjectFieldNoWriteBarrier<RawPtrT>(
+#ifdef V8_CAGED_POINTERS
+    StoreCagedPointerToObject(holder, JSTypedArray::kExternalPointerOffset,
+                              ReinterpretCast<CagedPtrT>(value));
+#else
+    return StoreObjectFieldNoWriteBarrier<RawPtrT>(
         holder, JSTypedArray::kExternalPointerOffset, value);
+#endif
   }
 
   // Load value from current parent frame by given offset in bytes.
