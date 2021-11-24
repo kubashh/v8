@@ -1907,6 +1907,7 @@ filegroup(
         "src/runtime/runtime.h",
         "src/security/external-pointer-table.cc",
         "src/security/vm-cage.cc",
+        "src/security/caged-pointer-constants.h",
         "src/security/caged-pointer-inl.h",
         "src/security/caged-pointer.h",
         "src/security/external-pointer-inl.h",
