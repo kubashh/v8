@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "356cc381_f60d8f0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-24T11:50:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe80fd53_da2d8aa3",
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d2d32485_578f7543",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -99,6 +117,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b83844f9_db81d5b6",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-24T11:50:08Z",
+      "side": 1,
+      "message": "IsEmpty() \u003d\u003d Local::IsGlobalPoolEmpty(), so we are already checking the global pool here.\n\nWe cannot refer to ::Local from Worklist anymore by design.\n\nWe could check the # of attached ::Local but that would not really help us with the scavenger as most of the ::Local lists have a lifetime that corresponds to Scavenger which is alive for the whole Scavenge.\n\nKeeping as is for now but please chime in with comments.",
+      "parentUuid": "cd9153d7_2a1d96f7",
+      "range": {
+        "startLine": 64,
+        "startChar": 31,
+        "endLine": 64,
+        "endChar": 38
+      },
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fdac58c_d1b8b54a",
@@ -112,6 +154,24 @@
       "writtenOn": "2021-11-24T10:40:38Z",
       "side": 1,
       "message": "I like that you have suffixed that worklist in scavenger.cc with _local (empty_chunks_local instead of empty_chunks). For me it has always been a bit tricky to see, whether e.g. empty_chunks_ is global or local worklist in the current context. That _local might make that a bit easier to figure out. Wdyt of renaming these fields here to empty_chunks_local_, etc. here as well?",
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8afac0f_e8f322aa",
+        "filename": "src/heap/scavenger.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-24T11:50:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fdac58c_d1b8b54a",
       "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
