@@ -1539,16 +1539,19 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
-#ifdef V8_CAGED_POINTERS
-
 TNode<CagedPtrT> CodeStubAssembler::LoadCagedPointerFromObject(
     TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
+#ifdef V8_USE_CAGED_POINTERS
   return LoadObjectField<CagedPtrT>(object, field_offset);
+#else
+  UNREACHABLE();
+#endif
 }
 
 void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
                                                   TNode<IntPtrT> offset,
                                                   TNode<CagedPtrT> pointer) {
+#ifdef V8_USE_CAGED_POINTERS
 #ifdef DEBUG
   // Verify pointer points into the cage.
   TNode<ExternalReference> cage_base_address =
@@ -1561,9 +1564,24 @@ void CodeStubAssembler::StoreCagedPointerToObject(TNode<HeapObject> object,
   CSA_CHECK(this, UintPtrLessThan(pointer, cage_end));
 #endif
   StoreObjectFieldNoWriteBarrier<CagedPtrT>(object, offset, pointer);
+#else
+  UNREACHABLE();
+#endif
 }
 
-#endif  // V8_CAGED_POINTERS
+TNode<CagedPtrT> CodeStubAssembler::EmptyBackingStoreBufferConstant() {
+#ifdef V8_USE_CAGED_POINTERS
+  // TODO(chromium:1218005) consider creating a LoadCagedPointerConstant() if
+  // more of these constants are required later on.
+  TNode<ExternalReference> empty_backing_store_buffer =
+      ExternalConstant(ExternalReference::empty_backing_store_buffer());
+  // The constants are stored as full pointers and so don't need to be decoded,
+  // thus they are loaded as IntPtrT.
+  return ReinterpretCast<CagedPtrT>(Load<IntPtrT>(empty_backing_store_buffer));
+#else
+  UNREACHABLE();
+#endif
+}
 
 TNode<ExternalPointerT> CodeStubAssembler::ChangeUint32ToExternalPointer(
     TNode<Uint32T> value) {
@@ -13860,8 +13878,13 @@ void CodeStubAssembler::ThrowIfArrayBufferViewBufferIsDetached(
 
 TNode<RawPtrT> CodeStubAssembler::LoadJSArrayBufferBackingStorePtr(
     TNode<JSArrayBuffer> array_buffer) {
+#ifdef V8_USE_CAGED_POINTERS
+  return ReinterpretCast<RawPtrT>(LoadCagedPointerFromObject(
+      array_buffer, JSArrayBuffer::kBackingStoreOffset));
+#else
   return LoadObjectField<RawPtrT>(array_buffer,
                                   JSArrayBuffer::kBackingStoreOffset);
+#endif
 }
 
 TNode<JSArrayBuffer> CodeStubAssembler::LoadJSArrayBufferViewBuffer(

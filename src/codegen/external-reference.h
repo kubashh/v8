@@ -321,7 +321,8 @@ class StatsCounter;
 #ifdef V8_VIRTUAL_MEMORY_CAGE
 #define EXTERNAL_REFERENCE_LIST_VIRTUAL_MEMORY_CAGE(V)               \
   V(virtual_memory_cage_base_address, "V8VirtualMemoryCage::base()") \
-  V(virtual_memory_cage_end_address, "V8VirtualMemoryCage::end()")
+  V(virtual_memory_cage_end_address, "V8VirtualMemoryCage::end()")   \
+  V(empty_backing_store_buffer, "EmptyBackingStoreBuffer()")
 #else
 #define EXTERNAL_REFERENCE_LIST_VIRTUAL_MEMORY_CAGE(V)
 #endif  // V8_VIRTUAL_MEMORY_CAGE
