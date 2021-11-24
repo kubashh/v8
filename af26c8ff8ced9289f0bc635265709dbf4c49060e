@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc44421e_a09b8db3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-24T12:33:11Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8910a4c_7a6db220",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "def44084_24a0b647",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-24T12:33:11Z",
+      "side": 1,
+      "message": "As discussed offline, I tested this locally but let\u0027s keep nullptr for the CL. Once caged pointers are used, these will anyway be nonzero values on caged-pointer-enabled builds",
+      "parentUuid": "e8910a4c_7a6db220",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 56
+      },
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6051c75e_72046d7d",
@@ -54,6 +95,30 @@
       "writtenOn": "2021-11-24T11:12:10Z",
       "side": 1,
       "message": "maybe have this DCHECK that it doesn\u0027t return null (and amend IsEmpty to either check the extension manually or access backing_store() directly)?",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 35
+      },
+      "revId": "af26c8ff8ced9289f0bc635265709dbf4c49060e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2105e9da_bb8de030",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-11-24T12:33:11Z",
+      "side": 1,
+      "message": "Marking as resolved as discussed offline",
+      "parentUuid": "6051c75e_72046d7d",
       "range": {
         "startLine": 48,
         "startChar": 2,
