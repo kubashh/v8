@@ -181,10 +181,10 @@ struct MaybeBoolFlag {
 #define V8_VIRTUAL_MEMORY_CAGE_BOOL false
 #endif
 
-#ifdef V8_CAGED_POINTERS
-#define V8_CAGED_POINTERS_BOOL true
+#ifdef V8_USE_CAGED_POINTERS
+#define V8_USE_CAGED_POINTERS_BOOL true
 #else
-#define V8_CAGED_POINTERS_BOOL false
+#define V8_USE_CAGED_POINTERS_BOOL false
 #endif
 
 // D8's MultiMappedAllocator is only available on Linux, and only if the virtual

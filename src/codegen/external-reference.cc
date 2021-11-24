@@ -222,6 +222,12 @@ ExternalReference ExternalReference::virtual_memory_cage_base_address() {
 ExternalReference ExternalReference::virtual_memory_cage_end_address() {
   return ExternalReference(GetProcessWideVirtualMemoryCage()->end_address());
 }
+
+ExternalReference ExternalReference::empty_backing_store_buffer() {
+  return ExternalReference(GetProcessWideVirtualMemoryCage()
+                               ->constants()
+                               .empty_backing_store_buffer_address());
+}
 #endif
 
 #ifdef V8_HEAP_SANDBOX
