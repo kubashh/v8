@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe80fd53_da2d8aa3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-24T10:40:38Z",
+      "side": 1,
+      "message": "Please add a bit of explanation here as well.",
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d2d32485_578f7543",
@@ -14,6 +31,23 @@
       "writtenOn": "2021-11-23T19:33:47Z",
       "side": 1,
       "message": "ptal",
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3758b3a_ecff2daf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-24T10:40:38Z",
+      "side": 1,
+      "message": "Cool, LGTM with comments",
       "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -37,6 +71,47 @@
         "endLine": 64,
         "endChar": 38
       },
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd9153d7_2a1d96f7",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-24T10:40:38Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better then if we use IsGlobalPoolEmpty() instead and get rid of this method? Or we could DCHECK here that IsGlobalPoolEmpty() returns true and there are no more local worklists for that worklist?",
+      "parentUuid": "b27c4917_2f8cae78",
+      "range": {
+        "startLine": 64,
+        "startChar": 31,
+        "endLine": 64,
+        "endChar": 38
+      },
+      "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fdac58c_d1b8b54a",
+        "filename": "src/heap/scavenger.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-24T10:40:38Z",
+      "side": 1,
+      "message": "I like that you have suffixed that worklist in scavenger.cc with _local (empty_chunks_local instead of empty_chunks). For me it has always been a bit tricky to see, whether e.g. empty_chunks_ is global or local worklist in the current context. That _local might make that a bit easier to figure out. Wdyt of renaming these fields here to empty_chunks_local_, etc. here as well?",
       "revId": "b8a2a35b10e247facf5718212a0e9a4af3ad09db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
