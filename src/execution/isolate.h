@@ -1369,7 +1369,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void set_date_cache(DateCache* date_cache);
 
 #ifdef V8_INTL_SUPPORT
-
   const std::string& DefaultLocale();
 
   void ResetDefaultLocale();
@@ -1391,7 +1390,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
                                std::shared_ptr<icu::UMemory> obj);
   void clear_cached_icu_object(ICUObjectCacheType cache_type);
   void clear_cached_icu_objects();
-
 #endif  // V8_INTL_SUPPORT
 
   enum class KnownPrototype { kNone, kObject, kArray, kString };
