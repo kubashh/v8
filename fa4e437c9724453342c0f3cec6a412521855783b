@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edd11f99_a6f810f2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-24T07:44:06Z",
+      "side": 1,
+      "message": "Hm I think we can\u0027t remove the is_main_thread logic from LI after all - for those cases in which TF runs on the main thread we need an updated default_locale value.\n\nFor normal concurrent jobs we\u0027re okay since each OptimizingCompileDispatcher::CompileTask creates its own LocalIsolate.",
+      "parentUuid": "e037fed0_b1d26113",
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "059fe253_7f326c68",
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "As discussed offline, this is an issue. How about just removing the CallOnce and default_locale_has_been_reset logic altogether?",
       "parentUuid": "bb312ff2_487444f7",
+      "range": {
+        "startLine": 946,
+        "startChar": 4,
+        "endLine": 946,
+        "endChar": 18
+      },
+      "revId": "fa4e437c9724453342c0f3cec6a412521855783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e4e254d_b60611c1",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-24T07:44:06Z",
+      "side": 1,
+      "message": "The issue was: since LocalIsolate::default_locale_has_been_reset always returns false, we\u0027d still reach the CallOnce result in CompareStringsOptionsFor.\n\nDone, removed CallOnce and default_locale_has_been_reset.",
+      "parentUuid": "7ee8c09d_7e5a3baf",
       "range": {
         "startLine": 946,
         "startChar": 4,
