@@ -710,7 +710,6 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   inline void WriteCagedPointerField(size_t offset, Isolate* isolate,
                                      Address value);
 #endif  // V8_CAGED_POINTERS
-
   //
   // ExternalPointer_t field accessors.
   //

@@ -11,6 +11,7 @@
 #include "include/v8-internal.h"
 #include "src/base/optional.h"
 #include "src/handles/handles.h"
+#include "src/security/vm-cage.h"  // TODO(saelo) needed (for GetProcessWideVirtualMemoryCage)
 
 namespace v8 {
 namespace internal {
@@ -31,6 +32,21 @@ enum class InitializedFlag : uint8_t { kUninitialized, kZeroInitialized };
 // a list of all memory objects (across all isolates) that share this
 // backing store.
 struct SharedWasmMemoryData;
+
+inline void* EmptyBackingStoreBuffer() {
+#ifdef V8_CAGED_POINTERS
+  // When caged pointer are used, backing store buffers are referenced from V8
+  // heap objects through caged pointers, which cannot represent nullptr. So
+  // instead of nullptr, we use a special empty backing store buffer value
+  // located inside the virtual memory cage.
+  return reinterpret_cast<void*>(GetProcessWideVirtualMemoryCage()
+                                     ->constants()
+                                     .empty_backing_store_buffer());
+#else
+  // Otherwise, we just use nullptr
+  return nullptr;
+#endif
+}
 
 // The {BackingStore} data structure stores all the low-level details about the
 // backing store of an array buffer or Wasm memory, including its base address
@@ -175,7 +191,7 @@ class V8_EXPORT_PRIVATE BackingStore : public BackingStoreBase {
   BackingStore& operator=(const BackingStore&) = delete;
   void SetAllocatorFromIsolate(Isolate* isolate);
 
-  void* buffer_start_ = nullptr;
+  void* buffer_start_ = EmptyBackingStoreBuffer();
   std::atomic<size_t> byte_length_;
   // Max byte length of the corresponding JSArrayBuffer(s).
   size_t max_byte_length_;
