@@ -12,10 +12,9 @@
 namespace v8 {
 namespace internal {
 
-#ifdef V8_CAGED_POINTERS
-
 V8_INLINE CagedPointer_t ReadCagedPointerField(Address field_address,
                                                PtrComprCageBase cage_base) {
+#ifdef V8_USE_CAGED_POINTERS
   // Caged pointers are currently only used if the sandbox is enabled.
   DCHECK(V8_HEAP_SANDBOX_BOOL);
 
@@ -24,11 +23,15 @@ V8_INLINE CagedPointer_t ReadCagedPointerField(Address field_address,
   Address offset = caged_pointer >> kCagedPointerShift;
   Address pointer = cage_base.address() + offset;
   return pointer;
+#else
+  UNREACHABLE();
+#endif
 }
 
 V8_INLINE void WriteCagedPointerField(Address field_address,
                                       PtrComprCageBase cage_base,
                                       CagedPointer_t pointer) {
+#ifdef V8_USE_CAGED_POINTERS
   // Caged pointers are currently only used if the sandbox is enabled.
   DCHECK(V8_HEAP_SANDBOX_BOOL);
 
@@ -38,9 +41,10 @@ V8_INLINE void WriteCagedPointerField(Address field_address,
   Address offset = pointer - cage_base.address();
   Address caged_pointer = offset << kCagedPointerShift;
   base::WriteUnalignedValue<Address>(field_address, caged_pointer);
+#else
+  UNREACHABLE();
+#endif
 }
-
-#endif  // V8_CAGED_POINTERS
 
 }  // namespace internal
 }  // namespace v8

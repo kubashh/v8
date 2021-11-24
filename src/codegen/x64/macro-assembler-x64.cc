@@ -378,7 +378,7 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
 
 void TurboAssembler::EncodeCagedPointer(Register value) {
   ASM_CODE_COMMENT(this);
-#ifdef V8_CAGED_POINTERS
+#ifdef V8_USE_CAGED_POINTERS
   subq(value, kPtrComprCageBaseRegister);
   shlq(value, Immediate(kCagedPointerShift));
 #else
@@ -388,7 +388,7 @@ void TurboAssembler::EncodeCagedPointer(Register value) {
 
 void TurboAssembler::DecodeCagedPointer(Register value) {
   ASM_CODE_COMMENT(this);
-#ifdef V8_CAGED_POINTERS
+#ifdef V8_USE_CAGED_POINTERS
   shrq(value, Immediate(kCagedPointerShift));
   addq(value, kPtrComprCageBaseRegister);
 #else

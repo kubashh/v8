@@ -8,6 +8,7 @@
 #include "include/v8-internal.h"
 #include "src/base/bounded-page-allocator.h"
 #include "src/common/globals.h"
+#include "src/security/caged-pointer-constants.h"
 
 namespace v8 {
 
@@ -92,6 +93,8 @@ class V8_EXPORT_PRIVATE V8VirtualMemoryCage {
     return Contains(reinterpret_cast<Address>(ptr));
   }
 
+  const CagedPointerConstants& constants() const { return constants_; }
+
  private:
   // The SequentialUnmapperTest calls the private Initialize method to create a
   // cage without guard regions, which would otherwise consume too much memory.
@@ -114,6 +117,10 @@ class V8_EXPORT_PRIVATE V8VirtualMemoryCage {
   bool InitializeAsFakeCage(v8::PageAllocator* page_allocator, size_t size,
                             size_t size_to_reserve);
 
+  // Initialize the caged pointer constants for this cage. Called by the
+  // Initialize methods above.
+  void InitializeConstants();
+
   Address base_ = kNullAddress;
   Address end_ = kNullAddress;
   size_t size_ = 0;
@@ -132,6 +139,9 @@ class V8_EXPORT_PRIVATE V8VirtualMemoryCage {
   v8::PageAllocator* page_allocator_ = nullptr;
   // The allocator to allocate pages inside the cage.
   std::unique_ptr<v8::PageAllocator> cage_page_allocator_;
+
+  // CagedPointer constants inside this cage.
+  CagedPointerConstants constants_;
 };
 
 #endif  // V8_VIRTUAL_MEMORY_CAGE_IS_AVAILABLE
@@ -142,7 +152,15 @@ V8_EXPORT_PRIVATE V8VirtualMemoryCage* GetProcessWideVirtualMemoryCage();
 #endif
 
 V8_INLINE bool IsValidBackingStorePointer(void* ptr) {
-#ifdef V8_VIRTUAL_MEMORY_CAGE
+  // TODO(saelo) remove this function and instead make a IsValidCagedPointer
+  // function once backing stores are always referenced through a CagedPointer
+  // when the cage is enabled.
+#ifdef V8_USE_CAGED_POINTERS
+  // When backing stores are referenced through caged pointers, nullptr is no
+  // longer a valid backing store pointer.
+  Address addr = reinterpret_cast<Address>(ptr);
+  return GetProcessWideVirtualMemoryCage()->Contains(addr);
+#elif V8_VIRTUAL_MEMORY_CAGE
   Address addr = reinterpret_cast<Address>(ptr);
   return kAllowBackingStoresOutsideCage || addr == kNullAddress ||
          GetProcessWideVirtualMemoryCage()->Contains(addr);

@@ -511,7 +511,6 @@ constexpr size_t kVirtualMemoryCageSize = 1ULL << kVirtualMemoryCageSizeLog2;
 constexpr size_t kVirtualMemoryCageAlignment =
     Internals::kPtrComprCageBaseAlignment;
 
-#ifdef V8_CAGED_POINTERS
 // CagedPointers are guaranteed to point into the virtual memory cage. This is
 // achieved by storing them as offset from the cage base rather than as raw
 // pointers.
@@ -521,7 +520,6 @@ using CagedPointer_t = Address;
 // it is guaranteed that the offset is smaller than the cage size after
 // shifting it to the right again. This constant specifies the shift amount.
 constexpr uint64_t kCagedPointerShift = 64 - kVirtualMemoryCageSizeLog2;
-#endif
 
 // Size of the guard regions surrounding the virtual memory cage. This assumes a
 // worst-case scenario of a 32-bit unsigned index being used to access an array
