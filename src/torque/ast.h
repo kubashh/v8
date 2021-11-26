@@ -33,7 +33,8 @@ namespace torque {
   V(ConditionalExpression)               \
   V(IdentifierExpression)                \
   V(StringLiteralExpression)             \
-  V(NumberLiteralExpression)             \
+  V(IntegerLiteralExpression)            \
+  V(FloatingPointLiteralExpression)      \
   V(FieldAccessExpression)               \
   V(ElementAccessExpression)             \
   V(DereferenceExpression)               \
@@ -459,16 +460,28 @@ struct StringLiteralExpression : Expression {
   std::string literal;
 };
 
-struct NumberLiteralExpression : Expression {
-  DEFINE_AST_NODE_LEAF_BOILERPLATE(NumberLiteralExpression)
-  NumberLiteralExpression(SourcePosition pos, double number)
-      : Expression(kKind, pos), number(number) {}
+struct IntegerLiteralExpression : Expression {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(IntegerLiteralExpression)
+  IntegerLiteralExpression(SourcePosition pos, int64_t value)
+      : Expression(kKind, pos), value(value) {}
 
   void VisitAllSubExpressions(VisitCallback callback) override {
     callback(this);
   }
 
-  double number;
+  int64_t value;
+};
+
+struct FloatingPointLiteralExpression : Expression {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(FloatingPointLiteralExpression)
+  FloatingPointLiteralExpression(SourcePosition pos, double value)
+      : Expression(kKind, pos), value(value) {}
+
+  void VisitAllSubExpressions(VisitCallback callback) override {
+    callback(this);
+  }
+
+  double value;
 };
 
 struct ElementAccessExpression : LocationExpression {

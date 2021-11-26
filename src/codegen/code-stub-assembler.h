@@ -3730,7 +3730,35 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     Unreachable();
   }
 
+  using IntegerLiteral = int64_t;
+  using FloatingPointLiteral = double;
   bool ConstexprBoolNot(bool value) { return !value; }
+  int31_t ConstexprIntegerLiteralToInt31(IntegerLiteral il) {
+    return static_cast<int31_t>(static_cast<int32_t>(il));
+  }
+  int32_t ConstexprIntegerLiteralToInt32(IntegerLiteral il) {
+    return static_cast<int32_t>(il);
+  }
+  uint32_t ConstexprIntegerLiteralToUint32(IntegerLiteral il) {
+    return static_cast<uint32_t>(il);
+  }
+  uint8_t ConstexprIntegerLiteralToUint8(IntegerLiteral il) {
+    return static_cast<uint8_t>(il);
+  }
+  double ConstexprFloatingPointLiteralToFloat64(FloatingPointLiteral fl) {
+    return fl;
+  }
+  bool ConstexprIntegerLiteralEqual(IntegerLiteral lhs, IntegerLiteral rhs) {
+    return lhs == rhs;
+  }
+  IntegerLiteral ConstexprIntegerLiteralLeftShift(IntegerLiteral lhs,
+                                                  IntegerLiteral rhs) {
+    return lhs << rhs;
+  }
+  IntegerLiteral ConstexprIntegerLiteralBitwiseOr(IntegerLiteral lhs,
+                                                  IntegerLiteral rhs) {
+    return lhs | rhs;
+  }
 
   bool ConstexprInt31Equal(int31_t a, int31_t b) { return a == b; }
   bool ConstexprInt31NotEqual(int31_t a, int31_t b) { return a != b; }

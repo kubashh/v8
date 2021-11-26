@@ -10,7 +10,7 @@
 #include "src/objects/objects.h"
 #include "src/objects/tagged-field.h"
 #include "src/roots/roots.h"
-#include "src/torque/runtime-macro-shims.h"
+//#include "src/torque/runtime-macro-shims.h"
 #include "src/torque/runtime-support.h"
 
 // Has to be the last include (doesn't have include guards):

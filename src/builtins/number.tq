@@ -90,7 +90,7 @@ macro NumberToStringSmi(x: int32, radix: int32): String labels Slow {
 
   // Calculate length and pre-allocate the result string.
   let temp: int32 = n;
-  let length: int32 = isNegative ? 1 : 0;
+  let length: int32 = isNegative ? Convert<int32>(1) : Convert<int32>(0);
   while (temp > 0) {
     temp = temp / radix;
     length = length + 1;
