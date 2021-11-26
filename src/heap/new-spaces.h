@@ -233,7 +233,8 @@ class V8_EXPORT_PRIVATE NewSpace
   using const_iterator = ConstPageIterator;
 
   NewSpace(Heap* heap, v8::PageAllocator* page_allocator,
-           size_t initial_semispace_capacity, size_t max_semispace_capacity);
+           size_t initial_semispace_capacity, size_t max_semispace_capacity,
+           LinearAllocationArea* allocation_info);
 
   ~NewSpace() override { TearDown(); }
 
