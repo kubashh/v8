@@ -118,6 +118,8 @@ transitioning builtin CallIteratorWithFeedback(
 @export
 transitioning macro IteratorCloseOnException(implicit context: Context)(
     iterator: IteratorRecord): void {
+  const pendingMessage = GetPendingMessage();
+  SetPendingMessage(TheHole);
   try {
     // 4. Let innerResult be GetMethod(iterator, "return").
     const method = GetProperty(iterator.object, kReturnString);
@@ -133,6 +135,7 @@ transitioning macro IteratorCloseOnException(implicit context: Context)(
   } catch (_e) {
     // Swallow the exception.
   }
+  SetPendingMessage(pendingMessage);
 
   // (If completion.[[Type]] is throw) return Completion(completion).
 }
