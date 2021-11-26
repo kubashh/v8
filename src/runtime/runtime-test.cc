@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <fstream>
+
 #include "include/v8-function.h"
 #include "src/api/api-inl.h"
 #include "src/base/numbers/double.h"
@@ -26,6 +28,7 @@
 #include "src/objects/js-function-inl.h"
 #include "src/objects/js-regexp-inl.h"
 #include "src/objects/smi.h"
+#include "src/profiler/heap-snapshot-generator.h"
 #include "src/regexp/regexp.h"
 #include "src/runtime/runtime-utils.h"
 #include "src/snapshot/snapshot.h"
@@ -825,6 +828,35 @@ RUNTIME_FUNCTION(Runtime_ScheduleGCInStackCheck) {
             v8::Isolate::kFullGarbageCollection);
       },
       nullptr);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+class FileOutputStream : public v8::OutputStream {
+ public:
+  explicit FileOutputStream(const char* filename) : os_(filename) {}
+  ~FileOutputStream() override { os_.close(); }
+
+  WriteResult WriteAsciiChunk(char* data, int size) override {
+    os_.write(data, size);
+    return kContinue;
+  }
+
+  void EndOfStream() override { os_.close(); }
+
+ private:
+  std::ofstream os_;
+};
+
+RUNTIME_FUNCTION(Runtime_TakeHeapSnapshot) {
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(String, filename_as_js_string, 0);
+  std::unique_ptr<char[]> filename = filename_as_js_string->ToCString();
+  HeapProfiler* heap_profiler = isolate->heap_profiler();
+  HeapSnapshot* snapshot =
+      heap_profiler->TakeSnapshot(nullptr, nullptr, true, true);
+  FileOutputStream stream(filename.get());
+  HeapSnapshotJSONSerializer serializer(snapshot);
+  serializer.Serialize(&stream);
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
