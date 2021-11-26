@@ -1043,8 +1043,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works only with V8_ENABLE_FORCE_SLOW_PATH compile time flag. Nop otherwise.
   void GotoIfForceSlowPath(Label* if_true);
 
-#ifdef V8_CAGED_POINTERS
-
   //
   // Caged pointer related functionality.
   //
@@ -1068,7 +1066,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                  TNode<IntPtrT> offset,
                                  TNode<CagedPtrT> pointer);
 
-#endif  // V8_CAGED_POINTERS
+  TNode<CagedPtrT> EmptyBackingStoreBufferConstant();
 
   //
   // ExternalPointerT-related functionality.
@@ -1148,14 +1146,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<RawPtrT> LoadJSTypedArrayExternalPointerPtr(
       TNode<JSTypedArray> holder) {
-    return LoadObjectField<RawPtrT>(holder,
-                                    JSTypedArray::kExternalPointerOffset);
+    return ReinterpretCast<RawPtrT>(LoadCagedPointerFromObject(
+        holder, JSTypedArray::kExternalPointerOffset));
   }
 
   void StoreJSTypedArrayExternalPointerPtr(TNode<JSTypedArray> holder,
                                            TNode<RawPtrT> value) {
-    StoreObjectFieldNoWriteBarrier<RawPtrT>(
-        holder, JSTypedArray::kExternalPointerOffset, value);
+    StoreCagedPointerToObject(holder, JSTypedArray::kExternalPointerOffset,
+                              ReinterpretCast<CagedPtrT>(value));
   }
 
   // Load value from current parent frame by given offset in bytes.
