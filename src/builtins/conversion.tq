@@ -82,7 +82,7 @@ transitioning builtin ToLength(implicit context: Context)(input: JSAny):
       case (h: HeapNumber): {
         let value: float64 = Convert<float64>(h);
         // The sense of this test is important for the NaN and -0 cases.
-        if (!(value > 0)) return 0;
+        if (!(value > 0.0)) return 0;
         if (value > kMaxSafeInteger) return kMaxSafeInteger;
         value = math::Float64Floor(value);
         return ChangeFloat64ToTagged(value);

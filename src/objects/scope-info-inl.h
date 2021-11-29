@@ -9,6 +9,7 @@
 #include "src/objects/fixed-array-inl.h"
 #include "src/objects/scope-info.h"
 #include "src/objects/string.h"
+#include "src/torque/runtime-macro-shims.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

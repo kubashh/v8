@@ -513,7 +513,8 @@ macro JoinStackPopInline(implicit context: Context)(receiver: JSReceiver):
   // Builtin call was not nested (receiver is the first entry) and
   // did not contain other nested arrays that expanded the stack.
   if (stack.objects[0] == receiver && len == kMinJoinStackSize) {
-    StoreFixedArrayElement(stack, 0, TheHole, SKIP_WRITE_BARRIER);
+    StoreFixedArrayElement(
+        stack, Convert<constexpr int31>(0), TheHole, SKIP_WRITE_BARRIER);
   } else
     deferred {
       JoinStackPop(stack, receiver);

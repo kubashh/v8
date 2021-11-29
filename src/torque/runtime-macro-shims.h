@@ -10,6 +10,8 @@
 
 #include <cstdint>
 
+#include "src/objects/smi.h"
+
 namespace v8 {
 namespace internal {
 
@@ -33,6 +35,11 @@ inline uintptr_t Unsigned(intptr_t s) { return static_cast<uintptr_t>(s); }
 #endif
 inline bool Word32Equal(uint32_t a, uint32_t b) { return a == b; }
 inline bool Word32NotEqual(uint32_t a, uint32_t b) { return a != b; }
+inline int32_t ConstexprIntegerLiteralToInt32(int64_t il) {
+  // TODO(nicohartmann@): Range Check.
+  return static_cast<int32_t>(il);
+}
+inline Smi SmiFromInt32(int32_t i) { return Smi::FromInt(i); }
 
 }  // namespace CodeStubAssembler
 }  // namespace TorqueRuntimeMacroShims

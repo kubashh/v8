@@ -80,6 +80,12 @@ template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<int32_t>::id =
     ParseResultTypeId::kInt32;
 template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<int64_t>::id =
+    ParseResultTypeId::kInt64;
+template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<double>::id =
+    ParseResultTypeId::kDouble;
+template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
     ParseResultHolder<std::vector<std::string>>::id =
         ParseResultTypeId::kStdVectorOfString;
@@ -835,8 +841,8 @@ class AnnotationSet {
   std::map<std::string, std::pair<AnnotationParameter, SourcePosition>> map_;
 };
 
-base::Optional<ParseResult> MakeInt32(ParseResultIterator* child_results) {
-  std::string value = child_results->NextAs<std::string>();
+base::Optional<ParseResult> YieldInt32(ParseResultIterator* child_results) {
+  std::string value = child_results->matched_input().ToString();
   size_t num_chars_converted = 0;
   int result = 0;
   try {
@@ -846,6 +852,39 @@ base::Optional<ParseResult> MakeInt32(ParseResultIterator* child_results) {
     return ParseResult{result};
   } catch (const std::out_of_range&) {
     Error("Integer out of 32-bit range");
+    return ParseResult{result};
+  }
+  // Tokenizer shouldn't have included extra trailing characters.
+  DCHECK_EQ(num_chars_converted, value.size());
+  return ParseResult{result};
+}
+
+base::Optional<ParseResult> YieldInt64(ParseResultIterator* child_results) {
+  std::string value = child_results->matched_input().ToString();
+  size_t num_chars_converted = 0;
+  int64_t result = 0;
+  try {
+    result = std::stoll(value, &num_chars_converted, 0);
+  } catch (const std::invalid_argument&) {
+    Error("Expected an integer");
+    return ParseResult{result};
+  } catch (const std::out_of_range&) {
+    Error("Integer out of 64-bit range");
+    return ParseResult{result};
+  }
+  // Tokenizer shouldn't have included extra trailing characters.
+  DCHECK_EQ(num_chars_converted, value.size());
+  return ParseResult{result};
+}
+
+base::Optional<ParseResult> YieldDouble(ParseResultIterator* child_results) {
+  std::string value = child_results->matched_input().ToString();
+  size_t num_chars_converted = 0;
+  double result = 0;
+  try {
+    result = std::stod(value, &num_chars_converted);
+  } catch (const std::out_of_range&) {
+    Error("double literal out-of-range");
     return ParseResult{result};
   }
   // Tokenizer shouldn't have included extra trailing characters.
@@ -1844,29 +1883,17 @@ base::Optional<ParseResult> MakeAssignmentExpression(
   return ParseResult{result};
 }
 
-base::Optional<ParseResult> MakeNumberLiteralExpression(
+base::Optional<ParseResult> MakeFloatingPointLiteralExpression(
     ParseResultIterator* child_results) {
-  auto number = child_results->NextAs<std::string>();
-  // TODO(turbofan): Support 64bit literals.
-  // Meanwhile, we type it as constexpr float64 when out of int32 range.
-  double value = 0;
-  try {
-#if defined(V8_OS_SOLARIS)
-    // stod() on Solaris does not currently support hex strings. Use strtol()
-    // specifically for hex literals until stod() support is available.
-    if (number.find("0x") == std::string::npos &&
-        number.find("0X") == std::string::npos) {
-      value = std::stod(number);
-    } else {
-      value = static_cast<double>(strtol(number.c_str(), nullptr, 0));
-    }
-#else
-    value = std::stod(number);
-#endif  // !defined(V8_OS_SOLARIS)
-  } catch (const std::out_of_range&) {
-    Error("double literal out-of-range").Throw();
-  }
-  Expression* result = MakeNode<NumberLiteralExpression>(value);
+  auto value = child_results->NextAs<double>();
+  Expression* result = MakeNode<FloatingPointLiteralExpression>(value);
+  return ParseResult{result};
+}
+
+base::Optional<ParseResult> MakeIntegerLiteralExpression(
+    ParseResultIterator* child_results) {
+  const int64_t value = child_results->NextAs<int64_t>();
+  Expression* result = MakeNode<IntegerLiteralExpression>(value);
   return ParseResult{result};
 }
 
@@ -2016,8 +2043,19 @@ base::Optional<ParseResult> MakeClassField(ParseResultIterator* child_results) {
       // Internally, an optional field is just an indexed field where the count
       // is zero or one.
       index = MakeNode<ConditionalExpression>(
-          *index, MakeNode<NumberLiteralExpression>(1),
-          MakeNode<NumberLiteralExpression>(0));
+          *index,
+          MakeCall(
+              MakeNode<Identifier>("FromConstexpr"),
+              {MakeNode<BasicTypeExpression>(std::vector<std::string>{},
+                                             MakeNode<Identifier>("intptr"),
+                                             std::vector<TypeExpression*>{})},
+              {MakeNode<IntegerLiteralExpression>(1)}, {}),
+          MakeCall(
+              MakeNode<Identifier>("FromConstexpr"),
+              {MakeNode<BasicTypeExpression>(std::vector<std::string>{},
+                                             MakeNode<Identifier>("intptr"),
+                                             std::vector<TypeExpression*>{})},
+              {MakeNode<IntegerLiteralExpression>(0)}, {}));
     }
     index_info = ClassFieldIndexInfo{*index, optional};
   }
@@ -2136,12 +2174,25 @@ struct TorqueGrammar : Grammar {
     return false;
   }
 
-  static bool MatchDecimalLiteral(InputPosition* pos) {
+  static bool MatchIntegerLiteral(InputPosition* pos) {
     InputPosition current = *pos;
     bool found_digit = false;
     MatchString("-", &current);
     while (MatchChar(std::isdigit, &current)) found_digit = true;
-    MatchString(".", &current);
+    if (found_digit) {
+      std::string s(*pos, current);
+      *pos = current;
+      return true;
+    }
+    return false;
+  }
+
+  static bool MatchFloatingPointLiteral(InputPosition* pos) {
+    InputPosition current = *pos;
+    bool found_digit = false;
+    MatchString("-", &current);
+    while (MatchChar(std::isdigit, &current)) found_digit = true;
+    if (!MatchString(".", &current)) return false;
     while (MatchChar(std::isdigit, &current)) found_digit = true;
     if (!found_digit) return false;
     *pos = current;
@@ -2183,13 +2234,17 @@ struct TorqueGrammar : Grammar {
   // Result: std::string
   Symbol externalString = {Rule({&stringLiteral}, StringLiteralUnquoteAction)};
 
-  // Result: std::string
-  Symbol decimalLiteral = {
-      Rule({Pattern(MatchDecimalLiteral)}, YieldMatchedInput),
-      Rule({Pattern(MatchHexLiteral)}, YieldMatchedInput)};
+  // Result: int64_t
+  Symbol integerLiteral = {Rule({Pattern(MatchIntegerLiteral)}, YieldInt64),
+                           Rule({Pattern(MatchHexLiteral)}, YieldInt64)};
+
+  // Result: double
+  Symbol floatingPointLiteral = {
+      Rule({Pattern(MatchFloatingPointLiteral)}, YieldDouble)};
 
   // Result: int32_t
-  Symbol int32Literal = {Rule({&decimalLiteral}, MakeInt32)};
+  Symbol int32Literal = {Rule({Pattern(MatchIntegerLiteral)}, YieldInt32),
+                         Rule({Pattern(MatchHexLiteral)}, YieldInt32)};
 
   // Result: AnnotationParameter
   Symbol annotationParameter = {
@@ -2408,7 +2463,8 @@ struct TorqueGrammar : Grammar {
            MakeReferenceFieldAccessExpression),
       Rule({&primaryExpression, Token("["), expression, Token("]")},
            MakeElementAccessExpression),
-      Rule({&decimalLiteral}, MakeNumberLiteralExpression),
+      Rule({&integerLiteral}, MakeIntegerLiteralExpression),
+      Rule({&floatingPointLiteral}, MakeFloatingPointLiteralExpression),
       Rule({&stringLiteral}, MakeStringLiteralExpression),
       Rule({&simpleType, &initializerList}, MakeStructExpression),
       Rule({&newExpression}),

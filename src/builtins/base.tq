@@ -26,6 +26,9 @@
 type void;
 type never;
 
+type IntegerLiteral constexpr 'int64_t';
+type FloatingPointLiteral constexpr 'double';
+
 type Tagged generates 'TNode<MaybeObject>' constexpr 'MaybeObject';
 type StrongTagged extends Tagged
     generates 'TNode<Object>' constexpr 'Object';
@@ -975,6 +978,37 @@ extern operator '==' macro ConstexprInt32Equal(
 extern operator '!=' macro ConstexprInt32NotEqual(
     constexpr int32, constexpr int32): constexpr bool;
 
+// IntegerLiteral overloads
+extern macro ConstexprIntegerLiteralToInt31(constexpr IntegerLiteral):
+    constexpr int31;
+extern macro ConstexprIntegerLiteralToInt32(constexpr IntegerLiteral):
+    constexpr int32;
+extern macro ConstexprIntegerLiteralToUint32(constexpr IntegerLiteral):
+    constexpr uint32;
+extern macro ConstexprFloatingPointLiteralToFloat64(
+    constexpr FloatingPointLiteral): constexpr float64;
+extern macro ConstexprIntegerLiteralToUint8(constexpr IntegerLiteral):
+    constexpr uint8;
+
+extern operator '==' macro ConstexprIntegerLiteralEqual(
+    constexpr IntegerLiteral, constexpr IntegerLiteral): constexpr bool;
+extern operator '==' macro ConstexprInt31Equal(
+    constexpr int31, constexpr IntegerLiteral): constexpr bool;
+extern operator '==' macro ConstexprInt32Equal(
+    constexpr int32, constexpr IntegerLiteral): constexpr bool;
+extern operator '>=' macro ConstexprInt31GreaterThanEqual(
+    constexpr int31, constexpr IntegerLiteral): constexpr bool;
+extern operator '!=' macro ConstexprInt31NotEqual(
+    constexpr int31, constexpr IntegerLiteral): constexpr bool;
+extern operator '+' macro ConstexprInt31Add(
+    constexpr int31, constexpr IntegerLiteral): constexpr int31;
+extern operator '<<' macro ConstexprIntegerLiteralLeftShift(
+    constexpr IntegerLiteral,
+    constexpr IntegerLiteral): constexpr IntegerLiteral;
+extern operator '|' macro ConstexprIntegerLiteralBitwiseOr(
+    constexpr IntegerLiteral,
+    constexpr IntegerLiteral): constexpr IntegerLiteral;
+
 extern operator '==' macro Word32Equal(int32, int32): bool;
 extern operator '==' macro Word32Equal(uint32, uint32): bool;
 extern operator '!=' macro Word32NotEqual(int32, int32): bool;
@@ -1164,19 +1198,28 @@ extern macro IntPtrConstant(constexpr int32): intptr;
 extern macro Uint16Constant(constexpr uint16): uint16;
 extern macro Int32Constant(constexpr int31): int31;
 extern macro Int32Constant(constexpr int32): int32;
+macro Int32Constant(i: constexpr IntegerLiteral): int32 {
+  return Int32Constant(ConstexprIntegerLiteralToInt32(i));
+}
 extern macro Int64Constant(constexpr int64): int64;
 extern macro Uint64Constant(constexpr uint64): uint64;
 extern macro Float64Constant(constexpr int32): float64;
 extern macro Float64Constant(constexpr float64): float64;
+extern macro Float64Constant(constexpr IntegerLiteral): float64;
+macro Float64Constant(f: constexpr FloatingPointLiteral): float64 {
+  return Float64Constant(ConstexprFloatingPointLiteralToFloat64(f));
+}
 extern macro SmiConstant(constexpr int31): Smi;
 extern macro SmiConstant(constexpr Smi): Smi;
 extern macro SmiConstant(constexpr MessageTemplate): Smi;
 extern macro SmiConstant(constexpr bool): Smi;
 extern macro SmiConstant(constexpr uint32): Smi;
+extern macro SmiConstant(constexpr IntegerLiteral): Smi;
 extern macro BoolConstant(constexpr bool): bool;
 extern macro StringConstant(constexpr string): String;
 extern macro IntPtrConstant(constexpr ContextSlot): ContextSlot;
 extern macro IntPtrConstant(constexpr intptr): intptr;
+extern macro IntPtrConstant(constexpr IntegerLiteral): intptr;
 extern macro PointerConstant(constexpr RawPtr): RawPtr;
 extern macro SingleCharacterStringConstant(constexpr string): String;
 extern macro Float64SilenceNaN(float64): float64;
@@ -1451,9 +1494,9 @@ macro TryNumberToUintPtr(valueNumber: Number, kMode: constexpr int31):
       // NaNs must be handled outside.
       dcheck(!Float64IsNaN(valueDouble));
       if (kMode == kModeValueIsAnyNumber) {
-        if (valueDouble < 0) goto IfLessThanZero;
+        if (valueDouble < 0.0) goto IfLessThanZero;
       } else {
-        dcheck(valueDouble >= 0);
+        dcheck(valueDouble >= 0.0);
       }
 
       if constexpr (Is64()) {

@@ -944,7 +944,9 @@ VisitResult ImplementationVisitor::Visit(AssignmentExpression* expr) {
   return scope.Yield(assignment_value);
 }
 
-VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
+VisitResult ImplementationVisitor::Visit(FloatingPointLiteralExpression* expr) {
+  const Type* result_type = TypeOracle::GetFloatingPointLiteralType();
+  /*
   const Type* result_type = TypeOracle::GetConstFloat64Type();
   if (expr->number >= std::numeric_limits<int32_t>::min() &&
       expr->number <= std::numeric_limits<int32_t>::max()) {
@@ -957,9 +959,18 @@ VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
       }
     }
   }
+  */
   std::stringstream str;
   str << std::setprecision(std::numeric_limits<double>::digits10 + 1)
-      << expr->number;
+      << expr->value;
+  return VisitResult{result_type, str.str()};
+}
+
+VisitResult ImplementationVisitor::Visit(IntegerLiteralExpression* expr) {
+  const Type* result_type = TypeOracle::GetIntegerLiteralType();
+  std::stringstream str;
+  str << std::setprecision(std::numeric_limits<int64_t>::digits10 + 1)
+      << expr->value;
   return VisitResult{result_type, str.str()};
 }
 
@@ -2849,7 +2860,9 @@ VisitResult ImplementationVisitor::GenerateCall(
     // If we're currently generating a C++ macro and it's calling another macro,
     // then we need to make sure that we also generate C++ code for the called
     // macro within the same -inl.inc file.
-    if (output_type_ == OutputType::kCC && !inline_macro) {
+    if ((output_type_ == OutputType::kCC ||
+         output_type_ == OutputType::kCCDebug) &&
+        !inline_macro) {
       if (auto* torque_macro = TorqueMacro::DynamicCast(macro)) {
         auto* streams = CurrentFileStreams::Get();
         SourceId file = streams ? streams->file : SourceId::Invalid();
@@ -2863,12 +2876,30 @@ VisitResult ImplementationVisitor::GenerateCall(
       std::stringstream result;
       result << "(";
       bool first = true;
-      if (auto* extern_macro = ExternMacro::DynamicCast(macro)) {
-        result << extern_macro->external_assembler_name() << "(state_)."
-               << extern_macro->ExternalName() << "(";
-      } else {
-        result << macro->ExternalName() << "(state_";
-        first = false;
+      switch (output_type_) {
+        case OutputType::kCSA: {
+          if (auto* extern_macro = ExternMacro::DynamicCast(macro)) {
+            result << extern_macro->external_assembler_name() << "(state_)."
+                   << extern_macro->ExternalName() << "(";
+          } else {
+            result << macro->ExternalName() << "(state_";
+            first = false;
+          }
+          break;
+        }
+        case OutputType::kCC: {
+          auto* extern_macro = ExternMacro::DynamicCast(macro);
+          CHECK_NOT_NULL(extern_macro);
+          result << extern_macro->CCName() << "(";
+          break;
+        }
+        case OutputType::kCCDebug: {
+          auto* extern_macro = ExternMacro::DynamicCast(macro);
+          CHECK_NOT_NULL(extern_macro);
+          result << extern_macro->CCDebugName() << "(accessor";
+          first = false;
+          break;
+        }
       }
       for (VisitResult arg : arguments.parameters) {
         DCHECK(!arg.IsOnStack());

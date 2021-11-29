@@ -18,6 +18,7 @@
 #include "src/security/external-pointer-inl.h"
 #include "src/security/external-pointer.h"
 #include "src/strings/string-hasher-inl.h"
+#include "src/torque/runtime-macro-shims.h"
 #include "src/utils/utils.h"
 
 // Has to be the last include (doesn't have include guards):
