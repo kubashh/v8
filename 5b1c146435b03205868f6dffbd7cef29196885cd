@@ -33,6 +33,23 @@
       "message": "I\u0027m adding Camillo to review this, as it will probably affect most V8 metrics.\n\nBrief summary: We have prepared two alternative fixes for this bug. This is the second alternative (V8 part), that creates all counter histograms at the time of the first context\u0027s initialization.\n\nThe possible drawback with this approach is that if a counter is used before the persistent histogram allocator is configured, we will lose the samples. This could be bad for counters that are heavily used during startup.",
       "revId": "5b1c146435b03205868f6dffbd7cef29196885cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99b9eb89_a00e523a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T12:36:38Z",
+      "side": 1,
+      "message": "This CL is abandoned, in favour of\nhttps://chromium-review.googlesource.com/c/v8/v8/+/3284888\nwhich creates the counter histograms lazily, the first time they are needed.",
+      "revId": "5b1c146435b03205868f6dffbd7cef29196885cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
