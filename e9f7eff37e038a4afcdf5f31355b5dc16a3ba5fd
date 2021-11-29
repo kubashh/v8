@@ -16,6 +16,69 @@
       "message": "ptal",
       "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ae62a4_ec382035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-29T09:29:41Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1881f28c_fe4c0102",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2404,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-29T09:29:41Z",
+      "side": 1,
+      "message": "nit: comment is not better than the code 😄",
+      "range": {
+        "startLine": 2404,
+        "startChar": 0,
+        "endLine": 2404,
+        "endChar": 68
+      },
+      "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c28cef89_018113e0",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-29T09:29:41Z",
+      "side": 1,
+      "message": "nit: we could use a switch here 😊",
+      "range": {
+        "startLine": 3422,
+        "startChar": 6,
+        "endLine": 3422,
+        "endChar": 17
+      },
+      "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
