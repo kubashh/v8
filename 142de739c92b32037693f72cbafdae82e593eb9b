@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d0f1bf3_d214d074",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-29T10:13:01Z",
+      "side": 1,
+      "message": "Please remove this tag, since this bug is relevant for all architectures.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "142de739c92b32037693f72cbafdae82e593eb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bd87a6f0_116b06ad",
@@ -14,6 +37,23 @@
       "writtenOn": "2021-11-26T14:10:59Z",
       "side": 1,
       "message": "Hi Manos，\nNot quite sure if this is the proper fix. \nI noticed in this test case, only RISCV would enter v8::internal::wasm::TriggerTierUp. But X64 and ARM64 would not. \nSo this case only failed for RISCV64 in debug mode.",
+      "revId": "142de739c92b32037693f72cbafdae82e593eb9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb0d287_a2eed94e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-11-29T10:13:01Z",
+      "side": 1,
+      "message": "LGTM with one comment. Thanks for fixing this.",
       "revId": "142de739c92b32037693f72cbafdae82e593eb9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
