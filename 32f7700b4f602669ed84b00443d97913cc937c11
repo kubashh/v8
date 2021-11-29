@@ -16,6 +16,23 @@
       "message": "Hi Zhi, please help to review this CL,Thanks!",
       "revId": "32f7700b4f602669ed84b00443d97913cc937c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd9cac72_174d1bc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2021-11-29T03:17:18Z",
+      "side": 1,
+      "message": "Hi Zhi, sorry, I forgot you are changing teams, please ignore this CL.\nHi Deepti,Please help to review this CL, Thanks!",
+      "revId": "32f7700b4f602669ed84b00443d97913cc937c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
