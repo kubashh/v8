@@ -247,11 +247,7 @@ MaybeHandle<Object> Module::Evaluate(Isolate* isolate, Handle<Module> module) {
   PrintStatusMessage(*module, "Evaluating module ");
 #endif  // DEBUG
   STACK_CHECK(isolate, MaybeHandle<Object>());
-  if (FLAG_harmony_top_level_await) {
-    return Module::EvaluateMaybeAsync(isolate, module);
-  } else {
-    return Module::InnerEvaluate(isolate, module);
-  }
+  return Module::EvaluateMaybeAsync(isolate, module);
 }
 
 MaybeHandle<Object> Module::EvaluateMaybeAsync(Isolate* isolate,
@@ -300,6 +296,7 @@ MaybeHandle<Object> Module::EvaluateMaybeAsync(Isolate* isolate,
   }
 }
 
+#if 0
 MaybeHandle<Object> Module::InnerEvaluate(Isolate* isolate,
                                           Handle<Module> module) {
   if (module->status() == kErrored) {
@@ -309,9 +306,8 @@ MaybeHandle<Object> Module::InnerEvaluate(Isolate* isolate,
     return isolate->factory()->undefined_value();
   }
 
-  // InnerEvaluate can be called both to evaluate top level modules without
-  // the harmony_top_level_await flag and recursively to evaluate
-  // SyntheticModules in the dependency graphs of SourceTextModules.
+  // InnerEvaluate can be called recursively to evaluate SyntheticModules in the
+  // dependency graphs of SourceTextModules.
   //
   // However, SyntheticModules transition directly to 'Evaluated,' so we should
   // never see an 'Evaluating' module at this point.
@@ -325,6 +321,7 @@ MaybeHandle<Object> Module::InnerEvaluate(Isolate* isolate,
                                      Handle<SyntheticModule>::cast(module));
   }
 }
+#endif
 
 Handle<JSModuleNamespace> Module::GetModuleNamespace(Isolate* isolate,
                                                      Handle<Module> module) {
