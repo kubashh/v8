@@ -5,6 +5,8 @@
 #ifndef V8_HEAP_LINEAR_ALLOCATION_AREA_H_
 #define V8_HEAP_LINEAR_ALLOCATION_AREA_H_
 
+// This header file is included outside of src/heap/.
+// Avoid including src/heap/ internals.
 #include "include/v8-internal.h"
 #include "src/common/checks.h"
 
