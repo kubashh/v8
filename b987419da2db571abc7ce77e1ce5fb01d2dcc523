@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef50ad75_8359fe2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "Already looking good.\n\nJakob, any chance there\u0027s a direct improvement measurable somewhere?",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9717c8ff_bf63e948",
+        "filename": "src/execution/DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "Can you add a comment on top of l-a-a.h saying that this is included outside of heap/ and thus should avoid including heap/ internals.",
+      "range": {
+        "startLine": 3,
+        "startChar": 15,
+        "endLine": 3,
+        "endChar": 39
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc6c936e_e698f109",
@@ -31,6 +71,150 @@
       "writtenOn": "2021-11-26T16:01:57Z",
       "side": 1,
       "message": "In these two lines, I\u0027d rather have sizeof(LinearAllocationArea) but I tried to keep this consistent with the rest of the entries. PTAL.",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eab78297_6e24bde8",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "mhm, we do have the full type info available here though, so I think we should use sizeof()\n\nIf we also want to keep this small, then we should use sizeof() here and then have in the cc file a static_assert() that sizeof() \u003d\u003d XXX with the comment that \"we need LinearAllocationArea to be small because of YYY\".\n\nJakob: Thoughts?",
+      "parentUuid": "dc6c936e_e698f109",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d0632e4_3e969656",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "Use forward decl instead of include here.",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21a9504_4047bf02",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 443,
+        "startChar": 15,
+        "endLine": 443,
+        "endChar": 16
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8902c3d4_04c927e1",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 444,
+        "startChar": 17,
+        "endLine": 444,
+        "endChar": 18
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cea1263_74906059",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 447,
+        "startChar": 35,
+        "endLine": 447,
+        "endChar": 36
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed04dca_18cdd74c",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "const",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7ca4c5_c84acc72",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-29T09:45:24Z",
+      "side": 1,
+      "message": "Since we are here: LAA* const...",
+      "range": {
+        "startLine": 485,
+        "startChar": 2,
+        "endLine": 485,
+        "endChar": 22
+      },
       "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
