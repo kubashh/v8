@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b010a7_c766479d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-29T23:26:57Z",
+      "side": 1,
+      "message": "This is a big one as far as flag removals go, since it was such an invasive feature.\n\ncbruni@ for main review\nmarja@ for src/parsing/\nishell@ for bootstrapper.cc\nmachenbach@ for variants.py",
+      "revId": "4f8c0a1e7f877c9743b6f7235511ae3957f15dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
