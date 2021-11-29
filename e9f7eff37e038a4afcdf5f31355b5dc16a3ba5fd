@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4626073a_78949bf7",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2404,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-29T09:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1881f28c_fe4c0102",
+      "range": {
+        "startLine": 2404,
+        "startChar": 0,
+        "endLine": 2404,
+        "endChar": 68
+      },
+      "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c28cef89_018113e0",
@@ -71,6 +95,30 @@
       "writtenOn": "2021-11-29T09:29:41Z",
       "side": 1,
       "message": "nit: we could use a switch here 😊",
+      "range": {
+        "startLine": 3422,
+        "startChar": 6,
+        "endLine": 3422,
+        "endChar": 17
+      },
+      "revId": "e9f7eff37e038a4afcdf5f31355b5dc16a3ba5fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b455d774_cfda14e8",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2021-11-29T09:47:32Z",
+      "side": 1,
+      "message": "We could, but that\u0027d increase the intendation of the main block of code below, and I don\u0027t think it\u0027s worth it. Easier to do these early returns to keep the intendation level low.\n\nWe could also do a switch and not put the main block of code inside it (have the early returns in the switch and the main block of code after), but that\u0027s just obscure.",
+      "parentUuid": "c28cef89_018113e0",
       "range": {
         "startLine": 3422,
         "startChar": 6,
