@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f320ba3_13d55e2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-29T10:05:58Z",
+      "side": 1,
+      "message": "LGTM with comment",
+      "revId": "0eef1224c4fa22135f5545125d27d4234c52d5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd04ceb_3c902207",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-29T10:05:58Z",
+      "side": 1,
+      "message": "not 100% certain, but you might run into the fuzzer with this line.\nThe following would not create a crash with wrong arguments:\n\n  if (!file_object-\u003eIsString()) return undefined;",
+      "range": {
+        "startLine": 852,
+        "startChar": 0,
+        "endLine": 852,
+        "endChar": 63
+      },
+      "revId": "0eef1224c4fa22135f5545125d27d4234c52d5d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
