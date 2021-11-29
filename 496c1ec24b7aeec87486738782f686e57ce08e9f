@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb04cee7_b25b3ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-29T16:03:40Z",
+      "side": 1,
+      "message": "ptal. This CL establishes concurrent pushing from V8 to Oilpan.\nIf you prefer, I can split it to multiple CLs based on the bulletpoints in the CL description (the \"other\" CLs will be unjustified without the context provided by this CL).",
+      "revId": "496c1ec24b7aeec87486738782f686e57ce08e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
