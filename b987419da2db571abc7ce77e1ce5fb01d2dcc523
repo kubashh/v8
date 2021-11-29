@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78b40f84_946393df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "The debug version is now fixed too.",
+      "parentUuid": "67881391_a0e524f7",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9717c8ff_bf63e948",
         "filename": "src/execution/DEPS",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2021-11-29T09:45:24Z",
       "side": 1,
       "message": "Can you add a comment on top of l-a-a.h saying that this is included outside of heap/ and thus should avoid including heap/ internals.",
+      "range": {
+        "startLine": 3,
+        "startChar": 15,
+        "endLine": 3,
+        "endChar": 39
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac06e08_10546419",
+        "filename": "src/execution/DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9717c8ff_bf63e948",
       "range": {
         "startLine": 3,
         "startChar": 15,
@@ -95,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49f237dd_d9e4be74",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "I\u0027m changing this to sizeof(LinearAllocationArea) and I\u0027m waiting for Jakob\u0027s answer on the second suggestion.",
+      "parentUuid": "eab78297_6e24bde8",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d0632e4_3e969656",
         "filename": "src/heap/heap.h",
         "patchSetId": 2
@@ -106,6 +166,24 @@
       "writtenOn": "2021-11-29T09:45:24Z",
       "side": 1,
       "message": "Use forward decl instead of include here.",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5932c621_fbe16112",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d0632e4_3e969656",
       "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -123,6 +201,30 @@
       "writtenOn": "2021-11-29T09:45:24Z",
       "side": 1,
       "message": "const",
+      "range": {
+        "startLine": 443,
+        "startChar": 15,
+        "endLine": 443,
+        "endChar": 16
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d9b7f0e_a347e624",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e21a9504_4047bf02",
       "range": {
         "startLine": 443,
         "startChar": 15,
@@ -156,6 +258,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68e7c8f1_8c3b3552",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8902c3d4_04c927e1",
+      "range": {
+        "startLine": 444,
+        "startChar": 17,
+        "endLine": 444,
+        "endChar": 18
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cea1263_74906059",
@@ -169,6 +295,30 @@
       "writtenOn": "2021-11-29T09:45:24Z",
       "side": 1,
       "message": "const",
+      "range": {
+        "startLine": 447,
+        "startChar": 35,
+        "endLine": 447,
+        "endChar": 36
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f92c5601_a1335e68",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cea1263_74906059",
       "range": {
         "startLine": 447,
         "startChar": 35,
@@ -196,6 +346,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "452d663d_5b4f6b30",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ed04dca_18cdd74c",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d7ca4c5_c84acc72",
@@ -209,6 +377,30 @@
       "writtenOn": "2021-11-29T09:45:24Z",
       "side": 1,
       "message": "Since we are here: LAA* const...",
+      "range": {
+        "startLine": 485,
+        "startChar": 2,
+        "endLine": 485,
+        "endChar": 22
+      },
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38a7968e_ebd59f16",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-11-29T15:16:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d7ca4c5_c84acc72",
       "range": {
         "startLine": 485,
         "startChar": 2,
