@@ -69,6 +69,24 @@
       "parentUuid": "83ec5e9e_262edb1b",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "838e96e6_efe23509",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T17:08:50Z",
+      "side": 1,
+      "message": "Also \"embedder\" usually tells me EmebedderHeapTracer and CppHeap doesn\u0027t implement that anymore.",
+      "parentUuid": "e1b54b95_23e03570",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
