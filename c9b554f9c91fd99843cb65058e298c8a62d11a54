@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6578c0c1_2fa4971a",
+        "filename": "src/heap/cppgc-js/cpp-marking-state.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "JSObject::IsApiWrapper is implemented in the *.cc file. The *.cc files are a different build target than the *.h files. My original prototype had this inlined but then in some builds it causes a build failure (undefined symbol if I\u0027m not mistaken). Currently JSObject::IsApiWrapper is only called in V8 from *.cc files as far as I can tell, which I guess is why it was never an issue.",
+      "parentUuid": "90f68b76_a0d7844e",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eeecc260_aeeead1a",
         "filename": "src/heap/embedder-tracing.cc",
         "patchSetId": 14
@@ -54,6 +78,30 @@
       "writtenOn": "2021-11-30T11:48:54Z",
       "side": 1,
       "message": "I think this should become a force-inlined function",
+      "range": {
+        "startLine": 123,
+        "startChar": 30,
+        "endLine": 123,
+        "endChar": 50
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56648756_0ec4c245",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "We would need to move it to the *.h file, but this method uses methods that are only defined in *-inl.h files. We can move all those to the corresponding *.h files as well.\nAlternatively, we could move this to a new embedder-tracing-inl.h and include that one where we use ExtractWrappableInfo.\nwdyt? I\u0027m leaning towards introducing a new embedder-tracing-inl.h file.",
+      "parentUuid": "eeecc260_aeeead1a",
       "range": {
         "startLine": 123,
         "startChar": 30,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a7ac44_dfbd7341",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c329608_33f9ebaa",
+      "range": {
+        "startLine": 241,
+        "startChar": 7,
+        "endLine": 241,
+        "endChar": 20
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a433127_f89baf4a",
@@ -104,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3ab1fae_c56e48a2",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a433127_f89baf4a",
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31819e88_9559d580",
@@ -117,6 +207,30 @@
       "writtenOn": "2021-11-30T11:48:54Z",
       "side": 1,
       "message": "PrepareForTrace",
+      "range": {
+        "startLine": 924,
+        "startChar": 9,
+        "endLine": 924,
+        "endChar": 24
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3833fa28_8b284304",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31819e88_9559d580",
       "range": {
         "startLine": 924,
         "startChar": 9,
@@ -150,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05c79d58_51049dd6",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbce5ac2_a411eb86",
+      "range": {
+        "startLine": 1978,
+        "startChar": 3,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41f83cec_09b1cac7",
@@ -163,6 +301,30 @@
       "writtenOn": "2021-11-30T11:48:54Z",
       "side": 1,
       "message": "I\u0027d remove this ctor and add a \n  static const CppMarkingState* kNoCppMarkingState \u003d nullptr;",
+      "range": {
+        "startLine": 147,
+        "startChar": 11,
+        "endLine": 147,
+        "endChar": 16
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97173510_ec64ac64",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41f83cec_09b1cac7",
       "range": {
         "startLine": 147,
         "startChar": 11,
@@ -196,6 +358,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c1d346a_bc7bccae",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "Done. We hold the cpp_marking_state in a std::unique_ptr, so the argument should also be a unique ptr.",
+      "parentUuid": "128aceb4_1431ee62",
+      "range": {
+        "startLine": 148,
+        "startChar": 34,
+        "endLine": 148,
+        "endChar": 41
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63f9ad12_ad950459",
@@ -209,6 +395,30 @@
       "writtenOn": "2021-11-30T11:48:54Z",
       "side": 1,
       "message": "It\u0027s not inline",
+      "range": {
+        "startLine": 170,
+        "startChar": 2,
+        "endLine": 170,
+        "endChar": 8
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a749d8e6_9ed5dc96",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T13:56:16Z",
+      "side": 1,
+      "message": "It\u0027s as inline as the above inline methods (e.g. PushEmbedder, PopEmbedder).\nIt\u0027s inline when we include the marking-worklist-inl.h.",
+      "parentUuid": "63f9ad12_ad950459",
       "range": {
         "startLine": 170,
         "startChar": 2,
