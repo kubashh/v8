@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62495e80_357d92a0",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-30T14:04:35Z",
+      "side": 1,
+      "message": "I think I would prefer if we would use PushEmbedder here instead and don\u0027t expose PushToCppHeap to keep MarkingWorklists::Local API a bit smaller and easier to understand.",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
