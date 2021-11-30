@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c25275_9e1e64a7",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-30T18:51:41Z",
+      "side": 1,
+      "message": "It feels like here we call conceptually from src/heap to src/heap/cppgc-js and then call right away back into src/heap for ExtractWrappableInfo. Does it make sense to use ExtractWrappableInfo in src/heap already and only pass in info.second as void* to MarkAndPush?",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

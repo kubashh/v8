@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fa98322_95718891",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-30T18:51:41Z",
+      "side": 1,
+      "message": "I would expect this to be simple enough to be optimized away by the compiler.",
+      "parentUuid": "2782ad66_8da5c54d",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83ec5e9e_262edb1b",
         "filename": "src/heap/marking-worklist.h",
         "patchSetId": 15
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "Also \"embedder\" usually tells me EmebedderHeapTracer and CppHeap doesn\u0027t implement that anymore.",
       "parentUuid": "e1b54b95_23e03570",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29bd66b_93d1e38f",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-30T18:51:41Z",
+      "side": 1,
+      "message": "We can totally come up with something else then Embedder - maybe Wrapper or so. But I would definitely prefer if we would only expose one concept here instead of both CppHeap \u0026 the embedder heap tracing since at least at the moment it seems so trivial to do so.\n\nIMHO it\u0027s a bit inconsistent that we mainly push using PushEmbedder to CppHeap but then publish the worklist using PublishToCppHeap. IsEmbedderEmpty() checks the CppHeap worklist as well.",
+      "parentUuid": "838e96e6_efe23509",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
