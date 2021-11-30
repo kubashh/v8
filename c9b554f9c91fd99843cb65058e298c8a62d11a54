@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90f68b76_a0d7844e",
+        "filename": "src/heap/cppgc-js/cpp-marking-state.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T12:01:34Z",
+      "side": 1,
+      "message": "This can be inlined? We don\u0027t save any include here.",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eeecc260_aeeead1a",
         "filename": "src/heap/embedder-tracing.cc",
         "patchSetId": 14
