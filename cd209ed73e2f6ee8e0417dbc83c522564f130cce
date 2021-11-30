@@ -16,6 +16,23 @@
       "message": "I think I would prefer if we would use PushEmbedder here instead and don\u0027t expose PushToCppHeap to keep MarkingWorklists::Local API a bit smaller and easier to understand.",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83ec5e9e_262edb1b",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-11-30T16:54:08Z",
+      "side": 1,
+      "message": "Could we name this PublishEmbedder instead? Would be really nice if MarkingWorklists::Local only uses the term \"embedder\" in its interface.",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
