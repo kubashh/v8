@@ -155,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf0db2f5_e85eab16",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-11-30T10:06:07Z",
+      "side": 1,
+      "message": "My suggestion would be to define LinearAllocationArea::kSize \u003d 3 * kSystemPointerSize and static-assert that it matches sizeof() (and use kSize in the IsolateData list).\n\nThe reason I\u0027d prefer a manual size definition over sizeof() is that we need the IsolateData layout to be the same across cross-compilation host/target platforms. We use the same pattern e.g. in ExternalReferenceTable.",
+      "parentUuid": "49f237dd_d9e4be74",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d0632e4_3e969656",
         "filename": "src/heap/heap.h",
         "patchSetId": 2
