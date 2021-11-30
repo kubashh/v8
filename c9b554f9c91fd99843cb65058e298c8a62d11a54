@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad34b79_4e315d2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "First round of comments, mainly nits. I will continue in a bit.",
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeecc260_aeeead1a",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "I think this should become a force-inlined function",
+      "range": {
+        "startLine": 123,
+        "startChar": 30,
+        "endLine": 123,
+        "endChar": 50
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c329608_33f9ebaa",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "Outdated comment.",
+      "range": {
+        "startLine": 241,
+        "startChar": 7,
+        "endLine": 241,
+        "endChar": 20
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a433127_f89baf4a",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "... It is only used with CppHeap.",
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31819e88_9559d580",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "PrepareForTrace",
+      "range": {
+        "startLine": 924,
+        "startChar": 9,
+        "endLine": 924,
+        "endChar": 24
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbce5ac2_a411eb86",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "Observation: For most parts you tried to have this branch in embedder-tracing.h/.cc.\n\nI like the explicit CppHeap parts in here though. Maybe we should try to do that with the other methods as well (not in this CL).",
+      "range": {
+        "startLine": 1978,
+        "startChar": 3,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f83cec_09b1cac7",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "I\u0027d remove this ctor and add a \n  static const CppMarkingState* kNoCppMarkingState \u003d nullptr;",
+      "range": {
+        "startLine": 147,
+        "startChar": 11,
+        "endLine": 147,
+        "endChar": 16
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "128aceb4_1431ee62",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "Can we pass `CppMarkingState*` here?",
+      "range": {
+        "startLine": 148,
+        "startChar": 34,
+        "endLine": 148,
+        "endChar": 41
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f9ad12_ad950459",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T11:48:54Z",
+      "side": 1,
+      "message": "It\u0027s not inline",
+      "range": {
+        "startLine": 170,
+        "startChar": 2,
+        "endLine": 170,
+        "endChar": 8
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
