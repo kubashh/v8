@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9630e69_a56e059c",
+        "filename": "src/heap/cppgc-js/cpp-marking-state.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T16:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b344505_2ecbf316",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeecc260_aeeead1a",
@@ -150,6 +174,30 @@
       "side": 1,
       "message": "\u003e wdyt? I\u0027m leaning towards introducing a new embedder-tracing-inl.h file.\n\nyes, let\u0027s stick to -inl.h in V8 JS code.",
       "parentUuid": "56648756_0ec4c245",
+      "range": {
+        "startLine": 123,
+        "startChar": 30,
+        "endLine": 123,
+        "endChar": 50
+      },
+      "revId": "c9b554f9c91fd99843cb65058e298c8a62d11a54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2eab639_888ac274",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T16:54:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35383700_651cd6dc",
       "range": {
         "startLine": 123,
         "startChar": 30,

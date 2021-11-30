@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2782ad66_8da5c54d",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-11-30T16:54:09Z",
+      "side": 1,
+      "message": "Are you sure?\nIt will be less efficient since PushEmbedder (1) it needs to branch on CppHeap, and (2) calling PushEmbedder convert js_object to HeapObject that we then need to recast back to JSObject.",
+      "parentUuid": "62495e80_357d92a0",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83ec5e9e_262edb1b",
         "filename": "src/heap/marking-worklist.h",
         "patchSetId": 15
