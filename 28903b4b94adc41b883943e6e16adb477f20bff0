@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce9ef9a_1ca01876",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-11-30T17:14:20Z",
+      "side": 1,
+      "message": "Thanks, Milad! I didn\u0027t know about this issue at all, sorry for introducing the warning.\n\nWhen you say \"temporary\", does that mean we could use some standard C++ way to let the compiler know the `dst` argument of memcpy is not null? From the issue you\u0027ve linked I see that GCC has a nonnull attribute and also there\u0027s gsl::not_null, but I don\u0027t think we can use any of those.\n\nBtw, +1 from me since Nico is mostly OOO today, but please feel free to wait for him too.",
+      "revId": "28903b4b94adc41b883943e6e16adb477f20bff0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
