@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec32747e_48ef615c",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T19:28:49Z",
+      "side": 1,
+      "message": "PushEmbedder() is the the wrong call on MarkingWorklist. That will enqueue in the old lists which we only use for EmbedderHeapTracer.\n\nWe need to somehow go through CppMarkingState. I think using the marking worklists is the right way. Alternatively, CppHeap can also have a local marking state to use that to push.",
+      "parentUuid": "5fa98322_95718891",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83ec5e9e_262edb1b",
         "filename": "src/heap/marking-worklist.h",
         "patchSetId": 15
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "We can totally come up with something else then Embedder - maybe Wrapper or so. But I would definitely prefer if we would only expose one concept here instead of both CppHeap \u0026 the embedder heap tracing since at least at the moment it seems so trivial to do so.\n\nIMHO it\u0027s a bit inconsistent that we mainly push using PushEmbedder to CppHeap but then publish the worklist using PublishToCppHeap. IsEmbedderEmpty() checks the CppHeap worklist as well.",
       "parentUuid": "838e96e6_efe23509",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d155e01c_6a108a1c",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T19:28:49Z",
+      "side": 1,
+      "message": "We want the fastest possible dispatch for CppHeap but also need to support EmbedderHeapTracer. We should avoid branching for each object as we moved Oilpan into V8 to enable fast paths, not treat it as a generic embedder.\n\nEventually, when others want to support multiplexing with the EmbedderHeapTracer, I think we have to support 3 marking mechanisms:\n1. JS\n2. CppHeap\n3. EmbedderHeapTracer\n\n1+2 should be as fast as possible. 3. should be supported. We would aim to get rid of 3. by having embedders migrate to Oilpan.",
+      "parentUuid": "b29bd66b_93d1e38f",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
