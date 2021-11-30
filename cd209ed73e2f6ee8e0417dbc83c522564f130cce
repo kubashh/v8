@@ -51,6 +51,24 @@
       "message": "Could we name this PublishEmbedder instead? Would be really nice if MarkingWorklists::Local only uses the term \"embedder\" in its interface.",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b54b95_23e03570",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T17:03:46Z",
+      "side": 1,
+      "message": "CppHeap is part of V8 now and I think we do want to treat it that way. It\u0027s not an embedder concept.\n\nIf it wasn\u0027t for Blink, we\u0027d likely set up a CppHeap parallel to V8\u0027s heap.",
+      "parentUuid": "83ec5e9e_262edb1b",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
