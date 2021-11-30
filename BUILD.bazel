@@ -1308,6 +1308,8 @@ filegroup(
         "src/heap/concurrent-marking.h",
         "src/heap/cppgc-js/cpp-heap.cc",
         "src/heap/cppgc-js/cpp-heap.h",
+        "src/heap/cppgc-js/cpp-marking-state.cc",
+        "src/heap/cppgc-js/cpp-marking-state.h",
         "src/heap/cppgc-js/cpp-snapshot.cc",
         "src/heap/cppgc-js/cpp-snapshot.h",
         "src/heap/cppgc-js/unified-heap-marking-state.h",
