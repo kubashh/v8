@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a589203_cb50f449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-11-30T15:36:47Z",
+      "side": 1,
+      "message": "ptal, will only land if the other CL sticks for a few days",
+      "revId": "d483e031d8aa9310f6a9e158d5698d77b5b613d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
