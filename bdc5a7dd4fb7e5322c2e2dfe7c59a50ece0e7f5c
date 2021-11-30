@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d8270b_00dd8deb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-11-30T13:39:32Z",
+      "side": 1,
+      "message": "PTAL, I don\u0027t think this flag currently adds much.",
+      "revId": "bdc5a7dd4fb7e5322c2e2dfe7c59a50ece0e7f5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
