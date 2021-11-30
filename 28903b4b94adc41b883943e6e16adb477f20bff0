@@ -16,6 +16,24 @@
       "message": "Thanks, Milad! I didn\u0027t know about this issue at all, sorry for introducing the warning.\n\nWhen you say \"temporary\", does that mean we could use some standard C++ way to let the compiler know the `dst` argument of memcpy is not null? From the issue you\u0027ve linked I see that GCC has a nonnull attribute and also there\u0027s gsl::not_null, but I don\u0027t think we can use any of those.\n\nBtw, +1 from me since Nico is mostly OOO today, but please feel free to wait for him too.",
       "revId": "28903b4b94adc41b883943e6e16adb477f20bff0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3db807_7f295260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-11-30T17:56:09Z",
+      "side": 1,
+      "message": "Thank you for reviewing Maya.\n\nThe error is actually saying the `constexpr param_types.data()` could be a null pointer at compile time, but gcc lacks the ability to also take `if (kParamCount \u003e 0) {` into account and throws the warning regardless.\n\nBy \"temporary\" I was referring to disabling `nonnull` only within this code snippet and not the entire file or globally within V8, the change itself needs to be permanent as GCC may not fix/change this behaviour. I have rephrased my comment to make it more clear.\n\n`memcpy` already includes this `nonnull` attribute and combined with `-Werror` causes compilation failures which this CL is disabling only at this location.\n\nI will also wait for Nico to review this CL.",
+      "parentUuid": "2ce9ef9a_1ca01876",
+      "revId": "28903b4b94adc41b883943e6e16adb477f20bff0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
