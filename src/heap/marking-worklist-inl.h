@@ -7,7 +7,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include "src/heap/cppgc-js/cpp-marking-state-inl.h"
 #include "src/heap/marking-worklist.h"
+#include "src/objects/js-objects-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -46,10 +48,20 @@ bool MarkingWorklists::Local::PopOnHold(HeapObject* object) {
 }
 
 void MarkingWorklists::Local::PushEmbedder(HeapObject object) {
-  embedder_.Push(object);
+  if (cpp_marking_state_) {
+    PushToCppHeap(JSObject::cast(object));
+  } else {
+    embedder_.Push(object);
+  }
+}
+
+void MarkingWorklists::Local::PushToCppHeap(JSObject object) {
+  DCHECK(cpp_marking_state_);
+  cpp_marking_state_->MarkAndPush(object);
 }
 
 bool MarkingWorklists::Local::PopEmbedder(HeapObject* object) {
+  DCHECK(!cpp_marking_state_);
   return embedder_.Pop(object);
 }
 

@@ -598,10 +598,10 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   // garbage collection treatment.
   // TODO(mlippautz): Make check exact and replace the pattern match in
   // Heap::TracePossibleWrapper.
-  bool IsApiWrapper();
+  V8_EXPORT_PRIVATE bool IsApiWrapper() const;
 
   // Same as IsApiWrapper() but also allow dropping the wrapper on minor GCs.
-  bool IsDroppableApiWrapper();
+  bool IsDroppableApiWrapper() const;
 
   // Returns a new map with all transitions dropped from the object's current
   // map and the ElementsKind set.
