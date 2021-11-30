@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fff6dbf_abcfcc46",
+        "filename": "src/objects/module.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-30T19:37:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83fc4622_dce03f2d",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 5
+      },
+      "revId": "4f8c0a1e7f877c9743b6f7235511ae3957f15dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df7d794d_97f3c4c9",
@@ -105,6 +129,30 @@
       "writtenOn": "2021-11-30T08:57:09Z",
       "side": 1,
       "message": "nit: debug leftover?",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 6
+      },
+      "revId": "4f8c0a1e7f877c9743b6f7235511ae3957f15dae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7bfd2cd_0e2aa4b2",
+        "filename": "src/objects/module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-11-30T19:37:31Z",
+      "side": 1,
+      "message": "Oops, good catch. I was testing to see if it\u0027s in fact dead code.",
+      "parentUuid": "df7d794d_97f3c4c9",
       "range": {
         "startLine": 122,
         "startChar": 0,
