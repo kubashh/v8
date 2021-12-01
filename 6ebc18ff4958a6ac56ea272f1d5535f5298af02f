@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58ebd09e_1ffc7da2",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T13:44:05Z",
+      "side": 1,
+      "message": "\u003d LAZY_MUTEX_INITIALIZER; ?",
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27fb17a_7a08aff8",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T13:44:05Z",
+      "side": 1,
+      "message": "The guard should be at the top, no? Otherwise a lookup could race with creation.",
+      "range": {
+        "startLine": 2774,
+        "startChar": 19,
+        "endLine": 2774,
+        "endChar": 31
+      },
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
