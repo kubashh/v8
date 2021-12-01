@@ -453,7 +453,9 @@ class ExternalOwningOneByteStringResource
   std::unique_ptr<base::OS::MemoryMappedFile> file_;
 };
 
+// static variables:
 CounterMap* Shell::counter_map_;
+base::SharedMutex Shell::counter_mutex_;
 base::OS::MemoryMappedFile* Shell::counters_file_ = nullptr;
 CounterCollection Shell::local_counters_;
 CounterCollection* Shell::counters_ = &local_counters_;
@@ -2738,8 +2740,9 @@ int32_t* Counter::Bind(const char* name, bool is_histogram) {
 }
 
 void Counter::AddSample(int32_t sample) {
-  count_++;
-  sample_total_ += sample;
+  base::Relaxed_AtomicIncrement(reinterpret_cast<base::Atomic32*>(&count_), 1);
+  base::Relaxed_AtomicIncrement(
+      reinterpret_cast<base::Atomic32*>(&sample_total_), sample);
 }
 
 CounterCollection::CounterCollection() {
@@ -2770,19 +2773,32 @@ void Shell::MapCounters(v8::Isolate* isolate, const char* name) {
 }
 
 Counter* Shell::GetCounter(const char* name, bool is_histogram) {
-  auto map_entry = counter_map_->find(name);
-  Counter* counter =
-      map_entry != counter_map_->end() ? map_entry->second : nullptr;
+  Counter* counter = nullptr;
+  {
+    base::SharedMutexGuard<base::kShared> mutex_guard(&counter_mutex_);
+    auto map_entry = counter_map_->find(name);
+    if (map_entry != counter_map_->end()) {
+      counter = map_entry->second;
+    }
+  }
 
-  if (counter == nullptr) {
-    counter = counters_->GetNextCounter();
-    if (counter != nullptr) {
+  if (!counter) {
+    base::SharedMutexGuard<base::kExclusive> mutex_guard(&counter_mutex_);
+
+    counter = (*counter_map_)[name];
+
+    if (counter == nullptr) {
+      counter = counters_->GetNextCounter();
+      if (counter == nullptr) {
+        // Too many counters.
+        return nullptr;
+      }
       (*counter_map_)[name] = counter;
       counter->Bind(name, is_histogram);
     }
-  } else {
-    DCHECK(counter->is_histogram() == is_histogram);
   }
+
+  DCHECK_EQ(is_histogram, counter->is_histogram());
   return counter;
 }
 
@@ -3346,7 +3362,11 @@ void Shell::OnExit(v8::Isolate* isolate) {
     i::Isolate::Delete(reinterpret_cast<i::Isolate*>(shared_isolate));
   }
 
+  V8::Dispose();
+  V8::DisposePlatform();
+
   if (i::FLAG_dump_counters || i::FLAG_dump_counters_nvp) {
+    base::SharedMutexGuard<base::kShared> mutex_guard(&counter_mutex_);
     std::vector<std::pair<std::string, Counter*>> counters(
         counter_map_->begin(), counter_map_->end());
     std::sort(counters.begin(), counters.end());
@@ -5375,9 +5395,6 @@ int Shell::Main(int argc, char* argv[]) {
     } while (fuzzilli_reprl);
   }
   OnExit(isolate);
-
-  V8::Dispose();
-  V8::DisposePlatform();
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
