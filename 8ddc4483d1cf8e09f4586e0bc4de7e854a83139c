@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16c0f303_f68677c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-12-01T15:58:19Z",
+      "side": 1,
+      "message": "PTAL, an alternative to the other shared chunk data CL which shares the entire vector (and so avoids multiple vector destructors)",
+      "revId": "8ddc4483d1cf8e09f4586e0bc4de7e854a83139c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
