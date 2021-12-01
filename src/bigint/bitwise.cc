@@ -133,6 +133,97 @@ void BitwiseXor_PosNeg(RWDigits Z, Digits X, Digits Y) {
   Add(Z, 1);
 }
 
+void LeftShiftByAbsolute(RWDigits Z, Digits X, digit_t shift) {
+  const int length = X.len();
+  const int result_length = Z.len();
+  const int digit_shift = static_cast<int>(shift / kDigitBits);
+  const int bits_shift = static_cast<int>(shift % kDigitBits);
+
+  int i = 0;
+  for (; i < digit_shift; ++i) Z[i] = 0ul;
+  if (bits_shift == 0) {
+    for (; i < result_length; ++i) Z[i] = X[i - digit_shift];
+  } else {
+    digit_t carry = 0;
+    for (int k = 0; k < length; ++k) {
+      digit_t d = X[k];
+      Z[k + digit_shift] = (d << bits_shift) | carry;
+      carry = d >> (kDigitBits - bits_shift);
+    }
+    DCHECK((carry == 0) == (result_length == length + digit_shift));
+    if (carry != 0) Z[length + digit_shift] = carry;
+  }
+}
+
+int RightShiftByAbsolute_ResultLength(Digits X, bool x_sign, digit_t shift,
+                                      RightShiftByAbsoluteState* state) {
+  const int digit_shift = static_cast<int>(shift / kDigitBits);
+  const int bits_shift = static_cast<int>(shift % kDigitBits);
+  int result_length = X.len() - digit_shift;
+  if (result_length <= 0) return 0;
+
+  // For negative numbers, round down if any bit was shifted out (so that e.g.
+  // -5n >> 1n == -3n and not -2n). Check now whether this will happen and
+  // whether it can cause overflow into a new digit. If we allocate the result
+  // large enough up front, it avoids having to do a second allocation later.
+  bool must_round_down = false;
+  if (x_sign) {
+    const digit_t mask = (static_cast<digit_t>(1) << bits_shift) - 1;
+    if ((X[digit_shift] & mask) != 0) {
+      must_round_down = true;
+    } else {
+      for (int i = 0; i < digit_shift; i++) {
+        if (X[i] != 0) {
+          must_round_down = true;
+          break;
+        }
+      }
+    }
+  }
+  // If bits_shift is non-zero, it frees up bits, preventing overflow.
+  if (must_round_down && bits_shift == 0) {
+    // Overflow cannot happen if the most significant digit has unset bits.
+    const bool rounding_can_overflow = digit_ismax(X.msd());
+    if (rounding_can_overflow) ++result_length;
+  }
+
+  if (state) {
+    DCHECK(!must_round_down || x_sign);
+    state->must_round_down = must_round_down;
+  }
+  return result_length;
+}
+
+void RightShiftByAbsolute(RWDigits Z, Digits X, digit_t shift,
+                          const RightShiftByAbsoluteState& state) {
+  const int length = X.len();
+  const int digit_shift = static_cast<int>(shift / kDigitBits);
+  const int bits_shift = static_cast<int>(shift % kDigitBits);
+
+  if (bits_shift == 0) {
+    // Zero out any overflow digit (see "rounding_can_overflow" above).
+    Z[Z.len() - 1] = 0;
+    for (int i = digit_shift; i < length; i++) {
+      Z[i - digit_shift] = X[i];
+    }
+  } else {
+    digit_t carry = X[digit_shift] >> bits_shift;
+    const int last = length - digit_shift - 1;
+    for (int i = 0; i < last; i++) {
+      digit_t d = X[i + digit_shift + 1];
+      Z[i] = (d << (kDigitBits - bits_shift)) | carry;
+      carry = d >> bits_shift;
+    }
+    Z[last] = carry;
+  }
+
+  if (state.must_round_down) {
+    // Rounding down (a negative value) means adding one to
+    // its absolute value. This cannot overflow.
+    IncrementOne(Z);
+  }
+}
+
 namespace {
 
 // Z := (least significant n bits of X).
