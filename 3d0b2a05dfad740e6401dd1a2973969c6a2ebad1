@@ -16,6 +16,23 @@
       "message": "lgtm, thanks a lot!",
       "revId": "3d0b2a05dfad740e6401dd1a2973969c6a2ebad1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e32f795_4bea7862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-01T15:37:10Z",
+      "side": 1,
+      "message": "Nikos, are you fine with landing this CL instead of yours?",
+      "revId": "3d0b2a05dfad740e6401dd1a2973969c6a2ebad1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
