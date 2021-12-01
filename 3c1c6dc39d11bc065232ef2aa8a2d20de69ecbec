@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c3b940_6d0eb9b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-01T14:55:22Z",
+      "side": 1,
+      "message": "ptal. You were right that there was no compaction happening.",
+      "revId": "3c1c6dc39d11bc065232ef2aa8a2d20de69ecbec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
