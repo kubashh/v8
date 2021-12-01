@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8681d64_cfe1b566",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-01T13:51:22Z",
+      "side": 1,
+      "message": "The other mutexes a few lines down did not have it.\nShould I fix those too?",
+      "parentUuid": "58ebd09e_1ffc7da2",
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e27fb17a_7a08aff8",
         "filename": "src/d8/d8.cc",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2021-12-01T13:44:05Z",
       "side": 1,
       "message": "The guard should be at the top, no? Otherwise a lookup could race with creation.",
+      "range": {
+        "startLine": 2774,
+        "startChar": 19,
+        "endLine": 2774,
+        "endChar": 31
+      },
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9f624ae_bcae9cd4",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-01T13:51:22Z",
+      "side": 1,
+      "message": "We had this race between creation and reading before.\nMoving the guard to the top will add an overhead and will probably do little good, as there are read accesses in multiple other places.",
+      "parentUuid": "e27fb17a_7a08aff8",
       "range": {
         "startLine": 2774,
         "startChar": 19,
