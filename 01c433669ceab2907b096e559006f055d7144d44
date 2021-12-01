@@ -33,6 +33,24 @@
       "message": "In order not to change the behavior of Generate_BinaryOperationWithFeedback, I implement the fast path in a separate function. This is basically a copy from bytecode handler for bitwise smi. (https://source.chromium.org/chromium/chromium/src/+/master:v8/src/interpreter/interpreter-generator.cc;l\u003d1009)",
       "revId": "01c433669ceab2907b096e559006f055d7144d44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc774af_98a83945",
+        "filename": "src/ic/binary-op-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2021-12-01T12:13:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f90be97b_011ad9ff",
+      "revId": "01c433669ceab2907b096e559006f055d7144d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
