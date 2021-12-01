@@ -127,6 +127,14 @@ void AddOne(RWDigits Z, Digits X) {
   for (; i < Z.len(); i++) Z[i] = 0;
 }
 
+void IncrementOne(RWDigits Z) {
+  digit_t carry = 1;
+  for (int i = 0; i < Z.len() && carry > 0; ++i) {
+    Z[i] = digit_add2(Z[i], carry, &carry);
+  }
+  DCHECK(carry == 0);
+}
+
 void SubtractOne(RWDigits Z, Digits X) {
   digit_t borrow = 1;
   int i = 0;
