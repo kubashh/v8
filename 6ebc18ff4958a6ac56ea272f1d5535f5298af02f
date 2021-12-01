@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48a3a1a6_0b20e22e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-01T14:42:50Z",
+      "side": 1,
+      "message": "I checked, and it needs a few more fixes to eliminate the crash in Wasm background compilation. I uploaded https://crrev.com/c/3308710 which uses SharedMutex and contains additional fixes.",
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58ebd09e_1ffc7da2",
