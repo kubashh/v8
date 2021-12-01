@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc1bd6f9_ee156213",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "Same here: Let\u0027s continue on the comment with the suggestion.",
+      "parentUuid": "d9d5cf3e_b98f5109",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83ec5e9e_262edb1b",
@@ -193,6 +211,24 @@
       "side": 1,
       "message": "Looking a bit more into this we could actually just push either a HeapObject, or the void* because EmbedderHeapTracerWorklist is the same type [1].\n\nThis list would then either processed by EmbedderHeapTracer or CppHeap. There\u0027s \n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/marking-worklist.h;drc\u003da3c79da4072f57e63b943f12866f26d6a8ee89c7;bpv\u003d1;bpt\u003d1;l\u003d22",
       "parentUuid": "d155e01c_6a108a1c",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4d658c_25705d64",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "Closing this one as I think I opened another comment that is actually actionable :)",
+      "parentUuid": "537125c0_c41bdecb",
       "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

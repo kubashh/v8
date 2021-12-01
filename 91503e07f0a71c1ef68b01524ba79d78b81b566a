@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d81fc42_6476fc0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "Had another look and added a new suggestion to discuss. I think this also addresses the concern around embedder/wrapper/CppHeap mixup in MarkingWorklist, MarkCompact, and IncrementalMarking.",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28c25275_9e1e64a7",
@@ -14,6 +31,75 @@
       "writtenOn": "2021-11-30T18:51:41Z",
       "side": 1,
       "message": "It feels like here we call conceptually from src/heap to src/heap/cppgc-js and then call right away back into src/heap for ExtractWrappableInfo. Does it make sense to use ExtractWrappableInfo in src/heap already and only pass in info.second as void* to MarkAndPush?",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb74c73_d64469c0",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "Same as in mark-compact.cc",
+      "range": {
+        "startLine": 546,
+        "startChar": 2,
+        "endLine": 549,
+        "endChar": 6
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e923ff_a9b339e8",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "I think this would be cleaner if it looked like the following:\n\n  if (local_marking_worklists()-\u003ePublishWrapper()) {\n    DCHECK(local_marking_worklists()-\u003eIsWrapperEmpty());\n  } else {\n    // Cannot directly publish wrapper objects.\n    // Rest of the code below.\n  }\n  \nThis requires:\n1. PublishToCppHeap() -\u003e PublishWrapper() and changing return value to whether we were able to directly publish. We could also name this \"PublishWrapperDirectly()\".\n2. IsEmbedderEmpty() -\u003e IsWrapperEmpty()\n\nSo the interface to MarkCompact is using the term \"Wrapper\". It also has a branch on whether wrappers can directly be published or need to be processed.",
+      "range": {
+        "startLine": 1993,
+        "startChar": 6,
+        "endLine": 1993,
+        "endChar": 7
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4765f9c_4755078f",
+        "filename": "src/heap/marking-worklist.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T19:38:55Z",
+      "side": 1,
+      "message": "Let\u0027s rename this to `wrapper_`",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 18
+      },
       "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
