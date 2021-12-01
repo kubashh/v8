@@ -66,6 +66,26 @@
       "path": ["BigInt"],
       "tests": [
         {
+          "name": "Shift",
+          "main": "run.js",
+          "flags": ["--allow-natives-syntax"],
+          "resources": ["shift.js", "bigint-util.js"],
+          "test_flags": ["shift"],
+          "results_regexp": "^BigInt\\-%s\\(Score\\): (.+)$",
+          "tests": [
+            { "name": "ShiftLeft-ShiftTooBig" },
+            { "name": "ShiftLeft-ResultTooBig" },
+            { "name": "ShiftLeft-Small" },
+            { "name": "ShiftLeft-Random" },
+            { "name": "ShiftLeft-Growing" },
+            { "name": "ShiftRight-Maximum" },
+            { "name": "ShiftRight-ToZero" },
+            { "name": "ShiftRight-Small" },
+            { "name": "ShiftRight-Random" },
+            { "name": "ShiftRight-Shrinking" }
+          ]
+        },
+        {
           "name": "ToBoolean",
           "main": "run.js",
           "resources": ["to-boolean.js"],
