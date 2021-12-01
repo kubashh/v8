@@ -22,6 +22,30 @@
       },
       "revId": "8820094a563d0d39641fe02ae82e4b114822cdb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94319dc1_f94df772",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3370,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-01T17:15:54Z",
+      "side": 1,
+      "message": "We have to ensure that all wasm background threads are stopped before the counter_map_ is deleted. As the deletion happens inside this method, we also need to dispose the wasm engine here (which happens via V8::Dispose).",
+      "parentUuid": "9350e1a3_0afd25d9",
+      "range": {
+        "startLine": 3369,
+        "startChar": 0,
+        "endLine": 3370,
+        "endChar": 26
+      },
+      "revId": "8820094a563d0d39641fe02ae82e4b114822cdb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
