@@ -51,6 +51,8 @@ using twodigit_t = __uint128_t;
 static constexpr int kDigitBits = 1 << kLog2DigitBits;
 static_assert(kDigitBits == 8 * sizeof(digit_t), "inconsistent type sizes");
 
+constexpr bool digit_ismax(digit_t x) { return static_cast<digit_t>(~x) == 0; }
+
 // Describes an array of digits, also known as a BigInt. Unsigned.
 // Does not own the memory it points at, and only gives read-only access to it.
 // Digits are stored in little-endian order.
@@ -229,6 +231,8 @@ bool AddSigned(RWDigits Z, Digits X, bool x_negative, Digits Y,
                bool y_negative);
 // Z := X + 1
 void AddOne(RWDigits Z, Digits X);
+// Z := Z + 1
+void IncrementOne(RWDigits Z);
 
 // Z := X - Y. Requires X >= Y.
 void Subtract(RWDigits Z, Digits X, Digits Y);
@@ -253,6 +257,14 @@ void BitwiseOr_PosNeg(RWDigits Z, Digits X, Digits Y);
 void BitwiseXor_PosPos(RWDigits Z, Digits X, Digits Y);
 void BitwiseXor_NegNeg(RWDigits Z, Digits X, Digits Y);
 void BitwiseXor_PosNeg(RWDigits Z, Digits X, Digits Y);
+void LeftShiftByAbsolute(RWDigits Z, Digits X, digit_t shift);
+// RightShiftByAbsoluteState is provided by RightShiftByAbsolute_ResultLength
+// and used by the actual RightShiftByAbsolute to avoid some recomputation.
+struct RightShiftByAbsoluteState {
+  bool must_round_down = false;
+};
+void RightShiftByAbsolute(RWDigits Z, Digits X, digit_t shift,
+                          const RightShiftByAbsoluteState& state);
 
 // Z := (least significant n bits of X, interpreted as a signed n-bit integer).
 // Returns true if the result is negative; Z will hold the absolute value.
@@ -352,6 +364,19 @@ inline int BitwiseXor_PosNeg_ResultLength(int x_length, int y_length) {
   // Result length growth example: 3 ^ -1 == -4 (2-bit inputs, 3-bit result).
   return std::max(x_length, y_length) + 1;
 }
+inline int LeftShiftByAbsolute_ResultLength(int x_length,
+                                            digit_t x_most_significant_digit,
+                                            digit_t shift) {
+  const int digit_shift = static_cast<int>(shift / kDigitBits);
+  const int bits_shift = static_cast<int>(shift % kDigitBits);
+  const bool grow = bits_shift != 0 && (x_most_significant_digit >>
+                                        (kDigitBits - bits_shift)) != 0;
+  return x_length + digit_shift + grow;
+}
+// If you intent to call RightShiftByAbsolute, pass to it the {state} value
+// provided as an out-parameter by this function.
+int RightShiftByAbsolute_ResultLength(Digits X, bool x_sign, digit_t shift,
+                                      RightShiftByAbsoluteState* state);
 
 // Returns -1 if this "asIntN" operation would be a no-op.
 int AsIntNResultLength(Digits X, bool x_negative, int n);
