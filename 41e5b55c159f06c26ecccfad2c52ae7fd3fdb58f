@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7047a412_9f0062fd",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-12-01T11:41:35Z",
+      "side": 1,
+      "message": "can you make this call Generate_BitwiseBinaryOpWithFeedback too, to get rid of the code duplication with Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback?",
+      "range": {
+        "startLine": 1009,
+        "startChar": 7,
+        "endLine": 1009,
+        "endChar": 29
+      },
+      "revId": "41e5b55c159f06c26ecccfad2c52ae7fd3fdb58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
