@@ -999,7 +999,7 @@ class InterpreterBitwiseBinaryOpAssembler : public InterpreterAssembler {
 
     BinaryOpAssembler binop_asm(state());
     TNode<Object> result = binop_asm.Generate_BitwiseBinaryOpWithFeedback(
-        bitwise_op, left, right, [=] { return context; }, &feedback);
+        bitwise_op, left, right, [=] { return context; }, &feedback, false);
 
     MaybeUpdateFeedback(feedback.value(), maybe_feedback_vector, slot_index);
     SetAccumulator(result);
