@@ -16,6 +16,23 @@
       "message": "still lgtm",
       "revId": "48b3a4cd6ed1ba42776a2db51f8bd3cf54f743d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "038f5dfb_9ec6c968",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-01T16:13:55Z",
+      "side": 1,
+      "message": "I think there\u0027s a chance that counter \u003d\u003d nullptr here, if we\u0027re creating too many counters.",
+      "revId": "48b3a4cd6ed1ba42776a2db51f8bd3cf54f743d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
