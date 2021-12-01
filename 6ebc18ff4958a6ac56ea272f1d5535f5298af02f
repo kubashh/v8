@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32de8f02_30a47dcb",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T14:00:46Z",
+      "side": 1,
+      "message": "Can you check what the macro expands to and why it would work without?",
+      "parentUuid": "c8681d64_cfe1b566",
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e27fb17a_7a08aff8",
         "filename": "src/d8/d8.cc",
         "patchSetId": 1
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "We had this race between creation and reading before.\nMoving the guard to the top will add an overhead and will probably do little good, as there are read accesses in multiple other places.",
       "parentUuid": "e27fb17a_7a08aff8",
+      "range": {
+        "startLine": 2774,
+        "startChar": 19,
+        "endLine": 2774,
+        "endChar": 31
+      },
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a96117_1c868d07",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-01T14:00:46Z",
+      "side": 1,
+      "message": "\u003e We had this race between creation and reading before.\n\ndidn\u0027t we create everything synchronously from the main thread on initialization? In that case the counter_map_ would be immutable/constant while reading.\n\nWith lazy initialization it\u0027s mutated all the time (potentially) which means that the read won\u0027t work.",
+      "parentUuid": "f9f624ae_bcae9cd4",
       "range": {
         "startLine": 2774,
         "startChar": 19,
