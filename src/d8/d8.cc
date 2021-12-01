@@ -453,6 +453,7 @@ class ExternalOwningOneByteStringResource
   std::unique_ptr<base::OS::MemoryMappedFile> file_;
 };
 
+base::LazyMutex Shell::counter_mutex_;
 CounterMap* Shell::counter_map_;
 base::OS::MemoryMappedFile* Shell::counters_file_ = nullptr;
 CounterCollection Shell::local_counters_;
@@ -2775,6 +2776,7 @@ Counter* Shell::GetCounter(const char* name, bool is_histogram) {
       map_entry != counter_map_->end() ? map_entry->second : nullptr;
 
   if (counter == nullptr) {
+    base::MutexGuard lock_guard(counter_mutex_.Pointer());
     counter = counters_->GetNextCounter();
     if (counter != nullptr) {
       (*counter_map_)[name] = counter;
