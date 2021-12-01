@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23821611_99b370d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-01T14:03:53Z",
+      "side": 1,
+      "message": "Can we include a regression test, or is there more to be fixed before that?",
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58ebd09e_1ffc7da2",
@@ -121,6 +138,23 @@
         "endLine": 2774,
         "endChar": 31
       },
+      "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3f6015e_8140c8d6",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-01T14:03:53Z",
+      "side": 1,
+      "message": "Can we put this inside the heap-allocated CounterMap? I.e. make it a struct with the unordered_map and a SharedMutex? That would also make reading the map (the most common operation) cheaper by avoiding unnecessary blocking between threads. That also avoids the lazy initialization problem.",
       "revId": "6ebc18ff4958a6ac56ea272f1d5535f5298af02f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
