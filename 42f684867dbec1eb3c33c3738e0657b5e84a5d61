@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5871f7be_3dfbbd87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-12-01T17:05:26Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "42f684867dbec1eb3c33c3738e0657b5e84a5d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "513b8a01_d391d7d6",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-12-01T17:05:26Z",
+      "side": 1,
+      "message": "If you remove the method then this comment will be obsolete. You can point to JSTypedArray::AddExternalPointerCompensationForDeserialization() instead.",
+      "revId": "42f684867dbec1eb3c33c3738e0657b5e84a5d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
