@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6da3bfa_9b35eae9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-01T08:49:20Z",
+      "side": 1,
+      "message": "The external references are staying.",
+      "parentUuid": "78b40f84_946393df",
+      "revId": "b987419da2db571abc7ce77e1ce5fb01d2dcc523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9717c8ff_bf63e948",
