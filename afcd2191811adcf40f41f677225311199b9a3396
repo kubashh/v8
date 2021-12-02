@@ -22,6 +22,30 @@
       },
       "revId": "afcd2191811adcf40f41f677225311199b9a3396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15a5076b_5638fbd1",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-12-02T08:55:39Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "981a3d05_bc8f34a4",
+      "range": {
+        "startLine": 505,
+        "startChar": 19,
+        "endLine": 505,
+        "endChar": 35
+      },
+      "revId": "afcd2191811adcf40f41f677225311199b9a3396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

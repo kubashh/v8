@@ -33,6 +33,24 @@
       "message": "If you remove the method then this comment will be obsolete. You can point to JSTypedArray::AddExternalPointerCompensationForDeserialization() instead.",
       "revId": "42f684867dbec1eb3c33c3738e0657b5e84a5d61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c205268_870d2839",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-12-02T08:55:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "513b8a01_d391d7d6",
+      "revId": "42f684867dbec1eb3c33c3738e0657b5e84a5d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
