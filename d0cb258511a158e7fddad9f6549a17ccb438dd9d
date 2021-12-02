@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e993aa_b40c61f8",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-12-02T13:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "579d0be5_4dbeec9c",
+      "range": {
+        "startLine": 50,
+        "startChar": 7,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "d0cb258511a158e7fddad9f6549a17ccb438dd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f49b0a2_61527de3",
@@ -54,6 +78,30 @@
       "writtenOn": "2021-12-02T12:06:57Z",
       "side": 1,
       "message": "This is going to use a rather large amount of memory. You could save resources by making the shift amount bigger (near the size limit), then the left-hand side can be quite small. Concretely, this would be enough:\n\n  a \u003d BigInt(BIGINT_MAX_BITS) - 1n - C;  // for some C \u003e\u003d 0n.\n  random_bigints[0] \u003d 2n \u003c\u003c C;",
+      "range": {
+        "startLine": 104,
+        "startChar": 22,
+        "endLine": 104,
+        "endChar": 55
+      },
+      "revId": "d0cb258511a158e7fddad9f6549a17ccb438dd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a5e0744_dd98afd6",
+        "filename": "test/js-perf-test/BigInt/shift.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2021-12-02T13:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f49b0a2_61527de3",
       "range": {
         "startLine": 104,
         "startChar": 22,
