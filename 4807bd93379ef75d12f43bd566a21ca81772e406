@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac1262c_59177d5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-02T15:49:10Z",
+      "side": 1,
+      "message": "Thanks for doing this! I like the approach you found for the splitting. LGTM with a bunch of nits.",
+      "revId": "4807bd93379ef75d12f43bd566a21ca81772e406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
