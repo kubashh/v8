@@ -143,6 +143,7 @@ class V8_EXPORT_PRIVATE LazyCompileDispatcher {
   Job* GetJobFor(Handle<SharedFunctionInfo> shared,
                  const base::MutexGuard&) const;
   void ScheduleIdleTaskFromAnyThread(const base::MutexGuard&);
+  bool FinalizeSingleJob();
   void DoBackgroundWork(JobDelegate* delegate);
   void DoIdleWork(double deadline_in_seconds);
 
