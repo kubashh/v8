@@ -533,6 +533,12 @@ bool Builtins::CodeObjectIsExecutable(Builtin builtin) {
   // that they are builtins at generation time. E.g.
   //   f = Array.of;
   //   f(1, 2, 3);
+
+#ifdef V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+  // Disable off-heap trampoline inlining for all builtins.
+  if ((true)) return true;
+#endif  // V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+
   // TODO(delphick): This is probably too loose but for now Wasm can call any JS
   // linkage builtin via its Code object. Once Wasm is fixed this can either be
   // tighted or removed completely.
