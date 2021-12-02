@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe3d29d_5c4e7ec4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-02T12:06:57Z",
+      "side": 1,
+      "message": "Wow, that\u0027s some very thorough coverage! It may not be worth running these for all eternity, but at least to cover your upcoming refactoring they\u0027re certainly nice to have.\n\nLGTM with minor comments.",
+      "revId": "d0cb258511a158e7fddad9f6549a17ccb438dd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "579d0be5_4dbeec9c",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-02T12:06:57Z",
+      "side": 1,
+      "message": "As the Chat thread pointed out, there\u0027s an even more elegant solution:\n\n  s +\u003d \"F\".repeat(bits / 4);",
+      "range": {
+        "startLine": 50,
+        "startChar": 7,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "d0cb258511a158e7fddad9f6549a17ccb438dd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f49b0a2_61527de3",
+        "filename": "test/js-perf-test/BigInt/shift.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-02T12:06:57Z",
+      "side": 1,
+      "message": "This is going to use a rather large amount of memory. You could save resources by making the shift amount bigger (near the size limit), then the left-hand side can be quite small. Concretely, this would be enough:\n\n  a \u003d BigInt(BIGINT_MAX_BITS) - 1n - C;  // for some C \u003e\u003d 0n.\n  random_bigints[0] \u003d 2n \u003c\u003c C;",
+      "range": {
+        "startLine": 104,
+        "startChar": 22,
+        "endLine": 104,
+        "endChar": 55
+      },
+      "revId": "d0cb258511a158e7fddad9f6549a17ccb438dd9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
