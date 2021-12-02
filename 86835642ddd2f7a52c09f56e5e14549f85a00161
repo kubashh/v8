@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d2d340_bdf4c9ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-12-02T14:57:20Z",
+      "side": 1,
+      "message": "Hello Jaro, hello Benedikt,\n\nhere\u0027s a CL to explicitly encode breaks caused by \u0027ScheduleBreak\u0027 as other. Tried to create a test case for this, but I can\u0027t find a case in which we can make a pause due to 1. ScheduleBreak and something, that isn\u0027t encoded as other. So leaving it as is without a test. PTAL!",
+      "revId": "86835642ddd2f7a52c09f56e5e14549f85a00161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
