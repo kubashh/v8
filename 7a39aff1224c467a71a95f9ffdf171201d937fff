@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63e4a8a_8cfd005e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-12-02T14:47:56Z",
+      "side": 1,
+      "message": "LGTM % nit.",
+      "revId": "7a39aff1224c467a71a95f9ffdf171201d937fff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d269f808_9a7d8d59",
+        "filename": "src/compiler-dispatcher/lazy-compile-dispatcher.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2021-12-02T14:47:56Z",
+      "side": 1,
+      "message": "Nit: it would be easier to parse/understand what we doing here if we put this in a separate function.\n\nI guess what\u0027re you doing here is popping/getting/retrieving a job from shared_to_unoptimized_job_ ?\n\nMaybe separate that in a function FindJob(filter) where filter is job \u003d\u003e bool\nie., (job-\u003estate \u003d\u003d Job::State::kReadyToFinalize || job-\u003estate \u003d\u003d Job::State::kAborted)?\nOr RemoveJob",
+      "range": {
+        "startLine": 312,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 3
+      },
+      "revId": "7a39aff1224c467a71a95f9ffdf171201d937fff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
