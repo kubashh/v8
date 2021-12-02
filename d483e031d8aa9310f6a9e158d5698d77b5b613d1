@@ -33,6 +33,23 @@
       "message": "Awesome, LGTM",
       "revId": "d483e031d8aa9310f6a9e158d5698d77b5b613d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc3bec48_8c8c0642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-02T11:58:08Z",
+      "side": 1,
+      "message": "I don\u0027t see any additional crashes on recent Canaries. Given that the previous attempt immediately spiked in a few new signatures, I think we are good.",
+      "revId": "d483e031d8aa9310f6a9e158d5698d77b5b613d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
