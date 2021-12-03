@@ -108,6 +108,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17852034_f30b20e7",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-03T12:54:06Z",
+      "side": 1,
+      "message": "Like I said, PushEmbedder works here as well, it\u0027s just a bit less efficient.\nThe extra branch in PushEmbedder won\u0027t be optimized away because that one check cpp_marking_state_ and the branch in EmbedderWriteBarrier checks cpp_heap_ so the compiler won\u0027t deduce that they\u0027re always the same.",
+      "parentUuid": "fc1bd6f9_ee156213",
+      "revId": "cd209ed73e2f6ee8e0417dbc83c522564f130cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83ec5e9e_262edb1b",

@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "005c3dec_a4a1b95c",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-03T12:54:06Z",
+      "side": 1,
+      "message": "I tried it and it gets a bot complicated.\nMarkingWorklist::Local doesn\u0027t currently have a reference to the Isolate or the CppHeap (for getting the WrapperDescriptor). We would need to had those so that we can call ExtractWrapperInfo from MarkingWorklist::Local::PushEmbedder.\nI think the implementation is cleaner this way.\n\nAlternatively, what I suggest is moving ExtractWrapperInfo to a utils class in src/heap/base/. The downside is that ExtractWrapperInfo relies on JSObject so either we move that to heap/base/ as well or heap/base/ depends on heap/.\nwdyt?",
+      "parentUuid": "28c25275_9e1e64a7",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eeb74c73_d64469c0",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 16
@@ -48,6 +66,30 @@
       "writtenOn": "2021-12-01T19:38:55Z",
       "side": 1,
       "message": "Same as in mark-compact.cc",
+      "range": {
+        "startLine": 546,
+        "startChar": 2,
+        "endLine": 549,
+        "endChar": 6
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e71696f_23a194ce",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-03T12:54:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eeb74c73_d64469c0",
       "range": {
         "startLine": 546,
         "startChar": 2,
@@ -83,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "829a3365_cfc8af26",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-03T12:54:06Z",
+      "side": 1,
+      "message": "I considered something similar when reading Dominik\u0027s comments. I think this makes sense.\nDominik wdyt?",
+      "parentUuid": "66e923ff_a9b339e8",
+      "range": {
+        "startLine": 1993,
+        "startChar": 6,
+        "endLine": 1993,
+        "endChar": 7
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e4765f9c_4755078f",
         "filename": "src/heap/marking-worklist.cc",
         "patchSetId": 16
@@ -94,6 +160,30 @@
       "writtenOn": "2021-12-01T19:38:55Z",
       "side": 1,
       "message": "Let\u0027s rename this to `wrapper_`",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 18
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c66a6c1_4d459308",
+        "filename": "src/heap/marking-worklist.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-03T12:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4765f9c_4755078f",
       "range": {
         "startLine": 183,
         "startChar": 9,
