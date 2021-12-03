@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "275e9f7a_07e53fac",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-03T15:35:15Z",
+      "side": 1,
+      "message": "If it gets too tricky, we can leave it as-is.",
+      "parentUuid": "005c3dec_a4a1b95c",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eeb74c73_d64469c0",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 16
@@ -137,6 +155,30 @@
       "side": 1,
       "message": "I considered something similar when reading Dominik\u0027s comments. I think this makes sense.\nDominik wdyt?",
       "parentUuid": "66e923ff_a9b339e8",
+      "range": {
+        "startLine": 1993,
+        "startChar": 6,
+        "endLine": 1993,
+        "endChar": 7
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "243dc3d9_2cf59757",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-03T15:35:15Z",
+      "side": 1,
+      "message": "sgtm",
+      "parentUuid": "829a3365_cfc8af26",
       "range": {
         "startLine": 1993,
         "startChar": 6,
