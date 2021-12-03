@@ -25,15 +25,18 @@ class Isolate;
 
 namespace internal {
 
+class CppMarkingState;
+
 // A C++ heap implementation used with V8 to implement unified heap.
 class V8_EXPORT_PRIVATE CppHeap final
     : public cppgc::internal::HeapBase,
       public v8::CppHeap,
       public cppgc::internal::StatsCollector::AllocationObserver {
  public:
-  enum GarbageCollectionFlagValues {
-    kReduceMemory,
-    kForced,
+  enum GarbageCollectionFlagValues : uint8_t {
+    kNoFlags = 0,
+    kReduceMemory = 1 << 1,
+    kForced = 1 << 2,
   };
 
   using GarbageCollectionFlags = base::Flags<GarbageCollectionFlagValues>;
@@ -112,9 +115,8 @@ class V8_EXPORT_PRIVATE CppHeap final
 
   void FinishSweepingIfRunning();
 
-  void RegisterV8References(
-      const std::vector<std::pair<void*, void*>>& embedder_fields);
-  void TracePrologue(GarbageCollectionFlags);
+  void InitializeTracing(GarbageCollectionFlags);
+  void StartTracing();
   bool AdvanceTracing(double max_duration);
   bool IsTracingDone();
   void TraceEpilogue();
@@ -132,6 +134,8 @@ class V8_EXPORT_PRIVATE CppHeap final
   }
 
   Isolate* isolate() const { return isolate_; }
+
+  std::unique_ptr<CppMarkingState> CreateCppMarkingState();
 
  private:
   void FinalizeIncrementalGarbageCollectionIfNeeded(
@@ -164,6 +168,8 @@ class V8_EXPORT_PRIVATE CppHeap final
 
   friend class MetricRecorderAdapter;
 };
+
+DEFINE_OPERATORS_FOR_FLAGS(CppHeap::GarbageCollectionFlags)
 
 }  // namespace internal
 }  // namespace v8
