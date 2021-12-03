@@ -315,16 +315,186 @@
   'built-ins/TypedArray/prototype/map/callbackfn-resize': [SKIP],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=11544
-  'built-ins/Temporal/*': [FAIL],
-  'intl402/Temporal/*': [FAIL],
+
+  # Test problem with Symbol toString in the message itself
+  # https://github.com/tc39/test262/pull/3318
+  'built-ins/Temporal/Calendar/prototype/dateAdd/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/dateUntil/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/day/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/dayOfWeek/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/dayOfYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/daysInMonth/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/daysInWeek/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/daysInYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/inLeapYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/month/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/monthCode/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/monthsInYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/weekOfYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Calendar/prototype/year/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/compare/relativeto-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/compare/relativeto-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/fractional-throws-rangeerror': [FAIL],
+  'built-ins/Temporal/Duration/prototype/add/relativeto-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/add/relativeto-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/round/relativeto-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/round/relativeto-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/relativeto-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/relativeto-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toJSON/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Now/plainDateISO/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Now/plainDateTimeISO/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Now/plainDateTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Now/plainDate/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/Now/plainTimeISO/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/compare/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/from/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/equals/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/since/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/toPlainDateTime/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/toZonedDateTime/plaintime-argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/toZonedDateTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/until/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/compare/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/from/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/equals/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/since/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/toZonedDateTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/until/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/withPlainDate/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/withPlainTime/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/compare/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/from/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/equals/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/since/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/toPlainDateTime/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/toZonedDateTime/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/toZonedDateTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/until/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/TimeZone/prototype/getInstantFor/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/TimeZone/prototype/getOffsetStringFor/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/TimeZone/prototype/getPlainDateTimeFor/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/TimeZone/prototype/getPossibleInstantsFor/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/compare/argument-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/from/argument-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/add/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/dayOfWeek/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/dayOfYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/daysInMonth/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/daysInWeek/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/daysInYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/day/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/argument-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/getISOFields/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/hoursInDay/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/hour/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/inLeapYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/microsecond/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/millisecond/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/minute/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/monthCode/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/monthsInYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/month/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/nanosecond/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/offsetNanoseconds/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/offset/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/second/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/argument-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/startOfDay/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/subtract/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toJSON/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toPlainDateTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toPlainDate/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toPlainMonthDay/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toPlainTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toPlainYearMonth/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/toString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/argument-propertybag-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/weekOfYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/withPlainDate/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/withPlainDate/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/withPlainTime/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/withPlainTime/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/with/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/year/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/Calendar/prototype/era/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/Calendar/prototype/eraYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainDate/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/era/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/ZonedDateTime/prototype/eraYear/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+
+  # https://github.com/tc39/proposal-temporal/issues/1924
+  'built-ins/Temporal/ZonedDateTime/from/zoneddatetime-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/sub-minute-offset': [FAIL],
+
+  # https://github.com/tc39/test262/issues/3319
+  'built-ins/Temporal/Duration/compare/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/add/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/round/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-sub-minute-offset': [FAIL],
+
+  # Daylight Saving Time related
+  'built-ins/Temporal/ZonedDateTime/prototype/with/offset-undefined': [FAIL],
+
+  # Calendar in TemporalTimeString
+  # https://github.com/tc39/test262/pull/3257
+  # https://github.com/tc39/proposal-temporal/issues/1896
+  'built-ins/Temporal/PlainTime/from/argument-string-with-calendar': [FAIL],
+
+  # TimeZone getPossibleInstantsFor bug
+  'built-ins/Temporal/Duration/prototype/total/timezone-getpossibleinstantsfor-iterable': [FAIL],
+
+  # Calendar.dateAdd with null instead of undefined
+  # https://github.com/tc39/test262/issues/3262
+  'built-ins/Temporal/Duration/prototype/add/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/dateadd-options': [FAIL],
+
+  # Maybe related to TimeZone daylight saving implementation
+  'built-ins/Temporal/Duration/prototype/round/relativeto-string-datetime': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-string-datetime': [FAIL],
+
+  # Custom TimeZone name
+  # https://github.com/tc39/test262/issues/3265
+  'built-ins/Temporal/Instant/from/timezone-custom': [FAIL],
+
+  'built-ins/Temporal/Duration/prototype/round/calendar-dateuntil-called-with-singular-largestunit': [FAIL],
+
+  # ???
+  'built-ins/Temporal/Instant/prototype/round/subclassing-ignored': [FAIL],
+
+  # Need to implement i18n
+
+  # https://github.com/tc39/ecma402/issues/623
   'intl402/DateTimeFormat/prototype/formatRange/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatRangeToParts/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/format/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatToParts/temporal-objects-resolved-time-zone': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatRange/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatRangeToParts/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/format/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatToParts/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/resolved-time-zone': [FAIL],
+
+  # https://github.com/tc39/test262/pull/3321
+  'intl402/Temporal/PlainDate/from/basic': [FAIL],
+  'intl402/Temporal/PlainMonthDay/from/basic': [FAIL],
+
+  # https://github.com/tc39/test262/pull/3323
+  'intl402/Temporal/TimeZone/from/argument-invalid': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=10776
   'intl402/NumberFormat/constructor-options-roundingMode-invalid': [FAIL],

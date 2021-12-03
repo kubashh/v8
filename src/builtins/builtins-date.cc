@@ -9,6 +9,8 @@
 #include "src/date/dateparser-inl.h"
 #include "src/logging/counters.h"
 #include "src/numbers/conversions.h"
+#include "src/objects/bigint.h"
+#include "src/objects/js-temporal-objects-inl.h"
 #include "src/objects/objects-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/intl-objects.h"
@@ -926,6 +928,25 @@ BUILTIN(DatePrototypeToJson) {
     RETURN_RESULT_OR_FAILURE(
         isolate, Execution::Call(isolate, function, receiver_obj, 0, nullptr));
   }
+}
+
+// Temporal #sec-date.prototype.totemporalinstant
+BUILTIN(DatePrototypeToTemporalInstant) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSDate, date, "Date.prototype.toTemporalInstant");
+  // 1. Let t be ? thisTimeValue(this value).
+  Handle<BigInt> t;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, t,
+      BigInt::FromNumber(isolate, Handle<Object>(date->value(), isolate)));
+  // 2. Let ns be ? NumberToBigInt(t) × 106.
+  Handle<BigInt> ns;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, ns,
+      BigInt::Multiply(isolate, t, BigInt::FromInt64(isolate, 1000000)));
+  // 3. Return ! CreateTemporalInstant(ns).
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           temporal::CreateTemporalInstant(isolate, ns));
 }
 
 }  // namespace internal
