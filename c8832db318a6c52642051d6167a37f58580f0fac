@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85a0300d_fab17989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-03T09:25:39Z",
+      "side": 1,
+      "message": "Next little fix. Michael, PTAL.\nThanks, Nikos, for bringing this up!",
+      "revId": "c8832db318a6c52642051d6167a37f58580f0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
