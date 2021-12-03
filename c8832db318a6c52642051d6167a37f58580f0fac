@@ -16,6 +16,23 @@
       "message": "Next little fix. Michael, PTAL.\nThanks, Nikos, for bringing this up!",
       "revId": "c8832db318a6c52642051d6167a37f58580f0fac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "119ff05d_5ea84299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-03T11:50:37Z",
+      "side": 1,
+      "message": "lgtm, thanks a lot ",
+      "revId": "c8832db318a6c52642051d6167a37f58580f0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
