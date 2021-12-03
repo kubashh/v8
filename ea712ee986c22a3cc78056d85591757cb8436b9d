@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da02655_f4b6d538",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-12-03T17:22:10Z",
+      "side": 1,
+      "message": "LGTM, thanks for fixing this.",
+      "revId": "ea712ee986c22a3cc78056d85591757cb8436b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfb4d479_f187b042",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2021-12-03T17:22:10Z",
+      "side": 1,
+      "message": "Can you please add a comment here like \"Root pointers do not get compressed.\"?",
+      "revId": "ea712ee986c22a3cc78056d85591757cb8436b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
