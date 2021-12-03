@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b63ba6b_f1b8177a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2021-12-03T15:25:28Z",
+      "side": 1,
+      "message": "Another chunky change, though most of it was mechanical insertions of the new \"ReusableUnoptimizedCompileState\" wherever there\u0027s a ParseInfo construction.\n\nBikesheds of the name are welcome, I\u0027m not in love with it.",
+      "revId": "50a7eef7992e53d55f2b06b8c0aad270cca534bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
