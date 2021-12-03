@@ -98,12 +98,12 @@ MachineType assert_size(int expected_size, MachineType type) {
              wasm::ObjectAccess::ToTagged(                       \
                  WasmInstanceObject::k##name##Offset)))
 
-#define LOAD_ROOT(root_name, factory_name)                         \
-  (parameter_mode_ == kNoSpecialParameterMode                      \
-       ? graph()->NewNode(mcgraph()->common()->HeapConstant(       \
-             isolate_->factory()->factory_name()))                 \
-       : gasm_->LoadImmutable(                                     \
-             MachineType::TaggedPointer(), BuildLoadIsolateRoot(), \
+#define LOAD_ROOT(root_name, factory_name)                   \
+  (parameter_mode_ == kNoSpecialParameterMode                \
+       ? graph()->NewNode(mcgraph()->common()->HeapConstant( \
+             isolate_->factory()->factory_name()))           \
+       : gasm_->LoadImmutable(                               \
+             MachineType::Pointer(), BuildLoadIsolateRoot(), \
              IsolateData::root_slot_offset(RootIndex::k##root_name)))
 
 bool ContainsSimd(const wasm::FunctionSig* sig) {
