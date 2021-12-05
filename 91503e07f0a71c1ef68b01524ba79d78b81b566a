@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9753c0ff_1347b1dd",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-05T22:48:56Z",
+      "side": 1,
+      "message": "I prototyped both approaches and I think it\u0027s best to leave it as is.",
+      "parentUuid": "275e9f7a_07e53fac",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eeb74c73_d64469c0",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 16
@@ -179,6 +197,30 @@
       "side": 1,
       "message": "sgtm",
       "parentUuid": "829a3365_cfc8af26",
+      "range": {
+        "startLine": 1993,
+        "startChar": 6,
+        "endLine": 1993,
+        "endChar": 7
+      },
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c928f2f9_773c6a0f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1993,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-05T22:48:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "243dc3d9_2cf59757",
       "range": {
         "startLine": 1993,
         "startChar": 6,
