@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3573d8c0_2a7fa7a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-12-06T19:38:02Z",
+      "side": 1,
+      "message": "Nothing changed in this CL since revert. Only blink removal CLs have landed upstream.",
+      "revId": "6a61a697b7b914124b9f4a27164b097eddecf9c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
