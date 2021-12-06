@@ -153,11 +153,11 @@ int GetFlagsForMemoryPermission(OS::MemoryPermission access,
     flags |= MAP_LAZY;
 #endif  // V8_OS_QNX
   }
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if V8_OS_MACOSX
   if (access == OS::MemoryPermission::kNoAccessWillJitLater) {
     flags |= MAP_JIT;
   }
-#endif
+#endif  // V8_OS_MACOSX
   return flags;
 }
 
@@ -525,6 +525,12 @@ Optional<AddressSpaceReservation> OS::CreateAddressSpaceReservation(
   }
 
   void* reservation = Allocate(hint, size, alignment, permission);
+  if (!reservation) {
+    // Retry without MAP_JIT, for example in case we are running on an old OS X.
+    permission = MemoryPermission::kNoAccess;
+    reservation = Allocate(hint, size, alignment, permission);
+  }
+
   if (!reservation) return {};
 
   return AddressSpaceReservation(reservation, size);
