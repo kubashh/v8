@@ -72,7 +72,7 @@ class MaybeUtf8 {
   // the MAX_STACK_LENGTH should be more than enough.
   uint8_t* buf_;
   uint8_t data_[MAX_STACK_LENGTH];
-  std::unique_ptr<uint8_t> allocated_;
+  std::unique_ptr<uint8_t[]> allocated_;
 };
 
 #if !defined(V8_USE_PERFETTO)
