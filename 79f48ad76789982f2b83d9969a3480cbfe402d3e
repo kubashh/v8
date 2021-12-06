@@ -22,6 +22,30 @@
       },
       "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf33f6c_604aa0fc",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2021-12-06T15:00:37Z",
+      "side": 0,
+      "message": "I don\u0027t think so: MAP_JIT is required when the hardened runtime is available, and possible always on the M1. There, without MAP_JIT, you can\u0027t get memory that is/was writable and executable.\nFrom what I understand (see also https://developer.apple.com/documentation/apple-silicon/porting-just-in-time-compilers-to-apple-silicon) V8_HAS_PTHREAD_JIT_WRITE_PROTECT indicates the presence of pthread_jit_write_protect_np which should only be present on the M1 (it\u0027s Arm specific). It can be used as a fast, thread-local way of switching the permissions of MAP_JIT memory from RX to RW and vice-versa.\nThe issue here is that MAP_JIT is also required on Intel chips when the hardened runtime is available, even though pthread_jit_write_protect_np isn\u0027t available there.",
+      "parentUuid": "87d7bc06_4b007fad",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 36
+      },
+      "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
