@@ -46,6 +46,30 @@
       },
       "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f258ad_5677a7a4",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-06T15:08:41Z",
+      "side": 0,
+      "message": "Ack, let\u0027s add a comment above the V8_OS_MACROSX macro usage then.",
+      "parentUuid": "0cf33f6c_604aa0fc",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 36
+      },
+      "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
