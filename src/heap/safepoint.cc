@@ -51,7 +51,7 @@ void IsolateSafepoint::EnterGlobalSafepointScope(Isolate* initiator) {
     IgnoreLocalGCRequests ignore_gc_requests(initiator->heap());
     LockMutex(initiator->main_thread_local_heap());
   }
-  CHECK_EQ(active_safepoint_scopes_.exchange(1), 0);
+  CHECK_EQ(++active_safepoint_scopes_, 1);
 
   barrier_.Arm();
 
@@ -101,7 +101,7 @@ void IsolateSafepoint::LockMutex(LocalHeap* local_heap) {
 
 void IsolateSafepoint::LeaveGlobalSafepointScope(Isolate* initiator) {
   local_heaps_mutex_.AssertHeld();
-  CHECK_EQ(active_safepoint_scopes_.exchange(0), 1);
+  CHECK_EQ(--active_safepoint_scopes_, 0);
   ClearSafepointRequestedFlags(IncludeMainThreadUnlessInitiator(initiator));
   barrier_.Disarm();
   local_heaps_mutex_.Unlock();
