@@ -17,6 +17,7 @@ namespace internal {
 
 class Heap;
 class LocalHeap;
+struct PerClientSafepointData;
 class RootVisitor;
 
 // Used to bring all threads with heap access in an isolate to a safepoint such
@@ -80,10 +81,17 @@ class IsolateSafepoint final {
   void NotifyPark();
 
   void EnterLocalSafepointScope();
-  void EnterGlobalSafepointScope(Isolate* initiator);
 
   void LeaveLocalSafepointScope();
+
+  void TryEnterGlobalSafepointScope(Isolate* initiator,
+                                    PerClientSafepointData* client_data);
+  void EnterGlobalSafepointScope(Isolate* initiator,
+                                 PerClientSafepointData* client_data);
+  void SetUpGlobalSafepointScope(Isolate* initiator,
+                                 PerClientSafepointData* client_data);
   void LeaveGlobalSafepointScope(Isolate* initiator);
+  void WaitUntilRunningThreadsInSafepoint(size_t running);
 
   IncludeMainThread IncludeMainThreadUnlessInitiator(Isolate* initiator);
 
