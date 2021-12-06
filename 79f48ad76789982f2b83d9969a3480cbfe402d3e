@@ -70,6 +70,30 @@
       },
       "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c0b7c4_49d0bd48",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-12-06T15:20:04Z",
+      "side": 0,
+      "message": "Basically it\u0027s just an orthogonal flag that seemed aligned (MAP_JIT is required for per-pthread-jit-write-protect) but it isn\u0027t entirely (it\u0027s also required to flip RW\u003c-\u003eRX).",
+      "parentUuid": "88f258ad_5677a7a4",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 36
+      },
+      "revId": "79f48ad76789982f2b83d9969a3480cbfe402d3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
