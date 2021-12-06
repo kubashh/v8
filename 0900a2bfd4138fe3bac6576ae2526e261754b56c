@@ -50,6 +50,40 @@
       "message": "interpreter lgtm",
       "revId": "0900a2bfd4138fe3bac6576ae2526e261754b56c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c281dfc9_4ad9a248",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-12-06T09:17:36Z",
+      "side": 1,
+      "message": "execution lgtm with a comment",
+      "revId": "0900a2bfd4138fe3bac6576ae2526e261754b56c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cbfeb99_36c9893e",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2021-12-06T09:17:36Z",
+      "side": 1,
+      "message": "Suggestion:\n\n set_pending_exception(exception);\n return ReThrow(exception);",
+      "revId": "0900a2bfd4138fe3bac6576ae2526e261754b56c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
