@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b7012d_524cc1d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-06T11:00:39Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "00d65f4dd3477d6e9c37d073083f98036ef1dd5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16be7db_5f4b1f27",
+        "filename": "src/builtins/builtins-trace.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-06T11:00:39Z",
+      "side": 1,
+      "message": "allocated_ \u003d std::make_unique\u003cuint8_t[]\u003e(len +1)",
+      "range": {
+        "startLine": 64,
+        "startChar": 17,
+        "endLine": 64,
+        "endChar": 22
+      },
+      "revId": "00d65f4dd3477d6e9c37d073083f98036ef1dd5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
