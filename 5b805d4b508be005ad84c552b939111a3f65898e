@@ -16,6 +16,24 @@
       "message": "lgtm.\n\nI\u0027d like to confirm that this CL doesn\u0027t change behavior of the implementation, but you are adding ScanTimeFraction for 1-1 correspondence with the spec grammar. Is that right?",
       "revId": "5b805d4b508be005ad84c552b939111a3f65898e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67dce5e6_3e1b1fd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2021-12-07T04:00:41Z",
+      "side": 1,
+      "message": "The PR I try to sync to does change the behavior, but the tests in test262 which show the differences is not yet import from the Temporal proposal repo yet (there are still about ~9000 tests not migrated into yet)",
+      "parentUuid": "e3929692_8cbb5d95",
+      "revId": "5b805d4b508be005ad84c552b939111a3f65898e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
