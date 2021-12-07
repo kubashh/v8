@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffaff8d8_50988768",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1df1b9ee_8279d304",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "final",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e217cb8b_434c332d",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "\u003d0",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c811abf7_25a270ca",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "\u003dfalse",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c444dd2_507c92ae",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "// DEBUG",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e78601_d12a4daf",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-07T11:29:36Z",
+      "side": 1,
+      "message": "We could also pass PerClientSafepointData* here and get running internally. wdyt?",
+      "range": {
+        "startLine": 97,
+        "startChar": 49,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
