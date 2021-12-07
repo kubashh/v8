@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e1c1f03_4f700ef2",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-07T12:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1df1b9ee_8279d304",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e217cb8b_434c332d",
@@ -48,6 +66,24 @@
       "writtenOn": "2021-12-07T11:29:36Z",
       "side": 1,
       "message": "\u003d0",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bde46ff_d46a2c63",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-07T12:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e217cb8b_434c332d",
       "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09fa0453_5a88419f",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-07T12:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c811abf7_25a270ca",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c444dd2_507c92ae",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d5f7351_49afabef",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-07T12:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c444dd2_507c92ae",
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62e78601_d12a4daf",
@@ -99,6 +171,30 @@
       "writtenOn": "2021-12-07T11:29:36Z",
       "side": 1,
       "message": "We could also pass PerClientSafepointData* here and get running internally. wdyt?",
+      "range": {
+        "startLine": 97,
+        "startChar": 49,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "58e1e578e7f0de888fbf4cac8e695cfc023a6a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5314c2c_67d1fd33",
+        "filename": "src/heap/safepoint.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2021-12-07T12:56:49Z",
+      "side": 1,
+      "message": "I\u0027ve also thought about this but then chose running for some reason. Updated this to use PerClientSafepointData.",
+      "parentUuid": "62e78601_d12a4daf",
       "range": {
         "startLine": 97,
         "startChar": 49,
