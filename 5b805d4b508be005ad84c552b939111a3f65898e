@@ -52,6 +52,24 @@
       "parentUuid": "67dce5e6_3e1b1fd3",
       "revId": "5b805d4b508be005ad84c552b939111a3f65898e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d254ed0_b20eddeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2021-12-07T04:03:08Z",
+      "side": 1,
+      "message": "How does this CL change the behavior? I thought the set of accepted strings is unchanged, but the production was changed to get rid of ambiguity in the spec language.",
+      "parentUuid": "67dce5e6_3e1b1fd3",
+      "revId": "5b805d4b508be005ad84c552b939111a3f65898e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
