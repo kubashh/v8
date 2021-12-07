@@ -3571,6 +3571,12 @@ void Isolate::CreateAndSetEmbeddedBlob() {
 }
 
 void Isolate::MaybeRemapEmbeddedBuiltinsIntoCodeRange() {
+#ifdef V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+  // Disable off-heap trampoline inlining for all builtins.
+  // Thus builtin remapping is not required.
+  if ((true)) return;
+#endif  // V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+
   if (!is_short_builtin_calls_enabled() || !RequiresCodeRange()) {
     return;
   }

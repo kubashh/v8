@@ -82,6 +82,11 @@ AssemblerOptions AssemblerOptions::Default(Isolate* isolate) {
       (options.code_range_start != kNullAddress) &&
       // Serialization of RUNTIME_ENTRY reloc infos is not supported yet.
       !serializer;
+#ifdef V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+  // Disable off-heap trampoline inlining for all builtins.
+  options.inline_offheap_trampolines = false;
+  options.short_builtin_calls = false;
+#endif  // V8_DONT_INLINE_BUILTIN_TRAMPOLINES
   return options;
 }
 

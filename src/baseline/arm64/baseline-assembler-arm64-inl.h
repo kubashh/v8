@@ -117,10 +117,16 @@ void BaselineAssembler::CallBuiltin(Builtin builtin) {
     // Generate pc-relative call.
     __ CallBuiltin(builtin);
   } else {
+#ifdef V8_DONT_INLINE_BUILTIN_TRAMPOLINES
+    Handle<Code> code_target =
+        masm()->isolate()->builtins()->code_handle(builtin);
+    __ Call(code_target, RelocInfo::CODE_TARGET);
+#else
     ScratchRegisterScope temps(this);
     Register temp = temps.AcquireScratch();
     __ LoadEntryFromBuiltin(builtin, temp);
     __ Call(temp);
+#endif  // V8_DONT_INLINE_BUILTIN_TRAMPOLINES
   }
 }
 
@@ -129,6 +135,8 @@ void BaselineAssembler::TailCallBuiltin(Builtin builtin) {
     // Generate pc-relative call.
     __ TailCallBuiltin(builtin);
   } else {
+#if defined(V8_ENABLE_CONTROL_FLOW_INTEGRITY) || \
+    !defined(V8_DONT_INLINE_BUILTIN_TRAMPOLINES)
     // The control flow integrity (CFI) feature allows us to "sign" code entry
     // points as a target for calls, jumps or both. Arm64 has special
     // instructions for this purpose, so-called "landing pads" (see
@@ -146,6 +154,12 @@ void BaselineAssembler::TailCallBuiltin(Builtin builtin) {
 
     __ LoadEntryFromBuiltin(builtin, temp);
     __ Jump(temp);
+#else
+    Handle<Code> code_target =
+        masm()->isolate()->builtins()->code_handle(builtin);
+    __ Jump(code_target, RelocInfo::CODE_TARGET);
+#endif  // defined(V8_ENABLE_CONTROL_FLOW_INTEGRITY) ||
+        // !defined(V8_DONT_INLINE_BUILTIN_TRAMPOLINES)
   }
 }
 
