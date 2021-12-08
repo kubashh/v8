@@ -441,6 +441,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e3d4ac_03c124a1",
+        "filename": "src/bigint/bitwise.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-08T10:33:05Z",
+      "side": 1,
+      "message": "I like it! It\u0027s nice to be able to easily verify that all digits of Z get written exactly once.",
+      "parentUuid": "2e253e3d_bb61be8e",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 68
+      },
+      "revId": "762bae3d8194f822651ee79cc1a944225db94159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca08a85b_f5d0aeb7",
@@ -525,6 +549,30 @@
       "side": 1,
       "message": "Rewrote this as well. PTAL",
       "parentUuid": "86f71105_fe94c988",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 23
+      },
+      "revId": "762bae3d8194f822651ee79cc1a944225db94159",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "771f1312_bca89b13",
+        "filename": "src/bigint/bitwise.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-08T10:33:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8caced7d_c999f50a",
       "range": {
         "startLine": 205,
         "startChar": 4,
