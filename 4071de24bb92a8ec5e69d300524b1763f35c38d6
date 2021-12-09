@@ -105,6 +105,24 @@
       "parentUuid": "2302e9c0_87a74aec",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8bca1f8_a6c317f0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-09T15:15:13Z",
+      "side": 1,
+      "message": "I wonder if we can repurpose the private_name_lookup_skips_outer_class bit on SFI and ScopeInfo to indicate a more general case where a scopes\u0027s outer scope isn\u0027t what it was originally (even if no private name lookup is necessary - for now it\u0027s only set when there\u0027s private name lookup). Then in those cases, we just insert a new class scope here. Private name resolution should also work fine as long as that bit is taken care of.\n\n\u003e Is it only private names btw? If so: why do we currently eagerly deserialize both? Couldn\u0027t we lazily deserialize non-private names during scope resolution?\n\nThe names will always be declared by the parser during reparsing, we are only restoring their context indicies. If we want to restore the indicies lazily, then we need to introduce linear lookups on the ScopeInfo during scope resolution. Right now they only fall back to the scope info if the variables does not exist - we had to introduce logic to handle the case where the variable does exist but it\u0027s lacking allocation info that you\u0027d get from a real LookupInScopeInfo call, which seems to introduce more complexity to the lookups than just looping over the variables from the scope info in one go before resolution.",
+      "parentUuid": "05cd8d32_30b767cc",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
