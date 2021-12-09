@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfbf58d1_7ede6666",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-09T13:23:23Z",
+      "side": 1,
+      "message": "I ran the cnn browsing story locally to compare performance and found:\n1) Overall main thread marking time improves. Average per cycle main thread marking time improved by 24.4% and Oilpan improved by 13.8% (more objects are now processed concurrently).\n2) Incremental steps take longer (i.e. v8:gc:event metrics). V8 is doing more than just pushing to a worklist and Oilpan has more objects to process, so that is to be expected imo.\n3) I see a regression in overall sweeping and weak handling timings. I suppose this could be explained by having more objects kept alive. Before this CL a wrapper object could potentially \"die\" (e.g. reset) between when it is found by V8 and when it is flushed to Oilpan. That can no longer happen.\n\nI think these numbers make sense?\n\nAre there any other concerns we should address? If not, I\u0027d like to submit this CL.",
+      "revId": "87f7f042e1473cb26b3922fedea37633965410a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
