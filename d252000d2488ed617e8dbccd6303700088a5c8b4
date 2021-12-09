@@ -39,6 +39,30 @@
       },
       "revId": "d252000d2488ed617e8dbccd6303700088a5c8b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07fea2bb_6f7966de",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2021-12-09T20:31:18Z",
+      "side": 1,
+      "message": "Good point, on purposes actually, it\u0027s an unnamed parameter with default value r0. It allows me to use `ByteReverseU64` with 2 parameter or 3. if 3 parameters are passed the 3rd param is simply ignored here as it doesn\u0027t even have a name and remains unused. If 2 parameters are passed, the third default parameter of r0 still gets ignored.\n\nI added it because the other 2 reversing functions `ByteReverseU32 and 16` take in 3 arguments, the last arg being a scratch reg. ByteReverseU64 is the only one that takes in 2 args. Since I\u0027m using these 3 functions under the macro `MAYBE_REVERSE_IF_WASM` it will pass a 3rd parameter to all of them regardless which will cause a compilation error on this function without this added dummy argument.\n\nWe also need to optimize ByteReverseU64 down the road which will require scratch registers added to it.",
+      "parentUuid": "9dcb8247_a801f905",
+      "range": {
+        "startLine": 617,
+        "startChar": 50,
+        "endLine": 617,
+        "endChar": 63
+      },
+      "revId": "d252000d2488ed617e8dbccd6303700088a5c8b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
