@@ -33,6 +33,24 @@
       "message": "You can deserialize shared_info-\u003eouter_scope_info() to get the class scope?",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dd89e36_0d0eef92",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-09T13:31:48Z",
+      "side": 1,
+      "message": "The deserialization is already done by DeserializeScopeChain() earlier, but it seems during error rendering, in the test cases at least, shared_info-\u003eGetOuterScopeInfo() becomes the script scope instead of the class scope, so that\u0027s what gets deserialized.\n\n0x16f608295bd5: [ScopeInfo] in OldSpace\n - map: 0x16f6080025d5 \u003cMap\u003e\n - parameters: 0\n - context locals : 2\n - scope type: SCRIPT_SCOPE\n - language mode: strict\n - declaration scope\n - function name(UNUSED): 0x16f608002501 \u003cString[0]: #\u003e\n - function kind: NormalFunction\n - function name: 0x16f608002501 \u003cString[0]: #\u003e\n - start position: 0\n - end position: 418\n - length: 11\n - context slots {\n    - 0: 0x16f608295ad9 \u003cString[1]: #C\u003e\n    - 1: 0x16f608295b39 \u003cString[1]: #D\u003e\n  }\n\nThis seems to be a strict mode thing, in sloppy mode the outer scope info comes from the class scope and original_scope_-\u003eis_class_scope() is true here.",
+      "parentUuid": "d57b175d_5a49d56c",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
