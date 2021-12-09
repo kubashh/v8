@@ -16,6 +16,23 @@
       "message": "PTAL, thanks! (For some reason it seems the updates are in patch set 1..3)",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d57b175d_5a49d56c",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-12-09T12:12:56Z",
+      "side": 1,
+      "message": "You can deserialize shared_info-\u003eouter_scope_info() to get the class scope?",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
