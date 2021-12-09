@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd42f1a2_5d272e92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1260090
+      },
+      "writtenOn": "2021-12-09T20:17:33Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d252000d2488ed617e8dbccd6303700088a5c8b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dcb8247_a801f905",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1260090
+      },
+      "writtenOn": "2021-12-09T20:17:33Z",
+      "side": 1,
+      "message": "Typo?",
+      "range": {
+        "startLine": 617,
+        "startChar": 50,
+        "endLine": 617,
+        "endChar": 63
+      },
+      "revId": "d252000d2488ed617e8dbccd6303700088a5c8b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
