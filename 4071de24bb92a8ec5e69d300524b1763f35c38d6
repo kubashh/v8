@@ -69,6 +69,24 @@
       "parentUuid": "8dd89e36_0d0eef92",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2302e9c0_87a74aec",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-09T14:15:53Z",
+      "side": 1,
+      "message": "It seems in the case of snapshots (at least in the tests in test-serialize.cc), the scope chain is preserved, so the tests with only public fields pass just fine, but in the case of error rendering the scope chain is optimized to remove any scopes that don\u0027t need the ScopeInfo. In that case I think we can just insert a new class scope into the scope chain - there shouldn\u0027t be any variables to allocate in this kind of empty class scopes anyway, so we can just skip the allocation fixup in ReplaceReparsedClassScope.",
+      "parentUuid": "01da06ac_baf300be",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
