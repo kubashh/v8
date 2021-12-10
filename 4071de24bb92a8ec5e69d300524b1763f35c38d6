@@ -159,6 +159,24 @@
       "parentUuid": "3ed3a34c_56265951",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dac87d66_799c9c7e",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-10T13:57:22Z",
+      "side": 1,
+      "message": "Thinking about it a bit more, I think we can tell whether the outer scope needs a context after reparsing it - if it declares no private names etc. in the reparsed_scope, we should be able to know after the reparsing is done - then know that the outer scope was optimized away, and we can fix up the scope chain by inserting reparsed_scope as a child scope of original_scope. Otherwise there isn\u0027t such mismatch, so the reparsed_scope is the original_scope, and we fix the allocation info of the variables instead.",
+      "parentUuid": "50cd8804_9c5e0ef6",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
