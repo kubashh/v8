@@ -226,7 +226,7 @@ macro LoadDataViewFloat64(
     lowWord = (b4 << 24) | (b5 << 16) | (b6 << 8) | b7;
   }
 
-  let result: float64 = 0;
+  let result: float64 = 0.0;
   result = Float64InsertLowWord32(result, lowWord);
   result = Float64InsertHighWord32(result, highWord);
 

@@ -23,6 +23,7 @@
 #include "src/codegen/source-position.h"
 #include "src/codegen/tnode.h"
 #include "src/heap/heap.h"
+#include "src/numbers/integer-literal.h"
 #include "src/objects/arguments.h"
 #include "src/objects/data-handler.h"
 #include "src/objects/heap-number.h"
@@ -537,6 +538,9 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     return ReinterpretCast<RawPtrT>(IntPtrConstant(bit_cast<intptr_t>(value)));
   }
   TNode<Number> NumberConstant(double value);
+  TNode<Number> NumberConstant(IntegerLiteral il) {
+    return NumberConstant(*il.As<int64_t>());
+  }
   TNode<Smi> SmiConstant(Smi value);
   TNode<Smi> SmiConstant(int value);
   template <typename E,

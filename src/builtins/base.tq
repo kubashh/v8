@@ -26,6 +26,9 @@
 type void;
 type never;
 
+type IntegerLiteral constexpr 'IntegerLiteral';
+type FloatingPointLiteral constexpr 'double';
+
 type Tagged generates 'TNode<MaybeObject>' constexpr 'MaybeObject';
 type StrongTagged extends Tagged
     generates 'TNode<Object>' constexpr 'Object';
@@ -165,7 +168,7 @@ struct float64_or_hole {
   is_hole: bool;
   value: float64;
 }
-const kDoubleHole: float64_or_hole = float64_or_hole{is_hole: true, value: 0};
+const kDoubleHole: float64_or_hole = float64_or_hole{is_hole: true, value: 0.0};
 
 @doNotGenerateCast
 @abstract
@@ -974,6 +977,72 @@ extern operator '==' macro ConstexprInt32Equal(
 extern operator '!=' macro ConstexprInt32NotEqual(
     constexpr int32, constexpr int32): constexpr bool;
 
+// IntegerLiteral overloads
+extern macro ConstexprIntegerLiteralToInt31(constexpr IntegerLiteral):
+    constexpr int31;
+extern macro ConstexprIntegerLiteralToInt32(constexpr IntegerLiteral):
+    constexpr int32;
+extern macro ConstexprIntegerLiteralToUint32(constexpr IntegerLiteral):
+    constexpr uint32;
+extern macro ConstexprIntegerLiteralToUint64(constexpr IntegerLiteral):
+    constexpr uint64;
+extern macro ConstexprIntegerLiteralToIntptr(constexpr IntegerLiteral):
+    constexpr intptr;
+extern macro ConstexprIntegerLiteralToUintptr(constexpr IntegerLiteral):
+    constexpr uintptr;
+extern macro ConstexprFloatingPointLiteralToFloat64(
+    constexpr FloatingPointLiteral): constexpr float64;
+extern macro ConstexprIntegerLiteralToUint8(constexpr IntegerLiteral):
+    constexpr uint8;
+extern macro ConstexprIntegerLiteralToFloat64(constexpr IntegerLiteral):
+    constexpr float64;
+
+extern operator '==' macro ConstexprIntegerLiteralEqual(
+    constexpr IntegerLiteral, constexpr IntegerLiteral): constexpr bool;
+// extern operator '==' macro ConstexprInt31Equal(
+//    constexpr int31, constexpr IntegerLiteral): constexpr bool;
+operator '==' macro ConstexprInt32EqualConstexprIntegerLiteral(
+    lhs: constexpr int32, rhs: constexpr IntegerLiteral): constexpr bool {
+  return lhs == ConstexprIntegerLiteralToInt32(rhs);
+}
+operator '>=' macro ConstexprInt31GreaterThanEqualConstexprIntegerLiteral(
+    lhs: constexpr int31, rhs: constexpr IntegerLiteral): constexpr bool {
+  return lhs >= ConstexprIntegerLiteralToInt31(rhs);
+}
+operator '==' macro ConstexprInt31EqualConstexprIntegerLiteral(
+    lhs: constexpr int31, rhs: constexpr IntegerLiteral): constexpr bool {
+  return lhs == ConstexprIntegerLiteralToInt31(rhs);
+}
+operator '!=' macro ConstexprInt31NotEqualConstexprIntegerLiteral(
+    lhs: constexpr int31, rhs: constexpr IntegerLiteral): constexpr bool {
+  return lhs != ConstexprIntegerLiteralToInt31(rhs);
+}
+extern operator '+' macro ConstexprIntegerLiteralAdd(
+    constexpr IntegerLiteral,
+    constexpr IntegerLiteral): constexpr IntegerLiteral;
+operator '+' macro ConstexprInt31AddConstexprIntegerLiteral(
+    lhs: constexpr int31, rhs: constexpr IntegerLiteral): constexpr int31 {
+  return lhs + ConstexprIntegerLiteralToInt31(rhs);
+}
+operator '+' macro ConstexprInt32AddConstexprIntegerLiteral(
+    lhs: constexpr int32, rhs: constexpr IntegerLiteral): constexpr int32 {
+  return lhs + ConstexprIntegerLiteralToInt32(rhs);
+}
+operator '*' macro ConstexprIntegerLiteralMulConstexprInt31(
+    lhs: constexpr IntegerLiteral, rhs: constexpr int31): constexpr int31 {
+  return ConstexprIntegerLiteralToInt31(lhs) * rhs;
+}
+operator '*' macro ConstexprInt31MulConstexprIntegerLiteral(
+    lhs: constexpr int31, rhs: constexpr IntegerLiteral): constexpr int31 {
+  return lhs * ConstexprIntegerLiteralToInt31(rhs);
+}
+extern operator '<<' macro ConstexprIntegerLiteralLeftShift(
+    constexpr IntegerLiteral,
+    constexpr IntegerLiteral): constexpr IntegerLiteral;
+extern operator '|' macro ConstexprIntegerLiteralBitwiseOr(
+    constexpr IntegerLiteral,
+    constexpr IntegerLiteral): constexpr IntegerLiteral;
+
 extern operator '==' macro Word32Equal(int32, int32): bool;
 extern operator '==' macro Word32Equal(uint32, uint32): bool;
 extern operator '!=' macro Word32NotEqual(int32, int32): bool;
@@ -1158,24 +1227,45 @@ extern macro LoadJSArrayElementsMap(ElementsKind, NativeContext): Map;
 extern macro NumberConstant(constexpr float64): Number;
 extern macro NumberConstant(constexpr int32): Number;
 extern macro NumberConstant(constexpr uint32): Number;
+/*
+macro NumberConstant(i: constexpr IntegerLiteral): Number {
+  // TODO(nicohartmann@): Maybe should provide a
+ConstexprIntegerLiteralToFloat64
+  // here directly.
+  return NumberConstant(ConstexprIntegerLiteralToInt32(i));
+}
+*/
 extern macro IntPtrConstant(constexpr int31): intptr;
 extern macro IntPtrConstant(constexpr int32): intptr;
 extern macro Uint16Constant(constexpr uint16): uint16;
 extern macro Int32Constant(constexpr int31): int31;
 extern macro Int32Constant(constexpr int32): int32;
+macro Int32Constant(i: constexpr IntegerLiteral): int32 {
+  return Int32Constant(ConstexprIntegerLiteralToInt32(i));
+}
 extern macro Int64Constant(constexpr int64): int64;
 extern macro Uint64Constant(constexpr uint64): uint64;
 extern macro Float64Constant(constexpr int32): float64;
 extern macro Float64Constant(constexpr float64): float64;
+extern macro Float64Constant(constexpr IntegerLiteral): float64;
+macro Float64Constant(f: constexpr FloatingPointLiteral): float64 {
+  return Float64Constant(ConstexprFloatingPointLiteralToFloat64(f));
+}
 extern macro SmiConstant(constexpr int31): Smi;
 extern macro SmiConstant(constexpr Smi): Smi;
 extern macro SmiConstant(constexpr MessageTemplate): Smi;
 extern macro SmiConstant(constexpr bool): Smi;
 extern macro SmiConstant(constexpr uint32): Smi;
+macro SmiConstant(il: constexpr IntegerLiteral): Smi {
+  return SmiConstant(ConstexprIntegerLiteralToInt31(il));
+}
 extern macro BoolConstant(constexpr bool): bool;
 extern macro StringConstant(constexpr string): String;
 extern macro IntPtrConstant(constexpr ContextSlot): ContextSlot;
 extern macro IntPtrConstant(constexpr intptr): intptr;
+macro IntPtrConstant(il: constexpr IntegerLiteral): intptr {
+  return IntPtrConstant(ConstexprIntegerLiteralToIntptr(il));
+}
 extern macro PointerConstant(constexpr RawPtr): RawPtr;
 extern macro SingleCharacterStringConstant(constexpr string): String;
 extern macro Float64SilenceNaN(float64): float64;
@@ -1450,9 +1540,9 @@ macro TryNumberToUintPtr(valueNumber: Number, kMode: constexpr int31):
       // NaNs must be handled outside.
       dcheck(!Float64IsNaN(valueDouble));
       if (kMode == kModeValueIsAnyNumber) {
-        if (valueDouble < 0) goto IfLessThanZero;
+        if (valueDouble < 0.0) goto IfLessThanZero;
       } else {
-        dcheck(valueDouble >= 0);
+        dcheck(valueDouble >= 0.0);
       }
 
       if constexpr (Is64()) {
@@ -1615,9 +1705,9 @@ macro ConvertToRelativeIndex(indexNumber: Number, length: uintptr): uintptr {
       dcheck(!Float64IsNaN(indexDouble));
       const lengthDouble: float64 = Convert<float64>(length);
       dcheck(lengthDouble <= kMaxSafeInteger);
-      if (indexDouble < 0) {
+      if (indexDouble < 0.0) {
         const relativeIndex: float64 = lengthDouble + indexDouble;
-        return relativeIndex > 0 ? ChangeFloat64ToUintPtr(relativeIndex) : 0;
+        return relativeIndex > 0.0 ? ChangeFloat64ToUintPtr(relativeIndex) : 0;
 
       } else {
         return ChangeFloat64ToUintPtr(
@@ -1654,7 +1744,7 @@ macro ClampToIndexRange(indexNumber: Number, limit: uintptr): uintptr {
       // NaNs must already be handled by ClampToIndexRange() version
       // above accepting JSAny indices.
       dcheck(!Float64IsNaN(indexDouble));
-      if (indexDouble <= 0) return 0;
+      if (indexDouble <= 0.0) return 0;
 
       const maxIndexDouble: float64 = Convert<float64>(limit);
       dcheck(maxIndexDouble <= kMaxSafeInteger);
@@ -1793,7 +1883,7 @@ macro Float64IsSomeInfinity(value: float64): bool {
   if (value == V8_INFINITY) {
     return true;
   }
-  return value == (Convert<float64>(0) - V8_INFINITY);
+  return value == (Convert<float64>(0.0) - V8_INFINITY);
 }
 
 macro IsIntegerOrSomeInfinity(o: Object): bool {

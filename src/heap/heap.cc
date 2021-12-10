@@ -5688,16 +5688,17 @@ class StressConcurrentAllocationObserver : public AllocationObserver {
   Heap* heap_;
 };
 
-void Heap::SetUpSpaces() {
+void Heap::SetUpSpaces(LinearAllocationArea* new_allocation_info,
+                       LinearAllocationArea* old_allocation_info) {
   // Ensure SetUpFromReadOnlySpace has been ran.
   DCHECK_NOT_NULL(read_only_space_);
   const bool has_young_gen = !FLAG_single_generation && !IsShared();
   if (has_young_gen) {
-    space_[NEW_SPACE] = new_space_ =
-        new NewSpace(this, memory_allocator_->data_page_allocator(),
-                     initial_semispace_size_, max_semi_space_size_);
+    space_[NEW_SPACE] = new_space_ = new NewSpace(
+        this, memory_allocator_->data_page_allocator(), initial_semispace_size_,
+        max_semi_space_size_, new_allocation_info);
   }
-  space_[OLD_SPACE] = old_space_ = new OldSpace(this);
+  space_[OLD_SPACE] = old_space_ = new OldSpace(this, old_allocation_info);
   space_[CODE_SPACE] = code_space_ = new CodeSpace(this);
   space_[MAP_SPACE] = map_space_ = new MapSpace(this);
   space_[LO_SPACE] = lo_space_ = new OldLargeObjectSpace(this);
@@ -5896,11 +5897,13 @@ EmbedderHeapTracer* Heap::GetEmbedderHeapTracer() const {
 void Heap::AttachCppHeap(v8::CppHeap* cpp_heap) {
   CppHeap::From(cpp_heap)->AttachIsolate(isolate());
   cpp_heap_ = cpp_heap;
+  local_embedder_heap_tracer()->SetCppHeap(CppHeap::From(cpp_heap));
 }
 
 void Heap::DetachCppHeap() {
   CppHeap::From(cpp_heap_)->DetachIsolate();
   cpp_heap_ = nullptr;
+  local_embedder_heap_tracer()->SetCppHeap(nullptr);
 }
 
 EmbedderHeapTracer::TraceFlags Heap::flags_for_embedder_tracer() const {

@@ -4,6 +4,8 @@
 
 #include "src/codegen/safepoint-table.h"
 
+#include <iomanip>
+
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/deoptimizer/deoptimizer.h"
@@ -49,26 +51,61 @@ int SafepointTable::find_return_pc(int pc_offset) {
 
 SafepointEntry SafepointTable::FindEntry(Address pc) const {
   int pc_offset = static_cast<int>(pc - instruction_start_);
-  // We use kMaxUInt32 as sentinel value, so check that we don't hit that.
-  DCHECK_NE(kMaxUInt32, pc_offset);
-  CHECK_LT(0, length_);
-  // A single entry with pc == -1 covers all call sites in the function.
-  if (length_ == 1 && GetEntry(0).pc() == -1) return GetEntry(0);
-  for (int i = 0; i < length_; i++) {
-    // TODO(kasperl): Replace the linear search with binary search.
+
+  // Check if the PC is pointing at a trampoline.
+  if (has_deopt_data()) {
+    int candidate = -1;
+    for (int i = 0; i < length_; ++i) {
+      int trampoline_pc = GetEntry(i).trampoline_pc();
+      if (trampoline_pc != -1 && trampoline_pc <= pc_offset) candidate = i;
+      if (trampoline_pc > pc_offset) break;
+    }
+    if (candidate != -1) return GetEntry(candidate);
+  }
+
+  for (int i = 0; i < length_; ++i) {
     SafepointEntry entry = GetEntry(i);
-    if (entry.pc() == pc_offset || entry.trampoline_pc() == pc_offset) {
+    if (i == length_ - 1 || GetEntry(i + 1).pc() > pc_offset) {
+      DCHECK_LE(entry.pc(), pc_offset);
       return entry;
     }
   }
   UNREACHABLE();
 }
 
-void SafepointTable::PrintEntry(int index, std::ostream& os) const {
-  for (uint8_t bits : GetEntry(index).tagged_slots()) {
-    for (int bit = 0; bit < kBitsPerByte; ++bit) {
-      os << ((bits >> bit) & 1);
+void SafepointTable::Print(std::ostream& os) const {
+  os << "Safepoints (entries = " << length_ << ", byte size = " << byte_size()
+     << ")\n";
+
+  for (int index = 0; index < length_; index++) {
+    SafepointEntry entry = GetEntry(index);
+    os << reinterpret_cast<const void*>(instruction_start_ + entry.pc()) << " "
+       << std::setw(6) << std::hex << entry.pc();
+
+    if (!entry.tagged_slots().empty()) {
+      os << "  slots (sp->fp): ";
+      for (uint8_t bits : entry.tagged_slots()) {
+        for (int bit = 0; bit < kBitsPerByte; ++bit) {
+          os << ((bits >> bit) & 1);
+        }
+      }
     }
+
+    if (entry.tagged_register_indexes() != 0) {
+      os << "  registers: ";
+      uint32_t register_bits = entry.tagged_register_indexes();
+      int bits = 32 - base::bits::CountLeadingZeros32(register_bits);
+      for (int j = bits - 1; j >= 0; --j) {
+        os << ((register_bits >> j) & 1);
+      }
+    }
+
+    if (entry.has_deoptimization_index()) {
+      os << "  deopt " << std::setw(6) << entry.deoptimization_index()
+         << " trampoline: " << std::setw(6) << std::hex
+         << entry.trampoline_pc();
+    }
+    os << "\n";
   }
 }
 
@@ -182,15 +219,12 @@ void SafepointTableBuilder::Emit(Assembler* assembler, int tagged_slots_size) {
 }
 
 void SafepointTableBuilder::RemoveDuplicates() {
-  // If the table contains more than one entry, and all entries are identical
-  // (except for the pc), replace the whole table by a single entry with pc =
-  // -1. This especially compacts the table for wasm code without tagged
-  // pointers and without deoptimization info.
+  // Remove any duplicate entries, i.e. succeeding entries that are identical
+  // except for the PC. During lookup, we will find the first entry whose PC is
+  // not larger than the PC at hand, and find the first non-duplicate.
 
   if (entries_.size() < 2) return;
 
-  // Check that all entries (1, size] are identical to entry 0.
-  const EntryBuilder& first_entry = entries_.front();
   auto is_identical_except_for_pc = [](const EntryBuilder& entry1,
                                        const EntryBuilder& entry2) {
     if (entry1.deopt_index != entry2.deopt_index) return false;
@@ -208,15 +242,19 @@ void SafepointTableBuilder::RemoveDuplicates() {
     return true;
   };
 
-  if (std::all_of(entries_.Find(1), entries_.end(),
-                  [&](const EntryBuilder& entry) {
-                    return is_identical_except_for_pc(first_entry, entry);
-                  })) {
-    // All entries were identical. Rewind the list to just one
-    // entry, and set the pc to -1.
-    entries_.Rewind(1);
-    entries_.front().pc = -1;
+  auto remaining_it = entries_.begin();
+  size_t remaining = 0;
+
+  for (auto it = entries_.begin(), end = entries_.end(); it != end;
+       ++remaining_it, ++remaining) {
+    if (remaining_it != it) *remaining_it = *it;
+    // Merge identical entries.
+    do {
+      ++it;
+    } while (it != end && is_identical_except_for_pc(*it, *remaining_it));
   }
+
+  entries_.Rewind(remaining);
 }
 
 void SafepointTableBuilder::TrimEntries(int* tagged_slots_size) {

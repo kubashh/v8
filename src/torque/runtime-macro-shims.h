@@ -10,6 +10,9 @@
 
 #include <cstdint>
 
+#include "src/numbers/integer-literal.h"
+#include "src/objects/smi.h"
+
 namespace v8 {
 namespace internal {
 
@@ -33,6 +36,17 @@ inline uintptr_t Unsigned(intptr_t s) { return static_cast<uintptr_t>(s); }
 #endif
 inline bool Word32Equal(uint32_t a, uint32_t b) { return a == b; }
 inline bool Word32NotEqual(uint32_t a, uint32_t b) { return a != b; }
+inline int32_t ConstexprIntegerLiteralToInt32(const IntegerLiteral& il) {
+  auto value = il.As<int32_t>();
+  DCHECK(value);
+  return *value;
+}
+inline intptr_t ConstexprIntegerLiteralToIntptr(const IntegerLiteral& il) {
+  auto value = il.As<intptr_t>();
+  DCHECK(value);
+  return *value;
+}
+inline Smi SmiFromInt32(int32_t i) { return Smi::FromInt(i); }
 
 }  // namespace CodeStubAssembler
 }  // namespace TorqueRuntimeMacroShims

@@ -5,18 +5,18 @@
 #ifndef V8_OBJECTS_DESCRIPTOR_ARRAY_INL_H_
 #define V8_OBJECTS_DESCRIPTOR_ARRAY_INL_H_
 
-#include "src/objects/descriptor-array.h"
-
 #include "src/execution/isolate.h"
 #include "src/handles/maybe-handles-inl.h"
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
+#include "src/objects/descriptor-array.h"
 #include "src/objects/field-type.h"
 #include "src/objects/heap-object-inl.h"
 #include "src/objects/lookup-cache-inl.h"
 #include "src/objects/maybe-object-inl.h"
 #include "src/objects/property.h"
 #include "src/objects/struct-inl.h"
+#include "src/torque/runtime-macro-shims.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

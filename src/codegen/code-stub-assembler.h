@@ -13,6 +13,7 @@
 #include "src/common/globals.h"
 #include "src/common/message-template.h"
 #include "src/compiler/code-assembler.h"
+#include "src/numbers/integer-literal.h"
 #include "src/objects/arguments.h"
 #include "src/objects/bigint.h"
 #include "src/objects/cell.h"
@@ -3741,7 +3742,66 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     Unreachable();
   }
 
+  using FloatingPointLiteral = double;
   bool ConstexprBoolNot(bool value) { return !value; }
+  int31_t ConstexprIntegerLiteralToInt31(IntegerLiteral il) {
+    auto value = il.As<int32_t>();
+    DCHECK(value);
+    return static_cast<int31_t>(*value);
+  }
+  int32_t ConstexprIntegerLiteralToInt32(IntegerLiteral il) {
+    auto value = il.As<int32_t>();
+    DCHECK(value);
+    return *value;
+  }
+  uint32_t ConstexprIntegerLiteralToUint32(IntegerLiteral il) {
+    auto value = il.As<uint32_t>();
+    DCHECK(value);
+    return *value;
+  }
+  uint8_t ConstexprIntegerLiteralToUint8(IntegerLiteral il) {
+    auto value = il.As<uint8_t>();
+    DCHECK(value);
+    return *value;
+  }
+  uint64_t ConstexprIntegerLiteralToUint64(IntegerLiteral il) {
+    auto value = il.As<uint64_t>();
+    DCHECK(value);
+    return *value;
+  }
+  intptr_t ConstexprIntegerLiteralToIntptr(IntegerLiteral il) {
+    auto value = il.As<intptr_t>();
+    DCHECK(value);
+    return *value;
+  }
+  uintptr_t ConstexprIntegerLiteralToUintptr(IntegerLiteral il) {
+    auto value = il.As<uintptr_t>();
+    DCHECK(value);
+    return *value;
+  }
+  double ConstexprIntegerLiteralToFloat64(IntegerLiteral il) {
+    if (il.RepresentableAs<int64_t>())
+      return static_cast<double>(*il.As<int64_t>());
+    return static_cast<double>(*il.As<uint64_t>());
+  }
+  double ConstexprFloatingPointLiteralToFloat64(FloatingPointLiteral fl) {
+    return fl;
+  }
+  bool ConstexprIntegerLiteralEqual(IntegerLiteral lhs, IntegerLiteral rhs) {
+    return lhs == rhs;
+  }
+  IntegerLiteral ConstexprIntegerLiteralAdd(IntegerLiteral lhs,
+                                            IntegerLiteral rhs) {
+    return lhs + rhs;
+  }
+  IntegerLiteral ConstexprIntegerLiteralLeftShift(IntegerLiteral lhs,
+                                                  IntegerLiteral rhs) {
+    return lhs << rhs;
+  }
+  IntegerLiteral ConstexprIntegerLiteralBitwiseOr(IntegerLiteral lhs,
+                                                  IntegerLiteral rhs) {
+    return lhs | rhs;
+  }
 
   bool ConstexprInt31Equal(int31_t a, int31_t b) { return a == b; }
   bool ConstexprInt31NotEqual(int31_t a, int31_t b) { return a != b; }

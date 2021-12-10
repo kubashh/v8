@@ -440,7 +440,8 @@ DEFINE_NEG_IMPLICATION(enable_third_party_heap, turbo_allocation_folding)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_recompilation)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_inlining)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, script_streaming)
-DEFINE_NEG_IMPLICATION(enable_third_party_heap, parallel_compile_tasks)
+DEFINE_NEG_IMPLICATION(enable_third_party_heap,
+                       parallel_compile_tasks_for_eager_toplevel)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, use_marking_progress_bar)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, move_object_start)
 DEFINE_NEG_IMPLICATION(enable_third_party_heap, concurrent_marking)
@@ -708,10 +709,15 @@ DEFINE_BOOL_READONLY(concurrent_sparkplug, false,
 #else
 DEFINE_BOOL(concurrent_sparkplug, false,
             "compile Sparkplug code in a background thread")
+DEFINE_IMPLICATION(concurrent_sparkplug, sparkplug)
 DEFINE_WEAK_IMPLICATION(future, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(predictable, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(single_threaded, concurrent_sparkplug)
+DEFINE_NEG_IMPLICATION(jitless, concurrent_sparkplug)
 #endif
+DEFINE_UINT(
+    concurrent_sparkplug_max_threads, 0,
+    "max number of threads that concurrent Sparkplug can use (0 for unbounded)")
 #else
 DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
 DEFINE_BOOL_READONLY(concurrent_sparkplug, false,
@@ -1095,6 +1101,11 @@ DEFINE_IMPLICATION(wasm_speculative_inlining, experimental_wasm_typed_funcref)
 DEFINE_IMPLICATION(wasm_speculative_inlining, wasm_dynamic_tiering)
 DEFINE_IMPLICATION(wasm_speculative_inlining, wasm_inlining)
 DEFINE_WEAK_IMPLICATION(experimental_wasm_gc, wasm_speculative_inlining)
+// Speculative inlining needs type feedback from Liftoff and compilation in
+// Turbofan.
+DEFINE_NEG_NEG_IMPLICATION(liftoff, wasm_speculative_inlining)
+DEFINE_NEG_IMPLICATION(liftoff_only, wasm_speculative_inlining)
+
 DEFINE_BOOL(wasm_loop_unrolling, true,
             "enable loop unrolling for wasm functions")
 DEFINE_BOOL(wasm_fuzzer_gen_test, false,
@@ -1566,11 +1577,17 @@ DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
 DEFINE_BOOL(cache_prototype_transitions, true, "cache prototype transitions")
 
 // lazy-compile-dispatcher.cc
-DEFINE_BOOL(parallel_compile_tasks, false, "enable parallel compile tasks")
 DEFINE_BOOL(lazy_compile_dispatcher, false, "enable compiler dispatcher")
-DEFINE_IMPLICATION(parallel_compile_tasks, lazy_compile_dispatcher)
 DEFINE_BOOL(trace_compiler_dispatcher, false,
             "trace compiler dispatcher activity")
+DEFINE_BOOL(
+    parallel_compile_tasks_for_eager_toplevel, false,
+    "spawn parallel compile tasks for eagerly compiled, top-level functions")
+DEFINE_IMPLICATION(parallel_compile_tasks_for_eager_toplevel,
+                   lazy_compile_dispatcher)
+DEFINE_BOOL(parallel_compile_tasks_for_lazy, false,
+            "spawn parallel compile tasks for all lazily compiled functions")
+DEFINE_IMPLICATION(parallel_compile_tasks_for_lazy, lazy_compile_dispatcher)
 
 // cpu-profiler.cc
 DEFINE_INT(cpu_profiler_sampling_interval, 1000,
@@ -1705,9 +1722,6 @@ DEFINE_BOOL(correctness_fuzzer_suppressions, false,
             "fuzzing: Abort program when the stack overflows or a string "
             "exceeds maximum length (as opposed to throwing RangeError). "
             "Use a fixed suppression string for error messages.")
-DEFINE_BOOL(randomize_hashes, true,
-            "randomize hashes to avoid predictable hash collisions "
-            "(with snapshots this option cannot override the baked-in seed)")
 DEFINE_BOOL(rehash_snapshot, true,
             "rehash strings from the snapshot to override the baked-in seed")
 DEFINE_UINT64(hash_seed, 0,
@@ -2163,9 +2177,10 @@ DEFINE_NEG_IMPLICATION(predictable, memory_reducer)
 // before. Audit them, and remove any unneeded implications.
 DEFINE_IMPLICATION(predictable, single_threaded_gc)
 DEFINE_NEG_IMPLICATION(predictable, concurrent_recompilation)
-DEFINE_NEG_IMPLICATION(predictable, lazy_compile_dispatcher)
-DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks)
 DEFINE_NEG_IMPLICATION(predictable, stress_concurrent_inlining)
+DEFINE_NEG_IMPLICATION(predictable, lazy_compile_dispatcher)
+DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks_for_eager_toplevel)
+DEFINE_NEG_IMPLICATION(predictable, parallel_compile_tasks_for_lazy)
 
 DEFINE_BOOL(predictable_gc_schedule, false,
             "Predictable garbage collection schedule. Fixes heap growing, "
@@ -2182,9 +2197,11 @@ DEFINE_NEG_IMPLICATION(predictable_gc_schedule, memory_reducer)
 DEFINE_BOOL(single_threaded, false, "disable the use of background tasks")
 DEFINE_IMPLICATION(single_threaded, single_threaded_gc)
 DEFINE_NEG_IMPLICATION(single_threaded, concurrent_recompilation)
-DEFINE_NEG_IMPLICATION(single_threaded, lazy_compile_dispatcher)
-DEFINE_NEG_IMPLICATION(single_threaded, parallel_compile_tasks)
 DEFINE_NEG_IMPLICATION(single_threaded, stress_concurrent_inlining)
+DEFINE_NEG_IMPLICATION(single_threaded, lazy_compile_dispatcher)
+DEFINE_NEG_IMPLICATION(single_threaded,
+                       parallel_compile_tasks_for_eager_toplevel)
+DEFINE_NEG_IMPLICATION(single_threaded, parallel_compile_tasks_for_lazy)
 
 //
 // Parallel and concurrent GC (Orinoco) related flags.

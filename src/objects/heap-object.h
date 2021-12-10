@@ -10,7 +10,7 @@
 #include "src/objects/objects.h"
 #include "src/objects/tagged-field.h"
 #include "src/roots/roots.h"
-#include "src/torque/runtime-macro-shims.h"
+//#include "src/torque/runtime-macro-shims.h"
 #include "src/torque/runtime-support.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -121,7 +121,6 @@ class HeapObject : public Object {
   // Iterates over pointers contained in the object (including the Map).
   // If it's not performance critical iteration use the non-templatized
   // version.
-  void Iterate(ObjectVisitor* v);
   void Iterate(PtrComprCageBase cage_base, ObjectVisitor* v);
 
   template <typename ObjectVisitor>
@@ -133,7 +132,6 @@ class HeapObject : public Object {
   // object, and so is safe to call while the map pointer is modified.
   // If it's not performance critical iteration use the non-templatized
   // version.
-  inline void IterateBody(ObjectVisitor* v);
   void IterateBody(PtrComprCageBase cage_base, ObjectVisitor* v);
   void IterateBody(Map map, int object_size, ObjectVisitor* v);
 
@@ -198,12 +196,12 @@ class HeapObject : public Object {
   // content depends on FLAG_hash_seed. When the object is deserialized into
   // a heap with a different hash seed, these objects need to adapt.
   bool NeedsRehashing(InstanceType instance_type) const;
-  bool NeedsRehashing() const;
+  bool NeedsRehashing(PtrComprCageBase cage_base) const;
 
   // Rehashing support is not implemented for all objects that need rehashing.
   // With objects that need rehashing but cannot be rehashed, rehashing has to
   // be disabled.
-  bool CanBeRehashed() const;
+  bool CanBeRehashed(PtrComprCageBase cage_base) const;
 
   // Rehash the object based on the layout inferred from its map.
   template <typename IsolateT>

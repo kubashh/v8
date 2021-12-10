@@ -30,10 +30,13 @@ namespace compiler {
 
 #define TRACE(broker, x) TRACE_BROKER(broker, x)
 
+#ifdef V8_STATIC_CONSTEXPR_VARIABLES_NEED_DEFINITIONS
 // These definitions are here in order to please the linker, which in debug mode
 // sometimes requires static constants to be defined in .cc files.
+// This is, however, deprecated (and unnecessary) in C++17.
 const uint32_t JSHeapBroker::kMinimalRefsBucketCount;
 const uint32_t JSHeapBroker::kInitialRefsBucketCount;
+#endif
 
 void JSHeapBroker::IncrementTracingIndentation() { ++trace_indentation_; }
 
@@ -43,6 +46,9 @@ JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
                            bool tracing_enabled, bool is_concurrent_inlining,
                            CodeKind code_kind)
     : isolate_(isolate),
+#if V8_COMPRESS_POINTERS
+      cage_base_(isolate),
+#endif  // V8_COMPRESS_POINTERS
       zone_(broker_zone),
       refs_(zone()->New<RefsMap>(kMinimalRefsBucketCount, AddressMatcher(),
                                  zone())),

@@ -519,11 +519,14 @@ class Code : public HeapObject {
     return RoundUp(kHeaderSize + body_size, kCodeAlignment);
   }
 
+  inline int CodeSize() const;
+
+  // Hides HeapObject::Size(...) and redirects queries to CodeSize().
+  DECL_GETTER(Size, int)
+
   DECL_CAST(Code)
 
   // Dispatched behavior.
-  inline int CodeSize() const;
-
   DECL_PRINTER(Code)
   DECL_VERIFIER(Code)
 
@@ -745,7 +748,7 @@ class AbstractCode : public HeapObject {
   inline int SizeIncludingMetadata();
 
   // Returns true if pc is inside this object's instructions.
-  inline bool contains(Address pc);
+  inline bool contains(Isolate* isolate, Address pc);
 
   // Returns the kind of the code.
   inline CodeKind kind();

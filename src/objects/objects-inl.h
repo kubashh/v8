@@ -23,6 +23,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/read-only-heap-inl.h"
 #include "src/numbers/conversions-inl.h"
+#include "src/numbers/integer-literal.h"
 #include "src/objects/bigint.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/heap-object.h"
@@ -316,7 +317,13 @@ DEF_GETTER(HeapObject, IsOSROptimizedCodeCache, bool) {
   return IsWeakFixedArray(cage_base);
 }
 
-DEF_GETTER(HeapObject, IsAbstractCode, bool) {
+bool HeapObject::IsAbstractCode() const {
+  // TODO(v8:11880): Either make AbstractCode be ByteArray|CodeT or
+  // ensure this version is not called for hot code.
+  PtrComprCageBase cage_base = GetPtrComprCageBaseSlow(*this);
+  return HeapObject::IsAbstractCode(cage_base);
+}
+bool HeapObject::IsAbstractCode(PtrComprCageBase cage_base) const {
   return IsBytecodeArray(cage_base) || IsCode(cage_base);
 }
 
@@ -752,11 +759,11 @@ ReadOnlyRoots HeapObject::GetReadOnlyRoots(PtrComprCageBase cage_base) const {
 }
 
 Map HeapObject::map() const {
-  // TODO(v8:11880): Ensure that cage friendly version is used for the cases
-  // when this could be a Code object. Add
-  // DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
-  // and use GetPtrComprCageBase(*this) here.
-  PtrComprCageBase cage_base = GetPtrComprCageBaseSlow(*this);
+  // This method is never used for objects located in code space (Code and
+  // free space fillers) and thus it is fine to use auto-computed cage base
+  // value.
+  DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
   return HeapObject::map(cage_base);
 }
 Map HeapObject::map(PtrComprCageBase cage_base) const {
@@ -836,11 +843,11 @@ ObjectSlot HeapObject::map_slot() const {
 }
 
 MapWord HeapObject::map_word(RelaxedLoadTag tag) const {
-  // TODO(v8:11880): Ensure that cage friendly version is used for the cases
-  // when this could be a Code object. Add
-  // DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
-  // and use GetPtrComprCageBase(*this) here.
-  PtrComprCageBase cage_base = GetPtrComprCageBaseSlow(*this);
+  // This method is never used for objects located in code space (Code and
+  // free space fillers) and thus it is fine to use auto-computed cage base
+  // value.
+  DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
   return HeapObject::map_word(cage_base, tag);
 }
 MapWord HeapObject::map_word(PtrComprCageBase cage_base,
@@ -878,11 +885,8 @@ bool HeapObject::release_compare_and_swap_map_word(MapWord old_map_word,
 
 // TODO(v8:11880): consider dropping parameterless version.
 int HeapObject::Size() const {
-  // TODO(v8:11880): Ensure that cage friendly version is used for the cases
-  // when this could be a Code object. Add
-  // DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
-  // and use GetPtrComprCageBase(*this) here.
-  PtrComprCageBase cage_base = GetPtrComprCageBaseSlow(*this);
+  DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !IsCodeSpaceObject(*this));
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
   return HeapObject::Size(cage_base);
 }
 int HeapObject::Size(PtrComprCageBase cage_base) const {

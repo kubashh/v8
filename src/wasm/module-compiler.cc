@@ -1256,8 +1256,9 @@ std::vector<CallSiteFeedback> ProcessTypeFeedback(
     if (value.IsWasmInternalFunction() &&
         WasmExportedFunction::IsWasmExportedFunction(
             WasmInternalFunction::cast(value).external())) {
-      // Monomorphic. Mark the target for inlining if it's defined in the
-      // same module.
+      // Monomorphic, and the internal function points to a wasm-generated
+      // external function (WasmExportedFunction). Mark the target for inlining
+      // if it's defined in the same module.
       WasmExportedFunction target = WasmExportedFunction::cast(
           WasmInternalFunction::cast(value).external());
       if (target.instance() == *instance &&
@@ -1266,9 +1267,8 @@ std::vector<CallSiteFeedback> ProcessTypeFeedback(
           PrintF("[Function #%d call_ref #%d inlineable (monomorphic)]\n",
                  func_index, i / 2);
         }
-        CallRefData data = CallRefData::cast(feedback.get(i + 1));
-        result[i / 2] = {target.function_index(),
-                         static_cast<int>(data.count())};
+        int32_t count = Smi::cast(feedback.get(i + 1)).value();
+        result[i / 2] = {target.function_index(), count};
         continue;
       }
     } else if (value.IsFixedArray()) {
@@ -1278,26 +1278,35 @@ std::vector<CallSiteFeedback> ProcessTypeFeedback(
       FixedArray polymorphic = FixedArray::cast(value);
       size_t total_count = 0;
       for (int j = 0; j < polymorphic.length(); j += 2) {
-        total_count += CallRefData::cast(polymorphic.get(j + 1)).count();
+        total_count += Smi::cast(polymorphic.get(j + 1)).value();
       }
       int found_target = -1;
       int found_count = -1;
       double best_frequency = 0;
       for (int j = 0; j < polymorphic.length(); j += 2) {
-        uint32_t this_count = CallRefData::cast(polymorphic.get(j + 1)).count();
+        int32_t this_count = Smi::cast(polymorphic.get(j + 1)).value();
         double frequency = static_cast<double>(this_count) / total_count;
         if (frequency > best_frequency) best_frequency = frequency;
         if (frequency < 0.8) continue;
-        Object maybe_target = polymorphic.get(j);
-        if (!maybe_target.IsWasmInternalFunction()) {
+
+        // We reject this polymorphic entry if:
+        // - it is not defined,
+        // - it is not a wasm-defined function (WasmExportedFunction)
+        // - it was not defined in this module.
+        if (!polymorphic.get(j).IsWasmInternalFunction()) continue;
+        WasmInternalFunction internal =
+            WasmInternalFunction::cast(polymorphic.get(j));
+        if (!WasmExportedFunction::IsWasmExportedFunction(
+                internal.external())) {
           continue;
         }
-        WasmExportedFunction target = WasmExportedFunction::cast(
-            WasmInternalFunction::cast(polymorphic.get(j)).external());
+        WasmExportedFunction target =
+            WasmExportedFunction::cast(internal.external());
         if (target.instance() != *instance ||
             target.function_index() < imported_functions) {
           continue;
         }
+
         found_target = target.function_index();
         found_count = static_cast<int>(this_count);
         if (FLAG_trace_wasm_speculative_inlining) {
@@ -1317,6 +1326,10 @@ std::vector<CallSiteFeedback> ProcessTypeFeedback(
     // If we fall through to here, then this call isn't eligible for inlining.
     // Possible reasons: uninitialized or megamorphic feedback; or monomorphic
     // or polymorphic that didn't meet our requirements.
+    if (FLAG_trace_wasm_speculative_inlining) {
+      PrintF("[Function #%d call_ref #%d *not* inlineable]\n", func_index,
+             i / 2);
+    }
     result[i / 2] = {-1, -1};
   }
   return result;
@@ -1839,7 +1852,8 @@ class BackgroundCompileJob final : public JobTask {
 std::shared_ptr<NativeModule> CompileToNativeModule(
     Isolate* isolate, const WasmFeatures& enabled, ErrorThrower* thrower,
     std::shared_ptr<const WasmModule> module, const ModuleWireBytes& wire_bytes,
-    Handle<FixedArray>* export_wrappers_out, int compilation_id) {
+    Handle<FixedArray>* export_wrappers_out, int compilation_id,
+    v8::metrics::Recorder::ContextId context_id) {
   const WasmModule* wasm_module = module.get();
   WasmEngine* engine = GetWasmEngine();
   base::OwnedVector<uint8_t> wire_bytes_copy =
@@ -1876,8 +1890,6 @@ std::shared_ptr<NativeModule> CompileToNativeModule(
   // Sync compilation is user blocking, so we increase the priority.
   native_module->compilation_state()->SetHighPriority();
 
-  v8::metrics::Recorder::ContextId context_id =
-      isolate->GetOrRegisterRecorderContextId(isolate->native_context());
   CompileNativeModule(isolate, context_id, thrower, wasm_module, native_module,
                       export_wrappers_out);
   bool cache_hit = !engine->UpdateNativeModuleCache(thrower->error(),

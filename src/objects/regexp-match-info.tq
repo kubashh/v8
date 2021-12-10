@@ -15,6 +15,18 @@ extern class RegExpMatchInfo extends FixedArray {
     const index: constexpr int31 = GetStartOfCaptureIndex(captureIndex) + 1;
     return UnsafeCast<Smi>(this.objects[index]);
   }
+  //  macro GetStartOfCapture(implicit context: Context)(captureIndex:
+  //                                                         constexpr int31):
+  //                                                         Smi {
+  //    const index: constexpr int31 = GetStartOfCaptureIndex(captureIndex);
+  //    return UnsafeCast<Smi>(this.objects[index]);
+  //  }
+  //  macro GetEndOfCapture(implicit context: Context)(captureIndex:
+  //                                                       constexpr int31):
+  //                                                       Smi {
+  //    const index: constexpr int31 = GetStartOfCaptureIndex(captureIndex) + 1;
+  //    return UnsafeCast<Smi>(this.objects[index]);
+  //  }
   macro NumberOfCaptures(implicit context: Context)(): Smi {
     return UnsafeCast<Smi>(this.objects[kRegExpMatchInfoNumberOfCapturesIndex]);
   }

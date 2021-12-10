@@ -139,7 +139,7 @@ class SafepointTable {
   // Returns the entry for the given pc.
   SafepointEntry FindEntry(Address pc) const;
 
-  void PrintEntry(int index, std::ostream& os) const;
+  void Print(std::ostream&) const;
 
  private:
   // Layout information.
@@ -252,7 +252,7 @@ class SafepointTableBuilder {
           register_indexes(0) {}
   };
 
-  // If all entries are identical, replace them by 1 entry with pc = kMaxUInt32.
+  // Remove consecutive identical entries.
   void RemoveDuplicates();
 
   // Try to trim entries by removing trailing zeros (and shrinking

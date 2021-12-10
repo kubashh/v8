@@ -27,6 +27,7 @@
 #include "src/objects/js-generator-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-regexp-inl.h"
+#include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/objects-body-descriptors.h"
 #include "src/objects/objects-inl.h"
@@ -423,14 +424,16 @@ void HeapObjectsMap::UpdateHeapObjectsMap() {
   }
   heap_->PreciseCollectAllGarbage(Heap::kNoGCFlags,
                                   GarbageCollectionReason::kHeapProfiler);
+  PtrComprCageBase cage_base(heap_->isolate());
   CombinedHeapObjectIterator iterator(heap_);
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
-    FindOrAddEntry(obj.address(), obj.Size());
+    int object_size = obj.Size(cage_base);
+    FindOrAddEntry(obj.address(), object_size);
     if (FLAG_heap_profiler_trace_objects) {
       PrintF("Update object      : %p %6d. Next address is %p\n",
-             reinterpret_cast<void*>(obj.address()), obj.Size(),
-             reinterpret_cast<void*>(obj.address() + obj.Size()));
+             reinterpret_cast<void*>(obj.address()), object_size,
+             reinterpret_cast<void*>(obj.address() + object_size));
     }
   }
   RemoveDeadEntries();
@@ -659,8 +662,8 @@ HeapEntry* V8HeapExplorer::AddEntry(HeapObject object, HeapEntry::Type type,
   if (FLAG_heap_profiler_show_hidden_objects && type == HeapEntry::kHidden) {
     type = HeapEntry::kNative;
   }
-
-  return AddEntry(object.address(), type, name, object.Size());
+  PtrComprCageBase cage_base(isolate());
+  return AddEntry(object.address(), type, name, object.Size(cage_base));
 }
 
 HeapEntry* V8HeapExplorer::AddEntry(Address address,
@@ -731,7 +734,8 @@ class IndexedReferencesExtractor : public ObjectVisitorWithCageBases {
         generator_(generator),
         parent_obj_(parent_obj),
         parent_start_(parent_obj_.RawMaybeWeakField(0)),
-        parent_end_(parent_obj_.RawMaybeWeakField(parent_obj_.Size())),
+        parent_end_(
+            parent_obj_.RawMaybeWeakField(parent_obj_.Size(cage_base()))),
         parent_(parent),
         next_index_(0) {}
   void VisitPointers(HeapObject host, ObjectSlot start,
@@ -824,6 +828,8 @@ void V8HeapExplorer::ExtractReferences(HeapEntry* entry, HeapObject obj) {
       ExtractJSPromiseReferences(entry, JSPromise::cast(obj));
     } else if (obj.IsJSGeneratorObject()) {
       ExtractJSGeneratorObjectReferences(entry, JSGeneratorObject::cast(obj));
+    } else if (obj.IsJSWeakRef()) {
+      ExtractJSWeakRefReferences(entry, JSWeakRef::cast(obj));
     }
     ExtractJSObjectReferences(entry, JSObject::cast(obj));
   } else if (obj.IsString()) {
@@ -869,6 +875,8 @@ void V8HeapExplorer::ExtractReferences(HeapEntry* entry, HeapObject obj) {
     ExtractEphemeronHashTableReferences(entry, EphemeronHashTable::cast(obj));
   } else if (obj.IsFixedArray()) {
     ExtractFixedArrayReferences(entry, FixedArray::cast(obj));
+  } else if (obj.IsWeakCell()) {
+    ExtractWeakCellReferences(entry, WeakCell::cast(obj));
   } else if (obj.IsHeapNumber()) {
     if (snapshot_->capture_numeric_value()) {
       ExtractNumberReference(entry, obj);
@@ -1214,6 +1222,20 @@ void V8HeapExplorer::ExtractAccessorPairReferences(HeapEntry* entry,
                        AccessorPair::kGetterOffset);
   SetInternalReference(entry, "setter", accessors.setter(),
                        AccessorPair::kSetterOffset);
+}
+
+void V8HeapExplorer::ExtractJSWeakRefReferences(HeapEntry* entry,
+                                                JSWeakRef js_weak_ref) {
+  SetWeakReference(entry, "target", js_weak_ref.target(),
+                   JSWeakRef::kTargetOffset);
+}
+
+void V8HeapExplorer::ExtractWeakCellReferences(HeapEntry* entry,
+                                               WeakCell weak_cell) {
+  SetWeakReference(entry, "target", weak_cell.target(),
+                   WeakCell::kTargetOffset);
+  SetWeakReference(entry, "unregister_token", weak_cell.unregister_token(),
+                   WeakCell::kUnregisterTokenOffset);
 }
 
 void V8HeapExplorer::TagBuiltinCodeObject(Object code, const char* name) {
@@ -1596,7 +1618,7 @@ class RootsReferencesExtractor : public RootVisitor {
                          OffHeapObjectSlot start,
                          OffHeapObjectSlot end) override {
     DCHECK_EQ(root, Root::kStringTable);
-    PtrComprCageBase cage_base = Isolate::FromHeap(explorer_->heap_);
+    PtrComprCageBase cage_base(explorer_->heap_->isolate());
     for (OffHeapObjectSlot p = start; p < end; ++p) {
       explorer_->SetGcSubrootReference(root, description, visiting_weak_roots_,
                                        p.load(cage_base));
@@ -1661,12 +1683,13 @@ bool V8HeapExplorer::IterateAndExtractReferences(
 
   CombinedHeapObjectIterator iterator(heap_,
                                       HeapObjectIterator::kFilterUnreachable);
+  PtrComprCageBase cage_base(heap_->isolate());
   // Heap iteration with filtering must be finished in any case.
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next(), progress_->ProgressStep()) {
     if (interrupted) continue;
 
-    size_t max_pointer = obj.Size() / kTaggedSize;
+    size_t max_pointer = obj.Size(cage_base) / kTaggedSize;
     if (max_pointer > visited_fields_.size()) {
       // Clear the current bits.
       std::vector<bool>().swap(visited_fields_);
@@ -1676,11 +1699,12 @@ bool V8HeapExplorer::IterateAndExtractReferences(
 
     HeapEntry* entry = GetEntry(obj);
     ExtractReferences(entry, obj);
-    SetInternalReference(entry, "map", obj.map(), HeapObject::kMapOffset);
+    SetInternalReference(entry, "map", obj.map(cage_base),
+                         HeapObject::kMapOffset);
     // Extract unvisited fields as hidden references and restore tags
     // of visited fields.
     IndexedReferencesExtractor refs_extractor(this, obj, entry);
-    obj.Iterate(&refs_extractor);
+    obj.Iterate(cage_base, &refs_extractor);
 
     // Ensure visited_fields_ doesn't leak to the next object.
     for (size_t i = 0; i < max_pointer; ++i) {
@@ -1723,6 +1747,9 @@ bool V8HeapExplorer::IsEssentialHiddenReference(Object parent,
     return false;
   if (parent.IsContext() &&
       field_offset == Context::OffsetOfElementAt(Context::NEXT_CONTEXT_LINK))
+    return false;
+  if (parent.IsJSFinalizationRegistry() &&
+      field_offset == JSFinalizationRegistry::kNextDirtyOffset)
     return false;
   return true;
 }

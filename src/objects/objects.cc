@@ -1838,23 +1838,24 @@ std::ostream& operator<<(std::ostream& os, const Brief& v) {
 void Smi::SmiPrint(std::ostream& os) const { os << value(); }
 
 void HeapObject::HeapObjectShortPrint(std::ostream& os) {
+  PtrComprCageBase cage_base = GetPtrComprCageBaseSlow(*this);
   os << AsHex::Address(this->ptr()) << " ";
 
-  if (IsString()) {
+  if (IsString(cage_base)) {
     HeapStringAllocator allocator;
     StringStream accumulator(&allocator);
     String::cast(*this).StringShortPrint(&accumulator);
     os << accumulator.ToCString().get();
     return;
   }
-  if (IsJSObject()) {
+  if (IsJSObject(cage_base)) {
     HeapStringAllocator allocator;
     StringStream accumulator(&allocator);
     JSObject::cast(*this).JSObjectShortPrint(&accumulator);
     os << accumulator.ToCString().get();
     return;
   }
-  switch (map().instance_type()) {
+  switch (map(cage_base).instance_type()) {
     case MAP_TYPE: {
       os << "<Map";
       Map mapInstance = Map::cast(*this);
@@ -2158,19 +2159,8 @@ void CallableTask::BriefPrintDetails(std::ostream& os) {
   os << " callable=" << Brief(callable());
 }
 
-// TODO(v8:11880): drop this version if favor of cage friendly one.
-void HeapObject::Iterate(ObjectVisitor* v) {
-  IterateFast<ObjectVisitor>(GetPtrComprCageBaseSlow(*this), v);
-}
-
 void HeapObject::Iterate(PtrComprCageBase cage_base, ObjectVisitor* v) {
   IterateFast<ObjectVisitor>(cage_base, v);
-}
-
-// TODO(v8:11880): drop this version if favor of cage friendly one.
-void HeapObject::IterateBody(ObjectVisitor* v) {
-  Map m = map();
-  IterateBodyFast<ObjectVisitor>(m, SizeFromMap(m), v);
 }
 
 void HeapObject::IterateBody(PtrComprCageBase cage_base, ObjectVisitor* v) {
@@ -2316,12 +2306,18 @@ int HeapObject::SizeFromMap(Map map) const {
       EmbedderDataArray::unchecked_cast(*this).length());
 }
 
-bool HeapObject::NeedsRehashing() const {
-  return NeedsRehashing(map().instance_type());
+bool HeapObject::NeedsRehashing(PtrComprCageBase cage_base) const {
+  return NeedsRehashing(map(cage_base).instance_type());
 }
 
 bool HeapObject::NeedsRehashing(InstanceType instance_type) const {
-  DCHECK_EQ(instance_type, map().instance_type());
+  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+    // Use map() only when it's guaranteed that it's not a Code object.
+    DCHECK_IMPLIES(instance_type != CODE_TYPE,
+                   instance_type == map().instance_type());
+  } else {
+    DCHECK_EQ(instance_type, map().instance_type());
+  }
   switch (instance_type) {
     case DESCRIPTOR_ARRAY_TYPE:
     case STRONG_DESCRIPTOR_ARRAY_TYPE:
@@ -2348,9 +2344,9 @@ bool HeapObject::NeedsRehashing(InstanceType instance_type) const {
   }
 }
 
-bool HeapObject::CanBeRehashed() const {
-  DCHECK(NeedsRehashing());
-  switch (map().instance_type()) {
+bool HeapObject::CanBeRehashed(PtrComprCageBase cage_base) const {
+  DCHECK(NeedsRehashing(cage_base));
+  switch (map(cage_base).instance_type()) {
     case JS_MAP_TYPE:
     case JS_SET_TYPE:
       return true;
@@ -2383,7 +2379,7 @@ bool HeapObject::CanBeRehashed() const {
 
 template <typename IsolateT>
 void HeapObject::RehashBasedOnMap(IsolateT* isolate) {
-  switch (map().instance_type()) {
+  switch (map(isolate).instance_type()) {
     case HASH_TABLE_TYPE:
       UNREACHABLE();
     case NAME_DICTIONARY_TYPE:
@@ -2442,7 +2438,7 @@ template void HeapObject::RehashBasedOnMap(Isolate* isolate);
 template void HeapObject::RehashBasedOnMap(LocalIsolate* isolate);
 
 bool HeapObject::IsExternal(Isolate* isolate) const {
-  return map().FindRootMap(isolate) == isolate->heap()->external_map();
+  return map(isolate).FindRootMap(isolate) == isolate->heap()->external_map();
 }
 
 void DescriptorArray::GeneralizeAllFields() {

@@ -249,7 +249,6 @@ VisitorId Map::GetVisitorId(Map map) {
     case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
     case JS_DATE_TYPE:
     case JS_ERROR_TYPE:
-    case JS_FINALIZATION_REGISTRY_TYPE:
     case JS_GENERATOR_OBJECT_TYPE:
     case JS_ITERATOR_PROTOTYPE_TYPE:
     case JS_MAP_ITERATOR_PROTOTYPE_TYPE:
@@ -323,6 +322,9 @@ VisitorId Map::GetVisitorId(Map map) {
 
     case WEAK_CELL_TYPE:
       return kVisitWeakCell;
+
+    case JS_FINALIZATION_REGISTRY_TYPE:
+      return kVisitJSFinalizationRegistry;
 
     case FILLER_TYPE:
     case FOREIGN_TYPE:
@@ -600,13 +602,14 @@ void Map::ReplaceDescriptors(Isolate* isolate,
 Map Map::FindRootMap(Isolate* isolate) const {
   DisallowGarbageCollection no_gc;
   Map result = *this;
+  PtrComprCageBase cage_base(isolate);
   while (true) {
-    Object back = result.GetBackPointer(isolate);
+    Object back = result.GetBackPointer(cage_base);
     if (back.IsUndefined(isolate)) {
       // Initial map must not contain descriptors in the descriptors array
       // that do not belong to the map.
       DCHECK_LE(result.NumberOfOwnDescriptors(),
-                result.instance_descriptors(isolate, kRelaxedLoad)
+                result.instance_descriptors(cage_base, kRelaxedLoad)
                     .number_of_descriptors());
       return result;
     }
