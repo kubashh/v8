@@ -444,7 +444,8 @@ CPU::CPU()
       is_fp64_mode_(false),
       has_non_stop_time_stamp_counter_(false),
       is_running_in_vm_(false),
-      has_msa_(false) {
+      has_msa_(false),
+      has_rvv_(false) {
   memcpy(vendor_, "Unknown", 8);
 
 #if defined(V8_OS_STARBOARD)
@@ -854,7 +855,31 @@ CPU::CPU()
   }
 #endif  // V8_OS_AIX
 #endif  // !USE_SIMULATOR
-#endif  // V8_HOST_ARCH_PPC || V8_HOST_ARCH_PPC64
+
+#elif V8_HOST_ARCH_RISCV64 || V8_HOST_ARCH_RISCV32
+  FILE* fp = fopen("/proc/cpuinfo", "r");
+  if (NULL == fp) printf("failed to open cpuinfo\n");
+  char szTest[1000] = {0};
+  // read file line by line
+  while (!feof(fp)) {
+    memset(szTest, 0, sizeof(szTest));
+    fgets(szTest, sizeof(szTest) - 1, fp);  // leave out \n
+    const char* pos = strstr(szTest, "isa");
+    if (pos != NULL) {
+      const char* isa = strstr(pos, "rv64");
+      if (isa == NULL) break;
+      isa += 4;
+      if (strstr(isa, "d") != NULL && strstr(isa, "f") != NULL) {
+        has_fpu_ = true;
+      }
+      if (strstr(isa, "v") != NULL) {
+        has_rvv_ = true;
+      }
+      break;
+    }
+  }
+  fclose(fp);
+#endif  // V8_HOST_ARCH_RISCV64 || V8_HOST_ARCH_RISCV32
 }
 
 }  // namespace base
