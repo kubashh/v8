@@ -141,6 +141,24 @@
       "parentUuid": "f8bca1f8_a6c317f0",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50cd8804_9c5e0ef6",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-10T13:23:11Z",
+      "side": 1,
+      "message": "\u003e here the initializer for B shouldn\u0027t skip A simply because \"class B\"\u0027s scope isn\u0027t the outer scope of the initializer for B that would mean it wouldn\u0027t see #a anymore.\n\nAh right, I forgot that private_name_lookup_skips_outer_class not only indicates that the outer class scope is optimized away but it also indicates that the outer scope is in heritage position.\n\n\u003e We just need to know whether this initializer accesses private names or not; and if it does the outer scope has to be its outer class scope\n\nDo you mean we should alter NeedsContext() and friends so that we keep the class scope in this case?",
+      "parentUuid": "3ed3a34c_56265951",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
