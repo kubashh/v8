@@ -177,6 +177,24 @@
       "parentUuid": "50cd8804_9c5e0ef6",
       "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7707fd11_fdf77c7d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2021-12-10T16:43:51Z",
+      "side": 1,
+      "message": "We could have a context in other cases too, but I suppose you don\u0027t care in that case since no special fix-up is needed. Sgtm.",
+      "parentUuid": "dac87d66_799c9c7e",
+      "revId": "4071de24bb92a8ec5e69d300524b1763f35c38d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
