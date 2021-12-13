@@ -3144,7 +3144,7 @@ InstructionSelector::SupportedMachineOperatorFlags() {
 MachineOperatorBuilder::AlignmentRequirements
 InstructionSelector::AlignmentRequirements() {
   return MachineOperatorBuilder::AlignmentRequirements::
-      NoUnalignedAccessSupport();
+      FullUnalignedAccessSupport();
 }
 
 #undef SIMD_BINOP_LIST
