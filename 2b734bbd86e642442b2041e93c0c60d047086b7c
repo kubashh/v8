@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efefe0e_c5fadf2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2021-12-13T09:49:04Z",
+      "side": 1,
+      "message": "I\u0027v updated the patch to deal with the case where the outer class scope does not need a context properly. PTAL, thanks!",
+      "revId": "2b734bbd86e642442b2041e93c0c60d047086b7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
