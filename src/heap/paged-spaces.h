@@ -289,11 +289,9 @@ class V8_EXPORT_PRIVATE PagedSpace
   inline void UnlinkFreeListCategories(Page* page);
   inline size_t RelinkFreeListCategories(Page* page);
 
-  Page* first_page() override {
-    return reinterpret_cast<Page*>(memory_chunk_list_.front());
-  }
-  const Page* first_page() const override {
-    return reinterpret_cast<const Page*>(memory_chunk_list_.front());
+  Page* first_page() { return reinterpret_cast<Page*>(Space::first_page()); }
+  const Page* first_page() const {
+    return reinterpret_cast<const Page*>(Space::first_page());
   }
 
   iterator begin() { return iterator(first_page()); }
