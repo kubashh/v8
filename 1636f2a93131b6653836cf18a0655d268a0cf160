@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "1636f2a93131b6653836cf18a0655d268a0cf160",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52c5a8cc_0e1900b4",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2021-12-13T09:02:20Z",
+      "side": 1,
+      "message": "Can you reuse `CPUInfo` to get the information? See other uses in this file.",
+      "range": {
+        "startLine": 859,
+        "startChar": 1,
+        "endLine": 859,
+        "endChar": 5
+      },
+      "revId": "1636f2a93131b6653836cf18a0655d268a0cf160",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
