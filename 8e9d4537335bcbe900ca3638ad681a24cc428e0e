@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b7cbca7_cdd86e3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2021-12-13T23:37:30Z",
+      "side": 1,
+      "message": "An alternative to https://chromium-review.googlesource.com/c/v8/v8/+/3333633.",
+      "revId": "8e9d4537335bcbe900ca3638ad681a24cc428e0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
