@@ -34,6 +34,23 @@
       "parentUuid": "bfbf58d1_7ede6666",
       "revId": "87f7f042e1473cb26b3922fedea37633965410a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2579a8f6_2b1c668e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-13T12:51:50Z",
+      "side": 1,
+      "message": "Can we lgtm this CL?\nI would like to submit it on Dec 27th and I assume most folks would be OOO then.",
+      "revId": "87f7f042e1473cb26b3922fedea37633965410a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
