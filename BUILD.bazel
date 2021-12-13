@@ -1964,8 +1964,6 @@ filegroup(
         "src/snapshot/shared-heap-serializer.cc",
         "src/snapshot/snapshot-compression.cc",
         "src/snapshot/snapshot-compression.h",
-        "third_party/zlib/google/compression_utils_portable.h",
-        "third_party/zlib/google/compression_utils_portable.cc",
         "src/snapshot/snapshot-data.cc",
         "src/snapshot/snapshot-data.h",
         "src/snapshot/snapshot-source-sink.cc",
@@ -2222,9 +2220,6 @@ filegroup(
             "src/trap-handler/handler-inside-win.cc",
             "src/trap-handler/handler-outside-win.cc",
             "src/trap-handler/handler-inside-win.h",
-            # Needed on windows to work around https://github.com/bazelbuild/bazel/issues/6337
-            "third_party/zlib/zlib.h",
-            "third_party/zlib/zconf.h",
         ],
         "//conditions:default": [],
     }) + select({
@@ -3234,7 +3229,7 @@ v8_library(
     ],
     icu_deps = [
         ":icu/generated_torque_headers",
-        "@icu",
+        "//third_party/icu",
     ],
     icu_srcs = [
         ":generated_regexp_special_case",
@@ -3249,7 +3244,7 @@ v8_library(
     ],
     deps = [
         ":v8_libbase",
-        "@zlib",
+        "//third_party/zlib",
     ],
 )
 
@@ -3312,7 +3307,7 @@ v8_binary(
         "UNISTR_FROM_CHAR_EXPLICIT=",
     ],
     deps = [
-        "@icu",
+        "//third_party/icu",
     ],
 )
 

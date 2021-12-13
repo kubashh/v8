@@ -21,15 +21,3 @@ new_local_repository(
     path = "bazel/config",
     build_file = "bazel/config/BUILD.bazel",
 )
-
-new_local_repository(
-    name = "zlib",
-    path = "third_party/zlib",
-    build_file = "bazel/BUILD.zlib",
-)
-
-new_local_repository(
-    name = "icu",
-    path = "third_party/icu",
-    build_file = "bazel/BUILD.icu",
-)
