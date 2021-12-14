@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85f7f9a_0940356e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-14T17:17:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5d8c6cf0258cc0d8bf3886037c3b21403522b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47aee9df_c9e9f5f5",
@@ -31,6 +48,30 @@
       "writtenOn": "2021-12-14T17:11:36Z",
       "side": 1,
       "message": "Drive by fix.",
+      "range": {
+        "startLine": 1389,
+        "startChar": 13,
+        "endLine": 1389,
+        "endChar": 22
+      },
+      "revId": "5d8c6cf0258cc0d8bf3886037c3b21403522b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e804563b_f8263d72",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2021-12-14T17:17:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "47aee9df_c9e9f5f5",
       "range": {
         "startLine": 1389,
         "startChar": 13,
