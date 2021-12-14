@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52492e70_baa14cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-12-14T17:11:36Z",
+      "side": 1,
+      "message": "Dominik, PTAL @ heap\nJakob, PTAL @ all",
+      "revId": "5d8c6cf0258cc0d8bf3886037c3b21403522b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47aee9df_c9e9f5f5",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2021-12-14T17:11:36Z",
+      "side": 1,
+      "message": "Drive by fix.",
+      "range": {
+        "startLine": 1389,
+        "startChar": 13,
+        "endLine": 1389,
+        "endChar": 22
+      },
+      "revId": "5d8c6cf0258cc0d8bf3886037c3b21403522b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
