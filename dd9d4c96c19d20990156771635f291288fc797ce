@@ -34,6 +34,24 @@
       "parentUuid": "1ae7d3e8_8c4d637a",
       "revId": "dd9d4c96c19d20990156771635f291288fc797ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a18b218_bc5c1715",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-15T16:21:51Z",
+      "side": 1,
+      "message": "I see, thanks for clarifying. So it sounds like overall this is a win. No objections from my side, just maybe provide such context on the CL next time. As I mentioned, we do not try to provide deterministic execution, but if this change is a prerequisite for another CL then that\u0027s fine of course.\nYou could also create a tracking bug (next time) to provide such context, and link the CLs together.",
+      "parentUuid": "11110962_fd80748f",
+      "revId": "dd9d4c96c19d20990156771635f291288fc797ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
