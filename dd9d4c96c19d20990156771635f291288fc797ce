@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae7d3e8_8c4d637a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-15T13:03:38Z",
+      "side": 1,
+      "message": "I am confused by this change. What does it try to achieve? Deterministic execution time for switches? Is that important for any use case we are supporting? I don\u0027t think that we generally try to make any guarantees there. So in that perspective this CL seems to add unneeded jump instructions, which looks like a pure regression.",
+      "revId": "dd9d4c96c19d20990156771635f291288fc797ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
