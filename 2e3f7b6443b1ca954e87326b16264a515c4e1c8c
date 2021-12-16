@@ -33,6 +33,23 @@
       "message": "+Maya for owners review",
       "revId": "2e3f7b6443b1ca954e87326b16264a515c4e1c8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0cfee07_7b3def0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2021-12-16T15:19:11Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "2e3f7b6443b1ca954e87326b16264a515c4e1c8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
