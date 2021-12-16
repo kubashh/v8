@@ -3728,17 +3728,23 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   // -------------------------------------------
   // Allocate a new continuation.
   // -------------------------------------------
+  Register suspender = rbx;
+  __ LoadAnyTaggedField(
+      suspender,
+      FieldOperand(function_data, WasmExportedFunctionData::kSuspenderOffset));
   MemOperand GCScanSlotPlace =
       MemOperand(rbp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
-  __ Move(GCScanSlotPlace, 2);
+  __ Move(GCScanSlotPlace, 3);
   __ Push(wasm_instance);
   __ Push(function_data);
+  __ Push(suspender);  // Argument.
   __ Move(kContextRegister, Smi::zero());
   __ CallRuntime(Runtime::kWasmAllocateContinuation);
   __ Pop(function_data);
   __ Pop(wasm_instance);
   STATIC_ASSERT(kReturnRegister0 == rax);
   Register target_continuation = rax;
+  suspender = no_reg;
   // live: [rsi, rdi, rax]
 
   // -------------------------------------------
@@ -3827,6 +3833,22 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   active_continuation = no_reg;
   foreign_jmpbuf = no_reg;
   wasm_instance = no_reg;
+  // live: [rsi]
+
+  // -------------------------------------------
+  // Restore parent suspender.
+  // -------------------------------------------
+  suspender = rax;
+  __ LoadRoot(suspender, RootIndex::kActiveSuspender);
+  __ LoadAnyTaggedField(
+      suspender, FieldOperand(suspender, WasmSuspenderObject::kParentOffset));
+  __ CompareRoot(suspender, RootIndex::kUndefinedValue);
+  Label undefined;
+  __ j(equal, &undefined, Label::kNear);
+  __ movq(FieldOperand(suspender, WasmSuspenderObject::kStateOffset),
+          Immediate(WasmSuspenderObject::State::Active));
+  __ bind(&undefined);
+  __ movq(masm->RootAsOperand(RootIndex::kActiveSuspender), suspender);
 
   // -------------------------------------------
   // Epilogue.
