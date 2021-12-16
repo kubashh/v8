@@ -7151,8 +7151,12 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
               Builtin::kWasmSuspend, zone_, StubCallMode::kCallWasmRuntimeStub);
           Node* call_target = mcgraph()->RelocatableIntPtrConstant(
               wasm::WasmCode::kWasmSuspend, RelocInfo::WASM_STUB_CALL);
-
-          gasm_->Call(call_descriptor, call_target, call);
+          Node* suspender =
+              gasm_->Load(MachineType::TaggedPointer(), Param(0),
+                          wasm::ObjectAccess::ToTagged(
+                              WasmApiFunctionRef::kSuspenderOffset));
+          // TODO(thibaudm): Create and pass the combined promise.
+          gasm_->Call(call_descriptor, call_target, call, suspender);
         }
         break;
       }
