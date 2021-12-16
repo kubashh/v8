@@ -1587,6 +1587,7 @@ Handle<WasmExportedFunctionData> Factory::NewWasmExportedFunctionData(
   result.set_c_wrapper_code(ToCodeT(*BUILTIN_CODE(isolate(), Illegal)),
                             SKIP_WRITE_BARRIER);
   result.set_packed_args_size(0);
+  result.set_suspender(*undefined_value());
   return handle(result, isolate());
 }
 
