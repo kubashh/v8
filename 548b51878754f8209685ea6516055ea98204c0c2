@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c68e163_d5464a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-16T17:31:43Z",
+      "side": 1,
+      "message": "LGTM, with some optional comments.",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a6300f_9ae600f2",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4092,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-16T17:31:43Z",
+      "side": 1,
+      "message": "How about merging this method with Terminate?\n\nvoid Worker::Terminate(bool wait_for_thread \u003d false);\n\nIn this way you could avoid taking the mutex twice in case you need to wait.",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d52407b0_4ff0f214",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4162,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-16T17:31:43Z",
+      "side": 1,
+      "message": "Not sure why the mutex is not needed here, but I tend to believe you.",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80196ec7_0d2e3130",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-16T17:31:43Z",
+      "side": 1,
+      "message": "Maybe FinishTerminating?",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
