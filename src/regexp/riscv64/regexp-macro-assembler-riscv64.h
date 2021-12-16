@@ -83,7 +83,6 @@ class V8_EXPORT_PRIVATE RegExpMacroAssemblerRISCV
   void WriteCurrentPositionToRegister(int reg, int cp_offset) override;
   void ClearRegisters(int reg_from, int reg_to) override;
   void WriteStackPointerToRegister(int reg) override;
-  bool CanReadUnaligned() const override;
 
   // Called from RegExp if the stack-guard is triggered.
   // If the code object is relocated, the return address is fixed before
