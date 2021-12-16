@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5482c6a9_c4f08196",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4162,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-12-16T17:36:11Z",
+      "side": 1,
+      "message": "we also have the started_semaphore_ below, which is used to synchronize the main thread in Worker::StartWorkerThread. Which means we cannot do any work with the worker itself (postMessage and so forth) until the semaphore is signalled.",
+      "parentUuid": "d52407b0_4ff0f214",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80196ec7_0d2e3130",
