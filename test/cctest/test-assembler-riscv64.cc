@@ -1963,6 +1963,8 @@ TEST(li_estimate) {
       INT32_MIN, INT32_MAX / 2, INT32_MAX, UINT32_MAX, INT64_MAX, INT64_MAX / 2,
       INT64_MIN};
   // Test jump tables with backward jumps and embedded heap objects.
+  if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;
+
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -1979,6 +1981,7 @@ TEST(li_estimate) {
 
 #define UTEST_LOAD_STORE_RVV(ldname, stname, SEW, arg...)            \
   TEST(RISCV_UTEST_##stname##ldname##SEW) {                          \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;               \
     CcTest::InitializeVM();                                          \
     Isolate* isolate = CcTest::i_isolate();                          \
     HandleScope scope(isolate);                                      \
@@ -1998,6 +2001,8 @@ UTEST_LOAD_STORE_RVV(vl, vs, E8, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
 // UTEST_LOAD_STORE_RVV(vl, vs, E8, 127, 127, 127, 127, 127, 127, 127)
 
 TEST(RVV_VSETIVLI) {
+  if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;
+
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -2009,6 +2014,8 @@ TEST(RVV_VSETIVLI) {
 }
 
 TEST(RVV_VFMV) {
+  if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;
+
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
@@ -2036,6 +2043,7 @@ inline int32_t ToImm5(int32_t v) {
 // Tests for vector integer arithmetic instructions between vector and vector
 #define UTEST_RVV_VI_VV_FORM_WITH_RES(instr_name, width, array, expect_res) \
   TEST(RISCV_UTEST_##instr_name##_##width) {                                \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                      \
     CcTest::InitializeVM();                                                 \
     auto fn = [](MacroAssembler& assm) {                                    \
       __ VU.set(t0, VSew::E##width, Vlmul::m1);                             \
@@ -2055,6 +2063,7 @@ inline int32_t ToImm5(int32_t v) {
 // Tests for vector integer arithmetic instructions between vector and scalar
 #define UTEST_RVV_VI_VX_FORM_WITH_RES(instr_name, width, array, expect_res) \
   TEST(RISCV_UTEST_##instr_name##_##width) {                                \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                      \
     CcTest::InitializeVM();                                                 \
     auto fn = [](MacroAssembler& assm) {                                    \
       __ VU.set(t0, VSew::E##width, Vlmul::m1);                             \
@@ -2074,6 +2083,7 @@ inline int32_t ToImm5(int32_t v) {
 // immediate
 #define UTEST_RVV_VI_VI_FORM_WITH_RES(instr_name, width, array, expect_res) \
   TEST(RISCV_UTEST_##instr_name##_##width) {                                \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                      \
     CcTest::InitializeVM();                                                 \
     for (int##width##_t rs1_val : array) {                                  \
       for (int##width##_t rs2_val : array) {                                \
@@ -2183,6 +2193,7 @@ UTEST_RVV_VI_VX_FORM_WITH_FN(vminu_vx, 32, ARRAY_INT32, std::min<uint32_t>)
 // vector and vector
 #define UTEST_RVV_VF_VV_FORM_WITH_RES(instr_name, array, expect_res)    \
   TEST(RISCV_UTEST_##instr_name) {                                      \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                  \
     CcTest::InitializeVM();                                             \
     auto fn = [](MacroAssembler& assm) {                                \
       __ VU.set(t0, VSew::E32, Vlmul::m1);                              \
@@ -2203,6 +2214,7 @@ UTEST_RVV_VI_VX_FORM_WITH_FN(vminu_vx, 32, ARRAY_INT32, std::min<uint32_t>)
 // vector and scalar
 #define UTEST_RVV_VF_VF_FORM_WITH_RES(instr_name, array, expect_res)    \
   TEST(RISCV_UTEST_##instr_name) {                                      \
+    if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                  \
     CcTest::InitializeVM();                                             \
     auto fn = [](MacroAssembler& assm) {                                \
       __ VU.set(t0, VSew::E32, Vlmul::m1);                              \
