@@ -1056,19 +1056,6 @@ std::ostream& operator<<(std::ostream& os, const MemoryAccessImm1& acc) {
   return os << acc.type;
 }
 
-struct MemoryAccessImm2 {
-  MachineType type;
-  ArchOpcode store_opcode;
-  ArchOpcode store_opcode_unaligned;
-  bool (InstructionSelectorTest::Stream::*val_predicate)(
-      const InstructionOperand*) const;
-  const int32_t immediates[40];
-};
-
-std::ostream& operator<<(std::ostream& os, const MemoryAccessImm2& acc) {
-  return os << acc.type;
-}
-
 // ----------------------------------------------------------------------------
 // Loads and stores immediate values
 // ----------------------------------------------------------------------------
@@ -1180,49 +1167,6 @@ const MemoryAccessImm1 kMemoryAccessImmMoreThan16bit[] = {
      kRiscvSd,
      &InstructionSelectorTest::Stream::IsInteger,
      {-65000, -55000, 32777, 55000, 65000}}};
-
-const MemoryAccessImm2 kMemoryAccessesImmUnaligned[] = {
-    {MachineType::Int16(),
-     kRiscvUsh,
-     kRiscvSh,
-     &InstructionSelectorTest::Stream::IsInteger,
-     {-4095, -3340, -3231, -3224, -3088, -1758, -1203, -123, -117, -91,
-      -89,   -87,   -86,   -82,   -44,   -23,   -3,    0,    7,    10,
-      39,    52,    69,    71,    91,    92,    107,   109,  115,  124,
-      286,   655,   1362,  1569,  2587,  3067,  3096,  3462, 3510, 4095}},
-    {MachineType::Int32(),
-     kRiscvUsw,
-     kRiscvSw,
-     &InstructionSelectorTest::Stream::IsInteger,
-     {-4095, -3340, -3231, -3224, -3088, -1758, -1203, -123, -117, -91,
-      -89,   -87,   -86,   -82,   -44,   -23,   -3,    0,    7,    10,
-      39,    52,    69,    71,    91,    92,    107,   109,  115,  124,
-      286,   655,   1362,  1569,  2587,  3067,  3096,  3462, 3510, 4095}},
-    {MachineType::Int64(),
-     kRiscvUsd,
-     kRiscvSd,
-     &InstructionSelectorTest::Stream::IsInteger,
-     {-4095, -3340, -3231, -3224, -3088, -1758, -1203, -123, -117, -91,
-      -89,   -87,   -86,   -82,   -44,   -23,   -3,    0,    7,    10,
-      39,    52,    69,    71,    91,    92,    107,   109,  115,  124,
-      286,   655,   1362,  1569,  2587,  3067,  3096,  3462, 3510, 4095}},
-    {MachineType::Float32(),
-     kRiscvUStoreFloat,
-     kRiscvStoreFloat,
-     &InstructionSelectorTest::Stream::IsDouble,
-     {-4095, -3340, -3231, -3224, -3088, -1758, -1203, -123, -117, -91,
-      -89,   -87,   -86,   -82,   -44,   -23,   -3,    0,    7,    10,
-      39,    52,    69,    71,    91,    92,    107,   109,  115,  124,
-      286,   655,   1362,  1569,  2587,  3067,  3096,  3462, 3510, 4095}},
-    {MachineType::Float64(),
-     kRiscvUStoreDouble,
-     kRiscvStoreDouble,
-     &InstructionSelectorTest::Stream::IsDouble,
-     {-4095, -3340, -3231, -3224, -3088, -1758, -1203, -123, -117, -91,
-      -89,   -87,   -86,   -82,   -44,   -23,   -3,    0,    7,    10,
-      39,    52,    69,    71,    91,    92,    107,   109,  115,  124,
-      286,   655,   1362,  1569,  2587,  3067,  3096,  3462, 3510, 4095}}};
-
 }  // namespace
 
 using InstructionSelectorMemoryAccessTest =
@@ -1326,38 +1270,6 @@ TEST_P(InstructionSelectorMemoryAccessImmTest, StoreZero) {
 INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
                          InstructionSelectorMemoryAccessImmTest,
                          ::testing::ValuesIn(kMemoryAccessesImm));
-
-using InstructionSelectorMemoryAccessUnalignedImmTest =
-    InstructionSelectorTestWithParam<MemoryAccessImm2>;
-
-TEST_P(InstructionSelectorMemoryAccessUnalignedImmTest, StoreZero) {
-  const MemoryAccessImm2 memacc = GetParam();
-  TRACED_FOREACH(int32_t, index, memacc.immediates) {
-    StreamBuilder m(this, MachineType::Int32(), MachineType::Pointer());
-    bool unaligned_store_supported =
-        m.machine()->UnalignedStoreSupported(memacc.type.representation());
-    m.UnalignedStore(memacc.type.representation(), m.Parameter(0),
-                     m.Int32Constant(index), m.Int32Constant(0));
-    m.Return(m.Int32Constant(0));
-    Stream s = m.Build();
-    uint32_t i = is_int12(index) ? 0 : 1;
-    ASSERT_EQ(i + 1, s.size());
-    EXPECT_EQ(unaligned_store_supported ? memacc.store_opcode_unaligned
-                                        : memacc.store_opcode,
-              s[i]->arch_opcode());
-    EXPECT_EQ(kMode_MRI, s[i]->addressing_mode());
-    ASSERT_EQ(3U, s[i]->InputCount());
-    ASSERT_EQ(InstructionOperand::IMMEDIATE, s[i]->InputAt(1)->kind());
-    EXPECT_EQ(i == 0 ? index : 0, s.ToInt32(s[i]->InputAt(1)));
-    ASSERT_EQ(InstructionOperand::IMMEDIATE, s[i]->InputAt(2)->kind());
-    EXPECT_EQ(0, s.ToInt64(s[i]->InputAt(2)));
-    EXPECT_EQ(0U, s[i]->OutputCount());
-  }
-}
-
-INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
-                         InstructionSelectorMemoryAccessUnalignedImmTest,
-                         ::testing::ValuesIn(kMemoryAccessesImmUnaligned));
 
 // ----------------------------------------------------------------------------
 // Load/store offsets more than 16 bits.
