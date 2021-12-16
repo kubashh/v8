@@ -3288,8 +3288,13 @@ InstructionSelector::SupportedMachineOperatorFlags() {
 // static
 MachineOperatorBuilder::AlignmentRequirements
 InstructionSelector::AlignmentRequirements() {
+#ifdef RISCV_HAS_NO_UNALIGNED
   return MachineOperatorBuilder::AlignmentRequirements::
       NoUnalignedAccessSupport();
+#else
+    return MachineOperatorBuilder::AlignmentRequirements::
+      FullUnalignedAccessSupport();
+#endif
 }
 
 #undef SIMD_BINOP_LIST
