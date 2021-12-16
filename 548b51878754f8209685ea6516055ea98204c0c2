@@ -85,6 +85,24 @@
       "message": "Maybe FinishTerminating?",
       "revId": "548b51878754f8209685ea6516055ea98204c0c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c038b558_19675e27",
+        "filename": "src/d8/d8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2021-12-16T17:57:39Z",
+      "side": 1,
+      "message": "inline into the only call-site.",
+      "parentUuid": "80196ec7_0d2e3130",
+      "revId": "548b51878754f8209685ea6516055ea98204c0c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
