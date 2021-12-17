@@ -305,6 +305,10 @@ v8_config(
                 "CAN_USE_VFP3_INSTRUCTIONS",
             ],
             "@config//:v8_target_arm64": ["V8_TARGET_ARCH_ARM64"],
+            "@config//:v8_target_s390x": [
+                "V8_TARGET_ARCH_S390",
+                "V8_TARGET_ARCH_S390X",
+            ],
         },
         no_match_error = "Please specify a target cpu supported by v8",
     ) + select({
@@ -2203,6 +2207,37 @@ filegroup(
             "src/regexp/arm64/regexp-macro-assembler-arm64.h",
             "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
         ],
+        "@config//:v8_target_s390x": [
+            "src/baseline/s390/baseline-assembler-s390-inl.h",
+            "src/baseline/s390/baseline-compiler-s390-inl.h",
+            "src/codegen/s390/assembler-s390-inl.h",
+            "src/codegen/s390/assembler-s390.h",
+            "src/codegen/s390/constants-s390.h",
+            "src/codegen/s390/interface-descriptors-s390-inl.h",
+            "src/codegen/s390/macro-assembler-s390.h",
+            "src/codegen/s390/register-s390.h",
+            "src/compiler/backend/s390/instruction-codes-s390.h",
+            "src/compiler/backend/s390/unwinding-info-writer-s390.h",
+            "src/execution/s390/frame-constants-s390.h",
+            "src/execution/s390/simulator-s390.h",
+            "src/regexp/s390/regexp-macro-assembler-s390.h",
+            "src/wasm/baseline/s390/liftoff-assembler-s390.h",
+            "src/codegen/s390/assembler-s390.cc",
+            "src/codegen/s390/constants-s390.cc",
+            "src/codegen/s390/cpu-s390.cc",
+            "src/codegen/s390/macro-assembler-s390.cc",
+            "src/compiler/backend/s390/code-generator-s390.cc",
+            "src/compiler/backend/s390/instruction-scheduler-s390.cc",
+            "src/compiler/backend/s390/instruction-selector-s390.cc",
+            "src/compiler/backend/s390/unwinding-info-writer-s390.cc",
+            "src/deoptimizer/s390/deoptimizer-s390.cc",
+            "src/diagnostics/s390/disasm-s390.cc",
+            "src/diagnostics/s390/eh-frame-s390.cc",
+            "src/diagnostics/s390/unwinder-s390.cc",
+            "src/execution/s390/frame-constants-s390.cc",
+            "src/execution/s390/simulator-s390.cc",
+            "src/regexp/s390/regexp-macro-assembler-s390.cc",
+        ],
     }) + select({
         # Only for x64 builds and for arm64 with x64 host simulator.
         "@config//:is_posix_x64": [
@@ -2713,6 +2748,7 @@ filegroup(
         "@config//:v8_target_x64": ["src/builtins/x64/builtins-x64.cc"],
         "@config//:v8_target_arm": ["src/builtins/arm/builtins-arm.cc"],
         "@config//:v8_target_arm64": ["src/builtins/arm64/builtins-arm64.cc"],
+        "@config//:v8_target_s390x": ["src/builtins/s390/builtins-s390.cc"],
     }) + select({
         ":is_v8_enable_webassembly": [
             "src/builtins/builtins-wasm-gen.cc",
@@ -2833,6 +2869,7 @@ filegroup(
         "@config//:is_inline_asm_x64": ["src/heap/base/asm/x64/push_registers_asm.cc"],
         "@config//:is_inline_asm_arm": ["src/heap/base/asm/arm/push_registers_asm.cc"],
         "@config//:is_inline_asm_arm64": ["src/heap/base/asm/arm64/push_registers_asm.cc"],
+        "@config//:is_inline_asm_s390x": ["src/heap/base/asm/s390/push_registers_asm.cc"],
         "@config//:is_msvc_asm_ia32": ["src/heap/base/asm/ia32/push_registers_masm.S"],
         "@config//:is_msvc_asm_x64": ["src/heap/base/asm/x64/push_registers_masm.S"],
         "@config//:is_msvc_asm_arm64": ["src/heap/base/asm/arm64/push_registers_masm.S"],
@@ -2998,6 +3035,7 @@ filegroup(
             "google3/snapshots/ia32/noicu/snapshot.cc",
         ],
         "@config//:v8_target_arm64": [":noicu/generated_snapshot_files"],
+        "@config//:v8_target_s390x": [":noicu/generated_snapshot_files"],
         "@config//:v8_target_x64": [":noicu/generated_snapshot_files"],
     }),
 )
@@ -3016,6 +3054,7 @@ filegroup(
             "google3/snapshots/ia32/icu/snapshot.cc",
         ],
         "@config//:v8_target_arm64": [":icu/generated_snapshot_files"],
+        "@config//:v8_target_s390x": [":icu/generated_snapshot_files"],
         "@config//:v8_target_x64": [":icu/generated_snapshot_files"],
     }),
 )
