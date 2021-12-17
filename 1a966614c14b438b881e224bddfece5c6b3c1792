@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db066ff1_8035e333",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-17T06:34:33Z",
+      "side": 1,
+      "message": "Pls see the comments.",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef8bded0_669b56d4",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-17T06:34:33Z",
+      "side": 1,
+      "message": "The function body would be better if we can make a little change:\n{\n#ifdef RISCV_HAS_NO_UNALIGNED\nreturn false;\n#else if\nreturn true;\n#endif\n}",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3295aab7_34dcb831",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-17T06:34:33Z",
+      "side": 1,
+      "message": "Why the characters can be 4 or 2 here? I noticed that the previous comment is \n\" // We assume that we cannot do unaligned loads on RISC-V, so this function\n  // must only be used to load a single character at a time.\"",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf9dc2f_de6c8002",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-17T06:34:33Z",
+      "side": 1,
+      "message": "This function can work for both \"RISCV_HAS_NO_UNALIGNED defined\" and \"RISCV_HAS_NO_UNALIGNED undefined\" case.",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
