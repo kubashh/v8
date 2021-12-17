@@ -1999,11 +1999,14 @@ RegisterIndex SinglePassRegisterAllocator::ChooseRegisterFor(
              pos != UsePosition::kStart) {
     // If we are trying to allocate a register that was used as a
     // same_input_output operand, then we can't use it for an input that expands
-    // past UsePosition::kStart. This should only happen for REGISTER_OR_SLOT
-    // operands that are used for the deopt state, so we can just use a spill
-    // slot.
-    CHECK(!must_use_register);
-    return RegisterIndex::Invalid();
+    // past UsePosition::kStart.
+    if (must_use_register) {
+      // Use a new register instead.
+      reg = ChooseRegisterFor(rep, pos, must_use_register);
+    } else {
+      // Use a spill slot.
+      reg = RegisterIndex::Invalid();
+    }
   }
   return reg;
 }
@@ -2306,7 +2309,11 @@ void SinglePassRegisterAllocator::AllocateInput(
 
     if (reg.is_valid()) {
       if (must_use_register) {
-        AllocateUse(reg, virtual_register, operand, instr_index, pos);
+        if (VirtualRegisterIsUnallocatedOrInReg(virtual_register.vreg(), reg)) {
+          AllocateUse(reg, virtual_register, operand, instr_index, pos);
+        } else {
+          AllocateUseWithMove(reg, virtual_register, operand, instr_index, pos);
+        }
       } else {
         AllocatePendingUse(reg, virtual_register, operand,
                            operand->HasRegisterOrSlotOrConstantPolicy(),
