@@ -33,6 +33,41 @@
       "message": "this makes sense on a local level to me, it\u0027s hard to review any knock-on effects it might have but I guess we\u0027ll fix them as they come up.",
       "revId": "9d04e4a47598b585487397dda313567e12ed44c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d987199a_cdbbeae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-20T11:39:47Z",
+      "side": 1,
+      "message": "Ack, every fix will include a regression test, and I\u0027ll keep going until everything is fixed. The fuzzer already found more issues anyway.",
+      "parentUuid": "334abf9f_d7ef7ba1",
+      "revId": "9d04e4a47598b585487397dda313567e12ed44c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88fe9089_35721b2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-20T11:39:47Z",
+      "side": 1,
+      "message": "Oops, I thought Leszek is compiler owner. Maya, can you rubber-stamp again please?",
+      "revId": "9d04e4a47598b585487397dda313567e12ed44c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
