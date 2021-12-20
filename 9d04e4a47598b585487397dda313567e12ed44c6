@@ -108,6 +108,30 @@
       },
       "revId": "9d04e4a47598b585487397dda313567e12ed44c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f814d302_3142696d",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2021-12-20T12:12:57Z",
+      "side": 1,
+      "message": "Ack, I added a comment to each case. I am still learning about all of this (while fixing issues), hope the comments make sense.",
+      "parentUuid": "d6e84990_b8ad7cbd",
+      "range": {
+        "startLine": 2310,
+        "startChar": 4,
+        "endLine": 2310,
+        "endChar": 24
+      },
+      "revId": "9d04e4a47598b585487397dda313567e12ed44c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
