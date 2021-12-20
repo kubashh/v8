@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5770f959_6a23e465",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-20T04:50:57Z",
+      "side": 1,
+      "message": "CanReadUnaligned  first in regexp-macro-assembler.cc:280, it will return true or false accord to FLAG",
+      "parentUuid": "ef8bded0_669b56d4",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3295aab7_34dcb831",
         "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
         "patchSetId": 10
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e39556e_da414164",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-20T04:50:57Z",
+      "side": 1,
+      "message": "I port arm64 to here. I don\u0027t find any info in origin commit. https://codereview.chromium.org/165443",
+      "parentUuid": "3295aab7_34dcb831",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "caf9dc2f_de6c8002",
         "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.h",
         "patchSetId": 10
@@ -65,6 +101,24 @@
       "writtenOn": "2021-12-17T06:34:33Z",
       "side": 1,
       "message": "This function can work for both \"RISCV_HAS_NO_UNALIGNED defined\" and \"RISCV_HAS_NO_UNALIGNED undefined\" case.",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d17232b_e141967e",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-20T04:50:57Z",
+      "side": 1,
+      "message": "If RISCV_HAS_NO_UNALIGNED undefined, it should call NativeRegExpMacroAssembler::CanReadUnaligned().",
+      "parentUuid": "caf9dc2f_de6c8002",
       "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
