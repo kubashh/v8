@@ -1662,6 +1662,20 @@ Heap::DevToolsTraceEventScope::~DevToolsTraceEventScope() {
                    heap_->SizeOfObjects());
 }
 
+namespace {
+GCTracer::Scope::ScopeId CollectorScopeId(GarbageCollector collector) {
+  switch (collector) {
+    case GarbageCollector::MARK_COMPACTOR:
+      return GCTracer::Scope::ScopeId::MARK_COMPACTOR;
+    case GarbageCollector::MINOR_MARK_COMPACTOR:
+      return GCTracer::Scope::ScopeId::MINOR_MARK_COMPACTOR;
+    case GarbageCollector::SCAVENGER:
+      return GCTracer::Scope::ScopeId::SCAVENGER;
+  }
+  UNREACHABLE();
+}
+}  // namespace
+
 bool Heap::CollectGarbage(AllocationSpace space,
                           GarbageCollectionReason gc_reason,
                           const v8::GCCallbackFlags gc_callback_flags) {
@@ -1759,82 +1773,100 @@ bool Heap::CollectGarbage(AllocationSpace space,
       OptionalTimedHistogramScope histogram_timer_priority_scope(
           gc_type_priority_timer, isolate_, mode);
 
-      if (!IsYoungGenerationCollector(collector)) {
-        PROFILE(isolate_, CodeMovingGCEvent());
-      }
-
       GCType gc_type;
 
-      switch (collector) {
-        case GarbageCollector::MARK_COMPACTOR:
-          gc_type = kGCTypeMarkSweepCompact;
-          break;
-        case GarbageCollector::SCAVENGER:
-          gc_type = kGCTypeScavenge;
-          break;
-        case GarbageCollector::MINOR_MARK_COMPACTOR:
-          gc_type = kGCTypeMinorMarkCompact;
-          break;
-        default:
-          UNREACHABLE();
-      }
-
       {
-        GCCallbacksScope scope(this);
-        // Temporary override any embedder stack state as callbacks may create
-        // their own state on the stack and recursively trigger GC.
-        EmbedderStackStateScope embedder_scope(
-            local_embedder_heap_tracer(),
-            EmbedderHeapTracer::EmbedderStackState::kMayContainHeapPointers);
-        if (scope.CheckReenter()) {
-          AllowGarbageCollection allow_gc;
-          AllowJavascriptExecution allow_js(isolate());
-          TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_PROLOGUE);
-          VMState<EXTERNAL> callback_state(isolate_);
-          HandleScope handle_scope(isolate_);
-          CallGCPrologueCallbacks(gc_type, kNoGCCallbackFlags);
+        // Traces the finishing parts of the last GC cycle.
+        TRACE_GC_EPOCH(tracer(), CollectorScopeId(collector),
+                       ThreadKind::kMain);
+
+        if (!IsYoungGenerationCollector(collector)) {
+          PROFILE(isolate_, CodeMovingGCEvent());
+        }
+
+        switch (collector) {
+          case GarbageCollector::MARK_COMPACTOR:
+            gc_type = kGCTypeMarkSweepCompact;
+            break;
+          case GarbageCollector::SCAVENGER:
+            gc_type = kGCTypeScavenge;
+            break;
+          case GarbageCollector::MINOR_MARK_COMPACTOR:
+            gc_type = kGCTypeMinorMarkCompact;
+            break;
+          default:
+            UNREACHABLE();
+        }
+
+        {
+          GCCallbacksScope scope(this);
+          // Temporary override any embedder stack state as callbacks may create
+          // their own state on the stack and recursively trigger GC.
+          EmbedderStackStateScope embedder_scope(
+              local_embedder_heap_tracer(),
+              EmbedderHeapTracer::EmbedderStackState::kMayContainHeapPointers);
+          if (scope.CheckReenter()) {
+            AllowGarbageCollection allow_gc;
+            AllowJavascriptExecution allow_js(isolate());
+            TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_PROLOGUE);
+            VMState<EXTERNAL> callback_state(isolate_);
+            HandleScope handle_scope(isolate_);
+            CallGCPrologueCallbacks(gc_type, kNoGCCallbackFlags);
+          }
         }
       }
 
       if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+        // Trace the third-party heap GC as part of a new epoch.
+        UpdateCurrentEpoch(collector);
+        TRACE_GC_EPOCH(tracer(), CollectorScopeId(collector),
+                       ThreadKind::kMain);
         tp_heap_->CollectGarbage();
       } else {
         freed_global_handles +=
             PerformGarbageCollection(collector, gc_callback_flags);
       }
-      // Clear flags describing the current GC now that the current GC is
-      // complete. Do this before GarbageCollectionEpilogue() since that could
-      // trigger another unforced GC.
-      is_current_gc_forced_ = false;
-      is_current_gc_for_heap_profiler_ = false;
 
       {
-        TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
-        gc_post_processing_depth_++;
+        // Keep tracing the new GC cycle that started above.
+        TRACE_GC_EPOCH(tracer(), CollectorScopeId(collector),
+                       ThreadKind::kMain);
+
+        // Clear flags describing the current GC now that the current GC is
+        // complete. Do this before GarbageCollectionEpilogue() since that could
+        // trigger another unforced GC.
+        is_current_gc_forced_ = false;
+        is_current_gc_for_heap_profiler_ = false;
+
         {
-          AllowGarbageCollection allow_gc;
-          AllowJavascriptExecution allow_js(isolate());
-          freed_global_handles +=
-              isolate_->global_handles()->PostGarbageCollectionProcessing(
-                  collector, gc_callback_flags);
+          TRACE_GC(tracer(),
+                   GCTracer::Scope::HEAP_EXTERNAL_WEAK_GLOBAL_HANDLES);
+          gc_post_processing_depth_++;
+          {
+            AllowGarbageCollection allow_gc;
+            AllowJavascriptExecution allow_js(isolate());
+            freed_global_handles +=
+                isolate_->global_handles()->PostGarbageCollectionProcessing(
+                    collector, gc_callback_flags);
+          }
+          gc_post_processing_depth_--;
         }
-        gc_post_processing_depth_--;
-      }
 
-      {
-        GCCallbacksScope scope(this);
-        if (scope.CheckReenter()) {
-          AllowGarbageCollection allow_gc;
-          AllowJavascriptExecution allow_js(isolate());
-          TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_EPILOGUE);
-          VMState<EXTERNAL> callback_state(isolate_);
-          HandleScope handle_scope(isolate_);
-          CallGCEpilogueCallbacks(gc_type, gc_callback_flags);
+        {
+          GCCallbacksScope scope(this);
+          if (scope.CheckReenter()) {
+            AllowGarbageCollection allow_gc;
+            AllowJavascriptExecution allow_js(isolate());
+            TRACE_GC(tracer(), GCTracer::Scope::HEAP_EXTERNAL_EPILOGUE);
+            VMState<EXTERNAL> callback_state(isolate_);
+            HandleScope handle_scope(isolate_);
+            CallGCEpilogueCallbacks(gc_type, gc_callback_flags);
+          }
         }
-      }
-      if (collector == GarbageCollector::MARK_COMPACTOR ||
-          collector == GarbageCollector::SCAVENGER) {
-        tracer()->RecordGCPhasesHistograms(gc_type_timer);
+        if (collector == GarbageCollector::MARK_COMPACTOR ||
+            collector == GarbageCollector::SCAVENGER) {
+          tracer()->RecordGCPhasesHistograms(gc_type_timer);
+        }
       }
     }
 
@@ -2133,31 +2165,22 @@ void Heap::UpdateSurvivalStatistics(int start_new_space_size) {
   tracer()->AddSurvivalRatio(survival_rate);
 }
 
-namespace {
-GCTracer::Scope::ScopeId CollectorScopeId(GarbageCollector collector) {
-  switch (collector) {
-    case GarbageCollector::MARK_COMPACTOR:
-      return GCTracer::Scope::ScopeId::MARK_COMPACTOR;
-    case GarbageCollector::MINOR_MARK_COMPACTOR:
-      return GCTracer::Scope::ScopeId::MINOR_MARK_COMPACTOR;
-    case GarbageCollector::SCAVENGER:
-      return GCTracer::Scope::ScopeId::SCAVENGER;
-  }
-  UNREACHABLE();
-}
-}  // namespace
-
 size_t Heap::PerformGarbageCollection(
     GarbageCollector collector, const v8::GCCallbackFlags gc_callback_flags) {
   DisallowJavascriptExecution no_js(isolate());
 
-  if (IsYoungGenerationCollector(collector)) {
-    CompleteSweepingYoung(collector);
-  } else {
-    DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
-    CompleteSweepingFull();
-    if (cpp_heap()) {
-      CppHeap::From(cpp_heap())->FinishSweepingIfRunning();
+  {
+    // Traces the finishing parts of the last GC cycle.
+    TRACE_GC_EPOCH(tracer(), CollectorScopeId(collector), ThreadKind::kMain);
+
+    if (IsYoungGenerationCollector(collector)) {
+      CompleteSweepingYoung(collector);
+    } else {
+      DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
+      CompleteSweepingFull();
+      if (cpp_heap()) {
+        CppHeap::From(cpp_heap())->FinishSweepingIfRunning();
+      }
     }
   }
 
