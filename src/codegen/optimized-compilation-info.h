@@ -243,6 +243,10 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     return std::move(canonical_handles_);
   }
 
+  void set_osr_level(int n) { osr_level_ = n; }
+
+  int osr_level() { return osr_level_; }
+
  private:
   void ConfigureFlags();
 
@@ -314,6 +318,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   // handles above. The only difference is that is created in the
   // CanonicalHandleScope(i.e step 1) is different).
   std::unique_ptr<CanonicalHandlesMap> canonical_handles_;
+
+  int osr_level_ = -1;
 };
 
 }  // namespace internal
