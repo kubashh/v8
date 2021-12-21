@@ -1564,6 +1564,8 @@ DEFINE_BOOL(always_opt, false, "always try to optimize functions")
 DEFINE_IMPLICATION(always_opt, opt)
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
+DEFINE_BOOL(concurrent_osr, true,
+            "compile turbofan optimized code for osr on background thread")
 
 DEFINE_BOOL(trace_serializer, false, "print code serializer trace")
 #ifdef DEBUG

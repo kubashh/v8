@@ -113,6 +113,7 @@ void RuntimeProfiler::AttemptOnStackReplacement(UnoptimizedFrame* frame,
     CodeTracer::Scope scope(isolate_->GetCodeTracer());
     PrintF(scope.file(), "[OSR - arming back edges in ");
     function.PrintName(scope.file());
+    PrintF(scope.file(), " offset: %d", frame->GetBytecodeOffset());
     PrintF(scope.file(), "]\n");
   }
 

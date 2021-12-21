@@ -205,7 +205,7 @@ void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
     }
     OptimizedCompilationInfo* info = job->compilation_info();
     Handle<JSFunction> function(*info->closure(), isolate_);
-    if (function->HasAvailableCodeKind(info->code_kind())) {
+    if (function->HasAvailableCodeKind(info->code_kind()) && !info->is_osr()) {
       if (FLAG_trace_concurrent_recompilation) {
         PrintF("  ** Aborting compilation for ");
         function->ShortPrint();
