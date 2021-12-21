@@ -861,10 +861,17 @@ void SetConsoleDelegate(Isolate* v8_isolate, ConsoleDelegate* delegate) {
   isolate->set_console_delegate(delegate);
 }
 
+ConsoleCallArguments::ConsoleCallArguments()
+    : v8::FunctionCallbackInfo<v8::Value>(nullptr, nullptr, 0) {}
+
 ConsoleCallArguments::ConsoleCallArguments(
     const v8::FunctionCallbackInfo<v8::Value>& info)
     : v8::FunctionCallbackInfo<v8::Value>(nullptr, info.values_, info.length_) {
 }
+
+ConsoleCallArguments::ConsoleCallArguments(v8::internal::Address* values,
+                                           int length)
+    : v8::FunctionCallbackInfo<v8::Value>(nullptr, values, length) {}
 
 ConsoleCallArguments::ConsoleCallArguments(
     const internal::BuiltinArguments& args)

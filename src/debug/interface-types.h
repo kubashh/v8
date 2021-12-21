@@ -104,6 +104,8 @@ class ConsoleCallArguments : private v8::FunctionCallbackInfo<v8::Value> {
     return v8::FunctionCallbackInfo<v8::Value>::operator[](i);
   }
 
+  ConsoleCallArguments();
+  ConsoleCallArguments(v8::internal::Address*, int);
   explicit ConsoleCallArguments(const v8::FunctionCallbackInfo<v8::Value>&);
   explicit ConsoleCallArguments(const internal::BuiltinArguments&);
 };

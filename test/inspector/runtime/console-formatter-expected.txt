@@ -1,0 +1,323 @@
+Test for console formatting
+
+Running test: testFloatFormatter
+Testing console.debug('%f', 3.1415)...
+debug[
+    [0] : {
+        type : string
+        value : 3.1415
+    }
+]
+Testing console.error('%f', '3e2')...
+error[
+    [0] : {
+        type : string
+        value : 300
+    }
+]
+Testing console.info('%f', Symbol('1.1'))...
+info[
+    [0] : {
+        type : string
+        value : NaN
+    }
+]
+Testing console.log('%f', {toString() { return '42'; }})...
+log[
+    [0] : {
+        type : string
+        value : 42
+    }
+]
+Testing console.trace('%f', {[Symbol.toPrimitive]() { return 2.78; }})...
+trace[
+    [0] : {
+        type : string
+        value : 2.78
+    }
+]
+Testing console.warn('%f', {toString() { throw new Error(); }})...
+{
+    columnNumber : 33
+    exception : {
+        className : Error
+        description : Error     at Object.toString (<anonymous>:1:40)     at parseFloat (<anonymous>)     at console.warn (<anonymous>)     at <anonymous>:1:9
+        objectId : <objectId>
+        subtype : error
+        type : object
+    }
+    exceptionId : <exceptionId>
+    lineNumber : 0
+    scriptId : <scriptId>
+    stackTrace : {
+        callFrames : [
+            [0] : {
+                columnNumber : 39
+                functionName : toString
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+            [1] : {
+                columnNumber : 8
+                functionName : 
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+        ]
+    }
+    text : Uncaught
+}
+
+Running test: testIntegerFormatter
+Testing console.debug('%d', 42)...
+debug[
+    [0] : {
+        type : string
+        value : 42
+    }
+]
+Testing console.error('%i', '987654321')...
+error[
+    [0] : {
+        type : string
+        value : 987654321
+    }
+]
+Testing console.info('%d', Symbol('12345'))...
+info[
+    [0] : {
+        type : string
+        value : NaN
+    }
+]
+Testing console.log('%i', {toString() { return '42'; }})...
+log[
+    [0] : {
+        type : string
+        value : 42
+    }
+]
+Testing console.trace('%d', {[Symbol.toPrimitive]() { return 256; }})...
+trace[
+    [0] : {
+        type : string
+        value : 256
+    }
+]
+Testing console.warn('%i', {toString() { throw new Error(); }})...
+{
+    columnNumber : 33
+    exception : {
+        className : Error
+        description : Error     at Object.toString (<anonymous>:1:40)     at parseInt (<anonymous>)     at console.warn (<anonymous>)     at <anonymous>:1:9
+        objectId : <objectId>
+        subtype : error
+        type : object
+    }
+    exceptionId : <exceptionId>
+    lineNumber : 0
+    scriptId : <scriptId>
+    stackTrace : {
+        callFrames : [
+            [0] : {
+                columnNumber : 39
+                functionName : toString
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+            [1] : {
+                columnNumber : 8
+                functionName : 
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+        ]
+    }
+    text : Uncaught
+}
+
+Running test: testStringFormatter
+Testing console.debug('%s', 42)...
+debug[
+    [0] : {
+        type : string
+        value : 42
+    }
+]
+Testing console.error('%s', 'Test string')...
+error[
+    [0] : {
+        type : string
+        value : Test string
+    }
+]
+Testing console.info('%s', Symbol('Test symbol'))...
+info[
+    [0] : {
+        type : string
+        value : Symbol(Test symbol)
+    }
+]
+Testing console.log('%s', {toString() { return 'Test object'; }})...
+log[
+    [0] : {
+        type : string
+        value : Test object
+    }
+]
+Testing console.trace('%s', {[Symbol.toPrimitive]() { return true; }})...
+trace[
+    [0] : {
+        type : string
+        value : true
+    }
+]
+Testing console.warn('%s', {toString() { throw new Error(); }})...
+{
+    columnNumber : 33
+    exception : {
+        className : Error
+        description : Error     at Object.toString (<anonymous>:1:40)     at String (<anonymous>)     at console.warn (<anonymous>)     at <anonymous>:1:9
+        objectId : <objectId>
+        subtype : error
+        type : object
+    }
+    exceptionId : <exceptionId>
+    lineNumber : 0
+    scriptId : <scriptId>
+    stackTrace : {
+        callFrames : [
+            [0] : {
+                columnNumber : 39
+                functionName : toString
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+            [1] : {
+                columnNumber : 8
+                functionName : 
+                lineNumber : 0
+                scriptId : <scriptId>
+                url : 
+            }
+        ]
+    }
+    text : Uncaught
+}
+
+Running test: testOtherFormatters
+Testing console.debug('%c', 'color:red')...
+debug[
+    [0] : {
+        type : string
+        value : %c
+    }
+    [1] : {
+        type : string
+        value : color:red
+    }
+]
+Testing console.error('%o', {toString() { throw new Error(); }})...
+error[
+    [0] : {
+        type : string
+        value : %o
+    }
+    [1] : {
+        className : Object
+        description : Object
+        objectId : 1.1.7
+        preview : {
+            description : Object
+            overflow : false
+            properties : [
+                [0] : {
+                    name : toString
+                    type : function
+                    value : 
+                }
+            ]
+            type : object
+        }
+        type : object
+    }
+]
+Testing console.info('%O', {toString() { throw new Error(); }})...
+info[
+    [0] : {
+        type : string
+        value : %O
+    }
+    [1] : {
+        className : Object
+        description : Object
+        objectId : 1.1.8
+        preview : {
+            description : Object
+            overflow : false
+            properties : [
+                [0] : {
+                    name : toString
+                    type : function
+                    value : 
+                }
+            ]
+            type : object
+        }
+        type : object
+    }
+]
+Testing console.log('We have reached 100% of our users', 'with this!')...
+log[
+    [0] : {
+        type : string
+        value : We have reached 100% of our users
+    }
+    [1] : {
+        type : string
+        value : with this!
+    }
+]
+
+Running test: testMultipleFormatters
+Testing console.debug('%s%some Text%i', '', 'S', 1)...
+debug[
+    [0] : {
+        type : string
+        value : Some Text1
+    }
+]
+Testing console.error('%c%i%c%s', 'color:red', 42, 'color:green', 'Message!')...
+error[
+    [0] : {
+        type : string
+        value : %c42%cMessage!
+    }
+    [1] : {
+        type : string
+        value : color:red
+    }
+    [2] : {
+        type : string
+        value : color:green
+    }
+]
+Testing console.info('%s', {toString() { return '%i% %s %s'; }}, {toString() { return '100'; }}, 'more', 'arguments')...
+info[
+    [0] : {
+        type : string
+        value : 100% more arguments
+    }
+]
+Testing console.log('%s %s', {toString() { return 'Too %s %s'; }}, 'many', 'specifiers')...
+log[
+    [0] : {
+        type : string
+        value : Too many specifiers %s
+    }
+]

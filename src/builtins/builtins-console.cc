@@ -6,6 +6,8 @@
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/builtins/builtins.h"
 #include "src/debug/interface-types.h"
+#include "src/execution/execution.h"
+#include "src/handles/maybe-handles.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
 #include "src/objects/objects-inl.h"
@@ -16,37 +18,134 @@ namespace internal {
 // -----------------------------------------------------------------------------
 // Console
 
-#define CONSOLE_METHOD_LIST(V)      \
-  V(Debug, debug)                   \
-  V(Error, error)                   \
-  V(Info, info)                     \
-  V(Log, log)                       \
-  V(Warn, warn)                     \
-  V(Dir, dir)                       \
-  V(DirXml, dirXml)                 \
-  V(Table, table)                   \
-  V(Trace, trace)                   \
-  V(Group, group)                   \
-  V(GroupCollapsed, groupCollapsed) \
-  V(GroupEnd, groupEnd)             \
-  V(Clear, clear)                   \
-  V(Count, count)                   \
-  V(CountReset, countReset)         \
-  V(Assert, assert)                 \
-  V(Profile, profile)               \
-  V(ProfileEnd, profileEnd)         \
-  V(TimeLog, timeLog)
+#define CONSOLE_METHOD_LIST(V)         \
+  V(Debug, debug, 1)                   \
+  V(Error, error, 1)                   \
+  V(Info, info, 1)                     \
+  V(Log, log, 1)                       \
+  V(Warn, warn, 1)                     \
+  V(Dir, dir, 0)                       \
+  V(DirXml, dirXml, 0)                 \
+  V(Table, table, 0)                   \
+  V(Trace, trace, 1)                   \
+  V(Group, group, 0)                   \
+  V(GroupCollapsed, groupCollapsed, 0) \
+  V(GroupEnd, groupEnd, 0)             \
+  V(Clear, clear, 0)                   \
+  V(Count, count, 0)                   \
+  V(CountReset, countReset, 0)         \
+  V(Assert, assert, 2)                 \
+  V(Profile, profile, 0)               \
+  V(ProfileEnd, profileEnd, 0)         \
+  V(TimeLog, timeLog, 0)
 
 namespace {
-void ConsoleCall(
-    Isolate* isolate, const internal::BuiltinArguments& args,
-    void (debug::ConsoleDelegate::*func)(const v8::debug::ConsoleCallArguments&,
-                                         const v8::debug::ConsoleContext&)) {
-  CHECK(!isolate->has_pending_exception());
-  CHECK(!isolate->has_scheduled_exception());
-  if (!isolate->console_delegate()) return;
+
+// 2.2 Formatter(args) [https://console.spec.whatwg.org/#formatter]
+//
+// This implements the formatter operation defined in the Console
+// specification to the degree that it makes sense for V8.  That
+// means we primarily deal with %s, %i, %f, and %d, and any side
+// effects caused by the type conversions, and we preserve the %o,
+// %c, and %O specifiers and their parameters unchanged, and instead
+// leave it to the debugger front-end to make sense of those.
+//
+// This implementation updates the |args| in-place and returns an
+// appropriate view onto the |args| as |ConsoleCallArguments|.
+//
+// The |target_index| describes the position of the target string,
+// which is different for example in case of `console.log` where
+// it is 1 compared to `console.assert` where it is 2. If you pass
+// 0 for |target_index|, this function is a no-op.
+Maybe<debug::ConsoleCallArguments> Formatter(Isolate* isolate,
+                                             BuiltinArguments& args,
+                                             int target_index) {
+  if (target_index == 0 || args.length() < target_index + 2 ||
+      !args[target_index].IsString()) {
+    return Just(debug::ConsoleCallArguments(args));
+  }
   HandleScope scope(isolate);
-  debug::ConsoleCallArguments wrapper(args);
+  auto percent = isolate->factory()->LookupSingleCharacterStringFromCode('%');
+  auto target = Handle<String>::cast(args.at(target_index));
+  int offset = 0, index = target_index + 1, length = args.length();
+  while (index < length) {
+    auto current = args.at(index);
+    offset = String::IndexOf(isolate, target, percent, offset);
+    if (offset < 0 || offset == target->length() - 1) {
+      break;
+    }
+    uint16_t specifier = target->Get(offset + 1, isolate);
+    if (specifier == 'd' || specifier == 'f' || specifier == 'i') {
+      if (current->IsSymbol()) {
+        current = isolate->factory()->NaN_string();
+      } else {
+        Handle<Object> params[] = {current,
+                                   isolate->factory()->NewNumberFromInt(10)};
+        auto builtin = specifier == 'f' ? isolate->global_parse_float_fun()
+                                        : isolate->global_parse_int_fun();
+        if (!Execution::CallBuiltin(isolate, builtin,
+                                    isolate->factory()->undefined_value(),
+                                    arraysize(params), params)
+                 .ToHandle(&current)) {
+          return Nothing<debug::ConsoleCallArguments>();
+        }
+      }
+    } else if (specifier == 's') {
+      Handle<Object> params[] = {current};
+      if (!Execution::CallBuiltin(isolate, isolate->string_function(),
+                                  isolate->factory()->undefined_value(),
+                                  arraysize(params), params)
+               .ToHandle(&current)) {
+        return Nothing<debug::ConsoleCallArguments>();
+      }
+    } else if (specifier == 'c' || specifier == 'o' || specifier == 'O') {
+      // We leave the interpretation of %c (CSS), %o (optimally useful
+      // formatting), and %O (generic JavaScript object formatting) to
+      // the debugger front-end, and preserve these specifiers as well
+      // as their arguments verbatim.
+      index++;
+      offset += 2;
+      continue;
+    } else {
+      offset++;
+      continue;
+    }
+
+    // Replace the |specifier| (including the '%' character) in |target|
+    // with the |current| value converted to a string (the %parseInt% and
+    // %parseFloat% builtin calls actually yield numbers).
+    auto converted = Object::ToString(isolate, current).ToHandleChecked();
+    auto prefix = isolate->factory()->NewProperSubString(target, 0, offset);
+    auto suffix =
+        isolate->factory()->NewSubString(target, offset + 2, target->length());
+    if (!isolate->factory()
+             ->NewConsString(prefix, converted)
+             .ToHandle(&target)) {
+      return Nothing<debug::ConsoleCallArguments>();
+    }
+    if (!isolate->factory()->NewConsString(target, suffix).ToHandle(&target)) {
+      return Nothing<debug::ConsoleCallArguments>();
+    }
+
+    // Shift the remaining arguments, since we consumed |current|...
+    for (int i = index; i < length - 1; ++i) args.set_at(i, args[i + 1]);
+    // ...and reflect that change in the |length|.
+    length--;
+  }
+  // Write back the |target| to the |args|.
+  args.set_at(target_index, *target);
+  return Just(debug::ConsoleCallArguments(args.address_of_first_argument(),
+                                          length - 1));
+}
+
+MaybeHandle<Object> ConsoleCall(
+    Isolate* isolate, BuiltinArguments& args,
+    void (debug::ConsoleDelegate::*func)(const v8::debug::ConsoleCallArguments&,
+                                         const v8::debug::ConsoleContext&),
+    int target_index = 0) {
+  if (!isolate->console_delegate()) {
+    return isolate->factory()->undefined_value();
+  }
   Handle<Object> context_id_obj = JSObject::GetDataProperty(
       args.target(), isolate->factory()->console_context_id_symbol());
   int context_id =
@@ -56,9 +155,15 @@ void ConsoleCall(
   Handle<String> context_name = context_name_obj->IsString()
                                     ? Handle<String>::cast(context_name_obj)
                                     : isolate->factory()->anonymous_string();
+  debug::ConsoleCallArguments wrapper;
+  if (!Formatter(isolate, args, target_index).To(&wrapper)) {
+    return MaybeHandle<Object>();
+  }
   (isolate->console_delegate()->*func)(
       wrapper,
       v8::debug::ConsoleContext(context_id, Utils::ToLocal(context_name)));
+  RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
+  return isolate->factory()->undefined_value();
 }
 
 void LogTimerEvent(Isolate* isolate, BuiltinArguments args,
@@ -74,36 +179,38 @@ void LogTimerEvent(Isolate* isolate, BuiltinArguments args,
   }
   LOG(isolate, TimerEvent(se, raw_name));
 }
+
 }  // namespace
 
-#define CONSOLE_BUILTIN_IMPLEMENTATION(call, name)             \
-  BUILTIN(Console##call) {                                     \
-    ConsoleCall(isolate, args, &debug::ConsoleDelegate::call); \
-    RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);            \
-    return ReadOnlyRoots(isolate).undefined_value();           \
+#define CONSOLE_BUILTIN_IMPLEMENTATION(call, name, target_index)           \
+  BUILTIN(Console##call) {                                                 \
+    HandleScope scope(isolate);                                            \
+    RETURN_RESULT_OR_FAILURE(                                              \
+        isolate, ConsoleCall(isolate, args, &debug::ConsoleDelegate::call, \
+                             target_index));                               \
   }
 CONSOLE_METHOD_LIST(CONSOLE_BUILTIN_IMPLEMENTATION)
 #undef CONSOLE_BUILTIN_IMPLEMENTATION
 
 BUILTIN(ConsoleTime) {
   LogTimerEvent(isolate, args, v8::LogEventStatus::kStart);
-  ConsoleCall(isolate, args, &debug::ConsoleDelegate::Time);
-  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
-  return ReadOnlyRoots(isolate).undefined_value();
+  HandleScope scope(isolate);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, ConsoleCall(isolate, args, &debug::ConsoleDelegate::Time));
 }
 
 BUILTIN(ConsoleTimeEnd) {
   LogTimerEvent(isolate, args, v8::LogEventStatus::kEnd);
-  ConsoleCall(isolate, args, &debug::ConsoleDelegate::TimeEnd);
-  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
-  return ReadOnlyRoots(isolate).undefined_value();
+  HandleScope scope(isolate);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, ConsoleCall(isolate, args, &debug::ConsoleDelegate::TimeEnd));
 }
 
 BUILTIN(ConsoleTimeStamp) {
   LogTimerEvent(isolate, args, v8::LogEventStatus::kStamp);
-  ConsoleCall(isolate, args, &debug::ConsoleDelegate::TimeStamp);
-  RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
-  return ReadOnlyRoots(isolate).undefined_value();
+  HandleScope scope(isolate);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, ConsoleCall(isolate, args, &debug::ConsoleDelegate::TimeStamp));
 }
 
 namespace {
@@ -162,7 +269,7 @@ BUILTIN(ConsoleContext) {
   int id = isolate->last_console_context_id() + 1;
   isolate->set_last_console_context_id(id);
 
-#define CONSOLE_BUILTIN_SETUP(call, name)                                      \
+#define CONSOLE_BUILTIN_SETUP(call, name, target_index)                        \
   InstallContextFunction(isolate, context, #name, Builtin::kConsole##call, id, \
                          args.at(1));
   CONSOLE_METHOD_LIST(CONSOLE_BUILTIN_SETUP)
