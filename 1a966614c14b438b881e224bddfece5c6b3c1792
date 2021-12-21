@@ -53,6 +53,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "deebb6bb_0df185a2",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-21T03:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5770f959_6a23e465",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "304bba52_04f8b1d4",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-21T03:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5770f959_6a23e465",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3295aab7_34dcb831",
@@ -88,6 +124,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d8f7ddf_28cae148",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-21T03:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e39556e_da414164",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b371269_2ab2d3bc",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-21T03:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e39556e_da414164",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caf9dc2f_de6c8002",
@@ -119,6 +191,24 @@
       "side": 1,
       "message": "If RISCV_HAS_NO_UNALIGNED undefined, it should call NativeRegExpMacroAssembler::CanReadUnaligned().",
       "parentUuid": "caf9dc2f_de6c8002",
+      "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9ae581c_bbe74dee",
+        "filename": "src/regexp/riscv64/regexp-macro-assembler-riscv64.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2021-12-21T03:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d17232b_e141967e",
       "revId": "1a966614c14b438b881e224bddfece5c6b3c1792",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
