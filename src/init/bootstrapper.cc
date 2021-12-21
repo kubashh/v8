@@ -4585,6 +4585,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
     Handle<JSObject> now = factory()->NewJSObject(isolate_->object_function(),
                                                   AllocationType::kOld);
     JSObject::AddProperty(isolate_, temporal, "Now", now, DONT_ENUM);
+    InstallToStringTag(isolate_, now, "Temporal.Now");
 
     // Note: There are NO Temporal.Now.plainTime
     // See https://github.com/tc39/proposal-temporal/issues/1540
@@ -5193,6 +5194,37 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   }
 #undef INSTALL_TEMPORAL_CTOR_AND_PROTOTYPE
 #undef INSTALL_TEMPORAL_FUNC
+
+  // The StringFixedArrayFromIterable and TemporalInsantFixedArrayFromIterable
+  // functions are created but not exposed, as they are used internally by
+  // CalendarFeilds and GetPossibleInstantsFor
+  {
+    Handle<JSFunction> func = SimpleCreateFunction(
+        isolate_,
+        factory()->InternalizeUtf8String("StringFixedArrayFromIterable"),
+        Builtin::kStringFixedArrayFromIterable, 1, false);
+    native_context()->set_string_fixed_array_from_iterable(*func);
+  }
+  {
+    Handle<JSFunction> func = SimpleCreateFunction(
+        isolate_,
+        factory()->InternalizeUtf8String(
+            "TemporalInstantFixedArrayFromIterable"),
+        Builtin::kTemporalInstantFixedArrayFromIterable, 1, false);
+    native_context()->set_temporal_instant_fixed_array_from_iterable(*func);
+  }
+
+  {  // -- D a t e
+    // #sec-date.prototype.totemporalinstant
+    Handle<JSFunction> date_func(native_context()->date_function(), isolate());
+    // Setup %DatePrototype%.
+    Handle<JSObject> date_prototype(
+        JSObject::cast(date_func->instance_prototype()), isolate());
+
+    // Install the Date.prototype.toTemporalInstant().
+    SimpleInstallFunction(isolate_, date_prototype, "toTemporalInstant",
+                          Builtin::kDatePrototypeToTemporalInstant, 0, false);
+  }
 }
 
 #ifdef V8_INTL_SUPPORT

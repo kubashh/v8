@@ -37,11 +37,15 @@ namespace internal {
     DCHECK_GE(upper, field);                                                  \
     DCHECK_LE(lower, field);                                                  \
     int hints = data();                                                       \
+    /* Mask out unrelated bits */                                             \
+    field &= (static_cast<uint32_t>(int32_t{-1})) ^                           \
+             (static_cast<uint32_t>(int32_t{-1}) << B##Bits::kSize);          \
     hints = B##Bits::update(hints, field);                                    \
     set_##data(hints);                                                        \
   }                                                                           \
   inline int32_t T::field() const {                                           \
     int32_t v = B##Bits::decode(data());                                      \
+    /* Restore bits for negative values based on the MSB in that field */     \
     v |= ((int32_t{1} << (B##Bits::kSize - 1) & v)                            \
               ? (static_cast<uint32_t>(int32_t{-1}) << B##Bits::kSize)        \
               : 0);                                                           \
@@ -89,7 +93,20 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSTemporalZonedDateTime)
 BIT_FIELD_ACCESSORS(JSTemporalCalendar, flags, calendar_index,
                     JSTemporalCalendar::CalendarIndexBits)
 
+ACCESSORS(JSTemporalCalendar, internal, Managed<TemporalCalendarInternal>,
+          kInternalOffset)
+
 BOOL_ACCESSORS(JSTemporalTimeZone, flags, is_offset, IsOffsetBit::kShift)
+
+// Special handling of sign
+TEMPORAL_INLINE_SIGNED_GETTER_SETTER(JSTemporalTimeZone, flags,
+                                     offset_milliseconds, -24 * 60 * 60 * 1000,
+                                     24 * 60 * 60 * 1000,
+                                     OffsetMillisecondsOrTimeZoneIndex)
+
+TEMPORAL_INLINE_SIGNED_GETTER_SETTER(JSTemporalTimeZone, details,
+                                     offset_sub_milliseconds, -1000000, 1000000,
+                                     OffsetSubMilliseconds)
 
 BIT_FIELD_ACCESSORS(JSTemporalTimeZone, flags,
                     offset_milliseconds_or_time_zone_index,

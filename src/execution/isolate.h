@@ -1401,10 +1401,13 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     default_locale_ = locale;
   }
 
-  enum class ICUObjectCacheType{
-      kDefaultCollator, kDefaultNumberFormat, kDefaultSimpleDateFormat,
-      kDefaultSimpleDateFormatForTime, kDefaultSimpleDateFormatForDate};
-  static constexpr int kICUObjectCacheTypeCount = 5;
+  enum class ICUObjectCacheType{kDefaultCollator,
+                                kDefaultNumberFormat,
+                                kDefaultSimpleDateFormat,
+                                kDefaultSimpleDateFormatForTime,
+                                kDefaultSimpleDateFormatForDate,
+                                kDefaultSimpleDateFormatForTemporal};
+  static constexpr int kICUObjectCacheTypeCount = 6;
 
   icu::UMemory* get_cached_icu_object(ICUObjectCacheType cache_type,
                                       Handle<Object> locales);

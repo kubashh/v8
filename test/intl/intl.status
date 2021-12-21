@@ -30,6 +30,9 @@
 [ALWAYS, {
 # TODO(jochen): The following test is flaky.
   'overrides/caching': [PASS, FAIL],
+  # https://github.com/tc39/proposal-temporal/issues/1932
+  'date-format/format-range': [FAIL],
+  'date-format/format-range-to-parts': [FAIL],
 }],  # ALWAYS
 
 ################################################################################

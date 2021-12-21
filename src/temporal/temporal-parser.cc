@@ -598,13 +598,13 @@ template <typename Char>
 int32_t ScanTimeZoneBracketedName(base::Vector<Char> str, int32_t s,
                                   ParsedISO8601Result* r) {
   int32_t len;
-  if ((len = ScanEtcGMTAsciiSignHour(str, s)) > 0) return len;
-  if ((len = ScanTimeZoneIANAName(str, s)) > 0) {
+  if (((len = ScanEtcGMTAsciiSignHour(str, s)) > 0) ||
+      ((len = ScanTimeZoneIANAName(str, s)) > 0) ||
+      ((len = ScanTimeZoneUTCOffsetName(str, s)) > 0)) {
     r->tzi_name_start = s;
     r->tzi_name_length = len;
-    return len;
   }
-  return ScanTimeZoneUTCOffsetName(str, s);
+  return len;
 }
 
 // TimeZoneBracketedAnnotation: '[' TimeZoneBracketedName ']'
