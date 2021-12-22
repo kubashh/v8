@@ -50,6 +50,24 @@
       "message": "super nit: extra new line?",
       "revId": "6468f0178c67eca118c4f3984817213140cfba23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a0e1b2_9b7f7b12",
+        "filename": "src/builtins/builtins-console.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-12-22T14:30:00Z",
+      "side": 1,
+      "message": "Intentional 😊",
+      "parentUuid": "ce94bb3d_624df12c",
+      "revId": "6468f0178c67eca118c4f3984817213140cfba23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
