@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a097769a_d4341923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-12-22T09:22:15Z",
+      "side": 1,
+      "message": "Kim, please take a look at the implementation.\n\nIgor, please rubber-stamp the bootstrapper.cc changes.",
+      "revId": "d1911ad573055c55d6b999a63fb41774bc878cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
