@@ -16,6 +16,40 @@
       "message": "The console-message-format errors in Blink are expected (crrev.com/c/3347983) disables the relevant test for now.",
       "revId": "6468f0178c67eca118c4f3984817213140cfba23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d63793cf_e73ae678",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-12-22T13:22:55Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6468f0178c67eca118c4f3984817213140cfba23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce94bb3d_624df12c",
+        "filename": "src/builtins/builtins-console.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2021-12-22T13:22:55Z",
+      "side": 1,
+      "message": "super nit: extra new line?",
+      "revId": "6468f0178c67eca118c4f3984817213140cfba23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
