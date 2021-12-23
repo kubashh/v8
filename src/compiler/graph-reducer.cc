@@ -96,7 +96,6 @@ void GraphReducer::ReduceNode(Node* node) {
 
 void GraphReducer::ReduceGraph() { ReduceNode(graph()->end()); }
 
-
 Reduction GraphReducer::Reduce(Node* const node) {
   auto skip = reducers_.end();
   for (auto i = reducers_.begin(); i != reducers_.end();) {

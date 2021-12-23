@@ -1505,6 +1505,25 @@ struct UntyperPhase {
   }
 };
 
+struct DummyReducerPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(DummyReducer)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    class DummyReducer final : public Reducer {
+     public:
+      const char* reducer_name() const override { return "DummyReducer"; }
+      Reduction Reduce(Node* node) final { return NoChange(); }
+    };
+
+    GraphReducer graph_reducer(
+        temp_zone, data->graph(), &data->info()->tick_counter(), data->broker(),
+        data->jsgraph()->Dead(), data->observe_node_manager());
+    DummyReducer dummy_reducer;
+    AddReducer(data, &graph_reducer, &dummy_reducer);
+    graph_reducer.ReduceGraph();
+  }
+};
+
 struct HeapBrokerInitializationPhase {
   DECL_MAIN_THREAD_PIPELINE_PHASE_CONSTANTS(HeapBrokerInitialization)
 
@@ -2828,6 +2847,9 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
 
   Run<DecompressionOptimizationPhase>();
   RunPrintAndVerify(DecompressionOptimizationPhase::phase_name(), true);
+
+  Run<DummyReducerPhase>();
+  RunPrintAndVerify(DummyReducerPhase::phase_name(), true);
 
   data->source_positions()->RemoveDecorator();
   if (data->info()->trace_turbo_json()) {
