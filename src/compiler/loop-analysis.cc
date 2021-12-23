@@ -551,7 +551,7 @@ LoopTree* LoopFinder::BuildLoopTree(Graph* graph, TickCounter* tick_counter,
 #if V8_ENABLE_WEBASSEMBLY
 // static
 ZoneUnorderedSet<Node*>* LoopFinder::FindSmallInnermostLoopFromHeader(
-    Node* loop_header, Zone* zone, size_t max_size) {
+    Node* loop_header, Zone* zone, size_t max_size, const char* debug_name) {
   auto* visited = zone->New<ZoneUnorderedSet<Node*>>(zone);
   std::vector<Node*> queue;
 
@@ -654,11 +654,11 @@ ZoneUnorderedSet<Node*>* LoopFinder::FindSmallInnermostLoopFromHeader(
       if (NodeProperties::IsControlEdge(edge) && visited->count(input) == 0 &&
           input->opcode() != IrOpcode::kStart) {
         FATAL(
-            "Floating control detected in wasm turbofan graph: Node #%d:%s is "
-            "inside loop headed by #%d, but its control dependency #%d:%s is "
-            "outside",
-            node->id(), node->op()->mnemonic(), loop_header->id(), input->id(),
-            input->op()->mnemonic());
+            "Floating control detected in wasm turbofan graph for function "
+            "'%s': Node #%d:%s is inside loop headed by #%d, but its control "
+            "dependency #%d:%s is outside",
+            debug_name, node->id(), node->op()->mnemonic(), loop_header->id(),
+            input->id(), input->op()->mnemonic());
       }
     }
   }

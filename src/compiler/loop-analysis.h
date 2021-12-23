@@ -190,7 +190,7 @@ class V8_EXPORT_PRIVATE LoopFinder {
   //    builtins,
   // 3) a nested loop is found in the loop.
   static ZoneUnorderedSet<Node*>* FindSmallInnermostLoopFromHeader(
-      Node* loop_header, Zone* zone, size_t max_size);
+      Node* loop_header, Zone* zone, size_t max_size, const char* debug_name);
 #endif
 };
 

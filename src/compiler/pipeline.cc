@@ -1684,7 +1684,8 @@ struct WasmLoopUnrollingPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(WasmLoopUnrolling)
 
   void Run(PipelineData* data, Zone* temp_zone,
-           std::vector<compiler::WasmLoopInfo>* loop_infos) {
+           std::vector<compiler::WasmLoopInfo>* loop_infos,
+           const char* debug_name) {
     for (WasmLoopInfo& loop_info : *loop_infos) {
       if (loop_info.can_be_innermost) {
         ZoneUnorderedSet<Node*>* loop =
@@ -1692,7 +1693,7 @@ struct WasmLoopUnrollingPhase {
                 loop_info.header, temp_zone,
                 // Only discover the loop until its size is the maximum unrolled
                 // size for its depth.
-                maximum_unrollable_size(loop_info.nesting_depth));
+                maximum_unrollable_size(loop_info.nesting_depth), debug_name);
         if (loop == nullptr) continue;
         UnrollLoop(loop_info.header, loop, loop_info.nesting_depth,
                    data->graph(), data->common(), temp_zone,
@@ -3250,7 +3251,7 @@ void Pipeline::GenerateCodeForWasmFunction(
     pipeline.RunPrintAndVerify(WasmInliningPhase::phase_name(), true);
   }
   if (FLAG_wasm_loop_unrolling) {
-    pipeline.Run<WasmLoopUnrollingPhase>(loop_info);
+    pipeline.Run<WasmLoopUnrollingPhase>(loop_info, info->GetDebugName().get());
     pipeline.RunPrintAndVerify(WasmLoopUnrollingPhase::phase_name(), true);
   }
   const bool is_asm_js = is_asmjs_module(module);
