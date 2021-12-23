@@ -5,7 +5,6 @@
 #define V8_HEAP_MARKING_WORKLIST_INL_H_
 
 #include <unordered_map>
-#include <vector>
 
 #include "src/heap/marking-worklist.h"
 
