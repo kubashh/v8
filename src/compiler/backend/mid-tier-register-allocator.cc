@@ -186,6 +186,13 @@ class RegisterIndex final {
     }
   }
 
+  RegisterIndex simdSibling() const {
+    CHECK(!kSimpleFPAliasing);  // Statically evaluated.
+    // Two FP registers {2N, 2N+1} alias the same SIMD register. We compute {2N}
+    // from {2N+1} and vice versa in a single computation.
+    return RegisterIndex{index_ + 1 - 2 * (index_ & 1)};
+  }
+
   bool operator==(const RegisterIndex& rhs) const {
     return index_ == rhs.index_;
   }
@@ -2156,10 +2163,7 @@ void SinglePassRegisterAllocator::SpillRegisterAndPotentialSimdSibling(
   SpillRegister(reg);
 
   if (!kSimpleFPAliasing && rep == MachineRepresentation::kSimd128) {
-    // Two FP registers {2N, 2N+1} alias the same SIMD register. We compute {2N}
-    // from {2N+1} and vice versa in a single computation.
-    RegisterIndex siblingSimdReg{reg.ToInt() + 1 - 2 * (reg.ToInt() & 1)};
-    SpillRegister(siblingSimdReg);
+    SpillRegister(reg.simdSibling());
   }
 }
 
@@ -2412,6 +2416,11 @@ RegisterIndex SinglePassRegisterAllocator::AllocateOutput(
       // in the (already allocated) following instruction's gap-move.
       CommitRegister(existing_reg, vreg_data.vreg(), vreg_data.rep(),
                      &move_output_to, UsePosition::kNone);
+    }
+    if (!kSimpleFPAliasing &&
+        vreg_data.rep() == MachineRepresentation::kSimd128) {
+      SpillRegister(reg.simdSibling());
+      DCHECK(!register_state()->IsAllocated(reg.simdSibling()));
     }
     CommitRegister(reg, vreg_data.vreg(), vreg_data.rep(), operand, pos);
     if (move_output_to.IsAllocated()) {
