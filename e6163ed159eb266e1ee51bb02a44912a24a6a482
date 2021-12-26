@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38a1dc24_30d2f482",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1530610
+      },
+      "writtenOn": "2021-12-26T00:35:42Z",
+      "side": 1,
+      "message": "Hello, would you be interested in reviewing this one-liner follow-up to commit 84f3877c15bc7f8956d21614da4311337525a3c8?\n\nPlease note: the best way to test this patch is simply to run\ntools/gen-keywords-gen-h.py and compare produced\nsrc/parsing/keywords-gen.h and try to compile V8.\nAs far as I understand, there are no explicit tests for\ntools/gen-keywords-gen-h.py.\n\nThank you,\nAnton.",
+      "revId": "e6163ed159eb266e1ee51bb02a44912a24a6a482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
