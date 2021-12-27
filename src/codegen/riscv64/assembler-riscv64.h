@@ -998,6 +998,10 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void vfabs_vv(VRegister dst, VRegister src, MaskType mask = NoMask) {
     vfsngjx_vv(dst, src, src, mask);
   }
+  void vfirst_m(Register rd, VRegister vs2, MaskType mask = NoMask);
+
+  void vcpop_m(Register rd, VRegister vs2, MaskType mask = NoMask);
+
   // Privileged
   void uret();
   void sret();

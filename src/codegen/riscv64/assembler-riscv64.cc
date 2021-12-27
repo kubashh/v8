@@ -3116,6 +3116,14 @@ void Assembler::vsxseg8(VRegister vd, Register rs1, VRegister rs2, VSew vsew,
   GenInstrV(STORE_FP, width, vd, rs1, rs2, mask, 0b11, 0, 0b111);
 }
 
+void Assembler::vfirst_m(Register rd, VRegister vs2, MaskType mask) {
+  GenInstrV(VWXUNARY0_FUNCT6, OP_MVV, rd, v17, vs2, mask);
+}
+
+void Assembler::vcpop_m(Register rd, VRegister vs2, MaskType mask) {
+  GenInstrV(VWXUNARY0_FUNCT6, OP_MVV, rd, v16, vs2, mask);
+}
+
 // Privileged
 void Assembler::uret() {
   GenInstrPriv(0b0000000, ToRegister(0), ToRegister(0b00010));
