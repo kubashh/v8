@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b941daf_6ed438e3",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-27T10:47:47Z",
+      "side": 1,
+      "message": "Resolving",
+      "parentUuid": "9753c0ff_1347b1dd",
+      "revId": "91503e07f0a71c1ef68b01524ba79d78b81b566a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeb74c73_d64469c0",
