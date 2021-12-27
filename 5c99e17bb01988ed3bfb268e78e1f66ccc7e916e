@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee5becf_82b6893c",
+        "filename": "src/codegen/riscv64/assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Replace v17 with 0b10001",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "267c52d0_7624ee91",
+        "filename": "src/codegen/riscv64/assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3124,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "279ac927_02d11bd8",
+        "filename": "src/execution/riscv64/simulator-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5571,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Use rvv_trace_vd()  instead of it.",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7947b57d_619c4863",
+        "filename": "src/execution/riscv64/simulator-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5582,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Use rvv_trace_vd()  instead of it.",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7c3bf07_30d8bc5b",
+        "filename": "src/execution/riscv64/simulator-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5596,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Use rvv_trace_vd()  instead of it.",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a10e376b_7a9689db",
+        "filename": "test/cctest/test-assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2568,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Format it please",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "476f6c16_153f41dd",
+        "filename": "test/cctest/test-assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2590,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2021-12-27T06:08:06Z",
+      "side": 1,
+      "message": "Format it",
+      "revId": "5c99e17bb01988ed3bfb268e78e1f66ccc7e916e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
