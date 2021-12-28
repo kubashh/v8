@@ -40,6 +40,10 @@ class V8_BASE_EXPORT LsanVirtualAddressSpace final
     return vas_->SetPagePermissions(address, size, permissions);
   }
 
+  bool AdviseHugePage(Address address, size_t size) override {
+    return vas_->AdviseHugePage(address, size);
+  }
+
   bool CanAllocateSubspaces() override { return vas_->CanAllocateSubspaces(); }
 
   std::unique_ptr<VirtualAddressSpace> AllocateSubspace(

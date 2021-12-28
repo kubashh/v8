@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <cmath>
+#include <list>
 #include <map>
 #include <memory>
 #include <unordered_map>
@@ -110,6 +111,7 @@ class Space;
 class StressScavengeObserver;
 class TimedHistogram;
 class WeakObjectRetainer;
+class HugePageRange;
 
 enum ArrayStorageAllocationMode {
   DONT_INITIALIZE_ARRAY_ELEMENTS,
@@ -1682,6 +1684,18 @@ class Heap {
   // over all objects.
   void MakeHeapIterable();
 
+  std::list<HugePageRange*>& huge_page_range_lists();
+
+  size_t HugePageRangeNum();
+
+  HugePageRange* CreateHugePageRange();
+
+  HugePageRange* FetchHugePageRange();
+
+  void RemoveHugePageRange(HugePageRange* range);
+
+  void TearDownHugePageRanges();
+
  private:
   using ExternalStringTableUpdaterCallback = String (*)(Heap* heap,
                                                         FullObjectSlot pointer);
@@ -2519,6 +2533,10 @@ class Heap {
   // marking.
   CollectionEpoch epoch_young_ = 0;
   CollectionEpoch epoch_full_ = 0;
+
+  // Huge page ranges.
+  size_t max_huge_page_range_;
+  std::list<HugePageRange*> huge_page_range_lists_;
 
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
