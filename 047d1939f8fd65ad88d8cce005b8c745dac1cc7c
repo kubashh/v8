@@ -34,6 +34,41 @@
       "parentUuid": "a6c978f5_cd7b43e9",
       "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb49b1ff_9dc09ea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-28T11:04:34Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11e6943e_99657082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-28T11:04:34Z",
+      "side": 1,
+      "message": "Ack.\n(Maybe to rephrase to fixing the histogram/metric values since existing scopes remain the same)",
+      "parentUuid": "89e15b97_8debdc2e",
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
