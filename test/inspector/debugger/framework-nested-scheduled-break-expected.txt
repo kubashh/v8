@@ -6,7 +6,7 @@ break aux data: {
 doFrameworkBreak (framework.js:20:12)
 doFrameworkWork (framework.js:15:12)
 frameworkCall (framework.js:9:12)
-testFunction (user.js:27:12)
+testFunction (user.js:25:12)
 (anonymous) (expr.js:0:0)
 
 break reason: ambiguous
@@ -23,19 +23,19 @@ break aux data: {
     }
   ]
 }
-callback (user.js:32:2)
+callback (user.js:30:2)
 doFrameworkWork (framework.js:16:2)
 frameworkCall (framework.js:9:12)
-testFunction (user.js:27:12)
+testFunction (user.js:25:12)
 (anonymous) (expr.js:0:0)
 
 break reason: user-break
 break aux data: {
   "data": "data for user-break"
 }
-callback (user.js:32:12)
+callback (user.js:30:12)
 doFrameworkWork (framework.js:16:2)
 frameworkCall (framework.js:9:12)
-testFunction (user.js:27:12)
+testFunction (user.js:25:12)
 (anonymous) (expr.js:0:0)
 
