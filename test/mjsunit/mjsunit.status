@@ -1466,6 +1466,7 @@
   'regress/wasm/regress-1271538': [SKIP],
   'regress/wasm/regress-1282197': [SKIP],
   'regress/wasm/regress-1282224': [SKIP],
+  'regress/wasm/regress-1283042': [SKIP],
 }],  # no_simd_hardware == True
 
 ##############################################################################
