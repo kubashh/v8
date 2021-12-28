@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26abda30_e3bb8af5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2021-12-28T16:15:39Z",
+      "side": 1,
+      "message": "Hey Kim,\n\nHere\u0027s a follow-up fix to also report correct locations with Debugger.CallFrame now.\n\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "d6fd3a54b1f8fd74a879735afe024fb843ea0766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
