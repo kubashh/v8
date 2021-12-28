@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6c978f5_cd7b43e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2021-12-28T10:08:50Z",
+      "side": 1,
+      "message": "The CL says it fixes a scope but I only see that it adds new scopes without touching existing ones. Am I missing something?",
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
