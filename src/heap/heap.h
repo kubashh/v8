@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <cmath>
+#include <list>
 #include <map>
 #include <memory>
 #include <unordered_map>
@@ -110,6 +111,7 @@ class Space;
 class StressScavengeObserver;
 class TimedHistogram;
 class WeakObjectRetainer;
+class HugePageRange;
 
 enum ArrayStorageAllocationMode {
   DONT_INITIALIZE_ARRAY_ELEMENTS,
@@ -1681,6 +1683,22 @@ class Heap {
   // Ensure that we have swept all spaces in such a way that we can iterate
   // over all objects.
   void MakeHeapIterable();
+
+  static const int kHugePageCapacity = 8;
+  static const int kMaxHugePageRange = 4;
+  std::list<HugePageRange*> huge_page_range_lists_;
+
+  std::list<HugePageRange*>& huge_page_range_lists();
+
+  size_t HugePageRangeNum();
+
+  HugePageRange* CreateHugePageRange();
+
+  HugePageRange* FetchHugePageRange();
+
+  void RemoveHugePageRange(HugePageRange* range);
+
+  void TearDownHugePageRanges();
 
  private:
   using ExternalStringTableUpdaterCallback = String (*)(Heap* heap,

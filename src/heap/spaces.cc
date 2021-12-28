@@ -85,8 +85,16 @@ Page* Page::ConvertNewToOld(Page* old_page) {
   DCHECK(old_page->InNewSpace());
   OldSpace* old_space = old_page->heap()->old_space();
   old_page->set_owner(old_space);
+  bool in_huge_page_range = old_page->IsFlagSet(Page::IN_RESERVERED_RANGE);
   old_page->ClearFlags(Page::kAllFlagsMask);
   Page* new_page = old_space->InitializePage(old_page);
+  if (in_huge_page_range) {
+    if (!HugePageRange::FromBasicMemoryChunk(new_page)) {
+      std::cout << "old page:" << old_page << std::endl;
+      FATAL("exit");
+    }
+    new_page->SetFlag(Page::IN_RESERVERED_RANGE);
+  }
   old_space->AddPage(new_page);
   return new_page;
 }
@@ -120,9 +128,8 @@ void Page::MergeOldToNewRememberedSets() {
 
 size_t Page::AvailableInFreeList() {
   size_t sum = 0;
-  ForAllFreeListCategories([&sum](FreeListCategory* category) {
-    sum += category->available();
-  });
+  ForAllFreeListCategories(
+      [&sum](FreeListCategory* category) { sum += category->available(); });
   return sum;
 }
 

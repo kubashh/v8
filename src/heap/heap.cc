@@ -3570,6 +3570,36 @@ void Heap::MakeHeapIterable() {
   if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
 }
 
+std::list<HugePageRange*>& Heap::huge_page_range_lists() {
+  return huge_page_range_lists_;
+}
+
+size_t Heap::HugePageRangeNum() { return huge_page_range_lists_.size(); }
+
+HugePageRange* Heap::CreateHugePageRange() {
+  HugePageRange* range = memory_allocator()->AllocateHugePageRange();
+  huge_page_range_lists_.push_back(range);
+  return range;
+}
+
+HugePageRange* Heap::FetchHugePageRange() {
+  for (HugePageRange* range : huge_page_range_lists_) {
+    if (range->page_num() < kHugePageCapacity) {
+      return range;
+    }
+  }
+
+  if (HugePageRangeNum() < kMaxHugePageRange) {
+    return CreateHugePageRange();
+  }
+
+  return nullptr;
+}
+
+void Heap::RemoveHugePageRange(HugePageRange* range) {
+  huge_page_range_lists_.remove(range);
+}
+
 void Heap::FreeLinearAllocationAreas() {
   safepoint()->IterateLocalHeaps(
       [](LocalHeap* local_heap) { local_heap->FreeLinearAllocationArea(); });
@@ -6113,6 +6143,8 @@ void Heap::TearDown() {
   read_only_space_ = nullptr;
 
   memory_allocator()->TearDown();
+
+  DCHECK_EQ(HugePageRangeNum(), 0);
 
   StrongRootsEntry* next = nullptr;
   for (StrongRootsEntry* current = strong_roots_head_; current;

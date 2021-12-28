@@ -147,6 +147,10 @@ bool PageAllocator::SetPermissions(void* address, size_t size,
       address, size, static_cast<base::OS::MemoryPermission>(access));
 }
 
+bool PageAllocator::AdviseHugePage(void* address, size_t size) {
+  return base::OS::AdviseHugePage(address, size);
+}
+
 bool PageAllocator::DiscardSystemPages(void* address, size_t size) {
   return base::OS::DiscardSystemPages(address, size);
 }
