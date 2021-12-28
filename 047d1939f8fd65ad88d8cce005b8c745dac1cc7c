@@ -16,6 +16,24 @@
       "message": "The CL says it fixes a scope but I only see that it adds new scopes without touching existing ones. Am I missing something?",
       "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e15b97_8debdc2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2021-12-28T10:22:17Z",
+      "side": 1,
+      "message": "It fixes the scope in the sense that, e.g., V8.GC.Cycle.Young will track additional time periods that it didn\u0027t track so far. Basically, this fix adjusts the value of the new metric V8.GC.Cycle.Young, so that it matches that of the old metric V8.GCScavenger. If the phrasing is misleading, let\u0027s change it.",
+      "parentUuid": "a6c978f5_cd7b43e9",
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
