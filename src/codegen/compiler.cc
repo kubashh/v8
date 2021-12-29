@@ -168,7 +168,17 @@ class CompilerTracer : public AllStatic {
   static void PrintTracePrefix(const CodeTracer::Scope& scope,
                                const char* header,
                                OptimizedCompilationInfo* info) {
-    PrintTracePrefix(scope, header, info->closure(), info->code_kind());
+    PrintTracePrefix(scope, header, info->closure(), info->code_kind(),
+                     info->osr_offset());
+  }
+
+  static void PrintTracePrefix(const CodeTracer::Scope& scope,
+                               const char* header, Handle<JSFunction> function,
+                               CodeKind code_kind, BytecodeOffset osr_offset) {
+    PrintF(scope.file(), "[%s ", header);
+    function->ShortPrint(scope.file());
+    PrintF(scope.file(), " osr offset %d ", osr_offset.ToInt());
+    PrintF(scope.file(), " (target %s)", CodeKindToString(code_kind));
   }
 
   static void PrintTracePrefix(const CodeTracer::Scope& scope,
@@ -1049,7 +1059,8 @@ MaybeHandle<CodeT> GetOptimizedCode(
     CodeKind code_kind, BytecodeOffset osr_offset = BytecodeOffset::None(),
     JavaScriptFrame* osr_frame = nullptr,
     GetOptimizedCodeResultHandling result_handling =
-        GetOptimizedCodeResultHandling::kDefault) {
+        GetOptimizedCodeResultHandling::kDefault,
+    int osr_level = -1) {
   DCHECK(CodeKindIsOptimizedJSFunction(code_kind));
 
   Handle<SharedFunctionInfo> shared(function->shared(), isolate);
@@ -1080,7 +1091,9 @@ MaybeHandle<CodeT> GetOptimizedCode(
   }
 
   // Check the optimized code cache (stored on the SharedFunctionInfo).
-  if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
+  // For OSR, this is handled at GetOptimizedCodeForOSR.
+  if (CodeKindIsStoredInOptimizedCodeCache(code_kind) &&
+      osr_offset == BytecodeOffset::None()) {
     Handle<CodeT> cached_code;
     if (GetCodeFromOptimizedCodeCache(function, osr_offset, code_kind)
             .ToHandle(&cached_code)) {
@@ -1118,6 +1131,18 @@ MaybeHandle<CodeT> GetOptimizedCode(
   if (mode == ConcurrencyMode::kConcurrent) {
     if (GetOptimizedCodeLater(std::move(job), isolate, compilation_info,
                               code_kind, function)) {
+      if (osr_offset != BytecodeOffset::None()) {
+        DCHECK(isolate->concurrent_osr_enabled());
+        compilation_info->set_osr_level(osr_level);
+        if (FLAG_trace_osr) {
+          CodeTracer::Scope scope(isolate->GetCodeTracer());
+          PrintF(scope.file(), "[OSR - Concurrent compiling: ");
+          function->PrintName(scope.file());
+          PrintF(scope.file(), " at OSR bytecode offset %d]\n",
+                 osr_offset.ToInt());
+        }
+        return {};
+      }
       return ContinuationForConcurrentOptimization(isolate, function);
     }
   } else {
@@ -3220,13 +3245,47 @@ template Handle<SharedFunctionInfo> Compiler::GetSharedFunctionInfo(
     FunctionLiteral* literal, Handle<Script> script, LocalIsolate* isolate);
 
 // static
-MaybeHandle<CodeT> Compiler::GetOptimizedCodeForOSR(
-    Isolate* isolate, Handle<JSFunction> function, BytecodeOffset osr_offset,
-    JavaScriptFrame* osr_frame) {
+MaybeHandle<CodeT> Compiler::GetOptimizedCodeForOSR(Isolate* isolate,
+                                                    Handle<JSFunction> function,
+                                                    BytecodeOffset osr_offset,
+                                                    JavaScriptFrame* osr_frame,
+                                                    int osr_level) {
   DCHECK(!osr_offset.IsNone());
   DCHECK_NOT_NULL(osr_frame);
-  return GetOptimizedCode(isolate, function, ConcurrencyMode::kNotConcurrent,
-                          CodeKindForOSR(), osr_offset, osr_frame);
+  DCHECK(0 <= osr_level && osr_level <= AbstractCode::kMaxLoopNestingMarker);
+
+  CodeKind code_kind = CodeKindForOSR();
+
+  // Check the optimized code cache.
+  if (CodeKindIsStoredInOptimizedCodeCache(code_kind)) {
+    Handle<CodeT> cached_code;
+    if (GetCodeFromOptimizedCodeCache(function, osr_offset, code_kind)
+            .ToHandle(&cached_code)) {
+      CompilerTracer::TraceOptimizedCodeCacheHit(isolate, function, osr_offset,
+                                                 code_kind);
+      return cached_code;
+    }
+  }
+
+  DCHECK(!function->IsInOptimizationQueue());
+  // plan to remove
+  if (isolate->concurrent_osr_enabled() && function->IsInOptimizationQueue()) {
+    if (FLAG_trace_osr) {
+      CodeTracer::Scope scope(isolate->GetCodeTracer());
+      PrintF(scope.file(),
+             "[OSR - One compilation in queue, won't start another job "
+             "before the current job has been finished.\n");
+    }
+    return {};
+  }
+
+  return GetOptimizedCode(
+      isolate, function,
+      isolate->concurrent_osr_enabled() && !isolate->bootstrapper()->IsActive()
+          ? ConcurrencyMode::kConcurrent
+          : ConcurrencyMode::kNotConcurrent,
+      code_kind, osr_offset, osr_frame,
+      GetOptimizedCodeResultHandling::kDefault, osr_level);
 }
 
 // static
@@ -3268,9 +3327,21 @@ bool Compiler::FinalizeOptimizedCompilationJob(OptimizedCompilationJob* job,
       if (V8_LIKELY(use_result)) {
         InsertCodeIntoOptimizedCodeCache(compilation_info);
         CompilerTracer::TraceCompletedJob(isolate, compilation_info);
-        compilation_info->closure()->set_code(*compilation_info->code(),
-                                              kReleaseStore);
+        if (!compilation_info->is_osr()) {
+          compilation_info->closure()->set_code(*compilation_info->code(),
+                                                kReleaseStore);
+        } else {
+          if (compilation_info->closure()->IsInOptimizationQueue() &&
+              !compilation_info->closure()->HasAvailableOptimizedCode()) {
+            compilation_info->closure()->SetOptimizationMarker(
+                OptimizationMarker::kCompileOptimizedConcurrent);
+          }
+          int osr_level = compilation_info->osr_level();
+          shared->GetBytecodeArray(isolate).set_osr_loop_nesting_level(
+              std::min({osr_level + 1, AbstractCode::kMaxLoopNestingMarker}));
+        }
       }
+
       return CompilationJob::SUCCEEDED;
     }
   }
