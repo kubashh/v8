@@ -110,6 +110,11 @@ bool EmulatedVirtualAddressSubspace::SetPagePermissions(
   return parent_space_->SetPagePermissions(address, size, permissions);
 }
 
+bool EmulatedVirtualAddressSubspace::AdviseHugePage(Address address,
+                                                    size_t size) {
+  return parent_space_->AdviseHugePage(address, size);
+}
+
 bool EmulatedVirtualAddressSubspace::CanAllocateSubspaces() {
   // This is not supported, mostly because it's not (yet) needed in practice.
   return false;

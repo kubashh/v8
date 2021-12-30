@@ -472,6 +472,12 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
 }
 
 // static
+bool OS::AdviseHugePage(void* address, size_t size) {
+  int madvise_ret = madvise(address, size, MADV_HUGEPAGE);
+  return madvise_ret == 0;
+}
+
+// static
 bool OS::DiscardSystemPages(void* address, size_t size) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
@@ -897,6 +903,10 @@ bool AddressSpaceReservation::SetPermissions(void* address, size_t size,
                                              OS::MemoryPermission access) {
   DCHECK(Contains(address, size));
   return OS::SetPermissions(address, size, access);
+}
+
+bool AddressSpaceReservation::AdviseHugePage(void* address, size_t size) {
+  return OS::AdviseHugePage(address, size);
 }
 
 bool AddressSpaceReservation::DiscardSystemPages(void* address, size_t size) {

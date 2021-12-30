@@ -77,6 +77,10 @@ bool VirtualAddressSpace::SetPagePermissions(Address address, size_t size,
                             static_cast<OS::MemoryPermission>(permissions));
 }
 
+bool VirtualAddressSpace::AdviseHugePage(Address address, size_t size) {
+  return OS::AdviseHugePage(reinterpret_cast<void*>(address), size);
+}
+
 bool VirtualAddressSpace::CanAllocateSubspaces() {
   return OS::CanReserveAddressSpace();
 }
@@ -202,6 +206,10 @@ bool VirtualAddressSubspace::SetPagePermissions(Address address, size_t size,
   return reservation_.SetPermissions(
       reinterpret_cast<void*>(address), size,
       static_cast<OS::MemoryPermission>(permissions));
+}
+
+bool VirtualAddressSubspace::AdviseHugePage(Address address, size_t size) {
+  return reservation_.AdviseHugePage(reinterpret_cast<void*>(address), size);
 }
 
 std::unique_ptr<v8::VirtualAddressSpace>

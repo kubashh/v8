@@ -18,6 +18,7 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
 #include "src/heap/code-range.h"
+#include "src/heap/huge-page-range.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/spaces.h"
 #include "src/tasks/cancelable-task.h"
@@ -165,6 +166,15 @@ class MemoryAllocator {
   EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   Page* AllocatePage(size_t size, SpaceType* owner, Executability executable);
 
+  template <typename SpaceType>
+  EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+  Page* AllocatePageInHugePageRange(SpaceType* owner);
+
+  template <MemoryAllocator::AllocationMode alloc_mode = kRegular>
+  EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+  HugePageRange* AllocateHugePageRange(
+      Executability executable = NOT_EXECUTABLE);
+
   LargePage* AllocateLargePage(size_t size, LargeObjectSpace* owner,
                                Executability executable);
 
@@ -176,6 +186,11 @@ class MemoryAllocator {
   template <MemoryAllocator::FreeMode mode = kFull>
   EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   void Free(MemoryChunk* chunk);
+
+  void FreeFromHugePageRange(MemoryChunk* chunk);
+
+  void Free(HugePageRange* range);
+
   void FreeReadOnlyPage(ReadOnlyPage* chunk);
 
   // Returns allocated spaces in bytes.
@@ -287,6 +302,8 @@ class MemoryAllocator {
   // before.
   void PerformFreeMemory(MemoryChunk* chunk);
 
+  void PerformFreeMemory(HugePageRange* range);
+
   // See AllocatePage for public interface. Note that currently we only
   // support pools for NOT_EXECUTABLE pages of size MemoryChunk::kPageSize.
   template <typename SpaceType>
@@ -384,6 +401,13 @@ extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
 extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
     Page* MemoryAllocator::AllocatePage<MemoryAllocator::kPooled, SemiSpace>(
         size_t size, SemiSpace* owner, Executability executable);
+
+extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+    Page* MemoryAllocator::AllocatePageInHugePageRange<SemiSpace>(
+        SemiSpace* owner);
+extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+    Page* MemoryAllocator::AllocatePageInHugePageRange<PagedSpace>(
+        PagedSpace* owner);
 
 extern template EXPORT_TEMPLATE_DECLARE(
     V8_EXPORT_PRIVATE) void MemoryAllocator::
