@@ -423,6 +423,10 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
   DCHECK(reservation->IsReserved());
   chunk->set_size(chunk->size() - bytes_to_free);
   chunk->set_area_end(new_area_end);
+  // Don't free if in huge page range.
+  if (chunk->IsFlagSet(MemoryChunk::IN_RESERVERED_RANGE)) {
+    return;
+  }
   if (chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
     // Add guard page at the end.
     size_t page_size = GetCommitPageSize();
@@ -516,8 +520,22 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
   }
 }
 
+void MemoryAllocator::PerformFreeMemory(HugePageRange* range) {
+  DCHECK(range->empty());
+  VirtualMemory* reservation = range->reserved_memory();
+  DCHECK(reservation->IsReserved());
+  size_ -= reservation->size();
+  delete range;
+}
+
 template <MemoryAllocator::FreeMode mode>
 void MemoryAllocator::Free(MemoryChunk* chunk) {
+  if (mode != kAlreadyPooled) {
+    if (chunk->IsFlagSet(MemoryChunk::IN_RESERVERED_RANGE)) {
+      FreeFromHugePageRange(chunk);
+      return;
+    }
+  }
   switch (mode) {
     case kFull:
       PreFreeMemory(chunk);
@@ -542,6 +560,17 @@ void MemoryAllocator::Free(MemoryChunk* chunk) {
   }
 }
 
+void MemoryAllocator::FreeFromHugePageRange(MemoryChunk* chunk) {
+  // std::cout << "FreeFromHugePageRange" << std::endl;
+  HugePageRange* range = HugePageRange::FromBasicMemoryChunk(chunk);
+  DCHECK(range);
+  range->Remove(chunk);
+  chunk->ReleaseAllAllocatedMemory();
+  if (range->empty()) {
+    Free(range);
+  }
+}
+
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void MemoryAllocator::Free<
     MemoryAllocator::kFull>(MemoryChunk* chunk);
 
@@ -554,9 +583,26 @@ template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void MemoryAllocator::Free<
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void MemoryAllocator::Free<
     MemoryAllocator::kPooledAndQueue>(MemoryChunk* chunk);
 
+void MemoryAllocator::Free(HugePageRange* range) {
+  DCHECK(range->empty());
+  DCHECK_GT(isolate_->heap()->huge_page_range_manager()->HugePageRangeNum(), 0);
+  isolate_->heap()->huge_page_range_manager()->RemoveHugePageRange(range);
+  PerformFreeMemory(range);
+}
+
 template <MemoryAllocator::AllocationMode alloc_mode, typename SpaceType>
 Page* MemoryAllocator::AllocatePage(size_t size, SpaceType* owner,
                                     Executability executable) {
+  AllocationSpace identity = owner->identity();
+  if (FLAG_huge_page && isolate_->heap()->deserialization_complete() &&
+      (identity == OLD_SPACE || identity == NEW_SPACE ||
+       identity == MAP_SPACE)) {
+    Page* page = AllocatePageInHugePageRange<SpaceType>(owner);
+    if (page) {
+      return page;
+    }
+  }
+
   MemoryChunk* chunk = nullptr;
   if (alloc_mode == kPooled) {
     DCHECK_EQ(size, static_cast<size_t>(
@@ -569,7 +615,9 @@ Page* MemoryAllocator::AllocatePage(size_t size, SpaceType* owner,
     chunk = AllocateChunk(size, size, executable, owner);
   }
   if (chunk == nullptr) return nullptr;
-  return owner->InitializePage(chunk);
+  Page* page = owner->InitializePage(chunk);
+  DCHECK(!page->IsFlagSet(Page::IN_RESERVERED_RANGE));
+  return page;
 }
 
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
@@ -581,6 +629,73 @@ template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
     Page* MemoryAllocator::AllocatePage<MemoryAllocator::kPooled, SemiSpace>(
         size_t size, SemiSpace* owner, Executability executable);
+
+template <typename SpaceType>
+Page* MemoryAllocator::AllocatePageInHugePageRange(SpaceType* owner) {
+  HugePageRange* range =
+      isolate_->heap()->huge_page_range_manager()->FetchHugePageRange();
+  if (!range || range->page_num() == HugePageRange::kMaxPageNum) {
+    return nullptr;
+  }
+  Address base = range->Allocate();
+  size_t size = Page::kPageSize;
+  if (Heap::ShouldZapGarbage()) {
+    ZapBlock(base, size, kZapValue);
+  }
+  Address area_start = base + MemoryChunkLayout::ObjectStartOffsetInDataPage();
+  Address area_end = base + size;
+  VirtualMemory reservation(page_allocator(NOT_EXECUTABLE), base,
+                            MemoryChunk::kPageSize);
+  BasicMemoryChunk* basic_chunk = BasicMemoryChunk::Initialize(
+      isolate_->heap(), base, MemoryChunk::kPageSize, area_start, area_end,
+      owner, std::move(reservation));
+
+  MemoryChunk* chunk =
+      MemoryChunk::Initialize(basic_chunk, isolate_->heap(), NOT_EXECUTABLE);
+  Page* page = owner->InitializePage(chunk);
+  page->SetFlag(MemoryChunk::IN_RESERVERED_RANGE);
+
+  return page;
+}
+
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    Page* MemoryAllocator::AllocatePageInHugePageRange<SemiSpace>(
+        SemiSpace* owner);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    Page* MemoryAllocator::AllocatePageInHugePageRange<PagedSpace>(
+        PagedSpace* owner);
+
+template <MemoryAllocator::AllocationMode alloc_mode>
+HugePageRange* MemoryAllocator::AllocateHugePageRange(
+    Executability executable) {
+  HugePageRange* range = nullptr;
+  if (alloc_mode == kPooled) {
+    UNREACHABLE();
+  }
+
+  if (range == nullptr) {
+    void* address_hint = AlignedAddress(isolate_->heap()->GetRandomMmapAddr(),
+                                        HugePageRange::kHugeRangeSize);
+
+    Address base = kNullAddress;
+    VirtualMemory reserved;
+    base = isolate_->heap()->memory_allocator()->AllocateAlignedMemory(
+        HugePageRange::kHugeRangeSize, HugePageRange::kHugeRangeSize,
+        HugePageRange::kHugeRangeSize, executable, address_hint, &reserved);
+    if (base == kNullAddress) {
+      return nullptr;
+    }
+    range = HugePageRange::Initialize(isolate_->heap(), std::move(reserved));
+  }
+  return range;
+}
+
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    HugePageRange* MemoryAllocator::AllocateHugePageRange<
+        MemoryAllocator::kRegular>(Executability executable);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    HugePageRange* MemoryAllocator::AllocateHugePageRange<
+        MemoryAllocator::kPooled>(Executability executable);
 
 ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(size_t size,
                                                     ReadOnlySpace* owner) {
