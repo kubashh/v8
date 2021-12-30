@@ -598,13 +598,13 @@ template <typename Char>
 int32_t ScanTimeZoneBracketedName(base::Vector<Char> str, int32_t s,
                                   ParsedISO8601Result* r) {
   int32_t len;
-  if ((len = ScanEtcGMTAsciiSignHour(str, s)) > 0) return len;
-  if ((len = ScanTimeZoneIANAName(str, s)) > 0) {
+  if (((len = ScanEtcGMTAsciiSignHour(str, s)) > 0) ||
+      ((len = ScanTimeZoneIANAName(str, s)) > 0) ||
+      ((len = ScanTimeZoneUTCOffsetName(str, s)) > 0)) {
     r->tzi_name_start = s;
     r->tzi_name_length = len;
-    return len;
   }
-  return ScanTimeZoneUTCOffsetName(str, s);
+  return len;
 }
 
 // TimeZoneBracketedAnnotation: '[' TimeZoneBracketedName ']'
@@ -1187,20 +1187,22 @@ SATISIFY(TemporalDurationString, ParsedISO8601Duration)
 }  // namespace
 
 #define IMPL_PARSE_METHOD(R, NAME)                                         \
-  Maybe<R> TemporalParser::Parse##NAME(                                    \
-      Isolate* isolate, Handle<String> iso_string, bool* valid) {          \
+  Maybe<R> TemporalParser::Parse##NAME(Isolate* isolate,                   \
+                                       Handle<String> iso_string) {        \
+    bool valid;                                                            \
     R parsed;                                                              \
     iso_string = String::Flatten(isolate, iso_string);                     \
     {                                                                      \
       DisallowGarbageCollection no_gc;                                     \
       String::FlatContent str_content = iso_string->GetFlatContent(no_gc); \
       if (str_content.IsOneByte()) {                                       \
-        *valid = Satisfy##NAME(str_content.ToOneByteVector(), &parsed);    \
+        valid = Satisfy##NAME(str_content.ToOneByteVector(), &parsed);     \
       } else {                                                             \
-        *valid = Satisfy##NAME(str_content.ToUC16Vector(), &parsed);       \
+        valid = Satisfy##NAME(str_content.ToUC16Vector(), &parsed);        \
       }                                                                    \
     }                                                                      \
-    return Just(parsed);                                                   \
+    if (valid) return Just(parsed);                                        \
+    return Nothing<R>();                                                   \
   }
 
 IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalDateTimeString)

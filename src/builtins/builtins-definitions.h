@@ -1631,13 +1631,19 @@ namespace internal {
   /* Temporal #sec-temporal.calendar.prototype.inleapyear */                   \
   CPP(TemporalCalendarPrototypeInLeapYear)                                     \
   /* Temporal #sec-temporal.calendar.prototype.fields */                       \
-  CPP(TemporalCalendarPrototypeFields)                                         \
+  TFJ(TemporalCalendarPrototypeFields, kJSArgcReceiverSlots, kIterable)        \
   /* Temporal #sec-temporal.calendar.prototype.mergefields */                  \
   CPP(TemporalCalendarPrototypeMergeFields)                                    \
   /* Temporal #sec-temporal.calendar.prototype.tostring */                     \
   CPP(TemporalCalendarPrototypeToString)                                       \
   /* Temporal #sec-temporal.calendar.prototype.tojson */                       \
-  CPP(TemporalCalendarPrototypeToJSON)
+  CPP(TemporalCalendarPrototypeToJSON)                                         \
+  /* Temporal #sec-date.prototype.totemporalinstant */                         \
+  CPP(DatePrototypeToTemporalInstant)                                          \
+                                                                               \
+  /* "Private" (created but not exposed) Bulitins needed by Temporal */        \
+  TFJ(StringFixedArrayFromIterable, kJSArgcReceiverSlots, kIterable)           \
+  TFJ(TemporalInstantFixedArrayFromIterable, kJSArgcReceiverSlots, kIterable)
 
 #define BUILTIN_LIST_BASE(CPP, TFJ, TFC, TFS, TFH, ASM) \
   BUILTIN_LIST_BASE_TIER0(CPP, TFJ, TFC, TFS, TFH, ASM) \

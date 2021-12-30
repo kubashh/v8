@@ -303,17 +303,91 @@
   'built-ins/Array/prototype/some/callbackfn-resize-arraybuffer': [FAIL],
   'built-ins/TypedArray/prototype/map/callbackfn-resize': [SKIP],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=11544
-  'built-ins/Temporal/*': [FAIL],
-  'intl402/Temporal/*': [FAIL],
+  # https://github.com/tc39/proposal-temporal/issues/1924
+  'built-ins/Temporal/ZonedDateTime/from/zoneddatetime-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/sub-minute-offset': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/sub-minute-offset': [FAIL],
+
+  # https://github.com/tc39/test262/issues/3319
+  'built-ins/Temporal/Duration/compare/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/add/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/round/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/relativeto-sub-minute-offset': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-sub-minute-offset': [FAIL],
+
+  # Daylight Saving Time related
+  'built-ins/Temporal/ZonedDateTime/prototype/with/offset-undefined': [FAIL],
+
+  # TimeZone getPossibleInstantsFor bug
+  'built-ins/Temporal/Duration/prototype/total/timezone-getpossibleinstantsfor-iterable': [FAIL],
+
+  # Calendar.dateAdd with null instead of undefined
+  # https://github.com/tc39/test262/issues/3262
+  'built-ins/Temporal/Duration/prototype/add/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/Duration/prototype/subtract/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/calendar-dateadd-called-with-options-undefined': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/round/dateadd-options': [FAIL],
+
+  # Maybe related to TimeZone daylight saving implementation
+  'built-ins/Temporal/Duration/prototype/round/relativeto-string-datetime': [FAIL],
+  'built-ins/Temporal/Duration/prototype/total/relativeto-string-datetime': [FAIL],
+
+  # Custom TimeZone name
+  # https://github.com/tc39/test262/issues/3265
+  'built-ins/Temporal/Instant/from/timezone-custom': [FAIL],
+
+  'built-ins/Temporal/Duration/prototype/round/calendar-dateuntil-called-with-singular-largestunit': [FAIL],
+
+  # ???
+  'built-ins/Temporal/Instant/prototype/round/subclassing-ignored': [FAIL],
+
+  'built-ins/Temporal/Duration/fractional-throws-rangeerror': [FAIL],
+
+  # Need to implement i18n
+
+  # https://github.com/tc39/ecma402/issues/623
   'intl402/DateTimeFormat/prototype/formatRange/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatRangeToParts/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/format/temporal-objects-resolved-time-zone': [FAIL],
   'intl402/DateTimeFormat/prototype/formatToParts/temporal-objects-resolved-time-zone': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatRange/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatRangeToParts/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/format/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
-  'intl402/DateTimeFormat/prototype/formatToParts/temporal-objects-timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainDateTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainTime/prototype/toLocaleString/resolved-time-zone': [FAIL],
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/resolved-time-zone': [FAIL],
+
+  'intl402/Temporal/PlainYearMonth/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+  'intl402/Temporal/PlainMonthDay/prototype/toLocaleString/timezone-getoffsetnanosecondsfor-not-callable': [FAIL],
+
+  # Maybe https://github.com/tc39/proposal-temporal/pull/1920
+  'built-ins/Temporal/Instant/compare/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/from/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/equals/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/since/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toString/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/until/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toZonedDateTimeISO/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Instant/prototype/toZonedDateTime/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Now/zonedDateTimeISO/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/Now/zonedDateTime/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/PlainDate/prototype/toZonedDateTime/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/PlainDateTime/prototype/toZonedDateTime/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/PlainTime/prototype/toZonedDateTime/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/TimeZone/from/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/TimeZone/prototype/getPlainDateTimeFor/instant-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/compare/zoneddatetime-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/from/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/from/zoneddatetime-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/zoneddatetime-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/zoneddatetime-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/zoneddatetime-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/withTimeZone/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/timezone-string-multiple-offsets': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/equals/zoneddatetime-string': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/since/zoneddatetime-string': [FAIL],
+  'built-ins/Temporal/ZonedDateTime/prototype/until/zoneddatetime-string': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=10776
   'intl402/NumberFormat/constructor-options-roundingMode-invalid': [FAIL],
