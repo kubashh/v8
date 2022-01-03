@@ -16,6 +16,24 @@
       "message": "Thanks for review, I fixed the line length issue. Does it look better now?",
       "revId": "0a03e934f5b965a6e7841773e548f1c04a9ad98f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b16be669_42a3d079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-03T15:56:51Z",
+      "side": 1,
+      "message": "Yes, thanks, LGTM.",
+      "parentUuid": "68d409c1_96e8f0dd",
+      "revId": "0a03e934f5b965a6e7841773e548f1c04a9ad98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
