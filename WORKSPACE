@@ -4,7 +4,9 @@
 
 workspace(name = "v8")
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "bazel_skylib",
     urls = [
@@ -22,14 +24,23 @@ new_local_repository(
     build_file = "bazel/config/BUILD.bazel",
 )
 
-new_local_repository(
-    name = "zlib",
-    path = "third_party/zlib",
-    build_file = "bazel/BUILD.zlib",
+new_git_repository(
+    name = "com_googlesource_chromium_icu",
+    build_file = "//:bazel/BUILD.icu",
+    commit = "fbc6faf1c2c429cd27fabe615a89f0b217aa4213",
+    remote = "https://chromium.googlesource.com/chromium/deps/icu.git",
 )
 
-new_local_repository(
-    name = "icu",
-    path = "third_party/icu",
-    build_file = "bazel/BUILD.icu",
+new_git_repository(
+    name = "com_googlesource_chromium_trace_event_common",
+    build_file = "//:bazel/BUILD.trace_event_common",
+    commit = "7f36dbc19d31e2aad895c60261ca8f726442bfbb",
+    remote = "https://chromium.googlesource.com/chromium/src/base/trace_event/common.git",
+)
+
+new_git_repository(
+    name = "com_googlesource_chromium_zlib",
+    build_file = "//:bazel/BUILD.zlib",
+    commit = "efd9399ae01364926be2a38946127fdf463480db",
+    remote = "https://chromium.googlesource.com/chromium/src/third_party/zlib.git",
 )
