@@ -104,6 +104,9 @@ class BasicMemoryChunk {
 
     // This page belongs to a shared heap.
     IN_SHARED_HEAP = 1u << 23,
+
+    // This page allocate in a reserved range.
+    IN_RESERVERED_RANGE = 1u << 24
   };
 
   using MainThreadFlags = base::Flags<Flag, uintptr_t>;
