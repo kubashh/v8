@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb38b58b_78aab6df",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-01-04T13:34:07Z",
+      "side": 1,
+      "message": "Done. This could similarly be added to Heap::GCTypeTimer.",
+      "parentUuid": "2ed8ae11_b2a02f07",
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9dcf12f_49503a1c",
         "filename": "src/heap/heap.cc",
         "patchSetId": 3
@@ -101,6 +119,30 @@
       "writtenOn": "2022-01-04T11:20:38Z",
       "side": 1,
       "message": "The block below is not dealing with the \"finishing parts of the last GC cycle\". It\u0027s executing GC proglogue callbacks.",
+      "range": {
+        "startLine": 1776,
+        "startChar": 22,
+        "endLine": 1776,
+        "endChar": 31
+      },
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27a60f2b_dbef1f52",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-01-04T13:34:07Z",
+      "side": 1,
+      "message": "Yes, fixing the comment is the easy part.\nBut the epoch has not changed yet, so this will be attributed to the previous epoch. Does this make sense?",
+      "parentUuid": "a9dcf12f_49503a1c",
       "range": {
         "startLine": 1776,
         "startChar": 22,
@@ -136,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bd5432e_f943dae6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-01-04T13:34:07Z",
+      "side": 1,
+      "message": "This is for the case of the third-party heap. In this case, PerformGarbageCollection is not called, so this should be the only invocation of UpdateCurrentEpoch.\n\nThis could only be problematic if the third-party heap kept a pointer to the heap object and its CollectGarbage method updated the heap\u0027s epoch.",
+      "parentUuid": "6e6689f2_0b3fb313",
+      "range": {
+        "startLine": 1817,
+        "startChar": 11,
+        "endLine": 1817,
+        "endChar": 16
+      },
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52545d1e_64685aeb",
         "filename": "src/heap/heap.cc",
         "patchSetId": 3
@@ -147,6 +213,30 @@
       "writtenOn": "2022-01-04T11:20:38Z",
       "side": 1,
       "message": "Why can\u0027t we just move this one somewhere around L1773.\n\nWith all the different blocks using the same scope id it\u0027s easy to miss some action in between.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 2,
+        "endLine": 2188,
+        "endChar": 16
+      },
+      "revId": "047d1939f8fd65ad88d8cce005b8c745dac1cc7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "611a9944_c68e19fc",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-01-04T13:34:07Z",
+      "side": 1,
+      "message": "The first CL that I had did just this.\nI talked to Dominik and he confirmed that it\u0027s wrong, though.\n\nIn that case, some of the tracing would be associated with the wrong epoch.\nThe lifetime of the GCTracer spans two successive epochs.\nSome things should be traced in the first epoch and some in the second.",
+      "parentUuid": "52545d1e_64685aeb",
       "range": {
         "startLine": 2188,
         "startChar": 2,
