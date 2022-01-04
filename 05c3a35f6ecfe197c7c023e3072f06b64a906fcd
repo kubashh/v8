@@ -16,6 +16,24 @@
       "message": "Hi Piotr,\nI am against doing this, since it means we should maintain/modify/roll forward the commit hash for these projects. Unfortunately, we don\u0027t have enough bandwidth to maintain that.\nI know we already have bazel_skylib, but this does not need to be frequently updated, and it will probably never break due to a \"normal\" V8 CL.",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aaad7fb_87305da6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-04T23:37:35Z",
+      "side": 1,
+      "message": "What if we could get v8-ci-autoroll-builder to update both DEPS and WORKSPACE? Would you be open to accepting this change, then?",
+      "parentUuid": "e1a9f833_331c0f44",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
