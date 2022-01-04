@@ -5165,6 +5165,7 @@ void Heap::ConfigureHeap(const v8::ResourceConstraints& constraints) {
           AllocationMemento::kSize));
 
   code_range_size_ = constraints.code_range_size_in_bytes();
+  max_huge_page_range_ = FLAG_max_huge_page_range;
 
   configured_ = true;
 }
@@ -5647,6 +5648,9 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
   memory_allocator_.reset(
       new MemoryAllocator(isolate_, code_page_allocator, MaxReserved()));
 
+  huge_page_range_manager_.reset(
+      new HugePageRangeManager(this, memory_allocator_.get()));
+
   mark_compact_collector_.reset(new MarkCompactCollector(this));
 
   scavenger_collector_.reset(new ScavengerCollector(this));
@@ -6114,6 +6118,8 @@ void Heap::TearDown() {
 
   memory_allocator()->TearDown();
 
+  DCHECK_EQ(huge_page_range_manager_->HugePageRangeNum(), 0);
+
   StrongRootsEntry* next = nullptr;
   for (StrongRootsEntry* current = strong_roots_head_; current;
        current = next) {
@@ -6123,6 +6129,7 @@ void Heap::TearDown() {
   strong_roots_head_ = nullptr;
 
   memory_allocator_.reset();
+  huge_page_range_manager_.reset();
 }
 
 void Heap::AddGCPrologueCallback(v8::Isolate::GCCallbackWithData callback,

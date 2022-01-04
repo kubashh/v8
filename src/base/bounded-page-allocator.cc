@@ -186,6 +186,10 @@ bool BoundedPageAllocator::SetPermissions(void* address, size_t size,
   return page_allocator_->SetPermissions(address, size, access);
 }
 
+bool BoundedPageAllocator::AdviseHugePage(void* address, size_t size) {
+  return page_allocator_->AdviseHugePage(address, size);
+}
+
 bool BoundedPageAllocator::DiscardSystemPages(void* address, size_t size) {
   return page_allocator_->DiscardSystemPages(address, size);
 }

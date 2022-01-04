@@ -1354,6 +1354,8 @@ filegroup(
         "src/heap/heap-write-barrier.h",
         "src/heap/heap.cc",
         "src/heap/heap.h",
+        "src/heap/huge-page-range.cc",
+        "src/heap/huge-page-range.h",
         "src/heap/incremental-marking-inl.h",
         "src/heap/incremental-marking-job.cc",
         "src/heap/incremental-marking-job.h",
