@@ -408,6 +408,7 @@ void WasmTableObject::Set(Isolate* isolate, Handle<WasmTableObject> table,
       return;
     case wasm::HeapType::kEq:
     case wasm::HeapType::kData:
+    case wasm::HeapType::kArray:
     case wasm::HeapType::kI31:
       // TODO(7748): Implement once we have struct/arrays/i31ref tables.
       UNREACHABLE();
@@ -449,6 +450,7 @@ Handle<Object> WasmTableObject::Get(Isolate* isolate,
     case wasm::HeapType::kEq:
     case wasm::HeapType::kI31:
     case wasm::HeapType::kData:
+    case wasm::HeapType::kArray:
     case wasm::HeapType::kAny:
       // TODO(7748): Implement once we have a story for struct/arrays/i31ref in
       // JS.
@@ -2217,6 +2219,7 @@ bool TypecheckJSObject(Isolate* isolate, const WasmModule* module,
         case HeapType::kAny:
           return true;
         case HeapType::kData:
+        case HeapType::kArray:
         case HeapType::kEq:
         case HeapType::kI31: {
           // TODO(7748): Change this when we have a decision on the JS API for
@@ -2234,21 +2237,24 @@ bool TypecheckJSObject(Isolate* isolate, const WasmModule* module,
             value = it.GetDataValue();
           }
 
-          if (expected.is_reference_to(HeapType::kEq)) return true;
-
-          if (expected.is_reference_to(HeapType::kData)) {
-            if (value->IsSmi()) {
-              *error_message = "dataref-typed object must be a heap object";
-              return false;
-            }
-            return true;
-          } else {
-            DCHECK(expected.is_reference_to(HeapType::kI31));
-            if (!value->IsSmi()) {
-              *error_message = "i31ref-typed object cannot be a heap object";
-              return false;
-            }
-            return true;
+          switch (expected.heap_representation()) {
+            case HeapType::kData:
+            case HeapType::kArray:
+              if (value->IsSmi()) {
+                *error_message = "dataref-typed object must be a heap object";
+                return false;
+              }
+              return true;
+            case HeapType::kEq:
+              return true;
+            case HeapType::kI31:
+              if (!value->IsSmi()) {
+                *error_message = "i31ref-typed object cannot be a heap object";
+                return false;
+              }
+              return true;
+            default:
+              UNREACHABLE();
           }
         }
         default:
