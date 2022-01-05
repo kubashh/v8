@@ -3999,10 +3999,12 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     __ CallCFunction(find_handler, 3);
   }
 
+#if V8_ENABLE_CET_SHADOW_STACK
   // Drop frames from the shadow stack.
   __ movq(rcx, masm->ExternalReferenceAsOperand(
                    num_frames_above_pending_handler_address));
   __ IncsspqIfSupported(rcx, kScratchRegister);
+#endif  // V8_ENABLE_CET_SHADOW_STACK
 
   // Retrieve the handler context, SP and FP.
   __ movq(rsi,
