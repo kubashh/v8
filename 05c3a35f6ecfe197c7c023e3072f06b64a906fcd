@@ -88,6 +88,24 @@
       "parentUuid": "82322eec_5daa74bc",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23871c87_d0c5d770",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-05T12:40:54Z",
+      "side": 1,
+      "message": "Sure, but this does not change the main issue. bazel/repositories.bzl still neeeds to be updated for every roll.",
+      "parentUuid": "46b41b64_85f683c3",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
