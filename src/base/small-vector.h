@@ -11,6 +11,7 @@
 
 #include "src/base/bits.h"
 #include "src/base/macros.h"
+#include "src/base/vector.h"
 
 namespace v8 {
 namespace base {
@@ -97,6 +98,8 @@ class SmallVector {
   size_t size() const { return end_ - begin_; }
   bool empty() const { return end_ == begin_; }
   size_t capacity() const { return end_of_storage_ - begin_; }
+
+  Vector<T> vector() { return Vector<T>(begin(), size()); }
 
   T& back() {
     DCHECK_NE(0, size());
