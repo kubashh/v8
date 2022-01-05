@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4ec07df_fd395f11",
+        "filename": "WORKSPACE",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-05T11:33:26Z",
+      "side": 1,
+      "message": "NOTE: Buildifier adds an empty line between directives, so this is against the style, but it\u0027s consistent with rest of the WORKSPACE file (right now).\n\nLet me know if you want me to \"fix\" the whole WORKSPACE file (either in this or a separate CL).",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "764c6004049cbf2381d9bfebff74f0cd590f6ce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
