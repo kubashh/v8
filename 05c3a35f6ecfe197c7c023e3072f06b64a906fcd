@@ -52,6 +52,24 @@
       "parentUuid": "5aaad7fb_87305da6",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82322eec_5daa74bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-05T10:55:56Z",
+      "side": 1,
+      "message": "We could move those git_repositories to `bazel/repositories.bzl` file, and then we can overwrite it completely, without worrying about rest of the WORKSPACE.\n\nI\u0027ll update this CL with how it should look like in a bit.",
+      "parentUuid": "bcd1dd93_008b9230",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
