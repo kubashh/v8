@@ -74,6 +74,7 @@
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/store-store-elimination.h"
+#include "src/compiler/turboshaft/graph-builder.h"
 #include "src/compiler/type-narrowing-reducer.h"
 #include "src/compiler/typed-optimization.h"
 #include "src/compiler/typer.h"
@@ -1992,6 +1993,14 @@ struct DecompressionOptimizationPhase {
   }
 };
 
+struct TurboshaftPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(TurboShaft)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    turboshaft::BuildGraph(data->schedule(), data->graph_zone(), temp_zone);
+  }
+};
+
 struct ScheduledEffectControlLinearizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(ScheduledEffectControlLinearization)
 
@@ -2835,6 +2844,10 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   }
 
   ComputeScheduledGraph();
+
+  if (FLAG_turboshaft) {
+    Run<TurboshaftPhase>();
+  }
 
   return SelectInstructions(linkage);
 }
