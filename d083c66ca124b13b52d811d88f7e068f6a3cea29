@@ -16,6 +16,23 @@
       "message": "PTAL.\n+Tamer for BUILD.gn changes, even though not technically required I guess.",
       "revId": "d083c66ca124b13b52d811d88f7e068f6a3cea29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18234d83_72ea7482",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-05T15:24:56Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "d083c66ca124b13b52d811d88f7e068f6a3cea29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
