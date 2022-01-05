@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c46dba3_a18bad5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-05T22:15:53Z",
+      "side": 1,
+      "message": "After some thinking, I think this doesn\u0027t completely fix the bug.\n\nTo recap, the bug you found is with 3 threads and 2 strings:\n\nstr1: 0x1(aa)\nstr2: 0x2(aa)\n\nT1: Miss on str1 -\u003e optimistically sets str1\u0027s map to an internalized string before actually inserting into the table: *Write-write race with T3*\nT2: Miss on str2 -\u003e Adds str2 to string table\nT3: Hit on str1 -\u003e Tries to make str1 into a thin string pointing to str2: *Write-write race with T1*\n\nThis points to another bug. Since StringTable::LookupKey optimistically sets a string\u0027s map to the internalized string map *before* actual insertion, it\u0027s possible for threads to see strings that have an internalized map that are not actually internalized. Eventually, that optimistic setting of the map will be undone by MakeThin on a string table hit, but until that happens, we lose the invariant that \"a string with an internalized map implies it is in the string table\", which could result in incorrectness if we pointer compare it to an internalized string with the same contents.\n\nI think the right fix here is to delay updating the map for in-place internalization until we are in fact sure we\u0027re inserting into the map (i.e. the two `data-\u003eSet(entry, *new_string)` lines in StringTable::LookupKey.\n\nI think this removes the write-write race with MakeThin completely, as it moves the internalized map update to be protected by the StringTable write_mutex, so the only possible concurrent migration remains Seq -\u003e Thin.\n\nThis requires some refactoring of the StringTable and StringTableKey::AsHandle code. Maybe the StringTableKey can be made stateful and AsHandle can be split into a PrepareForInsertion and GetHandleForInsertion:\n\n  Handle\u003cString\u003e StringTable::LookupKey(...) {\n    ...\n    // If a copy is needed, allocate the copy.\n    key-\u003ePrepareForInsertion(isolate);\n    {\n      base::MutexGuard guard(\u0026write_mutex_);\n      ...\n      if (element \u003d\u003d empty_element()) {\n        // Either returns the pre-allocated copy, or updates the map\n        // and returns the original string.\n        Handle\u003cString\u003e new_string \u003d key-\u003eGetHandleForInsertion();\n        data-\u003eSet(entry, new_string);\n        ...\n        return new_string\n      }\n      ...\n    }\n  }",
+      "revId": "747d8edb41bf4301cd5bfbbfb88d73980fe8810e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06aea38f_9363d038",
