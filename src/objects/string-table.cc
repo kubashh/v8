@@ -363,34 +363,63 @@ class InternalizedStringKey final : public StringTableKey {
 
   Handle<String> AsHandle(Isolate* isolate) {
     // Internalize the string in-place if possible.
-    MaybeHandle<Map> maybe_internalized_map;
-    StringTransitionStrategy strategy =
-        isolate->factory()->ComputeInternalizationStrategyForString(
-            string_, &maybe_internalized_map);
-    switch (strategy) {
-      case StringTransitionStrategy::kCopy:
-        break;
-      case StringTransitionStrategy::kInPlace:
-        // A relaxed write is sufficient here even with concurrent
-        // internalization. Though it is not synchronizing, a thread that does
-        // not see the relaxed write will wait on the string table write
-        // mutex. When that thread acquires that mutex, the ordering of the
-        // mutex's underlying memory access will force this map update to become
-        // visible to it.
-        string_->set_map_no_write_barrier(
-            *maybe_internalized_map.ToHandleChecked());
-        DCHECK(string_->IsInternalizedString());
-        return string_;
-      case StringTransitionStrategy::kAlreadyTransitioned:
-        // We can see already internalized strings here only when sharing the
-        // string table and allowing concurrent internalization.
-        DCHECK(FLAG_shared_string_table);
-        return string_;
+    {
+      DisallowGarbageCollection no_gc;
+      Map initial_map = string_->map();
+      StringTransitionStrategy strategy;
+      switch (String::MigrateStringMapUnderLockIfNeeded(
+          isolate, *string_, initial_map, initial_map,
+          [=, &strategy](Isolate* isolate, String string,
+                         StringShape initial_shape, Map* target_map) {
+            MaybeHandle<Map> maybe_internalized_map;
+            strategy =
+                isolate->factory()->ComputeInternalizationStrategyForString(
+                    handle(string, isolate), initial_map,
+                    &maybe_internalized_map);
+            // We only need to handle in-place transitions under the lock.
+            // All other transitions will be handled outside.
+            if (strategy == StringTransitionStrategy::kInPlace) {
+              *target_map = *maybe_internalized_map.ToHandleChecked();
+            }
+          },
+          no_gc)) {
+        case String::StringMigrationResult::kThisThreadMigrated:
+          switch (strategy) {
+            case StringTransitionStrategy::kCopy:
+              // Copy will be handled below outside the no gc scope.
+              break;
+            case StringTransitionStrategy::kInPlace:
+              // In-place transition was handled under lock.
+              // String can be either internalized or thin (if another thread
+              // migrated to thin right after this thread migrated to
+              // internalized).
+              DCHECK_IMPLIES(
+                  !string_->IsInternalizedString(),
+                  FLAG_shared_string_table && string_->IsThinString());
+              return string_;
+            case StringTransitionStrategy::kAlreadyTransitioned:
+              // We can see already internalized strings here only when sharing
+              // the string table and allowing concurrent internalization.
+              DCHECK(FLAG_shared_string_table);
+              return string_;
+          }
+          break;
+        case String::StringMigrationResult::kAnotherThreadMigrated:
+          // If another thread migrated, the String is either internalized or
+          // thin. In both cases we don't need to do anything. ThinStrings are
+          // fine because LookupKey will find the correct entry and return the
+          // internalized string.
+          DCHECK_IMPLIES(!string_->IsInternalizedString(),
+                         FLAG_shared_string_table && string_->IsThinString());
+          return string_;
+      }
     }
 
+    // It is safe to handle copies outside of the lock, as no instance
+    // type requiring a copy can transition any further.
+    StringShape shape(*string_);
     // External strings get special treatment, to avoid copying their
     // contents as long as they are not uncached.
-    StringShape shape(*string_);
     if (shape.IsExternalOneByte() && !shape.IsUncachedExternal()) {
       // TODO(syg): External strings not yet supported.
       DCHECK(!FLAG_shared_string_table);

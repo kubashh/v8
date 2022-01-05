@@ -285,6 +285,15 @@ class String : public TorqueGeneratedString<String, Name> {
   // and copies into a new shared sequential string.
   static inline Handle<String> Share(Isolate* isolate, Handle<String> string);
 
+  enum class StringMigrationResult {
+    kThisThreadMigrated,
+    kAnotherThreadMigrated
+  };
+  template <typename IsolateT, typename Callback>
+  static StringMigrationResult MigrateStringMapUnderLockIfNeeded(
+      IsolateT* isolate, String string, Map initial_map, Map target_map,
+      Callback update_representation, const DisallowGarbageCollection& no_gc);
+
   // String relational comparison, implemented according to ES6 section 7.2.11
   // Abstract Relational Comparison (step 5): The comparison of Strings uses a
   // simple lexicographic ordering on sequences of code unit values. There is no

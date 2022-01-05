@@ -288,7 +288,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // All other strings are internalized by flattening and copying and return
   // kCopy.
   V8_WARN_UNUSED_RESULT StringTransitionStrategy
-  ComputeInternalizationStrategyForString(Handle<String> string,
+  ComputeInternalizationStrategyForString(Handle<String> string, Map map,
                                           MaybeHandle<Map>* internalized_map);
 
   // Creates an internalized copy of an external string. |string| must be

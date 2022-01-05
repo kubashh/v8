@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_STRING_INL_H_
 #define V8_OBJECTS_STRING_INL_H_
 
+#include "src/base/platform/yield-processor.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate-utils.h"
@@ -190,9 +191,12 @@ bool StringShape::CanMigrateInParallel() const {
       // Shared ThinStrings do not migrate.
       return false;
     default:
+      // TODO(v8:12007): Set is_shared to true on internalized string when
+      // FLAG_shared_string_table is removed.
+      //
       // If you crashed here, you probably added a new shared string
       // type. Explicitly handle all shared string cases above.
-      DCHECK(!IsShared());
+      DCHECK((FLAG_shared_string_table && IsInternalized()) || !IsShared());
       return false;
   }
 }
@@ -633,6 +637,7 @@ const Char* String::GetChars(
                                                               access_guard);
 }
 
+// static
 Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,
                                AllocationType allocation) {
   DisallowGarbageCollection no_gc;  // Unhandlified code.
@@ -662,6 +667,7 @@ Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,
   return handle(s, isolate);
 }
 
+// static
 Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
                                AllocationType allocation) {
   // We should never pass non-flat strings to String::Flatten when off-thread.
@@ -763,6 +769,125 @@ uint16_t String::Get(
     int index, PtrComprCageBase cage_base,
     const SharedStringAccessGuardIfNeeded& access_guard) const {
   return GetImpl(index, cage_base, access_guard);
+}
+
+// This function must be used when migrating strings whose
+// StringShape::CanMigrateInParallel() is true. It encapsulates the
+// synchronization needed for parallel migrations from multiple threads. The
+// user passes a lambda to perform to update the representation.
+//
+// Returns whether this thread successfully migrated the string or another
+// thread did so.
+//
+// The locking algorithm to migrate a String uses its map word as a migration
+// lock:
+//
+//   map = string.map(kAcquireLoad);
+//   if (map != SENTINEL_MAP &&
+//       string.compare_and_swap_map(map, SENTINEL_MAP)) {
+//     // Lock acquired, i.e. the string's map is SENTINEL_MAP.
+//   } else {
+//     // Lock not acquired. Another thread set the sentinel. Spin until the
+//     // map is no longer the sentinel, i.e. until the other thread
+//     // releases the lock.
+//     Map reloaded_map;
+//     do {
+//       reloaded_map = string.map(kAcquireLoad);
+//     } while (reloaded_map == SENTINEL_MAP);
+//   }
+//
+// Some notes on usage:
+// - The initial map must be loaded with kAcquireLoad for synchronization.
+// - Avoid loading the map multiple times. Load the map once and branch
+//   on that.
+// - The lambda is passed the string, its initial (pre-migration)
+//   StringShape and a pointer to the target map (the lambda can update the
+//   target map if it is dependent on the initial map).
+// - The lambda may be executed under a spinlock, so it should be as short
+//   as possible.
+// - Currently only SeqString -> ThinString migrations can happen in
+//   parallel. If kAnotherThreadMigrated is returned, then the caller doesn't
+//   need to do any other work. In the future, if additional migrations can
+//   happen in parallel, then restarts may be needed if the parallel migration
+//   was to a different type (e.g. SeqString -> External).
+//
+// Example:
+//
+//   DisallowGarbageCollection no_gc;
+//   Map initial_map = string.map(kAcquireLoad);
+//   switch (MigrateStringMapUnderLockIfNeeded(
+//     isolate, string, initial_map, target_map,
+//     [](Isolate* isolate, String string, StringShape initial_shape,
+//        Map* target_map) {
+//       auto t = TargetStringType::unchecked_cast(string);
+//       t.set_field(foo);
+//       t.set_another_field(bar);
+//     }, no_gc);
+//
+
+// static
+template <typename IsolateT, typename Callback>
+String::StringMigrationResult String::MigrateStringMapUnderLockIfNeeded(
+    IsolateT* isolate, String string, Map initial_map, Map target_map,
+    Callback update_representation, const DisallowGarbageCollection& no_gc) {
+  InstanceType initial_type = initial_map.instance_type();
+  StringShape initial_shape(initial_type);
+
+  if (initial_shape.CanMigrateInParallel()) {
+    // A string whose map is a sentinel map means that it is in the critical
+    // section for being migrated to a different map. There are multiple
+    // sentinel maps: one for each InstanceType that may be migrated from.
+    Map sentinel_map =
+        *isolate->factory()->GetStringMigrationSentinelMap(initial_type);
+
+    // Try to acquire the migration lock by setting the string's map to the
+    // sentinel map. Note that it's possible that we've already witnessed a
+    // sentinel map.
+    if (initial_map == sentinel_map ||
+        !string.release_compare_and_swap_map_word(
+            MapWord::FromMap(initial_map), MapWord::FromMap(sentinel_map))) {
+      // If the lock couldn't be acquired, another thread must be migrating this
+      // string. The string's map will be the sentinel map until the migration
+      // is finished. Spin until the map is no longer the sentinel map.
+      //
+      // TODO(v8:12007): Replace this spin lock with a ParkingLot-like
+      // primitive.
+      Map reloaded_map = string.map(kAcquireLoad);
+      while (reloaded_map == sentinel_map) {
+        YIELD_PROCESSOR;
+        reloaded_map = string.map(kAcquireLoad);
+      }
+
+      // Another thread must have migrated once the map is no longer the
+      // sentinel map.
+      return StringMigrationResult::kAnotherThreadMigrated;
+    }
+  }
+
+  // With the lock held for cases where it's needed, do the work to update the
+  // representation before storing the map word. In addition to parallel
+  // migrations, this also ensures that the concurrent marker will read the
+  // updated representation when visiting migrated strings.
+  update_representation(isolate, string, initial_shape, &target_map);
+
+  // Do the store on the map word.
+  //
+  // In debug mode, do a compare-and-swap that is checked to succeed, to check
+  // that all string map migrations are using this function, since to be in the
+  // migration critical section, the string's current map must be the sentinel
+  // map.
+  //
+  // Otherwise do a normal release store.
+  if (DEBUG_BOOL && initial_shape.CanMigrateInParallel()) {
+    Map sentinel_map =
+        *isolate->factory()->GetStringMigrationSentinelMap(initial_type);
+    CHECK(string.release_compare_and_swap_map_word(
+        MapWord::FromMap(sentinel_map), MapWord::FromMap(target_map)));
+  } else {
+    string.set_map(target_map, kReleaseStore);
+  }
+
+  return StringMigrationResult::kThisThreadMigrated;
 }
 
 uint16_t String::GetImpl(

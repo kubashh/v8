@@ -876,12 +876,8 @@ Handle<String> Factory::NewInternalizedStringImpl(Handle<String> string,
   return AllocateInternalizedStringImpl<false>(string, chars, hash_field);
 }
 
-namespace {
-
-}  // namespace
-
 StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
-    Handle<String> string, MaybeHandle<Map>* internalized_map) {
+    Handle<String> string, Map map, MaybeHandle<Map>* internalized_map) {
   // Do not internalize young strings in-place: This allows us to ignore both
   // string table and stub cache on scavenges.
   if (Heap::InYoungGeneration(*string)) {
@@ -892,7 +888,6 @@ StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
   // This method may be called concurrently, so snapshot the map from the input
   // string instead of the calling IsType methods on HeapObject, which would
   // reload the map each time.
-  Map map = string->map();
   *internalized_map = GetInPlaceInternalizedStringMap(map);
   if (!internalized_map->is_null()) {
     return StringTransitionStrategy::kInPlace;

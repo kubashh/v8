@@ -4,7 +4,6 @@
 
 #include "src/objects/string.h"
 
-#include "src/base/platform/yield-processor.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate-utils.h"
@@ -164,136 +163,6 @@ Map ComputeThinStringMap(IsolateT* isolate, StringShape from_string_shape,
   return one_byte ? roots.thin_one_byte_string_map() : roots.thin_string_map();
 }
 
-enum class StringMigrationResult {
-  kThisThreadMigrated,
-  kAnotherThreadMigrated
-};
-
-// This function must be used when migrating strings whose
-// StringShape::CanMigrateInParallel() is true. It encapsulates the
-// synchronization needed for parallel migrations from multiple threads. The
-// user passes a lambda to perform to update the representation.
-//
-// Returns whether this thread successfully migrated the string or another
-// thread did so.
-//
-// The locking algorithm to migrate a String uses its map word as a migration
-// lock:
-//
-//   map = string.map(kAcquireLoad);
-//   if (map != SENTINEL_MAP &&
-//       string.compare_and_swap_map(map, SENTINEL_MAP)) {
-//     // Lock acquired, i.e. the string's map is SENTINEL_MAP.
-//   } else {
-//     // Lock not acquired. Another thread set the sentinel. Spin until the
-//     // map is no longer the sentinel, i.e. until the other thread
-//     // releases the lock.
-//     Map reloaded_map;
-//     do {
-//       reloaded_map = string.map(kAcquireLoad);
-//     } while (reloaded_map == SENTINEL_MAP);
-//   }
-//
-// Some notes on usage:
-// - The initial map must be loaded with kAcquireLoad for synchronization.
-// - Avoid loading the map multiple times. Load the map once and branch
-//   on that.
-// - The lambda is passed the string and its initial (pre-migration)
-//   StringShape.
-// - The lambda may be executed under a spinlock, so it should be as short
-//   as possible.
-// - Currently only SeqString -> ThinString migrations can happen in
-//   parallel. If kAnotherThreadMigrated is returned, then the caller doesn't
-//   need to do any other work. In the future, if additional migrations can
-//   happen in parallel, then restarts may be needed if the parallel migration
-//   was to a different type (e.g. SeqString -> External).
-//
-// Example:
-//
-//   DisallowGarbageCollection no_gc;
-//   Map initial_map = string.map(kAcquireLoad);
-//   switch (MigrateStringMapUnderLockIfNeeded(
-//     isolate, string, initial_map, target_map,
-//     [](Isolate* isolate, String string, StringShape initial_shape) {
-//       auto t = TargetStringType::unchecked_cast(string);
-//       t.set_field(foo);
-//       t.set_another_field(bar);
-//     }, no_gc);
-//
-template <typename IsolateT, typename Callback>
-StringMigrationResult MigrateStringMapUnderLockIfNeeded(
-    IsolateT* isolate, String string, Map initial_map, Map target_map,
-    Callback update_representation, const DisallowGarbageCollection& no_gc) {
-  USE(no_gc);
-
-  InstanceType initial_type = initial_map.instance_type();
-  StringShape initial_shape(initial_type);
-
-  if (initial_shape.CanMigrateInParallel()) {
-    // A string whose map is a sentinel map means that it is in the critical
-    // section for being migrated to a different map. There are multiple
-    // sentinel maps: one for each InstanceType that may be migrated from.
-    Map sentinel_map =
-        *isolate->factory()->GetStringMigrationSentinelMap(initial_type);
-
-    // Try to acquire the migration lock by setting the string's map to the
-    // sentinel map. Note that it's possible that we've already witnessed a
-    // sentinel map.
-    if (initial_map == sentinel_map ||
-        !string.release_compare_and_swap_map_word(
-            MapWord::FromMap(initial_map), MapWord::FromMap(sentinel_map))) {
-      // If the lock couldn't be acquired, another thread must be migrating this
-      // string. The string's map will be the sentinel map until the migration
-      // is finished. Spin until the map is no longer the sentinel map.
-      //
-      // TODO(v8:12007): Replace this spin lock with a ParkingLot-like
-      // primitive.
-      Map reloaded_map = string.map(kAcquireLoad);
-      while (reloaded_map == sentinel_map) {
-        YIELD_PROCESSOR;
-        reloaded_map = string.map(kAcquireLoad);
-      }
-
-      // Another thread must have migrated once the map is no longer the
-      // sentinel map.
-      //
-      // TODO(v8:12007): At time of writing there is only a single kind of
-      // migration that can happen in parallel: SeqString -> ThinString. If
-      // other parallel migrations are added, this DCHECK will fail, and users
-      // of MigrateStringMapUnderLockIfNeeded would need to restart if the
-      // string was migrated to a different map than target_map.
-      DCHECK_EQ(reloaded_map, target_map);
-      return StringMigrationResult::kAnotherThreadMigrated;
-    }
-  }
-
-  // With the lock held for cases where it's needed, do the work to update the
-  // representation before storing the map word. In addition to parallel
-  // migrations, this also ensures that the concurrent marker will read the
-  // updated representation when visiting migrated strings.
-  update_representation(isolate, string, initial_shape);
-
-  // Do the store on the map word.
-  //
-  // In debug mode, do a compare-and-swap that is checked to succeed, to check
-  // that all string map migrations are using this function, since to be in the
-  // migration critical section, the string's current map must be the sentinel
-  // map.
-  //
-  // Otherwise do a normal release store.
-  if (DEBUG_BOOL && initial_shape.CanMigrateInParallel()) {
-    DCHECK_NE(initial_map, target_map);
-    Map sentinel_map =
-        *isolate->factory()->GetStringMigrationSentinelMap(initial_type);
-    CHECK(string.release_compare_and_swap_map_word(
-        MapWord::FromMap(sentinel_map), MapWord::FromMap(target_map)));
-  } else {
-    string.set_map(target_map, kReleaseStore);
-  }
-
-  return StringMigrationResult::kThisThreadMigrated;
-}
-
 }  // namespace
 
 template <typename IsolateT>
@@ -320,7 +189,8 @@ void String::MakeThin(IsolateT* isolate, String internalized) {
                                         internalized.IsOneByteRepresentation());
   switch (MigrateStringMapUnderLockIfNeeded(
       isolate, *this, initial_map, target_map,
-      [=](IsolateT* isolate, String string, StringShape initial_shape) {
+      [=](IsolateT* isolate, String string, StringShape initial_shape,
+          Map* target_map) {
         if (initial_shape.IsExternal()) {
           // TODO(v8:12007): Support external strings.
           DCHECK(!initial_shape.IsShared());
@@ -335,8 +205,12 @@ void String::MakeThin(IsolateT* isolate, String internalized) {
       // Overwrite character data with the filler below.
       break;
     case StringMigrationResult::kAnotherThreadMigrated:
-      // Nothing to do.
-      return;
+      // Another thread could have migrated to Thin or Internalized.
+      StringShape shape(*this);
+      if (shape.IsThin()) return;
+      DCHECK(shape.IsInternalized());
+      // We need to restart when another thread migrated to intneralized.
+      return MakeThin(isolate, internalized);
   }
 
   ThinString thin = ThinString::cast(*this);
