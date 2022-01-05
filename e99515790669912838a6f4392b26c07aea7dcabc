@@ -16,6 +16,57 @@
       "message": "PTAL\n+Dominik for src/heap",
       "revId": "e99515790669912838a6f4392b26c07aea7dcabc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac506cc7_453dfa85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-05T11:52:50Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e99515790669912838a6f4392b26c07aea7dcabc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d923124_954fd654",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 7614,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-05T11:52:50Z",
+      "side": 1,
+      "message": "Would it make sense to reorder the handled cases to have all \"no_suspender\" cases at the top, and allocating the suspender only when needed?\n\nJust a minor nit, feel free to ignore.",
+      "revId": "e99515790669912838a6f4392b26c07aea7dcabc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ff042b_6db50559",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-05T11:52:50Z",
+      "side": 1,
+      "message": "You could check for the error case here directly, and throw and return on error, end the avoid the \"else\". You do this already in line 2596.",
+      "revId": "e99515790669912838a6f4392b26c07aea7dcabc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
