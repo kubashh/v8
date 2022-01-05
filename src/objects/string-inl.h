@@ -252,11 +252,17 @@ STATIC_ASSERT(v8::String::TWO_BYTE_ENCODING == kTwoByteStringTag);
 
 template <typename TDispatcher, typename TResult, typename... TArgs>
 inline TResult StringShape::DispatchToSpecificTypeWithoutCast(TArgs&&... args) {
-  switch (representation_and_encoding_tag()) {
+  switch (representation_encoding_and_shared_tag()) {
     case kSeqStringTag | kOneByteStringTag:
       return TDispatcher::HandleSeqOneByteString(std::forward<TArgs>(args)...);
     case kSeqStringTag | kTwoByteStringTag:
       return TDispatcher::HandleSeqTwoByteString(std::forward<TArgs>(args)...);
+    case kSeqStringTag | kOneByteStringTag | kSharedStringTag:
+      return TDispatcher::HandleSharedSeqOneByteString(
+          std::forward<TArgs>(args)...);
+    case kSeqStringTag | kTwoByteStringTag | kSharedStringTag:
+      return TDispatcher::HandleSharedSeqTwoByteString(
+          std::forward<TArgs>(args)...);
     case kConsStringTag | kOneByteStringTag:
     case kConsStringTag | kTwoByteStringTag:
       return TDispatcher::HandleConsString(std::forward<TArgs>(args)...);
@@ -271,6 +277,8 @@ inline TResult StringShape::DispatchToSpecificTypeWithoutCast(TArgs&&... args) {
       return TDispatcher::HandleSlicedString(std::forward<TArgs>(args)...);
     case kThinStringTag | kOneByteStringTag:
     case kThinStringTag | kTwoByteStringTag:
+    case kThinStringTag | kOneByteStringTag | kSharedStringTag:
+    case kThinStringTag | kTwoByteStringTag | kSharedStringTag:
       return TDispatcher::HandleThinString(std::forward<TArgs>(args)...);
     default:
       return TDispatcher::HandleInvalidString(std::forward<TArgs>(args)...);
@@ -299,6 +307,17 @@ inline TResult StringShape::DispatchToSpecificType(String str,
   }
     STRING_CLASS_TYPES(DEFINE_METHOD)
 #undef DEFINE_METHOD
+    // Shared strings can be migrated to different representations in parallel,
+    // so use unchecked_cast. Users must handle such representation changes by
+    // restarting the operation.
+#define DEFINE_SHARED_METHOD(Type)                                        \
+  static inline TResult HandleShared##Type(String str, TArgs&&... args) { \
+    return TDispatcher::HandleShared##Type(Type::unchecked_cast(str),     \
+                                           std::forward<TArgs>(args)...); \
+  }
+    DEFINE_SHARED_METHOD(SeqOneByteString)
+    DEFINE_SHARED_METHOD(SeqTwoByteString)
+#undef DEFINE_SHARED_METHOD
     static inline TResult HandleInvalidString(String str, TArgs&&... args) {
       return TDispatcher::HandleInvalidString(str,
                                               std::forward<TArgs>(args)...);
@@ -905,6 +924,15 @@ uint16_t String::GetImpl(
   }
     STRING_CLASS_TYPES(DEFINE_METHOD)
 #undef DEFINE_METHOD
+#define DEFINE_SHARED_METHOD(Type)                           \
+  static inline uint16_t HandleShared##Type(                 \
+      Type str, int index, PtrComprCageBase cage_base,       \
+      const SharedStringAccessGuardIfNeeded& access_guard) { \
+    return str.Get(index, cage_base, access_guard);          \
+  }
+    DEFINE_SHARED_METHOD(SeqOneByteString)
+    DEFINE_SHARED_METHOD(SeqTwoByteString)
+#undef DEFINE_SHARED_METHOD
     static inline uint16_t HandleInvalidString(
         String str, int index, PtrComprCageBase cage_base,
         const SharedStringAccessGuardIfNeeded& access_guard) {
@@ -973,7 +1001,7 @@ ConsString String::VisitFlat(
   PtrComprCageBase cage_base = GetPtrComprCageBase(string);
   while (true) {
     int32_t tag =
-        StringShape(string, cage_base).representation_and_encoding_tag();
+        StringShape(string, cage_base).representation_encoding_and_shared_tag();
     switch (tag) {
       case kSeqOneByteStringTag:
         visitor->VisitOneByteString(
@@ -985,6 +1013,26 @@ ConsString String::VisitFlat(
       case kSeqTwoByteStringTag:
         visitor->VisitTwoByteString(
             SeqTwoByteString::cast(string).GetChars(no_gc, access_guard) +
+                slice_offset,
+            length - offset);
+        return ConsString();
+
+      case kSeqOneByteStringTag | kSharedStringTag:
+        // TODO(pthier): Check that slice_offset is greater than the size of
+        // the buffer that can be overwritten by transitions to ThinString.
+        visitor->VisitOneByteString(
+            SeqOneByteString::unchecked_cast(string).GetChars(no_gc,
+                                                              access_guard) +
+                slice_offset,
+            length - offset);
+        return ConsString();
+
+      case kSeqTwoByteStringTag | kSharedStringTag:
+        // TODO(pthier): Check that slice_offset is greater than the size of
+        // the buffer that can be overwritten by transitions to ThinString.
+        visitor->VisitTwoByteString(
+            SeqTwoByteString::unchecked_cast(string).GetChars(no_gc,
+                                                              access_guard) +
                 slice_offset,
             length - offset);
         return ConsString();
@@ -1017,6 +1065,8 @@ ConsString String::VisitFlat(
 
       case kThinStringTag | kOneByteStringTag:
       case kThinStringTag | kTwoByteStringTag:
+      case kThinStringTag | kOneByteStringTag | kSharedStringTag:
+      case kThinStringTag | kTwoByteStringTag | kSharedStringTag:
         string = ThinString::cast(string).actual(cage_base);
         continue;
 
@@ -1557,6 +1607,70 @@ bool String::IsInPlaceInternalizable(InstanceType instance_type) {
     default:
       return false;
   }
+}
+
+base::uc16 MigrationSafeString::Get(
+    int index, PtrComprCageBase cage_base,
+    const SharedStringAccessGuardIfNeeded& access_guard) const {
+  if (CanMigrateInParallel() && index < BufferedLength()) {
+    return IsOneByte() ? onebyte_buffer_[index] : twobyte_buffer_[index];
+  }
+  return string_.Get(index, cage_base, access_guard);
+}
+
+template <>
+inline const uint8_t* MigrationSafeString::BufferedChars() const {
+  DCHECK(IsOneByte());
+  if (CanMigrateInParallel()) {
+    return onebyte_buffer_;
+  }
+  return reinterpret_cast<const uint8_t*>(
+      SeqOneByteString::cast(UnsafeString()).GetCharsAddress());
+}
+
+template <>
+inline const base::uc16* MigrationSafeString::BufferedChars() const {
+  DCHECK(IsTwoByte());
+  if (CanMigrateInParallel()) {
+    return twobyte_buffer_;
+  }
+  return reinterpret_cast<const base::uc16*>(
+      SeqTwoByteString::unchecked_cast(UnsafeString()).GetCharsAddress());
+}
+
+template <>
+inline const uint8_t* MigrationSafeString::RemainingChars() {
+  DCHECK(IsOneByte());
+  DCHECK_GT(RemainingLength(), 0);
+  if (CanMigrateInParallel()) {
+    return reinterpret_cast<const uint8_t*>(
+        SeqOneByteString::unchecked_cast(UnsafeString()).GetCharsAddress() +
+        BufferedLength());
+  } else {
+    return UnsafeString().AddressOfCharacterAt(BufferedLength(), no_gc_);
+  }
+}
+
+template <>
+inline const base::uc16* MigrationSafeString::RemainingChars() {
+  DCHECK(IsTwoByte());
+  DCHECK_GT(RemainingLength(), 0);
+  if (CanMigrateInParallel()) {
+    return reinterpret_cast<const base::uc16*>(
+        SeqTwoByteString::unchecked_cast(UnsafeString()).GetCharsAddress() +
+        BufferedLength());
+  } else {
+    return reinterpret_cast<const base::uc16*>(
+        UnsafeString().AddressOfCharacterAt(BufferedLength(), no_gc_));
+  }
+}
+
+int MigrationSafeString::RemainingLength() const {
+  return UnsafeString().length() - BufferedLength();
+}
+
+bool MigrationSafeString::CanMigrateInParallel() const {
+  return shape().CanMigrateInParallel();
 }
 
 }  // namespace internal

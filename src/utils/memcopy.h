@@ -11,6 +11,7 @@
 
 #include <algorithm>
 
+#include "src/base/atomic-utils.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 #include "src/base/platform/wrappers.h"
@@ -313,6 +314,66 @@ void CopyChars(DstType* dst, const SrcType* src, size_t count) {
 #undef CASE
     default:
       std::copy_n(src_u, count, dst_u);
+      return;
+  }
+}
+// Like CopyChars, but uses relaxed ordering for both reading from src and
+// writing to dst.
+template <typename SrcType, typename DstType>
+void Relaxed_CopyChars(DstType* dst, const SrcType* src, size_t count)
+    V8_NONNULL(1, 2);
+
+template <typename SrcType, typename DstType>
+void Relaxed_CopyChars(DstType* dst, const SrcType* src, size_t count) {
+  STATIC_ASSERT(std::is_integral<SrcType>::value);
+  STATIC_ASSERT(std::is_integral<DstType>::value);
+  using AtomicSrcType =
+      typename base::AtomicTypeFromByteWidth<sizeof(SrcType)>::type;
+  using AtomicDstType =
+      typename base::AtomicTypeFromByteWidth<sizeof(DstType)>::type;
+
+#ifdef DEBUG
+  // Check for no overlap. Maintain the same requirements for use as CopyChars.
+  Address src_start = reinterpret_cast<Address>(src);
+  Address src_end = src_start + count * sizeof(SrcType);
+  Address dst_start = reinterpret_cast<Address>(dst);
+  Address dst_end = dst_start + count * sizeof(DstType);
+  DCHECK(src_end <= dst_start || dst_end <= src_start);
+#endif
+
+  auto* dst_a = reinterpret_cast<volatile AtomicDstType*>(dst);
+  auto* src_a = reinterpret_cast<volatile const AtomicSrcType*>(src);
+
+  switch (count) {
+#define CASE(N)                                                              \
+  case N:                                                                    \
+    for (size_t i = 0; i < N; i++) {                                         \
+      base::Relaxed_Store(                                                   \
+          dst_a++, static_cast<AtomicDstType>(base::Relaxed_Load(src_a++))); \
+    }                                                                        \
+    return;
+    CASE(1)
+    CASE(2)
+    CASE(3)
+    CASE(4)
+    CASE(5)
+    CASE(6)
+    CASE(7)
+    CASE(8)
+    CASE(9)
+    CASE(10)
+    CASE(11)
+    CASE(12)
+    CASE(13)
+    CASE(14)
+    CASE(15)
+    CASE(16)
+#undef CASE
+    default:
+      for (size_t i = 0; i < count; i++) {
+        base::Relaxed_Store(
+            dst_a++, static_cast<AtomicDstType>(base::Relaxed_Load(src_a++)));
+      }
       return;
   }
 }

@@ -364,6 +364,47 @@ inline int CompareCharsUnsigned(const lchar* lhs, const rchar* rhs,
   return 0;
 }
 
+// Compare 8bit/16bit chars to 8bit/16bit chars using relaxed memory order.
+template <typename lchar, typename rchar>
+inline bool CompareCharsEqualUnsignedRelaxed(const lchar* lhs, const rchar* rhs,
+                                             size_t chars) {
+  STATIC_ASSERT(std::is_unsigned<lchar>::value);
+  STATIC_ASSERT(std::is_unsigned<rchar>::value);
+  STATIC_ASSERT(sizeof(lchar) == sizeof(base::Atomic8) ||
+                sizeof(lchar) == sizeof(base::Atomic16));
+  STATIC_ASSERT(sizeof(rchar) == sizeof(base::Atomic8) ||
+                sizeof(rchar) == sizeof(base::Atomic16));
+  using atomic_lchar =
+      typename base::AtomicTypeFromByteWidth<sizeof(lchar)>::type;
+  using atomic_rchar =
+      typename base::AtomicTypeFromByteWidth<sizeof(rchar)>::type;
+  if (sizeof(*lhs) == sizeof(*rhs)) {
+    // memcmp compares byte-by-byte, but for equality it doesn't matter whether
+    // two-byte char comparison is little- or big-endian.
+    return base::Relaxed_Memcmp(reinterpret_cast<const base::Atomic8*>(lhs),
+                                reinterpret_cast<const base::Atomic8*>(rhs),
+                                chars * sizeof(*lhs)) == 0;
+  }
+  for (const lchar* limit = lhs + chars; lhs < limit; ++lhs, ++rhs) {
+    atomic_lchar lc =
+        base::Relaxed_Load(reinterpret_cast<const volatile atomic_lchar*>(lhs));
+    atomic_rchar rc =
+        base::Relaxed_Load(reinterpret_cast<const volatile atomic_rchar*>(rhs));
+    if (lc != rc) return false;
+  }
+  return true;
+}
+
+template <typename lchar, typename rchar>
+inline bool CompareCharsEqualRelaxed(const lchar* lhs, const rchar* rhs,
+                                     size_t chars) {
+  using ulchar = typename std::make_unsigned<lchar>::type;
+  using urchar = typename std::make_unsigned<rchar>::type;
+  return CompareCharsEqualUnsignedRelaxed(reinterpret_cast<const ulchar*>(lhs),
+                                          reinterpret_cast<const urchar*>(rhs),
+                                          chars);
+}
+
 template <typename lchar, typename rchar>
 inline int CompareChars(const lchar* lhs, const rchar* rhs, size_t chars) {
   using ulchar = typename std::make_unsigned<lchar>::type;

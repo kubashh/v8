@@ -16,11 +16,19 @@ namespace internal {
 class StringComparator {
   class State {
    public:
-    State() : is_one_byte_(true), length_(0), buffer8_(nullptr) {}
+    State()
+        : migration_safe_string_(nullptr),
+          is_one_byte_(true),
+          length_(0),
+          buffer8_(nullptr) {}
     State(const State&) = delete;
     State& operator=(const State&) = delete;
 
     void Init(String string,
+              const SharedStringAccessGuardIfNeeded& access_guard);
+    void Init(String string, int start_offset,
+              const SharedStringAccessGuardIfNeeded& access_guard);
+    void Init(const MigrationSafeString& string,
               const SharedStringAccessGuardIfNeeded& access_guard);
 
     inline void VisitOneByteString(const uint8_t* chars, int length) {
@@ -39,6 +47,7 @@ class StringComparator {
                  const SharedStringAccessGuardIfNeeded& access_guard);
 
     ConsStringIterator iter_;
+    const MigrationSafeString* migration_safe_string_;
     bool is_one_byte_;
     int length_;
     union {
@@ -56,13 +65,21 @@ class StringComparator {
   static inline bool Equals(State* state_1, State* state_2, int to_check) {
     const Chars1* a = reinterpret_cast<const Chars1*>(state_1->buffer8_);
     const Chars2* b = reinterpret_cast<const Chars2*>(state_2->buffer8_);
-    return CompareCharsEqual(a, b, to_check);
+    if (state_1->migration_safe_string_ == nullptr &&
+        state_2->migration_safe_string_ == nullptr) {
+      return CompareCharsEqual(a, b, to_check);
+    }
+    return CompareCharsEqualRelaxed(a, b, to_check);
   }
 
   bool Equals(String string_1, String string_2,
               const SharedStringAccessGuardIfNeeded& access_guard);
+  bool Equals(const MigrationSafeString& string_1,
+              const MigrationSafeString& string_2,
+              const SharedStringAccessGuardIfNeeded& access_guard);
 
  private:
+  bool Equals(int length, const SharedStringAccessGuardIfNeeded& access_guard);
   State state_1_;
   State state_2_;
 };

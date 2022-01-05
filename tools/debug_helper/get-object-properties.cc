@@ -90,6 +90,14 @@ TypedObject GetTypedObjectForString(uintptr_t address, i::InstanceType type,
   }
     STRING_CLASS_TYPES(DEFINE_METHOD)
 #undef DEFINE_METHOD
+#define DEFINE_SHARED_METHOD(ClassName)                             \
+  static inline TypedObject HandleShared##ClassName(                \
+      uintptr_t address, d::TypeCheckResult type_source) {          \
+    return {type_source, std::make_unique<Tq##ClassName>(address)}; \
+  }
+    DEFINE_SHARED_METHOD(SeqOneByteString)
+    DEFINE_SHARED_METHOD(SeqTwoByteString)
+#undef DEFINE_SHARED_METHOD
     static inline TypedObject HandleInvalidString(
         uintptr_t address, d::TypeCheckResult type_source) {
       return {d::TypeCheckResult::kUnknownInstanceType,

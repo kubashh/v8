@@ -25,6 +25,8 @@ namespace internal {
 
 class SharedStringAccessGuardIfNeeded;
 
+class MigrationSafeString;
+
 enum InstanceType : uint16_t;
 
 enum AllowNullsFlag { ALLOW_NULLS, DISALLOW_NULLS };
@@ -82,6 +84,8 @@ class StringShape {
   inline TResult DispatchToSpecificType(String str, TArgs&&... args);
 
  private:
+  friend class MigrationSafeString;
+  StringShape() { invalidate(); }
   uint32_t type_;
 #ifdef DEBUG
   inline void set_valid() { valid_ = true; }
@@ -1100,6 +1104,48 @@ template <>
 struct CharTraits<uint16_t> {
   using String = SeqTwoByteString;
   using ExternalString = ExternalTwoByteString;
+};
+
+class MigrationSafeString {
+ public:
+  // Actual + FillerMap + FillerSize.
+  static constexpr int kBufferBytes = 3 * kTaggedSize;
+  static constexpr int kOneByteBufferChars = kBufferBytes;
+  static constexpr int kTwoByteBufferChars = kBufferBytes / sizeof(base::uc16);
+  explicit MigrationSafeString(String string);
+  MigrationSafeString(String string, PtrComprCageBase cage_base);
+  MigrationSafeString(const MigrationSafeString&) = delete;
+  bool operator=(const MigrationSafeString&) = delete;
+  ~MigrationSafeString();
+
+  inline uint16_t Get(
+      int index, PtrComprCageBase cage_base,
+      const SharedStringAccessGuardIfNeeded& access_guard) const;
+  template <typename Char>
+  inline const Char* BufferedChars() const;
+  int BufferedLength() const { return buffer_length_; }
+
+  template <typename Char>
+  inline const Char* RemainingChars();
+  inline int RemainingLength() const;
+
+  inline bool CanMigrateInParallel() const;
+  bool IsOneByte() const { return is_onebyte_; }
+  bool IsTwoByte() const { return !is_onebyte_; }
+  StringShape shape() const { return shape_; }
+  String UnsafeString() const { return string_; }
+
+ private:
+  void FreeBuffer();
+  union {
+    uint8_t* onebyte_buffer_;
+    base::uc16* twobyte_buffer_;
+  };
+  int buffer_length_;
+  bool is_onebyte_;
+  String string_;
+  StringShape shape_;
+  DISALLOW_GARBAGE_COLLECTION(no_gc_)
 };
 
 }  // namespace internal

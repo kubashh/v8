@@ -709,6 +709,93 @@ void String::WriteToFlat(String source, sinkchar* sink, int start, int length) {
                      SharedStringAccessGuardIfNeeded::NotNeeded());
 }
 
+namespace {
+
+enum MigrationSafeCopyStringResult { kCopied, kMigratedBeforeCopy };
+
+template <typename sinkchar>
+MigrationSafeCopyStringResult MigrationSafeCopySharedSeqString(
+    String source, Map* map, sinkchar* sink, int start, int length,
+    PtrComprCageBase cage_base, const DisallowGarbageCollection& no_gc) {
+  DCHECK_LT(0, length);
+  DCHECK_LE(0, start);
+  DCHECK_LE(start + length, source.length());
+  StringShape shape(*map);
+  DCHECK(shape.CanMigrateInParallel());
+
+  // If the string is currently migrating, spinlock until migration is
+  // complete.
+  Map sentinel_map = *GetIsolateFromWritableObject(source)
+                          ->factory()
+                          ->GetStringMigrationSentinelMap(map->instance_type());
+  if (*map == sentinel_map) {
+    while (*map == sentinel_map) {
+      YIELD_PROCESSOR;
+      *map = source.map(kAcquireLoad);
+    }
+    DCHECK(StringShape(*map).IsThin());
+    // Caller should restart the operation, as source is a ThinString now.
+    return kMigratedBeforeCopy;
+  }
+  DCHECK(source.IsFlat(cage_base));
+  do {
+    *map = source.map(kAcquireLoad);
+    Address buffer_start;
+    if (shape.IsSequentialOneByte()) {
+      buffer_start =
+          SeqOneByteString::unchecked_cast(source).GetCharsAddress() + start;
+    } else if (shape.IsSequentialTwoByte()) {
+      buffer_start =
+          SeqTwoByteString::unchecked_cast(source).GetCharsAddress() + start;
+    } else {
+      DCHECK(StringShape(*map).IsThin());
+      return kMigratedBeforeCopy;
+    }
+    if (shape.IsSequentialOneByte()) {
+      Relaxed_CopyChars(sink, reinterpret_cast<uint8_t*>(buffer_start), length);
+    } else {
+      DCHECK(shape.IsSequentialTwoByte());
+      Relaxed_CopyChars(sink, reinterpret_cast<base::uc16*>(buffer_start),
+                        length);
+    }
+  } while (*map != source.map(kAcquireLoad));
+  return kCopied;
+}
+
+template <typename StringType, typename sinkchar>
+MigrationSafeCopyStringResult MigrationSafeSeqStringWriteToFlat(
+    String source, Map* map, sinkchar* sink, int start, int length,
+    PtrComprCageBase cage_base,
+    const SharedStringAccessGuardIfNeeded& access_guard,
+    const DisallowGarbageCollection& no_gc) {
+  constexpr bool is_one_byte = std::is_same<StringType, SeqOneByteString>();
+  constexpr int migration_buffer_length =
+      is_one_byte ? MigrationSafeString::kOneByteBufferChars
+                  : MigrationSafeString::kTwoByteBufferChars;
+  int chars_copied = 0;
+  if (start < migration_buffer_length) {
+    const int safe_length = std::min(length, migration_buffer_length - start);
+    switch (MigrationSafeCopySharedSeqString(source, map, sink, start,
+                                             safe_length, cage_base, no_gc)) {
+      case kMigratedBeforeCopy:
+        return kMigratedBeforeCopy;
+      case kCopied:
+        if (safe_length == length) return kCopied;
+        chars_copied = safe_length;
+    }
+  }
+  const int remaining_start = std::max(migration_buffer_length, start);
+  const int remaining_length = length - chars_copied;
+  Relaxed_CopyChars(
+      sink + chars_copied,
+      StringType::unchecked_cast(source).GetChars(no_gc, access_guard) +
+          remaining_start,
+      remaining_length);
+  return kCopied;
+}
+
+}  // namespace
+
 // static
 template <typename sinkchar>
 void String::WriteToFlat(String source, sinkchar* sink, int start, int length,
@@ -719,8 +806,10 @@ void String::WriteToFlat(String source, sinkchar* sink, int start, int length,
   while (true) {
     DCHECK_LT(0, length);
     DCHECK_LE(0, start);
-    DCHECK_LE(length, source.length());
-    switch (StringShape(source, cage_base).representation_and_encoding_tag()) {
+    DCHECK_LE(start + length, source.length());
+    Map map = source.map(cage_base, kAcquireLoad);
+    StringShape shape = StringShape(map);
+    switch (shape.representation_encoding_and_shared_tag()) {
       case kOneByteStringTag | kExternalStringTag:
         CopyChars(
             sink,
@@ -745,6 +834,24 @@ void String::WriteToFlat(String source, sinkchar* sink, int start, int length,
                       start,
                   length);
         return;
+      case kOneByteStringTag | kSeqStringTag | kSharedStringTag:
+        switch (MigrationSafeSeqStringWriteToFlat<SeqOneByteString>(
+            source, &map, sink, start, length, cage_base, access_guard,
+            no_gc)) {
+          case kMigratedBeforeCopy:
+            continue;
+          case kCopied:
+            return;
+        }
+      case kTwoByteStringTag | kSeqStringTag | kSharedStringTag:
+        switch (MigrationSafeSeqStringWriteToFlat<SeqTwoByteString>(
+            source, &map, sink, start, length, cage_base, access_guard,
+            no_gc)) {
+          case kMigratedBeforeCopy:
+            continue;
+          case kCopied:
+            return;
+        }
       case kOneByteStringTag | kConsStringTag:
       case kTwoByteStringTag | kConsStringTag: {
         ConsString cons_string = ConsString::cast(source);
@@ -804,6 +911,8 @@ void String::WriteToFlat(String source, sinkchar* sink, int start, int length,
       }
       case kOneByteStringTag | kThinStringTag:
       case kTwoByteStringTag | kThinStringTag:
+      case kOneByteStringTag | kThinStringTag | kSharedStringTag:
+      case kTwoByteStringTag | kThinStringTag | kSharedStringTag:
         source = ThinString::cast(source).actual(cage_base);
         continue;
     }
@@ -888,12 +997,14 @@ bool String::SlowEquals(
 
   PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
 
+  MigrationSafeString this_safe(*this, cage_base);
+  MigrationSafeString other_safe(other, cage_base);
   // Fast check: if at least one ThinString is involved, dereference it/them
   // and restart.
-  if (this->IsThinString(cage_base) || other.IsThinString(cage_base)) {
-    if (other.IsThinString(cage_base))
+  if (this_safe.shape().IsThin() || other_safe.shape().IsThin()) {
+    if (other_safe.shape().IsThin())
       other = ThinString::cast(other).actual(cage_base);
-    if (this->IsThinString(cage_base)) {
+    if (this_safe.shape().IsThin()) {
       return ThinString::cast(*this).actual(cage_base).Equals(other);
     } else {
       return this->Equals(other);
@@ -922,20 +1033,35 @@ bool String::SlowEquals(
 
   // We know the strings are both non-empty. Compare the first chars
   // before we try to flatten the strings.
-  if (this->Get(0, cage_base, access_guard) !=
-      other.Get(0, cage_base, access_guard))
+  if (this_safe.Get(0, cage_base, access_guard) !=
+      other_safe.Get(0, cage_base, access_guard)) {
     return false;
+  }
 
   if (IsSeqOneByteString() && other.IsSeqOneByteString()) {
-    const uint8_t* str1 =
-        SeqOneByteString::cast(*this).GetChars(no_gc, access_guard);
-    const uint8_t* str2 =
-        SeqOneByteString::cast(other).GetChars(no_gc, access_guard);
-    return CompareCharsEqual(str1, str2, len);
+    if (!this_safe.CanMigrateInParallel() &&
+        !other_safe.CanMigrateInParallel()) {
+      const uint8_t* str1 =
+          SeqOneByteString::cast(*this).GetChars(no_gc, access_guard);
+      const uint8_t* str2 =
+          SeqOneByteString::cast(other).GetChars(no_gc, access_guard);
+      return CompareCharsEqual(str1, str2, len);
+    }
+    const uint8_t* str1 = this_safe.BufferedChars<uint8_t>();
+    const uint8_t* str2 = other_safe.BufferedChars<uint8_t>();
+    if (!CompareCharsEqualRelaxed(str1, str2, this_safe.BufferedLength())) {
+      return false;
+    }
+    if (this_safe.RemainingLength() == 0) {
+      return true;
+    }
+    str1 = this_safe.RemainingChars<uint8_t>();
+    str2 = other_safe.RemainingChars<uint8_t>();
+    return CompareCharsEqualRelaxed(str1, str2, this_safe.RemainingLength());
   }
 
   StringComparator comparator;
-  return comparator.Equals(*this, other, access_guard);
+  return comparator.Equals(this_safe, other_safe, access_guard);
 }
 
 // static
@@ -1841,6 +1967,63 @@ const byte* String::AddressOfCharacterAt(
           start_index);
     default:
       UNREACHABLE();
+  }
+}
+
+MigrationSafeString::MigrationSafeString(String string) :
+  MigrationSafeString(string, GetPtrComprCageBase(string)) {}
+
+MigrationSafeString::MigrationSafeString(String string,
+                                         PtrComprCageBase cage_base)
+    : onebyte_buffer_(nullptr), buffer_length_(0), is_onebyte_(false) {
+  string_ = string;
+  Map map = string.map(kAcquireLoad);
+  shape_ = StringShape(map);
+  int buffer_chars;
+  if (string_.IsOneByteRepresentation()) {
+    is_onebyte_ = true;
+    buffer_chars = kBufferBytes / sizeof(uint8_t);
+  } else {
+    is_onebyte_ = false;
+    buffer_chars = kBufferBytes / sizeof(base::uc16);
+  }
+  buffer_length_ = std::min(buffer_chars, string_.length());
+  if (shape_.CanMigrateInParallel()) {
+    MigrationSafeCopyStringResult result;
+    if (is_onebyte_) {
+      onebyte_buffer_ = new uint8_t[buffer_length_];
+      result = MigrationSafeCopySharedSeqString(
+          string_, &map, onebyte_buffer_, 0, buffer_length_, cage_base, no_gc_);
+    } else {
+      twobyte_buffer_ = new base::uc16[buffer_length_];
+      result = MigrationSafeCopySharedSeqString(
+          string_, &map, twobyte_buffer_, 0, buffer_length_, cage_base, no_gc_);
+    }
+    switch (result) {
+      case kMigratedBeforeCopy:
+        shape_ = StringShape(map);
+        DCHECK(shape_.IsThin());
+        FreeBuffer();
+        break;
+      case kCopied:
+        break;
+    }
+  }
+}
+
+void MigrationSafeString::FreeBuffer() {
+  if (IsOneByte()) {
+    DCHECK_NOT_NULL(onebyte_buffer_);
+    delete[] onebyte_buffer_;
+  } else {
+    DCHECK_NOT_NULL(twobyte_buffer_);
+    delete[] twobyte_buffer_;
+  }
+}
+
+MigrationSafeString::~MigrationSafeString() {
+  if (CanMigrateInParallel()) {
+    FreeBuffer();
   }
 }
 
