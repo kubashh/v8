@@ -106,6 +106,24 @@
       "parentUuid": "46b41b64_85f683c3",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b4c2ac_b8339e3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-05T18:07:36Z",
+      "side": 1,
+      "message": "Yes, I know. But presumably it\u0027s easier to make v8-ci-autoroll-builder generate file that contains only autoroller-managed deps (bazel/repositories.bzl) that one that also contains other entries (WORKSPACE) that might be updated manually.",
+      "parentUuid": "23871c87_d0c5d770",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
