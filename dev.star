@@ -95,6 +95,28 @@ luci.builder(
     triggered_by = ["v8-trigger"],
 )
 
+luci.builder(
+    bucket = "ci",
+    name = "V8 Win11 - dev image",
+    swarming_host = "chromium-swarm-dev.appspot.com",
+    swarming_tags = ["vpython:native-python-wrapper"],
+    dimensions = {"cpu": "x86-64", "os": "Windows-11", "pool": "luci.chromium.ci"},
+    executable = "recipe:v8",
+    properties = {
+        "$build/goma": {
+            "enable_ats": True,
+            "rpc_extra_params": "?prod",
+            "server_host": "goma.chromium.org",
+        },
+        "builder_group": "client.v8",
+        "recipe": "v8",
+    },
+    execution_timeout = 7200 * time.second,
+    build_numbers = True,
+    service_account = "v8-ci-builder-dev@chops-service-accounts.iam.gserviceaccount.com",
+    triggered_by = ["v8-trigger"],
+)
+
 luci.console_view(
     name = "dev_image",
     title = "Dev Image",
@@ -107,4 +129,9 @@ luci.console_view(
 luci.console_view_entry(
     console_view = "dev_image",
     builder = "V8 Win64 - dev image",
+)
+
+luci.console_view_entry(
+    console_view = "dev_image",
+    builder = "V8 Win11 - dev image",
 )
