@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0093be00_1e4e5248",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-05T15:19:36Z",
+      "side": 1,
+      "message": "PTAL.\n+Tamer for BUILD.gn changes, even though not technically required I guess.",
+      "revId": "d083c66ca124b13b52d811d88f7e068f6a3cea29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
