@@ -6,6 +6,7 @@
 #define V8_BASE_ITERATOR_H_
 
 #include <iterator>
+#include <utility>
 
 namespace v8 {
 namespace base {
@@ -45,6 +46,8 @@ class iterator_range {
   const_iterator end() const { return end_; }
   const_iterator cbegin() const { return begin_; }
   const_iterator cend() const { return end_; }
+  auto rbegin() const { return std::reverse_iterator<iterator>(end_); }
+  auto rend() const { return std::reverse_iterator<iterator>(begin_); }
 
   bool empty() const { return cbegin() == cend(); }
 
