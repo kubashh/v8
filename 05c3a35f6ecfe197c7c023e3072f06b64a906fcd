@@ -34,6 +34,24 @@
       "parentUuid": "e1a9f833_331c0f44",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcd1dd93_008b9230",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-05T09:33:20Z",
+      "side": 1,
+      "message": "Sure, sgtm if it updates to the same hashes in DEPS and WORKSPACE.\nI am adding Michael Achenbach (from V8 INFRA) to see if he has any comments on this.",
+      "parentUuid": "5aaad7fb_87305da6",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
