@@ -70,6 +70,24 @@
       "parentUuid": "bcd1dd93_008b9230",
       "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46b41b64_85f683c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-05T11:19:02Z",
+      "side": 1,
+      "message": "Done (patches 6), you want to automatically update only `bazel/repositories.bzl`.\n\nThis is actually better, because now other Bazel projects using V8 can load v8_repositories() instead of redefining each dependency.",
+      "parentUuid": "82322eec_5daa74bc",
+      "revId": "05c3a35f6ecfe197c7c023e3072f06b64a906fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
