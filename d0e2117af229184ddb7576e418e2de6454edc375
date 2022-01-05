@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37706214_cb75e9f4",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-05T16:37:22Z",
+      "side": 0,
+      "message": "just drive-by cleanup",
+      "range": {
+        "startLine": 879,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 0
+      },
+      "revId": "d0e2117af229184ddb7576e418e2de6454edc375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "452bea3d_1233fec2",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-05T16:37:22Z",
+      "side": 0,
+      "message": "removed as it no longer holds for Transition to Internalized.",
+      "range": {
+        "startLine": 260,
+        "startChar": 6,
+        "endLine": 265,
+        "endChar": 42
+      },
+      "revId": "d0e2117af229184ddb7576e418e2de6454edc375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
