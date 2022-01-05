@@ -243,6 +243,10 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     return std::move(canonical_handles_);
   }
 
+  void set_osr_depth(int n) { osr_depth_ = n; }
+
+  int osr_depth() { return osr_depth_; }
+
  private:
   void ConfigureFlags();
 
@@ -314,6 +318,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   // handles above. The only difference is that is created in the
   // CanonicalHandleScope(i.e step 1) is different).
   std::unique_ptr<CanonicalHandlesMap> canonical_handles_;
+
+  int osr_depth_ = -1;
 };
 
 }  // namespace internal

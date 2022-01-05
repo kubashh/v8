@@ -1462,6 +1462,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return optimizing_compile_dispatcher_ != nullptr;
   }
 
+  bool concurrent_osr_enabled() {
+    return concurrent_recompilation_enabled() && FLAG_concurrent_osr;
+  }
+
   OptimizingCompileDispatcher* optimizing_compile_dispatcher() {
     DCHECK_NOT_NULL(optimizing_compile_dispatcher_);
     return optimizing_compile_dispatcher_;
