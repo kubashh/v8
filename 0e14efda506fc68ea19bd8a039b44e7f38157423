@@ -33,6 +33,46 @@
       "message": "LGTM graph-builder-interface.cc and BUILD.bazel",
       "revId": "0e14efda506fc68ea19bd8a039b44e7f38157423",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2827b99_98b43d95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-01-05T14:15:16Z",
+      "side": 1,
+      "message": "Thanks, LGTM!",
+      "revId": "0e14efda506fc68ea19bd8a039b44e7f38157423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd4e5331_b4bfacfc",
+        "filename": "src/compiler/wasm-loop-peeling.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-01-05T14:15:16Z",
+      "side": 1,
+      "message": "Looks like an accidental copy-paste?",
+      "range": {
+        "startLine": 12,
+        "startChar": 3,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "0e14efda506fc68ea19bd8a039b44e7f38157423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
