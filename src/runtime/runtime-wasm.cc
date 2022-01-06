@@ -714,10 +714,13 @@ void SyncStackLimit(Isolate* isolate) {
 }  // namespace
 
 // Allocate a new continuation, and prepare for stack switching by updating the
-// active continuation and setting the stack limit.
+// active continuation, active suspender and stack limit.
 RUNTIME_FUNCTION(Runtime_WasmAllocateContinuation) {
   CHECK(FLAG_experimental_wasm_stack_switching);
   HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(WasmSuspenderObject, suspender, 0);
+
+  // Update the continuation state.
   auto parent =
       handle(WasmContinuationObject::cast(
                  *isolate->roots_table().slot(RootIndex::kActiveContinuation)),
@@ -727,6 +730,20 @@ RUNTIME_FUNCTION(Runtime_WasmAllocateContinuation) {
       Managed<wasm::StackMemory>::cast(target->stack()).get().get();
   isolate->wasm_stacks()->Add(target_stack);
   isolate->roots_table().slot(RootIndex::kActiveContinuation).store(*target);
+
+  // Update the suspender state.
+  auto active_suspender_slot =
+      isolate->roots_table().slot(RootIndex::kActiveSuspender);
+  if ((*active_suspender_slot).IsUndefined()) {
+    suspender->set_parent(ReadOnlyRoots(isolate).undefined_value());
+  } else {
+    suspender->set_parent(HeapObject::cast(*active_suspender_slot));
+    WasmSuspenderObject::cast(*active_suspender_slot)
+        .set_state(WasmSuspenderObject::Inactive);
+  }
+  suspender->set_state(WasmSuspenderObject::State::Active);
+  active_suspender_slot.store(*suspender);
+
   SyncStackLimit(isolate);
   return *target;
 }
