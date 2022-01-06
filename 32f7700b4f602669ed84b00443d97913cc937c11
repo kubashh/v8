@@ -50,6 +50,24 @@
       "message": "Sorry for the delay, I missed this CL. Please feel free to ping here or over email if you don\u0027t hear back. \n\nCL mostly looks good, but could you also add disassembler support and test? This would be in src/diagnostics/x64. ",
       "revId": "32f7700b4f602669ed84b00443d97913cc937c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd4bf68_7c562cff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2022-01-06T08:48:11Z",
+      "side": 1,
+      "message": "I thought you are OOO,:)\nCurrently most disassembler can handle 128 and 256 bit registers, I just add a disasm test, Thanks!",
+      "parentUuid": "0c93c56c_3e7e31a8",
+      "revId": "32f7700b4f602669ed84b00443d97913cc937c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
