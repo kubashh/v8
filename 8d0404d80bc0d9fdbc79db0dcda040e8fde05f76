@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0f4d03c_dd7f3bdd",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1163599
+      },
+      "writtenOn": "2022-01-06T18:54:17Z",
+      "side": 1,
+      "message": "This changes the serialized value format.\n\nI think this CL should have bumped kLatestVersion at https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/value-serializer.cc;l\u003d60;drc\u003d73a504d9c4206b06598fc62da68407a4a6b703b4\n\nValueDeserializer::ReadJSArrayBufferView() should handle both the old and the new versions.\n\ntest/unittests/objects/value-serializer-unittest.cc should keep the old deserialization tests (instead of overwriting them) next to the tests covering the new format version, to ensure that we can still read old values.",
+      "revId": "8d0404d80bc0d9fdbc79db0dcda040e8fde05f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
