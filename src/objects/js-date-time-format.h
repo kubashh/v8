@@ -25,6 +25,7 @@ namespace U_ICU_NAMESPACE {
 class DateIntervalFormat;
 class Locale;
 class SimpleDateFormat;
+class TimeZone;
 }  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
@@ -42,6 +43,12 @@ class JSDateTimeFormat
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> ResolvedOptions(
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format);
 
+  V8_WARN_UNUSED_RESULT static Handle<String> Calendar(
+      Isolate* isolate, Handle<JSDateTimeFormat> date_time_format);
+
+  V8_WARN_UNUSED_RESULT static Handle<Object> TimeZone(
+      Isolate* isolate, Handle<JSDateTimeFormat> date_time_format);
+
   // ecma402/#sec-unwrapdatetimeformat
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSDateTimeFormat>
   UnwrapDateTimeFormat(Isolate* isolate, Handle<JSReceiver> format_holder);
@@ -54,22 +61,22 @@ class JSDateTimeFormat
   // DateTime Format Functions
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> DateTimeFormat(
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
-      Handle<Object> date);
+      Handle<Object> date, const char* method);
 
   // ecma402/#sec-Intl.DateTimeFormat.prototype.formatToParts
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> FormatToParts(
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
-      double date_value, bool output_source);
+      Handle<Object> date, bool output_source);
 
   // ecma402/#sec-intl.datetimeformat.prototype.formatRange
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatRange(
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
-      double x_date_value, double y_date_value);
+      Handle<Object> start, Handle<Object> end);
 
   // ecma402/sec-Intl.DateTimeFormat.prototype.formatRangeToParts
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> FormatRangeToParts(
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
-      double x_date_value, double y_date_value);
+      Handle<Object> start, Handle<Object> end);
 
   // ecma-402/#sec-todatetimeoptions
   enum class RequiredOption { kDate, kTime, kAny };
@@ -81,9 +88,19 @@ class JSDateTimeFormat
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToLocaleDateTime(
       Isolate* isolate, Handle<Object> date, Handle<Object> locales,
       Handle<Object> options, RequiredOption required, DefaultsOption defaults,
-      const char* method_name);
+      const char* method);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> TemporalToLocaleString(
+      Isolate* isolate, Handle<Object> temporal, Handle<Object> locales,
+      Handle<Object> options, const char* method);
 
   V8_EXPORT_PRIVATE static const std::set<std::string>& GetAvailableLocales();
+
+  Handle<Object> static TimeZoneId(Isolate* isolate, const icu::TimeZone& tz);
+  std::unique_ptr<icu::TimeZone> static CreateTimeZone(const char* timezone);
+
+  V8_EXPORT_PRIVATE static std::string CanonicalizeTimeZoneID(
+      const std::string& input);
 
   Handle<String> HourCycleAsString() const;
 
