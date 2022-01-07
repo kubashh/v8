@@ -16,6 +16,24 @@
       "message": "(non-owner) This LGTM overall.\n\nWe have a failing node.js test -- look for \"not ok 2535 parallel/test-v8-serdes\" in https://logs.chromium.org/logs/node-ci/buildbucket/cr-buildbucket/8825746393326303745/+/u/test_default__retry_/stdout\n\nI suspect this is a problem with the test code in node.js (presuambly at test/parallel/test-v8-serdes.js:174:10). asully@ and I are both investigating.",
       "revId": "687ec811ce63a172f8f7e289b109c4b643c822dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a491d4c_10399dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163599
+      },
+      "writtenOn": "2022-01-07T00:15:59Z",
+      "side": 1,
+      "message": "Confirming that the test is in node.js -- https://github.com/nodejs/node/blob/master/test/parallel/test-v8-serdes.js",
+      "parentUuid": "32ef91b8_eca26846",
+      "revId": "687ec811ce63a172f8f7e289b109c4b643c822dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
