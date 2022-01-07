@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ea47f0_2468b373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-07T03:47:58Z",
+      "side": 1,
+      "message": "Happy new year and friendly ping for a review",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
