@@ -60,6 +60,7 @@ TF_BUILTIN(GrowFastDoubleElements, CodeStubAssembler) {
 }
 
 TF_BUILTIN(GrowFastSmiOrObjectElements, CodeStubAssembler) {
+  auto context = Parameter<Context>(Descriptor::kContext);
   auto object = Parameter<JSObject>(Descriptor::kObject);
   auto key = Parameter<Smi>(Descriptor::kKey);
 
@@ -70,8 +71,7 @@ TF_BUILTIN(GrowFastSmiOrObjectElements, CodeStubAssembler) {
   Return(elements);
 
   BIND(&runtime);
-  TailCallRuntime(Runtime::kGrowArrayElements, NoContextConstant(), object,
-                  key);
+  TailCallRuntime(Runtime::kGrowArrayElements, context, object, key);
 }
 
 TF_BUILTIN(ReturnReceiver, CodeStubAssembler) {

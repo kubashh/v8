@@ -1141,7 +1141,7 @@ struct SimplifiedOperatorGlobalCache final {
   struct GrowFastElementsOperator final
       : public Operator1<GrowFastElementsParameters> {
     GrowFastElementsOperator()
-        : Operator1(IrOpcode::kMaybeGrowFastElements, Operator::kNoThrow,
+        : Operator1(IrOpcode::kMaybeGrowFastElements, Operator::kNoProperties,
                     "MaybeGrowFastElements", 4, 1, 1, 1, 1, 0,
                     GrowFastElementsParameters(kMode, FeedbackSource())) {}
   };

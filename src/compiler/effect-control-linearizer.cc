@@ -4886,8 +4886,8 @@ Node* EffectControlLinearizer::LowerEnsureWritableFastElements(Node* node) {
   return done.PhiAt(0);
 }
 
-Node* EffectControlLinearizer::LowerMaybeGrowFastElements(Node* node,
-                                                          Node* frame_state) {
+Node* EffectControlLinearizer::LowerMaybeGrowFastElements(
+    Node* node, Node* frame_state_node) {
   GrowFastElementsParameters params = GrowFastElementsParametersOf(node->op());
   Node* object = node->InputAt(0);
   Node* elements = node->InputAt(1);
@@ -4905,6 +4905,7 @@ Node* EffectControlLinearizer::LowerMaybeGrowFastElements(Node* node,
 
   __ Bind(&if_grow);
   // We need to grow the {elements} for {object}.
+  FrameState frame_state(frame_state_node);
   Operator::Properties properties = Operator::kEliminatable;
   Callable callable =
       (params.mode() == GrowFastElementsMode::kDoubleElements)
@@ -4917,11 +4918,11 @@ Node* EffectControlLinearizer::LowerMaybeGrowFastElements(Node* node,
       callable.descriptor().GetStackParameterCount(), call_flags, properties);
   Node* new_elements =
       __ Call(call_descriptor, __ HeapConstant(callable.code()), object,
-              ChangeInt32ToSmi(index), __ NoContextConstant());
+              ChangeInt32ToSmi(index), frame_state.context());
 
   // Ensure that we were able to grow the {elements}.
   __ DeoptimizeIf(DeoptimizeReason::kCouldNotGrowElements, params.feedback(),
-                  ObjectIsSmi(new_elements), frame_state);
+                  ObjectIsSmi(new_elements), frame_state_node);
   __ Goto(&done, new_elements);
 
   __ Bind(&done);
