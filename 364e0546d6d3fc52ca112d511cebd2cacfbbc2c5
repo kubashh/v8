@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "430e0255_3b54d625",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T16:51:05Z",
+      "side": 1,
+      "message": "You can try that. Add an explicit GC call in the runtime function and see if it causes a crash. One example of an explicit GC is\nv8::Isolate* isolate \u003d ...;\nisolate-\u003eRequestGarbageCollectionForTesting(\n      v8::Isolate::kFullGarbageCollection);",
+      "parentUuid": "a50e329d_ea28f472",
+      "range": {
+        "startLine": 3741,
+        "startChar": 27,
+        "endLine": 3741,
+        "endChar": 28
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "184bd603_a10ba6e1",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 4
