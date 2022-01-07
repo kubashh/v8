@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adde9d31_c93ef370",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T17:17:51Z",
+      "side": 1,
+      "message": "Thanks for checking! I thought the instance would be moved by the GC, so when the instance gets loaded afterwards from the stack the pointer there would be invalid.",
+      "parentUuid": "3e061e7a_434b8f41",
+      "range": {
+        "startLine": 3741,
+        "startChar": 27,
+        "endLine": 3741,
+        "endChar": 28
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "184bd603_a10ba6e1",
