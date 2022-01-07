@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f526a62_8c099da5",
+        "filename": "src/objects/string.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-07T02:33:39Z",
+      "side": 1,
+      "message": "One way to make this safer could be to make the various String subclasses\u0027 GetChars methods private (and possibly rename to UnsafeGetChar), and require all uses of GetChars to be converted to first wrapping the string in a MigrationSafeString.\n\nMaybe also combine with FlatContent, and only allow FlatContent to be gotten via a MigrationSafeString wrapper. We really should stop dealing with character buffers directly.\n\nFinally, is the plan here to convert String-taking methods to take MigrationSafeStrings instead?",
+      "revId": "663d54df5676ecf34e8c41e24322fe0f438a89c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
