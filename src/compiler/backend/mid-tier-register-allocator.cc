@@ -1773,9 +1773,10 @@ void SinglePassRegisterAllocator::MergeStateFrom(
         if (processed_regs.Contains(reg, rep)) continue;
         processed_regs.Add(reg, rep);
 
-        bool reg_in_use = register_state()->IsAllocated(reg) ||
-                          (!kSimpleFPAliasing &&
-                           register_state()->IsAllocated(reg.simdSibling()));
+        bool reg_in_use =
+            register_state()->IsAllocated(reg) ||
+            (!kSimpleFPAliasing && rep == MachineRepresentation::kSimd128 &&
+             register_state()->IsAllocated(reg.simdSibling()));
 
         if (!reg_in_use) {
           DCHECK(successor_registers->IsAllocated(reg));
