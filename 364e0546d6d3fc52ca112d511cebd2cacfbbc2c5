@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a50e329d_ea28f472",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T15:04:27Z",
+      "side": 1,
+      "message": "I think you\u0027re right that not scanning it is safe, because the suspender is immediately wrapped in a handle in the callee.\nBut not incrementing the count won\u0027t work, it will scan the top two entries, i.e. the arg and only one of the two spills.",
+      "parentUuid": "1ceba600_4a7d0cb8",
+      "range": {
+        "startLine": 3741,
+        "startChar": 27,
+        "endLine": 3741,
+        "endChar": 28
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "184bd603_a10ba6e1",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 4
@@ -71,6 +95,24 @@
       "writtenOn": "2022-01-07T12:26:34Z",
       "side": 1,
       "message": "Do you think we should add a check here that the suspender is inactive?",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2741bd3c_be0f95df",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3848,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T15:04:27Z",
+      "side": 1,
+      "message": "Done (a few lines below, where we\u0027ve checked that it\u0027s not undefined already).",
+      "parentUuid": "184bd603_a10ba6e1",
       "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6397ced_dcf885b2",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T15:04:27Z",
+      "side": 1,
+      "message": "Done, also one of the autos above. I think the other ones are clear from the rhs.",
+      "parentUuid": "38b49ff5_6390e79c",
+      "range": {
+        "startLine": 735,
+        "startChar": 2,
+        "endLine": 735,
+        "endChar": 7
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abab4c6a_16458c3e",
@@ -115,6 +181,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30560733_72f5fb36",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T15:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abab4c6a_16458c3e",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74ce6794_518947dd",
@@ -128,6 +212,24 @@
       "writtenOn": "2022-01-07T12:26:34Z",
       "side": 1,
       "message": "Can you add a comment why the type here is JSFunction and not WasmExternalFunction?",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5534e2a4_f7338c6e",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2581,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T15:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74ce6794_518947dd",
       "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
