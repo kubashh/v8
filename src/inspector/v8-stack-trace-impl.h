@@ -121,16 +121,6 @@ class AsyncStackTrace {
   std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObject(
       V8Debugger* debugger, int maxAsyncDepth) const;
 
-  // If async stack has suspended task id, it means that at moment when we
-  // capture current stack trace we suspended corresponded asynchronous
-  // execution flow and it is possible to request pause for a momemnt when
-  // that flow is resumed.
-  // E.g. every time when we suspend async function we mark corresponded async
-  // stack as suspended and every time when this function is resumed we remove
-  // suspendedTaskId.
-  void setSuspendedTaskId(void* task);
-  void* suspendedTaskId() const;
-
   const String16& description() const;
   std::weak_ptr<AsyncStackTrace> parent() const;
   bool isEmpty() const;
@@ -146,7 +136,6 @@ class AsyncStackTrace {
                   std::shared_ptr<AsyncStackTrace> asyncParent,
                   const V8StackTraceId& externalParent);
 
-  void* m_suspendedTaskId;
   String16 m_description;
 
   std::vector<std::shared_ptr<StackFrame>> m_frames;

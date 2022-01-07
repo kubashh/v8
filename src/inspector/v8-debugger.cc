@@ -297,12 +297,14 @@ bool V8Debugger::asyncStepOutOfFunction(int targetContextGroupId,
   // Lookup for parent async function.
   auto parent = current->parent();
   if (parent.expired()) return false;
-  // Parent async stack will have suspended task id iff callee async function
-  // is awaiting current async function. We can make stepOut there only in this
-  // case.
-  void* parentTask =
-      std::shared_ptr<AsyncStackTrace>(parent)->suspendedTaskId();
-  if (!parentTask) return false;
+  auto parentStack = parent.lock();
+  auto it =
+      std::find_if(m_asyncTaskStacks.begin(), m_asyncTaskStacks.end(),
+                   [parentStack](AsyncTaskToStackTrace::value_type const& it) {
+                     return it.second.lock() == parentStack;
+                   });
+  if (it == m_asyncTaskStacks.end()) return false;
+  void* parentTask = it->first;
   m_targetContextGroupId = targetContextGroupId;
   m_taskWithScheduledBreak = parentTask;
   continueProgram(targetContextGroupId);
@@ -620,11 +622,6 @@ void V8Debugger::AsyncEventOccurred(v8::debug::DebugAsyncActionType type,
     case v8::debug::kAsyncFunctionSuspended: {
       if (m_asyncTaskStacks.find(task) == m_asyncTaskStacks.end()) {
         asyncTaskScheduledForStack(toStringView("await"), task, true, true);
-      }
-      auto stackIt = m_asyncTaskStacks.find(task);
-      if (stackIt != m_asyncTaskStacks.end() && !stackIt->second.expired()) {
-        std::shared_ptr<AsyncStackTrace> stack(stackIt->second);
-        stack->setSuspendedTaskId(task);
       }
       break;
     }
@@ -1007,7 +1004,6 @@ void V8Debugger::asyncTaskStartedForStack(void* task) {
   AsyncTaskToStackTrace::iterator stackIt = m_asyncTaskStacks.find(task);
   if (stackIt != m_asyncTaskStacks.end() && !stackIt->second.expired()) {
     std::shared_ptr<AsyncStackTrace> stack(stackIt->second);
-    stack->setSuspendedTaskId(nullptr);
     m_currentAsyncParent.push_back(stack);
   } else {
     m_currentAsyncParent.emplace_back();
