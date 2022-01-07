@@ -117,8 +117,6 @@ class AsyncStackTrace {
   static std::shared_ptr<AsyncStackTrace> capture(V8Debugger*,
                                                   const String16& description,
                                                   bool skipTopFrame = false);
-  static uintptr_t store(V8Debugger* debugger,
-                         std::shared_ptr<AsyncStackTrace> stack);
 
   std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObject(
       V8Debugger* debugger, int maxAsyncDepth) const;
@@ -148,7 +146,6 @@ class AsyncStackTrace {
                   std::shared_ptr<AsyncStackTrace> asyncParent,
                   const V8StackTraceId& externalParent);
 
-  uintptr_t m_id;
   void* m_suspendedTaskId;
   String16 m_description;
 
