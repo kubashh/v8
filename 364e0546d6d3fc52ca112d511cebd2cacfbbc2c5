@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e061e7a_434b8f41",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-07T17:08:33Z",
+      "side": 1,
+      "message": "I just tried and it doesn\u0027t cause a crash, but probably only because the instance is already spilled somewhere else or reachable from some other object. I stepped through the frame iteration code in gdb and verified that the first spill slot (instance) doesn\u0027t get visited in this frame, but the argument does.",
+      "parentUuid": "430e0255_3b54d625",
+      "range": {
+        "startLine": 3741,
+        "startChar": 27,
+        "endLine": 3741,
+        "endChar": 28
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "184bd603_a10ba6e1",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 4
