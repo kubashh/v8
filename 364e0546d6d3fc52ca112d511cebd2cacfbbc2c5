@@ -16,6 +16,120 @@
       "message": "PTAL",
       "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02607410_0245e0ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ceba600_4a7d0cb8",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3741,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "You don\u0027t have to increase the value here I think. The number in the GCScanSlot is the number of spill slots before a function call. You don\u0027t add a spill slot here though, you add a parameter.",
+      "range": {
+        "startLine": 3741,
+        "startChar": 27,
+        "endLine": 3741,
+        "endChar": 28
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184bd603_a10ba6e1",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3848,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "Do you think we should add a check here that the suspender is inactive?",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b49ff5_6390e79c",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "I think it\u0027s worth spelling out the actual type here. It is interesting and not obvious if this is a handle or not. The same is true for most of the autos above. I\u0027m wondering why you do (*active_suspender_slot).IsUndefined() instead of active_suspender_slot-\u003eIsUndefined(), and with the auto I cannot get the answer to that.",
+      "range": {
+        "startLine": 735,
+        "startChar": 2,
+        "endLine": 735,
+        "endChar": 7
+      },
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abab4c6a_16458c3e",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "You could call set_parent unconditionally, couldn\u0027t you?\nsuspender-\u003eset_parent(HeapObject::cast(*active_suspender_slot));\nif (active_suspender_slot-\u003eIsUndefined()) {\n...\n}",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74ce6794_518947dd",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2581,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-07T12:26:34Z",
+      "side": 1,
+      "message": "Can you add a comment why the type here is JSFunction and not WasmExternalFunction?",
+      "revId": "364e0546d6d3fc52ca112d511cebd2cacfbbc2c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
