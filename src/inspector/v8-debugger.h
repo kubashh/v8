@@ -114,7 +114,7 @@ class V8Debugger : public v8::debug::DebugDelegate,
   void externalAsyncTaskStarted(const V8StackTraceId& parent);
   void externalAsyncTaskFinished(const V8StackTraceId& parent);
 
-  uintptr_t storeStackTrace(std::shared_ptr<AsyncStackTrace> stack);
+  int storeStackTrace(std::shared_ptr<AsyncStackTrace> stack);
 
   void muteScriptParsedEvents();
   void unmuteScriptParsedEvents();
@@ -279,9 +279,9 @@ class V8Debugger : public v8::debug::DebugDelegate,
   bool m_pauseOnAsyncCall = false;
 
   using StackTraceIdToStackTrace =
-      std::unordered_map<uintptr_t, std::weak_ptr<AsyncStackTrace>>;
+      std::unordered_map<int, std::weak_ptr<AsyncStackTrace>>;
   StackTraceIdToStackTrace m_storedStackTraces;
-  uintptr_t m_lastStackTraceId = 0;
+  int m_lastStackTraceId = 0;
 
   std::unordered_map<int, V8DebuggerId> m_contextGroupIdToDebuggerId;
 

@@ -248,14 +248,14 @@ class V8_EXPORT V8InspectorClient {
 // resolved later. This allows to track cross-debugger calls and step between
 // them if a single client connects to multiple debuggers.
 struct V8_EXPORT V8StackTraceId {
-  uintptr_t id;
+  int id;
   std::pair<int64_t, int64_t> debugger_id;
   bool should_pause = false;
 
   V8StackTraceId();
   V8StackTraceId(const V8StackTraceId&) = default;
-  V8StackTraceId(uintptr_t id, const std::pair<int64_t, int64_t> debugger_id);
-  V8StackTraceId(uintptr_t id, const std::pair<int64_t, int64_t> debugger_id,
+  V8StackTraceId(int id, const std::pair<int64_t, int64_t> debugger_id);
+  V8StackTraceId(int id, const std::pair<int64_t, int64_t> debugger_id,
                  bool should_pause);
   explicit V8StackTraceId(StringView);
   V8StackTraceId& operator=(const V8StackTraceId&) = default;

@@ -842,7 +842,7 @@ Response V8DebuggerAgentImpl::getStackTrace(
     std::unique_ptr<protocol::Runtime::StackTraceId> inStackTraceId,
     std::unique_ptr<protocol::Runtime::StackTrace>* outStackTrace) {
   bool isOk = false;
-  int64_t id = inStackTraceId->getId().toInteger64(&isOk);
+  int id = inStackTraceId->getId().toInteger(&isOk);
   if (!isOk) return Response::ServerError("Invalid stack trace id");
 
   V8DebuggerId debuggerId;

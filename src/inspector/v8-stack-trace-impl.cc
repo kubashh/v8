@@ -96,11 +96,10 @@ std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObjectCommon(
       stackTrace->setParent(
           asyncParent->buildInspectorObject(debugger, maxAsyncDepth - 1));
     } else if (debugger) {
-      stackTrace->setParentId(
-          protocol::Runtime::StackTraceId::create()
-              .setId(stackTraceIdToString(
-                  AsyncStackTrace::store(debugger, asyncParent)))
-              .build());
+      stackTrace->setParentId(protocol::Runtime::StackTraceId::create()
+                                  .setId(stackTraceIdToString(
+                                      debugger->storeStackTrace(asyncParent)))
+                                  .build());
     }
   }
   if (!externalParent.IsInvalid()) {
@@ -117,11 +116,11 @@ std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObjectCommon(
 
 V8StackTraceId::V8StackTraceId() : id(0), debugger_id(V8DebuggerId().pair()) {}
 
-V8StackTraceId::V8StackTraceId(uintptr_t id,
+V8StackTraceId::V8StackTraceId(int id,
                                const std::pair<int64_t, int64_t> debugger_id)
     : id(id), debugger_id(debugger_id) {}
 
-V8StackTraceId::V8StackTraceId(uintptr_t id,
+V8StackTraceId::V8StackTraceId(int id,
                                const std::pair<int64_t, int64_t> debugger_id,
                                bool should_pause)
     : id(id), debugger_id(debugger_id), should_pause(should_pause) {}
@@ -143,7 +142,7 @@ V8StackTraceId::V8StackTraceId(StringView json)
   String16 s;
   if (!dict->getString(kId, &s)) return;
   bool isOk = false;
-  int64_t parsedId = s.toInteger64(&isOk);
+  int parsedId = s.toInteger(&isOk);
   if (!isOk || !parsedId) return;
   if (!dict->getString(kDebuggerId, &s)) return;
   V8DebuggerId debuggerId(s);
@@ -158,7 +157,7 @@ bool V8StackTraceId::IsInvalid() const { return !id; }
 std::unique_ptr<StringBuffer> V8StackTraceId::ToString() {
   if (IsInvalid()) return nullptr;
   auto dict = protocol::DictionaryValue::create();
-  dict->setString(kId, String16::fromInteger64(id));
+  dict->setString(kId, String16::fromInteger(id));
   dict->setString(kDebuggerId, V8DebuggerId(debugger_id).toString());
   dict->setBoolean(kShouldPause, should_pause);
   std::vector<uint8_t> json;
@@ -459,8 +458,8 @@ void AsyncStackTrace::setSuspendedTaskId(void* task) {
 
 void* AsyncStackTrace::suspendedTaskId() const { return m_suspendedTaskId; }
 
-uintptr_t AsyncStackTrace::store(V8Debugger* debugger,
-                                 std::shared_ptr<AsyncStackTrace> stack) {
+int AsyncStackTrace::store(V8Debugger* debugger,
+                           std::shared_ptr<AsyncStackTrace> stack) {
   if (stack->m_id) return stack->m_id;
   stack->m_id = debugger->storeStackTrace(stack);
   return stack->m_id;

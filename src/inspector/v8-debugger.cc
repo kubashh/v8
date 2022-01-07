@@ -905,7 +905,7 @@ V8StackTraceId V8Debugger::storeCurrentStackTrace(
       AsyncStackTrace::capture(this, toString16(description));
   if (!asyncStack) return V8StackTraceId();
 
-  uintptr_t id = AsyncStackTrace::store(this, asyncStack);
+  int id = storeStackTrace(asyncStack);
 
   m_allAsyncStacks.push_back(std::move(asyncStack));
   collectOldAsyncStacksIfNeeded();
@@ -919,9 +919,8 @@ V8StackTraceId V8Debugger::storeCurrentStackTrace(
   return V8StackTraceId(id, debuggerIdFor(contextGroupId).pair(), shouldPause);
 }
 
-uintptr_t V8Debugger::storeStackTrace(
-    std::shared_ptr<AsyncStackTrace> asyncStack) {
-  uintptr_t id = ++m_lastStackTraceId;
+int V8Debugger::storeStackTrace(std::shared_ptr<AsyncStackTrace> asyncStack) {
+  int id = ++m_lastStackTraceId;
   m_storedStackTraces[id] = asyncStack;
   return id;
 }
