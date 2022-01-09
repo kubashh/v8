@@ -616,7 +616,8 @@ TEST(Ffint_d_l_Ftintrz_l_ud) {
   CcTest::InitializeVM();
   FOR_INT64_INPUTS(i, ffint_ftintrz_int64_test_values) {
     int64_t input = *i;
-    uint64_t abs_input = (input < 0) ? -input : input;
+    int64_t min_int64 = (int64_t)1 << (sizeof(int64_t) * 8 - 1);
+    uint64_t abs_input = (input > 0 || input == min_int64) ? input : -input;
     auto fn = [](MacroAssembler* masm) {
       __ movgr2fr_d(f8, a0);
       __ ffint_d_l(f10, f8);
