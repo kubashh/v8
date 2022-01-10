@@ -39,8 +39,6 @@ TO_BE_IMPLEMENTED(TemporalNowPlainDateISO)
 /* Temporal #sec-temporal.now.plaintimeiso */
 TO_BE_IMPLEMENTED(TemporalNowPlainTimeISO)
 
-/* Temporal #sec-temporal.plaindate.compare */
-TO_BE_IMPLEMENTED(TemporalPlainDateCompare)
 /* Temporal #sec-get-temporal.plaindate.prototype.calendar */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeCalendar)
 /* Temporal #sec-get-temporal.plaindate.prototype.year */
@@ -644,6 +642,7 @@ BUILTIN(TemporalPlainDateConstructor) {
                    args.atOrUndefined(isolate, 4)));  // calendar_like
 }
 TEMPORAL_METHOD2(PlainDate, From)
+TEMPORAL_METHOD2(PlainDate, Compare)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 
 // PlainTime

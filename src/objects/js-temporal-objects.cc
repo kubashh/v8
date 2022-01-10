@@ -283,6 +283,19 @@ MaybeHandle<JSTemporalPlainDate> ToTemporalDate(Isolate* isolate,
                                                 Handle<JSReceiver> options,
                                                 const char* method);
 
+#define TO_TEMPORAL_WITH_UNDEFINED(T, N)                                 \
+  MaybeHandle<JSTemporal##T> ToTemporal##N(                              \
+      Isolate* isolate, Handle<Object> item, const char* method) {       \
+    /* 1. If options is not present, set options to */                   \
+    /* ! OrdinaryObjectCreate(null). */                                  \
+    return ToTemporal##N(isolate, item,                                  \
+                         isolate->factory()->NewJSObjectWithNullProto(), \
+                         method);                                        \
+  }
+
+TO_TEMPORAL_WITH_UNDEFINED(PlainDate, Date)
+#undef TO_TEMPORAL_WITH_UNDEFINED
+
 // #sec-temporal-isbuiltincalendar
 bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id);
 
@@ -4178,6 +4191,28 @@ MaybeHandle<JSTemporalPlainDate> JSTemporalPlainDate::From(
   }
   // 3. Return ? ToTemporalDate(item, options).
   return ToTemporalDate(isolate, item, options, method);
+}
+
+// #sec-temporal.plaindate.compare
+MaybeHandle<Smi> JSTemporalPlainDate::Compare(Isolate* isolate,
+                                              Handle<Object> one_obj,
+                                              Handle<Object> two_obj) {
+  const char* method = "Temporal.PlainDate.compare";
+  // 1. Set one to ? ToTemporalDate(one).
+  Handle<JSTemporalPlainDate> one;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, one,
+                             ToTemporalDate(isolate, one_obj, method), Smi);
+  // 2. Set two to ? ToTemporalDate(two).
+  Handle<JSTemporalPlainDate> two;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, two,
+                             ToTemporalDate(isolate, two_obj, method), Smi);
+  // 3. Return 𝔽(! CompareISODate(one.[[ISOYear]], one.[[ISOMonth]],
+  // one.[[ISODay]], two.[[ISOYear]], two.[[ISOMonth]], two.[[ISODay]])).
+  return Handle<Smi>(
+      Smi::FromInt(CompareISODate(isolate, one->iso_year(), one->iso_month(),
+                                  one->iso_day(), two->iso_year(),
+                                  two->iso_month(), two->iso_day())),
+      isolate);
 }
 
 #define DEFINE_INT_FIELD(obj, str, field, item)                \
