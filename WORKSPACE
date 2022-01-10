@@ -31,11 +31,9 @@ pip_install(
     requirements = "//:bazel/requirements.txt",
 )
 
-new_local_repository(
-    name = "com_googlesource_chromium_zlib",
-    path = "third_party/zlib",
-    build_file = "bazel/BUILD.zlib",
-)
+load("@v8//:bazel/repositories.bzl", "v8_repositories")
+
+v8_repositories()
 
 bind(
     name = "zlib",
@@ -47,21 +45,9 @@ bind(
     actual = "@com_googlesource_chromium_zlib//:zlib_compression_utils",
 )
 
-new_local_repository(
-    name = "com_googlesource_chromium_icu",
-    path = "third_party/icu",
-    build_file = "bazel/BUILD.icu",
-)
-
 bind(
     name = "icu",
     actual = "@com_googlesource_chromium_icu//:icu",
-)
-
-new_local_repository(
-    name = "com_googlesource_chromium_base_trace_event_common",
-    path = "base/trace_event/common",
-    build_file = "bazel/BUILD.trace_event_common",
 )
 
 bind(
