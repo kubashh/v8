@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d0be2e5_cbc0e239",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-01-10T10:05:11Z",
+      "side": 0,
+      "message": "Drive-by comment: These API changes might break embedders (if they were relying on v8 headers pulling these headers in), could you run tryjobs to make sure Chromium \u0026 node won\u0027t have problems?\n\n(Consequently, this can only be landed when we\u0027re not in an API freeze.)",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "741b18f5ddafd155385691e6fdccebd34ecc803e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

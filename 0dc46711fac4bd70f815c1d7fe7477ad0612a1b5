@@ -16,6 +16,46 @@
       "message": "No rush cleanup CL.",
       "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35b91116_019bb0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-01-10T10:05:11Z",
+      "side": 1,
+      "message": "drive-by lgtm w/ comments, you\u0027ll prob need more OWNERS anyway",
+      "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6197cda4_ccab8471",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-01-10T10:05:11Z",
+      "side": 1,
+      "message": "Is this needed?\n\nLooks like vector is only used here:\n  static v8::StartupData Create(\n      Isolate* isolate, std::vector\u003cContext\u003e* contexts,\n      const std::vector\u003cSerializeInternalFieldsCallback\u003e\u0026\n          embedder_fields_serializers,\n      const GlobalSafepointScope\u0026 global_safepoint,\n      const DisallowGarbageCollection\u0026 no_gc,\n      SerializerFlags flags \u003d kDefaultSerializerFlags);\n      \n-\u003e isn\u0027t forward declaring enough?",
+      "range": {
+        "startLine": 8,
+        "startChar": 10,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
