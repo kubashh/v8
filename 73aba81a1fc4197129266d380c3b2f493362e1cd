@@ -16,6 +16,108 @@
       "message": "Happy new year and friendly ping for a review",
       "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d968cc20_e037b42f",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2714,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "reparsed scope",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4e4a0e_948c3ab9",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be necessary anymore if you address my other comments?",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eadef07_b4228033",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "hierarchy",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dbbf670_f0cff13b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "declared",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33997e25_773ef7c4",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "Won\u0027t this break the outer class variable? E.g.,\n\n var a \u003d class X { a \u003d new (class Y { b \u003d X }) }\n \nwhen reparsing the initializer for Y?\n\nCan\u0027t we use the position of the original scope and of the class literal for which we\u0027re trying to reparse the initializer function to know whether we\u0027re looking at the right scope? I\u0027d suggest you check this before deserializing the scope chain so we don\u0027t even generate the class scope that we\u0027re going to reparse from the scope-info chain. That would allow us to stop removing the inner scope from the outer scope in ReplaceReparsedClassScope (which should then be named differently...)",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6fc7c3e_98bd89f0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-10T17:14:40Z",
+      "side": 1,
+      "message": "There\u0027s only 1 class variable?",
+      "revId": "73aba81a1fc4197129266d380c3b2f493362e1cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
