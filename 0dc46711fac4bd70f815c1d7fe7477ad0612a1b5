@@ -56,6 +56,30 @@
       },
       "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bae17d2_8d28f6bf",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2022-01-10T17:50:58Z",
+      "side": 1,
+      "message": "I don\u0027t know how to forward declare std::vector. I don\u0027t see anyone else trying to do that in the codebase.",
+      "parentUuid": "6197cda4_ccab8471",
+      "range": {
+        "startLine": 8,
+        "startChar": 10,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
