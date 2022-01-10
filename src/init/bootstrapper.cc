@@ -5197,6 +5197,15 @@ void Genesis::InitializeGlobal_harmony_temporal() {
 #undef INSTALL_TEMPORAL_CTOR_AND_PROTOTYPE
 #undef INSTALL_TEMPORAL_FUNC
 
+  // The StringFixedArrayFromIterable functions is created but not
+  // exposed, as it is used internally by CalendarFeilds.
+  {
+    Handle<JSFunction> func = SimpleCreateFunction(
+        isolate_,
+        factory()->InternalizeUtf8String("StringFixedArrayFromIterable"),
+        Builtin::kStringFixedArrayFromIterable, 1, false);
+    native_context()->set_string_fixed_array_from_iterable(*func);
+  }
   // The TemporalInsantFixedArrayFromIterable functions is created but not
   // exposed, as it is used internally by GetPossibleInstantsFor.
   {
