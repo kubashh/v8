@@ -39,8 +39,6 @@ TO_BE_IMPLEMENTED(TemporalNowPlainDateISO)
 /* Temporal #sec-temporal.now.plaintimeiso */
 TO_BE_IMPLEMENTED(TemporalNowPlainTimeISO)
 
-/* Temporal #sec-temporal.plaindate.compare */
-TO_BE_IMPLEMENTED(TemporalPlainDateCompare)
 /* Temporal #sec-get-temporal.plaindate.prototype.calendar */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeCalendar)
 /* Temporal #sec-get-temporal.plaindate.prototype.year */
@@ -83,8 +81,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeWithCalendar)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeUntil)
 /* Temporal #sec-temporal.plaindate.prototype.since */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeSince)
-/* Temporal #sec-temporal.plaindate.prototype.equals */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEquals)
 /* Temporal #sec-temporal.plaindate.prototype.toplaindatetime */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainDateTime)
 /* Temporal #sec-temporal.plaindate.prototype.tozoneddatetime */
@@ -603,6 +599,16 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     RETURN_RESULT_OR_FAILURE(isolate, JSTemporal##T ::METHOD(isolate, obj)); \
   }
 
+#define TEMPORAL_PROTOTYPE_METHOD1(T, METHOD, name)                            \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                    \
+    HandleScope scope(isolate);                                                \
+    const char* method = "Temporal." #T ".prototype." #name;                   \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                                \
+    RETURN_RESULT_OR_FAILURE(                                                  \
+        isolate,                                                               \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1))); \
+  }
+
 #define TEMPORAL_PROTOTYPE_METHOD3(T, METHOD, name)                          \
   BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
     HandleScope scope(isolate);                                              \
@@ -644,6 +650,8 @@ BUILTIN(TemporalPlainDateConstructor) {
                    args.atOrUndefined(isolate, 4)));  // calendar_like
 }
 TEMPORAL_METHOD2(PlainDate, From)
+TEMPORAL_METHOD2(PlainDate, Compare)
+TEMPORAL_PROTOTYPE_METHOD1(PlainDate, Equals, equals)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 
 // PlainTime
