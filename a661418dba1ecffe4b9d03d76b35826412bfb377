@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d283d904_9e8adeb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-01-10T12:11:48Z",
+      "side": 1,
+      "message": "This header is unconditionally imported on ARM with NEON instructions.",
+      "revId": "a661418dba1ecffe4b9d03d76b35826412bfb377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
