@@ -4272,6 +4272,7 @@ v8_source_set("v8_base_without_compiler") {
     "src/objects/option-utils.cc",
     "src/objects/ordered-hash-table.cc",
     "src/objects/osr-optimized-code-cache.cc",
+    "src/objects/property-cell.cc",
     "src/objects/property-descriptor.cc",
     "src/objects/property.cc",
     "src/objects/scope-info.cc",

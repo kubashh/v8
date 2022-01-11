@@ -1707,6 +1707,7 @@ filegroup(
         "src/objects/property-array-inl.h",
         "src/objects/property-array.h",
         "src/objects/property-cell-inl.h",
+        "src/objects/property-cell.cc",
         "src/objects/property-cell.h",
         "src/objects/property-descriptor-object-inl.h",
         "src/objects/property-descriptor-object.h",
