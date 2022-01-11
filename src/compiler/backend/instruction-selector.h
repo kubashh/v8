@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_BACKEND_INSTRUCTION_SELECTOR_H_
 #define V8_COMPILER_BACKEND_INSTRUCTION_SELECTOR_H_
 
+#include <initializer_list>
 #include <map>
 
 #include "src/codegen/cpu-features.h"
@@ -16,6 +17,7 @@
 #include "src/compiler/linkage.h"
 #include "src/compiler/machine-operator.h"
 #include "src/compiler/node.h"
+#include "src/compiler/turboshaft/operations.h"
 #include "src/zone/zone-containers.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -36,6 +38,10 @@ class Linkage;
 class OperandGenerator;
 class SwitchInfo;
 class StateObjectDeduplicator;
+
+namespace turboshaft {
+class Graph;
+}
 
 // The flags continuation is a way to combine a branch or a materialization
 // of a boolean value with an instruction that sets the flags register.
@@ -268,6 +274,62 @@ class FlagsContinuation final {
   Node* false_value_;               // Only valid if mode_ == kFlags_select.
 };
 
+class TSFlagsContinuation final {
+ public:
+  enum class Kind : uint8_t {
+    kBranch  //, kDeoptimize, kSet, kTrap, kSelect
+  };
+  Kind kind() const { return kind_; }
+
+  static TSFlagsContinuation ForBranch(const turboshaft::Block& true_block,
+                                       const turboshaft::Block& false_block) {
+    TSFlagsContinuation result(Kind::kBranch);
+    result.union_.branch_ = {&true_block, &false_block};
+    return result;
+  }
+  const turboshaft::Block& true_block() const {
+    DCHECK_EQ(kind_, Kind::kBranch);
+    return *union_.branch_.true_block_;
+  }
+  const turboshaft::Block& false_block() const {
+    DCHECK_EQ(kind_, Kind::kBranch);
+    return *union_.branch_.true_block_;
+  }
+
+ private:
+  explicit TSFlagsContinuation(Kind kind) : kind_(kind) {}
+
+  const Kind kind_;
+  union Union {
+    struct {
+      const turboshaft::Block* true_block_;
+      const turboshaft::Block* false_block_;
+    } branch_;
+    struct {
+      turboshaft::OpIndex result_;
+      DeoptimizeKind deopt_kind_;
+      DeoptimizeReason reason_;
+      NodeId node_id_;
+      FeedbackSource feedback_;
+      void* frame_state_;  // TODO(tebbi): What to choose here?
+      InstructionOperand* extra_args_;
+      int extra_args_count_;
+    } deoptimize_;
+    struct {
+      turboshaft::OpIndex result_;
+    } set_;
+    struct {
+      TrapId trap_id_;
+    } trap_;
+    struct {
+      turboshaft::OpIndex true_value_;
+      turboshaft::OpIndex false_value_;
+    } select_;
+
+    Union() : branch_{} {}
+  } union_;
+};
+
 // This struct connects nodes of parameters which are going to be pushed on the
 // call stack with their parameter index in the call descriptor of the callee.
 struct PushParameter {
@@ -302,10 +364,10 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   InstructionSelector(
       Zone* zone, size_t node_count, Linkage* linkage,
       InstructionSequence* sequence, Schedule* schedule,
-      SourcePositionTable* source_positions, Frame* frame,
-      EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
-      JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
-      size_t* max_pushed_argument_count,
+      const turboshaft::Graph& ts_graph, SourcePositionTable* source_positions,
+      Frame* frame, EnableSwitchJumpTable enable_switch_jump_table,
+      TickCounter* tick_counter, JSHeapBroker* broker,
+      size_t* max_unoptimized_frame_height, size_t* max_pushed_argument_count,
       SourcePositionMode source_position_mode = kCallSourcePositions,
       Features features = SupportedFeatures(),
       EnableScheduling enable_scheduling = FLAG_turbo_instruction_scheduling
@@ -317,6 +379,7 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
 
   // Visit code for the entire graph with the included schedule.
   bool SelectInstructions();
+  bool TurboshaftSelectInstructions();
 
   void StartBlock(RpoNumber rpo);
   void EndBlock(RpoNumber rpo);
@@ -382,6 +445,19 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
       InstructionCode opcode, size_t output_count, InstructionOperand* outputs,
       size_t input_count, InstructionOperand* inputs, size_t temp_count,
       InstructionOperand* temps, FlagsContinuation* cont);
+  Instruction* EmitWithContinuation(
+      InstructionCode opcode, TSFlagsContinuation* cont,
+      std::initializer_list<InstructionOperand> outputs,
+      std::initializer_list<InstructionOperand> inputs,
+      std::initializer_list<InstructionOperand> temps = {}) {
+    return EmitWithContinuation(opcode, cont, base::VectorOf(outputs),
+                                base::VectorOf(inputs), base::VectorOf(temps));
+  }
+  Instruction* EmitWithContinuation(
+      InstructionCode opcode, TSFlagsContinuation* cont,
+      base::Vector<const InstructionOperand> outputs,
+      base::Vector<const InstructionOperand> inputs,
+      base::Vector<const InstructionOperand> temps);
 
   void EmitIdentity(Node* node);
 
@@ -416,6 +492,10 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
 
   static MachineOperatorBuilder::AlignmentRequirements AlignmentRequirements();
 
+  const turboshaft::Operation& Get(turboshaft::OpIndex op_idx) const;
+  turboshaft::OpIndex Index(const turboshaft::Operation& op) const;
+  static RpoNumber Index(const turboshaft::Block& block);
+
   // ===========================================================================
   // ============ Architecture-independent graph covering methods. =============
   // ===========================================================================
@@ -428,6 +508,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // CanCover(a, b) holds. If this is not the case, code for b must still be
   // generated for other users, and fusing is unlikely to improve performance.
   bool CanCover(Node* user, Node* node) const;
+  bool CanCover(turboshaft::OpIndex input, const turboshaft::Block& block,
+                int effect_level) const;
   // CanCover is not transitive.  The counter example are Nodes A,B,C such that
   // CanCover(A, B) and CanCover(B,C) and B is pure: The the effect level of A
   // and B might differ. CanCoverTransitively does the additional checks.
@@ -461,22 +543,30 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // Checks if {node} was already defined, and therefore code was already
   // generated for it.
   bool IsDefined(Node* node) const;
+  bool IsDefined(const turboshaft::Operation& op) const;
+  bool IsDefined(turboshaft::OpIndex op) const;
 
   // Checks if {node} has any uses, and therefore code has to be generated for
   // it.
   bool IsUsed(Node* node) const;
+  bool IsUsed(const turboshaft::Operation& op) const;
 
   // Checks if {node} is currently live.
   bool IsLive(Node* node) const { return !IsDefined(node) && IsUsed(node); }
+  bool IsLive(turboshaft::OpIndex op) const {
+    return !IsDefined(op) && IsUsed(Get(op));
+  }
 
   // Gets the effect level of {node}.
   int GetEffectLevel(Node* node) const;
+  int GetEffectLevel(turboshaft::OpIndex op_idx) const;
 
   // Gets the effect level of {node}, appropriately adjusted based on
   // continuation flags if the node is a branch.
   int GetEffectLevel(Node* node, FlagsContinuation* cont) const;
 
   int GetVirtualRegister(const Node* node);
+  int GetVirtualRegister(turboshaft::OpIndex op_idx);
   const std::map<NodeId, int> GetVirtualRegistersForTesting() const;
 
   // Check if we can generate loads and stores of ExternalConstants relative
@@ -518,17 +608,22 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
 
   // Inform the instruction selection that {node} was just defined.
   void MarkAsDefined(Node* node);
+  void MarkAsDefined(turboshaft::OpIndex op_idx);
 
   // Inform the instruction selection that {node} has at least one use and we
   // will need to generate code for it.
   void MarkAsUsed(Node* node);
+  void MarkAsUsed(turboshaft::OpIndex op_idx);
 
   // Sets the effect level of {node}.
   void SetEffectLevel(Node* node, int effect_level);
+  void SetEffectLevel(turboshaft::OpIndex op_idx, int effect_level);
 
   // Inform the register allocation of the representation of the value produced
   // by {node}.
   void MarkAsRepresentation(MachineRepresentation rep, Node* node);
+  void MarkAsRepresentation(MachineRepresentation rep,
+                            turboshaft::OpIndex op_idx);
   void MarkAsWord32(Node* node) {
     MarkAsRepresentation(MachineRepresentation::kWord32, node);
   }
@@ -600,13 +695,19 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
 
   // Visit nodes in the given block and generate code.
   void VisitBlock(BasicBlock* block);
+  void VisitBlock(const turboshaft::Block& block);
 
   // Visit the node for the control flow at the end of the block, generating
   // code if necessary.
   void VisitControl(BasicBlock* block);
+  void VisitControl(const turboshaft::Block& block);
 
   // Visit the node and generate code, if any.
   void VisitNode(Node* node);
+
+  void VisitOp(const turboshaft::Operation& op, const turboshaft::Block& block);
+  template <class Op>
+  void Visit(const Op& op, const turboshaft::Block& block);
 
   // Visit the node and generate code for IEEE 754 functions.
   void VisitFloat64Ieee754Binop(Node*, InstructionCode code);
@@ -651,6 +752,12 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   void VisitStackPointerGreaterThan(Node* node, FlagsContinuation* cont);
 
   void VisitWordCompareZero(Node* user, Node* value, FlagsContinuation* cont);
+  void VisitWordNotEqualZero(const turboshaft::Operation& value,
+                             TSFlagsContinuation* cont,
+                             const turboshaft::Block& block, int effect_level);
+
+  void VisitCompare(InstructionCode opcode, InstructionOperand left,
+                    InstructionOperand right, TSFlagsContinuation* cont);
 
   void EmitPrepareArguments(ZoneVector<compiler::PushParameter>* arguments,
                             const CallDescriptor* call_descriptor, Node* node);
@@ -748,13 +855,16 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   SourcePositionMode const source_position_mode_;
   Features features_;
   Schedule* const schedule_;
+  const turboshaft::Graph& ts_graph_;
   BasicBlock* current_block_;
+  const turboshaft::Block* current_ts_block_;
   ZoneVector<Instruction*> instructions_;
   InstructionOperandVector continuation_inputs_;
   InstructionOperandVector continuation_outputs_;
   InstructionOperandVector continuation_temps_;
   BoolVector defined_;
   BoolVector used_;
+  IntVector use_count_;
   IntVector effect_level_;
   IntVector virtual_registers_;
   IntVector virtual_register_rename_;

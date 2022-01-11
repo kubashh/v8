@@ -74,6 +74,7 @@
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/store-store-elimination.h"
+#include "src/compiler/turboshaft/graph-builder.h"
 #include "src/compiler/type-narrowing-reducer.h"
 #include "src/compiler/typed-optimization.h"
 #include "src/compiler/typer.h"
@@ -166,6 +167,7 @@ class PipelineData {
         assembler_options_(AssemblerOptions::Default(isolate)) {
     PhaseScope scope(pipeline_statistics, "V8.TFInitPipelineData");
     graph_ = graph_zone_->New<Graph>(graph_zone_);
+    turboshaft_graph_ = graph_zone_->New<turboshaft::Graph>(graph_zone_);
     source_positions_ = graph_zone_->New<SourcePositionTable>(graph_);
     node_origins_ = info->trace_turbo_json()
                         ? graph_zone_->New<NodeOriginTable>(graph_)
@@ -338,6 +340,7 @@ class PipelineData {
 
   Zone* graph_zone() const { return graph_zone_; }
   Graph* graph() const { return graph_; }
+  turboshaft::Graph* turboshaft_graph() const { return turboshaft_graph_; }
   SourcePositionTable* source_positions() const { return source_positions_; }
   NodeOriginTable* node_origins() const { return node_origins_; }
   MachineOperatorBuilder* machine() const { return machine_; }
@@ -458,6 +461,7 @@ class PipelineData {
     graph_zone_scope_.Destroy();
     graph_zone_ = nullptr;
     graph_ = nullptr;
+    turboshaft_graph_ = nullptr;
     source_positions_ = nullptr;
     node_origins_ = nullptr;
     simplified_ = nullptr;
@@ -617,6 +621,7 @@ class PipelineData {
   ZoneStats::Scope graph_zone_scope_;
   Zone* graph_zone_ = nullptr;
   Graph* graph_ = nullptr;
+  turboshaft::Graph* turboshaft_graph_ = nullptr;
   SourcePositionTable* source_positions_ = nullptr;
   NodeOriginTable* node_origins_ = nullptr;
   SimplifiedOperatorBuilder* simplified_ = nullptr;
@@ -2020,6 +2025,15 @@ struct DecompressionOptimizationPhase {
   }
 };
 
+struct TurboshaftPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(TurboShaft)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    *data->turboshaft_graph() =
+        turboshaft::BuildGraph(data->schedule(), data->graph_zone(), temp_zone);
+  }
+};
+
 struct ScheduledEffectControlLinearizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(ScheduledEffectControlLinearization)
 
@@ -2233,8 +2247,11 @@ struct InstructionSelectionPhase {
 
   void Run(PipelineData* data, Zone* temp_zone, Linkage* linkage) {
     InstructionSelector selector(
-        temp_zone, data->graph()->NodeCount(), linkage, data->sequence(),
-        data->schedule(), data->source_positions(), data->frame(),
+        temp_zone,
+        FLAG_turboshaft ? data->turboshaft_graph()->op_count()
+                        : data->graph()->NodeCount(),
+        linkage, data->sequence(), data->schedule(), *data->turboshaft_graph(),
+        data->source_positions(), data->frame(),
         data->info()->switch_jump_table()
             ? InstructionSelector::kEnableSwitchJumpTable
             : InstructionSelector::kDisableSwitchJumpTable,
@@ -2254,7 +2271,9 @@ struct InstructionSelectionPhase {
         data->info()->trace_turbo_json()
             ? InstructionSelector::kEnableTraceTurboJson
             : InstructionSelector::kDisableTraceTurboJson);
-    if (!selector.SelectInstructions()) {
+    bool success = FLAG_turboshaft ? selector.TurboshaftSelectInstructions()
+                                   : selector.SelectInstructions();
+    if (!success) {
       data->set_compilation_failed();
     }
     if (data->info()->trace_turbo_json()) {
@@ -2863,6 +2882,10 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   }
 
   ComputeScheduledGraph();
+
+  if (FLAG_turboshaft) {
+    Run<TurboshaftPhase>();
+  }
 
   return SelectInstructions(linkage);
 }

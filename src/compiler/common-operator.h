@@ -577,7 +577,7 @@ class FrameState : public CommonNodeWrapperBase {
     DCHECK_EQ(node->opcode(), IrOpcode::kFrameState);
   }
 
-  FrameStateInfo frame_state_info() const {
+  const FrameStateInfo& frame_state_info() const {
     return FrameStateInfoOf(node()->op());
   }
 

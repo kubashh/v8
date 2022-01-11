@@ -43,6 +43,12 @@ class Vector {
     return Vector<T>(begin() + from, to - from);
   }
 
+  template <class U>
+  void OverwriteWith(Vector<U> other) {
+    DCHECK_EQ(size(), other.size());
+    std::copy(other.begin(), other.end(), begin());
+  }
+
   // Returns the length of the vector. Only use this if you really need an
   // integer return value. Use {size()} otherwise.
   int length() const {

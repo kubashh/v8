@@ -5,14 +5,18 @@
 #include "src/compiler/backend/instruction-selector.h"
 
 #include <limits>
+#include <type_traits>
 
 #include "src/base/iterator.h"
+#include "src/base/logging.h"
+#include "src/base/macros.h"
 #include "src/base/platform/wrappers.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/tick-counter.h"
 #include "src/common/globals.h"
 #include "src/compiler/backend/instruction-selector-impl.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/node-matchers.h"
@@ -20,6 +24,8 @@
 #include "src/compiler/pipeline.h"
 #include "src/compiler/schedule.h"
 #include "src/compiler/state-values-utils.h"
+#include "src/compiler/turboshaft/cfg.h"
+#include "src/compiler/turboshaft/operations.h"
 #include "src/deoptimizer/deoptimizer.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -30,14 +36,17 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+namespace ts = turboshaft;
+
 InstructionSelector::InstructionSelector(
     Zone* zone, size_t node_count, Linkage* linkage,
     InstructionSequence* sequence, Schedule* schedule,
-    SourcePositionTable* source_positions, Frame* frame,
-    EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
-    JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
-    size_t* max_pushed_argument_count, SourcePositionMode source_position_mode,
-    Features features, EnableScheduling enable_scheduling,
+    const ts::Graph& ts_graph, SourcePositionTable* source_positions,
+    Frame* frame, EnableSwitchJumpTable enable_switch_jump_table,
+    TickCounter* tick_counter, JSHeapBroker* broker,
+    size_t* max_unoptimized_frame_height, size_t* max_pushed_argument_count,
+    SourcePositionMode source_position_mode, Features features,
+    EnableScheduling enable_scheduling,
     EnableRootsRelativeAddressing enable_roots_relative_addressing,
     EnableTraceTurboJson trace_turbo)
     : zone_(zone),
@@ -47,13 +56,16 @@ InstructionSelector::InstructionSelector(
       source_position_mode_(source_position_mode),
       features_(features),
       schedule_(schedule),
+      ts_graph_(ts_graph),
       current_block_(nullptr),
+      current_ts_block_(nullptr),
       instructions_(zone),
       continuation_inputs_(sequence->zone()),
       continuation_outputs_(sequence->zone()),
       continuation_temps_(sequence->zone()),
       defined_(node_count, false, zone),
       used_(node_count, false, zone),
+      use_count_(zone),
       effect_level_(node_count, 0, zone),
       virtual_registers_(node_count,
                          InstructionOperand::kInvalidVirtualRegister, zone),
@@ -133,6 +145,65 @@ bool InstructionSelector::SelectInstructions() {
       AddTerminator(instructions_[end]);
     }
     EndBlock(RpoNumber::FromInt(block->rpo_number()));
+  }
+#if DEBUG
+  sequence()->ValidateSSA();
+#endif
+  return true;
+}
+
+bool InstructionSelector::TurboshaftSelectInstructions() {
+  DCHECK(FLAG_turboshaft);
+
+  use_count_.resize(ts_graph_.op_count());
+  for (const ts::Operation& op : ts_graph_.AllOperations()) {
+    for (ts::OpIndex input : op.Inputs()) {
+      ++use_count_[ts::ToUnderlyingType(input)];
+    }
+  }
+
+  // Mark the loop phi backedges as used.
+  for (auto block : ts_graph_.blocks()) {
+    if (!block->IsLoop()) continue;
+    DCHECK_EQ(2, block->predecessors.size());
+    for (const ts::Operation& instr : ts_graph_.BlockIterator(*block)) {
+      if (!instr.Is<ts::LoopPhiOp>()) continue;
+      const ts::LoopPhiOp& phi = instr.Cast<ts::LoopPhiOp>();
+      MarkAsUsed(phi.second());
+    }
+  }
+
+  // Visit each basic block in post order.
+  for (const ts::Block* block : ts_graph_.blocks()) {
+    VisitBlock(*block);
+    if (instruction_selection_failed()) return false;
+  }
+
+  // Schedule the selected instructions.
+  if (UseInstructionScheduling()) {
+    scheduler_ = zone()->New<InstructionScheduler>(zone(), sequence());
+  }
+
+  for (const ts::Block* block : ts_graph_.blocks()) {
+    RpoNumber rpo_number = Index(*block);
+    InstructionBlock* instruction_block =
+        sequence()->InstructionBlockAt(rpo_number);
+    for (size_t i = 0; i < instruction_block->phis().size(); i++) {
+      UpdateRenamesInPhi(instruction_block->PhiAt(i));
+    }
+    size_t end = instruction_block->code_end();
+    size_t start = instruction_block->code_start();
+    DCHECK_LE(end, start);
+    StartBlock(rpo_number);
+    if (end != start) {
+      while (start-- > end + 1) {
+        UpdateRenames(instructions_[start]);
+        AddInstruction(instructions_[start]);
+      }
+      UpdateRenames(instructions_[end]);
+      AddTerminator(instructions_[end]);
+    }
+    EndBlock(rpo_number);
   }
 #if DEBUG
   sequence()->ValidateSSA();
@@ -273,6 +344,17 @@ Instruction* InstructionSelector::Emit(Instruction* instr) {
   return instr;
 }
 
+const ts::Operation& InstructionSelector::Get(ts::OpIndex op_idx) const {
+  return ts_graph_.Get(op_idx);
+}
+ts::OpIndex InstructionSelector::Index(const ts::Operation& op) const {
+  return ts_graph_.Index(op);
+}
+// static
+RpoNumber InstructionSelector::Index(const ts::Block& block) {
+  return RpoNumber::FromInt(ToUnderlyingType(block.index));
+}
+
 bool InstructionSelector::CanCover(Node* user, Node* node) const {
   // 1. Both {user} and {node} must be in the same basic block.
   if (schedule()->block(node) != schedule()->block(user)) {
@@ -292,6 +374,26 @@ bool InstructionSelector::CanCover(Node* user, Node* node) const {
       return false;
     }
   }
+  return true;
+}
+
+bool InstructionSelector::CanCover(ts::OpIndex input, const ts::Block& block,
+                                   int effect_level) const {
+  // 1. Both {user} and {input} must be in the same basic block.
+  if (!block.Contains(input)) return false;
+
+  int use_count = use_count_[ts::ToUnderlyingType(input)];
+  DCHECK_GT(use_count, 0);
+
+  // 2. {input} must be owned by the {user}.
+  if (use_count != 1) return false;
+
+  // 3. Impure {input}s must match the effect level of the user.
+  if (!Get(input).properties().is_pure &&
+      GetEffectLevel(input) != effect_level) {
+    return false;
+  }
+
   return true;
 }
 
@@ -384,6 +486,18 @@ int InstructionSelector::GetVirtualRegister(const Node* node) {
   return virtual_register;
 }
 
+int InstructionSelector::GetVirtualRegister(ts::OpIndex op_idx) {
+  DCHECK(ts_graph_.IsValid(op_idx));
+  size_t const id = ts::ToUnderlyingType(op_idx);
+  DCHECK_LT(id, virtual_registers_.size());
+  int virtual_register = virtual_registers_[id];
+  if (virtual_register == InstructionOperand::kInvalidVirtualRegister) {
+    virtual_register = sequence()->NextVirtualRegister();
+    virtual_registers_[id] = virtual_register;
+  }
+  return virtual_register;
+}
+
 const std::map<NodeId, int> InstructionSelector::GetVirtualRegistersForTesting()
     const {
   std::map<NodeId, int> virtual_registers;
@@ -403,9 +517,26 @@ bool InstructionSelector::IsDefined(Node* node) const {
   return defined_[id];
 }
 
+bool InstructionSelector::IsDefined(const ts::Operation& op) const {
+  return IsDefined(Index(op));
+}
+
+bool InstructionSelector::IsDefined(ts::OpIndex op) const {
+  size_t const id = ts::ToUnderlyingType(op);
+  DCHECK_LT(id, defined_.size());
+  return defined_[id];
+}
+
 void InstructionSelector::MarkAsDefined(Node* node) {
   DCHECK_NOT_NULL(node);
   size_t const id = node->id();
+  DCHECK_LT(id, defined_.size());
+  defined_[id] = true;
+}
+
+void InstructionSelector::MarkAsDefined(ts::OpIndex op_idx) {
+  DCHECK(ts_graph_.IsValid(op_idx));
+  size_t const id = ts::ToUnderlyingType(op_idx);
   DCHECK_LT(id, defined_.size());
   defined_[id] = true;
 }
@@ -421,6 +552,13 @@ bool InstructionSelector::IsUsed(Node* node) const {
   return used_[id];
 }
 
+bool InstructionSelector::IsUsed(const ts::Operation& op) const {
+  if (op.properties().is_required_when_unused) return true;
+  size_t const id = ts::ToUnderlyingType(ts_graph_.Index(op));
+  DCHECK_LT(id, used_.size());
+  return used_[id];
+}
+
 void InstructionSelector::MarkAsUsed(Node* node) {
   DCHECK_NOT_NULL(node);
   size_t const id = node->id();
@@ -428,9 +566,22 @@ void InstructionSelector::MarkAsUsed(Node* node) {
   used_[id] = true;
 }
 
+void InstructionSelector::MarkAsUsed(ts::OpIndex op_idx) {
+  size_t const id = ToUnderlyingType(op_idx);
+  DCHECK_LT(id, used_.size());
+  used_[id] = true;
+}
+
 int InstructionSelector::GetEffectLevel(Node* node) const {
   DCHECK_NOT_NULL(node);
   size_t const id = node->id();
+  DCHECK_LT(id, effect_level_.size());
+  return effect_level_[id];
+}
+
+int InstructionSelector::GetEffectLevel(ts::OpIndex op_idx) const {
+  DCHECK(ts_graph_.IsValid(op_idx));
+  size_t const id = ts::ToUnderlyingType(op_idx);
   DCHECK_LT(id, effect_level_.size());
   return effect_level_[id];
 }
@@ -446,6 +597,13 @@ int InstructionSelector::GetEffectLevel(Node* node,
 void InstructionSelector::SetEffectLevel(Node* node, int effect_level) {
   DCHECK_NOT_NULL(node);
   size_t const id = node->id();
+  DCHECK_LT(id, effect_level_.size());
+  effect_level_[id] = effect_level;
+}
+
+void InstructionSelector::SetEffectLevel(ts::OpIndex op_idx, int effect_level) {
+  DCHECK(ts_graph_.IsValid(op_idx));
+  size_t const id = ts::ToUnderlyingType(op_idx);
   DCHECK_LT(id, effect_level_.size());
   effect_level_[id] = effect_level;
 }
@@ -487,6 +645,11 @@ void InstructionSelector::MarkAsRepresentation(MachineRepresentation rep,
 void InstructionSelector::MarkAsRepresentation(MachineRepresentation rep,
                                                Node* node) {
   sequence()->MarkAsRepresentation(rep, GetVirtualRegister(node));
+}
+
+void InstructionSelector::MarkAsRepresentation(MachineRepresentation rep,
+                                               ts::OpIndex op_idx) {
+  sequence()->MarkAsRepresentation(rep, GetVirtualRegister(op_idx));
 }
 
 namespace {
@@ -903,6 +1066,47 @@ Instruction* InstructionSelector::EmitWithContinuation(
               emit_inputs, emit_temps_size, emit_temps);
 }
 
+Instruction* InstructionSelector::EmitWithContinuation(
+    InstructionCode opcode, TSFlagsContinuation* cont,
+    base::Vector<const InstructionOperand> outputs,
+    base::Vector<const InstructionOperand> inputs,
+    base::Vector<const InstructionOperand> temps) {
+  OperandGenerator g(this);
+
+  // opcode = cont->Encode(opcode);
+
+  continuation_inputs_.clear();
+  continuation_inputs_.insert(continuation_inputs_.end(), inputs.begin(),
+                              inputs.end());
+
+  continuation_outputs_.clear();
+  continuation_outputs_.insert(continuation_outputs_.end(), outputs.begin(),
+                               outputs.end());
+
+  continuation_temps_.clear();
+  continuation_temps_.insert(continuation_temps_.end(), temps.begin(),
+                             temps.end());
+
+  switch (cont->kind()) {
+    using Kind = TSFlagsContinuation::Kind;
+    case Kind::kBranch:
+      continuation_inputs_.push_back(g.Label(cont->true_block()));
+      continuation_inputs_.push_back(g.Label(cont->false_block()));
+      break;
+  }
+
+  size_t const emit_inputs_size = continuation_inputs_.size();
+  auto* emit_inputs =
+      emit_inputs_size ? &continuation_inputs_.front() : nullptr;
+  size_t const emit_outputs_size = continuation_outputs_.size();
+  auto* emit_outputs =
+      emit_outputs_size ? &continuation_outputs_.front() : nullptr;
+  size_t const emit_temps_size = continuation_temps_.size();
+  auto* emit_temps = emit_temps_size ? &continuation_temps_.front() : nullptr;
+  return Emit(opcode, emit_outputs_size, emit_outputs, emit_inputs_size,
+              emit_inputs, emit_temps_size, emit_temps);
+}
+
 void InstructionSelector::AppendDeoptimizeArguments(
     InstructionOperandVector* args, DeoptimizeKind kind,
     DeoptimizeReason reason, NodeId node_id, FeedbackSource const& feedback,
@@ -1252,6 +1456,70 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
   // We're done with the block.
   InstructionBlock* instruction_block =
       sequence()->InstructionBlockAt(RpoNumber::FromInt(block->rpo_number()));
+  if (current_num_instructions() == current_block_end) {
+    // Avoid empty block: insert a {kArchNop} instruction.
+    Emit(Instruction::New(sequence()->zone(), kArchNop));
+  }
+  instruction_block->set_code_start(current_num_instructions());
+  instruction_block->set_code_end(current_block_end);
+  current_block_ = nullptr;
+}
+
+void InstructionSelector::VisitBlock(const ts::Block& block) {
+  DCHECK(!current_ts_block_);
+  current_ts_block_ = &block;
+  auto current_num_instructions = [&] {
+    DCHECK_GE(kMaxInt, instructions_.size());
+    return static_cast<int>(instructions_.size());
+  };
+  int current_block_end = current_num_instructions();
+
+  int effect_level = 0;
+  for (const ts::Operation& instr : ts_graph_.BlockIterator(block)) {
+    SetEffectLevel(Index(instr), effect_level);
+    if (instr.properties().can_write) {
+      ++effect_level;
+    }
+  }
+
+  auto FinishEmittedInstructions = [&](const ts::Operation& op,
+                                       int instruction_start) {
+    if (instruction_selection_failed()) return false;
+    if (current_num_instructions() == instruction_start) return true;
+    std::reverse(instructions_.begin() + instruction_start,
+                 instructions_.end());
+    if (!source_positions_) return true;
+    // TODO(tebbi): support source positions
+    // SourcePosition source_position =
+    // source_positions_->GetSourcePosition(node); if (source_position.IsKnown()
+    // && IsSourcePositionUsed(node)) {
+    //   sequence()->SetSourcePosition(instructions_.back(), source_position);
+    // }
+    return true;
+  };
+
+  // Visit code in reverse control flow order, because architecture-specific
+  // matching may cover more than one node at a time.
+  for (const ts::Operation& op :
+       base::Reversed(ts_graph_.BlockIterator(block))) {
+    int current_instr_end = current_num_instructions();
+    // Skip nodes that are unused or already defined.
+    if (IsUsed(op) && !IsDefined(op)) {
+      // Generate code for this node "top down", but schedule the code "bottom
+      // up".
+      VisitOp(op, block);
+      if (!FinishEmittedInstructions(op, current_instr_end)) return;
+    }
+    if (trace_turbo_ == kEnableTraceTurboJson) {
+      instr_origins_[ts::ToUnderlyingType(Index(op))] = {
+          current_num_instructions(), current_instr_end};
+    }
+  }
+
+  // We're done with the block.
+  RpoNumber rpo_number = RpoNumber::FromInt(ToUnderlyingType(block.index));
+  InstructionBlock* instruction_block =
+      sequence()->InstructionBlockAt(rpo_number);
   if (current_num_instructions() == current_block_end) {
     // Avoid empty block: insert a {kArchNop} instruction.
     Emit(Instruction::New(sequence()->zone(), kArchNop));
@@ -2379,6 +2647,48 @@ void InstructionSelector::VisitNode(Node* node) {
     default:
       FATAL("Unexpected operator #%d:%s @ node #%d", node->opcode(),
             node->op()->mnemonic(), node->id());
+  }
+}
+
+template <class Op>
+void InstructionSelector::Visit(const Op& op, const ts::Block& block) {
+  STATIC_ASSERT((std::is_base_of<ts::Operation, Op>::value));
+  STATIC_ASSERT(!(std::is_same<ts::Operation, Op>::value));
+  FATAL("Unexpected operation #%d: %s", ts_graph_.Index(op),
+        op.ToString().c_str());
+}
+template <>
+void InstructionSelector::Visit(const ts::ConstantOp& op,
+                                const ts::Block& block) {
+  MarkAsRepresentation(op.Representation(), Index(op));
+
+  // We must emit a NOP here because every live range needs a defining
+  // instruction in the register allocator.
+  OperandGenerator g(this);
+  Emit(kArchNop, g.DefineAsConstant(op, Index(op)));
+}
+template <>
+void InstructionSelector::Visit(const ts::BranchOp& op,
+                                const ts::Block& block) {
+  DCHECK_EQ(block.successors.size(), 1);
+  const ts::Block& tbranch = *block.successors[0];
+  const ts::Block& fbranch = *block.successors[1];
+
+  TSFlagsContinuation cont = TSFlagsContinuation::ForBranch(tbranch, fbranch);
+  VisitWordNotEqualZero(Get(op.condition()), &cont, block,
+                        GetEffectLevel(ts_graph_.Index(op)));
+}
+
+void InstructionSelector::VisitOp(const ts::Operation& op,
+                                  const ts::Block& block) {
+  tick_counter_->TickAndMaybeEnterSafepoint();
+  switch (op.opcode) {
+#define SWITCH_CASE(Name)   \
+  case ts::Opcode::k##Name: \
+    return Visit(op.Cast<ts::Name##Op>(), block);
+    TURBOSHAFT_OPERATION_LIST(SWITCH_CASE)
+    default:
+      UNREACHABLE();
   }
 }
 

@@ -11,11 +11,14 @@
 #include "src/compiler/common-operator.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/schedule.h"
+#include "src/compiler/turboshaft/operations.h"
 #include "src/objects/tagged-index.h"
 
 namespace v8 {
 namespace internal {
 namespace compiler {
+
+namespace ts = turboshaft;
 
 struct CaseInfo {
   int32_t value;  // The case value.
@@ -112,6 +115,14 @@ class OperandGenerator {
     return ConstantOperand(virtual_register);
   }
 
+  InstructionOperand DefineAsConstant(const ts::ConstantOp& op,
+                                      ts::OpIndex op_idx) {
+    selector()->MarkAsDefined(op_idx);
+    int virtual_register = GetVReg(op_idx);
+    sequence()->AddConstant(virtual_register, ToConstant(op));
+    return ConstantOperand(virtual_register);
+  }
+
   InstructionOperand DefineAsLocation(Node* node, LinkageLocation location) {
     return Define(node, ToUnallocatedOperand(location, GetVReg(node)));
   }
@@ -128,6 +139,12 @@ class OperandGenerator {
     return Use(node, UnallocatedOperand(UnallocatedOperand::NONE,
                                         UnallocatedOperand::USED_AT_START,
                                         GetVReg(node)));
+  }
+
+  InstructionOperand Use(ts::OpIndex value) {
+    return Use(value, UnallocatedOperand(UnallocatedOperand::NONE,
+                                         UnallocatedOperand::USED_AT_START,
+                                         GetVReg(value)));
   }
 
   InstructionOperand UseAnyAtEnd(Node* node) {
@@ -158,6 +175,11 @@ class OperandGenerator {
     return Use(node, UnallocatedOperand(UnallocatedOperand::MUST_HAVE_REGISTER,
                                         UnallocatedOperand::USED_AT_START,
                                         GetVReg(node)));
+  }
+  InstructionOperand UseRegister(ts::OpIndex value) {
+    return Use(value, UnallocatedOperand(UnallocatedOperand::MUST_HAVE_REGISTER,
+                                         UnallocatedOperand::USED_AT_START,
+                                         GetVReg(value)));
   }
 
   InstructionOperand UseUniqueSlot(Node* node) {
@@ -311,6 +333,11 @@ class OperandGenerator {
         Constant(RpoNumber::FromInt(block->rpo_number())));
   }
 
+  InstructionOperand Label(const ts::Block& block) {
+    return sequence()->AddImmediate(
+        Constant(InstructionSelector::Index(block)));
+  }
+
  protected:
   InstructionSelector* selector() const { return selector_; }
   InstructionSequence* sequence() const { return selector()->sequence(); }
@@ -318,6 +345,9 @@ class OperandGenerator {
 
  private:
   int GetVReg(Node* node) const { return selector_->GetVirtualRegister(node); }
+  int GetVReg(ts::OpIndex op_idx) const {
+    return selector_->GetVirtualRegister(op_idx);
+  }
 
   static Constant ToConstant(const Node* node) {
     switch (node->opcode()) {
@@ -389,6 +419,21 @@ class OperandGenerator {
     UNREACHABLE();
   }
 
+  static Constant ToConstant(const ts::ConstantOp& op) {
+    switch (op.kind) {
+      using Kind = ts::ConstantOp::Kind;
+      case Kind::kWord32:
+        return Constant(static_cast<int32_t>(op.word32()));
+      case Kind::kWord64:
+        return Constant(static_cast<int64_t>(op.word32()));
+      case Kind::kExternal:
+        return Constant(op.external_reference());
+      case Kind::kHeapObject:
+      case Kind::kCompressedHeapObject:
+        return Constant(op.handle(), op.kind == Kind::kCompressedHeapObject);
+    }
+  }
+
   static Constant ToNegatedConstant(const Node* node) {
     switch (node->opcode()) {
       case IrOpcode::kInt32Constant:
@@ -412,6 +457,12 @@ class OperandGenerator {
     DCHECK_NOT_NULL(node);
     DCHECK_EQ(operand.virtual_register(), GetVReg(node));
     selector()->MarkAsUsed(node);
+    return operand;
+  }
+
+  UnallocatedOperand Use(ts::OpIndex value, UnallocatedOperand operand) {
+    DCHECK_EQ(operand.virtual_register(), GetVReg(value));
+    selector()->MarkAsUsed(value);
     return operand;
   }
 

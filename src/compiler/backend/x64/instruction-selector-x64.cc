@@ -12,11 +12,14 @@
 #include "src/codegen/machine-type.h"
 #include "src/compiler/backend/instruction-codes.h"
 #include "src/compiler/backend/instruction-selector-impl.h"
+#include "src/compiler/backend/instruction-selector.h"
 #include "src/compiler/backend/instruction.h"
 #include "src/compiler/machine-operator.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/opcodes.h"
+#include "src/compiler/turboshaft/cfg.h"
+#include "src/compiler/turboshaft/operations.h"
 #include "src/roots/roots-inl.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -50,6 +53,27 @@ class X64OperandGenerator final : public OperandGenerator {
       case IrOpcode::kNumberConstant: {
         const double value = OpParameter<double>(node->op());
         return bit_cast<int64_t>(value) == 0;
+      }
+      default:
+        return false;
+    }
+  }
+
+  bool CanBeImmediate(const ts::Operation& value) {
+    if (!value.Is<ts::ConstantOp>()) return false;
+    const ts::ConstantOp& constant = value.Cast<ts::ConstantOp>();
+    switch (constant.kind) {
+      using Kind = ts::ConstantOp::Kind;
+      case Kind::kWord32:
+        // int32_t min will overflow if displacement mode is
+        // kNegativeDisplacement.
+        return static_cast<int32_t>(constant.word32()) !=
+               std::numeric_limits<int32_t>::min();
+
+      case Kind::kWord64: {
+        const int64_t value = static_cast<int64_t>(constant.word64());
+        return std::numeric_limits<int32_t>::min() < value &&
+               value <= std::numeric_limits<int32_t>::max();
       }
       default:
         return false;
@@ -245,8 +269,13 @@ class X64OperandGenerator final : public OperandGenerator {
     }
   }
 
+  // For x86's two operand instructions, using a value that does not live on as
+  // the left operand is better.
   bool CanBeBetterLeftOperand(Node* node) const {
     return !selector()->IsLive(node);
+  }
+  bool CanBeBetterLeftOperand(turboshaft::OpIndex op_idx) const {
+    return !selector()->IsLive(op_idx);
   }
 };
 
@@ -2494,8 +2523,8 @@ void InstructionSelector::VisitWordCompareZero(Node* user, Node* value,
           cont->OverwriteAndNegateIfEqual(kNotEqual);
           InstructionCode const opcode =
               IsSupported(AVX) ? kAVXFloat64Cmp : kSSEFloat64Cmp;
-          return VisitCompare(this, opcode, m.left().node(),
-                              m.right().InputAt(0), cont, false);
+          return compiler::VisitCompare(this, opcode, m.left().node(),
+                                        m.right().InputAt(0), cont, false);
         }
         cont->OverwriteAndNegateIfEqual(kUnsignedGreaterThan);
         return VisitFloat64Compare(this, value, cont);
@@ -2551,6 +2580,44 @@ void InstructionSelector::VisitWordCompareZero(Node* user, Node* value,
 
   // Branch could not be combined with a compare, emit compare against 0.
   VisitCompareZero(this, user, value, kX64Cmp32, cont);
+}
+
+void InstructionSelector::VisitWordNotEqualZero(const ts::Operation& value,
+                                                TSFlagsContinuation* cont,
+                                                const turboshaft::Block& block,
+                                                int effect_level) {
+  X64OperandGenerator g(this);
+  switch (value.opcode) {
+    case ts::Opcode::kEqual: {
+      auto& cmp = value.Cast<ts::EqualOp>();
+      ts::OpIndex left = cmp.left();
+      ts::OpIndex right = cmp.right();
+      if (cmp.rep == MachineRepresentation::kWord32) {
+        InstructionCode opcode =
+            kX64Cmp32 | FlagsModeField::encode(FlagsMode::kFlags_branch) |
+            FlagsConditionField::encode(FlagsCondition::kEqual);
+        VisitCompare(opcode, g.UseRegister(left), g.Use(right), cont);
+      } else {
+        UNIMPLEMENTED();
+      }
+      break;
+    }
+    default: {
+      InstructionCode opcode =
+          kX64Cmp32 | FlagsModeField::encode(FlagsMode::kFlags_branch) |
+          FlagsConditionField::encode(FlagsCondition::kNotEqual);
+      VisitCompare(opcode, g.UseRegister(Index(value)), g.UseImmediate(0),
+                   cont);
+      break;
+    }
+  }
+}
+
+void InstructionSelector::VisitCompare(InstructionCode opcode,
+                                       InstructionOperand left,
+                                       InstructionOperand right,
+                                       TSFlagsContinuation* cont) {
+  EmitWithContinuation(opcode, cont, {}, {left, right});
 }
 
 void InstructionSelector::VisitSwitch(Node* node, const SwitchInfo& sw) {
@@ -2722,8 +2789,8 @@ void InstructionSelector::VisitFloat64LessThan(Node* node) {
     FlagsContinuation cont = FlagsContinuation::ForSet(kNotEqual, node);
     InstructionCode const opcode =
         IsSupported(AVX) ? kAVXFloat64Cmp : kSSEFloat64Cmp;
-    return VisitCompare(this, opcode, m.left().node(), m.right().InputAt(0),
-                        &cont, false);
+    return compiler::VisitCompare(this, opcode, m.left().node(),
+                                  m.right().InputAt(0), &cont, false);
   }
   FlagsContinuation cont =
       FlagsContinuation::ForSet(kUnsignedGreaterThan, node);
