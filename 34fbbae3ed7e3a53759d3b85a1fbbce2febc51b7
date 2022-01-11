@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c74056_4dbbc5fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-11T16:40:50Z",
+      "side": 1,
+      "message": "lgtm % comment",
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bf576f6_a60eee61",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-11T16:40:50Z",
+      "side": 1,
+      "message": "I think this should stay as \"Free\" (or release).\n\nWe use \"uncommit/commit\" with \"protection\", and \"free\" with \"release\" \n\nUncommitted memory would generally still be available (as a reservation) which is not the case here.",
+      "range": {
+        "startLine": 230,
+        "startChar": 22,
+        "endLine": 230,
+        "endChar": 36
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c09e4cc_8570959d",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-11T16:40:50Z",
+      "side": 1,
+      "message": "Can we make it abstract? (\u003d0;)",
+      "range": {
+        "startLine": 185,
+        "startChar": 50,
+        "endLine": 185,
+        "endChar": 52
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
