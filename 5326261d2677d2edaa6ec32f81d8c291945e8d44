@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ab2ff6_88f57232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T11:43:23Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d8ccf6a_034bd9b7",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T11:43:23Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to reassign shorthands, because there are too many existing uses of them (e.g. various `sig_*` and `reps_*` variables all over the test suite), and renaming them all to remain consistent is a time sink. Also, \u0027t\u0027 collides with \"rtt\" (see line 47).\nFor now, AFAICT, available letters are: g, m, p, u, w, x, y, z. Let\u0027s pick one of those for \"array\", I don\u0027t particularly care which.\n(Seeing that we\u0027ll soon run out of letters, we may have to rethink our conventions anyway, but that\u0027s a discussion for another day.)",
+      "range": {
+        "startLine": 70,
+        "startChar": 44,
+        "endLine": 70,
+        "endChar": 45
+      },
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969e4ae8_9624bec2",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T11:43:23Z",
+      "side": 1,
+      "message": "Please update the prototype spec doc (https://bit.ly/3cWcm6Q) accordingly.",
+      "range": {
+        "startLine": 50,
+        "startChar": 18,
+        "endLine": 50,
+        "endChar": 22
+      },
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e561a6_69c5627b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2412,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T11:43:23Z",
+      "side": 1,
+      "message": "Ack, I agree that this looks more correct than before now (in particular, matches the reverse direction in line 2509).",
+      "range": {
+        "startLine": 2412,
+        "startChar": 8,
+        "endLine": 2412,
+        "endChar": 37
+      },
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
