@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3faf219_9916b8db",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-01-11T12:56:29Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "2d8ccf6a_034bd9b7",
+      "range": {
+        "startLine": 70,
+        "startChar": 44,
+        "endLine": 70,
+        "endChar": 45
+      },
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "969e4ae8_9624bec2",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-11T11:43:23Z",
       "side": 1,
       "message": "Please update the prototype spec doc (https://bit.ly/3cWcm6Q) accordingly.",
+      "range": {
+        "startLine": 50,
+        "startChar": 18,
+        "endLine": 50,
+        "endChar": 22
+      },
+      "revId": "5326261d2677d2edaa6ec32f81d8c291945e8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c41676_2e996dc5",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-01-11T12:56:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "969e4ae8_9624bec2",
       "range": {
         "startLine": 50,
         "startChar": 18,
