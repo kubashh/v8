@@ -3444,6 +3444,63 @@ MaybeHandle<Oddball> JSTemporalDuration::Blank(
                    : isolate->factory()->false_value();
 }
 
+namespace {
+// #sec-temporal-createnegatedtemporalduration
+MaybeHandle<JSTemporalDuration> CreateNegatedTemporalDuration(
+    Isolate* isolate, Handle<JSTemporalDuration> duration) {
+  TEMPORAL_ENTER_FUNC();
+  // 1. Assert: Type(duration) is Object.
+  // 2. Assert: duration has an [[InitializedTemporalDuration]] internal slot.
+  // 3. Return ! CreateTemporalDuration(−duration.[[Years]],
+  // −duration.[[Months]], −duration.[[Weeks]], −duration.[[Days]],
+  // −duration.[[Hours]], −duration.[[Minutes]], −duration.[[Seconds]],
+  // −duration.[[Milliseconds]], −duration.[[Microseconds]],
+  // −duration.[[Nanoseconds]]).
+
+  return CreateTemporalDuration(
+      isolate, -duration->years().Number(), -duration->months().Number(),
+      -duration->weeks().Number(), -duration->days().Number(),
+      -duration->hours().Number(), -duration->minutes().Number(),
+      -duration->seconds().Number(), -duration->milliseconds().Number(),
+      -duration->microseconds().Number(), -duration->nanoseconds().Number());
+}
+
+}  // namespace
+
+// #sec-temporal.duration.prototype.negated
+MaybeHandle<JSTemporalDuration> JSTemporalDuration::Negated(
+    Isolate* isolate, Handle<JSTemporalDuration> duration) {
+  // Let duration be the this value.
+  // 2. Perform ? RequireInternalSlot(duration,
+  // [[InitializedTemporalDuration]]).
+
+  // 3. Return ! CreateNegatedTemporalDuration(duration).
+  return CreateNegatedTemporalDuration(isolate, duration);
+}
+
+// #sec-temporal.duration.prototype.abs
+MaybeHandle<JSTemporalDuration> JSTemporalDuration::Abs(
+    Isolate* isolate, Handle<JSTemporalDuration> duration) {
+  // 1. Let duration be the this value.
+  // 2. Perform ? RequireInternalSlot(duration,
+  // [[InitializedTemporalDuration]]).
+  // 3. Return ? CreateTemporalDuration(abs(duration.[[Years]]),
+  // abs(duration.[[Months]]), abs(duration.[[Weeks]]), abs(duration.[[Days]]),
+  // abs(duration.[[Hours]]), abs(duration.[[Minutes]]),
+  // abs(duration.[[Seconds]]), abs(duration.[[Milliseconds]]),
+  // abs(duration.[[Microseconds]]), abs(duration.[[Nanoseconds]])).
+  return CreateTemporalDuration(isolate, std::abs(duration->years().Number()),
+                                std::abs(duration->months().Number()),
+                                std::abs(duration->weeks().Number()),
+                                std::abs(duration->days().Number()),
+                                std::abs(duration->hours().Number()),
+                                std::abs(duration->minutes().Number()),
+                                std::abs(duration->seconds().Number()),
+                                std::abs(duration->milliseconds().Number()),
+                                std::abs(duration->microseconds().Number()),
+                                std::abs(duration->nanoseconds().Number()));
+}
+
 // #sec-temporal.calendar
 MaybeHandle<JSTemporalCalendar> JSTemporalCalendar::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
