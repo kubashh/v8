@@ -82,8 +82,6 @@
   'temporal/instant-toJSON': [FAIL],
   'temporal/instant-valueOf': [FAIL],
   'temporal/plain-date-add': [FAIL],
-  'temporal/plain-date-compare': [FAIL],
-  'temporal/plain-date-equals': [FAIL],
   'temporal/plain-date-from': [FAIL],
   'temporal/plain-date-get-calendar': [FAIL],
   'temporal/plain-date-get-day': [FAIL],
