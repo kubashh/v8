@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14cad636_640bfeb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-11T11:36:01Z",
+      "side": 1,
+      "message": "That\u0027s indeed a very simple solution to unblock shared structs. Nice!\n\nI am actually surprised that no code relied on the post-condition \"After calling InternalizeString, the original string is either Thin or Internalized\".",
+      "revId": "27ebcb5138331d3e564e15286094eb229779f228",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
