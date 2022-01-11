@@ -13,6 +13,7 @@
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory-base-inl.h"
 #include "src/objects/feedback-cell.h"
+#include "src/objects/feedback-vector-inl.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
@@ -83,6 +84,24 @@ Factory::CodeBuilder& Factory::CodeBuilder::set_interpreter_data(
          interpreter_data->IsBytecodeArray());
   interpreter_data_ = interpreter_data;
   return *this;
+}
+
+template <typename... Params>
+V8_INLINE Handle<FeedbackVector> Factory::NewFeedbackVector3(
+    int length, Params&&... params) {
+  DCHECK_LE(0, length);
+  const int size = FeedbackVector::SizeFor(length);
+  FeedbackVector raw_vector = FeedbackVector::cast(AllocateRawWithImmortalMap(
+      size, AllocationType::kOld, *feedback_vector_map()));
+  {
+    DisallowGarbageCollection no_gc;
+    FeedbackVector::Init(isolate(), raw_vector, no_gc, length,
+                         std::forward<Params>(params)...);
+    VerifyInit(raw_vector);
+  }
+  Handle<FeedbackVector> result = handle(raw_vector, isolate());
+  FeedbackVector::PostInit(isolate(), result);
+  return result;
 }
 
 }  // namespace internal
