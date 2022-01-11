@@ -10,6 +10,7 @@
 #include "src/base/bit-field.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
+#include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/map.h"
@@ -221,6 +222,12 @@ class FeedbackVector
   static constexpr uint32_t kHasOptimizedCodeOrCompileOptimizedMarkerMask =
       OptimizationTierBits::kMask |
       kHasCompileOptimizedOrLogFirstExecutionMarker;
+
+  static void Init(FeedbackVector vector, DisallowGarbageCollection&,
+                   Handle<SharedFunctionInfo> shared,
+                   Handle<ClosureFeedbackCellArray> closure_feedback_cell_array,
+                   IsCompiledScope* is_compiled_scope, int length);
+  static void PostInit(Handle<FeedbackVector> vector);
 
   inline bool is_empty() const;
 
