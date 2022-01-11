@@ -16,6 +16,23 @@
       "message": "src/heap LGTM",
       "revId": "517741a112566a52ae9dc706656ea52d07ad3a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d9e5501_30c49603",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-11T10:39:58Z",
+      "side": 1,
+      "message": "+Jakob for src/roots owner review, ptal.",
+      "revId": "517741a112566a52ae9dc706656ea52d07ad3a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
