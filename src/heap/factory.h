@@ -148,6 +148,15 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       Handle<SharedFunctionInfo> shared,
       Handle<ClosureFeedbackCellArray> closure_feedback_cell_array);
 
+  Handle<FeedbackVector> NewFeedbackVector2(
+      Handle<SharedFunctionInfo> shared,
+      Handle<ClosureFeedbackCellArray> closure_feedback_cell_array,
+      IsCompiledScope* is_compiled_scope);
+
+  template <typename... Params>
+  V8_INLINE Handle<FeedbackVector> NewFeedbackVector3(int length,
+                                                      Params&&... params);
+
   // Allocates a clean embedder data array with given capacity.
   Handle<EmbedderDataArray> NewEmbedderDataArray(int length);
 
@@ -424,6 +433,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<PropertyCell> NewPropertyCell(
       Handle<Name> name, PropertyDetails details, Handle<Object> value,
       AllocationType allocation = AllocationType::kOld);
+
+  template <typename... Params>
+  Handle<PropertyCell> NewPropertyCell2(
+      Params&&... params, AllocationType allocation = AllocationType::kOld);
+
   Handle<PropertyCell> NewProtector();
 
   Handle<FeedbackCell> NewNoClosuresCell(Handle<HeapObject> value);
@@ -993,6 +1007,12 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
  private:
   friend class FactoryBase<Factory>;
+
+  template <typename T, typename... Params>
+  V8_INLINE Handle<T> InitializeAndVerify(Isolate* isolate, T raw,
+                                          Params&&... params);
+
+  V8_INLINE void VerifyInit(HeapObject heap_object);
 
   // ------
   // Customization points for FactoryBase

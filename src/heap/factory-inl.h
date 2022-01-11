@@ -13,6 +13,7 @@
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory-base-inl.h"
 #include "src/objects/feedback-cell.h"
+#include "src/objects/feedback-vector-inl.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
@@ -83,6 +84,55 @@ Factory::CodeBuilder& Factory::CodeBuilder::set_interpreter_data(
          interpreter_data->IsBytecodeArray());
   interpreter_data_ = interpreter_data;
   return *this;
+}
+
+void Factory::VerifyInit(HeapObject heap_object) {
+#ifdef MEMORY_SANITIZER
+  // T::Init() must initialize all memory.
+  __msan_check_mem_is_initialized(reinterpret_cast<void*>(heap_object.ptr()),
+                                  heap_object.Size());
+#endif  // MEMORY_SANITIZER
+#if VERIFY_HEAP
+  if (FLAG_verify_heap) {
+    heap_object.HeapObjectVerify(isolate());
+  }
+#endif  // VERIFY_HEAP
+}
+
+template <typename T, typename... Params>
+Handle<T> Factory::InitializeAndVerify(Isolate* isolate, T raw,
+                                       Params&&... params) {
+  {
+    DisallowGarbageCollection no_gc;
+    FeedbackVector::Init(isolate, raw, no_gc, std::forward<Params>(params)...);
+    VerifyInit(raw);
+  }
+  Handle<T> result = handle(raw, isolate);
+  T::PostInit(isolate, result);
+  return result;
+}
+
+template <typename... Params>
+V8_INLINE Handle<FeedbackVector> Factory::NewFeedbackVector3(
+    int length, Params&&... params) {
+  DCHECK_LE(0, length);
+  const int size = FeedbackVector::SizeFor(length);
+  FeedbackVector raw_result = FeedbackVector::cast(AllocateRawWithImmortalMap(
+      size, AllocationType::kOld, *feedback_vector_map()));
+  return InitializeAndVerify(isolate(), raw_result, length,
+                             std::forward(params)...);
+}
+
+template <typename... Params>
+Handle<PropertyCell> Factory::NewPropertyCell2(Params&&... params,
+                                               AllocationType allocation) {
+  STATIC_ASSERT(PropertyCell::kSize <= kMaxRegularHeapObjectSize);
+  PropertyCell raw_result = PropertyCell::cast(AllocateRawWithImmortalMap(
+      PropertyCell::kSize, allocation, *global_property_cell_map()));
+  return InitializeAndVerify(isolate(), raw_result, std::forward(params)...,
+                             allocation == AllocationType::kYoung
+                                 ? SKIP_WRITE_BARRIER
+                                 : UPDATE_WRITE_BARRIER);
 }
 
 }  // namespace internal
