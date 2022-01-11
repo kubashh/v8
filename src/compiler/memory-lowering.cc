@@ -539,7 +539,7 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
                  !access.type.Is(Type::ExternalPointer()) &&
                      !access.type.Is(Type::SandboxedExternalPointer()));
   // SandboxedPointers are not currently stored by optimized code.
-  DCHECK(!access.type.Is(Type::SandboxedPointer()));
+  CHECK(!access.type.Is(Type::SandboxedPointer()));
   MachineType machine_type = access.machine_type;
   Node* object = node->InputAt(0);
   Node* value = node->InputAt(1);
