@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "dbd16f2e6efc62388b4f9e35895c7226d39f83b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e140e619_8cf07dd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T19:59:39Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "dbd16f2e6efc62388b4f9e35895c7226d39f83b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45612fdf_e02274c4",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-11T19:59:39Z",
+      "side": 1,
+      "message": "Please update the prototype spec.",
+      "range": {
+        "startLine": 710,
+        "startChar": 2,
+        "endLine": 710,
+        "endChar": 66
+      },
+      "revId": "dbd16f2e6efc62388b4f9e35895c7226d39f83b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
