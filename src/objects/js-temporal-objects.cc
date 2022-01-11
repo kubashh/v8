@@ -3396,6 +3396,114 @@ MaybeHandle<JSTemporalDuration> JSTemporalDuration::Constructor(
                                 s, ms, mis, ns);
 }
 
+namespace temporal {
+// #sec-temporal-topartialduratio
+Maybe<bool> ToPartialDuration(Isolate* isolate,
+                              Handle<Object> temporal_duration_like,
+                              double* years, double* months, double* weeks,
+                              double* days, double* hours, double* minutes,
+                              double* seconds, double* milliseconds,
+                              double* microseconds, double* nanoseconds) {
+  Factory* factory = isolate->factory();
+
+  if (!temporal_duration_like->IsJSReceiver()) {
+    THROW_NEW_ERROR_RETURN_VALUE(isolate, NEW_TEMPORAL_INVALD_ARG_TYPE_ERROR(),
+                                 Nothing<bool>());
+  }
+  Handle<JSReceiver> receiver =
+      Handle<JSReceiver>::cast(temporal_duration_like);
+  // 1. Let duration be the this value.
+  // 2. Perform ? RequireInternalSlot(duration,
+  // [[InitializedTemporalDuration]]).
+  // 3. Let temporalDurationLike be ? ToPartialDuration(temporalDurationLike).
+  // ToPartialDuration
+  // 3. Let any be false.
+  bool any = false;
+  // 4. For each row of Table 7, except the header row, in table order, do
+  // a. Let property be the Property value of the current row.
+  // b. Let value be ? Get(temporalDurationLike, property).
+  // c. If value is not undefined, then
+  // i. Set any to true.
+  // ii. Set value to ? ToNumber(value).
+  // iii. If !IsIntegerNumber(value) is false, then
+  // 1. Throw a RangeError exception
+  // iv. Set result's internal slot whose name is the Internal Slot value of
+  // the current row to value.
+  // 4. If temporalDurationLike.[[Years]] is not undefined, then
+  // a . Let years be temporalDurationLike.[[Years]].
+  // 5. Else,
+  // a. Let years be duration.[[Years]].
+#define GET_PROP(name)                                                         \
+  {                                                                            \
+    Handle<Object> value;                                                      \
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(                                          \
+        isolate, value,                                                        \
+        JSReceiver::GetProperty(isolate, receiver, factory->name##_string()),  \
+        Nothing<bool>());                                                      \
+    if (!value->IsUndefined()) {                                               \
+      Handle<Object> number;                                                   \
+      ASSIGN_RETURN_ON_EXCEPTION_VALUE(                                        \
+          isolate, number, Object::ToNumber(isolate, value), Nothing<bool>()); \
+      *name = number->Number();                                                \
+      if (*name - std::floor(*name) != 0) {                                    \
+        THROW_NEW_ERROR_RETURN_VALUE(                                          \
+            isolate, NEW_TEMPORAL_INVALD_ARG_RANGE_ERROR(), Nothing<bool>());  \
+      }                                                                        \
+      any = true;                                                              \
+    }                                                                          \
+  }
+
+  GET_PROP(days);
+  GET_PROP(hours);
+  GET_PROP(microseconds);
+  GET_PROP(milliseconds);
+  GET_PROP(minutes);
+  GET_PROP(months);
+  GET_PROP(nanoseconds);
+  GET_PROP(seconds);
+  GET_PROP(weeks);
+  GET_PROP(years);
+#undef GET_PROP
+
+  // 5. If any is false, then
+  if (!any) {
+    // a. Throw a TypeError exception.
+    THROW_NEW_ERROR_RETURN_VALUE(isolate, NEW_TEMPORAL_INVALD_ARG_TYPE_ERROR(),
+                                 Nothing<bool>());
+  }
+  return Just(true);
+}
+
+}  // namespace temporal
+
+// #sec-temporal.duration.prototype.with
+MaybeHandle<JSTemporalDuration> JSTemporalDuration::With(
+    Isolate* isolate, Handle<JSTemporalDuration> duration,
+    Handle<Object> temporal_duration_like) {
+  double days = duration->days().Number();
+  double hours = duration->hours().Number();
+  double microseconds = duration->microseconds().Number();
+  double milliseconds = duration->milliseconds().Number();
+  double minutes = duration->minutes().Number();
+  double months = duration->months().Number();
+  double nanoseconds = duration->nanoseconds().Number();
+  double seconds = duration->seconds().Number();
+  double weeks = duration->weeks().Number();
+  double years = duration->years().Number();
+
+  Maybe<bool> maybe_partial = temporal::ToPartialDuration(
+      isolate, temporal_duration_like, &years, &months, &weeks, &days, &hours,
+      &minutes, &seconds, &milliseconds, &microseconds, &nanoseconds);
+
+  MAYBE_RETURN(maybe_partial, Handle<JSTemporalDuration>());
+
+  // 24. Return ? CreateTemporalDuration(years, months, weeks, days, hours,
+  // minutes, seconds, milliseconds, microseconds, nanoseconds).
+  return CreateTemporalDuration(isolate, years, months, weeks, days, hours,
+                                minutes, seconds, milliseconds, microseconds,
+                                nanoseconds);
+}
+
 // #sec-get-temporal.duration.prototype.sign
 MaybeHandle<Smi> JSTemporalDuration::Sign(Isolate* isolate,
                                           Handle<JSTemporalDuration> duration) {
