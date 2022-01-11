@@ -244,6 +244,107 @@ Handle<ClosureFeedbackCellArray> ClosureFeedbackCellArray::New(
 }
 
 // static
+void FeedbackVector::Init(
+    FeedbackVector vector, DisallowGarbageCollection& no_gc,
+    Handle<SharedFunctionInfo> shared,
+    Handle<ClosureFeedbackCellArray> closure_feedback_cell_array, int length) {
+  vector.set_shared_function_info(*shared);
+  vector.set_maybe_optimized_code(
+      HeapObjectReference::ClearedValue(vector.GetIsolate()), kReleaseStore);
+  vector.set_length(length);
+  vector.set_invocation_count(0);
+  vector.set_profiler_ticks(0);
+  vector.InitializeOptimizationState();
+  vector.set_closure_feedback_cell_array(*closure_feedback_cell_array);
+}
+
+// static
+void FeedbackVector::PostInit(Handle<FeedbackVector> vector,
+                              Handle<SharedFunctionInfo> shared,
+                              IsCompiledScope* is_compiled_scope) {
+  auto* isolate = vector->GetIsolate();
+  DCHECK(is_compiled_scope->is_compiled());
+
+  Handle<FeedbackMetadata> feedback_metadata(shared->feedback_metadata(),
+                                             isolate);
+  const int slot_count = feedback_metadata->slot_count();
+
+  DCHECK_EQ(vector->length(), slot_count);
+
+  DCHECK_EQ(vector->shared_function_info(), *shared);
+  DCHECK_EQ(vector->optimization_marker(),
+            FLAG_log_function_events ? OptimizationMarker::kLogFirstExecution
+                                     : OptimizationMarker::kNone);
+  DCHECK_EQ(vector->optimization_tier(), OptimizationTier::kNone);
+  DCHECK_EQ(vector->invocation_count(), 0);
+  DCHECK_EQ(vector->profiler_ticks(), 0);
+  DCHECK(vector->maybe_optimized_code()->IsCleared());
+
+  // Ensure we can skip the write barrier
+  Handle<Symbol> uninitialized_sentinel = UninitializedSentinel(isolate);
+  DCHECK_EQ(ReadOnlyRoots(isolate).uninitialized_symbol(),
+            *uninitialized_sentinel);
+  for (int i = 0; i < slot_count;) {
+    FeedbackSlot slot(i);
+    FeedbackSlotKind kind = feedback_metadata->GetKind(slot);
+    int entry_size = FeedbackMetadata::GetSlotSize(kind);
+
+    MaybeObject extra_value = MaybeObject::FromObject(*uninitialized_sentinel);
+    switch (kind) {
+      case FeedbackSlotKind::kLoadGlobalInsideTypeof:
+      case FeedbackSlotKind::kLoadGlobalNotInsideTypeof:
+      case FeedbackSlotKind::kStoreGlobalSloppy:
+      case FeedbackSlotKind::kStoreGlobalStrict:
+        vector->Set(slot, HeapObjectReference::ClearedValue(isolate),
+                    SKIP_WRITE_BARRIER);
+        break;
+      case FeedbackSlotKind::kForIn:
+      case FeedbackSlotKind::kCompareOp:
+      case FeedbackSlotKind::kBinaryOp:
+        vector->Set(slot, Smi::zero(), SKIP_WRITE_BARRIER);
+        break;
+      case FeedbackSlotKind::kLiteral:
+        vector->Set(slot, Smi::zero(), SKIP_WRITE_BARRIER);
+        break;
+      case FeedbackSlotKind::kCall:
+        vector->Set(slot, *uninitialized_sentinel, SKIP_WRITE_BARRIER);
+        extra_value = MaybeObject::FromObject(Smi::zero());
+        break;
+      case FeedbackSlotKind::kCloneObject:
+      case FeedbackSlotKind::kLoadProperty:
+      case FeedbackSlotKind::kLoadKeyed:
+      case FeedbackSlotKind::kHasKeyed:
+      case FeedbackSlotKind::kStoreNamedSloppy:
+      case FeedbackSlotKind::kStoreNamedStrict:
+      case FeedbackSlotKind::kStoreOwnNamed:
+      case FeedbackSlotKind::kDefineOwnKeyed:
+      case FeedbackSlotKind::kStoreKeyedSloppy:
+      case FeedbackSlotKind::kStoreKeyedStrict:
+      case FeedbackSlotKind::kStoreInArrayLiteral:
+      case FeedbackSlotKind::kStoreDataPropertyInLiteral:
+      case FeedbackSlotKind::kTypeProfile:
+      case FeedbackSlotKind::kInstanceOf:
+        vector->Set(slot, *uninitialized_sentinel, SKIP_WRITE_BARRIER);
+        break;
+
+      case FeedbackSlotKind::kInvalid:
+      case FeedbackSlotKind::kKindsNumber:
+        UNREACHABLE();
+    }
+    for (int j = 1; j < entry_size; j++) {
+      vector->Set(slot.WithOffset(j), extra_value, SKIP_WRITE_BARRIER);
+    }
+    i += entry_size;
+  }
+
+  Handle<FeedbackVector> result = Handle<FeedbackVector>::cast(vector);
+  if (!isolate->is_best_effort_code_coverage() ||
+      isolate->is_collecting_type_profile()) {
+    AddToVectorsForProfilingTools(isolate, result);
+  }
+}
+
+// static
 Handle<FeedbackVector> FeedbackVector::New(
     Isolate* isolate, Handle<SharedFunctionInfo> shared,
     Handle<ClosureFeedbackCellArray> closure_feedback_cell_array,
