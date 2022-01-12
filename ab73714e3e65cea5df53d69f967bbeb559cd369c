@@ -50,6 +50,24 @@
       "message": "Suggestion: since this is probably the uncommon case, wdyt about moving it below the old line 97?",
       "revId": "ab73714e3e65cea5df53d69f967bbeb559cd369c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e2aef42_9948d7c7",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-12T08:56:41Z",
+      "side": 1,
+      "message": "SG. Done",
+      "parentUuid": "7a8dacea_80b7da35",
+      "revId": "ab73714e3e65cea5df53d69f967bbeb559cd369c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
