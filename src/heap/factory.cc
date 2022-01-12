@@ -43,6 +43,7 @@
 #include "src/objects/debug-objects-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
 #include "src/objects/feedback-cell-inl.h"
+#include "src/objects/feedback-vector.h"
 #include "src/objects/fixed-array-inl.h"
 #include "src/objects/foreign-inl.h"
 #include "src/objects/instance-type-inl.h"
@@ -512,6 +513,26 @@ Handle<FeedbackVector> Factory::NewFeedbackVector(
   // TODO(leszeks): Initialize based on the feedback metadata.
   MemsetTagged(ObjectSlot(vector.slots_start()), *undefined_value(), length);
   return handle(vector, isolate());
+}
+
+Handle<FeedbackVector> Factory::NewFeedbackVector2(
+    Handle<SharedFunctionInfo> shared,
+    Handle<ClosureFeedbackCellArray> closure_feedback_cell_array,
+    IsCompiledScope* is_compiled_scope) {
+  const int length = shared->feedback_metadata().slot_count();
+  DCHECK_LE(0, length);
+  const int size = FeedbackVector::SizeFor(length);
+  FeedbackVector raw_vector = FeedbackVector::cast(AllocateRawWithImmortalMap(
+      size, AllocationType::kOld, *feedback_vector_map()));
+  {
+    DisallowGarbageCollection no_gc;
+    FeedbackVector::Init(isolate(), raw_vector, no_gc, length, shared,
+                         closure_feedback_cell_array, is_compiled_scope);
+    VerifyInit(raw_vector);
+  }
+  Handle<FeedbackVector> result = handle(raw_vector, isolate());
+  FeedbackVector::PostInit(isolate(), result);
+  return result;
 }
 
 Handle<EmbedderDataArray> Factory::NewEmbedderDataArray(int length) {
