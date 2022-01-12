@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46de9c33_5a3d28ca",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-01-12T09:43:54Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ve updated this to use Uncommit and Free.",
+      "parentUuid": "8bf576f6_a60eee61",
+      "range": {
+        "startLine": 230,
+        "startChar": 22,
+        "endLine": 230,
+        "endChar": 36
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c09e4cc_8570959d",
         "filename": "src/heap/spaces.h",
         "patchSetId": 3
@@ -71,6 +95,30 @@
       "writtenOn": "2022-01-11T16:40:50Z",
       "side": 1,
       "message": "Can we make it abstract? (\u003d0;)",
+      "range": {
+        "startLine": 185,
+        "startChar": 50,
+        "endLine": 185,
+        "endChar": 52
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a93f92_7efa7a8a",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-01-12T09:43:54Z",
+      "side": 1,
+      "message": "Yes, but then we would have to add this definition to NewSpace and the large spaces instead.",
+      "parentUuid": "3c09e4cc_8570959d",
       "range": {
         "startLine": 185,
         "startChar": 50,
