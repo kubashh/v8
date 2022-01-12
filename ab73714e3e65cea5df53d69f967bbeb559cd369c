@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "ab73714e3e65cea5df53d69f967bbeb559cd369c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb2f0042_c4b5eeb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-01-12T08:18:03Z",
+      "side": 1,
+      "message": "LGTM with a suggestion, thanks!",
+      "revId": "ab73714e3e65cea5df53d69f967bbeb559cd369c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8dacea_80b7da35",
+        "filename": "src/snapshot/embedded/embedded-data.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-01-12T08:18:03Z",
+      "side": 1,
+      "message": "Suggestion: since this is probably the uncommon case, wdyt about moving it below the old line 97?",
+      "revId": "ab73714e3e65cea5df53d69f967bbeb559cd369c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
