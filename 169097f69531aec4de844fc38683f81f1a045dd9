@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad43368_6ccf6e2b",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-12T15:01:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab38f221_621ea492",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 18
+      },
+      "revId": "169097f69531aec4de844fc38683f81f1a045dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f11742fc_41742259",
@@ -60,6 +84,30 @@
       "writtenOn": "2022-01-12T09:17:12Z",
       "side": 1,
       "message": "I guess it would even make sense to have an AllocateAndInitializeWithImmortalMap which wraps AllocateRawWithImmortalMap + T::cast + InitializeAndVerify",
+      "range": {
+        "startLine": 120,
+        "startChar": 51,
+        "endLine": 120,
+        "endChar": 77
+      },
+      "revId": "169097f69531aec4de844fc38683f81f1a045dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3977dafc_646e4e32",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-12T15:01:37Z",
+      "side": 1,
+      "message": "Yeah, I think there can be a few things that we bundle on Factory level. E.g., it should also be possible to generically handle all Struct types.",
+      "parentUuid": "0c8a80d0_0bc1d8a9",
       "range": {
         "startLine": 120,
         "startChar": 51,
