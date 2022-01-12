@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5573341f_4e44a428",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-12T09:45:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "46de9c33_5a3d28ca",
+      "range": {
+        "startLine": 230,
+        "startChar": 22,
+        "endLine": 230,
+        "endChar": 36
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c09e4cc_8570959d",
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "Yes, but then we would have to add this definition to NewSpace and the large spaces instead.",
       "parentUuid": "3c09e4cc_8570959d",
+      "range": {
+        "startLine": 185,
+        "startChar": 50,
+        "endLine": 185,
+        "endChar": 52
+      },
+      "revId": "34fbbae3ed7e3a53759d3b85a1fbbce2febc51b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "670a6178_df20ded9",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-12T09:45:16Z",
+      "side": 1,
+      "message": "Feel free to pick one solution. I think this abstraction is broken then and we should factor it out somewhere else.",
+      "parentUuid": "c7a93f92_7efa7a8a",
       "range": {
         "startLine": 185,
         "startChar": 50,
