@@ -50,6 +50,24 @@
       "message": "Perhaps add a DCHECK in EnterContext that it should be a native context?",
       "revId": "6a6d88e0d501b9b2a115e8756ce5d2216ebc6ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "888fd5d2_5345fc6e",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-12T11:59:45Z",
+      "side": 1,
+      "message": "I tried it a bit but failed. EnterContext is an inline function defined in api.h. In api.h, `IsNativeContext` is not available. `IsNativeContext` itself is defined in instance-type-inl.h, and if I include instance-type-inl.h in api.h, everything explodes. I could move EnterContext to api.cc, but then it would not be an inline function anymore. I don\u0027t know enough about this code to judge if this could have a performance impact, so I didn\u0027t add the DCHECK in the end. But I can add the DCHECK if you think it\u0027s worth it.",
+      "parentUuid": "3667dd6c_39798d13",
+      "revId": "6a6d88e0d501b9b2a115e8756ce5d2216ebc6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
