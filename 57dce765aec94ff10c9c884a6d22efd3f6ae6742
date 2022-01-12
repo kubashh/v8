@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "57dce765aec94ff10c9c884a6d22efd3f6ae6742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00b58310_2d573df9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-12T13:31:52Z",
+      "side": 1,
+      "message": "lgtm with suggestion",
+      "revId": "57dce765aec94ff10c9c884a6d22efd3f6ae6742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dccbce3d_c0bb172a",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-12T13:31:52Z",
+      "side": 1,
+      "message": "Maybe also inline?",
+      "revId": "57dce765aec94ff10c9c884a6d22efd3f6ae6742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
