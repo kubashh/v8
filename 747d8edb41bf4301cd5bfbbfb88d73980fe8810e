@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8816634e_50436b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-12T16:28:30Z",
+      "side": 1,
+      "message": "You are right, there is still an issue where other threads could see an internalized map for not actually internalized strings.\n\nI like your suggestion of splitting AsHandle and moving the actual update inside the critical section.\n\nI also just realised that StringTable::TryStringToIndexOrLookupExisting needs some extra checks, since the lookup-string could have been internalized by another thread.",
+      "parentUuid": "4c46dba3_a18bad5a",
+      "revId": "747d8edb41bf4301cd5bfbbfb88d73980fe8810e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06aea38f_9363d038",
@@ -104,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a11d8c0_e6398bb8",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-12T16:28:30Z",
+      "side": 1,
+      "message": "no longer relevant",
+      "parentUuid": "30c77fef_02431f7f",
+      "range": {
+        "startLine": 808,
+        "startChar": 0,
+        "endLine": 812,
+        "endChar": 58
+      },
+      "revId": "747d8edb41bf4301cd5bfbbfb88d73980fe8810e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2d0b52a_e9442f79",
@@ -117,6 +159,30 @@
       "writtenOn": "2022-01-05T16:37:22Z",
       "side": 1,
       "message": "This is the major change to this method.\nA pointer to the target map is now passed to the callback, as the target map might depend on the current map.\nNow that I am thinking about it again it might not be need anymore. It took me some iterations of this to understand everything better and choosing the strategy (+ target map) outside of the lock might be OK. Have to think about this again.",
+      "range": {
+        "startLine": 871,
+        "startChar": 56,
+        "endLine": 871,
+        "endChar": 67
+      },
+      "revId": "747d8edb41bf4301cd5bfbbfb88d73980fe8810e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "932ffa8c_ac11b799",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-12T16:28:30Z",
+      "side": 1,
+      "message": "no longer relevant",
+      "parentUuid": "b2d0b52a_e9442f79",
       "range": {
         "startLine": 871,
         "startChar": 56,
