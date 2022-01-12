@@ -18,6 +18,11 @@ namespace internal {
 class PropertyCell
     : public TorqueGeneratedPropertyCell<PropertyCell, HeapObject> {
  public:
+  static void Init(Isolate* isolate, PropertyCell cell,
+                   DisallowGarbageCollection&, Handle<Name> name,
+                   PropertyDetails details, Handle<Object> value,
+                   WriteBarrierMode write_barrier_mode);
+
   // [name]: the name of the global property.
   DECL_GETTER(name, Name)
 

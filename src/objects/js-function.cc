@@ -6,10 +6,12 @@
 
 #include "src/codegen/compiler.h"
 #include "src/diagnostics/code-tracer.h"
+#include "src/heap/factory-inl.h"
 #include "src/heap/heap-inl.h"
 #include "src/ic/ic.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/feedback-cell-inl.h"
+#include "src/objects/feedback-vector.h"
 #include "src/strings/string-builder-inl.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -316,8 +318,11 @@ void JSFunction::EnsureFeedbackVector(Handle<JSFunction> function,
   EnsureClosureFeedbackCellArray(function, false);
   Handle<ClosureFeedbackCellArray> closure_feedback_cell_array =
       handle(function->closure_feedback_cell_array(), isolate);
-  Handle<HeapObject> feedback_vector = FeedbackVector::New(
-      isolate, shared, closure_feedback_cell_array, is_compiled_scope);
+  // Handle<HeapObject> feedback_vector = FeedbackVector::New(
+  //     isolate, shared, closure_feedback_cell_array, is_compiled_scope);
+  int length = shared->feedback_metadata().slot_count();
+  Handle<HeapObject> feedback_vector = MakeV8<FeedbackVector>(
+      isolate, length, shared, closure_feedback_cell_array, is_compiled_scope);
   // EnsureClosureFeedbackCellArray should handle the special case where we need
   // to allocate a new feedback cell. Please look at comment in that function
   // for more details.
