@@ -72,7 +72,7 @@ class CompileImportWrapperJob final : public JobTask {
       // TODO(wasm): Batch code publishing, to avoid repeated locking and
       // permission switching.
       CompileImportWrapper(native_module_, counters_, key->kind, key->signature,
-                           key->expected_arity, cache_scope_);
+                           key->expected_arity, key->suspend, cache_scope_);
       if (delegate->ShouldYield()) return;
     }
   }
@@ -1149,14 +1149,15 @@ bool InstanceBuilder::ProcessImportedFunction(
       WasmImportWrapperCache* cache = native_module->import_wrapper_cache();
       // TODO(jkummerow): Consider precompiling CapiCallWrappers in parallel,
       // just like other import wrappers.
-      WasmCode* wasm_code = cache->MaybeGet(kind, expected_sig, expected_arity);
+      WasmCode* wasm_code =
+          cache->MaybeGet(kind, expected_sig, expected_arity, false);
       if (wasm_code == nullptr) {
         WasmCodeRefScope code_ref_scope;
         WasmImportWrapperCache::ModificationScope cache_scope(cache);
         wasm_code =
             compiler::CompileWasmCapiCallWrapper(native_module, expected_sig);
-        WasmImportWrapperCache::CacheKey key(kind, expected_sig,
-                                             expected_arity);
+        WasmImportWrapperCache::CacheKey key(kind, expected_sig, expected_arity,
+                                             false);
         cache_scope[key] = wasm_code;
         wasm_code->IncRef();
         isolate_->counters()->wasm_generated_code_size()->Increment(
@@ -1184,8 +1185,9 @@ bool InstanceBuilder::ProcessImportedFunction(
       }
 
       NativeModule* native_module = instance->module_object().native_module();
+      bool suspend = !resolved.suspender->IsUndefined();
       WasmCode* wasm_code = native_module->import_wrapper_cache()->Get(
-          kind, expected_sig, expected_arity);
+          kind, expected_sig, expected_arity, suspend);
       DCHECK_NOT_NULL(wasm_code);
       ImportedFunctionEntry entry(instance, func_index);
       if (wasm_code->kind() == WasmCode::kWasmToJsWrapper) {
@@ -1595,7 +1597,8 @@ void InstanceBuilder::CompileImportWrappers(
           shared.internal_formal_parameter_count_without_receiver();
     }
 
-    WasmImportWrapperCache::CacheKey key(kind, sig, expected_arity);
+    bool suspend = !resolved.suspender->IsUndefined();
+    WasmImportWrapperCache::CacheKey key(kind, sig, expected_arity, suspend);
     if (cache_scope[key] != nullptr) {
       // Cache entry already exists, no need to compile it again.
       continue;
