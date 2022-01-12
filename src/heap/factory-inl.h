@@ -13,6 +13,8 @@
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory-base-inl.h"
 #include "src/objects/feedback-cell.h"
+#include "src/objects/feedback-vector-inl.h"
+#include "src/objects/feedback-vector.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
@@ -83,6 +85,75 @@ Factory::CodeBuilder& Factory::CodeBuilder::set_interpreter_data(
          interpreter_data->IsBytecodeArray());
   interpreter_data_ = interpreter_data;
   return *this;
+}
+
+void Factory::VerifyInit(HeapObject heap_object) {
+#ifdef MEMORY_SANITIZER
+  // T::Init() must initialize all memory.
+  __msan_check_mem_is_initialized(reinterpret_cast<void*>(heap_object.ptr()),
+                                  heap_object.Size());
+#endif  // MEMORY_SANITIZER
+#if VERIFY_HEAP
+  if (FLAG_verify_heap) {
+    heap_object.HeapObjectVerify(isolate());
+  }
+#endif  // VERIFY_HEAP
+}
+
+template <typename T, typename... Params>
+Handle<T> Factory::InitializeAndVerify(Isolate* isolate, T raw,
+                                       Params&&... params) {
+  {
+    DisallowGarbageCollection no_gc;
+    T::Init(isolate, raw, no_gc, std::forward<Params>(params)...);
+    VerifyInit(raw);
+  }
+  Handle<T> result = handle(raw, isolate);
+  T::PostInit(isolate, result);
+  return result;
+}
+
+template <typename... Params>
+V8_INLINE Handle<FeedbackVector> Factory::NewFeedbackVector3(
+    int length, Params&&... params) {
+  DCHECK_LE(0, length);
+  const int size = FeedbackVector::SizeFor(length);
+  FeedbackVector raw_result = FeedbackVector::cast(AllocateRawWithImmortalMap(
+      size, AllocationType::kOld, *feedback_vector_map()));
+  return InitializeAndVerify(isolate(), raw_result, length,
+                             std::forward<Params>(params)...);
+}
+
+template <typename... Params>
+Handle<PropertyCell> Factory::NewPropertyCell2(AllocationType allocation,
+                                               Params&&... params) {
+  STATIC_ASSERT(PropertyCell::kSize <= kMaxRegularHeapObjectSize);
+  PropertyCell raw_result = PropertyCell::cast(AllocateRawWithImmortalMap(
+      PropertyCell::kSize, allocation, *global_property_cell_map()));
+  return InitializeAndVerify(
+      isolate(), raw_result, std::forward<Params>(params)...,
+      allocation == AllocationType::kYoung ? SKIP_WRITE_BARRIER
+                                           : UPDATE_WRITE_BARRIER);
+}
+
+template <typename T>
+struct MakeV8Dispatch;
+
+template <>
+struct MakeV8Dispatch<FeedbackVector> {
+  template <typename... Params>
+  Handle<FeedbackVector> operator()(Isolate* isolate, int length,
+                                    Params&&... params) {
+    // TODO(mlippautz): More generic dispatches like structs could use a single
+    // constructor on Factory.
+    return isolate->factory()->NewFeedbackVector3(
+        length, std::forward<Params>(params)...);
+  }
+};
+
+template <typename T, typename... Params>
+Handle<T> MakeV8(Isolate* isolate, Params&&... params) {
+  return MakeV8Dispatch<T>{}(isolate, std::forward<Params>(params)...);
 }
 
 }  // namespace internal
