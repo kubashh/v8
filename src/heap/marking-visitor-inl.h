@@ -6,10 +6,12 @@
 #define V8_HEAP_MARKING_VISITOR_INL_H_
 
 #include "src/heap/marking-visitor.h"
+#include "src/heap/marking-worklist.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/progress-bar.h"
 #include "src/heap/spaces.h"
+#include "src/objects/embedder-data-slot.h"
 #include "src/objects/objects.h"
 #include "src/objects/smi.h"
 
@@ -264,11 +266,21 @@ int MarkingVisitorBase<ConcreteVisitor,
                        MarkingState>::VisitEmbedderTracingSubclass(Map map,
                                                                    T object) {
   DCHECK(object.IsApiWrapper());
-  int size = concrete_visitor()->VisitJSObjectSubclass(map, object);
+  MarkingWorklists::Local::WrapperSnapshot wrapper_snapshot;
+  const bool valid_snapshot_data =
+      is_embedder_tracing_enabled_ &&
+      local_marking_worklists_->ExtractWrapper(map, object, wrapper_snapshot);
+  const int size = concrete_visitor()->VisitJSObjectSubclass(map, object);
   if (size && is_embedder_tracing_enabled_) {
-    // Success: The object needs to be processed for embedder references on
-    // the main thread.
-    local_marking_worklists_->PushWrapper(object);
+    // Success: The object needs to be processed for embedder references.
+    if (valid_snapshot_data) {
+      local_marking_worklists_->PushExtractedWrapper(wrapper_snapshot);
+    } else {
+      // Snapshot is not valid but embedder tracing is enabled. Just fall back
+      // to pushing the wrapper itself instead which will be processed on the
+      // main thread.
+      local_marking_worklists_->PushWrapper(object);
+    }
   }
   return size;
 }

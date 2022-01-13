@@ -6,6 +6,7 @@
 #define V8_HEAP_MARKING_VISITOR_H_
 
 #include "src/common/globals.h"
+#include "src/heap/embedder-tracing.h"
 #include "src/heap/marking-worklist.h"
 #include "src/heap/marking.h"
 #include "src/heap/memory-chunk.h"
@@ -15,6 +16,8 @@
 
 namespace v8 {
 namespace internal {
+
+class EmbedderDataSnapshot;
 
 struct EphemeronMarking {
   std::vector<HeapObject> newly_discovered;
@@ -127,9 +130,8 @@ template <typename ConcreteVisitor, typename MarkingState>
 class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
  public:
   MarkingVisitorBase(MarkingWorklists::Local* local_marking_worklists,
-                     WeakObjects::Local* local_weak_objects,
-                     //  WeakObjects* weak_objects,
-                     Heap* heap, unsigned mark_compact_epoch,
+                     WeakObjects::Local* local_weak_objects, Heap* heap,
+                     unsigned mark_compact_epoch,
                      base::EnumSet<CodeFlushMode> code_flush_mode,
                      bool is_embedder_tracing_enabled,
                      bool should_keep_ages_unchanged)

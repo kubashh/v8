@@ -23,6 +23,7 @@ namespace v8 {
 namespace internal {
 
 // Forward declarations.
+class EmbedderDataSnapshot;
 class EvacuationJobTraits;
 class HeapObjectVisitor;
 class ItemParallelJob;

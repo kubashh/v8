@@ -399,15 +399,14 @@ TEST(DeoptimizeConstructorMultiple) {
   CHECK_EQ(0, Deoptimizer::GetDeoptimizedCodeCount(CcTest::i_isolate()));
 }
 
-
 UNINITIALIZED_TEST(DeoptimizeBinaryOperationADDString) {
-  ManualGCScope manual_gc_scope;
   i::FLAG_concurrent_recompilation = false;
   AllowNativesSyntaxNoInlining options;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   isolate->Enter();
   {
     LocalContext env(isolate);
@@ -464,7 +463,6 @@ UNINITIALIZED_TEST(DeoptimizeBinaryOperationADDString) {
   isolate->Dispose();
 }
 
-
 static void CompileConstructorWithDeoptimizingValueOf() {
   CompileRun("var count = 0;"
              "var result = 0;"
@@ -508,14 +506,13 @@ static void TestDeoptimizeBinaryOpHelper(LocalContext* env,
   CHECK(!GetJSFunction((*env).local(), "f")->HasAttachedOptimizedCode());
 }
 
-
 UNINITIALIZED_TEST(DeoptimizeBinaryOperationADD) {
-  ManualGCScope manual_gc_scope;
   i::FLAG_concurrent_recompilation = false;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   isolate->Enter();
   {
     LocalContext env(isolate);
@@ -538,7 +535,6 @@ UNINITIALIZED_TEST(DeoptimizeBinaryOperationADD) {
   isolate->Exit();
   isolate->Dispose();
 }
-
 
 UNINITIALIZED_TEST(DeoptimizeBinaryOperationSUB) {
   ManualGCScope manual_gc_scope;
@@ -601,14 +597,13 @@ UNINITIALIZED_TEST(DeoptimizeBinaryOperationMUL) {
   isolate->Dispose();
 }
 
-
 UNINITIALIZED_TEST(DeoptimizeBinaryOperationDIV) {
-  ManualGCScope manual_gc_scope;
   i::FLAG_concurrent_recompilation = false;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   isolate->Enter();
   {
     LocalContext env(isolate);
@@ -631,7 +626,6 @@ UNINITIALIZED_TEST(DeoptimizeBinaryOperationDIV) {
   isolate->Exit();
   isolate->Dispose();
 }
-
 
 UNINITIALIZED_TEST(DeoptimizeBinaryOperationMOD) {
   ManualGCScope manual_gc_scope;
