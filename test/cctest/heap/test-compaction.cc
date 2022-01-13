@@ -49,9 +49,9 @@ HEAP_TEST(CompactionFullAbortedPage) {
 
   // Disable concurrent sweeping to ensure memory is in an expected state, i.e.,
   // we can reach the state of a half aborted page.
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   auto reset_oom = [](void* heap, size_t limit, size_t) -> size_t {
@@ -112,13 +112,13 @@ HEAP_TEST(CompactionPartiallyAbortedPage) {
 
   // Disable concurrent sweeping to ensure memory is in an expected state, i.e.,
   // we can reach the state of a half aborted page.
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
 
   const int objects_per_page = 10;
   const int object_size = GetObjectSize(objects_per_page);
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   auto reset_oom = [](void* heap, size_t limit, size_t) -> size_t {
@@ -192,13 +192,13 @@ HEAP_TEST(CompactionPartiallyAbortedPageWithInvalidatedSlots) {
 
   // Disable concurrent sweeping to ensure memory is in an expected state, i.e.,
   // we can reach the state of a half aborted page.
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
 
   const int objects_per_page = 10;
   const int object_size = GetObjectSize(objects_per_page);
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   auto reset_oom = [](void* heap, size_t limit, size_t) -> size_t {
@@ -277,13 +277,13 @@ HEAP_TEST(CompactionPartiallyAbortedPageIntraAbortedPointers) {
 
   // Disable concurrent sweeping to ensure memory is in an expected state, i.e.,
   // we can reach the state of a half aborted page.
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
 
   const int objects_per_page = 10;
   const int object_size = GetObjectSize(objects_per_page);
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   auto reset_oom = [](void* heap, size_t limit, size_t) -> size_t {
@@ -373,13 +373,13 @@ HEAP_TEST(CompactionPartiallyAbortedPageWithRememberedSetEntries) {
 
   // Disable concurrent sweeping to ensure memory is in an expected state, i.e.,
   // we can reach the state of a half aborted page.
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
 
   const int objects_per_page = 10;
   const int object_size = GetObjectSize(objects_per_page);
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   auto reset_oom = [](void* heap, size_t limit, size_t) -> size_t {
