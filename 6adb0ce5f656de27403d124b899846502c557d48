@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c8823b_2cbf1806",
+        "filename": "test/cctest/test-disasm-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-01-13T06:07:19Z",
+      "side": 1,
+      "message": "Please remove extra new line here.",
+      "revId": "6adb0ce5f656de27403d124b899846502c557d48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
