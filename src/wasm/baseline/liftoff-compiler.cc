@@ -2147,6 +2147,10 @@ class LiftoffCompiler {
 #undef CASE_CCALL_BINOP
   }
 
+  void TraceInstruction(FullDecoder* decoder, uint32_t markid) {
+    __ emit_trace_instruction(markid);
+  }
+
   void I32Const(FullDecoder* decoder, Value* result, int32_t value) {
     __ PushConstant(kI32, value);
   }
@@ -6538,7 +6542,7 @@ std::unique_ptr<DebugSideTable> GenerateLiftoffDebugSideTable(
       wire_bytes.GetFunctionBytes(function);
   CompilationEnv env = native_module->CreateCompilationEnv();
   FunctionBody func_body{function->sig, 0, function_bytes.begin(),
-                         function_bytes.end()};
+                         function_bytes.end(), function->traces};
 
   Zone zone(GetWasmEngine()->allocator(), "LiftoffDebugSideTableZone");
   auto call_descriptor = compiler::GetWasmCallDescriptor(&zone, function->sig);

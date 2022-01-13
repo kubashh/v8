@@ -570,6 +570,12 @@ int32_t LeftShiftForReducedMultiply(Matcher* m) {
 
 }  // namespace
 
+void InstructionSelector::VisitTraceInstruction(Node* node) {
+  Arm64OperandGenerator g(this);
+  uint32_t markid = OpParameter<uint32_t>(node->op());
+  Emit(kArm64TraceInstruction, g.Use(node), g.UseImmediate(markid));
+}
+
 void InstructionSelector::VisitStackSlot(Node* node) {
   StackSlotRepresentation rep = StackSlotRepresentationOf(node->op());
   int slot = frame_->AllocateSpillSlot(rep.size(), rep.alignment());

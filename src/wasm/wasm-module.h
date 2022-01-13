@@ -71,6 +71,7 @@ struct WasmFunction {
   bool imported;
   bool exported;
   bool declared;
+  std::vector<std::pair<uint32_t, uint32_t>> traces;
 };
 
 // A representation of a constant expression. The most common expression types
