@@ -3654,10 +3654,24 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
 }
 
 namespace {
-// Helper function for WasmReturnPromiseOnSuspend.
-void LoadJumpBuffer(MacroAssembler* masm, Register jmpbuf) {
+// Helper function for wasm stack switching.
+void FillJumpBuffer(MacroAssembler* masm, Register jmpbuf, Register tmp1,
+                    Register tmp2, Label* pc) {
+  __ movq(MemOperand(jmpbuf, wasm::kJmpBufSpOffset), rsp);
+  __ movq(MemOperand(jmpbuf, wasm::kJmpBufFpOffset), rbp);
+  Register stack_limit = tmp1;
+  __ movq(stack_limit, __ StackLimitAsOperand(StackLimitKind::kRealStackLimit));
+  __ movq(MemOperand(jmpbuf, wasm::kJmpBufStackLimitOffset), stack_limit);
+  __ leaq(kScratchRegister, MemOperand(pc, 0));
+  __ movq(MemOperand(jmpbuf, wasm::kJmpBufPcOffset), kScratchRegister);
+}
+
+void LoadJumpBuffer(MacroAssembler* masm, Register jmpbuf, bool load_pc) {
   __ movq(rsp, MemOperand(jmpbuf, wasm::kJmpBufSpOffset));
   __ movq(rbp, MemOperand(jmpbuf, wasm::kJmpBufFpOffset));
+  if (load_pc) {
+    __ jmp(MemOperand(jmpbuf, wasm::kJmpBufPcOffset));
+  }
   // The stack limit is set separately under the ExecutionAccess lock.
   // TODO(thibaudm): Reload live registers.
 }
@@ -3714,19 +3728,9 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
       kForeignForeignAddressTag, r8);
-  __ movq(MemOperand(jmpbuf, wasm::kJmpBufSpOffset), rsp);
-  __ movq(MemOperand(jmpbuf, wasm::kJmpBufFpOffset), rbp);
-  Register stack_limit_address = rcx;
-  __ movq(stack_limit_address,
-          FieldOperand(wasm_instance,
-                       WasmInstanceObject::kRealStackLimitAddressOffset));
-  Register stack_limit = rdx;
-  __ movq(stack_limit, MemOperand(stack_limit_address, 0));
-  __ movq(MemOperand(jmpbuf, wasm::kJmpBufStackLimitOffset), stack_limit);
-  // TODO(thibaudm): Save live registers.
+  Label suspend;
+  FillJumpBuffer(masm, jmpbuf, rcx, rdx, &suspend);
   foreign_jmpbuf = no_reg;
-  stack_limit = no_reg;
-  stack_limit_address = no_reg;
   // live: [rsi, rdi, rax]
 
   // -------------------------------------------
@@ -3765,7 +3769,7 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
       kForeignForeignAddressTag, r8);
   __ Move(GCScanSlotPlace, 0);
   // Switch stack!
-  LoadJumpBuffer(masm, target_jmpbuf);
+  LoadJumpBuffer(masm, target_jmpbuf, false);
   foreign_jmpbuf = no_reg;
   target_jmpbuf = no_reg;
   // live: [rsi, rdi]
@@ -3827,7 +3831,7 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
       jmpbuf, FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
       kForeignForeignAddressTag, r8);
   // Switch stack!
-  LoadJumpBuffer(masm, jmpbuf);
+  LoadJumpBuffer(masm, jmpbuf, false);
   __ Move(GCScanSlotPlace, 1);
   __ Push(wasm_instance);  // Spill.
   __ Move(kContextRegister, Smi::zero());
@@ -3863,6 +3867,8 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   __ bind(&undefined);
   __ movq(masm->RootAsOperand(RootIndex::kActiveSuspender), suspender);
 
+  __ bind(&suspend);
+
   // -------------------------------------------
   // Epilogue.
   // -------------------------------------------
@@ -3878,6 +3884,91 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   // Set up the stackframe.
   __ EnterFrame(StackFrame::STACK_SWITCH);
+
+  Register promise = rax;
+  Register suspender = rbx;
+
+  __ subq(rsp, Immediate(-(BuiltinWasmWrapperConstants::kGCScanSlotCountOffset -
+                           TypedFrameConstants::kFixedFrameSizeFromFp)));
+
+  // TODO(thibaudm): Throw if any of the following holds:
+  // - caller is null
+  // - ActiveSuspender is undefined
+  // - 'suspender' is not the active suspender
+
+  // -------------------------------------------
+  // Save current state in active jump buffer.
+  // -------------------------------------------
+  Label resume;
+  Register continuation = rcx;
+  __ LoadRoot(continuation, RootIndex::kActiveContinuation);
+  Register jmpbuf = rdx;
+  __ LoadAnyTaggedField(
+      jmpbuf,
+      FieldOperand(continuation, WasmContinuationObject::kJmpbufOffset));
+  __ LoadExternalPointerField(
+      jmpbuf, FieldOperand(jmpbuf, Foreign::kForeignAddressOffset),
+      kForeignForeignAddressTag, r8);
+  FillJumpBuffer(masm, jmpbuf, r8, r9, &resume);
+  __ movq(Operand(suspender, WasmSuspenderObject::kStateOffset),
+          Immediate(WasmSuspenderObject::Suspended));
+  jmpbuf = no_reg;
+  // live: [rax, rbx, rcx]
+
+  // -------------------------------------------
+  // Set suspender's continuation field.
+  // -------------------------------------------
+  Register object = WriteBarrierDescriptor::ObjectRegister();
+  // Free the write barrier's slot address register (rbx).
+  __ movq(rdx, suspender);
+  suspender = rdx;
+  __ movq(object, suspender);
+  __ RecordWriteField(
+      object, WasmSuspenderObject::kContinuationOffset, continuation,
+      WriteBarrierDescriptor::SlotAddressRegister(), SaveFPRegsMode::kIgnore);
+  continuation = no_reg;
+  // live: [rax, rbx]
+
+  // -------------------------------------------
+  // Update roots.
+  // -------------------------------------------
+  Register caller = rcx;
+  __ LoadAnyTaggedField(
+      caller,
+      FieldOperand(suspender, WasmSuspenderObject::kContinuationOffset));
+  __ LoadAnyTaggedField(
+      caller, FieldOperand(caller, WasmContinuationObject::kParentOffset));
+  __ movq(masm->RootAsOperand(RootIndex::kActiveContinuation), caller);
+  Register parent = rdx;
+  __ LoadAnyTaggedField(
+      parent, FieldOperand(suspender, WasmSuspenderObject::kParentOffset));
+  __ movq(masm->RootAsOperand(RootIndex::kActiveSuspender), parent);
+  parent = no_reg;
+  // live: [rax, rcx]
+
+  // -------------------------------------------
+  // Load jump buffer.
+  // -------------------------------------------
+  MemOperand GCScanSlotPlace =
+      MemOperand(rbp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
+  __ Move(GCScanSlotPlace, 2);
+  __ Push(promise);
+  __ Push(caller);
+  __ CallRuntime(Runtime::kWasmSyncStackLimit);
+  __ Pop(caller);
+  __ Pop(promise);
+  jmpbuf = caller;
+  __ LoadAnyTaggedField(
+      jmpbuf, FieldOperand(caller, WasmContinuationObject::kJmpbufOffset));
+  caller = no_reg;
+  __ LoadExternalPointerField(
+      jmpbuf, FieldOperand(jmpbuf, Foreign::kForeignAddressOffset),
+      kForeignForeignAddressTag, r8);
+  __ movq(kReturnRegister0, promise);
+  __ Move(GCScanSlotPlace, 0);
+  LoadJumpBuffer(masm, jmpbuf, true);
+  __ Trap();
+  __ bind(&resume);
   __ LeaveFrame(StackFrame::STACK_SWITCH);
   __ ret(0);
 }
