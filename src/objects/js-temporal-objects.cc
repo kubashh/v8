@@ -257,6 +257,10 @@ V8_WARN_UNUSED_RESULT MaybeHandle<JSTemporalDuration> CalendarDateUntil(
     Isolate* isolate, Handle<JSReceiver> calendar, Handle<Object> one,
     Handle<Object> two, Handle<Object> options, Handle<Object> date_until);
 
+// #sec-temporal-calendarequals
+V8_WARN_UNUSED_RESULT MaybeHandle<Oddball> CalendarEquals(
+    Isolate* isolate, Handle<JSReceiver> one, Handle<JSReceiver> two);
+
 // #sec-temporal-calendarfields
 MaybeHandle<FixedArray> CalendarFields(Isolate* isolate,
                                        Handle<JSReceiver> calendar,
@@ -282,6 +286,19 @@ MaybeHandle<JSTemporalPlainDate> ToTemporalDate(Isolate* isolate,
                                                 Handle<Object> item_obj,
                                                 Handle<JSReceiver> options,
                                                 const char* method);
+
+#define TO_TEMPORAL_WITH_UNDEFINED(T, N)                                 \
+  MaybeHandle<JSTemporal##T> ToTemporal##N(                              \
+      Isolate* isolate, Handle<Object> item, const char* method) {       \
+    /* 1. If options is not present, set options to */                   \
+    /* ! OrdinaryObjectCreate(null). */                                  \
+    return ToTemporal##N(isolate, item,                                  \
+                         isolate->factory()->NewJSObjectWithNullProto(), \
+                         method);                                        \
+  }
+
+TO_TEMPORAL_WITH_UNDEFINED(PlainDate, Date)
+#undef TO_TEMPORAL_WITH_UNDEFINED
 
 // #sec-temporal-isbuiltincalendar
 bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id);
@@ -2232,6 +2249,31 @@ MaybeHandle<String> ParseTemporalCalendarString(Isolate* isolate,
   return id;
 }
 
+// #sec-temporal-calendarequals
+MaybeHandle<Oddball> CalendarEquals(Isolate* isolate, Handle<JSReceiver> one,
+                                    Handle<JSReceiver> two) {
+  // 1. If one and two are the same Object value, return true.
+  Maybe<bool> maybe_equals = Object::Equals(isolate, one, two);
+  MAYBE_RETURN(maybe_equals, Handle<Oddball>());
+  if (maybe_equals.FromJust()) {
+    return isolate->factory()->true_value();
+  }
+  // 2. Let calendarOne be ? ToString(one).
+  Handle<String> calendar_one;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, calendar_one,
+                             Object::ToString(isolate, one), Oddball);
+  // 3. Let calendarTwo be ? ToString(two).
+  Handle<String> calendar_two;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, calendar_two,
+                             Object::ToString(isolate, two), Oddball);
+  // 4. If calendarOne is calendarTwo, return true.
+  if (String::Equals(isolate, calendar_one, calendar_two)) {
+    return isolate->factory()->true_value();
+  }
+  // 5. Return false.
+  return isolate->factory()->false_value();
+}
+
 // #sec-temporal-calendarfields
 MaybeHandle<FixedArray> CalendarFields(Isolate* isolate,
                                        Handle<JSReceiver> calendar,
@@ -4178,6 +4220,56 @@ MaybeHandle<JSTemporalPlainDate> JSTemporalPlainDate::From(
   }
   // 3. Return ? ToTemporalDate(item, options).
   return ToTemporalDate(isolate, item, options, method);
+}
+
+// #sec-temporal.plaindate.compare
+MaybeHandle<Smi> JSTemporalPlainDate::Compare(Isolate* isolate,
+                                              Handle<Object> one_obj,
+                                              Handle<Object> two_obj) {
+  const char* method = "Temporal.PlainDate.compare";
+  // 1. Set one to ? ToTemporalDate(one).
+  Handle<JSTemporalPlainDate> one;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, one,
+                             ToTemporalDate(isolate, one_obj, method), Smi);
+  // 2. Set two to ? ToTemporalDate(two).
+  Handle<JSTemporalPlainDate> two;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, two,
+                             ToTemporalDate(isolate, two_obj, method), Smi);
+  // 3. Return 𝔽(! CompareISODate(one.[[ISOYear]], one.[[ISOMonth]],
+  // one.[[ISODay]], two.[[ISOYear]], two.[[ISOMonth]], two.[[ISODay]])).
+  return Handle<Smi>(
+      Smi::FromInt(CompareISODate(isolate, one->iso_year(), one->iso_month(),
+                                  one->iso_day(), two->iso_year(),
+                                  two->iso_month(), two->iso_day())),
+      isolate);
+}
+
+// #sec-temporal.plaindate.prototype.equals
+MaybeHandle<Oddball> JSTemporalPlainDate::Equals(
+    Isolate* isolate, Handle<JSTemporalPlainDate> temporal_date,
+    Handle<Object> other_obj) {
+  const char* method = "Temporal.PlainDate.prototype.equals";
+  Factory* factory = isolate->factory();
+  // 1. Let temporalDate be the this value.
+  // 2. Perform ? RequireInternalSlot(temporalDate,
+  // [[InitializedTemporalDate]]).
+  // 3. Set other to ? ToTemporalDate(other).
+  Handle<JSTemporalPlainDate> other;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, other, ToTemporalDate(isolate, other_obj, method), Oddball);
+  // 4. If temporalDate.[[ISOYear]] ≠ other.[[ISOYear]], return false.
+  if (temporal_date->iso_year() != other->iso_year())
+    return factory->false_value();
+  // 5. If temporalDate.[[ISOMonth]] ≠ other.[[ISOMonth]], return false.
+  if (temporal_date->iso_month() != other->iso_month())
+    return factory->false_value();
+  // 6. If temporalDate.[[ISODay]] ≠ other.[[ISODay]], return false.
+  if (temporal_date->iso_day() != other->iso_day())
+    return factory->false_value();
+  // 7. Return ? CalendarEquals(temporalDate.[[Calendar]], other.[[Calendar]]).
+  return CalendarEquals(isolate,
+                        Handle<JSReceiver>(temporal_date->calendar(), isolate),
+                        Handle<JSReceiver>(other->calendar(), isolate));
 }
 
 #define DEFINE_INT_FIELD(obj, str, field, item)                \
