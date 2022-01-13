@@ -4493,9 +4493,9 @@ TEST(BytecodeFlushEventsEagerLogging) {
   i::FLAG_allow_natives_syntax = true;
 
   TestSetup test_setup;
-  ManualGCScope manual_gc_scope;
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   v8::Isolate* isolate = CcTest::isolate();
   Isolate* i_isolate = CcTest::i_isolate();
   Factory* factory = i_isolate->factory();

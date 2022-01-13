@@ -405,12 +405,12 @@ UNINITIALIZED_TEST(ConcurrentWriteBarrier) {
     // The test requires concurrent marking barrier.
     return;
   }
-  ManualGCScope manual_gc_scope;
 
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   Heap* heap = i_isolate->heap();
 
   FixedArray fixed_array;
@@ -471,12 +471,12 @@ UNINITIALIZED_TEST(ConcurrentRecordRelocSlot) {
     return;
   }
   FLAG_manual_evacuation_candidates_selection = true;
-  ManualGCScope manual_gc_scope;
 
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   Heap* heap = i_isolate->heap();
   {
     Code code;
