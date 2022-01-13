@@ -68,8 +68,8 @@ TEST(ExternalString_ExternalBackingStoreSizeIncreases) {
 }
 
 TEST(ExternalString_ExternalBackingStoreSizeDecreases) {
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -95,9 +95,9 @@ TEST(ExternalString_ExternalBackingStoreSizeDecreases) {
 
 TEST(ExternalString_ExternalBackingStoreSizeIncreasesMarkCompact) {
   if (!FLAG_compact) return;
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -131,8 +131,8 @@ TEST(ExternalString_ExternalBackingStoreSizeIncreasesMarkCompact) {
 
 TEST(ExternalString_ExternalBackingStoreSizeIncreasesAfterExternalization) {
   if (FLAG_single_generation) return;
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();

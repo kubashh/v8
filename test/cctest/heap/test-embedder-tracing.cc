@@ -150,8 +150,8 @@ TEST(V8RegisteringEmbedderReference) {
 TEST(EmbedderRegisteringV8Reference) {
   // Tests that references that are registered by the embedder heap tracer are
   // considered live by V8.
-  ManualGCScope manual_gc;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc;
   v8::Isolate* isolate = CcTest::isolate();
   TestEmbedderHeapTracer tracer;
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(isolate, &tracer);
@@ -241,8 +241,8 @@ TEST(TracingInEphemerons) {
 }
 
 TEST(FinalizeTracingIsNoopWhenNotMarking) {
-  ManualGCScope manual_gc;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc;
   v8::Isolate* isolate = CcTest::isolate();
   Isolate* i_isolate = CcTest::i_isolate();
   TestEmbedderHeapTracer tracer;

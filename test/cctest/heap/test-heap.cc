@@ -633,9 +633,9 @@ TEST(BytecodeArray) {
   static const int32_t kFrameSize = 32;
   static const int32_t kParameterCount = 2;
 
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   Isolate* isolate = CcTest::i_isolate();
   Heap* heap = isolate->heap();
   Factory* factory = isolate->factory();
