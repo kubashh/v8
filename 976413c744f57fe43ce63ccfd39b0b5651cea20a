@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ab6d0df_5880ae67",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-13T17:13:13Z",
+      "side": 1,
+      "message": "Actually I don\u0027t even need tmp1 if I also use the scratch register instead, fixed.",
+      "parentUuid": "f7665cbc_24d3a571",
+      "range": {
+        "startLine": 3659,
+        "startChar": 29,
+        "endLine": 3659,
+        "endChar": 33
+      },
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33837e6a_6e3c374b",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59a726c9_fc27bb6a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3925,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-13T17:13:13Z",
+      "side": 1,
+      "message": "AFAIU on this platform the write barrier uses two fixed registers (object:rdi, slot offset:rbx) and one free reg (the value).\nThe first move is to free \"rbx\" (because it will get clobbered), the second move is to move the host object in the fixed register \"rdi\" (\u003dobject).\nFor now I removed the whole block anyway (see below).",
+      "parentUuid": "33837e6a_6e3c374b",
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b448a21e_e1f14eee",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-01-13T15:52:21Z",
       "side": 1,
       "message": "Where is the write that belongs to this write barrier?",
+      "range": {
+        "startLine": 3926,
+        "startChar": 5,
+        "endLine": 3926,
+        "endChar": 21
+      },
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e4732e_04bd97ee",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-13T17:13:13Z",
+      "side": 1,
+      "message": "It\u0027s missing... I wondered how my tests passed: the answer is that the suspender\u0027s continuation is guaranteed to be the active continuation, at least until we add core wasm stack-switching. I replaced the whole thing with a check.\n\nWith core stack switching, the active continuation can change between the export and the import call. This write will be needed then, but in the meantime we can skip it.",
+      "parentUuid": "b448a21e_e1f14eee",
       "range": {
         "startLine": 3926,
         "startChar": 5,
