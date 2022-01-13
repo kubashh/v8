@@ -250,6 +250,8 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
   }
 
   switch (node->opcode()) {
+    case IrOpcode::kTraceInstruction:
+      break;
     case IrOpcode::kStart: {
       // Start has no inputs.
       CHECK_EQ(0, input_count);

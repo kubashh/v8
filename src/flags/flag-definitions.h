@@ -520,6 +520,10 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
 DEFINE_NEG_IMPLICATION(dict_property_const_tracking, concurrent_inlining)
 DEFINE_NEG_IMPLICATION(dict_property_const_tracking, turboprop)
 
+DEFINE_STRING(
+    wasm_trace_native, nullptr,
+    "Select which native code sequence to use for wasm trace intsruction")
+
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
             "Disable runtime allocation of executable memory.")

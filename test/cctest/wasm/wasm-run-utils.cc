@@ -144,14 +144,16 @@ uint32_t TestingModuleBuilder::AddFunction(const FunctionSig* sig,
     test_module_->functions.reserve(kMaxFunctions);
   }
   uint32_t index = static_cast<uint32_t>(test_module_->functions.size());
-  test_module_->functions.push_back({sig,      // sig
-                                     index,    // func_index
-                                     0,        // sig_index
-                                     {0, 0},   // code
-                                     0,        // feedback slots
-                                     false,    // imported
-                                     false,    // exported
-                                     false});  // declared
+  test_module_->functions.push_back(
+      {sig,     // sig
+       index,   // func_index
+       0,       // sig_index
+       {0, 0},  // code
+       0,       // feedback slots
+       false,   // imported
+       false,   // exported
+       false,   // declared
+       std::vector<std::pair<uint32_t, uint32_t>>()});
   if (type == kImport) {
     DCHECK_EQ(0, test_module_->num_declared_functions);
     ++test_module_->num_imported_functions;
@@ -387,7 +389,8 @@ void TestBuildingGraphWithBuilder(compiler::WasmGraphBuilder* builder,
                                   Zone* zone, const FunctionSig* sig,
                                   const byte* start, const byte* end) {
   WasmFeatures unused_detected_features;
-  FunctionBody body(sig, 0, start, end);
+  FunctionBody body(sig, 0, start, end,
+                    std::vector<std::pair<uint32_t, uint32_t>>());
   std::vector<compiler::WasmLoopInfo> loops;
   DecodeResult result = BuildTFGraph(
       zone->allocator(), WasmFeatures::All(), nullptr, builder,
@@ -570,7 +573,8 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
          func_wire_bytes.length());
 
   FunctionBody func_body{function_->sig, function_->code.offset(),
-                         func_wire_bytes.begin(), func_wire_bytes.end()};
+                         func_wire_bytes.begin(), func_wire_bytes.end(),
+                         function_->traces};
   NativeModule* native_module =
       builder_->instance_object()->module_object().native_module();
   ForDebugging for_debugging =

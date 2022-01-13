@@ -145,9 +145,9 @@ void WasmInliner::Finalize() {
     }
 #endif
 
-    const wasm::FunctionBody inlinee_body(real_sig, inlinee->code.offset(),
-                                          function_bytes.begin(),
-                                          function_bytes.end());
+    const wasm::FunctionBody inlinee_body(
+        real_sig, inlinee->code.offset(), function_bytes.begin(),
+        function_bytes.end(), inlinee->traces);
     wasm::WasmFeatures detected;
     WasmGraphBuilder builder(env_, zone(), mcgraph_, inlinee_body.sig,
                              source_positions_);

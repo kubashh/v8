@@ -13,6 +13,8 @@ bool InstructionScheduler::SchedulerSupported() { return true; }
 int InstructionScheduler::GetTargetInstructionFlags(
     const Instruction* instr) const {
   switch (instr->arch_opcode()) {
+    case kArm64TraceInstruction:
+      return kHasSideEffect;
     case kArm64Add:
     case kArm64Add32:
     case kArm64And:

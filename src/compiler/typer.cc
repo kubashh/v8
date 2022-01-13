@@ -717,6 +717,8 @@ Type Typer::Visitor::TypeOsrValue(Node* node) {
 
 Type Typer::Visitor::TypeRetain(Node* node) { UNREACHABLE(); }
 
+Type Typer::Visitor::TypeTraceInstruction(Node* node) { UNREACHABLE(); }
+
 Type Typer::Visitor::TypeInt32Constant(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeInt64Constant(Node* node) { UNREACHABLE(); }

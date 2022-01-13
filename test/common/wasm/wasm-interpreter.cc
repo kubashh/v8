@@ -4245,7 +4245,8 @@ ControlTransferMap WasmInterpreter::ComputeControlTransfersForTesting(
                         0,       // feedback slots
                         false,   // imported
                         false,   // exported
-                        false};  // declared
+                        false,   // declared
+                        std::vector<std::pair<uint32_t, uint32_t>>()};
   InterpreterCode code{&function, BodyLocalDecls(zone), start, end, nullptr};
 
   // Now compute and return the control transfers.

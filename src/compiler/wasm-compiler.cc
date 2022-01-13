@@ -705,6 +705,12 @@ Node* WasmGraphBuilder::BuildLoadIsolateRoot() {
   }
 }
 
+Node* WasmGraphBuilder::TraceInstruction(uint32_t value) {
+  const Operator* op = mcgraph()->machine()->TraceInstruction(value);
+  Node* newNode = SetEffect(graph()->NewNode(op));
+  return newNode;
+}
+
 Node* WasmGraphBuilder::Int32Constant(int32_t value) {
   return mcgraph()->Int32Constant(value);
 }

@@ -22,6 +22,7 @@
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/string-constants.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/flags/flags.h"
 #include "src/init/v8.h"
 
 namespace v8 {
@@ -2046,6 +2047,72 @@ void Assembler::Nop(int n) {
     pc_ += nop_bytes;
     n -= nop_bytes;
   } while (n);
+}
+
+void Assembler::emit_trace_instruction(Immediate markid) {
+#define _EMIT_BYTES(...)                                     \
+  for (byte _b : std::initializer_list<byte>{__VA_ARGS__}) { \
+    *pc_++ = _b;                                             \
+  }
+
+  if (FLAG_wasm_trace_native != nullptr &&
+      !strcmp(FLAG_wasm_trace_native, "cpuid")) {
+    pushq(rax);
+    pushq(rbx);
+    pushq(rcx);
+    pushq(rdx);
+    // load imm into eax
+    // low 16 bits is the magic number, high 16 bits is the low 16 bits markid
+    // finally mask the entire thing to 32 bits
+    // uint32_t imm = (0x4711 | ((markid.value_ & 0xFFFF) << 16)) & 0xFFFFFFFF;
+    // we can do this more succinctly and efficently in raw asm hex
+
+    // move imm to rax register
+    union {
+      uint32_t i;
+      byte b[4];
+    } split;
+    split.i = markid.value_;
+    _EMIT_BYTES(0xB8, split.b[0], split.b[1], split.b[2], split.b[3])
+
+    // perform a left shit by 16 on rax
+    _EMIT_BYTES(0xC1, 0xE0, 0x10)
+
+    // perform the or
+    // this can be done with an add, a lea, or an or
+    // for clarity and because there is not better reason, we will do the or
+    _EMIT_BYTES(0x0D, 0x11, 0x47, 0x00, 0x00)
+
+    cpuid();
+
+    popq(rax);
+    popq(rbx);
+    popq(rcx);
+    popq(rdx);
+  } else {
+    // this is the default, nop sequence
+
+    EnsureSpace ensure_space(this);
+    // push rbx on the stack
+    pushq(rbx);
+    // move markid into rbx
+    // MOV imm to reg
+    union {
+      uint32_t i;
+      byte b[4];
+    } split;
+    split.i = markid.value_;
+    _EMIT_BYTES(0xBB, split.b[0], split.b[1], split.b[2], split.b[3])
+
+    // execute tracing Nop
+    // bytes: prefix.64, prefix.67, nop, nop, nop
+    // special 5 byte sequence to trace
+    _EMIT_BYTES(0x64, 0x67, 0x90, 0x90, 0x90)
+
+    // pop stack into rbx
+    popq(rbx);
+  }
+#undef _EMIT_BYTES
 }
 
 void Assembler::popq(Register dst) {

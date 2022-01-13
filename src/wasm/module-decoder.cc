@@ -35,6 +35,7 @@ namespace {
 
 constexpr char kNameString[] = "name";
 constexpr char kSourceMappingURLString[] = "sourceMappingURL";
+constexpr char kInstTraceString[] = "code_annotation.instTrace";
 constexpr char kCompilationHintsString[] = "compilationHints";
 constexpr char kBranchHintsString[] = "branchHints";
 constexpr char kDebugInfoString[] = ".debug_info";
@@ -96,6 +97,8 @@ const char* SectionName(SectionCode code) {
       return kDebugInfoString;
     case kExternalDebugInfoSectionCode:
       return kExternalDebugInfoString;
+    case kInstTraceSectionCode:
+      return kInstTraceString;
     case kCompilationHintsSectionCode:
       return kCompilationHintsString;
     case kBranchHintsSectionCode:
@@ -149,6 +152,7 @@ SectionCode IdentifyUnknownSectionInternal(Decoder* decoder) {
       {base::StaticCharVector(kNameString), kNameSectionCode},
       {base::StaticCharVector(kSourceMappingURLString),
        kSourceMappingURLSectionCode},
+      {base::StaticCharVector(kInstTraceString), kInstTraceSectionCode},
       {base::StaticCharVector(kCompilationHintsString),
        kCompilationHintsSectionCode},
       {base::StaticCharVector(kBranchHintsString), kBranchHintsSectionCode},
@@ -395,7 +399,8 @@ class ModuleDecoderImpl : public Decoder {
     if (failed()) return;
     Reset(bytes, offset);
     TRACE("Section: %s\n", SectionName(section_code));
-    TRACE("Decode Section %p - %p\n", bytes.begin(), bytes.end());
+    TRACE("Decode Section %p - %p (0x%x)\n", bytes.begin(), bytes.end(),
+          static_cast<uint32_t>(bytes.end() - bytes.begin()));
 
     // Check if the section is out-of-order.
     if (section_code < next_ordered_section_ &&
@@ -434,6 +439,7 @@ class ModuleDecoderImpl : public Decoder {
       case kExternalDebugInfoSectionCode:
         // external_debug_info is a custom section containing a reference to an
         // external symbol file.
+      case kInstTraceSectionCode:
       case kCompilationHintsSectionCode:
         // TODO(frgossen): report out of place compilation hints section as a
         // warning.
@@ -504,6 +510,15 @@ class ModuleDecoderImpl : public Decoder {
         break;
       case kExternalDebugInfoSectionCode:
         DecodeExternalDebugInfoSection();
+        break;
+      case kInstTraceSectionCode:
+        if (enabled_features_.has_instruction_tracing()) {
+          DecodeInstTraceSection();
+        } else {
+          // Ignore this section when feature was disabled. It is an optional
+          // custom section anyways.
+          consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
+        }
         break;
       case kCompilationHintsSectionCode:
         if (enabled_features_.has_compilation_hints()) {
@@ -707,14 +722,16 @@ class ModuleDecoderImpl : public Decoder {
           // ===== Imported function ===========================================
           import->index = static_cast<uint32_t>(module_->functions.size());
           module_->num_imported_functions++;
-          module_->functions.push_back({nullptr,        // sig
-                                        import->index,  // func_index
-                                        0,              // sig_index
-                                        {0, 0},         // code
-                                        0,              // feedback slots
-                                        true,           // imported
-                                        false,          // exported
-                                        false});        // declared
+          module_->functions.push_back(
+              {nullptr,        // sig
+               import->index,  // func_index
+               0,              // sig_index
+               {0, 0},         // code
+               0,              // feedback slots
+               true,           // imported
+               false,          // exported
+               false,          // declared
+               std::vector<std::pair<uint32_t, uint32_t>>()});
           WasmFunction* function = &module_->functions.back();
           function->sig_index =
               consume_sig_index(module_.get(), &function->sig);
@@ -801,14 +818,16 @@ class ModuleDecoderImpl : public Decoder {
     module_->num_declared_functions = functions_count;
     for (uint32_t i = 0; i < functions_count; ++i) {
       uint32_t func_index = static_cast<uint32_t>(module_->functions.size());
-      module_->functions.push_back({nullptr,     // sig
-                                    func_index,  // func_index
-                                    0,           // sig_index
-                                    {0, 0},      // code
-                                    0,           // feedback slots
-                                    false,       // imported
-                                    false,       // exported
-                                    false});     // declared
+      module_->functions.push_back(
+          {nullptr,     // sig
+           func_index,  // func_index
+           0,           // sig_index
+           {0, 0},      // code
+           0,           // feedback slots
+           false,       // imported
+           false,       // exported
+           false,       // declared
+           std::vector<std::pair<uint32_t, uint32_t>>()});
       WasmFunction* function = &module_->functions.back();
       function->sig_index = consume_sig_index(module_.get(), &function->sig);
       if (!ok()) return;
@@ -1181,6 +1200,72 @@ class ModuleDecoderImpl : public Decoder {
       set_seen_unordered_section(kExternalDebugInfoSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
+  }
+
+  void DecodeInstTraceSection() {
+    TRACE("DecodeInstTrace module+%d\n", static_cast<int>(pc_ - start_));
+
+    set_seen_unordered_section(kInstTraceSectionCode);
+
+    // setup decoder
+    Decoder& decoder = *this;
+
+    //  codeannotationsec(A) ::= section_0(codeannotationdata(A))
+    //  codeannotationdata(A) ::= n:name (if n = 'code_annotation.A')
+    //                            vec(funcannotations(A))
+    //  funcannotations(A) ::= idx: funcidx
+    //                         vec(annotation(A))
+    //  annotation(A) ::= funcpos: u32
+    //                    size: u32 (if size = ||A||)
+    //                    data: A
+
+    uint32_t num_func_with_ann =
+        decoder.consume_u32v("number of functions with annotations");
+
+    for (uint32_t i = 0; decoder.ok() && i < num_func_with_ann; i++) {
+      uint32_t func_idx = decoder.consume_u32v("function index");
+      uint32_t num_ann = decoder.consume_u32v("number of annotations");
+      for (uint32_t j = 0; decoder.ok() && j < num_ann; j++) {
+        uint32_t func_pos = decoder.consume_u32v("function position");
+        uint32_t ann_size = decoder.consume_u32v("annotation size");
+        // we know as that a function annotation takes a 32 bit immediate, so if
+        // size is greater than 4 we will consume but not do anything with it
+        uint32_t immediate_id = 0;
+        uint32_t k;
+        for (k = 0; decoder.ok() && k < ann_size && k < 4; k++) {
+          immediate_id |= decoder.consume_u8("annotation byte") << k * 8;
+        }
+        // consume the rest of annotation
+        for (; decoder.ok() && k < ann_size; k++) {
+          decoder.consume_u8("consume extra byte");
+        }
+
+        // if this is a valid location and the decoder is ok, add it
+        if (decoder.ok() && func_idx < module_->functions.size()) {
+          WasmFunction& function = module_->functions[func_idx];
+          // if(func_pos < function.code.length())
+          {
+            TRACE("Mark 0x%x in function %d at offset 0x%x=%d\n", immediate_id,
+                  func_idx, func_pos, func_pos);
+            function.traces.push_back({func_pos, immediate_id});
+          }
+          /*else {
+            TRACE("Mark 0x%x in function %d has a bad code offset 0x%x=%d\n",
+          immediate_id, func_idx, func_pos, func_pos);
+          }*/
+        } else {
+          TRACE("Mark 0x%x has a bad function index %d\n", immediate_id,
+                func_idx);
+        }
+      }
+    }
+
+    // If section was invalid reset
+    if (decoder.failed()) {
+      for (auto func : module_->functions) {
+        func.traces.clear();
+      }
+    }
   }
 
   void DecodeCompilationHintsSection() {
@@ -1586,7 +1671,8 @@ class ModuleDecoderImpl : public Decoder {
     FunctionBody body = {
         function->sig, function->code.offset(),
         start_ + GetBufferRelativeOffset(function->code.offset()),
-        start_ + GetBufferRelativeOffset(function->code.end_offset())};
+        start_ + GetBufferRelativeOffset(function->code.end_offset()),
+        function->traces};
 
     WasmFeatures unused_detected_features = WasmFeatures::None();
     DecodeResult result = VerifyWasmCode(allocator, enabled_features_, module,
@@ -1771,7 +1857,7 @@ class ModuleDecoderImpl : public Decoder {
 
   WireBytesRef consume_init_expr(WasmModule* module, ValueType expected) {
     FunctionBody body(FunctionSig::Build(&init_expr_zone_, {expected}, {}),
-                      buffer_offset_, pc_, end_);
+                      buffer_offset_, pc_, end_, {});
     WasmFeatures detected;
     WasmFullDecoder<Decoder::kFullValidation, InitExprInterface,
                     kInitExpression>

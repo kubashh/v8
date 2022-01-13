@@ -101,7 +101,8 @@ class TestModuleBuilder {
          0,                                            // feedback slots
          false,                                        // import
          false,                                        // export
-         declared});                                   // declared
+         declared,                                     // declared
+         std::vector<std::pair<uint32_t, uint32_t>>()});
     CHECK_LE(mod.functions.size(), kMaxByteSizedLeb128);
     return static_cast<byte>(mod.functions.size() - 1);
   }
@@ -253,7 +254,8 @@ class FunctionBodyDecoderTestBase : public WithZoneMixin<BaseTest> {
         PrepareBytecode(CodeToVector(std::forward<Code>(raw_code)), append_end);
 
     // Validate the code.
-    FunctionBody body(sig, 0, code.begin(), code.end());
+    FunctionBody body(sig, 0, code.begin(), code.end(),
+                      std::vector<std::pair<uint32_t, uint32_t>>());
     WasmFeatures unused_detected_features = WasmFeatures::None();
     DecodeResult result =
         VerifyWasmCode(this->zone()->allocator(), enabled_features_, module,
@@ -3260,7 +3262,8 @@ TEST_F(FunctionBodyDecoderTest, Regression709741) {
   byte code[] = {WASM_NOP, WASM_END};
 
   for (size_t i = 0; i < arraysize(code); ++i) {
-    FunctionBody body(sigs.v_v(), 0, code, code + i);
+    FunctionBody body(sigs.v_v(), 0, code, code + i,
+                      std::vector<std::pair<uint32_t, uint32_t>>());
     WasmFeatures unused_detected_features;
     DecodeResult result =
         VerifyWasmCode(this->zone()->allocator(), WasmFeatures::All(), nullptr,

@@ -70,6 +70,7 @@ struct WasmFunction {
   bool imported;
   bool exported;
   bool declared;
+  std::vector<std::pair<uint32_t, uint32_t>> traces;
 };
 
 // Static representation of a wasm global variable.

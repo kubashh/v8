@@ -1657,7 +1657,7 @@ WasmValue InstanceBuilder::EvaluateInitExpression(
       instance->module_object().native_module()->wire_bytes();
   FunctionBody body(FunctionSig::Build(&init_expr_zone_, {expected}, {}),
                     init.offset(), module_bytes.begin() + init.offset(),
-                    module_bytes.begin() + init.end_offset());
+                    module_bytes.begin() + init.end_offset(), {});
   WasmFeatures detected;
   // We use kFullValidation so we do not have to create another instance of
   // WasmFullDecoder, which would cost us >50Kb binary code size.

@@ -912,6 +912,7 @@ struct ControlBase : public PcForErrors<validate> {
   INTERFACE_NON_CONSTANT_FUNCTIONS(F)
 
 #define INTERFACE_META_FUNCTIONS(F)    \
+  F(TraceInstruction, uint32_t value)  \
   F(StartFunction)                     \
   F(StartFunctionBody, Control* block) \
   F(FinishFunction)                    \
@@ -2220,7 +2221,8 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
                                              body.sig, body.start, body.end,
                                              body.offset),
         interface_(std::forward<InterfaceArgs>(interface_args)...),
-        control_(zone) {}
+        control_(zone),
+        traces(body.traces) {}
 
   Interface& interface() { return interface_; }
 
@@ -2373,6 +2375,18 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
     first_instruction_offset = this->pc_offset();
     // Decode the function body.
     while (this->pc_ < this->end_) {
+      auto curr_offset = this->pc_ - this->start_;
+      TRACE("Current Pos[0x%x] Byte[0x%x]\n", static_cast<int>(curr_offset),
+            *this->pc_);
+
+      for (auto trace : this->traces) {
+        if (trace.first == curr_offset) {
+          TRACE("Emit trace at 0x%x with ID[0x%x]\n",
+                static_cast<int>(curr_offset), trace.second);
+          CALL_INTERFACE_IF_OK_AND_REACHABLE(TraceInstruction, trace.second);
+        }
+      }
+
       // Most operations only grow the stack by at least one element (unary and
       // binary operations, local.get, constants, ...). Thus check that there is
       // enough space for those operations centrally, and avoid any bounds
@@ -2414,6 +2428,8 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
 
   // stack of blocks, loops, and ifs.
   ZoneVector<Control> control_;
+
+  std::vector<std::pair<uint32_t, uint32_t>> traces;
 
   // Controls whether code should be generated for the current block (basically
   // a cache for {ok() && control_.back().reachable()}).

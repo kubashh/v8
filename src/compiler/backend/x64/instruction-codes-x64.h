@@ -406,7 +406,8 @@ namespace compiler {
   V(X64Word64AtomicXorUint64)                        \
   V(X64Word64AtomicStoreWord64)                      \
   V(X64Word64AtomicExchangeUint64)                   \
-  V(X64Word64AtomicCompareExchangeUint64)
+  V(X64Word64AtomicCompareExchangeUint64)            \
+  V(X64TraceInstruction)
 
 // Addressing modes represent the "shape" of inputs to an instruction.
 // Many instructions support multiple addressing modes. Addressing modes
