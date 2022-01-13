@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f67630e_a347a015",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-01-13T13:55:09Z",
+      "side": 1,
+      "message": "LGTM, thanks! Could you include a link to the original build failure in the CL description? I assume it was an unresolved external symbol, but it would be good to have the details.",
+      "revId": "e0a937e78a7df1a7b68b5682ad3cf8da9faa48d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
