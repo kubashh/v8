@@ -50,6 +50,24 @@
       "message": "This could probably still be a DCHECK - we either use SandboxedPointer type in TF or not.",
       "revId": "a998a8392d7b0804669891226b93737b3bbc4fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a450bcf_32abb423",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-13T15:40:08Z",
+      "side": 1,
+      "message": "Right, that\u0027s a good point, in TF we control which types of pointers are stored, so I turned it back into a DCHECK now.",
+      "parentUuid": "24ccafd9_c917b10e",
+      "revId": "a998a8392d7b0804669891226b93737b3bbc4fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
