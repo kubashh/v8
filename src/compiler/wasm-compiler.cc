@@ -7084,7 +7084,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
   }
 
   // For wasm-to-js wrappers, parameter 0 is a WasmApiFunctionRef.
-  bool BuildWasmToJSWrapper(WasmImportCallKind kind, int expected_arity) {
+  bool BuildWasmToJSWrapper(WasmImportCallKind kind, int expected_arity,
+                            wasm::Suspend suspend) {
     int wasm_count = static_cast<int>(sig_->parameter_count());
 
     // Build the start and the parameter nodes.
@@ -7145,6 +7146,14 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
         DCHECK_EQ(pos, args.size());
         call = gasm_->Call(call_descriptor, pos, args.begin());
+        if (suspend == wasm::kSuspend) {
+          auto* call_descriptor = GetBuiltinCallDescriptor(
+              Builtin::kWasmSuspend, zone_, StubCallMode::kCallWasmRuntimeStub);
+          Node* call_target = mcgraph()->RelocatableIntPtrConstant(
+              wasm::WasmCode::kWasmSuspend, RelocInfo::WASM_STUB_CALL);
+
+          gasm_->Call(call_descriptor, call_target, call);
+        }
         break;
       }
       // =======================================================================
@@ -7179,6 +7188,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         auto call_descriptor = Linkage::GetJSCallDescriptor(
             graph()->zone(), false, pushed_count + 1, CallDescriptor::kNoFlags);
         call = gasm_->Call(call_descriptor, pos, args.begin());
+        // TODO(12191): Handle suspending wrapper.
         break;
       }
       // =======================================================================
@@ -7213,6 +7223,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
         DCHECK_EQ(pos, args.size());
         call = gasm_->Call(call_descriptor, pos, args.begin());
+        // TODO(12191): Handle suspending wrapper.
         break;
       }
       default:
@@ -7806,7 +7817,8 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
 
 wasm::WasmCompilationResult CompileWasmImportCallWrapper(
     wasm::CompilationEnv* env, WasmImportCallKind kind,
-    const wasm::FunctionSig* sig, bool source_positions, int expected_arity) {
+    const wasm::FunctionSig* sig, bool source_positions, int expected_arity,
+    wasm::Suspend suspend) {
   DCHECK_NE(WasmImportCallKind::kLinkError, kind);
   DCHECK_NE(WasmImportCallKind::kWasmToWasm, kind);
 
@@ -7838,7 +7850,7 @@ wasm::WasmCompilationResult CompileWasmImportCallWrapper(
       &zone, mcgraph, sig, env->module,
       WasmGraphBuilder::kWasmApiFunctionRefMode, nullptr, source_position_table,
       StubCallMode::kCallWasmRuntimeStub, env->enabled_features);
-  builder.BuildWasmToJSWrapper(kind, expected_arity);
+  builder.BuildWasmToJSWrapper(kind, expected_arity, suspend);
 
   // Build a name in the form "wasm-to-js-<kind>-<signature>".
   constexpr size_t kMaxNameLen = 128;
@@ -7910,7 +7922,8 @@ wasm::WasmCode* CompileWasmCapiCallWrapper(wasm::NativeModule* native_module,
 MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          const wasm::FunctionSig* sig,
                                          WasmImportCallKind kind,
-                                         int expected_arity) {
+                                         int expected_arity,
+                                         wasm::Suspend suspend) {
   std::unique_ptr<Zone> zone = std::make_unique<Zone>(
       isolate->allocator(), ZONE_NAME, kCompressGraphZone);
 
@@ -7928,7 +7941,7 @@ MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                   nullptr, nullptr,
                                   StubCallMode::kCallBuiltinPointer,
                                   wasm::WasmFeatures::FromIsolate(isolate));
-  builder.BuildWasmToJSWrapper(kind, expected_arity);
+  builder.BuildWasmToJSWrapper(kind, expected_arity, suspend);
 
   // Build a name in the form "wasm-to-js-<kind>-<signature>".
   constexpr size_t kMaxNameLen = 128;
