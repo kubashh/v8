@@ -273,6 +273,12 @@ class JSTemporalZonedDateTime
       Handle<HeapObject> new_target, Handle<Object> epoch_nanoseconds,
       Handle<Object> time_zone_like, Handle<Object> calendar_like);
 
+  // #sec-temporal.zoneddatetime.prototype.withtimezone
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalZonedDateTime>
+  WithTimeZone(Isolate* isolate,
+               Handle<JSTemporalZonedDateTime> zoned_date_time,
+               Handle<Object> time_zone_like);
+
   // #sec-temporal.zoneddatetime.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);

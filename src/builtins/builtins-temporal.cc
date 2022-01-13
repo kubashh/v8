@@ -269,8 +269,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWith)
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWithPlainTime)
 /* Temporal #sec-temporal.zoneddatetime.prototype.withplaindate */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWithPlainDate)
-/* Temporal #sec-temporal.zoneddatetime.prototype.withtimezone */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWithTimeZone)
 /* Temporal #sec-temporal.zoneddatetime.prototype.withcalendar */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWithCalendar)
 /* Temporal #sec-temporal.zoneddatetime.prototype.add */
@@ -571,6 +569,16 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     RETURN_RESULT_OR_FAILURE(isolate, JSTemporal##T ::METHOD(isolate, obj)); \
   }
 
+#define TEMPORAL_PROTOTYPE_METHOD1(T, METHOD, name)                            \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                    \
+    HandleScope scope(isolate);                                                \
+    const char* method = "Temporal." #T ".prototype." #name;                   \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                                \
+    RETURN_RESULT_OR_FAILURE(                                                  \
+        isolate,                                                               \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1))); \
+  }
+
 #define TEMPORAL_PROTOTYPE_METHOD3(T, METHOD, name)                          \
   BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
     HandleScope scope(isolate);                                              \
@@ -700,6 +708,7 @@ BUILTIN(TemporalZonedDateTimeConstructor) {
 TEMPORAL_GET(ZonedDateTime, Calendar, calendar)
 TEMPORAL_GET(ZonedDateTime, TimeZone, time_zone)
 TEMPORAL_GET(ZonedDateTime, EpochNanoseconds, nanoseconds)
+TEMPORAL_PROTOTYPE_METHOD1(ZonedDateTime, WithTimeZone, withTimeZone)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(ZonedDateTime)
 
