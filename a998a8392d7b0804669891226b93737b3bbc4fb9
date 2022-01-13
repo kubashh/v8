@@ -16,6 +16,40 @@
       "message": "small-ish CL to review at your convenience. Thanks!",
       "revId": "a998a8392d7b0804669891226b93737b3bbc4fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "067c9d24_2ea1584b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-13T12:24:51Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "a998a8392d7b0804669891226b93737b3bbc4fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ccafd9_c917b10e",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-13T12:24:51Z",
+      "side": 1,
+      "message": "This could probably still be a DCHECK - we either use SandboxedPointer type in TF or not.",
+      "revId": "a998a8392d7b0804669891226b93737b3bbc4fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
