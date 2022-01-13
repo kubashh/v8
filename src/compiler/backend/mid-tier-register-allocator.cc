@@ -78,6 +78,7 @@ class BlockState final {
  private:
   RegisterState* general_registers_in_state_;
   RegisterState* double_registers_in_state_;
+  RegisterState* simd128_registers_in_state_;
 
   DeferredBlocksRegion* deferred_blocks_region_;
 
@@ -92,6 +93,8 @@ RegisterState* BlockState::register_in_state(RegisterKind kind) {
       return general_registers_in_state_;
     case RegisterKind::kDouble:
       return double_registers_in_state_;
+    case RegisterKind::kSIMD128:
+      return simd128_registers_in_state_;
   }
 }
 
@@ -105,6 +108,10 @@ void BlockState::set_register_in_state(RegisterState* register_state,
     case RegisterKind::kDouble:
       DCHECK_NULL(double_registers_in_state_);
       double_registers_in_state_ = register_state;
+      break;
+    case RegisterKind::kSIMD128:
+      DCHECK_NULL(simd128_registers_in_state_);
+      simd128_registers_in_state_ = register_state;
       break;
   }
 }
@@ -180,7 +187,8 @@ class RegisterIndex final {
   }
 
   uintptr_t ToBit(MachineRepresentation rep) const {
-    if (kSimpleFPAliasing || rep != MachineRepresentation::kSimd128) {
+    if (kSimpleFPAliasing != AliasingKind::COMBINE ||
+        rep != MachineRepresentation::kSimd128) {
       return 1ull << ToInt();
     } else {
       DCHECK_EQ(rep, MachineRepresentation::kSimd128);
@@ -1565,7 +1573,7 @@ class SinglePassRegisterAllocator final {
   RegisterBitVector allocated_registers_bits_;
   RegisterBitVector same_input_output_registers_bits_;
 
-  // These fields are only used when kSimpleFPAliasing == false.
+  // These fields are only used when kSimpleFPAliasing == COMBINE.
   base::Optional<ZoneVector<RegisterIndex>> float32_reg_code_to_index_;
   base::Optional<ZoneVector<int>> index_to_float32_reg_code_;
   base::Optional<ZoneVector<RegisterIndex>> simd128_reg_code_to_index_;
@@ -1598,7 +1606,8 @@ SinglePassRegisterAllocator::SinglePassRegisterAllocator(
 
   // If the architecture has non-simple FP aliasing, initialize float and
   // simd128 specific register details.
-  if (!kSimpleFPAliasing && kind == RegisterKind::kDouble) {
+  if (kSimpleFPAliasing == AliasingKind::COMBINE &&
+      kind == RegisterKind::kDouble) {
     const RegisterConfiguration* config = data->config();
 
     //  Float registers.
@@ -1901,7 +1910,8 @@ void SinglePassRegisterAllocator::CheckConsistency() {
 
 RegisterIndex SinglePassRegisterAllocator::FromRegCode(
     int reg_code, MachineRepresentation rep) const {
-  if (!kSimpleFPAliasing && kind() == RegisterKind::kDouble) {
+  if (kSimpleFPAliasing == AliasingKind::COMBINE &&
+      kind() == RegisterKind::kDouble) {
     if (rep == MachineRepresentation::kFloat32) {
       return RegisterIndex(float32_reg_code_to_index_->at(reg_code));
     } else if (rep == MachineRepresentation::kSimd128) {
@@ -1915,7 +1925,8 @@ RegisterIndex SinglePassRegisterAllocator::FromRegCode(
 
 int SinglePassRegisterAllocator::ToRegCode(RegisterIndex reg,
                                            MachineRepresentation rep) const {
-  if (!kSimpleFPAliasing && kind() == RegisterKind::kDouble) {
+  if (kSimpleFPAliasing == AliasingKind::COMBINE &&
+      kind() == RegisterKind::kDouble) {
     if (rep == MachineRepresentation::kFloat32) {
       DCHECK_NE(-1, index_to_float32_reg_code_->at(reg.ToInt()));
       return index_to_float32_reg_code_->at(reg.ToInt());
@@ -2050,7 +2061,8 @@ RegisterBitVector SinglePassRegisterAllocator::InUseBitmap(UsePosition pos) {
 
 bool SinglePassRegisterAllocator::IsValidForRep(RegisterIndex reg,
                                                 MachineRepresentation rep) {
-  if (kSimpleFPAliasing || kind() == RegisterKind::kGeneral) {
+  if (kSimpleFPAliasing != AliasingKind::COMBINE ||
+      kind() == RegisterKind::kGeneral) {
     return true;
   } else {
     switch (rep) {
@@ -2078,7 +2090,8 @@ RegisterIndex SinglePassRegisterAllocator::ChooseFreeRegister(
 RegisterIndex SinglePassRegisterAllocator::ChooseFreeRegister(
     const RegisterBitVector& allocated_regs, MachineRepresentation rep) {
   RegisterIndex chosen_reg = RegisterIndex::Invalid();
-  if (kSimpleFPAliasing || kind() == RegisterKind::kGeneral) {
+  if (kSimpleFPAliasing != AliasingKind::COMBINE ||
+      kind() == RegisterKind::kGeneral) {
     chosen_reg = allocated_regs.GetFirstCleared(num_allocatable_registers_);
   } else {
     // If we don't have simple fp aliasing, we need to check each register
@@ -2116,8 +2129,11 @@ RegisterIndex SinglePassRegisterAllocator::ChooseRegisterToSpill(
     if (!IsValidForRep(reg, rep) || in_use.Contains(reg, rep)) continue;
     // With non-simple FP aliasing, a SIMD register might block more than one FP
     // register.
-    DCHECK_IMPLIES(kSimpleFPAliasing, register_state_->IsAllocated(reg));
-    if (!kSimpleFPAliasing && !register_state_->IsAllocated(reg)) continue;
+    DCHECK_IMPLIES(kSimpleFPAliasing != AliasingKind::COMBINE,
+                   register_state_->IsAllocated(reg));
+    if (kSimpleFPAliasing == AliasingKind::COMBINE &&
+        !register_state_->IsAllocated(reg))
+      continue;
 
     VirtualRegisterData& vreg_data =
         VirtualRegisterDataFor(VirtualRegisterForRegister(reg));
@@ -2166,8 +2182,12 @@ void SinglePassRegisterAllocator::SpillRegisterAndPotentialSimdSibling(
     RegisterIndex reg, MachineRepresentation rep) {
   SpillRegister(reg);
 
-  if (!kSimpleFPAliasing && rep == MachineRepresentation::kSimd128) {
-    SpillRegister(reg.simdSibling());
+  if (kSimpleFPAliasing == AliasingKind::COMBINE &&
+      rep == MachineRepresentation::kSimd128) {
+    // Two FP registers {2N, 2N+1} alias the same SIMD register. We compute {2N}
+    // from {2N+1} and vice versa in a single computation.
+    RegisterIndex siblingSimdReg{reg.ToInt() + 1 - 2 * (reg.ToInt() & 1)};
+    SpillRegister(siblingSimdReg);
   }
 }
 

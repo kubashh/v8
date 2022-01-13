@@ -162,7 +162,7 @@ TEST_F(InstructionTest, PrepareInsertAfter) {
     CHECK(Contains(&to_eliminate, d2, d0));
   }
 
-  if (!kSimpleFPAliasing) {
+  if (kSimpleFPAliasing == AliasingKind::COMBINE) {
     // Moves inserted after should cause all interfering moves to be eliminated.
     auto s0 = AllocatedOperand(LocationOperand::REGISTER,
                                MachineRepresentation::kFloat32, 0);
