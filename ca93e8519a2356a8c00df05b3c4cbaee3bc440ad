@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af55681d_9af39923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-13T21:01:06Z",
+      "side": 1,
+      "message": "Dominik, Omer: PTAL\n\nI refactored the test fixes out of this CL, they are here: https://chromium-review.googlesource.com/c/v8/v8/+/3386607/\n\nOmer noticed on the reverted CL that we don\u0027t need the full snapshot but rather 2 fields, so this all becomes much simpler.\n\nInstead of having a EmbedderDataSnapshot, I just reused MarkingWorklists and CppMarkingState.\n\nOmer: EmbedderDataSlot does not contain a valud but an address, so the snapshot cannot be EmbedderDataSlot but we need to have one more thingy.\n",
+      "revId": "ca93e8519a2356a8c00df05b3c4cbaee3bc440ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
