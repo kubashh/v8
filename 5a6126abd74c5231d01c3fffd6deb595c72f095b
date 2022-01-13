@@ -71,6 +71,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fc2f17d8_b4edada4",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-13T09:14:56Z",
+      "side": 1,
+      "message": "Not applicable anymore now that we re-use string_ instead of internalized_string_",
+      "parentUuid": "f68484c4_b456be05",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2fd7d7a1_70c6dbb0",
         "filename": "src/objects/string-table.cc",
         "patchSetId": 4
@@ -105,6 +123,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "eb1808db_c01371d1",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-13T09:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfa8728c_4af42cc5",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7aa3bcd5_5202bc80",
         "filename": "src/objects/string-table.cc",
         "patchSetId": 4
@@ -133,6 +169,30 @@
       "writtenOn": "2022-01-13T01:32:21Z",
       "side": 1,
       "message": "Existing typo: extra \u0027might\u0027.",
+      "range": {
+        "startLine": 335,
+        "startChar": 50,
+        "endLine": 335,
+        "endChar": 56
+      },
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79a38b2b_d3d0bcb3",
+        "filename": "test/cctest/test-shared-strings.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-13T09:14:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5e6d974_7fc5e2ad",
       "range": {
         "startLine": 335,
         "startChar": 50,
