@@ -16,6 +16,69 @@
       "message": "PTAL\n+Jakob for another small change in src/codegen.",
       "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7665cbc_24d3a571",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-13T15:52:21Z",
+      "side": 1,
+      "message": "Do you need tmp2?",
+      "range": {
+        "startLine": 3659,
+        "startChar": 29,
+        "endLine": 3659,
+        "endChar": 33
+      },
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33837e6a_6e3c374b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3925,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-13T15:52:21Z",
+      "side": 1,
+      "message": "This move is not needed, is it? Originally suspender \u003d rbx. Then you move the suspender to rdx, but the original value should still be in rbx. So there is not need to move the supender back to rbx.",
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b448a21e_e1f14eee",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-13T15:52:21Z",
+      "side": 1,
+      "message": "Where is the write that belongs to this write barrier?",
+      "range": {
+        "startLine": 3926,
+        "startChar": 5,
+        "endLine": 3926,
+        "endChar": 21
+      },
+      "revId": "976413c744f57fe43ce63ccfd39b0b5651cea20a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
