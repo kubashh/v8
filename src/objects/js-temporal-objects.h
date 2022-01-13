@@ -277,6 +277,23 @@ class JSTemporalZonedDateTime
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
 
+  // #sec-temporal.zoneddatetime.prototype.toinstant
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> ToInstant(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
+  // #sec-temporal.zoneddatetime.prototype.toplaindate
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainDate> ToPlainDate(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
+  // #sec-temporal.zoneddatetime.prototype.toplaintime
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainTime> ToPlainTime(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
+  // #sec-temporal.zoneddatetime.prototype.toplaindatetime
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainDateTime>
+  ToPlainDateTime(Isolate* isolate,
+                  Handle<JSTemporalZonedDateTime> zoned_date_time);
+
   DECL_PRINTER(JSTemporalZonedDateTime)
 
   TQ_OBJECT_CONSTRUCTORS(JSTemporalZonedDateTime)
