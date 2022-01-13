@@ -151,6 +151,9 @@ class BlockAssessments : public ZoneObject {
   void DropRegisters();
   void AddDefinition(InstructionOperand operand, int virtual_register) {
     auto existent = map_.find(operand);
+    if (FLAG_trace_turbo_alloc)
+      std::cout << operand << " find: " << (existent != map_.end())
+                << std::endl;
     if (existent != map_.end()) {
       // Drop the assignment
       map_.erase(existent);

@@ -5,6 +5,7 @@
 #ifndef V8_CODEGEN_ARM_REGISTER_ARM_H_
 #define V8_CODEGEN_ARM_REGISTER_ARM_H_
 
+#include "src/codegen/register-configuration.h"
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 
@@ -125,7 +126,7 @@ constexpr int ArgumentPaddingSlots(int argument_count) {
   return 0;
 }
 
-constexpr bool kSimpleFPAliasing = false;
+constexpr AliasingKind kSimpleFPAliasing = AliasingKind::COMBINE;
 constexpr bool kSimdMaskRegisters = false;
 
 enum SwVfpRegisterCode {

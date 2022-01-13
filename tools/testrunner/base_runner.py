@@ -694,6 +694,7 @@ class BaseTestRunner(object):
        utils.GuessPowerProcessorVersion() < 9:
        no_simd_hardware = True
 
+
     return {
       "arch": self.build_config.arch,
       "asan": self.build_config.asan,
