@@ -16,6 +16,46 @@
       "message": "Thanks for the review, Shu!",
       "revId": "3f6211e86102d799c8d340e2b8ee4778b36adb56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "597d3c23_823d5def",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-01-13T09:54:02Z",
+      "side": 1,
+      "message": "stamp.",
+      "revId": "3f6211e86102d799c8d340e2b8ee4778b36adb56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45066c84_6ab606af",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-01-13T09:54:02Z",
+      "side": 1,
+      "message": "nit: while you\u0027re here, can you remove this comment? It\u0027s left over from when this whole thing was in a while loop.",
+      "range": {
+        "startLine": 532,
+        "startChar": 0,
+        "endLine": 535,
+        "endChar": 48
+      },
+      "revId": "3f6211e86102d799c8d340e2b8ee4778b36adb56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
