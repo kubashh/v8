@@ -70,6 +70,30 @@
       },
       "revId": "741b18f5ddafd155385691e6fdccebd34ecc803e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a91812f_059b23ea",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-13T19:15:05Z",
+      "side": 0,
+      "message": "\u003e I have all green (default) trybots, which includes node_ci_linux64_rel and v8_linux_chromium_gn_rel. Is that sufficient?\n\u003e \n\nI believe that\u0027s enough, thanks.\n\n\u003e Are we in an API freeze right now?\n\nNope, not yet.",
+      "parentUuid": "9e62122d_545b16e7",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "741b18f5ddafd155385691e6fdccebd34ecc803e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
