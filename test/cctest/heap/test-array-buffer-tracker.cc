@@ -51,8 +51,8 @@ namespace heap {
 TEST(ArrayBuffer_OnlyMC) {
   FLAG_concurrent_array_buffer_sweeping = false;
 
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -78,8 +78,8 @@ TEST(ArrayBuffer_OnlyScavenge) {
   if (FLAG_single_generation) return;
   FLAG_concurrent_array_buffer_sweeping = false;
 
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -106,8 +106,8 @@ TEST(ArrayBuffer_ScavengeAndMC) {
   if (FLAG_single_generation) return;
   FLAG_concurrent_array_buffer_sweeping = false;
 
-  ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -134,10 +134,11 @@ TEST(ArrayBuffer_ScavengeAndMC) {
 
 TEST(ArrayBuffer_Compaction) {
   if (!FLAG_compact) return;
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   FLAG_concurrent_array_buffer_sweeping = false;
+
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -175,10 +176,10 @@ TEST(ArrayBuffer_UnregisterDuringSweep) {
 #ifdef VERIFY_HEAP
   i::FLAG_verify_heap = false;
 #endif  // VERIFY_HEAP
-  ManualGCScope manual_gc_scope;
   i::FLAG_concurrent_array_buffer_sweeping = false;
 
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -212,10 +213,11 @@ TEST(ArrayBuffer_UnregisterDuringSweep) {
 TEST(ArrayBuffer_NonLivePromotion) {
   if (!FLAG_incremental_marking) return;
   FLAG_concurrent_array_buffer_sweeping = false;
-  ManualGCScope manual_gc_scope;
+
   // The test verifies that the marking state is preserved when promoting
   // a buffer to old space.
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -250,10 +252,11 @@ TEST(ArrayBuffer_NonLivePromotion) {
 TEST(ArrayBuffer_LivePromotion) {
   if (!FLAG_incremental_marking) return;
   FLAG_concurrent_array_buffer_sweeping = false;
-  ManualGCScope manual_gc_scope;
+
   // The test verifies that the marking state is preserved when promoting
   // a buffer to old space.
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -291,10 +294,11 @@ TEST(ArrayBuffer_LivePromotion) {
 TEST(ArrayBuffer_SemiSpaceCopyThenPagePromotion) {
   if (!i::FLAG_incremental_marking) return;
   FLAG_concurrent_array_buffer_sweeping = false;
-  ManualGCScope manual_gc_scope;
+
   // The test verifies that the marking state is preserved across semispace
   // copy.
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -328,10 +332,10 @@ TEST(ArrayBuffer_PagePromotion) {
   if (!i::FLAG_incremental_marking || i::FLAG_single_generation) return;
   i::FLAG_concurrent_array_buffer_sweeping = false;
 
-  ManualGCScope manual_gc_scope;
   // The test verifies that the marking state is preserved across semispace
   // copy.
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
@@ -361,7 +365,7 @@ TEST(ArrayBuffer_PagePromotion) {
 
 UNINITIALIZED_TEST(ArrayBuffer_SemiSpaceCopyMultipleTasks) {
   if (FLAG_optimize_for_size || FLAG_single_generation) return;
-  ManualGCScope manual_gc_scope;
+
   // Test allocates JSArrayBuffer on different pages before triggering a
   // full GC that performs the semispace copy. If parallelized, this test
   // ensures proper synchronization in TSAN configurations.
@@ -370,6 +374,7 @@ UNINITIALIZED_TEST(ArrayBuffer_SemiSpaceCopyMultipleTasks) {
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  ManualGCScope manual_gc_scope(i_isolate);
   {
     v8::Isolate::Scope isolate_scope(isolate);
     v8::HandleScope handle_scope(isolate);
@@ -393,6 +398,7 @@ UNINITIALIZED_TEST(ArrayBuffer_SemiSpaceCopyMultipleTasks) {
 
 TEST(ArrayBuffer_ExternalBackingStoreSizeIncreases) {
   if (FLAG_single_generation) return;
+
   CcTest::InitializeVM();
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
@@ -416,6 +422,7 @@ TEST(ArrayBuffer_ExternalBackingStoreSizeIncreases) {
 TEST(ArrayBuffer_ExternalBackingStoreSizeDecreases) {
   if (FLAG_single_generation) return;
   FLAG_concurrent_array_buffer_sweeping = false;
+
   CcTest::InitializeVM();
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
@@ -438,10 +445,11 @@ TEST(ArrayBuffer_ExternalBackingStoreSizeDecreases) {
 
 TEST(ArrayBuffer_ExternalBackingStoreSizeIncreasesMarkCompact) {
   if (!FLAG_compact) return;
-  ManualGCScope manual_gc_scope;
   FLAG_manual_evacuation_candidates_selection = true;
   FLAG_concurrent_array_buffer_sweeping = false;
+
   CcTest::InitializeVM();
+  ManualGCScope manual_gc_scope;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   Heap* heap = reinterpret_cast<Isolate*>(isolate)->heap();
