@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ae9ee0_bc08f12c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:33:19Z",
+      "side": 1,
+      "message": "+leszeks@ for OWNER stamp in src/snapshot/",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f68484c4_b456be05",
