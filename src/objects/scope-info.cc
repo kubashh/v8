@@ -814,7 +814,8 @@ SourceTextModuleInfo ScopeInfo::ModuleDescriptorInfo() const {
   return SourceTextModuleInfo::cast(module_info());
 }
 
-String ScopeInfo::ContextLocalName(int var) const {
+String ScopeInfo::ContextInlinedLocalName(int var) const {
+  DCHECK(HasInlinedLocalNames());
   return context_local_names(var);
 }
 
@@ -924,7 +925,7 @@ std::pair<String, int> ScopeInfo::SavedClassVariable() const {
                 Context::MIN_CONTEXT_SLOTS;
     DCHECK_GE(index, 0);
     DCHECK_LT(index, ContextLocalCount());
-    String name = ContextLocalName(index);
+    String name = ContextInlinedLocalName(index);
     return std::make_pair(name, index);
   } else {
     // TODO(victorgomes, v8:12315): Implement this once we have a hash table.
