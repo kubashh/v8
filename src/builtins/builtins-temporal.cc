@@ -259,10 +259,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeDaysInYear)
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeMonthsInYear)
 /* Temporal #sec-get-temporal.zoneddatetime.prototype.inleapyear */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeInLeapYear)
-/* Temporal #sec-get-temporal.zoneddatetime.prototype.offsetnanoseconds */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeOffsetNanoseconds)
-/* Temporal #sec-get-temporal.zoneddatetime.prototype.offset */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeOffset)
 /* Temporal #sec-temporal.zoneddatetime.prototype.with */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeWith)
 /* Temporal #sec-temporal.zoneddatetime.prototype.withplaintime */
@@ -603,15 +599,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     return obj->field();                                          \
   }
 
-#define TEMPORAL_GET_NO_NEG_ZERO(T, METHOD, field)                \
-  BUILTIN(Temporal##T##Prototype##METHOD) {                       \
-    HandleScope scope(isolate);                                   \
-    const char* method = "get Temporal." #T ".prototype." #field; \
-    CHECK_RECEIVER(JSTemporal##T, obj, method);                   \
-    if (obj->field().IsMinusZero()) return Smi::zero();           \
-    return obj->field();                                          \
-  }
-
 // PlainDate
 BUILTIN(TemporalPlainDateConstructor) {
   HandleScope scope(isolate);
@@ -710,6 +697,8 @@ TEMPORAL_GET(ZonedDateTime, Calendar, calendar)
 TEMPORAL_GET(ZonedDateTime, TimeZone, time_zone)
 TEMPORAL_GET(ZonedDateTime, EpochNanoseconds, nanoseconds)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, GetISOFields, getISOFields)
+TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, OffsetNanoseconds, offsetNanoseconds)
+TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, Offset, offset)
 TEMPORAL_VALUE_OF(ZonedDateTime)
 
 // Duration
@@ -729,16 +718,16 @@ BUILTIN(TemporalDurationConstructor) {
                    args.atOrUndefined(isolate, 9),     // microseconds
                    args.atOrUndefined(isolate, 10)));  // nanoseconds
 }
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Years, years)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Months, months)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Weeks, weeks)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Days, days)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Hours, hours)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Minutes, minutes)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Seconds, seconds)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Milliseconds, milliseconds)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Microseconds, microseconds)
-TEMPORAL_GET_NO_NEG_ZERO(Duration, Nanoseconds, nanoseconds)
+TEMPORAL_GET(Duration, Years, years)
+TEMPORAL_GET(Duration, Months, months)
+TEMPORAL_GET(Duration, Weeks, weeks)
+TEMPORAL_GET(Duration, Days, days)
+TEMPORAL_GET(Duration, Hours, hours)
+TEMPORAL_GET(Duration, Minutes, minutes)
+TEMPORAL_GET(Duration, Seconds, seconds)
+TEMPORAL_GET(Duration, Milliseconds, milliseconds)
+TEMPORAL_GET(Duration, Microseconds, microseconds)
+TEMPORAL_GET(Duration, Nanoseconds, nanoseconds)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Sign, sign)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Blank, blank)
 TEMPORAL_VALUE_OF(Duration)
