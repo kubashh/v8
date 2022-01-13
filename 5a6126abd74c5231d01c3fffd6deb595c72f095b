@@ -16,6 +16,114 @@
       "message": "PTAL",
       "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef415b5b_cbaebc53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "Nice fix and refactorings! lgtm modulo nits below.",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f68484c4_b456be05",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "To avoid accidental reuse of the key and allocating more than one copy, let\u0027s DCHECK(internalized_string_.is_null()).",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fd7d7a1_70c6dbb0",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "Ah I didn\u0027t think about this case. What you say here makes sense.",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfa8728c_4af42cc5",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "I think you could get away reusing string_ for internalized_string_ since keys shouldn\u0027t ever be re-used. But it also shouldn\u0027t be a big deal, so up to you.",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa3bcd5_5202bc80",
+        "filename": "src/objects/string-table.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "Nice catch, thanks!",
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5e6d974_7fc5e2ad",
+        "filename": "test/cctest/test-shared-strings.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 1,
+      "message": "Existing typo: extra \u0027might\u0027.",
+      "range": {
+        "startLine": 335,
+        "startChar": 50,
+        "endLine": 335,
+        "endChar": 56
+      },
+      "revId": "5a6126abd74c5231d01c3fffd6deb595c72f095b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

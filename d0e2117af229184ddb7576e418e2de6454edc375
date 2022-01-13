@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d308b7_096e834d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-01-13T01:32:21Z",
+      "side": 0,
+      "message": "Ack. Thanks!",
+      "parentUuid": "37706214_cb75e9f4",
+      "range": {
+        "startLine": 879,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 0
+      },
+      "revId": "d0e2117af229184ddb7576e418e2de6454edc375",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "452bea3d_1233fec2",
