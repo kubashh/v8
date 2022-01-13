@@ -1248,6 +1248,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return Load<Simd128T>(ptr);
   }
 
+  TNode<BoolT> LoadConstructorOrBackPointer() { return BoolConstant(true); }
+
   // Reference is the CSA-equivalent of a Torque reference value, representing
   // an inner pointer into a HeapObject.
   //
