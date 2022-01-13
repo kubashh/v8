@@ -68,6 +68,24 @@
       "parentUuid": "3667dd6c_39798d13",
       "revId": "6a6d88e0d501b9b2a115e8756ce5d2216ebc6ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63495dab_ef3e067f",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-13T09:19:58Z",
+      "side": 1,
+      "message": "You could probably move the method to api-inl.h, but either way is ok by me.",
+      "parentUuid": "888fd5d2_5345fc6e",
+      "revId": "6a6d88e0d501b9b2a115e8756ce5d2216ebc6ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
