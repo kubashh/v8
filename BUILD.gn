@@ -5593,7 +5593,10 @@ v8_source_set("cppgc_base") {
   if (cppgc_is_standalone && !v8_use_perfetto) {
     sources += [ "//base/trace_event/common/trace_event_common.h" ]
   } else {
-    public_deps += [ ":v8_tracing" ]
+    public_deps += [
+      ":v8_internal_headers",
+      ":v8_tracing",
+    ]
   }
 }
 
