@@ -143,7 +143,7 @@ class LiftoffCompileEnvironment {
                                               function->code.end_offset());
 
     FunctionBody body{sig, 0, function_wire_bytes.begin(),
-                      function_wire_bytes.end()};
+                      function_wire_bytes.end(), function->traces};
     return {code, body};
   }
 

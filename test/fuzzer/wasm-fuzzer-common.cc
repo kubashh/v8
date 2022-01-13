@@ -66,7 +66,7 @@ Handle<WasmModuleObject> CompileReferenceModule(Zone* zone, Isolate* isolate,
     auto& func = module->functions[i];
     base::Vector<const uint8_t> func_code = wire_bytes.GetFunctionBytes(&func);
     FunctionBody func_body(func.sig, func.code.offset(), func_code.begin(),
-                           func_code.end());
+                           func_code.end(), func.traces);
     auto result = ExecuteLiftoffCompilation(
         &env, func_body, func.func_index, kForDebugging,
         LiftoffOptions{}.set_max_steps(max_steps).set_nondeterminism(
@@ -537,7 +537,7 @@ void DecodeAndAppendInitExpr(StdoutStream& os, Zone* zone,
       WireBytesRef ref = init.wire_bytes_ref();
       auto sig = FixedSizeSignature<ValueType>::Returns(expected);
       FunctionBody body(&sig, ref.offset(), module_bytes.start() + ref.offset(),
-                        module_bytes.start() + ref.end_offset());
+                        module_bytes.start() + ref.end_offset(), {});
       WasmFeatures detected;
       WasmFullDecoder<Decoder::kFullValidation, InitExprInterface,
                       kInitExpression>
@@ -723,7 +723,7 @@ void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
     os << "  .addBodyWithEnd([\n";
 
     FunctionBody func_body(func.sig, func.code.offset(), func_code.begin(),
-                           func_code.end());
+                           func_code.end(), func.traces);
     PrintRawWasmCode(isolate->allocator(), func_body, module, kOmitLocals);
     os << "]);\n";
   }

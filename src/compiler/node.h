@@ -298,6 +298,7 @@ class V8_EXPORT_PRIVATE Node final {
   Mark mark_;
   uint32_t bit_field_;
   ZoneUsePtr first_use_;
+  std::vector<uint32_t> trace_marks;
 
   friend class Edge;
   friend class NodeMarkerBase;

@@ -275,7 +275,8 @@ class DebugInfoImpl {
     base::Vector<const uint8_t> wire_bytes = native_module_->wire_bytes();
     FunctionBody body{function->sig, function->code.offset(),
                       wire_bytes.begin() + function->code.offset(),
-                      wire_bytes.begin() + function->code.end_offset()};
+                      wire_bytes.begin() + function->code.end_offset(),
+                      function->traces};
     std::unique_ptr<DebugSideTable> debug_sidetable;
 
     // Debug side tables for stepping are generated lazily.

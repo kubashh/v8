@@ -437,6 +437,8 @@ void Assembler::Align(int m) {
   }
 }
 
+void Assembler::emit_trace_instruction() {}
+
 void Assembler::CodeTargetAlign() {
   // Preferred alignment of jump targets on some ARM chips.
   Align(8);
