@@ -1150,14 +1150,14 @@ bool InstanceBuilder::ProcessImportedFunction(
       // TODO(jkummerow): Consider precompiling CapiCallWrappers in parallel,
       // just like other import wrappers.
       WasmCode* wasm_code =
-          cache->MaybeGet(kind, expected_sig, expected_arity, kNoSuspend);
+          cache->MaybeGet(kind, expected_sig, expected_arity, false);
       if (wasm_code == nullptr) {
         WasmCodeRefScope code_ref_scope;
         WasmImportWrapperCache::ModificationScope cache_scope(cache);
         wasm_code =
             compiler::CompileWasmCapiCallWrapper(native_module, expected_sig);
         WasmImportWrapperCache::CacheKey key(kind, expected_sig, expected_arity,
-                                             kNoSuspend);
+                                             false);
         cache_scope[key] = wasm_code;
         wasm_code->IncRef();
         isolate_->counters()->wasm_generated_code_size()->Increment(
@@ -1185,8 +1185,7 @@ bool InstanceBuilder::ProcessImportedFunction(
       }
 
       NativeModule* native_module = instance->module_object().native_module();
-      Suspend suspend =
-          resolved.suspender->IsUndefined() ? kNoSuspend : kSuspend;
+      bool suspend = !resolved.suspender->IsUndefined();
       WasmCode* wasm_code = native_module->import_wrapper_cache()->Get(
           kind, expected_sig, expected_arity, suspend);
       DCHECK_NOT_NULL(wasm_code);
@@ -1598,7 +1597,7 @@ void InstanceBuilder::CompileImportWrappers(
           shared.internal_formal_parameter_count_without_receiver();
     }
 
-    Suspend suspend = resolved.suspender->IsUndefined() ? kNoSuspend : kSuspend;
+    bool suspend = !resolved.suspender->IsUndefined();
     WasmImportWrapperCache::CacheKey key(kind, sig, expected_arity, suspend);
     if (cache_scope[key] != nullptr) {
       // Cache entry already exists, no need to compile it again.

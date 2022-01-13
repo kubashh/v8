@@ -55,7 +55,6 @@ class WasmCode;
 class WasmFeatures;
 class WireBytesStorage;
 enum class LoadTransformationKind : uint8_t;
-enum Suspend : bool { kSuspend, kNoSuspend };
 }  // namespace wasm
 
 namespace compiler {
@@ -125,7 +124,7 @@ V8_EXPORT_PRIVATE WasmImportData ResolveWasmImportCall(
 // Compiles an import call wrapper, which allows Wasm to call imports.
 V8_EXPORT_PRIVATE wasm::WasmCompilationResult CompileWasmImportCallWrapper(
     wasm::CompilationEnv* env, WasmImportCallKind, const wasm::FunctionSig*,
-    bool source_positions, int expected_arity, wasm::Suspend);
+    bool source_positions, int expected_arity, bool suspend);
 
 // Compiles a host call wrapper, which allows Wasm to call host functions.
 wasm::WasmCode* CompileWasmCapiCallWrapper(wasm::NativeModule*,
@@ -140,8 +139,7 @@ std::unique_ptr<OptimizedCompilationJob> NewJSToWasmCompilationJob(
 MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          const wasm::FunctionSig* sig,
                                          WasmImportCallKind kind,
-                                         int expected_arity,
-                                         wasm::Suspend suspend);
+                                         int expected_arity, bool suspend);
 
 // Compiles a stub with JS linkage that serves as an adapter for function
 // objects constructed via {WebAssembly.Function}. It performs a round-trip

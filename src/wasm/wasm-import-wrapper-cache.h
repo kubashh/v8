@@ -29,7 +29,7 @@ class WasmImportWrapperCache {
  public:
   struct CacheKey {
     CacheKey(const compiler::WasmImportCallKind& _kind, const FunctionSig* _sig,
-             int _expected_arity, Suspend _suspend)
+             int _expected_arity, bool _suspend)
         : kind(_kind),
           signature(_sig),
           expected_arity(_expected_arity == kDontAdaptArgumentsSentinel
@@ -45,7 +45,7 @@ class WasmImportWrapperCache {
     compiler::WasmImportCallKind kind;
     const FunctionSig* signature;
     int expected_arity;
-    Suspend suspend;
+    bool suspend;
   };
 
   class CacheKeyHash {
@@ -76,10 +76,10 @@ class WasmImportWrapperCache {
   // Thread-safe. Assumes the key exists in the map.
   V8_EXPORT_PRIVATE WasmCode* Get(compiler::WasmImportCallKind kind,
                                   const FunctionSig* sig, int expected_arity,
-                                  Suspend suspend) const;
+                                  bool suspend) const;
   // Thread-safe. Returns nullptr if the key doesn't exist in the map.
   WasmCode* MaybeGet(compiler::WasmImportCallKind kind, const FunctionSig* sig,
-                     int expected_arity, Suspend suspend) const;
+                     int expected_arity, bool suspend) const;
 
   ~WasmImportWrapperCache();
 

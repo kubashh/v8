@@ -7085,7 +7085,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
   // For wasm-to-js wrappers, parameter 0 is a WasmApiFunctionRef.
   bool BuildWasmToJSWrapper(WasmImportCallKind kind, int expected_arity,
-                            wasm::Suspend suspend) {
+                            bool suspend) {
     int wasm_count = static_cast<int>(sig_->parameter_count());
 
     // Build the start and the parameter nodes.
@@ -7146,13 +7146,17 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
         DCHECK_EQ(pos, args.size());
         call = gasm_->Call(call_descriptor, pos, args.begin());
-        if (suspend == wasm::kSuspend) {
+        if (suspend) {
           auto* call_descriptor = GetBuiltinCallDescriptor(
               Builtin::kWasmSuspend, zone_, StubCallMode::kCallWasmRuntimeStub);
           Node* call_target = mcgraph()->RelocatableIntPtrConstant(
               wasm::WasmCode::kWasmSuspend, RelocInfo::WASM_STUB_CALL);
-
-          gasm_->Call(call_descriptor, call_target, call);
+          Node* suspender =
+              gasm_->Load(MachineType::TaggedPointer(), Param(0),
+                          wasm::ObjectAccess::ToTagged(
+                              WasmApiFunctionRef::kSuspenderOffset));
+          // TODO(thibaudm): Create and pass the chained promise.
+          gasm_->Call(call_descriptor, call_target, call, suspender);
         }
         break;
       }
@@ -7818,7 +7822,7 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
 wasm::WasmCompilationResult CompileWasmImportCallWrapper(
     wasm::CompilationEnv* env, WasmImportCallKind kind,
     const wasm::FunctionSig* sig, bool source_positions, int expected_arity,
-    wasm::Suspend suspend) {
+    bool suspend) {
   DCHECK_NE(WasmImportCallKind::kLinkError, kind);
   DCHECK_NE(WasmImportCallKind::kWasmToWasm, kind);
 
@@ -7922,8 +7926,7 @@ wasm::WasmCode* CompileWasmCapiCallWrapper(wasm::NativeModule* native_module,
 MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          const wasm::FunctionSig* sig,
                                          WasmImportCallKind kind,
-                                         int expected_arity,
-                                         wasm::Suspend suspend) {
+                                         int expected_arity, bool suspend) {
   std::unique_ptr<Zone> zone = std::make_unique<Zone>(
       isolate->allocator(), ZONE_NAME, kCompressGraphZone);
 

@@ -1599,7 +1599,7 @@ int AddImportWrapperUnits(NativeModule* native_module,
     }
     WasmImportWrapperCache::CacheKey key(
         compiler::kDefaultImportCallKind, sig,
-        static_cast<int>(sig->parameter_count()), kNoSuspend);
+        static_cast<int>(sig->parameter_count()), false);
     auto it = keys.insert(key);
     if (it.second) {
       // Ensure that all keys exist in the cache, so that we can populate the
@@ -3635,7 +3635,7 @@ void CompilationStateImpl::PublishCompilationResults(
           native_module_->module()->functions[func_index].sig;
       WasmImportWrapperCache::CacheKey key(
           compiler::kDefaultImportCallKind, sig,
-          static_cast<int>(sig->parameter_count()), kNoSuspend);
+          static_cast<int>(sig->parameter_count()), false);
       // If two imported functions have the same key, only one of them should
       // have been added as a compilation unit. So it is always the first time
       // we compile a wrapper for this key here.
@@ -3875,7 +3875,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module,
 WasmCode* CompileImportWrapper(
     NativeModule* native_module, Counters* counters,
     compiler::WasmImportCallKind kind, const FunctionSig* sig,
-    int expected_arity, Suspend suspend,
+    int expected_arity, bool suspend,
     WasmImportWrapperCache::ModificationScope* cache_scope) {
   // Entry should exist, so that we don't insert a new one and invalidate
   // other threads' iterators/references, but it should not have been compiled
