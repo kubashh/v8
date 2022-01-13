@@ -52,6 +52,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0d9e2e_f9cbd1bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-13T10:25:46Z",
+      "side": 1,
+      "message": "You have the power :)",
+      "parentUuid": "32986e3d_53692caf",
+      "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b94efd36_4e4fc3b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-13T10:25:46Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0dc46711fac4bd70f815c1d7fe7477ad0612a1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6197cda4_ccab8471",

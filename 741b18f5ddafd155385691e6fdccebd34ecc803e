@@ -22,6 +22,30 @@
       },
       "revId": "741b18f5ddafd155385691e6fdccebd34ecc803e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2f4026d_8a2de8ab",
+        "filename": "include/cppgc/default-platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-13T10:25:46Z",
+      "side": 0,
+      "message": "API changes may break embedders on every release (when we e.g. take a away a deprecated method). Requiring them to adjust their headers seems okay.\n\nAPI freeze protects us against breaking Blink when we may have to roll back V8, so that indeed should be checked against and respected.",
+      "parentUuid": "2d0be2e5_cbc0e239",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "741b18f5ddafd155385691e6fdccebd34ecc803e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
