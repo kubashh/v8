@@ -4082,6 +4082,53 @@ MaybeHandle<JSReceiver> JSTemporalZonedDateTime::GetISOFields(
   return fields;
 }
 
+// #sec-get-temporal.zoneddatetime.prototype.offsetnanoseconds
+MaybeHandle<Object> JSTemporalZonedDateTime::OffsetNanoseconds(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  TEMPORAL_ENTER_FUNC();
+  const char* method = "Temporal.ZonedDateTime.prototype.offsetNanoseconds";
+  // 1. Let zonedDateTime be the this value.
+  // 2. Perform ? RequireInternalSlot(zonedDateTime,
+  // [[InitializedTemporalZonedDateTime]]).
+  // 3. Let timeZone be zonedDateTime.[[TimeZone]].
+  Handle<JSReceiver> time_zone =
+      Handle<JSReceiver>(zoned_date_time->time_zone(), isolate);
+  // 4. Let instant be ! CreateTemporalInstant(zonedDateTime.[[Nanoseconds]]).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant,
+      CreateTemporalInstant(
+          isolate, Handle<BigInt>(zoned_date_time->nanoseconds(), isolate)),
+      Object);
+  // 5. Return 𝔽(? GetOffsetNanosecondsFor(timeZone, instant)).
+  Maybe<int64_t> maybe_result =
+      GetOffsetNanosecondsFor(isolate, time_zone, instant, method);
+  MAYBE_RETURN(maybe_result, Handle<Object>());
+  return isolate->factory()->NewNumberFromInt64(maybe_result.FromJust());
+}
+
+// #sec-get-temporal.zoneddatetime.prototype.offset
+MaybeHandle<String> JSTemporalZonedDateTime::Offset(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  const char* method = "Temporal.ZonedDateTime.prototype.offset";
+  TEMPORAL_ENTER_FUNC();
+  // 1. Let zonedDateTime be the this value.
+  // 2. Perform ? RequireInternalSlot(zonedDateTime,
+  // [[InitializedTemporalZonedDateTime]]).
+  // 3. Let instant be ! CreateTemporalInstant(zonedDateTime.[[Nanoseconds]]).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant,
+      CreateTemporalInstant(
+          isolate, Handle<BigInt>(zoned_date_time->nanoseconds(), isolate)),
+      String);
+  // 4. Return ? BuiltinTimeZoneGetOffsetStringFor(zonedDateTime.[[TimeZone]],
+  // instant).
+  Handle<JSReceiver> time_zone =
+      Handle<JSReceiver>(zoned_date_time->time_zone(), isolate);
+  return BuiltinTimeZoneGetOffsetStringFor(isolate, time_zone, instant, method);
+}
+
 // #sec-temporal.instant
 MaybeHandle<JSTemporalInstant> JSTemporalInstant::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,

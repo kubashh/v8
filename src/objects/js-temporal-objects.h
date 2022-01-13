@@ -277,6 +277,14 @@ class JSTemporalZonedDateTime
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
 
+  // #sec-get-temporal.zoneddatetime.prototype.offsetnanoseconds
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> OffsetNanoseconds(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
+  // #sec-get-temporal.zoneddatetime.prototype.offset
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> Offset(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
   DECL_PRINTER(JSTemporalZonedDateTime)
 
   TQ_OBJECT_CONSTRUCTORS(JSTemporalZonedDateTime)
