@@ -32,10 +32,12 @@ struct FunctionBody {
   uint32_t offset;         // offset in the module bytes, for error reporting
   const byte* start;       // start of the function body
   const byte* end;         // end of the function body
+  std::vector<std::pair<uint32_t, uint32_t>> traces;
 
   FunctionBody(const FunctionSig* sig, uint32_t offset, const byte* start,
-               const byte* end)
-      : sig(sig), offset(offset), start(start), end(end) {}
+               const byte* end,
+               std::vector<std::pair<uint32_t, uint32_t>> traces)
+      : sig(sig), offset(offset), start(start), end(end), traces(traces) {}
 };
 
 enum class LoadTransformationKind : uint8_t { kSplat, kExtend, kZeroExtend };

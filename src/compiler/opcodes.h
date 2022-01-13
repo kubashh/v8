@@ -84,7 +84,8 @@
   V(DeadValue)            \
   V(Dead)                 \
   V(Plug)                 \
-  V(StaticAssert)
+  V(StaticAssert)         \
+  V(TraceInstruction)
 
 // Opcodes for JavaScript operators.
 // Arguments are JSName (the name with a 'JS' prefix), and Name.

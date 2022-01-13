@@ -1091,7 +1091,8 @@ DecodeResult ValidateSingleFunction(const WasmModule* module, int func_index,
                                     AccountingAllocator* allocator,
                                     WasmFeatures enabled_features) {
   const WasmFunction* func = &module->functions[func_index];
-  FunctionBody body{func->sig, func->code.offset(), code.begin(), code.end()};
+  FunctionBody body{func->sig, func->code.offset(), code.begin(), code.end(),
+                    func->traces};
   DecodeResult result;
 
   WasmFeatures detected;

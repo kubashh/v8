@@ -74,7 +74,7 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
   auto* func = &env->module->functions[func_index_];
   base::Vector<const uint8_t> code = wire_bytes_storage->GetCode(func->code);
   wasm::FunctionBody func_body{func->sig, func->code.offset(), code.begin(),
-                               code.end()};
+                               code.end(), func->traces};
 
   base::Optional<TimedHistogramScope> wasm_compile_function_time_scope;
   base::Optional<TimedHistogramScope> wasm_compile_huge_function_time_scope;
@@ -151,7 +151,8 @@ void WasmCompilationUnit::CompileWasmFunction(Isolate* isolate,
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
   FunctionBody function_body{function->sig, function->code.offset(),
                              wire_bytes.start() + function->code.offset(),
-                             wire_bytes.start() + function->code.end_offset()};
+                             wire_bytes.start() + function->code.end_offset(),
+                             function->traces};
 
   DCHECK_LE(native_module->num_imported_functions(), function->func_index);
   DCHECK_LT(function->func_index, native_module->num_functions());
