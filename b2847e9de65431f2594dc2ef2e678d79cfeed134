@@ -50,6 +50,24 @@
       "message": "It is surprising to me why in all other locations you check the suspender for null and undefined, except here you only check for null. What\u0027s the reason for that? Would it be worth adding a comment here for that?",
       "revId": "b2847e9de65431f2594dc2ef2e678d79cfeed134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baf4c41a_6608aec7",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2093,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-14T14:16:31Z",
+      "side": 1,
+      "message": "That\u0027s because in other places it comes from the suspender object of the function data, which may be undefined. Here it only depends on the caller, which either needs a Suspender object or doesn\u0027t.\nI\u0027m not sure it\u0027s worth a comment, but I can add a DCHECK that the suspender is not undefined here.",
+      "parentUuid": "2d3d50e3_98e36495",
+      "revId": "b2847e9de65431f2594dc2ef2e678d79cfeed134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
