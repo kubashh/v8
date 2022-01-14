@@ -460,7 +460,7 @@ class TestEnvironment : public HandleAndZoneScope {
         ((kDoubleRegisterCount % 2) == 0) && ((kDoubleRegisterCount % 3) == 0),
         "kDoubleRegisterCount should be a multiple of two and three.");
     for (int i = 0; i < kDoubleRegisterCount; i += 2) {
-      if (kSimpleFPAliasing) {
+      if (kFPAliasing != COMBINE) {
         // Allocate three registers at once if kSimd128 is supported, else
         // allocate in pairs.
         AddRegister(&test_signature, MachineRepresentation::kFloat32,
@@ -858,7 +858,7 @@ class TestEnvironment : public HandleAndZoneScope {
     ParallelMove* parallel_move = main_zone()->New<ParallelMove>(main_zone());
 
     for (int i = 0; i < size;) {
-      MachineRepresentation rep = CreateRandomMachineRepresentation();
+      MachineRepresentation rep = MachineRepresentation::kSimd128;
       InstructionOperand lhs = CreateRandomOperand(kCannotBeConstant, rep);
       InstructionOperand rhs = CreateRandomOperand(kCannotBeConstant, rep);
       MoveOperands mo(lhs, rhs);
@@ -1232,7 +1232,7 @@ TEST(FuzzAssembleSwap) {
   TestEnvironment env;
 
   Handle<FixedArray> state_in = env.GenerateInitialState();
-  ParallelMove* swaps = env.GenerateRandomSwaps(1000);
+  ParallelMove* swaps = env.GenerateRandomSwaps(1);
 
   Handle<FixedArray> expected = env.SimulateSwaps(swaps, state_in);
 
