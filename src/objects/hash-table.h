@@ -437,6 +437,42 @@ class V8_EXPORT_PRIVATE ObjectHashSet
                       HashTable<ObjectHashSet, ObjectHashSetShape>);
 };
 
+class NameToIndexShape : public BaseShape<Handle<Name>> {
+ public:
+  static inline bool IsMatch(Handle<Name> key, Object other);
+  static inline uint32_t Hash(ReadOnlyRoots roots, Handle<Name> key);
+  static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
+  static inline Handle<Object> AsHandle(Handle<Name> key);
+  static const int kPrefixSize = 0;
+  static const int kEntryValueIndex = 1;
+  static const int kEntrySize = 2;
+  static const bool kMatchNeedsHoleCheck = false;
+};
+
+class V8_EXPORT_PRIVATE NameToIndexDictionary
+    : public HashTable<NameToIndexDictionary, NameToIndexShape> {
+ public:
+  inline static Handle<Map> GetMap(ReadOnlyRoots roots);
+  int32_t Lookup(Handle<Name> key);
+  // Returns the value at entry.
+  Object ValueAt(InternalIndex entry);
+
+  V8_WARN_UNUSED_RESULT static Handle<NameToIndexDictionary> Add(
+      Isolate* isolate, Handle<NameToIndexDictionary> dictionary,
+      Handle<Name> key, int32_t value);
+
+  DECL_CAST(NameToIndexDictionary)
+  DECL_PRINTER(NameToIndexDictionary)
+
+  OBJECT_CONSTRUCTORS(NameToIndexDictionary,
+                      HashTable<NameToIndexDictionary, NameToIndexShape>);
+
+ private:
+  int EntryToValueIndex(InternalIndex entry) const {
+    return EntryToIndex(entry) + NameToIndexShape::kEntryValueIndex;
+  }
+};
+
 }  // namespace internal
 }  // namespace v8
 

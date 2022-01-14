@@ -183,6 +183,7 @@ class ZoneForwardList;
   V(Microtask)                                 \
   V(Name)                                      \
   V(NameDictionary)                            \
+  V(NameToIndexDictionary)                     \
   V(NativeContext)                             \
   V(NormalizedMapCache)                        \
   V(NumberDictionary)                          \
