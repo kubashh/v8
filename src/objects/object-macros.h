@@ -479,6 +479,7 @@
   do {                                                                   \
     DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                  \
     DCHECK_NE(mode, UPDATE_EPHEMERON_KEY_WRITE_BARRIER);                 \
+    AssertValidWriteBarrierMode(object, value, mode);                    \
     if (mode != SKIP_WRITE_BARRIER) {                                    \
       if (mode == UPDATE_WRITE_BARRIER) {                                \
         WriteBarrier::Marking(object, (object).RawField(offset), value); \

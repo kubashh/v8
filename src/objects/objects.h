@@ -274,6 +274,9 @@ enum class ElementTypes { kAll, kStringAndSymbol };
 // TODO(mythria): Move this to a better place.
 ShouldThrow GetShouldThrow(Isolate* isolate, Maybe<ShouldThrow> should_throw);
 
+void AssertValidWriteBarrierMode(HeapObject source, Object target,
+                                 WriteBarrierMode mode);
+
 // Object is the abstract superclass for all classes in the
 // object hierarchy.
 // Object does not use any virtual functions to avoid the
