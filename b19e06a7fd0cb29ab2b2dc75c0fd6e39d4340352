@@ -33,6 +33,52 @@
       "message": "src/heap LGTM",
       "revId": "b19e06a7fd0cb29ab2b2dc75c0fd6e39d4340352",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f49b65_f1a50e34",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-14T11:15:05Z",
+      "side": 1,
+      "message": "Please rename it to NameToIndex[Hash]Table or something in order to avoid confusion. The term Dictionary is \"reserved\" for slow property/element backing stores.",
+      "range": {
+        "startLine": 212,
+        "startChar": 13,
+        "endLine": 212,
+        "endChar": 34
+      },
+      "revId": "b19e06a7fd0cb29ab2b2dc75c0fd6e39d4340352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "078de6cb_03fe7beb",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-14T11:15:05Z",
+      "side": 1,
+      "message": "It looks like you could have just used ObjectHashTable instead of introducing a new class. You would still need a custom map/instance type in order to enforce rehashing.",
+      "range": {
+        "startLine": 452,
+        "startChar": 24,
+        "endLine": 452,
+        "endChar": 45
+      },
+      "revId": "b19e06a7fd0cb29ab2b2dc75c0fd6e39d4340352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
