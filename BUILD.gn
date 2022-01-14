@@ -990,7 +990,10 @@ config("toolchain") {
   visibility = [ "./*" ]
 
   defines = []
-  cflags = []
+  cflags = [
+    "-Xclang",
+    "-fno-use-ctor-homing",
+  ]
   ldflags = []
 
   if (v8_current_cpu == "arm") {
