@@ -9,6 +9,7 @@
 #include "src/base/optional.h"
 #include "src/common/globals.h"
 #include "src/objects/heap-object.h"
+#include "src/objects/objects.h"
 
 namespace v8 {
 namespace internal {
@@ -64,6 +65,12 @@ class V8_EXPORT_PRIVATE WriteBarrier {
   static void ClearForThread(MarkingBarrier*);
 
   static MarkingBarrier* CurrentMarkingBarrier(Heap* heap);
+
+#ifdef ENABLE_SLOW_DCHECKS
+  template <typename T>
+  static inline void VerifySkipWriteBarrier(HeapObject host, T value);
+  static bool IsImmortalImmovableHeapObject(HeapObject object);
+#endif
 
  private:
   static inline base::Optional<Heap*> GetHeapIfMarking(HeapObject object);
