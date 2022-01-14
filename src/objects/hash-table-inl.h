@@ -45,9 +45,14 @@ ObjectHashSet::ObjectHashSet(Address ptr)
   SLOW_DCHECK(IsObjectHashSet());
 }
 
+NameToIndexHashTable::NameToIndexHashTable(Address ptr) : ObjectHashTable(ptr) {
+  SLOW_DCHECK(IsNameToIndexHashTable());
+}
+
 CAST_ACCESSOR(ObjectHashTable)
 CAST_ACCESSOR(EphemeronHashTable)
 CAST_ACCESSOR(ObjectHashSet)
+CAST_ACCESSOR(NameToIndexHashTable)
 
 void EphemeronHashTable::set_key(int index, Object value) {
   DCHECK_NE(GetReadOnlyRoots().fixed_cow_array_map(), map());
@@ -122,6 +127,11 @@ void HashTableBase::SetNumberOfDeletedElements(int nod) {
 template <typename Derived, typename Shape>
 Handle<Map> HashTable<Derived, Shape>::GetMap(ReadOnlyRoots roots) {
   return roots.hash_table_map_handle();
+}
+
+// static
+Handle<Map> NameToIndexHashTable::GetMap(ReadOnlyRoots roots) {
+  return roots.name_to_index_dictionary_map_handle();
 }
 
 // static

@@ -437,6 +437,23 @@ class V8_EXPORT_PRIVATE ObjectHashSet
                       HashTable<ObjectHashSet, ObjectHashSetShape>);
 };
 
+class V8_EXPORT_PRIVATE NameToIndexHashTable : public ObjectHashTable {
+ public:
+  inline static Handle<Map> GetMap(ReadOnlyRoots roots);
+  int32_t Lookup(Handle<Name> key);
+  // Returns the value at entry.
+  Object ValueAt(InternalIndex entry);
+
+  V8_WARN_UNUSED_RESULT static Handle<NameToIndexHashTable> Add(
+      Isolate* isolate, Handle<NameToIndexHashTable> dictionary,
+      Handle<Name> key, int32_t value);
+
+  DECL_CAST(NameToIndexHashTable)
+  DECL_PRINTER(NameToIndexHashTable)
+
+  OBJECT_CONSTRUCTORS(NameToIndexHashTable, ObjectHashTable);
+};
+
 }  // namespace internal
 }  // namespace v8
 
