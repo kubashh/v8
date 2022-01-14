@@ -27,6 +27,79 @@ namespace compiler {
     if (FLAG_trace_turbo_scheduler) PrintF(__VA_ARGS__); \
   } while (false)
 
+SLPScheduler::SLPScheduler(Graph* graph) {
+  graph_ = graph;
+  ComputeDominatorsDepth();
+}
+
+void SLPScheduler::ComputeDominatorsDepth() {
+  Node* start = graph_->start();
+  SetDominatorDepth(start, 0);
+
+  // Do BFS from the start node and compute the depth of
+  // each control node (dominators).
+  std::queue<Node*> queue({start});
+  while (!queue.empty()) {
+    Node* node = queue.front();
+    int depth = GetDominatorDepth(node);
+    queue.pop();
+    for (Edge const edge : node->use_edges()) {
+      if (!NodeProperties::IsControlEdge(edge)) continue;
+      Node* use = edge.from();
+      if (dominator_depth_.find(use) == dominator_depth_.end() &&
+          use->opcode() != IrOpcode::kEnd) {
+        SetDominatorDepth(use, depth + 1);
+        queue.push(use);
+      }
+    }
+  }
+}
+
+Node* SLPScheduler::GetImmediateDominator(Node* node) {
+  DCHECK(!NodeProperties::IsControl(node));
+
+  auto it = immediate_dominator_.find(node);
+  if (it != immediate_dominator_.end()) return it->second;
+
+  Node* idom = nullptr;
+  // For phi node, the immediate dominator is its control node.
+  if (NodeProperties::IsPhi(node)) {
+    idom = NodeProperties::GetControlInput(node);
+  } else {
+    // For non-phi node, the immediate dominator is the immediate dominator
+    // of its input with maximal depth.
+    int maximal_depth = -1;
+    if (node->InputCount() == 0) {
+      idom = graph_->start();
+    }
+    for (int i = 0; i < node->InputCount(); ++i) {
+      Node* input = node->InputAt(i);
+      Node* dominator = nullptr;
+      if (NodeProperties::IsControl(input)) {
+        dominator = input;
+      } else {
+        dominator = GetImmediateDominator(input);
+      }
+      int depth = GetDominatorDepth(dominator);
+      if (depth > maximal_depth) {
+        idom = dominator;
+      }
+    }
+  }
+
+  DCHECK(idom != nullptr);
+  SetImmediateDominator(node, idom);
+  return idom;
+}
+
+bool SLPScheduler::SameBasicBlock(Node* node_a, Node* node_b) {
+  if (NodeProperties::IsControl(node_a)) {
+    return node_a == node_b;
+  } else {
+    return GetImmediateDominator(node_a) == GetImmediateDominator(node_b);
+  }
+}
+
 Scheduler::Scheduler(Zone* zone, Graph* graph, Schedule* schedule, Flags flags,
                      size_t node_count_hint, TickCounter* tick_counter,
                      const ProfileDataFromFile* profile_data)

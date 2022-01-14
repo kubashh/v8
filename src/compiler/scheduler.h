@@ -27,6 +27,41 @@ class ControlEquivalence;
 class Graph;
 class SpecialRPONumberer;
 
+class V8_EXPORT_PRIVATE SLPScheduler {
+ public:
+  explicit SLPScheduler(Graph* graph);
+  bool SameBasicBlock(Node* node_a, Node* node_b);
+
+ private:
+  // Compute the depth of each dominators. The depth is defined
+  // by the shortest distance from start node.
+  void ComputeDominatorsDepth();
+
+  int GetDominatorDepth(Node* dominator) const {
+    auto it = dominator_depth_.find(dominator);
+    DCHECK(it != dominator_depth_.end());
+    return it->second;
+  }
+
+  void SetDominatorDepth(Node* dominator, int depth) {
+    DCHECK(dominator_depth_.find(dominator) == dominator_depth_.end());
+    dominator_depth_[dominator] = depth;
+  }
+
+  Node* GetImmediateDominator(Node* node);
+
+  void SetImmediateDominator(Node* node, Node* idom) {
+    immediate_dominator_[node] = idom;
+  }
+
+  // A map from a control node to the distance of its shortest path
+  // to start node following control edges.
+  std::unordered_map<Node*, int> dominator_depth_;
+  // A map from a non-contol node to its immediate dominator.
+  std::unordered_map<Node*, Node*> immediate_dominator_;
+  Graph* graph_;
+};
+
 // Computes a schedule from a graph, placing nodes into basic blocks and
 // ordering the basic blocks in the special RPO order.
 class V8_EXPORT_PRIVATE Scheduler {
