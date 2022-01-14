@@ -283,6 +283,18 @@ void WriteBarrier::MarkingFromInternalFields(JSObject host) {
   MarkingSlowFromInternalFields(*heap, host);
 }
 
+// static
+#ifdef ENABLE_SLOW_DCHECKS
+void WriteBarrier::VerifySkipWriteBarrier(HeapObject host, Object value) {
+  if (BasicMemoryChunk::FromHeapObject(host)->InYoungGeneration()) return;
+  if (value.IsSmi()) return;
+  HeapObject target = HeapObject::cast(value);
+  if (ReadOnlyHeap::Contains(target)) return;
+  DCHECK_WITH_MSG(IsImmortalImmovableHeapObject(target),
+                  "write barrier is required and cannot be skipped.");
+}
+#endif
+
 }  // namespace internal
 }  // namespace v8
 

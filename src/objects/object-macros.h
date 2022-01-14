@@ -469,6 +469,13 @@
   } while (false)
 #endif
 
+#ifdef ENABLE_SLOW_DCHECKS
+#define VERIFY_SKIP_WRITE_BARRIER(object, value) \
+  WriteBarrier::VerifySkipWriteBarrier((object), (value))
+#else
+#define VERIFY_SKIP_WRITE_BARRIER(object, value)
+#endif
+
 #ifdef V8_DISABLE_WRITE_BARRIERS
 #define CONDITIONAL_WRITE_BARRIER(object, offset, value, mode)
 #elif V8_ENABLE_UNCONDITIONAL_WRITE_BARRIERS
@@ -484,6 +491,8 @@
         WriteBarrier::Marking(object, (object).RawField(offset), value); \
       }                                                                  \
       GenerationalBarrier(object, (object).RawField(offset), value);     \
+    } else {                                                             \
+      VERIFY_SKIP_WRITE_BARRIER(object, value);                          \
     }                                                                    \
   } while (false)
 #endif
