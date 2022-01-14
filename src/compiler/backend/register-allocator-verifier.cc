@@ -321,7 +321,9 @@ void BlockAssessments::DropRegisters() {
     auto current = iterator;
     ++iterator;
     InstructionOperand op = current->first;
-    if (op.IsAnyRegister()) map().erase(current);
+    if (op.IsAnyRegister()) {
+      map().erase(current);
+    }
   }
 }
 
@@ -420,7 +422,6 @@ BlockAssessments* RegisterAllocatorVerifier::CreateForBlock(
               operand, zone()->New<PendingAssessment>(zone(), block, operand)));
         }
       }
-
       // Any references stack slots that became stale in predecessors will be
       // stale here.
       ret->stale_ref_stack_slots().insert(
@@ -554,7 +555,6 @@ void RegisterAllocatorVerifier::VerifyGapMoves() {
     const InstructionBlock* block =
         sequence()->instruction_blocks()[block_index];
     BlockAssessments* block_assessments = CreateForBlock(block);
-
     for (int instr_index = block->code_start(); instr_index < block->code_end();
          ++instr_index) {
       const InstructionConstraint& instr_constraint = constraints_[instr_index];
@@ -579,6 +579,7 @@ void RegisterAllocatorVerifier::VerifyGapMoves() {
       if (instr->IsCall()) {
         block_assessments->DropRegisters();
       }
+
       if (instr->HasReferenceMap()) {
         block_assessments->CheckReferenceMap(instr->reference_map());
       }
