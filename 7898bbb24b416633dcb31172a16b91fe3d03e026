@@ -56,6 +56,30 @@
       },
       "revId": "7898bbb24b416633dcb31172a16b91fe3d03e026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bea53d6_baaf6340",
+        "filename": "src/objects/scope-info.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-14T09:37:45Z",
+      "side": 1,
+      "message": "Thanks Nico. Yes, this is the intended behaviour. Currently kMaxInlinedLocalNamesSize is the maximum size, so this is always true.\n\nNext CL I will add another field:\ncontext_local_names_hashtable?[kMaxInlinedLocalNamesSize \u003c\u003d Convert\u003cintptr\u003e(context_local_count)]: NameToIndexDictionary;\n\nSo the names are stored in the hashtable instead of inlined in the scope info object.",
+      "parentUuid": "3284044f_81510b2e",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 13
+      },
+      "revId": "7898bbb24b416633dcb31172a16b91fe3d03e026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
