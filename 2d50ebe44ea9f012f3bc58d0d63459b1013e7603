@@ -16,6 +16,115 @@
       "message": "Thanks, LGTM",
       "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a9f766_483b4b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-01-14T13:35:23Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44d8b8d6_b7041f5f",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-01-14T13:35:23Z",
+      "side": 1,
+      "message": "nit: Would it make sense for this method to delegate to the one below (at line 39)?",
+      "range": {
+        "startLine": 28,
+        "startChar": 22,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b049df3_22515d85",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-01-14T13:35:23Z",
+      "side": 1,
+      "message": "nit: There is a hidden implication here that only cpp_heap supports snapshot, but afaict there\u0027s nothing in the old implementation that would prevent it from using snapshots as well. Perhaps we should rename it to |requires_snapshot|?",
+      "range": {
+        "startLine": 273,
+        "startChar": 13,
+        "endLine": 273,
+        "endChar": 30
+      },
+      "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f51b10db_c21bf20a",
+        "filename": "src/heap/marking-worklist-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-01-14T13:35:23Z",
+      "side": 1,
+      "message": "This is already defined in the *.h file. Can we just use MarkingWorklists::Local::WrapperSnapshot instead?",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 78
+      },
+      "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e6d589_b741262a",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 7848,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-01-14T13:35:23Z",
+      "side": 1,
+      "message": "stale change?",
+      "range": {
+        "startLine": 7848,
+        "startChar": 2,
+        "endLine": 7848,
+        "endChar": 15
+      },
+      "revId": "2d50ebe44ea9f012f3bc58d0d63459b1013e7603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
