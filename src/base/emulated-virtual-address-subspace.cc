@@ -40,7 +40,7 @@ void EmulatedVirtualAddressSubspace::SetRandomSeed(int64_t seed) {
 
 Address EmulatedVirtualAddressSubspace::RandomPageAddress() {
   MutexGuard guard(&mutex_);
-  Address addr = base() + (rng_.NextInt64() % size());
+  Address addr = base() + (uint64_t(rng_.NextInt64()) % size());
   return RoundDown(addr, allocation_granularity());
 }
 
@@ -77,10 +77,11 @@ Address EmulatedVirtualAddressSubspace::AllocatePages(
     while (!UnmappedRegionContains(hint, size)) {
       hint = RandomPageAddress();
     }
+    RoundDown(hint, alignment);
 
     Address region =
         parent_space_->AllocatePages(hint, size, alignment, permissions);
-    if (region && UnmappedRegionContains(region, size)) {
+    if (UnmappedRegionContains(region, size) && IsAligned(region, alignment)) {
       return region;
     } else if (region) {
       CHECK(parent_space_->FreePages(region, size));
