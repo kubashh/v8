@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a1a946_44b0da7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-14T15:09:41Z",
+      "side": 1,
+      "message": "As discussed offline, revert % rename.\nPTAL.",
+      "revId": "5aca2ffdfc7244e1d1e8d671020cc1d417e2ea92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
