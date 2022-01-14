@@ -6,6 +6,7 @@
 #define V8_CODEGEN_ARM64_REGISTER_ARM64_H_
 
 #include "src/codegen/arm64/utils-arm64.h"
+#include "src/codegen/register-configuration.h"
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 #include "src/common/globals.h"
@@ -259,7 +260,7 @@ constexpr int ArgumentPaddingSlots(int argument_count) {
   return argument_count & alignment_mask;
 }
 
-constexpr bool kSimpleFPAliasing = true;
+constexpr AliasingKind kFPAliasing = AliasingKind::OVERLAP;
 constexpr bool kSimdMaskRegisters = false;
 
 enum DoubleRegisterCode {
