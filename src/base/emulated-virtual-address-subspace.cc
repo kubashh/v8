@@ -40,7 +40,7 @@ void EmulatedVirtualAddressSubspace::SetRandomSeed(int64_t seed) {
 
 Address EmulatedVirtualAddressSubspace::RandomPageAddress() {
   MutexGuard guard(&mutex_);
-  Address addr = base() + (rng_.NextInt64() % size());
+  Address addr = base() + (uint64_t(rng_.NextInt64()) % size());
   return RoundDown(addr, allocation_granularity());
 }
 
