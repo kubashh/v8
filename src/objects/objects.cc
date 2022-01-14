@@ -2326,6 +2326,7 @@ bool HeapObject::NeedsRehashing(InstanceType instance_type) const {
     case ORDERED_HASH_SET_TYPE:
       return false;  // We'll rehash from the JSMap or JSSet referencing them.
     case NAME_DICTIONARY_TYPE:
+    case NAME_TO_INDEX_HASH_TABLE_TYPE:
     case GLOBAL_DICTIONARY_TYPE:
     case NUMBER_DICTIONARY_TYPE:
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
@@ -2354,6 +2355,7 @@ bool HeapObject::CanBeRehashed(PtrComprCageBase cage_base) const {
     case ORDERED_NAME_DICTIONARY_TYPE:
       return false;
     case NAME_DICTIONARY_TYPE:
+    case NAME_TO_INDEX_HASH_TABLE_TYPE:
     case GLOBAL_DICTIONARY_TYPE:
     case NUMBER_DICTIONARY_TYPE:
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
@@ -2382,6 +2384,9 @@ void HeapObject::RehashBasedOnMap(IsolateT* isolate) {
       UNREACHABLE();
     case NAME_DICTIONARY_TYPE:
       NameDictionary::cast(*this).Rehash(isolate);
+      break;
+    case NAME_TO_INDEX_HASH_TABLE_TYPE:
+      NameToIndexHashTable::cast(*this).Rehash(isolate);
       break;
     case SWISS_NAME_DICTIONARY_TYPE:
       SwissNameDictionary::cast(*this).Rehash(isolate);
@@ -6235,6 +6240,23 @@ Object ObjectHashTableBase<Derived, Shape>::Lookup(PtrComprCageBase cage_base,
   return this->get(Derived::EntryToIndex(entry) + 1);
 }
 
+int32_t NameToIndexHashTable::Lookup(Handle<Name> key) {
+  Object index = ObjectHashTable::Lookup(key);
+  if (index.IsTheHole()) return -1;
+  DCHECK(index.IsSmi());
+  return Smi::cast(index).value();
+}
+
+Handle<NameToIndexHashTable> NameToIndexHashTable::Add(
+    Isolate* isolate, Handle<NameToIndexHashTable> table, Handle<Name> key,
+    int32_t index) {
+  DCHECK_GE(index, 0);
+  Handle<ObjectHashTable> object_table(ObjectHashTable::cast(*table), isolate);
+  Handle<Object> smi_index(Smi::FromInt(index), isolate);
+  ObjectHashTable::Put(object_table, key, smi_index);
+  return table;
+}
+
 template <typename Derived, typename Shape>
 Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
   DisallowGarbageCollection no_gc;
@@ -6259,6 +6281,10 @@ Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key,
 
 template <typename Derived, typename Shape>
 Object ObjectHashTableBase<Derived, Shape>::ValueAt(InternalIndex entry) {
+  return this->get(EntryToValueIndex(entry));
+}
+
+Object NameToIndexHashTable::ValueAt(InternalIndex entry) {
   return this->get(EntryToValueIndex(entry));
 }
 
