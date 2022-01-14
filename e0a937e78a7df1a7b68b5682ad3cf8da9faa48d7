@@ -16,6 +16,24 @@
       "message": "LGTM, thanks! Could you include a link to the original build failure in the CL description? I assume it was an unresolved external symbol, but it would be good to have the details.",
       "revId": "e0a937e78a7df1a7b68b5682ad3cf8da9faa48d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1d3484_a752571b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-14T02:22:32Z",
+      "side": 1,
+      "message": "Sorry i don\u0027t found this failure in CL. \nI only run tools/dev/gm.py and ninjia to build arm64.debug in my linux pc.",
+      "parentUuid": "7f67630e_a347a015",
+      "revId": "e0a937e78a7df1a7b68b5682ad3cf8da9faa48d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
