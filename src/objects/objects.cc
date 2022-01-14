@@ -63,6 +63,7 @@
 #include "src/objects/free-space-inl.h"
 #include "src/objects/function-kind.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
@@ -133,6 +134,31 @@
 
 namespace v8 {
 namespace internal {
+
+#if DEBUG
+namespace {
+bool InRoots(Heap* heap, HeapObject object) {
+  if (object.IsCode()) return Builtins::IsBuiltin(Code::cast(object));
+  return false;
+}
+}  // namespace
+#endif
+
+void AssertValidWriteBarrierMode(HeapObject source, Object target,
+                                 WriteBarrierMode mode) {
+#if DEBUG
+  if (mode != SKIP_WRITE_BARRIER) return;
+  if (Heap::InYoungGeneration(source)) return;
+  if (target.IsSmi()) return;
+  HeapObject target_heap_object = HeapObject::cast(target);
+  if (ReadOnlyHeap::Contains(target_heap_object)) return;
+  MemoryChunk* chunk = MemoryChunk::FromHeapObject(target_heap_object);
+  if (chunk->IsFlagSet(MemoryChunk::NEVER_EVACUATE) &&
+      InRoots(chunk->heap(), target_heap_object))
+    return;
+  DCHECK_WITH_MSG(false, "invalid write barrier mode");
+#endif
+}
 
 ShouldThrow GetShouldThrow(Isolate* isolate, Maybe<ShouldThrow> should_throw) {
   if (should_throw.IsJust()) return should_throw.FromJust();
