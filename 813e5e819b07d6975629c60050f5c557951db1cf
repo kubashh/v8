@@ -16,6 +16,46 @@
       "message": "Thanks Igor, PTAL!",
       "revId": "813e5e819b07d6975629c60050f5c557951db1cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b52c9442_3d83653a",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-14T15:43:57Z",
+      "side": 1,
+      "message": ".NameToIndexHashTablePrint(os);",
+      "revId": "813e5e819b07d6975629c60050f5c557951db1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d6f0c8f_170c266b",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-14T15:43:57Z",
+      "side": 1,
+      "message": "table",
+      "range": {
+        "startLine": 448,
+        "startChar": 53,
+        "endLine": 448,
+        "endChar": 63
+      },
+      "revId": "813e5e819b07d6975629c60050f5c557951db1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
