@@ -303,8 +303,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToPlainMonthDay)
 TO_BE_IMPLEMENTED(TemporalDurationFrom)
 /* Temporal #sec-temporal.duration.compare */
 TO_BE_IMPLEMENTED(TemporalDurationCompare)
-/* Temporal #sec-temporal.duration.prototype.with */
-TO_BE_IMPLEMENTED(TemporalDurationPrototypeWith)
 /* Temporal #sec-temporal.duration.prototype.negated */
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeNegated)
 /* Temporal #sec-temporal.duration.prototype.abs */
@@ -559,6 +557,16 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     RETURN_RESULT_OR_FAILURE(isolate, JSTemporal##T ::METHOD(isolate, obj)); \
   }
 
+#define TEMPORAL_PROTOTYPE_METHOD1(T, METHOD, name)                            \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                    \
+    HandleScope scope(isolate);                                                \
+    const char* method = "Temporal." #T ".prototype." #name;                   \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                                \
+    RETURN_RESULT_OR_FAILURE(                                                  \
+        isolate,                                                               \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1))); \
+  }
+
 #define TEMPORAL_PROTOTYPE_METHOD3(T, METHOD, name)                          \
   BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
     HandleScope scope(isolate);                                              \
@@ -752,6 +760,7 @@ TEMPORAL_GET(Duration, Seconds, seconds)
 TEMPORAL_GET(Duration, Milliseconds, milliseconds)
 TEMPORAL_GET(Duration, Microseconds, microseconds)
 TEMPORAL_GET(Duration, Nanoseconds, nanoseconds)
+TEMPORAL_PROTOTYPE_METHOD1(Duration, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Sign, sign)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Blank, blank)
 TEMPORAL_VALUE_OF(Duration)
