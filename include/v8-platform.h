@@ -427,6 +427,8 @@ class PageAllocator {
   virtual bool SetPermissions(void* address, size_t length,
                               Permission permissions) = 0;
 
+  virtual bool AdviseHugePage(void* address, size_t size) { return true; }
+
   /**
    * Frees memory in the given [address, address + size) range. address and size
    * should be operating system page-aligned. The next write to this
@@ -645,6 +647,11 @@ class VirtualAddressSpace {
    */
   virtual V8_WARN_UNUSED_RESULT bool SetPagePermissions(
       Address address, size_t size, PagePermissions permissions) = 0;
+
+  virtual V8_WARN_UNUSED_RESULT bool AdviseHugePage(Address address,
+                                                    size_t size) {
+    return true;
+  }
 
   /**
    * Creates a guard region at the specified address.
