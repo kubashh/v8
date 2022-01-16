@@ -897,6 +897,10 @@ bool AddressSpaceReservation::SetPermissions(void* address, size_t size,
   return OS::SetPermissions(address, size, access);
 }
 
+bool AddressSpaceReservation::AdviseHugePage(void* address, size_t size) {
+  return OS::AdviseHugePage(address, size);
+}
+
 bool AddressSpaceReservation::DiscardSystemPages(void* address, size_t size) {
   DCHECK(Contains(address, size));
   return OS::DiscardSystemPages(address, size);

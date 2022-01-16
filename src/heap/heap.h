@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <cmath>
+#include <map>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -109,6 +110,7 @@ class Space;
 class StressScavengeObserver;
 class TimedHistogram;
 class WeakObjectRetainer;
+class HugePageRangeManager;
 
 enum ArrayStorageAllocationMode {
   DONT_INITIALIZE_ARRAY_ELEMENTS,
@@ -917,6 +919,14 @@ class Heap {
     return memory_allocator_.get();
   }
 
+  HugePageRangeManager* huge_page_range_manager() {
+    return huge_page_range_manager_.get();
+  }
+
+  const HugePageRangeManager* huge_page_range_manager() const {
+    return huge_page_range_manager_.get();
+  }
+
   inline Isolate* isolate();
 
   MarkCompactCollector* mark_compact_collector() {
@@ -1681,6 +1691,8 @@ class Heap {
   // over all objects.
   void MakeHeapIterable();
 
+  size_t max_huge_page_range() { return max_huge_page_range_; }
+
  private:
   using ExternalStringTableUpdaterCallback = String (*)(Heap* heap,
                                                         FullObjectSlot pointer);
@@ -2379,6 +2391,7 @@ class Heap {
   std::unique_ptr<ArrayBufferSweeper> array_buffer_sweeper_;
 
   std::unique_ptr<MemoryAllocator> memory_allocator_;
+  std::unique_ptr<HugePageRangeManager> huge_page_range_manager_;
   std::unique_ptr<IncrementalMarking> incremental_marking_;
   std::unique_ptr<ConcurrentMarking> concurrent_marking_;
   std::unique_ptr<GCIdleTimeHandler> gc_idle_time_handler_;
@@ -2518,6 +2531,9 @@ class Heap {
   // marking.
   CollectionEpoch epoch_young_ = 0;
   CollectionEpoch epoch_full_ = 0;
+
+  // Huge page ranges.
+  size_t max_huge_page_range_;
 
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
