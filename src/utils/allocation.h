@@ -185,6 +185,15 @@ inline bool SetPermissions(v8::PageAllocator* page_allocator, Address address,
                         access);
 }
 
+// Advise memory map to huge page from |address| to |address + size| .
+V8_EXPORT_PRIVATE
+V8_WARN_UNUSED_RESULT bool AdviseHugePage(v8::PageAllocator* page_allocator,
+                                          void* address, size_t size);
+inline bool AdviseHugePage(v8::PageAllocator* page_allocator, Address address,
+                           size_t size) {
+  return AdviseHugePage(page_allocator, reinterpret_cast<void*>(address), size);
+}
+
 // Function that may release reserved memory regions to allow failed allocations
 // to succeed. |length| is the amount of memory needed. Returns |true| if memory
 // could be released, false otherwise.
@@ -268,6 +277,9 @@ class VirtualMemory final {
   // multiples of CommitPageSize(). Returns true on success, otherwise false.
   V8_EXPORT_PRIVATE bool SetPermissions(Address address, size_t size,
                                         PageAllocator::Permission access);
+
+  // Advise memory map to Huge Page.
+  V8_EXPORT_PRIVATE bool AdviseHugePage();
 
   // Releases memory after |free_start|. Returns the number of bytes released.
   V8_EXPORT_PRIVATE size_t Release(Address free_start);
