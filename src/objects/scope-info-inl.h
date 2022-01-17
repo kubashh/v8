@@ -36,6 +36,19 @@ bool ScopeInfo::HasInlinedLocalNames() const {
   return ContextLocalCount() < kScopeInfoMaxInlinedLocalNamesSize;
 }
 
+String ScopeInfo::LocalNames::Iterator::name() const {
+  DCHECK_LT(index_, scope_info_->context_local_count());
+  return scope_info_->context_local_names(index_);
+}
+
+ScopeInfo::LocalNames::Iterator ScopeInfo::LocalNames::begin() const {
+  return Iterator(scope_info_, 0);
+}
+
+ScopeInfo::LocalNames::Iterator ScopeInfo::LocalNames::end() const {
+  return Iterator(scope_info_, scope_info_->ContextLocalCount());
+}
+
 }  // namespace internal
 }  // namespace v8
 

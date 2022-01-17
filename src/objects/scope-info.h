@@ -143,8 +143,51 @@ class ScopeInfo : public TorqueGeneratedScopeInfo<ScopeInfo, HeapObject> {
   // Return true if the local names are inlined in the scope info object.
   inline bool HasInlinedLocalNames() const;
 
-  // Return the name of the given context local.
-  String ContextLocalName(int var) const;
+  class LocalNames {
+   public:
+    class Iterator {
+     public:
+      Iterator(Handle<ScopeInfo> scope_info, int index)
+          : scope_info_(scope_info), index_(index) {}
+
+      Iterator& operator++() {
+        index_++;
+        return *this;
+      }
+
+      friend bool operator==(const Iterator& a, const Iterator& b) {
+        return *a.scope_info_ == *b.scope_info_ && a.index_ == b.index_;
+      }
+      friend bool operator!=(const Iterator& a, const Iterator& b) {
+        return !(a == b);
+      }
+
+      inline String name() const;
+      const Iterator* operator*() const { return this; }
+      int index() const { return index_; }
+
+     private:
+      Handle<ScopeInfo> scope_info_;
+      int index_;
+    };
+
+    explicit LocalNames(Handle<ScopeInfo> scope_info)
+        : scope_info_(scope_info) {}
+
+    inline Iterator begin() const;
+    inline Iterator end() const;
+
+   private:
+    Handle<ScopeInfo> scope_info_;
+  };
+
+  static LocalNames IterateLocalNames(Handle<ScopeInfo> scope_info) {
+    return LocalNames(scope_info);
+  }
+
+  // Return the name of a given context local.
+  // It should only be used if inlined local names.
+  String ContextInlinedLocalName(int var) const;
 
   // Return the mode of the given context local.
   VariableMode ContextLocalMode(int var) const;
