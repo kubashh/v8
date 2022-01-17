@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f95b4a_919c700e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-17T11:08:34Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f48c4d55_019c4ee7",
@@ -106,6 +123,58 @@
       "side": 1,
       "message": "sgtm (leaving open for Igor)",
       "parentUuid": "cb051777_f4c4f42e",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5d4a5ce_3281b401",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-17T11:08:34Z",
+      "side": 1,
+      "message": "It doesn\u0027t seem like a perf critical place but just for clarity please rephrase the old comment like \"we could have skipped the WB because of ... but we don\u0027t because of ...\".",
+      "parentUuid": "cb051777_f4c4f42e",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2509369a_6aba6370",
+        "filename": "src/objects/object-macros.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-17T11:08:34Z",
+      "side": 1,
+      "message": "We should probably be calling this only when a respective flag is on:\n  if (v8::internal::FLAG_enable_slow_asserts) ...\n\nAlternatively, you can make this function returning bool and just use...",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecb15d5e_ecafdfcd",
+        "filename": "src/objects/object-macros.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-17T11:08:34Z",
+      "side": 1,
+      "message": "... \n  SLOW_DCHECK(WriteBarrier::VerifySkipWriteBarrier(object, value));\ninstead of introducing a new macro.",
       "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
