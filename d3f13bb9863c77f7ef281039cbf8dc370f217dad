@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "141f06c8_061308f1",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-01-17T07:08:29Z",
+      "side": 1,
+      "message": "This mirrors \"GetCurrentScriptUrl\": https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/bindings/v8_binding.cc;l\u003d73;drc\u003dd1e10a67c29d52a9dc6a53eb333e97eb3c7c86ea",
+      "range": {
+        "startLine": 1360,
+        "startChar": 4,
+        "endLine": 1360,
+        "endChar": 44
+      },
+      "revId": "d3f13bb9863c77f7ef281039cbf8dc370f217dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
