@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a932054_b22f627d",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-17T15:40:33Z",
+      "side": 1,
+      "message": "I don\u0027t see any advantage of doing that. We either need the handle during the return in the first if or in the condition of the second one. In either case, we always end up creating the handle.",
+      "parentUuid": "d4aec3bf_bd4447d8",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 45
+      },
+      "revId": "a9bf39c3e6f5e75dc72b3399867402591eab8418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a98ef11_8afc42e8",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-01-17T13:54:31Z",
       "side": 1,
       "message": "nit: It would be nice to add `DISALLOW_GARBAGE_COLLECTION(no_gc)` for the unsafe case",
+      "revId": "a9bf39c3e6f5e75dc72b3399867402591eab8418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47064d82_ba3ddeb0",
+        "filename": "src/objects/scope-info-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-17T15:40:33Z",
+      "side": 1,
+      "message": "Great idea! I\u0027ve added a new argument passing DisallowGC. Thanks!",
+      "parentUuid": "3a98ef11_8afc42e8",
       "revId": "a9bf39c3e6f5e75dc72b3399867402591eab8418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
