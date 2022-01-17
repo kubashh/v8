@@ -34,6 +34,24 @@
       "parentUuid": "462185ea_09b9d625",
       "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a5e585_c1c45005",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-17T09:32:38Z",
+      "side": 0,
+      "message": "Yeah, originally, this function would attempt 3 times to allocate the pages at an explicitly generated random base address. Then, this change: https://chromium-review.googlesource.com/c/v8/v8/+/558881/2/src/base/platform/platform-win32.cc removed the 3x and just tried once, and afterwards this change: https://chromium-review.googlesource.com/c/v8/v8/+/558876/20/src/base/platform/platform-win32.cc removed the explicit random base entirely, and relied on the hint instead. Since then, from what I can tell, this function mostly just respected the hint or let the OS chose the base address.",
+      "parentUuid": "ad219ea9_884c3d36",
+      "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

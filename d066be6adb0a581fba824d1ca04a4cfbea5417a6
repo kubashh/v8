@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef47f98_f7f6319f",
+        "filename": "src/base/emulated-virtual-address-subspace.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-17T09:32:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0474f7ed_06c283c9",
+      "range": {
+        "startLine": 43,
+        "startChar": 27,
+        "endLine": 43,
+        "endChar": 35
+      },
+      "revId": "d066be6adb0a581fba824d1ca04a4cfbea5417a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8bcf9aa_fe8c6f1e",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f30af378_2001ab28",
+        "filename": "src/base/emulated-virtual-address-subspace.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-17T09:32:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8bcf9aa_fe8c6f1e",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 11
+      },
+      "revId": "d066be6adb0a581fba824d1ca04a4cfbea5417a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9022aa38_65e77de4",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-01-17T08:58:24Z",
       "side": 1,
       "message": "nit: Here and below: Can you use ASSERT_* (precondition) and EXPECT_* gtest macros instead of CHECK?",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 9
+      },
+      "revId": "d066be6adb0a581fba824d1ca04a4cfbea5417a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e03b7c2a_503083e8",
+        "filename": "test/unittests/base/virtual-address-space-unittest.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-17T09:32:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9022aa38_65e77de4",
       "range": {
         "startLine": 40,
         "startChar": 4,
