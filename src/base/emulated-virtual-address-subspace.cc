@@ -130,6 +130,11 @@ bool EmulatedVirtualAddressSubspace::FreeGuardRegion(Address address,
   return parent_space_->FreeGuardRegion(address, size);
 }
 
+bool EmulatedVirtualAddressSubspace::AdviseHugePage(Address address,
+                                                    size_t size) {
+  return parent_space_->AdviseHugePage(address, size);
+}
+
 bool EmulatedVirtualAddressSubspace::CanAllocateSubspaces() {
   // This is not supported, mostly because it's not (yet) needed in practice.
   return false;
