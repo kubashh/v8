@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4aec3bf_bd4447d8",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-01-17T13:54:31Z",
+      "side": 1,
+      "message": "total nit: you could delay the name handle creation",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 211,
+        "endChar": 45
+      },
+      "revId": "a9bf39c3e6f5e75dc72b3399867402591eab8418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a98ef11_8afc42e8",
+        "filename": "src/objects/scope-info-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-01-17T13:54:31Z",
+      "side": 1,
+      "message": "nit: It would be nice to add `DISALLOW_GARBAGE_COLLECTION(no_gc)` for the unsafe case",
+      "revId": "a9bf39c3e6f5e75dc72b3399867402591eab8418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
