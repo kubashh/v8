@@ -863,11 +863,13 @@ void Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
     // function is in heritage position. Otherwise the function scope's skip bit
     // will be correctly inherited from the outer scope.
     ClassScope::HeritageParsingScope heritage(original_scope_->AsClassScope());
-    result = DoParseFunction(isolate, info, start_position, end_position,
-                             function_literal_id, info->function_name());
+    result = DoParseDeserializedFunction(
+        isolate, shared_info, info, start_position, end_position,
+        function_literal_id, info->function_name());
   } else {
-    result = DoParseFunction(isolate, info, start_position, end_position,
-                             function_literal_id, info->function_name());
+    result = DoParseDeserializedFunction(
+        isolate, shared_info, info, start_position, end_position,
+        function_literal_id, info->function_name());
   }
   MaybeProcessSourceRanges(info, result, stack_limit_);
   if (result != nullptr) {
@@ -1028,6 +1030,130 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
 
   DCHECK_IMPLIES(result, function_literal_id == result->function_literal_id());
   return result;
+}
+
+FunctionLiteral* Parser::DoParseDeserializedFunction(
+    Isolate* isolate, Handle<SharedFunctionInfo> shared_info, ParseInfo* info,
+    int start_position, int end_position, int function_literal_id,
+    const AstRawString* raw_name) {
+  if (flags().function_kind() !=
+      FunctionKind::kClassMembersInitializerFunction) {
+    return DoParseFunction(isolate, info, start_position, end_position,
+                           function_literal_id, raw_name);
+  }
+
+  // Reparse the outer class while skipping the non-fields to get a list of
+  // ClassLiteralProperty and create a InitializeClassMembersStatement for
+  // the synthetic instance initializer function.
+  FunctionLiteral* result = ParseClassForInstanceMemberInitialization(
+      isolate, start_position, function_literal_id);
+  DCHECK_EQ(result->kind(), FunctionKind::kClassMembersInitializerFunction);
+  DCHECK_EQ(result->function_literal_id(), function_literal_id);
+  DCHECK_EQ(result->end_position(), shared_info->EndPosition());
+
+  // The private_name_lookup_skips_outer_class bit should be set by
+  // PostProcessParseResult() during scope analysis later.
+  return result;
+}
+
+FunctionLiteral* Parser::ParseClassForInstanceMemberInitialization(
+    Isolate* isolate, int initializer_pos, int initializer_id) {
+  int class_token_pos = initializer_pos;
+
+  // Insert a FunctionState with the closest outer Declaration scope
+  DeclarationScope* nearest_decl_scope = original_scope_->GetDeclarationScope();
+  DCHECK_NOT_NULL(nearest_decl_scope);
+  FunctionState function_state(&function_state_, &scope_, nearest_decl_scope);
+  // We will reindex the function literals later.
+  ResetFunctionLiteralId();
+
+  // We preparse the class members that are not fields with initializers
+  // in order to collect the function literal ids.
+  ParsingModeScope mode(this, PARSE_LAZILY);
+
+  ExpressionParsingScope no_expression_scope(impl());
+
+  // We will reparse the entire class because we want to know if
+  // the class is anonymous.
+  // When the function is a kClassMembersInitializerFunction, we record the
+  // source range of the entire class as its positions in its SFI, so at this
+  // point the scanner should be rewound to the position of the class token.
+  DCHECK_EQ(peek(), Token::CLASS);
+  Expect(Token::CLASS);
+
+  const AstRawString* class_name = NullIdentifier();
+  const AstRawString* variable_name = NullIdentifier();
+  // It's a reparse so we don't need to check for default export or
+  // whether the names are reserved.
+  if (peek() == Token::EXTENDS || peek() == Token::LBRACE) {
+    GetDefaultStrings(&class_name, &variable_name);
+  } else {
+    class_name = ParseIdentifier();
+    variable_name = class_name;
+  }
+  bool is_anonymous = class_name == nullptr || class_name->IsEmpty();
+
+  // If the class scope didn't need a context, original_scope_ might
+  // actually be the outer scope of the class scope
+  // If original_scope_->is_class_scope() is false then that's certainly
+  // the case. Otherwise, we' use original_scope_->outer_scope() as the
+  // outer scope for now and fix up the heirarchy later if necessary
+  // based on what gets decalared in the reparsed_scope by the parser.
+  Scope* outer = original_scope_->is_class_scope()
+                     ? original_scope_->outer_scope()
+                     : original_scope_;
+  ClassScope* reparsed_scope = NewClassScope(outer, is_anonymous);
+
+  Expression* expr =
+      DoParseClassLiteral(reparsed_scope, class_name, scanner()->location(),
+                          is_anonymous, class_token_pos);
+  DCHECK(expr->IsClassLiteral());
+  ClassLiteral* literal = expr->AsClassLiteral();
+  FunctionLiteral* initializer =
+      literal->instance_members_initializer_function();
+
+  // Reindex so that the function literal ids match.
+  AstFunctionLiteralIdReindexer reindexer(
+      stack_limit_, initializer_id - initializer->function_literal_id());
+  reindexer.Reindex(expr);
+
+  no_expression_scope.ValidateExpression();
+
+  // Fix up the scope chain and the references used by the instance member
+  // initializer.
+  // There are 5 types of variables that can be declared in the class scope:
+  // 1. private names.
+  // 2. private brands (1 must also exist if 2 exists).
+  // 3. home object and static home object variables.
+  // 4. syntethic computed field keys
+  // 5. class variables.
+  // Existence of 1-4 result in context allocation for the class scope,
+  // and we should fix up their indices.
+  // 5 may result in context allocation too if it's referenced, but if that's
+  // the only thing resulting in a context allocation, we can simply
+  // delete it from the scope so that its allocation info gets deserialized
+  // during scope resolution. We'll handle that in ReplaceReparsedClassScope().
+  bool needs_allocation_fixup = false;
+  // If the class scope declares private names, computed fields or the home
+  // objects, then we will restore allocation info of them.
+  if (literal->private_members()->length() > 0 ||
+      literal->home_object() != nullptr ||
+      literal->static_home_object() != nullptr) {
+    needs_allocation_fixup = true;
+  } else {
+    for (int i = 0; i < literal->public_members()->length(); i++) {
+      if (literal->public_members()->at(i)->is_computed_name()) {
+        needs_allocation_fixup = true;
+        break;
+      }
+    }
+  }
+  reparsed_scope->ReplaceReparsedClassScope(
+      isolate, ast_value_factory(), original_scope_, needs_allocation_fixup);
+  if (original_scope_->is_class_scope()) {
+    original_scope_ = reparsed_scope;
+  }
+  return initializer;
 }
 
 Statement* Parser::ParseModuleItem() {
@@ -3122,7 +3248,9 @@ FunctionLiteral* Parser::CreateInitializerFunction(
       FunctionSyntaxKind::kAccessorOrMethod,
       FunctionLiteral::kShouldEagerCompile, scope->start_position(), false,
       GetNextFunctionLiteralId());
-
+#ifdef DEBUG
+  scope->SetScopeName(ast_value_factory()->GetOneByteString(name));
+#endif
   RecordFunctionLiteralSourceRange(result);
 
   return result;
