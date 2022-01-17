@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adeb9670_361d9d00",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-01-17T10:24:21Z",
+      "side": 1,
+      "message": "After this CL lands, this will no longer be true as \"GetCurrentScriptUrl\" will be replaced wholly with a call to this new method. So adding a comment here to a function that in turn will call this method would only confuse IMO.",
+      "parentUuid": "555da980_4b88e0ff",
+      "range": {
+        "startLine": 1360,
+        "startChar": 4,
+        "endLine": 1360,
+        "endChar": 44
+      },
+      "revId": "d3f13bb9863c77f7ef281039cbf8dc370f217dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93749f9_3547cc50",
@@ -61,6 +85,24 @@
       "writtenOn": "2022-01-17T08:42:26Z",
       "side": 1,
       "message": "This might be an empty handle. We could use an MaybeHandle instead to make this more clear.",
+      "revId": "d3f13bb9863c77f7ef281039cbf8dc370f217dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5635d9a_bb52d8a2",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-01-17T10:24:21Z",
+      "side": 1,
+      "message": "The API convention is to use MaybeHandle for things that throw. So if the MaybeHandle empty -\u003e there is a pending exception or on the API level that the surrounding TryCatch will have an exception.\n\nNormal empty handle means, nothing found but no exception either. I think we should honor the convention here.",
+      "parentUuid": "b93749f9_3547cc50",
       "revId": "d3f13bb9863c77f7ef281039cbf8dc370f217dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
