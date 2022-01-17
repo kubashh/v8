@@ -35,6 +35,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd1c46cb_115af977",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-17T11:06:35Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f48c4d55_019c4ee7",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-17T11:06:35Z",
+      "side": 1,
+      "message": "As I said offline: Let\u0027s try to refine this a bit but I agree that it shoud randomly already find issues.",
+      "range": {
+        "startLine": 290,
+        "startChar": 46,
+        "endLine": 290,
+        "endChar": 63
+      },
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb051777_f4c4f42e",
@@ -48,6 +88,24 @@
       "writtenOn": "2022-01-17T09:24:01Z",
       "side": 1,
       "message": "This skips the write barrier because we overwrite the slow with the exact reference. However, the write barrier is only invoked *after* updating that slot, so we don\u0027t have the old value to check this. So I think it\u0027s better to use UPDATE_WRITE_BARRIER here and in case this does anything to performance, we should probably add a method for setting that second slot without that first one.",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8782b2_ee863b97",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-17T11:06:35Z",
+      "side": 1,
+      "message": "sgtm (leaving open for Igor)",
+      "parentUuid": "cb051777_f4c4f42e",
       "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
