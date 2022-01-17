@@ -206,5 +206,9 @@ std::vector<OS::MemoryRange> OS::GetFreeMemoryRangesWithin(
   return result;
 }
 
+// static
+bool OS::AdviseHugePage(void* address, size_t size) {
+  return madvise(address, size, MADV_HUGEPAGE) == 0;
+}
 }  // namespace base
 }  // namespace v8

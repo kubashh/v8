@@ -1170,6 +1170,12 @@ DEFINE_SIZE_T(min_semi_space_size, 0,
 DEFINE_SIZE_T(max_semi_space_size, 0,
               "max size of a semi-space (in MBytes), the new space consists of "
               "two semi-spaces")
+#if V8_OS_LINUX
+DEFINE_BOOL(huge_page, true, "enable huge page in new space")
+#else
+DEFINE_BOOL(huge_page, false, "enable huge page in new space")
+#endif
+DEFINE_INT(max_huge_page_range, 4, "max number of huge page ranges in the heap")
 DEFINE_INT(semi_space_growth_factor, 2, "factor by which to grow the new space")
 DEFINE_SIZE_T(max_old_space_size, 0, "max size of the old space (in Mbytes)")
 DEFINE_SIZE_T(
