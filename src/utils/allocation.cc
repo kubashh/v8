@@ -234,6 +234,11 @@ bool SetPermissions(v8::PageAllocator* page_allocator, void* address,
   return page_allocator->SetPermissions(address, size, access);
 }
 
+bool AdviseHugePage(v8::PageAllocator* page_allocator, void* address,
+                    size_t size) {
+  return page_allocator->AdviseHugePage(address, size);
+}
+
 bool OnCriticalMemoryPressure(size_t length) {
   // TODO(bbudge) Rework retry logic once embedders implement the more
   // informative overload.
@@ -281,6 +286,10 @@ bool VirtualMemory::SetPermissions(Address address, size_t size,
       v8::internal::SetPermissions(page_allocator_, address, size, access);
   DCHECK(result);
   return result;
+}
+
+bool VirtualMemory::AdviseHugePage() {
+  return v8::internal::AdviseHugePage(page_allocator_, address(), size());
 }
 
 size_t VirtualMemory::Release(Address free_start) {
