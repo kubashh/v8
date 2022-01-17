@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab4cd11c_f7329d4d",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5674,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-01-17T09:24:01Z",
+      "side": 0,
+      "message": "I think this relies on the map being reached from the native_context. I am not sure this is correct 100% - in any case this code shouldn\u0027t be hot, so we can just emit a write barrier here to guarantee correctness. We also do not need to make VerifySkipWriteBarrier more complicated.",
+      "revId": "c7f210801987c4326ac4b09842f1838984579b6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

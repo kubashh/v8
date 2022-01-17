@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb051777_f4c4f42e",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-01-17T09:24:01Z",
+      "side": 1,
+      "message": "This skips the write barrier because we overwrite the slow with the exact reference. However, the write barrier is only invoked *after* updating that slot, so we don\u0027t have the old value to check this. So I think it\u0027s better to use UPDATE_WRITE_BARRIER here and in case this does anything to performance, we should probably add a method for setting that second slot without that first one.",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
