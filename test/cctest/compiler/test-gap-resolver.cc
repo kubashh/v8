@@ -17,7 +17,7 @@ const auto GetRegConfig = RegisterConfiguration::Default;
 // simplify ParallelMove equivalence testing.
 void GetCanonicalOperands(const InstructionOperand& op,
                           std::vector<InstructionOperand>* fragments) {
-  CHECK(!kSimpleFPAliasing);
+  CHECK(kFPAliasing == COMBINE);
   CHECK(op.IsFPLocationOperand());
   const LocationOperand& loc = LocationOperand::cast(op);
   MachineRepresentation rep = loc.representation();
@@ -51,7 +51,7 @@ class InterpreterState {
       CHECK(!m->IsRedundant());
       const InstructionOperand& src = m->source();
       const InstructionOperand& dst = m->destination();
-      if (!kSimpleFPAliasing && src.IsFPLocationOperand() &&
+      if (kFPAliasing == COMBINE && src.IsFPLocationOperand() &&
           dst.IsFPLocationOperand()) {
         // Canonicalize FP location-location moves by fragmenting them into
         // an equivalent sequence of float32 moves, to simplify state
@@ -137,8 +137,14 @@ class InterpreterState {
       // Preserve FP representation when FP register aliasing is complex.
       // Otherwise, canonicalize to kFloat64.
       if (IsFloatingPoint(loc_op.representation())) {
-        rep = kSimpleFPAliasing ? MachineRepresentation::kFloat64
-                                : loc_op.representation();
+        if (kFPAliasing != INDEPENDENT) {
+          rep = kFPAliasing != COMBINE ? MachineRepresentation::kFloat64
+                                       : loc_op.representation();
+        } else {
+          rep = IsSIMD128(loc_op.representation())
+                    ? MachineRepresentation::kSimd128
+                    : MachineRepresentation::kFloat64;
+        }
       }
       if (loc_op.IsAnyRegister()) {
         index = loc_op.register_code();
@@ -234,7 +240,7 @@ class ParallelMoveCreator : public HandleAndZoneScope {
       // On architectures where FP register aliasing is non-simple, update the
       // destinations set with the float equivalents of the operand and check
       // that all destinations are unique and do not alias each other.
-      if (!kSimpleFPAliasing && mo.destination().IsFPLocationOperand()) {
+      if (kFPAliasing == COMBINE && mo.destination().IsFPLocationOperand()) {
         std::vector<InstructionOperand> dst_fragments;
         GetCanonicalOperands(dst, &dst_fragments);
         CHECK(!dst_fragments.empty());
@@ -383,7 +389,7 @@ void RunTest(ParallelMove* pm, Zone* zone) {
 
 TEST(Aliasing) {
   // On platforms with simple aliasing, these parallel moves are ill-formed.
-  if (kSimpleFPAliasing) return;
+  if (kFPAliasing != COMBINE) return;
 
   ParallelMoveCreator pmc;
   Zone* zone = pmc.main_zone();
