@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f691d4_7f9c8bbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-01-17T09:25:47Z",
+      "side": 1,
+      "message": "PTAL, especially at those two comments I wrote where I added write barriers.",
+      "revId": "e393f19b2c1c4fd4ff322648dfd4589811e43450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb051777_f4c4f42e",
