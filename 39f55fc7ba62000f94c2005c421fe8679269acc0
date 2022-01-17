@@ -16,6 +16,24 @@
       "message": "I guess this is some kind of artifact. It used to actually randomize the allocation location a long time ago, but currently it doesn\u0027t randomize anything since it either uses the hint, or let\u0027s the OS pick the location, which isn\u0027t random. We also don\u0027t need to randomize at this layer, callers will take care of that if desired. However, this functions does stop hints from working (at least for PAGE_READWRITE mappings), which breaks the tests... So I replaced it with a simple wrapper function around VirtualAlloc instead now.",
       "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad219ea9_884c3d36",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-17T08:58:24Z",
+      "side": 0,
+      "message": "sg, did you do some digging by chance when this was introduced (and why)?",
+      "parentUuid": "462185ea_09b9d625",
+      "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
