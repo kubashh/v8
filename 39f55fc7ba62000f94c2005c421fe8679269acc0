@@ -52,6 +52,24 @@
       "parentUuid": "ad219ea9_884c3d36",
       "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59bd019a_ad9f3cbe",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-18T11:26:09Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "e3a5e585_c1c45005",
+      "revId": "39f55fc7ba62000f94c2005c421fe8679269acc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
