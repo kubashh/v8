@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "5778ef523734ea8fa569567300c9414a2986c8f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e061ffd7_55ce5d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-18T16:00:27Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "5778ef523734ea8fa569567300c9414a2986c8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b22f51ff_8d96c5ac",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-18T16:00:27Z",
+      "side": 1,
+      "message": "super-nit: define some kAttempts (or kRetries), so that we don\u0027t think that the 100 is some magic value",
+      "range": {
+        "startLine": 127,
+        "startChar": 22,
+        "endLine": 127,
+        "endChar": 25
+      },
+      "revId": "5778ef523734ea8fa569567300c9414a2986c8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
