@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2484967b_bc4641c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-18T14:49:42Z",
+      "side": 1,
+      "message": "Thanks Camillo!",
+      "revId": "c9db6d1a14a98273163af1b615cbcec1448e18e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a473f13b_85884b0f",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-01-18T14:06:17Z",
       "side": 1,
       "message": "performance nit (and doesn\u0027t need to be fixed in this CL): We could avoid the derefs here as none of the methods past EnsureCapacity allocate.",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 24
+      },
+      "revId": "c9db6d1a14a98273163af1b615cbcec1448e18e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8ba8c18_e129375f",
+        "filename": "src/objects/hash-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-01-18T14:49:42Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ll do this next CL! 😊",
+      "parentUuid": "a473f13b_85884b0f",
       "range": {
         "startLine": 300,
         "startChar": 0,
