@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "d19f57166c3e7086d0ad26671c995cd739e630b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69401e60_21f2223f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-18T12:33:30Z",
+      "side": 1,
+      "message": "LGTM with a nit.\n\nHave you checked how this impacts compile times? I guess it undoes about half the benefit that https://chromium-review.googlesource.com/c/v8/v8/+/938316/ brought; too bad, but I don\u0027t see a better option.",
+      "revId": "d19f57166c3e7086d0ad26671c995cd739e630b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f25c483_aae004eb",
+        "filename": "test/unittests/objects/value-serializer-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-18T12:33:30Z",
+      "side": 1,
+      "message": "nit: DecodeTestUpToVersion",
+      "range": {
+        "startLine": 1678,
+        "startChar": 5,
+        "endLine": 1678,
+        "endChar": 29
+      },
+      "revId": "d19f57166c3e7086d0ad26671c995cd739e630b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
