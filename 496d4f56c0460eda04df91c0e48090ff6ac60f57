@@ -16,6 +16,108 @@
       "message": "Thanks for the suggestions, PTAL",
       "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74750feb_44dda891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "I like this a lot Joyee! Thanks! Just a few more minor comments that will improve it further I think; probably the last round :)",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8458e97a_2bf55f68",
+        "filename": "src/objects/scope-info.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "Is this a spurious change that\u0027s already unnecessary by now? As far as I can tell it\u0027s unused? If it\u0027s somehow implicitly used by being the first in the list, it\u0027s fine to keep; but perhaps needs a small comment or at least a DCHECK somewhere or so; it\u0027s not entirely obvious from reading this CL.",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ecbaabe_2e6bc2df",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "It reads a little nicer if you\u0027d simply switch the cases:\n\nif (flags().function_kind() \u003d\u003d FunctionKind::kClassMembers...) {\n  return ParseClassForInstanceMember..();\n}\nreturn DoParseFunction(...);",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0dbe6b4_2690a35f",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "I guess you can just move those DCHECKs into ParseClass..?",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb6481bb_07b0d13b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "Currently this sequence is a copy of ParseClassDeclaration, but I guess you could use the slightly cheaper sequence for the Token::CLASS case in ParsePrimaryExpression (class expression instead of class declaration). That entire sequence would be a 1-1 copy, so simply extracting that body of the Token::CLASS case into a helper function returning a ClassLiteral* (ClassLiteral* ParseClassExpression()) and calling it here would make sense.\n\nBasically I think you can hook into that code much earlier than you were doing previously with DoParseClassLiteral because everything is more uniform by now; which is great! Hence I think you can drop the DoParseClassLiteral function and merge it back with ParseClassLiteral.",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16a1c838_ca16018f",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-01-18T07:54:44Z",
+      "side": 1,
+      "message": "Everything down from here presumably will stay here.",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
