@@ -15,7 +15,10 @@
 #include "src/compiler/common-operator.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/node.h"
+#include "src/compiler/opcodes.h"
 #include "src/compiler/schedule.h"
+#include "src/compiler/turboshaft/cfg.h"
+#include "src/compiler/turboshaft/operations.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/frames.h"
 #include "src/execution/isolate-utils-inl.h"
@@ -333,9 +336,9 @@ Instruction::Instruction(InstructionCode opcode)
 }
 
 Instruction::Instruction(InstructionCode opcode, size_t output_count,
-                         InstructionOperand* outputs, size_t input_count,
-                         InstructionOperand* inputs, size_t temp_count,
-                         InstructionOperand* temps)
+                         const InstructionOperand* outputs, size_t input_count,
+                         const InstructionOperand* inputs, size_t temp_count,
+                         const InstructionOperand* temps)
     : opcode_(opcode),
       bit_field_(OutputCountField::encode(output_count) |
                  InputCountField::encode(input_count) |
@@ -644,9 +647,19 @@ static RpoNumber GetRpo(const BasicBlock* block) {
   return RpoNumber::FromInt(block->rpo_number());
 }
 
+static RpoNumber GetRpo(const turboshaft::Block* block) {
+  if (block == nullptr) return RpoNumber::Invalid();
+  return RpoNumber::FromInt(turboshaft::ToUnderlyingType(block->index));
+}
+
 static RpoNumber GetLoopEndRpo(const BasicBlock* block) {
   if (!block->IsLoopHeader()) return RpoNumber::Invalid();
   return RpoNumber::FromInt(block->loop_end()->rpo_number());
+}
+
+static RpoNumber GetLoopEndRpo(const turboshaft::Block& block) {
+  if (!block.IsLoop()) return RpoNumber::Invalid();
+  return GetRpo(block.LoopEnd());
 }
 
 static InstructionBlock* InstructionBlockFor(Zone* zone,
@@ -669,6 +682,25 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
       block->predecessors()[0]->control() == BasicBlock::Control::kSwitch) {
     instr_block->set_switch_target(true);
   }
+  return instr_block;
+}
+
+static InstructionBlock* InstructionBlockFor(Zone* zone,
+                                             const turboshaft::Block& block) {
+  InstructionBlock* instr_block = zone->New<InstructionBlock>(
+      zone, GetRpo(&block), GetRpo(block.LoopHeader()), GetLoopEndRpo(block),
+      GetRpo(block.ImmediateDominator()), block.IsDeferred(),
+      block.IsHandler());
+  // Map successors and precessors
+  instr_block->successors().reserve(block.successors.size());
+  for (const turboshaft::Block* successor : block.successors) {
+    instr_block->successors().push_back(GetRpo(successor));
+  }
+  instr_block->predecessors().reserve(block.predecessors.size());
+  for (const turboshaft::Block* predecessor : block.predecessors) {
+    instr_block->predecessors().push_back(GetRpo(predecessor));
+  }
+  instr_block->set_switch_target(block.IsSwitchCase());
   return instr_block;
 }
 
@@ -724,8 +756,7 @@ std::ostream& operator<<(std::ostream& os,
 
 InstructionBlocks* InstructionSequence::InstructionBlocksFor(
     Zone* zone, const Schedule* schedule) {
-  InstructionBlocks* blocks = zone->NewArray<InstructionBlocks>(1);
-  new (blocks) InstructionBlocks(
+  InstructionBlocks* blocks = zone->New<InstructionBlocks>(
       static_cast<int>(schedule->rpo_order()->size()), nullptr, zone);
   size_t rpo_number = 0;
   for (BasicBlockVector::const_iterator it = schedule->rpo_order()->begin();
@@ -733,6 +764,18 @@ InstructionBlocks* InstructionSequence::InstructionBlocksFor(
     DCHECK(!(*blocks)[rpo_number]);
     DCHECK(GetRpo(*it).ToSize() == rpo_number);
     (*blocks)[rpo_number] = InstructionBlockFor(zone, *it);
+  }
+  return blocks;
+}
+
+InstructionBlocks* InstructionSequence::InstructionBlocksFor(
+    Zone* zone, const turboshaft::Graph& graph) {
+  InstructionBlocks* blocks =
+      zone->New<InstructionBlocks>(graph.block_count(), nullptr, zone);
+  size_t rpo_number = 0;
+  for (const turboshaft::Block* block : graph.blocks()) {
+    DCHECK(GetRpo(block).ToSize() == rpo_number);
+    (*blocks)[rpo_number++] = InstructionBlockFor(zone, *block);
   }
   return blocks;
 }
@@ -1200,6 +1243,44 @@ std::ostream& operator<<(std::ostream& os, const InstructionSequence& code) {
     os << PrintableInstructionBlock{block, &code};
   }
   return os;
+}
+
+UnallocatedOperand ToUnallocatedOperand(LinkageLocation location,
+                                        int virtual_register) {
+  if (location.IsAnyRegister()) {
+    // any machine register.
+    return UnallocatedOperand(UnallocatedOperand::MUST_HAVE_REGISTER,
+                              virtual_register);
+  }
+  if (location.IsCallerFrameSlot()) {
+    // a location on the caller frame.
+    return UnallocatedOperand(UnallocatedOperand::FIXED_SLOT,
+                              location.AsCallerFrameSlot(), virtual_register);
+  }
+  if (location.IsCalleeFrameSlot()) {
+    // a spill location on this (callee) frame.
+    return UnallocatedOperand(UnallocatedOperand::FIXED_SLOT,
+                              location.AsCalleeFrameSlot(), virtual_register);
+  }
+  // a fixed register.
+  if (IsFloatingPoint(location.GetType().representation())) {
+    return UnallocatedOperand(UnallocatedOperand::FIXED_FP_REGISTER,
+                              location.AsRegister(), virtual_register);
+  }
+  return UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER,
+                            location.AsRegister(), virtual_register);
+}
+
+UnallocatedOperand ToDualLocationUnallocatedOperand(
+    LinkageLocation primary_location, LinkageLocation secondary_location,
+    int virtual_register) {
+  // We only support the primary location being a register and the secondary
+  // one a slot.
+  DCHECK(primary_location.IsRegister() &&
+         secondary_location.IsCalleeFrameSlot());
+  int reg_id = primary_location.AsRegister();
+  int slot_id = secondary_location.AsCalleeFrameSlot();
+  return UnallocatedOperand(reg_id, slot_id, virtual_register);
 }
 
 }  // namespace compiler

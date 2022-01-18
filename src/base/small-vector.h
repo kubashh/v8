@@ -11,6 +11,7 @@
 
 #include "src/base/bits.h"
 #include "src/base/macros.h"
+#include "src/base/vector.h"
 
 namespace v8 {
 namespace base {
@@ -45,6 +46,13 @@ class SmallVector {
   }
   SmallVector(std::initializer_list<T> init,
               const Allocator& allocator = Allocator())
+      : allocator_(allocator) {
+    resize_no_init(init.size());
+    memcpy(begin_, init.begin(), sizeof(T) * init.size());
+  }
+  SmallVector(
+      base::Vector<const T> init,
+      const Allocator& allocator = Allocator())  // NOLINT(runtime/explicit)
       : allocator_(allocator) {
     resize_no_init(init.size());
     memcpy(begin_, init.begin(), sizeof(T) * init.size());
@@ -98,6 +106,8 @@ class SmallVector {
   bool empty() const { return end_ == begin_; }
   size_t capacity() const { return end_of_storage_ - begin_; }
 
+  Vector<T> vector() { return Vector<T>(begin(), size()); }
+
   T& back() {
     DCHECK_NE(0, size());
     return end_[-1];
@@ -124,6 +134,13 @@ class SmallVector {
     T* end = end_;
     if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
     new (end) T(std::forward<Args>(args)...);
+    end_ = end + 1;
+  }
+
+  void push_back(T x) {
+    T* end = end_;
+    if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
+    new (end) T(std::move(x));
     end_ = end + 1;
   }
 

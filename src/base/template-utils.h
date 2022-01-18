@@ -89,6 +89,9 @@ constexpr bool all(Args... rest) {
   return fold(std::logical_and<>{}, true, rest...);
 }
 
+template <bool add_const, class T>
+using add_const_if = std::conditional_t<add_const, const T, T>;
+
 template <class... Ts>
 struct make_void {
   using type = void;
