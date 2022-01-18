@@ -62,6 +62,8 @@ class V8_BASE_EXPORT VirtualAddressSpace : public VirtualAddressSpaceBase {
 
   bool FreeGuardRegion(Address address, size_t size) override;
 
+  bool AdviseHugePage(Address address, size_t size) override;
+
   bool CanAllocateSubspaces() override;
 
   std::unique_ptr<v8::VirtualAddressSpace> AllocateSubspace(
@@ -99,6 +101,8 @@ class V8_BASE_EXPORT VirtualAddressSubspace : public VirtualAddressSpaceBase {
   bool AllocateGuardRegion(Address address, size_t size) override;
 
   bool FreeGuardRegion(Address address, size_t size) override;
+
+  bool AdviseHugePage(Address address, size_t size) override;
 
   bool CanAllocateSubspaces() override { return true; }
 
