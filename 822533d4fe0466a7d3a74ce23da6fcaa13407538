@@ -16,6 +16,63 @@
       "message": "ptal",
       "revId": "822533d4fe0466a7d3a74ce23da6fcaa13407538",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2191f170_f539e807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-18T13:08:42Z",
+      "side": 1,
+      "message": "Thanks Jakob!\nLGTM % comments.\n\nAlso: is it possible to add a test-case?",
+      "revId": "822533d4fe0466a7d3a74ce23da6fcaa13407538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25febc8b_d1fc13b8",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-18T13:08:42Z",
+      "side": 1,
+      "message": "I find it a little bit confusing that this always returns false for case-sensitive comparison.\nCan you please add a comment explaining the reason?",
+      "revId": "822533d4fe0466a7d3a74ce23da6fcaa13407538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "895d7108_e23cbf83",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-01-18T13:08:42Z",
+      "side": 1,
+      "message": "return true",
+      "range": {
+        "startLine": 583,
+        "startChar": 14,
+        "endLine": 583,
+        "endChar": 23
+      },
+      "revId": "822533d4fe0466a7d3a74ce23da6fcaa13407538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
