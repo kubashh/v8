@@ -94,6 +94,19 @@ V8_WARN_UNUSED_RESULT Handle<String> UnitToString(Isolate* isolate, Unit unit);
 
 // #sec-temporal-totemporaldisambiguation
 enum class Disambiguation { kCompatible, kEarlier, kLater, kReject };
+enum class Precision { k0, k1, k2, k3, k4, k5, k6, k7, k8, k9, kAuto, kMinute };
+
+// #sec-temporal-toshowcalendaroption
+enum class ShowCalendar { kAuto, kAlways, kNever };
+
+// #sec-temporal-toshowtimezonenameoption
+enum class ShowTimeZone { kAuto, kNever };
+
+// #sec-temporal-toshowoffsetoption
+enum class ShowOffset { kAuto, kNever };
+
+// sec-temporal-totemporalroundingmode
+enum class RoundingMode { kCeil, kFloor, kTrunc, kHalfExpand };
 
 // ISO8601 String Parsing
 
@@ -798,6 +811,12 @@ MaybeHandle<JSTemporalTimeZone> CreateTemporalTimeZoneUTC(
   return CreateTemporalTimeZoneFromIndex(isolate, target, new_target, 0);
 }
 
+MaybeHandle<JSTemporalTimeZone> CreateTemporalTimeZoneUTC(Isolate* isolate) {
+  TEMPORAL_ENTER_FUNC();
+  return CreateTemporalTimeZoneUTC(isolate, CONSTRUCTOR(time_zone),
+                                   CONSTRUCTOR(time_zone));
+}
+
 bool IsUTC(Isolate* isolate, Handle<String> time_zone);
 
 // #sec-temporal-createtemporaltimezone
@@ -979,6 +998,8 @@ DateTimeRecordCommon BalanceISODateTime(Isolate* isolate, int32_t year,
 }  // namespace
 
 namespace temporal {
+
+// #sec-temporal-builtintimezonegetplaindatetimefor
 MaybeHandle<JSTemporalPlainDateTime> BuiltinTimeZoneGetPlainDateTimeFor(
     Isolate* isolate, Handle<JSReceiver> time_zone,
     Handle<JSTemporalInstant> instant, Handle<JSReceiver> calendar,
@@ -1016,6 +1037,7 @@ MaybeHandle<JSTemporalPlainDateTime> BuiltinTimeZoneGetPlainDateTimeFor(
 }  // namespace temporal
 
 namespace {
+
 // #sec-temporal-getpossibleinstantsfor
 MaybeHandle<FixedArray> GetPossibleInstantsFor(Isolate* isolate,
                                                Handle<JSReceiver> time_zone,
@@ -1494,6 +1516,844 @@ MaybeHandle<String> FormatTimeZoneOffsetString(Isolate* isolate,
   // 12. Return the string-concatenation of sign, h, the code unit 0x003A
   // (COLON), m, and post.
   return builder.Finish();
+}
+
+#define ADD_DURATION_PART(builder, name, tag)        \
+  do {                                               \
+    if (dur.name != 0) {                             \
+      int64_t part = std::abs(dur.name);             \
+      builder.AppendInt(static_cast<int32_t>(part)); \
+      builder.AppendCStringLiteral(tag);             \
+    }                                                \
+  } while (false)
+
+// #sec-temporal-temporaldurationtostring
+MaybeHandle<String> TemporalDurationToString(Isolate* isolate,
+                                             const DurationRecord& input,
+                                             Precision precision) {
+  IncrementalStringBuilder builder(isolate);
+  DurationRecord dur = input;
+  // 1. Assert: precision is not "minute".
+  DCHECK(precision != Precision::kMinute);
+  // 2. Set seconds to the mathematical value of seconds.
+  // 3. Set milliseconds to the mathematical value of milliseconds.
+  // 4. Set microseconds to the mathematical value of microseconds.
+  // 5. Set nanoseconds to the mathematical value of nanoseconds.
+  // 6. Let sign be ! DurationSign(years, months, weeks, days, hours, minutes,
+  // seconds, milliseconds, microseconds, nanoseconds).
+  int32_t sign = DurationSign(isolate, input);
+
+  // 7. Set microseconds to microseconds + the integral part of nanoseconds /
+  // 1000.
+  dur.microseconds += static_cast<int>(dur.nanoseconds / 1000);
+  // 8. Set nanoseconds to remainder(nanoseconds, 1000).
+  dur.nanoseconds = remainder(dur.nanoseconds, 1000);
+  // 9. Set milliseconds to milliseconds + the integral part of microseconds /
+  // 1000.
+  dur.milliseconds += static_cast<int>(dur.microseconds / 1000);
+  // 10. Set microseconds to microseconds modulo 1000.
+  dur.microseconds = remainder(dur.microseconds, 1000);
+  // 11. Set seconds to seconds + the integral part of milliseconds / 1000.
+  dur.seconds += static_cast<int>(dur.milliseconds / 1000);
+  // 12. Set milliseconds to milliseconds modulo 1000.
+  dur.milliseconds = remainder(dur.milliseconds, 1000);
+  builder.AppendCString((sign < 0) ? "-P" : "P");
+  // 13. Let datePart be "".
+  // 14. If years is not 0, then
+  // a. Set datePart to the string concatenation of abs(years) formatted as a
+  // decimal number and the code unit 0x0059 (LATIN CAPITAL LETTER Y).
+  ADD_DURATION_PART(builder, years, "Y");
+  // 15. If months is not 0, then
+  // a. Set datePart to the string concatenation of datePart,
+  // abs(months) formatted as a decimal number, and the code unit
+  // 0x004D (LATIN CAPITAL LETTER M).
+  ADD_DURATION_PART(builder, months, "M");
+  // 16. If weeks is not 0, then
+  // a. Set datePart to the string concatenation of datePart,
+  // abs(weeks) formatted as a decimal number, and the code unit
+  // 0x0057 (LATIN CAPITAL LETTER W).
+  ADD_DURATION_PART(builder, weeks, "W");
+  // 17. If days is not 0, then
+  // a. Set datePart to the string concatenation of datePart,
+  // abs(days) formatted as a decimal number, and the code unit 0x0044
+  // (LATIN CAPITAL LETTER D).
+  ADD_DURATION_PART(builder, days, "D");
+  // 18. Let timePart be "".
+  IncrementalStringBuilder time_part(isolate);
+  // 19. If hours is not 0, then
+  // a. Set timePart to the string concatenation of abs(hours) formatted as a
+  // decimal number and the code unit 0x0048 (LATIN CAPITAL LETTER H).
+  ADD_DURATION_PART(time_part, hours, "H");
+  // 20. If minutes is not 0, then
+  // a. Set timePart to the string concatenation of timePart,
+  // abs(minutes) formatted as a decimal number, and the code unit
+  // 0x004D (LATIN CAPITAL LETTER M).
+  ADD_DURATION_PART(time_part, minutes, "M");
+  // 21. If any of seconds, milliseconds, microseconds, and nanoseconds are not
+  // 0; or years, months, weeks, days, hours, and minutes are all 0, then
+  if ((dur.seconds != 0 || dur.milliseconds != 0 || dur.microseconds != 0 ||
+       dur.nanoseconds != 0) ||
+      (dur.years == 0 && dur.months == 0 && dur.weeks == 0 && dur.days == 0 &&
+       dur.hours == 0 && dur.minutes == 0)) {
+    // a. Let fraction be abs(milliseconds) × 10^6 + abs(microseconds) × 10^3 +
+    // abs(nanoseconds).
+    int64_t fraction = std::abs(dur.milliseconds) * 1000000 +
+                       std::abs(dur.microseconds) * 1000 +
+                       std::abs(dur.nanoseconds);
+    // b. Let decimalPart be fraction formatted as a nine-digit decimal number,
+    // padded to the left with zeroes if necessary.
+    // e. Let secondsPart be abs(seconds) formatted as a decimal number.
+    {
+      int64_t seconds = std::abs(dur.seconds);
+      time_part.AppendInt(static_cast<int32_t>(seconds));
+    }
+    // 7. If precision is "auto", then
+    int64_t divisor = 100000000;
+    bool output_period = true;
+    if (precision == Precision::kAuto) {
+      // a. Set fraction to the
+      // longest possible substring of fraction starting at position 0 and not
+      // ending with the code unit 0x0030 (DIGIT ZERO).
+      while (fraction > 0) {
+        if (output_period) {
+          time_part.AppendCStringLiteral(".");
+          output_period = false;
+        }
+        time_part.AppendInt(static_cast<int32_t>(fraction / divisor));
+        fraction %= divisor;
+        divisor /= 10;
+      }
+    } else {
+      // c. Set fraction to the substring of fraction from 0 to precision.
+      int32_t len = 0;
+      int32_t precision_len = static_cast<int32_t>(precision);
+      while (len++ < precision_len) {
+        if (output_period) {
+          time_part.AppendCStringLiteral(".");
+          output_period = false;
+        }
+        time_part.AppendInt(static_cast<int32_t>(fraction / divisor));
+        fraction %= divisor;
+        divisor /= 10;
+      }
+    }
+    // g. Set timePart to the string concatenation of timePart, secondsPart, and
+    // the code unit 0x0053 (LATIN CAPITAL LETTER S).
+    time_part.AppendCStringLiteral("S");
+  }
+  // 22. Let signPart be the code unit 0x002D (HYPHEN-MINUS) if sign < 0, and
+  // otherwise the empty String.
+  // 23. Let result be the string concatenation of signPart, the code unit
+  // 0x0050 (LATIN CAPITAL LETTER P) and datePart.
+  // 24. If timePart is not "", then
+  if (time_part.Length() > 0) {
+    // a. Set result to the string concatenation of result, the code unit 0x0054
+    // (LATIN CAPITAL LETTER T), and timePart.
+    Handle<String> time_part_string;
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, time_part_string, time_part.Finish(),
+                               String);
+    builder.AppendCStringLiteral("T");
+    builder.AppendString(time_part_string);
+  }
+  return builder.Finish();
+}
+
+// #sec-temporal-padisoyear
+void PadISOYear(IncrementalStringBuilder* builder, int32_t y) {
+  // 1. Assert: y is an integer.
+  // 2. If y > 999 and y ≤ 9999, then
+  if (y > 999 && y <= 9999) {
+    // a. Return y formatted as a four-digit decimal number.
+    builder->AppendInt(y);
+    return;
+  }
+  // 3. If y ≥ 0, let yearSign be "+"; otherwise, let yearSign be "-".
+  if (y >= 0) {
+    builder->AppendCStringLiteral("+");
+  } else {
+    builder->AppendCStringLiteral("-");
+  }
+  // 4. Let year be abs(y), formatted as a six-digit decimal number, padded to
+  // the left with zeroes as necessary.
+  y = std::abs(y);
+  if (y < 10) {
+    builder->AppendCStringLiteral("00000");
+  } else if (y < 100) {
+    builder->AppendCStringLiteral("0000");
+  } else if (y < 1000) {
+    builder->AppendCStringLiteral("000");
+  } else if (y < 10000) {
+    builder->AppendCStringLiteral("00");
+  } else if (y < 100000) {
+    builder->AppendCStringLiteral("0");
+  }
+  builder->AppendInt(y);
+}
+
+// #sec-temporal-formatcalendarannotation
+MaybeHandle<String> FormatCalendarAnnotation(Isolate* isolate,
+                                             Handle<String> id,
+                                             ShowCalendar show_calendar) {
+  IncrementalStringBuilder builder(isolate);
+  // 1.Assert: showCalendar is "auto", "always", or "never".
+  // 2. If showCalendar is "never", return the empty String.
+  if (show_calendar == ShowCalendar::kNever) {
+    return builder.Finish();
+  }
+  // 3. If showCalendar is "auto" and id is "iso8601", return the empty String.
+  if (show_calendar == ShowCalendar::kAuto &&
+      String::Equals(isolate, id, isolate->factory()->iso8601_string())) {
+    return builder.Finish();
+  }
+  // 4. Return the string-concatenation of "[u-ca=", id, and "]".
+  builder.AppendCStringLiteral("[u-ca=");
+  builder.AppendString(id);
+  builder.AppendCStringLiteral("]");
+  return builder.Finish();
+}
+
+// #sec-temporal-temporaldatetostring
+MaybeHandle<String> TemporalDateToString(Isolate* isolate, int32_t iso_year,
+                                         int32_t iso_month, int32_t iso_day,
+                                         Handle<String> calendar_id,
+                                         ShowCalendar show_calendar) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: Type(temporalDate) is Object.
+  // 2. Assert: temporalDate has an [[InitializedTemporalDate]] internal slot.
+  // 6. Let calendarID be ? ToString(temporalDate.[[Calendar]]).
+  // 3. Let year be ! PadISOYear(temporalDate.[[ISOYear]]).
+  PadISOYear(&builder, iso_year);
+  // 4. Let month be temporalDate.[[ISOMonth]] formatted as a two-digit
+  // decimal number, padded to the left with a zero if necessary.
+  builder.AppendCString((iso_month < 10) ? "-0" : "-");
+  builder.AppendInt(iso_month);
+  // 5. Let day be temporalDate.[[ISODay]] formatted as a two-digit
+  // decimal number, padded to the left with a zero if necessary.
+  builder.AppendCString((iso_day < 10) ? "-0" : "-");
+  builder.AppendInt(iso_day);
+
+  // 7. Let calendar be ! FormatCalendarAnnotation(calendarID,
+  // showCalendar).
+  Handle<String> calendar_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_string,
+      FormatCalendarAnnotation(isolate, calendar_id, show_calendar), String);
+  // 8. Return the string-concatenation of year, the code unit 0x002D
+  // (HYPHEN-MINUS), month, the code unit 0x002D (HYPHEN-MINUS), day, and
+  // calendar.
+  builder.AppendString(calendar_string);
+  return builder.Finish();
+}
+
+// #sec-temporal-formatsecondsstringpart
+void FormatSecondsStringPart(IncrementalStringBuilder* builder, int32_t second,
+                             int32_t millisecond, int32_t microsecond,
+                             int32_t nanosecond, Precision precision) {
+  // 1. Assert: second, millisecond, microsecond and nanosecond are integers.
+  // 2. If precision is "minute", return "".
+  if (precision == Precision::kMinute) {
+    return;
+  }
+  // 3. Let secondsString be the string-concatenation of the code unit 0x003A
+  // (COLON) and second formatted as a two-digit decimal number, padded to the
+  // left with zeroes if necessary.
+  builder->AppendCString((second < 10) ? ":0" : ":");
+  builder->AppendInt(second);
+  // 4. Let fraction be millisecond × 10^6 + microsecond × 10^3 + nanosecond.
+  int32_t fraction = millisecond * 1000000 + microsecond * 1000 + nanosecond;
+  // 5. If fraction is 0, return secondsString.
+  if (fraction == 0) return;
+  // 6. Set fraction to fraction formatted as a nine-digit decimal number,
+  // padded to the left with zeroes if necessary.
+  builder->AppendCStringLiteral(".");
+  // 7. If precision is "auto", then
+  int32_t divisor = 100000000;
+  if (precision == Precision::kAuto) {
+    // a. Set fraction to the
+    // longest possible substring of fraction starting at position 0 and not
+    // ending with the code unit 0x0030 (DIGIT ZERO).
+    do {
+      builder->AppendInt(fraction / divisor);
+      fraction %= divisor;
+      divisor /= 10;
+    } while (fraction > 0);
+  } else {
+    // c. Set fraction to the substring of fraction from 0 to precision.
+    int32_t len = 0;
+    int32_t precision_len = static_cast<int32_t>(precision);
+    while (len++ < precision_len) {
+      builder->AppendInt(fraction / divisor);
+      fraction %= divisor;
+      divisor /= 10;
+    }
+  }
+  // 7. Return the string-concatenation of secondsString, the code unit 0x002E
+  // (FULL STOP), and fraction.
+}
+
+// #sec-temporal-temporaltimetostring
+MaybeHandle<String> TemporalTimeToString(Isolate* isolate, int32_t hour,
+                                         int32_t minute, int32_t second,
+                                         int32_t millisecond,
+                                         int32_t microsecond,
+                                         int32_t nanosecond,
+                                         Precision precision) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: hour, minute, second, millisecond, microsecond and nanosecond
+  // are integers.
+  // 2. Let hour be hour formatted as a two-digit decimal number, padded to the
+  // left with a zero if necessary.
+  if (hour < 10) {
+    builder.AppendCStringLiteral("0");
+  }
+  builder.AppendInt(hour);
+  // 3. Let minute be minute formatted as a two-digit decimal number, padded to
+  // the left with a zero if necessary.
+  builder.AppendCString((minute < 10) ? ":0" : ":");
+  builder.AppendInt(minute);
+  // 4. Let seconds be ! FormatSecondsStringPart(second, millisecond,
+  // microsecond, nanosecond, precision).
+  // 5. Return the string-concatenation of hour, the code unit 0x003A (COLON),
+  // minute, and seconds.
+  FormatSecondsStringPart(&builder, second, millisecond, microsecond,
+                          nanosecond, precision);
+  return builder.Finish();
+}
+
+// #sec-temporal-temporaldatetimetostring
+MaybeHandle<String> TemporalDateTimeToString(
+    Isolate* isolate, int32_t iso_year, int32_t iso_month, int32_t iso_day,
+    int32_t hour, int32_t minute, int32_t second, int32_t millisecond,
+    int32_t microsecond, int32_t nanosecond, Handle<String> calendar_id,
+    Precision precision, ShowCalendar show_calendar) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: isoYear, isoMonth, isoDay, hour, minute, second, millisecond,
+  // microsecond, and nanosecond are integers.
+  // 2. Let year be ! PadISOYear(isoYear).
+  PadISOYear(&builder, iso_year);
+  // 3. Let month be isoMonth formatted as a two-digit decimal number,
+  // padded to the left with a zero if necessary.
+  builder.AppendCString((iso_month < 10) ? "-0" : "-");
+  builder.AppendInt(iso_month);
+
+  // 4. Let day be isoDay formatted as a two-digit decimal number, padded
+  // to the left with a zero if necessary.
+  builder.AppendCString((iso_day < 10) ? "-0" : "-");
+  builder.AppendInt(iso_day);
+
+  // 5. Let hour be hour formatted as a two-digit decimal number, padded
+  // to the left with a zero if necessary.
+  builder.AppendCString((hour < 10) ? "T0" : "T");
+  builder.AppendInt(hour);
+  // 6. Let minute be minute formatted as a two-digit decimal number,
+  // padded to the left with a zero if necessary.
+  builder.AppendCString((minute < 10) ? ":0" : ":");
+  builder.AppendInt(minute);
+  // 7. Let seconds be ! FormatSecondsStringPart(second, millisecond,
+  // microsecond, nanosecond, precision).
+  FormatSecondsStringPart(&builder, second, millisecond, microsecond,
+                          nanosecond, precision);
+  // 9. Let calendarString be ! FormatCalendarAnnotation(calendarID,
+  // showCalendar).
+  Handle<String> calendar_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_string,
+      FormatCalendarAnnotation(isolate, calendar_id, show_calendar), String);
+
+  // 10. Return the string-concatenation of year, the code unit 0x002D
+  // (HYPHEN-MINUS), month, the code unit 0x002D (HYPHEN-MINUS), day, 0x0054
+  // (LATIN CAPITAL LETTER T), hour, the code unit 0x003A (COLON), minute,
+  builder.AppendString(calendar_string);
+  return builder.Finish();
+}
+
+// #sec-temporal-temporalyearmonthtostring
+MaybeHandle<String> TemporalYearMonthToString(
+    Isolate* isolate, int32_t iso_year, int32_t iso_month, int32_t iso_day,
+    Handle<String> calendar_id, ShowCalendar show_calendar) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: Type(yearMonth) is Object.
+  // 2. Assert: yearMonth has an [[InitializedTemporalYearMonth]] internal slot.
+  // 3. Let year be ! PadISOYear(yearMonth.[[ISOYear]]).
+  PadISOYear(&builder, iso_year);
+  // 4. Let month be yearMonth.[[ISOMonth]] formatted as a two-digit
+  // decimal number, padded to the left with a zero if necessary.
+  // 5. Let result be the string-concatenation of year, the code unit
+  // 0x002D (HYPHEN-MINUS), and month.
+  builder.AppendCString((iso_month < 10) ? "-0" : "-");
+  builder.AppendInt(iso_month);
+  // 6. Let calendarID be ? ToString(yearMonth.[[Calendar]]).
+  // 7. If calendarID is not "iso8601", then
+  if (!String::Equals(isolate, calendar_id,
+                      isolate->factory()->iso8601_string())) {
+    // a. Let day be yearMonth.[[ISODay]] formatted as a two-digit decimal
+    // number, padded to the left with a zero if necessary. b. Set result to the
+    // string-concatenation of result, the code unit 0x002D (HYPHEN-MINUS), and
+    // day.
+    builder.AppendCString((iso_day < 10) ? "-0" : "-");
+    builder.AppendInt(iso_day);
+  }
+  // 8. Let calendarString be ! FormatCalendarAnnotation(calendarID,
+  // showCalendar).
+  Handle<String> calendar_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_string,
+      FormatCalendarAnnotation(isolate, calendar_id, show_calendar), String);
+
+  // 9. If calendarString is not the empty String, then
+  // a. Set result to the string-concatenation of result and calendarString.
+  builder.AppendString(calendar_string);
+
+  // 10. Return result.
+  return builder.Finish();
+}
+
+// #sec-temporal-temporalmonthdaytostring
+MaybeHandle<String> TemporalMonthDayToString(Isolate* isolate, int32_t iso_year,
+                                             int32_t iso_month, int32_t iso_day,
+                                             Handle<String> calendar_id,
+                                             ShowCalendar show_calendar) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: Type(monthDay) is Object.
+  // 2. Assert: monthDay has an [[InitializedTemporalMonthDay]] internal slot.
+  // 3. Let month be monthDay.[[ISOMonth]] formatted as a two-digit decimal
+  // number, padded to the left with a zero if necessary.
+  // 4. Let day be monthDay.[[ISODay]] formatted as a two-digit decimal number,
+  // padded to the left with a zero if necessary.
+  // 5. Let result be the string-concatenation of month, the code unit 0x002D
+  // (HYPHEN-MINUS), and day.
+  // 6. Let calendarID be ? ToString(monthDay.[[Calendar]]).
+  // 7. If calendarID is not "iso8601", then
+  if (!String::Equals(isolate, calendar_id,
+                      isolate->factory()->iso8601_string())) {
+    // a. Let year be ! PadISOYear(monthDay.[[ISOYear]]).
+    PadISOYear(&builder, iso_year);
+    // b. Set result to the string-concatenation of year, the code unit
+    // 0x002D (HYPHEN-MINUS), and result.
+    builder.AppendCStringLiteral("-");
+  }
+  if (iso_month < 10) {
+    builder.AppendCStringLiteral("0");
+  }
+  builder.AppendInt(iso_month);
+  builder.AppendCString((iso_day < 10) ? "-0" : "-");
+  builder.AppendInt(iso_day);
+  // 8. Let calendarString be ! FormatCalendarAnnotation(calendarID,
+  // showCalendar).
+  Handle<String> calendar_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_string,
+      FormatCalendarAnnotation(isolate, calendar_id, show_calendar), String);
+  // 9. If calendarString is not the empty String, then
+  // a. Set result to the string-concatenation of result and calendarString.
+  builder.AppendString(calendar_string);
+  // 10. Return result.
+  return builder.Finish();
+}
+
+// #sec-temporal-roundnumbertoincrement
+double RoundNumberToIncrement(Isolate* isolate, double x, double increment,
+                              RoundingMode rounding_mode);
+
+// #sec-temporal-formatisotimezoneoffsetstring
+V8_WARN_UNUSED_RESULT MaybeHandle<String> FormatISOTimeZoneOffsetString(
+    Isolate* isolate, int64_t offset_nanoseconds) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: offsetNanoseconds is an integer.
+  // 2. Set offsetNanoseconds to ! RoundNumberToIncrement(offsetNanoseconds, 60
+  // × 10^9, "halfExpand").
+  offset_nanoseconds = RoundNumberToIncrement(isolate, offset_nanoseconds, 6e10,
+                                              RoundingMode::kHalfExpand);
+  // 3. If offsetNanoseconds ≥ 0, let sign be "+"; otherwise, let sign be "-".
+  builder.AppendCString((offset_nanoseconds >= 0) ? "+" : "-");
+  // 4. Set offsetNanoseconds to abs(offsetNanoseconds).
+  offset_nanoseconds = abs(offset_nanoseconds);
+  // 5. Let minutes be offsetNanoseconds / (60 × 10^9) modulo 60.
+  int64_t minutes = (offset_nanoseconds / 60000000000) % 60;
+  // 6. Let hours be floor(offsetNanoseconds / (3600 × 10^9)).
+  int64_t hours = offset_nanoseconds / 3600000000000;
+  // 7. Let h be hours, formatted as a two-digit decimal number, padded to the
+  // left with a zero if necessary.
+  if (hours < 10) {
+    builder.AppendCStringLiteral("0");
+  }
+  builder.AppendInt(static_cast<int32_t>(hours));
+  // 8. Let m be minutes, formatted as a two-digit decimal number, padded to the
+  // left with a zero if necessary.
+  builder.AppendCString((minutes < 10) ? ":0" : ":");
+  builder.AppendInt(static_cast<int>(minutes));
+  // 9. Return the string-concatenation of sign, h, the code unit 0x003A
+  // (COLON), and m.
+  return builder.Finish();
+}
+
+// #sec-temporal-temporalinstanttostring
+MaybeHandle<String> TemporalInstantToString(Isolate* isolate,
+                                            Handle<JSTemporalInstant> instant,
+                                            Handle<Object> time_zone_obj,
+                                            Precision precision,
+                                            const char* method) {
+  IncrementalStringBuilder builder(isolate);
+  // 1. Assert: Type(instant) is Object.
+  // 2. Assert: instant has an [[InitializedTemporalInstant]] internal slot.
+  // 3. Let outputTimeZone be timeZone.
+  Handle<JSReceiver> output_time_zone;
+
+  // 4. If outputTimeZone is undefined, then
+  if (time_zone_obj->IsUndefined()) {
+    // a. Set outputTimeZone to ? CreateTemporalTimeZone("UTC").
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, output_time_zone,
+                               CreateTemporalTimeZoneUTC(isolate), String);
+  } else {
+    DCHECK(time_zone_obj->IsJSReceiver());
+    output_time_zone = Handle<JSReceiver>::cast(time_zone_obj);
+  }
+
+  // 5. Let isoCalendar be ? GetISO8601Calendar().
+  Handle<JSTemporalCalendar> iso_calendar;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, iso_calendar,
+                             temporal::GetISO8601Calendar(isolate), String);
+  // 6. Let dateTime be ?
+  // BuiltinTimeZoneGetPlainDateTimeFor(outputTimeZone, instant,
+  // isoCalendar).
+  Handle<JSTemporalPlainDateTime> date_time;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, date_time,
+      temporal::BuiltinTimeZoneGetPlainDateTimeFor(
+          isolate, output_time_zone, instant, iso_calendar, method),
+      String);
+  // 7. Let dateTimeString be ? TemporalDateTimeToString(dateTime.[[ISOYear]],
+  // dateTime.[[ISOMonth]], dateTime.[[ISODay]], dateTime.[[ISOHour]],
+  // dateTime.[[ISOMinute]], dateTime.[[ISOSecond]],
+  // dateTime.[[ISOMillisecond]], dateTime.[[ISOMicrosecond]],
+  // dateTime.[[ISONanosecond]], undefined, precision, "never").
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, calendar_id,
+                             Object::ToString(isolate, iso_calendar), String);
+
+  Handle<String> date_time_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, date_time_string,
+      TemporalDateTimeToString(
+          isolate, date_time->iso_year(), date_time->iso_month(),
+          date_time->iso_day(), date_time->iso_hour(), date_time->iso_minute(),
+          date_time->iso_second(), date_time->iso_millisecond(),
+          date_time->iso_microsecond(), date_time->iso_nanosecond(),
+          calendar_id,  // Unimportant due to ShowCalendar::kNever
+          precision, ShowCalendar::kNever),
+      String);
+  builder.AppendString(date_time_string);
+
+  // 8. If timeZone is undefined, then
+  if (time_zone_obj->IsUndefined()) {
+    // a. Let timeZoneString be "Z".
+    builder.AppendCStringLiteral("Z");
+  } else {
+    // 9. Else,
+    DCHECK(time_zone_obj->IsJSReceiver());
+    Handle<JSReceiver> time_zone = Handle<JSReceiver>::cast(time_zone_obj);
+
+    // a. Let offsetNs be ? GetOffsetNanosecondsFor(timeZone, instant).
+    Maybe<int64_t> maybe_offset_ns =
+        GetOffsetNanosecondsFor(isolate, time_zone, instant, method);
+    MAYBE_RETURN(maybe_offset_ns, Handle<String>());
+    int64_t offset_ns = maybe_offset_ns.FromJust();
+    // b. Let timeZoneString be ! FormatISOTimeZoneOffsetString(offsetNs).
+    Handle<String> time_zone_string;
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, time_zone_string,
+        FormatISOTimeZoneOffsetString(isolate, offset_ns), String);
+    builder.AppendString(time_zone_string);
+  }
+
+  // 10. Return the string-concatenation of dateTimeString and timeZoneString.
+  return builder.Finish();
+}
+
+// #sec-temporal-roundnumbertoincrement
+double RoundNumberToIncrement(Isolate* isolate, double x, double increment,
+                              RoundingMode rounding_mode) {
+  TEMPORAL_ENTER_FUNC();
+
+  // 3. Let quotient be x / increment.
+  double rounded;
+  switch (rounding_mode) {
+    // 4. If roundingMode is "ceil", then
+    case RoundingMode::kCeil:
+      // a. Let rounded be −floor(−quotient).
+      rounded = -std::floor(-x / increment);
+      break;
+    // 5. Else if roundingMode is "floor", then
+    case RoundingMode::kFloor:
+      // a. Let rounded be floor(quotient).
+      rounded = std::floor(x / increment);
+      break;
+    // 6. Else if roundingMode is "trunc", then
+    case RoundingMode::kTrunc:
+      // a. Let rounded be the integral part of quotient, removing any
+      // fractional digits.
+      rounded =
+          (x > 0) ? std::floor(x / increment) : -std::floor(-x / increment);
+      break;
+      // 7. Else,
+    default:
+      // a. Let rounded be ! RoundHalfAwayFromZero(quotient).
+      rounded = std::round(x / increment);
+      break;
+  }
+  // 8. Return rounded × increment.
+  return rounded * increment;
+}
+
+// #sec-temporal-roundhalfawayfromzero
+MaybeHandle<BigInt> RoundHalfAwayFromZero(Isolate* isolate, Handle<BigInt> x,
+                                          Handle<BigInt> increment) {
+  DCHECK(!increment->IsNegative());
+  bool negative = x->IsNegative();
+  if (negative) {
+    x = BigInt::UnaryMinus(isolate, x);
+  }
+  Handle<BigInt> rounded;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, rounded,
+                             BigInt::Divide(isolate, x, increment), BigInt);
+  Handle<BigInt> remainder;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, remainder,
+                             BigInt::Remainder(isolate, x, increment), BigInt);
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, remainder,
+      BigInt::Multiply(isolate, remainder, BigInt::FromInt64(isolate, 2)),
+      BigInt);
+  switch (BigInt::CompareToBigInt(remainder, increment)) {
+    case ComparisonResult::kLessThan:
+      break;
+    case ComparisonResult::kEqual:
+    case ComparisonResult::kGreaterThan:
+    default:
+      ASSIGN_RETURN_ON_EXCEPTION(isolate, rounded,
+                                 BigInt::Increment(isolate, rounded), BigInt);
+      break;
+  }
+  if (negative) {
+    rounded = BigInt::UnaryMinus(isolate, rounded);
+  }
+  return rounded;
+}
+
+// #sec-temporal-roundnumbertoincrement
+MaybeHandle<BigInt> RoundNumberToIncrement(Isolate* isolate, Handle<BigInt> x,
+                                           int64_t increment,
+                                           RoundingMode rounding_mode) {
+  TEMPORAL_ENTER_FUNC();
+  DCHECK_GE(increment, 0);
+  Handle<BigInt> increment_n = BigInt::FromInt64(isolate, increment);
+  Handle<BigInt> rounded;
+  // 3. Let quotient be x / increment.
+  switch (rounding_mode) {
+    // 4. If roundingMode is "ceil", then
+    case RoundingMode::kCeil:
+      // a. Let rounded be −floor(−quotient).
+      ASSIGN_RETURN_ON_EXCEPTION(
+          isolate, rounded,
+          BigInt::Divide(isolate, BigInt::UnaryMinus(isolate, x), increment_n),
+          BigInt);
+      rounded = BigInt::UnaryMinus(isolate, rounded);
+      break;
+    // 5. Else if roundingMode is "floor", then
+    case RoundingMode::kFloor:
+      // a. Let rounded be floor(quotient).
+      ASSIGN_RETURN_ON_EXCEPTION(
+          isolate, rounded, BigInt::Divide(isolate, x, increment_n), BigInt);
+      break;
+    // 6. Else if roundingMode is "trunc", then
+    case RoundingMode::kTrunc:
+      // a. Let rounded be the integral part of quotient, removing any
+      // fractional digits.
+      if (x->IsNegative()) {
+        ASSIGN_RETURN_ON_EXCEPTION(
+            isolate, rounded,
+            BigInt::Divide(isolate, BigInt::UnaryMinus(isolate, x),
+                           increment_n),
+            BigInt);
+        rounded = BigInt::UnaryMinus(isolate, rounded);
+      } else {
+        ASSIGN_RETURN_ON_EXCEPTION(
+            isolate, rounded, BigInt::Divide(isolate, x, increment_n), BigInt);
+      }
+      break;
+      // 7. Else,
+    default:
+      // a. Let rounded be ! RoundHalfAwayFromZero(quotient).
+      ASSIGN_RETURN_ON_EXCEPTION(isolate, rounded,
+                                 RoundHalfAwayFromZero(isolate, x, increment_n),
+                                 BigInt);
+      break;
+  }
+  // 8. Return rounded × increment.
+  return BigInt::Multiply(isolate, rounded, increment_n);
+}
+
+// #sec-temporal-roundtemporalinstant
+MaybeHandle<BigInt> RoundTemporalInstant(Isolate* isolate, Handle<BigInt> ns,
+                                         double increment, Unit unit,
+                                         RoundingMode rounding_mode) {
+  TEMPORAL_ENTER_FUNC();
+
+  double factor = increment;
+  switch (unit) {
+    case Unit::kHour:
+      factor *= 3.6e12;
+      break;
+    case Unit::kMinute:
+      factor *= 6e10;
+      break;
+    case Unit::kSecond:
+      factor *= 1e9;
+      break;
+    case Unit::kMillisecond:
+      factor *= 1e6;
+      break;
+    case Unit::kMicrosecond:
+      factor *= 1e3;
+      break;
+    case Unit::kNanosecond:
+      break;
+    default:
+      UNREACHABLE();
+  }
+  return RoundNumberToIncrement(isolate, ns, factor, rounding_mode);
+}
+
+// #sec-temporal-temporalzoneddatetimetostring
+MaybeHandle<String> TemporalZonedDateTimeToString(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time,
+    Precision precision, ShowCalendar show_calendar,
+    ShowTimeZone show_time_zone, ShowOffset show_offset, double increment,
+    Unit unit, RoundingMode rounding_mode, const char* method) {
+  // 5. Let ns be ? RoundTemporalInstant(zonedDateTime.[[Nanoseconds]],
+  // increment, unit, roundingMode).
+  Handle<BigInt> ns;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, ns,
+      RoundTemporalInstant(
+          isolate, Handle<BigInt>(zoned_date_time->nanoseconds(), isolate),
+          increment, unit, rounding_mode),
+      String);
+
+  // 6. Let timeZone be zonedDateTime.[[TimeZone]].
+  Handle<JSReceiver> time_zone = handle(zoned_date_time->time_zone(), isolate);
+  // 7. Let instant be ! CreateTemporalInstant(ns).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant, temporal::CreateTemporalInstant(isolate, ns), String);
+
+  // 8. Let isoCalendar be ! GetISO8601Calendar().
+  Handle<JSTemporalCalendar> iso_calendar;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, iso_calendar,
+                             temporal::GetISO8601Calendar(isolate), String);
+
+  // 9. Let temporalDateTime be ?
+  // BuiltinTimeZoneGetPlainDateTimeFor(timeZone, instant,
+  // isoCalendar).
+  Handle<JSTemporalPlainDateTime> temporal_date_time;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, temporal_date_time,
+      temporal::BuiltinTimeZoneGetPlainDateTimeFor(isolate, time_zone, instant,
+                                                   iso_calendar, method),
+      String);
+  // 10. Let dateTimeString be ?
+  // TemporalDateTimeToString(temporalDateTime.[[ISOYear]],
+  // temporalDateTime.[[ISOMonth]], temporalDateTime.[[ISODay]],
+  // temporalDateTime.[[ISOHour]], temporalDateTime.[[ISOMinute]],
+  // temporalDateTime.[[ISOSecond]], temporalDateTime.[[ISOMillisecond]],
+  // temporalDateTime.[[ISOMicrosecond]], temporalDateTime.[[ISONanosecond]],
+  // isoCalendar, precision, "never").
+  Handle<String> calendar_str;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, calendar_str,
+                             Object::ToString(isolate, iso_calendar), String);
+  Handle<String> date_time_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, date_time_string,
+      TemporalDateTimeToString(
+          isolate, temporal_date_time->iso_year(),
+          temporal_date_time->iso_month(), temporal_date_time->iso_day(),
+          temporal_date_time->iso_hour(), temporal_date_time->iso_minute(),
+          temporal_date_time->iso_second(),
+          temporal_date_time->iso_millisecond(),
+          temporal_date_time->iso_microsecond(),
+          temporal_date_time->iso_nanosecond(), calendar_str, precision,
+          ShowCalendar::kNever),
+      String);
+
+  IncrementalStringBuilder builder(isolate);
+  builder.AppendString(date_time_string);
+
+  // 11. If showOffset is "never", then
+  if (show_offset == ShowOffset::kNever) {
+    // a. Let offsetString be the empty String.
+    // 12. Else,
+  } else {
+    // a. Let offsetNs be ? GetOffsetNanosecondsFor(timeZone, instant).
+    Maybe<int64_t> maybe_offset_ns =
+        GetOffsetNanosecondsFor(isolate, time_zone, instant, method);
+    MAYBE_RETURN(maybe_offset_ns, Handle<String>());
+    int64_t offset_ns = maybe_offset_ns.FromJust();
+    // b. Let offsetString be ! FormatISOTimeZoneOffsetString(offsetNs).
+    Handle<String> time_zone_string;
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, time_zone_string,
+        FormatISOTimeZoneOffsetString(isolate, offset_ns), String);
+    builder.AppendString(time_zone_string);
+  }
+
+  // 13. If showTimeZone is "never", then
+  if (show_time_zone == ShowTimeZone::kNever) {
+    // a. Let timeZoneString be the empty String.
+    // 14. Else,
+  } else {
+    // a. Let timeZoneID be ? ToString(timeZone).
+    Handle<String> time_zone_id;
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, time_zone_id,
+                               Object::ToString(isolate, time_zone), String);
+    // b. Let timeZoneString be the string-concatenation of the code unit 0x005B
+    // (LEFT SQUARE BRACKET), timeZoneID, and the code unit 0x005D (RIGHT SQUARE
+    // BRACKET).
+    builder.AppendCStringLiteral("[");
+    builder.AppendString(time_zone_id);
+    builder.AppendCStringLiteral("]");
+  }
+  // 15. Let calendarID be ? ToString(zonedDateTime.[[Calendar]]).
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(
+          isolate, Handle<JSReceiver>(zoned_date_time->calendar(), isolate)),
+      String);
+
+  // 16. Let calendarString be ! FormatCalendarAnnotation(calendarID,
+  // showCalendar).
+  Handle<String> calendar_string;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_string,
+      FormatCalendarAnnotation(isolate, calendar_id, show_calendar), String);
+  builder.AppendString(calendar_string);
+  // 17. Return the string-concatenation of dateTimeString, offsetString,
+  // timeZoneString, and calendarString.
+  return builder.Finish();
+}
+
+// #sec-temporal-temporalzoneddatetimetostring
+MaybeHandle<String> TemporalZonedDateTimeToString(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time,
+    Precision precision, ShowCalendar show_calendar,
+    ShowTimeZone show_time_zone, ShowOffset show_offset, const char* method) {
+  // 1. Assert: Type(zonedDateTime) is Object and zonedDateTime has an
+  // [[InitializedTemporalZonedDateTime]] internal slot.
+  // 2. If increment is not present, set it to 1.
+  // 3. If unit is not present, set it to "nanosecond".
+  // 4. If roundingMode is not present, set it to "trunc".
+  return TemporalZonedDateTimeToString(
+      isolate, zoned_date_time, precision, show_calendar, show_time_zone,
+      show_offset, 1, Unit::kNanosecond, RoundingMode::kTrunc, method);
 }
 
 // #sec-temporal-builtintimezonegetoffsetstringfor
@@ -3460,6 +4320,30 @@ MaybeHandle<Oddball> JSTemporalDuration::Blank(
                    : isolate->factory()->false_value();
 }
 
+// #sec-temporal.duration.prototype.tojson
+MaybeHandle<String> JSTemporalDuration::ToJSON(
+    Isolate* isolate, Handle<JSTemporalDuration> duration) {
+  // 1. Let duration be the this value.
+  // 2. Perform ? RequireInternalSlot(duration,
+  // [[InitializedTemporalDuration]]).
+  // 3. Return ! TemporalDurationToString(duration.[[Years]],
+  // duration.[[Months]], duration.[[Weeks]], duration.[[Days]],
+  // duration.[[Hours]], duration.[[Minutes]], duration.[[Seconds]],
+  // duration.[[Milliseconds]], duration.[[Microseconds]],
+  // duration.[[Nanoseconds]], "auto").
+
+  return TemporalDurationToString(
+      isolate,
+      {NumberToInt64(duration->years()), NumberToInt64(duration->months()),
+       NumberToInt64(duration->weeks()), NumberToInt64(duration->days()),
+       NumberToInt64(duration->hours()), NumberToInt64(duration->minutes()),
+       NumberToInt64(duration->seconds()),
+       NumberToInt64(duration->milliseconds()),
+       NumberToInt64(duration->microseconds()),
+       NumberToInt64(duration->nanoseconds())},
+      Precision::kAuto);
+}
+
 // #sec-temporal.calendar
 MaybeHandle<JSTemporalCalendar> JSTemporalCalendar::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
@@ -3663,6 +4547,21 @@ MaybeHandle<JSReceiver> JSTemporalPlainDate::GetISOFields(
   return fields;
 }
 
+// #sec-temporal.plaindate.prototype.tojson
+MaybeHandle<String> JSTemporalPlainDate::ToJSON(
+    Isolate* isolate, Handle<JSTemporalPlainDate> temporal_date) {
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(temporal_date->calendar(), isolate)),
+      String);
+  // #sec-temporal.plaindate.prototype.tolocalestring
+  return TemporalDateToString(
+      isolate, temporal_date->iso_year(), temporal_date->iso_month(),
+      temporal_date->iso_day(), calendar_id, ShowCalendar::kAuto);
+}
+
 // #sec-temporal-createtemporaldatetime
 MaybeHandle<JSTemporalPlainDateTime> JSTemporalPlainDateTime::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
@@ -3753,6 +4652,24 @@ MaybeHandle<JSReceiver> JSTemporalPlainDateTime::GetISOFields(
   return fields;
 }
 
+// #sec-temporal.plaindatetime.prototype.tojson
+MaybeHandle<String> JSTemporalPlainDateTime::ToJSON(
+    Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time) {
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(date_time->calendar(), isolate)),
+      String);
+
+  return TemporalDateTimeToString(
+      isolate, date_time->iso_year(), date_time->iso_month(),
+      date_time->iso_day(), date_time->iso_hour(), date_time->iso_minute(),
+      date_time->iso_second(), date_time->iso_millisecond(),
+      date_time->iso_microsecond(), date_time->iso_nanosecond(), calendar_id,
+      Precision::kAuto, ShowCalendar::kAuto);
+}
+
 // #sec-temporal.plainmonthday
 MaybeHandle<JSTemporalPlainMonthDay> JSTemporalPlainMonthDay::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
@@ -3822,6 +4739,20 @@ MaybeHandle<JSReceiver> JSTemporalPlainMonthDay::GetISOFields(
   DEFINE_INT_FIELD(fields, isoYear, iso_year, month_day)
   // 8. Return fields.
   return fields;
+}
+
+// #sec-temporal.plainmonthday.prototype.tojson
+MaybeHandle<String> JSTemporalPlainMonthDay::ToJSON(
+    Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day) {
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(month_day->calendar(), isolate)),
+      String);
+  return TemporalMonthDayToString(isolate, month_day->iso_year(),
+                                  month_day->iso_month(), month_day->iso_day(),
+                                  calendar_id, ShowCalendar::kAuto);
 }
 
 MaybeHandle<JSTemporalPlainYearMonth> JSTemporalPlainYearMonth::Constructor(
@@ -3896,6 +4827,20 @@ MaybeHandle<JSReceiver> JSTemporalPlainYearMonth::GetISOFields(
   return fields;
 }
 
+// #sec-temporal.plainyearmonth.prototype.tojson
+MaybeHandle<String> JSTemporalPlainYearMonth::ToJSON(
+    Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month) {
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(year_month->calendar(), isolate)),
+      String);
+  return TemporalYearMonthToString(
+      isolate, year_month->iso_year(), year_month->iso_month(),
+      year_month->iso_day(), calendar_id, ShowCalendar::kAuto);
+}
+
 // #sec-temporal-plaintime-constructor
 MaybeHandle<JSTemporalPlainTime> JSTemporalPlainTime::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
@@ -3968,6 +4913,16 @@ MaybeHandle<JSReceiver> JSTemporalPlainTime::GetISOFields(
   DEFINE_INT_FIELD(fields, isoSecond, iso_second, temporal_time)
   // 11. Return fields.
   return fields;
+}
+
+// #sec-temporal.plaintime.prototype.tojson
+MaybeHandle<String> JSTemporalPlainTime::ToJSON(
+    Isolate* isolate, Handle<JSTemporalPlainTime> temporal_time) {
+  return TemporalTimeToString(
+      isolate, temporal_time->iso_hour(), temporal_time->iso_minute(),
+      temporal_time->iso_second(), temporal_time->iso_millisecond(),
+      temporal_time->iso_microsecond(), temporal_time->iso_nanosecond(),
+      Precision::kAuto);
 }
 
 // #sec-temporal.zoneddatetime
@@ -4098,6 +5053,21 @@ MaybeHandle<JSReceiver> JSTemporalZonedDateTime::GetISOFields(
   return fields;
 }
 
+// #sec-temporal.zoneddatetime.prototype.tojson
+MaybeHandle<String> JSTemporalZonedDateTime::ToJSON(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  TEMPORAL_ENTER_FUNC();
+  const char* method = "Temporal.ZonedDateTime.prototype.toJSON";
+  // 1. Let zonedDateTime be the this value.
+  // 2. Perform ? RequireInternalSlot(zonedDateTime,
+  // [[InitializedTemporalZonedDateTime]]).
+  // 3. Return ? TemporalZonedDateTimeToString(zonedDateTime, "auto", "auto",
+  // "auto", "auto").
+  return TemporalZonedDateTimeToString(
+      isolate, zoned_date_time, Precision::kAuto, ShowCalendar::kAuto,
+      ShowTimeZone::kAuto, ShowOffset::kAuto, method);
+}
+
 // #sec-temporal.instant
 MaybeHandle<JSTemporalInstant> JSTemporalInstant::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
@@ -4127,6 +5097,19 @@ MaybeHandle<JSTemporalInstant> JSTemporalInstant::Constructor(
   // 4. Return ? CreateTemporalInstant(epochNanoseconds, NewTarget).
   return temporal::CreateTemporalInstant(isolate, target, new_target,
                                          epoch_nanoseconds);
+}
+
+// #sec-temporal.instant.prototype.tojson
+MaybeHandle<String> JSTemporalInstant::ToJSON(
+    Isolate* isolate, Handle<JSTemporalInstant> handle) {
+  TEMPORAL_ENTER_FUNC();
+  const char* method = "Temporal.Instant.prototype.toJSON";
+  // 1. Let instant be the this value.
+  // 2. Perform ? RequireInternalSlot(instant, [[InitializedTemporalInstant]]).
+  // 3. Return ? TemporalInstantToString(instant, undefined, "auto").
+  return TemporalInstantToString(isolate, handle,
+                                 isolate->factory()->undefined_value(),
+                                 Precision::kAuto, method);
 }
 
 }  // namespace internal

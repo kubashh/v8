@@ -91,8 +91,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainDateTime)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToZonedDateTime)
 /* Temporal #sec-temporal.plaindate.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToString)
-/* Temporal #sec-temporal.plaindate.prototype.tojson */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToJSON)
 
 /* Temporal.PlaneTime */
 /* Temporal #sec-temporal.plaintime.from */
@@ -131,8 +129,6 @@ TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeToPlainDateTime)
 TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeToZonedDateTime)
 /* Temporal #sec-temporal.plaintime.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeToString)
-/* Temporal #sec-temporal.plaindtimeprototype.tojson */
-TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeToJSON)
 
 /* Temporal.PlaneDateTime */
 /* Temporal #sec-temporal.plaindatetime.from */
@@ -197,8 +193,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeRound)
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeEquals)
 /* Temporal #sec-temporal.plaindatetime.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeToString)
-/* Temporal #sec-temporal.plainddatetimeprototype.tojson */
-TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeToJSON)
 /* Temporal #sec-temporal.plaindatetime.prototype.tozoneddatetime */
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeToZonedDateTime)
 /* Temporal #sec-temporal.plaindatetime.prototype.toplaindate */
@@ -269,8 +263,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeRound)
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeEquals)
 /* Temporal #sec-temporal.zoneddatetime.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToString)
-/* Temporal #sec-temporal.zonedddatetimeprototype.tojson */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToJSON)
 /* Temporal #sec-temporal.zoneddatetime.prototype.startofday */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeStartOfDay)
 /* Temporal #sec-temporal.zoneddatetime.prototype.toinstant */
@@ -307,8 +299,6 @@ TO_BE_IMPLEMENTED(TemporalDurationPrototypeRound)
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeTotal)
 /* Temporal #sec-temporal.duration.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeToString)
-/* Temporal #sec-temporal.duration.tojson */
-TO_BE_IMPLEMENTED(TemporalDurationPrototypeToJSON)
 
 /* Temporal.Instant */
 /* Temporal #sec-temporal.instant.from */
@@ -337,8 +327,6 @@ TO_BE_IMPLEMENTED(TemporalInstantPrototypeRound)
 TO_BE_IMPLEMENTED(TemporalInstantPrototypeEquals)
 /* Temporal #sec-temporal.instant.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalInstantPrototypeToString)
-/* Temporal #sec-temporal.instant.tojson */
-TO_BE_IMPLEMENTED(TemporalInstantPrototypeToJSON)
 /* Temporal #sec-temporal.instant.prototype.tozoneddatetime */
 TO_BE_IMPLEMENTED(TemporalInstantPrototypeToZonedDateTime)
 /* Temporal #sec-temporal.instant.prototype.tozoneddatetimeiso */
@@ -377,8 +365,6 @@ TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeSince)
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEquals)
 /* Temporal #sec-temporal.plainyearmonth.tostring */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToString)
-/* Temporal #sec-temporal.plainyearmonth.tojson */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToJSON)
 /* Temporal #sec-temporal.plainyearmonth.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToPlainDate)
 
@@ -399,8 +385,6 @@ TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeWith)
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeEquals)
 /* Temporal #sec-temporal.plainmonthday.prototype.tostring */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToString)
-/* Temporal #sec-temporal.plainmonthday.tojson */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToJSON)
 /* Temporal #sec-temporal.plainmonthday.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToPlainDate)
 
@@ -421,8 +405,6 @@ TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeGetPossibleInstantsFor)
 TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeGetNextTransition)
 /* Temporal #sec-temporal.timezone.prototype.getprevioustransition */
 TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeGetPreviousTransition)
-/* Temporal #sec-temporal.timezone.prototype.tojson */
-TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeToJSON)
 
 /* Temporal.Calendar */
 /* Temporal #sec-temporal.calendar.from */
@@ -463,8 +445,6 @@ TO_BE_IMPLEMENTED(TemporalCalendarPrototypeMonthsInYear)
 TO_BE_IMPLEMENTED(TemporalCalendarPrototypeInLeapYear)
 /* Temporal #sec-temporal.calendar.prototype.mergefields */
 TO_BE_IMPLEMENTED(TemporalCalendarPrototypeMergeFields)
-/* Temporal #sec-temporal.calendar.prototype.tojson */
-TO_BE_IMPLEMENTED(TemporalCalendarPrototypeToJSON)
 
 // to be switch to TFJ later
 /* Temporal #sec-temporal.calendar.prototype.fields */
@@ -537,6 +517,15 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(                             \
         isolate, ret, JSTemporal##T::ToString(isolate, t, method)); \
     return *ret;                                                    \
+  }
+
+#define TEMPORAL_TO_JSON_BY_TO_STRING(T)                            \
+  BUILTIN(Temporal##T##PrototypeToJSON) {                           \
+    HandleScope scope(isolate);                                     \
+    Handle<String> json;                                            \
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(                             \
+        isolate, json, Object::ToString(isolate, args.receiver())); \
+    return *json;                                                   \
   }
 
 #define TEMPORAL_PROTOTYPE_METHOD0(T, METHOD, name)                          \
@@ -621,6 +610,7 @@ BUILTIN(TemporalPlainDateConstructor) {
 TEMPORAL_GET(PlainDate, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainDate)
+TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToJSON, toJSON)
 
 // PlainTime
 BUILTIN(TemporalPlainTimeConstructor) {
@@ -638,6 +628,7 @@ BUILTIN(TemporalPlainTimeConstructor) {
 TEMPORAL_GET(PlainTime, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainTime, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainTime)
+TEMPORAL_PROTOTYPE_METHOD0(PlainTime, ToJSON, toJSON)
 
 // PlainDateTime
 BUILTIN(TemporalPlainDateTimeConstructor) {
@@ -659,6 +650,7 @@ BUILTIN(TemporalPlainDateTimeConstructor) {
 TEMPORAL_GET(PlainDateTime, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDateTime, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainDateTime)
+TEMPORAL_PROTOTYPE_METHOD0(PlainDateTime, ToJSON, toJSON)
 
 // PlainYearMonth
 BUILTIN(TemporalPlainYearMonthConstructor) {
@@ -674,6 +666,7 @@ BUILTIN(TemporalPlainYearMonthConstructor) {
 TEMPORAL_GET(PlainYearMonth, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainYearMonth)
+TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, ToJSON, toJSON)
 
 // PlainMonthDay
 BUILTIN(TemporalPlainMonthDayConstructor) {
@@ -689,6 +682,7 @@ BUILTIN(TemporalPlainMonthDayConstructor) {
 TEMPORAL_GET(PlainMonthDay, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainMonthDay)
+TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, ToJSON, toJSON)
 
 // ZonedDateTime
 
@@ -756,6 +750,7 @@ TEMPORAL_ZONED_DATE_TIME_GET_INT_BY_FORWARD_TIME_ZONE(Nanosecond,
                                                       iso_nanosecond)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(ZonedDateTime)
+TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, ToJSON, toJSON)
 
 // Duration
 BUILTIN(TemporalDurationConstructor) {
@@ -787,8 +782,8 @@ TEMPORAL_GET(Duration, Nanoseconds, nanoseconds)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Sign, sign)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Blank, blank)
 TEMPORAL_VALUE_OF(Duration)
+TEMPORAL_PROTOTYPE_METHOD0(Duration, ToJSON, toJSON)
 
-// Instant
 TEMPORAL_CONSTRUCTOR1(Instant)
 TEMPORAL_VALUE_OF(Instant)
 TEMPORAL_GET(Instant, EpochNanoseconds, nanoseconds)
@@ -798,15 +793,18 @@ TEMPORAL_GET_NUMBER_AFTER_DIVID(Instant, EpochMilliseconds, nanoseconds,
                                 1000000, epochMilliseconds)
 TEMPORAL_GET_BIGINT_AFTER_DIVID(Instant, EpochMicroseconds, nanoseconds, 1000,
                                 epochMicroseconds)
+TEMPORAL_PROTOTYPE_METHOD0(Instant, ToJSON, toJSON)
 
 // Calendar
 TEMPORAL_CONSTRUCTOR1(Calendar)
 TEMPORAL_ID_BY_TO_STRING(Calendar)
+TEMPORAL_TO_JSON_BY_TO_STRING(Calendar)
 TEMPORAL_TO_STRING(Calendar)
 
 // TimeZone
 TEMPORAL_CONSTRUCTOR1(TimeZone)
 TEMPORAL_ID_BY_TO_STRING(TimeZone)
+TEMPORAL_TO_JSON_BY_TO_STRING(TimeZone)
 TEMPORAL_TO_STRING(TimeZone)
 
 }  // namespace internal

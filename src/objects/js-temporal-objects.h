@@ -86,6 +86,10 @@ class JSTemporalDuration
   V8_WARN_UNUSED_RESULT static MaybeHandle<Oddball> Blank(
       Isolate* isolate, Handle<JSTemporalDuration> duration);
 
+  // #sec-temporal.duration.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
+      Isolate* isolate, Handle<JSTemporalDuration> duration);
+
   DECL_PRINTER(JSTemporalDuration)
 
   TQ_OBJECT_CONSTRUCTORS(JSTemporalDuration)
@@ -98,6 +102,10 @@ class JSTemporalInstant
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> Constructor(
       Isolate* isolate, Handle<JSFunction> target,
       Handle<HeapObject> new_target, Handle<Object> epoch_nanoseconds);
+
+  // #sec-temporal.instant.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
+      Isolate* isolate, Handle<JSTemporalInstant> instant);
 
   DECL_PRINTER(JSTemporalInstant)
 
@@ -116,6 +124,10 @@ class JSTemporalPlainDate
 
   // #sec-temporal.plaindate.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
+      Isolate* isolate, Handle<JSTemporalPlainDate> plain_date);
+
+  // #sec-temporal.plaindate.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainDate> plain_date);
 
   DECL_PRINTER(JSTemporalPlainDate)
@@ -142,6 +154,10 @@ class JSTemporalPlainDateTime
 
   // #sec-temporal.plaindatetime.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
+      Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time);
+
+  // #sec-temporal.plaindatetime.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time);
 
   DECL_PRINTER(JSTemporalPlainDateTime)
@@ -171,6 +187,10 @@ class JSTemporalPlainMonthDay
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day);
 
+  // #sec-temporal.plainmonthday.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
+      Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day);
+
   DECL_PRINTER(JSTemporalPlainMonthDay)
 
   DEFINE_TORQUE_GENERATED_JS_TEMPORAL_YEAR_MONTH_DAY()
@@ -192,6 +212,10 @@ class JSTemporalPlainTime
 
   // #sec-temporal.plaintime.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
+      Isolate* isolate, Handle<JSTemporalPlainTime> plain_time);
+
+  // #sec-temporal.plaintime.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainTime> plain_time);
 
   DECL_PRINTER(JSTemporalPlainTime)
@@ -217,6 +241,10 @@ class JSTemporalPlainYearMonth
 
   // #sec-temporal.plainyearmonth.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
+      Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month);
+
+  // #sec-temporal.plainyearmonth.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month);
 
   // Abstract Operations
@@ -275,6 +303,10 @@ class JSTemporalZonedDateTime
 
   // #sec-temporal.zoneddatetime.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
+  // #sec-temporal.zoneddatetime.prototype.tojson
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
 
   DECL_PRINTER(JSTemporalZonedDateTime)
