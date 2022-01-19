@@ -97,6 +97,8 @@ void IsolateAllocator::InitializeOncePerProcess() {
         sandbox->base(), params.reservation_size, params.base_alignment,
         PagePermissions::kNoAccess);
     CHECK_EQ(sandbox->base(), base);
+    CHECK(sandbox->address_space()->SetPagePermissions(
+        base, params.reservation_size, PagePermissions::kNoAccess));
     existing_reservation = base::AddressRegion(base, params.reservation_size);
     params.page_allocator = sandbox->page_allocator();
   }
