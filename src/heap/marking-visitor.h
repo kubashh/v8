@@ -157,6 +157,8 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   V8_INLINE int VisitSharedFunctionInfo(Map map, SharedFunctionInfo object);
   V8_INLINE int VisitTransitionArray(Map map, TransitionArray object);
   V8_INLINE int VisitWeakCell(Map map, WeakCell object);
+  V8_INLINE int VisitWasmContinuationObject(Map map,
+                                            WasmContinuationObject object);
 
   // ObjectVisitor overrides.
   void VisitMapPointer(HeapObject host) final {
@@ -182,6 +184,10 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
     VisitCodePointerImpl(host, slot);
   }
+  V8_INLINE void VisitFullPointers(HeapObject host, FullObjectSlot start,
+                                   FullObjectSlot end) final {
+    VisitFullPointersImpl(host, start, end);
+  }
   V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final;
   V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final;
   void VisitCustomWeakPointers(HeapObject host, ObjectSlot start,
@@ -197,6 +203,8 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   template <typename THeapObjectSlot>
   void ProcessStrongHeapObject(HeapObject host, THeapObjectSlot slot,
                                HeapObject heap_object);
+  void ProcessFullHeapObject(HeapObject host, FullHeapObjectSlot slot,
+                             HeapObject heap_object);
   template <typename THeapObjectSlot>
   void ProcessWeakHeapObject(HeapObject host, THeapObjectSlot slot,
                              HeapObject heap_object);
@@ -206,6 +214,8 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
 
   template <typename TSlot>
   V8_INLINE void VisitPointersImpl(HeapObject host, TSlot start, TSlot end);
+  V8_INLINE void VisitFullPointersImpl(HeapObject host, FullObjectSlot start,
+                                       FullObjectSlot end);
 
   // Similar to VisitPointersImpl() but using code cage base for loading from
   // the slot.

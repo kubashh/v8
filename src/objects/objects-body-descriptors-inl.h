@@ -775,6 +775,23 @@ class WasmStruct::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+template <typename ObjectVisitor>
+class StackVisitor : public RootVisitor {
+ public:
+  explicit StackVisitor(HeapObject host, ObjectVisitor* visitor)
+      : host_(host), visitor_(visitor) {}
+
+  void VisitRootPointers(Root root, const char* description,
+                         FullObjectSlot start, FullObjectSlot end) override {
+    DCHECK_EQ(root, Root::kStackRoots);
+    visitor_->VisitFullPointers(host_, start, end);
+  }
+
+ private:
+  HeapObject host_;
+  ObjectVisitor* visitor_;
+};
+
 class WasmContinuationObject::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
@@ -787,7 +804,19 @@ class WasmContinuationObject::BodyDescriptor final : public BodyDescriptorBase {
     IteratePointer(obj, kParentOffset, v);
     IteratePointer(obj, kStackOffset, v);
     IteratePointer(obj, kJmpbufOffset, v);
-    // TODO(fgm): Visit the continuation's stack pointers.
+    // TODO(fgm): Uncomment the main loop below when the active stack is
+    // skipped.
+
+    // Isolate* isolate;
+    // i::GetIsolateFromHeapObject(obj, &isolate);
+    // wasm::StackMemory* stack =
+    // Managed<wasm::StackMemory>::cast(WasmContinuationObject::cast(obj).stack()).get().get();
+    // StackFrameIterator it(isolate, stack);
+    // StackVisitor<ObjectVisitor> stack_visitor(obj, v);
+    // wasm::WasmCodeRefScope scope;
+    // for (; !it.done(); it.Advance()) {
+    //   it.frame()->Iterate(&stack_visitor);
+    // }
   }
 
   static inline int SizeOf(Map map, HeapObject obj) {
