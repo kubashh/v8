@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4170d6b_870a38f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-01-19T11:42:07Z",
+      "side": 1,
+      "message": "Andreas, PTAL at the last patch set, I fixed some small issues with the state property:\n- Added missing int\u003c-\u003esmi conversion\n- Using 32-bit slots for pointer compression (by using Load|StoreTaggedSigned instead of movq)",
+      "revId": "3fd6e65250ea23ac21005591792ac669ee45e515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
