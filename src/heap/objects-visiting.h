@@ -53,6 +53,7 @@ namespace internal {
   V(TransitionArray)                    \
   IF_WASM(V, WasmApiFunctionRef)        \
   IF_WASM(V, WasmArray)                 \
+  IF_WASM(V, WasmContinuationObject)    \
   IF_WASM(V, WasmCapiFunctionData)      \
   IF_WASM(V, WasmExportedFunctionData)  \
   IF_WASM(V, WasmFunctionData)          \

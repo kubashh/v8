@@ -618,6 +618,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<WasmArray> NewWasmArray(const wasm::ArrayType* type,
                                  const std::vector<wasm::WasmValue>& elements,
                                  Handle<Map> map);
+  Handle<WasmContinuationObject> NewWasmContinuationObject();
 
   Handle<SharedFunctionInfo> NewSharedFunctionInfoForWasmExportedFunction(
       Handle<String> name, Handle<WasmExportedFunctionData> data);

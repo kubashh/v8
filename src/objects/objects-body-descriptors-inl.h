@@ -775,6 +775,26 @@ class WasmStruct::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+class WasmContinuationObject::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
+    UNREACHABLE();
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointer(obj, kParentOffset, v);
+    IteratePointer(obj, kStackOffset, v);
+    IteratePointer(obj, kJmpbufOffset, v);
+    // TODO(fgm): Visit the continuation's stack pointers.
+  }
+
+  static inline int SizeOf(Map map, HeapObject obj) {
+    return obj.SizeFromMap(map);
+  }
+};
+
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 class ExternalOneByteString::BodyDescriptor final : public BodyDescriptorBase {
@@ -1168,6 +1188,8 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
 #endif  // V8_ENABLE_WEBASSEMBLY
       return CALL_APPLY(JSObject);
 #if V8_ENABLE_WEBASSEMBLY
+    case WASM_CONTINUATION_OBJECT_TYPE:
+      return CALL_APPLY(WasmContinuationObject);
     case WASM_INSTANCE_OBJECT_TYPE:
       return CALL_APPLY(WasmInstanceObject);
 #endif  // V8_ENABLE_WEBASSEMBLY
