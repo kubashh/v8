@@ -574,6 +574,8 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
   // Iterate over pointers on native execution stack.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope wasm_code_ref_scope;
+  // TODO(fgm): Skip this for root marking, this will be handled by the
+  // concurrent marker.
   if (FLAG_experimental_wasm_stack_switching) {
     wasm::StackMemory* current = wasm_stacks_;
     DCHECK_NOT_NULL(current);

@@ -457,6 +457,10 @@ void ScavengeVisitor::VisitPointers(HeapObject host, MaybeObjectSlot start,
                                     MaybeObjectSlot end) {
   return VisitPointersImpl(host, start, end);
 }
+void ScavengeVisitor::VisitFullPointers(HeapObject host, FullObjectSlot start,
+                                        FullObjectSlot end) {
+  return VisitPointersImpl(host, start, end);
+}
 
 void ScavengeVisitor::VisitCodePointer(HeapObject host, CodeObjectSlot slot) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);

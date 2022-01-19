@@ -118,6 +118,9 @@ class ObjectVisitor {
                              ObjectSlot end) = 0;
   virtual void VisitPointers(HeapObject host, MaybeObjectSlot start,
                              MaybeObjectSlot end) = 0;
+  // TODO(fgm): Make pure virtual.
+  virtual void VisitFullPointers(HeapObject host, FullObjectSlot start,
+                                 FullObjectSlot end) {}
   // When V8_EXTERNAL_CODE_SPACE is enabled, visits a Code pointer slot.
   // The values may be modified on return.
   // Not used when V8_EXTERNAL_CODE_SPACE is not enabled (the Code pointer
@@ -140,6 +143,9 @@ class ObjectVisitor {
   }
   virtual void VisitPointer(HeapObject host, MaybeObjectSlot p) {
     VisitPointers(host, p, p + 1);
+  }
+  virtual void VisitFullPointer(HeapObject host, FullObjectSlot p) {
+    VisitFullPointers(host, p, p + 1);
   }
   virtual void VisitCustomWeakPointer(HeapObject host, ObjectSlot p) {
     VisitCustomWeakPointers(host, p, p + 1);
