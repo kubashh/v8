@@ -33,6 +33,23 @@
       "message": "lgtm on non-Fuchsia parts",
       "revId": "ad190141c5bba170aa1d0cede7774938fcb43f3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b4c2f5_60be58f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-01-19T10:30:56Z",
+      "side": 1,
+      "message": "Hi Victor, could you review the platform-fuchsia.cc changes, please? :)",
+      "revId": "ad190141c5bba170aa1d0cede7774938fcb43f3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
