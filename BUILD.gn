@@ -16,6 +16,7 @@ if (is_android) {
 
 import("gni/snapshot_toolchain.gni")
 import("gni/v8.gni")
+import("gni/branch_toggle.gni")
 
 # Specifies if the target build is a simulator build. Comparing target cpu
 # with v8 target cpu to not affect simulator builds for making cross-compile
@@ -81,9 +82,6 @@ declare_args() {
 
   # Sets -dENABLE_HUGEPAGE
   v8_enable_hugepage = false
-
-  # Sets -dENABLE_HANDLE_ZAPPING.
-  v8_enable_handle_zapping = true
 
   # Enable slow dchecks.
   v8_enable_slow_dchecks = false

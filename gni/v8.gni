@@ -6,6 +6,7 @@ import("//build/config/gclient_args.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/config/v8_target_cpu.gni")
 import("split_static_library.gni")
+import("branch_toggle.gni")
 
 declare_args() {
   # Set flags for tracking code coverage. Uses gcov with gcc and sanitizer
@@ -71,9 +72,6 @@ declare_args() {
   # will fail. Also, asm.js will not be translated to WebAssembly and will be
   # executed as standard JavaScript instead.
   v8_enable_webassembly = ""
-
-  # Enable runtime call stats.
-  v8_enable_runtime_call_stats = true
 
   # Add fuzzilli fuzzer support.
   v8_fuzzilli = false
