@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2731c1_48321dac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-01-19T11:37:36Z",
+      "side": 1,
+      "message": "Looks like it doesn\u0027t have a big effect\n\nCommand used for testing, for posteriority:\n\nrm -rf out/x64.release/unittests out/x64.release/obj/test/unittests/unittests_sources/value-serializer-unittest.o out/x64.release/obj/test/unittests/unittests_sources/value-serializer-unittest.o \u0026\u0026 time gm x64.release.tests",
+      "parentUuid": "69401e60_21f2223f",
+      "revId": "d19f57166c3e7086d0ad26671c995cd739e630b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f25c483_aae004eb",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-01-18T12:33:30Z",
       "side": 1,
       "message": "nit: DecodeTestUpToVersion",
+      "range": {
+        "startLine": 1678,
+        "startChar": 5,
+        "endLine": 1678,
+        "endChar": 29
+      },
+      "revId": "d19f57166c3e7086d0ad26671c995cd739e630b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6130608_534c5510",
+        "filename": "test/unittests/objects/value-serializer-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-01-19T11:37:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f25c483_aae004eb",
       "range": {
         "startLine": 1678,
         "startChar": 5,
