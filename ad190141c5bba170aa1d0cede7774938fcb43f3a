@@ -16,6 +16,23 @@
       "message": "This CL fixes the failing VirtualAddressSpace unittests on fuchsia bots:\n\n[----------] 3 tests from VirtualAddressSpaceTest\n[ RUN      ] VirtualAddressSpaceTest.TestRootSpace\n[       OK ] VirtualAddressSpaceTest.TestRootSpace (1 ms)\n[ RUN      ] VirtualAddressSpaceTest.TestSubspace\n[       OK ] VirtualAddressSpaceTest.TestSubspace (2 ms)\n[ RUN      ] VirtualAddressSpaceTest.TestEmulatedSubspace\n[       OK ] VirtualAddressSpaceTest.TestEmulatedSubspace (0 ms)\n[----------] 3 tests from VirtualAddressSpaceTest (4 ms total)",
       "revId": "ad190141c5bba170aa1d0cede7774938fcb43f3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bae4dd8_218c1e85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-19T10:29:49Z",
+      "side": 1,
+      "message": "lgtm on non-Fuchsia parts",
+      "revId": "ad190141c5bba170aa1d0cede7774938fcb43f3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
