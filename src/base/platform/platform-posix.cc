@@ -883,7 +883,8 @@ bool AddressSpaceReservation::Allocate(void* address, size_t size,
                                        OS::MemoryPermission access) {
   // The region is already mmap'ed, so it just has to be made accessible now.
   DCHECK(Contains(address, size));
-  return OS::SetPermissions(address, size, access);
+  int prot = GetProtectionFromMemoryPermission(access);
+  return mprotect(address, size, prot) == 0;
 }
 
 bool AddressSpaceReservation::Free(void* address, size_t size) {
