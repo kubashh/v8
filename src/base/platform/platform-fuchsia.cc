@@ -56,13 +56,12 @@ zx_vm_option_t GetAlignmentOptionFromAlignment(size_t alignment) {
   return alignment_log2 << ZX_VM_ALIGN_BASE;
 }
 
-void* AllocateInternal(const zx::vmar& vmar, size_t page_size,
-                       size_t vmar_offset, bool vmar_offset_is_hint,
-                       size_t size, size_t alignment,
-                       OS::MemoryPermission access) {
+void* AllocateInternal(const zx::vmar& vmar, void* vmar_base, size_t page_size,
+                       void* address, bool address_is_hint, size_t size,
+                       size_t alignment, OS::MemoryPermission access) {
   DCHECK_EQ(0, size % page_size);
   DCHECK_EQ(0, alignment % page_size);
-  DCHECK_EQ(0, vmar_offset % page_size);
+  DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % alignment);
 
   zx::vmo vmo;
   if (zx::vmo::create(size, 0, &vmo) != ZX_OK) {
@@ -86,26 +85,38 @@ void* AllocateInternal(const zx::vmar& vmar, size_t page_size,
   CHECK_NE(0, alignment_option);  // Invalid alignment specified
   options |= alignment_option;
 
-  if (vmar_offset != 0) {
+  size_t vmar_offset = 0;
+  if (address != nullptr) {
+    uintptr_t target_addr = reinterpret_cast<uintptr_t>(address);
+    uintptr_t base = reinterpret_cast<uintptr_t>(vmar_base);
+    DCHECK_GE(target_addr, base);
+    vmar_offset = target_addr - base;
+
     options |= ZX_VM_SPECIFIC;
   }
 
-  zx_vaddr_t address;
-  zx_status_t status = vmar.map(options, vmar_offset, vmo, 0, size, &address);
+  zx_vaddr_t result = 0;
+  zx_status_t status = vmar.map(options, vmar_offset, vmo, 0, size, &result);
 
-  if (status != ZX_OK && vmar_offset != 0 && vmar_offset_is_hint) {
-    // If a vmar_offset was specified and the allocation failed (for example,
+  printf(
+      "AllocateInternal address %p, is hint: %i, size: %lu kB, vmar_base: %p, "
+      "vmar_offset: %p, result: %p, status: %i\n",
+      address, address_is_hint, size / 1024, vmar_base,
+      reinterpret_cast<void*>(vmar_offset), reinterpret_cast<void*>(result),
+      status);
+  if (status != ZX_OK && address != nullptr && address_is_hint) {
+    // If an address was specified and the allocation failed (for example,
     // because the offset overlapped another mapping), then we should retry
-    // again without a vmar_offset if that offset was just meant to be a hint.
+    // again without a vmar_offset if that address was just meant to be a hint.
     options &= ~(ZX_VM_SPECIFIC);
-    status = vmar.map(options, 0, vmo, 0, size, &address);
+    status = vmar.map(options, 0, vmo, 0, size, &result);
   }
 
   if (status != ZX_OK) {
     return nullptr;
   }
 
-  return reinterpret_cast<void*>(address);
+  return reinterpret_cast<void*>(result);
 }
 
 bool FreeInternal(const zx::vmar& vmar, size_t page_size, void* address,
@@ -135,13 +146,13 @@ bool DiscardSystemPagesInternal(const zx::vmar& vmar, size_t page_size,
 }
 
 zx_status_t CreateAddressSpaceReservationInternal(
-    const zx::vmar& vmar, size_t page_size, size_t vmar_offset,
-    bool vmar_offset_is_hint, size_t size, size_t alignment,
+    const zx::vmar& vmar, void* vmar_base, size_t page_size, void* address,
+    bool address_is_hint, size_t size, size_t alignment,
     OS::MemoryPermission max_permission, zx::vmar* child,
     zx_vaddr_t* child_addr) {
   DCHECK_EQ(0, size % page_size);
   DCHECK_EQ(0, alignment % page_size);
-  DCHECK_EQ(0, vmar_offset % page_size);
+  DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % alignment);
 
   // TODO(v8) determine these based on max_permission.
   zx_vm_option_t options = ZX_VM_CAN_MAP_READ | ZX_VM_CAN_MAP_WRITE |
@@ -151,16 +162,22 @@ zx_status_t CreateAddressSpaceReservationInternal(
   CHECK_NE(0, alignment_option);  // Invalid alignment specified
   options |= alignment_option;
 
-  if (vmar_offset != 0) {
+  size_t vmar_offset = 0;
+  if (address != nullptr) {
+    uintptr_t target_addr = reinterpret_cast<uintptr_t>(address);
+    uintptr_t base = reinterpret_cast<uintptr_t>(vmar_base);
+    DCHECK_GE(target_addr, base);
+    vmar_offset = target_addr - base;
+
     options |= ZX_VM_SPECIFIC;
   }
 
   zx_status_t status =
       vmar.allocate(options, vmar_offset, size, child, child_addr);
-  if (status != ZX_OK && vmar_offset != 0 && vmar_offset_is_hint) {
-    // If a vmar_offset was specified and the allocation failed (for example,
+  if (status != ZX_OK && address != nullptr && address_is_hint) {
+    // If an address was specified and the allocation failed (for example,
     // because the offset overlapped another mapping), then we should retry
-    // again without a vmar_offset if that offset was just meant to be a hint.
+    // again without a vmar_offset if that address was just meant to be a hint.
     options &= ~(ZX_VM_SPECIFIC);
     status = vmar.allocate(options, 0, size, child, child_addr);
   }
@@ -177,11 +194,9 @@ TimezoneCache* OS::CreateTimezoneCache() {
 // static
 void* OS::Allocate(void* address, size_t size, size_t alignment,
                    MemoryPermission access) {
-  constexpr bool vmar_offset_is_hint = true;
-  DCHECK_EQ(0, reinterpret_cast<Address>(address) % alignment);
-  return AllocateInternal(*zx::vmar::root_self(), AllocatePageSize(),
-                          reinterpret_cast<uint64_t>(address),
-                          vmar_offset_is_hint, size, alignment, access);
+  constexpr bool address_is_hint = true;
+  return AllocateInternal(*zx::vmar::root_self(), nullptr, AllocatePageSize(),
+                          address, address_is_hint, size, alignment, access);
 }
 
 // static
@@ -224,12 +239,10 @@ Optional<AddressSpaceReservation> OS::CreateAddressSpaceReservation(
   DCHECK_EQ(0, reinterpret_cast<Address>(hint) % alignment);
   zx::vmar child;
   zx_vaddr_t child_addr;
-  uint64_t vmar_offset = reinterpret_cast<uint64_t>(hint);
-  constexpr bool vmar_offset_is_hint = true;
+  constexpr bool address_is_hint = true;
   zx_status_t status = CreateAddressSpaceReservationInternal(
-      *zx::vmar::root_self(), AllocatePageSize(), vmar_offset,
-      vmar_offset_is_hint, size, alignment, max_permission, &child,
-      &child_addr);
+      *zx::vmar::root_self(), nullptr, AllocatePageSize(), hint,
+      address_is_hint, size, alignment, max_permission, &child, &child_addr);
   if (status != ZX_OK) return {};
   return AddressSpaceReservation(reinterpret_cast<void*>(child_addr), size,
                                  child.release());
@@ -287,15 +300,10 @@ Optional<AddressSpaceReservation> AddressSpaceReservation::CreateSubReservation(
 
   zx::vmar child;
   zx_vaddr_t child_addr;
-  size_t vmar_offset = 0;
-  if (address != 0) {
-    vmar_offset =
-        reinterpret_cast<size_t>(address) - reinterpret_cast<size_t>(base());
-  }
-  constexpr bool vmar_offset_is_hint = false;
+  constexpr bool address_is_hint = false;
   zx_status_t status = CreateAddressSpaceReservationInternal(
-      *zx::unowned_vmar(vmar_), OS::AllocatePageSize(), vmar_offset,
-      vmar_offset_is_hint, size, OS::AllocatePageSize(), max_permission, &child,
+      *zx::unowned_vmar(vmar_), base(), OS::AllocatePageSize(), address,
+      address_is_hint, size, OS::AllocatePageSize(), max_permission, &child,
       &child_addr);
   if (status != ZX_OK) return {};
   DCHECK_EQ(reinterpret_cast<void*>(child_addr), address);
@@ -311,15 +319,10 @@ bool AddressSpaceReservation::FreeSubReservation(
 bool AddressSpaceReservation::Allocate(void* address, size_t size,
                                        OS::MemoryPermission access) {
   DCHECK(Contains(address, size));
-  size_t vmar_offset = 0;
-  if (address != 0) {
-    vmar_offset =
-        reinterpret_cast<size_t>(address) - reinterpret_cast<size_t>(base());
-  }
-  constexpr bool vmar_offset_is_hint = false;
+  constexpr bool address_is_hint = false;
   void* allocation = AllocateInternal(
-      *zx::unowned_vmar(vmar_), OS::AllocatePageSize(), vmar_offset,
-      vmar_offset_is_hint, size, OS::AllocatePageSize(), access);
+      *zx::unowned_vmar(vmar_), base(), OS::AllocatePageSize(), address,
+      address_is_hint, size, OS::AllocatePageSize(), access);
   DCHECK(!allocation || allocation == address);
   return allocation != nullptr;
 }
