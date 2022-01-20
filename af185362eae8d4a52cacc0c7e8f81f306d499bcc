@@ -16,6 +16,23 @@
       "message": "mlippautz: please have a look? :)",
       "revId": "af185362eae8d4a52cacc0c7e8f81f306d499bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec8c85e4_f4c1fc39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-20T22:49:58Z",
+      "side": 1,
+      "message": "ah, I see that what I did doesn\u0027t help actually - we can\u0027t depend on chromium //base unless doing a chromium build. I\u0027m going to put this CL aside and file a separate v8 bug about this problem.",
+      "revId": "af185362eae8d4a52cacc0c7e8f81f306d499bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
