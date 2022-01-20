@@ -16,6 +16,23 @@
       "message": "hablich: please have a look? :)",
       "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a8c9dd_bb7a3695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1123977
+      },
+      "writtenOn": "2022-01-20T08:06:47Z",
+      "side": 1,
+      "message": "Adding better reviewers and removing myself.",
+      "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
