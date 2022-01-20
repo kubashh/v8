@@ -89,8 +89,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEquals)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainDateTime)
 /* Temporal #sec-temporal.plaindate.prototype.tozoneddatetime */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToZonedDateTime)
-/* Temporal #sec-temporal.plaindate.prototype.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToString)
 
 /* Temporal.PlaneTime */
 /* Temporal #sec-temporal.plaintime.from */
@@ -363,8 +361,6 @@ TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeUntil)
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeSince)
 /* Temporal #sec-temporal.plainyearmonth.prototype.equals */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEquals)
-/* Temporal #sec-temporal.plainyearmonth.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToString)
 /* Temporal #sec-temporal.plainyearmonth.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToPlainDate)
 
@@ -383,8 +379,6 @@ TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeDay)
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeWith)
 /* Temporal #sec-temporal.plainmonthday.prototype.equals */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeEquals)
-/* Temporal #sec-temporal.plainmonthday.prototype.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToString)
 /* Temporal #sec-temporal.plainmonthday.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToPlainDate)
 
@@ -536,6 +530,16 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     RETURN_RESULT_OR_FAILURE(isolate, JSTemporal##T ::METHOD(isolate, obj)); \
   }
 
+#define TEMPORAL_PROTOTYPE_METHOD1(T, METHOD, name)                            \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                    \
+    HandleScope scope(isolate);                                                \
+    const char* method = "Temporal." #T ".prototype." #name;                   \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                                \
+    RETURN_RESULT_OR_FAILURE(                                                  \
+        isolate,                                                               \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1))); \
+  }
+
 #define TEMPORAL_PROTOTYPE_METHOD3(T, METHOD, name)                          \
   BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
     HandleScope scope(isolate);                                              \
@@ -610,6 +614,7 @@ BUILTIN(TemporalPlainDateConstructor) {
 TEMPORAL_GET(PlainDate, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainDate)
+TEMPORAL_PROTOTYPE_METHOD1(PlainDate, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToJSON, toJSON)
 
 // PlainTime
@@ -666,6 +671,7 @@ BUILTIN(TemporalPlainYearMonthConstructor) {
 TEMPORAL_GET(PlainYearMonth, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainYearMonth)
+TEMPORAL_PROTOTYPE_METHOD1(PlainYearMonth, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, ToJSON, toJSON)
 
 // PlainMonthDay
@@ -682,6 +688,7 @@ BUILTIN(TemporalPlainMonthDayConstructor) {
 TEMPORAL_GET(PlainMonthDay, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainMonthDay)
+TEMPORAL_PROTOTYPE_METHOD1(PlainMonthDay, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, ToJSON, toJSON)
 
 // ZonedDateTime

@@ -130,6 +130,11 @@ class JSTemporalPlainDate
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainDate> plain_date);
 
+  // #sec-temporal.plaindate.prototype.tostring
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToString(
+      Isolate* isolate, Handle<JSTemporalPlainDate> plain_date,
+      Handle<Object> options);
+
   DECL_PRINTER(JSTemporalPlainDate)
 
   DEFINE_TORQUE_GENERATED_JS_TEMPORAL_YEAR_MONTH_DAY()
@@ -191,6 +196,11 @@ class JSTemporalPlainMonthDay
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day);
 
+  // #sec-temporal.plainmonthday.prototype.tostring
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToString(
+      Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day,
+      Handle<Object> options);
+
   DECL_PRINTER(JSTemporalPlainMonthDay)
 
   DEFINE_TORQUE_GENERATED_JS_TEMPORAL_YEAR_MONTH_DAY()
@@ -246,6 +256,11 @@ class JSTemporalPlainYearMonth
   // #sec-temporal.plainyearmonth.prototype.tojson
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
       Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month);
+
+  // #sec-temporal.plainyearmonth.prototype.tostring
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToString(
+      Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month,
+      Handle<Object> options);
 
   // Abstract Operations
 
