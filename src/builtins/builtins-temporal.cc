@@ -89,8 +89,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEquals)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainDateTime)
 /* Temporal #sec-temporal.plaindate.prototype.tozoneddatetime */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToZonedDateTime)
-/* Temporal #sec-temporal.plaindate.prototype.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToString)
 
 /* Temporal.PlaneTime */
 /* Temporal #sec-temporal.plaintime.from */
@@ -363,8 +361,6 @@ TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeUntil)
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeSince)
 /* Temporal #sec-temporal.plainyearmonth.prototype.equals */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEquals)
-/* Temporal #sec-temporal.plainyearmonth.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToString)
 /* Temporal #sec-temporal.plainyearmonth.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToPlainDate)
 
@@ -383,8 +379,6 @@ TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeDay)
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeWith)
 /* Temporal #sec-temporal.plainmonthday.prototype.equals */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeEquals)
-/* Temporal #sec-temporal.plainmonthday.prototype.tostring */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToString)
 /* Temporal #sec-temporal.plainmonthday.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToPlainDate)
 
@@ -464,24 +458,18 @@ TO_BE_IMPLEMENTED(TemporalInstantPrototypeToLocaleString)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEra)
 /* Temporal #sec-get-temporal.plaindate.prototype.erayear */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEraYear)
-/* Temporal #sec-temporal.plaindate.prototype.tolocalestring */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToLocaleString)
 /* Temporal #sec-get-temporal.plaindatetime.prototype.era */
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeEra)
 /* Temporal #sec-get-temporal.plaindatetime.prototype.erayear */
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeEraYear)
 /* Temporal #sec-temporal.plaindatetime.prototype.tolocalestring */
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeToLocaleString)
-/* Temporal #sec-temporal.plainmonthday.prototype.tolocalestring */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToLocaleString)
 /* Temporal #sec-temporal.plaintime.prototype.tolocalestring */
 TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeToLocaleString)
 /* Temporal #sec-get-temporal.plainyearmonth.prototype.era */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEra)
 /* Temporal #sec-get-temporal.plainyearmonth.prototype.erayear */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEraYear)
-/* Temporal #sec-temporal.plainyearmonth.prototype.tolocalestring */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToLocaleString)
 /* Temporal #sec-get-temporal.zoneddatetime.prototype.era */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeEra)
 /* Temporal #sec-get-temporal.zoneddatetime.prototype.erayear */
@@ -534,6 +522,27 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
     const char* method = "Temporal." #T ".prototype." #name;                 \
     CHECK_RECEIVER(JSTemporal##T, obj, method);                              \
     RETURN_RESULT_OR_FAILURE(isolate, JSTemporal##T ::METHOD(isolate, obj)); \
+  }
+
+#define TEMPORAL_PROTOTYPE_METHOD1(T, METHOD, name)                            \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                    \
+    HandleScope scope(isolate);                                                \
+    const char* method = "Temporal." #T ".prototype." #name;                   \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                                \
+    RETURN_RESULT_OR_FAILURE(                                                  \
+        isolate,                                                               \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1))); \
+  }
+
+#define TEMPORAL_PROTOTYPE_METHOD2(T, METHOD, name)                          \
+  BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
+    HandleScope scope(isolate);                                              \
+    const char* method = "Temporal." #T ".prototype." #name;                 \
+    CHECK_RECEIVER(JSTemporal##T, obj, method);                              \
+    RETURN_RESULT_OR_FAILURE(                                                \
+        isolate,                                                             \
+        JSTemporal##T ::METHOD(isolate, obj, args.atOrUndefined(isolate, 1), \
+                               args.atOrUndefined(isolate, 2)));             \
   }
 
 #define TEMPORAL_PROTOTYPE_METHOD3(T, METHOD, name)                          \
@@ -610,6 +619,7 @@ BUILTIN(TemporalPlainDateConstructor) {
 TEMPORAL_GET(PlainDate, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainDate)
+TEMPORAL_PROTOTYPE_METHOD1(PlainDate, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToJSON, toJSON)
 
 // PlainTime
@@ -666,6 +676,7 @@ BUILTIN(TemporalPlainYearMonthConstructor) {
 TEMPORAL_GET(PlainYearMonth, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainYearMonth)
+TEMPORAL_PROTOTYPE_METHOD1(PlainYearMonth, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, ToJSON, toJSON)
 
 // PlainMonthDay
@@ -682,6 +693,7 @@ BUILTIN(TemporalPlainMonthDayConstructor) {
 TEMPORAL_GET(PlainMonthDay, Calendar, calendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainMonthDay)
+TEMPORAL_PROTOTYPE_METHOD1(PlainMonthDay, ToString, toString)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, ToJSON, toJSON)
 
 // ZonedDateTime
@@ -806,6 +818,14 @@ TEMPORAL_CONSTRUCTOR1(TimeZone)
 TEMPORAL_ID_BY_TO_STRING(TimeZone)
 TEMPORAL_TO_JSON_BY_TO_STRING(TimeZone)
 TEMPORAL_TO_STRING(TimeZone)
+
+#ifdef V8_INTL_SUPPORT
+// Temporal.*.prototype.toLocaleString
+TEMPORAL_PROTOTYPE_METHOD2(PlainDate, ToLocaleString, toLocaleString)
+TEMPORAL_PROTOTYPE_METHOD2(PlainYearMonth, ToLocaleString, toLocaleString)
+TEMPORAL_PROTOTYPE_METHOD2(PlainMonthDay, ToLocaleString, toLocaleString)
+
+#endif  // V8_INTL_SUPPORT
 
 }  // namespace internal
 }  // namespace v8
