@@ -138,6 +138,30 @@
       },
       "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88cede0d_3d959de0",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 5597,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-20T22:42:37Z",
+      "side": 1,
+      "message": "I also ended up needing v8_config_headers because tracing/trace-event.h uses include/v8-platform.h, which is in that target.",
+      "parentUuid": "c081d991_2b9b333b",
+      "range": {
+        "startLine": 5597,
+        "startChar": 8,
+        "endLine": 5597,
+        "endChar": 27
+      },
+      "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
