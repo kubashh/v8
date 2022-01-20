@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1198a290_cb899bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-20T17:41:31Z",
+      "side": 1,
+      "message": "Thanks for looking into this. LMK if this is something you\u0027d like to fix, or otherwise maybe just file a concrete bug against the GC.",
+      "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ee9f2ce_6a24851d",
@@ -89,6 +106,30 @@
       "side": 1,
       "message": "Sure:\n\n$ gn check out/rel\n\n```\nERROR at //v8/src/heap/cppgc/trace-event.h:9:11: Include not allowed.\n#include \"src/tracing/trace-event.h\"\n          ^------------------------\nIt is not in any dependency of\n  //v8:cppgc_base\nThe include file is in the target(s):\n  //v8:v8_internal_headers\nwhich should somehow be reachable.\n```",
       "parentUuid": "5ee9f2ce_6a24851d",
+      "range": {
+        "startLine": 5597,
+        "startChar": 8,
+        "endLine": 5597,
+        "endChar": 27
+      },
+      "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c081d991_2b9b333b",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 5597,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-20T17:41:31Z",
+      "side": 1,
+      "message": "Thanks, I think that is the only file that is needed by cppgc that is not part of base.\n\nI think the right way here would be to introduce\n  //v8:v8_internal_tracing_headers\nwith just that file and let v8_internal_headers and cppgc_base depend on that one.\n\nWe don\u0027t want cppgc_base use anything else from v8_internal_headers.",
+      "parentUuid": "35c5abc4_d4a89684",
       "range": {
         "startLine": 5597,
         "startChar": 8,
