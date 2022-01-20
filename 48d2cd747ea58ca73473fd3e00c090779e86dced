@@ -73,6 +73,30 @@
       },
       "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35c5abc4_d4a89684",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 5597,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-20T16:47:53Z",
+      "side": 1,
+      "message": "Sure:\n\n$ gn check out/rel\n\n```\nERROR at //v8/src/heap/cppgc/trace-event.h:9:11: Include not allowed.\n#include \"src/tracing/trace-event.h\"\n          ^------------------------\nIt is not in any dependency of\n  //v8:cppgc_base\nThe include file is in the target(s):\n  //v8:v8_internal_headers\nwhich should somehow be reachable.\n```",
+      "parentUuid": "5ee9f2ce_6a24851d",
+      "range": {
+        "startLine": 5597,
+        "startChar": 8,
+        "endLine": 5597,
+        "endChar": 27
+      },
+      "revId": "48d2cd747ea58ca73473fd3e00c090779e86dced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
