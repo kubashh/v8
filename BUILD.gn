@@ -2625,6 +2625,18 @@ v8_header_set("v8_flags") {
   deps = [ ":v8_shared_internal_headers" ]
 }
 
+v8_header_set("v8_internal_tracing_headers") {
+  configs = [ ":internal_config" ]
+  sources = [
+    "src/tracing/trace-event.h",
+  ]
+  public_deps = [
+    "//base:base",
+    ":v8_config_headers",
+    ":v8_libbase"
+  ]
+}
+
 v8_header_set("v8_internal_headers") {
   configs = [ ":internal_config" ]
 
@@ -3387,7 +3399,6 @@ v8_header_set("v8_internal_headers") {
     "src/third_party/siphash/halfsiphash.h",
     "src/third_party/utf8-decoder/utf8-decoder.h",
     "src/torque/runtime-macro-shims.h",
-    "src/tracing/trace-event.h",
     "src/tracing/traced-value.h",
     "src/tracing/tracing-category-observer.h",
     "src/utils/address-map.h",
@@ -3779,6 +3790,7 @@ v8_header_set("v8_internal_headers") {
     ":torque_runtime_support",
     ":v8_flags",
     ":v8_headers",
+    ":v8_internal_tracing_headers",
     ":v8_maybe_icu",
     ":v8_shared_internal_headers",
   ]
@@ -5583,6 +5595,10 @@ v8_source_set("cppgc_base") {
     ":v8_cppgc_shared",
     ":v8_libbase",
     ":v8_libplatform",
+  ]
+
+  deps = [
+    ":v8_internal_tracing_headers",
   ]
 
   if (cppgc_is_standalone && !v8_use_perfetto) {
