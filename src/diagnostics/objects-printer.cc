@@ -1870,6 +1870,8 @@ void WasmContinuationObject::WasmContinuationObjectPrint(std::ostream& os) {
 void WasmSuspenderObject::WasmSuspenderObjectPrint(std::ostream& os) {
   PrintHeader(os, "WasmSuspenderObject");
   os << "\n - continuation: " << continuation();
+  os << "\n - parent: " << parent();
+  os << "\n - state: " << state();
   os << "\n";
 }
 
