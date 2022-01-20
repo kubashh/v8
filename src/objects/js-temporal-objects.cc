@@ -1310,6 +1310,18 @@ MaybeHandle<JSTemporalInstant> BuiltinTimeZoneGetInstantFor(
                                       date_time, disambiguation, method);
 }
 
+// #sec-temporal-toshowcalendaroption
+Maybe<ShowCalendar> ToShowCalendarOption(Isolate* isolate,
+                                         Handle<JSReceiver> options,
+                                         const char* method) {
+  // 1. Return ? GetOption(normalizedOptions, "calendarName", « String », «
+  // "auto", "always", "never" », "auto").
+  return GetStringOption<ShowCalendar>(
+      isolate, options, "calendarName", method, {"auto", "always", "never"},
+      {ShowCalendar::kAuto, ShowCalendar::kAlways, ShowCalendar::kNever},
+      ShowCalendar::kAuto);
+}
+
 // #sec-temporal-totemporalcalendar
 MaybeHandle<JSReceiver> ToTemporalCalendar(
     Isolate* isolate, Handle<Object> temporal_calendar_like,
@@ -4556,7 +4568,53 @@ MaybeHandle<String> JSTemporalPlainDate::ToJSON(
       Object::ToString(isolate,
                        Handle<JSReceiver>(temporal_date->calendar(), isolate)),
       String);
-  // #sec-temporal.plaindate.prototype.tolocalestring
+  return TemporalDateToString(
+      isolate, temporal_date->iso_year(), temporal_date->iso_month(),
+      temporal_date->iso_day(), calendar_id, ShowCalendar::kAuto);
+}
+
+// #sec-temporal.plaindate.prototype.tostring
+MaybeHandle<String> JSTemporalPlainDate::ToString(
+    Isolate* isolate, Handle<JSTemporalPlainDate> temporal_date,
+    Handle<Object> options_obj) {
+  const char* method = "Temporal.PlainDate.prototype.toString";
+  // 1. Let temporalDate be the this value.
+  // 2. Perform ? RequireInternalSlot(temporalDate,
+  // [[InitializedTemporalDate]]).
+  // 3. Set options to ? GetOptionsObject(options).
+  Handle<JSReceiver> options;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, options, GetOptionsObject(isolate, options_obj, method), String);
+  // 4. Let showCalendar be ? ToShowCalendarOption(options).
+  Maybe<ShowCalendar> maybe_show_calendar =
+      ToShowCalendarOption(isolate, options, method);
+  MAYBE_RETURN(maybe_show_calendar, Handle<String>());
+  ShowCalendar show_calendar = maybe_show_calendar.FromJust();
+
+  // 5. Return ? TemporalDateToString(temporalDate, showCalendar).
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(temporal_date->calendar(), isolate)),
+      String);
+  return TemporalDateToString(
+      isolate, temporal_date->iso_year(), temporal_date->iso_month(),
+      temporal_date->iso_day(), calendar_id, show_calendar);
+}
+
+// #sec-temporal.plaindate.prototype.tolocalestring
+MaybeHandle<String> JSTemporalPlainDate::ToLocaleString(
+    Isolate* isolate, Handle<JSTemporalPlainDate> temporal_date,
+    Handle<Object> locales, Handle<Object> options) {
+  // TODO(ftang) implement real tolocalestring in V8_INTL_SUPPORT
+
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(temporal_date->calendar(), isolate)),
+      String);
   return TemporalDateToString(
       isolate, temporal_date->iso_year(), temporal_date->iso_month(),
       temporal_date->iso_day(), calendar_id, ShowCalendar::kAuto);
@@ -4755,6 +4813,52 @@ MaybeHandle<String> JSTemporalPlainMonthDay::ToJSON(
                                   calendar_id, ShowCalendar::kAuto);
 }
 
+// #sec-temporal.plainmonthday.prototype.tostring
+MaybeHandle<String> JSTemporalPlainMonthDay::ToString(
+    Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day,
+    Handle<Object> options_obj) {
+  const char* method = "Temporal.PlainMonthDay.prototype.toString";
+  //  1. Let monthDay be the this value.
+  // 2. Perform ? RequireInternalSlot(monthDay,
+  // [[InitializedTemporalMonthDay]]).
+  // 3. Set options to ? GetOptionsObject(options).
+  Handle<JSReceiver> options;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, options, GetOptionsObject(isolate, options_obj, method), String);
+  // 4. Let showCalendar be ? ToShowCalendarOption(options).
+  Maybe<ShowCalendar> maybe_show_calendar =
+      ToShowCalendarOption(isolate, options, method);
+  MAYBE_RETURN(maybe_show_calendar, Handle<String>());
+  ShowCalendar show_calendar = maybe_show_calendar.FromJust();
+  // 5. Return ? TemporalMonthDayToString(monthDay, showCalendar).
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(month_day->calendar(), isolate)),
+      String);
+  return TemporalMonthDayToString(isolate, month_day->iso_year(),
+                                  month_day->iso_month(), month_day->iso_day(),
+                                  calendar_id, show_calendar);
+}
+
+// #sec-temporal.plainmonthday.prototype.tolocalestring
+MaybeHandle<String> JSTemporalPlainMonthDay::ToLocaleString(
+    Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day,
+    Handle<Object> locales, Handle<Object> options) {
+  // TODO(ftang) implement real tolocalestring in V8_INTL_SUPPORT
+
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(month_day->calendar(), isolate)),
+      String);
+  return TemporalMonthDayToString(isolate, month_day->iso_year(),
+                                  month_day->iso_month(), month_day->iso_day(),
+                                  calendar_id, ShowCalendar::kAuto);
+}
+
 MaybeHandle<JSTemporalPlainYearMonth> JSTemporalPlainYearMonth::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
     Handle<Object> iso_year_obj, Handle<Object> iso_month_obj,
@@ -4830,6 +4934,52 @@ MaybeHandle<JSReceiver> JSTemporalPlainYearMonth::GetISOFields(
 // #sec-temporal.plainyearmonth.prototype.tojson
 MaybeHandle<String> JSTemporalPlainYearMonth::ToJSON(
     Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month) {
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(year_month->calendar(), isolate)),
+      String);
+  return TemporalYearMonthToString(
+      isolate, year_month->iso_year(), year_month->iso_month(),
+      year_month->iso_day(), calendar_id, ShowCalendar::kAuto);
+}
+
+// #sec-temporal.plainyearmonth.prototype.tostring
+MaybeHandle<String> JSTemporalPlainYearMonth::ToString(
+    Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month,
+    Handle<Object> options_obj) {
+  const char* method = "Temporal.PlainYearMonth.prototype.toString";
+  // 1. Let yearMonth be the this value.
+  // 2. Perform ? RequireInternalSlot(yearMonth,
+  // [[InitializedTemporalYearMonth]]).
+  // 3. Set options to ? GetOptionsObject(options).
+  Handle<JSReceiver> options;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, options, GetOptionsObject(isolate, options_obj, method), String);
+  // 4. Let showCalendar be ? ToShowCalendarOption(options).
+  Maybe<ShowCalendar> maybe_show_calendar =
+      ToShowCalendarOption(isolate, options, method);
+  MAYBE_RETURN(maybe_show_calendar, Handle<String>());
+  ShowCalendar show_calendar = maybe_show_calendar.FromJust();
+
+  // 5. Return ? TemporalYearMonthToString(yearMonth, showCalendar).
+  Handle<String> calendar_id;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, calendar_id,
+      Object::ToString(isolate,
+                       Handle<JSReceiver>(year_month->calendar(), isolate)),
+      String);
+  return TemporalYearMonthToString(
+      isolate, year_month->iso_year(), year_month->iso_month(),
+      year_month->iso_day(), calendar_id, show_calendar);
+}
+
+// #sec-temporal.plainyearmonth.prototype.tolocalestring
+MaybeHandle<String> JSTemporalPlainYearMonth::ToLocaleString(
+    Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month,
+    Handle<Object> locales, Handle<Object> options) {
+  // TODO(ftang) implement real tolocalestring in V8_INTL_SUPPORT
   Handle<String> calendar_id;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate, calendar_id,
