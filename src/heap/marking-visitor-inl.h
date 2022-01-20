@@ -51,6 +51,19 @@ void MarkingVisitorBase<ConcreteVisitor, MarkingState>::ProcessStrongHeapObject(
 // class template arguments
 template <typename ConcreteVisitor, typename MarkingState>
 // method template arguments
+void MarkingVisitorBase<ConcreteVisitor, MarkingState>::ProcessFullHeapObject(
+    HeapObject host, FullHeapObjectSlot slot, HeapObject heap_object) {
+  concrete_visitor()->SynchronizePageAccess(heap_object);
+  BasicMemoryChunk* target_page = BasicMemoryChunk::FromHeapObject(heap_object);
+  if (!is_shared_heap_ && target_page->InSharedHeap()) return;
+  MarkObject(host, heap_object);
+  // TODO(fgm): Record full slot.
+  // concrete_visitor()->RecordSlot(host, slot, heap_object);
+}
+
+// class template arguments
+template <typename ConcreteVisitor, typename MarkingState>
+// method template arguments
 template <typename THeapObjectSlot>
 void MarkingVisitorBase<ConcreteVisitor, MarkingState>::ProcessWeakHeapObject(
     HeapObject host, THeapObjectSlot slot, HeapObject heap_object) {
@@ -88,6 +101,20 @@ MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitPointersImpl(
     } else if (TSlot::kCanBeWeak && object.GetHeapObjectIfWeak(&heap_object)) {
       ProcessWeakHeapObject(host, THeapObjectSlot(slot), heap_object);
     }
+  }
+}
+
+// class template arguments
+template <typename ConcreteVisitor, typename MarkingState>
+// method template arguments
+V8_INLINE void
+MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitFullPointersImpl(
+    HeapObject host, FullObjectSlot start, FullObjectSlot end) {
+  for (FullObjectSlot slot = start; slot < end; ++slot) {
+    Object object = *slot;
+    if (!object.IsHeapObject()) return;
+    HeapObject heap_object = HeapObject::cast(object);
+    ProcessFullHeapObject(host, FullHeapObjectSlot(slot), heap_object);
   }
 }
 
@@ -418,6 +445,21 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitWeakCell(
     // transitive closure.
     local_weak_objects_->weak_cells_local.Push(weak_cell);
   }
+  return size;
+}
+
+template <typename ConcreteVisitor, typename MarkingState>
+int MarkingVisitorBase<ConcreteVisitor, MarkingState>::
+    VisitWasmContinuationObject(Map map, WasmContinuationObject object) {
+  // TODO(fgm): Synchronize with the main thread.
+  ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
+  if (!visitor->ShouldVisit(object)) return 0;
+  int size = WasmContinuationObject::BodyDescriptor::SizeOf(map, object);
+  if (visitor->ShouldVisitMapPointer()) {
+    visitor->VisitMapPointer(object);
+  }
+  WasmContinuationObject::BodyDescriptor::IterateBody(map, object, size,
+                                                      visitor);
   return size;
 }
 

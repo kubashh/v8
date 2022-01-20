@@ -1646,6 +1646,13 @@ Handle<WasmArray> Factory::NewWasmArray(
   return handle(result, isolate());
 }
 
+Handle<WasmContinuationObject> Factory::NewWasmContinuationObject() {
+  auto map = *wasm_continuation_object_map();
+  auto result = WasmContinuationObject::cast(AllocateRawWithImmortalMap(
+      map.instance_size(), AllocationType::kYoung, map));
+  return handle(result, isolate());
+}
+
 Handle<WasmStruct> Factory::NewWasmStruct(const wasm::StructType* type,
                                           wasm::WasmValue* args,
                                           Handle<Map> map) {

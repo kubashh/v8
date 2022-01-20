@@ -775,6 +775,55 @@ class WasmStruct::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+template <typename ObjectVisitor>
+class StackVisitor : public RootVisitor {
+ public:
+  explicit StackVisitor(HeapObject host, ObjectVisitor* visitor)
+      : host_(host), visitor_(visitor) {}
+
+  void VisitRootPointers(Root root, const char* description,
+                         FullObjectSlot start, FullObjectSlot end) override {
+    DCHECK_EQ(root, Root::kStackRoots);
+    visitor_->VisitFullPointers(host_, start, end);
+  }
+
+ private:
+  HeapObject host_;
+  ObjectVisitor* visitor_;
+};
+
+class WasmContinuationObject::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
+    UNREACHABLE();
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointer(obj, kParentOffset, v);
+    IteratePointer(obj, kStackOffset, v);
+    IteratePointer(obj, kJmpbufOffset, v);
+    // TODO(fgm): Uncomment the main loop below when the active stack is
+    // skipped.
+
+    // Isolate* isolate;
+    // i::GetIsolateFromHeapObject(obj, &isolate);
+    // wasm::StackMemory* stack =
+    // Managed<wasm::StackMemory>::cast(WasmContinuationObject::cast(obj).stack()).get().get();
+    // StackFrameIterator it(isolate, stack);
+    // StackVisitor<ObjectVisitor> stack_visitor(obj, v);
+    // wasm::WasmCodeRefScope scope;
+    // for (; !it.done(); it.Advance()) {
+    //   it.frame()->Iterate(&stack_visitor);
+    // }
+  }
+
+  static inline int SizeOf(Map map, HeapObject obj) {
+    return obj.SizeFromMap(map);
+  }
+};
+
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 class ExternalOneByteString::BodyDescriptor final : public BodyDescriptorBase {
@@ -1168,6 +1217,8 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
 #endif  // V8_ENABLE_WEBASSEMBLY
       return CALL_APPLY(JSObject);
 #if V8_ENABLE_WEBASSEMBLY
+    case WASM_CONTINUATION_OBJECT_TYPE:
+      return CALL_APPLY(WasmContinuationObject);
     case WASM_INSTANCE_OBJECT_TYPE:
       return CALL_APPLY(WasmInstanceObject);
 #endif  // V8_ENABLE_WEBASSEMBLY

@@ -1756,8 +1756,9 @@ void DecodeI64ExceptionValue(Handle<FixedArray> encoded_values,
 Handle<WasmContinuationObject> WasmContinuationObject::New(
     Isolate* isolate, std::unique_ptr<wasm::StackMemory> stack,
     HeapObject parent) {
-  Handle<WasmContinuationObject> result = Handle<WasmContinuationObject>::cast(
-      isolate->factory()->NewStruct(WASM_CONTINUATION_OBJECT_TYPE));
+  Handle<WasmContinuationObject> result =
+      isolate->factory()->NewWasmContinuationObject();
+
   stack->jmpbuf()->stack_limit = stack->jslimit();
   stack->jmpbuf()->sp = stack->base();
   stack->jmpbuf()->fp = kNullAddress;

@@ -988,7 +988,7 @@ class WasmArray : public TorqueGeneratedWasmArray<WasmArray, WasmObject> {
 // A wasm delimited continuation.
 class WasmContinuationObject
     : public TorqueGeneratedWasmContinuationObject<WasmContinuationObject,
-                                                   Struct> {
+                                                   HeapObject> {
  public:
   static Handle<WasmContinuationObject> New(
       Isolate* isolate, std::unique_ptr<wasm::StackMemory> stack);
@@ -997,7 +997,7 @@ class WasmContinuationObject
 
   DECL_PRINTER(WasmContinuationObject)
 
-  using BodyDescriptor = StructBodyDescriptor;
+  class BodyDescriptor;
 
  private:
   static Handle<WasmContinuationObject> New(

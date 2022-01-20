@@ -237,6 +237,8 @@ class ScavengeVisitor final : public NewSpaceVisitor<ScavengeVisitor> {
 
   V8_INLINE void VisitPointers(HeapObject host, MaybeObjectSlot start,
                                MaybeObjectSlot end) final;
+  V8_INLINE void VisitFullPointers(HeapObject host, FullObjectSlot start,
+                                   FullObjectSlot end) final;
   V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final;
 
   V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final;
