@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f78dd25f_beb97cf7",
+        "filename": "src/objects/scope-info.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "From my reading, the empty scope info allocated Heap::CreateInitialMaps() gets the scope type that\u0027s first in line. I was trying to avoid the additional allocation of position info, but reading more carefully it seems that wouldn\u0027t happen since only the invariable part of ScopeInfo gets allocated for empty scope info and it\u0027s only done once per heap, also it\u0027s always guarded with the IsEmpty bit so there\u0027s no need for a separate type. I reverted the change and added a comment here explaining about this.\n\nMaybe it\u0027s out of scope of this patch, I am curious about why the IsEmpty bit instead of an EMPTY_SCOPE type is used to indicate that the ScopeInfo is the special empty one though, I think if the latter is used that would free up a bit in the ScopeFlags?",
+      "parentUuid": "8458e97a_2bf55f68",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ecbaabe_2e6bc2df",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-01-18T07:54:44Z",
       "side": 1,
       "message": "It reads a little nicer if you\u0027d simply switch the cases:\n\nif (flags().function_kind() \u003d\u003d FunctionKind::kClassMembers...) {\n  return ParseClassForInstanceMember..();\n}\nreturn DoParseFunction(...);",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "367df4b9_14baa4b0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ecbaabe_2e6bc2df",
       "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65093355_271df044",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0dbe6b4_2690a35f",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb6481bb_07b0d13b",
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbce7f9b_0626f5e8",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb6481bb_07b0d13b",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16a1c838_ca16018f",
@@ -116,6 +188,24 @@
       "writtenOn": "2022-01-18T07:54:44Z",
       "side": 1,
       "message": "Everything down from here presumably will stay here.",
+      "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "353abea8_97911bca",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a1c838_ca16018f",
       "revId": "496d4f56c0460eda04df91c0e48090ff6ac60f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

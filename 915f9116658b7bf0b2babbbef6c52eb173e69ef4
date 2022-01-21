@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "833692b0_a6429309",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-21T04:24:36Z",
+      "side": 1,
+      "message": "I noticed that the outer scope could be something other than CLASS_SCOPE once optimized, so added another condition here and below in the calculation of needs_allocation_fixup, the first two tests wrapped in a block in test/mjsunit/regress/regress-crbug-1278086.js would hit this.",
+      "revId": "915f9116658b7bf0b2babbbef6c52eb173e69ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
