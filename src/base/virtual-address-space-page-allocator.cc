@@ -55,6 +55,11 @@ bool VirtualAddressSpacePageAllocator::SetPermissions(
                                   static_cast<PagePermissions>(access));
 }
 
+bool VirtualAddressSpacePageAllocator::AdviseHugePage(void* address,
+                                                      size_t size) {
+  return vas_->AdviseHugePage(reinterpret_cast<Address>(address), size);
+}
+
 bool VirtualAddressSpacePageAllocator::DiscardSystemPages(void* address,
                                                           size_t size) {
   return vas_->DiscardSystemPages(reinterpret_cast<Address>(address), size);
