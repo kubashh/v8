@@ -18,6 +18,7 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
 #include "src/heap/code-range.h"
+#include "src/heap/huge-page-range.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/spaces.h"
 #include "src/tasks/cancelable-task.h"
@@ -174,6 +175,11 @@ class MemoryAllocator {
       MemoryAllocator::AllocationMode alloc_mode, size_t size, Space* owner,
       Executability executable);
 
+  V8_EXPORT_PRIVATE Page* AllocatePageInHugePageRange(Space* owner);
+
+  V8_EXPORT_PRIVATE
+  HugePageRange* AllocateHugePageRange();
+
   LargePage* AllocateLargePage(size_t size, LargeObjectSpace* owner,
                                Executability executable);
 
@@ -184,6 +190,11 @@ class MemoryAllocator {
 
   V8_EXPORT_PRIVATE void Free(MemoryAllocator::FreeMode mode,
                               MemoryChunk* chunk);
+
+  void FreeFromHugePageRange(MemoryChunk* chunk);
+
+  void Free(HugePageRange* range);
+
   void FreeReadOnlyPage(ReadOnlyPage* chunk);
 
   // Returns allocated spaces in bytes.
@@ -289,6 +300,8 @@ class MemoryAllocator {
   // PerformFreeMemory can be called concurrently when PreFree was executed
   // before.
   void PerformFreeMemory(MemoryChunk* chunk);
+
+  void PerformFreeMemory(HugePageRange* range);
 
   // See AllocatePage for public interface. Note that currently we only
   // support pools for NOT_EXECUTABLE pages of size MemoryChunk::kPageSize.

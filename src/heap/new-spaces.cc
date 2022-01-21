@@ -76,7 +76,8 @@ bool SemiSpace::EnsureCurrentCapacity() {
       DCHECK_NOT_NULL(current_page);
       memory_chunk_list_.PushBack(current_page);
       marking_state->ClearLiveness(current_page);
-      current_page->SetFlags(first_page()->GetFlags(), Page::kAllFlagsMask);
+      current_page->SetFlags(first_page()->GetFlags(),
+                             Page::kAllFlagsMask ^ Page::IN_RESERVERED_RANGE);
       heap()->CreateFillerObjectAt(current_page->area_start(),
                                    static_cast<int>(current_page->area_size()),
                                    ClearRecordedSlots::kNo);
@@ -253,7 +254,8 @@ void SemiSpace::RemovePage(Page* page) {
 }
 
 void SemiSpace::PrependPage(Page* page) {
-  page->SetFlags(current_page()->GetFlags(), Page::kAllFlagsMask);
+  page->SetFlags(current_page()->GetFlags(),
+                 Page::kAllFlagsMask ^ Page::IN_RESERVERED_RANGE);
   page->set_owner(this);
   memory_chunk_list_.PushFront(page);
   current_capacity_ += Page::kPageSize;

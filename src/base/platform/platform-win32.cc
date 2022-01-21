@@ -1183,6 +1183,10 @@ bool AddressSpaceReservation::DecommitPages(void* address, size_t size) {
   return OS::DecommitPages(address, size);
 }
 
+bool AddressSpaceReservation::AdviseHugePage(void* address, size_t size) {
+  return false;
+}
+
 // The following code loads functions defined in DbhHelp.h and TlHelp32.h
 // dynamically. This is to avoid being depending on dbghelp.dll and
 // tlhelp32.dll when running (the functions in tlhelp32.dll have been moved to
