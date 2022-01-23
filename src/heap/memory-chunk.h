@@ -305,6 +305,7 @@ class MemoryChunk : public BasicMemoryChunk {
   friend class MinorMarkingState;
   friend class MinorNonAtomicMarkingState;
   friend class PagedSpace;
+  friend class HugePageRange;
 };
 
 }  // namespace internal
