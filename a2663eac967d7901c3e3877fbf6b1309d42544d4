@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d34dea6_7be30ee6",
+        "filename": "src/codegen/register-configuration.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "This can be removed.",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1276824_67358586",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "why not \"kFPAliasing !\u003d AliasingKind::COMBINE  \u0026\u0026 kFPAliasing !\u003d AliasingKind::INDEPENDENT\" here?",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f44712fb_9ff00145",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "This comment should also be adjusted to something like \"if FPAliasing kind is COMBINE\".",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14482e80_68982933",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "This comment should be adjusted.",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b11d9ec_f83b6c76",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "Comment adjust, pls",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbad73f_bbb627a7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-01-23T02:50:04Z",
+      "side": 1,
+      "message": "Since we had already added kSimd128 type for both Register kind and LiveRange kind. Perhaps it\u0027s better to split the handle of  the kSimd128 LiveRange out of \"FixedFPLiveRangeFor\" function.\n\nMaybe \"LiveRangeBuilder::LiveRangeFor\" function can be considered to be modified.",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
