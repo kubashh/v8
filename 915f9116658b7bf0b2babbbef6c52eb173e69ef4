@@ -34,6 +34,24 @@
       "parentUuid": "833692b0_a6429309",
       "revId": "915f9116658b7bf0b2babbbef6c52eb173e69ef4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b140a4cb_eca99a4a",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-24T15:19:13Z",
+      "side": 1,
+      "message": "What I noticed was that when the closest outer socpe that needs a context isn\u0027t a CLASS_SCOPE, it may not have PostionInfo at all (e.g. a block scope) then we can\u0027t compare the positions, so this check sort of does the same thing as the one below since maybe_outer_scope_info.ToHandleChecked()-\u003escope_type() \u003d\u003d CLASS_SCOPE implies that the outer scope also has position info. I probably went into a different line of thought when I wrote the check below..I\u0027ll update the check below to match this, thanks for catching it!",
+      "parentUuid": "856df928_131bc56a",
+      "revId": "915f9116658b7bf0b2babbbef6c52eb173e69ef4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
