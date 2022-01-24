@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d7420b_b95c8a5f",
+        "filename": "src/codegen/register-configuration.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d34dea6_7be30ee6",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1276824_67358586",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-23T02:50:04Z",
       "side": 1,
       "message": "why not \"kFPAliasing !\u003d AliasingKind::COMBINE  \u0026\u0026 kFPAliasing !\u003d AliasingKind::INDEPENDENT\" here?",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d82b8ec0_822baedb",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "when rep is not Simd128, it should run 1\u003c\u003cToint().",
+      "parentUuid": "c1276824_67358586",
       "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf01501_38c4f959",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f44712fb_9ff00145",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14482e80_68982933",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-01-23T02:50:04Z",
       "side": 1,
       "message": "This comment should be adjusted.",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45257605_63e6eb25",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14482e80_68982933",
       "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0db3a6d3_4eb54acc",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b11d9ec_f83b6c76",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcbad73f_bbb627a7",
@@ -99,6 +189,24 @@
       "writtenOn": "2022-01-23T02:50:04Z",
       "side": 1,
       "message": "Since we had already added kSimd128 type for both Register kind and LiveRange kind. Perhaps it\u0027s better to split the handle of  the kSimd128 LiveRange out of \"FixedFPLiveRangeFor\" function.\n\nMaybe \"LiveRangeBuilder::LiveRangeFor\" function can be considered to be modified.",
+      "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966c4948_bae05c91",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-01-24T03:42:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbad73f_bbb627a7",
       "revId": "a2663eac967d7901c3e3877fbf6b1309d42544d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
