@@ -16,15 +16,16 @@ namespace internal {
 
 // An architecture independent representation of the sets of registers available
 // for instruction creation.
+enum AliasingKind {
+  // Registers alias a single register of every other size (e.g. Intel).
+  OVERLAP,
+  // Registers alias two registers of the next smaller size (e.g. ARM).
+  COMBINE,
+  // SIMD128 Registers is independent of every other size (e.g Riscv)
+  INDEPENDENT
+};
 class V8_EXPORT_PRIVATE RegisterConfiguration {
  public:
-  enum AliasingKind {
-    // Registers alias a single register of every other size (e.g. Intel).
-    OVERLAP,
-    // Registers alias two registers of the next smaller size (e.g. ARM).
-    COMBINE
-  };
-
   // Architecture independent maxes.
   static constexpr int kMaxGeneralRegisters = 32;
   static constexpr int kMaxFPRegisters = 32;
@@ -41,10 +42,13 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
       RegList registers);
 
   RegisterConfiguration(int num_general_registers, int num_double_registers,
+                        int num_simd128_registers,
                         int num_allocatable_general_registers,
                         int num_allocatable_double_registers,
+                        int num_allocatable_simd128_registers,
                         const int* allocatable_general_codes,
                         const int* allocatable_double_codes,
+                        const int* allocatable_simd128_codes,
                         AliasingKind fp_aliasing_kind);
 
   int num_general_registers() const { return num_general_registers_; }
