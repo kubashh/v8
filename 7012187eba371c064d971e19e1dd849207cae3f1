@@ -16,6 +16,24 @@
       "message": "Nice, this looks even simpler than the version you had before :)",
       "revId": "7012187eba371c064d971e19e1dd849207cae3f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61de0fc6_e659e587",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-01-24T15:38:17Z",
+      "side": 1,
+      "message": "Thanks for the reviews that made the patch nicer :)",
+      "parentUuid": "302aac64_6f4a6bfd",
+      "revId": "7012187eba371c064d971e19e1dd849207cae3f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
