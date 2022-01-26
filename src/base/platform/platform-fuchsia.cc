@@ -373,5 +373,9 @@ bool AddressSpaceReservation::DecommitPages(void* address, size_t size) {
          DiscardSystemPages(address, size);
 }
 
+bool AddressSpaceReservation::AdviseHugePage(void* address, size_t size) {
+  return false;
+}
+
 }  // namespace base
 }  // namespace v8
