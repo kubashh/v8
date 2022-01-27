@@ -3211,17 +3211,9 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
 
   handle_scope_data_.Initialize();
 
-  // When pointer compression is on with a per-Isolate cage, allocation in the
-  // shared Isolate can point into the per-Isolate RO heap as the offsets are
-  // constant across Isolates.
-  //
-  // When pointer compression is on with a shared cage or when pointer
-  // compression is off, a shared RO heap is required. Otherwise a shared
-  // allocation requested by a client Isolate could point into the client
-  // Isolate's RO space (e.g. an RO map) whose pages gets unmapped when it is
-  // disposed.
-  CHECK_IMPLIES(is_shared_, COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL ||
-                                V8_SHARED_RO_HEAP_BOOL);
+  CHECK_IMPLIES(is_shared_, V8_SHARED_RO_HEAP_BOOL &&
+                                (COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL ||
+                                 !COMPRESS_POINTERS_BOOL));
 
 #define ISOLATE_INIT_EXECUTE(type, name, initial_value) \
   name##_ = (initial_value);
