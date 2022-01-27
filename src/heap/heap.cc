@@ -18,6 +18,7 @@
 #include "src/base/logging.h"
 #include "src/base/once.h"
 #include "src/base/platform/mutex.h"
+#include "src/base/safe_conversions_impl.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/builtins/accessors.h"
 #include "src/codegen/assembler-inl.h"
@@ -913,8 +914,39 @@ void Heap::IncrementDeferredCount(v8::Isolate::UseCounterFeature feature) {
 
 bool Heap::UncommitFromSpace() { return new_space_->UncommitFromSpace(); }
 
-void Heap::GarbageCollectionPrologue() {
+void Heap::GarbageCollectionPrologue(
+    GarbageCollectionReason gc_reason,
+    const v8::GCCallbackFlags gc_callback_flags) {
   TRACE_GC(tracer(), GCTracer::Scope::HEAP_PROLOGUE);
+
+  is_current_gc_forced_ = gc_callback_flags & v8::kGCCallbackFlagForced ||
+                          current_gc_flags_ & kForcedGC ||
+                          force_gc_on_next_allocation_;
+  is_current_gc_for_heap_profiler_ =
+      gc_reason == GarbageCollectionReason::kHeapProfiler;
+  if (force_gc_on_next_allocation_) force_gc_on_next_allocation_ = false;
+
+  // Filter on-stack reference below this method.
+  isolate()
+      ->global_handles()
+      ->CleanupOnStackReferencesBelowCurrentStackPosition();
+
+#ifdef V8_ENABLE_ALLOCATION_TIMEOUT
+  // Reset the allocation timeout, but make sure to allow at least a few
+  // allocations after a collection. The reason for this is that we have a lot
+  // of allocation sequences and we assume that a garbage collection will allow
+  // the subsequent allocation attempts to go through.
+  if (FLAG_random_gc_interval > 0 || FLAG_gc_interval >= 0) {
+    allocation_timeout_ =
+        std::max(6, NextAllocationTimeout(allocation_timeout_));
+  }
+#endif
+
+  // There may be an allocation memento behind objects in new space. Upon
+  // evacuation of a non-full new space (or if we are on the last page) there
+  // may be uninitialized memory behind top. We fill the remainder of the page
+  // with a filler.
+  if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
 
   // Reset GC statistics.
   promoted_objects_size_ = 0;
@@ -1697,6 +1729,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
   // collection is triggered. Note that these callbacks may trigger another
   // garbage collection since they may allocate.
 
+  DCHECK(AllowGarbageCollection::IsAllowed());
+
   // Ensure that all pending phantom callbacks are invoked.
   isolate()->global_handles()->InvokeSecondPassPhantomCallbacks();
 
@@ -1721,73 +1755,49 @@ bool Heap::CollectGarbage(AllocationSpace space,
     }
   }
 
-  is_current_gc_forced_ = gc_callback_flags & v8::kGCCallbackFlagForced ||
-                          current_gc_flags_ & kForcedGC ||
-                          force_gc_on_next_allocation_;
-  is_current_gc_for_heap_profiler_ =
-      gc_reason == GarbageCollectionReason::kHeapProfiler;
-  if (force_gc_on_next_allocation_) force_gc_on_next_allocation_ = false;
-
-  DevToolsTraceEventScope devtools_trace_event_scope(
-      this, IsYoungGenerationCollector(collector) ? "MinorGC" : "MajorGC",
-      GarbageCollectionReasonToString(gc_reason));
-
-  // Filter on-stack reference below this method.
-  isolate()
-      ->global_handles()
-      ->CleanupOnStackReferencesBelowCurrentStackPosition();
-
-  // The VM is in the GC state until exiting this function.
-  VMState<GC> state(isolate());
-
-#ifdef V8_ENABLE_ALLOCATION_TIMEOUT
-  // Reset the allocation timeout, but make sure to allow at least a few
-  // allocations after a collection. The reason for this is that we have a lot
-  // of allocation sequences and we assume that a garbage collection will allow
-  // the subsequent allocation attempts to go through.
-  if (FLAG_random_gc_interval > 0 || FLAG_gc_interval >= 0) {
-    allocation_timeout_ =
-        std::max(6, NextAllocationTimeout(allocation_timeout_));
-  }
-#endif
-
-  // There may be an allocation memento behind objects in new space. Upon
-  // evacuation of a non-full new space (or if we are on the last page) there
-  // may be uninitialized memory behind top. We fill the remainder of the page
-  // with a filler.
-  if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
-
-  if (IsYoungGenerationCollector(collector) &&
-      !incremental_marking()->IsStopped()) {
-    if (FLAG_trace_incremental_marking) {
-      isolate()->PrintWithTimestamp(
-          "[IncrementalMarking] Scavenge during marking.\n");
-    }
-  }
+  // Part 2: The main garbage collection phase.
 
   size_t freed_global_handles = 0;
-
-  size_t committed_memory_before = 0;
-
-  if (collector == GarbageCollector::MARK_COMPACTOR) {
-    committed_memory_before = CommittedOldGenerationMemory();
-    if (cpp_heap()) {
-      // CppHeap needs a stack marker at the top of all entry points to allow
-      // deterministic passes over the stack. E.g., a verifier that should only
-      // find a subset of references of the marker.
-      //
-      // TODO(chromium:1056170): Consider adding a component that keeps track
-      // of relevant GC stack regions where interesting pointers can be found.
-      static_cast<v8::internal::CppHeap*>(cpp_heap())
-          ->SetStackEndOfCurrentGC(v8::base::Stack::GetCurrentStackPosition());
-    }
-  }
-
+  size_t committed_memory_before = collector == GarbageCollector::MARK_COMPACTOR
+                                       ? CommittedOldGenerationMemory()
+                                       : 0;
   {
     tracer()->Start(collector, gc_reason, collector_reason);
-    DCHECK(AllowGarbageCollection::IsAllowed());
+    VMState<GC> state(isolate());
+    DevToolsTraceEventScope devtools_trace_event_scope(
+        this, IsYoungGenerationCollector(collector) ? "MinorGC" : "MajorGC",
+        GarbageCollectionReasonToString(gc_reason));
+
+    // There may be an allocation memento behind objects in new space. Upon
+    // evacuation of a non-full new space (or if we are on the last page) there
+    // may be uninitialized memory behind top. We fill the remainder of the page
+    // with a filler.
+    if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
+
+    if (IsYoungGenerationCollector(collector) &&
+        !incremental_marking()->IsStopped()) {
+      if (FLAG_trace_incremental_marking) {
+        isolate()->PrintWithTimestamp(
+            "[IncrementalMarking] Scavenge during marking.\n");
+      }
+    }
+
+    if (collector == GarbageCollector::MARK_COMPACTOR) {
+      if (cpp_heap()) {
+        // CppHeap needs a stack marker at the top of all entry points to allow
+        // deterministic passes over the stack. E.g., a verifier that should
+        // only find a subset of references of the marker.
+        //
+        // TODO(chromium:1056170): Consider adding a component that keeps track
+        // of relevant GC stack regions where interesting pointers can be found.
+        static_cast<v8::internal::CppHeap*>(cpp_heap())
+            ->SetStackEndOfCurrentGC(
+                v8::base::Stack::GetCurrentStackPosition());
+      }
+    }
+
     DisallowGarbageCollection no_gc_during_gc;
-    GarbageCollectionPrologue();
+    GarbageCollectionPrologue(gc_reason, gc_callback_flags);
 
     {
       TimedHistogram* gc_type_timer = GCTypeTimer(collector);
@@ -2458,6 +2468,16 @@ void Heap::MarkCompact() {
   PauseAllocationObserversScope pause_observers(this);
 
   SetGCState(MARK_COMPACT);
+  if (cpp_heap()) {
+    // CppHeap needs a stack marker at the top of all entry points to allow
+    // deterministic passes over the stack. E.g., a verifier that should
+    // only find a subset of references of the marker.
+    //
+    // TODO(chromium:1056170): Consider adding a component that keeps track
+    // of relevant GC stack regions where interesting pointers can be found.
+    static_cast<v8::internal::CppHeap*>(cpp_heap())
+        ->SetStackEndOfCurrentGC(v8::base::Stack::GetCurrentStackPosition());
+  }
 
   CodeSpaceMemoryModificationScope code_modifcation(this);
 
@@ -2498,6 +2518,11 @@ void Heap::MinorMarkCompact() {
 #ifdef ENABLE_MINOR_MC
   DCHECK(FLAG_minor_mc);
   DCHECK(new_space());
+
+  if (FLAG_trace_incremental_marking && !incremental_marking()->IsStopped()) {
+    isolate()->PrintWithTimestamp(
+        "[IncrementalMarking] MinorMarkCompact during marking.\n");
+  }
 
   PauseAllocationObserversScope pause_observers(this);
   SetGCState(MINOR_MARK_COMPACT);
@@ -2602,6 +2627,11 @@ void Heap::EvacuateYoungGeneration() {
 
 void Heap::Scavenge() {
   DCHECK_NOT_NULL(new_space());
+
+  if (FLAG_trace_incremental_marking && !incremental_marking()->IsStopped()) {
+    isolate()->PrintWithTimestamp(
+        "[IncrementalMarking] Scavenge during marking.\n");
+  }
 
   if (fast_promotion_mode_ && CanPromoteYoungAndExpandOldGeneration(0)) {
     tracer()->NotifyYoungGenerationHandling(
