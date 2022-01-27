@@ -471,6 +471,8 @@ class Heap {
 #endif
   }
 
+  static GCType GetGCTypeFromGarbageCollector(GarbageCollector collector);
+
   // Helper function to get the bytecode flushing mode based on the flags. This
   // is required because it is not safe to acess flags in concurrent marker.
   static inline base::EnumSet<CodeFlushMode> GetCodeFlushMode(Isolate* isolate);
