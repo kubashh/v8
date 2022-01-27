@@ -34,7 +34,10 @@ function MakeHoley(array) {
 }
 
 function SmiSetup() {
-  array = Array.from({ length: array_size }, (_, i) => i);
+  array = [];
+  for (let i = 0; i < array_size; i++) array.push(i);
+  // TODO(v8:10105): May still create holey arrays (allocation sites?).
+  // assert(%HasFastPackedElements(array));
   assert(%HasSmiElements(array));
 }
 
@@ -45,7 +48,10 @@ function HoleySmiSetup() {
 }
 
 function DoubleSetup() {
-  array = Array.from({ length: array_size }, (_, i) => i + 0.5);
+  array = [];
+  for (let i = 0; i < array_size; i++) array.push(i + 0.5);
+  // TODO(v8:10105): May still create holey arrays (allocation sites?).
+  // assert(%HasFastPackedElements(array));
   assert(%HasDoubleElements(array));
 }
 
@@ -56,7 +62,10 @@ function HoleyDoubleSetup() {
 }
 
 function FastSetup() {
-  array = Array.from({ length: array_size }, (_, i) => `value ${i}`);
+  array = [];
+  for (let i = 0; i < array_size; i++) array.push(`value ${i}`);
+  // TODO(v8:10105): May still create holey arrays (allocation sites?).
+  // assert(%HasFastPackedElements(array));
   assert(%HasObjectElements(array));
 }
 
