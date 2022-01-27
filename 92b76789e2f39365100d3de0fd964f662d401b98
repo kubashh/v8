@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79162e01_9c2a3e21",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "Spurious new line.",
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f00e3c_a3a1a77a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "Same tracking bug as used for eliminating overlapping GCs?",
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c1909ca_49bd386b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa5c23e_1e3b1f51",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "nit: // static",
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c58e464b_3dae84e5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "Can this be an anonymous free standing function? (Why is it on Heap?)",
+      "range": {
+        "startLine": 1664,
+        "startChar": 13,
+        "endLine": 1664,
+        "endChar": 42
+      },
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e561ee8_96f94c2e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-01-27T09:13:52Z",
+      "side": 1,
+      "message": "Let\u0027s avoid the ////// blocks which we don\u0027t use anywhere else I think (?)",
+      "range": {
+        "startLine": 1696,
+        "startChar": 10,
+        "endLine": 1696,
+        "endChar": 17
+      },
+      "revId": "92b76789e2f39365100d3de0fd964f662d401b98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
