@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11481dce_a2dfa884",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-27T14:39:33Z",
+      "side": 1,
+      "message": "As much as I am a fan of early returns, I think in this case it would actually be easier to understand if we have one return in the end, which combines all the previously computed things, like:\n  return size_of_imports +\n    (include_liftoff ? size_of_liftoff : 0) +\n    (dynamic_tiering ? size_of_turbofan / 4 : size_of_turbofan);\n\nOr you do the computations before the return:\n  if (!include_liftoff) size_of_liftoff \u003d 0;\n  if (dynamic_tiering) size_of_turbofan /\u003d 4;\n  return size_of_imports + size_of_liftoff + size_of_turbofan;",
+      "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "262c9485_ac47f3a9",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-27T14:39:33Z",
+      "side": 1,
+      "message": "nit: a division by four is much easier to read, and will be optimized by the compiler into a shift.",
+      "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
