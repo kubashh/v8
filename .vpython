@@ -22,7 +22,7 @@
 # Read more about `vpython` and how to modify this file here:
 #   https://chromium.googlesource.com/infra/infra/+/master/doc/users/vpython.md
 
-python_version: "2.7"
+python_version: "3.8"
 
 # The default set of platforms vpython checks does not yet include mac-arm64.
 # Setting `verify_pep425_tag` to the list of platforms we explicitly must support
