@@ -89,6 +89,9 @@ constexpr bool all(Args... rest) {
   return fold(std::logical_and<>{}, true, rest...);
 }
 
+template <bool add_const, class T>
+using add_const_if = std::conditional_t<add_const, const T, T>;
+
 template <class... Ts>
 struct make_void {
   using type = void;
@@ -106,6 +109,15 @@ struct conjunction<B> : B {};
 template <class B, class... Bn>
 struct conjunction<B, Bn...>
     : std::conditional_t<bool(B::value), conjunction<Bn...>, B> {};
+
+template <class T, class... Args>
+std::array<T, 1 + sizeof...(Args)> make_array(T first, Args... rest) {
+  return {std::move(first), std::move(rest)...};
+}
+template <class T>
+std::array<T, 0> make_array() {
+  return {};
+}
 
 }  // namespace base
 }  // namespace v8
