@@ -16,6 +16,46 @@
       "message": "ptal since you suggested the JS pattern :)",
       "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddfe4c71_336e0d87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-27T16:24:38Z",
+      "side": 1,
+      "message": "LGTM with a suggestion.",
+      "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e2b8ca4_adeb887c",
+        "filename": "test/js-perf-test/Array/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-01-27T16:24:38Z",
+      "side": 1,
+      "message": "Well, if it _is_ allocation sites, then you can probably fix it by replacing line 45 with a copy of lines 37+38 (and accordingly for double/fast elements below).",
+      "range": {
+        "startLine": 39,
+        "startChar": 52,
+        "endLine": 39,
+        "endChar": 69
+      },
+      "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
