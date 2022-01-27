@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7140c11f_3ff0632e",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-27T20:21:22Z",
+      "side": 1,
+      "message": "I don\u0027t agree that code style comments are bikeshedding. Of course there is always a bit of personal preference contained, but my comment had the intention to increase readability of the code which got quite a bit more complex in this CL. Future readers and maintainers of this code will profit from any improvement we make now.\n\nThanks for the changes, I think they indeed increase readability quite a bit.",
+      "parentUuid": "53d7b942_7b540646",
+      "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "262c9485_ac47f3a9",

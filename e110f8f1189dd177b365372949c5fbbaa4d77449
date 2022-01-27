@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b70d37_d0761d03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-27T20:21:22Z",
+      "side": 1,
+      "message": "LGTM with one typo.",
+      "revId": "e110f8f1189dd177b365372949c5fbbaa4d77449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f2ff1ef_557ae85d",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-01-27T20:21:22Z",
+      "side": 1,
+      "message": "\"now liftoff\" -\u003e \"no Liftoff\"?",
+      "range": {
+        "startLine": 2087,
+        "startChar": 27,
+        "endLine": 2087,
+        "endChar": 38
+      },
+      "revId": "e110f8f1189dd177b365372949c5fbbaa4d77449",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
