@@ -18,7 +18,6 @@
       "fuchsia.device.NameProvider",
       "fuchsia.fonts.Provider",
       "fuchsia.intl.PropertyProvider",
-      "fuchsia.kernel.VmexResource",
       "fuchsia.logger.Log",
       "fuchsia.logger.LogSink",
       "fuchsia.media.Audio",
