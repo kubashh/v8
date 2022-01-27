@@ -2043,8 +2043,9 @@ size_t WasmCodeManager::EstimateLiftoffCodeSize(int body_size) {
 }
 
 // static
-size_t WasmCodeManager::EstimateNativeModuleCodeSize(const WasmModule* module,
-                                                     bool include_liftoff) {
+size_t WasmCodeManager::EstimateNativeModuleCodeSize(
+    const WasmModule* module, bool include_liftoff,
+    DynamicTiering dynamic_tiering) {
   int num_functions = static_cast<int>(module->num_declared_functions);
   int num_imported_functions = static_cast<int>(module->num_imported_functions);
   int code_section_length = 0;
@@ -2056,25 +2057,44 @@ size_t WasmCodeManager::EstimateNativeModuleCodeSize(const WasmModule* module,
         static_cast<int>(last_fn->code.end_offset() - first_fn->code.offset());
   }
   return EstimateNativeModuleCodeSize(num_functions, num_imported_functions,
-                                      code_section_length, include_liftoff);
+                                      code_section_length, include_liftoff,
+                                      dynamic_tiering);
 }
 
 // static
-size_t WasmCodeManager::EstimateNativeModuleCodeSize(int num_functions,
-                                                     int num_imported_functions,
-                                                     int code_section_length,
-                                                     bool include_liftoff) {
-  const size_t overhead_per_function =
-      kTurbofanFunctionOverhead + kCodeAlignment / 2 +
-      (include_liftoff ? kLiftoffFunctionOverhead + kCodeAlignment / 2 : 0);
-  const size_t overhead_per_code_byte =
-      kTurbofanCodeSizeMultiplier +
-      (include_liftoff ? kLiftoffCodeSizeMultiplier : 0);
+size_t WasmCodeManager::EstimateNativeModuleCodeSize(
+    int num_functions, int num_imported_functions, int code_section_length,
+    bool include_liftoff, DynamicTiering dynamic_tiering) {
   // Note that the size for jump tables is added later, in {ReservationSize} /
   // {OverheadPerCodeSpace}.
-  return overhead_per_function * num_functions           // per function
-         + overhead_per_code_byte * code_section_length  // per code byte
-         + kImportSize * num_imported_functions;         // per import
+
+  const size_t size_of_imports = kImportSize * num_imported_functions;
+
+  const size_t overhead_per_function_turbofan =
+      kTurbofanFunctionOverhead + kCodeAlignment / 2;
+
+  const size_t size_of_turbofan =
+      overhead_per_function_turbofan * num_functions +
+      kTurbofanCodeSizeMultiplier * code_section_length;
+
+  if (!include_liftoff) {
+    return size_of_imports + size_of_turbofan;
+  }
+
+  const size_t overhead_per_function_liftoff =
+      kLiftoffFunctionOverhead + kCodeAlignment / 2;
+
+  const size_t size_of_liftoff =
+      overhead_per_function_liftoff * num_functions +
+      kLiftoffCodeSizeMultiplier * code_section_length;
+
+  if (dynamic_tiering == DynamicTiering::kDisabled) {
+    return size_of_imports + size_of_liftoff + size_of_turbofan;
+  }
+
+  // With dynamic tiering we estimate that less than a quarter of the functions
+  // gets compiled with TurboFan.
+  return size_of_imports + size_of_liftoff + (size_of_turbofan / 4);
 }
 
 // static
