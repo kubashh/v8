@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "034ba92c_2e3362ab",
+        "filename": "src/objects/scope-info.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-27T20:35:12Z",
+      "side": 1,
+      "message": "The artifacts of distributed issue fixing ))",
+      "revId": "49e31074f712ef43ab96d62204ba9927df8d8801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
