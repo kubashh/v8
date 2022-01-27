@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68b23c9a_1f3832d6",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-01-27T12:59:15Z",
+      "side": 0,
+      "message": "Code objects could actually be visited by this method and thus this way of the main cage base computation is not correct.",
+      "revId": "e78a351f045970108daa27546c5e2e07a9021a49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
