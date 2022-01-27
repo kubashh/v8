@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d7b942_7b540646",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2081,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-27T17:19:52Z",
+      "side": 1,
+      "message": "Isn\u0027t this a bikeshedding discussion about what kind of code style we prefer personally?\n\nAside from that, I think your calculation is wrong. If include_liftoff is false and dynamic tiering is enabled, then everything gets compiled with TurboFan, so we need the full size of size_of_turbofan, and not just 25%.\n\nI changed the code now such that the effect of include_liftoff an dynamic_tiering is more obvious, which is an adjusted version of your second snippet.",
+      "parentUuid": "11481dce_a2dfa884",
+      "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "262c9485_ac47f3a9",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-01-27T14:39:33Z",
       "side": 1,
       "message": "nit: a division by four is much easier to read, and will be optimized by the compiler into a shift.",
+      "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "088147a6_fcaf91da",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-01-27T17:19:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "262c9485_ac47f3a9",
       "revId": "bbc2e8146dca549a56afbb0426867d531205336c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
