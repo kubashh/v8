@@ -34,6 +34,24 @@
       "parentUuid": "c2e4acb9_649ceca0",
       "revId": "a66b09e5510d62ff469e72b1a8ff7f0ead1bf0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67619e99_6f5b72e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115629
+      },
+      "writtenOn": "2022-01-28T17:59:37Z",
+      "side": 1,
+      "message": "Nope, we\u0027re building with clang from the Chromium tree.",
+      "parentUuid": "6825a952_3878ba06",
+      "revId": "a66b09e5510d62ff469e72b1a8ff7f0ead1bf0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
