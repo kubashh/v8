@@ -2057,8 +2057,8 @@ MaybeLocal<Value> Script::Run(Local<Context> context,
   ENTER_V8(isolate, context, Script, Run, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   i::AggregatingHistogramTimerScope histogram_timer(
       isolate->counters()->compile_lazy());
   auto fun = i::Handle<i::JSFunction>::cast(Utils::OpenHandle(this));
@@ -2361,8 +2361,8 @@ MaybeLocal<Value> Module::Evaluate(Local<Context> context) {
   ENTER_V8(isolate, context, Module, Evaluate, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   i::AggregatingHistogramTimerScope timer(isolate->counters()->compile_lazy());
 
   i::Handle<i::Module> self = Utils::OpenHandle(this);
@@ -5118,8 +5118,8 @@ MaybeLocal<Value> Object::CallAsFunction(Local<Context> context,
   ENTER_V8(isolate, context, Object, CallAsFunction, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   auto self = Utils::OpenHandle(this);
   auto recv_obj = Utils::OpenHandle(*recv);
   STATIC_ASSERT(sizeof(v8::Local<v8::Value>) == sizeof(i::Handle<i::Object>));
@@ -5138,8 +5138,8 @@ MaybeLocal<Value> Object::CallAsConstructor(Local<Context> context, int argc,
   ENTER_V8(isolate, context, Object, CallAsConstructor, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   auto self = Utils::OpenHandle(this);
   STATIC_ASSERT(sizeof(v8::Local<v8::Value>) == sizeof(i::Handle<i::Object>));
   i::Handle<i::Object>* args = reinterpret_cast<i::Handle<i::Object>*>(argv);
@@ -5177,8 +5177,8 @@ MaybeLocal<Object> Function::NewInstanceWithSideEffectType(
   ENTER_V8(isolate, context, Function, NewInstance, MaybeLocal<Object>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   auto self = Utils::OpenHandle(this);
   STATIC_ASSERT(sizeof(v8::Local<v8::Value>) == sizeof(i::Handle<i::Object>));
   bool should_set_has_no_side_effect =
@@ -5228,8 +5228,8 @@ MaybeLocal<v8::Value> Function::Call(Local<Context> context,
   ENTER_V8(isolate, context, Function, Call, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(isolate);
-  i::NestedTimedHistogramScope execute_timer(isolate->counters()->execute(),
-                                             isolate);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   auto self = Utils::OpenHandle(this);
   Utils::ApiCheck(!self.is_null(), "v8::Function::Call",
                   "Function to be called is a null pointer");
@@ -6365,6 +6365,8 @@ Local<Context> NewContext(
 
   TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.NewContext");
   LOG_API(isolate, Context, New);
+  i::LongTaskNestedTimedHistogramScope execute_timer(
+      isolate->counters()->execute());
   i::HandleScope scope(isolate);
   ExtensionConfiguration no_extensions;
   if (extensions == nullptr) extensions = &no_extensions;
