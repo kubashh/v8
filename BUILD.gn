@@ -1032,6 +1032,10 @@ config("toolchain") {
         asmflags = [ "-mbranch-protection=pac-ret" ]
       }
     }
+
+    # TODO(adamk): Remove this flag once relaxed SIMD tests pass without it.
+    # See https://crbug.com/v8/12588.
+    cflags += [ "-ffp-contract=off" ]
   }
 
   # Mips64el/mipsel simulators.
