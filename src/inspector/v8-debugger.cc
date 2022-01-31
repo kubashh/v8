@@ -211,14 +211,21 @@ void V8Debugger::breakProgram(int targetContextGroupId) {
   v8::debug::BreakRightNow(m_isolate);
 }
 
-void V8Debugger::interruptAndBreak(int targetContextGroupId) {
+void V8Debugger::interruptAndBreak(int targetContextGroupId,
+                                   v8::debug::BreakReason breakReason) {
   // Don't allow nested breaks.
   if (isPaused()) return;
   DCHECK(targetContextGroupId);
   m_targetContextGroupId = targetContextGroupId;
+  v8::debug::BreakReasons* reasons = new v8::debug::BreakReasons({breakReason});
   m_isolate->RequestInterrupt(
-      [](v8::Isolate* isolate, void*) { v8::debug::BreakRightNow(isolate); },
-      nullptr);
+      [](v8::Isolate* isolate, void* data) {
+        v8::debug::BreakReasons* reasons =
+            reinterpret_cast<v8::debug::BreakReasons*>(data);
+        v8::debug::BreakRightNow(isolate, *reasons);
+        delete reasons;
+      },
+      reasons);
 }
 
 void V8Debugger::continueProgram(int targetContextGroupId,
