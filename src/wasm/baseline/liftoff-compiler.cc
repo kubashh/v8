@@ -4852,12 +4852,12 @@ class LiftoffCompiler {
     LiftoffRegister src = pinned.set(__ PopToRegister(pinned));
     LiftoffRegister dst = pinned.set(PopMemTypeToRegister(pinned));
 
-    Register instance = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    __ FillInstanceInto(instance);
-
     LiftoffRegister segment_index =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     __ LoadConstant(segment_index, WasmValue(imm.data_segment.index));
+
+    Register instance = LoadInstanceIntoRegister(pinned, no_reg);
+    DCHECK_NE(no_reg, instance);
 
     ExternalReference ext_ref = ExternalReference::wasm_memory_init();
     auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind, kI32,
@@ -4901,8 +4901,10 @@ class LiftoffCompiler {
     LiftoffRegister size = pinned.set(PopMemTypeToRegister(pinned));
     LiftoffRegister src = pinned.set(PopMemTypeToRegister(pinned));
     LiftoffRegister dst = pinned.set(PopMemTypeToRegister(pinned));
-    Register instance = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    __ FillInstanceInto(instance);
+
+    Register instance = LoadInstanceIntoRegister(pinned, no_reg);
+    DCHECK_NE(no_reg, instance);
+
     ExternalReference ext_ref = ExternalReference::wasm_memory_copy();
     auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind,
                                              kPointerKind, kPointerKind);
@@ -4924,8 +4926,9 @@ class LiftoffCompiler {
     LiftoffRegister value = pinned.set(__ PopToRegister(pinned));
     LiftoffRegister dst = pinned.set(PopMemTypeToRegister(pinned));
 
-    Register instance = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    __ FillInstanceInto(instance);
+    Register instance = LoadInstanceIntoRegister(pinned, no_reg);
+    DCHECK_NE(no_reg, instance);
+
     ExternalReference ext_ref = ExternalReference::wasm_memory_fill();
     auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind, kI32,
                                              kPointerKind);
@@ -6390,10 +6393,10 @@ class LiftoffCompiler {
   Register LoadInstanceIntoRegister(LiftoffRegList pinned, Register fallback) {
     Register instance = __ cache_state()->cached_instance;
     if (instance == no_reg) {
-      instance = __ cache_state()->TrySetCachedInstanceRegister(
-          pinned | LiftoffRegList::ForRegs(fallback));
+      if (fallback != no_reg) pinned.set(fallback);
+      instance = __ cache_state()->TrySetCachedInstanceRegister(pinned);
       if (instance == no_reg) instance = fallback;
-      __ LoadInstanceFromFrame(instance);
+      if (instance != no_reg) __ LoadInstanceFromFrame(instance);
     }
     return instance;
   }
