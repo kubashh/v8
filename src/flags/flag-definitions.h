@@ -506,7 +506,6 @@ DEFINE_BOOL_READONLY(conservative_stack_scanning,
 DEFINE_BOOL(future, FUTURE_BOOL,
             "Implies all staged features that we want to ship in the "
             "not-too-far future")
-
 #if ENABLE_SPARKPLUG
 DEFINE_WEAK_IMPLICATION(future, sparkplug)
 DEFINE_WEAK_IMPLICATION(future, flush_baseline_code)
@@ -517,6 +516,7 @@ DEFINE_WEAK_IMPLICATION(future, short_builtin_calls)
 #if !MUST_WRITE_PROTECT_CODE_MEMORY
 DEFINE_WEAK_VALUE_IMPLICATION(future, write_protect_code_memory, false)
 #endif
+DEFINE_WEAK_IMPLICATION(future, compact_map_space)
 
 DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      V8_DICT_PROPERTY_CONST_TRACKING_BOOL,
