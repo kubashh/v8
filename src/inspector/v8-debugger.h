@@ -54,7 +54,8 @@ class V8Debugger : public v8::debug::DebugDelegate,
   void setPauseOnExceptionsState(v8::debug::ExceptionBreakState);
   bool canBreakProgram();
   void breakProgram(int targetContextGroupId);
-  void interruptAndBreak(int targetContextGroupId);
+  void interruptAndBreak(int targetContextGroupId,
+                         v8::debug::BreakReason breakReason);
   void continueProgram(int targetContextGroupId,
                        bool terminateOnResume = false);
   void breakProgramOnAssert(int targetContextGroupId);
