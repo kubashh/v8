@@ -1687,7 +1687,7 @@ class WasmDecoder : public Decoder {
       case kExprRefAsNonNull:
         return 1;
 
-#define DECLARE_OPCODE_CASE(name, opcode, sig) case kExpr##name:
+#define DECLARE_OPCODE_CASE(name, ...) case kExpr##name:
         // clang-format off
       /********** Simple and memory opcodes **********/
       FOREACH_SIMPLE_OPCODE(DECLARE_OPCODE_CASE)
@@ -1913,7 +1913,7 @@ class WasmDecoder : public Decoder {
       // Prefixed opcodes (already handled, included here for completeness of
       // switch)
       FOREACH_SIMD_OPCODE(DECLARE_OPCODE_CASE)
-      FOREACH_NUMERIC_OPCODE(DECLARE_OPCODE_CASE)
+      FOREACH_NUMERIC_OPCODE(DECLARE_OPCODE_CASE, DECLARE_OPCODE_CASE)
       FOREACH_ATOMIC_OPCODE(DECLARE_OPCODE_CASE)
       FOREACH_ATOMIC_0_OPERAND_OPCODE(DECLARE_OPCODE_CASE)
       FOREACH_GC_OPCODE(DECLARE_OPCODE_CASE)
@@ -2021,13 +2021,19 @@ class WasmDecoder : public Decoder {
             return {2, 1};
           FOREACH_SIMD_CONST_OPCODE(DECLARE_OPCODE_CASE)
             return {0, 1};
+          // Special case numeric opcodes without fixed signature.
+          case kExprMemoryInit:
+          case kExprMemoryCopy:
+          case kExprMemoryFill:
+            return {3, 0};
+          case kExprTableGrow:
+            return {2, 1};
+          case kExprTableFill:
+            return {3, 0};
           default: {
             sig = WasmOpcodes::Signature(opcode);
-            if (sig) {
-              return {sig->parameter_count(), sig->return_count()};
-            } else {
-              UNREACHABLE();
-            }
+            DCHECK_NOT_NULL(sig);
+            return {sig->parameter_count(), sig->return_count()};
           }
         }
       }
@@ -4916,10 +4922,6 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
 
   unsigned DecodeNumericOpcode(WasmOpcode opcode, uint32_t opcode_length) {
     const FunctionSig* sig = WasmOpcodes::Signature(opcode);
-    if (!VALIDATE(sig != nullptr)) {
-      this->DecodeError("invalid numeric opcode");
-      return 0;
-    }
     switch (opcode) {
       case kExprI32SConvertSatF32:
       case kExprI32UConvertSatF32:
@@ -4935,10 +4937,11 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       case kExprMemoryInit: {
         MemoryInitImmediate<validate> imm(this, this->pc_ + opcode_length);
         if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
-        Value size = Peek(0, 2, sig->GetParam(2));
-        Value src = Peek(1, 1, sig->GetParam(1));
-        Value dst = Peek(2, 0, sig->GetParam(0));
-        CALL_INTERFACE_IF_OK_AND_REACHABLE(MemoryInit, imm, dst, src, size);
+        // TODO(clemensb): Add memory64 support.
+        Value size = Peek(0, 2, kWasmI32);
+        Value offset = Peek(1, 1, kWasmI32);
+        Value dst = Peek(2, 0, kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(MemoryInit, imm, dst, offset, size);
         Drop(3);
         return opcode_length + imm.length;
       }
@@ -4954,9 +4957,10 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       case kExprMemoryCopy: {
         MemoryCopyImmediate<validate> imm(this, this->pc_ + opcode_length);
         if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
-        Value size = Peek(0, 2, sig->GetParam(2));
-        Value src = Peek(1, 1, sig->GetParam(1));
-        Value dst = Peek(2, 0, sig->GetParam(0));
+        // TODO(clemensb): Add memory64 support.
+        Value size = Peek(0, 2, kWasmI32);
+        Value src = Peek(1, 1, kWasmI32);
+        Value dst = Peek(2, 0, kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(MemoryCopy, imm, dst, src, size);
         Drop(3);
         return opcode_length + imm.length;
@@ -4964,9 +4968,10 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       case kExprMemoryFill: {
         MemoryIndexImmediate<validate> imm(this, this->pc_ + opcode_length);
         if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
-        Value size = Peek(0, 2, sig->GetParam(2));
-        Value value = Peek(1, 1, sig->GetParam(1));
-        Value dst = Peek(2, 0, sig->GetParam(0));
+        // TODO(clemensb): Add memory64 support.
+        Value size = Peek(0, 2, kWasmI32);
+        Value value = Peek(1, 1, kWasmI32);
+        Value dst = Peek(2, 0, kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(MemoryFill, imm, dst, value, size);
         Drop(3);
         return opcode_length + imm.length;
@@ -5002,7 +5007,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
         IndexImmediate<validate> imm(this, this->pc_ + opcode_length,
                                      "table index");
         if (!this->ValidateTable(this->pc_ + opcode_length, imm)) return 0;
-        Value delta = Peek(0, 1, sig->GetParam(1));
+        Value delta = Peek(0, 1, kWasmI32);
         Value value = Peek(1, 0, this->module_->tables[imm.index].type);
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(TableGrow, imm, value, delta,
@@ -5024,9 +5029,9 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
         IndexImmediate<validate> imm(this, this->pc_ + opcode_length,
                                      "table index");
         if (!this->ValidateTable(this->pc_ + opcode_length, imm)) return 0;
-        Value count = Peek(0, 2, sig->GetParam(2));
+        Value count = Peek(0, 2, kWasmI32);
         Value value = Peek(1, 1, this->module_->tables[imm.index].type);
-        Value start = Peek(2, 0, sig->GetParam(0));
+        Value start = Peek(2, 0, kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(TableFill, imm, start, value, count);
         Drop(3);
         return opcode_length + imm.length;
