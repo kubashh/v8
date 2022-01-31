@@ -31,14 +31,15 @@ bool InvalidatedSlotsFilter::IsValid(Address slot) {
   HeapObject invalidated_object = HeapObject::FromAddress(invalidated_start_);
 
   if (invalidated_size_ == 0) {
-    DCHECK(invalidated_object.map().IsMap());
+    DCHECK(MarkCompactCollector::IsMapOrForwardedMap(invalidated_object.map()));
     invalidated_size_ = invalidated_object.Size();
   }
 
   int offset = static_cast<int>(slot - invalidated_start_);
-  DCHECK_GT(offset, 0);
+  DCHECK_GE(offset, 0);
   if (offset < invalidated_size_)
-    return invalidated_object.IsValidSlot(invalidated_object.map(), offset);
+    return offset == 0 ||
+           invalidated_object.IsValidSlot(invalidated_object.map(), offset);
 
   NextInvalidatedObject();
   return true;
