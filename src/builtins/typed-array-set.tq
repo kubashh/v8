@@ -70,7 +70,8 @@ TypedArrayPrototypeSet(
     // 7. Let targetBuffer be target.[[ViewedArrayBuffer]].
     // 8. If IsDetachedBuffer(targetBuffer) is true, throw a TypeError
     //   exception.
-    const utarget = typed_array::EnsureAttached(target) otherwise IsDetached;
+    const attachedTargetAndLength = EnsureAttachedAndReadLength(target)
+        otherwise IsDetachedOrOutOfBounds;
 
     const overloadedArg = arguments[0];
     try {
@@ -86,22 +87,23 @@ TypedArrayPrototypeSet(
       // 10. Let srcBuffer be typedArray.[[ViewedArrayBuffer]].
       // 11. If IsDetachedBuffer(srcBuffer) is true, throw a TypeError
       //   exception.
-      const utypedArray =
-          typed_array::EnsureAttached(typedArray) otherwise IsDetached;
+      const utypedArray = typed_array::EnsureAttached(typedArray)
+          otherwise IsDetachedOrOutOfBounds;
 
       TypedArrayPrototypeSetTypedArray(
-          utarget, utypedArray, targetOffset, targetOffsetOverflowed)
+          attachedTargetAndLength, utypedArray, targetOffset,
+          targetOffsetOverflowed)
           otherwise OffsetOutOfBounds;
       return Undefined;
     } label NotTypedArray deferred {
       TypedArrayPrototypeSetArray(
-          utarget, overloadedArg, targetOffset, targetOffsetOverflowed)
-          otherwise OffsetOutOfBounds, IsDetached;
+          target, overloadedArg, targetOffset, targetOffsetOverflowed)
+          otherwise OffsetOutOfBounds, IsDetachedOrOutOfBounds;
       return Undefined;
     }
   } label OffsetOutOfBounds deferred {
     ThrowRangeError(MessageTemplate::kTypedArraySetOffsetOutOfBounds);
-  } label IsDetached deferred {
+  } label IsDetachedOrOutOfBounds deferred {
     ThrowTypeError(MessageTemplate::kDetachedOperation, kBuiltinNameSet);
   }
 }
@@ -112,7 +114,7 @@ transitioning macro
 TypedArrayPrototypeSetArray(implicit context: Context, receiver: JSAny)(
     target: JSTypedArray, arrayArg: JSAny, targetOffset: uintptr,
     targetOffsetOverflowed: bool): void labels IfOffsetOutOfBounds,
-    IfDetached {
+    IfDetachedOrOutOfBounds {
   // Steps 9-13 are not observable, do them later.
 
   // 14. Let src be ? ToObject(array).
@@ -124,7 +126,8 @@ TypedArrayPrototypeSetArray(implicit context: Context, receiver: JSAny)(
   if (targetOffsetOverflowed) goto IfOffsetOutOfBounds;
 
   // 9. Let targetLength be target.[[ArrayLength]].
-  const targetLength = target.length;
+  const targetLength = LoadJSTypedArrayLengthAndCheckDetached(target)
+      otherwise IfDetachedOrOutOfBounds;
 
   // 16. If srcLength + targetOffset > targetLength, throw a RangeError
   //   exception.
@@ -161,7 +164,9 @@ TypedArrayPrototypeSetArray(implicit context: Context, receiver: JSAny)(
         IsElementsKindInRange(
             srcKind, ElementsKind::PACKED_DOUBLE_ELEMENTS,
             ElementsKind::HOLEY_DOUBLE_ELEMENTS)) {
-      const utarget = typed_array::EnsureAttached(target) otherwise IfDetached;
+      // FIXME: read length here, also add a test
+      const utarget =
+          typed_array::EnsureAttached(target) otherwise IfDetachedOrOutOfBounds;
       CallCCopyFastNumberJSArrayElementsToTypedArray(
           context, fastSrc, utarget, srcLength, targetOffset);
 
@@ -178,17 +183,20 @@ TypedArrayPrototypeSetArray(implicit context: Context, receiver: JSAny)(
 // https://tc39.es/ecma262/#sec-%typedarray%.prototype.set-typedarray-offset
 transitioning macro
 TypedArrayPrototypeSetTypedArray(implicit context: Context, receiver: JSAny)(
-    target: AttachedJSTypedArray, typedArray: AttachedJSTypedArray,
-    targetOffset: uintptr,
+    attachedTargetAndLength: typed_array::AttachedJSTypedArrayAndLength,
+    typedArray: AttachedJSTypedArray, targetOffset: uintptr,
     targetOffsetOverflowed: bool): void labels IfOffsetOutOfBounds {
   // Steps 12-20 are not observable, so we can handle offset overflow
   // at step 21 here.
   if (targetOffsetOverflowed) goto IfOffsetOutOfBounds;
 
   // 9. Let targetLength be target.[[ArrayLength]].
-  const targetLength = target.length;
+  // (This step is already done.)
+  const target = attachedTargetAndLength.array;
+  const targetLength = attachedTargetAndLength.length;
 
   // 19. Let srcLength be typedArray.[[ArrayLength]].
+  // FIXME: change this
   const srcLength: uintptr = typedArray.length;
 
   // Steps 12-20 are not observable, so we can do step 21 here.
