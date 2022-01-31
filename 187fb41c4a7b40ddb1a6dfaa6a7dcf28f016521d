@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b42768d1_26b673f3",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-01-31T16:57:04Z",
+      "side": 1,
+      "message": "Could not we avoid the manual memory management stuff by hard-coding kScheduled reason here?\n\nI think what you have here would leak if v8 tears down without interrupting.",
+      "range": {
+        "startLine": 226,
+        "startChar": 8,
+        "endLine": 226,
+        "endChar": 22
+      },
+      "revId": "187fb41c4a7b40ddb1a6dfaa6a7dcf28f016521d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
