@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267a286b_7f1d2d08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-01T11:23:10Z",
+      "side": 1,
+      "message": "Generally looks good, just have a few smaller questions",
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac9a4e89_8cef18c0",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-01T11:23:10Z",
+      "side": 1,
+      "message": "oh god... I am not sure this is really readable...",
+      "range": {
+        "startLine": 644,
+        "startChar": 23,
+        "endLine": 644,
+        "endChar": 39
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6fcc2b3_ab7dca23",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-01T11:23:10Z",
+      "side": 1,
+      "message": "Instead of adding a branch here, you could also specialize `MutatorUnifiedHeapMarkingVisitor` with am emty `Visit(TracedReferenceBase)`?\n\nwdyt?",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24d4215e_850f3434",
+        "filename": "src/heap/cppgc/explicit-management.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-01T11:23:10Z",
+      "side": 1,
+      "message": "Alternatively, you could just handle the object if the markbit as not been set. In such a case, the object is guaranteed to be in the young generation and you have no recorded slots.\n\nwdyt?",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 16
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a93fe0_160de372",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-01T11:23:10Z",
+      "side": 1,
+      "message": "I thought we only use this for Grow/Shrink which should be disabled when the markbit is set?",
+      "range": {
+        "startLine": 233,
+        "startChar": 13,
+        "endLine": 233,
+        "endChar": 35
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
