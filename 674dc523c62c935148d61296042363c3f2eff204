@@ -33,6 +33,69 @@
       "message": "Oops, forgot to click button. Still LGTM.",
       "revId": "674dc523c62c935148d61296042363c3f2eff204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a860c7d_2995b0bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-01T11:14:13Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64f36173_ee4a8ac1",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-01T11:14:13Z",
+      "side": 1,
+      "message": "Let\u0027s be more precise here (double fields are unaligned only when pointer compression is off on 64-bit architectures or on 32-bit architectures, while on 64-bit architectures with disabled pointer compression they are always aligned):\n  // Bug(v8:8875) Double fields may be unaligned.\n  constexpr bool unaligned_double_field \u003d std::is_same\u003cV, double\u003e::value \u0026\u0026 kDoubleSize \u003e kTaggedSize;\n  if (unaligned_double_field || v8_pointer_compression_unaligned) {\n    ...",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf7bd98_887f222b",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-01T11:14:13Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 36
+      },
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
