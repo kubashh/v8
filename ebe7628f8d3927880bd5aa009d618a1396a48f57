@@ -16,6 +16,40 @@
       "message": "Hi! This CL includes some small refactoring for field accessors and pointer compression. PTAL, thanks!",
       "revId": "ebe7628f8d3927880bd5aa009d618a1396a48f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77e4341_48c978b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-01T10:35:59Z",
+      "side": 1,
+      "message": "Thanks, LGTM with one mini-nit.",
+      "revId": "ebe7628f8d3927880bd5aa009d618a1396a48f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bed72c1_3d55e800",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-01T10:35:59Z",
+      "side": 1,
+      "message": "nit: missing punctuation.",
+      "revId": "ebe7628f8d3927880bd5aa009d618a1396a48f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
