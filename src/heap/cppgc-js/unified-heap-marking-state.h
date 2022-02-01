@@ -7,6 +7,7 @@
 
 #include "include/v8-cppgc.h"
 #include "src/base/logging.h"
+#include "src/heap/cppgc/marker.h"
 #include "src/heap/heap.h"
 
 namespace v8 {
@@ -22,7 +23,10 @@ class BasicTracedReferenceExtractor {
 
 class UnifiedHeapMarkingState {
  public:
-  explicit UnifiedHeapMarkingState(Heap* heap) : heap_(heap) {}
+  UnifiedHeapMarkingState(
+      Heap* heap,
+      cppgc::internal::MarkerBase::MarkingConfig::CollectionType type)
+      : heap_(heap), type_(type) {}
 
   UnifiedHeapMarkingState(const UnifiedHeapMarkingState&) = delete;
   UnifiedHeapMarkingState& operator=(const UnifiedHeapMarkingState&) = delete;
@@ -31,6 +35,7 @@ class UnifiedHeapMarkingState {
 
  private:
   Heap* heap_;
+  cppgc::internal::MarkerBase::MarkingConfig::CollectionType type_;
 };
 
 void UnifiedHeapMarkingState::MarkAndPush(const TracedReferenceBase& ref) {
@@ -39,8 +44,10 @@ void UnifiedHeapMarkingState::MarkAndPush(const TracedReferenceBase& ref) {
   // Having the following DCHECK crash means that the heap is in detached mode
   // but we find traceable pointers into an Isolate.
   DCHECK_NOT_NULL(heap_);
-  heap_->RegisterExternallyReferencedObject(
-      BasicTracedReferenceExtractor::ObjectReference(ref));
+  if (type_ ==
+      cppgc::internal::MarkerBase::MarkingConfig::CollectionType::kMajor)
+    heap_->RegisterExternallyReferencedObject(
+        BasicTracedReferenceExtractor::ObjectReference(ref));
 }
 
 }  // namespace internal
