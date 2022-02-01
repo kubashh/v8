@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b2f07e_92ef1c67",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-01T13:09:39Z",
+      "side": 1,
+      "message": "Done (not sure about naming though (MutatorMinorGCMarkingVisitor)).",
+      "parentUuid": "a6fcc2b3_ab7dca23",
+      "range": {
+        "startLine": 47,
+        "startChar": 6,
+        "endLine": 47,
+        "endChar": 11
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24d4215e_850f3434",
@@ -87,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9525d375_7ba8ef9b",
+        "filename": "src/heap/cppgc/explicit-management.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-01T13:09:39Z",
+      "side": 1,
+      "message": "Let me address it in a followup, together with tests.",
+      "parentUuid": "24d4215e_850f3434",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 16
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98a93fe0_160de372",
@@ -100,6 +148,30 @@
       "writtenOn": "2022-02-01T11:23:10Z",
       "side": 1,
       "message": "I thought we only use this for Grow/Shrink which should be disabled when the markbit is set?",
+      "range": {
+        "startLine": 233,
+        "startChar": 13,
+        "endLine": 233,
+        "endChar": 35
+      },
+      "revId": "b2c03d3cea644a88e9a4aaed80f77944610cc99c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e851c1a_2ded442f",
+        "filename": "src/heap/cppgc/heap-object-header.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-01T13:09:39Z",
+      "side": 1,
+      "message": "As discussed offline, added a comment to reconsider this.",
+      "parentUuid": "98a93fe0_160de372",
       "range": {
         "startLine": 233,
         "startChar": 13,
