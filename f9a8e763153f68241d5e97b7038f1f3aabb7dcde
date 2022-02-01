@@ -39,6 +39,30 @@
       },
       "revId": "f9a8e763153f68241d5e97b7038f1f3aabb7dcde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a21301_f72c19b1",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2022-02-01T16:40:10Z",
+      "side": 1,
+      "message": "Also, note that it may make more sense to CHECK() these in any case.",
+      "parentUuid": "0b142e21_b918aa64",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 14
+      },
+      "revId": "f9a8e763153f68241d5e97b7038f1f3aabb7dcde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
