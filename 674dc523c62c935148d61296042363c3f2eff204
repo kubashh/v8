@@ -16,6 +16,23 @@
       "message": "Thanks!",
       "revId": "674dc523c62c935148d61296042363c3f2eff204",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5adaa83_9a17929a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-01T10:39:37Z",
+      "side": 1,
+      "message": "Oops, forgot to click button. Still LGTM.",
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
