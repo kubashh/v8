@@ -16,6 +16,29 @@
       "message": "PTAL!",
       "revId": "f9a8e763153f68241d5e97b7038f1f3aabb7dcde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b142e21_b918aa64",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2022-02-01T16:39:26Z",
+      "side": 1,
+      "message": "nit: This seems strange placement for the USE - recommend putting it at the end of the function, or my the definition of the variable.",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 14
+      },
+      "revId": "f9a8e763153f68241d5e97b7038f1f3aabb7dcde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
