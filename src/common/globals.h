@@ -1153,7 +1153,7 @@ inline std::ostream& operator<<(std::ostream& os, CreateArgumentsType type) {
   UNREACHABLE();
 }
 
-constexpr int kScopeInfoMaxInlinedLocalNamesSize = 32;
+constexpr int kScopeInfoMaxInlinedLocalNamesSize = 75;
 
 enum ScopeType : uint8_t {
   CLASS_SCOPE,     // The scope introduced by a class.
