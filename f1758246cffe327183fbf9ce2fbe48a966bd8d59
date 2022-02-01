@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a595bf_a85c5c56",
+        "filename": "src/sandbox/sandboxed-pointer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-02-01T09:09:01Z",
+      "side": 1,
+      "message": "maybe you should extract the logic in ReadField to a memory.h helper, and use that? https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/objects.h;l\u003d671;drc\u003db183cc28e6a297f2761ec1d6cbf3bab89b5b64c4",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 3
+      },
+      "revId": "f1758246cffe327183fbf9ce2fbe48a966bd8d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
