@@ -22,6 +22,30 @@
       },
       "revId": "f1758246cffe327183fbf9ce2fbe48a966bd8d59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f31fe65d_608a539b",
+        "filename": "src/sandbox/sandboxed-pointer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-01T09:54:54Z",
+      "side": 1,
+      "message": "Good idea, gave it a shot. One issue is that base/ doesn\u0027t know about kTaggedSize (from src/common/globals.h) and also so far doesn\u0027t care about pointer compression. So instead, I\u0027ve now moved the new accessors into src/common/ptr-compr.h. Let me know what you think of this!",
+      "parentUuid": "67a595bf_a85c5c56",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 3
+      },
+      "revId": "f1758246cffe327183fbf9ce2fbe48a966bd8d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
