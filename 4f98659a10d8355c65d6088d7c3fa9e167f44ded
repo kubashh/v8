@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bafeadb7_9a418229",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-02-01T17:03:19Z",
+      "side": 1,
+      "message": "This breaks gc-stress again (for a different reason).\nJakob, please rubber-stamp the revert.",
+      "revId": "4f98659a10d8355c65d6088d7c3fa9e167f44ded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
