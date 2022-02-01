@@ -26,7 +26,7 @@ class MemberBase {
  protected:
   struct AtomicInitializerTag {};
 
-  MemberBase() = default;
+  MemberBase() : raw_(nullptr) {}
   explicit MemberBase(const void* value) : raw_(value) {}
   MemberBase(const void* value, AtomicInitializerTag) { SetRawAtomic(value); }
 
@@ -46,7 +46,7 @@ class MemberBase {
   void ClearFromGC() const { raw_ = nullptr; }
 
  private:
-  mutable const void* raw_ = nullptr;
+  mutable const void* raw_;
 };
 
 // The basic class from which all Member classes are 'generated'.
