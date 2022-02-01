@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55b73b55_46818b3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-01T08:03:12Z",
+      "side": 1,
+      "message": "Hi Jaro,\n\nthis adds the break reason explicilty, ptal!",
+      "revId": "180efa2275aef1284ba77190e414ec27ce759dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
