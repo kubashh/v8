@@ -16,6 +16,29 @@
       "message": "Hi Jaro,\n\nthis adds the break reason explicilty, ptal!",
       "revId": "180efa2275aef1284ba77190e414ec27ce759dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d8cd120_179211f2",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-02-01T10:35:15Z",
+      "side": 1,
+      "message": "Nit: You can omit \u0027data\u0027 now.",
+      "range": {
+        "startLine": 220,
+        "startChar": 36,
+        "endLine": 220,
+        "endChar": 41
+      },
+      "revId": "180efa2275aef1284ba77190e414ec27ce759dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
