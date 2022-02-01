@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d70343_57112d19",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-01T11:28:18Z",
+      "side": 1,
+      "message": "Cool, thanks!",
+      "parentUuid": "64f36173_ee4a8ac1",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cf7bd98_887f222b",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-02-01T11:14:13Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 36
+      },
+      "revId": "674dc523c62c935148d61296042363c3f2eff204",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "953ce63e_2e4422ec",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-01T11:28:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cf7bd98_887f222b",
       "range": {
         "startLine": 40,
         "startChar": 6,

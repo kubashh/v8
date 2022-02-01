@@ -46,6 +46,30 @@
       },
       "revId": "f1758246cffe327183fbf9ce2fbe48a966bd8d59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "751a1645_6a970a99",
+        "filename": "src/sandbox/sandboxed-pointer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-01T11:28:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f31fe65d_608a539b",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 3
+      },
+      "revId": "f1758246cffe327183fbf9ce2fbe48a966bd8d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
