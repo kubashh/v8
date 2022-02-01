@@ -22,7 +22,12 @@ V8_INLINE Address ReadSandboxedPointerField(Address field_address,
   Address pointer = cage_base.address() + offset;
   return pointer;
 #else
-  return base::ReadUnalignedValue<Address>(field_address);
+  if (COMPRESS_POINTERS_BOOL) {
+    // The field address may be unaligned if pointer compression is enabled.
+    return base::ReadUnalignedValue<Address>(field_address);
+  } else {
+    return *reinterpret_cast<Address const*>(field_address);
+  }
 #endif
 }
 
@@ -38,7 +43,12 @@ V8_INLINE void WriteSandboxedPointerField(Address field_address,
   base::WriteUnalignedValue<SandboxedPointer_t>(field_address,
                                                 sandboxed_pointer);
 #else
-  base::WriteUnalignedValue<Address>(field_address, pointer);
+  if (COMPRESS_POINTERS_BOOL) {
+    // The field address may be unaligned if pointer compression is enabled.
+    base::WriteUnalignedValue<Address>(field_address, pointer);
+  } else {
+    *reinterpret_cast<Address*>(field_address) = pointer;
+  }
 #endif
 }
 
