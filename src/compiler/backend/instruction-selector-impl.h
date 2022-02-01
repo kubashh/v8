@@ -415,44 +415,6 @@ class OperandGenerator {
     return operand;
   }
 
-  UnallocatedOperand ToDualLocationUnallocatedOperand(
-      LinkageLocation primary_location, LinkageLocation secondary_location,
-      int virtual_register) {
-    // We only support the primary location being a register and the secondary
-    // one a slot.
-    DCHECK(primary_location.IsRegister() &&
-           secondary_location.IsCalleeFrameSlot());
-    int reg_id = primary_location.AsRegister();
-    int slot_id = secondary_location.AsCalleeFrameSlot();
-    return UnallocatedOperand(reg_id, slot_id, virtual_register);
-  }
-
-  UnallocatedOperand ToUnallocatedOperand(LinkageLocation location,
-                                          int virtual_register) {
-    if (location.IsAnyRegister()) {
-      // any machine register.
-      return UnallocatedOperand(UnallocatedOperand::MUST_HAVE_REGISTER,
-                                virtual_register);
-    }
-    if (location.IsCallerFrameSlot()) {
-      // a location on the caller frame.
-      return UnallocatedOperand(UnallocatedOperand::FIXED_SLOT,
-                                location.AsCallerFrameSlot(), virtual_register);
-    }
-    if (location.IsCalleeFrameSlot()) {
-      // a spill location on this (callee) frame.
-      return UnallocatedOperand(UnallocatedOperand::FIXED_SLOT,
-                                location.AsCalleeFrameSlot(), virtual_register);
-    }
-    // a fixed register.
-    if (IsFloatingPoint(location.GetType().representation())) {
-      return UnallocatedOperand(UnallocatedOperand::FIXED_FP_REGISTER,
-                                location.AsRegister(), virtual_register);
-    }
-    return UnallocatedOperand(UnallocatedOperand::FIXED_REGISTER,
-                              location.AsRegister(), virtual_register);
-  }
-
   InstructionSelector* selector_;
 };
 

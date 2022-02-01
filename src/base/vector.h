@@ -43,6 +43,12 @@ class Vector {
     return Vector<T>(begin() + from, to - from);
   }
 
+  template <class U>
+  void OverwriteWith(Vector<U> other) {
+    DCHECK_EQ(size(), other.size());
+    std::copy(other.begin(), other.end(), begin());
+  }
+
   // Returns the length of the vector. Only use this if you really need an
   // integer return value. Use {size()} otherwise.
   int length() const {
@@ -79,6 +85,13 @@ class Vector {
 
   // Returns a pointer past the end of the data in the vector.
   constexpr T* end() const { return start_ + length_; }
+
+  constexpr std::reverse_iterator<T*> rbegin() const {
+    return std::make_reverse_iterator(end());
+  }
+  constexpr std::reverse_iterator<T*> rend() const {
+    return std::make_reverse_iterator(begin());
+  }
 
   // Returns a clone of this vector with a new backing store.
   Vector<T> Clone() const {
