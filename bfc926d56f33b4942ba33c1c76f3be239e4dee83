@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90a84cd7_22f4a435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520052
+      },
+      "writtenOn": "2022-02-02T23:17:27Z",
+      "side": 1,
+      "message": "Hi Camillo, I\u0027ve noticed that the sampling cpu profiler is needlessly logging events to the tracing infrastructure that seems to be only relevant to the TracingCpuProfilerImpl.\n\nThis CL adds a flag to skip this tracing, please let me know what you think.",
+      "revId": "bfc926d56f33b4942ba33c1c76f3be239e4dee83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
