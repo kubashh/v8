@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd8c54b0_c22c544e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-02T14:05:36Z",
+      "side": 1,
+      "message": "Hey Yang,\n\nHere\u0027s the final step towards deprecating `Debugger.CallFrame.url`.\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "8495b330177eec801de3f665d05fb740fe574660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
