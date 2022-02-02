@@ -16,6 +16,46 @@
       "message": "Still lgtm, thanks for adding the new tests.\n\nIdle wondering: as we keep adding more tests to the mjsunit tests, are they going to start timing out on some build configurations and we should split them up?",
       "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6834ea5_0471498d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-02T19:37:07Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a46f58_40ed0831",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 5508,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-02T19:37:07Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be 4 to account for the offset?",
+      "range": {
+        "startLine": 5508,
+        "startChar": 72,
+        "endLine": 5508,
+        "endChar": 73
+      },
+      "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
