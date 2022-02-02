@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36441f94_b77a9ed2",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3894,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-02T12:33:50Z",
+      "side": 1,
+      "message": "Oops, thanks for the comment. This turned out to be more complicated than I first thought...\n\ntest262 has tests for copying TypedArrays into TypedArrays, and as we don\u0027t have surprising side effects in those cases, I thought they\u0027re enough.\n\nTurns out, they aren\u0027t. E.g., some code paths are hit only when the source is RAB/GSAB but the target isn\u0027t, and looks like those weren\u0027t tested.\n\n-\u003e Added tests for those, also added the missing impl for those code paths.\n\nThis code here, however, isn\u0027t hit in TA.p.set, since the \"source and target are both TAs\" case goes to TypedArrayPrototypeSetTypedArray and not here.\n\nI\u0027ll need to investigate *where* this code path is hit though, and update it. -\u003e Added a TODO here, will do that in a separate CL.",
+      "parentUuid": "68e0210c_53ecd201",
+      "range": {
+        "startLine": 3894,
+        "startChar": 29,
+        "endLine": 3894,
+        "endChar": 48
+      },
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49ea9f63_90c1be2d",
@@ -105,6 +129,24 @@
       "writtenOn": "2022-02-02T01:12:16Z",
       "side": 1,
       "message": "Needs some tests with a GSAB source.",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68fc42ec_72e1d9f9",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-02T12:33:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49ea9f63_90c1be2d",
       "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +174,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78e26d83_7588f0dd",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-02T12:33:50Z",
+      "side": 1,
+      "message": "This is on purpose, so that I also test the code path which doesn\u0027t pass the offset. It\u0027s a bit overzealous code coverage addition and hopefully not significant, but... I\u0027m keeping my suspicion level pretty high with this feature. E.g., it might theoretically be that some important check is misplaced so that it only happens on this \"offset not undefined\" code path, that\u0027s why I make sure I test both (here and in other tests).",
+      "parentUuid": "1da44859_3d05a9ef",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 3
+      },
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b880e04_8c2ac21f",
@@ -145,6 +211,24 @@
       "writtenOn": "2022-02-02T01:12:16Z",
       "side": 1,
       "message": "Needs some tests with source RABs.",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f66beb4_8b5324d7",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 5681,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-02T12:33:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b880e04_8c2ac21f",
       "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
