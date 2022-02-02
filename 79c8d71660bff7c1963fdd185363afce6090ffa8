@@ -56,6 +56,30 @@
       },
       "revId": "79c8d71660bff7c1963fdd185363afce6090ffa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7652744f_8978ed5e",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-02T12:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea202511_56f94a6d",
+      "range": {
+        "startLine": 494,
+        "startChar": 2,
+        "endLine": 500,
+        "endChar": 3
+      },
+      "revId": "79c8d71660bff7c1963fdd185363afce6090ffa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
