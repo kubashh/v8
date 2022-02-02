@@ -16,6 +16,137 @@
       "message": "ptal",
       "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02f9e93c_03b78b84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "lgtm modulo needing to handle RAB/GSAB sources. It\u0027s also fine with me if you\u0027d like to do that in a follow-up CL.\n\nAdditionally, if https://github.com/tc39/ecma262/pull/2646 gets consensus and merged at the next TC39, the detach/OOB behavior you\u0027ve written tests for here would also need to change. Sorry in advance. 😞",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267ef41c_2873fb44",
+        "filename": "src/builtins/typed-array-set.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "Thank you for updating the comments!",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c694352d_4e329b63",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3856,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "Thanks for adding the TODO here.",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e0210c_53ecd201",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3894,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "source_ta could also be a RAB/GSAB, which could also have been resized by the conversion of the offset parameter, but never during mid-iteration AFAICT.",
+      "range": {
+        "startLine": 3894,
+        "startChar": 29,
+        "endLine": 3894,
+        "endChar": 48
+      },
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ea9f63_90c1be2d",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "Needs some tests with a GSAB source.",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1da44859_3d05a9ef",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "This if isn\u0027t needed, passing offset through should have the same behavior when it\u0027s undefined.",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 3
+      },
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b880e04_8c2ac21f",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 5681,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-02T01:12:16Z",
+      "side": 1,
+      "message": "Needs some tests with source RABs.",
+      "revId": "19857ba7d24b9b90423ad1d4b0c2c53a0fc53b75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
