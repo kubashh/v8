@@ -67,6 +67,11 @@ class BuildFlags : public ContextualClass<BuildFlags> {
 #else
     build_flags_["V8_ENABLE_WEBASSEMBLY"] = false;
 #endif
+#ifdef DEBUG
+    build_flags_["DEBUG"] = true;
+#else
+    build_flags_["DEBUG"] = false;
+#endif
   }
   static bool GetFlag(const std::string& name, const char* production) {
     auto it = Get().build_flags_.find(name);
