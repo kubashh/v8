@@ -41,19 +41,27 @@ except ImportError as e:
 
 
 import json
+import multiprocessing
 import optparse
 import os
 from os.path import abspath, join, dirname, basename, exists
 import pickle
 import re
-import sys
 import subprocess
-import multiprocessing
 from subprocess import PIPE
+import sys
 
 from testrunner.local import statusfile
 from testrunner.local import testsuite
 from testrunner.local import utils
+
+PYTHON3 = sys.version_info >= (3, 0)
+
+def maybe_decode(arg, encoding="utf-8"):
+  return arg.decode(encoding) if PYTHON3 else arg
+
+def maybe_encode(arg, encoding="utf-8"):
+  return arg.encode(encoding) if PYTHON3 else arg
 
 # Special LINT rules diverging from default and reason.
 # build/header_guard: Our guards have the form "V8_FOO_H_", not "SRC_FOO_H_".
@@ -92,7 +100,7 @@ def CppLintWorker(command):
     out_lines = ""
     error_count = -1
     while True:
-      out_line = process.stderr.readline()
+      out_line = maybe_decode(process.stderr.readline())
       if out_line == '' and process.poll() != None:
         if error_count == -1:
           print("Failed to process %s" % command.pop())
@@ -106,9 +114,6 @@ def CppLintWorker(command):
     return error_count
   except KeyboardInterrupt:
     process.kill()
-  except:
-    print('Error running cpplint.py. Please make sure you have depot_tools' +
-          ' in your $PATH. Lint check skipped.')
     process.kill()
 
 def TorqueLintWorker(command):
@@ -118,7 +123,7 @@ def TorqueLintWorker(command):
     out_lines = ""
     error_count = 0
     while True:
-      out_line = process.stderr.readline()
+      out_line = maybe_decode(process.stderr.readline())
       if out_line == '' and process.poll() != None:
         break
       out_lines += out_line
@@ -148,7 +153,7 @@ def JSLintWorker(command):
         sys.stdout.write("error code " + str(rc) + " running clang-format.\n")
         return rc
 
-      if output != contents:
+      if maybe_decode(output) != contents:
         return 1
 
       return 0
@@ -206,7 +211,7 @@ class FileContentsCache(object):
     for file in files:
       try:
         handle = open(file, "r")
-        file_sum = md5er(handle.read()).digest()
+        file_sum = md5er(maybe_encode(handle.read())).digest()
         if not file in self.sums or self.sums[file] != file_sum:
           changed_or_new.append(file)
           self.sums[file] = file_sum
@@ -490,7 +495,7 @@ class SourceProcessor(SourceFileProcessor):
       output = subprocess.Popen('git ls-files --full-name',
                                 stdout=PIPE, cwd=path, shell=True)
       result = []
-      for file in output.stdout.read().split():
+      for file in maybe_decode(output.stdout.read()).split():
         for dir_part in os.path.dirname(file).replace(os.sep, '/').split('/'):
           if self.IgnoreDir(dir_part):
             break
@@ -623,8 +628,8 @@ class SourceProcessor(SourceFileProcessor):
     violations = 0
     for file in files:
       try:
-        handle = open(file)
-        contents = handle.read()
+        handle = open(file, "rb")
+        contents = maybe_decode(handle.read(), "ISO-8859-1")
         if len(contents) > 0 and not self.ProcessContents(file, contents):
           success = False
           violations += 1
