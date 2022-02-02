@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8731544d_08d91ae0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-02T09:27:32Z",
+      "side": 1,
+      "message": "These were the checks I added to catch \"unexpected\" occurrences of Code objects requiring special handling when external code space is enabled, however, I didn\u0027t expect that RelocInfo::target_object() will be called during GC. And once GC moves the target object the checks like obj.IsBlah() just crash because map value becomes a forwarding pointer. So, instead of introducing GC-safe IsCode() machinery which will work with external code space I introduced IsCodeSpaceObject(..) predicate which just checks IS_EXECUTABLE flag on the object\u0027s page and thus serves the purpose.",
+      "parentUuid": "61299b1a_f1a290e4",
+      "revId": "a6cc99d30be782faf2b004fd913bbb6a914afeb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e9ec0bc7_47ae053f",
@@ -31,6 +49,40 @@
       "writtenOn": "2022-02-01T15:28:48Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "a6cc99d30be782faf2b004fd913bbb6a914afeb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60aa57b5_516cc71c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-02T09:27:32Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "a6cc99d30be782faf2b004fd913bbb6a914afeb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef51234_54990036",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-02T09:27:32Z",
+      "side": 1,
+      "message": "I decided to change this (last) DCHECK too just to be uniform.",
       "revId": "a6cc99d30be782faf2b004fd913bbb6a914afeb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
