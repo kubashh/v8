@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "79c8d71660bff7c1963fdd185363afce6090ffa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "153d31ff_f0254653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-02-02T08:44:05Z",
+      "side": 1,
+      "message": "Thanks! LGTM with a nit.",
+      "revId": "79c8d71660bff7c1963fdd185363afce6090ffa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea202511_56f94a6d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-02-02T08:44:05Z",
+      "side": 1,
+      "message": "nit: I would prefer to set call_ref once with a ternary operator.",
+      "range": {
+        "startLine": 494,
+        "startChar": 2,
+        "endLine": 500,
+        "endChar": 3
+      },
+      "revId": "79c8d71660bff7c1963fdd185363afce6090ffa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
