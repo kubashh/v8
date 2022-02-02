@@ -10,9 +10,16 @@ import argparse
 import os
 import sys
 import tempfile
-import urllib2
 
 from common_includes import *
+
+PYTHON3 = sys.version_info >= (3, 0)
+
+if PYTHON3:
+  import urllib.request as urllib2
+else:
+  import urllib2
+
 
 class Preparation(Step):
   MESSAGE = "Preparation."

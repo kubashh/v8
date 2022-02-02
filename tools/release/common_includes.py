@@ -31,7 +31,6 @@ from __future__ import print_function
 
 import argparse
 import datetime
-import httplib
 import glob
 import imp
 import json
@@ -43,10 +42,19 @@ import sys
 import textwrap
 import time
 import urllib
-import urllib2
 
 from git_recipes import GitRecipesMixin
 from git_recipes import GitFailedException
+
+PYTHON3 = sys.version_info >= (3, 0)
+
+if PYTHON3:
+  import http.client as httplib
+  import urllib.request as urllib2
+else:
+  import httplib
+  import urllib2
+
 
 DAY_IN_SECONDS = 24 * 60 * 60
 PUSH_MSG_GIT_RE = re.compile(r".* \(based on (?P<git_rev>[a-fA-F0-9]+)\)$")
@@ -94,7 +102,7 @@ def MSub(rexp, replacement, text):
 
 def SortingKey(version):
   """Key for sorting version number strings: '3.11' > '3.2.1.1'"""
-  version_keys = map(int, version.split("."))
+  version_keys = [int(v) for v in version.split(".")]
   # Fill up to full version numbers to normalize comparison.
   while len(version_keys) < 4:  # pragma: no cover
     version_keys.append(0)
@@ -256,7 +264,7 @@ class GitInterface(VCInterface):
         lambda s: re.match(r"^branch\-heads/\d+\.\d+$", s),
         self.step.GitRemotes())
     # Remove 'branch-heads/' prefix.
-    return map(lambda s: s[13:], branches)
+    return [b[13:] for b in branches]
 
   def MainBranch(self):
     return "main"
@@ -557,7 +565,7 @@ class Step(GitRecipesMixin):
                          int(time_now - max_age)).strip()
 
     # Filter out revisions who's tag is off by one or more commits.
-    return filter(lambda r: self.GetVersionTag(r), revisions.splitlines())
+    return list(filter(self.GetVersionTag, revisions.splitlines()))
 
   def GetLatestVersion(self):
     # Use cached version if available.
