@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "055c7b643d23279908d593e6687e9de98b8a46f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "186de494_52c93c4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-02-02T19:50:22Z",
+      "side": 1,
+      "message": "PTAL. Patchset 3 (two lines) and the commit message.",
+      "revId": "055c7b643d23279908d593e6687e9de98b8a46f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
