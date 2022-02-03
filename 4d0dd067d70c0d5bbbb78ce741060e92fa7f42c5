@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b936e69_490757e2",
+        "filename": "tools/release/common_includes.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T12:29:54Z",
+      "side": 1,
+      "message": "That\u0027s awesome, didn\u0027t know that.",
+      "parentUuid": "42914df7_c801b7c4",
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b333ad29_499fd884",
@@ -106,6 +124,30 @@
       "side": 1,
       "message": "Maybe `trace.ConsumeOutput` accepts both str and unicode/bytes (py2/py3)?",
       "parentUuid": "b333ad29_499fd884",
+      "range": {
+        "startLine": 293,
+        "startChar": 26,
+        "endLine": 293,
+        "endChar": 41
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f82cc932_8b17515b",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T12:29:54Z",
+      "side": 1,
+      "message": "Let\u0027s hope though. Results processors are rarely used. So the impact is rather low if it fails.",
+      "parentUuid": "6de28a13_2e14e9ed",
       "range": {
         "startLine": 293,
         "startChar": 26,
