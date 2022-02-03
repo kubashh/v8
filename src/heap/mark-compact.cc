@@ -556,7 +556,7 @@ bool MarkCompactCollector::StartCompaction(StartCompactionMode mode) {
     return false;
   }
 
-  CollectEvacuationCandidates(heap()->old_space());
+  // CollectEvacuationCandidates(heap()->old_space());
 
   if (FLAG_compact_map_space) {
     CollectEvacuationCandidates(heap()->map_space());
@@ -564,7 +564,7 @@ bool MarkCompactCollector::StartCompaction(StartCompactionMode mode) {
 
   if (FLAG_compact_code_space &&
       (heap()->IsGCWithoutStack() || FLAG_compact_code_space_with_stack)) {
-    CollectEvacuationCandidates(heap()->code_space());
+    // CollectEvacuationCandidates(heap()->code_space());
   } else if (FLAG_trace_fragmentation) {
     TraceFragmentation(heap()->code_space());
   }
@@ -858,11 +858,11 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   } else if (FLAG_stress_compaction) {
     for (size_t i = 0; i < pages.size(); i++) {
       Page* p = pages[i].second;
-      if (i % 2 == 0) {
-        candidate_count++;
-        total_live_bytes += pages[i].first;
-        AddEvacuationCandidate(p);
-      }
+      // if (i % 2 == 0) {
+      candidate_count++;
+      total_live_bytes += pages[i].first;
+      AddEvacuationCandidate(p);
+      // }
     }
   } else {
     // The following approach determines the pages that should be evacuated.
