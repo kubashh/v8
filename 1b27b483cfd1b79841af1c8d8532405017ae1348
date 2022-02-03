@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2799e857_84526a0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-03T19:55:35Z",
+      "side": 1,
+      "message": "lgtm modulo naming nit",
+      "revId": "1b27b483cfd1b79841af1c8d8532405017ae1348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1006ddf_12b34d90",
+        "filename": "src/objects/js-temporal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-03T19:55:35Z",
+      "side": 1,
+      "message": "Nit: I\u0027d prefer calendar_like here.\n\nI see that the spec is also inconsistent in when this parameter is named calendar and when it\u0027s named calendarLike, and I\u0027d also prefer it to be all named calendarLike in the spec draft as well.",
+      "range": {
+        "startLine": 120,
+        "startChar": 21,
+        "endLine": 120,
+        "endChar": 29
+      },
+      "revId": "1b27b483cfd1b79841af1c8d8532405017ae1348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08081706_3a476b95",
+        "filename": "src/objects/js-temporal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-03T19:55:35Z",
+      "side": 1,
+      "message": "Nit: calendar_like",
+      "range": {
+        "startLine": 151,
+        "startChar": 30,
+        "endLine": 151,
+        "endChar": 38
+      },
+      "revId": "1b27b483cfd1b79841af1c8d8532405017ae1348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
