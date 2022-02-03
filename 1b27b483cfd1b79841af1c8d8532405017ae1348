@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fbf60ec_fec0be4e",
+        "filename": "src/objects/js-temporal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-02-03T21:42:52Z",
+      "side": 1,
+      "message": "Make sense . see also https://github.com/tc39/proposal-temporal/pull/2030",
+      "parentUuid": "a1006ddf_12b34d90",
+      "range": {
+        "startLine": 120,
+        "startChar": 21,
+        "endLine": 120,
+        "endChar": 29
+      },
+      "revId": "1b27b483cfd1b79841af1c8d8532405017ae1348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08081706_3a476b95",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-03T19:55:35Z",
       "side": 1,
       "message": "Nit: calendar_like",
+      "range": {
+        "startLine": 151,
+        "startChar": 30,
+        "endLine": 151,
+        "endChar": 38
+      },
+      "revId": "1b27b483cfd1b79841af1c8d8532405017ae1348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ab413f_6f768c5f",
+        "filename": "src/objects/js-temporal-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-02-03T21:42:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08081706_3a476b95",
       "range": {
         "startLine": 151,
         "startChar": 30,
