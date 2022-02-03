@@ -63,6 +63,30 @@
       },
       "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8fe3ea8_9350a7c8",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-02-03T11:36:15Z",
+      "side": 1,
+      "message": "I am not saying it would fail for wasm-gc, I am saying it is too permissive: Imagine two modules which both define signature 5 to be `(ref 0) -\u003e (ref 0)`. One of them defines type 0 to be a struct, the other an array. This check would evaluate them as equal, when they are not. And you are right, the signature map lookup would do the same.\nI am fine with keeping this for now, knowing it fails for wasm-gc, but we need to fix it when we implement global canonicalization of isorecursive types. Can you please add a TODO(7748) to do so?",
+      "parentUuid": "fbd8771a_99ff770d",
+      "range": {
+        "startLine": 512,
+        "startChar": 4,
+        "endLine": 513,
+        "endChar": 58
+      },
+      "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
