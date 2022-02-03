@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b554bd_e812da67",
+        "filename": ".vpython3",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "This is required by the perf-runner tests. I found the version tags used in various other places already.",
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03fd801_dcf18030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "PTAL. This one was a bit more involved... I didn\u0027t put TODOs everywhere. After the migration, I\u0027ll audit files by looking for \u0027python3\u0027, which should find most relevant places to change.",
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b333ad29_499fd884",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "I\u0027m a bit puzzled here, why this passes with python2... In many other cases I needed to differentiate, but not here it seems.",
+      "range": {
+        "startLine": 293,
+        "startChar": 26,
+        "endLine": 293,
+        "endChar": 41
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5df37911_210b73fa",
+        "filename": "tools/unittests/run_perf_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "We sort now by one differentiating factor. Just using the dicts has a difference between Py2 and Py3 as the dict keys themselves have a different order.",
+      "range": {
+        "startLine": 201,
+        "startChar": 56,
+        "endLine": 201,
+        "endChar": 68
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f990e43_1cdf8baa",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "Here we sort by a string representation of the dicts. The dicts themselves have a key order difference though, so we now sort the inner dicts first.",
+      "range": {
+        "startLine": 285,
+        "startChar": 13,
+        "endLine": 285,
+        "endChar": 34
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4621e5b_ffdea5a6",
+        "filename": "tools/v8_presubmit.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-03T08:23:44Z",
+      "side": 1,
+      "message": "There\u0027s a file https://source.chromium.org/chromium/chromium/src/+/main:v8/test/webkit/parser-high-byte-character.js we choke on when using utf-8. I actually wonder if the other places that use utf-8 would represent this file correctly. But it probably doesn\u0027t play a role ever, since nobody e.g. changes that file and then this file\u0027s special chars.\n\nNot even code search can show the characters correctly o_O.",
+      "range": {
+        "startLine": 635,
+        "startChar": 19,
+        "endLine": 635,
+        "endChar": 60
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
