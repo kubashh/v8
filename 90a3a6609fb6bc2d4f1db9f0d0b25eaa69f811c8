@@ -52,6 +52,24 @@
       "parentUuid": "5229c0a5_bcb28a3d",
       "revId": "90a3a6609fb6bc2d4f1db9f0d0b25eaa69f811c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea8209b7_ff09ee57",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-03T13:29:34Z",
+      "side": 1,
+      "message": "The scratch registers are cheaper to get, so use them if available. They are not used by Liftoff, so they should be available in all platform-specific code without any need to spill.\nWe could check if existing usages of GetUnusedRegister could also be changed to use scratch registers.\nOTOH arm64 has lots of registers, so probably also GetUnusedRegister find one without needing to spill.",
+      "parentUuid": "81029ec8_a624021d",
+      "revId": "90a3a6609fb6bc2d4f1db9f0d0b25eaa69f811c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
