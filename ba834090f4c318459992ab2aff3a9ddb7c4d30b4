@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d40a31f_31a5eaa4",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-02-03T09:27:51Z",
+      "side": 1,
+      "message": "I do not think this check is correct. Two wasm-gc signatures may look the same, but if they originate from different modules, they are not: e.g. (ref 0) may refer to a different type depending on defining module. Can you not just compare instance with target_instance instead?",
+      "range": {
+        "startLine": 512,
+        "startChar": 4,
+        "endLine": 513,
+        "endChar": 58
+      },
+      "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
