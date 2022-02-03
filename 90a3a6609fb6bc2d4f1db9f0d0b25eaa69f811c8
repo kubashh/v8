@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9855b7d3_6e490cb7",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-02-03T00:04:50Z",
+      "side": 1,
+      "message": "Hi Andreas and Clemens,\n\nSorry for using this old CL to ask a question.\n\nOn TurboFan, register allocation can be customized during instruction selection per platform. We can use `UseUniqueRegister` to force different registers be allocated during codegen.\n\nI just wanted to confirm that this is not doable in LO platform specific functions as the registers are allocate at `liftoff-compiler.cc` before being passed down?\nI can see which ops allow unique src/dst to be used with the use of `pinned` variables. Same method seems to be used to allocated temp registers during LO code generation as done in this line.",
+      "revId": "90a3a6609fb6bc2d4f1db9f0d0b25eaa69f811c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
