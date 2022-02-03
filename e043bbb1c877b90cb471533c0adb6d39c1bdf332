@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff923bc0_ce9ba945",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-03T08:57:17Z",
+      "side": 1,
+      "message": "I\u0027ll add thinking about that to my mental todo list, I anyhow have \"clean up / refactor the tests\" on the list..",
+      "parentUuid": "f140b17e_bfec73b9",
+      "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd04b84_4df162b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-03T08:57:17Z",
+      "side": 1,
+      "message": "thanks for reviewing!",
+      "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64a46f58_40ed0831",
@@ -48,6 +83,30 @@
       "writtenOn": "2022-02-02T19:37:07Z",
       "side": 1,
       "message": "Shouldn\u0027t this be 4 to account for the offset?",
+      "range": {
+        "startLine": 5508,
+        "startChar": 72,
+        "endLine": 5508,
+        "endChar": 73
+      },
+      "revId": "e043bbb1c877b90cb471533c0adb6d39c1bdf332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92a0ac05_c57746fa",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 5508,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-02-03T08:57:17Z",
+      "side": 1,
+      "message": "Yes, this should be 4, thanks for catching it!",
+      "parentUuid": "64a46f58_40ed0831",
       "range": {
         "startLine": 5508,
         "startChar": 72,
