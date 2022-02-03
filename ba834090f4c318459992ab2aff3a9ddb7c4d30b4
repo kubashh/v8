@@ -39,6 +39,30 @@
       },
       "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbd8771a_99ff770d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-03T10:04:52Z",
+      "side": 1,
+      "message": "If that would be the case, then also the lookup in the signature map would give the wrong result, no?\nSo you say the DCHECK_EQ would fail for WasmGC?\n\nUsing the target instance would solve the case of a single instance, but not the case of multiple instances created from the same wire bytes. We could compare the underlying NativeModule*, but it would still be slightly less generic than the check here.",
+      "parentUuid": "1d40a31f_31a5eaa4",
+      "range": {
+        "startLine": 512,
+        "startChar": 4,
+        "endLine": 513,
+        "endChar": 58
+      },
+      "revId": "ba834090f4c318459992ab2aff3a9ddb7c4d30b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
