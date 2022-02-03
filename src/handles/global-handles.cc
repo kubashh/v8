@@ -668,6 +668,8 @@ class GlobalHandles::TracedNode final
   bool is_on_stack() const { return IsOnStack::decode(flags_); }
   void set_is_on_stack(bool v) { flags_ = IsOnStack::update(flags_, v); }
 
+  void clear_object() { object_ = kNullAddress; }
+
   void SetFinalizationCallback(void* parameter,
                                WeakCallbackInfo<void>::Callback callback) {
     set_parameter(parameter);
@@ -1156,9 +1158,20 @@ void GlobalHandles::DestroyTraced(Address* location) {
     TracedNode* node = TracedNode::FromLocation(location);
     if (node->is_on_stack()) {
       node->Release(nullptr);
-    } else {
+    } else if (node->has_destructor()) {
       NodeSpace<TracedNode>::Release(node);
     }
+    DCHECK(!node->has_destructor());
+    DCHECK(!node->is_on_stack());
+    // Traced node without destructor. Such nodes are released in the atomic
+    // pause in `IterateWeakRootsForPhantomHandles()` when they are discovered
+    // as not marked.
+    //
+    // Eagerly clear the object to avoid needlessly marking the object from this
+    // point. In the case this happens during incremental marking, the node may
+    // still be spuriously marked as live and is then only reclaimed on the next
+    // cycle.
+    node->clear_object();
   }
 }
 
