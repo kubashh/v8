@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c22e0b5_3564f3a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-02-03T08:57:14Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42914df7_c801b7c4",
+        "filename": "tools/release/common_includes.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-02-03T08:57:14Z",
+      "side": 1,
+      "message": "You could probably use distutils.version instead of `SortingKey`, since this method fails if versions should become longer than 4 digits in some future.\n\n\n```\nfrom distutils.version import LooseVersion\n\nauthoritative_version \u003d sorted([main_version, latest_version], key\u003dLooseVersion)[1]\n\n```",
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b333ad29_499fd884",
@@ -48,6 +82,30 @@
       "writtenOn": "2022-02-03T08:23:44Z",
       "side": 1,
       "message": "I\u0027m a bit puzzled here, why this passes with python2... In many other cases I needed to differentiate, but not here it seems.",
+      "range": {
+        "startLine": 293,
+        "startChar": 26,
+        "endLine": 293,
+        "endChar": 41
+      },
+      "revId": "4d0dd067d70c0d5bbbb78ce741060e92fa7f42c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6de28a13_2e14e9ed",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-02-03T08:57:14Z",
+      "side": 1,
+      "message": "Maybe `trace.ConsumeOutput` accepts both str and unicode/bytes (py2/py3)?",
+      "parentUuid": "b333ad29_499fd884",
       "range": {
         "startLine": 293,
         "startChar": 26,
