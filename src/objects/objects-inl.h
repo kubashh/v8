@@ -788,17 +788,45 @@ Map HeapObject::map(PtrComprCageBase cage_base) const {
 }
 
 void HeapObject::set_map(Map value) {
+  set_map(value, kRelaxedStore, VerificationMode::kPotentialLayoutChange);
+}
+
+void HeapObject::set_map(Map value, ReleaseStoreTag tag) {
+  set_map(value, kReleaseStore, VerificationMode::kPotentialLayoutChange);
+}
+
+void HeapObject::set_map_safe_transition(Map value) {
+  set_map(value, kRelaxedStore, VerificationMode::kSafeMapTransition);
+}
+
+void HeapObject::set_map_safe_transition(Map value, ReleaseStoreTag tag) {
+  set_map(value, kReleaseStore, VerificationMode::kSafeMapTransition);
+}
+
+template <typename MemoryOrder>
+void HeapObject::set_map(Map value, MemoryOrder order, VerificationMode mode) {
 #if V8_ENABLE_WEBASSEMBLY
   // In {WasmGraphBuilder::SetMap} and {WasmGraphBuilder::LoadMap}, we treat
   // maps as immutable. Therefore we are not allowed to mutate them here.
   DCHECK(!value.IsWasmStructMap() && !value.IsWasmArrayMap());
 #endif
+  // Object layout changes are currently not supported on background threads.
+  // This method might change object layout and therefore can't be used on
+  // background threads.
+  DCHECK_IMPLIES(mode != VerificationMode::kSafeMapTransition,
+                 !LocalHeap::Current());
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap && !value.is_null()) {
-    GetHeapFromWritableObject(*this)->VerifyObjectLayoutChange(*this, value);
+    Heap* heap = GetHeapFromWritableObject(*this);
+    if (mode == VerificationMode::kSafeMapTransition) {
+      heap->VerifySafeMapTransition(*this, value);
+    } else {
+      DCHECK_EQ(mode, VerificationMode::kPotentialLayoutChange);
+      heap->VerifyObjectLayoutChange(*this, value);
+    }
   }
 #endif
-  set_map_word(MapWord::FromMap(value), kRelaxedStore);
+  set_map_word(MapWord::FromMap(value), order);
 #ifndef V8_DISABLE_WRITE_BARRIERS
   if (!value.is_null()) {
     WriteBarrier::Marking(*this, map_slot(), value);
@@ -808,20 +836,6 @@ void HeapObject::set_map(Map value) {
 
 DEF_ACQUIRE_GETTER(HeapObject, map, Map) {
   return map_word(cage_base, kAcquireLoad).ToMap();
-}
-
-void HeapObject::set_map(Map value, ReleaseStoreTag tag) {
-#ifdef VERIFY_HEAP
-  if (FLAG_verify_heap && !value.is_null()) {
-    GetHeapFromWritableObject(*this)->VerifyObjectLayoutChange(*this, value);
-  }
-#endif
-  set_map_word(MapWord::FromMap(value), tag);
-#ifndef V8_DISABLE_WRITE_BARRIERS
-  if (!value.is_null()) {
-    WriteBarrier::Marking(*this, map_slot(), value);
-  }
-#endif
 }
 
 // Unsafe accessor omitting write barrier.
