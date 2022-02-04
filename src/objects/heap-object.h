@@ -35,6 +35,11 @@ class HeapObject : public Object {
   DECL_GETTER(map, Map)
   inline void set_map(Map value);
 
+  // This method behaves the same as `set_map` but marks the map transition as
+  // safe for the concurrent marker (object layout doesn't change) during
+  // verification.
+  inline void set_map_safe_transition(Map value);
+
   inline ObjectSlot map_slot() const;
 
   // The no-write-barrier version.  This is OK if the object is white and in
