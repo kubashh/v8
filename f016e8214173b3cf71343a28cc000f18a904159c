@@ -16,6 +16,24 @@
       "message": "nit: This can move up to ~L1746 (Part 2)",
       "revId": "f016e8214173b3cf71343a28cc000f18a904159c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f52d667_6ab0d60a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-02-04T14:44:47Z",
+      "side": 1,
+      "message": "Agreed. That\u0027s a nicer spot.",
+      "parentUuid": "9af8e084_c35c164e",
+      "revId": "f016e8214173b3cf71343a28cc000f18a904159c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
