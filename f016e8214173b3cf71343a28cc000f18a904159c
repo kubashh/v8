@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9af8e084_c35c164e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1773,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-04T14:41:37Z",
+      "side": 1,
+      "message": "nit: This can move up to ~L1746 (Part 2)",
+      "revId": "f016e8214173b3cf71343a28cc000f18a904159c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
