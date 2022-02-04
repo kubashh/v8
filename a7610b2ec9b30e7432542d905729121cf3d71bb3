@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5080de3_9c88f129",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-04T20:15:50Z",
+      "side": 1,
+      "message": "Fix #2: this field is accessed from background threads, so it has to be atomic like the Code::kind field it mirrors.",
+      "revId": "a7610b2ec9b30e7432542d905729121cf3d71bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c375aa47_71f9bf30",
+        "filename": "src/objects/js-function-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-04T20:15:50Z",
+      "side": 1,
+      "message": "Fix #1: we don\u0027t need to convert it to Code to check the kind since the kind field is cached in CodeT.",
+      "revId": "a7610b2ec9b30e7432542d905729121cf3d71bb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
