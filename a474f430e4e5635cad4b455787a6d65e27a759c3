@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4feff70_e205278b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-02-04T09:51:39Z",
+      "side": 1,
+      "message": "PTAL, this isn\u0027t really good full support but it works for the most basic use cases I tried.",
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
