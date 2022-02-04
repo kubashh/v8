@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ef6e3ef_e7b8925e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-02-04T13:34:22Z",
+      "side": 1,
+      "message": "Toon, PTAL top-level file addition",
+      "revId": "9d4c77c42e755a330c5307d739a724c22606c1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
