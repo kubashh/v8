@@ -788,14 +788,33 @@ Map HeapObject::map(PtrComprCageBase cage_base) const {
 }
 
 void HeapObject::set_map(Map value) {
+  set_map(value, VerificationMode::kPotentialLayoutChange);
+}
+
+void HeapObject::set_map_safe_transition(Map value) {
+  set_map(value, VerificationMode::kSafeMapTransition);
+}
+
+void HeapObject::set_map(Map value, VerificationMode mode) {
 #if V8_ENABLE_WEBASSEMBLY
   // In {WasmGraphBuilder::SetMap} and {WasmGraphBuilder::LoadMap}, we treat
   // maps as immutable. Therefore we are not allowed to mutate them here.
   DCHECK(!value.IsWasmStructMap() && !value.IsWasmArrayMap());
 #endif
+  // Object layout changes are currently not supported on background threads.
+  // This method might change object layout and therefore can't be used on
+  // background threads.
+  DCHECK_IMPLIES(mode != VerificationMode::kSafeMapTransition,
+                 !LocalHeap::Current());
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap && !value.is_null()) {
-    GetHeapFromWritableObject(*this)->VerifyObjectLayoutChange(*this, value);
+    Heap* heap = GetHeapFromWritableObject(*this);
+    if (mode == VerificationMode::kSafeMapTransition) {
+      heap->VerifySafeMapTransition(*this, value);
+    } else {
+      DCHECK_EQ(mode, VerificationMode::kPotentialLayoutChange);
+      heap->VerifyObjectLayoutChange(*this, value);
+    }
   }
 #endif
   set_map_word(MapWord::FromMap(value), kRelaxedStore);
