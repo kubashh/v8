@@ -61,21 +61,21 @@
   DECL_PRIMITIVE_GETTER(name, type)                  \
   DECL_PRIMITIVE_SETTER(name, type)
 
-#define DECL_RELAXED_INT32_ACCESSORS(name)   \
-  inline int32_t name(RelaxedLoadTag) const; \
-  inline void set_##name(int32_t value, RelaxedStoreTag);
+#define DECL_UINT16_ACCESSORS(name) DECL_PRIMITIVE_ACCESSORS(name, uint16_t)
 
-#define DECL_UINT16_ACCESSORS(name) \
-  inline uint16_t name() const;     \
-  inline void set_##name(int value);
+#define DECL_INT16_ACCESSORS(name) DECL_PRIMITIVE_ACCESSORS(name, int16_t)
 
-#define DECL_INT16_ACCESSORS(name) \
-  inline int16_t name() const;     \
-  inline void set_##name(int16_t value);
+#define DECL_UINT8_ACCESSORS(name) DECL_PRIMITIVE_ACCESSORS(name, uint8_t)
 
-#define DECL_UINT8_ACCESSORS(name) \
-  inline uint8_t name() const;     \
-  inline void set_##name(int value);
+#define DECL_RELAXED_PRIMITIVE_ACCESSORS(name, type) \
+  inline type name(RelaxedLoadTag) const;            \
+  inline void set_##name(type value, RelaxedStoreTag);
+
+#define DECL_RELAXED_INT32_ACCESSORS(name) \
+  DECL_RELAXED_PRIMITIVE_ACCESSORS(name, int32_t)
+
+#define DECL_RELAXED_UINT16_ACCESSORS(name) \
+  DECL_RELAXED_PRIMITIVE_ACCESSORS(name, uint16_t)
 
 // TODO(ishell): eventually isolate-less getters should not be used anymore.
 // For full pointer-mode the C++ compiler should optimize away unused isolate
@@ -170,9 +170,17 @@
     RELAXED_WRITE_INT32_FIELD(*this, offset, value);        \
   }
 
+#define RELAXED_UINT16_ACCESSORS(holder, name, offset)       \
+  uint16_t holder::name(RelaxedLoadTag) const {              \
+    return RELAXED_READ_UINT16_FIELD(*this, offset);         \
+  }                                                          \
+  void holder::set_##name(uint16_t value, RelaxedStoreTag) { \
+    RELAXED_WRITE_UINT16_FIELD(*this, offset, value);        \
+  }
+
 #define UINT16_ACCESSORS(holder, name, offset)                          \
   uint16_t holder::name() const { return ReadField<uint16_t>(offset); } \
-  void holder::set_##name(int value) {                                  \
+  void holder::set_##name(uint16_t value) {                             \
     DCHECK_GE(value, 0);                                                \
     DCHECK_LE(value, static_cast<uint16_t>(-1));                        \
     WriteField<uint16_t>(offset, value);                                \
@@ -180,7 +188,7 @@
 
 #define UINT8_ACCESSORS(holder, name, offset)                         \
   uint8_t holder::name() const { return ReadField<uint8_t>(offset); } \
-  void holder::set_##name(int value) {                                \
+  void holder::set_##name(uint8_t value) {                            \
     DCHECK_GE(value, 0);                                              \
     DCHECK_LE(value, static_cast<uint8_t>(-1));                       \
     WriteField<uint8_t>(offset, value);                               \
@@ -213,13 +221,10 @@
     TorqueGeneratedClass::set_##torque_name(value, mode);             \
   }
 
-#define RENAME_UINT16_TORQUE_ACCESSORS(holder, name, torque_name) \
-  uint16_t holder::name() const {                                 \
-    return TorqueGeneratedClass::torque_name();                   \
-  }                                                               \
-  void holder::set_##name(int value) {                            \
-    DCHECK_EQ(value, static_cast<uint16_t>(value));               \
-    TorqueGeneratedClass::set_##torque_name(value);               \
+#define RENAME_PRIMITIVE_TORQUE_ACCESSORS(holder, name, torque_name, type)  \
+  type holder::name() const { return TorqueGeneratedClass::torque_name(); } \
+  void holder::set_##name(type value) {                                     \
+    TorqueGeneratedClass::set_##torque_name(value);                         \
   }
 
 #define ACCESSORS_RELAXED_CHECKED2(holder, name, type, offset, get_condition, \
