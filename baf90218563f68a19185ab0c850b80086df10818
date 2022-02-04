@@ -16,6 +16,23 @@
       "message": "PTAL Liviu or Al.\n\nHannes or Toon for stamping the .vpython3 file. On the extended stable branch 9.6 we didn\u0027t modify the owners file yet, hence we need an ENG OWNER. On newer branches we own this file...",
       "revId": "baf90218563f68a19185ab0c850b80086df10818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b458a1_5b5ace4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-02-04T14:19:20Z",
+      "side": 1,
+      "message": "rubber-stamped",
+      "revId": "baf90218563f68a19185ab0c850b80086df10818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
