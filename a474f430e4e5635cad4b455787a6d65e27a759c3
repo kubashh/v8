@@ -16,6 +16,23 @@
       "message": "PTAL, this isn\u0027t really good full support but it works for the most basic use cases I tried.",
       "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08f22736_5a88292b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-02-04T13:02:41Z",
+      "side": 1,
+      "message": "or Camillo, whoever looks at it first.",
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
