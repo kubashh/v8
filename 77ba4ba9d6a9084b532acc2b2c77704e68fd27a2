@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d2bc5b2_47f7234a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-02-04T14:37:52Z",
+      "side": 1,
+      "message": "ACK, moved back.",
+      "parentUuid": "fbcf80d6_03b19725",
+      "range": {
+        "startLine": 931,
+        "startChar": 8,
+        "endLine": 931,
+        "endChar": 57
+      },
+      "revId": "77ba4ba9d6a9084b532acc2b2c77704e68fd27a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "deabbdf1_f295041d",
         "filename": "src/heap/heap.cc",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2022-01-27T15:22:26Z",
       "side": 1,
       "message": "This is a bit tricky. It needs to be as high up as possible in the call chain for an actual GC as it is used to free up TracedReferences on stack. The deeper it\u0027s in the call chain the less we clean up.\n\nYou may get test failures/and or performance regressions if this is too deep in the GC.",
+      "range": {
+        "startLine": 2446,
+        "startChar": 50,
+        "endLine": 2446,
+        "endChar": 73
+      },
+      "revId": "77ba4ba9d6a9084b532acc2b2c77704e68fd27a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf90317_2a86f595",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2446,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-02-04T14:37:52Z",
+      "side": 1,
+      "message": "ACK. Moved back.",
+      "parentUuid": "deabbdf1_f295041d",
       "range": {
         "startLine": 2446,
         "startChar": 50,
