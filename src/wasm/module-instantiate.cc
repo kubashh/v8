@@ -1013,12 +1013,13 @@ void InstanceBuilder::WriteGlobalValue(const WasmGlobal& global,
         global.type.is_reference()
             ? reinterpret_cast<byte*>(tagged_globals_->address())
             : raw_buffer_ptr(untagged_globals_, 0),
-        global.offset, value.to_string().c_str(), global.type.name().c_str());
+        global.storage_position, value.to_string().c_str(),
+        global.type.name().c_str());
   DCHECK(IsSubtypeOf(value.type(), global.type, module_));
   if (global.type.is_numeric()) {
     value.CopyTo(GetRawUntaggedGlobalPtr<byte>(global));
   } else {
-    tagged_globals_->set(global.offset, *value.to_ref());
+    tagged_globals_->set(global.storage_position, *value.to_ref());
   }
 }
 
@@ -1369,7 +1370,7 @@ bool InstanceBuilder::ProcessImportedWasmGlobalObject(
     return false;
   }
   if (global.mutability) {
-    DCHECK_LT(global.index, module_->num_imported_mutable_globals);
+    DCHECK_LT(global.storage_position, module_->num_imported_mutable_globals);
     Handle<Object> buffer;
     Address address_or_offset;
     if (global.type.is_reference()) {
@@ -1388,8 +1389,10 @@ bool InstanceBuilder::ProcessImportedWasmGlobalObject(
       address_or_offset = reinterpret_cast<Address>(raw_buffer_ptr(
           Handle<JSArrayBuffer>::cast(buffer), global_object->offset()));
     }
-    instance->imported_mutable_globals_buffers().set(global.index, *buffer);
-    instance->imported_mutable_globals()[global.index] = address_or_offset;
+    instance->imported_mutable_globals_buffers().set(global.storage_position,
+                                                     *buffer);
+    instance->imported_mutable_globals()[global.storage_position] =
+        address_or_offset;
     return true;
   }
 
@@ -1666,7 +1669,8 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
 
 template <typename T>
 T* InstanceBuilder::GetRawUntaggedGlobalPtr(const WasmGlobal& global) {
-  return reinterpret_cast<T*>(raw_buffer_ptr(untagged_globals_, global.offset));
+  return reinterpret_cast<T*>(
+      raw_buffer_ptr(untagged_globals_, global.storage_position));
 }
 
 // Process initialization of globals.
@@ -1682,7 +1686,7 @@ void InstanceBuilder::InitGlobals(Handle<WasmInstanceObject> instance) {
     if (thrower_->error()) return;
 
     if (global.type.is_reference()) {
-      tagged_globals_->set(global.offset, *value.to_ref());
+      tagged_globals_->set(global.storage_position, *value.to_ref());
     } else {
       value.CopyTo(GetRawUntaggedGlobalPtr<byte>(global));
     }
@@ -1811,19 +1815,21 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
               instance->imported_mutable_globals_buffers(), isolate_);
           if (global.type.is_reference()) {
             tagged_buffer = handle(
-                FixedArray::cast(buffers_array->get(global.index)), isolate_);
+                FixedArray::cast(buffers_array->get(global.storage_position)),
+                isolate_);
             // For externref globals we store the relative offset in the
             // imported_mutable_globals array instead of an absolute address.
-            Address addr = instance->imported_mutable_globals()[global.index];
+            Address addr =
+                instance->imported_mutable_globals()[global.storage_position];
             DCHECK_LE(addr, static_cast<Address>(
                                 std::numeric_limits<uint32_t>::max()));
             offset = static_cast<uint32_t>(addr);
           } else {
-            untagged_buffer =
-                handle(JSArrayBuffer::cast(buffers_array->get(global.index)),
-                       isolate_);
+            untagged_buffer = handle(JSArrayBuffer::cast(buffers_array->get(
+                                         global.storage_position)),
+                                     isolate_);
             Address global_addr =
-                instance->imported_mutable_globals()[global.index];
+                instance->imported_mutable_globals()[global.storage_position];
 
             size_t buffer_size = untagged_buffer->byte_length();
             Address backing_store =
@@ -1839,7 +1845,7 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
             untagged_buffer =
                 handle(instance->untagged_globals_buffer(), isolate_);
           }
-          offset = global.offset;
+          offset = global.storage_position;
         }
 
         // Since the global's array untagged_buffer is always provided,

@@ -70,15 +70,14 @@ namespace wasm {
 
 #define TOK(name) AsmJsScanner::kToken_##name
 
-AsmJsParser::AsmJsParser(Zone* zone, uintptr_t stack_limit,
+AsmJsParser::AsmJsParser(std::unique_ptr<Zone> zone, uintptr_t stack_limit,
                          Utf16CharacterStream* stream)
-    : zone_(zone),
+    : zone_(zone.get()),
       scanner_(stream),
-      module_builder_(zone->New<WasmModuleBuilder>(zone)),
       stack_limit_(stack_limit),
-      block_stack_(zone),
-      global_imports_(zone) {
-  module_builder_->SetMinMemorySize(0);
+      block_stack_(zone.get()),
+      global_imports_(zone.get()),
+      module_builder_(zone->New<WasmModuleBuilder>(std::move(zone))) {
   InitializeStdlibTypes();
 }
 
@@ -239,7 +238,8 @@ void AsmJsParser::DeclareGlobal(VarInfo* info, bool mutable_variable,
                                 WasmInitExpr init) {
   info->kind = VarKind::kGlobal;
   info->type = type;
-  info->index = module_builder_->AddGlobal(vtype, true, init);
+  module_builder_->globals.emplace_back(vtype, true, init, 0, false, false);
+  info->index = static_cast<uint32_t>(module_builder_->globals.size() - 1);
   info->mutable_variable = mutable_variable;
 }
 
@@ -362,16 +362,18 @@ void AsmJsParser::ValidateModule() {
       // For imported functions without a single call site, we insert a dummy
       // import here to preserve the fact that there actually was an import.
       FunctionSig* void_void_sig = FunctionSig::Builder(zone(), 0, 0).Build();
-      module_builder_->AddImport(info.import->function_name, void_void_sig);
+      module_builder_->AddImportedFunction(info.import->function_name,
+                                           void_void_sig);
     }
   }
 
   // Add start function to initialize things.
-  WasmFunctionBuilder* start = module_builder_->AddFunction();
-  module_builder_->MarkStartFunction(start);
+  WasmFunctionBuilder* start = module_builder_->AddFunction(nullptr);
+  module_builder_->start_function_index =
+      static_cast<int>(module_builder_->functions.size() - 1);
   for (auto& global_import : global_imports_) {
-    uint32_t import_index = module_builder_->AddGlobalImport(
-        global_import.import_name, global_import.value_type,
+    uint32_t import_index = module_builder_->add_imported_global(
+        {}, global_import.import_name, global_import.value_type,
         false /* mutability */);
     start->EmitWithI32V(kExprGlobalGet, import_index);
     start->EmitWithI32V(kExprGlobalSet, VarIndex(global_import.var_info));
@@ -646,7 +648,9 @@ void AsmJsParser::ValidateExport() {
       if (info->kind != VarKind::kFunction) {
         FAIL("Expected function");
       }
-      module_builder_->AddExport(name, info->function_builder);
+      module_builder_->export_table.emplace_back(
+          name, ImportExportKindCode::kExternalFunction,
+          info->function_builder->func_index());
       if (Check(',')) {
         if (!Peek('}')) {
           continue;
@@ -663,8 +667,10 @@ void AsmJsParser::ValidateExport() {
     if (info->kind != VarKind::kFunction) {
       FAIL("Single function export must be a function");
     }
-    module_builder_->AddExport(base::CStrVector(AsmJs::kSingleFunctionName),
-                               info->function_builder);
+    module_builder_->export_table.emplace_back(
+        base::CStrVector(AsmJs::kSingleFunctionName),
+        ImportExportKindCode::kExternalFunction,
+        info->function_builder->func_index());
   }
 }
 
@@ -704,8 +710,7 @@ void AsmJsParser::ValidateFunctionTable() {
         FAIL("Function table definition doesn't match use");
       }
       module_builder_->SetIndirectFunction(
-          0, static_cast<uint32_t>(table_info->index + count), info->index,
-          WasmModuleBuilder::WasmElemSegment::kRelativeToDeclaredFunctions);
+          0, static_cast<uint32_t>(table_info->index + count), info->index);
     }
     ++count;
     if (Check(',')) {
@@ -738,7 +743,7 @@ void AsmJsParser::ValidateFunction() {
   VarInfo* function_info = GetVarInfo(function_name);
   if (function_info->kind == VarKind::kUnused) {
     function_info->kind = VarKind::kFunction;
-    function_info->function_builder = module_builder_->AddFunction();
+    function_info->function_builder = module_builder_->AddFunction(nullptr);
     function_info->index = function_info->function_builder->func_index();
     function_info->mutable_variable = false;
   } else if (function_info->kind != VarKind::kFunction) {
@@ -2139,16 +2144,21 @@ AsmType* AsmJsParser::ValidateCall() {
     EXPECT_TOKENn(']');
     VarInfo* function_info = GetVarInfo(function_name);
     if (function_info->kind == VarKind::kUnused) {
-      if (module_builder_->NumTables() == 0) {
-        module_builder_->AddTable(kWasmFuncRef, 0);
+      if (module_builder_->tables.size() == 0) {
+        module_builder_->tables.emplace_back(kWasmFuncRef, 0, mask + 1, true,
+                                             false, false, WasmInitExpr());
       }
-      uint32_t func_index = module_builder_->IncreaseTableMinSize(0, mask + 1);
-      if (func_index == std::numeric_limits<uint32_t>::max()) {
+      auto& table = module_builder_->tables[0];
+      uint32_t old_min_size = table.initial_size;
+      uint32_t count = mask + 1;
+      if (count > FLAG_wasm_max_table_size - old_min_size) {
         FAILn("Exceeded maximum function table size");
       }
+      table.initial_size = old_min_size + count;
+      table.maximum_size = std::max(old_min_size + count, table.maximum_size);
       function_info->kind = VarKind::kTable;
       function_info->mask = mask;
-      function_info->index = func_index;
+      function_info->index = old_min_size;
       function_info->mutable_variable = false;
     } else {
       if (function_info->kind != VarKind::kTable) {
@@ -2169,7 +2179,7 @@ AsmType* AsmJsParser::ValidateCall() {
     VarInfo* function_info = GetVarInfo(function_name);
     if (function_info->kind == VarKind::kUnused) {
       function_info->kind = VarKind::kFunction;
-      function_info->function_builder = module_builder_->AddFunction();
+      function_info->function_builder = module_builder_->AddFunction(nullptr);
       function_info->index = function_info->function_builder->func_index();
       function_info->mutable_variable = false;
     } else {
@@ -2240,7 +2250,7 @@ AsmType* AsmJsParser::ValidateCall() {
     function_type->AsFunctionType()->AddArgument(t);
   }
   FunctionSig* sig = ConvertSignature(return_type, param_types);
-  uint32_t signature_index = module_builder_->AddSignature(sig);
+  uint32_t signature_index = module_builder_->add_signature(sig, kNoSuperType);
 
   // Emit actual function invocation depending on the kind. At this point we
   // also determined the complete function type and can perform checking against
@@ -2262,8 +2272,8 @@ AsmType* AsmJsParser::ValidateCall() {
       index = it->second;
       DCHECK(function_info->function_defined);
     } else {
-      index =
-          module_builder_->AddImport(function_info->import->function_name, sig);
+      index = module_builder_->AddImportedFunction(
+          function_info->import->function_name, sig);
       function_info->import->cache[*sig] = index;
       function_info->function_defined = true;
     }

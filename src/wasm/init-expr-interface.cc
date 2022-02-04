@@ -75,12 +75,12 @@ void InitExprInterface::GlobalGet(FullDecoder* decoder, Value* result,
           ? WasmValue(
                 reinterpret_cast<byte*>(
                     instance_->untagged_globals_buffer().backing_store()) +
-                    global.offset,
+                    global.storage_position,
                 global.type)
-          : WasmValue(
-                handle(instance_->tagged_globals_buffer().get(global.offset),
-                       isolate_),
-                global.type);
+          : WasmValue(handle(instance_->tagged_globals_buffer().get(
+                                 global.storage_position),
+                             isolate_),
+                      global.type);
 }
 
 void InitExprInterface::StructNewWithRtt(

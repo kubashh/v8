@@ -271,7 +271,7 @@ TEST_F(WasmModuleVerifyTest, OneGlobal) {
     const WasmGlobal* global = &result.value()->globals.back();
 
     EXPECT_EQ(kWasmI32, global->type);
-    EXPECT_EQ(0u, global->offset);
+    EXPECT_EQ(0u, global->storage_position);
     EXPECT_FALSE(global->mutability);
   }
 
@@ -294,7 +294,7 @@ TEST_F(WasmModuleVerifyTest, S128Global) {
     EXPECT_OK(result);
     const WasmGlobal* global = &result.value()->globals.back();
     EXPECT_EQ(kWasmS128, global->type);
-    EXPECT_EQ(0u, global->offset);
+    EXPECT_EQ(0u, global->storage_position);
     EXPECT_FALSE(global->mutability);
   }
 }
@@ -745,13 +745,13 @@ TEST_F(WasmModuleVerifyTest, TwoGlobals) {
     const WasmGlobal* g0 = &result.value()->globals[0];
 
     EXPECT_EQ(kWasmF32, g0->type);
-    EXPECT_EQ(0u, g0->offset);
+    EXPECT_EQ(0u, g0->storage_position);
     EXPECT_FALSE(g0->mutability);
 
     const WasmGlobal* g1 = &result.value()->globals[1];
 
     EXPECT_EQ(kWasmF64, g1->type);
-    EXPECT_EQ(8u, g1->offset);
+    EXPECT_EQ(8u, g1->storage_position);
     EXPECT_TRUE(g1->mutability);
   }
 
@@ -2567,7 +2567,7 @@ TEST_F(WasmModuleVerifyTest, UnknownSectionSkipped) {
   const WasmGlobal* global = &result.value()->globals.back();
 
   EXPECT_EQ(kWasmI32, global->type);
-  EXPECT_EQ(0u, global->offset);
+  EXPECT_EQ(0u, global->storage_position);
 }
 
 TEST_F(WasmModuleVerifyTest, ImportTable_empty) {

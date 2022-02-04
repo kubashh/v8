@@ -44,6 +44,14 @@ WireBytesRef LazilyGeneratedNames::LookupFunctionName(
   return it->second;
 }
 
+bool IsValidTableType(ValueType type, const WasmModule* module) {
+  if (!type.is_object_reference()) return false;
+  HeapType heap_type = type.heap_type();
+  return heap_type == HeapType::kFunc || heap_type == HeapType::kExtern ||
+         (module != nullptr && heap_type.is_index() &&
+          module->has_signature(heap_type.ref_index()));
+}
+
 // static
 int MaxNumExportWrappers(const WasmModule* module) {
   // For each signature there may exist a wrapper, both for imported and
@@ -217,9 +225,6 @@ std::ostream& operator<<(std::ostream& os, const WasmFunctionName& name) {
   }
   return os;
 }
-
-WasmModule::WasmModule(std::unique_ptr<Zone> signature_zone)
-    : signature_zone(std::move(signature_zone)) {}
 
 bool IsWasmCodegenAllowed(Isolate* isolate, Handle<Context> context) {
   // TODO(wasm): Once wasm has its own CSP policy, we should introduce a

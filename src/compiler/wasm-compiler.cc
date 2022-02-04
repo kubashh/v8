@@ -3676,12 +3676,12 @@ void WasmGraphBuilder::GetGlobalBaseAndOffset(const wasm::WasmGlobal& global,
     Node* base_or_index = gasm_->LoadFromObject(
         MachineType::UintPtr(),
         LOAD_INSTANCE_FIELD(ImportedMutableGlobals, MachineType::UintPtr()),
-        Int32Constant(global.index * kSystemPointerSize));
+        Int32Constant(global.storage_position * kSystemPointerSize));
     if (global.type.is_reference()) {
       // Load the base from the ImportedMutableGlobalsBuffer of the instance.
       Node* buffers = LOAD_INSTANCE_FIELD(ImportedMutableGlobalsBuffers,
                                           MachineType::TaggedPointer());
-      *base = gasm_->LoadFixedArrayElementAny(buffers, global.index);
+      *base = gasm_->LoadFixedArrayElementAny(buffers, global.storage_position);
 
       // For this case, {base_or_index} gives the index of the global in the
       // buffer. From the index, calculate the actual offset in the FixedArray.
@@ -3698,10 +3698,11 @@ void WasmGraphBuilder::GetGlobalBaseAndOffset(const wasm::WasmGlobal& global,
     *base =
         LOAD_INSTANCE_FIELD(TaggedGlobalsBuffer, MachineType::TaggedPointer());
     *offset = gasm_->IntPtrConstant(
-        wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(global.offset));
+        wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
+            global.storage_position));
   } else {
     *base = LOAD_INSTANCE_FIELD(GlobalsStart, MachineType::UintPtr());
-    *offset = gasm_->IntPtrConstant(global.offset);
+    *offset = gasm_->IntPtrConstant(global.storage_position);
   }
 }
 

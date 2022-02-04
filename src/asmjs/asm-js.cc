@@ -234,7 +234,8 @@ UnoptimizedCompilationJob::Status AsmJsCompilationJob::ExecuteJobImpl() {
     allow_deref.emplace();
   }
   stream->Seek(compilation_info()->literal()->start_position());
-  wasm::AsmJsParser parser(&translate_zone, stack_limit(), stream);
+  wasm::AsmJsParser parser(std::make_unique<Zone>(allocator_, ZONE_NAME),
+                           stack_limit(), stream);
   if (!parser.Run()) {
     if (!FLAG_suppress_asm_messages) {
       ReportCompilationFailure(parse_info(), parser.failure_location(),

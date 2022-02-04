@@ -24,8 +24,9 @@ constexpr ValueType optRef(uint32_t index) {
 FieldInit mut(ValueType type) { return FieldInit(type, true); }
 FieldInit immut(ValueType type) { return FieldInit(type, false); }
 
-void DefineStruct(WasmModule* module, std::initializer_list<FieldInit> fields,
-                  uint32_t supertype = kNoSuperType) {
+uint32_t DefineStruct(WasmModule* module,
+                      std::initializer_list<FieldInit> fields,
+                      uint32_t supertype = kNoSuperType) {
   StructType::Builder builder(module->signature_zone.get(),
                               static_cast<uint32_t>(fields.size()));
   for (FieldInit field : fields) {

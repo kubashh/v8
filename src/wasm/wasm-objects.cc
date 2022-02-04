@@ -197,7 +197,7 @@ Handle<WasmTableObject> WasmTableObject::New(
   {
     const WasmModule* module =
         instance.is_null() ? nullptr : instance->module();
-    CHECK(wasm::WasmTable::IsValidTableType(type, module));
+    CHECK(wasm::IsValidTableType(type, module));
   }
 
   Handle<FixedArray> backing_store = isolate->factory()->NewFixedArray(initial);
@@ -1510,9 +1510,9 @@ uint8_t* WasmInstanceObject::GetGlobalStorage(
   DCHECK(!global.type.is_reference());
   if (global.mutability && global.imported) {
     return reinterpret_cast<byte*>(
-        instance->imported_mutable_globals()[global.index]);
+        instance->imported_mutable_globals()[global.storage_position]);
   } else {
-    return instance->globals_start() + global.offset;
+    return instance->globals_start() + global.storage_position;
   }
 }
 
@@ -1524,14 +1524,15 @@ WasmInstanceObject::GetGlobalBufferAndIndex(Handle<WasmInstanceObject> instance,
   Isolate* isolate = instance->GetIsolate();
   if (global.mutability && global.imported) {
     Handle<FixedArray> buffer(
-        FixedArray::cast(
-            instance->imported_mutable_globals_buffers().get(global.index)),
+        FixedArray::cast(instance->imported_mutable_globals_buffers().get(
+            global.storage_position)),
         isolate);
-    Address idx = instance->imported_mutable_globals()[global.index];
+    Address idx = instance->imported_mutable_globals()[global.storage_position];
     DCHECK_LE(idx, std::numeric_limits<uint32_t>::max());
     return {buffer, static_cast<uint32_t>(idx)};
   }
-  return {handle(instance->tagged_globals_buffer(), isolate), global.offset};
+  return {handle(instance->tagged_globals_buffer(), isolate),
+          global.storage_position};
 }
 
 // static

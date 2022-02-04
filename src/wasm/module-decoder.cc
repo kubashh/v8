@@ -762,63 +762,58 @@ class ModuleDecoderImpl : public Decoder {
     for (uint32_t i = 0; ok() && i < import_table_count; ++i) {
       TRACE("DecodeImportTable[%d] module+%d\n", i,
             static_cast<int>(pc_ - start_));
-
-      module_->import_table.push_back({
-          {0, 0},             // module_name
-          {0, 0},             // field_name
-          kExternalFunction,  // kind
-          0                   // index
-      });
-      WasmImport* import = &module_->import_table.back();
       const byte* pos = pc_;
-      import->module_name = consume_string(this, true, "module name");
-      import->field_name = consume_string(this, true, "field name");
-      import->kind =
+      WireBytesRef module_name = consume_string(this, true, "module name");
+      WireBytesRef field_name = consume_string(this, true, "field name");
+      ImportExportKindCode kind =
           static_cast<ImportExportKindCode>(consume_u8("import kind"));
-      switch (import->kind) {
+      switch (kind) {
         case kExternalFunction: {
           // ===== Imported function ===========================================
-          import->index = static_cast<uint32_t>(module_->functions.size());
+          uint32_t sig_index = consume_sig_index(module_.get());
+          if (!ok()) return;
+          uint32_t index = static_cast<uint32_t>(module_->functions.size());
+          module_->import_table.emplace_back(module_name, field_name,
+                                             kExternalFunction, index);
           module_->num_imported_functions++;
-          module_->functions.push_back({nullptr,        // sig
-                                        import->index,  // func_index
-                                        0,              // sig_index
-                                        {0, 0},         // code
-                                        0,              // feedback slots
-                                        true,           // imported
-                                        false,          // exported
-                                        false});        // declared
-          WasmFunction* function = &module_->functions.back();
-          function->sig_index =
-              consume_sig_index(module_.get(), &function->sig);
+          module_->functions.push_back({
+              module_->signature(sig_index),
+              index,
+              sig_index,
+              {},     // code
+              0,      // feedback slots
+              true,   // imported
+              false,  // exported
+              false   // declared
+          });
           break;
         }
         case kExternalTable: {
           // ===== Imported table ==============================================
-          import->index = static_cast<uint32_t>(module_->tables.size());
-          module_->num_imported_tables++;
-          module_->tables.emplace_back();
-          WasmTable* table = &module_->tables.back();
-          table->imported = true;
           const byte* type_position = pc();
           ValueType type = consume_reference_type();
-          if (!WasmTable::IsValidTableType(type, module_.get())) {
+          if (!IsValidTableType(type, module_.get())) {
             error(type_position,
                   "Currently, only externref and function references are "
                   "allowed as table types");
             break;
           }
-          table->type = type;
           uint8_t flags = validate_table_flags("element count");
+          bool has_maximum_size;
+          uint32_t initial_size, maximum_size;
           consume_resizable_limits(
               "element count", "elements", std::numeric_limits<uint32_t>::max(),
-              &table->initial_size, &table->has_maximum_size,
-              std::numeric_limits<uint32_t>::max(), &table->maximum_size,
-              flags);
+              &initial_size, &has_maximum_size,
+              std::numeric_limits<uint32_t>::max(), &maximum_size, flags);
+          module_->add_imported_table(module_name, field_name, type,
+                                      initial_size, has_maximum_size,
+                                      maximum_size);
           break;
         }
         case kExternalMemory: {
           // ===== Imported memory =============================================
+          module_->import_table.emplace_back(module_name, field_name,
+                                             kExternalMemory, 0);
           if (!AddMemory(module_.get())) break;
           uint8_t flags = validate_memory_flags(&module_->has_shared_memory,
                                                 &module_->is_memory64);
@@ -830,31 +825,31 @@ class ModuleDecoderImpl : public Decoder {
         }
         case kExternalGlobal: {
           // ===== Imported global =============================================
-          import->index = static_cast<uint32_t>(module_->globals.size());
-          module_->globals.push_back({kWasmVoid, false, {}, {0}, true, false});
-          WasmGlobal* global = &module_->globals.back();
-          global->type = consume_value_type();
-          global->mutability = consume_mutability();
-          if (global->mutability) {
-            module_->num_imported_mutable_globals++;
-          }
+          ValueType type = consume_value_type();
+          bool mutability = consume_mutability();
+          module_->add_imported_global(module_name, field_name, type,
+                                       mutability);
           break;
         }
         case kExternalTag: {
           // ===== Imported tag ================================================
           if (!enabled_features_.has_eh()) {
-            errorf(pos, "unknown import kind 0x%02x", import->kind);
+            errorf(pos,
+                   "unknown import kind 0x%02x, enable with "
+                   "--experimental-wasm-eh",
+                   kExternalTag);
             break;
           }
-          import->index = static_cast<uint32_t>(module_->tags.size());
-          const WasmTagSig* tag_sig = nullptr;
+          module_->import_table.emplace_back(
+              module_name, field_name, kExternalTag,
+              static_cast<uint32_t>(module_->tags.size()));
           consume_exception_attribute();  // Attribute ignored for now.
-          consume_tag_sig_index(module_.get(), &tag_sig);
+          const WasmTagSig* tag_sig = consume_tag_sig_index(module_.get());
           module_->tags.emplace_back(tag_sig);
           break;
         }
         default:
-          errorf(pos, "unknown import kind 0x%02x", import->kind);
+          errorf(pos, "unknown import kind 0x%02x", kind);
           break;
       }
     }
@@ -873,17 +868,16 @@ class ModuleDecoderImpl : public Decoder {
     module_->num_declared_functions = functions_count;
     for (uint32_t i = 0; i < functions_count; ++i) {
       uint32_t func_index = static_cast<uint32_t>(module_->functions.size());
-      module_->functions.push_back({nullptr,     // sig
+      uint32_t sig_index = consume_sig_index(module_.get());
+      if (!ok()) return;
+      module_->functions.push_back({module_->signature(sig_index),  // sig
                                     func_index,  // func_index
-                                    0,           // sig_index
+                                    sig_index,   // sig_index
                                     {0, 0},      // code
                                     0,           // feedback slots
                                     false,       // imported
                                     false,       // exported
                                     false});     // declared
-      WasmFunction* function = &module_->functions.back();
-      function->sig_index = consume_sig_index(module_.get(), &function->sig);
-      if (!ok()) return;
     }
     DCHECK_EQ(module_->functions.size(), total_function_count);
   }
@@ -896,7 +890,7 @@ class ModuleDecoderImpl : public Decoder {
       WasmTable* table = &module_->tables.back();
       const byte* type_position = pc();
       ValueType table_type = consume_reference_type();
-      if (!WasmTable::IsValidTableType(table_type, module_.get())) {
+      if (!IsValidTableType(table_type, module_.get())) {
         error(type_position,
               "Currently, only externref and function references are allowed "
               "as table types");
@@ -940,7 +934,7 @@ class ModuleDecoderImpl : public Decoder {
       bool mutability = consume_mutability();
       if (failed()) break;
       ConstantExpression init = consume_init_expr(module_.get(), type);
-      module_->globals.push_back({type, mutability, init, {0}, false, false});
+      module_->globals.emplace_back(type, mutability, init, 0, false, false);
     }
     if (ok()) CalculateGlobalOffsets(module_.get());
   }
@@ -953,11 +947,9 @@ class ModuleDecoderImpl : public Decoder {
       TRACE("DecodeExportTable[%d] module+%d\n", i,
             static_cast<int>(pc_ - start_));
 
-      module_->export_table.push_back({
-          {0, 0},             // name
-          kExternalFunction,  // kind
-          0                   // index
-      });
+      module_->export_table.emplace_back(WireBytesRef(),     // name
+                                         kExternalFunction,  // kind
+                                         0);                 // index
       WasmExport* exp = &module_->export_table.back();
 
       exp->name = consume_string(this, true, "field name");
@@ -1412,9 +1404,8 @@ class ModuleDecoderImpl : public Decoder {
     uint32_t tag_count = consume_count("tag count", kV8MaxWasmTags);
     for (uint32_t i = 0; ok() && i < tag_count; ++i) {
       TRACE("DecodeTag[%d] module+%d\n", i, static_cast<int>(pc_ - start_));
-      const WasmTagSig* tag_sig = nullptr;
       consume_exception_attribute();  // Attribute ignored for now.
-      consume_tag_sig_index(module_.get(), &tag_sig);
+      const WasmTagSig* tag_sig = consume_tag_sig_index(module_.get());
       module_->tags.emplace_back(tag_sig);
     }
   }
@@ -1611,15 +1602,15 @@ class ModuleDecoderImpl : public Decoder {
     uint32_t num_imported_mutable_globals = 0;
     for (WasmGlobal& global : module->globals) {
       if (global.mutability && global.imported) {
-        global.index = num_imported_mutable_globals++;
+        global.storage_position = num_imported_mutable_globals++;
       } else if (global.type.is_reference()) {
-        global.offset = tagged_offset;
+        global.storage_position = tagged_offset;
         // All entries in the tagged_globals_buffer have size 1.
         tagged_offset++;
       } else {
         int size = global.type.element_size_bytes();
         untagged_offset = (untagged_offset + size - 1) & ~(size - 1);  // align
-        global.offset = untagged_offset;
+        global.storage_position = untagged_offset;
         untagged_offset += size;
       }
     }
@@ -1656,28 +1647,27 @@ class ModuleDecoderImpl : public Decoder {
     }
   }
 
-  uint32_t consume_sig_index(WasmModule* module, const FunctionSig** sig) {
+  uint32_t consume_sig_index(WasmModule* module) {
     const byte* pos = pc_;
     uint32_t sig_index = consume_u32v("signature index");
     if (!module->has_signature(sig_index)) {
       errorf(pos, "signature index %u out of bounds (%d signatures)", sig_index,
              static_cast<int>(module->types.size()));
-      *sig = nullptr;
       return 0;
     }
-    *sig = module->signature(sig_index);
     return sig_index;
   }
 
-  uint32_t consume_tag_sig_index(WasmModule* module, const FunctionSig** sig) {
+  const WasmTagSig* consume_tag_sig_index(WasmModule* module) {
     const byte* pos = pc_;
-    uint32_t sig_index = consume_sig_index(module, sig);
-    if (*sig && (*sig)->return_count() != 0) {
+    uint32_t sig_index = consume_sig_index(module);
+    if (!ok()) return nullptr;
+    const FunctionSig* sig = module_->signature(sig_index);
+    if (sig->return_count() != 0) {
       errorf(pos, "tag signature %u has non-void return", sig_index);
-      *sig = nullptr;
-      return 0;
+      return nullptr;
     }
-    return sig_index;
+    return sig;
   }
 
   uint32_t consume_count(const char* name, size_t maximum) {

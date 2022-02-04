@@ -50,8 +50,8 @@ class AsmJsParser {
 
   using StdlibSet = base::EnumSet<StandardMember, uint64_t>;
 
-  explicit AsmJsParser(Zone* zone, uintptr_t stack_limit,
-                       Utf16CharacterStream* stream);
+  AsmJsParser(std::unique_ptr<Zone> zone, uintptr_t stack_limit,
+              Utf16CharacterStream* stream);
   bool Run();
   const char* failure_message() const { return failure_message_; }
   int failure_location() const { return failure_location_; }
@@ -165,7 +165,6 @@ class AsmJsParser {
 
   Zone* zone_;
   AsmJsScanner scanner_;
-  WasmModuleBuilder* module_builder_;
   WasmFunctionBuilder* current_function_builder_;
   AsmType* return_type_ = nullptr;
   uintptr_t stack_limit_;
@@ -243,6 +242,8 @@ class AsmJsParser {
   // Global imports. The list of imported variables that are copied during
   // module instantiation into a corresponding global variable.
   ZoneLinkedList<GlobalImport> global_imports_;
+
+  WasmModuleBuilder* module_builder_;
 
   Zone* zone() { return zone_; }
 

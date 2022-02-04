@@ -2356,11 +2356,12 @@ class LiftoffCompiler {
       LOAD_INSTANCE_FIELD(addr, ImportedMutableGlobals, kSystemPointerSize,
                           *pinned);
       __ Load(LiftoffRegister(addr), addr, no_reg,
-              global->index * sizeof(Address), kPointerLoadType, *pinned);
+              global->storage_position * sizeof(Address), kPointerLoadType,
+              *pinned);
       *offset = 0;
     } else {
       LOAD_INSTANCE_FIELD(addr, GlobalsStart, kSystemPointerSize, *pinned);
-      *offset = global->offset;
+      *offset = global->storage_position;
     }
     return addr;
   }
@@ -2373,10 +2374,10 @@ class LiftoffCompiler {
     LOAD_TAGGED_PTR_INSTANCE_FIELD(globals_buffer,
                                    ImportedMutableGlobalsBuffers, *pinned);
     *base = globals_buffer;
-    __ LoadTaggedPointer(
-        *base, globals_buffer, no_reg,
-        wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(global->offset),
-        *pinned);
+    __ LoadTaggedPointer(*base, globals_buffer, no_reg,
+                         wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
+                             global->storage_position),
+                         *pinned);
 
     // For the offset we need the index of the global in the buffer, and
     // then calculate the actual offset from the index. Load the index from
@@ -2388,7 +2389,7 @@ class LiftoffCompiler {
                         kSystemPointerSize, *pinned);
     *offset = imported_mutable_globals;
     __ Load(LiftoffRegister(*offset), imported_mutable_globals, no_reg,
-            global->index * sizeof(Address),
+            global->storage_position * sizeof(Address),
             kSystemPointerSize == 4 ? LoadType::kI32Load : LoadType::kI64Load,
             *pinned);
     __ emit_i32_shli(*offset, *offset, kTaggedSizeLog2);
@@ -2424,7 +2425,7 @@ class LiftoffCompiler {
       Register value = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
       __ LoadTaggedPointer(value, globals_buffer, no_reg,
                            wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
-                               imm.global->offset),
+                               imm.global->storage_position),
                            pinned);
       __ PushRegister(kind, LiftoffRegister(value));
       return;
@@ -2467,7 +2468,7 @@ class LiftoffCompiler {
       LiftoffRegister value = pinned.set(__ PopToRegister(pinned));
       __ StoreTaggedPointer(globals_buffer, no_reg,
                             wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
-                                imm.global->offset),
+                                imm.global->storage_position),
                             value, pinned);
       return;
     }

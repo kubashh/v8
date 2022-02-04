@@ -167,17 +167,25 @@ class ConstantExpression {
 STATIC_ASSERT(sizeof(ConstantExpression) <= 8);
 
 // Static representation of a wasm global variable.
-struct WasmGlobal {
-  ValueType type;           // type of the global.
-  bool mutability;          // {true} if mutable.
-  ConstantExpression init;  // the initialization expression of the global.
-  union {
-    // Index of imported mutable global.
-    uint32_t index;
-    // Offset into global memory (if not imported & mutable). Expressed in bytes
-    // for value-typed globals, and in tagged words for reference-typed globals.
-    uint32_t offset;
-  };
+template <typename Expr>
+struct WasmGlobalAbstract {
+  WasmGlobalAbstract(ValueType type, bool mutability, Expr init,
+                     uint32_t storage_position, bool imported, bool exported)
+      : type(type),
+        mutability(mutability),
+        init(init),
+        storage_position(storage_position),
+        imported(imported),
+        exported(exported) {}
+  ValueType type;   // type of the global.
+  bool mutability;  // {true} if mutable.
+  Expr init;        // the initialization expression of the global.
+  // The position of this global in the runtime global storage.
+  // If this global is imported mutable, it is its index in the imported mutable
+  // global storage.
+  // Otherwise, this is its offset in global memory, expressed in bytes for
+  // value-typed globals, and in tagged words for reference-typed globals.
+  uint32_t storage_position;
   bool imported;  // true if imported.
   bool exported;  // true if exported.
 };
@@ -195,21 +203,23 @@ struct WasmTag {
 };
 
 // Static representation of a wasm data segment.
-struct WasmDataSegment {
+template <typename Expr, typename Bytes>
+struct WasmDataSegmentAbstract {
   // Construct an active segment.
-  explicit WasmDataSegment(ConstantExpression dest_addr)
+  explicit WasmDataSegmentAbstract(Expr dest_addr)
       : dest_addr(dest_addr), active(true) {}
 
   // Construct a passive segment, which has no dest_addr.
-  WasmDataSegment() : active(false) {}
+  WasmDataSegmentAbstract() : active(false) {}
 
-  ConstantExpression dest_addr;  // destination memory address of the data.
-  WireBytesRef source;           // start offset in the module bytes.
+  Expr dest_addr;      // destination memory address of the data.
+  Bytes source;        // start offset in the module bytes.
   bool active = true;  // true if copied automatically during instantiation.
 };
 
 // Static representation of wasm element segment (table initializer).
-struct WasmElemSegment {
+template <typename Expr>
+struct WasmElemSegmentAbstract {
   enum Status {
     kStatusActive,      // copied automatically during instantiation.
     kStatusPassive,     // copied explicitly after instantiation.
@@ -218,8 +228,8 @@ struct WasmElemSegment {
   enum ElementType { kFunctionIndexElements, kExpressionElements };
 
   // Construct an active segment.
-  WasmElemSegment(ValueType type, uint32_t table_index,
-                  ConstantExpression offset, ElementType element_type)
+  WasmElemSegmentAbstract(ValueType type, uint32_t table_index, Expr offset,
+                          ElementType element_type)
       : status(kStatusActive),
         type(type),
         table_index(table_index),
@@ -228,42 +238,54 @@ struct WasmElemSegment {
 
   // Construct a passive or declarative segment, which has no table index or
   // offset.
-  WasmElemSegment(ValueType type, Status status, ElementType element_type)
+  WasmElemSegmentAbstract(ValueType type, Status status,
+                          ElementType element_type)
       : status(status), type(type), table_index(0), element_type(element_type) {
     DCHECK_NE(status, kStatusActive);
   }
 
   // Default constructor. Constucts an invalid segment.
-  WasmElemSegment()
+  WasmElemSegmentAbstract()
       : status(kStatusActive),
         type(kWasmBottom),
         table_index(0),
         element_type(kFunctionIndexElements) {}
 
-  WasmElemSegment(const WasmElemSegment&) = delete;
-  WasmElemSegment(WasmElemSegment&&) V8_NOEXCEPT = default;
-  WasmElemSegment& operator=(const WasmElemSegment&) = delete;
-  WasmElemSegment& operator=(WasmElemSegment&&) V8_NOEXCEPT = default;
+  WasmElemSegmentAbstract(const WasmElemSegmentAbstract&) = delete;
+  WasmElemSegmentAbstract(WasmElemSegmentAbstract&&) V8_NOEXCEPT = default;
+  WasmElemSegmentAbstract& operator=(const WasmElemSegmentAbstract&) = delete;
+  WasmElemSegmentAbstract& operator=(WasmElemSegmentAbstract&&)
+      V8_NOEXCEPT = default;
 
   Status status;
   ValueType type;
   uint32_t table_index;
-  ConstantExpression offset;
+  Expr offset;
   ElementType element_type;
-  std::vector<ConstantExpression> entries;
+  std::vector<Expr> entries;
 };
 
 // Static representation of a wasm import.
-struct WasmImport {
-  WireBytesRef module_name;   // module name.
-  WireBytesRef field_name;    // import name.
+template <typename Bytes>
+struct WasmImportAbstract {
+  WasmImportAbstract(Bytes module_name, Bytes field_name,
+                     ImportExportKindCode kind, uint32_t index)
+      : module_name(module_name),
+        field_name(field_name),
+        kind(kind),
+        index(index) {}
+  Bytes module_name;          // module name.
+  Bytes field_name;           // import name.
   ImportExportKindCode kind;  // kind of the import.
   uint32_t index;             // index into the respective space.
 };
 
 // Static representation of a wasm export.
-struct WasmExport {
-  WireBytesRef name;          // exported name.
+template <typename Bytes>
+struct WasmExportAbstract {
+  WasmExportAbstract(Bytes name, ImportExportKindCode kind, uint32_t index)
+      : name(name), kind(kind), index(index) {}
+  Bytes name;                 // exported name.
   ImportExportKindCode kind;  // kind of the export.
   uint32_t index;             // index into the respective space.
 };
@@ -389,10 +411,44 @@ struct TypeFeedbackStorage {
   base::Mutex mutex;
 };
 
-struct WasmTable;
+// Static representation of a wasm indirect call table.
+template <typename Expr>
+struct WasmTableAbstract {
+  MOVE_ONLY_WITH_DEFAULT_CONSTRUCTORS(WasmTableAbstract);
+  WasmTableAbstract(ValueType type, uint32_t initial_size,
+                    uint32_t maximum_size, bool has_maximum_size, bool imported,
+                    bool exported, Expr initial_value)
+      : type(type),
+        initial_size(initial_size),
+        maximum_size(maximum_size),
+        has_maximum_size(has_maximum_size),
+        imported(imported),
+        exported(exported),
+        initial_value(initial_value) {}
+
+  ValueType type = kWasmVoid;     // table type.
+  uint32_t initial_size = 0;      // initial table size.
+  uint32_t maximum_size = 0;      // maximum table size.
+  bool has_maximum_size = false;  // true if there is a maximum size.
+  bool imported = false;          // true if imported.
+  bool exported = false;          // true if exported.
+  Expr initial_value;
+};
 
 // Static representation of a module.
-struct V8_EXPORT_PRIVATE WasmModule {
+template <typename Expr, typename Bytes, typename Function, typename Global,
+          typename DataSegment, typename Table, typename Import,
+          typename Export, typename ElemSegment>
+struct V8_EXPORT_PRIVATE WasmModuleAbstract {
+  STATIC_ASSERT((std::is_base_of<WasmGlobalAbstract<Expr>, Global>::value));
+  STATIC_ASSERT((std::is_base_of<WasmDataSegmentAbstract<Expr, Bytes>,
+                                 DataSegment>::value));
+  STATIC_ASSERT((std::is_base_of<WasmTableAbstract<Expr>, Table>::value));
+  STATIC_ASSERT((std::is_base_of<WasmImportAbstract<Bytes>, Import>::value));
+  STATIC_ASSERT((std::is_base_of<WasmExportAbstract<Bytes>, Export>::value));
+  STATIC_ASSERT(
+      (std::is_base_of<WasmElemSegmentAbstract<Expr>, ElemSegment>::value));
+
   std::unique_ptr<Zone> signature_zone;
   uint32_t initial_pages = 0;      // initial size of the memory in 64k pages
   uint32_t maximum_pages = 0;      // maximum size of the memory in 64k pages
@@ -415,24 +471,26 @@ struct V8_EXPORT_PRIVATE WasmModule {
   uint32_t num_declared_data_segments = 0;  // From the DataCount section.
   // Position and size of the code section (payload only, i.e. without section
   // ID and length).
-  WireBytesRef code = {0, 0};
-  WireBytesRef name = {0, 0};
+  Bytes code = {};
+  Bytes name = {};
 
-  void add_type(TypeDefinition type) {
+  uint32_t add_type(TypeDefinition type) {
     types.push_back(type);
     uint32_t canonical_id = type.kind == TypeDefinition::kFunction
                                 ? signature_map.FindOrInsert(*type.function_sig)
                                 : 0;
     canonicalized_type_ids.push_back(canonical_id);
+    return static_cast<uint32_t>(types.size() - 1);
   }
 
   bool has_type(uint32_t index) const { return index < types.size(); }
 
-  void add_signature(const FunctionSig* sig, uint32_t supertype) {
+  uint32_t add_signature(const FunctionSig* sig, uint32_t supertype) {
     types.push_back(TypeDefinition(sig, supertype));
     DCHECK_NOT_NULL(sig);
     uint32_t canonical_id = signature_map.FindOrInsert(*sig);
     canonicalized_type_ids.push_back(canonical_id);
+    return static_cast<uint32_t>(types.size() - 1);
   }
   bool has_signature(uint32_t index) const {
     return index < types.size() &&
@@ -443,10 +501,11 @@ struct V8_EXPORT_PRIVATE WasmModule {
     return types[index].function_sig;
   }
 
-  void add_struct_type(const StructType* type, uint32_t supertype) {
+  uint32_t add_struct_type(const StructType* type, uint32_t supertype) {
     types.push_back(TypeDefinition(type, supertype));
     // No canonicalization for structs.
     canonicalized_type_ids.push_back(0);
+    return static_cast<uint32_t>(types.size() - 1);
   }
   bool has_struct(uint32_t index) const {
     return index < types.size() && types[index].kind == TypeDefinition::kStruct;
@@ -456,10 +515,11 @@ struct V8_EXPORT_PRIVATE WasmModule {
     return types[index].struct_type;
   }
 
-  void add_array_type(const ArrayType* type, uint32_t supertype) {
+  uint32_t add_array_type(const ArrayType* type, uint32_t supertype) {
     types.push_back(TypeDefinition(type, supertype));
     // No canonicalization for arrays.
     canonicalized_type_ids.push_back(0);
+    return static_cast<uint32_t>(types.size() - 1);
   }
   bool has_array(uint32_t index) const {
     return index < types.size() && types[index].kind == TypeDefinition::kArray;
@@ -477,6 +537,26 @@ struct V8_EXPORT_PRIVATE WasmModule {
     return supertype(index) != kNoSuperType;
   }
 
+  uint32_t add_imported_table(Bytes module_name, Bytes field_name,
+                              ValueType type, uint32_t initial_size,
+                              bool has_maximum_size, uint32_t maximum_size) {
+    uint32_t index = static_cast<uint32_t>(tables.size());
+    import_table.emplace_back(module_name, field_name, kExternalTable, index);
+    num_imported_tables++;
+    tables.push_back(
+        {type, initial_size, maximum_size, has_maximum_size, true, false, {}});
+    return index;
+  }
+
+  uint32_t add_imported_global(Bytes module_name, Bytes field_name,
+                               ValueType type, bool mutability) {
+    uint32_t index = static_cast<uint32_t>(globals.size());
+    import_table.emplace_back(module_name, field_name, kExternalGlobal, index);
+    globals.push_back({type, mutability, {}, 0, true, false});
+    if (mutability) num_imported_mutable_globals++;
+    return index;
+  }
+
   std::vector<TypeDefinition> types;  // by type index
   // Map from each type index to the index of its corresponding canonical index.
   // Canonical indices do not correspond to types.
@@ -485,14 +565,14 @@ struct V8_EXPORT_PRIVATE WasmModule {
   std::vector<uint32_t> canonicalized_type_ids;
   // Canonicalizing map for signature indexes.
   SignatureMap signature_map;
-  std::vector<WasmFunction> functions;
-  std::vector<WasmGlobal> globals;
-  std::vector<WasmDataSegment> data_segments;
-  std::vector<WasmTable> tables;
-  std::vector<WasmImport> import_table;
-  std::vector<WasmExport> export_table;
+  std::vector<Function> functions;
+  std::vector<Global> globals;
+  std::vector<DataSegment> data_segments;
+  std::vector<Table> tables;
+  std::vector<Import> import_table;
+  std::vector<Export> export_table;
   std::vector<WasmTag> tags;
-  std::vector<WasmElemSegment> elem_segments;
+  std::vector<ElemSegment> elem_segments;
   std::vector<WasmCompilationHint> compilation_hints;
   BranchHintInfo branch_hints;
   mutable TypeFeedbackStorage type_feedback;
@@ -505,38 +585,52 @@ struct V8_EXPORT_PRIVATE WasmModule {
   // from asm.js.
   std::unique_ptr<AsmJsOffsetInformation> asm_js_offset_information;
 
-  explicit WasmModule(std::unique_ptr<Zone> signature_zone = nullptr);
-  WasmModule(const WasmModule&) = delete;
-  WasmModule& operator=(const WasmModule&) = delete;
+  explicit WasmModuleAbstract(std::unique_ptr<Zone> signature_zone = nullptr)
+      : signature_zone(std::move(signature_zone)) {}
+  WasmModuleAbstract(const WasmModuleAbstract&) = delete;
+  WasmModuleAbstract& operator=(const WasmModuleAbstract&) = delete;
 };
 
-// Static representation of a wasm indirect call table.
-struct WasmTable {
-  MOVE_ONLY_WITH_DEFAULT_CONSTRUCTORS(WasmTable);
+struct WasmGlobal : public WasmGlobalAbstract<ConstantExpression> {
+  using WasmGlobalAbstract::WasmGlobalAbstract;
+};
 
-  // 'module' can be nullptr
-  // TODO(9495): Update this function as more table types are supported, or
-  // remove it completely when all reference types are allowed.
-  static bool IsValidTableType(ValueType type, const WasmModule* module) {
-    if (!type.is_object_reference()) return false;
-    HeapType heap_type = type.heap_type();
-    return heap_type == HeapType::kFunc || heap_type == HeapType::kExtern ||
-           (module != nullptr && heap_type.is_index() &&
-            module->has_signature(heap_type.ref_index()));
-  }
+struct WasmImport : public WasmImportAbstract<WireBytesRef> {
+  using WasmImportAbstract::WasmImportAbstract;
+};
 
-  ValueType type = kWasmVoid;     // table type.
-  uint32_t initial_size = 0;      // initial table size.
-  uint32_t maximum_size = 0;      // maximum table size.
-  bool has_maximum_size = false;  // true if there is a maximum size.
-  bool imported = false;          // true if imported.
-  bool exported = false;          // true if exported.
-  ConstantExpression initial_value;
+struct WasmExport : public WasmExportAbstract<WireBytesRef> {
+  using WasmExportAbstract::WasmExportAbstract;
+};
+
+struct WasmDataSegment
+    : public WasmDataSegmentAbstract<ConstantExpression, WireBytesRef> {
+  using WasmDataSegmentAbstract::WasmDataSegmentAbstract;
+};
+
+struct WasmElemSegment : public WasmElemSegmentAbstract<ConstantExpression> {
+  using WasmElemSegmentAbstract::WasmElemSegmentAbstract;
+};
+
+struct WasmTable : public WasmTableAbstract<ConstantExpression> {
+  using WasmTableAbstract::WasmTableAbstract;
+};
+
+struct WasmModule
+    : public WasmModuleAbstract<ConstantExpression, WireBytesRef, WasmFunction,
+                                WasmGlobal, WasmDataSegment, WasmTable,
+                                WasmImport, WasmExport, WasmElemSegment> {
+  using WasmModuleAbstract::WasmModuleAbstract;
 };
 
 inline bool is_asmjs_module(const WasmModule* module) {
   return module->origin != kWasmOrigin;
 }
+
+// 'module' can be nullptr
+// TODO(9495): Update this function as more table types are supported, or
+// remove it completely when all reference types are allowed.
+bool IsValidTableType(ValueType type, const WasmModule* module);
 
 size_t EstimateStoredSize(const WasmModule* module);
 

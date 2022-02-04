@@ -82,7 +82,7 @@ class TestModuleBuilder {
     mod.origin = origin;
   }
   byte AddGlobal(ValueType type, bool mutability = true) {
-    mod.globals.push_back({type, mutability, {}, {0}, false, false});
+    mod.globals.push_back({type, mutability, {}, 0, false, false});
     CHECK_LE(mod.globals.size(), kMaxByteSizedLeb128);
     return static_cast<byte>(mod.globals.size() - 1);
   }
@@ -113,7 +113,7 @@ class TestModuleBuilder {
 
   byte AddTable(ValueType type, uint32_t initial_size, bool has_maximum_size,
                 uint32_t maximum_size) {
-    CHECK(WasmTable::IsValidTableType(type, &mod));
+    CHECK(IsValidTableType(type, &mod));
     mod.tables.emplace_back();
     WasmTable& table = mod.tables.back();
     table.type = type;

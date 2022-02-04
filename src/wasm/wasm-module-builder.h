@@ -161,7 +161,7 @@ class ZoneBuffer : public ZoneObject {
   byte* end_;
 };
 
-class WasmModuleBuilder;
+struct WasmModuleBuilder;
 
 class V8_EXPORT_PRIVATE WasmFunctionBuilder : public ZoneObject {
  public:
@@ -213,7 +213,7 @@ class V8_EXPORT_PRIVATE WasmFunctionBuilder : public ZoneObject {
 
  private:
   explicit WasmFunctionBuilder(WasmModuleBuilder* builder);
-  friend class WasmModuleBuilder;
+  friend struct WasmModuleBuilder;
   friend Zone;
 
   struct DirectCallIndex {
@@ -241,235 +241,31 @@ class V8_EXPORT_PRIVATE WasmFunctionBuilder : public ZoneObject {
   uint8_t hint_ = kNoCompilationHint;
 };
 
-class V8_EXPORT_PRIVATE WasmModuleBuilder : public ZoneObject {
- public:
-  explicit WasmModuleBuilder(Zone* zone);
-  WasmModuleBuilder(const WasmModuleBuilder&) = delete;
-  WasmModuleBuilder& operator=(const WasmModuleBuilder&) = delete;
+using Name = base::Vector<const char>;
 
-  // Static representation of wasm element segment (table initializer). This is
-  // different than the version in wasm-module.h.
-  class WasmElemSegment {
-   public:
-    // asm.js gives function indices starting with the first non-imported
-    // function.
-    enum FunctionIndexingMode {
-      kRelativeToImports,
-      kRelativeToDeclaredFunctions
-    };
-    enum Status {
-      kStatusActive,      // copied automatically during instantiation.
-      kStatusPassive,     // copied explicitly after instantiation.
-      kStatusDeclarative  // purely declarative and never copied.
-    };
-    struct Entry {
-      enum Kind { kGlobalGetEntry, kRefFuncEntry, kRefNullEntry } kind;
-      uint32_t index;
-      Entry(Kind kind, uint32_t index) : kind(kind), index(index) {}
-      Entry() : kind(kRefNullEntry), index(0) {}
-    };
-
-    // Construct an active segment.
-    WasmElemSegment(Zone* zone, ValueType type, uint32_t table_index,
-                    WasmInitExpr offset)
-        : type(type),
-          table_index(table_index),
-          offset(offset),
-          entries(zone),
-          status(kStatusActive) {
-      DCHECK(IsValidOffsetKind(offset.kind()));
-    }
-
-    // Construct a passive or declarative segment, which has no table
-    // index or offset.
-    WasmElemSegment(Zone* zone, ValueType type, bool declarative)
-        : type(type),
-          table_index(0),
-          entries(zone),
-          status(declarative ? kStatusDeclarative : kStatusPassive) {
-      DCHECK(IsValidOffsetKind(offset.kind()));
-    }
-
-    MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(WasmElemSegment);
-
-    ValueType type;
-    uint32_t table_index;
-    WasmInitExpr offset;
-    FunctionIndexingMode indexing_mode = kRelativeToImports;
-    ZoneVector<Entry> entries;
-    Status status;
-
-   private:
-    // This ensures no {WasmInitExpr} with subexpressions is used, which would
-    // cause a memory leak because those are stored in an std::vector. Such
-    // offset would also be mistyped.
-    bool IsValidOffsetKind(WasmInitExpr::Operator kind) {
-      return kind == WasmInitExpr::kI32Const ||
-             kind == WasmInitExpr::kGlobalGet;
-    }
-  };
-
-  // Building methods.
-  uint32_t AddImport(base::Vector<const char> name, FunctionSig* sig,
-                     base::Vector<const char> module = {});
-  WasmFunctionBuilder* AddFunction(const FunctionSig* sig = nullptr);
-  WasmFunctionBuilder* AddFunction(uint32_t sig_index);
-  uint32_t AddGlobal(ValueType type, bool mutability = true,
-                     WasmInitExpr init = WasmInitExpr());
-  uint32_t AddGlobalImport(base::Vector<const char> name, ValueType type,
-                           bool mutability,
-                           base::Vector<const char> module = {});
-  void AddDataSegment(const byte* data, uint32_t size, uint32_t dest);
-  // Add an element segment to this {WasmModuleBuilder}. {segment}'s enties
-  // have to be initialized.
-  void AddElementSegment(WasmElemSegment segment);
-  // Helper method to create an active segment with one function. Assumes that
-  // table segment at {table_index} is typed as funcref.
-  void SetIndirectFunction(uint32_t table_index, uint32_t index_in_table,
-                           uint32_t direct_function_index,
-                           WasmElemSegment::FunctionIndexingMode indexing_mode);
-  // Increase the starting size of the table at {table_index} by {count}. Also
-  // increases the maximum table size if needed. Returns the former starting
-  // size, or the maximum uint32_t value if the maximum table size has been
-  // exceeded.
-  uint32_t IncreaseTableMinSize(uint32_t table_index, uint32_t count);
-  // Adds the signature to the module if it does not already exist.
-  uint32_t AddSignature(const FunctionSig* sig,
-                        uint32_t supertype = kNoSuperType);
-  // Does not deduplicate function signatures.
-  uint32_t ForceAddSignature(const FunctionSig* sig,
-                             uint32_t supertype = kNoSuperType);
-  uint32_t AddException(const FunctionSig* type);
-  uint32_t AddStructType(StructType* type, uint32_t supertype = kNoSuperType);
-  uint32_t AddArrayType(ArrayType* type, uint32_t supertype = kNoSuperType);
-  uint32_t AddTable(ValueType type, uint32_t min_size);
-  uint32_t AddTable(ValueType type, uint32_t min_size, uint32_t max_size);
-  uint32_t AddTable(ValueType type, uint32_t min_size, uint32_t max_size,
-                    WasmInitExpr init);
-  void MarkStartFunction(WasmFunctionBuilder* builder);
-  void AddExport(base::Vector<const char> name, ImportExportKindCode kind,
-                 uint32_t index);
-  void AddExport(base::Vector<const char> name, WasmFunctionBuilder* builder) {
-    AddExport(name, kExternalFunction, builder->func_index());
-  }
-  uint32_t AddExportedGlobal(ValueType type, bool mutability, WasmInitExpr init,
-                             base::Vector<const char> name);
-  void ExportImportedFunction(base::Vector<const char> name, int import_index);
-  void SetMinMemorySize(uint32_t value);
-  void SetMaxMemorySize(uint32_t value);
-  void SetHasSharedMemory();
-
+struct V8_EXPORT_PRIVATE WasmModuleBuilder
+    : public WasmModuleAbstract<
+          WasmInitExpr, Name, WasmFunctionBuilder*,
+          WasmGlobalAbstract<WasmInitExpr>,
+          WasmDataSegmentAbstract<WasmInitExpr, Name>,
+          WasmTableAbstract<WasmInitExpr>, WasmImportAbstract<Name>,
+          WasmExportAbstract<Name>, WasmElemSegmentAbstract<WasmInitExpr>> {
+  using WasmModuleAbstract::WasmModuleAbstract;
   // Writing methods.
   void WriteTo(ZoneBuffer* buffer) const;
   void WriteAsmJsOffsetTable(ZoneBuffer* buffer) const;
-
-  Zone* zone() { return zone_; }
-
-  ValueType GetTableType(uint32_t index) { return tables_[index].type; }
-
-  bool IsSignature(uint32_t index) {
-    return types_[index].kind == TypeDefinition::kFunction;
-  }
-
-  const FunctionSig* GetSignature(uint32_t index) {
-    DCHECK(types_[index].kind == TypeDefinition::kFunction);
-    return types_[index].function_sig;
-  }
-
-  bool IsStructType(uint32_t index) {
-    return types_[index].kind == TypeDefinition::kStruct;
-  }
-  const StructType* GetStructType(uint32_t index) {
-    return types_[index].struct_type;
-  }
-
-  bool IsArrayType(uint32_t index) {
-    return types_[index].kind == TypeDefinition::kArray;
-  }
-  const ArrayType* GetArrayType(uint32_t index) {
-    return types_[index].array_type;
-  }
-
-  WasmFunctionBuilder* GetFunction(uint32_t index) { return functions_[index]; }
-  int NumExceptions() { return static_cast<int>(exceptions_.size()); }
-
-  int NumTypes() { return static_cast<int>(types_.size()); }
-
-  int NumTables() { return static_cast<int>(tables_.size()); }
-
-  int NumFunctions() { return static_cast<int>(functions_.size()); }
-
-  const FunctionSig* GetExceptionType(int index) {
-    return types_[exceptions_[index]].function_sig;
-  }
-
- private:
-  struct WasmFunctionImport {
-    base::Vector<const char> module;
-    base::Vector<const char> name;
-    uint32_t sig_index;
-  };
-
-  struct WasmGlobalImport {
-    base::Vector<const char> module;
-    base::Vector<const char> name;
-    ValueTypeCode type_code;
-    bool mutability;
-  };
-
-  struct WasmExport {
-    base::Vector<const char> name;
-    ImportExportKindCode kind;
-    int index;  // Can be negative for re-exported imports.
-  };
-
-  struct WasmGlobal {
-    MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(WasmGlobal);
-
-    ValueType type;
-    bool mutability;
-    WasmInitExpr init;
-  };
-
-  struct WasmTable {
-    ValueType type;
-    uint32_t min_size;
-    uint32_t max_size;
-    bool has_maximum;
-    WasmInitExpr init;
-  };
-
-  struct WasmDataSegment {
-    ZoneVector<byte> data;
-    uint32_t dest;
-  };
-
-  friend class WasmFunctionBuilder;
-  Zone* zone_;
-  ZoneVector<TypeDefinition> types_;
-  ZoneVector<WasmFunctionImport> function_imports_;
-  ZoneVector<WasmGlobalImport> global_imports_;
-  ZoneVector<WasmExport> exports_;
-  ZoneVector<WasmFunctionBuilder*> functions_;
-  ZoneVector<WasmTable> tables_;
-  ZoneVector<WasmDataSegment> data_segments_;
-  ZoneVector<WasmElemSegment> element_segments_;
-  ZoneVector<WasmGlobal> globals_;
-  ZoneVector<int> exceptions_;
-  ZoneUnorderedMap<FunctionSig, uint32_t> signature_map_;
-  int start_function_index_;
-  uint32_t min_memory_size_;
-  uint32_t max_memory_size_;
-  bool has_max_memory_size_;
-  bool has_shared_memory_;
-#if DEBUG
-  // Once AddExportedImport is called, no more imports can be added.
-  bool adding_imports_allowed_ = true;
-#endif
+  // Helper method to create an active segment with one function. Assumes that
+  // table segment at {table_index} is typed as funcref.
+  void SetIndirectFunction(uint32_t table_index, uint32_t index_in_table,
+                           uint32_t direct_function_index);
+  uint32_t AddImportedFunction(base::Vector<const char> name, FunctionSig* sig,
+                               base::Vector<const char> module = {});
+  WasmFunctionBuilder* AddFunction(const FunctionSig* sig);
+  Zone* zone() { return signature_zone.get(); }
 };
 
 const FunctionSig* WasmFunctionBuilder::signature() {
-  return builder_->types_[signature_index_].function_sig;
+  return builder_->types[signature_index_].function_sig;
 }
 
 }  // namespace wasm
