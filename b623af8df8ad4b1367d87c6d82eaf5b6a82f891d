@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ffada7_c571b3fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-04T13:29:27Z",
+      "side": 1,
+      "message": "PTALA at the CL, I had to add memory order for String::MakeThin. Then also migrated set_map_no_write_barrier to this new method to share code there as well.",
+      "revId": "b623af8df8ad4b1367d87c6d82eaf5b6a82f891d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
