@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1980faf9_d4db0248",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-04T14:57:00Z",
+      "side": 1,
+      "message": "PTAL. This blocks on the python3 trybot. In earlier patchsets it detected the errors.",
+      "revId": "a7c128e152b604ce0c3ad95dce6c31f367edd425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
