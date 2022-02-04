@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac632ea5_d45aae3e",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-04T13:15:12Z",
+      "side": 0,
+      "message": "lol 😊",
+      "range": {
+        "startLine": 482,
+        "startChar": 7,
+        "endLine": 482,
+        "endChar": 13
+      },
+      "revId": "fca5a7f350be8914dc01195d47ca221e86497077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
