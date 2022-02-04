@@ -446,7 +446,9 @@ void CppHeap::InitializeTracing(
                  !GetMetricRecorder()->MetricsReportPending());
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  cppgc::internal::SequentialUnmarker unmarker(raw_heap());
+  if (collection_type ==
+      cppgc::internal::GarbageCollector::Config::CollectionType::kMajor)
+    cppgc::internal::SequentialUnmarker unmarker(raw_heap());
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
   current_gc_flags_ = gc_flags;
@@ -512,7 +514,8 @@ void CppHeap::EnterFinalPause(cppgc::EmbedderStackState stack_state) {
                                       stack_state);
 }
 
-void CppHeap::TraceEpilogue() {
+void CppHeap::TraceEpilogue(
+    cppgc::internal::GarbageCollector::Config::CollectionType collection_type) {
   CHECK(in_atomic_pause_);
   CHECK(marking_done_);
   {
@@ -532,8 +535,7 @@ void CppHeap::TraceEpilogue() {
   buffered_allocated_bytes_ = 0;
   const size_t bytes_allocated_in_prefinalizers = ExecutePreFinalizers();
 #if CPPGC_VERIFY_HEAP
-  UnifiedHeapMarkingVerifier verifier(
-      *this, cppgc::internal::Heap::Config::CollectionType::kMajor);
+  UnifiedHeapMarkingVerifier verifier(*this, collection_type);
   verifier.Run(
       stack_state_of_prev_gc(), stack_end_of_current_gc(),
       stats_collector()->marked_bytes() + bytes_allocated_in_prefinalizers);
@@ -627,7 +629,7 @@ void CppHeap::CollectGarbageForTesting(
     }
     EnterFinalPause(stack_state);
     AdvanceTracing(std::numeric_limits<double>::infinity());
-    TraceEpilogue();
+    TraceEpilogue(collection_type);
   }
 }
 
