@@ -785,6 +785,10 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
     free_bytes_threshold = target_fragmentation_percent * (area_size / 100);
   }
 
+  if (space->identity() == MAP_SPACE) {
+    max_evacuated_bytes = 16 * MB;
+  }
+
   // Pairs of (live_bytes_in_page, page).
   using LiveBytesPagePair = std::pair<size_t, Page*>;
   std::vector<LiveBytesPagePair> pages;
@@ -818,7 +822,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
     if (in_standard_path) {
       // Only the pages with at more than |free_bytes_threshold| free bytes are
       // considered for evacuation.
-      if (area_size - p->allocated_bytes() >= free_bytes_threshold) {
+      if (area_size - p->allocated_bytes() >= free_bytes_threshold ||
+          space->identity() == MAP_SPACE) {
         pages.push_back(std::make_pair(p->allocated_bytes(), p));
       }
     } else {
@@ -858,7 +863,7 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   } else if (FLAG_stress_compaction) {
     for (size_t i = 0; i < pages.size(); i++) {
       Page* p = pages[i].second;
-      if (i % 2 == 0) {
+      if (i % 3 == 2 || space->identity() == MAP_SPACE) {
         candidate_count++;
         total_live_bytes += pages[i].first;
         AddEvacuationCandidate(p);
@@ -990,6 +995,7 @@ void MarkCompactCollector::FinishConcurrentMarking() {
 void MarkCompactCollector::VerifyMarking() {
   CHECK(local_marking_worklists()->IsEmpty());
   DCHECK(heap_->incremental_marking()->IsStopped());
+  VerifyMapWordSlot();
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap) {
     FullMarkingVerifier verifier(heap());
@@ -1003,6 +1009,26 @@ void MarkCompactCollector::VerifyMarking() {
     heap()->code_space()->VerifyLiveBytes();
   }
 #endif
+}
+
+void MarkCompactCollector::VerifyMapWordSlot() {
+  PtrComprCageBase cage_base(isolate());
+
+  for (Page* p : *heap()->old_space()) {
+    if (p->IsEvacuationCandidate()) continue;
+    for (auto object_and_size :
+         LiveObjectRange<kAllLiveObjects>(p, marking_state_.bitmap(p))) {
+      HeapObject object = object_and_size.first;
+      Map map = object.map(cage_base);
+      BasicMemoryChunk* map_chunk = BasicMemoryChunk::FromHeapObject(map);
+      if (!map_chunk->IsEvacuationCandidate()) continue;
+      if (!RememberedSet<OLD_TO_OLD>::Contains(p,
+                                               object.map_slot().address())) {
+        object.Print();
+        CHECK_WITH_MSG(false, "missing slot in map word");
+      }
+    }
+  }
 }
 
 void MarkCompactCollector::Finish() {

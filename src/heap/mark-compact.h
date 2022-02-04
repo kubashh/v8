@@ -583,6 +583,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 #endif
 
   void VerifyMarking();
+  void VerifyMapWordSlot();
 #ifdef VERIFY_HEAP
   void VerifyMarkbitsAreClean();
   void VerifyMarkbitsAreDirty(ReadOnlySpace* space);
