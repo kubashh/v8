@@ -54,6 +54,69 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0abdefde_a282c6b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "LGTM % line lengths.\n\nThanks a lot for doing this!",
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fffe555_0364480a",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "nit: 80col please (idea: pull out a local variable `size \u003d self.MachinePointerSize()`)",
+      "range": {
+        "startLine": 841,
+        "startChar": 80,
+        "endLine": 841,
+        "endChar": 83
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2add447_d7125be5",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 1264,
+        "startChar": 80,
+        "endLine": 1264,
+        "endChar": 82
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1b074968_a7f169e4",
         "filename": "tools/grokdump.py",
         "patchSetId": 1
@@ -70,6 +133,190 @@
         "startChar": 6,
         "endLine": 1275,
         "endChar": 14
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc17b153_b84cfc07",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1871,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 1871,
+        "startChar": 80,
+        "endLine": 1871,
+        "endChar": 96
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2e6287_5a54a0b1",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "nit: 80col, again below",
+      "range": {
+        "startLine": 1988,
+        "startChar": 80,
+        "endLine": 1988,
+        "endChar": 81
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd826a9_682f8aa0",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col",
+      "range": {
+        "startLine": 2748,
+        "startChar": 80,
+        "endLine": 2748,
+        "endChar": 81
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "070ac28b_dcea01e5",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2828,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col",
+      "range": {
+        "startLine": 2828,
+        "startChar": 80,
+        "endLine": 2828,
+        "endChar": 106
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "019fb97b_a41b52be",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 2949,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col, again below",
+      "range": {
+        "startLine": 2949,
+        "startChar": 80,
+        "endLine": 2949,
+        "endChar": 111
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d40872ae_8a26c61f",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 3009,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col, again below",
+      "range": {
+        "startLine": 3009,
+        "startChar": 80,
+        "endLine": 3009,
+        "endChar": 93
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "739b4332_497d1fc3",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 3038,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col",
+      "range": {
+        "startLine": 3038,
+        "startChar": 80,
+        "endLine": 3038,
+        "endChar": 82
+      },
+      "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825ca12e_47c75bea",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 3289,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-04T13:23:20Z",
+      "side": 1,
+      "message": "80col, again below",
+      "range": {
+        "startLine": 3289,
+        "startChar": 80,
+        "endLine": 3289,
+        "endChar": 104
       },
       "revId": "a474f430e4e5635cad4b455787a6d65e27a759c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
