@@ -79,7 +79,7 @@ def read_file_utf8(file):
   try:                # Python 3
     with open(file, encoding='utf-8') as f:
       return f.read()
-  except TypeError:   # Python 2
+  except TypeError:   # Python 2 ..
     with open(file) as f:
       return f.read()
 
