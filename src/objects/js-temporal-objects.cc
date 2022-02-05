@@ -272,6 +272,24 @@ MaybeHandle<JSReceiver> ToTemporalCalendarWithISODefault(
     Isolate* isolate, Handle<Object> temporal_calendar_like,
     const char* method);
 
+// #sec-temporal-totemporaldate
+V8_WARN_UNUSED_RESULT MaybeHandle<JSTemporalPlainDate> ToTemporalDate(
+    Isolate* isolate, Handle<Object> item_obj, Handle<JSReceiver> options,
+    const char* method);
+
+#define TO_TEMPORAL_WITH_UNDEFINED(T, N)                                 \
+  MaybeHandle<JSTemporal##T> ToTemporal##N(                              \
+      Isolate* isolate, Handle<Object> item, const char* method) {       \
+    /* 1. If options is not present, set options to */                   \
+    /* ! OrdinaryObjectCreate(null). */                                  \
+    return ToTemporal##N(isolate, item,                                  \
+                         isolate->factory()->NewJSObjectWithNullProto(), \
+                         method);                                        \
+  }
+
+TO_TEMPORAL_WITH_UNDEFINED(PlainDate, Date)
+#undef TO_TEMPORAL_WITH_UNDEFINED
+
 // #sec-temporal-isbuiltincalendar
 bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id);
 
@@ -4161,6 +4179,55 @@ MaybeHandle<JSTemporalCalendar> JSTemporalCalendar::Constructor(
         JSTemporalCalendar);
   }
   return CreateTemporalCalendar(isolate, target, new_target, identifier);
+}
+
+// #sec-temporal.calendar.prototype.daysinmonth
+MaybeHandle<Smi> JSTemporalCalendar::DaysInMonth(
+    Isolate* isolate, Handle<JSTemporalCalendar> calendar,
+    Handle<Object> temporal_date_like) {
+  const char* method = "Temporal.Calendar.prototype.daysInMonth";
+  // 1 Let calendar be the this value.
+  // 2. Perform ? RequireInternalSlot(calendar,
+  // [[InitializedTemporalCalendar]]).
+  // 3. Assert: calendar.[[Identifier]] is "iso8601".
+  int32_t year;
+  int32_t month;
+  // 4. If Type(temporalDateLike) is not Object or temporalDateLike does not
+  // have an [[InitializedTemporalDate]] or [[InitializedTemporalYearMonth]]
+  // internal slots, then
+  if (temporal_date_like->IsJSTemporalPlainDate()) {
+    year = Handle<JSTemporalPlainDate>::cast(temporal_date_like)->iso_year();
+    month = Handle<JSTemporalPlainDate>::cast(temporal_date_like)->iso_month();
+  } else if (temporal_date_like->IsJSTemporalPlainYearMonth()) {
+    year =
+        Handle<JSTemporalPlainYearMonth>::cast(temporal_date_like)->iso_year();
+    month =
+        Handle<JSTemporalPlainYearMonth>::cast(temporal_date_like)->iso_month();
+  } else {
+    // a. Set temporalDateLike to ? ToTemporalDate(temporalDateLike).
+    Handle<JSTemporalPlainDate> date;
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, date, ToTemporalDate(isolate, temporal_date_like, method),
+        Smi);
+    year = date->iso_year();
+    month = date->iso_month();
+  }
+  int32_t days_in_month = 0;
+  // 4. If calendar.[[Identifier]] is "iso8601", then
+  if (calendar->calendar_index() == 0) {
+    // a. Let daysInMonth be ! ISODaysInMonth(temporalDateLike.[[ISOYear]],
+    // temporalDateLike.[[ISOMonth]]).
+
+    days_in_month = ISODaysInMonth(isolate, year, month);
+  } else {
+#ifdef V8_INTL_SUPPORT
+    // TODO(ftang) add intl code
+#else   // V8_INTL_SUPPORT
+    UNREACHABLE();
+#endif  // V8_INTL_SUPPORT
+  }
+  // 6. Return 𝔽(daysInMonth).
+  return Handle<Smi>(Smi::FromInt(days_in_month), isolate);
 }
 
 // #sec-temporal.calendar.prototype.tostring
