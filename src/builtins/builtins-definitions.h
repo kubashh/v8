@@ -1650,6 +1650,7 @@ namespace internal {
   CPP(TemporalCalendarPrototypeToJSON)                                         \
                                                                                \
   /* "Private" (created but not exposed) Bulitins needed by Temporal */        \
+  TFJ(StringFixedArrayFromIterable, kJSArgcReceiverSlots, kIterable)           \
   TFJ(TemporalInstantFixedArrayFromIterable, kJSArgcReceiverSlots, kIterable)
 
 #define BUILTIN_LIST_BASE(CPP, TFJ, TFC, TFS, TFH, ASM) \

@@ -218,10 +218,9 @@ TF_BUILTIN(IterableToFixedArrayForWasm, IteratorBuiltinsAssembler) {
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
-    TNode<Context> context, TNode<Object> iterable) {
+void IteratorBuiltinsAssembler::FillStringGrowableFixedArrayFromIterable(
+    TNode<Context> context, TNode<Object> iterable, GrowableFixedArray* list) {
   Label done(this);
-  GrowableFixedArray list(state());
   // 1. If iterable is undefined, then
   //   a. Return a new empty List.
   GotoIf(IsUndefined(iterable), &done);
@@ -230,9 +229,8 @@ TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
   IteratorRecord iterator_record = GetIterator(context, iterable);
 
   // 3. Let list be a new empty List.
-
-  Label loop_start(this,
-                   {list.var_array(), list.var_length(), list.var_capacity()});
+  Label loop_start(
+      this, {list->var_array(), list->var_length(), list->var_capacity()});
   Goto(&loop_start);
   // 4. Let next be true.
   // 5. Repeat, while next is not false
@@ -250,7 +248,8 @@ TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
     TNode<Uint16T> next_value_type = LoadInstanceType(CAST(next_value));
     GotoIfNot(IsStringInstanceType(next_value_type), &if_isnotstringtype);
     //   iii. Append nextValue to the end of the List list.
-    list.Push(next_value);
+    list->Push(next_value);
+
     Goto(&loop_start);
     // 5.b.ii
     BIND(&if_isnotstringtype);
@@ -278,8 +277,21 @@ TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
   }
 
   BIND(&done);
+}
+
+TNode<JSArray> IteratorBuiltinsAssembler::StringListFromIterable(
+    TNode<Context> context, TNode<Object> iterable) {
+  GrowableFixedArray list(state());
+  FillStringGrowableFixedArrayFromIterable(context, iterable, &list);
   // 6. Return list.
   return list.ToJSArray(context);
+}
+
+TNode<FixedArray> IteratorBuiltinsAssembler::StringFixedArrayFromIterable(
+    TNode<Context> context, TNode<Object> iterable) {
+  GrowableFixedArray list(state());
+  FillStringGrowableFixedArrayFromIterable(context, iterable, &list);
+  return list.ToFixedArray();
 }
 
 TF_BUILTIN(StringListFromIterable, IteratorBuiltinsAssembler) {
@@ -287,6 +299,13 @@ TF_BUILTIN(StringListFromIterable, IteratorBuiltinsAssembler) {
   auto iterable = Parameter<Object>(Descriptor::kIterable);
 
   Return(StringListFromIterable(context, iterable));
+}
+
+TF_BUILTIN(StringFixedArrayFromIterable, IteratorBuiltinsAssembler) {
+  auto context = Parameter<Context>(Descriptor::kContext);
+  auto iterable = Parameter<Object>(Descriptor::kIterable);
+
+  Return(StringFixedArrayFromIterable(context, iterable));
 }
 
 // This builtin always returns a new JSArray and is thus safe to use even in the
