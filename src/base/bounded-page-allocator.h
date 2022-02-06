@@ -81,6 +81,8 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
 
   bool SetPermissions(void* address, size_t size, Permission access) override;
 
+  bool AdviseHugePage(void* address, size_t size) override;
+
   bool DiscardSystemPages(void* address, size_t size) override;
 
   bool DecommitPages(void* address, size_t size) override;
