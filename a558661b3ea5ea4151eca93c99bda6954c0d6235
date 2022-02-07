@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd37511_8d79e734",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-07T23:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c88a57a2_c83c4db9",
+      "range": {
+        "startLine": 1466,
+        "startChar": 6,
+        "endLine": 1467,
+        "endChar": 33
+      },
+      "revId": "a558661b3ea5ea4151eca93c99bda6954c0d6235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49df09ce_d6a64fd1",
