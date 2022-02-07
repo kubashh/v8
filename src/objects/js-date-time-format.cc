@@ -1463,19 +1463,25 @@ class DateTimePatternGeneratorCache {
     base::MutexGuard guard(&mutex_);
     auto it = map_.find(key);
     if (it != map_.end()) {
+      DCHECK(it->second != nullptr);
       return it->second->clone();
     }
     UErrorCode status = U_ZERO_ERROR;
-    map_[key].reset(
-        icu::DateTimePatternGenerator::createInstance(locale, status));
+    icu::DateTimePatternGenerator* item =
+        icu::DateTimePatternGenerator::createInstance(locale, status);
     // Fallback to use "root".
     if (U_FAILURE(status)) {
       status = U_ZERO_ERROR;
-      map_[key].reset(
-          icu::DateTimePatternGenerator::createInstance("root", status));
+      item = icu::DateTimePatternGenerator::createInstance("root", status);
     }
     DCHECK(U_SUCCESS(status));
-    return map_[key]->clone();
+    DCHECK(item != nullptr);
+    if (U_SUCCESS(status) && item != nullptr) {
+      map_[key].reset(item);
+      return map_[key]->clone();
+    }
+    // Probably caused by OOM
+    return nullptr;
   }
 
  private:
@@ -1623,6 +1629,11 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::New(
 
   std::unique_ptr<icu::DateTimePatternGenerator> generator(
       generator_cache.Pointer()->CreateGenerator(icu_locale));
+  // In case of OOM, we may get nullptr
+  if (generator.get() == nullptr) {
+    THROW_NEW_ERROR(isolate, NewRangeError(MessageTemplate::kIcuError),
+                    JSDateTimeFormat);
+  }
 
   // 15.Let hcDefault be dataLocaleData.[[hourCycle]].
   HourCycle hc_default = ToHourCycle(generator->getDefaultHourCycle(status));
