@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32e8773a_71e1b29b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-07T23:11:36Z",
+      "side": 1,
+      "message": "Oops, you uploaded a new PS mid-air with my comments. It\u0027d be nicer to have CreateGenerator take care of the crashing and never return nullptr than have its callers check.",
+      "revId": "840fe10dfa7f22a7d7fde9b8087cf69dd159ea0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
