@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee832e66_97927d6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-07T23:10:08Z",
+      "side": 1,
+      "message": "I\u0027d prefer to crash and call FatalProcessOutOfMemory here instead of throwing a user-catchable exception on ICU OOM.",
+      "revId": "a558661b3ea5ea4151eca93c99bda6954c0d6235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c88a57a2_c83c4db9",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-07T23:10:08Z",
+      "side": 1,
+      "message": "Let\u0027s refactor this method to be like:\n\n```\nif (it !\u003d map_.end()) {\n  orig \u003d it-\u003esecond;\n} else {\n  orig \u003d /* Make new icu::DateTimePatternGenerator instance */\n  // Add orig to map_\n  // ...\n}\nclone \u003d orig ? orig-\u003eclone() : nullptr;\nif (clone \u003d\u003d nullptr) {\n  V8::FatalProcessOutOfMemory(isolate, \"DateTimePatternGeneratorCache::CreateGenerator\");\n}\nreturn clone;\n```",
+      "range": {
+        "startLine": 1466,
+        "startChar": 6,
+        "endLine": 1467,
+        "endChar": 33
+      },
+      "revId": "a558661b3ea5ea4151eca93c99bda6954c0d6235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49df09ce_d6a64fd1",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-07T23:10:08Z",
+      "side": 1,
+      "message": "Does U_FAILURE subsume OOM errors?",
+      "revId": "a558661b3ea5ea4151eca93c99bda6954c0d6235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
