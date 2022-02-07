@@ -8,6 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <type_traits>
 
 #include "src/base/optional.h"
 #include "src/base/platform/elapsed-timer.h"
@@ -74,6 +75,11 @@
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/store-store-elimination.h"
+#include "src/compiler/turboshaft/cfg.h"
+#include "src/compiler/turboshaft/graph-builder.h"
+#include "src/compiler/turboshaft/recreate-schedule.h"
+#include "src/compiler/turboshaft/reducer.h"
+#include "src/compiler/turboshaft/select-instructions.h"
 #include "src/compiler/type-narrowing-reducer.h"
 #include "src/compiler/typed-optimization.h"
 #include "src/compiler/typer.h"
@@ -166,6 +172,7 @@ class PipelineData {
         assembler_options_(AssemblerOptions::Default(isolate)) {
     PhaseScope scope(pipeline_statistics, "V8.TFInitPipelineData");
     graph_ = graph_zone_->New<Graph>(graph_zone_);
+    turboshaft_graph_ = graph_zone_->New<turboshaft::Graph>(graph_zone_);
     source_positions_ = graph_zone_->New<SourcePositionTable>(graph_);
     node_origins_ = info->trace_turbo_json()
                         ? graph_zone_->New<NodeOriginTable>(graph_)
@@ -338,6 +345,8 @@ class PipelineData {
 
   Zone* graph_zone() const { return graph_zone_; }
   Graph* graph() const { return graph_; }
+  void set_graph(Graph* graph) { graph_ = graph; }
+  turboshaft::Graph& turboshaft_graph() const { return *turboshaft_graph_; }
   SourcePositionTable* source_positions() const { return source_positions_; }
   NodeOriginTable* node_origins() const { return node_origins_; }
   MachineOperatorBuilder* machine() const { return machine_; }
@@ -458,6 +467,7 @@ class PipelineData {
     graph_zone_scope_.Destroy();
     graph_zone_ = nullptr;
     graph_ = nullptr;
+    turboshaft_graph_ = nullptr;
     source_positions_ = nullptr;
     node_origins_ = nullptr;
     simplified_ = nullptr;
@@ -495,9 +505,16 @@ class PipelineData {
 
   void InitializeInstructionSequence(const CallDescriptor* call_descriptor) {
     DCHECK_NULL(sequence_);
-    InstructionBlocks* instruction_blocks =
-        InstructionSequence::InstructionBlocksFor(instruction_zone(),
-                                                  schedule());
+    InstructionBlocks* instruction_blocks;
+    if (FLAG_turboshaft) {
+      turboshaft_graph().AddEndBlock();
+      instruction_blocks = InstructionSequence::InstructionBlocksFor(
+          instruction_zone(), turboshaft_graph());
+    } else {
+      instruction_blocks = InstructionSequence::InstructionBlocksFor(
+          instruction_zone(), schedule());
+    }
+
     sequence_ = instruction_zone()->New<InstructionSequence>(
         isolate(), instruction_zone(), instruction_blocks);
     if (call_descriptor && call_descriptor->RequiresFrameAsIncoming()) {
@@ -617,6 +634,7 @@ class PipelineData {
   ZoneStats::Scope graph_zone_scope_;
   Zone* graph_zone_ = nullptr;
   Graph* graph_ = nullptr;
+  turboshaft::Graph* turboshaft_graph_ = nullptr;
   SourcePositionTable* source_positions_ = nullptr;
   NodeOriginTable* node_origins_ = nullptr;
   SimplifiedOperatorBuilder* simplified_ = nullptr;
@@ -1068,6 +1086,8 @@ PipelineStatistics* CreatePipelineStatistics(
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+void TraceSequence(OptimizedCompilationInfo* info, PipelineData* data,
+                   const char* phase_name);
 }  // namespace
 
 class PipelineCompilationJob final : public OptimizedCompilationJob {
@@ -2020,6 +2040,42 @@ struct DecompressionOptimizationPhase {
   }
 };
 
+struct BuildTurboshaftPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(BuildTurboShaft)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    turboshaft::BuildGraph(data->schedule(), data->graph_zone(), temp_zone,
+                           &data->turboshaft_graph());
+    data->reset_schedule();
+  }
+};
+
+struct OptimizeTurboshaftPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(OptimizeTurboShaft)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    // for (size_t i = 0; i < 500; ++i) {
+    turboshaft::OptimizationPhase<turboshaft::LivenessAnalyzer,
+                                  turboshaft::BasicAssembler>
+        phase(&data->turboshaft_graph());
+    phase.Run();
+    // }
+  }
+};
+
+struct TurboshaftRecreateSchedulePhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(TurboshaftRecreateSchedule)
+
+  void Run(PipelineData* data, Zone* temp_zone, Linkage* linkage) {
+    data->turboshaft_graph().AddEndBlock();
+    auto result = turboshaft::RecreateSchedule(data->turboshaft_graph(),
+                                               linkage->GetIncomingDescriptor(),
+                                               data->graph_zone());
+    data->set_graph(result.graph);
+    data->set_schedule(result.schedule);
+  }
+};
+
 struct ScheduledEffectControlLinearizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(ScheduledEffectControlLinearization)
 
@@ -2232,38 +2288,59 @@ struct InstructionSelectionPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(SelectInstructions)
 
   void Run(PipelineData* data, Zone* temp_zone, Linkage* linkage) {
-    InstructionSelector selector(
-        temp_zone, data->graph()->NodeCount(), linkage, data->sequence(),
-        data->schedule(), data->source_positions(), data->frame(),
-        data->info()->switch_jump_table()
-            ? InstructionSelector::kEnableSwitchJumpTable
-            : InstructionSelector::kDisableSwitchJumpTable,
-        &data->info()->tick_counter(), data->broker(),
-        data->address_of_max_unoptimized_frame_height(),
-        data->address_of_max_pushed_argument_count(),
-        data->info()->source_positions()
-            ? InstructionSelector::kAllSourcePositions
-            : InstructionSelector::kCallSourcePositions,
-        InstructionSelector::SupportedFeatures(),
-        FLAG_turbo_instruction_scheduling
-            ? InstructionSelector::kEnableScheduling
-            : InstructionSelector::kDisableScheduling,
-        data->assembler_options().enable_root_relative_access
-            ? InstructionSelector::kEnableRootsRelativeAddressing
-            : InstructionSelector::kDisableRootsRelativeAddressing,
-        data->info()->trace_turbo_json()
-            ? InstructionSelector::kEnableTraceTurboJson
-            : InstructionSelector::kDisableTraceTurboJson);
-    if (!selector.SelectInstructions()) {
-      data->set_compilation_failed();
-    }
-    if (data->info()->trace_turbo_json()) {
-      TurboJsonFile json_of(data->info(), std::ios_base::app);
-      json_of << "{\"name\":\"" << phase_name()
-              << "\",\"type\":\"instructions\""
-              << InstructionRangesAsJSON{data->sequence(),
-                                         &selector.instr_origins()}
-              << "},\n";
+    if (FLAG_turboshaft && FLAG_turboshaft_instruction_selection) {
+      base::Flags<CpuFeature> cpu_flags(
+          static_cast<std::underlying_type_t<CpuFeature>>(
+              CpuFeatures::SupportedFeatures()));
+      bool success = turboshaft::SelectInstructions(
+          temp_zone, linkage, data->sequence(), data->turboshaft_graph(),
+          data->source_positions(), data->frame(),
+          data->info()->switch_jump_table(), &data->info()->tick_counter(),
+          data->broker(), data->address_of_max_unoptimized_frame_height(),
+          data->address_of_max_pushed_argument_count(),
+          data->info()->source_positions(), cpu_flags,
+          FLAG_turbo_instruction_scheduling,
+          data->assembler_options().enable_root_relative_access,
+          data->info()->trace_turbo_json());
+      TraceSequence(data->info(), data, "after instruction selection");
+      if (!success) {
+        data->set_compilation_failed();
+      }
+    } else {
+      InstructionSelector selector(
+          temp_zone, data->graph()->NodeCount(), linkage, data->sequence(),
+          data->schedule(), data->source_positions(), data->frame(),
+          data->info()->switch_jump_table()
+              ? InstructionSelector::kEnableSwitchJumpTable
+              : InstructionSelector::kDisableSwitchJumpTable,
+          &data->info()->tick_counter(), data->broker(),
+          data->address_of_max_unoptimized_frame_height(),
+          data->address_of_max_pushed_argument_count(),
+          data->info()->source_positions()
+              ? InstructionSelector::kAllSourcePositions
+              : InstructionSelector::kCallSourcePositions,
+          InstructionSelector::SupportedFeatures(),
+          FLAG_turbo_instruction_scheduling
+              ? InstructionSelector::kEnableScheduling
+              : InstructionSelector::kDisableScheduling,
+          data->assembler_options().enable_root_relative_access
+              ? InstructionSelector::kEnableRootsRelativeAddressing
+              : InstructionSelector::kDisableRootsRelativeAddressing,
+          data->info()->trace_turbo_json()
+              ? InstructionSelector::kEnableTraceTurboJson
+              : InstructionSelector::kDisableTraceTurboJson);
+      bool success = selector.SelectInstructions();
+      if (!success) {
+        data->set_compilation_failed();
+      }
+      if (data->info()->trace_turbo_json()) {
+        TurboJsonFile json_of(data->info(), std::ios_base::app);
+        json_of << "{\"name\":\"" << phase_name()
+                << "\",\"type\":\"instructions\""
+                << InstructionRangesAsJSON{data->sequence(),
+                                           &selector.instr_origins()}
+                << "},\n";
+      }
     }
   }
 };
@@ -2863,6 +2940,22 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   }
 
   ComputeScheduledGraph();
+
+  if (FLAG_turboshaft) {
+    Run<BuildTurboshaftPhase>();
+    Run<OptimizeTurboshaftPhase>();
+    if (!FLAG_turboshaft_instruction_selection) {
+      Run<TurboshaftRecreateSchedulePhase>(linkage);
+      if (data->info()->trace_turbo_graph() || FLAG_trace_turbo_scheduler) {
+        UnparkedScopeIfNeeded scope(data->broker());
+        AllowHandleDereference allow_deref;
+        CodeTracer::StreamScope tracing_scope(data->GetCodeTracer());
+        tracing_scope.stream()
+            << "-- Recreated Schedule ----------------------------\n"
+            << *data->schedule();
+      }
+    }
+  }
 
   return SelectInstructions(linkage);
 }
@@ -3576,6 +3669,7 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
   if (!data->frame()) {
     data->InitializeFrameData(call_descriptor);
   }
+
   // Select and schedule instructions covering the scheduled graph.
   Run<InstructionSelectionPhase>(linkage);
   if (data->compilation_failed()) {
