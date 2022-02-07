@@ -173,7 +173,7 @@ deps = {
   'third_party/android_sdk/public': {
       'packages': [
           {
-              'package': 'chromium/third_party/android_sdk/public/build-tools/31.0.0',
+              'package': 'chromium/third_party/android_sdk/public/build-tools/39.0.0',
               'version': Var('android_sdk_build-tools_version'),
           },
           {
