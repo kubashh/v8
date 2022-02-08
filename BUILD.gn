@@ -2845,6 +2845,14 @@ v8_header_set("v8_internal_headers") {
     "src/compiler/simplified-operator.h",
     "src/compiler/state-values-utils.h",
     "src/compiler/store-store-elimination.h",
+    "src/compiler/turboshaft/cfg.h",
+    "src/compiler/turboshaft/graph-builder.h",
+    "src/compiler/turboshaft/operation-matchers.h",
+    "src/compiler/turboshaft/operations.h",
+    "src/compiler/turboshaft/recreate-schedule.h",
+    "src/compiler/turboshaft/reducer.h",
+    "src/compiler/turboshaft/select-instructions-inl.h",
+    "src/compiler/turboshaft/select-instructions.h",
     "src/compiler/type-cache.h",
     "src/compiler/type-narrowing-reducer.h",
     "src/compiler/typed-optimization.h",
@@ -3901,6 +3909,10 @@ v8_compiler_sources = [
   "src/compiler/simplified-operator.cc",
   "src/compiler/state-values-utils.cc",
   "src/compiler/store-store-elimination.cc",
+  "src/compiler/turboshaft/cfg.cc",
+  "src/compiler/turboshaft/graph-builder.cc",
+  "src/compiler/turboshaft/operations.cc",
+  "src/compiler/turboshaft/recreate-schedule.cc",
   "src/compiler/type-cache.cc",
   "src/compiler/type-narrowing-reducer.cc",
   "src/compiler/typed-optimization.cc",
@@ -3910,6 +3922,11 @@ v8_compiler_sources = [
   "src/compiler/verifier.cc",
   "src/compiler/zone-stats.cc",
 ]
+
+if (v8_current_cpu == "x64") {
+  v8_compiler_sources +=
+      [ "src/compiler/turboshaft/select-instructions-x64.cc" ]
+}
 
 if (v8_enable_webassembly) {
   v8_compiler_sources += [
