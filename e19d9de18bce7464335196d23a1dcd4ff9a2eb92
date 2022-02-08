@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3886ee7f_09cc1054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-08T10:38:46Z",
+      "side": 1,
+      "message": "Thanks Piotr! LGTM.",
+      "revId": "e19d9de18bce7464335196d23a1dcd4ff9a2eb92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
