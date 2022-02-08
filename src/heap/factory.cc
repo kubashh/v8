@@ -1485,7 +1485,6 @@ Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
   // The supertypes list is constant after initialization, so we pretenure
   // that too. The subtypes list, however, is expected to grow (and hence be
   // replaced), so we don't pretenure it.
-  Handle<ArrayList> subtypes = ArrayList::New(isolate(), 0);
   Handle<FixedArray> supertypes;
   if (opt_parent.is_null()) {
     supertypes = NewFixedArray(wasm::kMinimumSupertypeArraySize);
@@ -1514,7 +1513,7 @@ Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
   result.AllocateExternalPointerEntries(isolate());
   result.set_foreign_address(isolate(), type_address);
   result.set_supertypes(*supertypes);
-  result.set_subtypes(*subtypes);
+  result.set_subtypes(ReadOnlyRoots(isolate()).empty_array_list());
   result.set_instance_size(instance_size_bytes);
   result.set_instance(*instance);
   return handle(result, isolate());
@@ -2743,7 +2742,7 @@ Handle<SourceTextModule> Factory::NewSourceTextModule(
   Handle<FixedArray> requested_modules =
       requested_modules_length > 0 ? NewFixedArray(requested_modules_length)
                                    : empty_fixed_array();
-  Handle<ArrayList> async_parent_modules = ArrayList::New(isolate(), 0);
+  Handle<ArrayList> async_parent_modules = ArrayList::New(isolate(), 16);
 
   ReadOnlyRoots roots(isolate());
   SourceTextModule module = SourceTextModule::cast(
