@@ -234,6 +234,7 @@ bool Heap::CreateInitialMaps() {
     ALLOCATE_PARTIAL_MAP(FIXED_ARRAY_TYPE, kVariableSizeSentinel, fixed_array);
     ALLOCATE_PARTIAL_MAP(WEAK_FIXED_ARRAY_TYPE, kVariableSizeSentinel,
                          weak_fixed_array);
+    ALLOCATE_PARTIAL_MAP(FIXED_ARRAY_TYPE, kVariableSizeSentinel, array_list);
     ALLOCATE_PARTIAL_MAP(WEAK_ARRAY_LIST_TYPE, kVariableSizeSentinel,
                          weak_array_list);
     ALLOCATE_PARTIAL_MAP(FIXED_ARRAY_TYPE, kVariableSizeSentinel,
@@ -250,7 +251,6 @@ bool Heap::CreateInitialMaps() {
 #undef ALLOCATE_PARTIAL_MAP
   }
 
-  // Allocate the empty array.
   {
     AllocationResult alloc =
         AllocateRaw(FixedArray::SizeFor(0), AllocationType::kReadOnly);
@@ -259,6 +259,16 @@ bool Heap::CreateInitialMaps() {
     FixedArray::cast(obj).set_length(0);
   }
   set_empty_fixed_array(FixedArray::cast(obj));
+
+  {
+    AllocationResult alloc = AllocateRaw(
+        ArrayList::SizeFor(ArrayList::kFirstIndex), AllocationType::kReadOnly);
+    if (!alloc.To(&obj)) return false;
+    obj.set_map_after_allocation(roots.array_list_map(), SKIP_WRITE_BARRIER);
+    ArrayList::cast(obj).set_length(ArrayList::kFirstIndex);
+    ArrayList::cast(obj).SetLength(0);
+  }
+  set_empty_array_list(ArrayList::cast(obj));
 
   {
     AllocationResult alloc =
@@ -342,6 +352,7 @@ bool Heap::CreateInitialMaps() {
   FinalizePartialMap(roots.fixed_array_map());
   FinalizePartialMap(roots.weak_fixed_array_map());
   FinalizePartialMap(roots.weak_array_list_map());
+  FinalizePartialMap(roots.array_list_map());
   FinalizePartialMap(roots.fixed_cow_array_map());
   FinalizePartialMap(roots.descriptor_array_map());
   FinalizePartialMap(roots.undefined_map());
