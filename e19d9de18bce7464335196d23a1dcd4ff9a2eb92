@@ -16,7 +16,23 @@
       "message": "Thanks Piotr! LGTM.",
       "revId": "e19d9de18bce7464335196d23a1dcd4ff9a2eb92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a62192ba_2af1a71e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135301
+      },
+      "writtenOn": "2022-02-08T11:28:01Z",
+      "side": 1,
+      "message": "FYI, this allows for cross-compiling to Linux/aarch64 in OSS, if you want to add it to the bots.\n\nSee: https://github.com/proxy-wasm/proxy-wasm-cpp-host/pull/246.",
+      "revId": "e19d9de18bce7464335196d23a1dcd4ff9a2eb92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
-  ],
-  "submitRequirementResults": []
+  ]
 }
