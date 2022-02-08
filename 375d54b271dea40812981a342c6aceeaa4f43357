@@ -56,6 +56,30 @@
       },
       "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7f7ccd_c8b6246b",
+        "filename": "test/js-perf-test/Array/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-08T11:19:18Z",
+      "side": 1,
+      "message": "So, more hacking on this just increased frustration. It\u0027s indeed allocation sites, but your suggestion is not sufficient to fix the issue since setup functions are reused through all subtests (filter, every, map, ...). Thus if any subtest changes the elements kind of the allocated array, that\u0027s propagated to the allocation site.\n\nNow a solution to this is to create a fresh setup closure for each subitem; that again helps but is not sufficient, I assume since the line item is itself run in a loop.\n\nSo, either we teach the runner itself to create a new setup closure on each iteration, or we disable allocation site tracking (impossible currently since it\u0027s a build-time flag).\n\nMy conclusion is, it\u0027s not worth the time to fix this test that nobody needs.\n\nOTOH it\u0027s misleading to keep the test around. Shall we just delete it?",
+      "parentUuid": "6e2b8ca4_adeb887c",
+      "range": {
+        "startLine": 39,
+        "startChar": 52,
+        "endLine": 39,
+        "endChar": 69
+      },
+      "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
