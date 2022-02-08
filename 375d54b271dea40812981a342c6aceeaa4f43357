@@ -80,6 +80,30 @@
       },
       "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b4615c_a4c6186b",
+        "filename": "test/js-perf-test/Array/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-08T14:20:19Z",
+      "side": 1,
+      "message": "I\u0027d say: let\u0027s keep the test, including the TODO and the commented-out assert. As long as we claim to care about packed elements, we should test them, so we should fix this test. (I\u0027m fine with landing this CL as-is as an incremental improvement.)",
+      "parentUuid": "fa7f7ccd_c8b6246b",
+      "range": {
+        "startLine": 39,
+        "startChar": 52,
+        "endLine": 39,
+        "endChar": 69
+      },
+      "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
