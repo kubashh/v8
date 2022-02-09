@@ -525,8 +525,7 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      "Use const tracking on dictionary properties")
 
 // Flags for jitless
-DEFINE_BOOL(jitless, V8_LITE_BOOL,
-            "Disable runtime allocation of executable memory.")
+DEFINE_BOOL(jitless, true, "Disable runtime allocation of executable memory.")
 
 // Jitless V8 has a few implications:
 DEFINE_NEG_IMPLICATION(jitless, opt)
@@ -1319,7 +1318,7 @@ DEFINE_BOOL(compact, true,
             "Perform compaction on full GCs based on V8's default heuristics")
 DEFINE_BOOL(compact_code_space, true,
             "Perform code space compaction on full collections.")
-DEFINE_BOOL(compact_map_space, false,
+DEFINE_BOOL(compact_map_space, true,
             "Perform map space compaction on full collections.")
 DEFINE_BOOL(compact_on_every_full_gc, false,
             "Perform compaction on every full GC")
