@@ -16,6 +16,24 @@
       "message": "Is this necessary? `type(obj) \u003d\u003d bytes` is true in py2 and py3.\n\n\nThis might be sufficent:\n```\nsubprocess.check_output(cmd_line, shell\u003dTrue, cwd\u003dcwd).decode(\"utf-8\")\n```\n\nHowever, it converts the string to a unicode object in py2, which at least changes the behaviour.",
       "revId": "930f4db628d206f80e7ecdb04275aca9c2614ead",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9c8041_a6dd7dbb",
+        "filename": "tools/release/common_includes.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-02-09T09:29:55Z",
+      "side": 1,
+      "message": "not decoding now in py2",
+      "parentUuid": "e7ac7f41_4872069d",
+      "revId": "930f4db628d206f80e7ecdb04275aca9c2614ead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
