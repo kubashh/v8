@@ -16,6 +16,7 @@
 namespace v8 {
 
 class Isolate;
+class DisplayNames;
 
 // Valid priorities supported by the task scheduling infrastructure.
 enum class TaskPriority : uint8_t {
@@ -775,6 +776,17 @@ class HighAllocationThroughputObserver {
 };
 
 /**
+ */
+
+class DisplayNamesProvider {
+ public:
+  virtual std::unique_ptr<DisplayNames> Create(const char* locale,
+                                               const char* type) {
+    return nullptr;
+  }
+};
+
+/**
  * V8 Platform abstraction layer.
  *
  * The embedder has to provide an implementation of this interface before
@@ -974,6 +986,11 @@ class Platform {
     static HighAllocationThroughputObserver default_observer;
     return &default_observer;
   }
+
+  /**
+   * Return display name
+   */
+  virtual DisplayNamesProvider* GetDisplayNamesProvider() { return nullptr; }
 
  protected:
   /**

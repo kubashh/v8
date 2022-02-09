@@ -444,6 +444,7 @@ filegroup(
         "include/v8-data.h",
         "include/v8-date.h",
         "include/v8-debug.h",
+        "include/v8-display-names.h",
         "include/v8-embedder-heap.h",
         "include/v8-embedder-state-scope.h",
         "include/v8-exception.h",

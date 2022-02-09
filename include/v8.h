@@ -27,6 +27,7 @@
 #include "v8-data.h"               // NOLINT(build/include_directory)
 #include "v8-date.h"               // NOLINT(build/include_directory)
 #include "v8-debug.h"              // NOLINT(build/include_directory)
+#include "v8-display-names.h"      // NOLINT(build/include_directory)
 #include "v8-exception.h"          // NOLINT(build/include_directory)
 #include "v8-extension.h"          // NOLINT(build/include_directory)
 #include "v8-external.h"           // NOLINT(build/include_directory)

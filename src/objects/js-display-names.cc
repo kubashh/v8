@@ -11,6 +11,8 @@
 #include <memory>
 #include <vector>
 
+#include "include/v8-display-names.h"
+#include "src/api/api-inl.h"
 #include "src/execution/isolate.h"
 #include "src/heap/factory.h"
 #include "src/objects/intl-objects.h"
@@ -366,9 +368,84 @@ class DateTimeFieldNames : public DisplayNamesInternal {
   std::unique_ptr<icu::DateTimePatternGenerator> generator_;
 };
 
+class ExternalDisplayNames : public DisplayNamesInternal {
+ public:
+  ExternalDisplayNames(const icu::Locale& locale,
+                       std::unique_ptr<DisplayNames> delegate, const char* type)
+      : locale_(locale), delegate_(std::move(delegate)), type_(type) {}
+  ~ExternalDisplayNames() override = default;
+  const char* type() const override { return type_; }
+  icu::Locale locale() const override { return locale_; }
+  Maybe<icu::UnicodeString> of(Isolate* isolate,
+                               const char* code) const override;
+
+ private:
+  const icu::Locale locale_;
+  std::unique_ptr<DisplayNames> delegate_;
+  const char* type_;
+};
+
+Maybe<icu::UnicodeString> ExternalDisplayNames::of(Isolate* isolate,
+                                                   const char* code) const {
+  v8::MaybeLocal<v8::String> maybe_result =
+      delegate_->Of(reinterpret_cast<v8::Isolate*>(isolate), code);
+  if (maybe_result.IsEmpty()) return Nothing<icu::UnicodeString>();
+  Local<v8::String> result = maybe_result.ToLocalChecked();
+  Handle<String> string = Utils::OpenHandle(*result);
+  string = String::Flatten(isolate, string);
+  DisallowGarbageCollection no_gc;
+  const String::FlatContent& flat = string->GetFlatContent(no_gc);
+  int32_t length = string->length();
+  if (flat.IsOneByte()) {
+    return Just(icu::UnicodeString(
+        reinterpret_cast<const char*>(flat.ToOneByteVector().begin()), length));
+  } else {
+    return Just(icu::UnicodeString(flat.ToUC16Vector().begin(), length));
+  }
+}
+
+static const char* const CONSTEXPR_LANGUAGE = "language";
+static const char* const CONSTEXPR_REGION = "region";
+static const char* const CONSTEXPR_SCRIPT = "script";
+
+DisplayNamesInternal* CreateFromProvider(const icu::Locale& locale,
+                                         JSDisplayNames::Style style, Type type,
+                                         bool fallback, bool dialect) {
+  DisplayNamesProvider* provider =
+      V8::GetCurrentPlatform()->GetDisplayNamesProvider();
+  if (provider == nullptr) return nullptr;
+  const char* type_name;
+  switch (type) {
+    case Type::kLanguage:
+      type_name = CONSTEXPR_LANGUAGE;
+      break;
+    case Type::kRegion:
+      type_name = CONSTEXPR_REGION;
+      break;
+    case Type::kScript:
+      type_name = CONSTEXPR_SCRIPT;
+      break;
+    default:
+      return nullptr;
+  }
+  UErrorCode status = U_ZERO_ERROR;
+  std::string locale_id = locale.toLanguageTag<std::string>(status);
+  CHECK(U_SUCCESS(status));
+  std::unique_ptr<DisplayNames> delegate(
+      provider->Create(locale_id.c_str(), type_name));
+  if (delegate.get() == nullptr) return nullptr;
+  return new ExternalDisplayNames(locale, std::move(delegate), type_name);
+}
+
 DisplayNamesInternal* CreateInternal(const icu::Locale& locale,
                                      JSDisplayNames::Style style, Type type,
                                      bool fallback, bool dialect) {
+  // If the platform display names provider give us one, return that.
+  DisplayNamesInternal* external =
+      CreateFromProvider(locale, style, type, fallback, dialect);
+  if (external != nullptr) {
+    return external;
+  }
   switch (type) {
     case Type::kLanguage:
       return new LanguageNames(locale, style, fallback, dialect);
