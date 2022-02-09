@@ -66,8 +66,9 @@ static Handle<AccessorPair> CreateAccessorPair(bool with_getter,
 
 // Check cached migration target map after Map::Update() and Map::TryUpdate()
 static void CheckMigrationTarget(Isolate* isolate, Map old_map, Map new_map) {
-  Map target = TransitionsAccessor(isolate, handle(old_map, isolate))
-                   .GetMigrationTarget();
+  DisallowGarbageCollection no_gc;
+  Map target =
+      TransitionsAccessor(isolate, old_map, &no_gc).GetMigrationTarget();
   if (target.is_null()) return;
   CHECK_EQ(new_map, target);
   CHECK_EQ(MapUpdater::TryUpdateNoLock(isolate, old_map,
@@ -391,10 +392,10 @@ class Expectations {
                  heap_type);
 
     Handle<String> name = CcTest::MakeName("prop", property_index);
-    Map target = TransitionsAccessor(isolate_, map)
-                     .SearchTransition(*name, PropertyKind::kData, attributes);
+    MaybeHandle<Map> target = TransitionsAccessor::SearchTransition(
+        isolate_, map, *name, PropertyKind::kData, attributes);
     CHECK(!target.is_null());
-    return handle(target, isolate_);
+    return target.ToHandleChecked();
   }
 
   Handle<Map> AddAccessorConstant(Handle<Map> map,
@@ -2065,10 +2066,10 @@ TEST(ReconfigurePropertySplitMapTransitionsOverflow) {
       }
 
       Handle<String> name = CcTest::MakeName("prop", i);
-      Map target = TransitionsAccessor(isolate, map2)
-                       .SearchTransition(*name, PropertyKind::kData, NONE);
+      MaybeHandle<Map> target = TransitionsAccessor::SearchTransition(
+          isolate, map2, *name, PropertyKind::kData, NONE);
       CHECK(!target.is_null());
-      map2 = handle(target, isolate);
+      map2 = target.ToHandleChecked();
     }
 
     map2 = ReconfigureProperty(isolate, map2, InternalIndex(kSplitProp),
@@ -2090,14 +2091,14 @@ TEST(ReconfigurePropertySplitMapTransitionsOverflow) {
 
   // Fill in transition tree of |map2| so that it can't have more transitions.
   for (int i = 0; i < TransitionsAccessor::kMaxNumberOfTransitions; i++) {
-    CHECK(TransitionsAccessor(isolate, map2).CanHaveMoreTransitions());
+    CHECK(TransitionsAccessor::CanHaveMoreTransitions(isolate, map2));
     Handle<String> name = CcTest::MakeName("foo", i);
     Map::CopyWithField(isolate, map2, name, any_type, NONE,
                        PropertyConstness::kMutable, Representation::Smi(),
                        INSERT_TRANSITION)
         .ToHandleChecked();
   }
-  CHECK(!TransitionsAccessor(isolate, map2).CanHaveMoreTransitions());
+  CHECK(!TransitionsAccessor::CanHaveMoreTransitions(isolate, map2));
 
   // Try to update |map|, since there is no place for propX transition at |map2|
   // |map| should become normalized.
@@ -3094,7 +3095,8 @@ TEST(DeletePropertyGeneralizesConstness) {
 
   // |new_parent_map| must have exactly one outgoing transition to |new_map|.
   {
-    TransitionsAccessor ta(isolate, new_parent_map);
+    DisallowGarbageCollection no_gc;
+    TransitionsAccessor ta(isolate, *new_parent_map, &no_gc);
     CHECK_EQ(ta.NumberOfTransitions(), 1);
     CHECK_EQ(ta.GetTarget(0), *new_map);
   }

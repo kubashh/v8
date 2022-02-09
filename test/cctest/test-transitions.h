@@ -15,8 +15,9 @@ class TestTransitionsAccessor : public TransitionsAccessor {
   TestTransitionsAccessor(Isolate* isolate, Map map,
                           DisallowGarbageCollection* no_gc)
       : TransitionsAccessor(isolate, map, no_gc) {}
-  TestTransitionsAccessor(Isolate* isolate, Handle<Map> map)
-      : TransitionsAccessor(isolate, map) {}
+  TestTransitionsAccessor(Isolate* isolate, Handle<Map> map,
+                          DisallowGarbageCollection* no_gc)
+      : TransitionsAccessor(isolate, *map, no_gc) {}
 
   // Expose internals for tests.
   bool IsUninitializedEncoding() { return encoding() == kUninitialized; }

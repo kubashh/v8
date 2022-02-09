@@ -52,18 +52,23 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   inline TransitionsAccessor(Isolate* isolate, Map map,
                              DisallowGarbageCollection* no_gc,
                              bool concurrent_access = false);
-  inline TransitionsAccessor(Isolate* isolate, Handle<Map> map,
-                             bool concurrent_access = false);
+  // inline TransitionsAccessor(Isolate* isolate, Handle<Map> map,
+  //                            bool concurrent_access = false);
   // Insert a new transition into |map|'s transition array, extending it
   // as necessary.
-  // Requires the constructor that takes a Handle<Map> to have been used.
-  // This TransitionsAccessor instance is unusable after this operation.
-  void Insert(Handle<Name> name, Handle<Map> target, SimpleTransitionFlag flag);
+  static void Insert(Isolate* isolate, Handle<Map> map, Handle<Name> name,
+                     Handle<Map> target, SimpleTransitionFlag flag);
 
   Map SearchTransition(Name name, PropertyKind kind,
                        PropertyAttributes attributes);
+  static inline MaybeHandle<Map> SearchTransition(
+      Isolate* isolate, Handle<Map> map, Name name, PropertyKind kind,
+      PropertyAttributes attributes);
 
   Map SearchSpecial(Symbol name);
+  static inline MaybeHandle<Map> SearchSpecial(Isolate* isolate,
+                                               Handle<Map> map, Symbol name);
+
   // Returns true for non-property transitions like elements kind, or
   // or frozen/sealed transitions.
   static bool IsSpecialTransition(ReadOnlyRoots roots, Name name);
@@ -97,6 +102,8 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   inline Map GetTarget(int transition_number);
   static inline PropertyDetails GetTargetDetails(Name name, Map target);
 
+  static bool CanHaveMoreTransitions(Isolate* isolate, Handle<Map> map);
+
   static bool IsMatchingMap(Map target, Name name, PropertyKind kind,
                             PropertyAttributes attributes);
 
@@ -124,8 +131,11 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   // prototype is set, rather than creating a new map every time.  The
   // transitions are in the form of a map where the keys are prototype objects
   // and the values are the maps they transition to.
-  void PutPrototypeTransition(Handle<Object> prototype, Handle<Map> target_map);
-  Handle<Map> GetPrototypeTransition(Handle<Object> prototype);
+  static void PutPrototypeTransition(Isolate* isolate, Handle<Map>,
+                                     Handle<Object> prototype,
+                                     Handle<Map> target_map);
+  static Handle<Map> GetPrototypeTransition(Isolate* isolate, Handle<Map> map,
+                                            Handle<Object> prototype);
 
   // During the first-time Map::Update and Map::TryUpdate, the migration target
   // map could be cached in the raw_transitions slot of the old map that is
@@ -170,6 +180,8 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 
   inline TransitionArray transitions();
 
+  DISALLOW_GARBAGE_COLLECTION(no_gc_)
+
  private:
   friend class MarkCompactCollector;  // For HasSimpleTransitionTo.
   friend class third_party_heap::Impl;
@@ -183,6 +195,14 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   static inline Name GetSimpleTransitionKey(Map transition);
 
   static inline Map GetTargetFromRaw(MaybeObject raw);
+
+  static inline TransitionArray transitions(MaybeObject raw_transitions);
+
+  static void EnsureHasFullTransitionArray(Isolate* isolate, Handle<Map> map);
+  static void SetPrototypeTransitions(Isolate* isolate, Handle<Map> map,
+                                      Handle<WeakFixedArray> proto_transitions);
+  static WeakFixedArray GetPrototypeTransitions(Isolate* isolate,
+                                                Handle<Map> map);
 
   void MarkNeedsReload() {
 #if DEBUG
@@ -199,15 +219,10 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 
   inline Map GetTargetMapFromWeakRef();
 
-  void EnsureHasFullTransitionArray();
-  void SetPrototypeTransitions(Handle<WeakFixedArray> proto_transitions);
-  WeakFixedArray GetPrototypeTransitions();
-
   void TraverseTransitionTreeInternal(const TraverseCallback& callback,
                                       DisallowGarbageCollection* no_gc);
 
   Isolate* isolate_;
-  Handle<Map> map_handle_;
   Map map_;
   MaybeObject raw_transitions_;
   Encoding encoding_;

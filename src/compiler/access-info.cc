@@ -1118,13 +1118,17 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
     MapRef map, NameRef name, base::Optional<JSObjectRef> holder,
     PropertyAttributes attrs) const {
   // Check if the {map} has a data transition with the given {name}.
-  Map transition =
-      TransitionsAccessor(isolate(), map.object(), true)
-          .SearchTransition(*name.object(), PropertyKind::kData, attrs);
-  if (transition.is_null()) return Invalid();
-
+  Map transition;
+  {
+    DisallowGarbageCollection no_gc;
+    transition =
+        TransitionsAccessor(isolate(), *map.object(), &no_gc, true)
+            .SearchTransition(*name.object(), PropertyKind::kData, attrs);
+    if (transition.is_null()) return Invalid();
+  }
   base::Optional<MapRef> maybe_transition_map =
       TryMakeRef(broker(), transition);
+  // TODO(victorgomes): the use of transition after this point would crash.
   if (!maybe_transition_map.has_value()) return Invalid();
   MapRef transition_map = maybe_transition_map.value();
 

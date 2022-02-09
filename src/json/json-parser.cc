@@ -505,7 +505,8 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
         map = ParentOfDescriptorOwner(isolate_, map, feedback, descriptor);
         feedback_descriptors = 0;
       }
-      if (!TransitionsAccessor(isolate(), map)
+      DisallowGarbageCollection no_gc;
+      if (!TransitionsAccessor(isolate(), *map, &no_gc)
                .FindTransitionToField(key)
                .ToHandle(&target)) {
         break;

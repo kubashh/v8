@@ -355,8 +355,10 @@ TEST(TransitionArrayHashCollisionMassive) {
 
   Handle<JSFunction> csa_lookup = CreateCsaTransitionArrayLookup(isolate);
 
+  DisallowGarbageCollection no_gc;
   Handle<TransitionArray> transition_array(
-      TestTransitionsAccessor(isolate, root_map).transitions(), isolate);
+      TestTransitionsAccessor(isolate, root_map, &no_gc).transitions(),
+      isolate);
 
   CheckTransitionArrayLookups(isolate, transition_array, maps, csa_lookup);
 
@@ -413,8 +415,10 @@ TEST(TransitionArrayHashCollision) {
 
   Handle<JSFunction> csa_lookup = CreateCsaTransitionArrayLookup(isolate);
 
+  DisallowGarbageCollection no_gc;
   Handle<TransitionArray> transition_array(
-      TestTransitionsAccessor(isolate, root_map).transitions(), isolate);
+      TestTransitionsAccessor(isolate, root_map, &no_gc).transitions(),
+      isolate);
 
   CheckTransitionArrayLookups(isolate, transition_array, maps, csa_lookup);
 
