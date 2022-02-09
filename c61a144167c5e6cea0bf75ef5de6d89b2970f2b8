@@ -16,6 +16,40 @@
       "message": "Thibaud, PTAL.",
       "revId": "c61a144167c5e6cea0bf75ef5de6d89b2970f2b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c415741_b4ca768d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-02-09T13:55:43Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c61a144167c5e6cea0bf75ef5de6d89b2970f2b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0c9769_5354a62f",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-02-09T13:55:43Z",
+      "side": 1,
+      "message": "As discussed, I\u0027ll enable this for arm/arm64 too in a follow-up change, it should be supported now.",
+      "revId": "c61a144167c5e6cea0bf75ef5de6d89b2970f2b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
