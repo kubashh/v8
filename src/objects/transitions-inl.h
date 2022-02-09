@@ -17,9 +17,14 @@
 namespace v8 {
 namespace internal {
 
+// static
+TransitionArray TransitionsAccessor::transitions(MaybeObject raw_transitions) {
+  return TransitionArray::cast(raw_transitions.GetHeapObjectAssumeStrong());
+}
+
 TransitionArray TransitionsAccessor::transitions() {
   DCHECK_EQ(kFullTransitionArray, encoding());
-  return TransitionArray::cast(raw_transitions_->GetHeapObjectAssumeStrong());
+  return transitions(raw_transitions_);
 }
 
 OBJECT_CONSTRUCTORS_IMPL(TransitionArray, WeakFixedArray)
@@ -193,27 +198,12 @@ int TransitionArray::SearchName(Name name, bool concurrent_search,
 }
 
 TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Map map,
-                                         DisallowGarbageCollection* no_gc,
                                          bool concurrent_access)
     : isolate_(isolate), map_(map), concurrent_access_(concurrent_access) {
   Initialize();
-  USE(no_gc);
 }
 
-TransitionsAccessor::TransitionsAccessor(Isolate* isolate, Handle<Map> map,
-                                         bool concurrent_access)
-    : isolate_(isolate),
-      map_handle_(map),
-      map_(*map),
-      concurrent_access_(concurrent_access) {
-  Initialize();
-}
-
-void TransitionsAccessor::Reload() {
-  DCHECK(!map_handle_.is_null());
-  map_ = *map_handle_;
-  Initialize();
-}
+void TransitionsAccessor::Reload() { Initialize(); }
 
 int TransitionsAccessor::Capacity() { return transitions().Capacity(); }
 
@@ -237,6 +227,27 @@ TransitionsAccessor::Encoding TransitionsAccessor::GetEncoding(
   } else {
     UNREACHABLE();
   }
+}
+
+// static
+MaybeHandle<Map> TransitionsAccessor::SearchTransition(
+    Isolate* isolate, Handle<Map> map, Name name, PropertyKind kind,
+    PropertyAttributes attributes) {
+  DisallowGarbageCollection no_gc;
+  Map result = TransitionsAccessor(isolate, *map)
+                   .SearchTransition(name, kind, attributes);
+  if (result.is_null()) return MaybeHandle<Map>();
+  return MaybeHandle<Map>(result, isolate);
+}
+
+// static
+MaybeHandle<Map> TransitionsAccessor::SearchSpecial(Isolate* isolate,
+                                                    Handle<Map> map,
+                                                    Symbol name) {
+  DisallowGarbageCollection no_gc;
+  Map result = TransitionsAccessor(isolate, *map).SearchSpecial(name);
+  if (result.is_null()) return MaybeHandle<Map>();
+  return MaybeHandle<Map>(result, isolate);
 }
 
 void TransitionsAccessor::Initialize() {
