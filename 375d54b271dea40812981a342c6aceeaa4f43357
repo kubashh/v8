@@ -104,6 +104,30 @@
       },
       "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b98947fb_d2f69680",
+        "filename": "test/js-perf-test/Array/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-09T07:03:05Z",
+      "side": 1,
+      "message": "To clarify, you say \u0027test\u0027 but we\u0027re talking about microbenchmarks. In my experience, js-perf-tests are not useful (after perhaps a period of time in which the feature author actively watches the test). Perf sheriffs tend to ignore most js-perf-test alerts since they are so common and flaky.\n\nIMO a misleading benchmark with line items named \u0027packed\u0027, \u0027holey\u0027, ..., while the underlying behavior is actually different, is more harmful than helpful.\n\nAnyway - the current CL improves things slightly, so I\u0027ll go ahead and land it with your suggested change.",
+      "parentUuid": "b2b4615c_a4c6186b",
+      "range": {
+        "startLine": 39,
+        "startChar": 52,
+        "endLine": 39,
+        "endChar": 69
+      },
+      "revId": "375d54b271dea40812981a342c6aceeaa4f43357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
