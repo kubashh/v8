@@ -391,8 +391,7 @@ void LargeObjectSpace::Verify(Isolate* isolate) {
           object.IsFreeSpace(cage_base) ||
           object.IsFeedbackMetadata(cage_base) || object.IsContext(cage_base) ||
           object.IsUncompiledDataWithoutPreparseData(cage_base) ||
-          object.IsPreparseData(cage_base)) &&
-        !FLAG_young_generation_large_objects) {
+          object.IsPreparseData(cage_base))) {
       FATAL("Found invalid Object (instance_type=%i) in large object space.",
             object.map(cage_base).instance_type());
     }
