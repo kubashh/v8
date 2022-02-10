@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3798ec_1cf0474d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-10T18:09:42Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "d3250530_d7a1573f",
+      "revId": "2510c059cf589c16c6c5685dbe88c7d2b2b24097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "153472e3_5ad05be3",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-02-10T17:59:04Z",
       "side": 1,
       "message": "Naming nit: Maybe ExcludingExternal?",
+      "range": {
+        "startLine": 1453,
+        "startChar": 36,
+        "endLine": 1453,
+        "endChar": 43
+      },
+      "revId": "2510c059cf589c16c6c5685dbe88c7d2b2b24097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a9fbbc7_20bcb1ee",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-10T18:09:42Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "153472e3_5ad05be3",
       "range": {
         "startLine": 1453,
         "startChar": 36,
