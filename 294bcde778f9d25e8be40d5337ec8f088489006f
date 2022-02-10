@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e1ef98_36b9fcc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-10T09:39:10Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "294bcde778f9d25e8be40d5337ec8f088489006f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d123c66c_b92f807d",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-10T09:39:10Z",
+      "side": 1,
+      "message": "I think this verifier was used to ensure that only certain types are allocated in LO space which comes from a time where a special bit was reserved on each tagged value for LO objects. This has long been gone. (Introduction of weak bit required reworking this mechanism.)\n\nI guess it\u0027s nevertheless somewhat useful to know which objects can be large.",
+      "range": {
+        "startLine": 383,
+        "startChar": 15,
+        "endLine": 383,
+        "endChar": 39
+      },
+      "revId": "294bcde778f9d25e8be40d5337ec8f088489006f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "349e0f1c_64cc2193",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-10T09:39:10Z",
+      "side": 1,
+      "message": "We could also create a list somewhere in e.g. heap-symbols.h.",
+      "range": {
+        "startLine": 385,
+        "startChar": 15,
+        "endLine": 385,
+        "endChar": 23
+      },
+      "revId": "294bcde778f9d25e8be40d5337ec8f088489006f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
