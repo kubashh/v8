@@ -145,7 +145,8 @@ class ExpectedOutProc(OutProc):
     if output.exit_code != 0:
         return True
 
-    with open(self._expected_filename, 'r') as f:
+    # Fix goes here
+    with open(self._expected_filename, 'r', encoding='utf-8') as f:
       expected_lines = f.readlines()
 
     for act_iterator in self._act_block_iterator(output):
