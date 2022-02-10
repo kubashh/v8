@@ -50,6 +50,24 @@
       "message": "nit: Please add the reasoning here to avoid detective work in future.",
       "revId": "b0775853ea90a4cf049ebacec8134ab845007ffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b2b378_c547df90",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-10T18:42:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36e97de7_2b214857",
+      "revId": "b0775853ea90a4cf049ebacec8134ab845007ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
