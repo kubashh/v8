@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1082ea98_c5ec3f3b",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-02-10T09:08:37Z",
+      "side": 1,
+      "message": "as a followup, could this (optionally) take a LocalHeap to ensure this ordering?",
+      "range": {
+        "startLine": 161,
+        "startChar": 60,
+        "endLine": 161,
+        "endChar": 76
+      },
+      "revId": "40335883ece4996135e2d19d7a470c8244059646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
