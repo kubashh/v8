@@ -145,6 +145,7 @@ class ExpectedOutProc(OutProc):
     if output.exit_code != 0:
         return True
 
+    # Fix goes here
     with open(self._expected_filename, 'r') as f:
       expected_lines = f.readlines()
 
