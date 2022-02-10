@@ -541,6 +541,9 @@ bool String::SupportsExternalization() {
     return false;
   }
 
+  // We currently do not support ExternalStrings in the shared heap.
+  if (InSharedHeap()) return false;
+
 #ifdef V8_COMPRESS_POINTERS
   // Small strings may not be in-place externalizable.
   if (this->Size() < ExternalString::kUncachedSize) return false;
