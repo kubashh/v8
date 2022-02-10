@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "2510c059cf589c16c6c5685dbe88c7d2b2b24097",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3250530_d7a1573f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T17:59:04Z",
+      "side": 1,
+      "message": "lgtm with one addition: String::SupportsExternalization needs to return false for InSharedHeap strings.",
+      "revId": "2510c059cf589c16c6c5685dbe88c7d2b2b24097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "153472e3_5ad05be3",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T17:59:04Z",
+      "side": 1,
+      "message": "Naming nit: Maybe ExcludingExternal?",
+      "range": {
+        "startLine": 1453,
+        "startChar": 36,
+        "endLine": 1453,
+        "endChar": 43
+      },
+      "revId": "2510c059cf589c16c6c5685dbe88c7d2b2b24097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
