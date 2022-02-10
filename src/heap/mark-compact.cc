@@ -51,6 +51,7 @@
 #include "src/objects/embedder-data-array-inl.h"
 #include "src/objects/foreign.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-objects-inl.h"
 #include "src/objects/maybe-object.h"
@@ -1633,7 +1634,8 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
 
   inline bool ShouldPromoteIntoSharedHeap(Map map) {
     if (shared_string_table_) {
-      return String::IsInPlaceInternalizable(map.instance_type());
+      return String::IsInPlaceInternalizable(map.instance_type()) &&
+             !InstanceTypeChecker::IsExternalString(map.instance_type());
     }
     return false;
   }
@@ -2447,11 +2449,11 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     string_table->DropOldData();
     string_table->IterateElements(&internalized_visitor);
     string_table->NotifyElementsRemoved(internalized_visitor.PointersRemoved());
-
-    ExternalStringTableCleaner external_visitor(heap());
-    heap()->external_string_table_.IterateAll(&external_visitor);
-    heap()->external_string_table_.CleanUpAll();
   }
+
+  ExternalStringTableCleaner external_visitor(heap());
+  heap()->external_string_table_.IterateAll(&external_visitor);
+  heap()->external_string_table_.CleanUpAll();
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_CLEAR_FLUSHABLE_BYTECODE);
@@ -3388,7 +3390,8 @@ class ClientHeapVerifier final : public ObjectVisitorWithCageBases {
 
 static String UpdateReferenceInExternalStringTableEntry(Heap* heap,
                                                         FullObjectSlot p) {
-  MapWord map_word = HeapObject::cast(*p).map_word(kRelaxedLoad);
+  HeapObject old_string = HeapObject::cast(*p);
+  MapWord map_word = old_string.map_word(kRelaxedLoad);
 
   if (map_word.IsForwardingAddress()) {
     String new_string = String::cast(map_word.ToForwardingAddress());

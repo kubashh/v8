@@ -9,6 +9,7 @@
 #include "src/heap/local-allocator-inl.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/scavenger.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/map.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots-inl.h"
@@ -381,7 +382,8 @@ SlotCallbackResult Scavenger::EvacuateObject(THeapObjectSlot slot, Map map,
           map, slot, String::unchecked_cast(source), size,
           ObjectFields::kMaybePointers);
     case kVisitDataObject:  // External strings have kVisitDataObject.
-      if (String::IsInPlaceInternalizable(map.instance_type())) {
+      if (String::IsInPlaceInternalizable(map.instance_type()) &&
+          !InstanceTypeChecker::IsExternalString(map.instance_type())) {
         return EvacuateInPlaceInternalizableString(
             map, slot, String::unchecked_cast(source), size,
             ObjectFields::kDataOnly);
