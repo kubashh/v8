@@ -22,6 +22,30 @@
       },
       "revId": "642828eb8b98added8ff4c84c30ccf9b344b78e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c7cc864_2dcd6aa3",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-10T11:04:10Z",
+      "side": 0,
+      "message": "This is mainly because the short builtin calls feature wasn\u0027t enabled on Android in the first place. Short builtin calls come at a memory price which we didn\u0027t want to pay for low-memory devices and the external code space is a step towards recovering that memory regression + is a step towards supporting RWX pages on Apple Silicon.",
+      "parentUuid": "333fac02_443e8e8f",
+      "range": {
+        "startLine": 431,
+        "startChar": 8,
+        "endLine": 431,
+        "endChar": 59
+      },
+      "revId": "642828eb8b98added8ff4c84c30ccf9b344b78e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
