@@ -16,6 +16,40 @@
       "message": "Thanks for the review!",
       "revId": "b0775853ea90a4cf049ebacec8134ab845007ffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0008661f_ef19110a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-10T18:14:00Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "b0775853ea90a4cf049ebacec8134ab845007ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e97de7_2b214857",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-10T18:14:00Z",
+      "side": 1,
+      "message": "nit: Please add the reasoning here to avoid detective work in future.",
+      "revId": "b0775853ea90a4cf049ebacec8134ab845007ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
