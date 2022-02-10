@@ -16,6 +16,91 @@
       "message": "szuend@ PTAL debug-coverage.cc\nomerkatz@ PTAL setup-heap-internal.cc\nsyg@ PTAL the rest",
       "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a433cd7_8a2da6ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T00:47:35Z",
+      "side": 1,
+      "message": "lgtm % length() vs Length() question",
+      "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "037d8a5e_b7cb11c9",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T00:47:35Z",
+      "side": 1,
+      "message": "Should this be CHECK_EQ(Length(), 0)? I see below in heap-setup-internal.cc that     `ArrayList::cast(obj).set_length(ArrayList::kFirstIndex)`, which isn\u0027t 0. Am I missing something?",
+      "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9199aaa_0ed1f5cc",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T00:47:35Z",
+      "side": 1,
+      "message": "When would this branch be hit, over the verifier directly calling ArrayListVerify?",
+      "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c51880a7_506b701e",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T00:47:35Z",
+      "side": 1,
+      "message": "Same question as above, whether this should be Length().",
+      "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a57e3f3_4703f7d9",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4062,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-02-10T00:47:35Z",
+      "side": 1,
+      "message": "Isn\u0027t the map check taken care of by the Handle\u003cArrayList\u003e::cast above?",
+      "revId": "7056b67160b8a2faffa6d89b7890abacb7a0ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
