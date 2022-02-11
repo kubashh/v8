@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c39e35c_f56a9f08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-11T10:42:40Z",
+      "side": 1,
+      "message": "Adding sandbox initialization to samples as they seem to be used in tests. PTAL, thanks!! :)",
+      "revId": "00826f57e0e0d4c87bf60212f5462e5ab8baffa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
