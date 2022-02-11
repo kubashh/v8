@@ -2532,10 +2532,10 @@ void MarkCompactCollector::ClearPotentialSimpleMapTransition(Map dead_target) {
   DCHECK(non_atomic_marking_state()->IsWhite(dead_target));
   Object potential_parent = dead_target.constructor_or_back_pointer();
   if (potential_parent.IsMap()) {
-    Map parent = Map::cast(potential_parent);
     DisallowGarbageCollection no_gc_obviously;
+    Map parent = Map::cast(potential_parent);
     if (non_atomic_marking_state()->IsBlackOrGrey(parent) &&
-        TransitionsAccessor(isolate(), parent, &no_gc_obviously)
+        TransitionsAccessor(isolate(), parent)
             .HasSimpleTransitionTo(dead_target)) {
       ClearPotentialSimpleMapTransition(parent, dead_target);
     }
