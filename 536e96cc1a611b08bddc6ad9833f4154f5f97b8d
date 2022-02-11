@@ -16,6 +16,24 @@
       "message": "Why remove this line? I believe the GC is already disallowed here but nevertheless I think it\u0027s nice to document this here again. Or at least have `DCHECK(AllowGarbageCollection::IsDisallowed())`",
       "revId": "536e96cc1a611b08bddc6ad9833f4154f5f97b8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e10bf127_8a5cf929",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2536,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-11T09:57:56Z",
+      "side": 0,
+      "message": "I was just removing the obvious... 😊 \nBut that\u0027s fine, I\u0027ll put it back!",
+      "parentUuid": "6915fa4e_33940592",
+      "revId": "536e96cc1a611b08bddc6ad9833f4154f5f97b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
