@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6915fa4e_33940592",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2536,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-11T09:50:09Z",
+      "side": 0,
+      "message": "Why remove this line? I believe the GC is already disallowed here but nevertheless I think it\u0027s nice to document this here again. Or at least have `DCHECK(AllowGarbageCollection::IsDisallowed())`",
+      "revId": "536e96cc1a611b08bddc6ad9833f4154f5f97b8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
