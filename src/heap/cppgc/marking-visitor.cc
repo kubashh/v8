@@ -15,11 +15,13 @@ MarkingVisitorBase::MarkingVisitorBase(HeapBase& heap,
                                        BasicMarkingState& marking_state)
     : marking_state_(marking_state) {}
 
-void MarkingVisitorBase::Visit(const void* object, TraceDescriptor desc) {
+void MarkingVisitorBase::Visit(const void** slot, const void* object,
+                               TraceDescriptor desc) {
   marking_state_.MarkAndPush(object, desc);
 }
 
-void MarkingVisitorBase::VisitWeak(const void* object, TraceDescriptor desc,
+void MarkingVisitorBase::VisitWeak(const void** slot, const void* object,
+                                   TraceDescriptor desc,
                                    WeakCallback weak_callback,
                                    const void* weak_member) {
   marking_state_.RegisterWeakReferenceIfNeeded(object, desc, weak_callback,
@@ -79,7 +81,7 @@ MutatorMarkingVisitor::MutatorMarkingVisitor(HeapBase& heap,
 
 void MutatorMarkingVisitor::VisitRoot(const void* object, TraceDescriptor desc,
                                       const SourceLocation&) {
-  Visit(object, desc);
+  Visit(nullptr, object, desc);
 }
 
 void MutatorMarkingVisitor::VisitWeakRoot(const void* object,

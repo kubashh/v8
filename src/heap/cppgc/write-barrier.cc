@@ -50,6 +50,37 @@ void ProcessMarkValue(HeapObjectHeader& header, MarkerBase* marker,
   marker->WriteBarrierForObject<type>(header);
 }
 
+#if defined(CPPGC_YOUNG_GENERATION)
+class GenerationalBarrierVisitor final : public Visitor {
+ public:
+  GenerationalBarrierVisitor(const AgeTable& age_table,
+                             const CagedHeapLocalData& local_data)
+      : Visitor(internal::VisitorFactory::CreateKey()),
+        age_table_(age_table),
+        remembered_slots_(local_data.heap_base.remembered_slots()) {}
+
+ private:
+  void Visit(const void** slot, const void* value, TraceDescriptor) override {
+    // Slot as nullptr would indicate Persistent, which we shouldn't trace from
+    // the write barrier.
+    DCHECK(slot);
+
+    const uintptr_t value_offset =
+        reinterpret_cast<uintptr_t>(value) &
+        (api_constants::kCagedHeapReservationAlignment - 1);
+
+    if (value_offset > 0 && age_table_[value_offset] == AgeTable::Age::kOld)
+      return;
+
+    // Record slot.
+    remembered_slots_.insert(reinterpret_cast<void*>(slot));
+  }
+
+  const AgeTable& age_table_;
+  std::set<void*>& remembered_slots_;
+};
+#endif  // defined(CPPGC_YOUNG_GENERATION)
+
 }  // namespace
 
 // static
@@ -154,6 +185,16 @@ void WriteBarrier::GenerationalBarrierForSourceObjectSlow(
   local_data.heap_base.remembered_source_objects().emplace(
       object_header.ObjectStart());
 }
+
+void WriteBarrier::GenerationalBarrierForSourceObjectWithCustomCallbackSlow(
+    const CagedHeapLocalData& local_data, const AgeTable& age_table,
+    const void* object, TraceCallback trace_callback) {
+  DCHECK(object);
+
+  GenerationalBarrierVisitor visitor(age_table, local_data);
+  trace_callback(&visitor, object);
+}
+
 #endif  // CPPGC_YOUNG_GENERATION
 
 #if V8_ENABLE_CHECKS

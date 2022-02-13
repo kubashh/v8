@@ -21,12 +21,12 @@ class UnifiedHeapVerificationVisitor final : public JSVisitor {
       : JSVisitor(cppgc::internal::VisitorFactory::CreateKey()),
         state_(state) {}
 
-  void Visit(const void*, cppgc::TraceDescriptor desc) final {
+  void Visit(const void**, const void*, cppgc::TraceDescriptor desc) final {
     state_.VerifyMarked(desc.base_object_payload);
   }
 
-  void VisitWeak(const void*, cppgc::TraceDescriptor desc, cppgc::WeakCallback,
-                 const void*) final {
+  void VisitWeak(const void**, const void*, cppgc::TraceDescriptor desc,
+                 cppgc::WeakCallback, const void*) final {
     // Weak objects should have been cleared at this point. As a consequence,
     // all objects found through weak references have to point to live objects
     // at this point.
