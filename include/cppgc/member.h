@@ -203,7 +203,7 @@ class BasicMember final : private MemberBase, private CheckingPolicy {
     return result;
   }
 
-  const T** GetSlotForTesting() const {
+  const T** GetSlot() const {
     return reinterpret_cast<const T**>(GetRawSlot());
   }
 

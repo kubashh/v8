@@ -163,6 +163,9 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
 
 #if defined(CPPGC_YOUNG_GENERATION)
   std::set<void*>& remembered_slots() { return remembered_slots_; }
+  std::set<void*>& remembered_source_objects() {
+    return remembered_source_objects_;
+  }
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
   size_t ObjectPayloadSize() const;
@@ -260,6 +263,7 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
       allocation_observer_for_PROCESS_HEAP_STATISTICS_;
 #if defined(CPPGC_YOUNG_GENERATION)
   std::set<void*> remembered_slots_;
+  std::set<void*> remembered_source_objects_;
 #endif
 
   size_t no_gc_scope_ = 0;

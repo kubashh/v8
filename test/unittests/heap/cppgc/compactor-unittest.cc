@@ -32,7 +32,7 @@ struct CompactableGCed : public GarbageCollected<CompactableGCed> {
   ~CompactableGCed() { ++g_destructor_callcount; }
   void Trace(Visitor* visitor) const {
     visitor->Trace(other);
-    visitor->RegisterMovableReference(other.GetSlotForTesting());
+    visitor->RegisterMovableReference(other.GetSlot());
   }
   static size_t g_destructor_callcount;
   Member<CompactableGCed> other;
@@ -53,7 +53,7 @@ struct CompactableHolder
   void Trace(Visitor* visitor) const {
     for (int i = 0; i < kNumObjects; ++i) {
       visitor->Trace(objects[i]);
-      visitor->RegisterMovableReference(objects[i].GetSlotForTesting());
+      visitor->RegisterMovableReference(objects[i].GetSlot());
     }
   }
   Member<CompactableGCed> objects[kNumObjects];
