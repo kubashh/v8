@@ -649,7 +649,7 @@ class VisiblityVisitor final : public WeakVisitor {
       : WeakVisitor(graph_builder), parent_scope_(parent_scope) {}
 
   // C++ handling.
-  void Visit(const void*, cppgc::TraceDescriptor desc) final {
+  void Visit(const void**, const void*, cppgc::TraceDescriptor desc) final {
     graph_builder_.VisitForVisibility(
         &parent_scope_.ParentAsRegularState(),
         HeapObjectHeader::FromObject(desc.base_object_payload));
@@ -678,7 +678,7 @@ class GraphBuildingVisitor final : public JSVisitor {
         parent_scope_(parent_scope) {}
 
   // C++ handling.
-  void Visit(const void*, cppgc::TraceDescriptor desc) final {
+  void Visit(const void**, const void*, cppgc::TraceDescriptor desc) final {
     graph_builder_.AddEdge(
         parent_scope_.ParentAsRegularState(),
         HeapObjectHeader::FromObject(desc.base_object_payload), edge_name_);

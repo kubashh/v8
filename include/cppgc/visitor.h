@@ -68,14 +68,15 @@ class V8_EXPORT Visitor {
    * \param member Reference retaining an object.
    */
   template <typename T>
-  void Trace(const T* t) {
+  void Trace(const T** slot, const T* value) {
     static_assert(sizeof(T), "Pointee type must be fully defined.");
     static_assert(internal::IsGarbageCollectedOrMixinType<T>::value,
                   "T must be GarbageCollected or GarbageCollectedMixin type");
-    if (!t) {
+    if (!value) {
       return;
     }
-    Visit(t, TraceTrait<T>::GetTraceDescriptor(t));
+    Visit(reinterpret_cast<const void**>(slot), value,
+          TraceTrait<T>::GetTraceDescriptor(value));
   }
 
   /**
@@ -87,7 +88,8 @@ class V8_EXPORT Visitor {
   void Trace(const Member<T>& member) {
     const T* value = member.GetRawAtomic();
     CPPGC_DCHECK(value != kSentinelPointer);
-    Trace(value);
+    const T** slot = member.GetSlot();
+    Trace(slot, value);
   }
 
   /**
@@ -111,7 +113,10 @@ class V8_EXPORT Visitor {
     }
 
     CPPGC_DCHECK(value != kSentinelPointer);
-    VisitWeak(value, TraceTrait<T>::GetTraceDescriptor(value),
+
+    const T** slot = weak_member.GetSlot();
+    VisitWeak(reinterpret_cast<const void**>(slot), value,
+              TraceTrait<T>::GetTraceDescriptor(value),
               &HandleWeak<WeakMember<T>>, &weak_member);
   }
 
@@ -229,9 +234,10 @@ class V8_EXPORT Visitor {
    */
   template <typename T>
   void TraceStrongly(const WeakMember<T>& weak_member) {
+    const T** slot = weak_member.GetSlot();
     const T* value = weak_member.GetRawAtomic();
     CPPGC_DCHECK(value != kSentinelPointer);
-    Trace(value);
+    Trace(slot, value);
   }
 
   /**
@@ -294,9 +300,9 @@ class V8_EXPORT Visitor {
   }
 
  protected:
-  virtual void Visit(const void* self, TraceDescriptor) {}
-  virtual void VisitWeak(const void* self, TraceDescriptor, WeakCallback,
-                         const void* weak_member) {}
+  virtual void Visit(const void** slot, const void* value, TraceDescriptor) {}
+  virtual void VisitWeak(const void** slot, const void* value, TraceDescriptor,
+                         WeakCallback, const void* weak_member) {}
   virtual void VisitRoot(const void*, TraceDescriptor, const SourceLocation&) {}
   virtual void VisitWeakRoot(const void* self, TraceDescriptor, WeakCallback,
                              const void* weak_root, const SourceLocation&) {}
