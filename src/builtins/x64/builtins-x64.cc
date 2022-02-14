@@ -2981,37 +2981,9 @@ void LoadTargetJumpBuffer(MacroAssembler* masm, Register target_continuation) {
   LoadJumpBuffer(masm, target_jmpbuf, false);
 }
 
-void LoadAndCallTargetWasmFunction(MacroAssembler* masm, Register function_data,
-                                   Register wasm_instance, Register tmp1) {
-  // TODO(thibaudm): Handle arguments.
-  // Set thread_in_wasm_flag.
-  Register thread_in_wasm_flag_addr = tmp1;
-  __ movq(
-      thread_in_wasm_flag_addr,
-      MemOperand(kRootRegister, Isolate::thread_in_wasm_flag_address_offset()));
-  __ movl(MemOperand(thread_in_wasm_flag_addr, 0), Immediate(1));
-  Register function_entry = function_data;
-  __ LoadAnyTaggedField(
-      function_entry,
-      FieldOperand(function_entry, WasmExportedFunctionData::kInternalOffset));
-  __ LoadExternalPointerField(
-      function_entry,
-      FieldOperand(function_data, WasmInternalFunction::kForeignAddressOffset),
-      kForeignForeignAddressTag, kScratchRegister);
-  __ Push(wasm_instance);
-  __ call(function_entry);
-  // Note: we might be returning to an "OnFulfilled" frame if the stack was
-  // suspended and resumed via the chained promise.
-  __ Pop(wasm_instance);
-  // Unset thread_in_wasm_flag.
-  __ movq(
-      thread_in_wasm_flag_addr,
-      MemOperand(kRootRegister, Isolate::thread_in_wasm_flag_address_offset()));
-  __ movl(MemOperand(thread_in_wasm_flag_addr, 0), Immediate(0));
-}
-
 void ReloadParentContinuation(MacroAssembler* masm, Register wasm_instance,
-                              Register tmp1, Register tmp2) {
+                              Register return_reg, Register tmp1,
+                              Register tmp2) {
   Register active_continuation = tmp1;
   __ LoadRoot(active_continuation, RootIndex::kActiveContinuation);
 
@@ -3048,10 +3020,12 @@ void ReloadParentContinuation(MacroAssembler* masm, Register wasm_instance,
   MemOperand GCScanSlotPlace =
       MemOperand(rbp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
   __ Move(GCScanSlotPlace, 1);
+  __ Push(return_reg);
   __ Push(wasm_instance);  // Spill.
   __ Move(kContextRegister, Smi::zero());
   __ CallRuntime(Runtime::kWasmSyncStackLimit);
   __ Pop(wasm_instance);
+  __ Pop(return_reg);
 }
 
 void RestoreParentSuspender(MacroAssembler* masm) {
@@ -3125,11 +3099,11 @@ void LoadValueTypesArray(MacroAssembler* masm, Register function_data,
   __ movq(valuetypes_array_ptr,
           MemOperand(signature, wasm::FunctionSig::kRepsOffset));
 }
-}  // namespace
 
-void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
+void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   // Set up the stackframe.
-  __ EnterFrame(StackFrame::JS_TO_WASM);
+  __ EnterFrame(stack_switch ? StackFrame::STACK_SWITCH
+                             : StackFrame::JS_TO_WASM);
 
   // -------------------------------------------
   // Compute offsets and prepare for GC.
@@ -3138,9 +3112,10 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
       BuiltinWasmWrapperConstants::kGCScanSlotCountOffset;
   // The number of parameters passed to this function.
   constexpr int kInParamCountOffset =
-      kGCScanSlotCountOffset - kSystemPointerSize;
+      BuiltinWasmWrapperConstants::kInParamCountOffset;
   // The number of parameters according to the signature.
-  constexpr int kParamCountOffset = kInParamCountOffset - kSystemPointerSize;
+  constexpr int kParamCountOffset =
+      BuiltinWasmWrapperConstants::kParamCountOffset;
   constexpr int kReturnCountOffset = kParamCountOffset - kSystemPointerSize;
   constexpr int kValueTypesArrayStartOffset =
       kReturnCountOffset - kSystemPointerSize;
@@ -3162,29 +3137,87 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ movq(MemOperand(rbp, kInParamCountOffset), in_param_count);
   in_param_count = no_reg;
 
-  // Initialize the {HasRefTypes} slot.
-  __ movq(MemOperand(rbp, kHasRefTypesOffset), Immediate(0));
-
   Register function_data = rdi;
   Register wasm_instance = rsi;
   LoadFunctionDataAndWasmInstance(masm, function_data, wasm_instance);
 
-  // -------------------------------------------
-  // Decrement the budget of the generic wrapper in function data.
-  // -------------------------------------------
-  __ SmiAddConstant(
-      MemOperand(function_data, WasmExportedFunctionData::kWrapperBudgetOffset -
-                                    kHeapObjectTag),
-      Smi::FromInt(-1));
-
-  // -------------------------------------------
-  // Check if the budget of the generic wrapper reached 0 (zero).
-  // -------------------------------------------
-  // Instead of a specific comparison, we can directly use the flags set
-  // from the previous addition.
   Label compile_wrapper, compile_wrapper_done;
-  __ j(less_equal, &compile_wrapper);
-  __ bind(&compile_wrapper_done);
+  if (!stack_switch) {
+    // -------------------------------------------
+    // Decrement the budget of the generic wrapper in function data.
+    // -------------------------------------------
+    __ SmiAddConstant(
+        MemOperand(
+            function_data,
+            WasmExportedFunctionData::kWrapperBudgetOffset - kHeapObjectTag),
+        Smi::FromInt(-1));
+
+    // -------------------------------------------
+    // Check if the budget of the generic wrapper reached 0 (zero).
+    // -------------------------------------------
+    // Instead of a specific comparison, we can directly use the flags set
+    // from the previous addition.
+    __ j(less_equal, &compile_wrapper);
+    __ bind(&compile_wrapper_done);
+  }
+
+  Label suspend;
+  if (stack_switch) {
+    Register active_continuation = rbx;
+    __ LoadRoot(active_continuation, RootIndex::kActiveContinuation);
+    SaveState(masm, active_continuation, rcx, &suspend);
+    AllocateContinuation(masm, function_data, wasm_instance);
+    Register target_continuation = rax; /* fixed */
+    // Save the old stack's rbp in r9, and use it to access the parameters in
+    // the parent frame.
+    // We also distribute the spill slots across the two stacks as needed by
+    // creating a "shadow frame":
+    //
+    //      old stack:                    new stack:
+    //      +-----------------+
+    //      | <parent frame>  |
+    // r9-> +-----------------+           +-----------------+
+    //      | <fixed>         |           | 0 (jmpbuf rbp)  |
+    //      +-----------------+     rbp-> +-----------------+
+    //      |kGCScanSlotCount |           |kGCScanSlotCount |
+    //      +-----------------+           +-----------------+
+    //      | kParamCount     |           |      /          |
+    //      +-----------------+           +-----------------+
+    //      | kInParamCount   |           |      /          |
+    //      +-----------------+           +-----------------+
+    //      |      /          |           | kReturnCount    |
+    //      +-----------------+           +-----------------+
+    //      |      /          |           |kValueTypesArray |
+    //      +-----------------+           +-----------------+
+    //      |      /          |           | kHasRefTypes    |
+    //      +-----------------+           +-----------------+
+    //      |      /          |           | kFunctionData   |
+    //      +-----------------+    rsp->  +-----------------+
+    //          seal stack                         |
+    //                                             V
+    //
+    // - When we first enter the prompt, we have access to both frames, so it
+    // does not matter where the values are spilled.
+    // - When we suspend for the first time, we longjmp to the original frame
+    // (left).  So the frame needs to contain the necessary information to
+    // properly deconstruct itself (actual param count and signature param
+    // count).
+    // - When we suspend for the second time, we longjmp to the frame that was
+    // set up by the WasmResume builtin, which has the same layout as the
+    // original frame (left).
+    // - When the closure finally resolves, we use the value types pointer
+    // stored in the shadow frame to get the return type and convert the return
+    // value accordingly.
+    __ movq(r9, rbp);
+    LoadTargetJumpBuffer(masm, target_continuation);
+    // Push the loaded rbp. We know it is null, because there is no frame yet,
+    // so could also push 0 directly. In any case we need to push it, because
+    // this marks the base of the stack segment for the stack frame iterator.
+    __ pushq(rbp);
+    __ movq(rbp, rsp);
+    __ addq(rsp, Immediate(kLastSpillOffset));
+  }
+  Register fp = stack_switch ? r9 : rbp;
 
   // -------------------------------------------
   // Load values from the signature.
@@ -3195,6 +3228,9 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   LoadValueTypesArray(masm, function_data, valuetypes_array_ptr, return_count,
                       param_count);
 
+  // Initialize the {HasRefTypes} slot.
+  __ movq(MemOperand(rbp, kHasRefTypesOffset), Immediate(0));
+
   // -------------------------------------------
   // Store signature-related values to the stack.
   // -------------------------------------------
@@ -3202,7 +3238,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // We cannot push values onto the stack right before the wasm call. The wasm
   // function expects the parameters, that didn't fit into the registers, on the
   // top of the stack.
-  __ movq(MemOperand(rbp, kParamCountOffset), param_count);
+  __ movq(MemOperand(fp, kParamCountOffset), param_count);
   __ movq(MemOperand(rbp, kReturnCountOffset), return_count);
   __ movq(MemOperand(rbp, kValueTypesArrayStartOffset), valuetypes_array_ptr);
 
@@ -3272,7 +3308,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ subq(rsp, params_size);
   params_size = no_reg;
   param_count = rcx;
-  __ movq(param_count, MemOperand(rbp, kParamCountOffset));
+  __ movq(param_count, MemOperand(fp, kParamCountOffset));
 
   // -------------------------------------------
   // Set up for the param evaluation loop.
@@ -3327,7 +3363,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   Label loop_through_params;
   __ bind(&loop_through_params);
 
-  __ movq(param, MemOperand(rbp, current_param, times_1, 0));
+  __ movq(param, MemOperand(fp, current_param, times_1, 0));
   __ movl(valuetype,
           Operand(valuetypes_array_ptr, wasm::ValueType::bit_field_offset()));
 
@@ -3391,7 +3427,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   __ bind(&ref_loop_through_params);
 
   // Load the current parameter with type.
-  __ movq(param, MemOperand(rbp, current_param, times_1, 0));
+  __ movq(param, MemOperand(fp, current_param, times_1, 0));
   __ movl(valuetype,
           Operand(valuetypes_array_ptr, wasm::ValueType::bit_field_offset()));
   // Extract the ValueKind of the type, to check for kRef and kOptRef.
@@ -3439,7 +3475,7 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // -----------------------------------
 
   Register temp_params_size = rax;
-  __ movq(temp_params_size, MemOperand(rbp, kParamCountOffset));
+  __ movq(temp_params_size, MemOperand(fp, kParamCountOffset));
   __ shlq(temp_params_size, Immediate(kSystemPointerSizeLog2));
   // We want to use the register of the function_data = rdi.
   __ movq(MemOperand(rbp, kFunctionDataOffset), function_data);
@@ -3591,6 +3627,9 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // Call the Wasm function.
   // -------------------------------------------
   __ call(function_entry);
+  // Note: we might be returning to a different frame if the stack was suspended
+  // and resumed during the call. The new frame is set up by WasmResume and has
+  // a compatible layout.
   function_entry = no_reg;
 
   // -------------------------------------------
@@ -3624,6 +3663,14 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
 
   Label return_done;
   __ bind(&return_done);
+  if (stack_switch) {
+    ReloadParentContinuation(masm, wasm_instance, return_reg, rbx, rcx);
+    RestoreParentSuspender(masm);
+  }
+  __ bind(&suspend);
+  // No need to process the return value if the stack is suspended, there is a
+  // single 'externref' value (the promise) which doesn't require conversion.
+
   __ movq(param_count, MemOperand(rbp, kParamCountOffset));
 
   // Calculate the number of parameters we have to pop off the stack. This
@@ -3636,7 +3683,8 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
   // -------------------------------------------
   // Deconstrunct the stack frame.
   // -------------------------------------------
-  __ LeaveFrame(StackFrame::JS_TO_WASM);
+  __ LeaveFrame(stack_switch ? StackFrame::STACK_SWITCH
+                             : StackFrame::JS_TO_WASM);
 
   // We have to remove the caller frame slots:
   //  - JS arguments
@@ -3842,92 +3890,40 @@ void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
           RelocInfo::CODE_TARGET);
   __ jmp(&return_done);
 
-  // -------------------------------------------
-  // Kick off compilation.
-  // -------------------------------------------
-  __ bind(&compile_wrapper);
-  // Enable GC.
-  MemOperand GCScanSlotPlace = MemOperand(rbp, kGCScanSlotCountOffset);
-  __ Move(GCScanSlotPlace, 4);
-  // Save registers to the stack.
-  __ pushq(wasm_instance);
-  __ pushq(function_data);
-  // Push the arguments for the runtime call.
-  __ Push(wasm_instance);  // first argument
-  __ Push(function_data);  // second argument
-  // Set up context.
-  __ Move(kContextRegister, Smi::zero());
-  // Call the runtime function that kicks off compilation.
-  __ CallRuntime(Runtime::kWasmCompileWrapper, 2);
-  // Pop the result.
-  __ movq(r9, kReturnRegister0);
-  // Restore registers from the stack.
-  __ popq(function_data);
-  __ popq(wasm_instance);
-  __ jmp(&compile_wrapper_done);
-}
-
-namespace {
-// Helper function for wasm stack switching.
-
-// Returns the wasm instance in rsi and the function data in the same register
-// the input.
-void GetInstanceAndFunctionData(MacroAssembler* masm, Register closure) {
-  Register sfi = closure;
-  __ LoadAnyTaggedField(
-      sfi,
-      MemOperand(
-          closure,
-          wasm::ObjectAccess::SharedFunctionInfoOffsetInTaggedJSFunction()));
-  Register function_data = sfi;
-  __ LoadAnyTaggedField(
-      function_data,
-      FieldOperand(sfi, SharedFunctionInfo::kFunctionDataOffset));
-  Register wasm_instance = kWasmInstanceRegister;  // rsi
-  __ LoadAnyTaggedField(
-      wasm_instance,
-      FieldOperand(function_data, WasmExportedFunctionData::kInstanceOffset));
+  if (!stack_switch) {
+    // -------------------------------------------
+    // Kick off compilation.
+    // -------------------------------------------
+    __ bind(&compile_wrapper);
+    // Enable GC.
+    MemOperand GCScanSlotPlace = MemOperand(rbp, kGCScanSlotCountOffset);
+    __ Move(GCScanSlotPlace, 4);
+    // Save registers to the stack.
+    __ pushq(wasm_instance);
+    __ pushq(function_data);
+    // Push the arguments for the runtime call.
+    __ Push(wasm_instance);  // first argument
+    __ Push(function_data);  // second argument
+                             // Set up context.
+    __ Move(kContextRegister, Smi::zero());
+    // Call the runtime function that kicks off compilation.
+    __ CallRuntime(Runtime::kWasmCompileWrapper, 2);
+    // Pop the result.
+    __ movq(r9, kReturnRegister0);
+    // Restore registers from the stack.
+    __ popq(function_data);
+    __ popq(wasm_instance);
+    __ jmp(&compile_wrapper_done);
+  }
 }
 }  // namespace
 
+void Builtins::Generate_GenericJSToWasmWrapper(MacroAssembler* masm) {
+  GenericJSToWasmWrapperHelper(masm, false);
+}
+
 void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
-  __ EnterFrame(StackFrame::STACK_SWITCH);
-
-  // Parameters.
-  Register param_count = kJavaScriptCallArgCountRegister;  // rax
-  __ decq(param_count);
-  __ subq(rsp, Immediate(ReturnPromiseOnSuspendFrameConstants::kSpillAreaSize));
-  __ movq(
-      MemOperand(rbp, ReturnPromiseOnSuspendFrameConstants::kParamCountOffset),
-      param_count);
-
-  GetInstanceAndFunctionData(masm, kJSFunctionRegister);
-  Register function_data = rdi;
-  Register wasm_instance = kWasmInstanceRegister;
-  Register active_continuation = rax;
-  __ LoadRoot(active_continuation, RootIndex::kActiveContinuation);
-  Label suspend;
-  SaveState(masm, active_continuation, rbx, &suspend);
-  AllocateContinuation(masm, function_data, wasm_instance);
-  Register target_continuation = rax;
-  LoadTargetJumpBuffer(masm, target_continuation);
-  LoadAndCallTargetWasmFunction(masm, function_data, wasm_instance, rax);
-  ReloadParentContinuation(masm, wasm_instance, rax, rbx);
-  RestoreParentSuspender(masm);
-
-  __ bind(&suspend);
-
-  // -------------------------------------------
-  // Epilogue.
-  // -------------------------------------------
-  param_count = rbx;
-  __ movq(
-      param_count,
-      MemOperand(rbp, ReturnPromiseOnSuspendFrameConstants::kParamCountOffset));
-  __ LeaveFrame(StackFrame::STACK_SWITCH);
-  __ DropArguments(param_count, r8, TurboAssembler::kCountIsInteger,
-                   TurboAssembler::kCountExcludesReceiver);
-  __ ret(0);
+  GenericJSToWasmWrapperHelper(masm, true);
 }
 
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
@@ -4034,14 +4030,18 @@ void Builtins::Generate_WasmResume(MacroAssembler* masm) {
 
   Register param_count = rax;
   Register closure = kJSFunctionRegister;  // rdi
-  __ subq(rsp, Immediate(ReturnPromiseOnSuspendFrameConstants::kSpillAreaSize));
 
-  // This slot is not used in this builtin. But when we return from the resumed
-  // continuation, we return to the ReturnPromiseOnSuspend code, which expects
-  // this slot to be set.
-  __ movq(
-      MemOperand(rbp, ReturnPromiseOnSuspendFrameConstants::kParamCountOffset),
-      param_count);
+  // These slots are not used in this builtin. But when we return from the
+  // resumed continuation, we return to the GenericJSToWasmWrapper code, which
+  // expects these slots to be set.
+  constexpr int kInParamCountOffset =
+      BuiltinWasmWrapperConstants::kInParamCountOffset;
+  constexpr int kParamCountOffset =
+      BuiltinWasmWrapperConstants::kParamCountOffset;
+  __ subq(rsp, Immediate(3 * kSystemPointerSize));
+  __ movq(MemOperand(rbp, kParamCountOffset), param_count);
+  __ movq(MemOperand(rbp, kInParamCountOffset), param_count);
+
   param_count = no_reg;
 
   // -------------------------------------------
