@@ -142,14 +142,14 @@ class DispatchingVisitor final : public VisitorBase {
       : object_(object), payload_(payload) {}
 
  protected:
-  void Visit(const void* t, TraceDescriptor desc) final {
+  void Visit(const void**, const void* t, TraceDescriptor desc) final {
     EXPECT_EQ(object_, t);
     EXPECT_EQ(payload_, desc.base_object_payload);
     desc.callback(this, desc.base_object_payload);
   }
 
-  void VisitWeak(const void* t, TraceDescriptor desc, WeakCallback callback,
-                 const void* weak_member) final {
+  void VisitWeak(const void**, const void* t, TraceDescriptor desc,
+                 WeakCallback callback, const void* weak_member) final {
     EXPECT_EQ(object_, t);
     EXPECT_EQ(payload_, desc.base_object_payload);
     LivenessBroker broker = LivenessBrokerFactory::Create();

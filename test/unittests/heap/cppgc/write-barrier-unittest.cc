@@ -357,7 +357,7 @@ TEST_F(NoWriteBarrierTest, WriteBarrierBailoutWhenMarkingIsOff) {
     WriteBarrierType expected = WriteBarrierType::kNone;
 #endif  // !CPPGC_YOUNG_GENERATION
     EXPECT_EQ(expected, HeapConsistency::GetWriteBarrierType(
-                            object2->next_ref().GetSlotForTesting(),
+                            object2->next_ref().GetSlot(),
                             object2->next_ref().Get(), params));
     EXPECT_FALSE(object1->IsMarked());
   }
@@ -370,10 +370,10 @@ TEST_F(WriteBarrierTest, DijkstraWriteBarrierTriggersWhenMarkingIsOn) {
     ExpectWriteBarrierFires scope(marker(), {object1});
     EXPECT_FALSE(object1->IsMarked());
     WriteBarrierParams params;
-    EXPECT_EQ(WriteBarrierType::kMarking,
-              HeapConsistency::GetWriteBarrierType(
-                  object2->next_ref().GetSlotForTesting(),
-                  object2->next_ref().Get(), params));
+    EXPECT_EQ(
+        WriteBarrierType::kMarking,
+        HeapConsistency::GetWriteBarrierType(
+            object2->next_ref().GetSlot(), object2->next_ref().Get(), params));
     HeapConsistency::DijkstraWriteBarrier(params, object2->next_ref().Get());
     EXPECT_TRUE(object1->IsMarked());
   }
@@ -386,10 +386,10 @@ TEST_F(WriteBarrierTest, DijkstraWriteBarrierBailoutIfMarked) {
   {
     ExpectNoWriteBarrierFires scope(marker(), {object1});
     WriteBarrierParams params;
-    EXPECT_EQ(WriteBarrierType::kMarking,
-              HeapConsistency::GetWriteBarrierType(
-                  object2->next_ref().GetSlotForTesting(),
-                  object2->next_ref().Get(), params));
+    EXPECT_EQ(
+        WriteBarrierType::kMarking,
+        HeapConsistency::GetWriteBarrierType(
+            object2->next_ref().GetSlot(), object2->next_ref().Get(), params));
     HeapConsistency::DijkstraWriteBarrier(params, object2->next_ref().Get());
   }
 }
