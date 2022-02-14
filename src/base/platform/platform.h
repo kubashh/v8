@@ -197,16 +197,22 @@ class V8_BASE_EXPORT OS {
 
   // Memory permissions. These should be kept in sync with the ones in
   // v8::PageAllocator.
+  static constexpr uint8_t kProtNone = 0b0000;
+  static constexpr uint8_t kProtRead = 0b0100;
+  static constexpr uint8_t kProtWrite = 0b0010;
+  static constexpr uint8_t kProtExec = 0b0001;
+  static constexpr uint8_t kProtJit = 0b1000;
+
   enum class MemoryPermission {
-    kNoAccess,
-    kRead,
-    kReadWrite,
+    kNoAccess = kProtNone,
+    kRead = kProtRead,
+    kReadWrite = kProtRead | kProtWrite,
     // TODO(hpayer): Remove this flag. Memory should never be rwx.
-    kReadWriteExecute,
-    kReadExecute,
+    kReadWriteExecute = kProtRead | kProtWrite | kProtExec,
+    kReadExecute = kProtRead | kProtExec,
     // TODO(jkummerow): Remove this when Wasm has a platform-independent
     // w^x implementation.
-    kNoAccessWillJitLater
+    kNoAccessWillJitLater = kProtNone | kProtJit
   };
 
   static bool HasLazyCommits();

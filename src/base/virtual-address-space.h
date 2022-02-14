@@ -66,7 +66,7 @@ class V8_BASE_EXPORT VirtualAddressSpace : public VirtualAddressSpaceBase {
 
   std::unique_ptr<v8::VirtualAddressSpace> AllocateSubspace(
       Address hint, size_t size, size_t alignment,
-      PagePermissions max_permissions) override;
+      PagePermissions max_page_permissions) override;
 
   bool DiscardSystemPages(Address address, size_t size) override;
 
@@ -104,7 +104,7 @@ class V8_BASE_EXPORT VirtualAddressSubspace : public VirtualAddressSpaceBase {
 
   std::unique_ptr<v8::VirtualAddressSpace> AllocateSubspace(
       Address hint, size_t size, size_t alignment,
-      PagePermissions max_permissions) override;
+      PagePermissions max_page_permissions) override;
 
   bool DiscardSystemPages(Address address, size_t size) override;
 
@@ -118,7 +118,8 @@ class V8_BASE_EXPORT VirtualAddressSubspace : public VirtualAddressSpaceBase {
   bool FreeSubspace(VirtualAddressSubspace* subspace) override;
 
   VirtualAddressSubspace(AddressSpaceReservation reservation,
-                         VirtualAddressSpaceBase* parent_space);
+                         VirtualAddressSpaceBase* parent_space,
+                         PagePermissions max_page_permissions);
 
   // The address space reservation backing this subspace.
   AddressSpaceReservation reservation_;
