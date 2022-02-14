@@ -9,6 +9,7 @@
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/schedule.h"
+#include "src/compiler/turboshaft/cfg.h"
 #include "src/flags/flags.h"
 #include "src/objects/objects-inl.h"
 #include "test/unittests/compiler/compiler-test-utils.h"
@@ -44,8 +45,9 @@ InstructionSelectorTest::Stream InstructionSelectorTest::StreamBuilder::Build(
   TickCounter tick_counter;
   size_t max_unoptimized_frame_height = 0;
   size_t max_pushed_argument_count = 0;
+  turboshaft::Graph ts_graph(test_->zone());
   InstructionSelector selector(
-      test_->zone(), node_count, &linkage, &sequence, schedule,
+      test_->zone(), node_count, &linkage, &sequence, schedule, ts_graph,
       &source_position_table, nullptr,
       InstructionSelector::kEnableSwitchJumpTable, &tick_counter, nullptr,
       &max_unoptimized_frame_height, &max_pushed_argument_count,
