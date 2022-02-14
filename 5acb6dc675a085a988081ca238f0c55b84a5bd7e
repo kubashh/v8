@@ -16,6 +16,74 @@
       "message": "Hey, PTAL at include/v8-platform.h and related changes, thanks! :)",
       "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba194e0_5da52a91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-14T18:11:50Z",
+      "side": 1,
+      "message": "overall looks good, just some concerns to discuss (re modifications in v8-platform.h)",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5077f4ea_3a97c931",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-14T18:11:50Z",
+      "side": 1,
+      "message": "Probably it\u0027d be better to define these bits as another enum class in order to avoid pollution of v8 namespace.",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14594e3d_7ec972ee",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-14T18:11:50Z",
+      "side": 1,
+      "message": "Thinking out loud... It seems to me that these bits were introduced only for the purpose of nicer implementation of these operators but maybe introducing one function defined on V8 side and leaving the values of PagePermissions/Permissions enums intact would be enough for now?\n  bool IsSubset(PagePermissions permissions, PagePermissions max_permissions).\n\nOr maybe not define this function at this level at all for now, since the VirtualAddressSpace is not adopted by other embedders yet.",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d59460a9_17a544c0",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-14T18:11:50Z",
+      "side": 1,
+      "message": "I\u0027m not sure it\u0027s ok to add such a dependency. Otherwise we could have used v8::PagePermissions here.\nI think the right way would be to not include this header and define kProtXXX here as well and on V8 side check that base::kProtXXX \u003d\u003d v8::kProtXXX.",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
