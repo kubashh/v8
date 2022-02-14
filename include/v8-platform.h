@@ -354,6 +354,46 @@ class TracingController {
   virtual void RemoveTraceStateObserver(TraceStateObserver*) {}
 };
 
+// Fundamental page access types used to construct page permissions.
+static constexpr uint8_t kProtNone = 0b0000;
+static constexpr uint8_t kProtRead = 0b0100;
+static constexpr uint8_t kProtWrite = 0b0010;
+static constexpr uint8_t kProtExec = 0b0001;
+// Special protection value indicating that a page is explicitely allowed to be
+// writable and executable (for example for JIT generated code).
+// TODO(saelo) remove this once all JIT pages are allocated through the
+// VirtualAddressSpace interface.
+static constexpr uint8_t kProtJit = 0b1000;
+
+/**
+ * Possible permissions for memory pages.
+ *
+ * Update VirtualAddressSpace.TestPagePermissions when modifying this enum.
+ */
+enum class PagePermissions : uint8_t {
+  kNoAccess = kProtNone,
+  kRead = kProtRead,
+  kReadWrite = kProtRead | kProtWrite,
+  kReadExecute = kProtRead | kProtExec,
+  kReadWriteExecute = kProtRead | kProtWrite | kProtExec,
+};
+
+// Relational operators are defined to perform set inclusion tests.
+inline constexpr bool operator<=(PagePermissions lhs, PagePermissions rhs) {
+  uint8_t lhs_bits = static_cast<uint8_t>(lhs);
+  uint8_t rhs_bits = static_cast<uint8_t>(rhs);
+  return (lhs_bits & rhs_bits) == lhs_bits;
+}
+inline constexpr bool operator>=(PagePermissions lhs, PagePermissions rhs) {
+  return rhs <= lhs;
+}
+inline constexpr bool operator<(PagePermissions lhs, PagePermissions rhs) {
+  return lhs <= rhs && lhs != rhs;
+}
+inline constexpr bool operator>(PagePermissions lhs, PagePermissions rhs) {
+  return lhs >= rhs && lhs != rhs;
+}
+
 /**
  * A V8 memory page allocator.
  *
@@ -390,18 +430,18 @@ class PageAllocator {
   /**
    * Memory permissions.
    */
-  enum Permission {
-    kNoAccess,
-    kRead,
-    kReadWrite,
-    kReadWriteExecute,
-    kReadExecute,
+  enum Permission : uint8_t {
+    kNoAccess = kProtNone,
+    kRead = kProtRead,
+    kReadWrite = kProtRead | kProtWrite,
+    kReadWriteExecute = kProtRead | kProtWrite | kProtExec,
+    kReadExecute = kProtRead | kProtExec,
     // Set this when reserving memory that will later require kReadWriteExecute
     // permissions. The resulting behavior is platform-specific, currently
     // this is used to set the MAP_JIT flag on Apple Silicon.
     // TODO(jkummerow): Remove this when Wasm has a platform-independent
     // w^x implementation.
-    kNoAccessWillJitLater
+    kNoAccessWillJitLater = kProtNone | kProtJit
   };
 
   /**
@@ -511,17 +551,6 @@ class PageAllocator {
 };
 
 /**
- * Page permissions.
- */
-enum class PagePermissions {
-  kNoAccess,
-  kRead,
-  kReadWrite,
-  kReadWriteExecute,
-  kReadExecute,
-};
-
-/**
  * Class to manage a virtual memory address space.
  *
  * This class represents a contiguous region of virtual address space in which
@@ -534,11 +563,13 @@ class VirtualAddressSpace {
   using Address = uintptr_t;
 
   VirtualAddressSpace(size_t page_size, size_t allocation_granularity,
-                      Address base, size_t size)
+                      Address base, size_t size,
+                      PagePermissions max_page_permissions)
       : page_size_(page_size),
         allocation_granularity_(allocation_granularity),
         base_(base),
-        size_(size) {}
+        size_(size),
+        max_page_permissions_(max_page_permissions) {}
 
   virtual ~VirtualAddressSpace() = default;
 
@@ -574,6 +605,14 @@ class VirtualAddressSpace {
    * \returns the size of this address space in bytes.
    */
   size_t size() const { return size_; }
+
+  /**
+   * The maximum page permissions that pages allocated inside this space can
+   * obtain.
+   *
+   * \returns the maximum page permissions.
+   */
+  PagePermissions max_page_permissions() const { return max_page_permissions_; }
 
   /**
    * Sets the random seed so that GetRandomPageAddress() will generate
@@ -703,14 +742,14 @@ class VirtualAddressSpace {
    * \param alignment The alignment of the subspace in bytes. Must be a multiple
    * of the allocation_granularity() and should be a power of two.
    *
-   * \param max_permissions The maximum permissions that pages allocated in the
-   * subspace can obtain.
+   * \param max_page_permissions The maximum permissions that pages allocated in
+   * the subspace can obtain.
    *
    * \returns a new subspace or nullptr on failure.
    */
   virtual std::unique_ptr<VirtualAddressSpace> AllocateSubspace(
       Address hint, size_t size, size_t alignment,
-      PagePermissions max_permissions) = 0;
+      PagePermissions max_page_permissions) = 0;
 
   //
   // TODO(v8) maybe refactor the methods below before stabilizing the API. For
@@ -750,6 +789,7 @@ class VirtualAddressSpace {
   const size_t allocation_granularity_;
   const Address base_;
   const size_t size_;
+  const PagePermissions max_page_permissions_;
 };
 
 /**

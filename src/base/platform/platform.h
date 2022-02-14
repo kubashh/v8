@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "include/v8-platform.h"
 #include "src/base/base-export.h"
 #include "src/base/build_config.h"
 #include "src/base/compiler-specific.h"
@@ -196,17 +197,16 @@ class V8_BASE_EXPORT OS {
   static PRINTF_FORMAT(1, 0) void VPrintError(const char* format, va_list args);
 
   // Memory permissions. These should be kept in sync with the ones in
-  // v8::PageAllocator.
+  // v8::PageAllocator and v8::PagePermissions.
   enum class MemoryPermission {
-    kNoAccess,
-    kRead,
-    kReadWrite,
-    // TODO(hpayer): Remove this flag. Memory should never be rwx.
-    kReadWriteExecute,
-    kReadExecute,
+    kNoAccess = kProtNone,
+    kRead = kProtRead,
+    kReadWrite = kProtRead | kProtWrite,
+    kReadWriteExecute = kProtRead | kProtWrite | kProtExec,
+    kReadExecute = kProtRead | kProtExec,
     // TODO(jkummerow): Remove this when Wasm has a platform-independent
     // w^x implementation.
-    kNoAccessWillJitLater
+    kNoAccessWillJitLater = kProtNone | kProtJit
   };
 
   static bool HasLazyCommits();
