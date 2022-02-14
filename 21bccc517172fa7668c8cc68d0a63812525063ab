@@ -50,6 +50,24 @@
       "message": "Why did you need to handlify this? Looks like SetBreakOnEntryFlag doesn\u0027t allocate and could also be using raw pointers?",
       "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c75a4943_604016d4",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-02-14T14:54:36Z",
+      "side": 1,
+      "message": "Benedikt, why use raw pointers if you do not have to? It just creates opportunities for getting things wrong in the future.",
+      "parentUuid": "0eee5672_33f00fa5",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
