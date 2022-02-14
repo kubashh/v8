@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1879a28a_4111072f",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T12:06:44Z",
+      "side": 1,
+      "message": "The idea is that the fast dispatching API on the Blink side (for Members and WTF::KeyValuePair) would use this method. It\u0027s also used in a followup CL (I guess I split the CL incorrectly).",
+      "parentUuid": "c784958a_a6ece658",
+      "range": {
+        "startLine": 206,
+        "startChar": 12,
+        "endLine": 206,
+        "endChar": 19
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83ee069d_cb0dce9a",
         "filename": "src/heap/cppgc/explicit-management.cc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2022-02-14T08:25:50Z",
       "side": 1,
       "message": "Would it make sense to have something like\n\n  class OldToNewRememberedSet {\n    static void AddSlot(HeapBase\u0026, ...);\n    static void InvalidateSlotRange(HeapBase\u0026, ...);\n    static void IterateSlots(HeapBase\u0026, Visitor\u0026, ...);\n    static void IterateObjects(HeapBase\u0026, Visitor\u0026, ...);\n  };",
+      "range": {
+        "startLine": 90,
+        "startChar": 12,
+        "endLine": 90,
+        "endChar": 34
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb0a1e2_0121e4e0",
+        "filename": "src/heap/cppgc/explicit-management.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T12:06:44Z",
+      "side": 1,
+      "message": "Was in one of my local CLs :) Let me refactor it in a followup.",
+      "parentUuid": "83ee069d_cb0dce9a",
       "range": {
         "startLine": 90,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b04fa3b_3cd777af",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T12:06:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e9b9651_940cb29d",
+      "range": {
+        "startLine": 69,
+        "startChar": 48,
+        "endLine": 69,
+        "endChar": 57
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb01aa5a_cc35b4dc",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c52ab95_001de061",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T12:06:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eb01aa5a_cc35b4dc",
+      "range": {
+        "startLine": 149,
+        "startChar": 2,
+        "endLine": 151,
+        "endChar": 56
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4e75f90_5cbf5ba3",
@@ -123,6 +219,30 @@
       "writtenOn": "2022-02-14T08:25:50Z",
       "side": 1,
       "message": "I\u0027d store the header, as that\u0027s what we use during visitation.",
+      "range": {
+        "startLine": 155,
+        "startChar": 6,
+        "endLine": 155,
+        "endChar": 19
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa5bd19_b43042d1",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T12:06:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4e75f90_5cbf5ba3",
       "range": {
         "startLine": 155,
         "startChar": 6,
