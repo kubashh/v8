@@ -79,10 +79,6 @@ class BasicMemoryChunk {
     // triggering on the same page.
     COMPACTION_WAS_ABORTED_FOR_TESTING = 1u << 16,
 
-    // |SWEEP_TO_ITERATE|: The page requires sweeping using external markbits
-    // to iterate the page.
-    SWEEP_TO_ITERATE = 1u << 17,
-
     // |INCREMENTAL_MARKING|: Indicates whether incremental marking is currently
     // enabled.
     INCREMENTAL_MARKING = 1u << 18,

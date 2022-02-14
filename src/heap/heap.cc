@@ -6176,6 +6176,7 @@ void Heap::TearDown() {
     minor_mark_compact_collector_.reset();
   }
 
+  minor_mark_compact_collector_.reset();
   scavenger_collector_.reset();
   array_buffer_sweeper_.reset();
   incremental_marking_.reset();
