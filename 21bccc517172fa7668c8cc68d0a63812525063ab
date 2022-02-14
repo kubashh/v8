@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f69f210_4b8e2dee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-14T12:28:10Z",
+      "side": 1,
+      "message": "Hi Benedikt, hi Clemens,\n\nI\u0027m adding functionality to remove instrumentation breakpoints in wasm (+ tests for it). PTAL!",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

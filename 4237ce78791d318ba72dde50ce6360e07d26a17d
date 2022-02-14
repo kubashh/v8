@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4a6c157_bbd25de8",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-14T12:28:10Z",
+      "side": 1,
+      "message": "Note: This is redundant in a way, as later in the back-end we won\u0027t do anything if it\u0027 s not a WebAssembly script. I added this because I think it makes this code more explicit (that it\u0027s only for Wasm).",
+      "revId": "4237ce78791d318ba72dde50ce6360e07d26a17d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
