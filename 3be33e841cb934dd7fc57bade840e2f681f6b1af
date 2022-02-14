@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e4be2b1_718c149d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-02-14T16:08:35Z",
+      "side": 1,
+      "message": "Thanks for investigating! LGTM with a suggestion.",
+      "revId": "3be33e841cb934dd7fc57bade840e2f681f6b1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f7194f_ae982bcc",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-02-14T16:08:35Z",
+      "side": 1,
+      "message": "Could you add a DCHECK that the function\u0027s signature matches the requested signature? I mean a simple pointer equality, which should work since we don\u0027t deduplicate signatures.",
+      "revId": "3be33e841cb934dd7fc57bade840e2f681f6b1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
