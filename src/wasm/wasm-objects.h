@@ -838,7 +838,7 @@ class WasmScript : public AllStatic {
                                                     int breakpoint_id);
 
   // Remove all set breakpoints.
-  static void ClearAllBreakpoints(Script);
+  static void ClearAllBreakpoints(Handle<Script>);
 
   // Get a list of all possible breakpoints within a given range of this module.
   V8_EXPORT_PRIVATE static bool GetPossibleBreakpoints(

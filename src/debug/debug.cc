@@ -959,13 +959,14 @@ void Debug::ClearAllBreakPoints() {
   // Clear all wasm breakpoints.
   if (!wasm_scripts_with_break_points_.is_null()) {
     DisallowGarbageCollection no_gc;
+    HandleScope scope(isolate_);
     for (int idx = wasm_scripts_with_break_points_->length() - 1; idx >= 0;
          --idx) {
       HeapObject raw_wasm_script;
       if (wasm_scripts_with_break_points_->Get(idx).GetHeapObject(
               &raw_wasm_script)) {
         Script wasm_script = Script::cast(raw_wasm_script);
-        WasmScript::ClearAllBreakpoints(wasm_script);
+        WasmScript::ClearAllBreakpoints(handle(wasm_script, isolate_));
         wasm_script.wasm_native_module()->GetDebugInfo()->RemoveIsolate(
             isolate_);
       }
