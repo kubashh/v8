@@ -162,6 +162,23 @@ class HeapConsistency final {
                                                                inner_pointer);
   }
 
+  /**
+   * Generational barrier for source object that may contain outgoing pointers
+   * to objects in young generation. The object is traced eagerly with the
+   * user-specified callback.
+   *
+   * \param params The parameters retrieved from `GetWriteBarrierType()`.
+   * \param object Object containing slots.
+   * \param trace_callback The custom trace callback invoked for the object.
+   */
+  static V8_INLINE void GenerationalBarrierForSourceObjectWithCustomCallback(
+      const WriteBarrierParams& params, const void* object,
+      TraceCallback trace_callback) {
+    internal::WriteBarrier::
+        GenerationalBarrierForSourceObjectWithCustomCallback(params, object,
+                                                             trace_callback);
+  }
+
  private:
   HeapConsistency() = delete;
 };

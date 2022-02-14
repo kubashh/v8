@@ -146,11 +146,11 @@ class VerificationVisitor final : public cppgc::Visitor {
   explicit VerificationVisitor(VerificationState& state)
       : cppgc::Visitor(VisitorFactory::CreateKey()), state_(state) {}
 
-  void Visit(const void*, TraceDescriptor desc) final {
+  void Visit(const void**, const void*, TraceDescriptor desc) final {
     state_.VerifyMarked(desc.base_object_payload);
   }
 
-  void VisitWeak(const void*, TraceDescriptor desc, WeakCallback,
+  void VisitWeak(const void**, const void*, TraceDescriptor desc, WeakCallback,
                  const void*) final {
     // Weak objects should have been cleared at this point. As a consequence,
     // all objects found through weak references have to point to live objects
