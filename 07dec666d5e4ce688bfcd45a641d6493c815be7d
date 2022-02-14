@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "454ab824_e6a89124",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-14T13:09:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a550ed81_5709fe17",
+      "range": {
+        "startLine": 206,
+        "startChar": 12,
+        "endLine": 206,
+        "endChar": 19
+      },
+      "revId": "07dec666d5e4ce688bfcd45a641d6493c815be7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83ee069d_cb0dce9a",
