@@ -16,6 +16,23 @@
       "message": "PTAL, thanks! :)",
       "revId": "a9f184e567d691bf84e5ce13bcdd3dc974103a37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b0a0781_f275ae26",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-14T10:37:21Z",
+      "side": 1,
+      "message": "Alternatively, I could also define a `bool IsSubset(PagePermissions lhs, PagePermissions rhs) { ... }` function and use that instead.",
+      "revId": "a9f184e567d691bf84e5ce13bcdd3dc974103a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
