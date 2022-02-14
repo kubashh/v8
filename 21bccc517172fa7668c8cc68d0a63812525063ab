@@ -16,6 +16,40 @@
       "message": "Hi Benedikt, hi Clemens,\n\nI\u0027m adding functionality to remove instrumentation breakpoints in wasm (+ tests for it). PTAL!",
       "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e99612e_70e12d7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-14T13:03:44Z",
+      "side": 1,
+      "message": "LGTM modulo handlification question.",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eee5672_33f00fa5",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-14T13:03:44Z",
+      "side": 1,
+      "message": "Why did you need to handlify this? Looks like SetBreakOnEntryFlag doesn\u0027t allocate and could also be using raw pointers?",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
