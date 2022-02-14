@@ -12,7 +12,7 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-enum class RegisterKind { kGeneral, kDouble };
+enum class RegisterKind { kGeneral, kDouble, kSIMD128 };
 
 inline int GetRegisterCount(const RegisterConfiguration* config,
                             RegisterKind kind) {
@@ -21,6 +21,8 @@ inline int GetRegisterCount(const RegisterConfiguration* config,
       return config->num_general_registers();
     case RegisterKind::kDouble:
       return config->num_double_registers();
+    case RegisterKind::kSIMD128:
+      return config->num_simd128_registers();
   }
 }
 
@@ -31,6 +33,8 @@ inline int GetAllocatableRegisterCount(const RegisterConfiguration* config,
       return config->num_allocatable_general_registers();
     case RegisterKind::kDouble:
       return config->num_allocatable_double_registers();
+    case RegisterKind::kSIMD128:
+      return config->num_allocatable_simd128_registers();
   }
 }
 
@@ -41,6 +45,8 @@ inline const int* GetAllocatableRegisterCodes(
       return config->allocatable_general_codes();
     case RegisterKind::kDouble:
       return config->allocatable_double_codes();
+    case RegisterKind::kSIMD128:
+      return config->allocatable_simd128_codes();
   }
 }
 
