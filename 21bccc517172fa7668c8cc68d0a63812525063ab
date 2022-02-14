@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bcd89b8_b9e99047",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-14T15:01:04Z",
+      "side": 1,
+      "message": "These two together hint at an inconsistency. I am on Benedikt\u0027s side - if we do not allocate, and don\u0027t plan to do so, let\u0027s not handlify for no reason.\n\nThe SetBreakOnEntryFlag function itself uses a dangerous mix of handles and raw pointers.",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 962,
+        "endChar": 32
+      },
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0eee5672_33f00fa5",
         "filename": "src/wasm/wasm-debug.cc",
         "patchSetId": 5
