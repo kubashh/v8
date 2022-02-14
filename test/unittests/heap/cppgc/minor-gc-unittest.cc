@@ -454,6 +454,13 @@ class GCedWithInlinedArray
   using WriteBarrierParams = subtle::HeapConsistency::WriteBarrierParams;
   using HeapConsistency = subtle::HeapConsistency;
 
+  void SetInPlace(size_t index) {
+    DCHECK_GT(kNumObjects, index);
+
+    auto* new_obj = new (&objects[index]) InlinedObject<Value>(alloc_handle_);
+    GenerationalBarrierForSourceObjectEager(new_obj);
+  }
+
   void SetInPlaceRange(size_t from, size_t to) {
     DCHECK_GT(to, from);
     DCHECK_GT(kNumObjects, from);
@@ -461,7 +468,7 @@ class GCedWithInlinedArray
     for (; from != to; ++from)
       new (&objects[from]) InlinedObject<Value>(alloc_handle_);
 
-    GenerationalBarrierForSourceObject(&objects[from]);
+    GenerationalBarrierForSourceObjectDeferred(&objects[from]);
   }
 
   void Trace(cppgc::Visitor* v) const {
@@ -471,7 +478,17 @@ class GCedWithInlinedArray
   InlinedObject<Value> objects[kNumObjects];
 
  private:
-  void GenerationalBarrierForSourceObject(void* object) {
+  void GenerationalBarrierForSourceObjectEager(void* object) {
+    DCHECK(object);
+    WriteBarrierParams params;
+    const auto barrier_type = HeapConsistency::GetWriteBarrierType(
+        object, params, [this]() -> HeapHandle& { return heap_handle_; });
+    EXPECT_EQ(HeapConsistency::WriteBarrierType::kGenerational, barrier_type);
+    HeapConsistency::GenerationalBarrierForSourceObjectWithCustomCallback(
+        params, object, TraceTrait<InlinedObject<Value>>::Trace);
+  }
+
+  void GenerationalBarrierForSourceObjectDeferred(void* object) {
     DCHECK(object);
     WriteBarrierParams params;
     const auto barrier_type = HeapConsistency::GetWriteBarrierType(
@@ -485,6 +502,63 @@ class GCedWithInlinedArray
 };
 
 }  // namespace
+
+TYPED_TEST(MinorGCTestForType, GenerationalBarrierEagerTracing) {
+  using Type = typename TestFixture::Type;
+
+  Persistent<GCedWithInlinedArray<Type>> array =
+      MakeGarbageCollected<GCedWithInlinedArray<Type>>(
+          this->GetAllocationHandle(), this->GetHeapHandle(),
+          this->GetAllocationHandle());
+
+  {
+    ExpectNoRememberedSlotsAdded _(this->GetHeap());
+    // Create a single element in the array, which in turn will create two other
+    // elements.
+    array->SetInPlace(1);
+  }
+
+  // Check that the the backing store and objects referred from the first object
+  // are promoted.
+  RunMinorGCAndExpectObjectsPromoted(*this, array.Get(),
+                                     array->objects[1].ref.Get(),
+                                     array->objects[1].inner.ref.Get());
+
+  {
+    // Push new inlined object to the old array and expect slots to be eagerly
+    // traced and remembered.
+    ExpectRememberedSlotsAdded _(this->GetHeap(),
+                                 {array->objects[2].ref.GetSlot(),
+                                  array->objects[2].inner.ref.GetSlot()});
+    array->SetInPlace(2);
+  }
+
+  {
+    // Push two inlined objects to the old array and expect slots to be eagerly
+    // traced and remembered.
+    ExpectRememberedSlotsAdded _(
+        this->GetHeap(),
+        {array->objects[6].ref.GetSlot(), array->objects[6].inner.ref.GetSlot(),
+         array->objects[8].ref.GetSlot(),
+         array->objects[8].inner.ref.GetSlot()});
+    array->SetInPlace(6);
+    array->SetInPlace(8);
+  }
+
+  {
+    // Eagerly free array and expect the remembered set to be reset.
+    ExpectRememberedSlotsRemoved _(
+        this->GetHeap(),
+        {array->objects[2].ref.GetSlot(), array->objects[2].inner.ref.GetSlot(),
+         array->objects[6].ref.GetSlot(), array->objects[6].inner.ref.GetSlot(),
+         array->objects[8].ref.GetSlot(),
+         array->objects[8].inner.ref.GetSlot()});
+    auto* raw = array.Release();
+    cppgc::subtle::FreeUnreferencedObject(this->GetHeapHandle(), *raw);
+  }
+
+  this->CollectMinor();
+}
 
 TYPED_TEST(MinorGCTestForType, GenerationalBarrierDeferredTracing) {
   using Type = typename TestFixture::Type;
@@ -502,11 +576,13 @@ TYPED_TEST(MinorGCTestForType, GenerationalBarrierDeferredTracing) {
       Heap::From(this->GetHeap())->remembered_source_objects();
   {
     ExpectNoRememberedSlotsAdded _(this->GetHeap());
-    EXPECT_EQ(0u, remembered_objects.count(array->objects));
+    EXPECT_EQ(0u, remembered_objects.count(
+                      &HeapObjectHeader::FromObject(array->objects)));
 
     array->SetInPlaceRange(2, 4);
 
-    EXPECT_EQ(1u, remembered_objects.count(array->objects));
+    EXPECT_EQ(1u, remembered_objects.count(
+                      &HeapObjectHeader::FromObject(array->objects)));
   }
 
   RunMinorGCAndExpectObjectsPromoted(

@@ -64,23 +64,22 @@ bool ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
 void VisitRememberedObjects(HeapBase& heap, Visitor& visitor,
                             MutatorMarkingState& mutator_marking_state) {
 #if defined(CPPGC_YOUNG_GENERATION)
-  for (void* object : heap.remembered_source_objects()) {
-    auto& object_header = HeapObjectHeader::FromObject(object);
-    // Since age checking with the age-table is imprecise, the object could
-    // still be young.
-    if (object_header.IsYoung()) continue;
+  for (HeapObjectHeader* source_hoh : heap.remembered_source_objects()) {
+    // The age checking in the generational barrier is imprecise, since a card
+    // may have mixed young/old objects. Check here precisely if the object is
+    // old.
+    if (source_hoh->IsYoung()) continue;
     // The design of young generation requires collections to be executed at the
     // top level (with the guarantee that no objects are currently being in
     // construction). This can be ensured by running young GCs from safe points
     // or by reintroducing nested allocation scopes that avoid finalization.
-    DCHECK(!object_header.template IsInConstruction<AccessMode::kNonAtomic>());
+    DCHECK(!source_hoh->template IsInConstruction<AccessMode::kNonAtomic>());
 
     const TraceCallback trace_callback =
-        GlobalGCInfoTable::GCInfoFromIndex(object_header.GetGCInfoIndex())
-            .trace;
+        GlobalGCInfoTable::GCInfoFromIndex(source_hoh->GetGCInfoIndex()).trace;
 
     // Process eagerly to avoid reaccounting.
-    trace_callback(&visitor, object);
+    trace_callback(&visitor, source_hoh->ObjectStart());
   }
 #endif
 }
@@ -93,6 +92,9 @@ void VisitRememberedSlots(HeapBase& heap,
     // Slot must always point to a valid, not freed object.
     auto& slot_header = BasePage::FromInnerAddress(&heap, slot)
                             ->ObjectHeaderFromInnerAddress(slot);
+    // The age checking in the generational barrier is imprecise, since a card
+    // may have mixed young/old objects. Check here precisely if the object is
+    // old.
     if (slot_header.IsYoung()) continue;
     // The design of young generation requires collections to be executed at the
     // top level (with the guarantee that no objects are currently being in

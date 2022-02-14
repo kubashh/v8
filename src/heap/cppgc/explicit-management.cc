@@ -92,7 +92,7 @@ void ExplicitManagementImpl::FreeUnreferencedObject(HeapHandle& heap_handle,
   InvalidateRememberedSlotsInRange(
       heap_base, object, reinterpret_cast<uint8_t*>(object) + object_size);
   // If this object was registered as remembered, remove it.
-  heap_base.remembered_source_objects().erase(object);
+  heap_base.remembered_source_objects().erase(&header);
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 }
 

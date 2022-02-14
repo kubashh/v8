@@ -19,12 +19,13 @@ UnifiedHeapMarkingVisitorBase::UnifiedHeapMarkingVisitorBase(
       marking_state_(marking_state),
       unified_heap_marking_state_(unified_heap_marking_state) {}
 
-void UnifiedHeapMarkingVisitorBase::Visit(const void* object,
+void UnifiedHeapMarkingVisitorBase::Visit(const void** slot, const void* object,
                                           TraceDescriptor desc) {
   marking_state_.MarkAndPush(object, desc);
 }
 
-void UnifiedHeapMarkingVisitorBase::VisitWeak(const void* object,
+void UnifiedHeapMarkingVisitorBase::VisitWeak(const void** slot,
+                                              const void* object,
                                               TraceDescriptor desc,
                                               WeakCallback weak_callback,
                                               const void* weak_member) {
@@ -76,7 +77,7 @@ MutatorUnifiedHeapMarkingVisitor::MutatorUnifiedHeapMarkingVisitor(
 void MutatorUnifiedHeapMarkingVisitor::VisitRoot(const void* object,
                                                  TraceDescriptor desc,
                                                  const SourceLocation&) {
-  this->Visit(object, desc);
+  this->Visit(nullptr, object, desc);
 }
 
 void MutatorUnifiedHeapMarkingVisitor::VisitWeakRoot(const void* object,

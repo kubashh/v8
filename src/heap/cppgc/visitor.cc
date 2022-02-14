@@ -84,7 +84,7 @@ void ConservativeTracingVisitor::TraceConservativelyIfNeeded(
 void ConservativeTracingVisitor::VisitFullyConstructedConservatively(
     HeapObjectHeader& header) {
   visitor_.Visit(
-      header.ObjectStart(),
+      nullptr, header.ObjectStart(),
       {header.ObjectStart(),
        GlobalGCInfoTable::GCInfoFromIndex(header.GetGCInfoIndex()).trace});
 }
