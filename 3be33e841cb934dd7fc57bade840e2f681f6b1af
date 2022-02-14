@@ -33,6 +33,24 @@
       "message": "Could you add a DCHECK that the function\u0027s signature matches the requested signature? I mean a simple pointer equality, which should work since we don\u0027t deduplicate signatures.",
       "revId": "3be33e841cb934dd7fc57bade840e2f681f6b1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d98623_2281173b",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 915,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-02-14T17:02:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17f7194f_ae982bcc",
+      "revId": "3be33e841cb934dd7fc57bade840e2f681f6b1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
