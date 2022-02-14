@@ -513,6 +513,7 @@ static bool matches(V8InspectorImpl* inspector, const V8DebuggerScript& script,
     case BreakpointType::kByScriptId: {
       return script.scriptId() == selector;
     }
+
     default:
       return false;
   }
@@ -717,8 +718,14 @@ Response V8DebuggerAgentImpl::removeBreakpoint(const String16& breakpointId) {
   // not Wasm breakpoint.
   std::vector<V8DebuggerScript*> scripts;
   for (const auto& scriptIter : m_scripts) {
-    if (!matches(m_inspector, *scriptIter.second, type, selector)) continue;
+    const bool scriptSelectorMatch =
+        matches(m_inspector, *scriptIter.second, type, selector);
+    const bool isInstrumentation =
+        type == BreakpointType::kInstrumentationBreakpoint;
+    if (!scriptSelectorMatch && !isInstrumentation) continue;
     V8DebuggerScript* script = scriptIter.second.get();
+    if (script->getLanguage() != V8DebuggerScript::Language::WebAssembly)
+      continue;
     scripts.push_back(script);
   }
   removeBreakpointImpl(breakpointId, scripts);
