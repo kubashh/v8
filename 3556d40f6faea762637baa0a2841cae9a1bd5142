@@ -16,6 +16,24 @@
       "message": "Thanks for the contribution! Could you add a test? E.g. a mjsunit test, something like \"test/mjsunit/regress/regress-v8-12595.js\"",
       "revId": "3556d40f6faea762637baa0a2841cae9a1bd5142",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe1ee07_fba6f8d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-02-14T12:07:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "168e3c13_7331bc7c",
+      "revId": "3556d40f6faea762637baa0a2841cae9a1bd5142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
