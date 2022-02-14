@@ -16,6 +16,23 @@
       "message": "Awesome, thanks! LGTM",
       "revId": "dfe2d5baeed3792e69e00582a42f3b937f1f930b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49fb00a3_a0f1baa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-14T11:00:30Z",
+      "side": 1,
+      "message": "PTAL again, Toon!\nI\u0027ve ran all the gc_stress bots this time and it passes CQ.\nv8_linux_arm64_gc_stress_dbg_ng_triggered failure is an infra issue.\n",
+      "revId": "dfe2d5baeed3792e69e00582a42f3b937f1f930b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
