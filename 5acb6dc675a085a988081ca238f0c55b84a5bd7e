@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f0396c4_daf77f7d",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-15T08:53:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5077f4ea_3a97c931",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14594e3d_7ec972ee",
@@ -71,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82b90ea2_ca1fdf1f",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-15T08:53:58Z",
+      "side": 1,
+      "message": "Right, I implemented the other approach now, with a `IsSubset` method and no bits. Let me know which version you prefer! :)",
+      "parentUuid": "14594e3d_7ec972ee",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d59460a9_17a544c0",
         "filename": "src/base/platform/platform.h",
         "patchSetId": 4
@@ -82,6 +118,24 @@
       "writtenOn": "2022-02-14T18:11:50Z",
       "side": 1,
       "message": "I\u0027m not sure it\u0027s ok to add such a dependency. Otherwise we could have used v8::PagePermissions here.\nI think the right way would be to not include this header and define kProtXXX here as well and on V8 side check that base::kProtXXX \u003d\u003d v8::kProtXXX.",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "285c9de7_cb483d73",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-15T08:53:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d59460a9_17a544c0",
       "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
