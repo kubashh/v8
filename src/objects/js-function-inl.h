@@ -71,12 +71,9 @@ bool JSFunction::IsMarkedForConcurrentOptimization() {
 void JSFunction::SetInterruptBudget() {
   if (!has_feedback_vector()) {
     DCHECK(shared().is_compiled());
-    int budget = FLAG_budget_for_feedback_vector_allocation;
-    if (FLAG_feedback_allocation_on_bytecode_size) {
-      budget = shared().GetBytecodeArray(GetIsolate()).length() *
-               FLAG_scale_factor_for_feedback_allocation;
-    }
-    raw_feedback_cell().set_interrupt_budget(budget);
+    raw_feedback_cell().set_interrupt_budget(
+        shared().GetBytecodeArray(GetIsolate()).length() *
+        FLAG_interrupt_budget_factor_for_feedback_allocation);
     return;
   }
   FeedbackVector::SetInterruptBudget(raw_feedback_cell());
