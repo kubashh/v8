@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_EXECUTION_RUNTIME_PROFILER_H_
-#define V8_EXECUTION_RUNTIME_PROFILER_H_
+#ifndef V8_EXECUTION_TIERING_H_
+#define V8_EXECUTION_TIERING_H_
 
 #include "src/common/assert-scope.h"
 #include "src/handles/handles.h"
@@ -20,9 +20,11 @@ class JSFunction;
 enum class CodeKind;
 enum class OptimizationReason : uint8_t;
 
-class RuntimeProfiler {
+// This class makes tiering decisions, e.g.: should a function tier up? what is
+// the target tier? should it OSR?
+class Tiering {
  public:
-  explicit RuntimeProfiler(Isolate* isolate);
+  explicit Tiering(Isolate* isolate);
 
   // Called from the interpreter when the bytecode interrupt has been exhausted.
   void MarkCandidatesForOptimizationFromBytecode();
@@ -55,20 +57,20 @@ class RuntimeProfiler {
 
   class V8_NODISCARD MarkCandidatesForOptimizationScope final {
    public:
-    explicit MarkCandidatesForOptimizationScope(RuntimeProfiler* profiler);
+    explicit MarkCandidatesForOptimizationScope(Tiering* profiler);
     ~MarkCandidatesForOptimizationScope();
 
    private:
     HandleScope handle_scope_;
-    RuntimeProfiler* const profiler_;
+    Tiering* const profiler_;
     DisallowGarbageCollection no_gc;
   };
 
-  Isolate* isolate_;
+  Isolate* const isolate_;
   bool any_ic_changed_;
 };
 
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_EXECUTION_RUNTIME_PROFILER_H_
+#endif  // V8_EXECUTION_TIERING_H_

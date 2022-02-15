@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/execution/runtime-profiler.h"
+#include "src/execution/tiering.h"
 
 #include "src/base/platform/platform.h"
 #include "src/codegen/assembler.h"
@@ -85,18 +85,18 @@ void TraceRecompile(JSFunction function, OptimizationReason reason,
 
 }  // namespace
 
-RuntimeProfiler::RuntimeProfiler(Isolate* isolate)
+Tiering::Tiering(Isolate* isolate)
     : isolate_(isolate), any_ic_changed_(false) {}
 
-void RuntimeProfiler::Optimize(JSFunction function, OptimizationReason reason,
-                               CodeKind code_kind) {
+void Tiering::Optimize(JSFunction function, OptimizationReason reason,
+                       CodeKind code_kind) {
   DCHECK_NE(reason, OptimizationReason::kDoNotOptimize);
   TraceRecompile(function, reason, code_kind, isolate_);
   function.MarkForOptimization(ConcurrencyMode::kConcurrent);
 }
 
-void RuntimeProfiler::AttemptOnStackReplacement(UnoptimizedFrame* frame,
-                                                int loop_nesting_levels) {
+void Tiering::AttemptOnStackReplacement(UnoptimizedFrame* frame,
+                                        int loop_nesting_levels) {
   JSFunction function = frame->function();
   SharedFunctionInfo shared = function.shared();
   if (!FLAG_use_osr || !shared.IsUserJavaScript()) {
@@ -122,9 +122,8 @@ void RuntimeProfiler::AttemptOnStackReplacement(UnoptimizedFrame* frame,
       {level + loop_nesting_levels, AbstractCode::kMaxLoopNestingMarker}));
 }
 
-void RuntimeProfiler::MaybeOptimizeFrame(JSFunction function,
-                                         JavaScriptFrame* frame,
-                                         CodeKind code_kind) {
+void Tiering::MaybeOptimizeFrame(JSFunction function, JavaScriptFrame* frame,
+                                 CodeKind code_kind) {
   if (function.IsInOptimizationQueue()) {
     TraceInOptimizationQueue(function);
     return;
@@ -158,7 +157,7 @@ void RuntimeProfiler::MaybeOptimizeFrame(JSFunction function,
   }
 }
 
-bool RuntimeProfiler::MaybeOSR(JSFunction function, UnoptimizedFrame* frame) {
+bool Tiering::MaybeOSR(JSFunction function, UnoptimizedFrame* frame) {
   int ticks = function.feedback_vector().profiler_ticks();
   if (function.IsMarkedForOptimization() ||
       function.IsMarkedForConcurrentOptimization() ||
@@ -182,9 +181,9 @@ bool ShouldOptimizeAsSmallFunction(int bytecode_size, bool any_ic_changed) {
 
 }  // namespace
 
-OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
-                                                   BytecodeArray bytecode,
-                                                   JavaScriptFrame* frame) {
+OptimizationReason Tiering::ShouldOptimize(JSFunction function,
+                                           BytecodeArray bytecode,
+                                           JavaScriptFrame* frame) {
   if (function.ActiveTierIsTurbofan()) {
     return OptimizationReason::kDoNotOptimize;
   }
@@ -238,19 +237,19 @@ OptimizationReason RuntimeProfiler::ShouldOptimize(JSFunction function,
   return OptimizationReason::kDoNotOptimize;
 }
 
-RuntimeProfiler::MarkCandidatesForOptimizationScope::
-    MarkCandidatesForOptimizationScope(RuntimeProfiler* profiler)
+Tiering::MarkCandidatesForOptimizationScope::MarkCandidatesForOptimizationScope(
+    Tiering* profiler)
     : handle_scope_(profiler->isolate_), profiler_(profiler) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.MarkCandidatesForOptimization");
 }
 
-RuntimeProfiler::MarkCandidatesForOptimizationScope::
+Tiering::MarkCandidatesForOptimizationScope::
     ~MarkCandidatesForOptimizationScope() {
   profiler_->any_ic_changed_ = false;
 }
 
-void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
+void Tiering::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
   if (!isolate_->use_optimizer()) return;
   MarkCandidatesForOptimizationScope scope(this);
 
@@ -268,13 +267,13 @@ void RuntimeProfiler::MarkCandidatesForOptimization(JavaScriptFrame* frame) {
   MaybeOptimizeFrame(function, frame, code_kind);
 }
 
-void RuntimeProfiler::MarkCandidatesForOptimizationFromBytecode() {
+void Tiering::MarkCandidatesForOptimizationFromBytecode() {
   JavaScriptFrameIterator it(isolate_);
   DCHECK(it.frame()->is_unoptimized());
   MarkCandidatesForOptimization(it.frame());
 }
 
-void RuntimeProfiler::MarkCandidatesForOptimizationFromCode() {
+void Tiering::MarkCandidatesForOptimizationFromCode() {
   JavaScriptFrameIterator it(isolate_);
   DCHECK(it.frame()->is_optimized());
   MarkCandidatesForOptimization(it.frame());

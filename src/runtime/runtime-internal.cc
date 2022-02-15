@@ -17,7 +17,7 @@
 #include "src/execution/frames-inl.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/messages.h"
-#include "src/execution/runtime-profiler.h"
+#include "src/execution/tiering.h"
 #include "src/handles/maybe-handles.h"
 #include "src/init/bootstrapper.h"
 #include "src/logging/counters.h"
@@ -373,7 +373,7 @@ void BytecodeBudgetInterruptFromBytecode(Isolate* isolate,
   if (should_mark_for_optimization) {
     SealHandleScope shs(isolate);
     isolate->counters()->runtime_profiler_ticks()->Increment();
-    isolate->runtime_profiler()->MarkCandidatesForOptimizationFromBytecode();
+    isolate->tiering()->MarkCandidatesForOptimizationFromBytecode();
   }
 }
 }  // namespace
@@ -428,7 +428,7 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterruptFromCode) {
 
   SealHandleScope shs(isolate);
   isolate->counters()->runtime_profiler_ticks()->Increment();
-  isolate->runtime_profiler()->MarkCandidatesForOptimizationFromCode();
+  isolate->tiering()->MarkCandidatesForOptimizationFromCode();
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
