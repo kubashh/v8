@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23739abb_424c3b69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-15T11:29:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9de9f403_a0652eff",
+      "revId": "250c48fb7b638976c4c8d0217fd7d9f1c285e6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a67388ad_a98f8d6b",
@@ -49,6 +67,30 @@
       "writtenOn": "2022-02-15T10:02:07Z",
       "side": 1,
       "message": "I guess this is more \"OnProfilingTick\" or something like that.",
+      "range": {
+        "startLine": 252,
+        "startChar": 14,
+        "endLine": 252,
+        "endChar": 43
+      },
+      "revId": "250c48fb7b638976c4c8d0217fd7d9f1c285e6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc184c06_03ac8919",
+        "filename": "src/execution/tiering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-15T11:29:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a67388ad_a98f8d6b",
       "range": {
         "startLine": 252,
         "startChar": 14,
