@@ -33,6 +33,46 @@
       "message": "src/heap LGTM",
       "revId": "470725d92ee9702e9fe91c677bb69e1a1a6905f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7486953a_5cfad753",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-15T13:43:52Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "470725d92ee9702e9fe91c677bb69e1a1a6905f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b58c08e_85e64eb6",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-02-15T13:43:52Z",
+      "side": 1,
+      "message": "This counter should probably be renamed as well.",
+      "range": {
+        "startLine": 249,
+        "startChar": 24,
+        "endLine": 249,
+        "endChar": 46
+      },
+      "revId": "470725d92ee9702e9fe91c677bb69e1a1a6905f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
