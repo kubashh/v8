@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78d88210_a3f331ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-15T10:32:56Z",
+      "side": 1,
+      "message": "PTAL; I don\u0027t expect this to have a significant performance impact, I just saw it when looking at instantiation performance.",
+      "revId": "c2e87990cbde670982398b6a0c9768c4a64bcc1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
