@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "717f5f19_f1914df0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-15T06:38:19Z",
+      "side": 1,
+      "message": "Thanks Benedikt, Clemens, Jaro for the review and chiming in!\n\nI\u0027ve changed it to using raw pointers in the latest patch.",
+      "revId": "e2fa9b3a5230ddd9ef51d211c00c17578a0761c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

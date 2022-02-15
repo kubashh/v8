@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0037abe_1708bd86",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-15T06:38:19Z",
+      "side": 1,
+      "message": "Ok! I have changed it to raw pointer usage now.",
+      "parentUuid": "2bcd89b8_b9e99047",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 962,
+        "endChar": 32
+      },
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0eee5672_33f00fa5",
@@ -89,6 +113,24 @@
       "side": 1,
       "message": "Benedikt, why use raw pointers if you do not have to? It just creates opportunities for getting things wrong in the future.",
       "parentUuid": "0eee5672_33f00fa5",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eed84db9_d17b0cf0",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-15T06:38:19Z",
+      "side": 1,
+      "message": "I\u0027ve changed it to using raw pointers in the latest patch. I thought that using handles would be safer (here, and generally); sometimes this still confuses me.",
+      "parentUuid": "c75a4943_604016d4",
       "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
