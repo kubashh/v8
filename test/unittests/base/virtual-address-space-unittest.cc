@@ -114,12 +114,13 @@ TEST(VirtualAddressSpaceTest, TestSubspace) {
 
   if (!rootspace.CanAllocateSubspaces()) return;
   size_t subspace_alignment = rootspace.allocation_granularity();
-  auto subspace = rootspace.AllocateSubspace(
-      VirtualAddressSpace::kNoHint, kSubspaceSize, subspace_alignment,
-      PagePermissions::kReadWriteExecute);
+  auto subspace = rootspace.AllocateSubspace(VirtualAddressSpace::kNoHint,
+                                             kSubspaceSize, subspace_alignment,
+                                             PagePermissions::kReadWrite);
   ASSERT_TRUE(subspace);
   EXPECT_NE(kNullAddress, subspace->base());
   EXPECT_EQ(kSubspaceSize, subspace->size());
+  EXPECT_EQ(PagePermissions::kReadWrite, subspace->max_page_permissions());
 
   TestRandomPageAddressGeneration(subspace.get());
   TestBasicPageAllocation(subspace.get());
@@ -131,10 +132,11 @@ TEST(VirtualAddressSpaceTest, TestSubspace) {
   size_t subsubspace_alignment = subspace->allocation_granularity();
   auto subsubspace = subspace->AllocateSubspace(
       VirtualAddressSpace::kNoHint, kSubSubspaceSize, subsubspace_alignment,
-      PagePermissions::kReadWriteExecute);
+      PagePermissions::kReadWrite);
   ASSERT_TRUE(subsubspace);
   EXPECT_NE(kNullAddress, subsubspace->base());
   EXPECT_EQ(kSubSubspaceSize, subsubspace->size());
+  EXPECT_EQ(PagePermissions::kReadWrite, subsubspace->max_page_permissions());
 
   TestRandomPageAddressGeneration(subsubspace.get());
   TestBasicPageAllocation(subsubspace.get());
@@ -180,6 +182,7 @@ TEST(VirtualAddressSpaceTest, TestEmulatedSubspace) {
                                           kSubspaceMappedSize, kSubspaceSize);
   EXPECT_EQ(reservation, subspace.base());
   EXPECT_EQ(kSubspaceSize, subspace.size());
+  EXPECT_EQ(rootspace.max_page_permissions(), subspace.max_page_permissions());
 
   TestRandomPageAddressGeneration(&subspace);
   TestBasicPageAllocation(&subspace);
