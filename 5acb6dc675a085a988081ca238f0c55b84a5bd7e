@@ -155,6 +155,24 @@
       "message": "I think it would be good to test the IsSubset() function instead.",
       "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8760888_7b7a3e43",
+        "filename": "test/unittests/base/virtual-address-space-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-15T10:20:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "932cb292_932dbd24",
+      "revId": "5acb6dc675a085a988081ca238f0c55b84a5bd7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

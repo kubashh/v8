@@ -33,6 +33,24 @@
       "message": "Once we start using/testing it it\u0027d most likely require V8_BASE_EXPORT.",
       "revId": "b3e801e6ff3c8bdb0f0f1e7b2330a3fc82121859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ecfbb0_5d9a3c72",
+        "filename": "src/base/virtual-address-space.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-02-15T10:20:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24c69a11_8c5904fa",
+      "revId": "b3e801e6ff3c8bdb0f0f1e7b2330a3fc82121859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
