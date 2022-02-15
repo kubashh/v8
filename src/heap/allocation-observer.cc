@@ -10,18 +10,18 @@
 namespace v8 {
 namespace internal {
 
-void AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
+bool AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
 #if DEBUG
   auto it = std::find_if(observers_.begin(), observers_.end(),
                          [observer](const AllocationObserverCounter& aoc) {
                            return aoc.observer_ == observer;
                          });
   DCHECK_EQ(observers_.end(), it);
-#endif
+#endif  // DEBUG
 
   if (step_in_progress_) {
     pending_added_.push_back(AllocationObserverCounter(observer, 0, 0));
-    return;
+    return false;
   }
 
   intptr_t step_size = observer->GetNextStepSize();
@@ -38,9 +38,10 @@ void AllocationCounter::AddAllocationObserver(AllocationObserver* observer) {
     next_counter_ = current_counter_ +
                     std::min(static_cast<intptr_t>(missing_bytes), step_size);
   }
+  return true;
 }
 
-void AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
+bool AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
   auto it = std::find_if(observers_.begin(), observers_.end(),
                          [observer](const AllocationObserverCounter& aoc) {
                            return aoc.observer_ == observer;
@@ -50,7 +51,7 @@ void AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
   if (step_in_progress_) {
     DCHECK_EQ(pending_removed_.count(observer), 0);
     pending_removed_.insert(observer);
-    return;
+    return false;
   }
 
   observers_.erase(it);
@@ -68,6 +69,7 @@ void AllocationCounter::RemoveAllocationObserver(AllocationObserver* observer) {
 
     next_counter_ = current_counter_ + step_size;
   }
+  return true;
 }
 
 void AllocationCounter::AdvanceAllocationObservers(size_t allocated) {
