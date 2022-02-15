@@ -127,9 +127,12 @@ using MachineSignature = Signature<MachineType>;
 
 template <typename T>
 size_t hash_value(const Signature<T>& sig) {
-  size_t hash = base::hash_combine(sig.parameter_count(), sig.return_count());
-  for (const T& t : sig.all()) hash = base::hash_combine(hash, t);
-  return hash;
+  // Hash over all contained representations, plus the parameter count to
+  // differentiate signatures with the same representation array but different
+  // parameter/return count.
+  size_t seed = hash_value(sig.parameter_count());
+  for (T rep : sig.all()) seed = hash_combine(seed, hash_value(rep));
+  return seed;
 }
 
 template <typename T, size_t kNumReturns = 0, size_t kNumParams = 0>
