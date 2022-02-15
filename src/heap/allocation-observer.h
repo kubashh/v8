@@ -16,44 +16,53 @@ namespace internal {
 
 class AllocationObserver;
 
-class AllocationCounter {
+class AllocationCounter final {
  public:
-  AllocationCounter()
-      : paused_(false),
-        current_counter_(0),
-        next_counter_(0),
-        step_in_progress_(false) {}
-  V8_EXPORT_PRIVATE void AddAllocationObserver(AllocationObserver* observer);
-  V8_EXPORT_PRIVATE void RemoveAllocationObserver(AllocationObserver* observer);
+  AllocationCounter() = default;
 
-  bool IsActive() { return !IsPaused() && observers_.size() > 0; }
+  // Adds an observer. May be called from `AllocationObserver::Step()`.
+  //
+  // Returns whether `NextBytes()` has been updated and the caller may thus
+  // update when they next call `InvokeAllocationObservers()`.
+  V8_EXPORT_PRIVATE bool AddAllocationObserver(AllocationObserver* observer);
 
-  void Pause() {
-    DCHECK(!paused_);
-    DCHECK(!step_in_progress_);
-    paused_ = true;
-  }
+  // Removes an observer. May be called from `AllocationObserver::Step()`.
+  //
+  // Returns whether `NextBytes()` has been updated and the caller may thus
+  // update when they next call `InvokeAllocationObservers()`.
+  V8_EXPORT_PRIVATE bool RemoveAllocationObserver(AllocationObserver* observer);
 
-  void Resume() {
-    DCHECK(paused_);
-    DCHECK(!step_in_progress_);
-    paused_ = false;
-  }
-
+  // Advances forward by `allocated` bytes. Does not invoke any observers.
   V8_EXPORT_PRIVATE void AdvanceAllocationObservers(size_t allocated);
+
+  // Invokes observers via `AllocationObserver::Step()` and computes new step
+  // sizes. Does not advance the current allocation counter.
   V8_EXPORT_PRIVATE void InvokeAllocationObservers(Address soon_object,
                                                    size_t object_size,
                                                    size_t aligned_object_size);
 
-  size_t NextBytes() {
+  bool IsActive() const { return !IsPaused() && observers_.size() > 0; }
+
+  bool IsStepInProgress() const { return step_in_progress_; }
+
+  size_t NextBytes() const {
     DCHECK(IsActive());
     return next_counter_ - current_counter_;
   }
 
-  bool IsStepInProgress() { return step_in_progress_; }
+  void Pause() {
+    DCHECK(!step_in_progress_);
+    paused_++;
+  }
+
+  void Resume() {
+    DCHECK_NE(0, paused_);
+    DCHECK(!step_in_progress_);
+    paused_--;
+  }
 
  private:
-  bool IsPaused() { return paused_; }
+  bool IsPaused() const { return paused_ > 0; }
 
   struct AllocationObserverCounter {
     AllocationObserverCounter(AllocationObserver* observer, size_t prev_counter,
@@ -71,12 +80,10 @@ class AllocationCounter {
   std::vector<AllocationObserverCounter> pending_added_;
   std::unordered_set<AllocationObserver*> pending_removed_;
 
-  bool paused_;
-
-  size_t current_counter_;
-  size_t next_counter_;
-
-  bool step_in_progress_;
+  int paused_ = 0;
+  size_t current_counter_ = 0;
+  size_t next_counter_ = 0;
+  bool step_in_progress_ = false;
 };
 
 // -----------------------------------------------------------------------------
