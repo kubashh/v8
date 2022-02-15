@@ -35,6 +35,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8140f17f_592307b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-02-15T13:47:45Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "19bbeae33fbe363497446c3cdccc68eac53e4b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e9b835f_9cebca86",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-02-15T13:47:45Z",
+      "side": 1,
+      "message": "q: shouldn\u0027t r9 point to a stack slot, and not between two stack slots? Same question for rbp and rsp.",
+      "range": {
+        "startLine": 3179,
+        "startChar": 7,
+        "endLine": 3179,
+        "endChar": 11
+      },
+      "revId": "19bbeae33fbe363497446c3cdccc68eac53e4b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c28d379_bef99b0d",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3220,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-02-15T13:47:45Z",
+      "side": 1,
+      "message": "Just as an idea: With the current naming scheme you call the frame pointer of the original frame \"fp\", and the frame pointer of the shadow frame you call \"rbp\" I wonder if the code would be more readable if you used \"original_fp\" and \"shadow_fp\", which have the values r9 and rbp, depending on the situation. Intuitively I would say that \"original_fp\" and \"shadow_fp\" are easier to understand than \"fp\" and \"rbp\".",
+      "range": {
+        "startLine": 3220,
+        "startChar": 11,
+        "endLine": 3220,
+        "endChar": 14
+      },
+      "revId": "19bbeae33fbe363497446c3cdccc68eac53e4b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6674fc5_47dc2f6c",
@@ -54,6 +117,23 @@
         "endLine": 208,
         "endChar": 4
       },
+      "revId": "19bbeae33fbe363497446c3cdccc68eac53e4b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d631d75_340fd53d",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-02-15T13:47:45Z",
+      "side": 1,
+      "message": "you could multiply the parameters by weights to also test that the parameters don\u0027t get mixed up.",
       "revId": "19bbeae33fbe363497446c3cdccc68eac53e4b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
