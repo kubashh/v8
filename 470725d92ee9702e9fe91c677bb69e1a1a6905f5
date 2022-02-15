@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84b62895_d2b9804f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-15T13:34:54Z",
+      "side": 1,
+      "message": "Dominik/Igor ptal at heap/ic, thanks!",
+      "revId": "470725d92ee9702e9fe91c677bb69e1a1a6905f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
