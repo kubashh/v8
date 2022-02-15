@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50b39320_ed066fdf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5612,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-15T15:24:51Z",
+      "side": 1,
+      "message": "Can you imagine a case where we need the lock here?",
+      "range": {
+        "startLine": 5612,
+        "startChar": 10,
+        "endLine": 5612,
+        "endChar": 20
+      },
+      "revId": "d3228357ed74ac3bf4811040e9f7f824bf4c1553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

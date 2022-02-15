@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8115e85_fe11146b",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-15T15:24:51Z",
+      "side": 0,
+      "message": "This is where I actually started :)",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 268,
+        "endChar": 28
+      },
+      "revId": "2b96e854f5e617012a937a5416b493460f92f46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de64bf95_272bc228",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-02-15T15:24:51Z",
+      "side": 0,
+      "message": "I don\u0027t see why we need to advance the counter when there\u0027s nothing being invoked here.",
+      "range": {
+        "startLine": 346,
+        "startChar": 4,
+        "endLine": 346,
+        "endChar": 30
+      },
+      "revId": "2b96e854f5e617012a937a5416b493460f92f46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
