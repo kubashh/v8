@@ -151,6 +151,24 @@
       "parentUuid": "eed84db9_d17b0cf0",
       "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d23662ec_56baf2d8",
+        "filename": "src/wasm/wasm-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-15T07:22:53Z",
+      "side": 1,
+      "message": "My comment was primarily about the reason behind the change. I think handlifying the code would be fine, but then we should be consistent.",
+      "parentUuid": "519e8d58_136df662",
+      "revId": "21bccc517172fa7668c8cc68d0a63812525063ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
