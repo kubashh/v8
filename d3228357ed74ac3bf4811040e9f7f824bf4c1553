@@ -22,6 +22,30 @@
       },
       "revId": "d3228357ed74ac3bf4811040e9f7f824bf4c1553",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e37a458_5df495c6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5612,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-02-15T15:34:48Z",
+      "side": 1,
+      "message": "AFAIR we need it for FreeLinearAllocationArea() when giving back the memory to the free list. Otherwise we might race with background threads on the free list.",
+      "parentUuid": "50b39320_ed066fdf",
+      "range": {
+        "startLine": 5612,
+        "startChar": 10,
+        "endLine": 5612,
+        "endChar": 20
+      },
+      "revId": "d3228357ed74ac3bf4811040e9f7f824bf4c1553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
