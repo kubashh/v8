@@ -130,15 +130,10 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
     external_backing_store_bytes_ = nullptr;
   }
 
-  virtual void AddAllocationObserver(AllocationObserver* observer);
-
-  virtual void RemoveAllocationObserver(AllocationObserver* observer);
-
+  virtual bool AddAllocationObserver(AllocationObserver* observer);
+  virtual bool RemoveAllocationObserver(AllocationObserver* observer);
   virtual void PauseAllocationObservers();
-
   virtual void ResumeAllocationObservers();
-
-  virtual void StartNextInlineAllocationStep() {}
 
   // Returns size of objects. Can differ from the allocated size
   // (e.g. see OldLargeObjectSpace).
@@ -195,8 +190,6 @@ class V8_EXPORT_PRIVATE Space : public BaseSpace {
 #endif
 
  protected:
-  int allocation_observers_paused_depth_ = 0;
-
   AllocationCounter allocation_counter_;
 
   // The List manages the pages that belong to the given space.
@@ -462,9 +455,9 @@ class SpaceWithLinearArea : public Space {
   }
 
   // Methods needed for allocation observers.
-  V8_EXPORT_PRIVATE void AddAllocationObserver(
+  V8_EXPORT_PRIVATE bool AddAllocationObserver(
       AllocationObserver* observer) override;
-  V8_EXPORT_PRIVATE void RemoveAllocationObserver(
+  V8_EXPORT_PRIVATE bool RemoveAllocationObserver(
       AllocationObserver* observer) override;
   V8_EXPORT_PRIVATE void ResumeAllocationObservers() override;
   V8_EXPORT_PRIVATE void PauseAllocationObservers() override;
@@ -476,6 +469,15 @@ class SpaceWithLinearArea : public Space {
                                                    size_t allocation_size);
 
   void MarkLabStartInitialized();
+  virtual void FreeLinearAllocationArea() = 0;
+
+  void DisableInlineAllocation();
+  void EnableInlineAllocation();
+
+  void PrintAllocationsOrigins();
+
+ protected:
+  V8_EXPORT_PRIVATE void UpdateAllocationOrigins(AllocationOrigin origin);
 
   // When allocation observers are active we may use a lower limit to allow the
   // observers to 'interrupt' earlier than the natural limit. Given a linear
@@ -483,16 +485,12 @@ class SpaceWithLinearArea : public Space {
   // allow proper observation based on existing observers. min_size specifies
   // the minimum size that the limited area should have.
   Address ComputeLimit(Address start, Address end, size_t min_size);
+
   V8_EXPORT_PRIVATE virtual void UpdateInlineAllocationLimit(
       size_t min_size) = 0;
 
-  V8_EXPORT_PRIVATE void UpdateAllocationOrigins(AllocationOrigin origin);
-
-  void PrintAllocationsOrigins();
-
- protected:
-  // TODO(ofrobots): make these private after refactoring is complete.
   LinearAllocationArea* const allocation_info_;
+  bool use_lab_ = true;
 
   size_t allocations_origins_[static_cast<int>(
       AllocationOrigin::kNumberOfAllocationOrigins)] = {0};
