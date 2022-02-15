@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a6bf65_4bd655d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-02-15T10:14:40Z",
+      "side": 1,
+      "message": "ptal. This CL establishes the invariant that the page promotion flags are only set during the evacuation phase of a GC. The invariant is checked during heap verification.",
+      "revId": "35ef9fe5bc41dd2f99e9f56f88b4bd306e045c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
