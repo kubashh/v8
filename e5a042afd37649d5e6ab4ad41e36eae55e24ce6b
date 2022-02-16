@@ -16,6 +16,108 @@
       "message": "Hi Nico\nCan you review this cl?",
       "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad52439d_ca050431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "I think you need someone here who is well versed with the register allocator to review this CL. +ecmziegler to add the right person to approve the design doc for the register allocation changes. ",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "076ac993_792c4823",
+        "filename": "src/codegen/machine-type.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "This should be IsSimd128 to be consistent with the rest of the file.",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67bd9e95_21d46e84",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "There should probably be a DCHECK for AliasingKind::COMBINE here.",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18842477_75f3fcbb",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1702,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "HasSimd128VirtualRegisters would be better here.",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d786f1_d2f138f5",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1703,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "Similarly kSimd128RepMask here as well.",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce466676_6c91528e",
+        "filename": "src/compiler/backend/register-allocation.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-02-16T06:27:01Z",
+      "side": 1,
+      "message": "kSimd128 to be consistent with the rest of the code.",
+      "revId": "e5a042afd37649d5e6ab4ad41e36eae55e24ce6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
