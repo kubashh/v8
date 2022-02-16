@@ -881,6 +881,16 @@ void GlobalHandles::OnStackTracedNodeSpace::CleanupBelowCurrentStackPosition() {
 }
 
 // static
+void GlobalHandles::EnableMarkingBarrier(Isolate* isolate) {
+  isolate->global_handles()->is_marking_ = true;
+}
+
+// static
+void GlobalHandles::DisableMarkingBarrier(Isolate* isolate) {
+  isolate->global_handles()->is_marking_ = false;
+}
+
+// static
 void GlobalHandles::TracedNode::Verify(GlobalHandles* global_handles,
                                        const Address* const* slot) {
 #ifdef DEBUG
@@ -1172,10 +1182,7 @@ void GlobalHandles::DestroyTraced(Address* location) {
     // When marking is off the handle may be freed immediately. Note that this
     // includes also the case when invoking the first pass callbacks during the
     // atomic pause which requires releasing a node fully.
-    if (!global_handles->isolate()
-             ->heap()
-             ->incremental_marking()
-             ->IsMarking()) {
+    if (!global_handles->is_marking_) {
       NodeSpace<TracedNode>::Release(node);
       return;
     }
