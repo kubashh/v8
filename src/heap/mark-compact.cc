@@ -2439,6 +2439,7 @@ void MarkCompactCollector::MarkLiveObjects() {
   }
   if (was_marked_incrementally_) {
     MarkingBarrier::DeactivateAll(heap());
+    GlobalHandles::DisableMarkingBarrier(heap()->isolate());
   }
 
   epoch_++;
