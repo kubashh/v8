@@ -6,11 +6,13 @@
 #define V8_BASE_SMALL_VECTOR_H_
 
 #include <algorithm>
+#include <initializer_list>
 #include <type_traits>
 #include <utility>
 
 #include "src/base/bits.h"
 #include "src/base/macros.h"
+#include "src/base/vector.h"
 
 namespace v8 {
 namespace base {
@@ -49,6 +51,20 @@ class SmallVector {
     resize_no_init(init.size());
     memcpy(begin_, init.begin(), sizeof(T) * init.size());
   }
+  template <size_t n>
+  SmallVector(
+      const std::array<T, n>& array,
+      const Allocator& allocator = Allocator())  // NOLINT(runtime/explicit)
+      : allocator_(allocator) {
+    *this = array;
+  }
+  SmallVector(
+      base::Vector<const T> init,
+      const Allocator& allocator = Allocator())  // NOLINT(runtime/explicit)
+      : allocator_(allocator) {
+    resize_no_init(init.size());
+    memcpy(begin_, init.begin(), sizeof(T) * init.size());
+  }
 
   ~SmallVector() {
     if (is_big()) FreeDynamicStorage();
@@ -65,6 +81,18 @@ class SmallVector {
     }
     memcpy(begin_, other.begin_, sizeof(T) * other_size);
     end_ = begin_ + other_size;
+    return *this;
+  }
+
+  template <size_t n>
+  SmallVector& operator=(const std::array<T, n>& init) V8_NOEXCEPT {
+    if (n <= kSize) {
+      DCHECK(capacity() >= kSize);
+      end_ = begin_ + n;
+    } else {
+      resize_no_init(init.size());
+    }
+    memcpy(begin_, init.begin(), sizeof(T) * init.size());
     return *this;
   }
 
@@ -124,6 +152,13 @@ class SmallVector {
     T* end = end_;
     if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
     new (end) T(std::forward<Args>(args)...);
+    end_ = end + 1;
+  }
+
+  void push_back(T x) {
+    T* end = end_;
+    if (V8_UNLIKELY(end == end_of_storage_)) end = Grow();
+    new (end) T(std::move(x));
     end_ = end + 1;
   }
 
