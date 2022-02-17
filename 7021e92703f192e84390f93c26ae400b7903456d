@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68280958_96fb9c13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-17T15:43:20Z",
+      "side": 1,
+      "message": "Hey Jaro,\n\nHere\u0027s a pragmatic fix for the issue we looked at in the morning.\nPlease take a look.\n\nthanks,\nBenedikt",
+      "revId": "7021e92703f192e84390f93c26ae400b7903456d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
