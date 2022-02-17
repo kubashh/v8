@@ -31,6 +31,10 @@ namespace compiler {
 class Schedule;
 class SourcePositionTable;
 
+namespace turboshaft {
+class Graph;
+}
+
 #if defined(V8_CC_MSVC) && defined(V8_TARGET_ARCH_IA32)
 // MSVC on x86 has issues with ALIGNAS(8) on InstructionOperand, but does
 // align the object to 8 bytes anyway (covered by a static assert below).
@@ -894,9 +898,10 @@ class V8_EXPORT_PRIVATE Instruction final {
   }
 
   static Instruction* New(Zone* zone, InstructionCode opcode,
-                          size_t output_count, InstructionOperand* outputs,
-                          size_t input_count, InstructionOperand* inputs,
-                          size_t temp_count, InstructionOperand* temps) {
+                          size_t output_count,
+                          const InstructionOperand* outputs, size_t input_count,
+                          const InstructionOperand* inputs, size_t temp_count,
+                          const InstructionOperand* temps) {
     DCHECK(output_count == 0 || outputs != nullptr);
     DCHECK(input_count == 0 || inputs != nullptr);
     DCHECK(temp_count == 0 || temps != nullptr);
@@ -1029,9 +1034,9 @@ class V8_EXPORT_PRIVATE Instruction final {
   explicit Instruction(InstructionCode opcode);
 
   Instruction(InstructionCode opcode, size_t output_count,
-              InstructionOperand* outputs, size_t input_count,
-              InstructionOperand* inputs, size_t temp_count,
-              InstructionOperand* temps);
+              const InstructionOperand* outputs, size_t input_count,
+              const InstructionOperand* inputs, size_t temp_count,
+              const InstructionOperand* temps);
 
   using IsCallField = base::BitField<bool, 30, 1>;
 
@@ -1639,6 +1644,8 @@ class V8_EXPORT_PRIVATE InstructionSequence final
  public:
   static InstructionBlocks* InstructionBlocksFor(Zone* zone,
                                                  const Schedule* schedule);
+  static InstructionBlocks* InstructionBlocksFor(
+      Zone* zone, const turboshaft::Graph& graph);
   InstructionSequence(Isolate* isolate, Zone* zone,
                       InstructionBlocks* instruction_blocks);
   InstructionSequence(const InstructionSequence&) = delete;
@@ -1865,6 +1872,13 @@ class V8_EXPORT_PRIVATE InstructionSequence final
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
                                            const InstructionSequence&);
 #undef INSTRUCTION_OPERAND_ALIGN
+
+UnallocatedOperand ToUnallocatedOperand(LinkageLocation location,
+                                        int virtual_register);
+
+UnallocatedOperand ToDualLocationUnallocatedOperand(
+    LinkageLocation primary_location, LinkageLocation secondary_location,
+    int virtual_register);
 
 }  // namespace compiler
 }  // namespace internal
