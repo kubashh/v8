@@ -16,6 +16,23 @@
       "message": "Hey Jaro,\n\nHere\u0027s a pragmatic fix for the issue we looked at in the morning.\nPlease take a look.\n\nthanks,\nBenedikt",
       "revId": "7021e92703f192e84390f93c26ae400b7903456d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c9bd066_f4c1de76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-02-18T07:32:15Z",
+      "side": 1,
+      "message": "Thanks for fixing!",
+      "revId": "7021e92703f192e84390f93c26ae400b7903456d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
