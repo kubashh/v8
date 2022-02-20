@@ -2817,6 +2817,92 @@ TEST(CodeSerializerWithHarmonyScoping) {
   isolate2->Dispose();
 }
 
+UNINITIALIZED_TEST(CodeSerializerWithRehashing) {
+  DisableEmbeddedBlobRefcounting();
+  const char* source1 =
+      "var obj = {};"
+      "for (var idx = 0; idx < 2048 /* larger than page size */; idx++) {"
+      "  obj[`foo${idx}`] = idx;"
+      "}";
+  const char* source2 =
+      "'use strict';"
+      "var entity = 'a';"
+      "entity = charClass(entity);"
+      "function charClass (str) {"
+      "  return str.split('').reduce(function (s, c) { "
+      "    s[c] = true;"
+      "    return s;"
+      "  }, {});"
+      "};";
+  const char* source3 = "typeof obj['foo700']";
+
+  v8::StartupData blob;
+  v8::ScriptCompiler::CachedData* cache;
+  {
+    v8::SnapshotCreator creator;
+    v8::Isolate* isolate = creator.GetIsolate();
+    v8::Isolate::Scope iscope(isolate);
+
+    {
+      v8::HandleScope scope(isolate);
+
+      v8::Local<v8::Context> context = v8::Context::New(isolate);
+      v8::Context::Scope context_scope(context);
+      CompileRun(source1);
+      CompileRun(source2);
+      creator.SetDefaultContext(context);
+
+      v8::Local<v8::String> source_str = v8_str(source3);
+      v8::ScriptOrigin origin(isolate, v8_str("test"));
+      v8::ScriptCompiler::Source source(source_str, origin);
+      v8::Local<v8::Function> function =
+          v8::ScriptCompiler::CompileFunction(context, &source, 0, nullptr, 0,
+                                              nullptr,
+                                              v8::ScriptCompiler::kEagerCompile)
+              .ToLocalChecked();
+      cache = v8::ScriptCompiler::CreateCodeCacheForFunction(function);
+      CHECK(cache);
+    }
+
+    blob =
+        creator.CreateBlob(v8::SnapshotCreator::FunctionCodeHandling::kClear);
+  }
+
+  v8::Isolate::CreateParams params;
+  params.snapshot_blob = &blob;
+  params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  // Test-appropriate equivalent of v8::Isolate::New.
+  v8::Isolate* isolate = TestSerializer::NewIsolate(params);
+  {
+    v8::Isolate::Scope isolate_scope(isolate);
+    v8::HandleScope handle_scope(isolate);
+    v8::Local<v8::Context> context = v8::Context::New(isolate);
+    v8::Context::Scope context_scope(context);
+
+    v8::Local<v8::String> source_str = v8_str(source3);
+    v8::ScriptOrigin origin(isolate, v8_str("test"));
+    v8::ScriptCompiler::Source source(source_str, origin, cache);
+    v8::Local<v8::Function> function;
+    {
+      DisallowCompilation no_compile(reinterpret_cast<Isolate*>(isolate));
+      function = v8::ScriptCompiler::CompileFunction(
+                     context, &source, 0, nullptr, 0, nullptr,
+                     v8::ScriptCompiler::kEagerCompile)
+                     .ToLocalChecked();
+    }
+    v8::Local<v8::Value> result =
+        function->Call(context, v8::Undefined(isolate), 0, nullptr)
+            .ToLocalChecked();
+    v8::Local<v8::String> result_str =
+        result->ToString(isolate->GetCurrentContext()).ToLocalChecked();
+    CHECK(result_str->Equals(isolate->GetCurrentContext(), v8_str("number"))
+              .FromJust());
+  }
+  isolate->Dispose();
+  delete[] blob.data;
+  FreeCurrentEmbeddedBlob();
+}
+
 TEST(Regress503552) {
   if (!FLAG_incremental_marking) return;
   // Test that the code serializer can deal with weak cells that form a linked
