@@ -60,7 +60,7 @@ std::vector<SourcePositionInfo> SourcePosition::InliningStack(
 }
 
 std::vector<SourcePositionInfo> SourcePosition::InliningStack(
-    Handle<Code> code) const {
+    Handle<Code> code, bool first_only) const {
   Isolate* isolate = code->GetIsolate();
   Handle<DeoptimizationData> deopt_data(
       DeoptimizationData::cast(code->deoptimization_data()), isolate);
@@ -73,6 +73,7 @@ std::vector<SourcePositionInfo> SourcePosition::InliningStack(
         deopt_data->GetInlinedFunction(inl.inlined_function_id), isolate);
     stack.push_back(SourcePositionInfo(pos, function));
     pos = inl.position;
+    if (first_only) break;
   }
   Handle<SharedFunctionInfo> function(
       SharedFunctionInfo::cast(deopt_data->SharedFunctionInfo()), isolate);
