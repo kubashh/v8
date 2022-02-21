@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "7ea2abb5412526a508de4a714ed55dacf3ba0365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "567ba03a_fdf4fcf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-21T17:13:42Z",
+      "side": 1,
+      "message": "LGTM, just a nit/suggestion.",
+      "revId": "7ea2abb5412526a508de4a714ed55dacf3ba0365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e114ae5b_dbc74f94",
+        "filename": "src/codegen/source-position.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-21T17:13:42Z",
+      "side": 1,
+      "message": "Nit/suggestion: I found particularly confusing the call for this function with `first_only`.\n\nI would rather have a new function like:\n```\nSourcePositionInfo SourcePosition::FirstInlinedStack(Handle\u003cCode\u003e code) {\n  Isolate* isolate \u003d code-\u003eGetIsolate();\n  Handle\u003cDeoptimizationData\u003e deopt_data(\n      DeoptimizationData::cast(code-\u003edeoptimization_data()), isolate);\n  SourcePosition pos \u003d *this;\n  DCHECK(pos.isInlined());\n  InliningPosition inl \u003d\n        deopt_data-\u003eInliningPositions().get(pos.InliningId());\n  Handle\u003cSharedFunctionInfo\u003e function(\n        deopt_data-\u003eGetInlinedFunction(inl.inlined_function_id), isolate);\n  return SourcePositionInfo(pos, function);\n}\n```\n\nEven though we would have some code repetition in the implementation, I found more natural. 😊  One could also implement an inlined helper function.",
+      "range": {
+        "startLine": 62,
+        "startChar": 48,
+        "endLine": 62,
+        "endChar": 61
+      },
+      "revId": "7ea2abb5412526a508de4a714ed55dacf3ba0365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
