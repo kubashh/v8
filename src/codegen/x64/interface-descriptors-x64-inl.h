@@ -78,29 +78,29 @@ constexpr auto DynamicCheckMapsWithFeedbackVectorDescriptor::registers() {
 }
 
 // static
-constexpr Register LoadDescriptor::ReceiverRegister() { return rdx; }
+constexpr Register LoadDescriptor::ReceiverRegister() { return r8; }
 // static
-constexpr Register LoadDescriptor::NameRegister() { return rcx; }
+constexpr Register LoadDescriptor::NameRegister() { return r9; }
 // static
 constexpr Register LoadDescriptor::SlotRegister() { return rax; }
 
 // static
-constexpr Register LoadWithVectorDescriptor::VectorRegister() { return rbx; }
+constexpr Register LoadWithVectorDescriptor::VectorRegister() { return r11; }
 
 // static
 constexpr Register KeyedLoadBaselineDescriptor::ReceiverRegister() {
-  return rdx;
+  return r8;
 }
 // static
 constexpr Register KeyedLoadBaselineDescriptor::NameRegister() {
   return kInterpreterAccumulatorRegister;
 }
 // static
-constexpr Register KeyedLoadBaselineDescriptor::SlotRegister() { return rcx; }
+constexpr Register KeyedLoadBaselineDescriptor::SlotRegister() { return rbx; }
 
 // static
 constexpr Register KeyedLoadWithVectorDescriptor::VectorRegister() {
-  return rbx;
+  return r11;
 }
 
 // static
@@ -108,35 +108,35 @@ constexpr Register KeyedHasICBaselineDescriptor::ReceiverRegister() {
   return kInterpreterAccumulatorRegister;
 }
 // static
-constexpr Register KeyedHasICBaselineDescriptor::NameRegister() { return rdx; }
+constexpr Register KeyedHasICBaselineDescriptor::NameRegister() { return r8; }
 // static
-constexpr Register KeyedHasICBaselineDescriptor::SlotRegister() { return rcx; }
+constexpr Register KeyedHasICBaselineDescriptor::SlotRegister() { return rbx; }
 
 // static
 constexpr Register KeyedHasICWithVectorDescriptor::VectorRegister() {
-  return rbx;
+  return r11;
 }
 
 // static
 constexpr Register
 LoadWithReceiverAndVectorDescriptor::LookupStartObjectRegister() {
-  return rdi;
+  return r12;
 }
 
 // static
-constexpr Register StoreDescriptor::ReceiverRegister() { return rdx; }
+constexpr Register StoreDescriptor::ReceiverRegister() { return r8; }
 // static
-constexpr Register StoreDescriptor::NameRegister() { return rcx; }
+constexpr Register StoreDescriptor::NameRegister() { return r9; }
 // static
 constexpr Register StoreDescriptor::ValueRegister() { return rax; }
 // static
-constexpr Register StoreDescriptor::SlotRegister() { return rdi; }
+constexpr Register StoreDescriptor::SlotRegister() { return rbx; }
 
 // static
-constexpr Register StoreWithVectorDescriptor::VectorRegister() { return rbx; }
+constexpr Register StoreWithVectorDescriptor::VectorRegister() { return r11; }
 
 // static
-constexpr Register StoreTransitionDescriptor::MapRegister() { return r11; }
+constexpr Register StoreTransitionDescriptor::MapRegister() { return r12; }
 
 // static
 constexpr Register ApiGetterDescriptor::HolderRegister() { return rcx; }
@@ -269,12 +269,12 @@ constexpr auto BinaryOpDescriptor::registers() {
 
 // static
 constexpr auto Compare_BaselineDescriptor::registers() {
-  return RegisterArray(rdx, rax, rbx);
+  return RegisterArray(r8, rax, rbx);
 }
 
 // static
 constexpr auto BinaryOp_BaselineDescriptor::registers() {
-  return RegisterArray(rdx, rax, rbx);
+  return RegisterArray(r8, rax, rbx);
 }
 
 // static

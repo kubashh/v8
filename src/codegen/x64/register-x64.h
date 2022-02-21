@@ -291,6 +291,8 @@ constexpr Register kPtrComprCageBaseRegister = r14;  // callee save
 constexpr Register kPtrComprCageBaseRegister = kRootRegister;
 #endif
 
+// Does this register still need to be hold when short builtin call
+// is enabled?
 constexpr Register kOffHeapTrampolineRegister = kScratchRegister;
 
 constexpr DoubleRegister kFPReturnRegister0 = xmm0;
