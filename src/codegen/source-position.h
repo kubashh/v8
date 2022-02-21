@@ -81,7 +81,8 @@ class SourcePosition final {
   }
 
   // Assumes that the code object is optimized
-  std::vector<SourcePositionInfo> InliningStack(Handle<Code> code) const;
+  std::vector<SourcePositionInfo> InliningStack(Handle<Code> code,
+                                                bool first_only = false) const;
   std::vector<SourcePositionInfo> InliningStack(
       OptimizedCompilationInfo* cinfo) const;
 
