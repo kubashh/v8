@@ -14,6 +14,14 @@ load(
 # Use LUCI Scheduler BBv2 names and add Scheduler realms configs.
 lucicfg.enable_experiment("crbug.com/1182002")
 
+# Use python3 for all builds
+luci.builder.defaults.experiments.set(
+    {
+        "luci.recipes.use_python3": 100,
+        "v8.steps.use_python3": 100,
+    },
+)
+
 lucicfg.config(
     config_dir = "generated",
     tracked_files = [
