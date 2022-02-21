@@ -108,6 +108,7 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
   void PrepareForTrace(EmbedderHeapTracer::TraceFlags flags);
   void TracePrologue(EmbedderHeapTracer::TraceFlags flags);
   void TraceEpilogue();
+  void MinorGCTraceEpilogue();
   void EnterFinalPause();
   bool Trace(double deadline);
   bool IsRemoteTracingDone();
