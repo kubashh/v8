@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c82258a_e6c5d020",
+        "filename": "src/codegen/x64/register-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-02-21T11:12:24Z",
+      "side": 1,
+      "message": "Is this register still required when short builtin call is enabled? I think all the calls in the off-heap trampoline are short direct call.",
+      "revId": "f7396b49a0c4d5869685319400d001c595bb3f40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
