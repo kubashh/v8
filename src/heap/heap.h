@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <cmath>
+#include <map>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -110,6 +111,7 @@ class Space;
 class StressScavengeObserver;
 class TimedHistogram;
 class WeakObjectRetainer;
+class HugePageRangeManager;
 
 enum ArrayStorageAllocationMode {
   DONT_INITIALIZE_ARRAY_ELEMENTS,
@@ -865,6 +867,14 @@ class Heap {
   }
 
   inline ConcurrentAllocator* concurrent_allocator_for_maps();
+
+  HugePageRangeManager* huge_page_range_manager() {
+    return huge_page_range_manager_.get();
+  }
+
+  const HugePageRangeManager* huge_page_range_manager() const {
+    return huge_page_range_manager_.get();
+  }
 
   inline Isolate* isolate();
 
@@ -2328,6 +2338,7 @@ class Heap {
   std::unique_ptr<ArrayBufferSweeper> array_buffer_sweeper_;
 
   std::unique_ptr<MemoryAllocator> memory_allocator_;
+  std::unique_ptr<HugePageRangeManager> huge_page_range_manager_;
   std::unique_ptr<IncrementalMarking> incremental_marking_;
   std::unique_ptr<ConcurrentMarking> concurrent_marking_;
   std::unique_ptr<GCIdleTimeHandler> gc_idle_time_handler_;

@@ -121,6 +121,14 @@ bool VirtualAddressSpace::FreeGuardRegion(Address address, size_t size) {
   return OS::Free(reinterpret_cast<void*>(address), size);
 }
 
+bool VirtualAddressSpace::AdviseHugePage(Address address, size_t size) {
+#ifdef V8_OS_LINUX
+  return base::OS::AdviseHugePage(reinterpret_cast<void*>(address), size);
+#else
+  return false;
+#endif
+}
+
 bool VirtualAddressSpace::CanAllocateSubspaces() {
   return OS::CanReserveAddressSpace();
 }
@@ -327,6 +335,10 @@ bool VirtualAddressSubspace::FreeSharedPages(Address address, size_t size) {
   CHECK(reservation_.FreeShared(reinterpret_cast<void*>(address), size));
   CHECK_EQ(size, region_allocator_.FreeRegion(address));
   return true;
+}
+
+bool VirtualAddressSubspace::AdviseHugePage(Address address, size_t size) {
+  return reservation_.AdviseHugePage(reinterpret_cast<void*>(address), size);
 }
 
 std::unique_ptr<v8::VirtualAddressSpace>

@@ -354,6 +354,8 @@ class V8_BASE_EXPORT OS {
   V8_WARN_UNUSED_RESULT static bool SetPermissions(void* address, size_t size,
                                                    MemoryPermission access);
 
+  V8_WARN_UNUSED_RESULT static bool AdviseHugePage(void* address, size_t size);
+
   V8_WARN_UNUSED_RESULT static bool DiscardSystemPages(void* address,
                                                        size_t size);
 
@@ -426,6 +428,8 @@ class V8_BASE_EXPORT AddressSpaceReservation {
 
   V8_WARN_UNUSED_RESULT bool SetPermissions(void* address, size_t size,
                                             OS::MemoryPermission access);
+
+  V8_WARN_UNUSED_RESULT bool AdviseHugePage(void* address, size_t size);
 
   V8_WARN_UNUSED_RESULT bool DiscardSystemPages(void* address, size_t size);
 
