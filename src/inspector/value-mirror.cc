@@ -892,8 +892,8 @@ void getPrivatePropertiesForPreview(
     v8::Local<v8::Context> context, v8::Local<v8::Object> object,
     int* nameLimit, bool* overflow,
     protocol::Array<PropertyPreview>* privateProperties) {
-  std::vector<PrivatePropertyMirror> mirrors =
-      ValueMirror::getPrivateProperties(context, object);
+  std::vector<PrivatePropertyMirror> mirrors = ValueMirror::getPrivateProperties(
+    context, object, /* accessorPropertiesOnly */ false);
   for (auto& mirror : mirrors) {
     std::unique_ptr<PropertyPreview> propertyPreview;
     if (mirror.value) {
@@ -1429,7 +1429,8 @@ void ValueMirror::getInternalProperties(
 
 // static
 std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
-    v8::Local<v8::Context> context, v8::Local<v8::Object> object) {
+    v8::Local<v8::Context> context, v8::Local<v8::Object> object,
+    bool accessorPropertiesOnly) {
   std::vector<PrivatePropertyMirror> mirrors;
   v8::Isolate* isolate = context->GetIsolate();
   v8::MicrotasksScope microtasksScope(isolate,
@@ -1462,6 +1463,8 @@ std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
       if (!setter->IsNull()) {
         setterMirror = ValueMirror::create(context, setter);
       }
+    } else if (accessorPropertiesOnly) {
+      continue;
     } else {
       valueMirror = ValueMirror::create(context, value);
     }
