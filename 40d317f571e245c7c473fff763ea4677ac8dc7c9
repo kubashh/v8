@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c41f63_cf3bbdc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-22T11:20:35Z",
+      "side": 1,
+      "message": "Thanks! `FirstInfo` lgtm, I found 2 other issues though...",
+      "revId": "40d317f571e245c7c473fff763ea4677ac8dc7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365448c5_6d593e9a",
+        "filename": "src/diagnostics/perf-jit.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-22T11:20:35Z",
+      "side": 1,
+      "message": "You probably don\u0027t want the negation here, right?\nMaybe invert the conditional:\n```\nif (!maybeScript.IsScript()) {\n  return {kUnknownScriptNameString, kUnknownScriptNameStringLen};\n}\n```",
+      "range": {
+        "startLine": 299,
+        "startChar": 6,
+        "endLine": 299,
+        "endChar": 30
+      },
+      "revId": "40d317f571e245c7c473fff763ea4677ac8dc7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8e0105_9a1b1fe4",
+        "filename": "src/diagnostics/perf-jit.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-02-22T11:20:35Z",
+      "side": 1,
+      "message": "I am a bit confused. When is `last_script` updated? I can only see the `last_script \u003d 0` assignment.",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 37
+      },
+      "revId": "40d317f571e245c7c473fff763ea4677ac8dc7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
