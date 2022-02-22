@@ -33,6 +33,23 @@
       "message": "To Kim, who already reviewed the front-end parts.",
       "revId": "cf43c830d90733f563bb9b72fc7e7cd2f7e65b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70a013c4_4cb70ce8",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-02-22T13:14:37Z",
+      "side": 1,
+      "message": "nit: can we add a comment to the last bool? `/* accessorPropertiesOnly */`",
+      "revId": "cf43c830d90733f563bb9b72fc7e7cd2f7e65b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
