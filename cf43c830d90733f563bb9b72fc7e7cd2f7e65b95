@@ -16,6 +16,23 @@
       "message": "Hey Jaro,\n\nThis fixes the missing reporting of private accessors when `accessorPropertiesOnly` was set to true in `Runtime.getProperties`.\n\nPlease take a look.\n\nthanks,\nBenedikt",
       "revId": "cf43c830d90733f563bb9b72fc7e7cd2f7e65b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a2c8f0_63dd68c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-02-22T13:06:34Z",
+      "side": 1,
+      "message": "To Kim, who already reviewed the front-end parts.",
+      "revId": "cf43c830d90733f563bb9b72fc7e7cd2f7e65b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
