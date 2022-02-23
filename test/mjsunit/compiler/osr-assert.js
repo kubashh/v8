@@ -34,8 +34,9 @@ function f(x, b, c) {
     a = a + 5;
     assertEquals(b + 1, c);
     outer--;
-    if (outer === 5) {
-      %OptimizeOsr();
+    if (outer === 5 || outer === 4) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
     }
   }
   return a + 4;

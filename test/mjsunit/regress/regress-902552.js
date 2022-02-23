@@ -6,8 +6,11 @@
 
 function f() {
   var C = class {};
-  for (var i = 0; i < 4; ++i) {
-    if (i == 2) %OptimizeOsr();
+  for (var i = 0; i < 5; ++i) {
+    if (i >= 2) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
+    }
     C.prototype.foo = 42;
   }
 }

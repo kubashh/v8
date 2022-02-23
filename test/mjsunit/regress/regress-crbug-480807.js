@@ -10,8 +10,9 @@ function foo() {
     for (var a = 1; a > 0; a--) {
       c += 1;
     }
-    for (var b = 1; b > 0; b--) {
-      %OptimizeOsr();
+    for (var b = 2; b > 0; b--) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(foo);
     }
   }
   return c;

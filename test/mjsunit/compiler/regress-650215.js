@@ -8,7 +8,10 @@ function f() {
   var x = 0;
   for (var i = 0; i < 10; i++) {
     x = (2 % x) | 0;
-    if (i === 5) %OptimizeOsr();
+    if (i === 5 || i === 6) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
+    }
   }
   return x;
 }

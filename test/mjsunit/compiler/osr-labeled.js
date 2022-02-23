@@ -8,9 +8,11 @@ function foo() {
   var sum = 0;
   A: for (var i = 0; i < 5; i++) {
     B: for (var j = 0; j < 5; j++) {
-         %PrepareFunctionForOptimization(foo);
       C: for (var k = 0; k < 10; k++) {
-        if (k === 5) %OptimizeOsr();
+        if (k === 4 || k === 5) {
+          %OptimizeOsr(0, "concurrent");
+          %PrepareFunctionForOptimization(foo);
+        }
         if (k === 6) break B;
         sum++;
       }
@@ -27,10 +29,10 @@ function bar(a) {
   var sum = 0;
   A: for (var i = 0; i < 5; i++) {
     B: for (var j = 0; j < 5; j++) {
-         %PrepareFunctionForOptimization(bar);
       C: for (var k = 0; k < 10; k++) {
         sum++;
-        %OptimizeOsr();
+        %OptimizeOsr(0, "concurrent");
+        %PrepareFunctionForOptimization(bar);
         if (a === 1) break A;
         if (a === 2) break B;
         if (a === 3) break C;

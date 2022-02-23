@@ -34,7 +34,10 @@ function f1() {
     var y = x + 5;
     var z = y + 3;
     sum += z;
-    if (i == 18) %OptimizeOsr();
+    if (i >= 18) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f1);
+    }
   }
   return sum;
 }
@@ -46,7 +49,10 @@ function f2() {
     var y = x + 5;
     var z = y + 3;
     sum += z;
-    if (i == 19) %OptimizeOsr();
+    if (i >= 19) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f2);
+    }
   }
   return sum;
 }
@@ -58,7 +64,10 @@ function f3() {
     var y = x + 5;
     var z = y + 3;
     sum += z;
-    if (i == 20) %OptimizeOsr();
+    if (i >= 20) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f3);
+    }
   }
   return sum;
 }

@@ -9,7 +9,10 @@ function f() {
   for (var i = 0; i < 4; ++i) {
     var x = a[0];
     (function() { return x });
-    if (i == 1) %OptimizeOsr();
+    if (i == 1 || i == 2) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
+    }
     gc();
   }
 }

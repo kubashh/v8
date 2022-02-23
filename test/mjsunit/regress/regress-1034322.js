@@ -15,7 +15,11 @@ function v0() {
 function v1() {
   while (!v0()) {
     // Trigger OSR early to get a crashing case asap.
-    if (ticks == 5) %OptimizeOsr();
+    if (ticks >= 5 && ticks < 10) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(v0);
+      %PrepareFunctionForOptimization(v1);
+    }
     // With the bug fixed, there's no easy way to trigger termination. Instead,
     // run until we reach a certain number of ticks. The crash triggers locally
     // at tick 7562, thus running until 20k ticks to be somewhat safe.

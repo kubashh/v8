@@ -14,7 +14,10 @@ function foo() {
     for (var i = 0; i < 10; i++) {
       {
         let x = i;
-        if (i == 5) %OptimizeOsr();
+        if (i == 5 || i == 6) {
+          %OptimizeOsr(0, "concurrent");
+          %PrepareFunctionForOptimization(foo);
+        }
         sum += i;
         result.push(function() { return x; });
       }

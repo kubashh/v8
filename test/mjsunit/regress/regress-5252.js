@@ -7,7 +7,7 @@
 (function TestNonLoopyLoop() {
   function f() {
     do {
-      %OptimizeOsr();
+      %OptimizeOsr(0, "concurrent");
       return 23;
     } while(false)
   }
@@ -20,7 +20,8 @@
 (function TestNonLoopyGenerator() {
   function* g() {
     do {
-      %OptimizeOsr();
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(g);
       yield 23;
       yield 42;
     } while(false)

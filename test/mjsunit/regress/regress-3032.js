@@ -28,7 +28,12 @@
 // Flags: --allow-natives-syntax
 
 function f() {
-  for (var i = 0; i < 10; i++) { if (i == 5) %OptimizeOsr(); }
+  for (var i = 0; i < 10; i++) {
+    if (i == 5 || i == 6) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
+    }
+  }
   var xl = 4096;
   var z = i % xl;
 }

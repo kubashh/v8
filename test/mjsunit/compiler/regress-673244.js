@@ -8,7 +8,10 @@ function f() {
   var accumulator = false;
   for (var i = 0; i < 4; i++) {
     accumulator = accumulator.hasOwnProperty(3);
-    if (i === 1) %OptimizeOsr();
+    if (i === 1 || i === 2) {
+      %OptimizeOsr(0, "concurrent");
+      %PrepareFunctionForOptimization(f);
+    }
   }
 }
 
