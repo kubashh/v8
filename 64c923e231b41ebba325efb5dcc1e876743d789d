@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7401ec4_c8a16f92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1311345
+      },
+      "writtenOn": "2022-02-23T11:11:18Z",
+      "side": 1,
+      "message": "It wasn\u0027t clear to me whether or not the bug was in letting these functions be used by the allocator, or whether it was in the marking itself.",
+      "parentUuid": "b54b6cc2_40cff6d3",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5f8ea99_840be941",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-23T10:47:53Z",
       "side": 1,
       "message": "This is missing the \"chromium:\" prefix.",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a93f1b_fc8dc715",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1311345
+      },
+      "writtenOn": "2022-02-23T11:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5f8ea99_840be941",
       "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,30 @@
       "writtenOn": "2022-02-23T10:47:53Z",
       "side": 1,
       "message": "Please add a short comment saying why we exclude those code kinds. Also (or alternatively), it might be a good idea to extract this into its own boolean variable:\n\nbool is_statically_compiled \u003d ...\nbool use_mid_tier_register_allocator \u003d !is_statically_compiled \u0026\u0026 ...",
+      "range": {
+        "startLine": 3460,
+        "startChar": 0,
+        "endLine": 3463,
+        "endChar": 62
+      },
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f72c2e_66559a3b",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3463,
+      "author": {
+        "id": 1311345
+      },
+      "writtenOn": "2022-02-23T11:11:18Z",
+      "side": 1,
+      "message": "Is this a comprehensive list of code kinds that are statically compiled? I have only gone off what was causing crashes. Also, FOR_TESTING is not only used at static compile time as far as I can tell.",
+      "parentUuid": "38111849_533f3dda",
       "range": {
         "startLine": 3460,
         "startChar": 0,
