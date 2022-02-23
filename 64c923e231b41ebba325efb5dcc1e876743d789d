@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b42ce611_8ff3761c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-02-23T16:01:34Z",
+      "side": 1,
+      "message": "Also not clear to me whether the mid-tier allocator was intended to be used for statically compiled code. If we agree it was not, then +1 to the motivation that we don\u0027t need a fast allocator in this case.\n\nBtw @Clemens, what would be the benefit of using the top-tier allocator always for statically compiled code? (besides not hitting this bug)",
+      "parentUuid": "c7401ec4_c8a16f92",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5f8ea99_840be941",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -125,6 +143,30 @@
       "side": 1,
       "message": "Is this a comprehensive list of code kinds that are statically compiled? I have only gone off what was causing crashes. Also, FOR_TESTING is not only used at static compile time as far as I can tell.",
       "parentUuid": "38111849_533f3dda",
+      "range": {
+        "startLine": 3460,
+        "startChar": 0,
+        "endLine": 3463,
+        "endChar": 62
+      },
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07428214_e4813f58",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3463,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-02-23T16:01:34Z",
+      "side": 1,
+      "message": "+1 for the `is_statically_compiled` suggestion, even if the list is not exhaustive, although I don\u0027t see any of the other CodeKinds to be used statically. We could even add a predicate to https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/code-kind.h for this logic (without the FOR_TESTING, which you might \u0027and\u0027 with the predicate here).",
+      "parentUuid": "02f72c2e_66559a3b",
       "range": {
         "startLine": 3460,
         "startChar": 0,
