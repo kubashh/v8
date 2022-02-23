@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54b6cc2_40cff6d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-23T10:47:53Z",
+      "side": 1,
+      "message": "If there is a bug, we should fix the bug, and prevent the use of the mid-tier register allocator for those functions.\n\nI think it\u0027s a good idea to use the top-tier allocator for all statically compiled code, but not because of a bug, but because we don\u0027t care about compile time that much for those code objects. So I would suggest using this argument in the CL description instead.",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f8ea99_840be941",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-23T10:47:53Z",
+      "side": 1,
+      "message": "This is missing the \"chromium:\" prefix.",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "87291a7e_2f3c88e0",
@@ -14,6 +48,29 @@
       "writtenOn": "2022-02-23T10:40:19Z",
       "side": 1,
       "message": "It might be incorrect to turn it off for FOR_TESTING as this may simply be hiding bugs with the mid-tier register allocator itself.",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38111849_533f3dda",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3463,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-23T10:47:53Z",
+      "side": 1,
+      "message": "Please add a short comment saying why we exclude those code kinds. Also (or alternatively), it might be a good idea to extract this into its own boolean variable:\n\nbool is_statically_compiled \u003d ...\nbool use_mid_tier_register_allocator \u003d !is_statically_compiled \u0026\u0026 ...",
+      "range": {
+        "startLine": 3460,
+        "startChar": 0,
+        "endLine": 3463,
+        "endChar": 62
+      },
       "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
