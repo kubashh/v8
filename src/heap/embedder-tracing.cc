@@ -78,6 +78,13 @@ void LocalEmbedderHeapTracer::TraceEpilogue() {
   }
 }
 
+void LocalEmbedderHeapTracer::MinorGCTraceEpilogue() {
+  if (!InUse()) return;
+
+  // Minor GC is supported only for CppHeap.
+  if (cpp_heap_) cpp_heap_->RunMinorGC();
+}
+
 void LocalEmbedderHeapTracer::UpdateRemoteStats(size_t allocated_size,
                                                 double time) {
   remote_stats_.used_size = allocated_size;

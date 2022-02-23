@@ -2373,6 +2373,10 @@ size_t Heap::PerformGarbageCollection(
     local_embedder_heap_tracer()->TraceEpilogue();
   }
 
+  if (collector == GarbageCollector::SCAVENGER) {
+    local_embedder_heap_tracer()->MinorGCTraceEpilogue();
+  }
+
 #ifdef VERIFY_HEAP
   if (FLAG_verify_heap) {
     // We don't really perform a GC here but need this scope for the nested
