@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c5b519b_99958723",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-24T10:55:53Z",
+      "side": 1,
+      "message": "I think there are two orthogonal issues here, which are connected though:\n1. For statically compiled code we are more interested in best performance and we can sacrifice some compile time, so we should always use the top-tier register allocator.\n2. The mid-tier register allocator should generate a valid register allocation for every valid TurboFan graph, otherwise it\u0027s a bug. If the bug indeed only happens for code where we don\u0027t want to use this allocator (because of the point above), then that\u0027s low priority though, maybe not even worth fixing.",
+      "parentUuid": "b42ce611_8ff3761c",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5f8ea99_840be941",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "+1 for the `is_statically_compiled` suggestion, even if the list is not exhaustive, although I don\u0027t see any of the other CodeKinds to be used statically. We could even add a predicate to https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/code-kind.h for this logic (without the FOR_TESTING, which you might \u0027and\u0027 with the predicate here).",
       "parentUuid": "02f72c2e_66559a3b",
+      "range": {
+        "startLine": 3460,
+        "startChar": 0,
+        "endLine": 3463,
+        "endChar": 62
+      },
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a74b2d67_2a829d01",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3463,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-24T10:55:53Z",
+      "side": 1,
+      "message": "The CodeKinds are defined in code-kind.h. It seems like BYTECODE_HANDLER and BUILTIN are the most important kinds we want to exclude for mid-tier. C_WASM_ENTRY is only used by the wasm C API, but depending on the use case those could be dynamically generated. But those are small wrappers, so both register allocators should be fine.\n\nNot sure about FOR_TESTING. If it\u0027s not needed, I would recommend dropping it from this list. If that leads to issues, we could temporarily add it to the list, with a TODO to look into this (feel free to assign this to me).",
+      "parentUuid": "07428214_e4813f58",
       "range": {
         "startLine": 3460,
         "startChar": 0,
