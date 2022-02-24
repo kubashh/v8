@@ -51,6 +51,24 @@
       "parentUuid": "7b37c658_b0d39504",
       "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b56f2d1_e1d1674e",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-24T11:32:14Z",
+      "side": 1,
+      "message": "Ah I read that the wrong way around; key:object, value:index makes more sense.",
+      "parentUuid": "ff3e7a9b_de6f0504",
+      "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
