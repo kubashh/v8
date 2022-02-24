@@ -16,6 +16,23 @@
       "message": "jgruber@ src/snapshot OWNER PTAL",
       "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b37c658_b0d39504",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-02-24T10:50:19Z",
+      "side": 1,
+      "message": "Unrelated: using an IdentityMap here seems a bit silly; looks like a plain Array registered with GC should do.",
+      "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
