@@ -33,105 +33,24 @@
       "message": "Unrelated: using an IdentityMap here seems a bit silly; looks like a plain Array registered with GC should do.",
       "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
-    }
-  ],
-  "submitRequirementResults": [
-    {
-      "submitRequirement": {
-        "name": "Code-Owners",
-        "description": {
-          "value": "User with the code owner override approved the change"
-        },
-        "applicabilityExpression": {
-          "value": {
-            "expressionString": "has:enabled_code-owners"
-          }
-        },
-        "submittabilityExpression": {
-          "expressionString": "has:approval_code-owners"
-        },
-        "overrideExpression": {
-          "value": {
-            "expressionString": "label:Owners-Override\u003d+1"
-          }
-        },
-        "allowOverrideInChildProjects": true
-      },
-      "applicabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"has:enabled_code-owners"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["has:enabled_code-owners"],"failingAtoms":[]}
-      },
-      "submittabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"has:approval_code-owners"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["has:approval_code-owners"],"failingAtoms":[]}
-      },
-      "overrideExpressionResult": {
-        "value": {"expression":{"expressionString":"label:Owners-Override=+1"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Owners-Override=+1"]}
-      },
-      "patchSetCommitId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
-      "legacy": {
-        "value": false
-      },
-      "forced": {},
-      "hidden": {}
     },
     {
-      "submitRequirement": {
-        "name": "Code-Review",
-        "description": {
-          "value": "Submit requirement for the \u0027Code-Review\u0027 label"
-        },
-        "applicabilityExpression": {},
-        "submittabilityExpression": {
-          "expressionString": "label:Code-Review\u003dMAX,user\u003dnon_uploader -label:Code-Review\u003dMIN"
-        },
-        "overrideExpression": {
-          "value": {
-            "expressionString": "label:Bot-Commit\u003d+1"
-          }
-        },
-        "allowOverrideInChildProjects": true
+      "unresolved": false,
+      "key": {
+        "uuid": "ff3e7a9b_de6f0504",
+        "filename": "src/snapshot/serializer.h",
+        "patchSetId": 4
       },
-      "applicabilityExpressionResult": {},
-      "submittabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"label:Code-Review=MAX,user=non_uploader -label:Code-Review=MIN"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["label:Code-Review=MAX,user=non_uploader"],"failingAtoms":["label:Code-Review=MIN"]}
+      "lineNbr": 170,
+      "author": {
+        "id": 1132654
       },
-      "overrideExpressionResult": {
-        "value": {"expression":{"expressionString":"label:Bot-Commit=+1"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Bot-Commit=+1"]}
-      },
-      "patchSetCommitId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
-      "legacy": {
-        "value": false
-      },
-      "forced": {},
-      "hidden": {}
-    },
-    {
-      "submitRequirement": {
-        "name": "Verified",
-        "description": {
-          "value": "Submit requirement for the \u0027Verified\u0027 label"
-        },
-        "applicabilityExpression": {
-          "value": {
-            "expressionString": "is:false"
-          }
-        },
-        "submittabilityExpression": {
-          "expressionString": "is:true"
-        },
-        "overrideExpression": {},
-        "allowOverrideInChildProjects": true
-      },
-      "applicabilityExpressionResult": {
-        "value": {"expression":{"expressionString":"is:false"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:false"]}
-      },
-      "submittabilityExpressionResult": {},
-      "overrideExpressionResult": {},
-      "patchSetCommitId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
-      "legacy": {
-        "value": false
-      },
-      "forced": {},
-      "hidden": {}
+      "writtenOn": "2022-02-24T11:22:11Z",
+      "side": 1,
+      "message": "We do use it for looking up id\u0027s of objects in web-snapshot [1]. We could use an FixedArray-based hash-map for that as alternative to keep the lookups fast.\n\n [1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/snapshot/serializer.h;bpv\u003d1;bpt\u003d1?q\u003dLookupOrInsert",
+      "parentUuid": "7b37c658_b0d39504",
+      "revId": "c4730119ad7f0fba8e18c7c2799de0353b2c8dcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
