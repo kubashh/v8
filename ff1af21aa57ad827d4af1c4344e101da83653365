@@ -16,6 +16,46 @@
       "message": "Ping :) ",
       "revId": "ff1af21aa57ad827d4af1c4344e101da83653365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "174fb9ef_d25f4ea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-25T13:20:41Z",
+      "side": 1,
+      "message": "LGTM with a diligence question. Sorry for the latency.",
+      "revId": "ff1af21aa57ad827d4af1c4344e101da83653365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17821baf_b6ff6926",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-02-25T13:20:41Z",
+      "side": 1,
+      "message": "With this logic, a sequence `scope(module1); scope(module2); scope(module1);` would mean that `module1` gets two consecutive `SetWritable()` calls. Have you verified that that\u0027s fine?",
+      "range": {
+        "startLine": 23,
+        "startChar": 44,
+        "endLine": 23,
+        "endChar": 68
+      },
+      "revId": "ff1af21aa57ad827d4af1c4344e101da83653365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
