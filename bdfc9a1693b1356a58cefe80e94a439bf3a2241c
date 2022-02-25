@@ -1,0 +1,435 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c901b3b1_8c21d7f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Apologies for the late response. Found a few minor things, but overall the CL looks okay.",
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ded9ecb0_70a400a7",
+        "filename": "src/codegen/register-configuration.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "I don\u0027t think this is very clear. The \u0027allocatable_simd128_codes\u0027 are passed as an argument, but then only used when fp_aliasing_kind is INDEPENDENT, otherwise it is ignored and allocatable_simd128_codes_ is initialized from e.g. the double registers.\n\nCan we make this more consistent? I see a few options here:\n1) compute the allocatable_simd128_codes in the caller\n2) change the name of the argument to reflect when it is actually used\n3) split this into multiple constructors with different number of arguments\n \nOption 3) would be the cleanest imho, but I\u0027m afraid that might be a bit inflexible because the subclasses might not know which constructor to use statically. Option 2) is the simplest.\n\nPlease take another look at that and how you can make this a bit more intuitive.",
+      "range": {
+        "startLine": 217,
+        "startChar": 4,
+        "endLine": 217,
+        "endChar": 40
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5aa051_3b5f2883",
+        "filename": "src/codegen/register-configuration.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Now that this is outside the RegisterConfiguration class, we should make this an enum class.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c64e41be_4f2fbc98",
+        "filename": "src/codegen/register-configuration.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 24,
+        "startChar": 23,
+        "endLine": 24,
+        "endChar": 25
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bf49b88_87f007f2",
+        "filename": "src/codegen/riscv64/register-riscv64.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Is this change intentional? If so, why is this changed? At least update the comment above.",
+      "range": {
+        "startLine": 305,
+        "startChar": 23,
+        "endLine": 305,
+        "endChar": 24
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab39fe00_260e10f3",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Maybe a different name is more reasonable now? What about kCombineFPAliasing?",
+      "range": {
+        "startLine": 84,
+        "startChar": 13,
+        "endLine": 84,
+        "endChar": 31
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "026cec46_c8ec8b69",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: One pair of paranthesis seems unnecessary.",
+      "range": {
+        "startLine": 165,
+        "startChar": 24,
+        "endLine": 165,
+        "endChar": 54
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86277171_74ad479a",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Is the runtime CHECK necessary? DCHECK seems more reasonable here. You should use [D]CHECK_EQ(a, b) instead of [D]CHECK(a \u003d\u003d b).",
+      "range": {
+        "startLine": 707,
+        "startChar": 8,
+        "endLine": 707,
+        "endChar": 13
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6f5e76_4f75b97b",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: If {kFPAliasing} is COMBINE, ...",
+      "range": {
+        "startLine": 1537,
+        "startChar": 5,
+        "endLine": 1537,
+        "endChar": 39
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7fd1188_4018caf7",
+        "filename": "src/compiler/backend/mid-tier-register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: CHECK_EQ",
+      "range": {
+        "startLine": 1541,
+        "startChar": 4,
+        "endLine": 1541,
+        "endChar": 9
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e33d1409_ae5cf59c",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "if (kFPAliasing \u003d\u003d AliasingKind::INDEPENDENT \u0026\u0026 IsSimd128(representation()) {\n  return RegisterKind::kSimd128;\n }\n return IsFloatingPoint(representation()) ? RegisterKind::kDouble\n                                          : RegisterKind::kGeneral;",
+      "range": {
+        "startLine": 382,
+        "startChar": 0,
+        "endLine": 390,
+        "endChar": 3
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a342b22_58186de8",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2006,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Isn\u0027t there a case for kFloat32 missing?",
+      "range": {
+        "startLine": 2006,
+        "startChar": 4,
+        "endLine": 2006,
+        "endChar": 16
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5348d167_390f8a72",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "Is this case even used? It looks like for kFPAliasing \u003d\u003d INDEPENDENT and rep \u003d\u003d kSimd128 we are using the FixedSIMD128LiveRangeFor below.",
+      "range": {
+        "startLine": 2007,
+        "startChar": 6,
+        "endLine": 2007,
+        "endChar": 43
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63379487_4e02a7de",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ",
+      "range": {
+        "startLine": 2036,
+        "startChar": 2,
+        "endLine": 2036,
+        "endChar": 7
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27f35d29_6bcfb8c6",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 3029,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: consider changing this into a switch(mode()) { ... }",
+      "range": {
+        "startLine": 3025,
+        "startChar": 0,
+        "endLine": 3029,
+        "endChar": 80
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da51348_9adc3bfc",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "DCHECK_EQ",
+      "range": {
+        "startLine": 3563,
+        "startChar": 6,
+        "endLine": 3563,
+        "endChar": 12
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9a4094b_ec736495",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 4016,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ",
+      "range": {
+        "startLine": 4016,
+        "startChar": 2,
+        "endLine": 4016,
+        "endChar": 8
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7657f14_2adb3c44",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: DCHECK_EQ",
+      "range": {
+        "startLine": 4032,
+        "startChar": 2,
+        "endLine": 4032,
+        "endChar": 8
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b15169_075f3948",
+        "filename": "test/cctest/compiler/test-gap-resolver.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-02-25T16:32:43Z",
+      "side": 1,
+      "message": "nit: CHECK_EQ",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
