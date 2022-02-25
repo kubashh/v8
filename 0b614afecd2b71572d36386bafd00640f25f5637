@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c276add4_d6e977b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-25T14:43:09Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "0b614afecd2b71572d36386bafd00640f25f5637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7745f56f_8b412894",
@@ -35,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14465d9c_e60bbb51",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-25T14:43:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7745f56f_8b412894",
+      "revId": "0b614afecd2b71572d36386bafd00640f25f5637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90ec9c29_f6bec526",
@@ -48,6 +83,30 @@
       "writtenOn": "2022-02-23T15:38:31Z",
       "side": 1,
       "message": "I see why you try to go through `local_embedder_heap_tracer()`. However, there\u0027s (a) no matching `TracePrologueCall()` and (b) it\u0027s not something that the embedder heap tracer is concerned about.\n\nSince we do allow accessing `CppHeap` from `Heap` I think we can just call `CppHeap::RunMinorGC()` here.",
+      "range": {
+        "startLine": 2377,
+        "startChar": 4,
+        "endLine": 2377,
+        "endChar": 30
+      },
+      "revId": "0b614afecd2b71572d36386bafd00640f25f5637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d354fd3_61ed1674",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2377,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-02-25T14:43:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90ec9c29_f6bec526",
       "range": {
         "startLine": 2377,
         "startChar": 4,
