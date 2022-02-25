@@ -56,6 +56,30 @@
       },
       "revId": "ff1af21aa57ad827d4af1c4344e101da83653365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b09e50_129144b9",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-25T13:23:28Z",
+      "side": 1,
+      "message": "Yes, that\u0027s fine. If {SwitchingPerNativeModule}, then {SetWritable} just does a {NativeModule::AddWriter}, which might cost performance (because we take a mutex) but is fine otherwise.\nNesting scopes that way is expected to be really rare anyway, the current bug is the only place I know (where we tier down module2 while/after compiling module1).",
+      "parentUuid": "17821baf_b6ff6926",
+      "range": {
+        "startLine": 23,
+        "startChar": 44,
+        "endLine": 23,
+        "endChar": 68
+      },
+      "revId": "ff1af21aa57ad827d4af1c4344e101da83653365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
