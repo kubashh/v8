@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f936608b_ef95628e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-25T09:34:01Z",
+      "side": 1,
+      "message": "This needs adaption to the latest patchset.",
+      "revId": "44eb1456cb5dc27fb62fa14428c0d76c578ddf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44cff965_94f56ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-02-25T09:34:01Z",
+      "side": 1,
+      "message": "Thanks, PS4 LGTM.\nNote that reviewers don\u0027t get a mail when you upload a new patch set, so I nearly missed it :) ",
+      "revId": "44eb1456cb5dc27fb62fa14428c0d76c578ddf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
