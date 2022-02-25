@@ -69,6 +69,7 @@ BasicMemoryChunk* BasicMemoryChunk::Initialize(Heap* heap, Address base,
   chunk->heap_ = heap;
   chunk->set_owner(owner);
   chunk->reservation_ = std::move(reservation);
+  chunk->huge_page_ = nullptr;
   chunk->high_water_mark_ = static_cast<intptr_t>(area_start - base);
   chunk->allocated_bytes_ = chunk->area_size();
   chunk->wasted_memory_ = 0;

@@ -253,5 +253,5 @@ const int kPageSizeBits = kHugePageBits;
 // executable V8 page.
 const int kPageSizeBits = 18;
 #endif
-
+const int kHugePageSizeBits = 21;
 #endif  // V8_BASE_BUILD_CONFIG_H_

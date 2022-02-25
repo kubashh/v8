@@ -19,6 +19,14 @@ void* VirtualAddressSpacePageAllocator::AllocatePages(
                           static_cast<PagePermissions>(access)));
 }
 
+void* VirtualAddressSpacePageAllocator::AllocateHugePages(
+    void* hint, size_t size, size_t alignment,
+    PageAllocator::Permission access) {
+  return reinterpret_cast<void*>(
+      vas_->AllocateHugePages(reinterpret_cast<Address>(hint), size, alignment,
+                              static_cast<PagePermissions>(access)));
+}
+
 bool VirtualAddressSpacePageAllocator::FreePages(void* ptr, size_t size) {
   MutexGuard guard(&mutex_);
   Address address = reinterpret_cast<Address>(ptr);
