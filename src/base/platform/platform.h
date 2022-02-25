@@ -54,8 +54,8 @@
 // the cheaper intrin0.h is not available for all build configurations. That is
 // why we declare this intrinsic.
 extern "C" unsigned long __readfsdword(unsigned long);  // NOLINT(runtime/int)
-#endif                                       // V8_CC_MSVC && V8_HOST_ARCH_IA32
-#endif                                       // V8_NO_FAST_TLS
+#endif  // V8_CC_MSVC && V8_HOST_ARCH_IA32
+#endif  // V8_NO_FAST_TLS
 
 namespace v8 {
 
@@ -105,12 +105,12 @@ inline intptr_t InternalGetExistingThreadLocal(intptr_t index) {
   intptr_t result;
 #if V8_HOST_ARCH_IA32
   asm("movl %%gs:(%1,%2,4), %0;"
-      :"=r"(result)  // Output must be a writable register.
-      :"r"(kMacTlsBaseOffset), "r"(index));
+      : "=r"(result)  // Output must be a writable register.
+      : "r"(kMacTlsBaseOffset), "r"(index));
 #else
   asm("movq %%gs:(%1,%2,8), %0;"
-      :"=r"(result)
-      :"r"(kMacTlsBaseOffset), "r"(index));
+      : "=r"(result)
+      : "r"(kMacTlsBaseOffset), "r"(index));
 #endif
   return result;
 }
@@ -156,7 +156,7 @@ class V8_BASE_EXPORT OS {
   // can be used for profiling. The implementation should
   // strive for high-precision timer resolution, preferable
   // micro-second resolution.
-  static int GetUserTime(uint32_t* secs,  uint32_t* usecs);
+  static int GetUserTime(uint32_t* secs, uint32_t* usecs);
 
   // Returns current time as the number of milliseconds since
   // 00:00:00 UTC, January 1, 1970.
@@ -333,6 +333,11 @@ class V8_BASE_EXPORT OS {
   V8_WARN_UNUSED_RESULT static void* Allocate(void* address, size_t size,
                                               size_t alignment,
                                               MemoryPermission access);
+
+  V8_WARN_UNUSED_RESULT static void* AllocateHugePage(void* address,
+                                                      size_t size,
+                                                      size_t alignment,
+                                                      MemoryPermission access);
 
   V8_WARN_UNUSED_RESULT static void* AllocateShared(size_t size,
                                                     MemoryPermission access);
@@ -520,9 +525,7 @@ class V8_BASE_EXPORT Thread {
   // Wait until thread terminates.
   void Join();
 
-  inline const char* name() const {
-    return name_;
-  }
+  inline const char* name() const { return name_; }
 
   // Abstract method for run handler.
   virtual void Run() = 0;

@@ -205,6 +205,5 @@ std::vector<OS::MemoryRange> OS::GetFreeMemoryRangesWithin(
   fclose(fp);
   return result;
 }
-
 }  // namespace base
 }  // namespace v8

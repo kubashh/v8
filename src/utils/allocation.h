@@ -155,6 +155,12 @@ V8_WARN_UNUSED_RESULT void* AllocatePages(v8::PageAllocator* page_allocator,
                                           size_t alignment,
                                           PageAllocator::Permission access);
 
+V8_EXPORT_PRIVATE
+V8_WARN_UNUSED_RESULT void* AllocateHugePages(v8::PageAllocator* page_allocator,
+                                              void* address, size_t size,
+                                              size_t alignment,
+                                              PageAllocator::Permission access);
+
 // Frees memory allocated by a call to AllocatePages. |address| and |size| must
 // be multiples of AllocatePageSize(). Returns true on success, otherwise false.
 V8_EXPORT_PRIVATE
@@ -207,7 +213,8 @@ class VirtualMemory final {
   // This may not be at the position returned by address().
   V8_EXPORT_PRIVATE VirtualMemory(v8::PageAllocator* page_allocator,
                                   size_t size, void* hint, size_t alignment = 1,
-                                  JitPermission jit = kNoJit);
+                                  JitPermission jit = kNoJit,
+                                  bool huge_page = false);
 
   // Construct a virtual memory by assigning it some already mapped address
   // and size.
