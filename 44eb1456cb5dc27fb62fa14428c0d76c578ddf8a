@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2cc949d_9a79528f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1310167
+      },
+      "writtenOn": "2022-02-25T10:30:15Z",
+      "side": 1,
+      "message": "Apologies, I updated the commit description on my local commit and forgot that it wouldn\u0027t push.",
+      "parentUuid": "f936608b_ef95628e",
+      "revId": "44eb1456cb5dc27fb62fa14428c0d76c578ddf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "44cff965_94f56ab2",

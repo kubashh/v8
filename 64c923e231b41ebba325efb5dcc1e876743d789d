@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf2ddb8_7f716fc8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1310167
+      },
+      "writtenOn": "2022-02-25T10:30:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c5b519b_99958723",
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5f8ea99_840be941",
@@ -233,6 +251,30 @@
       "side": 1,
       "message": "I will prevent use of the mid-tier register allocator for statically compiled functions only for now as they are sufficient to prevent any issues with v8_enable_builtins_profiling.\n\nWhen forcing use of the mid-tier allocator, the FOR_TESTING code fails for the same reason as the static code, I imagine none of the test code has enough virtual registers to reach the threshold for using the mid-tier register allocator as a huge function and so is not an issue that needs to be covered in this patch.\n\nThe C_WASM_ENTRY code fails when using the mid-tier allocator as it hits the DCHECK here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/backend/mid-tier-register-allocator.cc;l\u003d582;bpv\u003d0;bpt\u003d1\nThis may be a completely different bug and so I will not attempt to fix that here.",
       "parentUuid": "a74b2d67_2a829d01",
+      "range": {
+        "startLine": 3460,
+        "startChar": 0,
+        "endLine": 3463,
+        "endChar": 62
+      },
+      "revId": "64c923e231b41ebba325efb5dcc1e876743d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee4e07de_983495da",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3463,
+      "author": {
+        "id": 1310167
+      },
+      "writtenOn": "2022-02-25T10:30:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e6c5e18_09b39ef3",
       "range": {
         "startLine": 3460,
         "startChar": 0,
