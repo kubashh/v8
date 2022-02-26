@@ -716,6 +716,15 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
 
 }  // namespace
 
+void Builtins::Generate_ClobberDoubleRegisters(MacroAssembler* masm) {
+// clobber all double registers
+#define CLOBBER_REGISTER(R) __ Move(R, (uint32_t)0),
+  DOUBLE_REGISTERS(CLOBBER_REGISTER)
+#undef CLOBBER_REGISTER
+
+  __ Ret(0);
+}
+
 void Builtins::Generate_JSEntry(MacroAssembler* masm) {
   Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtin::kJSEntryTrampoline);
 }

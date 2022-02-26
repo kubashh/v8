@@ -105,12 +105,12 @@ Handle<S> Arguments<T>::at(int index) const {
   return Handle<S>::cast(obj);
 }
 
-double ClobberDoubleRegisters(double x1, double x2, double x3, double x4);
+void ClobberDoubleRegisters(Isolate*);
 
 #ifdef DEBUG
-#define CLOBBER_DOUBLE_REGISTERS() ClobberDoubleRegisters(1, 2, 3, 4);
+#define CLOBBER_DOUBLE_REGISTERS(isolate) ClobberDoubleRegisters(isolate);
 #else
-#define CLOBBER_DOUBLE_REGISTERS()
+#define CLOBBER_DOUBLE_REGISTERS(isolate)
 #endif
 
 // TODO(cbruni): add global flag to check whether any tracing events have been
@@ -143,7 +143,7 @@ double ClobberDoubleRegisters(double x1, double x2, double x3, double x4);
   RUNTIME_ENTRY_WITH_RCS(Type, InternalType, Convert, Name)                 \
   Type Name(int args_length, Address* args_object, Isolate* isolate) {      \
     DCHECK(isolate->context().is_null() || isolate->context().IsContext()); \
-    CLOBBER_DOUBLE_REGISTERS();                                             \
+    CLOBBER_DOUBLE_REGISTERS(isolate);                                      \
     TEST_AND_CALL_RCS(Name)                                                 \
     RuntimeArguments args(args_length, args_object);                        \
     return Convert(__RT_impl_##Name(args, isolate));                        \

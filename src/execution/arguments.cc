@@ -4,14 +4,19 @@
 
 #include "src/execution/arguments.h"
 
+#include "src/execution/simulator.h"
+#include "src/objects/code-inl.h"
+
 namespace v8 {
 namespace internal {
 
-double ClobberDoubleRegisters(double x1, double x2, double x3, double x4) {
-  // TODO(v8:11798): This clobbers only subset of registers depending on
-  // compiler, Rewrite this in assembly to really clobber all registers. GCC for
-  // ia32 uses the FPU and does not touch XMM registers.
-  return x1 * 1.01 + x2 * 2.02 + x3 * 3.03 + x4 * 4.04;
+void ClobberDoubleRegisters(Isolate* isolate) {
+  Handle<CodeT> code = BUILTIN_CODE(isolate, ClobberDoubleRegisters);
+  using ClobberDoubleRegistersFunction = GeneratedCode<void()>;
+  ClobberDoubleRegistersFunction stub_entry =
+      ClobberDoubleRegistersFunction::FromAddress(isolate,
+                                                  code->InstructionStart());
+  stub_entry.Call();
 }
 
 }  // namespace internal

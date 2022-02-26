@@ -156,6 +156,9 @@ namespace internal {
   /* ES6 section 9.5.14 [[Construct]] ( argumentsList, newTarget) */           \
   TFC(ConstructProxy, JSTrampoline)                                            \
                                                                                \
+  /* ClobberDoubleRegisters */                                                 \
+  ASM(ClobberDoubleRegisters, Dummy)                                           \
+                                                                               \
   /* Apply and entries */                                                      \
   ASM(JSEntry, Dummy)                                                          \
   ASM(JSConstructEntry, Dummy)                                                 \
