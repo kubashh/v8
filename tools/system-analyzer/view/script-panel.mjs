@@ -1,11 +1,11 @@
 // Copyright 2020 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import {defer, groupBy} from '../helper.mjs';
+import {arrayEquals, defer, groupBy} from '../helper.mjs';
 import {App} from '../index.mjs'
 
-import {SelectRelatedEvent, ToolTipEvent} from './events.mjs';
-import {CollapsableElement, CSSColor, delay, DOM, formatBytes, gradientStopsFromGroups} from './helper.mjs';
+import {SelectionEvent, SelectRelatedEvent, ToolTipEvent} from './events.mjs';
+import {CollapsableElement, CSSColor, delay, DOM, formatBytes, gradientStopsFromGroups, LazyTable} from './helper.mjs';
 
 // A source mapping proxy for source maps that don't have CORS headers.
 // TODO(leszeks): Make this configurable.
@@ -18,6 +18,8 @@ DOM.defineCustomElement('view/script-panel',
   _sourcePositionsToMarkNodesPromise = defer();
   _scripts = [];
   _script;
+
+  showToolTipEntriesHandler = this.handleShowToolTipEntries.bind(this);
 
   constructor() {
     super(templateText);
@@ -48,6 +50,7 @@ DOM.defineCustomElement('view/script-panel',
   }
 
   set selectedSourcePositions(sourcePositions) {
+    if (arrayEquals(this._selectedSourcePositions, sourcePositions)) return;
     this._selectedSourcePositions = sourcePositions;
     // TODO: highlight multiple scripts
     this.script = sourcePositions[0]?.script;
@@ -141,25 +144,23 @@ DOM.defineCustomElement('view/script-panel',
     this.dispatchEvent(new SelectRelatedEvent(this._script));
   }
 
+  setSelectedSourcePositionInternal(sourcePosition) {
+    this._selectedSourcePositions = [sourcePosition];
+    console.assert(sourcePosition.script === this._script);
+  }
+
   handleSourcePositionClick(e) {
     const sourcePosition = e.target.sourcePosition;
+    this.setSelectedSourcePositionInternal(sourcePosition);
     this.dispatchEvent(new SelectRelatedEvent(sourcePosition));
   }
 
   handleSourcePositionMouseOver(e) {
     const sourcePosition = e.target.sourcePosition;
     const entries = sourcePosition.entries;
-    let text = groupBy(entries, each => each.constructor, true)
-                   .map(group => {
-                     let text = `${group.key.name}: ${group.length}\n`
-                     text += groupBy(group.entries, each => each.type, true)
-                                 .map(group => {
-                                   return `  - ${group.key}: ${group.length}`;
-                                 })
-                                 .join('\n');
-                     return text;
-                   })
-                   .join('\n');
+    const toolTipContent = DOM.div();
+    toolTipContent.appendChild(
+        new ToolTipTableBuilder(this, entries).tableNode);
 
     let sourceMapContent;
     switch (this._script.sourceMapState) {
@@ -192,16 +193,50 @@ DOM.defineCustomElement('view/script-panel',
       default:
         break;
     }
-
-    const toolTipContent = DOM.div({
-      children: [
-        DOM.element('pre', {className: 'textContent', textContent: text}),
-        sourceMapContent
-      ]
-    });
+    toolTipContent.appendChild(sourceMapContent);
     this.dispatchEvent(new ToolTipEvent(toolTipContent, e.target));
   }
+
+  handleShowToolTipEntries(event) {
+    let entries = event.currentTarget.data;
+    const sourcePosition = entries[0].sourcePosition;
+    // Add a source position entry so the current position stays focused.
+    this.setSelectedSourcePositionInternal(sourcePosition);
+    entries = entries.concat(this._selectedSourcePositions);
+    this.dispatchEvent(new SelectionEvent(entries));
+  }
 });
+
+class ToolTipTableBuilder {
+  constructor(scriptPanel, entries) {
+    this._scriptPanel = scriptPanel;
+    this.tableNode = DOM.table();
+    const tr = DOM.tr();
+    tr.appendChild(DOM.td('Type'))
+    tr.appendChild(DOM.td('Subtype'))
+    tr.appendChild(DOM.td('Count')) this.tableNode
+        .appendChild(document.createElement('thead'))
+        .appendChild(tr);
+    groupBy(entries, each => each.constructor, true).forEach(group => {
+      this.addRow(group.key.name, 'all', entries, false)
+      groupBy(group.entries, each => each.type, true).forEach(group => {
+        this.addRow('', group.key, group.entries, false)
+      })
+    })
+  }
+
+  addRow(name, subtypeName, entries) {
+    const tr = DOM.tr();
+    tr.appendChild(DOM.td(name));
+    tr.appendChild(DOM.td(subtypeName));
+    tr.appendChild(DOM.td(entries.length));
+    const button =
+        DOM.button('Show', this._scriptPanel.showToolTipEntriesHandler);
+    button.data = entries;
+    tr.appendChild(DOM.td(button));
+    this.tableNode.appendChild(tr);
+  }
+}
 
 class SourcePositionIterator {
   _entries;

@@ -180,16 +180,6 @@ export class LogReader {
   }
 
   /**
-   * Returns whether a particular dispatch must be skipped.
-   *
-   * @param {!Object} dispatch Dispatch record.
-   * @return {boolean} True if dispatch must be skipped.
-   */
-  skipDispatch(dispatch) {
-    return false;
-  }
-
-  /**
    * Does a dispatch of a log record.
    *
    * @param {Array.<string>} fields Log record.
@@ -200,9 +190,6 @@ export class LogReader {
     const command = fields[0];
     const dispatch = this.dispatchTable_[command];
     if (dispatch === undefined) return;
-    if (dispatch === null || this.skipDispatch(dispatch)) {
-      return;
-    }
 
     // Parse fields.
     const parsedFields = [];

@@ -274,6 +274,7 @@ export class Profile {
   c_entries_ = {};
   scripts_ = [];
   urlToScript_ = new Map();
+  warnings = [];
 
   serializeVMSymbols() {
     let result = this.codeMap_.getAllStaticEntriesWithAddresses();
@@ -525,7 +526,7 @@ export class Profile {
         const func = this.codeMap_.findDynamicEntryByStartAddress(funcAddr);
         if (!func || func.funcId === undefined) {
           // TODO: fix
-          console.warn(`Could not find function ${inlinedFunctions[i]}`);
+          this.warnings.push(`Could not find function ${inlinedFunctions[i]}`);
           inlinedFunctions[i] = null;
         } else {
           inlinedFunctions[i] = func.funcId;

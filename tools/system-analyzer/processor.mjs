@@ -248,6 +248,9 @@ export class Processor extends LogReader {
 
   async finalize() {
     await this._chunkConsumer.consumeAll();
+    if (this._profile.warnings.length > 0) {
+      console.warn('Found profiler warnings:', this._profile.warnings);
+    }
     // TODO(cbruni): print stats;
     this._mapTimeline.transitions = new Map();
     let id = 0;
