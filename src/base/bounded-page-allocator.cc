@@ -30,40 +30,39 @@ void* BoundedPageAllocator::AllocatePages(void* hint, size_t size,
                                           size_t alignment,
                                           PageAllocator::Permission access) {
   MutexGuard guard(&mutex_);
-  DCHECK(IsAligned(alignment, region_allocator_.page_size()));
-  DCHECK(IsAligned(alignment, allocate_page_size_));
-
-  Address address = RegionAllocator::kAllocationFailure;
-
-  Address hint_address = reinterpret_cast<Address>(hint);
-  if (hint_address && IsAligned(hint_address, alignment) &&
-      region_allocator_.contains(hint_address, size)) {
-    if (region_allocator_.AllocateRegionAt(hint_address, size)) {
-      address = hint_address;
-    }
-  }
-
-  if (address == RegionAllocator::kAllocationFailure) {
-    if (alignment <= allocate_page_size_) {
-      // TODO(ishell): Consider using randomized version here.
-      address = region_allocator_.AllocateRegion(size);
-    } else {
-      address = region_allocator_.AllocateAlignedRegion(size, alignment);
-    }
-  }
-
-  if (address == RegionAllocator::kAllocationFailure) {
+  void* ptr = AllocateRegion(hint, size, alignment);
+  if (!ptr) {
     return nullptr;
   }
 
-  void* ptr = reinterpret_cast<void*>(address);
   if (!page_allocator_->SetPermissions(ptr, size, access)) {
     // This most likely means that we ran out of memory.
-    CHECK_EQ(region_allocator_.FreeRegion(address), size);
+    CHECK_EQ(region_allocator_.FreeRegion(reinterpret_cast<Address>(ptr)),
+             size);
     return nullptr;
   }
 
   return ptr;
+}
+
+void* BoundedPageAllocator::AllocateHugePages(
+    void* hint, size_t size, size_t alignment,
+    PageAllocator::Permission access) {
+  MutexGuard guard(&mutex_);
+  void* ptr = AllocateRegion(hint, size, alignment);
+  if (!ptr) {
+    return nullptr;
+  }
+
+  void* huge_page_base =
+      page_allocator_->AllocateHugePages(ptr, size, alignment, access);
+  if (!huge_page_base) {
+    Address address = reinterpret_cast<Address>(huge_page_base);
+    size_t freed_size = region_allocator_.FreeRegion(address);
+    CHECK_EQ(size, freed_size);
+  }
+  CHECK_EQ(huge_page_base, ptr);
+  return huge_page_base;
 }
 
 bool BoundedPageAllocator::AllocatePagesAt(Address address, size_t size,
@@ -192,6 +191,35 @@ bool BoundedPageAllocator::DiscardSystemPages(void* address, size_t size) {
 
 bool BoundedPageAllocator::DecommitPages(void* address, size_t size) {
   return page_allocator_->DecommitPages(address, size);
+}
+
+void* BoundedPageAllocator::AllocateRegion(void* hint, size_t size,
+                                           size_t alignment) {
+  DCHECK(IsAligned(alignment, region_allocator_.page_size()));
+  DCHECK(IsAligned(alignment, allocate_page_size_));
+
+  Address address = RegionAllocator::kAllocationFailure;
+
+  Address hint_address = reinterpret_cast<Address>(hint);
+  if (hint_address && IsAligned(hint_address, alignment) &&
+      region_allocator_.contains(hint_address, size)) {
+    if (region_allocator_.AllocateRegionAt(hint_address, size)) {
+      address = hint_address;
+    }
+  }
+
+  if (address == RegionAllocator::kAllocationFailure) {
+    if (alignment <= allocate_page_size_) {
+      // TODO(ishell): Consider using randomized version here.
+      address = region_allocator_.AllocateRegion(size);
+    } else {
+      address = region_allocator_.AllocateAlignedRegion(size, alignment);
+    }
+  }
+  if (address == RegionAllocator::kAllocationFailure) {
+    return nullptr;
+  }
+  return reinterpret_cast<void*>(address);
 }
 
 }  // namespace base

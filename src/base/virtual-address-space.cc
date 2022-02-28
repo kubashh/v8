@@ -85,6 +85,18 @@ Address VirtualAddressSpace::AllocatePages(Address hint, size_t size,
                    static_cast<OS::MemoryPermission>(permissions)));
 }
 
+Address VirtualAddressSpace::AllocateHugePages(Address hint, size_t size,
+                                               size_t alignment,
+                                               PagePermissions permissions) {
+  DCHECK(IsAligned(alignment, allocation_granularity()));
+  DCHECK(IsAligned(hint, alignment));
+  DCHECK(IsAligned(size, allocation_granularity()));
+
+  return reinterpret_cast<Address>(
+      OS::AllocateHugePage(reinterpret_cast<void*>(hint), size, alignment,
+                           static_cast<OS::MemoryPermission>(permissions)));
+}
+
 bool VirtualAddressSpace::FreePages(Address address, size_t size) {
   DCHECK(IsAligned(address, allocation_granularity()));
   DCHECK(IsAligned(size, allocation_granularity()));
