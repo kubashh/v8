@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3373cadc_af3f454f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-03-01T15:07:54Z",
+      "side": 1,
+      "message": "Hello,\n\nI just wanted bring up two questions related to this topic;\n\n- Why can\u0027t you use the current implementation and interpret the allocated FP register number as a Simd register? i.e the allocator returns FP register 5 and you simply use Simd register 5 instead. Of course this method wont work if a direct 1-1 match can\u0027t be made and certain vector registers can\u0027t be used. I can also see how using separate Simd registers could avoid register spilling.\n\n- Some builtins such a `WasmDebugBreak` need to push Vector/FP registers before making a runtime call: https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/src/builtins/x64/builtins-x64.cc#2860\nAfter this change, do Simd registers need to also be pushed/popped onto the stack separately from FP registers?",
+      "revId": "807445751cd17dcc8279127a97da10fe288f03ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
