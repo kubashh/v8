@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2020 the V8 project authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -6,58 +6,67 @@
 # This is main driver for gcmole tool. See README for more details.
 # Usage: CLANG_BIN=clang-bin-dir python tools/gcmole/gcmole.py [arm|arm64|ia32|x64]
 
-# for py2/py3 compatibility
-from __future__ import print_function
 
+from multiprocessing import cpu_count
+from pathlib import Path
 import collections
 import difflib
-from multiprocessing import cpu_count
+import optparse
 import os
+import queue
 import re
+import shlex
 import subprocess
 import sys
 import threading
-if sys.version_info.major > 2:
-  import queue
-else:
-  import Queue as queue
 
-ArchCfg = collections.namedtuple("ArchCfg",
-                                 ["triple", "arch_define", "arch_options"])
+ArchCfg = collections.namedtuple(
+    "ArchCfg", ["name", "cpu", "triple", "arch_define", "arch_options"])
 
 ARCHITECTURES = {
     "ia32":
         ArchCfg(
+            name="ia32",
+            cpu="x86",
             triple="i586-unknown-linux",
             arch_define="V8_TARGET_ARCH_IA32",
             arch_options=["-m32"],
         ),
     "arm":
         ArchCfg(
+            name="arm",
+            cpu="arm",
             triple="i586-unknown-linux",
             arch_define="V8_TARGET_ARCH_ARM",
             arch_options=["-m32"],
         ),
     "x64":
         ArchCfg(
+            name="x64",
+            cpu="x64",
             triple="x86_64-unknown-linux",
             arch_define="V8_TARGET_ARCH_X64",
-            arch_options=[]),
+            arch_options=[],
+        ),
     "arm64":
         ArchCfg(
+            name="arm64",
+            cpu="arm64",
             triple="x86_64-unknown-linux",
             arch_define="V8_TARGET_ARCH_ARM64",
             arch_options=[],
         ),
 }
+ARCHITECTURES['x86'] = ARCHITECTURES['ia32']
 
 
-def log(format, *args):
-  print(format.format(*args))
+def log(format, level=0):
+  mark = ("#", "=", "-", ".")[level]
+  print(mark * 2, format)
 
 
-def fatal(format, *args):
-  log(format, *args)
+def fatal(format):
+  log(format)
   sys.exit(1)
 
 
@@ -65,26 +74,26 @@ def fatal(format, *args):
 # Clang invocation
 
 
-def MakeClangCommandLine(plugin, plugin_args, arch_cfg, clang_bin_dir,
-                         clang_plugins_dir):
+def make_clang_command_line(plugin, plugin_args, options):
+  arch_cfg = ARCHITECTURES[options.v8_target_cpu]
   prefixed_plugin_args = []
   if plugin_args:
     for arg in plugin_args:
       prefixed_plugin_args += [
           "-Xclang",
-          "-plugin-arg-{}".format(plugin),
+          f"-plugin-arg-{plugin}",
           "-Xclang",
           arg,
       ]
-
+  log(f"Using generated files in {options.v8_build_dir / 'gen'}")
   return ([
-      os.path.join(clang_bin_dir, "clang++"),
+      options.clang_bin_dir / "clang++",
       "-std=c++14",
       "-c",
       "-Xclang",
       "-load",
       "-Xclang",
-      os.path.join(clang_plugins_dir, "libgcmole.so"),
+      options.clang_plugins_dir / "libgcmole.so",
       "-Xclang",
       "-plugin",
       "-Xclang",
@@ -99,37 +108,36 @@ def MakeClangCommandLine(plugin, plugin_args, arch_cfg, clang_bin_dir,
       arch_cfg.arch_define,
       "-DENABLE_DEBUGGER_SUPPORT",
       "-DV8_INTL_SUPPORT",
-      "-DV8_ENABLE_WEBASSEMBLY",
-      "-I./",
-      "-Iinclude/",
-      "-Iout/build/gen",
+      f"-I{options.v8_root_dir}",
+      f"-I{options.v8_root_dir}/include/",
+      f"-I{options.v8_build_dir / 'gen'}",
       "-Ithird_party/icu/source/common",
       "-Ithird_party/icu/source/i18n",
   ] + arch_cfg.arch_options)
 
 
-def InvokeClangPluginForFile(filename, cmd_line, verbose):
+def invoke_clang_plugin_for_file(filename, cmd_line, verbose):
+  args = cmd_line + [filename]
   if verbose:
-    print("popen ", " ".join(cmd_line + [filename]))
-  p = subprocess.Popen(
-      cmd_line + [filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print("popen ", shlex.join(map(str, args)))
+  p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = p.communicate()
-  return p.returncode, stdout, stderr
+  return p.returncode, stdout.decode("utf-8"), stderr.decode("utf-8")
 
 
-def InvokeClangPluginForFilesInQueue(i, input_queue, output_queue, cancel_event,
-                                     cmd_line, verbose):
+def invoke_clang_plugin_for_files_in_queue(i, input_queue, output_queue,
+                                           cancel_event, cmd_line, verbose):
   success = False
   try:
     while not cancel_event.is_set():
       filename = input_queue.get_nowait()
-      ret, stdout, stderr = InvokeClangPluginForFile(filename, cmd_line,
-                                                     verbose)
-      output_queue.put_nowait((filename, ret, stdout.decode('utf-8'), stderr.decode('utf-8')))
+      ret, stdout, stderr = invoke_clang_plugin_for_file(
+          filename, cmd_line, verbose)
+      output_queue.put_nowait((filename, ret, stdout, stderr))
       if ret != 0:
         break
   except KeyboardInterrupt:
-    log("-- [{}] Interrupting", i)
+    log(f"[{i}] Interrupting", level=1)
   except queue.Empty:
     success = True
   finally:
@@ -138,30 +146,21 @@ def InvokeClangPluginForFilesInQueue(i, input_queue, output_queue, cancel_event,
     output_queue.put_nowait(success)
 
 
-def InvokeClangPluginForEachFile(
-    filenames,
-    plugin,
-    plugin_args,
-    arch_cfg,
-    flags,
-    clang_bin_dir,
-    clang_plugins_dir,
-):
-  cmd_line = MakeClangCommandLine(plugin, plugin_args, arch_cfg, clang_bin_dir,
-                                  clang_plugins_dir)
-  verbose = flags["verbose"]
-  if flags["sequential"]:
-    log("** Sequential execution.")
+def invoke_clang_plugin_for_each_file(filenames, plugin, plugin_args, options):
+  cmd_line = make_clang_command_line(plugin, plugin_args, options)
+  verbose = options.verbose
+  if options.sequential:
+    log("Sequential execution.")
     for filename in filenames:
-      log("-- {}", filename)
-      returncode, stdout, stderr = InvokeClangPluginForFile(
+      log(filename, level=1)
+      returncode, stdout, stderr = invoke_clang_plugin_for_file(
           filename, cmd_line, verbose)
       if returncode != 0:
         sys.stderr.write(stderr)
         sys.exit(returncode)
       yield filename, stdout, stderr
   else:
-    log("** Parallel execution.")
+    log("Parallel execution.")
     cpus = cpu_count()
     input_queue = queue.Queue()
     output_queue = queue.Queue()
@@ -175,7 +174,7 @@ def InvokeClangPluginForEachFile(
       for i in range(min(len(filenames), cpus)):
         threads.append(
             threading.Thread(
-                target=InvokeClangPluginForFilesInQueue,
+                target=invoke_clang_plugin_for_files_in_queue,
                 args=(i, input_queue, output_queue, cancel_event, cmd_line,
                       verbose)))
 
@@ -192,7 +191,7 @@ def InvokeClangPluginForEachFile(
           else:
             break
         filename, returncode, stdout, stderr = output
-        log("-- {}", filename)
+        log(filename, level=1)
         if returncode != 0:
           sys.stderr.write(stderr)
           sys.exit(returncode)
@@ -207,7 +206,7 @@ def InvokeClangPluginForEachFile(
 # -----------------------------------------------------------------------------
 
 
-def ParseGNFile(for_test):
+def parse_gn_file(options, for_test):
   result = {}
   if for_test:
     gn_files = [("tools/gcmole/GCMOLE.gn", re.compile('"([^"]*?\.cc)"'), "")]
@@ -215,64 +214,50 @@ def ParseGNFile(for_test):
     gn_files = [
         ("BUILD.gn", re.compile('"([^"]*?\.cc)"'), ""),
         ("test/cctest/BUILD.gn", re.compile('"(test-[^"]*?\.cc)"'),
-         "test/cctest/"),
+         Path("test/cctest/")),
     ]
 
   for filename, pattern, prefix in gn_files:
-    with open(filename) as gn_file:
+    path = options.v8_root_dir / filename
+    with open(path) as gn_file:
       gn = gn_file.read()
       for condition, sources in re.findall("### gcmole\((.*?)\) ###(.*?)\]", gn,
                                            re.MULTILINE | re.DOTALL):
         if condition not in result:
           result[condition] = []
         for file in pattern.findall(sources):
-          result[condition].append(prefix + file)
+          result[condition].append(options.v8_root_dir / prefix / file)
 
   return result
 
 
-def EvaluateCondition(cond, props):
+def evaluate_condition(cond, props):
   if cond == "all":
     return True
 
   m = re.match("(\w+):(\w+)", cond)
   if m is None:
-    fatal("failed to parse condition: {}", cond)
+    fatal(f"failed to parse condition: {cond}")
   p, v = m.groups()
   if p not in props:
-    fatal("undefined configuration property: {}", p)
+    fatal(f"undefined configuration property: {p}")
 
   return props[p] == v
 
 
-def BuildFileList(sources, props):
+def build_file_list(options, for_test):
+  sources = parse_gn_file(options, for_test)
+  props = {
+      "os": "linux",
+      "arch": options.v8_target_cpu,
+      "mode": "debug",
+      "simulator": ""
+  }
   ret = []
-  for condition, files in sources.items():
-    if EvaluateCondition(condition, props):
+  for condition, files in list(sources.items()):
+    if evaluate_condition(condition, props):
       ret += files
   return ret
-
-
-gn_sources = ParseGNFile(for_test=False)
-gn_test_sources = ParseGNFile(for_test=True)
-
-
-def FilesForArch(arch):
-  return BuildFileList(gn_sources, {
-      "os": "linux",
-      "arch": arch,
-      "mode": "debug",
-      "simulator": ""
-  })
-
-
-def FilesForTest(arch):
-  return BuildFileList(gn_test_sources, {
-      "os": "linux",
-      "arch": arch,
-      "mode": "debug",
-      "simulator": ""
-  })
 
 
 # -----------------------------------------------------------------------------
@@ -308,19 +293,19 @@ ALLOWLIST = [
 
 GC_PATTERN = ",.*Collect.*Garbage"
 SAFEPOINT_PATTERN = ",SafepointSlowPath"
-ALLOWLIST_PATTERN = "|".join("(?:%s)" % p for p in ALLOWLIST)
+ALLOWLIST_PATTERN = "|".join(f"(?:{p})" for p in ALLOWLIST)
 
 
-def MergeRegexp(pattern_dict):
+def merge_regexp(pattern_dict):
   return re.compile("|".join(
-      "(?P<%s>%s)" % (key, value) for (key, value) in pattern_dict.items()))
+      f"(?P<{key}>{value})" for (key, value) in list(pattern_dict.items())))
 
 
-IS_SPECIAL_WITHOUT_ALLOW_LIST = MergeRegexp({
+IS_SPECIAL_WITHOUT_ALLOW_LIST = merge_regexp({
     "gc": GC_PATTERN,
     "safepoint": SAFEPOINT_PATTERN
 })
-IS_SPECIAL_WITH_ALLOW_LIST = MergeRegexp({
+IS_SPECIAL_WITH_ALLOW_LIST = merge_regexp({
     "gc": GC_PATTERN,
     "safepoint": SAFEPOINT_PATTERN,
     "allow": ALLOWLIST_PATTERN
@@ -329,81 +314,83 @@ IS_SPECIAL_WITH_ALLOW_LIST = MergeRegexp({
 
 class GCSuspectsCollector:
 
-  def __init__(self, flags):
+  def __init__(self, options):
     self.gc = {}
-    self.gc_caused = collections.defaultdict(lambda: [])
+    self.gc_caused = collections.defaultdict(lambda: set())
     self.funcs = {}
     self.current_caller = None
-    self.allowlist = flags["allowlist"]
+    self.allowlist = options.allowlist
     self.is_special = IS_SPECIAL_WITH_ALLOW_LIST if self.allowlist else IS_SPECIAL_WITHOUT_ALLOW_LIST
 
-  def AddCause(self, name, cause):
-    self.gc_caused[name].append(cause)
+  def add_cause(self, name, cause):
+    self.gc_caused[name].add(cause)
 
-  def Parse(self, lines):
+  def parse(self, lines):
     for funcname in lines:
       if not funcname:
         continue
 
       if funcname[0] != "\t":
-        self.Resolve(funcname)
+        self.resolve(funcname)
         self.current_caller = funcname
       else:
         name = funcname[1:]
-        callers_for_name = self.Resolve(name)
+        callers_for_name = self.resolve(name)
         callers_for_name.add(self.current_caller)
 
-  def Resolve(self, name):
+  def resolve(self, name):
     if name not in self.funcs:
       self.funcs[name] = set()
       m = self.is_special.search(name)
       if m:
         if m.group("gc"):
           self.gc[name] = True
-          self.AddCause(name, "<GC>")
+          self.add_cause(name, "<GC>")
         elif m.group("safepoint"):
           self.gc[name] = True
-          self.AddCause(name, "<Safepoint>")
+          self.add_cause(name, "<Safepoint>")
         elif m.group("allow"):
           self.gc[name] = False
 
     return self.funcs[name]
 
-  def Propagate(self):
-    log("** Propagating GC information")
+  def propagate(self):
+    log("Propagating GC information")
 
     def mark(funcname, callers):
       for caller in callers:
         if caller not in self.gc:
           self.gc[caller] = True
           mark(caller, self.funcs[caller])
+        self.add_cause(caller, funcname)
 
-        self.AddCause(caller, funcname)
-
-    for funcname, callers in self.funcs.items():
+    for funcname, callers in list(self.funcs.items()):
       if self.gc.get(funcname, False):
         mark(funcname, callers)
 
 
-def GenerateGCSuspects(arch, files, arch_cfg, flags, clang_bin_dir,
-                       clang_plugins_dir):
+def generate_gc_suspects(files, options):
   # Reset the global state.
-  collector = GCSuspectsCollector(flags)
+  collector = GCSuspectsCollector(options)
 
-  log("** Building GC Suspects for {}", arch)
-  for filename, stdout, stderr in InvokeClangPluginForEachFile(
-      files, "dump-callees", [], arch_cfg, flags, clang_bin_dir,
-      clang_plugins_dir):
-    collector.Parse(stdout.splitlines())
+  log(f"Building GC Suspects for {options.v8_target_cpu}")
+  for _, stdout, _ in invoke_clang_plugin_for_each_file(files, "dump-callees",
+                                                        [], options):
+    collector.parse(stdout.splitlines())
+  collector.propagate()
+  # TODO(cbruni): remove once gcmole.cc is migrated
+  write_gc_suspects(collector, options.v8_root_dir)
+  write_gc_suspects(collector, options.out_dir)
+  log(f"GCSuspects generated for {options.v8_target_cpu}")
 
-  collector.Propagate()
 
-  with open("gcsuspects", "w") as out:
+def write_gc_suspects(collector, dst):
+  with open(dst / "gcsuspects", "w") as out:
     for name, value in collector.gc.items():
       if value:
         out.write(name + "\n")
 
-  with open("gccauses", "w") as out:
+  with open(dst / "gccauses", "w") as out:
     out.write("GC = {\n")
     for name, causes in collector.gc_caused.items():
       out.write("  '{}': [\n".format(name))
@@ -412,50 +399,35 @@ def GenerateGCSuspects(arch, files, arch_cfg, flags, clang_bin_dir,
       out.write("  ],\n")
     out.write("}\n")
 
-  log("** GCSuspects generated for {}", arch)
-
 
 # ------------------------------------------------------------------------------
 # Analysis
 
 
-def CheckCorrectnessForArch(arch, for_test, flags, clang_bin_dir,
-                            clang_plugins_dir):
-  if for_test:
-    files = FilesForTest(arch)
-  else:
-    files = FilesForArch(arch)
-  arch_cfg = ARCHITECTURES[arch]
+def check_correctness_for_arch(options, for_test):
+  files = build_file_list(options, for_test)
 
-  if not flags["reuse_gcsuspects"]:
-    GenerateGCSuspects(arch, files, arch_cfg, flags, clang_bin_dir,
-                       clang_plugins_dir)
+  if not options.reuse_gcsuspects:
+    generate_gc_suspects(files, options)
   else:
-    log("** Reusing GCSuspects for {}", arch)
+    log(f"Reusing GCSuspects for {options.v8_target_cpu}")
 
   processed_files = 0
   errors_found = False
   output = ""
 
-  log(
-      "** Searching for evaluation order problems{} for {}",
-      " and dead variables" if flags["dead_vars"] else "",
-      arch,
-  )
+  log("Searching for evaluation order problems "
+      f"{' and dead variables' if options.dead_vars else ''} "
+      f"for {options.v8_target_cpu}")
   plugin_args = []
-  if flags["dead_vars"]:
+  if options.dead_vars:
     plugin_args.append("--dead-vars")
-  if flags["verbose_trace"]:
+  if options.verbose:
     plugin_args.append("--verbose")
-  for filename, stdout, stderr in InvokeClangPluginForEachFile(
-      files,
-      "find-problems",
-      plugin_args,
-      arch_cfg,
-      flags,
-      clang_bin_dir,
-      clang_plugins_dir,
-  ):
+  if options.verbose_trace:
+    plugin_args.append("--verbose-trace")
+  for _, _, stderr in invoke_clang_plugin_for_each_file(files, "find-problems",
+                                                        plugin_args, options):
     processed_files = processed_files + 1
     if not errors_found:
       errors_found = re.search("^[^:]+:\d+:\d+: (warning|error)", stderr,
@@ -465,23 +437,20 @@ def CheckCorrectnessForArch(arch, for_test, flags, clang_bin_dir,
     else:
       sys.stdout.write(stderr)
 
-  log(
-      "** Done processing {} files. {}",
-      processed_files,
-      "Errors found" if errors_found else "No errors found",
-  )
+  log(f"Done processing {processed_files} files.")
+  log("Errors found" if errors_found else "## No errors found")
 
   return errors_found, output
 
 
-def TestRun(flags, clang_bin_dir, clang_plugins_dir):
-  log("** Test Run")
-  errors_found, output = CheckCorrectnessForArch("x64", True, flags,
-                                                 clang_bin_dir,
-                                                 clang_plugins_dir)
+def TestRun(options):
+  if not options.test_run:
+    return True
+  log("Test Run")
+  errors_found, output = check_correctness_for_arch(options, True)
   if not errors_found:
-    log("** Test file should produce errors, but none were found. Output:")
-    log(output)
+    log("Test file should produce errors, but none were found. Output:")
+    print(output)
     return False
 
   filename = "tools/gcmole/test-expectations.txt"
@@ -489,8 +458,9 @@ def TestRun(flags, clang_bin_dir, clang_plugins_dir):
     expectations = exp_file.read()
 
   if output != expectations:
-    log("** Output mismatch from running tests. Please run them manually.")
-
+    print("#" * 79)
+    log("Output mismatch from running tests. Please run them manually.")
+    print("#" * 79)
     for line in difflib.unified_diff(
         expectations.splitlines(),
         output.splitlines(),
@@ -498,78 +468,187 @@ def TestRun(flags, clang_bin_dir, clang_plugins_dir):
         tofile="output",
         lineterm="",
     ):
-      log("{}", line)
+      print(line)
 
-    log("------")
-    log("--- Full output ---")
-    log(output)
-    log("------")
+    print("#" * 79)
+    log("Full output")
+    print("#" * 79)
+    print(output)
+    print("#" * 79)
 
     return False
 
-  log("** Tests ran successfully")
+  log("Tests ran successfully")
   return True
 
 
+# =============================================================================
+def relative_parents(path, level=0):
+  return Path(os.path.relpath(path.absolute().parents[level]))
+
+
 def main(args):
-  DIR = os.path.dirname(args[0])
+  # Print arguments for better debugging on the bots
+  # Get a clean parent path relative to PWD
+  DIR = relative_parents(Path(args[0]))
 
-  clang_bin_dir = os.getenv("CLANG_BIN")
-  clang_plugins_dir = os.getenv("CLANG_PLUGINS")
+  parser = optparse.OptionParser()
+  default_clang_bin_dir = DIR / 'gcmole-tools' / 'bin'
+  parser.add_option(
+      "--clang-bin-dir",
+      metavar="DIR",
+      help="Build dir of the custom clang version for gcmole."
+      f"Default: env['CLANG_DIR'] or '{default_clang_bin_dir}'")
+  parser.add_option(
+      "--clang-plugins-dir",
+      metavar="DIR",
+      help="Containing dir for libgcmole.so."
+      f"Default: env['CLANG_PLUGINS'] or '{DIR}'")
+  default_root_dir = relative_parents(DIR, 1)
+  parser.add_option(
+      "--v8-root-dir",
+      metavar="DIR",
+      default=default_root_dir,
+      help=f"V8 checkout directory. Default: '{default_root_dir}'")
+  default_build_dir = default_root_dir / 'out' / 'build'
+  parser.add_option(
+      "--v8-build-dir",
+      metavar="DIR",
+      default=default_build_dir,
+      help=f"GN build dir for v8. Default: '{default_build_dir}'. "
+      "Config must match cpu specified by --v8-target-cpu")
+  archs = list(ARCHITECTURES.keys())
+  parser.add_option(
+      "--v8-target-cpu",
+      type="choice",
+      choices=archs,
+      help=f"Tested CPU architecture. Choices: {archs}",
+      metavar="CPU")
+  default_output_dir = default_build_dir / 'gen' / 'gcmole'
+  parser.add_option(
+      "--out-dir",
+      metavar="DIR",
+      default=default_output_dir,
+      help="Output location for gcsuspect and gcauses file."
+      f"Default: {default_output_dir}")
 
-  if not clang_bin_dir or clang_bin_dir == "":
-    fatal("CLANG_BIN not set")
+  group = optparse.OptionGroup(parser, "GCMOLE options")
+  group.add_option(
+      "--reuse-gcsuspects",
+      action="store_true",
+      default=False,
+      help="Don't build gcsuspects file and reuse previously generated one.")
+  group.add_option(
+      "--sequential",
+      action="store_true",
+      default=False,
+      help="Don't use parallel python runner.")
+  group.add_option(
+      "--verbose",
+      action="store_true",
+      default=False,
+      help="Print commands to console before executing them.")
+  group.add_option(
+      "--no-dead-vars",
+      action="store_false",
+      dest="dead_vars",
+      default=True,
+      help="Don't perform dead variable analysis.")
+  group.add_option(
+      "--verbose-trace",
+      action="store_true",
+      default=False,
+      help="Enable verbose tracing from the plugin itself."
+      "This can be useful to debug finding dead variable.")
+  group.add_option(
+      "--no-allowlist",
+      action="store_true",
+      default=True,
+      dest="allowlist",
+      help="""When building gcsuspects allowlist certain functions as if they can be
+  causing GC. Currently used to reduce number of false positives in dead
+  variables analysis. See TODO for ALLOWLIST in gcmole.py""")
+  group.add_option(
+      "--test-run",
+      action="store_true",
+      default=False,
+      help="Test gcmole on tools/gcmole/gcmole-test.cc")
+  parser.add_option_group(group)
 
-  if not clang_plugins_dir or clang_plugins_dir == "":
-    clang_plugins_dir = DIR
+  (options, args) = parser.parse_args()
 
-  flags = {
-      #: not build gcsuspects file and reuse previously generated one.
-      "reuse_gcsuspects": False,
-      #:n't use parallel python runner.
-      "sequential": False,
-      # Print commands to console before executing them.
-      "verbose": False,
-      # Perform dead variable analysis.
-      "dead_vars": True,
-      # Enable verbose tracing from the plugin itself.
-      "verbose_trace": False,
-      # When building gcsuspects allowlist certain functions as if they can be
-      # causing GC. Currently used to reduce number of false positives in dead
-      # variables analysis. See TODO for ALLOWLIST
-      "allowlist": True,
-  }
-  pos_args = []
-
-  flag_regexp = re.compile("^--(no[-_]?)?([\w\-_]+)$")
-  for arg in args[1:]:
-    m = flag_regexp.match(arg)
-    if m:
-      no, flag = m.groups()
-      flag = flag.replace("-", "_")
-      if flag in flags:
-        flags[flag] = no is None
-      else:
-        fatal("Unknown flag: {}", flag)
+  if not options.clang_bin_dir:
+    if os.getenv("CLANG_BIN"):
+      options.clang_bin_dir = os.getenv("CLANG_BIN")
     else:
-      pos_args.append(arg)
+      options.clang_bin_dir = default_clang_bin_dir
+  if not options.clang_plugins_dir:
+    if os.getenv("CLANG_PLUGINS"):
+      options.clang_plugins_dir = os.getenv("CLANG_PLUGINS")
+    else:
+      options.clang_plugins_dir = DIR
+  if not options.v8_target_cpu:
+    parser.error("Missing --v8-target-cpu option")
 
-  archs = pos_args if len(pos_args) > 0 else ["ia32", "arm", "x64", "arm64"]
+  verify_and_convert_dirs(parser, options)
+  verify_build_config(parser, options)
+  verify_clang_plugin(parser, options)
 
   any_errors_found = False
-  if not TestRun(flags, clang_bin_dir, clang_plugins_dir):
+  if not TestRun(options):
     any_errors_found = True
   else:
-    for arch in archs:
-      if not ARCHITECTURES[arch]:
-        fatal("Unknown arch: {}", arch)
-
-      errors_found, output = CheckCorrectnessForArch(arch, False, flags,
-                                                     clang_bin_dir,
-                                                     clang_plugins_dir)
-      any_errors_found = any_errors_found or errors_found
+    errors_found, output = check_correctness_for_arch(options, False)
+    any_errors_found = any_errors_found or errors_found
 
   sys.exit(1 if any_errors_found else 0)
+
+
+def verify_and_convert_dirs(parser, options):
+  for flag in [
+      "--out-dir", "--v8-root-dir", "--v8-build-dir", "--clang-bin-dir",
+      "--clang-plugins-dir"
+  ]:
+    option = parser.get_option(flag)
+    dir = Path(getattr(options, option.dest))
+    if not dir.is_dir():
+      parser.error(f"{flag}='{dir}' does not exist!")
+    setattr(options, option.dest, dir)
+
+
+def verify_build_config(parser, options):
+  gen_dir = options.v8_build_dir / 'gen'
+  if not gen_dir.is_dir():
+    parser.error(f"gen dir '{gen_dir}' does not exist. Please build v8 first.")
+  # Bypass target_cpu checks on the bots.
+  if options.v8_build_dir == 'out/build':
+    return
+  # TODO: replace with gn desc instead of hard-coding build flags in the
+  # ARCHITECURES dict.
+  found_arch = False
+  arch_line = ""
+  with open(options.v8_build_dir / 'args.gn') as f:
+    for line in f.readlines():
+      if "target_cpu" in line:
+        arch_line = line
+        if f'"{options.v8_target_cpu}"' in line:
+          found_arch = True
+        elif "v8_target_cpu" in line:
+          found_arch = False
+  if not found_arch:
+    parser.error(
+        f"Build dir '{options.v8_build_dir}' doesn't match test architecture "
+        f"{options.v8_target_cpu}: {arch_line}")
+
+
+def verify_clang_plugin(parser, options):
+  libgcmole_path = options.clang_plugins_dir / "libgcmole.so"
+  if not libgcmole_path.is_file():
+    parser.error(
+        f"'{libgcmole_path}' does not exist. Please build gcmole first.")
+  clang_path = options.clang_bin_dir / "clang++"
+  if not clang_path.is_file():
+    parser.error(f"'{clang_path}' does not exist. Please build gcmole first.")
 
 
 if __name__ == "__main__":
