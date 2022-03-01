@@ -1958,6 +1958,34 @@ if (v8_verify_torque_generation_invariance) {
   }
 }
 
+action("run_gcmole") {
+  testonly = true
+  script = "tools/gcmole/gcmole.py"
+
+  destination_folder = "$target_gen_dir/gcmole"
+  outputs = [
+    "$destination_folder/gcsuspects",
+    "$destination_folder/gccauses",
+  ]
+  deps = [ ":v8_generated_cc_files" ]
+
+  args = [
+    "--clang-bin-dir",
+    rebase_path("tools/gcmole/gcmole-tools/bin", root_build_dir),
+    "--v8-root-dir",
+    rebase_path("."),
+    "--v8-build-dir",
+    rebase_path(root_build_dir),
+    "--v8-target-cpu",
+    v8_target_cpu,
+    "--out-dir",
+    rebase_path(destination_folder),
+    "--sequential",
+  ]
+
+  sources = torque_files
+}
+
 group("v8_maybe_icu") {
   if (v8_enable_i18n_support) {
     public_deps = [ "//third_party/icu" ]
