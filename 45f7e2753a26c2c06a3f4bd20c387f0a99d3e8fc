@@ -16,6 +16,70 @@
       "message": "Hi, I have updated to use inline assembly for ia32, x86, arm, and arm64. And for mips, ppc, s390, loong and riscv, I am not sure the best way to clobber all double regsiters using inline assembly, thus using the original implementation.",
       "revId": "45f7e2753a26c2c06a3f4bd20c387f0a99d3e8fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b24f6d2d_7215b060",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-01T13:16:07Z",
+      "side": 1,
+      "message": "Using the original implementation for those architectures is fine, we rely on external support for them anyway.",
+      "parentUuid": "b805136c_290fc23f",
+      "revId": "45f7e2753a26c2c06a3f4bd20c387f0a99d3e8fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bce18e2_31b9279a",
+        "filename": "src/execution/arguments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-01T13:16:07Z",
+      "side": 1,
+      "message": "can you instead include src/codegen/register.h instead of these copies?",
+      "range": {
+        "startLine": 19,
+        "startChar": 14,
+        "endLine": 19,
+        "endChar": 44
+      },
+      "revId": "45f7e2753a26c2c06a3f4bd20c387f0a99d3e8fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4195327_472f5880",
+        "filename": "src/execution/arguments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-01T13:16:07Z",
+      "side": 1,
+      "message": "please merge these all into one condition, and inline ClobberDoubleRegistersImpl into here to avoid the #if for defining it.",
+      "range": {
+        "startLine": 116,
+        "startChar": 6,
+        "endLine": 116,
+        "endChar": 23
+      },
+      "revId": "45f7e2753a26c2c06a3f4bd20c387f0a99d3e8fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
