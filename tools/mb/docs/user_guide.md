@@ -308,5 +308,3 @@ If you hit weirder things than that, add some print statements to the
 python script, send a question to gn-dev@chromium.org, or
 [file a bug](https://crbug.com/new) with the label
 'mb' and cc: dpranke@chromium.org.
-
-
