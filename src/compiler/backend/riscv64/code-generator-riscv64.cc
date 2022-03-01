@@ -2135,10 +2135,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kRiscvI8x16RoundingAverageU: {
       __ VU.set(kScratchReg2, E8, m1);
-      __ vwaddu_vv(kSimd128ScratchReg, i.InputSimd128Register(0),
+      __ vwaddu_vv(kSimd128ScratchReg2, i.InputSimd128Register(0),
                    i.InputSimd128Register(1));
       __ li(kScratchReg, 1);
-      __ vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg, kScratchReg);
+      __ vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg2, kScratchReg);
       __ li(kScratchReg, 2);
       __ VU.set(kScratchReg2, E16, m2);
       __ vdivu_vx(kSimd128ScratchReg3, kSimd128ScratchReg3, kScratchReg);
@@ -2148,10 +2148,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kRiscvI16x8RoundingAverageU: {
       __ VU.set(kScratchReg2, E16, m1);
-      __ vwaddu_vv(kSimd128ScratchReg, i.InputSimd128Register(0),
+      __ vwaddu_vv(kSimd128ScratchReg2, i.InputSimd128Register(0),
                    i.InputSimd128Register(1));
       __ li(kScratchReg, 1);
-      __ vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg, kScratchReg);
+      __ vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg2, kScratchReg);
       __ li(kScratchReg, 2);
       __ VU.set(kScratchReg2, E32, m2);
       __ vdivu_vx(kSimd128ScratchReg3, kSimd128ScratchReg3, kScratchReg);

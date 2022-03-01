@@ -6,6 +6,7 @@
 #define V8_CODEGEN_LOONG64_REGISTER_LOONG64_H_
 
 #include "src/codegen/loong64/constants-loong64.h"
+#include "src/codegen/register-configuration.h"
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 
@@ -177,7 +178,7 @@ constexpr int ArgumentPaddingSlots(int argument_count) {
   return 0;
 }
 
-constexpr bool kSimpleFPAliasing = true;
+constexpr AliasingKind kFPAliasing = AliasingKind::OVERLAP;
 constexpr bool kSimdMaskRegisters = false;
 
 enum DoubleRegisterCode {
