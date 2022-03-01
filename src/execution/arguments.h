@@ -105,10 +105,10 @@ Handle<S> Arguments<T>::at(int index) const {
   return Handle<S>::cast(obj);
 }
 
-double ClobberDoubleRegisters(double x1, double x2, double x3, double x4);
+void ClobberDoubleRegisters();
 
 #ifdef DEBUG
-#define CLOBBER_DOUBLE_REGISTERS() ClobberDoubleRegisters(1, 2, 3, 4);
+#define CLOBBER_DOUBLE_REGISTERS() ClobberDoubleRegisters();
 #else
 #define CLOBBER_DOUBLE_REGISTERS()
 #endif
