@@ -4,43 +4,78 @@
 
 import("../../gni/v8.gni")
 
-group("v8_run_gcmole") {
-  testonly = true
+template("run_gcmole") {
+  action(target_name) {
+    testonly = true
+    script = "gcmole.py"
+    deps = [ "../../:v8_generated_cc_files" ]
 
-  data = [
-    "GCMOLE.gn",
-    "gcmole.py",
-    "gcmole-test.cc",
-    "gcmole-tools/",
-    "run-gcmole.py",
-    "suspects.whitelist",
-    "ignored_files",
-    "test-expectations.txt",
+    data = [
+      "GCMOLE.gn",
+      "gcmole.py",
+      "gcmole-test.cc",
+      "gcmole-tools/",
+      "run-gcmole.py",
+      "suspects.whitelist",
+      "ignored_files",
+      "test-expectations.txt",
 
-    # The following contains all relevant source and build files.
-    "../debug_helper/debug-helper.h",
-    "../../BUILD.gn",
-    "../../base/",
-    "../../include/",
-    "../../src/",
-    "../../test/cctest/",
-    "../../test/common/",
-    "../../testing/gtest/include/gtest/gtest_prod.h",
-    "../../third_party/googletest/src/googletest/include/gtest/gtest_prod.h",
-    "../../third_party/icu/source/",
-    "../../third_party/wasm-api/wasm.h",
-    "../../third_party/wasm-api/wasm.hh",
-    "../../third_party/zlib/",
-    "../../third_party/inspector_protocol/",
-    "$target_gen_dir/../../",
-    "$target_gen_dir/../../torque-generated/",
-  ]
+      # The following contains all relevant source and build files.
+      "../debug_helper/debug-helper.h",
+      "../../BUILD.gn",
+      "../../base/",
+      "../../include/",
+      "../../src/",
+      "../../test/cctest/",
+      "../../test/common/",
+      "../../testing/gtest/include/gtest/gtest_prod.h",
+      "../../third_party/googletest/src/googletest/include/gtest/gtest_prod.h",
+      "../../third_party/icu/source/",
+      "../../third_party/wasm-api/wasm.h",
+      "../../third_party/wasm-api/wasm.hh",
+      "../../third_party/zlib/",
+      "../../third_party/inspector_protocol/",
+      "$target_gen_dir/../../",
+      "$target_gen_dir/../../torque-generated/",
+    ]
 
-  deps = [ "../../:run_torque" ]
+    args = [
+             "--clang-bin-dir",
+             rebase_path("../../tools/gcmole/gcmole-tools/bin"),
+             "--clang-plugins-dir",
+             rebase_path("../../tools/gcmole/gcmole-tools"),
+             "--v8-root-dir",
+             rebase_path("../.."),
+             "--v8-build-dir",
+             rebase_path(root_build_dir),
+             "--v8-target-cpu",
+             v8_target_cpu,
+             "--out-dir",
+             rebase_path(target_gen_dir),
+           ] + invoker.args
 
-  if (v8_gcmole) {
-    # This assumes gcmole tools have been fetched by a hook
-    # into v8/tools/gcmole/gcmole_tools.
-    data += [ "gcmole-tools/" ]
+    if (v8_gcmole) {
+      # This assumes gcmole tools have been fetched by a hook
+      # into v8/tools/gcmole/gcmole_tools.
+      data += [ "gcmole-tools/" ]
+    }
+
+    outputs = invoker.outputs
   }
+}
+
+run_gcmole("v8_run_gcmole_test") {
+  args = [
+    "--test-run",
+    "--verbose",
+  ]
+  outputs = [ "$target_gen_dir/test-expectations-gen.txt" ]
+}
+
+run_gcmole("v8_run_gcmole") {
+  args = []
+  outputs = [
+    "$target_gen_dir/gcsuspects",
+    "$target_gen_dir/gccauses",
+  ]
 }
