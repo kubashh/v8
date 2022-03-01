@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "281b11c5_3a4e5885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-01T12:45:21Z",
+      "side": 1,
+      "message": "liviurau@ PTAL py2 to py3 conversion",
+      "revId": "2b77db8b6d4ddf41199c23b996f7b6dda992fc61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
