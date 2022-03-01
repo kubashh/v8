@@ -6,6 +6,7 @@
 #define V8_CODEGEN_MIPS_REGISTER_MIPS_H_
 
 #include "src/codegen/mips/constants-mips.h"
+#include "src/codegen/register-configuration.h"
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 
@@ -209,7 +210,7 @@ constexpr int ArgumentPaddingSlots(int argument_count) {
   return 0;
 }
 
-constexpr bool kSimpleFPAliasing = true;
+constexpr AliasingKind kFPAliasing = AliasingKind::OVERLAP;
 constexpr bool kSimdMaskRegisters = false;
 
 enum DoubleRegisterCode {
