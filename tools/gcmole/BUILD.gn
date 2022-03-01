@@ -4,8 +4,10 @@
 
 import("../../gni/v8.gni")
 
-group("v8_run_gcmole") {
+action("v8_run_gcmole") {
   testonly = true
+  script = "gcmole.py"
+  deps = [ "../../:v8_generated_cc_files" ]
 
   data = [
     "GCMOLE.gn",
@@ -36,11 +38,31 @@ group("v8_run_gcmole") {
     "$target_gen_dir/../../torque-generated/",
   ]
 
-  deps = [ "../../:run_torque" ]
-
   if (v8_gcmole) {
     # This assumes gcmole tools have been fetched by a hook
     # into v8/tools/gcmole/gcmole_tools.
     data += [ "gcmole-tools/" ]
   }
+
+  destination_folder = "$target_gen_dir/gcmole"
+
+  args = [
+    "--test-run",
+    "--verbose",
+    "--sequential",
+    "--clang-bin-dir",
+    rebase_path("gcmole-tools/bin", root_build_dir),
+    "--v8-root-dir",
+    rebase_path("../.."),
+    "--v8-build-dir",
+    rebase_path(root_build_dir),
+    "--v8-target-cpu",
+    v8_target_cpu,
+    "--out-dir",
+    rebase_path(destination_folder),
+  ]
+  outputs = [
+    "$destination_folder/gcsuspects",
+    "$destination_folder/gccauses",
+  ]
 }
