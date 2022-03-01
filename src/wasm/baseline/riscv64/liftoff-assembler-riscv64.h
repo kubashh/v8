@@ -2852,13 +2852,13 @@ void LiftoffAssembler::emit_i32x4_dot_i16x8_s(LiftoffRegister dst,
   VU.set(kScratchReg, E32, m2);
   li(kScratchReg, 0b01010101);
   vmv_sx(v0, kScratchReg);
-  vcompress_vv(kSimd128ScratchReg, kSimd128ScratchReg3, v0);
+  vcompress_vv(kSimd128ScratchReg2, kSimd128ScratchReg3, v0);
 
   li(kScratchReg, 0b10101010);
-  vmv_sx(kSimd128ScratchReg2, kScratchReg);
-  vcompress_vv(v0, kSimd128ScratchReg3, kSimd128ScratchReg2);
+  vmv_sx(kSimd128ScratchReg, kScratchReg);
+  vcompress_vv(v0, kSimd128ScratchReg3, kSimd128ScratchReg);
   VU.set(kScratchReg, E32, m1);
-  vadd_vv(dst.fp().toV(), kSimd128ScratchReg, v0);
+  vadd_vv(dst.fp().toV(), kSimd128ScratchReg2, v0);
 }
 
 void LiftoffAssembler::emit_i64x2_neg(LiftoffRegister dst,
@@ -3315,9 +3315,9 @@ void LiftoffAssembler::emit_i8x16_rounding_average_u(LiftoffRegister dst,
                                                      LiftoffRegister lhs,
                                                      LiftoffRegister rhs) {
   VU.set(kScratchReg, E8, m1);
-  vwaddu_vv(kSimd128ScratchReg, lhs.fp().toV(), rhs.fp().toV());
+  vwaddu_vv(kSimd128ScratchReg2, lhs.fp().toV(), rhs.fp().toV());
   li(kScratchReg, 1);
-  vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg, kScratchReg);
+  vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg2, kScratchReg);
   li(kScratchReg, 2);
   VU.set(kScratchReg2, E16, m2);
   vdivu_vx(kSimd128ScratchReg3, kSimd128ScratchReg3, kScratchReg);
@@ -3328,9 +3328,9 @@ void LiftoffAssembler::emit_i16x8_rounding_average_u(LiftoffRegister dst,
                                                      LiftoffRegister lhs,
                                                      LiftoffRegister rhs) {
   VU.set(kScratchReg2, E16, m1);
-  vwaddu_vv(kSimd128ScratchReg, lhs.fp().toV(), rhs.fp().toV());
+  vwaddu_vv(kSimd128ScratchReg2, lhs.fp().toV(), rhs.fp().toV());
   li(kScratchReg, 1);
-  vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg, kScratchReg);
+  vwaddu_wx(kSimd128ScratchReg3, kSimd128ScratchReg2, kScratchReg);
   li(kScratchReg, 2);
   VU.set(kScratchReg2, E32, m2);
   vdivu_vx(kSimd128ScratchReg3, kSimd128ScratchReg3, kScratchReg);
