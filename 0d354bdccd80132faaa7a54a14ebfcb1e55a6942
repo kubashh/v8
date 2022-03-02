@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e825a11b_86205ec9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-02T18:50:54Z",
+      "side": 1,
+      "message": "jkummerow@ nvm, moving isolate change to separate CL https://crrev.com/c/3497335",
+      "revId": "0d354bdccd80132faaa7a54a14ebfcb1e55a6942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
