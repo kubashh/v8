@@ -16,6 +16,40 @@
       "message": "lgtm with nit",
       "revId": "f6060a18c5965dfb246c00de4127c6730f2bd545",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d6c0874_17b41354",
+        "filename": "src/execution/arguments.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-03-02T10:58:57Z",
+      "side": 1,
+      "message": "Could you please double-check that this inline assembly syntax works as expected for clang/msvc/gcc?",
+      "revId": "f6060a18c5965dfb246c00de4127c6730f2bd545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca68f268_407f463b",
+        "filename": "src/execution/arguments.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-03-02T10:58:57Z",
+      "side": 1,
+      "message": "This is not going to clobber any registers at all. I think it\u0027s better to keep the signature and fallback implementation of the ClobberDoubleRegisters(..) unmodified.\nAnd the TODO too.",
+      "revId": "f6060a18c5965dfb246c00de4127c6730f2bd545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
