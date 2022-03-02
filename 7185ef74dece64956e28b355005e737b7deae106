@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "038715c0_40f92a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-02T18:09:50Z",
+      "side": 1,
+      "message": "jkummerow@ PTAL changes in isolate.cc",
+      "revId": "7185ef74dece64956e28b355005e737b7deae106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
