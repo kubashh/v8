@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18aa3bdc_0606b01a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-02T10:42:34Z",
+      "side": 1,
+      "message": "I wanted to have a single CodeGen function for all relational comparison nodes. Wdyt? PTAL!",
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
