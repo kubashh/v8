@@ -63,6 +63,30 @@
       },
       "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "723ef3da_8feb6ee8",
+        "filename": "include/cppgc/cross-thread-persistent.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-02T15:04:58Z",
+      "side": 1,
+      "message": "`Member\u003c\u003e` doesn\u0027t automatically register a slot as movable reference but that happens manually in all collections (that don\u0027t even use a Member). So, just having `Member\u003cFoo\u003e` where `Foo` moves breaks the same way as `CTP`. With `CTP` you have additional concurrency on top (which is what you described).\n\nI am not sure it causes more confusion that it helps explaining.\n\nFeel free to land if you think it helps.",
+      "parentUuid": "1b2eba7d_1c210dd3",
+      "range": {
+        "startLine": 442,
+        "startChar": 5,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
