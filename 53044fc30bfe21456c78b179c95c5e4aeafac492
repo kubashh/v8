@@ -33,6 +33,52 @@
       "message": "ptal",
       "revId": "53044fc30bfe21456c78b179c95c5e4aeafac492",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee47b249_788aa5da",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-02T09:17:40Z",
+      "side": 1,
+      "message": "probably the constructor here should be private if you stay with the singleton approach.",
+      "range": {
+        "startLine": 89,
+        "startChar": 6,
+        "endLine": 89,
+        "endChar": 26
+      },
+      "revId": "53044fc30bfe21456c78b179c95c5e4aeafac492",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00ef2865_3a4ed8ff",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-02T09:17:40Z",
+      "side": 1,
+      "message": "these are small enough to fit into an int32 (even without bitfields), maybe  we should pass this class by value instead of singleton?",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 35
+      },
+      "revId": "53044fc30bfe21456c78b179c95c5e4aeafac492",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
