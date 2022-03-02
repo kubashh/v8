@@ -22,6 +22,30 @@
       },
       "revId": "61747456be8b1b22191b10999db384aa301af3aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba44aec1_593fdcc9",
+        "filename": "test/mjsunit/maglev/00.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-02T09:40:16Z",
+      "side": 1,
+      "message": "I see --maglev as the same as --opt (which should be renamed --turbofan or --enable-turbofan). --no-opt also means that OptimizeFunctionOnNextCall does nothing, which IMO makes sense.\n\nI agree the transition period while --maglev is off by default is slightly awkward; until we switch it on, tests will have to pass --maglev explicitly. Seems okayish to me.. Wdyt?",
+      "parentUuid": "f39f2ba6_9f9900ce",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 41
+      },
+      "revId": "61747456be8b1b22191b10999db384aa301af3aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
