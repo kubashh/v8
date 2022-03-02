@@ -17,6 +17,7 @@ class Isolate;
 class UnoptimizedFrame;
 class JavaScriptFrame;
 class JSFunction;
+class SharedFunctionInfo;
 enum class CodeKind;
 enum class OptimizationReason : uint8_t;
 
@@ -30,6 +31,13 @@ class TieringManager {
 
   void AttemptOnStackReplacement(UnoptimizedFrame* frame,
                                  int nesting_levels = 1);
+
+  // For use when a JSFunction is available.
+  static int InterruptBudgetFor(JSFunction function);
+  // For use when no JSFunction, but an SFI is available.
+  static int InterruptBudgetFor(Isolate* isolate, SharedFunctionInfo shared);
+  // For use when neither a JSFunction nor an SFI is available.
+  static int InitialInterruptBudget();
 
  private:
   // Make the decision whether to optimize the given function, and mark it for

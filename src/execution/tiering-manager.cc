@@ -121,6 +121,26 @@ void TieringManager::AttemptOnStackReplacement(UnoptimizedFrame* frame,
       {level + loop_nesting_levels, AbstractCode::kMaxLoopNestingMarker}));
 }
 
+// static
+int TieringManager::InterruptBudgetFor(JSFunction function) {
+  return FLAG_interrupt_budget;  // For Turbofan.
+}
+
+// static
+int TieringManager::InterruptBudgetFor(Isolate* isolate,
+                                       SharedFunctionInfo shared) {
+  DCHECK(shared.is_compiled());
+  return shared.GetBytecodeArray(isolate).length() *
+         FLAG_interrupt_budget_factor_for_feedback_allocation;
+}
+
+// static
+int TieringManager::InitialInterruptBudget() {
+  return V8_LIKELY(FLAG_lazy_feedback_allocation)
+             ? FLAG_interrupt_budget_for_feedback_allocation
+             : FLAG_interrupt_budget;
+}
+
 void TieringManager::MaybeOptimizeFrame(JSFunction function,
                                         JavaScriptFrame* frame,
                                         CodeKind code_kind) {
@@ -261,7 +281,7 @@ void TieringManager::OnInterruptTick(Handle<JSFunction> function) {
   // Ensure that the feedback vector has been allocated, and reset the
   // interrupt budget in preparation for the next tick.
   if (had_feedback_vector) {
-    function->SetInterruptBudget();
+    function->SetInterruptBudget(isolate_);
   } else {
     JSFunction::CreateAndAttachFeedbackVector(isolate_, function,
                                               &is_compiled_scope);
