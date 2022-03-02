@@ -33,6 +33,24 @@
       "message": "Vadim, I don\u0027t understand what\u0027s going on here. I updated my depot tools with update_depot_tools, then I regenerate my files and I don\u0027t get any diff, but the validation keeps failing. Do I need to update a hard-coded version somewhere?",
       "revId": "ff2c1f7b02e7e1dd077e0c5b508fcfcf3598de9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1558f20_2bee9fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-03-02T10:45:57Z",
+      "side": 1,
+      "message": "Is it maybe because of this CL? https://crrev.com/2a5803e85b589540155f3ec781e3dce6ca7c53e5\n\nIs there a version mismatch now with 1.30.9 and 1.30.10? I have 1.30.9 locally and that\u0027s the version when updating depot_tools. Validation doesn\u0027t give any error locally. Is it possible that there\u0027s a different version on the validation server?",
+      "parentUuid": "d971ddcc_14ea09a0",
+      "revId": "ff2c1f7b02e7e1dd077e0c5b508fcfcf3598de9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
