@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c23fbd95_5c6f8c6e",
+        "filename": "src/codegen/register-configuration.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-03-02T16:34:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0f486334_35f9ee22",
+      "range": {
+        "startLine": 217,
+        "startChar": 4,
+        "endLine": 217,
+        "endChar": 40
+      },
+      "revId": "bdfc9a1693b1356a58cefe80e94a439bf3a2241c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f5aa051_3b5f2883",
