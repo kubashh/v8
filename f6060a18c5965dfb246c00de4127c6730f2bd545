@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96242ba6_5504fec8",
+        "filename": "src/execution/arguments.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-03-02T17:21:18Z",
+      "side": 1,
+      "message": "Nit: Could you please #define CLOBBER_REGISTER() or not define it outside of the function and change the function body to just\n\n#ifdef CLOBBER_REGISTER\n  DOUBLE_REGISTERS(CLOBBER_REGISTER)\n  return 0;\n#else  // CLOBBER_REGISTER\n  // TODO() ...\n  return x1 * ...;\n#endif // CLOBBER_REGISTER \n\n#undef CLOBBER_REGISTER",
+      "parentUuid": "4724c1bf_9f793d01",
+      "revId": "f6060a18c5965dfb246c00de4127c6730f2bd545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca68f268_407f463b",
         "filename": "src/execution/arguments.cc",
         "patchSetId": 3
