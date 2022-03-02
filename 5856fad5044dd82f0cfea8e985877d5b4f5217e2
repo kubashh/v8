@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbdcf143_e875ca31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-02T13:59:29Z",
+      "side": 1,
+      "message": "ptal.\nUnfortunately we cannot enforce this with a DCHECK since the owning heap (and its spaces/pages) maybe be gone if that heap terminates.",
+      "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
