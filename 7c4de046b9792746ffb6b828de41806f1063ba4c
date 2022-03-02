@@ -62,6 +62,30 @@
       },
       "revId": "7c4de046b9792746ffb6b828de41806f1063ba4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa2521bd_eca5a2d1",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 25
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-02T17:25:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "557356b6_0c07ad97",
+      "range": {
+        "startLine": 610,
+        "startChar": 15,
+        "endLine": 610,
+        "endChar": 22
+      },
+      "revId": "7c4de046b9792746ffb6b828de41806f1063ba4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
