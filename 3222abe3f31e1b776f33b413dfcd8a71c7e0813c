@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99b8f6a0_a34c8445",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-02T11:09:25Z",
+      "side": 1,
+      "message": "\u003e Since it\u0027s templated though, it\u0027s not really part of the \"hierarchy\", it seems similar to BinaryWithFeedbackNode.\n\nRight, my main thought was whether the boilerplate including new class definitions, new macro lists, etc was necessary. I can be convinced, but my first reaction is that a simple helper function is easier.",
+      "parentUuid": "a40649fb_d576860f",
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "866a52b0_76ce7a33",
