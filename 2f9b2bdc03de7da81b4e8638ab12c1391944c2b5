@@ -299,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bdacb9_d766c149",
+        "filename": "tools/system-analyzer/view/code-panel.mjs",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-02T09:44:11Z",
+      "side": 1,
+      "message": "ups, you\u0027re right (I was hacking on the train on my laptop, forgot to update), without the `?` it now works:\n\n  \u0027CallUndefinedReceiver0 r2, [11]\u0027.split(kRegisterRegexp)\n  [\u0027\u0027, \u0027CallUndefinedReceiver0 \u0027, \u0027r2\u0027, \u0027, [11]\u0027]\n\n  \u0027Star1 \u0027.split(kRegisterRegexp)\n  [\u0027Star1 \u0027]\n  \n  \u0027mov rsp,[r10+18]\u0027.split(kRegisterRegexp)\n  [\u0027\u0027, \u0027mov \u0027, \u0027rsp\u0027, \u0027\u0027, \u0027,[\u0027, \u0027r10\u0027, \u0027+18]\u0027]",
+      "parentUuid": "99add3e4_779cf07e",
+      "range": {
+        "startLine": 11,
+        "startChar": 16,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "2f9b2bdc03de7da81b4e8638ab12c1391944c2b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e85c88f_7950186c",
