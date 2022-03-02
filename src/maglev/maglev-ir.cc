@@ -679,25 +679,61 @@ void Add::GenerateCode(MaglevCodeGenState* code_gen_state,
   UNREACHABLE();
 }
 
-void LessThan::AllocateVreg(MaglevVregAllocationState* vreg_state,
-                            const ProcessingState& state) {
+template <class Derived>
+void RelationalComparisonNode<Derived>::AllocateVreg(
+    MaglevVregAllocationState* vreg_state, const ProcessingState& state) {
+  // TODO(victorgomes): Add static check to see if `Derived` is relational.
   using D = BinaryOp_WithFeedbackDescriptor;
-  UseFixed(left_input(), D::GetRegisterParameter(D::kLeft));
-  UseFixed(right_input(), D::GetRegisterParameter(D::kRight));
+  UseFixed(Base::left_input(), D::GetRegisterParameter(D::kLeft));
+  UseFixed(Base::right_input(), D::GetRegisterParameter(D::kRight));
   DefineAsFixed(vreg_state, this, kReturnRegister0);
 }
-void LessThan::GenerateCode(MaglevCodeGenState* code_gen_state,
-                            const ProcessingState& state) {
+template <class Derived>
+void RelationalComparisonNode<Derived>::GenerateCode(
+    MaglevCodeGenState* code_gen_state, const ProcessingState& state) {
+  // TODO(victorgomes): Add static check to see if `Derived` is relational.
   using D = BinaryOp_WithFeedbackDescriptor;
-  DCHECK_EQ(ToRegister(left_input()), D::GetRegisterParameter(D::kLeft));
-  DCHECK_EQ(ToRegister(right_input()), D::GetRegisterParameter(D::kRight));
+  DCHECK_EQ(ToRegister(Base::left_input()), D::GetRegisterParameter(D::kLeft));
+  DCHECK_EQ(ToRegister(Base::right_input()),
+            D::GetRegisterParameter(D::kRight));
   __ Move(kContextRegister, code_gen_state->native_context().object());
-  __ Move(D::GetRegisterParameter(D::kSlot), Immediate(feedback().index()));
-  __ Move(D::GetRegisterParameter(D::kFeedbackVector), feedback().vector);
+  __ Move(D::GetRegisterParameter(D::kSlot),
+          Immediate(Base::feedback().index()));
+  __ Move(D::GetRegisterParameter(D::kFeedbackVector), Base::feedback().vector);
 
-  // TODO(jgruber): Implement full handling.
-  __ CallBuiltin(Builtin::kLessThan_WithFeedback);
+  // TODO(victorgomes): Implement full handling.
+
+  switch (operation_) {
+    case Operation::kLessThan:
+      __ CallBuiltin(Builtin::kLessThan_WithFeedback);
+      break;
+    case Operation::kLessThanOrEqual:
+      __ CallBuiltin(Builtin::kLessThanOrEqual_WithFeedback);
+      break;
+    case Operation::kGreaterThan:
+      __ CallBuiltin(Builtin::kGreaterThan_WithFeedback);
+      break;
+    case Operation::kGreaterThanOrEqual:
+      __ CallBuiltin(Builtin::kGreaterThanOrEqual_WithFeedback);
+      break;
+    default:
+      UNREACHABLE();
+  }
 }
+
+#define DEFINE_RELATIONAL_COMPARISON_NODE(RelCompNode)                  \
+  void RelCompNode::AllocateVreg(MaglevVregAllocationState* vreg_state, \
+                                 const ProcessingState& state) {        \
+    Base::AllocateVreg(vreg_state, state);                              \
+  }                                                                     \
+  void RelCompNode::GenerateCode(MaglevCodeGenState* code_gen_state,    \
+                                 const ProcessingState& state) {        \
+    Base::GenerateCode(code_gen_state, state);                          \
+  }
+
+RELATIONAL_COMPARISON_NODE_LIST(DEFINE_RELATIONAL_COMPARISON_NODE)
+
+#undef DEFINE_RELATIONAL_COMPARISON_NODE
 
 void Phi::AllocateVreg(MaglevVregAllocationState* vreg_state,
                        const ProcessingState& state) {

@@ -34,6 +34,12 @@ class MaglevVregAllocationState;
 //
 // The macro lists below must match the node class hierarchy.
 
+#define RELATIONAL_COMPARISON_NODE_LIST(V) \
+  V(LessThan)                              \
+  V(LessThanOrEqual)                       \
+  V(GreaterThan)                           \
+  V(GreaterThanOrEqual)
+
 #define VALUE_NODE_LIST(V) \
   V(Add)                   \
   V(CallProperty)          \
@@ -41,14 +47,14 @@ class MaglevVregAllocationState;
   V(Constant)              \
   V(Increment)             \
   V(InitialValue)          \
-  V(LessThan)              \
   V(LoadField)             \
   V(LoadGlobal)            \
   V(LoadNamedGeneric)      \
   V(Phi)                   \
   V(RegisterInput)         \
   V(RootConstant)          \
-  V(SmiConstant)
+  V(SmiConstant)           \
+  RELATIONAL_COMPARISON_NODE_LIST(V)
 
 #define NODE_LIST(V) \
   V(Checkpoint)      \
@@ -689,6 +695,28 @@ class BinaryWithFeedbackNode : public FixedInputValueNodeT<2, Derived> {
   const compiler::FeedbackSource feedback_;
 };
 
+template <class Derived>
+class RelationalComparisonNode : public BinaryWithFeedbackNode<Derived> {
+  using Base = BinaryWithFeedbackNode<Derived>;
+
+ public:
+  // The implementation currently calls runtime.
+  static constexpr OpProperties kProperties = OpProperties::Call();
+
+  void AllocateVreg(MaglevVregAllocationState* vreg_state,
+                    const ProcessingState& state);
+  void GenerateCode(MaglevCodeGenState*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+
+ protected:
+  RelationalComparisonNode(size_t input_count,
+                           const compiler::FeedbackSource& feedback,
+                           Operation operation)
+      : Base(input_count, feedback), operation_(operation) {}
+
+  const Operation operation_;
+};
+
 class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
   using Base = FixedInputValueNodeT<0, InitialValue>;
 
@@ -976,20 +1004,20 @@ class Add : public BinaryWithFeedbackNode<Add> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
-class LessThan : public BinaryWithFeedbackNode<LessThan> {
-  using Base = BinaryWithFeedbackNode<LessThan>;
+#define DEFINE_RELATIONAL_COMPARISON_NODE(RelCompNode)                        \
+  class RelCompNode : public RelationalComparisonNode<RelCompNode> {          \
+    using Base = RelationalComparisonNode<RelCompNode>;                       \
+                                                                              \
+   public:                                                                    \
+    RelCompNode(size_t input_count, const compiler::FeedbackSource& feedback) \
+        : Base(input_count, feedback, Operation::k##RelCompNode) {}           \
+    void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);    \
+    void GenerateCode(MaglevCodeGenState*, const ProcessingState&);           \
+  };
 
- public:
-  LessThan(size_t input_count, const compiler::FeedbackSource& feedback)
-      : Base(input_count, feedback) {}
+RELATIONAL_COMPARISON_NODE_LIST(DEFINE_RELATIONAL_COMPARISON_NODE)
 
-  // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
-
-  void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);
-  void GenerateCode(MaglevCodeGenState*, const ProcessingState&);
-  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
-};
+#undef DEFINE_RELATIONAL_COMPARISON_NODE
 
 // TODO(verwaest): It may make more sense to buffer phis in merged_states until
 // we set up the interpreter frame state for code generation. At that point we
