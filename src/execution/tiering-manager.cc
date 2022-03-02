@@ -88,6 +88,12 @@ void TraceRecompile(JSFunction function, OptimizationReason reason,
 
 class OptimizationDecision {
  public:
+  static constexpr OptimizationDecision Maglev() {
+    // TODO(v8:7700): Consider using another reason here.
+    // TODO(v8:7700): Support concurrency.
+    return {OptimizationReason::kHotAndStable, CodeKind::MAGLEV,
+            ConcurrencyMode::kNotConcurrent};
+  }
   static constexpr OptimizationDecision TurbofanHotAndStable() {
     return {OptimizationReason::kHotAndStable, CodeKind::TURBOFAN,
             ConcurrencyMode::kConcurrent};
@@ -159,6 +165,11 @@ void TieringManager::AttemptOnStackReplacement(UnoptimizedFrame* frame,
 // static
 int TieringManager::InterruptBudgetFor(Isolate* isolate, JSFunction function) {
   if (function.has_feedback_vector()) {
+    // TODO(v8:7700): Flip the UNLIKELY when appropriate.
+    if (V8_UNLIKELY(FLAG_maglev) &&
+        function.ActiveTierIsUnoptimizedJSFunction()) {
+      return FLAG_interrupt_budget_for_maglev;
+    }
     return FLAG_interrupt_budget;  // For Turbofan.
   }
 
@@ -190,11 +201,11 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
     return;
   }
 
+  // TODO(v8:7700): Consider splitting this up for Maglev/Turbofan.
   if (function.shared().optimization_disabled()) return;
 
-  // Note: We currently do not trigger OSR compilation from TP code.
   if (frame->is_unoptimized()) {
-    if (FLAG_always_osr) {
+    if (V8_UNLIKELY(FLAG_always_osr)) {
       AttemptOnStackReplacement(UnoptimizedFrame::cast(frame),
                                 AbstractCode::kMaxLoopNestingMarker);
       // Fall through and do a normal optimized compile as well.
@@ -236,7 +247,9 @@ OptimizationDecision TieringManager::ShouldOptimize(JSFunction function,
                                                     JavaScriptFrame* frame) {
   DCHECK_EQ(code_kind, function.GetActiveTier().value());
 
-  if (code_kind == CodeKind::TURBOFAN) {
+  if (V8_UNLIKELY(FLAG_maglev) && CodeKindIsUnoptimizedJSFunction(code_kind)) {
+    return OptimizationDecision::Maglev();
+  } else if (code_kind == CodeKind::TURBOFAN) {
     // Already in the top tier.
     return OptimizationDecision::DoNotOptimize();
   }
