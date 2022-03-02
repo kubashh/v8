@@ -16,6 +16,29 @@
       "message": "ptal.\nUnfortunately we cannot enforce this with a DCHECK since the owning heap (and its spaces/pages) maybe be gone if that heap terminates.",
       "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e6225ef_13c76aac",
+        "filename": "include/cppgc/cross-thread-persistent.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-02T14:38:39Z",
+      "side": 1,
+      "message": "This really holds for all managed pointers that we have so far (BasicMember, BasicPersistent).\n\nI think we\u0027ve said so far: Anything that wants compaction is a special case and not the other way round.",
+      "range": {
+        "startLine": 442,
+        "startChar": 5,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
