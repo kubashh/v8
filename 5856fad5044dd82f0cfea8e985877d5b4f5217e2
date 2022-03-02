@@ -39,6 +39,30 @@
       },
       "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b2eba7d_1c210dd3",
+        "filename": "include/cppgc/cross-thread-persistent.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-02T14:52:02Z",
+      "side": 1,
+      "message": "Indeed, members and persistents don\u0027t prevent moving, but that won\u0027t be concurrent.\n\nAssume you\u0027ve registered the slots as movable references and generally did everything correctly. With members and persistents you should still be safe to use the reference because you know that if you could move the object than it wasn\u0027t being used during the GC (i.e. no stack).\nWith CT(W)P that doesn\u0027t hold. You could be accessing the object and half way through another thread moves it. I think that\u0027s only possible with CT(W)Ps, and thus worth an extra warning. wdyt?",
+      "parentUuid": "3e6225ef_13c76aac",
+      "range": {
+        "startLine": 442,
+        "startChar": 5,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
