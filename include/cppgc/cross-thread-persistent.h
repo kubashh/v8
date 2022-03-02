@@ -439,6 +439,9 @@ namespace subtle {
  * - Does not protect the heap owning an object from terminating.
  * - Reaching transitively through the graph is unsupported as objects may be
  *   moved concurrently on the thread owning the object.
+ * - Does not prevent the thread owning the object from moving it concurrently.
+ *   Do not use CrossThreadPersistent to hold objects allocated on compactable
+ *   spaces.
  */
 template <typename T>
 using CrossThreadPersistent = internal::BasicCrossThreadPersistent<
@@ -447,13 +450,16 @@ using CrossThreadPersistent = internal::BasicCrossThreadPersistent<
 /**
  * **DO NOT USE: Has known caveats, see below.**
  *
- * CrossThreadPersistent allows weakly retaining objects from threads other than
- * the thread the owning heap is operating on.
+ * WeakCrossThreadPersistent allows weakly retaining objects from threads other
+ * than the thread the owning heap is operating on.
  *
  * Known caveats:
  * - Does not protect the heap owning an object from terminating.
  * - Reaching transitively through the graph is unsupported as objects may be
  *   moved concurrently on the thread owning the object.
+ * - Does not prevent the thread owning the object from moving it concurrently.
+ *   Do not use WeakCrossThreadPersistent to hold objects allocated on
+ *   compactable spaces.
  */
 template <typename T>
 using WeakCrossThreadPersistent = internal::BasicCrossThreadPersistent<
