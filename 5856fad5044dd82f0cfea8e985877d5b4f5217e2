@@ -87,6 +87,30 @@
       },
       "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daef9eb_cf0a5928",
+        "filename": "include/cppgc/cross-thread-persistent.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-02T15:42:11Z",
+      "side": 1,
+      "message": "I think it\u0027s worth having this discussion.\n\nI didn\u0027t mean that Member registers the slot as movable. I meant that in the scenario I described, you would explicitly register the slot as movable, trace everything, etc... (i.e. \"you did everything correctly\"). Then compaction happens.\nIf your slot is a Member, you\u0027re safe as you know you can\u0027t access the object while it is compacted. Thus I believe we could support atomic compaction of members in the future.\n\nMy point was that with CTP you don\u0027t have these guarantees. Even if you did everything right, and registered the CTP slot as movable, compaction can happen concurrently to accessing the object and you are never safe. I don\u0027t think we could ever support compaction of objects in CTP (without forcing all threads into a safepoint or something like that).\n\nDid I manage to clarify why I think the cases of Member/Persistent and CTP are not equivalent?\nDo you think making this distinction is not beneficial?\nIs the problem the phrasing or the content?",
+      "parentUuid": "723ef3da_8feb6ee8",
+      "range": {
+        "startLine": 442,
+        "startChar": 5,
+        "endLine": 442,
+        "endChar": 9
+      },
+      "revId": "5856fad5044dd82f0cfea8e985877d5b4f5217e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
