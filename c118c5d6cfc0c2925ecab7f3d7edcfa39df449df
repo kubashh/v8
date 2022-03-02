@@ -16,6 +16,23 @@
       "message": "fyi, minor changes in the latest PS",
       "revId": "c118c5d6cfc0c2925ecab7f3d7edcfa39df449df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5063ff0f_964a2624",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-02T10:42:14Z",
+      "side": 1,
+      "message": "Still +1",
+      "revId": "c118c5d6cfc0c2925ecab7f3d7edcfa39df449df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
