@@ -12,10 +12,15 @@ function f(x) {
   return y;
 }
 
-%PrepareFunctionForOptimization(f);
-assertEquals(1, f(true));
-assertEquals(0, f(false));
+function g() {
+  // Test that normal tiering (without OptimizeMaglevOnNextCall) works.
+  for (let i = 0; i < 1000; i++) {
+    if (%ActiveTierIsMaglev(f)) break;
+    f(10);
+  }
+}
+%NeverOptimizeFunction(g);
 
-%OptimizeMaglevOnNextCall(f);
-assertEquals(1, f(true));
-assertEquals(0, f(false));
+g();
+
+assertTrue(%ActiveTierIsMaglev(f));
