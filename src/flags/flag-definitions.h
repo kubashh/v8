@@ -519,8 +519,7 @@ DEFINE_BOOL(future, FUTURE_BOOL,
 #define V8_ENABLE_MAGLEV_BOOL false
 #endif  // V8_ENABLE_MAGLEV
 
-DEFINE_BOOL(maglev, V8_ENABLE_MAGLEV_BOOL,
-            "enable the maglev optimizing compiler")
+DEFINE_BOOL(maglev, false, "enable the maglev optimizing compiler")
 DEFINE_STRING(maglev_filter, "*", "optimization filter for the maglev compiler")
 DEFINE_BOOL(maglev_break_on_entry, false, "insert an int3 on maglev entries")
 DEFINE_BOOL(print_maglev_graph, false, "print maglev graph")
@@ -627,6 +626,12 @@ DEFINE_INT(interrupt_budget_for_feedback_allocation, 940,
 DEFINE_INT(interrupt_budget_factor_for_feedback_allocation, 8,
            "The interrupt budget factor (applied to bytecode size) for "
            "allocating feedback vectors, used when bytecode size is known")
+
+// Tiering: Maglev.
+// The Maglev interrupt budget is chosen to be roughly 1/10th of Turbofan's
+// overall budget (including the multiple required ticks).
+DEFINE_INT(interrupt_budget_for_maglev, 40 * KB,
+           "interrupt budget which should be used for the profiler counter")
 
 // Tiering: Turbofan.
 DEFINE_INT(interrupt_budget, 132 * KB,
