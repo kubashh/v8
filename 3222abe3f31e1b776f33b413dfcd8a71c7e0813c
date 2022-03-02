@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40b43a1d_cea9a74b",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-02T10:49:17Z",
+      "side": 1,
+      "message": "Suggestion: Not sure making RelationalComparisonNode part of the node hierarchy is necessary - would a simple helper function that takes a BinaryWithFeedbackNode and an Operation work?",
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "866a52b0_76ce7a33",
         "filename": "src/maglev/maglev-ir.h",
         "patchSetId": 1
