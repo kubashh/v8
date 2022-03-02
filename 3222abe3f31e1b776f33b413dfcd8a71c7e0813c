@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a40649fb_d576860f",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-02T10:57:12Z",
+      "side": 1,
+      "message": "Sorry, I answered Jakob there... Leszek, you mean we could have a generic AllocateVreg in BinaryWithFeedbackNode. Is that it?",
+      "parentUuid": "fce78493_31c6bc14",
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "866a52b0_76ce7a33",
