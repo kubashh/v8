@@ -137,16 +137,21 @@ bool JSFunction::ActiveTierIsIgnition() const {
   return GetActiveTier() == CodeKind::INTERPRETED_FUNCTION;
 }
 
-bool JSFunction::ActiveTierIsTurbofan() const {
-  return GetActiveTier() == CodeKind::TURBOFAN;
-}
-
 bool JSFunction::ActiveTierIsBaseline() const {
   return GetActiveTier() == CodeKind::BASELINE;
 }
 
+bool JSFunction::ActiveTierIsUnoptimizedJSFunction() const {
+  auto tier = GetActiveTier();
+  return tier.has_value() && CodeKindIsUnoptimizedJSFunction(tier.value());
+}
+
 bool JSFunction::ActiveTierIsMaglev() const {
   return GetActiveTier() == CodeKind::MAGLEV;
+}
+
+bool JSFunction::ActiveTierIsTurbofan() const {
+  return GetActiveTier() == CodeKind::TURBOFAN;
 }
 
 bool JSFunction::CanDiscardCompiled() const {
