@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48708379_9aea96ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-03-02T09:51:45Z",
+      "side": 1,
+      "message": "LGTM, really nice!",
+      "revId": "7c4de046b9792746ffb6b828de41806f1063ba4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da0c35b_a4526e82",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 25
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-03-02T09:51:45Z",
+      "side": 1,
+      "message": "Really cool, thanks!",
+      "range": {
+        "startLine": 510,
+        "startChar": 11,
+        "endLine": 510,
+        "endChar": 19
+      },
+      "revId": "7c4de046b9792746ffb6b828de41806f1063ba4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "557356b6_0c07ad97",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 25
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-03-02T09:51:45Z",
+      "side": 1,
+      "message": "nit: could you add a comment about what the conversion involves?",
+      "range": {
+        "startLine": 610,
+        "startChar": 15,
+        "endLine": 610,
+        "endChar": 22
+      },
+      "revId": "7c4de046b9792746ffb6b828de41806f1063ba4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
