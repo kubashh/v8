@@ -277,6 +277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99add3e4_779cf07e",
+        "filename": "tools/system-analyzer/view/code-panel.mjs",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-03-02T08:43:08Z",
+      "side": 1,
+      "message": "Yeah I thought that this might be the reason, but I got confused.\nAre you sure this is working? The negated character class is optional, so it has no effect on what is matched.",
+      "parentUuid": "e4f5a35d_46dbe6c4",
+      "range": {
+        "startLine": 11,
+        "startChar": 16,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "2f9b2bdc03de7da81b4e8638ab12c1391944c2b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8e85c88f_7950186c",
         "filename": "tools/system-analyzer/view/helper.mjs",
         "patchSetId": 7
