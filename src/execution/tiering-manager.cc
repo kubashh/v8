@@ -86,12 +86,31 @@ void TraceRecompile(JSFunction function, OptimizationReason reason,
 
 }  // namespace
 
-void TieringManager::Optimize(JSFunction function, OptimizationReason reason,
-                              CodeKind code_kind) {
-  DCHECK_NE(reason, OptimizationReason::kDoNotOptimize);
-  TraceRecompile(function, reason, code_kind, isolate_);
-  function.MarkForOptimization(isolate_, CodeKind::TURBOFAN,
-                               ConcurrencyMode::kConcurrent);
+class OptimizationDecision {
+ public:
+  static const OptimizationDecision* TurbofanHotAndStable() {
+    static const OptimizationDecision kSingleton{
+        OptimizationReason::kHotAndStable, CodeKind::TURBOFAN,
+        ConcurrencyMode::kConcurrent};
+    return &kSingleton;
+  }
+  static const OptimizationDecision* TurbofanSmallFunction() {
+    static const OptimizationDecision kSingleton{
+        OptimizationReason::kSmallFunction, CodeKind::TURBOFAN,
+        ConcurrencyMode::kConcurrent};
+    return &kSingleton;
+  }
+  static OptimizationDecision* DontOptimize() { return nullptr; }
+  OptimizationReason optimization_reason;
+  CodeKind code_kind;
+  ConcurrencyMode concurrency_mode;
+};
+
+void TieringManager::Optimize(JSFunction function, CodeKind code_kind,
+                              const OptimizationDecision* decision) {
+  TraceRecompile(function, decision->optimization_reason, code_kind, isolate_);
+  function.MarkForOptimization(isolate_, decision->code_kind,
+                               decision->concurrency_mode);
 }
 
 void TieringManager::AttemptOnStackReplacement(UnoptimizedFrame* frame,
@@ -168,12 +187,8 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
     }
   }
 
-  OptimizationReason reason = ShouldOptimize(
-      function, function.shared().GetBytecodeArray(isolate_), frame);
-
-  if (reason != OptimizationReason::kDoNotOptimize) {
-    Optimize(function, reason, code_kind);
-  }
+  const OptimizationDecision* d = ShouldOptimize(function, code_kind, frame);
+  if (d != nullptr) Optimize(function, code_kind, d);
 }
 
 bool TieringManager::MaybeOSR(JSFunction function, UnoptimizedFrame* frame) {
@@ -200,16 +215,20 @@ bool ShouldOptimizeAsSmallFunction(int bytecode_size, bool any_ic_changed) {
 
 }  // namespace
 
-OptimizationReason TieringManager::ShouldOptimize(JSFunction function,
-                                                  BytecodeArray bytecode,
-                                                  JavaScriptFrame* frame) {
-  if (function.ActiveTierIsTurbofan()) {
-    return OptimizationReason::kDoNotOptimize;
+const OptimizationDecision* TieringManager::ShouldOptimize(
+    JSFunction function, CodeKind code_kind, JavaScriptFrame* frame) {
+  DCHECK_EQ(code_kind, function.GetActiveTier().value());
+
+  if (code_kind == CodeKind::TURBOFAN) {
+    // Already in the top tier.
+    return OptimizationDecision::DontOptimize();
   }
+
   // If function's SFI has OSR cache, once enter loop range of OSR cache, set
   // OSR loop nesting level for matching condition of OSR (loop_depth <
   // osr_level), soon later OSR will be triggered when executing bytecode
   // JumpLoop which is entry of the OSR cache, then hit the OSR cache.
+  BytecodeArray bytecode = function.shared().GetBytecodeArray(isolate_);
   if (V8_UNLIKELY(function.shared().osr_code_cache_state() > kNotCached) &&
       frame->is_unoptimized()) {
     int current_offset =
@@ -227,7 +246,7 @@ OptimizationReason TieringManager::ShouldOptimize(JSFunction function,
           current_offset >= jump_target_offset) {
         bytecode.set_osr_loop_nesting_level(iterator.GetImmediateOperand(1) +
                                             1);
-        return OptimizationReason::kHotAndStable;
+        return OptimizationDecision::TurbofanHotAndStable();
       }
     }
   }
@@ -236,12 +255,12 @@ OptimizationReason TieringManager::ShouldOptimize(JSFunction function,
       FLAG_ticks_before_optimization +
       (bytecode.length() / FLAG_bytecode_size_allowance_per_tick);
   if (ticks >= ticks_for_optimization) {
-    return OptimizationReason::kHotAndStable;
+    return OptimizationDecision::TurbofanHotAndStable();
   } else if (ShouldOptimizeAsSmallFunction(bytecode.length(),
                                            any_ic_changed_)) {
     // If no IC was patched since the last tick and this function is very
     // small, optimistically optimize it now.
-    return OptimizationReason::kSmallFunction;
+    return OptimizationDecision::TurbofanSmallFunction();
   } else if (FLAG_trace_opt_verbose) {
     PrintF("[not yet optimizing ");
     function.PrintName();
@@ -253,7 +272,7 @@ OptimizationReason TieringManager::ShouldOptimize(JSFunction function,
              bytecode.length(), FLAG_max_bytecode_size_for_early_opt);
     }
   }
-  return OptimizationReason::kDoNotOptimize;
+  return OptimizationDecision::DontOptimize();
 }
 
 TieringManager::OnInterruptTickScope::OnInterruptTickScope(

@@ -17,6 +17,7 @@ class Isolate;
 class UnoptimizedFrame;
 class JavaScriptFrame;
 class JSFunction;
+class OptimizationDecision;
 enum class CodeKind;
 enum class OptimizationReason : uint8_t;
 
@@ -45,11 +46,12 @@ class TieringManager {
   // Potentially attempts OSR from and returns whether no other
   // optimization attempts should be made.
   bool MaybeOSR(JSFunction function, UnoptimizedFrame* frame);
-  OptimizationReason ShouldOptimize(JSFunction function,
-                                    BytecodeArray bytecode_array,
-                                    JavaScriptFrame* frame);
-  void Optimize(JSFunction function, OptimizationReason reason,
-                CodeKind code_kind);
+  // Returns nullptr if we decline to optimize.
+  const OptimizationDecision* ShouldOptimize(JSFunction function,
+                                             CodeKind code_kind,
+                                             JavaScriptFrame* frame);
+  void Optimize(JSFunction function, CodeKind code_kind,
+                const OptimizationDecision* decision);
   void Baseline(JSFunction function, OptimizationReason reason);
 
   class V8_NODISCARD OnInterruptTickScope final {
