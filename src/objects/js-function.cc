@@ -88,6 +88,9 @@ V8_WARN_UNUSED_RESULT bool HighestTierOf(CodeKinds kinds,
   if ((kinds & CodeKindFlag::TURBOFAN) != 0) {
     *highest_tier = CodeKind::TURBOFAN;
     return true;
+  } else if ((kinds & CodeKindFlag::MAGLEV) != 0) {
+    *highest_tier = CodeKind::MAGLEV;
+    return true;
   } else if ((kinds & CodeKindFlag::BASELINE) != 0) {
     *highest_tier = CodeKind::BASELINE;
     return true;
@@ -137,16 +140,16 @@ bool JSFunction::ActiveTierIsIgnition() const {
   return GetActiveTier() == CodeKind::INTERPRETED_FUNCTION;
 }
 
-bool JSFunction::ActiveTierIsTurbofan() const {
-  return GetActiveTier() == CodeKind::TURBOFAN;
-}
-
 bool JSFunction::ActiveTierIsBaseline() const {
   return GetActiveTier() == CodeKind::BASELINE;
 }
 
 bool JSFunction::ActiveTierIsMaglev() const {
   return GetActiveTier() == CodeKind::MAGLEV;
+}
+
+bool JSFunction::ActiveTierIsTurbofan() const {
+  return GetActiveTier() == CodeKind::TURBOFAN;
 }
 
 bool JSFunction::CanDiscardCompiled() const {
