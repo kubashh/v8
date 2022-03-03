@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "105f314c_3f3a005d",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-03T06:27:04Z",
+      "side": 1,
+      "message": "optional nit: suggest moving this up to set_next_use",
+      "revId": "122fa4f9584eeafd1c645d5766ab9cc600656691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abc623ad_d4603167",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-03T06:27:04Z",
+      "side": 1,
+      "message": "Unrelated: `\u003e0` meaning \u0027not an incoming arg\u0027? If so a named predicated would be helpful.",
+      "range": {
+        "startLine": 329,
+        "startChar": 10,
+        "endLine": 329,
+        "endChar": 26
+      },
+      "revId": "122fa4f9584eeafd1c645d5766ab9cc600656691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
