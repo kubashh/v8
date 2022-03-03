@@ -16,6 +16,23 @@
       "message": "thanks!",
       "revId": "2bc6bf7114ce68ea719d757c1544b08bbca902e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a70052_161dfc58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-03T09:22:56Z",
+      "side": 1,
+      "message": "I\u0027ll fix the build failure on arm64.",
+      "revId": "2bc6bf7114ce68ea719d757c1544b08bbca902e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
