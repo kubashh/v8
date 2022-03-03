@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76110a86_4266d008",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1474,
+      "author": {
+        "id": 1523932
+      },
+      "writtenOn": "2022-03-03T01:40:24Z",
+      "side": 0,
+      "message": "There is only \"intptr_t\" type for the second parameter of function Move. Thus, the \"uint32_t\" or \"int32_t\" is changing to \"intptr_t\" consistent.",
+      "range": {
+        "startLine": 1474,
+        "startChar": 4,
+        "endLine": 1474,
+        "endChar": 12
+      },
+      "revId": "9923a6c269865a00deace7517652f21b06bc9346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
