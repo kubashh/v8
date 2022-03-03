@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f324a15_072f7400",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-03T08:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "105f314c_3f3a005d",
+      "revId": "122fa4f9584eeafd1c645d5766ab9cc600656691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "abc623ad_d4603167",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-03-03T06:27:04Z",
       "side": 1,
       "message": "Unrelated: `\u003e0` meaning \u0027not an incoming arg\u0027? If so a named predicated would be helpful.",
+      "range": {
+        "startLine": 329,
+        "startChar": 10,
+        "endLine": 329,
+        "endChar": 26
+      },
+      "revId": "122fa4f9584eeafd1c645d5766ab9cc600656691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e2a5ff_ddf9f0cd",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-03T08:57:30Z",
+      "side": 1,
+      "message": "\u003e0 meaning specifically \"one of the actual spill slots controlled by the allocator\", where \u003c0 is indeed things like incoming args, also the current context slot. We\u0027ll probable change the free slots to a BitVector, and can clean this up then.",
+      "parentUuid": "abc623ad_d4603167",
       "range": {
         "startLine": 329,
         "startChar": 10,
