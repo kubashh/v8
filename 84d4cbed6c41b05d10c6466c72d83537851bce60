@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dd7ff9d_6226cb3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-04T00:55:59Z",
+      "side": 1,
+      "message": "lgtm other than moving the string test down.",
+      "revId": "84d4cbed6c41b05d10c6466c72d83537851bce60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f67d41_1c3787e7",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-04T00:55:59Z",
+      "side": 1,
+      "message": "This line should be moved to the bottom, after the call to `ToPrimitive`, in case that returns a string. The hint doesn\u0027t guarantee that you actually get a String back.",
+      "range": {
+        "startLine": 2903,
+        "startChar": 0,
+        "endLine": 2903,
+        "endChar": 41
+      },
+      "revId": "84d4cbed6c41b05d10c6466c72d83537851bce60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
