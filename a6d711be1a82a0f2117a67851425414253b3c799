@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b917c2ec_0554a8be",
+        "filename": "src/compiler/branch-condition-duplicator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "We kinda need to still have an \"a+b\" in there, because there is no problem with breaking SSA when doing \"a \u003d\u003d b\" (the issue of bit materialization for the case of \"a \u003d\u003d b\" was solved without requiring to duplicate branch conditions). I\u0027ve changed the example a bit, let me know what you think.",
+      "parentUuid": "21f29249_e0b2a6ba",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6642eaae_b842f5b9",
         "filename": "src/compiler/branch-condition-duplicator.h",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-04T10:45:08Z",
       "side": 1,
       "message": "How about something like `ProcessGraph`?",
+      "range": {
+        "startLine": 60,
+        "startChar": 7,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09e8df04_f1641366",
+        "filename": "src/compiler/branch-condition-duplicator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6642eaae_b842f5b9",
       "range": {
         "startLine": 60,
         "startChar": 7,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a166dfe2_80dc2849",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Because I didn\u0027t know about `base::nullopt`! I was actually wondering why .has_value() wasn\u0027t working, I see why now! Thanks :)",
+      "parentUuid": "b084c168_23f549b4",
+      "range": {
+        "startLine": 2169,
+        "startChar": 9,
+        "endLine": 2169,
+        "endChar": 16
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c8c64de_15de99b8",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-03-04T10:38:31Z",
       "side": 1,
       "message": "If you followed the comment above, this should be `.has_value()`.",
+      "range": {
+        "startLine": 2186,
+        "startChar": 52,
+        "endLine": 2186,
+        "endChar": 62
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12fbbb6_71889895",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c8c64de_15de99b8",
       "range": {
         "startLine": 2186,
         "startChar": 52,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a4a41b_209d7c3a",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32d410b6_01db6118",
+      "range": {
+        "startLine": 2201,
+        "startChar": 0,
+        "endLine": 2201,
+        "endChar": 21
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8da4763_442aacea",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0812bf89_641dd2c6",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8da4763_442aacea",
+      "range": {
+        "startLine": 2244,
+        "startChar": 6,
+        "endLine": 2244,
+        "endChar": 27
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ec74ab3_7a33aff4",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-03-04T10:38:31Z",
       "side": 1,
       "message": "?",
+      "range": {
+        "startLine": 2268,
+        "startChar": 0,
+        "endLine": 2268,
+        "endChar": 55
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b415437_6840ed93",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-04T14:28:35Z",
+      "side": 1,
+      "message": "Whups!",
+      "parentUuid": "4ec74ab3_7a33aff4",
       "range": {
         "startLine": 2268,
         "startChar": 0,
