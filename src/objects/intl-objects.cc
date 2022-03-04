@@ -2897,12 +2897,10 @@ Maybe<bool> Intl::GetTimeZoneIndex(Isolate* isolate, Handle<String> identifier,
 // #sec-tointlmathematicalvalue
 MaybeHandle<Object> Intl::ToIntlMathematicalValueAsNumberBigIntOrString(
     Isolate* isolate, Handle<Object> input) {
-  // Strings are used to preserve arbitrary precision decimals, and are passed
-  // through to ICU.
-  if (input->IsNumber() || input->IsBigInt() || input->IsString())
-    return input;  // Shortcut.
-
-  // TODO(ftang) revisit the following later.
+  if (input->IsNumber() || input->IsBigInt()) return input;  // Shortcut.
+  // TODO(ftang) revisit the following after the resolution of
+  // https://github.com/tc39/proposal-intl-numberformat-v3/pull/82
+  if (input->IsString()) UNIMPLEMENTED();
   if (input->IsOddball()) {
     return Oddball::ToNumber(isolate, Handle<Oddball>::cast(input));
   }
