@@ -1910,6 +1910,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     // interrupted full cycle.
     if (IsYoungGenerationCollector(collector)) {
       tracer()->StopCycle(collector);
+    } else {
+      tracer()->StopCycleIfNeeded();
     }
   }
 
@@ -2022,7 +2024,6 @@ void Heap::CompleteSweepingFull() {
   if (cpp_heap()) {
     CppHeap::From(cpp_heap())->FinishSweepingIfRunning();
   }
-  tracer()->StopCycleIfSweeping();
 }
 
 void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
@@ -2396,6 +2397,7 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   tracer()->StopAtomicPause();
   tracer()->StopObservablePause();
   tracer()->UpdateStatistics(collector);
+  tracer()->StopCycleIfNeeded();
 }
 
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {

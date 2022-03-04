@@ -6388,7 +6388,7 @@ HEAP_TEST(Regress670675) {
   if (collector->sweeping_in_progress()) {
     collector->EnsureSweepingCompleted();
   }
-  heap->tracer()->StopCycleIfSweeping();
+  heap->tracer()->StopCycleIfNeeded();
   i::IncrementalMarking* marking = CcTest::heap()->incremental_marking();
   if (marking->IsStopped()) {
     SafepointScope safepoint_scope(heap);

@@ -277,7 +277,7 @@ TEST(FinalizeTracingWhenMarking) {
   if (heap->mark_compact_collector()->sweeping_in_progress()) {
     heap->mark_compact_collector()->EnsureSweepingCompleted();
   }
-  heap->tracer()->StopCycleIfSweeping();
+  heap->tracer()->StopCycleIfNeeded();
   CHECK(heap->incremental_marking()->IsStopped());
 
   i::IncrementalMarking* marking = heap->incremental_marking();
