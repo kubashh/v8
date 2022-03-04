@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21f29249_e0b2a6ba",
+        "filename": "src/compiler/branch-condition-duplicator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:45:08Z",
+      "side": 1,
+      "message": "I\u0027d suggest to use an example with a comparison, as it\u0027s the more typical case and shows the bit materialization issue.",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6642eaae_b842f5b9",
+        "filename": "src/compiler/branch-condition-duplicator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:45:08Z",
+      "side": 1,
+      "message": "How about something like `ProcessGraph`?",
+      "range": {
+        "startLine": 60,
+        "startChar": 7,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b084c168_23f549b4",
         "filename": "src/compiler/machine-operator-reducer.cc",
         "patchSetId": 6
