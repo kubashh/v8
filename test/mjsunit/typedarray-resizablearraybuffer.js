@@ -6308,3 +6308,262 @@ function TestIterationAndResize(ta, expected, rab, resize_after,
     assertEquals([0, 2, 4, 6], ToNumbers(lengthTracking.subarray(evil)));
   }
 })();
+
+(function SortWithDefaultComparison() {
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    const fixedLength = new ctor(rab, 0, 4);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    const lengthTracking = new ctor(rab, 0);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+
+    const taFull = new ctor(rab, 0);
+    function WriteUnsortedData() {
+      // Write some data into the array.
+      for (let i = 0; i < taFull.length; ++i) {
+        WriteToTypedArray(taFull, i, 10 - 2 * i);
+      }
+    }
+    // Orig. array: [10, 8, 6, 4]
+    //              [10, 8, 6, 4] << fixedLength
+    //                     [6, 4] << fixedLengthWithOffset
+    //              [10, 8, 6, 4, ...] << lengthTracking
+    //                     [6, 4, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    fixedLength.sort();
+    assertEquals([4, 6, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    fixedLengthWithOffset.sort();
+    assertEquals([10, 8, 4, 6], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([4, 6, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTrackingWithOffset.sort();
+    assertEquals([10, 8, 4, 6], ToNumbers(taFull));
+
+    // Shrink so that fixed length TAs go out of bounds.
+    rab.resize(3 * ctor.BYTES_PER_ELEMENT);
+
+    // Orig. array: [10, 8, 6]
+    //              [10, 8, 6, ...] << lengthTracking
+    //                     [6, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([6, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTrackingWithOffset.sort();
+    assertEquals([10, 8, 6], ToNumbers(taFull));
+
+    // Shrink so that the TAs with offset go out of bounds.
+    rab.resize(1 * ctor.BYTES_PER_ELEMENT);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    assertThrows(() => { lengthTrackingWithOffset.sort(); }, TypeError);
+
+    // Shrink to zero.
+    rab.resize(0);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(); }, TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    assertThrows(() => { lengthTrackingWithOffset.sort(); }, TypeError);
+
+    // Grow so that all TAs are back in-bounds.
+    rab.resize(6 * ctor.BYTES_PER_ELEMENT);
+
+    // Orig. array: [10, 8, 6, 4, 2, 0]
+    //              [10, 8, 6, 4] << fixedLength
+    //                     [6, 4] << fixedLengthWithOffset
+    //              [10, 8, 6, 4, 2, 0, ...] << lengthTracking
+    //                     [6, 4, 2, 0, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    fixedLength.sort();
+    assertEquals([4, 6, 8, 10, 2, 0], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    fixedLengthWithOffset.sort();
+    assertEquals([10, 8, 4, 6, 2, 0], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([0, 2, 4, 6, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTrackingWithOffset.sort();
+    assertEquals([10, 8, 0, 2, 4, 6], ToNumbers(taFull));
+  }
+})();
+
+(function SortWithCustomComparison() {
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    const fixedLength = new ctor(rab, 0, 4);
+    const fixedLengthWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT, 2);
+    const lengthTracking = new ctor(rab, 0);
+    const lengthTrackingWithOffset = new ctor(rab, 2 * ctor.BYTES_PER_ELEMENT);
+
+    const taFull = new ctor(rab, 0);
+    function WriteUnsortedData() {
+      // Write some data into the array.
+      for (let i = 0; i < taFull.length; ++i) {
+        WriteToTypedArray(taFull, i, 10 - i);
+      }
+    }
+    function CustomComparison(a, b) {
+      // Sort all odd numbers before even numbers.
+      a = Number(a);
+      b = Number(b);
+      if (a % 2 == 1 && b % 2 == 0) {
+        return -1;
+      }
+      if (a % 2 == 0 && b % 2 == 1) {
+        return 1;
+      }
+      if (a < b) {
+        return -1;
+      }
+      if (a > b) {
+        return 1;
+      }
+      return 0;
+    }
+    // Orig. array: [10, 9, 8, 7]
+    //              [10, 9, 8, 7] << fixedLength
+    //                     [8, 7] << fixedLengthWithOffset
+    //              [10, 9, 8, 7, ...] << lengthTracking
+    //                     [8, 7, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    fixedLength.sort(CustomComparison);
+    assertEquals([7, 9, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    fixedLengthWithOffset.sort(CustomComparison);
+    assertEquals([10, 9, 7, 8], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTracking.sort(CustomComparison);
+    assertEquals([7, 9, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData(CustomComparison);
+    lengthTrackingWithOffset.sort();
+    assertEquals([10, 9, 7, 8], ToNumbers(taFull));
+
+    // Shrink so that fixed length TAs go out of bounds.
+    rab.resize(3 * ctor.BYTES_PER_ELEMENT);
+
+    // Orig. array: [10, 9, 8]
+    //              [10, 9, 8, ...] << lengthTracking
+    //                     [8, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(CustomComparison); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(CustomComparison); },
+                 TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort(CustomComparison);
+    assertEquals([9, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTrackingWithOffset.sort(CustomComparison);
+    assertEquals([10, 9, 8], ToNumbers(taFull));
+
+    // Shrink so that the TAs with offset go out of bounds.
+    rab.resize(1 * ctor.BYTES_PER_ELEMENT);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(CustomComparison); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(CustomComparison); },
+                 TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    assertThrows(() => { lengthTrackingWithOffset.sort(CustomComparison); },
+                 TypeError);
+
+    // Shrink to zero.
+    rab.resize(0);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLength.sort(CustomComparison); }, TypeError);
+
+    WriteUnsortedData();
+    assertThrows(() => { fixedLengthWithOffset.sort(CustomComparison); },
+                 TypeError);
+
+    WriteUnsortedData();
+    lengthTracking.sort();
+    assertEquals([], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    assertThrows(() => { lengthTrackingWithOffset.sort(CustomComparison); },
+                 TypeError);
+
+    // Grow so that all TAs are back in-bounds.
+    rab.resize(6 * ctor.BYTES_PER_ELEMENT);
+
+    // Orig. array: [10, 9, 8, 7, 6, 5]
+    //              [10, 9, 8, 7] << fixedLength
+    //                     [8, 7] << fixedLengthWithOffset
+    //              [10, 9, 8, 7, 6, 5, ...] << lengthTracking
+    //                     [8, 7, 6, 5, ...] << lengthTrackingWithOffset
+
+    WriteUnsortedData();
+    fixedLength.sort(CustomComparison);
+    assertEquals([7, 9, 8, 10, 6, 5], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    fixedLengthWithOffset.sort(CustomComparison);
+    assertEquals([10, 9, 7, 8, 6, 5], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTracking.sort(CustomComparison);
+    assertEquals([5, 7, 9, 6, 8, 10], ToNumbers(taFull));
+
+    WriteUnsortedData();
+    lengthTrackingWithOffset.sort(CustomComparison);
+    assertEquals([10, 9, 5, 7, 6, 8], ToNumbers(taFull));
+  }
+})();

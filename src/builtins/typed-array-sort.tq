@@ -99,12 +99,10 @@ transitioning javascript builtin TypedArrayPrototypeSort(
   const obj: JSAny = receiver;
 
   // 3. Let buffer be ? ValidateTypedArray(obj).
-  //    ValidateTypedArray currently returns the array, not the ViewBuffer.
-  const array: JSTypedArray =
-      ValidateTypedArray(context, obj, kBuiltinNameSort);
-
-  // 4. Let len be obj.[[ArrayLength]].
-  const len: uintptr = array.length;
+  // 4. Let len be IntegerIndexedObjectLength(obj).
+  const len: uintptr =
+      ValidateTypedArrayAndGetLength(context, obj, kBuiltinNameSort);
+  const array: JSTypedArray = UnsafeCast<JSTypedArray>(obj);
 
   // Arrays of length 1 or less are considered sorted.
   if (len < 2) return array;
