@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b084c168_23f549b4",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:38:31Z",
+      "side": 1,
+      "message": "Why not return `base::nullopt`?",
+      "range": {
+        "startLine": 2169,
+        "startChar": 9,
+        "endLine": 2169,
+        "endChar": 16
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c8c64de_15de99b8",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2186,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:38:31Z",
+      "side": 1,
+      "message": "If you followed the comment above, this should be `.has_value()`.",
+      "range": {
+        "startLine": 2186,
+        "startChar": 52,
+        "endLine": 2186,
+        "endChar": 62
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32d410b6_01db6118",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:38:31Z",
+      "side": 1,
+      "message": "The standard approach would be to return `Reduction`.",
+      "range": {
+        "startLine": 2201,
+        "startChar": 0,
+        "endLine": 2201,
+        "endChar": 21
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8da4763_442aacea",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:38:31Z",
+      "side": 1,
+      "message": "These early returns prevent your optimization from triggering. The code should be re-structured to continue running the other checks even if a reduction happened. An alternative would be (not sure if the recursion is elegant, but the `FollowedBy` is kind of nice and it generalizes well to cases where the node is actually replaced):\n\n return Changed(node).FollowedBy(ReduceConditional(node));",
+      "range": {
+        "startLine": 2244,
+        "startChar": 6,
+        "endLine": 2244,
+        "endChar": 27
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec74ab3_7a33aff4",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T10:38:31Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 2268,
+        "startChar": 0,
+        "endLine": 2268,
+        "endChar": 55
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
