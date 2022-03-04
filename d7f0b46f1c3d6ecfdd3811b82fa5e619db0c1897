@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac705555_88ca819f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T16:16:49Z",
+      "side": 1,
+      "message": "I apply Owners-Override, because the missing OWNER permissions are just build files.",
+      "revId": "d7f0b46f1c3d6ecfdd3811b82fa5e619db0c1897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17e0f18d_a5081438",
