@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b07014e_38fa389f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-04T13:52:53Z",
+      "side": 1,
+      "message": "Nice CL! Thanks!",
+      "revId": "7fa6f3cccd3a2e9797be35d06300f13d3e389810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92fd8bc2_f8a3ce24",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-04T13:52:53Z",
+      "side": 1,
+      "message": "You want to use this to statically catch when we finished supporting all bytecodes? Nice! 😊",
+      "range": {
+        "startLine": 440,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 67
+      },
+      "revId": "7fa6f3cccd3a2e9797be35d06300f13d3e389810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
