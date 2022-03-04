@@ -42,6 +42,9 @@ class V8_BASE_EXPORT VirtualAddressSpacePageAllocator
   void* AllocatePages(void* hint, size_t size, size_t alignment,
                       Permission access) override;
 
+  void* AllocateHugePages(void* hint, size_t size, size_t alignment,
+                          Permission access) override;
+
   bool FreePages(void* address, size_t size) override;
 
   bool ReleasePages(void* address, size_t size, size_t new_size) override;
