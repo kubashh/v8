@@ -190,8 +190,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeEquals)
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToString)
 /* Temporal #sec-temporal.zonedddatetimeprototype.tojson */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToJSON)
-/* Temporal #sec-temporal.zoneddatetime.prototype.startofday */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeStartOfDay)
 /* Temporal #sec-temporal.zoneddatetime.prototype.toinstant */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToInstant)
 /* Temporal #sec-temporal.zoneddatetime.prototype.toplaindate */
@@ -750,6 +748,7 @@ TEMPORAL_PROTOTYPE_METHOD1(ZonedDateTime, WithCalendar, withCalendar)
 TEMPORAL_PROTOTYPE_METHOD1(ZonedDateTime, WithTimeZone, withTimeZone)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(ZonedDateTime)
+TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, StartOfDay, startOfDay)
 
 // Duration
 BUILTIN(TemporalDurationConstructor) {
