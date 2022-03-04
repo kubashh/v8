@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "480b82c3_3f6a0440",
+        "filename": "src/compiler/branch-condition-duplicator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T16:14:53Z",
+      "side": 1,
+      "message": "You mean because of the new optimization in the InstructionSelector? My idea was that that one could be replaced with duplicating Branch inputs. Anyhow, I\u0027m happy with your example.",
+      "parentUuid": "b917c2ec_0554a8be",
+      "range": {
+        "startLine": 27,
+        "startChar": 7,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "a6d711be1a82a0f2117a67851425414253b3c799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6642eaae_b842f5b9",
         "filename": "src/compiler/branch-condition-duplicator.h",
         "patchSetId": 6

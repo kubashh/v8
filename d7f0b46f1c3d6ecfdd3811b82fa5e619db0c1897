@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66967a0b_d5ca0ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T16:14:53Z",
+      "side": 1,
+      "message": "Thanks! LGTM",
+      "revId": "d7f0b46f1c3d6ecfdd3811b82fa5e619db0c1897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e0f18d_a5081438",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-04T16:14:53Z",
+      "side": 1,
+      "message": "I think this code also works for all the other opcodes supported by `ReduceConditional`, so you could consider removing this check.",
+      "range": {
+        "startLine": 2202,
+        "startChar": 24,
+        "endLine": 2202,
+        "endChar": 41
+      },
+      "revId": "d7f0b46f1c3d6ecfdd3811b82fa5e619db0c1897",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
