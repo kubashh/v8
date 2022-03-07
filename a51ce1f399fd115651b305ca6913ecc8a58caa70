@@ -39,6 +39,30 @@
       },
       "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5ffe8b0_fb03cfea",
+        "filename": "src/execution/clobber-registers.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-07T07:23:54Z",
+      "side": 1,
+      "message": "I found \"src/codegen/register.h\" seems not to include the arch specific headers, and \"src/codegen/register-arch.h\" will include the arch specific headers according to V8_TARGET_ARCH. And we need to include the arch specific headers according to V8_HOST_ARCH here, including \"src/codegen/register-arch.h\" might break the build.",
+      "parentUuid": "cf64e59e_dca80dbd",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
