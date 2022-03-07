@@ -824,6 +824,10 @@ CppHeap::MetricRecorderAdapter* CppHeap::GetMetricRecorder() const {
 
 void CppHeap::FinishSweepingIfRunning() { sweeper_.FinishIfRunning(); }
 
+void CppHeap::FinishSweepingIfNoTasksRunning() {
+  sweeper_.FinishIfNoTasksRunning();
+}
+
 std::unique_ptr<CppMarkingState> CppHeap::CreateCppMarkingState() {
   DCHECK(IsMarking());
   return std::make_unique<CppMarkingState>(

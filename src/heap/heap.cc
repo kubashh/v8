@@ -2412,8 +2412,18 @@ void Heap::CompleteSweepingYoung(GarbageCollector collector) {
       UNREACHABLE();
   }
 
-  TRACE_GC_EPOCH(tracer(), scope_id, ThreadKind::kMain);
-  array_buffer_sweeper()->EnsureFinished();
+  {
+    TRACE_GC_EPOCH(tracer(), scope_id, ThreadKind::kMain);
+    array_buffer_sweeper()->EnsureFinished();
+  }
+
+  // If sweeping is in progress and there are no sweeper tasks running, finish
+  // the sweeping here, to avoid having to pause and resume during the young
+  // generation GC.
+  mark_compact_collector()->FinishSweepingIfNoTasksRunning();
+  if (cpp_heap()) {
+    CppHeap::From(cpp_heap())->FinishSweepingIfNoTasksRunning();
+  }
 }
 
 void Heap::EnsureSweepingCompleted(HeapObject object) {

@@ -809,10 +809,21 @@ class Sweeper::SweeperImpl final {
     NotifyDone();
   }
 
+  void FinishIfNoTasksRunning() {
+    if (is_in_progress_ && !is_sweeping_on_mutator_thread_ &&
+        concurrent_sweeper_handle_ && concurrent_sweeper_handle_->IsValid() &&
+        !concurrent_sweeper_handle_->IsActive()) {
+      // At this point we know that the concurrent sweeping task has run
+      // out-of-work: all pages are swept. The main thread still needs to finish
+      // sweeping though.
+      FinishIfRunning();
+    }
+  }
+
   void Finish() {
     DCHECK(is_in_progress_);
 
-    MutatorThreadSweepingScope sweeping_in_progresss(*this);
+    MutatorThreadSweepingScope sweeping_in_progress(*this);
 
     // First, call finalizers on the mutator thread.
     SweepFinalizer finalizer(platform_, config_.free_memory_handling);
@@ -1001,6 +1012,7 @@ void Sweeper::Start(SweepingConfig config) {
   impl_->Start(config, heap_.platform());
 }
 void Sweeper::FinishIfRunning() { impl_->FinishIfRunning(); }
+void Sweeper::FinishIfNoTasksRunning() { impl_->FinishIfNoTasksRunning(); }
 void Sweeper::WaitForConcurrentSweepingForTesting() {
   impl_->WaitForConcurrentSweepingForTesting();
 }

@@ -530,6 +530,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   bool is_compacting() const { return compacting_; }
   bool is_shared_heap() const { return is_shared_heap_; }
 
+  void FinishSweepingIfNoTasksRunning();
+
   // Ensures that sweeping is finished.
   //
   // Note: Can only be called safely from main thread.
