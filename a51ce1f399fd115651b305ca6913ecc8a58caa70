@@ -16,6 +16,29 @@
       "message": "Hi, I have fixed the build failure on arm, Could you please try the CQ again? Thanks very much! Because \"arguments.h\" includes \"register-[arch].h\", which would cause redefinition of registers. And the cpp linter also requires \"arguments.cc\" must include \"arguments.h\". So I defined \"ClobberDoubleRegisters\" into a new file \"clobber-register.h\".",
       "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf64e59e_dca80dbd",
+        "filename": "src/execution/clobber-registers.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-07T07:07:44Z",
+      "side": 1,
+      "message": "nit: you can just include \"src/codegen/register.h\", this will include the arch specific headers.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
