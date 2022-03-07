@@ -16,6 +16,52 @@
       "message": "PTAL again! These are only \"GenericNodes\" at the moment. I will add more specific ones later on.",
       "revId": "5c9f6464ca92d0bf49e739d28fd09a4d01df5dca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8316991d_4714e063",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-07T10:18:33Z",
+      "side": 1,
+      "message": "I think, looking at this, I disagree with Jakob\u0027s advice here, I think it\u0027d be cleaner to have a single AllocateVreg/GenerateCode on BinaryWithFeedbackNode, and not define it separately on the RelComp subclasses",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 733,
+        "endChar": 53
+      },
+      "revId": "5c9f6464ca92d0bf49e739d28fd09a4d01df5dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8556c580_825d5912",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-07T10:18:33Z",
+      "side": 1,
+      "message": "this isn\u0027t needed when there\u0027s no params (my mistake in the Add/LessThan impl, you can remove it there too)",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 64
+      },
+      "revId": "5c9f6464ca92d0bf49e739d28fd09a4d01df5dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
