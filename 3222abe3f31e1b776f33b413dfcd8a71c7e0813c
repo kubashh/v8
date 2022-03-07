@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "992dc993_785b1687",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T09:28:06Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "d4c4fd2c_32ab2aad",
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "866a52b0_76ce7a33",
@@ -162,6 +180,30 @@
       "side": 1,
       "message": "Interesting... okay then!",
       "parentUuid": "866a52b0_76ce7a33",
+      "range": {
+        "startLine": 717,
+        "startChar": 0,
+        "endLine": 717,
+        "endChar": 29
+      },
+      "revId": "3222abe3f31e1b776f33b413dfcd8a71c7e0813c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a14221e6_9e4529c6",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T09:28:06Z",
+      "side": 1,
+      "message": "Done!",
+      "parentUuid": "a4164f27_0530533e",
       "range": {
         "startLine": 717,
         "startChar": 0,
