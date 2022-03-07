@@ -63,6 +63,30 @@
       },
       "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f64b6aa_54e6b053",
+        "filename": "src/execution/clobber-registers.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-07T07:41:43Z",
+      "side": 1,
+      "message": "I recently changed register-arch.h to register.h (and register.h to register-base.h) -- but you\u0027re right, it\u0027s the HOST that\u0027s important here, not the TARGET. Good observation!",
+      "parentUuid": "b5ffe8b0_fb03cfea",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "a51ce1f399fd115651b305ca6913ecc8a58caa70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
