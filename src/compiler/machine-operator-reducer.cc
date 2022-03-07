@@ -1370,6 +1370,36 @@ Reduction MachineOperatorReducer::ReduceWord32Comparisons(Node* node) {
       return Changed(node);
     }
   }
+  // Simplifying (x >> n) <= k into x <= (k << n), with "k << n" being being
+  // computed here at compile time.
+  if (m.right().HasResolvedValue() &&
+      m.left().op() == machine()->Word32SarShiftOutZeros()) {
+    uint32_t right = m.right().ResolvedValue();
+    Int32BinopMatcher mleft(m.left().node());
+    if (mleft.right().HasResolvedValue() &&
+        base::bits::CountLeadingZeros(right) >
+            static_cast<uint32_t>(mleft.right().ResolvedValue())) {
+      node->ReplaceInput(0, mleft.left().node());
+      node->ReplaceInput(1,
+                         Int32Constant(right << mleft.right().ResolvedValue()));
+      return Changed(node);
+    }
+  }
+  // Simplifying y <= (x >> k) into (k << n) <= x, with "k << n" being being
+  // computed here at compile time.
+  if (m.left().HasResolvedValue() &&
+      m.right().op() == machine()->Word32SarShiftOutZeros()) {
+    uint32_t left = m.left().ResolvedValue();
+    Int32BinopMatcher mright(m.right().node());
+    if (mright.right().HasResolvedValue() &&
+        base::bits::CountLeadingZeros(left) >
+            static_cast<uint32_t>(mright.right().ResolvedValue())) {
+      node->ReplaceInput(0,
+                         Int32Constant(left << mright.right().ResolvedValue()));
+      node->ReplaceInput(1, mright.left().node());
+      return Changed(node);
+    }
+  }
   return NoChange();
 }
 
@@ -2323,6 +2353,17 @@ MachineOperatorReducer::ReduceWord32EqualForConstantRhs(Node* lhs,
           return std::make_pair(Word32And(new_input, new_mask), new_rhs);
         }
       }
+    }
+  }
+  // Replaces (x >> n) == k with x == k << n, with "k << n" being being computed
+  // here at compile time.
+  if (lhs->op() == machine()->Word32SarShiftOutZeros() &&
+      lhs->UseCount() == 1) {
+    typename WordNAdapter::UintNBinopMatcher mshift(lhs);
+    if (mshift.right().HasResolvedValue() &&
+        base::bits::CountLeadingZeros(rhs) > mshift.right().ResolvedValue()) {
+      return std::make_pair(mshift.left().node(),
+                            rhs << mshift.right().ResolvedValue());
     }
   }
   return {};
