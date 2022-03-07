@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70e71979_22dc182e",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-07T18:43:32Z",
+      "side": 1,
+      "message": "I know it\u0027s not your code, but for consistency: This should be signed shift, so \"\u003e\u003e\".",
+      "range": {
+        "startLine": 1361,
+        "startChar": 8,
+        "endLine": 1361,
+        "endChar": 11
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be0e75db_91421933",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-07T18:43:32Z",
+      "side": 1,
+      "message": "\"being being\", also below (two more times).",
+      "range": {
+        "startLine": 1373,
+        "startChar": 71,
+        "endLine": 1373,
+        "endChar": 76
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9dfbba5_5359d484",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-07T18:43:32Z",
+      "side": 1,
+      "message": "Please ensure that 0 \u003c\u003d shift \u003c 32, to avoid C++ undefined behavior. Also below.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 11,
+        "endLine": 1380,
+        "endChar": 16
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4e9947_eec44b9e",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-07T18:43:32Z",
+      "side": 1,
+      "message": "n?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 17,
+        "endLine": 1390,
+        "endChar": 18
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
