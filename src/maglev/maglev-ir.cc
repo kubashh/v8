@@ -678,15 +678,18 @@ void Add::GenerateCode(MaglevCodeGenState* code_gen_state,
   UNREACHABLE();
 }
 
-void LessThan::AllocateVreg(MaglevVregAllocationState* vreg_state,
-                            const ProcessingState& state) {
+template <class Derived>
+void BinaryWithFeedbackNode<Derived>::AllocateVreg(
+    MaglevVregAllocationState* vreg_state, const ProcessingState& state) {
   using D = BinaryOp_WithFeedbackDescriptor;
   UseFixed(left_input(), D::GetRegisterParameter(D::kLeft));
   UseFixed(right_input(), D::GetRegisterParameter(D::kRight));
   DefineAsFixed(vreg_state, this, kReturnRegister0);
 }
-void LessThan::GenerateCode(MaglevCodeGenState* code_gen_state,
-                            const ProcessingState& state) {
+
+template <class Derived>
+void BinaryWithFeedbackNode<Derived>::GenerateRelationalComparisonCode(
+    MaglevCodeGenState* code_gen_state, const ProcessingState& state) {
   using D = BinaryOp_WithFeedbackDescriptor;
   DCHECK_EQ(ToRegister(left_input()), D::GetRegisterParameter(D::kLeft));
   DCHECK_EQ(ToRegister(right_input()), D::GetRegisterParameter(D::kRight));
@@ -695,8 +698,41 @@ void LessThan::GenerateCode(MaglevCodeGenState* code_gen_state,
   __ Move(D::GetRegisterParameter(D::kFeedbackVector), feedback().vector);
 
   // TODO(jgruber): Implement full handling.
-  __ CallBuiltin(Builtin::kLessThan_WithFeedback);
+
+  switch (Derived::opcode()) {
+    case Opcode::kLessThan:
+      __ CallBuiltin(Builtin::kLessThan_WithFeedback);
+      break;
+    case Opcode::kLessThanOrEqual:
+      __ CallBuiltin(Builtin::kLessThanOrEqual_WithFeedback);
+      break;
+    case Opcode::kGreaterThan:
+      __ CallBuiltin(Builtin::kGreaterThan_WithFeedback);
+      break;
+    case Opcode::kGreaterThanOrEqual:
+      __ CallBuiltin(Builtin::kGreaterThanOrEqual_WithFeedback);
+      break;
+    default:
+      UNREACHABLE();
+  }
 }
+
+#define DEFINE_RELATIONAL_COMPARISON_NODE(RelComp)                  \
+  void RelComp::AllocateVreg(MaglevVregAllocationState* vreg_state, \
+                             const ProcessingState& state) {        \
+    Base::AllocateVreg(vreg_state, state);                          \
+  }                                                                 \
+  void RelComp::GenerateCode(MaglevCodeGenState* code_gen_state,    \
+                             const ProcessingState& state) {        \
+    Base::GenerateRelationalComparisonCode(code_gen_state, state);  \
+  }
+
+DEFINE_RELATIONAL_COMPARISON_NODE(LessThan)
+DEFINE_RELATIONAL_COMPARISON_NODE(LessThanOrEqual)
+DEFINE_RELATIONAL_COMPARISON_NODE(GreaterThan)
+DEFINE_RELATIONAL_COMPARISON_NODE(GreaterThanOrEqual)
+
+#undef DEFINE_RELATIONAL_COMPARISON_NODE
 
 void Phi::AllocateVreg(MaglevVregAllocationState* vreg_state,
                        const ProcessingState& state) {

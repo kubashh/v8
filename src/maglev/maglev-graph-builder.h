@@ -361,6 +361,9 @@ class MaglevGraphBuilder {
     return block;
   }
 
+  template <typename RelNodeT>
+  void VisitRelNode();
+
   void MergeIntoFrameState(BasicBlock* block, int target);
   void BuildBranchIfTrue(ValueNode* node, int true_target, int false_target);
   void BuildBranchIfToBooleanTrue(ValueNode* node, int true_target,
