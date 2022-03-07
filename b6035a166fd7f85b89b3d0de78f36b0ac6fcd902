@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19f892d8_318c7891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-07T19:16:39Z",
+      "side": 1,
+      "message": "lgtm % nits",
+      "revId": "b6035a166fd7f85b89b3d0de78f36b0ac6fcd902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21314b43_f2869789",
+        "filename": "src/heap/cppgc-js/cpp-heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-07T19:16:39Z",
+      "side": 1,
+      "message": "nit: Here and below, rename to `FinishSweepingIfOutOfWork` or something similar that is not dependant on tasks.",
+      "range": {
+        "startLine": 121,
+        "startChar": 7,
+        "endLine": 121,
+        "endChar": 37
+      },
+      "revId": "b6035a166fd7f85b89b3d0de78f36b0ac6fcd902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e0c5dc_943625d8",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-07T19:16:39Z",
+      "side": 1,
+      "message": "nit: DCHECK that no SpaceState has unswept pages.",
+      "range": {
+        "startLine": 818,
+        "startChar": 24,
+        "endLine": 818,
+        "endChar": 25
+      },
+      "revId": "b6035a166fd7f85b89b3d0de78f36b0ac6fcd902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
