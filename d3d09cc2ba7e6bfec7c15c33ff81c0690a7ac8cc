@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d9fc25_43ff963a",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T12:47:10Z",
+      "side": 1,
+      "message": "Discussed offline!",
+      "parentUuid": "c71d35cb_44a4d07a",
+      "range": {
+        "startLine": 709,
+        "startChar": 2,
+        "endLine": 709,
+        "endChar": 74
+      },
+      "revId": "d3d09cc2ba7e6bfec7c15c33ff81c0690a7ac8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "976cea48_7c3e5e1e",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Could do that, but I\u0027d expect AllocateVreg to be the same for all binary operations. Not so much for GenerateCode.",
       "parentUuid": "976cea48_7c3e5e1e",
+      "range": {
+        "startLine": 722,
+        "startChar": 7,
+        "endLine": 722,
+        "endChar": 19
+      },
+      "revId": "d3d09cc2ba7e6bfec7c15c33ff81c0690a7ac8cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b950e6_6d7181d6",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T12:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34d27639_95d603db",
       "range": {
         "startLine": 722,
         "startChar": 7,
