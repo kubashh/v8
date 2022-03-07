@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a641ac_02156437",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-07T19:21:35Z",
+      "side": 1,
+      "message": "Argh, it\u0027s the opposite of what JS does ... very confusing. But ok, let\u0027s fix that in a separate CL.",
+      "parentUuid": "db7086c1_db24ec08",
+      "range": {
+        "startLine": 1361,
+        "startChar": 8,
+        "endLine": 1361,
+        "endChar": 11
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be0e75db_91421933",
