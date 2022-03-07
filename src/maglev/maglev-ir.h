@@ -40,9 +40,12 @@ class MaglevVregAllocationState;
   V(CallProperty)          \
   V(CallUndefinedReceiver) \
   V(Constant)              \
+  V(GreaterThan)           \
+  V(GreaterThanOrEqual)    \
   V(Increment)             \
   V(InitialValue)          \
   V(LessThan)              \
+  V(LessThanOrEqual)       \
   V(LoadField)             \
   V(LoadGlobal)            \
   V(LoadNamedGeneric)      \
@@ -703,6 +706,7 @@ class BinaryWithFeedbackNode : public FixedInputValueNodeT<2, Derived> {
   using Base = FixedInputValueNodeT<2, Derived>;
 
  public:
+  constexpr Opcode opcode() const { return NodeBase::opcode_of<Derived>; }
   compiler::FeedbackSource feedback() const { return feedback_; }
 
   static constexpr int kLeftIndex = 0;
@@ -714,6 +718,12 @@ class BinaryWithFeedbackNode : public FixedInputValueNodeT<2, Derived> {
   BinaryWithFeedbackNode(size_t input_count,
                          const compiler::FeedbackSource& feedback)
       : Base(input_count), feedback_(feedback) {}
+
+  void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);
+
+  // Only to be called if node is a RelationalComparisonNode.
+  void GenerateRelationalComparisonCode(MaglevCodeGenState*,
+                                        const ProcessingState&);
 
  protected:
   const compiler::FeedbackSource feedback_;
@@ -1011,6 +1021,52 @@ class LessThan : public BinaryWithFeedbackNode<LessThan> {
 
  public:
   LessThan(size_t input_count, const compiler::FeedbackSource& feedback)
+      : Base(input_count, feedback) {}
+
+  // The implementation currently calls runtime.
+  static constexpr OpProperties kProperties = OpProperties::Call();
+
+  void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);
+  void GenerateCode(MaglevCodeGenState*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class LessThanOrEqual : public BinaryWithFeedbackNode<LessThanOrEqual> {
+  using Base = BinaryWithFeedbackNode<LessThanOrEqual>;
+
+ public:
+  LessThanOrEqual(size_t input_count, const compiler::FeedbackSource& feedback)
+      : Base(input_count, feedback) {}
+
+  // The implementation currently calls runtime.
+  static constexpr OpProperties kProperties = OpProperties::Call();
+
+  void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);
+  void GenerateCode(MaglevCodeGenState*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class GreaterThan : public BinaryWithFeedbackNode<GreaterThan> {
+  using Base = BinaryWithFeedbackNode<GreaterThan>;
+
+ public:
+  GreaterThan(size_t input_count, const compiler::FeedbackSource& feedback)
+      : Base(input_count, feedback) {}
+
+  // The implementation currently calls runtime.
+  static constexpr OpProperties kProperties = OpProperties::Call();
+
+  void AllocateVreg(MaglevVregAllocationState*, const ProcessingState&);
+  void GenerateCode(MaglevCodeGenState*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class GreaterThanOrEqual : public BinaryWithFeedbackNode<GreaterThanOrEqual> {
+  using Base = BinaryWithFeedbackNode<GreaterThanOrEqual>;
+
+ public:
+  GreaterThanOrEqual(size_t input_count,
+                     const compiler::FeedbackSource& feedback)
       : Base(input_count, feedback) {}
 
   // The implementation currently calls runtime.
