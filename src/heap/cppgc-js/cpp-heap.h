@@ -118,6 +118,7 @@ class V8_EXPORT_PRIVATE CppHeap final
       std::unique_ptr<CustomSpaceStatisticsReceiver>);
 
   void FinishSweepingIfRunning();
+  void FinishSweepingIfNoTasksRunning();
 
   void InitializeTracing(
       cppgc::internal::GarbageCollector::Config::CollectionType,
