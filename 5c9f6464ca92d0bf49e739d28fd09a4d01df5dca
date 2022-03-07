@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29ae4c1d_0718cff5",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T11:23:57Z",
+      "side": 1,
+      "message": "Discussed off line, it seems easier/cleaner to call the base function from each of the nodes AllocateVreg.\nI also removed the macro magic and repeat each definition instead.",
+      "parentUuid": "8316991d_4714e063",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 733,
+        "endChar": 53
+      },
+      "revId": "5c9f6464ca92d0bf49e739d28fd09a4d01df5dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8556c580_825d5912",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-07T10:18:33Z",
       "side": 1,
       "message": "this isn\u0027t needed when there\u0027s no params (my mistake in the Add/LessThan impl, you can remove it there too)",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1045,
+        "endChar": 64
+      },
+      "revId": "5c9f6464ca92d0bf49e739d28fd09a4d01df5dca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4713fd80_8189b422",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-03-07T11:23:57Z",
+      "side": 1,
+      "message": "PrintImpl seems to call Node::PrintParams, so we need to define at least an empty function here.",
+      "parentUuid": "8556c580_825d5912",
       "range": {
         "startLine": 1045,
         "startChar": 2,
