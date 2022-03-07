@@ -1370,6 +1370,30 @@ Reduction MachineOperatorReducer::ReduceWord32Comparisons(Node* node) {
       return Changed(node);
     }
   }
+  // Simplifying (x >> n) <= k into x <= (k << n) (if n is 0/1 and k is 0/1),
+  // with "k << n" being being computed here at compile time.
+  if ((m.right().Is(0) || m.right().Is(1)) &&
+      m.left().op() == machine()->Word32SarShiftOutZeros()) {
+    Int32BinopMatcher mleft(m.left().node());
+    if (mleft.right().Is(0) || mleft.right().Is(1)) {
+      node->ReplaceInput(0, mleft.left().node());
+      node->ReplaceInput(1, Int32Constant(m.right().ResolvedValue()
+                                          << mleft.right().ResolvedValue()));
+      return Changed(node);
+    }
+  }
+  // Simplifying y <= (x >> k) into (k << n) <= x (if n is 0/1 and k is 0/1),
+  // with "k << n" being being computed here at compile time.
+  if ((m.left().Is(0) || m.left().Is(1)) &&
+      m.right().op() == machine()->Word32SarShiftOutZeros()) {
+    Int32BinopMatcher mright(m.right().node());
+    if (mright.right().Is(0) || mright.right().Is(1)) {
+      node->ReplaceInput(0, Int32Constant(m.left().ResolvedValue()
+                                          << mright.right().ResolvedValue()));
+      node->ReplaceInput(1, mright.left().node());
+      return Changed(node);
+    }
+  }
   return NoChange();
 }
 
@@ -2323,6 +2347,16 @@ MachineOperatorReducer::ReduceWord32EqualForConstantRhs(Node* lhs,
           return std::make_pair(Word32And(new_input, new_mask), new_rhs);
         }
       }
+    }
+  }
+  // Replaces (x >> n) == k with x == k << n (if n is 0/1 and k is 0/1),
+  // with "k << n" being being computed here at compile time.
+  if (lhs->op() == machine()->Word32SarShiftOutZeros() &&
+      lhs->UseCount() == 1 && ((rhs == 0) || (rhs == 1))) {
+    typename WordNAdapter::UintNBinopMatcher mshift(lhs);
+    if (mshift.right().Is(0) || mshift.right().Is(1)) {
+      auto shift_bits = mshift.right().ResolvedValue();
+      return std::make_pair(mshift.left().node(), rhs << shift_bits);
     }
   }
   return {};
