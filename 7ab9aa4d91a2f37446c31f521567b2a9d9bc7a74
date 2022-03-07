@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db7086c1_db24ec08",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-07T19:03:51Z",
+      "side": 1,
+      "message": "Actually, quite a few comments in this file use \u003e\u003e\u003e to mean arithmetic shift right and \u003e\u003e to mean logical shift right. As such, I\u0027ve changed my comments to use \u003e\u003e\u003e instead of \u003e\u003e. Please let me know if you\u0027re OK with that :)",
+      "parentUuid": "70e71979_22dc182e",
+      "range": {
+        "startLine": 1361,
+        "startChar": 8,
+        "endLine": 1361,
+        "endChar": 11
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be0e75db_91421933",
         "filename": "src/compiler/machine-operator-reducer.cc",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-07T18:43:32Z",
       "side": 1,
       "message": "\"being being\", also below (two more times).",
+      "range": {
+        "startLine": 1373,
+        "startChar": 71,
+        "endLine": 1373,
+        "endChar": 76
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "786c76ed_c1eb8879",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-07T19:03:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be0e75db_91421933",
       "range": {
         "startLine": 1373,
         "startChar": 71,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90d4c6e2_47a36222",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-07T19:03:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9dfbba5_5359d484",
+      "range": {
+        "startLine": 1380,
+        "startChar": 11,
+        "endLine": 1380,
+        "endChar": 16
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b4e9947_eec44b9e",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-03-07T18:43:32Z",
       "side": 1,
       "message": "n?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 17,
+        "endLine": 1390,
+        "endChar": 18
+      },
+      "revId": "7ab9aa4d91a2f37446c31f521567b2a9d9bc7a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7426ad6f_575d2b15",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-03-07T19:03:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b4e9947_eec44b9e",
       "range": {
         "startLine": 1390,
         "startChar": 17,
