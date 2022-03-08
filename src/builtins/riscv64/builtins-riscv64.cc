@@ -2770,9 +2770,6 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     for (Register gp_param_reg : wasm::kGpParamRegisters) {
       gp_regs |= gp_param_reg.bit();
     }
-    // Also push a1, because we must push multiples of 16 bytes (see
-    // {TurboAssembler::PushCPURegList}.
-    CHECK_EQ(0, NumRegs(gp_regs) % 2);
 
     RegList fp_regs = 0;
     for (DoubleRegister fp_param_reg : wasm::kFpParamRegisters) {
