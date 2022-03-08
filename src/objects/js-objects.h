@@ -605,6 +605,9 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
       InstanceType instance_type, bool function_has_prototype_slot = false);
   static inline int GetHeaderSize(Map map);
 
+  static inline bool MayHaveEmbedderFields(Map map);
+  inline bool MayHaveEmbedderFields();
+
   static inline int GetEmbedderFieldsStartOffset(Map map);
   inline int GetEmbedderFieldsStartOffset();
 
