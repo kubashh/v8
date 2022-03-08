@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da259948_7d7cf8a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-08T17:59:05Z",
+      "side": 1,
+      "message": "Hey Toon, can you take a quick look at setup-heap-internal.cc? I\u0027m changing the \"external\" object type to JS_API_OBJECT since it seems to basically just be a wrapper around a single EmbedderDataSlot, created through the API (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/factory.cc;l\u003d2275;drc\u003d97c2dc1068cf2a2f7eb95a128542bf7b064172de;bpv\u003d1;bpt\u003d1)",
+      "revId": "3c10de76ced47739ad9766390c5b1b76988fe983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
