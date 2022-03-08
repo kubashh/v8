@@ -1910,6 +1910,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     // interrupted full cycle.
     if (IsYoungGenerationCollector(collector)) {
       tracer()->StopCycle(collector);
+    } else {
+      tracer()->StopCycleIfNeeded();
     }
   }
 
@@ -2020,7 +2022,6 @@ void Heap::CompleteSweepingFull() {
   mark_compact_collector()->EnsureSweepingCompleted(
       MarkCompactCollector::SweepingForcedFinalizationMode::kUnifiedHeap);
   DCHECK(!mark_compact_collector()->sweeping_in_progress());
-  tracer()->StopCycleIfSweeping();
 }
 
 void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
@@ -2394,6 +2395,7 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   tracer()->StopAtomicPause();
   tracer()->StopObservablePause();
   tracer()->UpdateStatistics(collector);
+  tracer()->StopCycleIfNeeded();
 }
 
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {

@@ -269,7 +269,7 @@ class V8_EXPORT_PRIVATE GCTracer {
   void StartCycle(GarbageCollector collector, GarbageCollectionReason gc_reason,
                   const char* collector_reason, MarkingType marking);
   void StopCycle(GarbageCollector collector);
-  void StopCycleIfSweeping();
+  void StopCycleIfNeeded();
 
   // Start and stop a cycle's atomic pause.
   void StartAtomicPause();
@@ -279,6 +279,7 @@ class V8_EXPORT_PRIVATE GCTracer {
   void StopInSafepoint();
 
   void NotifySweepingCompleted();
+  void NotifyCppGCCompleted();
 
   void NotifyYoungGenerationHandling(
       YoungGenerationHandling young_generation_handling);
@@ -567,6 +568,11 @@ class V8_EXPORT_PRIVATE GCTracer {
   base::RingBuffer<BytesAndDuration> recorded_old_generation_allocations_;
   base::RingBuffer<BytesAndDuration> recorded_embedder_generation_allocations_;
   base::RingBuffer<double> recorded_survival_ratios_;
+
+  // A full GC cycle stops only when both v8 and cppgc (if available) GCs have
+  // finished sweeping.
+  bool notified_sweeping_completed_ = false;
+  bool notified_cppgc_completed_ = false;
 
   // When a full GC cycle is interrupted by a young generation GC cycle, the
   // |previous_| event is used as temporary storage for the |current_| event
