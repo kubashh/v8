@@ -16,14 +16,18 @@ extern transitioning builtin
 FunctionPrototypeBind(implicit context: Context)(
     JSFunction, JSAny, int32): JSAny;
 
+extern transitioning builtin
+ShadowRealmWrappedFunctionCreate(implicit context: Context)(
+    JSFunction, JSAny, int32, JSAny, NativeContext, JSAny): JSAny;
+
 const kLengthDescriptorIndex: constexpr int32
     generates 'JSFunctionOrBoundFunctionOrWrappedFunction::kLengthDescriptorIndex'
     ;
 const kNameDescriptorIndex: constexpr int32
     generates 'JSFunctionOrBoundFunctionOrWrappedFunction::kNameDescriptorIndex'
     ;
-const kMinDescriptorsForFastBind:
-    constexpr int31 generates 'JSFunction::kMinDescriptorsForFastBind';
+const kMinDescriptorsForFastBindAndWrap: constexpr int31
+    generates 'JSFunction::kMinDescriptorsForFastBindAndWrap';
 
 macro CheckAccessor(implicit context: Context)(
     array: DescriptorArray, index: constexpr int32,
@@ -44,7 +48,7 @@ FastFunctionPrototypeBind(
   const argc: intptr = arguments.actual_count;
   try {
     typeswitch (receiver) {
-      case (fn: JSFunction|JSBoundFunction): {
+      case (fn: JSFunction|JSBoundFunction|JSWrappedFunction): {
         // Disallow binding of slow-mode functions. We need to figure out
         // whether the length and name property are in the original state.
         Comment('Disallow binding of slow-mode functions');
@@ -55,7 +59,7 @@ FastFunctionPrototypeBind(
         // the actual value on the object changes.
 
         if (fn.map.bit_field3.number_of_own_descriptors <
-            kMinDescriptorsForFastBind) {
+            kMinDescriptorsForFastBindAndWrap) {
           goto Slow;
         }
 
@@ -107,6 +111,77 @@ FastFunctionPrototypeBind(
   } label Slow {
     tail FunctionPrototypeBind(
         LoadTargetFromFrame(), newTarget, Convert<int32>(argc));
+  }
+}
+
+// https://tc39.es/proposal-shadowrealm/#sec-getwrappedvalue
+transitioning builtin
+ShadowRealmGetWrappedValue(implicit context: Context)(
+    creationContext: NativeContext, value: JSAny): JSAny {
+  try {
+    typeswitch (value) {
+      // 1b. Return ? WrappedFunctionCreate(callerRealm, value).
+      case (value: JSFunction|JSBoundFunction|JSWrappedFunction): {
+        // Fast path for WrappedFunctionCreate
+        // https://tc39.es/proposal-shadowrealm/#sec-wrappedfunctioncreate
+
+        // Disallow wrapping of slow-mode functions. We need to figure out
+        // whether the length and name property are in the original state.
+        Comment('Disallow wrapping of slow-mode functions');
+        if (IsDictionaryMap(value.map)) goto Slow;
+
+        // Check whether the length and name properties are still present as
+        // AccessorInfo objects. If so, their value can be recomputed even if
+        // the actual value on the object changes.
+        if (value.map.bit_field3.number_of_own_descriptors <
+            kMinDescriptorsForFastBindAndWrap) {
+          goto Slow;
+        }
+
+        const descriptors: DescriptorArray = value.map.instance_descriptors;
+        CheckAccessor(
+            descriptors, kLengthDescriptorIndex, LengthStringConstant())
+            otherwise Slow;
+        CheckAccessor(descriptors, kNameDescriptorIndex, NameStringConstant())
+            otherwise Slow;
+
+        const wrappedFunctionMap: Map =
+            *NativeContextSlot(ContextSlot::WRAPPED_FUNCTION_MAP_INDEX);
+
+        // Verify that prototype matches that of the target bound function.
+        if (value.map.prototype != wrappedFunctionMap.prototype) goto Slow;
+
+        const result = new JSWrappedFunction{
+          map: wrappedFunctionMap,
+          properties_or_hash: kEmptyFixedArray,
+          elements: kEmptyFixedArray,
+          wrapped_target_function: value,
+          context: creationContext
+        };
+        return result;
+      }
+
+      case (Callable): {
+        goto Slow;
+      }
+
+      // 1. If Type(value) is Object, then
+      // a. If IsCallable(value) is false, throw a TypeError exception.
+      case (JSReceiver): {
+        ThrowTypeError(MessageTemplate::kNotCallable, value);
+      }
+
+      // 2. Return value.
+      case (value: JSAny): {
+        return value;
+      }
+    }
+  } label Slow {
+    // TODO(11989): the target can not be a Proxy here.
+    const target: JSFunction = *NativeContextSlot(
+        ContextSlot::FUNCTION_PROTOTYPE_APPLY_INDEX);
+    return ShadowRealmWrappedFunctionCreate(
+        target, Undefined, 3, Undefined, creationContext, value);
   }
 }
 }  // namespace function
