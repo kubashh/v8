@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "19f9b88b_c0e6e4ae",
+        "filename": "src/builtins/riscv64/builtins-riscv64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2775,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-03-08T08:04:05Z",
+      "side": 1,
+      "message": "Not. It check num of kGpParamRegisters is odd.",
+      "parentUuid": "bd0f98b3_76861b59",
+      "revId": "c51151d9e96c52b7f2d20a459d70f952742df3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "77c99b02_b834657b",
         "filename": "src/builtins/riscv64/builtins-riscv64.cc",
         "patchSetId": 5
@@ -65,6 +83,24 @@
       "writtenOn": "2022-03-08T08:00:10Z",
       "side": 1,
       "message": "Here a1 is pushed in addition to the previous 7 regs. Now totally 8 regs are pushed.  So the following assert in the next line should pass.",
+      "revId": "c51151d9e96c52b7f2d20a459d70f952742df3ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6f3b05d_67bec514",
+        "filename": "src/builtins/riscv64/builtins-riscv64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2776,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-03-08T08:04:05Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "77c99b02_b834657b",
       "revId": "c51151d9e96c52b7f2d20a459d70f952742df3ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
