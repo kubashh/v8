@@ -1597,7 +1597,6 @@ void RiscvDebugger::PrintAllRegs() {
   // print registers t0, ..., t6
   PrintRegs('t', 0, 6);
 }
-
 #undef REG_INFO
 
 void RiscvDebugger::PrintAllRegsIncludingFPU() {
