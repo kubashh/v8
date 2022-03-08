@@ -16,6 +16,46 @@
       "message": "lgtm",
       "revId": "0229c83437b9b5038f21b70c3c51e05f311022ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f51477f6_ac17a8d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-08T11:12:08Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0229c83437b9b5038f21b70c3c51e05f311022ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3366cdf_a186ef0c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-08T11:12:08Z",
+      "side": 1,
+      "message": "I think this should move into `MarkCompactCollector::FinishSweepingIfOutOfWork()`. The unified heap GCs run together.",
+      "range": {
+        "startLine": 2424,
+        "startChar": 2,
+        "endLine": 2426,
+        "endChar": 3
+      },
+      "revId": "0229c83437b9b5038f21b70c3c51e05f311022ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
