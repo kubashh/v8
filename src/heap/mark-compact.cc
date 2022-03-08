@@ -677,6 +677,16 @@ void MarkCompactCollector::VerifyMarkbitsAreClean() {
 
 #endif  // VERIFY_HEAP
 
+void MarkCompactCollector::FinishSweepingIfOutOfWork() {
+  if (sweeper()->sweeping_in_progress() && FLAG_concurrent_sweeping &&
+      !sweeper()->AreSweeperTasksRunning()) {
+    // At this point we know that all concurrent sweeping tasks have run
+    // out-of-work and quit: all pages are swept. The main thread still needs
+    // to complete sweeping though.
+    EnsureSweepingCompleted();
+  }
+}
+
 void MarkCompactCollector::EnsureSweepingCompleted() {
   if (!sweeper()->sweeping_in_progress()) return;
 
