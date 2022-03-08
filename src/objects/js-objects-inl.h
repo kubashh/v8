@@ -284,6 +284,26 @@ int JSObject::GetEmbedderFieldsStartOffset() {
 }
 
 // static
+bool JSObject::MayHaveEmbedderFields(Map map) {
+  // TODO(v8) encode this information more efficiently maybe?
+  switch (map.instance_type()) {
+    case JS_API_OBJECT_TYPE:
+    case JS_SPECIAL_API_OBJECT_TYPE:
+    case JS_ARRAY_BUFFER_TYPE:
+    case JS_TYPED_ARRAY_TYPE:
+    case JS_DATA_VIEW_TYPE:
+    case JS_PROMISE_TYPE:
+    case JS_GLOBAL_OBJECT_TYPE:
+    case JS_GLOBAL_PROXY_TYPE:
+      return true;
+    default:
+      return false;
+  }
+}
+
+bool JSObject::MayHaveEmbedderFields() { return MayHaveEmbedderFields(map()); }
+
+// static
 int JSObject::GetEmbedderFieldCount(Map map) {
   int instance_size = map.instance_size();
   if (instance_size == kVariableSizeSentinel) return 0;
@@ -441,10 +461,11 @@ void JSObject::InitializeBody(Map map, int start_offset,
                               MapWord filler_map, Object undefined_filler) {
   int size = map.instance_size();
   int offset = start_offset;
-  int embedder_field_start = GetEmbedderFieldsStartOffset(map);
-  int embedder_field_count = GetEmbedderFieldCount(map);
 
-  if (embedder_field_count) {
+  // embedder data slots need to be initialized separately
+  if (MayHaveEmbedderFields(map)) {
+    int embedder_field_start = GetEmbedderFieldsStartOffset(map);
+
     // fill start with references to the undefined value object
     DCHECK_LE(offset, embedder_field_start);
     while (offset < embedder_field_start) {
@@ -454,11 +475,13 @@ void JSObject::InitializeBody(Map map, int start_offset,
 
     // initialize embedder data slots
     DCHECK_EQ(offset, embedder_field_start);
-    for (int i = 0; i < embedder_field_count; i++) {
+    for (int i = 0; i < GetEmbedderFieldCount(map); i++) {
       // TODO(v8): consider initializing embedded data slots with Smi::zero().
       EmbedderDataSlot(*this, i).Initialize(undefined_filler);
       offset += kEmbedderDataSlotSize;
     }
+  } else {
+    DCHECK_EQ(0, GetEmbedderFieldCount(map));
   }
 
   DCHECK_LE(offset, size);

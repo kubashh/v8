@@ -3635,10 +3635,10 @@ bool Value::IsExternal() const {
   i::Object obj = *Utils::OpenHandle(this);
   if (!obj.IsHeapObject()) return false;
   i::HeapObject heap_obj = i::HeapObject::cast(obj);
-  // Check the instance type is JS_OBJECT (instance type of Externals) before
-  // attempting to get the Isolate since that guarantees the object is writable
-  // and GetIsolate will work.
-  if (heap_obj.map().instance_type() != i::JS_OBJECT_TYPE) return false;
+  // Check the instance type is JS_API_OBJECT (instance type of Externals)
+  // before attempting to get the Isolate since that guarantees the object is
+  // writable and GetIsolate will work.
+  if (heap_obj.map().instance_type() != i::JS_API_OBJECT_TYPE) return false;
   i::Isolate* isolate = i::JSObject::cast(heap_obj).GetIsolate();
   ASSERT_NO_SCRIPT_NO_EXCEPTION(isolate);
   return heap_obj.IsExternal(isolate);
