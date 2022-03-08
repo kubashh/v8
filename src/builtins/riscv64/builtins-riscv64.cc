@@ -2772,6 +2772,8 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     }
     // Also push a1, because we must push multiples of 16 bytes (see
     // {TurboAssembler::PushCPURegList}.
+    CHECK_EQ(1, NumRegs(gp_regs) % 2);
+    gp_regs |= a1.bit();
     CHECK_EQ(0, NumRegs(gp_regs) % 2);
 
     RegList fp_regs = 0;
