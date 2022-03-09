@@ -193,12 +193,12 @@ bool DoubleToUint32IfEqualToSelf(double value, uint32_t* uint32_value) {
 
 int32_t NumberToInt32(Object number) {
   if (number.IsSmi()) return Smi::ToInt(number);
-  return DoubleToInt32(number.Number());
+  return DoubleToInt32(HeapNumber::cast(number).value());
 }
 
 uint32_t NumberToUint32(Object number) {
   if (number.IsSmi()) return Smi::ToInt(number);
-  return DoubleToUint32(number.Number());
+  return DoubleToUint32(HeapNumber::cast(number).value());
 }
 
 uint32_t PositiveNumberToUint32(Object number) {
@@ -207,8 +207,7 @@ uint32_t PositiveNumberToUint32(Object number) {
     if (value <= 0) return 0;
     return value;
   }
-  DCHECK(number.IsHeapNumber());
-  double value = number.Number();
+  double value = HeapNumber::cast(number).value();
   // Catch all values smaller than 1 and use the double-negation trick for NANs.
   if (!(value >= 1)) return 0;
   uint32_t max = std::numeric_limits<uint32_t>::max();
