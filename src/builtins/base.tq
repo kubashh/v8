@@ -392,6 +392,7 @@ extern enum MessageTemplate {
   kPropertyNotFunction,
   kBigIntTooBig,
   kNotTypedArray,
+  kNotCallable,
   kDetachedOperation,
   kBadSortComparisonFunction,
   kIncompatibleMethodReceiver,

@@ -58,29 +58,10 @@ BUILTIN(ShadowRealmConstructor) {
 
 namespace {
 
-// https://tc39.es/proposal-shadowrealm/#sec-getwrappedvalue
-MaybeHandle<Object> GetWrappedValue(Isolate* isolate, Handle<Object> value,
-                                    Handle<NativeContext> creation_context,
-                                    Handle<NativeContext> target_context) {
-  // 1. If Type(value) is Object, then
-  if (!value->IsJSReceiver()) {
-    // 2. Return value.
-    return value;
-  }
-  // 1a. If IsCallable(value) is false, throw a TypeError exception.
-  if (!value->IsCallable()) {
-    THROW_NEW_ERROR_RETURN_VALUE(
-        isolate,
-        NewError(Handle<JSFunction>(creation_context->type_error_function(),
-                                    isolate),
-                 MessageTemplate::kNotCallable),
-        {});
-  }
-  // 1b. Return ? WrappedFunctionCreate(callerRealm, value).
-
-  // WrappedFunctionCreate
-  // https://tc39.es/proposal-shadowrealm/#sec-wrappedfunctioncreate
-
+// https://tc39.es/proposal-shadowrealm/#sec-wrappedfunctioncreate
+MaybeHandle<Object> WrappedFunctionCreate(
+    Isolate* isolate, Handle<NativeContext> creation_context,
+    Handle<Object> value) {
   // The intermediate wrapped functions are not user-visible. And calling a
   // wrapped function won't cause a side effect in the creation realm.
   // Unwrap here to avoid nested unwrapping at the call site.
@@ -98,16 +79,134 @@ MaybeHandle<Object> GetWrappedValue(Isolate* isolate, Handle<Object> value,
   // 4. Set wrapped.[[Call]] as described in 2.1.
   // 5. Set wrapped.[[WrappedTargetFunction]] to Target.
   // 6. Set wrapped.[[Realm]] to callerRealm.
-  // 7. Let result be CopyNameAndLength(wrapped, Target, "wrapped").
-  // 8. If result is an Abrupt Completion, throw a TypeError exception.
   Handle<JSWrappedFunction> wrapped =
       isolate->factory()->NewJSWrappedFunction(creation_context, value);
+
+  // 7. Let result be CopyNameAndLength(wrapped, Target, "wrapped").
+  bool abrupt = true;
+  do {
+    // Setup the "length" property based on the "length" of the {value}.
+    // If the value's length is the default JSFunction accessor, we can keep the
+    // accessor that's installed by default on the JSWrappedFunction. It lazily
+    // computes the value from the underlying internal length.
+    Handle<AccessorInfo> function_length_accessor =
+        isolate->factory()->function_length_accessor();
+    LookupIterator length_lookup(isolate, value,
+                                 isolate->factory()->length_string(), value,
+                                 LookupIterator::OWN);
+    if (!value->IsJSFunction() ||
+        length_lookup.state() != LookupIterator::ACCESSOR ||
+        !length_lookup.GetAccessors().is_identical_to(
+            function_length_accessor)) {
+      Handle<Object> length(Smi::zero(), isolate);
+      PropertyAttributes attributes;
+      if (!JSReceiver::GetPropertyAttributes(&length_lookup).To(&attributes))
+        break;
+
+      if (attributes != ABSENT) {
+        Handle<Object> target_length;
+        if (!Object::GetProperty(&length_lookup).ToHandle(&target_length))
+          break;
+
+        if (target_length->IsNumber()) {
+          length = isolate->factory()->NewNumber(
+              std::max(0.0, DoubleToInteger(target_length->Number())));
+        }
+      }
+      LookupIterator it(isolate, wrapped, isolate->factory()->length_string(),
+                        wrapped);
+      DCHECK_EQ(LookupIterator::ACCESSOR, it.state());
+      if (JSObject::DefineOwnPropertyIgnoreAttributes(&it, length,
+                                                      it.property_attributes())
+              .is_null())
+        break;
+    }
+
+    // Setup the "name" property based on the "name" of the {value}.
+    // If the value's name is the default JSFunction accessor, we can keep the
+    // accessor that's installed by default on the JSWrappedFunction. It lazily
+    // computes the value from the underlying internal name.
+    Handle<AccessorInfo> function_name_accessor =
+        isolate->factory()->function_name_accessor();
+    LookupIterator name_lookup(isolate, value,
+                               isolate->factory()->name_string(), value);
+    if (!value->IsJSFunction() ||
+        name_lookup.state() != LookupIterator::ACCESSOR ||
+        !name_lookup.GetAccessors().is_identical_to(function_name_accessor) ||
+        (name_lookup.IsFound() && !name_lookup.HolderIsReceiver())) {
+      Handle<Object> target_name;
+      if (!Object::GetProperty(&name_lookup).ToHandle(&target_name)) break;
+
+      Handle<String> name;
+      if (target_name->IsString()) {
+        if (!Name::ToFunctionName(isolate, Handle<String>::cast(target_name))
+                 .ToHandle(&name))
+          break;
+      } else {
+        name = isolate->factory()->empty_string();
+      }
+      LookupIterator it(isolate, wrapped, isolate->factory()->name_string());
+      DCHECK_EQ(LookupIterator::ACCESSOR, it.state());
+      if (JSObject::DefineOwnPropertyIgnoreAttributes(&it, name,
+                                                      it.property_attributes())
+              .is_null())
+        break;
+    }
+    abrupt = false;
+  } while (false);
+
+  // 8. If result is an Abrupt Completion, throw a TypeError exception.
+  if (abrupt) {
+    DCHECK(isolate->has_pending_exception());
+    Handle<Object> pending_exception =
+        Handle<Object>(isolate->pending_exception(), isolate);
+    isolate->clear_pending_exception();
+    // TODO(v8:11989): provide a non-observable inspection.
+    THROW_NEW_ERROR_RETURN_VALUE(
+        isolate,
+        NewError(Handle<JSFunction>(creation_context->type_error_function(),
+                                    isolate),
+                 MessageTemplate::kCallShadowRealmFunctionThrown),
+        {});
+  }
 
   // 9. Return wrapped.
   return wrapped;
 }
 
+// https://tc39.es/proposal-shadowrealm/#sec-getwrappedvalue
+MaybeHandle<Object> GetWrappedValue(Isolate* isolate,
+                                    Handle<NativeContext> creation_context,
+                                    Handle<Object> value) {
+  // 1. If Type(value) is Object, then
+  if (!value->IsJSReceiver()) {
+    // 2. Return value.
+    return value;
+  }
+  // 1a. If IsCallable(value) is false, throw a TypeError exception.
+  if (!value->IsCallable()) {
+    THROW_NEW_ERROR_RETURN_VALUE(
+        isolate,
+        NewError(Handle<JSFunction>(creation_context->type_error_function(),
+                                    isolate),
+                 MessageTemplate::kNotCallable),
+        {});
+  }
+  // 1b. Return ? WrappedFunctionCreate(callerRealm, value).
+  return WrappedFunctionCreate(isolate, creation_context, value);
+}
+
 }  // namespace
+
+// https://tc39.es/proposal-shadowrealm/#sec-wrappedfunctioncreate
+BUILTIN(ShadowRealmWrappedFunctionCreate) {
+  HandleScope scope(isolate);
+  Handle<NativeContext> creation_context =
+      Handle<NativeContext>::cast(args.at(1));
+  Handle<Object> value = args.at(2);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, WrappedFunctionCreate(isolate, creation_context, value));
+}
 
 // https://tc39.es/proposal-shadowrealm/#sec-shadowrealm.prototype.evaluate
 BUILTIN(ShadowRealmPrototypeEvaluate) {
@@ -213,6 +312,7 @@ BUILTIN(ShadowRealmPrototypeEvaluate) {
   }
 
   if (result.is_null()) {
+    DCHECK(isolate->has_pending_exception());
     Handle<Object> pending_exception =
         Handle<Object>(isolate->pending_exception(), isolate);
     isolate->clear_pending_exception();
@@ -233,8 +333,7 @@ BUILTIN(ShadowRealmPrototypeEvaluate) {
   Handle<Object> wrapped_result;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, wrapped_result,
-      GetWrappedValue(isolate, result.ToHandleChecked(), caller_context,
-                      eval_context));
+      GetWrappedValue(isolate, caller_context, result.ToHandleChecked()));
   return *wrapped_result;
 }
 

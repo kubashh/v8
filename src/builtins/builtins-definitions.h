@@ -880,7 +880,7 @@ namespace internal {
   CPP(ShadowRealmConstructor)                                                  \
   CPP(ShadowRealmPrototypeEvaluate)                                            \
   CPP(ShadowRealmPrototypeImportValue)                                         \
-  TFS(ShadowRealmGetWrappedValue, kCreationContext, kValue)                    \
+  CPP(ShadowRealmWrappedFunctionCreate)                                        \
                                                                                \
   /* SharedArrayBuffer */                                                      \
   CPP(SharedArrayBufferPrototypeGetByteLength)                                 \
