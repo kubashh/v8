@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee7bf4e2_6cd6fdbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-09T14:07:55Z",
+      "side": 1,
+      "message": "PTAL at the minimal change in the test which makes it ~25x faster locally. Hopefully similar on the bot.",
+      "revId": "1a44f85f69d213ff29aee47dec0520a9fb97a69b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
