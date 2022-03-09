@@ -391,6 +391,14 @@ class StackMemory;
     }                                                                \
   } while (false)
 
+#define MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(isolate, dst, call, value) \
+  do {                                                                    \
+    if (!(call).To(&dst)) {                                               \
+      DCHECK(isolate->has_pending_exception());                           \
+      return value;                                                       \
+    }                                                                     \
+  } while (false)
+
 #define FOR_WITH_HANDLE_SCOPE(isolate, loop_var_type, init, loop_var,      \
                               limit_check, increment, body)                \
   do {                                                                     \

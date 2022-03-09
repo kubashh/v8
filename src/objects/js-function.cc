@@ -230,6 +230,15 @@ MaybeHandle<String> JSBoundFunction::GetName(Isolate* isolate,
     function = handle(JSBoundFunction::cast(function->bound_target_function()),
                       isolate);
   }
+  if (function->bound_target_function().IsJSWrappedFunction()) {
+    Handle<JSWrappedFunction> target(
+        JSWrappedFunction::cast(function->bound_target_function()), isolate);
+    Handle<Object> name;
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, name, JSWrappedFunction::GetName(isolate, target), String);
+    if (!name->IsString()) return target_name;
+    return factory->NewConsString(target_name, Handle<String>::cast(name));
+  }
   if (function->bound_target_function().IsJSFunction()) {
     Handle<JSFunction> target(
         JSFunction::cast(function->bound_target_function()), isolate);
@@ -258,6 +267,17 @@ Maybe<int> JSBoundFunction::GetLength(Isolate* isolate,
       nof_bound_arguments = Smi::kMaxValue;
     }
   }
+  if (function->bound_target_function().IsJSWrappedFunction()) {
+    Handle<JSWrappedFunction> target(
+        JSWrappedFunction::cast(function->bound_target_function()), isolate);
+    int target_length = 0;
+    if (!JSWrappedFunction::GetLength(isolate, target).To(&target_length)) {
+      return Nothing<int>();
+    }
+
+    int length = std::max(0, target_length - nof_bound_arguments);
+    return Just(length);
+  }
   // All non JSFunction targets get a direct property and don't use this
   // accessor.
   Handle<JSFunction> target(JSFunction::cast(function->bound_target_function()),
@@ -272,6 +292,50 @@ Maybe<int> JSBoundFunction::GetLength(Isolate* isolate,
 Handle<String> JSBoundFunction::ToString(Handle<JSBoundFunction> function) {
   Isolate* const isolate = function->GetIsolate();
   return isolate->factory()->function_native_code_string();
+}
+
+// static
+MaybeHandle<String> JSWrappedFunction::GetName(
+    Isolate* isolate, Handle<JSWrappedFunction> function) {
+  Factory* factory = isolate->factory();
+  Handle<String> target_name = factory->empty_string();
+  Handle<JSReceiver> target =
+      Handle<JSReceiver>(function->wrapped_target_function(), isolate);
+  if (target->IsJSBoundFunction()) {
+    Handle<JSBoundFunction> target(
+        JSBoundFunction::cast(function->wrapped_target_function()), isolate);
+    Handle<String> name;
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, name, JSBoundFunction::GetName(isolate, target), String);
+    return name;
+  }
+  if (target->IsJSFunction()) {
+    Handle<JSFunction> target(
+        JSFunction::cast(function->wrapped_target_function()), isolate);
+    Handle<Object> name = JSFunction::GetName(isolate, target);
+    if (!name->IsString()) return target_name;
+    return Handle<String>::cast(name);
+  }
+  // This will omit the proper target name for bound JSProxies.
+  return target_name;
+}
+
+// static
+Maybe<int> JSWrappedFunction::GetLength(Isolate* isolate,
+                                        Handle<JSWrappedFunction> function) {
+  Handle<JSReceiver> target =
+      Handle<JSReceiver>(function->wrapped_target_function(), isolate);
+  if (target->IsJSBoundFunction()) {
+    Handle<JSBoundFunction> target(
+        JSBoundFunction::cast(function->wrapped_target_function()), isolate);
+    return JSBoundFunction::GetLength(isolate, target);
+  }
+  // All non JSFunction targets get a direct property and don't use this
+  // accessor.
+  Handle<JSFunction> target_function = Handle<JSFunction>::cast(target);
+  int target_length = target_function->length();
+
+  return Just(target_length);
 }
 
 // static
@@ -924,7 +988,8 @@ namespace {
 
 bool UseFastFunctionNameLookup(Isolate* isolate, Map map) {
   DCHECK(map.IsJSFunctionMap());
-  if (map.NumberOfOwnDescriptors() < JSFunction::kMinDescriptorsForFastBind) {
+  if (map.NumberOfOwnDescriptors() <
+      JSFunction::kMinDescriptorsForFastBindAndWrap) {
     return false;
   }
   DCHECK(!map.is_dictionary_map());
