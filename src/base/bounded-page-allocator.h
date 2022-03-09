@@ -70,6 +70,9 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
   void* AllocatePages(void* hint, size_t size, size_t alignment,
                       Permission access) override;
 
+  void* AllocateHugePages(void* hint, size_t size, size_t alignment,
+                          Permission access) override;
+
   bool ReserveForSharedMemoryMapping(void* address, size_t size) override;
 
   // Allocates pages at given address, returns true on success.
@@ -86,6 +89,8 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
   bool DecommitPages(void* address, size_t size) override;
 
  private:
+  void* AllocateRegion(void* hint, size_t size, size_t alignment);
+
   v8::base::Mutex mutex_;
   const size_t allocate_page_size_;
   const size_t commit_page_size_;

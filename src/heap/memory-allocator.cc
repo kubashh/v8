@@ -234,13 +234,14 @@ void MemoryAllocator::FreeMemoryRegion(v8::PageAllocator* page_allocator,
 
 Address MemoryAllocator::AllocateAlignedMemory(
     size_t reserve_size, size_t commit_size, size_t alignment,
-    Executability executable, void* hint, VirtualMemory* controller) {
+    Executability executable, void* hint, VirtualMemory* controller,
+    bool huge_page) {
   v8::PageAllocator* page_allocator = this->page_allocator(executable);
   DCHECK(commit_size <= reserve_size);
-  VirtualMemory reservation(page_allocator, reserve_size, hint, alignment);
+  VirtualMemory reservation(page_allocator, reserve_size, hint, alignment,
+                            VirtualMemory::JitPermission::kNoJit, huge_page);
   if (!reservation.IsReserved()) return kNullAddress;
   Address base = reservation.address();
-  size_ += reservation.size();
 
   if (executable == EXECUTABLE) {
     if (!CommitExecutableMemory(&reservation, base, commit_size,
@@ -260,7 +261,6 @@ Address MemoryAllocator::AllocateAlignedMemory(
     // Failed to commit the body. Free the mapping and any partially committed
     // regions inside it.
     reservation.Free();
-    size_ -= reserve_size;
     return kNullAddress;
   }
 
@@ -367,7 +367,7 @@ V8_EXPORT_PRIVATE BasicMemoryChunk* MemoryAllocator::AllocateBasicChunk(
     area_start = base + MemoryChunkLayout::ObjectStartOffsetInDataPage();
     area_end = area_start + commit_area_size;
   }
-
+  size_ += reservation.size();
   // Use chunk_size for statistics because we assume that  treat reserved but
   // not-yet committed memory regions of chunks as allocated.
   LOG(isolate_,
@@ -422,6 +422,11 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
   DCHECK(reservation->IsReserved());
   chunk->set_size(chunk->size() - bytes_to_free);
   chunk->set_area_end(new_area_end);
+  // Don't really free if in huge page range.
+  if (chunk->huge_page()) {
+    size_ -= bytes_to_free;
+    return;
+  }
   if (chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
     // Add guard page at the end.
     size_t page_size = GetCommitPageSize();
@@ -522,6 +527,10 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
 }
 
 void MemoryAllocator::Free(MemoryAllocator::FreeMode mode, MemoryChunk* chunk) {
+  if (chunk->huge_page()) {
+    FreeFromHugePageRange(chunk);
+    return;
+  }
   switch (mode) {
     case kImmediately:
       PreFreeMemory(chunk);
@@ -547,9 +556,25 @@ void MemoryAllocator::FreePooledChunk(MemoryChunk* chunk) {
                    static_cast<size_t>(MemoryChunk::kPageSize));
 }
 
+void MemoryAllocator::FreeFromHugePageRange(MemoryChunk* chunk) {
+  size_ -= chunk->size();
+  chunk->ReleaseAllAllocatedMemory();
+  isolate_->heap()->huge_page_range_manager()->FreePageInHugePageRange(chunk);
+}
+
 Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
                                     size_t size, Space* owner,
                                     Executability executable) {
+  AllocationSpace identity = owner->identity();
+  if (FLAG_huge_page && isolate_->heap()->deserialization_complete() &&
+      (identity == OLD_SPACE || identity == NEW_SPACE ||
+       identity == MAP_SPACE)) {
+    Page* page = AllocatePageInHugePageRange(owner);
+    if (page) {
+      return page;
+    }
+  }
+
   MemoryChunk* chunk = nullptr;
   if (alloc_mode == kUsePool) {
     DCHECK_EQ(size, static_cast<size_t>(
@@ -562,9 +587,39 @@ Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
     chunk = AllocateChunk(size, size, executable, owner);
   }
   if (chunk == nullptr) return nullptr;
-  return owner->InitializePage(chunk);
+  Page* page = owner->InitializePage(chunk);
+  DCHECK_NULL(page->huge_page());
+  return page;
 }
 
+Page* MemoryAllocator::AllocatePageInHugePageRange(Space* owner) {
+  Page* page = isolate_->heap()
+                   ->huge_page_range_manager()
+                   ->TryAllocatePageInHugePageRange(owner);
+  if (page) {
+    size_ += page->size();
+  }
+  return page;
+}
+
+HugePageRange* MemoryAllocator::AllocateHugePageRange() {
+  HugePageRange* range = nullptr;
+  if (range == nullptr) {
+    void* address_hint = AlignedAddress(isolate_->heap()->GetRandomMmapAddr(),
+                                        HugePageRange::kHugeRangeSize);
+    Address base = kNullAddress;
+    VirtualMemory reserved;
+    base = isolate_->heap()->memory_allocator()->AllocateAlignedMemory(
+        HugePageRange::kHugeRangeSize, HugePageRange::kHugeRangeSize,
+        HugePageRange::kHugeRangeSize, NOT_EXECUTABLE, address_hint, &reserved,
+        true);
+    if (base == kNullAddress) {
+      return nullptr;
+    }
+    range = HugePageRange::Initialize(isolate_->heap(), std::move(reserved));
+  }
+  return range;
+}
 ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(size_t size,
                                                     ReadOnlySpace* owner) {
   BasicMemoryChunk* chunk =

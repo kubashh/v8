@@ -120,9 +120,8 @@ void Page::MergeOldToNewRememberedSets() {
 
 size_t Page::AvailableInFreeList() {
   size_t sum = 0;
-  ForAllFreeListCategories([&sum](FreeListCategory* category) {
-    sum += category->available();
-  });
+  ForAllFreeListCategories(
+      [&sum](FreeListCategory* category) { sum += category->available(); });
   return sum;
 }
 

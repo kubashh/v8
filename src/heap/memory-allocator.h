@@ -18,6 +18,7 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
 #include "src/heap/code-range.h"
+#include "src/heap/huge-page-range.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/spaces.h"
 #include "src/tasks/cancelable-task.h"
@@ -174,6 +175,11 @@ class MemoryAllocator {
       MemoryAllocator::AllocationMode alloc_mode, size_t size, Space* owner,
       Executability executable);
 
+  V8_EXPORT_PRIVATE Page* AllocatePageInHugePageRange(Space* owner);
+
+  V8_EXPORT_PRIVATE
+  HugePageRange* AllocateHugePageRange();
+
   LargePage* AllocateLargePage(size_t size, LargeObjectSpace* owner,
                                Executability executable);
 
@@ -184,6 +190,9 @@ class MemoryAllocator {
 
   V8_EXPORT_PRIVATE void Free(MemoryAllocator::FreeMode mode,
                               MemoryChunk* chunk);
+
+  void FreeFromHugePageRange(MemoryChunk* chunk);
+
   void FreeReadOnlyPage(ReadOnlyPage* chunk);
 
   // Returns allocated spaces in bytes.
@@ -262,7 +271,8 @@ class MemoryAllocator {
 
   Address AllocateAlignedMemory(size_t reserve_size, size_t commit_size,
                                 size_t alignment, Executability executable,
-                                void* hint, VirtualMemory* controller);
+                                void* hint, VirtualMemory* controller,
+                                bool huge_page = false);
 
   // Commit memory region owned by given reservation object.  Returns true if
   // it succeeded and false otherwise.
