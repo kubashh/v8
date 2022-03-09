@@ -447,7 +447,7 @@ KNOWN_MAPS = {
     ("read_only_space", 0x06a8d): (138, "StoreHandler1Map"),
     ("read_only_space", 0x06ab5): (138, "StoreHandler2Map"),
     ("read_only_space", 0x06add): (138, "StoreHandler3Map"),
-    ("map_space", 0x02149): (1057, "ExternalMap"),
+    ("map_space", 0x02149): (1058, "ExternalMap"),
     ("map_space", 0x02171): (2115, "JSMessageObjectMap"),
 }
 
