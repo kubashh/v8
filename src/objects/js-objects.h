@@ -605,6 +605,9 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
       InstanceType instance_type, bool function_has_prototype_slot = false);
   static inline int GetHeaderSize(Map map);
 
+  static inline bool MayHaveEmbedderFields(Map map);
+  inline bool MayHaveEmbedderFields();
+
   static inline int GetEmbedderFieldsStartOffset(Map map);
   inline int GetEmbedderFieldsStartOffset();
 
@@ -879,6 +882,15 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   TQ_OBJECT_CONSTRUCTORS(JSObject)
 };
 
+// An abstract superclass for JSObjects that may contain EmbedderDataSlots.
+class JSObjectWithEmbedderSlots
+    : public TorqueGeneratedJSObjectWithEmbedderSlots<JSObjectWithEmbedderSlots,
+                                                      JSObject> {
+ public:
+  STATIC_ASSERT(kHeaderSize == JSObject::kHeaderSize);
+  TQ_OBJECT_CONSTRUCTORS(JSObjectWithEmbedderSlots)
+};
+
 // An abstract superclass for JSObjects that may have elements while having an
 // empty fixed array as elements backing store. It doesn't carry any
 // functionality but allows function classes to be identified in the type
@@ -894,6 +906,8 @@ class JSCustomElementsObject
 // An abstract superclass for JSObjects that require non-standard element
 // access. It doesn't carry any functionality but allows function classes to be
 // identified in the type system.
+// These may also contain EmbedderDataSlots, but can't currently inherit from
+// JSObjectWithEmbedderSlots due to instance_type constraints.
 class JSSpecialObject
     : public TorqueGeneratedJSSpecialObject<JSSpecialObject,
                                             JSCustomElementsObject> {
