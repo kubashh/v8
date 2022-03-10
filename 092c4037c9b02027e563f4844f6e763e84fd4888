@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f07d63_dd3ce16e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-10T20:23:21Z",
+      "side": 1,
+      "message": "Unfortunately this CL could not land because of two failing tests. Sweeping finalization occurred in a young GC cycle that interrupted a full GC cycle, because of `Sweeper::PauseOrCompleteScope` inside `ScavengerCollector::ColelctGarbage`.\n\nPatchset #5 changes the above to only pause sweeping, not complete it. It should have been completed in `Heap::CompleteSweepingYoung` before getting to this. If we\u0027re so unlucky and sweeping finished after that, let\u0027s just pause it.\n\nI also added a couple of `DCHECK`s.",
+      "revId": "092c4037c9b02027e563f4844f6e763e84fd4888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
