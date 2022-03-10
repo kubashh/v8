@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef45cac_0de1c210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-10T21:22:28Z",
+      "side": 1,
+      "message": "Patchset #7 introduces a `DCHECK` that sets the precondition under which `GCTracer::NotifySweepingCompleted` is called (to avoid situtations and failing tests like the ones between #4 and #5). This precondition is a bit involved, because heap verification triggers sweeping finalization from within a cycle\u0027s atomic pause (see comment in the code). So `GCTracer::VerifyScope` is introduced, in order to keep track whether we are inside heap verification.\n\nPTAL again.",
+      "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
