@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "18cd536cb72328d919495ac8868a3ad722e2f38b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e657c5c_76cbfe27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-10T10:42:42Z",
+      "side": 1,
+      "message": "LGTM.\n\nDo you think it may be worth adding `CHECK(___.IsSmi())` in the places where we now no longer check for HeapNumber-\u003euint32 conversions? It looks like the affected runtime functions today only need to process Smis, but I\u0027m worried that this is a bit of a trap going forward: limits could change, compiler behavior (e.g. around canonicalizing HeapNumber(42) to Smi(42)) could change, or someone could copy/paste such a snippet to a new function where it\u0027s not correct (which would be hard to detect with tests because it\u0027d work just fine most of the time).",
+      "revId": "18cd536cb72328d919495ac8868a3ad722e2f38b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
