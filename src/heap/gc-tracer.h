@@ -237,6 +237,17 @@ class V8_EXPORT_PRIVATE GCTracer {
     TimedHistogram* type_priority_timer;
   };
 
+#ifdef VERIFY_HEAP
+  class V8_NODISCARD VerifyScope final {
+   public:
+    explicit VerifyScope(GCTracer* tracer);
+    ~VerifyScope();
+
+   private:
+    GCTracer* const tracer_;
+  };
+#endif
+
   static const int kThroughputTimeFrameMs = 5000;
   static constexpr double kConservativeSpeedInBytesPerMillisecond = 128 * KB;
 
@@ -269,7 +280,7 @@ class V8_EXPORT_PRIVATE GCTracer {
   void StartCycle(GarbageCollector collector, GarbageCollectionReason gc_reason,
                   const char* collector_reason, MarkingType marking);
   void StopCycle(GarbageCollector collector);
-  void StopCycleIfSweeping();
+  void StopCycleIfNeeded();
 
   // Start and stop a cycle's atomic pause.
   void StartAtomicPause();
@@ -279,6 +290,7 @@ class V8_EXPORT_PRIVATE GCTracer {
   void StopInSafepoint();
 
   void NotifySweepingCompleted();
+  void NotifyCppGCCompleted();
 
   void NotifyYoungGenerationHandling(
       YoungGenerationHandling young_generation_handling);
@@ -295,6 +307,14 @@ class V8_EXPORT_PRIVATE GCTracer {
            (collector == GarbageCollector::MARK_COMPACTOR &&
             (current_.type == Event::MARK_COMPACTOR ||
              current_.type == Event::INCREMENTAL_MARK_COMPACTOR));
+  }
+
+  // Checks if the current event corresponds to a full GC cycle whose sweeping
+  // has not finalized yet.
+  bool IsSweepingInProgress() const {
+    return (current_.type == Event::MARK_COMPACTOR ||
+            current_.type == Event::INCREMENTAL_MARK_COMPACTOR) &&
+           current_.state == Event::State::SWEEPING;
   }
 #endif
 
@@ -568,10 +588,19 @@ class V8_EXPORT_PRIVATE GCTracer {
   base::RingBuffer<BytesAndDuration> recorded_embedder_generation_allocations_;
   base::RingBuffer<double> recorded_survival_ratios_;
 
+  // A full GC cycle stops only when both v8 and cppgc (if available) GCs have
+  // finished sweeping.
+  bool notified_sweeping_completed_ = false;
+  bool notified_cppgc_completed_ = false;
+
   // When a full GC cycle is interrupted by a young generation GC cycle, the
   // |previous_| event is used as temporary storage for the |current_| event
   // that corresponded to the full GC cycle, and this field is set to true.
   bool young_gc_while_full_gc_ = false;
+
+#ifdef VERIFY_HEAP
+  bool in_heap_verification_ = false;
+#endif
 
   v8::metrics::GarbageCollectionFullMainThreadBatchedIncrementalMark
       incremental_mark_batched_events_;

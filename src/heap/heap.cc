@@ -1910,6 +1910,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     // interrupted full cycle.
     if (IsYoungGenerationCollector(collector)) {
       tracer()->StopCycle(collector);
+    } else {
+      tracer()->StopCycleIfNeeded();
     }
   }
 
@@ -2019,8 +2021,11 @@ void Heap::CompleteSweepingFull() {
   array_buffer_sweeper()->EnsureFinished();
   mark_compact_collector()->EnsureSweepingCompleted(
       MarkCompactCollector::SweepingForcedFinalizationMode::kUnifiedHeap);
+
   DCHECK(!mark_compact_collector()->sweeping_in_progress());
-  tracer()->StopCycleIfSweeping();
+  DCHECK_IMPLIES(cpp_heap(),
+                 !CppHeap::From(cpp_heap())->sweeper().IsSweepingInProgress());
+  DCHECK(!tracer()->IsSweepingInProgress());
 }
 
 void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
@@ -2394,6 +2399,7 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   tracer()->StopAtomicPause();
   tracer()->StopObservablePause();
   tracer()->UpdateStatistics(collector);
+  tracer()->StopCycleIfNeeded();
 }
 
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {
@@ -4532,6 +4538,7 @@ void Heap::Verify() {
   IgnoreLocalGCRequests ignore_gc_requests(this);
   SafepointScope safepoint_scope(this);
   HandleScope scope(isolate());
+  GCTracer::VerifyScope verify_scope(tracer());
 
   MakeHeapIterable();
 

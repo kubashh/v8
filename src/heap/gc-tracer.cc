@@ -232,6 +232,18 @@ GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(Heap* heap,
   }
 }
 
+#ifdef VERIFY_HEAP
+GCTracer::VerifyScope::VerifyScope(GCTracer* tracer) : tracer_(tracer) {
+  CHECK(!tracer_->in_heap_verification_);
+  tracer_->in_heap_verification_ = true;
+}
+
+GCTracer::VerifyScope::~VerifyScope() {
+  CHECK(tracer_->in_heap_verification_);
+  tracer_->in_heap_verification_ = false;
+}
+#endif
+
 GCTracer::GCTracer(Heap* heap)
     : heap_(heap),
       current_(Event::START, Event::State::NOT_RUNNING,
@@ -273,7 +285,12 @@ void GCTracer::ResetForTesting() {
   current_.end_time = MonotonicallyIncreasingTimeInMs();
   previous_ = current_;
   start_of_observable_pause_ = 0.0;
+  notified_sweeping_completed_ = false;
+  notified_cppgc_completed_ = false;
   young_gc_while_full_gc_ = false;
+#ifdef VERIFY_HEAP
+  in_heap_verification_ = false;
+#endif
   ResetIncrementalMarkingCounters();
   allocation_time_ms_ = 0.0;
   new_space_allocation_counter_bytes_ = 0.0;
@@ -548,12 +565,40 @@ void GCTracer::StopCycle(GarbageCollector collector) {
   }
 }
 
-void GCTracer::StopCycleIfSweeping() {
+void GCTracer::StopCycleIfNeeded() {
   if (current_.state != Event::State::SWEEPING) return;
+  if (!notified_sweeping_completed_) return;
+  if (heap_->cpp_heap() && !notified_cppgc_completed_) return;
   StopCycle(GarbageCollector::MARK_COMPACTOR);
+  notified_sweeping_completed_ = false;
+  notified_cppgc_completed_ = false;
 }
 
 void GCTracer::NotifySweepingCompleted() {
+#ifdef VERIFY_HEAP
+  // If we're not verifying the heap, then we must be in a full GC cycle and
+  // sweeping must be in progress.
+  DCHECK_IMPLIES(!in_heap_verification_, IsSweepingInProgress());
+
+  // If we're verifying the heap, it could also be that:
+  // (a) we are in the atomic pause of the full GC cycle, or
+  // (b) we are in a young GC cycle that interrupted a full GC cycle for which
+  // sweeping is in progress.
+  DCHECK_IMPLIES(in_heap_verification_,
+                 ((current_.type == Event::MARK_COMPACTOR ||
+                   current_.type == Event::INCREMENTAL_MARK_COMPACTOR) &&
+                  (current_.state == Event::State::SWEEPING ||
+                   current_.state == Event::State::ATOMIC)) ||
+                     (young_gc_while_full_gc_ &&
+                      (previous_.type == Event::MARK_COMPACTOR ||
+                       previous_.type == Event::INCREMENTAL_MARK_COMPACTOR) &&
+                      previous_.state == Event::State::SWEEPING));
+#else
+  DCHECK(IsSweepingInProgress());
+#endif
+
+  // Stop a full GC cycle only when both v8 and cppgc (if available) GCs have
+  // finished sweeping. This method is invoked by v8.
   if (FLAG_trace_gc_freelists) {
     PrintIsolate(heap_->isolate(),
                  "FreeLists statistics after sweeping completed:\n");
@@ -565,6 +610,21 @@ void GCTracer::NotifySweepingCompleted() {
     heap_->code_space()->PrintAllocationsOrigins();
     heap_->map_space()->PrintAllocationsOrigins();
   }
+  DCHECK(!notified_sweeping_completed_);
+  notified_sweeping_completed_ = true;
+  StopCycleIfNeeded();
+}
+
+void GCTracer::NotifyCppGCCompleted() {
+  // Stop a full GC cycle only when both v8 and cppgc (if available) GCs have
+  // finished sweeping. This method is invoked by cppgc.
+  DCHECK(heap_->cpp_heap());
+  DCHECK(CppHeap::From(heap_->cpp_heap())
+             ->GetMetricRecorder()
+             ->MetricsReportPending());
+  DCHECK(!notified_cppgc_completed_);
+  notified_cppgc_completed_ = true;
+  StopCycleIfNeeded();
 }
 
 void GCTracer::SampleAllocation(double current_ms,

@@ -722,6 +722,14 @@ void MarkCompactCollector::EnsureSweepingCompleted(
     // exists.
     CppHeap::From(heap()->cpp_heap())->FinishSweepingIfRunning();
   }
+
+  DCHECK_IMPLIES(mode == SweepingForcedFinalizationMode::kUnifiedHeap ||
+                     !heap()->cpp_heap(),
+                 !heap()->tracer()->IsSweepingInProgress());
+  DCHECK_IMPLIES(
+      mode == SweepingForcedFinalizationMode::kUnifiedHeap &&
+          heap()->cpp_heap(),
+      !CppHeap::From(heap()->cpp_heap())->sweeper().IsSweepingInProgress());
 }
 
 void MarkCompactCollector::EnsurePageIsSwept(Page* page) {
