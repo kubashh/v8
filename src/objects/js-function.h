@@ -56,6 +56,11 @@ class JSWrappedFunction
     : public TorqueGeneratedJSWrappedFunction<
           JSWrappedFunction, JSFunctionOrBoundFunctionOrWrappedFunction> {
  public:
+  static MaybeHandle<String> GetName(Isolate* isolate,
+                                     Handle<JSWrappedFunction> function);
+  static Maybe<int> GetLength(Isolate* isolate,
+                              Handle<JSWrappedFunction> function);
+
   // Dispatched behavior.
   DECL_PRINTER(JSWrappedFunction)
   DECL_VERIFIER(JSWrappedFunction)
@@ -80,7 +85,7 @@ class JSFunction : public TorqueGeneratedJSFunction<
   DECL_RELAXED_GETTER(shared, SharedFunctionInfo)
 
   // Fast binding requires length and name accessors.
-  static const int kMinDescriptorsForFastBind = 2;
+  static const int kMinDescriptorsForFastBindAndWrap = 2;
 
   // [context]: The context for this function.
   inline Context context();
