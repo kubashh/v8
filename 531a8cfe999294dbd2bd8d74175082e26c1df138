@@ -16,6 +16,52 @@
       "message": "Patchset #7 introduces a `DCHECK` that sets the precondition under which `GCTracer::NotifySweepingCompleted` is called (to avoid situtations and failing tests like the ones between #4 and #5). This precondition is a bit involved, because heap verification triggers sweeping finalization from within a cycle\u0027s atomic pause (see comment in the code). So `GCTracer::VerifyScope` is introduced, in order to keep track whether we are inside heap verification.\n\nPTAL again.",
       "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac4d11ad_9ba6ceea",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-11T07:02:40Z",
+      "side": 1,
+      "message": "I think this case should not be needed. We should not be finalizing a full gc during a young gc anymore. If we have to finalize sweep for heap verification, you could imo force finalize before the young gc in heap verification builds.",
+      "range": {
+        "startLine": 592,
+        "startChar": 22,
+        "endLine": 592,
+        "endChar": 45
+      },
+      "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a3f558a_1914cf3d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-03-11T07:02:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be true regardless of cpp_heap or the forced finalization mode?\nI think this could be a regular DCHECK.",
+      "range": {
+        "startLine": 728,
+        "startChar": 17,
+        "endLine": 728,
+        "endChar": 58
+      },
+      "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
