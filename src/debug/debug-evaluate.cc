@@ -927,6 +927,7 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtin id) {
     case Builtin::kSetPrototypeClear:
     case Builtin::kSetPrototypeDelete:
     // Array builtins.
+    case Builtin::kArrayFrom:
     case Builtin::kArrayIteratorPrototypeNext:
     case Builtin::kArrayPrototypePop:
     case Builtin::kArrayPrototypePush:

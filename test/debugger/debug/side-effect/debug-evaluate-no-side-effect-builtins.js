@@ -17,6 +17,7 @@ var data_view = new DataView(new ArrayBuffer(8), 0, 8);
 var array = [1,2,3];
 var pure_function = function(x) { return x * x; };
 var unpure_function = function(x) { array.push(x); };
+var object_with_iterator = { [Symbol.iterator]: unpure_function };
 
 function listener(event, exec_state, event_data, data) {
   if (event != Debug.DebugEvent.Break) return;
@@ -73,7 +74,8 @@ function listener(event, exec_state, event_data, data) {
     success([], `new Array()`);
     success([undefined, undefined], `new Array(2)`);
     success([1, 2], `new Array(1, 2)`);
-    fail(`Array.from([1, 2, 3])`);
+    success(`Array.from([1, 2, 3])`);
+    fail(`Array.from(object_with_iterator)`);
     fail(`Array.of(1, 2, 3)`);
     var function_param = [
       "flatMap", "forEach", "every", "some", "reduce", "reduceRight", "find",
