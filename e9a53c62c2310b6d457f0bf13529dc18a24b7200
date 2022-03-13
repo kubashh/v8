@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2aa3fa_782b5961",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-13T20:30:11Z",
+      "side": 1,
+      "message": "See my comment on the issue:\nThis seems to optimize a pattern in Liftoff which we do not expect to see in real world programs. Tools like wasm-opt should be able to easily fold type conversions of constants. Is there a reason why Liftoff should spend cycles trying to emit better machine code for such code?",
+      "revId": "e9a53c62c2310b6d457f0bf13529dc18a24b7200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
