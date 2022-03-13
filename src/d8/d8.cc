@@ -4691,7 +4691,11 @@ int Shell::RunMain(Isolate* isolate, bool last_run) {
       options.isolate_sources[i].WaitForThread();
     }
   }
-  WaitForRunningWorkers();
+  // if quit() has been called, no need to WaitForRunningWorkers.
+  if (quit_once_.load(std::memory_order_acquire) ==
+      base::ONCE_STATE_UNINITIALIZED) {
+    WaitForRunningWorkers();
+  }
   if (Shell::unhandled_promise_rejections_.load() > 0) {
     printf("%i pending unhandled Promise rejection(s) detected.\n",
            Shell::unhandled_promise_rejections_.load());
@@ -5541,7 +5545,11 @@ int Shell::Main(int argc, char* argv[]) {
 #endif  // V8_FUZZILLI
     } while (fuzzilli_reprl);
   }
-  OnExit(isolate, true);
+  // if quit() has been called, no need to onExit.
+  if (quit_once_.load(std::memory_order_acquire) ==
+      base::ONCE_STATE_UNINITIALIZED) {
+    OnExit(isolate, true);
+  }
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
