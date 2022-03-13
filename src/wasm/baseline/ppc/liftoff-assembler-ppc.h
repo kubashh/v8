@@ -1381,6 +1381,12 @@ bool LiftoffAssembler::emit_i64_remu(LiftoffRegister dst, LiftoffRegister lhs,
   return true;
 }
 
+bool LiftoffAssembler::emit_type_conversion_constant(WasmOpcode opcode,
+                                                     int32_t src_value,
+                                                     int32_t* dst_value) {
+  return false;
+}
+
 bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
                                             LiftoffRegister dst,
                                             LiftoffRegister src, Label* trap) {

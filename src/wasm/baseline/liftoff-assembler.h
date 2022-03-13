@@ -998,7 +998,9 @@ class LiftoffAssembler : public TurboAssembler {
 
   inline bool emit_type_conversion(WasmOpcode opcode, LiftoffRegister dst,
                                    LiftoffRegister src, Label* trap = nullptr);
-
+  inline bool emit_type_conversion_constant(WasmOpcode opcode,
+                                            int32_t src_value,
+                                            int32_t* dst_value);
   inline void emit_i32_signextend_i8(Register dst, Register src);
   inline void emit_i32_signextend_i16(Register dst, Register src);
   inline void emit_i64_signextend_i8(LiftoffRegister dst, LiftoffRegister src);

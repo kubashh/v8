@@ -1351,6 +1351,12 @@ void LiftoffAssembler::emit_f64_copysign(DoubleRegister dst, DoubleRegister lhs,
   Sli(dst.V1D(), scratch.V1D(), 63);
 }
 
+bool LiftoffAssembler::emit_type_conversion_constant(WasmOpcode opcode,
+                                                     int32_t src_value,
+                                                     int32_t* dst_value) {
+  return false;
+}
+
 bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
                                             LiftoffRegister dst,
                                             LiftoffRegister src, Label* trap) {

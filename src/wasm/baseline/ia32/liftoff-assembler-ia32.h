@@ -2324,6 +2324,12 @@ inline bool EmitSatTruncateFloatToInt(LiftoffAssembler* assm, Register dst,
 #undef __
 }  // namespace liftoff
 
+bool LiftoffAssembler::emit_type_conversion_constant(WasmOpcode opcode,
+                                                     int32_t src_value,
+                                                     int32_t* dst_value) {
+  return false;
+}
+
 bool LiftoffAssembler::emit_type_conversion(WasmOpcode opcode,
                                             LiftoffRegister dst,
                                             LiftoffRegister src, Label* trap) {
