@@ -1589,6 +1589,20 @@ class LiftoffCompiler {
                           ExternalReference (*fallback_fn)()) {
     static constexpr RegClass src_rc = reg_class_for(src_kind);
     static constexpr RegClass dst_rc = reg_class_for(dst_kind);
+
+    LiftoffAssembler::VarState src_slot = __ cache_state()->stack_state.back();
+    // const conversion
+    if (src_slot.is_const()) {
+      // if emit const conversion success, directly return.
+      int32_t dst_value = 0;
+      if (__ emit_type_conversion_constant(opcode, src_slot.i32_const(),
+                                           &dst_value)) {
+        __ cache_state()->stack_state.pop_back();
+        __ PushConstant(dst_kind, dst_value);
+        return;
+      }
+    }
+
     LiftoffRegister src = __ PopToRegister();
     LiftoffRegister dst = src_rc == dst_rc
                               ? __ GetUnusedRegister(dst_rc, {src}, {})
