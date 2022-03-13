@@ -675,6 +675,34 @@ class LiftoffAssembler : public TurboAssembler {
   bool ValidateCacheState() const;
 #endif
 
+  inline bool emit_type_conversion_constant(WasmOpcode opcode,
+                                            int32_t src_value,
+                                            int32_t* dst_value) {
+    switch (opcode) {
+      case kExprI64UConvertI32: {
+        // check if zero extended value fits into int32
+        uint32_t value = static_cast<uint32_t>(src_value);
+        if (value <= std::numeric_limits<int32_t>::max()) {
+          *dst_value = src_value;
+          return true;
+        } else {
+          return false;
+        }
+      }
+      case kExprI32ConvertI64: {
+        *dst_value = src_value;
+        return true;
+      }
+      case kExprI64SConvertI32: {
+        *dst_value = src_value;
+        return true;
+      }
+      default: {
+        return false;
+      }
+    }
+  }
+
   ////////////////////////////////////
   // Platform-specific part.        //
   ////////////////////////////////////
@@ -998,7 +1026,6 @@ class LiftoffAssembler : public TurboAssembler {
 
   inline bool emit_type_conversion(WasmOpcode opcode, LiftoffRegister dst,
                                    LiftoffRegister src, Label* trap = nullptr);
-
   inline void emit_i32_signextend_i8(Register dst, Register src);
   inline void emit_i32_signextend_i16(Register dst, Register src);
   inline void emit_i64_signextend_i8(LiftoffRegister dst, LiftoffRegister src);
