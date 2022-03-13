@@ -15,7 +15,7 @@
   let worker = new Worker('', {type: 'string'});
   let memory = new WebAssembly.Memory({initial: 1, maximum: 2});
 
-  assertThrows(() => worker.postMessage(memory.buffer), Error);
+  worker.postMessage(memory.buffer);
 })();
 
 // Can't use assert in a worker.
