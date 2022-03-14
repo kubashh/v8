@@ -308,6 +308,7 @@ enum ExternalPointerTag : uint64_t {
 // clang-format on
 
 constexpr uint64_t kExternalPointerTagMask = 0xffff000000000000;
+constexpr uint64_t kExternalPointerTagShift = 48;
 
 // Converts encoded external pointer to address.
 V8_EXPORT Address DecodeExternalPointerImpl(const Isolate* isolate,
