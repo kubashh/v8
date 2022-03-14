@@ -87,6 +87,24 @@
       "parentUuid": "a9840169_49452f1e",
       "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d69e3f31_dc53dd9a",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-14T16:54:58Z",
+      "side": 1,
+      "message": "\u003e Thanks! So if we turn \n\u003e ```\n\u003e if (!js_object.IsAnyApiObject()) return false;\n\u003e ```\n\u003e into\n\u003e ```\n\u003e if (!js_object.MayHaveEmbedderFields()) return false;\n\u003e ```\n\u003e We would end up asking Blink whether we can drop other objects with EmbedderDataSlots, such as global objects, ArrayBuffers, TypedArrays, DataViews, etc. Is that desirable? I guess if Blink can\u0027t construct these, there\u0027s no point in asking and so we should use `IsAnyApiObject` here?\n\nBlink will not be able to recreated those and return true here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state.cc;drc\u003d30309877d4b10434eeaa9f85e8ba00ca91c7d731;bpv\u003d1;bpt\u003d1;l\u003d34\n\nI think it makes sense to leave the code as is with the most precise naming because the getters will really only be used for this part of the GC.\n\n(We\u0027d love to get rid of the special handling alltogether but we are talking about 1-2% PMF here.)",
+      "parentUuid": "a8dea9fa_2521cec6",
+      "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
