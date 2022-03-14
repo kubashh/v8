@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "173d0b3b_2c89bfbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T09:40:06Z",
+      "side": 1,
+      "message": "Thanks for working on this! I\u0027m not (yet) convinced, but I only had a quick look at this, maybe you have more infos about why you think this is the right fix?",
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a32aa1d_db4af8ad",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T09:40:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the right fix... as opposed to e.g., setting allow_new_workers_ to false when quit() is called. Would that have helped?\n\nWhy don\u0027t we need to WaitForRunningWorkers? Sounds like a nice thing to make them also ramp down in a controlled way, even though quit() has been called.",
+      "range": {
+        "startLine": 4694,
+        "startChar": 43,
+        "endLine": 4694,
+        "endChar": 64
+      },
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
