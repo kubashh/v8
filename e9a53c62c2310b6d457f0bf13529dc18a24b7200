@@ -16,6 +16,24 @@
       "message": "See my comment on the issue:\nThis seems to optimize a pattern in Liftoff which we do not expect to see in real world programs. Tools like wasm-opt should be able to easily fold type conversions of constants. Is there a reason why Liftoff should spend cycles trying to emit better machine code for such code?",
       "revId": "e9a53c62c2310b6d457f0bf13529dc18a24b7200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d78158_adbc38a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-14T01:20:17Z",
+      "side": 1,
+      "message": "Thanks! get it. I fixed it in turbofun, we could reduce kWord64 to kWord32 when right operand fits into uint32, and now turbofun can generate these instructions\n```\n0x1c947d58b4c0     0  55                   push rbp\n0x1c947d58b4c1     1  4889e5               REX.W movq rbp,rsp\n0x1c947d58b4c4     4  6a08                 push 0x8\n0x1c947d58b4c6     6  56                   push rsi\n0x1c947d58b4c7     7  83e0ff               andl rax,0xff\n0x1c947d58b4ca     a  488be5               REX.W movq rsp,rbp\n0x1c947d58b4cd     d  5d                   pop rbp\n0x1c947d58b4ce     e  c3                   retl\n0x1c947d58b4cf     f  90                   nop\n```\n\n```\nmovl rbx,0xffffffff\nREX.W andq rbx,rax\nREX.W movq rax,rbx\n```\ncan be optimized to \n```\nandl rax,0xff\n```",
+      "parentUuid": "ee2aa3fa_782b5961",
+      "revId": "e9a53c62c2310b6d457f0bf13529dc18a24b7200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
