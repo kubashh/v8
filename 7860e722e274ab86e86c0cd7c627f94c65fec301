@@ -39,6 +39,30 @@
       },
       "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e470f4a6_14faf59c",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-14T12:50:04Z",
+      "side": 1,
+      "message": "Thanks very much for the review! Because `WaitForRunningWorkers` will reset `allow_new_workers` to true when finish, If we set `allow_new_workers_` to false when `quit()` is called, `quit()` will call WaitForRunningWorkers, and when WaitForRunningWorkers finish, `allow_new_workers` will be set to true again, that\u0027s why I think we should use `quit_once_` to check. And when `quit()` has called `WaitForRunningWorkers`, `allow_new_workers_` is set to false, if we here also call `WaitForRunningWorkers` in :4696, which will directly finish because `running_workers_` is empty and set `allow_new_workers_` to true again, which updates `allow_new_worker_` wrongly before `WaitForRunningWorkers` called by `quit()` finish. And the reason for the crash I think is that when the worker calls quit(), then call WaitForRunningWorkers, which will empty running_workers_ through `workers_copy.swap(running_workers_);`. And when the main thread finishes executing js because `allow_new_workers_` is set to false in WaitForRunningWorkers, the main thread calls WaitForRunningWorkers after, then will directly return because `running_workers_` is empty, thus call `onExit`, which will fail because actually, the worker threads haven\u0027t finished. So I think here we could don\u0027t call `onExit` if `quit()` has been called, WDYT? Thanks!",
+      "parentUuid": "3a32aa1d_db4af8ad",
+      "range": {
+        "startLine": 4694,
+        "startChar": 43,
+        "endLine": 4694,
+        "endChar": 64
+      },
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
