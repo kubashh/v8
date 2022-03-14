@@ -63,6 +63,30 @@
       },
       "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80bc9a6c_a4596481",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T13:10:00Z",
+      "side": 1,
+      "message": "Might the overall problem be that WaitForRunningWorkers sets allow_new_workers_ to true, even if we\u0027re trying to quit? Maybe it shouldn\u0027t, in that particular case?",
+      "parentUuid": "e470f4a6_14faf59c",
+      "range": {
+        "startLine": 4694,
+        "startChar": 43,
+        "endLine": 4694,
+        "endChar": 64
+      },
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
