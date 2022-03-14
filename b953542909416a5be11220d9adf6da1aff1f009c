@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f077771c_8cdb9455",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T12:32:32Z",
+      "side": 0,
+      "message": "How does this not add a bug where we don\u0027t throw even if we should, if \"forStorage\" is true in step 13.2.2 ( https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializeinternal )?\n\nDon\u0027t we need to distinguish between the case where forStorage is true and where forStorage is false here?",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 3
+      },
+      "revId": "b953542909416a5be11220d9adf6da1aff1f009c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
