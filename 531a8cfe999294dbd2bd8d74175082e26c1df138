@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4ffe092_ee442a3b",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-14T07:49:21Z",
+      "side": 1,
+      "message": "Unless we change when finalization is forced, this check is unfortunately required. I don\u0027t like it either. Moreover, in this case, we wrongly attribute sweeping finalization to the young GC.",
+      "parentUuid": "ac4d11ad_9ba6ceea",
+      "range": {
+        "startLine": 592,
+        "startChar": 22,
+        "endLine": 592,
+        "endChar": 45
+      },
+      "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3f558a_1914cf3d",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 7
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-11T07:02:40Z",
       "side": 1,
       "message": "Shouldn\u0027t this be true regardless of cpp_heap or the forced finalization mode?\nI think this could be a regular DCHECK.",
+      "range": {
+        "startLine": 728,
+        "startChar": 17,
+        "endLine": 728,
+        "endChar": 58
+      },
+      "revId": "531a8cfe999294dbd2bd8d74175082e26c1df138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8761db7e_3d57e8e7",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-14T07:49:21Z",
+      "side": 1,
+      "message": "This checks that sweeping has been finalized and the full GC cycle has stopped. This is triggered by `GCTracer::NotifySweepingCompleted` and `GCTracer::NotifyCppGCCompleted`. If the mode is `kV8Only` and there is a `cpp_heap`, then it\u0027s possible that sweeping has not been finalized for Oilpan and the check will fail.",
+      "parentUuid": "8a3f558a_1914cf3d",
       "range": {
         "startLine": 728,
         "startChar": 17,
