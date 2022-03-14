@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76bb2c65_6e3c8754",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-14T14:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c4b8a25_47c1f289",
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e8828da_0a541fd1",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-03-14T14:20:04Z",
       "side": 1,
       "message": "The whole thing can just go as \n\n  DCHECK(!CppHeap::From(heap()-\u003ecpp_heap())-\u003esweeper().IsSweepingInProgress())\n  \non L724? Then you don\u0027t need to repeat the branch.",
+      "range": {
+        "startLine": 729,
+        "startChar": 2,
+        "endLine": 732,
+        "endChar": 76
+      },
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52a1843e_dc802fd8",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-14T14:57:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e8828da_0a541fd1",
       "range": {
         "startLine": 729,
         "startChar": 2,
