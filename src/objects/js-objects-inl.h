@@ -33,6 +33,7 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSReceiver)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSObject)
+TQ_OBJECT_CONSTRUCTORS_IMPL(JSObjectWithEmbedderSlots)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSCustomElementsObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSSpecialObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSAsyncFromSyncIterator)
@@ -284,6 +285,20 @@ int JSObject::GetEmbedderFieldsStartOffset() {
 }
 
 // static
+bool JSObject::MayHaveEmbedderFields(Map map) {
+  InstanceType instance_type = map.instance_type();
+  // TODO(v8) It'd be nice if all objects with embedder data slots inherited
+  // from JSObjectWithEmbedderSlots, but this is currently not possible due to
+  // instance_type constraints.
+  return InstanceTypeChecker::IsJSObjectWithEmbedderSlots(instance_type) ||
+         InstanceTypeChecker::IsJSSpecialObject(instance_type);
+}
+
+bool JSObject::MayHaveEmbedderFields() const {
+  return MayHaveEmbedderFields(map());
+}
+
+// static
 int JSObject::GetEmbedderFieldCount(Map map) {
   int instance_size = map.instance_size();
   if (instance_size == kVariableSizeSentinel) return 0;
@@ -479,10 +494,12 @@ void JSObject::InitializeBody(Map map, int start_offset,
                               MapWord filler_map, Object undefined_filler) {
   int size = map.instance_size();
   int offset = start_offset;
-  int embedder_field_start = GetEmbedderFieldsStartOffset(map);
-  int embedder_field_count = GetEmbedderFieldCount(map);
 
-  if (embedder_field_count) {
+  // embedder data slots need to be initialized separately
+  if (MayHaveEmbedderFields(map)) {
+    int embedder_field_start = GetEmbedderFieldsStartOffset(map);
+    int embedder_field_count = GetEmbedderFieldCount(map);
+
     // fill start with references to the undefined value object
     DCHECK_LE(offset, embedder_field_start);
     while (offset < embedder_field_start) {
@@ -497,6 +514,8 @@ void JSObject::InitializeBody(Map map, int start_offset,
       EmbedderDataSlot(*this, i).Initialize(undefined_filler);
       offset += kEmbedderDataSlotSize;
     }
+  } else {
+    DCHECK_EQ(0, GetEmbedderFieldCount(map));
   }
 
   DCHECK_LE(offset, size);
