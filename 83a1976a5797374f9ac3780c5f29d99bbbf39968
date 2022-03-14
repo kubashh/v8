@@ -16,6 +16,63 @@
       "message": "Patchset #8 reverts #7.\n\nWe discussed with Michael that it\u0027s better to just move the first call to `Heap::Verify` earlier, before the (young) GC cycle begins. After this, the newly introduced `DCHECK` in `GCTracer:NotifySweepingCompleted` can be simplified.",
       "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "902170b6_7f56dfc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-14T14:20:04Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c4b8a25_47c1f289",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-14T14:20:04Z",
+      "side": 1,
+      "message": "nit: since you are here\n\n  #endif  // VERIFY_HEAP",
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8828da_0a541fd1",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-14T14:20:04Z",
+      "side": 1,
+      "message": "The whole thing can just go as \n\n  DCHECK(!CppHeap::From(heap()-\u003ecpp_heap())-\u003esweeper().IsSweepingInProgress())\n  \non L724? Then you don\u0027t need to repeat the branch.",
+      "range": {
+        "startLine": 729,
+        "startChar": 2,
+        "endLine": 732,
+        "endChar": 76
+      },
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
