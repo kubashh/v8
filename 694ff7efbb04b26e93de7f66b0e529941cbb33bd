@@ -105,6 +105,24 @@
       "parentUuid": "a8dea9fa_2521cec6",
       "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a76710c8_15b9cda3",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T17:37:56Z",
+      "side": 1,
+      "message": "Alright, thanks for the explanation! I\u0027ve renamed it again and added a comment which hopefully makes it more clear what this is. Please take another look, also at the other (trivial) heap/ changes. Thanks!",
+      "parentUuid": "d69e3f31_dc53dd9a",
+      "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
