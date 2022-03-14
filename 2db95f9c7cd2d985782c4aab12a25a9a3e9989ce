@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21f081ac_9fb05323",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-14T14:26:35Z",
+      "side": 1,
+      "message": "nit: use this constant in the shifts above?",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d48295f6_82127368",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-14T14:26:35Z",
+      "side": 1,
+      "message": "nit: unneeded cast",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1656974_dedb83f2",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-14T14:26:35Z",
+      "side": 1,
+      "message": "nit: we usually include the v8: prefix `TODO(v8:12700)`",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
