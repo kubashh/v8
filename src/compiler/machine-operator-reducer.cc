@@ -1853,7 +1853,18 @@ Reduction MachineOperatorReducer::ReduceWord32And(Node* node) {
 
 Reduction MachineOperatorReducer::ReduceWord64And(Node* node) {
   DCHECK_EQ(IrOpcode::kWord64And, node->opcode());
-  return ReduceWordNAnd<Word64Adapter>(node);
+  Reduction reduction = ReduceWordNAnd<Word64Adapter>(node);
+  if (reduction.Changed()) {
+    return reduction;
+  }
+  // for Word64And, x & 0xffffffff => kWord32And
+  Int64BinopMatcher m(node);
+  if (m.right().Is(0xffffffff)) {
+    NodeProperties::ChangeOp(node->InputAt(1), common()->Int32Constant(-1));
+    NodeProperties::ChangeOp(node, machine()->Word32And());
+    return Changed(node);
+  }
+  return NoChange();
 }
 
 Reduction MachineOperatorReducer::TryMatchWord32Ror(Node* node) {
