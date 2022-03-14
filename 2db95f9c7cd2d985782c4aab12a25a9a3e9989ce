@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf707ebf_a23edad3",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T14:31:51Z",
+      "side": 1,
+      "message": "Yeah so that\u0027d push the lines above 80 chars, which would make this block longer and harder to parse :/ Is it ok to go over 8 chars in `clang-format off` blocks? Otherwise, I\u0027d just leave it as is now...",
+      "parentUuid": "21f081ac_9fb05323",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d48295f6_82127368",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-14T14:26:35Z",
       "side": 1,
       "message": "nit: unneeded cast",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7019f477_25b03a2f",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T14:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d48295f6_82127368",
       "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2022-03-14T14:26:35Z",
       "side": 1,
       "message": "nit: we usually include the v8: prefix `TODO(v8:12700)`",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2314cb_78767d27",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T14:31:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1656974_dedb83f2",
       "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
