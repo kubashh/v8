@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c0938d2_b34114c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-03-14T12:10:54Z",
+      "side": 1,
+      "message": "Patchset #8 reverts #7.\n\nWe discussed with Michael that it\u0027s better to just move the first call to `Heap::Verify` earlier, before the (young) GC cycle begins. After this, the newly introduced `DCHECK` in `GCTracer:NotifySweepingCompleted` can be simplified.",
+      "revId": "83a1976a5797374f9ac3780c5f29d99bbbf39968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
