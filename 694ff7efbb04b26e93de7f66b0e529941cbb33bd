@@ -69,6 +69,24 @@
       "parentUuid": "c2c49e99_dfaefbc2",
       "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8dea9fa_2521cec6",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T16:44:57Z",
+      "side": 1,
+      "message": "Thanks! So if we turn \n```\nif (!js_object.IsAnyApiObject()) return false;\n```\ninto\n```\nif (!js_object.MayHaveEmbedderFields()) return false;\n```\nWe would end up asking Blink whether we can drop other objects with EmbedderDataSlots, such as global objects, ArrayBuffers, TypedArrays, DataViews, etc. Is that desirable? I guess if Blink can\u0027t construct these, there\u0027s no point in asking and so we should use `IsAnyApiObject` here?",
+      "parentUuid": "a9840169_49452f1e",
+      "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
