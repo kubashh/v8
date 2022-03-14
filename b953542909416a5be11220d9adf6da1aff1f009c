@@ -46,6 +46,30 @@
       },
       "revId": "b953542909416a5be11220d9adf6da1aff1f009c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "667994d6_cd6ac9dd",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T13:20:15Z",
+      "side": 0,
+      "message": "Ah, you\u0027re right, here we only get the non-shared ones.",
+      "parentUuid": "b09766f5_b5787dd1",
+      "range": {
+        "startLine": 910,
+        "startChar": 0,
+        "endLine": 913,
+        "endChar": 3
+      },
+      "revId": "b953542909416a5be11220d9adf6da1aff1f009c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
