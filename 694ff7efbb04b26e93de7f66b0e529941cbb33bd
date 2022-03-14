@@ -51,6 +51,24 @@
       "parentUuid": "c294c2cd_77aa1dde",
       "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9840169_49452f1e",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-14T16:35:21Z",
+      "side": 1,
+      "message": "Missed this part: Here\u0027s what this is used for:\n\n- `ScriptWrappable` (C++) / Wrapper (JS) pairs generally live and die together\n- The exception (yay!) is during Scavenge, where the Scavenger treats all wrapper objects that are still unmodified as potentially reclaimable.\n- V8 wil check for those unmodified wrappers and ask Blink whether it can really drop them.\n- If Blink knows how to recreate empty wrapper objects (it does for most types), V8 will reclaim those wrappers on Scavenge.\n\nReturning `false` should be always safe in production. Maybe some unit tests fail?\n\nIf we return `false` where we could return `true` for Blink, you may end up with a memory regression.",
+      "parentUuid": "c2c49e99_dfaefbc2",
+      "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
