@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97970ac8_8e40394b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-14T12:36:36Z",
+      "side": 1,
+      "message": "ptal - this is the last TA.p RAB / GSAB CL. unfortunately it\u0027s one of the subtly tricky ones...",
+      "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
