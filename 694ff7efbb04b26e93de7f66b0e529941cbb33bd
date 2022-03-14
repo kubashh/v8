@@ -33,6 +33,24 @@
       "message": "mlippautz@ Please double check this change as it doesn\u0027t have the exact same semantics as before, but should, from what I can tell, still be correct.",
       "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c49e99_dfaefbc2",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-14T16:28:50Z",
+      "side": 1,
+      "message": "Ok I\u0027ve brought the function back under a different name now (IsAnyApiObject) since I\u0027m not sure I really understand this logic (IsUnmodifiedApiObject), but maybe double check if that is really still required :)",
+      "parentUuid": "c294c2cd_77aa1dde",
+      "revId": "694ff7efbb04b26e93de7f66b0e529941cbb33bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
