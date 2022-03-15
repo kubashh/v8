@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b2acf7f_069ee7ab",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-15T16:16:13Z",
+      "side": 1,
+      "message": "Alright, so how about this solution then? It uses the constant and stays below 80 chars with a tiny bit of additional readability because I also dropped the `ULL` suffix at the cost of a macro",
+      "parentUuid": "5c6b8909_e1d04971",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d48295f6_82127368",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 1

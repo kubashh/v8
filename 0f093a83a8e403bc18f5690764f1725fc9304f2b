@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "897bac7a_84463feb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-15T16:16:13Z",
+      "side": 1,
+      "message": "Added a sentence, is that what you had in mind?",
+      "parentUuid": "1153fb8a_4a3f274b",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ee4ea1e7_e2e90490",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-03-15T08:56:56Z",
       "side": 1,
       "message": "If possible, I\u0027d suggest a `DCHECK(IsExternalPointerTag(...))` - assuming tags are the limited set of values in v8-internal.h.",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cae0928_02f2835c",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-15T16:16:13Z",
+      "side": 1,
+      "message": "Currently that\u0027s the case, but in the (hopefully near) future it will no longer be the case as the embedder will need to be able to create tags on its own. So it probably doesn\u0027t make sense to add this functionality now only to remove it again later.",
+      "parentUuid": "39dcdcf6_95ea523a",
       "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
