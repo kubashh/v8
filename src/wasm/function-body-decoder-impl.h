@@ -897,6 +897,7 @@ struct ControlBase : public PcForErrors<validate> {
   INTERFACE_NON_CONSTANT_FUNCTIONS(F)
 
 #define INTERFACE_META_FUNCTIONS(F)    \
+  F(TraceInstruction, uint32_t value)  \
   F(StartFunction)                     \
   F(StartFunctionBody, Control* block) \
   F(FinishFunction)                    \
@@ -1085,7 +1086,9 @@ class WasmDecoder : public Decoder {
         module_(module),
         enabled_(enabled),
         detected_(detected),
-        sig_(sig) {}
+        sig_(sig) {
+    current_inst_trace = module->inst_traces.begin();
+  }
 
   Zone* zone() const { return local_types_.get_allocator().zone(); }
 
@@ -2173,6 +2176,7 @@ class WasmDecoder : public Decoder {
   const WasmFeatures enabled_;
   WasmFeatures* detected_;
   const FunctionSig* sig_;
+  std::vector<std::pair<uint32_t, uint32_t>>::const_iterator current_inst_trace;
 };
 
 // Only call this in contexts where {current_code_reachable_and_ok_} is known to
@@ -2377,6 +2381,23 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
     first_instruction_offset = this->pc_offset();
     // Decode the function body.
     while (this->pc_ < this->end_) {
+      auto curr_func_offset = this->pc_ - this->start_;
+      auto curr_module_offset = this->module_->code.offset() + curr_func_offset;
+      TRACE("Current Module[0x%x] FuncPos[0x%x] Byte[0x%x]\n",
+            static_cast<int>(curr_module_offset),
+            static_cast<int>(curr_func_offset), *this->pc_);
+
+      if (V8_UNLIKELY(this->current_inst_trace !=
+                          this->module_->inst_traces.end() &&
+                      this->current_inst_trace->first == curr_module_offset)) {
+        TRACE("Emit trace at 0x%x with ID[0x%x]\n",
+              static_cast<int>(curr_func_offset),
+              this->current_inst_trace->second);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(TraceInstruction,
+                                           this->current_inst_trace->second);
+        this->current_inst_trace++;
+      }
+
       // Most operations only grow the stack by at least one element (unary and
       // binary operations, local.get, constants, ...). Thus check that there is
       // enough space for those operations centrally, and avoid any bounds
