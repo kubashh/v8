@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06aa8fce_9a081194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1152444
+      },
+      "writtenOn": "2022-03-15T08:21:54Z",
+      "side": 1,
+      "message": "FYI, this seems to block the roll: https://crrev.com/c/3523267\n\nThe failing test is:\nexternal/wpt/wasm/serialization/arraybuffer/transfer.window.html\n",
+      "revId": "6e2c9bb265be648600e440c1ed0dc5a644c1f290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
