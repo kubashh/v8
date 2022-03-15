@@ -16,6 +16,46 @@
       "message": "ptal - this is the last TA.p RAB / GSAB CL. unfortunately it\u0027s one of the subtly tricky ones...",
       "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cabe4cea_1bb0b59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-15T10:01:56Z",
+      "side": 1,
+      "message": "LGTM with an optional suggestion.",
+      "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8f35dcf_ee19b605",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 6462,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-15T10:01:56Z",
+      "side": 1,
+      "message": "If you wanted to make this a bit more concise, you could write this part as a one-liner:\n\n  return a \u003c b ? -1 : a \u003e b ? 1 : 0;\n\nAgain several times below and in the other test file. (Just a suggestion, you can also keep it as-is.)",
+      "range": {
+        "startLine": 6456,
+        "startChar": 6,
+        "endLine": 6462,
+        "endChar": 15
+      },
+      "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
