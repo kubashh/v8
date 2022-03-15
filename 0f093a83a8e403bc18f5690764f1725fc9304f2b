@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1153fb8a_4a3f274b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-15T08:56:56Z",
+      "side": 1,
+      "message": "Could you please give a high level overview of how the new system replaces the old system?",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ee4ea1e7_e2e90490",
@@ -31,6 +48,23 @@
       "writtenOn": "2022-03-14T14:39:32Z",
       "side": 1,
       "message": "PTAL, thanks! This should fix these failures: https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20fyi/26622/overview",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39dcdcf6_95ea523a",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-15T08:56:56Z",
+      "side": 1,
+      "message": "If possible, I\u0027d suggest a `DCHECK(IsExternalPointerTag(...))` - assuming tags are the limited set of values in v8-internal.h.",
       "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

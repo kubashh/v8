@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c6b8909_e1d04971",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-15T08:56:56Z",
+      "side": 1,
+      "message": "Hmm personally I\u0027d just go with whatever clang-format does, I\u0027d prefer the explicit use of the shift constant over formatting concerns. If the q is \u0027go over 80 chars, or don\u0027t use the constant\u0027, I tend towards the constant. But up to you :)",
+      "parentUuid": "bf707ebf_a23edad3",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d48295f6_82127368",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 1
