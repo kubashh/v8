@@ -1853,7 +1853,20 @@ Reduction MachineOperatorReducer::ReduceWord32And(Node* node) {
 
 Reduction MachineOperatorReducer::ReduceWord64And(Node* node) {
   DCHECK_EQ(IrOpcode::kWord64And, node->opcode());
-  return ReduceWordNAnd<Word64Adapter>(node);
+  Reduction reduction = ReduceWordNAnd<Word64Adapter>(node);
+  if (reduction.Changed()) {
+    return reduction;
+  }
+  // For Word64And, x & immediate (if immediate fits into uint32) => kWord32And.
+  Int64BinopMatcher m(node);
+  if (m.right().IsInRange(std::numeric_limits<uint32_t>::min(),
+                          std::numeric_limits<uint32_t>::max())) {
+    const uint32_t value = static_cast<uint32_t>(m.right().ResolvedValue());
+    NodeProperties::ChangeOp(node->InputAt(1), common()->Int32Constant(value));
+    NodeProperties::ChangeOp(node, machine()->Word32And());
+    return Changed(node);
+  }
+  return NoChange();
 }
 
 Reduction MachineOperatorReducer::TryMatchWord32Ror(Node* node) {
