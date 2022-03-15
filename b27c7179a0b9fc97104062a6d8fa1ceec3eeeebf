@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a0ed9fb_9cd6389f",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7f7918_73d11f23",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "918322ef_bd99be32",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This looks unused (also, it would be problematic to make Node that much bigger).",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "383bbdf0_de5752fd",
+        "filename": "src/compiler/node.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "918322ef_bd99be32",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +128,48 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91a53d59_c21c3a09",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92d9e270_110f86a7",
+      "range": {
+        "startLine": 528,
+        "startChar": 61,
+        "endLine": 528,
+        "endChar": 72
+      },
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfe60787_2938aef3",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e902530_3305a851",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab458c7d_eb592722",
@@ -105,6 +183,30 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This needs to be more efficient, as this is executed for every single decoded wasm instruction. Can we ensure that the traces vector is sorted, and keep a single pointer into that vector that we check here? If we store pointers instead of offsets in the vector, this will make the check even more efficient.\n\nI.e. something like\nif (V8_UNLIKELY(*next_trace_pc \u003d\u003d this-\u003epc_)) { ...",
+      "range": {
+        "startLine": 2393,
+        "startChar": 0,
+        "endLine": 2394,
+        "endChar": 41
+      },
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f0505d_450f3f10",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab458c7d_eb592722",
       "range": {
         "startLine": 2393,
         "startChar": 0,
@@ -132,6 +234,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68653211_6a310631",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2443,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1efe3c0a_a1263543",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb6326aa_8f8c22f2",
@@ -145,6 +265,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This shouldn\u0027t be part of the FunctionBody. Since this is stored in the WasmModule already, can we just extract it from there and pass it to the decoder directly?",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c9bb713_6f9ddce4",
+        "filename": "src/wasm/function-body-decoder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb6326aa_8f8c22f2",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -166,6 +304,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6615b9d_c52e4378",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb668536_8dc86a63",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bdc9f58_01f1fec3",
@@ -179,6 +335,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "Similar to the other sections, please add a sentence saying what this section is.",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459e8d19_1994b923",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bdc9f58_01f1fec3",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -200,6 +374,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa22c127_41d45a02",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b238fd17_7569551e",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f4a0693_86288a5a",
@@ -213,6 +405,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This looks rather unusual. Can we just access via {this} instead?",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f663974_5df5ae9a",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f4a0693_86288a5a",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -234,6 +444,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a33f28a_3cdce2dd",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f0897b3_6f7d08eb",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f6dc3c2_b1ae3dfa",
@@ -247,6 +475,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This is missing a comment.",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be2af39b_81c8a553",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f6dc3c2_b1ae3dfa",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -268,6 +514,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d591845e_bbcfaf22",
+        "filename": "src/wasm/wasm-feature-flags.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0057a8e_d276a83e",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "164742e1_3396a0d6",
@@ -281,6 +545,24 @@
       "writtenOn": "2022-02-16T11:30:32Z",
       "side": 1,
       "message": "This makes the static representation of each function multiple machine words (3 typically) bigger. WDYT about storing this as a single std::vector on the WasmModule, using module-relative offsets?",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aefc29e_dc8c076f",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-15T22:34:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "164742e1_3396a0d6",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
