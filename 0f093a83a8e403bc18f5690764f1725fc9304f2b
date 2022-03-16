@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1a1c6420_2a553de1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-16T06:49:11Z",
+      "side": 1,
+      "message": "Yeah thanks - I asked mostly because I have little sandboxing context myself and any overview really helps.",
+      "parentUuid": "897bac7a_84463feb",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ee4ea1e7_e2e90490",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Currently that\u0027s the case, but in the (hopefully near) future it will no longer be the case as the embedder will need to be able to create tags on its own. So it probably doesn\u0027t make sense to add this functionality now only to remove it again later.",
       "parentUuid": "39dcdcf6_95ea523a",
+      "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e74abea_485022ce",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-16T06:49:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2cae0928_02f2835c",
       "revId": "0f093a83a8e403bc18f5690764f1725fc9304f2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
