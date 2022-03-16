@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0fa3e755_be4d10de",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-03-16T09:43:21Z",
+      "side": 1,
+      "message": "Without the `clang-format off` the formatting would become\n```\nenum ExternalPointerTag : uint64_t {\n  kExternalPointerNullTag \u003d MAKE_TAG(0b0000000000000000),\n  kExternalPointerFreeEntryTag \u003d MAKE_TAG(0b0111111110000000),\n  kExternalStringResourceTag \u003d MAKE_TAG(0b1000000011111111),\n  kExternalStringResourceDataTag \u003d MAKE_TAG(0b1000000101111111),\n  kForeignForeignAddressTag \u003d MAKE_TAG(0b1000000110111111),\n  kNativeContextMicrotaskQueueTag \u003d MAKE_TAG(0b1000000111011111),\n  kEmbedderDataSlotPayloadTag \u003d MAKE_TAG(0b1000000111101111),\n  kCodeEntryPointTag \u003d MAKE_TAG(0b1000000111110111),\n  kExternalObjectValueTag \u003d MAKE_TAG(0b1000000111111011),\n};\n```\n:/",
+      "parentUuid": "dbcacd43_5c9004bd",
+      "revId": "2db95f9c7cd2d985782c4aab12a25a9a3e9989ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d48295f6_82127368",
         "filename": "src/snapshot/deserializer.cc",
         "patchSetId": 1
