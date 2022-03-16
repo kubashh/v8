@@ -5541,7 +5541,14 @@ int Shell::Main(int argc, char* argv[]) {
 #endif  // V8_FUZZILLI
     } while (fuzzilli_reprl);
   }
-  OnExit(isolate, true);
+  // If quit() has been called, do not dispose the platform and other
+  // global data like in QuitOnce, other work threads may not shutdown.
+  if (quit_once_.load(std::memory_order_acquire) ==
+      base::ONCE_STATE_UNINITIALIZED) {
+    OnExit(isolate, true);
+  } else {
+    OnExit(isolate, false);
+  }
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
