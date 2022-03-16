@@ -5541,7 +5541,11 @@ int Shell::Main(int argc, char* argv[]) {
 #endif  // V8_FUZZILLI
     } while (fuzzilli_reprl);
   }
-  OnExit(isolate, true);
+  // if quit() has been called, no need to onExit.
+  if (quit_once_.load(std::memory_order_acquire) ==
+      base::ONCE_STATE_UNINITIALIZED) {
+    OnExit(isolate, true);
+  }
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
