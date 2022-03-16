@@ -1,0 +1,339 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00499fa4_d6121971",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Please generally use \"Wasm\" or \"WebAssembly\".",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8c0741c_9688c30e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This link is dead. I think the new link is https://github.com/WebAssembly/tool-conventions/blob/main/CodeMetadata.md",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327ef6ba_f2a9df3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Thanks, this looks better. I left another round of review, but some things still look very rough, so this might need more review rounds.\nAs mentioned before, we should be very careful not to introduce overhead for modules which do not use instruction tracing. Can you please measure how much overhead the current implementation introduces?",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1324144d_1c95dc76",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "What\u0027s the plan with arm64? In its current form, this method could just be skipped, and the instruction selector would just not emit anything.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e3bc0f9_362b338a",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Do we have some documentation we can link about the different instructions we emit here?",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3409f0_3da01ca8",
+        "filename": "src/compiler/machine-operator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "I don\u0027t see those comments on other methods in this file. I would suggest dropping it here as well.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d57d317_979f6b57",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Here as well.",
+      "range": {
+        "startLine": 717,
+        "startChar": 50,
+        "endLine": 717,
+        "endChar": 55
+      },
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb774c04_4a9b9eaf",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This should be \"mark_id\", I think.",
+      "range": {
+        "startLine": 285,
+        "startChar": 34,
+        "endLine": 285,
+        "endChar": 39
+      },
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "208cf7ad_706dbf7c",
+        "filename": "src/diagnostics/x64/disasm-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Please integrate this better. It looks like the 0x64 prefix was not used so far, so maybe define it and check against it here, then handle this special case within the block for the new prefix, and fail if the following bytes are something unexpected.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e8202b_c8f55862",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Also here, is there a way to express this via existing assembler methods instead of hard-coding the bytes?",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "812453db_7dc155f4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Wouldn\u0027t we have to find the beginning of trace marks for the current function?",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbe320de_6f615e86",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This is missing a trailing underscore (see style guide), and I suggest to store a single pointer instead of an iterator (see below).",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab7222f_1ea7e399",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "Did you measure the performance impact of this, for validation or Liftoff compilation? I would assume this to take significant time.\n\nI would suggest two things to make this faster:\n1) Store a single pointer, and add an \"invalid\" entry at the end of the vector, such that we can dereference past the actual end, but we will never match that last entry.\n2) If there is remaining performance overhead, we should try to avoid the additional computation here and instead transfer the vector at some point to contain pointers instead of offsets.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad955810_5762b57c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This is still talking about the compilation hints section.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "051b6c51_1729d688",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This might access after the end of the vector.\nPlease try to rewrite this whole loop to make it easier to read. Maybe something like:\n\n  for (; inst_traces_it !\u003d this-\u003einst_traces_.end() \u0026\u0026\n         inst_traces_it-\u003efirst \u003d\u003d i;\n         ++inst_traces_it) {\n    ...\n  }",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f415e84_d7c7147c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This looks unnecessary. If you like, you can make it part of the loop condition to exit earlier.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55501dbb_fe3c833f",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This could just be a part of the loop condition above.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb85c3f_fec25b2f",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This needs more documentation.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efa8115f_477f66ad",
+        "filename": "tools/turbolizer/package-lock.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-16T12:45:37Z",
+      "side": 1,
+      "message": "This file looks unrelated; please delete.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
