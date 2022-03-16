@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2aa915c_a12de6a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:37:23Z",
+      "side": 1,
+      "message": "Oops, forgot to finish sentence. Main thing is to keep GetWrappedValue in CSA due to possibly deprecating Torque in the near future.",
+      "parentUuid": "7de0a174_7ba51cea",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7112a70_2cd8d2fd",
