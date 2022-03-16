@@ -87,6 +87,30 @@
       },
       "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40700ca5_22d8e843",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-16T06:22:21Z",
+      "side": 1,
+      "message": "I think the main problem is that because the worker thread calls `quit()` and then calls `WaitForRunningWorkers`, which will empty `running_workers_`, the main thread will call `onExit(isolate, true)` which will dispose the platform and other global data before all the worker thread actually thread shutdown. So I think we could call `onExit(isolate, false)` when `quit()` has been called like here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/d8/d8.cc;l\u003d2636-2644;drc\u003d8e18ea3913f271dd2035e3a61efb6e49fba530ec in `QuitOnce`, which will not dispose the platform and other global data. I have updated it, WDYT? Thanks!",
+      "parentUuid": "80bc9a6c_a4596481",
+      "range": {
+        "startLine": 4694,
+        "startChar": 43,
+        "endLine": 4694,
+        "endChar": 64
+      },
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
