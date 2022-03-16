@@ -22,6 +22,30 @@
       },
       "revId": "7d21e4d9c2dd3d47e991068341e6e44d8494122d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98b13988_a9a05504",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-16T12:32:36Z",
+      "side": 1,
+      "message": "Done, Thanks very much! Very sorry, I should have updated the commit message when I updated the patchset. Thanks very much for the review!",
+      "parentUuid": "1d8ebcaa_8a41bb65",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "7d21e4d9c2dd3d47e991068341e6e44d8494122d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
