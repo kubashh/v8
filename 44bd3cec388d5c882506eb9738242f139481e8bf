@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "44bd3cec388d5c882506eb9738242f139481e8bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6732513_cec5734a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T00:26:16Z",
+      "side": 1,
+      "message": "Hm, the code-review and OWNERS stuff isn\u0027t being satisfied for some reason. I fixed a typo in the commit message (spect -\u003e spec), I wonder if that\u0027s why? Frank, mind re-uploading the CL (or change the commit message a little bit yourself) and see if that fixes it?",
+      "revId": "44bd3cec388d5c882506eb9738242f139481e8bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
