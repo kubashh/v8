@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d8ebcaa_8a41bb65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-16T12:26:50Z",
+      "side": 1,
+      "message": "This doesn\u0027t really describe the problem, can you update this to describe it better? E.g.,\n\n\"Worker threads who quit() don\u0027t destroy their Isolates, and thus the ramp down on the main thread failed. In that case, skip the ramp down on the main thread too, as that\u0027s what we already do when the code calls quit().\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "7d21e4d9c2dd3d47e991068341e6e44d8494122d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

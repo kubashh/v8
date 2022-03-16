@@ -111,6 +111,30 @@
       },
       "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e58da803_d1c61c3c",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-16T12:26:50Z",
+      "side": 1,
+      "message": "Alright, I had a closer look at this to deconfuse myself. Based on the code snippet, I had thought the problem is that we start new workers after we\u0027ve already called QuitOnce, but that doesn\u0027t seem to be the problem. (Also I\u0027m not sure why we\u0027d ever set allow_new_workers_ back to true. But that\u0027s a red herring!)\n\nThe problem seems to be that once the worker calls Quit, it doesn\u0027t dispose its Isolate (normally done at the end of Worker::ExecuteInThread). And then if we try to ramp down the platform nicely on the main thread, WasmEngine complains that its isolates_ is not empty.\n\nI think the current CL is the right fix; like in the comment you linked, when we\u0027re quit()ing, we should just skip the nice rampdown.",
+      "parentUuid": "40700ca5_22d8e843",
+      "range": {
+        "startLine": 4694,
+        "startChar": 43,
+        "endLine": 4694,
+        "endChar": 64
+      },
+      "revId": "7860e722e274ab86e86c0cd7c627f94c65fec301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
