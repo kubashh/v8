@@ -37,6 +37,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb4a763f_1bf01abc",
+        "filename": "src/builtins/typed-array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T01:05:59Z",
+      "side": 1,
+      "message": "Perhaps add a TODO here linking to https://github.com/tc39/ecma262/pull/2646#issuecomment-1067456576, as I\u0027ll ask to remove this per-iteration check in the upcoming TC39.\n\nAs bakkot says in that comment, this check is just kind of nonsensical, since sort already has to buffer the input. WDYT?",
+      "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9168e4a0_9d150389",
+        "filename": "src/builtins/typed-array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T01:05:59Z",
+      "side": 1,
+      "message": "Subtle and nice catch! Though the \"It cannot be OOB here though, since we\u0027ve checked it as part of the comparison function\" part will no longer hold if  the comparison function detach check is removed as suggested by https://github.com/tc39/ecma262/pull/2646#issuecomment-1067456576\n\nIf we were to remove the detach check in the comparison function, a detach/OOB here would return the array directly and not perform any writes back.",
+      "revId": "517ec11b2b86d02381c9744ce6e356938b161397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8f35dcf_ee19b605",
         "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
         "patchSetId": 2
