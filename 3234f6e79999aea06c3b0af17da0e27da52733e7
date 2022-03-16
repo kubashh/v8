@@ -16,6 +16,176 @@
       "message": "Hi Shu, would you mind taking a look at this CL? Thank you!",
       "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7de0a174_7ba51cea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Mostly lgtm, great work! Main thing is to keep GetWrappedValue in CSA due to, otherwise almost all nits.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7112a70_2cd8d2fd",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Nit: please put {} around multi-line ifs.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a8bb903_af4a184e",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Nit: please put {} around multi-line ifs.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69b067dc_45a04239",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Nit: {} around multi-line if.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d40bff_2e814f1f",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Nit: {} around multi-line if.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43c541a9_585bc680",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "What does this TODO mean?",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92fe740_c0a93bb5",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Please add a comment here and below that `NewError` is used to ensure the creation Realm\u0027s `TypeError` constructor is used instead of the executing Realm\u0027s.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93d3374_83967d6d",
+        "filename": "src/builtins/function.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Sorry about the churn, but I\u0027d prefer that this builtin remains in CSA instead of being ported to Torque. We might be discouraging Torque usage in the near future, and since it\u0027s already in CSA, let\u0027s keep it that way. Thanks for understanding.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "165981a1_b8e8eb1a",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "`JSBoundFunction::GetLength` looks fallible but actually isn\u0027t, it always returns `Just(int)`. So `JSWrappedFunction::GetLength` is also actually infallible, and we can use `ToChecked()` here.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e076d9b_e74fe163",
+        "filename": "test/mjsunit/harmony/shadowrealm-evaluate.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-16T23:36:47Z",
+      "side": 1,
+      "message": "Oh fascinating, I didn\u0027t realize this implication that revocable proxies now throw earlier in the process because getting \u0027name\u0027 and \u0027length\u0027 would throw `TypeError`s. That\u0027s... good, I think?",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
