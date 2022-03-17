@@ -2629,7 +2629,6 @@ void Shell::QuitOnce(v8::FunctionCallbackInfo<v8::Value>* args) {
   int exit_code = (*args)[0]
                       ->Int32Value(args->GetIsolate()->GetCurrentContext())
                       .FromMaybe(0);
-  WaitForRunningWorkers();
   Isolate* isolate = args->GetIsolate();
   isolate->Exit();
 
@@ -5186,11 +5185,9 @@ void Shell::WaitForRunningWorkers() {
     allow_new_workers_ = false;
     workers_copy.swap(running_workers_);
   }
-
   for (auto& worker : workers_copy) {
     worker->TerminateAndWaitForThread();
   }
-
   // Now that all workers are terminated, we can re-enable Worker creation.
   base::MutexGuard lock_guard(workers_mutex_.Pointer());
   DCHECK(running_workers_.empty());
@@ -5541,6 +5538,7 @@ int Shell::Main(int argc, char* argv[]) {
 #endif  // V8_FUZZILLI
     } while (fuzzilli_reprl);
   }
+
   OnExit(isolate, true);
 
   // Delete the platform explicitly here to write the tracing output to the
