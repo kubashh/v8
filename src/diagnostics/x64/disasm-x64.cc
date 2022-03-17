@@ -2310,6 +2310,8 @@ int DisassemblerX64::InstructionDecode(v8::base::Vector<char> out_buffer,
                           // is not in 'instructions' table.
   byte current;
 
+  bool isSSCMark = false;
+
   // Scan for prefixes.
   while (true) {
     current = *data;
@@ -2335,6 +2337,13 @@ int DisassemblerX64::InstructionDecode(v8::base::Vector<char> out_buffer,
       setRex(0x40 | (~(vex_byte1_ >> 5) & 4));
       data += 2;
       break;  // Vex is the last prefix.
+    } else if (current == 0x64 && *(data + 1) == 0x67 && *(data + 2) == 0x90 &&
+               *(data + 3) == 0x90 && *(data + 4) == 0x90) {
+      isSSCMark = true;
+      AppendToBuffer("sscmark");
+      data += 5;
+      break;
+
     } else {  // Not a prefix - an opcode.
       break;
     }
@@ -2345,7 +2354,7 @@ int DisassemblerX64::InstructionDecode(v8::base::Vector<char> out_buffer,
   if (vex_byte0_ != 0) {
     processed = true;
     data += AVXInstruction(data);
-  } else {
+  } else if (!isSSCMark) {
     const InstructionDesc& idesc = instruction_table_->Get(current);
     byte_size_operand_ = idesc.byte_size_operation;
     switch (idesc.type) {

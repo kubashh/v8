@@ -607,6 +607,7 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
 
   // Visit the node and generate code, if any.
   void VisitNode(Node* node);
+  void VisitTraceInstruction(Node* node);
 
   // Visit the node and generate code for IEEE 754 functions.
   void VisitFloat64Ieee754Binop(Node*, InstructionCode code);
