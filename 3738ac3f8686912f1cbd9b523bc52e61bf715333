@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db883f93_953e3993",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-17T05:24:38Z",
+      "side": 1,
+      "message": "I found there may be some problems calling `WaitForRunningWorkers` \nwhen we call `quit()`.\n\nFirst, e.g.\n```\nfunction quitInWorker() {\n  quit();\n};\n\nfor(let i \u003d 0; i \u003c 10; i++){\n  new Worker(quitInWorker, ({type : \u0027function\u0027, arguments : []}));\n}\n\nquit()\n```\nSuppose the main thread first calls `quit()`, and the worker\nthread calls `quit()` after the main thread calls `quit()`. The worker\nthread then sched_yield to wait for `quit_once_` updated to \n`ONCE_STATE_DONE`. However, the main thread is WaitForRunningWorkers \nto wait for the worker thread to join, which means `quit_once_` will \nnever be updated to `ONCE_STATE_DONE` and the worker thread will never\njoin, thus causing deadlock.\n\nSecond, e.g.\n```\nfunction quitInWorker() {\n  quit();\n};\n\nfor(let i \u003d 0; i \u003c 10; i++){\n  new Worker(quitInWorker, ({type : \u0027function\u0027, arguments : []}));\n}\n\n```\nSuppose the worker thread calls `quit()` and empty the \n`running_workers_` by WaitForRunningWorkers, then the main thread \ncalls `onExit(isolate, true)` to dispose the platform and other \nglobal data, which will crash other running workers. And that\u0027s\nthe problem reported by the issue.\n\nI thought we could solve these problems by not calling `WaitForRunningWorkers`\nin `quit()` and I have updated the patchset. WDYT? Thanks!",
+      "revId": "3738ac3f8686912f1cbd9b523bc52e61bf715333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
