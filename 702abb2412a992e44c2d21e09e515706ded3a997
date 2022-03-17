@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d126bd4_ceea69be",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-17T12:13:37Z",
+      "side": 1,
+      "message": "Tobias, can you check if this is correct, or if we need a Word32-\u003eWord64 propagation of the Word32And?",
+      "revId": "702abb2412a992e44c2d21e09e515706ded3a997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
