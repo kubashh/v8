@@ -406,6 +406,24 @@
       "parentUuid": "efa8115f_477f66ad",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6abc0ff5_6e6176ef",
+        "filename": "tools/turbolizer/package-lock.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-17T15:48:49Z",
+      "side": 1,
+      "message": "Oh, I probably looked at a diff between a previous patchset and the current patchset, so it showed the file as added. Comparing base and the latest patchset shows that the file is unaffected, so everything is fine.",
+      "parentUuid": "87c0b24e_487c6968",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
