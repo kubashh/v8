@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "358a213f_abe53ecb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-17T15:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00499fa4_d6121971",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8c0741c_9688c30e",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This link is dead. I think the new link is https://github.com/WebAssembly/tool-conventions/blob/main/CodeMetadata.md",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c3856a9_109dcedc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-17T15:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8c0741c_9688c30e",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "What\u0027s the plan with arm64? In its current form, this method could just be skipped, and the instruction selector would just not emit anything.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "748b3e43_aeb0c7a6",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-17T15:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1324144d_1c95dc76",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -332,6 +386,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This file looks unrelated; please delete.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c0b24e_487c6968",
+        "filename": "tools/turbolizer/package-lock.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-17T15:23:55Z",
+      "side": 1,
+      "message": "Should this file exist or not? In the first round of comments it was missing, now it is extra?",
+      "parentUuid": "efa8115f_477f66ad",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
