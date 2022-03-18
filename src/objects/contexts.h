@@ -210,6 +210,8 @@ enum ContextLookupFlags {
     temporal_zoned_date_time_function)                                         \
   V(TEMPORAL_INSTANT_FIXED_ARRAY_FROM_ITERABLE_FUNCTION_INDEX, JSFunction,     \
     temporal_instant_fixed_array_from_iterable)                                \
+  V(SHADOW_REALM_WRAPPED_FUNCTION_CREATE_FUN_INDEX, JSFunction,                \
+    shadow_realm_wrapped_function_create_fun)                                  \
   V(STRING_FIXED_ARRAY_FROM_ITERABLE_FUNCTION_INDEX, JSFunction,               \
     string_fixed_array_from_iterable)                                          \
   /* Context maps */                                                           \
