@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a645f36_5876226c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-03-18T07:15:58Z",
+      "side": 1,
+      "message": "Thanks for investigating, sounds indeed plausible that we shouldn\u0027t call WaitForRunningWorkers in that case.\n\nI\u0027m wondering, for a better solution, if the main thread should be the one doing the quitting, and a worker would just send a message to the main thread to do that. But it\u0027s a bit tricky to implement... so this LGTM.",
+      "revId": "78d3bd4986b58905850382789fa078bee1f056e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
