@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0201db0f_ff0e210c",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7112a70_2cd8d2fd",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a8bb903_af4a184e",
@@ -83,6 +101,24 @@
       "writtenOn": "2022-03-16T23:36:47Z",
       "side": 1,
       "message": "Nit: please put {} around multi-line ifs.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24b15d8f_82d6005e",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a8bb903_af4a184e",
       "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae044e44_aac5babb",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69b067dc_45a04239",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75d40bff_2e814f1f",
@@ -117,6 +171,24 @@
       "writtenOn": "2022-03-16T23:36:47Z",
       "side": 1,
       "message": "Nit: {} around multi-line if.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b0a0fc0_9d8a2193",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75d40bff_2e814f1f",
       "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27618bed_e07dc73f",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "I\u0027ve updated the comment to \"provide a non-observable inspection on the pending_exception to the newly created TypeError\". The spec didn\u0027t say if the newly created TypeError should create observable side effects in the execution realm, so I\u0027m leaving it to follow-up works. I created https://github.com/tc39/proposal-shadowrealm/issues/353 to discuss the \"inspection\".",
+      "parentUuid": "43c541a9_585bc680",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c92fe740_c0a93bb5",
@@ -151,6 +241,24 @@
       "writtenOn": "2022-03-16T23:36:47Z",
       "side": 1,
       "message": "Please add a comment here and below that `NewError` is used to ensure the creation Realm\u0027s `TypeError` constructor is used instead of the executing Realm\u0027s.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce961c51_1cdaeb28",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c92fe740_c0a93bb5",
       "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -172,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32092d2a_c881b0f3",
+        "filename": "src/builtins/function.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Oh, I didn\u0027t know that. Thank you for letting me know. Updated!",
+      "parentUuid": "e93d3374_83967d6d",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "165981a1_b8e8eb1a",
@@ -185,6 +311,24 @@
       "writtenOn": "2022-03-16T23:36:47Z",
       "side": 1,
       "message": "`JSBoundFunction::GetLength` looks fallible but actually isn\u0027t, it always returns `Just(int)`. So `JSWrappedFunction::GetLength` is also actually infallible, and we can use `ToChecked()` here.",
+      "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "648e00ef_549bac2e",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-18T16:13:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "165981a1_b8e8eb1a",
       "revId": "3234f6e79999aea06c3b0af17da0e27da52733e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
