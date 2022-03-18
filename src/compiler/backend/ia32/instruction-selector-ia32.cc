@@ -99,8 +99,13 @@ class IA32OperandGenerator final : public OperandGenerator {
   bool CanBeImmediate(Node* node) {
     switch (node->opcode()) {
       case IrOpcode::kInt32Constant:
+      case IrOpcode::kRelocatableInt32Constant: {
+        const int32_t value = OpParameter<int32_t>(node->op());
+        // int32_t min will overflow if displacement mode is
+        // kNegativeDisplacement.
+        return value != std::numeric_limits<int32_t>::min();
+      }
       case IrOpcode::kExternalConstant:
-      case IrOpcode::kRelocatableInt32Constant:
       case IrOpcode::kRelocatableInt64Constant:
         return true;
       case IrOpcode::kNumberConstant: {
