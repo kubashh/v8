@@ -103,6 +103,10 @@ class JSTemporalInstant
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> Now(
       Isolate* isolate);
 
+  // #sec-temporal.instant.from
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> From(
+      Isolate* isolate, Handle<Object> item);
+
   DECL_PRINTER(JSTemporalInstant)
 
   TQ_OBJECT_CONSTRUCTORS(JSTemporalInstant)
