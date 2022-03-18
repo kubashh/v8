@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "348f0c61_1db715f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T18:36:28Z",
+      "side": 1,
+      "message": "Thanks for changing it back to CSA, legendecas, I appreciate it.\n\n+ cbruni@ for CSA OWNER stamp.",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf318ae0_d34fe387",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T18:36:28Z",
+      "side": 1,
+      "message": "Nit: Please add an empty line between the GH link and the next comment. Also please capitalize Realm.",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b6069e2_0ccb3b16",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T18:36:28Z",
+      "side": 1,
+      "message": "Nit: Realm\u0027s",
+      "range": {
+        "startLine": 173,
+        "startChar": 44,
+        "endLine": 173,
+        "endChar": 50
+      },
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8131c29_ab4126b2",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T18:36:28Z",
+      "side": 1,
+      "message": "Same nits: capitalize realm and change final Realms -\u003e Realm\u0027s.",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb010a1_361b8eea",
+        "filename": "src/builtins/builtins-shadowrealm-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T18:36:28Z",
+      "side": 1,
+      "message": "I think this has the same issue as the bug you fixed previously for bind, where API can install an AccessorInfo that\u0027s not the default one, and then trigger the fast path incorrectly.\n\nIf so, could you also add a test for that case?",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
