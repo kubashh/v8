@@ -302,8 +302,6 @@ TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToJSON)
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToPlainDate)
 
 /* Temporal.TimeZone */
-/* Temporal #sec-temporal.timezone.prototype.getoffsetnanosecondsfor */
-TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeGetOffsetNanosecondsFor)
 /* Temporal #sec-temporal.timezone.prototype.getoffsetstringfor */
 TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeGetOffsetStringFor)
 /* Temporal #sec-temporal.timezone.prototype.getplaindatetimefor */
@@ -824,6 +822,8 @@ BUILTIN(TemporalCalendarFrom) {
 TEMPORAL_CONSTRUCTOR1(TimeZone)
 TEMPORAL_ID_BY_TO_STRING(TimeZone)
 TEMPORAL_TO_STRING(TimeZone)
+TEMPORAL_PROTOTYPE_METHOD1(TimeZone, GetOffsetNanosecondsFor,
+                           getOffsetNanosecondsFor)
 // #sec-temporal.timezone.from
 BUILTIN(TemporalTimeZoneFrom) {
   HandleScope scope(isolate);
