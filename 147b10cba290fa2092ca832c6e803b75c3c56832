@@ -90,6 +90,23 @@
       "message": "I think this has the same issue as the bug you fixed previously for bind, where API can install an AccessorInfo that\u0027s not the default one, and then trigger the fast path incorrectly.\n\nIf so, could you also add a test for that case?",
       "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d1dcce_4bf08737",
+        "filename": "src/builtins/builtins-shadowrealm-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-18T22:16:29Z",
+      "side": 1,
+      "message": "Please make ShadowRealmWrappedFunctionCreate be a runtime call instead, so we don\u0027t need to create the JSFunction wrapper.",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
