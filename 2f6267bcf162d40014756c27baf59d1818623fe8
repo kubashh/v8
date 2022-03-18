@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ec1623_d09f5145",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-03-18T23:27:22Z",
+      "side": 1,
+      "message": "Looks like you\u0027re passing doubles to a function that expects int64_t? Seems like using NumberToInt64 would be safer here.",
+      "revId": "2f6267bcf162d40014756c27baf59d1818623fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a33287_e4421fa0",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-03-18T23:27:22Z",
+      "side": 1,
+      "message": "Same here, should these use NumberToInt64 to avoid the implicit conversion?",
+      "revId": "2f6267bcf162d40014756c27baf59d1818623fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
