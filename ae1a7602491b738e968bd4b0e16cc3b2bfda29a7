@@ -16,6 +16,29 @@
       "message": "Cleanup of commit and asking for clarifications?",
       "revId": "ae1a7602491b738e968bd4b0e16cc3b2bfda29a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9076496_89f1687f",
+        "filename": "src/compiler/machine-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1434,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-18T09:44:15Z",
+      "side": 1,
+      "message": "An effect-chain node should have an effect input as well as an effect output, so that it can be linked into the effect chain. It should usually also have a control input to make sure that it\u0027s scheduled below the last branch and cannot float out of it.",
+      "range": {
+        "startLine": 1434,
+        "startChar": 26,
+        "endLine": 1434,
+        "endChar": 42
+      },
+      "revId": "ae1a7602491b738e968bd4b0e16cc3b2bfda29a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
