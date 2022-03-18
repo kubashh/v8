@@ -2238,7 +2238,7 @@ Maybe<InstantRecord> ParseTemporalInstantString(Isolate* isolate,
     offset_string = isolate->factory()->NewStringFromStaticChars("+00:00");
   }
   // 7. Assert: offsetString is not undefined.
-  CHECK_GT(offset_string->length(), 0);
+  DCHECK_GT(offset_string->length(), 0);
 
   // 6. Return the new Record { [[Year]]: result.[[Year]],
   // [[Month]]: result.[[Month]], [[Day]]: result.[[Day]],
@@ -2277,7 +2277,7 @@ MaybeHandle<BigInt> ParseTemporalInstant(Isolate* isolate,
 
   // 3. Let offsetString be result.[[TimeZoneOffsetString]].
   // 4. Assert: offsetString is not undefined.
-  CHECK_NE(result.offset_string->length(), 0);
+  DCHECK_NE(result.offset_string->length(), 0);
 
   // 5. Let utc be ? GetEpochFromISOParts(result.[[Year]], result.[[Month]],
   // result.[[Day]], result.[[Hour]], result.[[Minute]], result.[[Second]],
@@ -4522,6 +4522,73 @@ MaybeHandle<JSTemporalTimeZone> JSTemporalTimeZone::Constructor(
   }
   // 5. Return ? CreateTemporalTimeZone(canonical, NewTarget).
   return CreateTemporalTimeZone(isolate, target, new_target, canonical);
+}
+
+namespace {
+
+MaybeHandle<Object> GetIANATimeZoneOffsetNanoseconds(Isolate* isolate,
+                                                     Handle<BigInt> nanoseconds,
+                                                     int32_t time_zone_index) {
+#ifdef V8_INTL_SUPPORT
+  // TODO(ftang) Handle offset for other timezone
+  if (time_zone_index == 0) {
+    return handle(Smi::zero(), isolate);
+  }
+  UNREACHABLE();
+#else   // V8_INTL_SUPPORT
+  DCHECK_EQ(time_zone_index, 0);
+  return handle(Smi::zero(), isolate);
+#endif  // V8_INTL_SUPPORT
+}
+
+}  // namespace
+
+// #sec-temporal.timezone.prototype.getoffsetnanosecondsfor
+MaybeHandle<Object> JSTemporalTimeZone::GetOffsetNanosecondsFor(
+    Isolate* isolate, Handle<JSTemporalTimeZone> time_zone,
+    Handle<Object> instant_obj) {
+  TEMPORAL_ENTER_FUNC();
+  const char* method_name =
+      "Temporal.TimeZone.prototype.getOffsetNanosecondsFor";
+  // 1. Let timeZone be the this value.
+  // 2. Perform ? RequireInternalSlot(timeZone,
+  // [[InitializedTemporalTimeZone]]).
+  // 3. Set instant to ? ToTemporalInstant(instant).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant, ToTemporalInstant(isolate, instant_obj, method_name),
+      Smi);
+  // 4. If timeZone.[[OffsetNanoseconds]] is not undefined, return
+  // timeZone.[[OffsetNanoseconds]].
+  if (time_zone->is_offset()) {
+    Handle<Object> result =
+        isolate->factory()->NewNumberFromInt64(time_zone->offset_nanoseconds());
+    return result;
+  }
+  // 5. Return ! GetIANATimeZoneOffsetNanoseconds(instant.[[Nanoseconds]],
+  // timeZone.[[Identifier]]).
+  return GetIANATimeZoneOffsetNanoseconds(
+      isolate, Handle<BigInt>(instant->nanoseconds(), isolate),
+      time_zone->time_zone_index());
+}
+
+// #sec-temporal.timezone.prototype.getoffsetstringfor
+MaybeHandle<String> JSTemporalTimeZone::GetOffsetStringFor(
+    Isolate* isolate, Handle<JSTemporalTimeZone> time_zone,
+    Handle<Object> instant_obj) {
+  TEMPORAL_ENTER_FUNC();
+  const char* method_name = "Temporal.TimeZone.prototype.getOffsetStringFor";
+  // 1. Let timeZone be the this value.
+  // 2. Perform ? RequireInternalSlot(timeZone,
+  // [[InitializedTemporalTimeZone]]).
+  // 3. Set instant to ? ToTemporalInstant(instant).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant, ToTemporalInstant(isolate, instant_obj, method_name),
+      String);
+  // 4. Return ? BuiltinTimeZoneGetOffsetStringFor(timeZone, instant).
+  return BuiltinTimeZoneGetOffsetStringFor(isolate, time_zone, instant,
+                                           method_name);
 }
 
 // #sec-temporal.timezone.prototype.tostring
