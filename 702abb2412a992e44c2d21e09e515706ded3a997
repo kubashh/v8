@@ -34,6 +34,24 @@
       "parentUuid": "9d126bd4_ceea69be",
       "revId": "702abb2412a992e44c2d21e09e515706ded3a997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c2825d_cd69c21a",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-19T06:03:27Z",
+      "side": 1,
+      "message": "Done, Thanks very much for the review! I have updated the patchset. And we could match four patterns in the instruction selector,\n- For y \u003d x \u0026 0xFF, we could use movzxbq y, x.\n- For y \u003d x \u0026 0xFFFF, we could use movzxwq y, x.\n- For y \u003d x \u0026 0xFFFFFFFF, we could use movl y, x.\n- For y \u003d x \u0026 immediate and immediate fits into uint32, we could use andl x, immediate.",
+      "parentUuid": "6e6c71f4_30ba5602",
+      "revId": "702abb2412a992e44c2d21e09e515706ded3a997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
