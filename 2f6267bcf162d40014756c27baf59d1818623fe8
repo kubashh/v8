@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "837f001d_0c6d1c35",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-03-19T00:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22ec1623_d09f5145",
+      "revId": "2f6267bcf162d40014756c27baf59d1818623fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67a33287_e4421fa0",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-18T23:27:22Z",
       "side": 1,
       "message": "Same here, should these use NumberToInt64 to avoid the implicit conversion?",
+      "revId": "2f6267bcf162d40014756c27baf59d1818623fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e0c345c_8a360690",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-03-19T00:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67a33287_e4421fa0",
       "revId": "2f6267bcf162d40014756c27baf59d1818623fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
