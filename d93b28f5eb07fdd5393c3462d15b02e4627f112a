@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33f426b9_a4a1b1cb",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:40:17Z",
+      "side": 1,
+      "message": "nit: `} else if (...`",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 3
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c79fa74_694484fa",
         "filename": "src/objects/js-function.cc",
         "patchSetId": 11
@@ -72,6 +95,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0560bc4_c0160c1d",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:40:17Z",
+      "side": 1,
+      "message": "I guess this could be nested recursively? If so, a while-loop to resolve the wrapped function is probably better.",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 37
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89c05763_e8185c13",
         "filename": "src/objects/js-function.cc",
         "patchSetId": 11
@@ -106,6 +152,30 @@
       "writtenOn": "2022-03-21T09:04:34Z",
       "side": 1,
       "message": "nit: maybe move this to a separate (anonymous?) helper to make this more readable",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 19
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cadb507f_f98cd08e",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:40:17Z",
+      "side": 1,
+      "message": "- If possible, can you share this code with DoFunctionBind?\n- Maybe create separate helpers for the length and name setup as well",
+      "parentUuid": "41a69d72_f4662552",
       "range": {
         "startLine": 372,
         "startChar": 0,
