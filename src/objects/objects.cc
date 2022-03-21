@@ -494,6 +494,9 @@ MaybeHandle<String> Object::NoSideEffectsToMaybeString(Isolate* isolate,
     Handle<String> fun_str;
     if (input->IsJSBoundFunction()) {
       fun_str = JSBoundFunction::ToString(Handle<JSBoundFunction>::cast(input));
+    } else if (input->IsJSWrappedFunction()) {
+      fun_str =
+          JSWrappedFunction::ToString(Handle<JSWrappedFunction>::cast(input));
     } else {
       DCHECK(input->IsJSFunction());
       fun_str = JSFunction::ToString(Handle<JSFunction>::cast(input));
