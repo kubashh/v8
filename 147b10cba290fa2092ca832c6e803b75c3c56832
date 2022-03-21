@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f284f941_c1936e40",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf318ae0_d34fe387",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b6069e2_0ccb3b16",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-03-18T18:36:28Z",
       "side": 1,
       "message": "Nit: Realm\u0027s",
+      "range": {
+        "startLine": 173,
+        "startChar": 44,
+        "endLine": 173,
+        "endChar": 50
+      },
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c6928a_3538d0ac",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b6069e2_0ccb3b16",
       "range": {
         "startLine": 173,
         "startChar": 44,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4172476_bf580a50",
+        "filename": "src/builtins/builtins-shadow-realms.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8131c29_ab4126b2",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7eb010a1_361b8eea",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d058430e_8c792188",
+        "filename": "src/builtins/builtins-shadowrealm-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Actually, when we define a native data property with Template, the generated object will always be a Dictionary map. A dictionary map is not allowed for fast path. I\u0027ve added test case for this, like the function bind one.",
+      "parentUuid": "7eb010a1_361b8eea",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10d1dcce_4bf08737",
@@ -105,6 +183,24 @@
       "writtenOn": "2022-03-18T22:16:29Z",
       "side": 1,
       "message": "Please make ShadowRealmWrappedFunctionCreate be a runtime call instead, so we don\u0027t need to create the JSFunction wrapper.",
+      "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f16806_9c641dc4",
+        "filename": "src/builtins/builtins-shadowrealm-gen.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10d1dcce_4bf08737",
       "revId": "147b10cba290fa2092ca832c6e803b75c3c56832",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

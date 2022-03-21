@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57019966_f94fe8da",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "217d2d26_572fac2f",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 36
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33f426b9_a4a1b1cb",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-21T09:40:17Z",
       "side": 1,
       "message": "nit: `} else if (...`",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 3
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0b12b81_b726d34b",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33f426b9_a4a1b1cb",
       "range": {
         "startLine": 309,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14e01e7a_c61933a6",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c79fa74_694484fa",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 36
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2c50b84_a7e30417",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-03-21T09:04:34Z",
       "side": 1,
       "message": "Can you add a documenting DCHECK here on what types value can be.\nI presume this can be JSFunction/JSBoundFunction/JSWrappedFunction?",
+      "range": {
+        "startLine": 348,
+        "startChar": 3,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6232ea26_59f030bd",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "This value could be any callable js objects. I\u0027ve updated it with JSReceiver and added a DCHECK that it must be a callable js object.",
+      "parentUuid": "a2c50b84_a7e30417",
       "range": {
         "startLine": 348,
         "startChar": 3,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "210cab88_254fb995",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "No. Each time when we creating WrappedFunction, we will try to unwrap first.  So a WrappedFunction can not wrap a WrappedFunction.",
+      "parentUuid": "f0560bc4_c0160c1d",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 352,
+        "endChar": 37
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89c05763_e8185c13",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-03-21T09:04:34Z",
       "side": 1,
       "message": "Can this be a Smi? If not then we should use HeapObject for value (see comment above)",
+      "range": {
+        "startLine": 355,
+        "startChar": 19,
+        "endLine": 355,
+        "endChar": 25
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1c27af_694bae6b",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89c05763_e8185c13",
       "range": {
         "startLine": 355,
         "startChar": 19,
@@ -186,6 +330,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "268d2c51_16ca052a",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cadb507f_f98cd08e",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 19
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "239adc2f_6b0f11b2",
@@ -199,6 +367,30 @@
       "writtenOn": "2022-03-21T09:04:34Z",
       "side": 1,
       "message": "Could this be HeapObject or even JSReceiver?",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1501b67_d4cad246",
+        "filename": "src/runtime/runtime-shadow-realm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "239adc2f_6b0f11b2",
       "range": {
         "startLine": 15,
         "startChar": 9,
@@ -232,6 +424,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7630213_56c892ad",
+        "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-bind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f000b99b_1b113b15",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ffce2a8_4d32c654",
@@ -245,6 +461,30 @@
       "writtenOn": "2022-03-21T09:04:34Z",
       "side": 1,
       "message": "Could you also add a test that creates a very deeply nested bound function to check that we can handle .name and .length on it with only throwing exceptions and not hard crashing?\n\n bound \u003d\u003e wrapped \u003d\u003e bound \u003d\u003e wrapped \u003d\u003e ...",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac6acaf_17661fbc",
+        "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-bind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-21T17:28:01Z",
+      "side": 1,
+      "message": "Added mjsunit/harmony/shadowrealm-wrapped-function-props-stack for this.",
+      "parentUuid": "1ffce2a8_4d32c654",
       "range": {
         "startLine": 14,
         "startChar": 0,
