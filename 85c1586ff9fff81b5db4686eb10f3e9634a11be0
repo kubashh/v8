@@ -77,6 +77,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ae6fd19_c89eb66e",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T20:42:23Z",
+      "side": 1,
+      "message": "nit: let\u0027s just inline these macros, we just discussed this in our sub-team and we\u0027re likely going to reduce a few of these macros as they don\u0027t add much value.",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 327,
+        "endChar": 17
+      },
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "250ef80b_c8675d8e",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T20:42:23Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need this and you can directly `return JSBoundFunction::GetName(...)`",
+      "range": {
+        "startLine": 394,
+        "startChar": 0,
+        "endLine": 394,
+        "endChar": 31
+      },
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46685868_2a7472ee",
         "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-props-stack.js",
         "patchSetId": 13
