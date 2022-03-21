@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "264150d2_dda45659",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-21T18:33:09Z",
+      "side": 1,
+      "message": "lgtm now, though now we\u0027re missing an OWNER stamp for isolate.h, so +jkummerow@",
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb6877d_e5699010",
+        "filename": "src/builtins/builtins-shadowrealm-gen.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-21T18:33:09Z",
+      "side": 1,
+      "message": "Please add a comment above the `CheckAccessor` calls that these don\u0027t need to check for the exact accessor because the only time custom accessor arise is with function templates via API, and in that case the object is in dictionary mode.",
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46685868_2a7472ee",
+        "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-props-stack.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-03-21T18:33:09Z",
+      "side": 1,
+      "message": "Stack size is going to differ from arch to arch, so this is probably going to need to be bigger.",
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
