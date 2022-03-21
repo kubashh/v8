@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "31d06067_27e43ad7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-21T20:29:05Z",
+      "side": 1,
+      "message": "From earlier review comments, I assume this is outdated? Please update the patch description accordingly.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 63
+      },
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "264150d2_dda45659",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-03-21T18:33:09Z",
       "side": 1,
       "message": "lgtm now, though now we\u0027re missing an OWNER stamp for isolate.h, so +jkummerow@",
+      "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da06d377_bb877bb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-21T20:29:05Z",
+      "side": 1,
+      "message": "isolate and code-stub-assembler LGTM.",
       "revId": "85c1586ff9fff81b5db4686eb10f3e9634a11be0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
