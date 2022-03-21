@@ -33,6 +33,23 @@
       "message": "@Igor: Could you please do an OWNER review of `src/base/bits.h`? Thanks!",
       "revId": "a77c87022157d300d4d8d4bf069ddf8d32c10fe9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f0225b_8dcbb742",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-03-21T12:43:39Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a77c87022157d300d4d8d4bf069ddf8d32c10fe9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
