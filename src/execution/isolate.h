@@ -316,6 +316,17 @@ class StackMemory;
   } while (false)
 
 /**
+ * Similar to RETURN_ON_EXCEPTION_VALUE, for Maybe<T> values.
+ */
+#define MAYBE_RETURN_ON_EXCEPTION_VALUE(isolate, call, value) \
+  do {                                                        \
+    if ((call).IsNothing()) {                                 \
+      DCHECK((isolate)->has_pending_exception());             \
+      return value;                                           \
+    }                                                         \
+  } while (false)
+
+/**
  * RETURN_FAILURE_ON_EXCEPTION conditionally returns the "exception" sentinel if
  * the given MaybeHandle is empty; so it can only be used in functions with
  * return type Object, such as RUNTIME_FUNCTION(...) {...} or BUILTIN(...)
@@ -340,6 +351,16 @@ class StackMemory;
     Isolate* __isolate__ = (isolate);                                  \
     RETURN_ON_EXCEPTION_VALUE(__isolate__, call,                       \
                               ReadOnlyRoots(__isolate__).exception()); \
+  } while (false);
+
+/**
+ * Similar to RETURN_FAILURE_ON_EXCEPTION, for Maybe<T> values.
+ */
+#define MAYBE_RETURN_FAILURE_ON_EXCEPTION(isolate, call)                     \
+  do {                                                                       \
+    Isolate* __isolate__ = (isolate);                                        \
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(__isolate__, call,                       \
+                                    ReadOnlyRoots(__isolate__).exception()); \
   } while (false);
 
 /**
@@ -381,6 +402,15 @@ class StackMemory;
   } while (false)
 
 #define MAYBE_RETURN_NULL(call) MAYBE_RETURN(call, MaybeHandle<Object>())
+
+#define MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(isolate, dst, call, value) \
+  do {                                                                    \
+    Isolate* __isolate__ = (isolate);                                     \
+    if (!(call).To(&dst)) {                                               \
+      DCHECK(__isolate__->has_pending_exception());                       \
+      return value;                                                       \
+    }                                                                     \
+  } while (false)
 
 #define MAYBE_ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, dst, call) \
   do {                                                               \
