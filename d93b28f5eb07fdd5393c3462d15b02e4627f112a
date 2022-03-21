@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "217d2d26_572fac2f",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "You\u0027re introduced a recursive call here which cannot be easily resolved like in JSBoundFunction::GetName.\n\nYou should add a `STACK_CHECK(isolate, MaybeHandle\u003cString\u003e());` here to avoid stack-overflows.",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 302,
+        "endChar": 36
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c79fa74_694484fa",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "Add `STACK_CHECK` as well here.",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 36
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2c50b84_a7e30417",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "Can you add a documenting DCHECK here on what types value can be.\nI presume this can be JSFunction/JSBoundFunction/JSWrappedFunction?",
+      "range": {
+        "startLine": 348,
+        "startChar": 3,
+        "endLine": 348,
+        "endChar": 24
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c05763_e8185c13",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "Can this be a Smi? If not then we should use HeapObject for value (see comment above)",
+      "range": {
+        "startLine": 355,
+        "startChar": 19,
+        "endLine": 355,
+        "endChar": 25
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41a69d72_f4662552",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "nit: maybe move this to a separate (anonymous?) helper to make this more readable",
+      "range": {
+        "startLine": 372,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 19
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "239adc2f_6b0f11b2",
+        "filename": "src/runtime/runtime-shadow-realm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "Could this be HeapObject or even JSReceiver?",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f000b99b_1b113b15",
+        "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-bind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "nit: var \u003d\u003e let (not really important though :P)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ffce2a8_4d32c654",
+        "filename": "test/mjsunit/harmony/shadowrealm-wrapped-function-bind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-03-21T09:04:34Z",
+      "side": 1,
+      "message": "Could you also add a test that creates a very deeply nested bound function to check that we can handle .name and .length on it with only throwing exceptions and not hard crashing?\n\n bound \u003d\u003e wrapped \u003d\u003e bound \u003d\u003e wrapped \u003d\u003e ...",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "d93b28f5eb07fdd5393c3462d15b02e4627f112a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
