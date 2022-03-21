@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40a38250_91c5a3cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-03-21T10:24:13Z",
+      "side": 1,
+      "message": "The change looks good so far.\n\nFor the commit message, please provide a one line title (\u003c\u003d 70 characters) followed by an empty line. You also might want to prefix the title with [turbolizer].",
+      "revId": "7cc0a95bfafa8fdb95b10f0579e830d59e85fd2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
