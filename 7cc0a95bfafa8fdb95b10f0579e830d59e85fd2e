@@ -16,6 +16,24 @@
       "message": "The change looks good so far.\n\nFor the commit message, please provide a one line title (\u003c\u003d 70 characters) followed by an empty line. You also might want to prefix the title with [turbolizer].",
       "revId": "7cc0a95bfafa8fdb95b10f0579e830d59e85fd2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14c2dcd2_add1de06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1167225
+      },
+      "writtenOn": "2022-03-21T10:56:25Z",
+      "side": 1,
+      "message": "Thanks, I like it too!\nIf you want additional inspiration of what could be done: And at the moment, it only preserves nodes with the same id across phases, but we actually have more information with node origins (you can see it in the tooltip when hovering on a node), and highlighting all the nodes in the next phase that were lowered from the current node would make more sense. This can also work the other way around.",
+      "parentUuid": "40a38250_91c5a3cc",
+      "revId": "7cc0a95bfafa8fdb95b10f0579e830d59e85fd2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
