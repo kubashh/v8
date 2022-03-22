@@ -50,7 +50,19 @@ export class MySelection {
   }
 
   detachSelection() {
-    const result = this.selectedKeys();
+    const result = new Set();
+    for (const node of this.selection.values()) {
+      if (node.nodeLabel && node.nodeLabel.origin) {
+        result.add({
+          nodeId: node.id,
+          originNodeId: node.nodeLabel.origin.nodeId
+        });
+      } else {
+        result.add({
+          nodeId: node.id != undefined ? node.id : node
+        });
+      }
+    }
     this.clear();
     return result;
   }
