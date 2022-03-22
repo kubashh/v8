@@ -254,12 +254,14 @@ export class GraphView extends PhaseView {
     this.toolbox.appendChild(createImgInput("toggle-types", "toggle types",
       partial(this.toggleTypesAction, this)));
 
+    const adaptedSelection = this.adaptSelectionToCurrentPhase(data.data, rememberedSelection);
+
     this.phaseName = data.name;
-    this.createGraph(data.data, rememberedSelection);
+    this.createGraph(data.data, adaptedSelection);
     this.broker.addNodeHandler(this.selectionHandler);
 
-    if (rememberedSelection != null && rememberedSelection.size > 0) {
-      this.attachSelection(rememberedSelection);
+    if (adaptedSelection != null && adaptedSelection.size > 0) {
+      this.attachSelection(adaptedSelection);
       this.connectVisibleSelectedNodes();
       this.viewSelection();
     } else {
@@ -286,14 +288,14 @@ export class GraphView extends PhaseView {
     this.deleteContent();
   }
 
-  createGraph(data, rememberedSelection) {
+  createGraph(data, selection) {
     this.graph = new Graph(data);
 
     this.showControlAction(this);
 
-    if (rememberedSelection != undefined) {
+    if (selection != undefined) {
       for (const n of this.graph.nodes()) {
-        n.visible = n.visible || rememberedSelection.has(nodeToStringKey(n));
+        n.visible = n.visible || selection.has(nodeToStringKey(n));
       }
     }
 
@@ -357,6 +359,42 @@ export class GraphView extends PhaseView {
         this.setAttribute('transform', transform);
       }
     });
+  }
+
+  adaptSelectionToCurrentPhase(data, selection) {
+    const updatedGraphSelection = new Set();
+    if (!data || !(selection instanceof Set)) return updatedGraphSelection;
+    // Adding survived nodes (with the same id)
+    for (const node of data.nodes) {
+      selection.forEach(s => {
+        if (s.nodeId == node.id) {
+          updatedGraphSelection.add(this.state.selection.stringKey(node));
+          selection.delete(s);
+        }
+      });
+    }
+    // Adding children of removed nodes
+    selection.forEach(s => {
+      let isChildrenExist = false;
+      for (const node of data.nodes) {
+        if (node.nodeLabel.origin) {
+          if (node.nodeLabel.origin.nodeId == s.nodeId) {
+            updatedGraphSelection.add(this.state.selection.stringKey(node));
+            isChildrenExist = true;
+          }
+        }
+      }
+      if (isChildrenExist) {
+        selection.delete(s);
+      }
+    });
+    // Adding ancestors of selected nodes
+    selection.forEach(s => {
+      if (s.originNodeId) {
+        updatedGraphSelection.add(`${s.originNodeId}`);
+      }
+    });
+    return updatedGraphSelection;
   }
 
   attachSelection(s) {

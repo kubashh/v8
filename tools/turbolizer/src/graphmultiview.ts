@@ -61,6 +61,10 @@ export class GraphMultiView extends View {
     view.divNode.addEventListener("keyup", (e: KeyboardEvent) => {
       if (e.keyCode == 191) { // keyCode == '/'
         searchInput.focus();
+      } else if (e.keyCode == 78) { // keyCode == 'n'
+        view.displayNextGraphPhase();
+      } else if (e.keyCode == 66) { // keyCode == 'b'
+        view.displayPreviousGraphPhase();
       }
     });
     searchInput.setAttribute("value", window.sessionStorage.getItem("lastSearch") || "");
@@ -121,6 +125,34 @@ export class GraphMultiView extends View {
     const phaseId = this.sourceResolver.getPhaseIdByName(phaseName);
     this.selectMenu.selectedIndex = phaseId;
     this.displayPhase(this.sourceResolver.getPhase(phaseId), selection);
+  }
+
+  displayNextGraphPhase() {
+    let nextPhaseIndex = this.selectMenu.selectedIndex + 1;
+    while (nextPhaseIndex < this.sourceResolver.phases.length) {
+      const nextPhase = this.sourceResolver.getPhase(nextPhaseIndex);
+      if (nextPhase.type == "graph") {
+        this.selectMenu.selectedIndex = nextPhaseIndex;
+        window.sessionStorage.setItem("lastSelectedPhase", nextPhaseIndex.toString());
+        this.displayPhase(nextPhase);
+        break;
+      }
+      nextPhaseIndex += 1;
+    }
+  }
+
+  displayPreviousGraphPhase() {
+    let previousPhaseIndex = this.selectMenu.selectedIndex - 1;
+    while (previousPhaseIndex >= 0) {
+      const previousPhase = this.sourceResolver.getPhase(previousPhaseIndex);
+      if (previousPhase.type == "graph") {
+        this.selectMenu.selectedIndex = previousPhaseIndex;
+        window.sessionStorage.setItem("lastSelectedPhase", previousPhaseIndex.toString());
+        this.displayPhase(previousPhase);
+        break;
+      }
+      previousPhaseIndex -= 1;
+    }
   }
 
   hideCurrentPhase() {
