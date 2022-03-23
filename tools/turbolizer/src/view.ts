@@ -22,8 +22,8 @@ export abstract class View {
 }
 
 export abstract class PhaseView extends View {
-  public abstract initializeContent(data: any, rememberedSelection: Set<any>): void;
-  public abstract detachSelection(): Set<string>;
+  public abstract initializeContent(data: any, rememberedSelection: Map<any, any>): void;
+  public abstract detachSelection(): Map<any, any>;
   public abstract onresize(): void;
   public abstract searchInputAction(searchInput: HTMLInputElement, e: Event, onlyVisible: boolean): void;
 
