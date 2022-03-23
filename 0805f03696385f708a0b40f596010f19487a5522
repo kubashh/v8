@@ -46,6 +46,30 @@
       },
       "revId": "0805f03696385f708a0b40f596010f19487a5522",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb82f3b_83e07d28",
+        "filename": "tools/turbolizer/src/selection.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-23T15:16:21Z",
+      "side": 1,
+      "message": "If you think it\u0027s better way, then fine, I\u0027ll fix it.",
+      "parentUuid": "701e7bf9_88e75503",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 11
+      },
+      "revId": "0805f03696385f708a0b40f596010f19487a5522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
