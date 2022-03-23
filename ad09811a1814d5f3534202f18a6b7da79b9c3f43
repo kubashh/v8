@@ -16,6 +16,24 @@
       "message": "There is no real dependency between the reverted CL and crrev.com/c/3535782.\nThey don\u0027t even touch the same files. I don\u0027t think there was a need to revert this CL.",
       "revId": "ad09811a1814d5f3534202f18a6b7da79b9c3f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95db8b4b_7e1c7cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-23T22:05:41Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I misfired trying to solve a merge conflict.",
+      "parentUuid": "fdbeb699_aa7d5183",
+      "revId": "ad09811a1814d5f3534202f18a6b7da79b9c3f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
