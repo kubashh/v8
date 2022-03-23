@@ -139,7 +139,6 @@ v8_source_set("cppgc_unittests_sources") {
     "heap/cppgc/visitor-unittest.cc",
     "heap/cppgc/weak-container-unittest.cc",
     "heap/cppgc/workloads-unittest.cc",
-    "heap/cppgc/write-barrier-unittest.cc",
   ]
 
   configs = [
@@ -313,7 +312,6 @@ v8_source_set("unittests_sources") {
     "diagnostics/gdb-jit-unittest.cc",
     "execution/microtask-queue-unittest.cc",
     "heap/allocation-observer-unittest.cc",
-    "heap/barrier-unittest.cc",
     "heap/bitmap-test-utils.h",
     "heap/bitmap-unittest.cc",
     "heap/code-object-registry-unittest.cc",
