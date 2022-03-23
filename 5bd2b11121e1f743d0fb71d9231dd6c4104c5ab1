@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4235128_624c8194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-23T09:33:14Z",
+      "side": 1,
+      "message": "Thanks a lot, I tried it, works great!",
+      "revId": "5bd2b11121e1f743d0fb71d9231dd6c4104c5ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35cc4e12_cd312846",
+        "filename": "tools/turbolizer/src/graph-view.ts",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-23T09:33:14Z",
+      "side": 1,
+      "message": "This (and also above) is a quadratic-time algorithm for big selections. Since some Turbolizer graphs get really big, it might be better to make it linear. You could create a set of id\u0027s in the original selection to speed things up I think.",
+      "range": {
+        "startLine": 377,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 7
+      },
+      "revId": "5bd2b11121e1f743d0fb71d9231dd6c4104c5ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
