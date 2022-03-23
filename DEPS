@@ -83,9 +83,9 @@ deps = {
   'base/trace_event/common':
     Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + 'd115b033c4e53666b535cbd1985ffe60badad082',
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + '3444906fc96f38ef006babefe3ebbd77890c16cc',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'cb9c2ecfde4b916878f7d5c869ab8e4b52cf758f',
   'buildtools':
-    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'd8c375426d8f7f4147f7d4109bb63c12655fb8d6',
+    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'e1471b21ee9c6765ee95e9db0c76fe997ccad35c',
   'buildtools/clang_format/script':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/clang/tools/clang-format.git' + '@' + 'e435ad79c17b1888b34df88d6a30a094936e3836',
   'buildtools/linux64': {
@@ -111,7 +111,7 @@ deps = {
   'buildtools/third_party/libc++/trunk':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxx.git' + '@' + '79a2e924d96e2fc1e4b937c42efd08898fa472d7',
   'buildtools/third_party/libc++abi/trunk':
-    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + '93b8dcd57bd8ebe201ec24f7257339988ed2ef7c',
+    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + 'edde7bbc4049ae4a32257d9f16451312c763c601',
   'buildtools/third_party/libunwind/trunk':
     Var('chromium_url') + '/external/github.com/llvm/llvm-project/libunwind.git' + '@' + 'd1c7f92b8b0bff8d9f710ca40e44563a63db376e',
   'buildtools/win': {
@@ -165,7 +165,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/android_platform': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/android_platform.git' + '@' + '87b4b48de3c8204224d63612c287eb5a447a562d',
+    'url': Var('chromium_url') + '/chromium/src/third_party/android_platform.git' + '@' + '2760db43ffc8b074cb7960c90b5254f74a5c299a',
     'condition': 'checkout_android',
   },
   'third_party/android_sdk/public': {
@@ -207,7 +207,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '389f33bb40a3345b73a68613178c789476ceaecf',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + '180b8d540d9f9ae3e24cfe564f02044133c1c070',
     'condition': 'checkout_android',
   },
   'third_party/colorama/src': {
@@ -215,7 +215,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '76979dae56c08d24b092347a1bdd2abe474555a3',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'd8464b85288e18674dc58896b6548fd24b220890',
   'third_party/fuchsia-sdk': {
     'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-sdk.git' + '@' + '7c9c220d13ab367d49420144a257886ebfbce278',
     'condition': 'checkout_fuchsia',
@@ -224,7 +224,7 @@ deps = {
     'url': Var('chromium_url') + '/external/github.com/google/benchmark.git' + '@' + '60b16f11a30146ac825b7d99be0b9887c24b254a',
   },
   'third_party/googletest/src':
-    Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + 'b007c54f2944e193ac44fba1bc997cb65826a0b9',
+    Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + '1754febbaa863ae95f34c4aff46162f11186a899',
   'third_party/icu':
     Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'a9359a84a3969b3019db7d62899afb19642eefcd',
   'third_party/instrumented_libraries':
@@ -272,9 +272,9 @@ deps = {
       'condition': 'checkout_android',
   },
   'third_party/zlib':
-    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '923f5eb4bfa403d0f14d9cbca2cdf7fa7416ee67',
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '16b8c02648faf08794ed0048c0fb1427909e9a46',
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'a15c2dfa35177dc21577a1760e8f4c0c1e854da6',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '6d9216fdfeb45c381a23f3909b693df72623d015',
   'tools/clang/dsymutil': {
     'packages': [
       {
