@@ -39,6 +39,30 @@
       },
       "revId": "5bd2b11121e1f743d0fb71d9231dd6c4104c5ab1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "189b473b_4af185af",
+        "filename": "tools/turbolizer/src/graph-view.ts",
+        "patchSetId": 6
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-23T13:00:25Z",
+      "side": 1,
+      "message": "I guess in this situation map, allow to save the functionality and get rid of the quadratic-time algorithm.",
+      "parentUuid": "35cc4e12_cd312846",
+      "range": {
+        "startLine": 377,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 7
+      },
+      "revId": "5bd2b11121e1f743d0fb71d9231dd6c4104c5ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
