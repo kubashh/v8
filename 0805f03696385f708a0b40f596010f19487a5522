@@ -22,6 +22,30 @@
       },
       "revId": "0805f03696385f708a0b40f596010f19487a5522",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "701e7bf9_88e75503",
+        "filename": "tools/turbolizer/src/selection.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-23T15:15:04Z",
+      "side": 1,
+      "message": "Yes, probably it will be more clear, but we will provide data (in this case, all fields of the node) that we are not going to use.",
+      "parentUuid": "18de28e6_8b3dcc00",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 11
+      },
+      "revId": "0805f03696385f708a0b40f596010f19487a5522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
