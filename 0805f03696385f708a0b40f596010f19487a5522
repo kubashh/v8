@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18de28e6_8b3dcc00",
+        "filename": "tools/turbolizer/src/selection.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-23T15:03:46Z",
+      "side": 1,
+      "message": "Why not just make it a map from node id to the node itself? I think that would be easier to understand.",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 11
+      },
+      "revId": "0805f03696385f708a0b40f596010f19487a5522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
