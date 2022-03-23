@@ -254,12 +254,14 @@ export class GraphView extends PhaseView {
     this.toolbox.appendChild(createImgInput("toggle-types", "toggle types",
       partial(this.toggleTypesAction, this)));
 
+    const adaptedSelection = this.adaptSelectionToCurrentPhase(data.data, rememberedSelection);
+
     this.phaseName = data.name;
-    this.createGraph(data.data, rememberedSelection);
+    this.createGraph(data.data, adaptedSelection);
     this.broker.addNodeHandler(this.selectionHandler);
 
-    if (rememberedSelection != null && rememberedSelection.size > 0) {
-      this.attachSelection(rememberedSelection);
+    if (adaptedSelection != null && adaptedSelection.size > 0) {
+      this.attachSelection(adaptedSelection);
       this.connectVisibleSelectedNodes();
       this.viewSelection();
     } else {
@@ -286,14 +288,14 @@ export class GraphView extends PhaseView {
     this.deleteContent();
   }
 
-  createGraph(data, rememberedSelection) {
+  createGraph(data, selection) {
     this.graph = new Graph(data);
 
     this.showControlAction(this);
 
-    if (rememberedSelection != undefined) {
+    if (selection != undefined) {
       for (const n of this.graph.nodes()) {
-        n.visible = n.visible || rememberedSelection.has(nodeToStringKey(n));
+        n.visible = n.visible || selection.has(nodeToStringKey(n));
       }
     }
 
@@ -357,6 +359,32 @@ export class GraphView extends PhaseView {
         this.setAttribute('transform', transform);
       }
     });
+  }
+
+  adaptSelectionToCurrentPhase(data, selection) {
+    const updatedGraphSelection = new Set();
+    if (!data || !(selection instanceof Map)) return updatedGraphSelection;
+    // Adding survived nodes (with the same id)
+    for (const node of data.nodes) {
+      if (selection.has(node.id)) {
+        updatedGraphSelection.add(this.state.selection.stringKey(node));
+        selection.delete(node.id);
+      }
+    }
+    // Adding children of removed nodes
+    for (const node of data.nodes) {
+      const nodeOrigin = node.nodeLabel.origin;
+      if (nodeOrigin && selection.has(nodeOrigin.nodeId)) {
+        updatedGraphSelection.add(this.state.selection.stringKey(node));
+      }
+    }
+    // Adding ancestors of removed nodes
+    selection.forEach(s => {
+      if (s.originNodeId) {
+        updatedGraphSelection.add(`${s.originNodeId}`);
+      }
+    });
+    return updatedGraphSelection;
   }
 
   attachSelection(s) {
