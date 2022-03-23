@@ -16,6 +16,23 @@
       "message": "Tests seem to pass. AFAIK we should never get a different-length (or different contents) ThinString from the internalized string.",
       "revId": "f6a86722b09761462aaf5639a35472b0c780ce08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cad6c32_6f2c3f99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-23T09:27:47Z",
+      "side": 1,
+      "message": "seems reasonable to me, thanks",
+      "revId": "f6a86722b09761462aaf5639a35472b0c780ce08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
