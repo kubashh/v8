@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a699c4_90a17b37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-03-24T09:21:41Z",
+      "side": 1,
+      "message": "Hi Tobias, this is the CL for the linear-time scheduler for WASM SMID according to your suggestion in the design doc (https://docs.google.com/document/d/1VWZbkO5c_DdxlJObmSLN_9zQUZELVgXyudbpzv5WQM0/edit?disco\u003dAAAATHEQuSY).\n\nDo you think we should start reviewing it separately now or together with other revec CLs?",
+      "revId": "f0b0335371c97500f6f9944f3f005b523d3632ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
