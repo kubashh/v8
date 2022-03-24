@@ -87,6 +87,30 @@
       },
       "revId": "a13355b46bd5fecadbb1338c1b7f8d0449e5fdfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d059bd_02839bd3",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-03-24T10:01:44Z",
+      "side": 1,
+      "message": "I\u0027m fine with either approach. I actually like that the full verification would allow us to have a more precise check against expected_marked_bytes.",
+      "parentUuid": "412d1397_d9cca5ab",
+      "range": {
+        "startLine": 265,
+        "startChar": 23,
+        "endLine": 265,
+        "endChar": 52
+      },
+      "revId": "a13355b46bd5fecadbb1338c1b7f8d0449e5fdfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
