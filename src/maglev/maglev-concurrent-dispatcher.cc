@@ -100,6 +100,7 @@ CompilationJob::Status MaglevCompilationJob::PrepareJobImpl(Isolate* isolate) {
 CompilationJob::Status MaglevCompilationJob::ExecuteJobImpl(
     RuntimeCallStats* stats, LocalIsolate* local_isolate) {
   LocalIsolateScope scope{info(), local_isolate};
+  info()->set_local_isolate(local_isolate);
   maglev::MaglevCompiler::Compile(info()->toplevel_compilation_unit());
   // TODO(v8:7700): Actual return codes.
   return CompilationJob::SUCCEEDED;

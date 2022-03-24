@@ -14,6 +14,7 @@ namespace v8 {
 namespace internal {
 
 class Isolate;
+class LocalIsolate;
 class PersistentHandles;
 class SharedFunctionInfo;
 class Zone;
@@ -53,6 +54,11 @@ class MaglevCompilationInfo final {
   }
   Handle<JSFunction> function() const { return function_; }
 
+  LocalIsolate* local_isolate() const { return local_isolate_; }
+  void set_local_isolate(LocalIsolate* local_isolate) {
+    local_isolate_ = local_isolate;
+  }
+
   bool has_graph_labeller() const { return !!graph_labeller_; }
   void set_graph_labeller(MaglevGraphLabeller* graph_labeller);
   MaglevGraphLabeller* graph_labeller() const {
@@ -88,6 +94,7 @@ class MaglevCompilationInfo final {
 
   Zone zone_;
   Isolate* const isolate_;
+  LocalIsolate* local_isolate_;
   const std::unique_ptr<compiler::JSHeapBroker> broker_;
   // Must be initialized late since it requires an initialized heap broker.
   MaglevCompilationUnit* toplevel_compilation_unit_ = nullptr;

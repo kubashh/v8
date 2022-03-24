@@ -172,7 +172,7 @@ class MaglevGraphBuilder {
   typename compiler::ref_traits<T>::ref_type GetRefOperand(int operand_index) {
     return MakeRef(broker(),
                    Handle<T>::cast(iterator_.GetConstantForIndexOperand(
-                       operand_index, isolate())));
+                       operand_index, local_isolate())));
   }
 
   void SetAccumulator(ValueNode* node) {
@@ -337,8 +337,9 @@ class MaglevGraphBuilder {
   }
   const FeedbackNexus feedback_nexus(int slot_operand_index) const {
     // TODO(leszeks): Use JSHeapBroker here.
-    return FeedbackNexus(feedback().object(),
-                         GetSlotOperand(slot_operand_index));
+    return FeedbackNexus(
+        feedback().object(), GetSlotOperand(slot_operand_index),
+        NexusConfig::FromBackgroundThread(isolate(), local_isolate()->heap()));
   }
   const compiler::BytecodeArrayRef& bytecode() const {
     return compilation_unit_->bytecode();
@@ -347,6 +348,9 @@ class MaglevGraphBuilder {
     return compilation_unit_->bytecode_analysis();
   }
   Isolate* isolate() const { return compilation_unit_->isolate(); }
+  LocalIsolate* local_isolate() const {
+    return compilation_unit_->local_isolate();
+  }
   Zone* zone() const { return compilation_unit_->zone(); }
   int parameter_count() const { return compilation_unit_->parameter_count(); }
   int register_count() const { return compilation_unit_->register_count(); }

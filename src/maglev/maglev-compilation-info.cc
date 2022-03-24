@@ -74,6 +74,8 @@ MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
   broker()->InitializeAndStartSerializing();
   broker()->StopSerializing();
 
+  local_isolate_ = isolate_->AsLocalIsolate();
+
   toplevel_compilation_unit_ =
       MaglevCompilationUnit::New(zone(), this, function);
 }

@@ -29,6 +29,10 @@ compiler::JSHeapBroker* MaglevCompilationUnit::broker() const {
 
 Isolate* MaglevCompilationUnit::isolate() const { return info_->isolate(); }
 
+LocalIsolate* MaglevCompilationUnit::local_isolate() const {
+  return info_->local_isolate();
+}
+
 Zone* MaglevCompilationUnit::zone() const { return info_->zone(); }
 
 bool MaglevCompilationUnit::has_graph_labeller() const {
