@@ -1326,8 +1326,16 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   THREAD_LOCAL_TOP_ACCESSOR(ExternalCallbackScope*, external_callback_scope)
 
-  THREAD_LOCAL_TOP_ACCESSOR(StateTag, current_vm_state)
   THREAD_LOCAL_TOP_ACCESSOR(EmbedderState*, current_embedder_state)
+
+  inline void set_current_vm_state(StateTag state_tag) {
+    thread_local_top()->current_vm_state_.store(state_tag,
+                                                std::memory_order_release);
+  }
+  inline StateTag current_vm_state() const {
+    return thread_local_top()->current_vm_state_.load(
+        std::memory_order_acquire);
+  }
 
   void SetData(uint32_t slot, void* data) {
     DCHECK_LT(slot, Internals::kNumIsolateDataSlots);

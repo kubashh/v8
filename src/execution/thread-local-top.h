@@ -146,7 +146,7 @@ class ThreadLocalTop {
   Address js_entry_sp_;
   // The external callback we're currently in.
   ExternalCallbackScope* external_callback_scope_;
-  StateTag current_vm_state_;
+  std::atomic<StateTag> current_vm_state_;
   EmbedderState* current_embedder_state_;
 
   // Call back function to report unsafe JS accesses.
