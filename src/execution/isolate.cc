@@ -3232,6 +3232,8 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
   // before it is entered.
   thread_manager_ = new ThreadManager(this);
 
+  current_vm_state_.store(EXTERNAL, std::memory_order_release);
+
   handle_scope_data_.Initialize();
 
   // A shared Isolate is used to support JavaScript shared memory features
