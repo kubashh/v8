@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba3c6360_e6a2a0f0",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30498967_eece960e",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "918322ef_bd99be32",
@@ -424,6 +442,24 @@
       "side": 1,
       "message": "Please go over the whole CL again and fix the comments accordingly.",
       "parentUuid": "fa22c127_41d45a02",
+      "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3bf50d6_330bc2c6",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01463ae6_8ff258e2",
       "revId": "b27c7179a0b9fc97104062a6d8fa1ceec3eeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

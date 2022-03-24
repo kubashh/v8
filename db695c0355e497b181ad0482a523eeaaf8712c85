@@ -142,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f396afa8_076c5c0e",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "We are working on getting some of this documentation linked here as we continue to iterate on this",
+      "parentUuid": "5e3bc0f9_362b338a",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5b3409f0_3da01ca8",
         "filename": "src/compiler/machine-operator.cc",
         "patchSetId": 5
@@ -180,6 +198,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8fcf1a_e2b7cee4",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d57d317_979f6b57",
+      "range": {
+        "startLine": 717,
+        "startChar": 50,
+        "endLine": 717,
+        "endChar": 55
+      },
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb774c04_4a9b9eaf",
@@ -193,6 +235,30 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This should be \"mark_id\", I think.",
+      "range": {
+        "startLine": 285,
+        "startChar": 34,
+        "endLine": 285,
+        "endChar": 39
+      },
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4eb91e_c8b5d1ff",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb774c04_4a9b9eaf",
       "range": {
         "startLine": 285,
         "startChar": 34,
@@ -220,6 +286,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "478c0518_1ab6f0af",
+        "filename": "src/diagnostics/x64/disasm-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "208cf7ad_706dbf7c",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3e8202b_c8f55862",
@@ -233,6 +317,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "Also here, is there a way to express this via existing assembler methods instead of hard-coding the bytes?",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "013cf383_908fe556",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3e8202b_c8f55862",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -256,6 +358,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26624356_ea612f28",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "The current solution implemented is good for small numbers of traces, but suboptimal. One way to make this easier/simpler would be to have something that allows to know which function we are currently decoding? I found a couple methods, but they involve doing searching across the module, and I can only see them used in debugging",
+      "parentUuid": "812453db_7dc155f4",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbe320de_6f615e86",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 5
@@ -267,6 +387,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This is missing a trailing underscore (see style guide), and I suggest to store a single pointer instead of an iterator (see below).",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e171283c_9491ef19",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2179,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbe320de_6f615e86",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -305,6 +443,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3fb6187_111b04e4",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad955810_5762b57c",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "051b6c51_1729d688",
@@ -318,6 +474,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This might access after the end of the vector.\nPlease try to rewrite this whole loop to make it easier to read. Maybe something like:\n\n  for (; inst_traces_it !\u003d this-\u003einst_traces_.end() \u0026\u0026\n         inst_traces_it-\u003efirst \u003d\u003d i;\n         ++inst_traces_it) {\n    ...\n  }",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84a596a2_b9939891",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "051b6c51_1729d688",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -339,6 +513,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3548a1b4_b2860a89",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f415e84_d7c7147c",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55501dbb_fe3c833f",
@@ -356,6 +548,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c705e706_1be237ac",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55501dbb_fe3c833f",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fb85c3f_fec25b2f",
@@ -369,6 +579,24 @@
       "writtenOn": "2022-03-16T12:45:37Z",
       "side": 1,
       "message": "This needs more documentation.",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655fc29f_edd1e40c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1681,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-24T20:32:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fb85c3f_fec25b2f",
       "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
