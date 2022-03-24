@@ -783,6 +783,8 @@ class Heap {
         std::min(max_old_generation_size(), std::max(heap_limit, min_limit)));
   }
 
+  void EnsureWasmCanonicalRttsSize(int length);
+
   // ===========================================================================
   // Initialization. ===========================================================
   // ===========================================================================
