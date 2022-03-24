@@ -139,9 +139,6 @@ Handle<DescriptorArray> CreateArrayDescriptorArray(
   return descriptors;
 }
 
-}  // namespace
-
-// TODO(jkummerow): Move these elsewhere.
 Handle<Map> CreateStructMap(Isolate* isolate, const WasmModule* module,
                             int struct_index, Handle<Map> opt_rtt_parent,
                             Handle<WasmInstanceObject> instance) {
@@ -213,11 +210,30 @@ Handle<Map> CreateFuncRefMap(Isolate* isolate, const WasmModule* module,
   return map;
 }
 
-void CreateMapForType(Isolate* isolate, const WasmModule* module,
-                      int type_index, Handle<WasmInstanceObject> instance,
-                      Handle<FixedArray> maps) {
+void GetOrCreatCanonicalMapForType(Isolate* isolate, const WasmModule* module,
+                                   int type_index,
+                                   Handle<WasmInstanceObject> instance,
+                                   Handle<FixedArray> maps) {
   // Recursive calls for supertypes may already have created this map.
   if (maps->get(type_index).IsMap()) return;
+
+  Handle<WeakArrayList> canonical_rtts;
+  uint32_t canonical_type_index =
+      module->isorecursive_canonical_type_ids[type_index];
+
+  if (FLAG_wasm_type_canonicalization) {
+    // Try to find the canonical map for this type in the isolate store.
+    canonical_rtts = handle(isolate->heap()->wasm_canonical_rtts(), isolate);
+    DCHECK_GT(static_cast<uint32_t>(canonical_rtts->length()),
+              canonical_type_index);
+    MaybeObject maybe_canonical_map = canonical_rtts->Get(canonical_type_index);
+    if (maybe_canonical_map.IsStrongOrWeak() &&
+        maybe_canonical_map.GetHeapObject().IsMap()) {
+      maps->set(type_index, maybe_canonical_map.GetHeapObject());
+      return;
+    }
+  }
+
   Handle<Map> rtt_parent;
   // If the type with {type_index} has an explicit supertype, make sure the
   // map for that supertype is created first, so that the supertypes list
@@ -226,7 +242,7 @@ void CreateMapForType(Isolate* isolate, const WasmModule* module,
   if (supertype != kNoSuperType) {
     // This recursion is safe, because kV8MaxRttSubtypingDepth limits the
     // number of recursive steps, so we won't overflow the stack.
-    CreateMapForType(isolate, module, supertype, instance, maps);
+    GetOrCreatCanonicalMapForType(isolate, module, supertype, instance, maps);
     rtt_parent = handle(Map::cast(maps->get(supertype)), isolate);
   }
   Handle<Map> map;
@@ -239,12 +255,16 @@ void CreateMapForType(Isolate* isolate, const WasmModule* module,
       break;
     case TypeDefinition::kFunction:
       // TODO(7748): Create funcref RTTs lazily?
-      // TODO(7748): Canonicalize function maps (cross-module)?
       map = CreateFuncRefMap(isolate, module, rtt_parent, instance);
       break;
   }
+  if (FLAG_wasm_type_canonicalization) {
+    canonical_rtts->Set(canonical_type_index, HeapObjectReference::Weak(*map));
+  }
   maps->set(type_index, *map);
 }
+
+}  // namespace
 
 // A helper class to simplify instantiating a module from a module object.
 // It closes over the {Isolate}, the {ErrorThrower}, etc.
@@ -643,10 +663,19 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   // list.
   //--------------------------------------------------------------------------
   if (enabled_.has_gc()) {
+    if (FLAG_wasm_type_canonicalization) {
+      uint32_t maximum_canonical_type_index =
+          *std::max_element(module_->isorecursive_canonical_type_ids.begin(),
+                            module_->isorecursive_canonical_type_ids.end());
+      // Make sure all canonical indices have been set.
+      DCHECK_NE(maximum_canonical_type_index, kNoSuperType);
+      isolate_->heap()->EnsureWasmCanonicalRttsSize(
+          maximum_canonical_type_index + 1);
+    }
     Handle<FixedArray> maps = isolate_->factory()->NewFixedArray(
         static_cast<int>(module_->types.size()));
     for (uint32_t index = 0; index < module_->types.size(); index++) {
-      CreateMapForType(isolate_, module_, index, instance, maps);
+      GetOrCreatCanonicalMapForType(isolate_, module_, index, instance, maps);
     }
     instance->set_managed_object_maps(*maps);
   }

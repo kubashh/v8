@@ -396,6 +396,13 @@ class WeakArrayList
       Isolate* isolate, Handle<WeakArrayList> array, int length,
       AllocationType allocation = AllocationType::kYoung);
 
+  // If {array.length()} is less than {length}, return a new array with the same
+  // elements up to {array.length()} and additional {undefined} elements equal
+  // to the difference. Otherwise, return {array}.
+  static Handle<WeakArrayList> Grow(
+      Isolate* isolate, Handle<WeakArrayList> array, int length,
+      AllocationType allocation = AllocationType::kYoung);
+
   // Returns the number of non-cleaned weak references in the array.
   int CountLiveWeakReferences() const;
 
