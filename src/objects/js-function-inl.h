@@ -134,6 +134,18 @@ void JSFunction::SetOptimizationMarker(OptimizationMarker marker) {
   feedback_vector().SetOptimizationMarker(marker);
 }
 
+OptimizationMarker JSFunction::osr_optimization_marker() {
+  DCHECK(has_feedback_vector());
+  return feedback_vector().osr_optimization_marker();
+}
+
+void JSFunction::set_osr_optimization_marker(OptimizationMarker marker) {
+  DCHECK(has_feedback_vector());
+  DCHECK(ChecksOptimizationMarker());
+  DCHECK(!ActiveTierIsTurbofan());
+  feedback_vector().set_osr_optimization_marker(marker);
+}
+
 bool JSFunction::has_feedback_vector() const {
   return shared().is_compiled() &&
          raw_feedback_cell().value().IsFeedbackVector();

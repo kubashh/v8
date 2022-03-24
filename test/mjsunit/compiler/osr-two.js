@@ -14,6 +14,8 @@ function f(x) {
       inner--;
       if (inner == 5) {
         %OptimizeOsr();
+      } else if (inner == 6) {
+        %FinalizeOptimization();
       }
     }
     outer--;
