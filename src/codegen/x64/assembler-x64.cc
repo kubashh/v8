@@ -22,6 +22,7 @@
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/string-constants.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/flags/flags.h"
 #include "src/init/v8.h"
 
 namespace v8 {
@@ -2057,6 +2058,43 @@ void Assembler::Nop(int n) {
     pc_ += nop_bytes;
     n -= nop_bytes;
   } while (n);
+}
+
+void Assembler::emit_trace_instruction(Immediate markid) {
+  EnsureSpace ensure_space(this);
+  if (FLAG_wasm_trace_native != nullptr &&
+      !strcmp(FLAG_wasm_trace_native, "cpuid")) {
+    // optionally selected cpuid sequence
+    // load imm into eax
+    // low 16 bits is the magic number, high 16 bits is the low 16 bits markid
+    // finally mask the entire thing to 32 bits
+    // uint32_t imm = (0x4711 | ((markid.value_ & 0xFFFF) << 16)) & 0xFFFFFFFF;
+    // we can do this more succinctly and efficently in raw asm hex
+    pushq(rax);
+    pushq(rbx);
+    pushq(rcx);
+    pushq(rdx);
+    movl(rax, markid);
+    shll(rax, Immediate(16));
+    orl(rax, Immediate(0x4711));
+    cpuid();
+    popq(rax);
+    popq(rbx);
+    popq(rcx);
+    popq(rdx);
+  } else {
+    // this is the default, triple-nop sequence (sscmark)
+    // load imm into ebx
+    // triple-nop prefixed by 0x64 and 0x67
+    pushq(rbx);
+    movl(rbx, markid);
+    emit(0x64);
+    emit(0x67);
+    nop();
+    nop();
+    nop();
+    popq(rbx);
+  }
 }
 
 void Assembler::popq(Register dst) {
