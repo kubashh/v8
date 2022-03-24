@@ -4235,6 +4235,16 @@ Handle<WeakArrayList> WeakArrayList::EnsureSpace(Isolate* isolate,
   return array;
 }
 
+Handle<WeakArrayList> WeakArrayList::Grow(Isolate* isolate,
+                                          Handle<WeakArrayList> array,
+                                          int length,
+                                          AllocationType allocation) {
+  if (length <= array->length()) return array;
+  auto result = EnsureSpace(isolate, array, length, allocation);
+  result->set_length(length);
+  return result;
+}
+
 int WeakArrayList::CountLiveWeakReferences() const {
   int live_weak_references = 0;
   for (int i = 0; i < length(); i++) {

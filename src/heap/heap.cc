@@ -2183,6 +2183,11 @@ void Heap::CheckCollectionRequested() {
                     current_gc_callback_flags_);
 }
 
+void Heap::EnsureWasmCanonicalRttsSize(int length) {
+  set_wasm_canonical_rtts(*WeakArrayList::Grow(
+      isolate_, handle(wasm_canonical_rtts(), isolate_), length));
+}
+
 void Heap::UpdateSurvivalStatistics(int start_new_space_size) {
   if (start_new_space_size == 0) return;
 
