@@ -22,6 +22,30 @@
       },
       "revId": "a13355b46bd5fecadbb1338c1b7f8d0449e5fdfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f669e6f_24e76d79",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-03-24T08:31:08Z",
+      "side": 1,
+      "message": "\u003e I think I understand now why you added this method (verifying young gen marking should only count the bytes marked by the young gen gc).\n\u003e However, would it not be easier to let the marking verifier verify old objects as well? Verification will take longer, but this is an expensive step anyway that is not run in production. If the verifier counts all objects, you could just return `marked_bytes_so_far_` which will make this method redundant, and would simplify the verifier (since it no longer needs to take collection type into account).\n\u003e Wdyt?\n\nThe more we slow down DCHECK builds the further we are away from production (and production timings). To avoid issues where DCHECK builds don\u0027t repro issues anymore, I\u0027d suggest verifying the delta if easily possible.\n\n(Thinking of cases where regular heap is \u003e10x more than young gen which may happen more and more.)",
+      "parentUuid": "8f2aa7b9_0cf4f285",
+      "range": {
+        "startLine": 265,
+        "startChar": 23,
+        "endLine": 265,
+        "endChar": 52
+      },
+      "revId": "a13355b46bd5fecadbb1338c1b7f8d0449e5fdfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
