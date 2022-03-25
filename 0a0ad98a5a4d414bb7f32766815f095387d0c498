@@ -16,6 +16,23 @@
       "message": "Thank you all for reviewing!",
       "revId": "0a0ad98a5a4d414bb7f32766815f095387d0c498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514a5a0c_f97bd06e",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-03-25T19:07:52Z",
+      "side": 1,
+      "message": "Hello,\n\ngcc is throwing the following compile time error:\n```\nerror: variable \u0027pending_exception\u0027 set but not used\n```\nIs the variable needed and if so should we add a `USE()` expression?",
+      "revId": "0a0ad98a5a4d414bb7f32766815f095387d0c498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
