@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc8fb68e_4660ce52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-25T13:46:55Z",
+      "side": 1,
+      "message": "If cyclic dependency isn\u0027t a problem, sure.",
+      "parentUuid": "81da79c6_cc85f4fe",
+      "revId": "0b47b3a99438e9658ae2a43dfe2e6c63e9001327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5211ea17_9bf94542",
@@ -103,6 +121,30 @@
       "side": 1,
       "message": "I think the best solution here would be to use the above mentioned import type and migrate DEFAULT_NODE_BUBBLE_RADIUS to constants.ts",
       "parentUuid": "9eab3509_ab9386ab",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 31
+      },
+      "revId": "0b47b3a99438e9658ae2a43dfe2e6c63e9001327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02526257_a71e875f",
+        "filename": "tools/turbolizer/src/view.ts",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-25T13:46:55Z",
+      "side": 1,
+      "message": "Decided to leave it as is.",
+      "parentUuid": "04cb789b_09ea0212",
       "range": {
         "startLine": 5,
         "startChar": 0,
