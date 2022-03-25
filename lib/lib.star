@@ -339,7 +339,58 @@ def v8_basic_builder(defaults, **kwargs):
     kwargs["properties"] = properties
     kwargs.setdefault("resultdb_settings", resultdb.settings(enable = True))
     kwargs = fix_args(defaults, **kwargs)
+
+    description = kwargs.pop("description", None)
+    if description:
+        kwargs["description_html"] = to_html(
+            kwargs["name"],
+            kwargs["bucket"],
+            description,
+        )
     luci.builder(**kwargs)
+
+def to_html(name, bucket, description):
+    html = "%s<br/><br/>" % description["purpose"]
+    request = description.get("request", None)
+    if request:
+        html += "Request: <a href=\"%s\">%s</a><br/>" % (request, request)
+    equivalent = description.get("equivalent", None)
+    if bucket.startswith("ci"):
+        html += "CQ"
+        cq_base = description.get("cq_base", None)
+        if cq_base:
+            equivalent = cq_base + ("_ng" if name.endswith(" - compiler") else "_ng_triggered")
+    elif bucket.startswith("try"):
+        html += "CQ"
+        ci_base = description.get("ci_base", None)
+        if ci_base:
+            equivalent = ci_base + ("" if name.endswith("_triggered") else " - compiler")
+    html += " equivalent: <a href=\"https://ci.chromium.org/p/v8/builders/%s/%s\">%s</a><br/>" % (
+        bucket,
+        equivalent,
+        equivalent,
+    )
+    triggers = description.get("triggers", None)
+    if triggers:
+        html += "Triggers: <a href=\"https://ci.chromium.org/p/v8/builders/%s/%s\">%s</a><br/>" % (
+            bucket,
+            triggers,
+            triggers,
+        )
+    triggered_by = description.get("triggered by", None)
+    if triggered_by:
+        html += "Triggered by: <a href=\"https://ci.chromium.org/p/v8/builders/%s/%s\">%s</a><br/>" % (
+            bucket,
+            triggered_by,
+            triggered_by,
+        )
+    if name.endswith(" - compiler") or name.endswith("_ng"):
+        html += "<a href='https://source.chromium.org/chromium/chromium/src/+/main:v8/infra/mb/mb_config.pyl?q=%22%27" + \
+                name + "%27%22'>Compiler arguments</a><br/>"
+    else:
+        html += "<a href='https://source.chromium.org/chromium/chromium/src/+/main:v8/infra/testing/builders.pyl?q=%22%27" + \
+                name + "%27%22'>Tester configuration</a><br/>"
+    return html
 
 def multibranch_builder(**kwargs):
     added_builders = []
@@ -517,6 +568,11 @@ def ci_pair_factory(func):
 
         if not type(tester_close) == "NoneType":
             tester_kwargs["close_tree"] = tester_close
+
+        description = kwargs.pop("description", None)
+        if description:
+            builder_kwargs["description"] = description
+            tester_kwargs["description"] = description
 
         return [
             func(**builder_kwargs),
