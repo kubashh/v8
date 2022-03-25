@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5211ea17_9bf94542",
+        "filename": "tools/turbolizer/src/view.ts",
+        "patchSetId": 12
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-25T12:24:22Z",
+      "side": 1,
+      "message": "The build script warns about a cyclic dependency. Perhaps using `import type` could help?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 31
+      },
+      "revId": "0b47b3a99438e9658ae2a43dfe2e6c63e9001327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
