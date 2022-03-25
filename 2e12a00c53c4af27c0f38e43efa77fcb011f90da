@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58996b4b_69c562b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-25T15:02:55Z",
+      "side": 1,
+      "message": "Clashes lightly with your CL, but should be easy enough to fix.",
+      "revId": "2e12a00c53c4af27c0f38e43efa77fcb011f90da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
