@@ -16,6 +16,23 @@
       "message": "Friendly ping to PTAL. Thanks very much!",
       "revId": "e77d161327ab267fdf1d503e1c076867445a9388",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "895c1792_9274032b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-03-25T18:54:22Z",
+      "side": 1,
+      "message": "lgtm. thanks!",
+      "revId": "e77d161327ab267fdf1d503e1c076867445a9388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
