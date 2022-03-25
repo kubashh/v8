@@ -39,6 +39,30 @@
       },
       "revId": "a5544d9e7565af9fb9ca2f54c21d9de089b5a721",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cff064_cbef99a8",
+        "filename": "tools/turbolizer/src/graph-view.ts",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-03-25T12:01:05Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a good idea. I had insufficient user experience for this. Thanks.",
+      "parentUuid": "1b9c4692_d07d53f9",
+      "range": {
+        "startLine": 379,
+        "startChar": 8,
+        "endLine": 379,
+        "endChar": 36
+      },
+      "revId": "a5544d9e7565af9fb9ca2f54c21d9de089b5a721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
