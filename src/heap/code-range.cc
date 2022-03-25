@@ -4,12 +4,18 @@
 
 #include "src/heap/code-range.h"
 
+#include "include/v8config.h"
 #include "src/base/bits.h"
 #include "src/base/lazy-instance.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
 #include "src/heap/heap-inl.h"
 #include "src/utils/allocation.h"
+
+#if V8_OS_MACOS
+#include <mach/mach.h>
+#include <mach/mach_vm.h>
+#endif
 
 namespace v8 {
 namespace internal {
@@ -191,6 +197,7 @@ uint8_t* CodeRange::RemapEmbeddedBuiltins(Isolate* isolate,
   }
 
   const size_t kAllocatePageSize = page_allocator()->AllocatePageSize();
+  const size_t kCommitPageSize = page_allocator()->CommitPageSize();
   size_t allocate_code_size =
       RoundUp(embedded_blob_code_size, kAllocatePageSize);
 
@@ -207,8 +214,34 @@ uint8_t* CodeRange::RemapEmbeddedBuiltins(Isolate* isolate,
         isolate, "Can't allocate space for re-embedded builtins");
   }
 
-  size_t code_size =
-      RoundUp(embedded_blob_code_size, page_allocator()->CommitPageSize());
+  size_t code_size = RoundUp(embedded_blob_code_size, kCommitPageSize);
+
+#if V8_OS_MACOS
+  // Builtins should start at a page boundary, see
+  // platform-embedded-file-writer-mac.cc.
+  if ((reinterpret_cast<uintptr_t>(embedded_blob_code) &
+       (kCommitPageSize - 1)) == 0) {
+    vm_prot_t cur_protection = VM_PROT_EXECUTE | VM_PROT_READ;
+    vm_prot_t max_protection;
+    // Asks the kernel to remap *on top* of an existing mapping, rather than
+    // copying the data.
+    int flags = VM_FLAGS_FIXED | VM_FLAGS_OVERWRITE;
+    mach_vm_address_t target =
+        reinterpret_cast<mach_vm_address_t>(embedded_blob_code_copy);
+    kern_return_t ret = mach_vm_remap(
+        mach_task_self(), &target, code_size, 0, flags, mach_task_self(),
+        reinterpret_cast<mach_vm_address_t>(embedded_blob_code), FALSE,
+        &cur_protection, &max_protection, VM_INHERIT_NONE);
+    CHECK_EQ(ret, KERN_SUCCESS);
+    // Did we get the address we wanted?
+    CHECK_EQ(target,
+             reinterpret_cast<mach_vm_address_t>(embedded_blob_code_copy));
+
+    embedded_blob_code_copy_.store(embedded_blob_code_copy,
+                                   std::memory_order_release);
+    return embedded_blob_code_copy;
+  }
+#endif  // V8_OS_MACOS
 
   if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
                                         PageAllocator::kReadWrite)) {
