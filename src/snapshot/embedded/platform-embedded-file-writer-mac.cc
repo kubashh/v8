@@ -70,8 +70,23 @@ void PlatformEmbeddedFileWriterMac::AlignToCodeAlignment() {
   STATIC_ASSERT(64 >= kCodeAlignment);
   fprintf(fp_, ".balign 64\n");
 #else
-  STATIC_ASSERT(32 >= kCodeAlignment);
-  fprintf(fp_, ".balign 32\n");
+
+#if !V8_TARGET_ARCH_ARM64
+#error "Unsupported target architecture"
+#endif
+
+  // ARM64 macOS has a 16kiB page size. Since we want to remap it on the heap,
+  // needs to be page-aligned.
+  fprintf(fp_, ".balign 16384\n");
+#endif
+}
+
+void PlatformEmbeddedFileWriterMac::PaddingAfterCode() {
+#if V8_TARGET_ARCH_ARM64
+  // ARM64 macOS has a 16kiB page size. Since we want to remap builtins on the
+  // heap, make sure that the trailing part of the page doesn't contain anything
+  // dangerous.
+  fprintf(fp_, ".balign 16384\n");
 #endif
 }
 
