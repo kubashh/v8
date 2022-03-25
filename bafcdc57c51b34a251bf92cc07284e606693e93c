@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae029a9_85517fe5",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-25T15:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5038864_2eccd762",
+      "range": {
+        "startLine": 389,
+        "startChar": 2,
+        "endLine": 390,
+        "endChar": 76
+      },
+      "revId": "bafcdc57c51b34a251bf92cc07284e606693e93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67496360_c1c62842",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-03-25T01:42:18Z",
       "side": 1,
       "message": "nit: same here, remove shadowing variable",
+      "range": {
+        "startLine": 393,
+        "startChar": 2,
+        "endLine": 395,
+        "endChar": 48
+      },
+      "revId": "bafcdc57c51b34a251bf92cc07284e606693e93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb6944e_ebfc9aef",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-25T15:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67496360_c1c62842",
       "range": {
         "startLine": 393,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff957ecb_4a15b9fa",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-25T15:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "001661e6_02f2d961",
+      "range": {
+        "startLine": 408,
+        "startChar": 0,
+        "endLine": 410,
+        "endChar": 55
+      },
+      "revId": "bafcdc57c51b34a251bf92cc07284e606693e93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "247be75f_a4d6a428",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-03-25T01:42:18Z",
       "side": 1,
       "message": "nit: remove temporary variable",
+      "range": {
+        "startLine": 414,
+        "startChar": 1,
+        "endLine": 414,
+        "endChar": 39
+      },
+      "revId": "bafcdc57c51b34a251bf92cc07284e606693e93c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b11b20_37474b6c",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-25T15:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "247be75f_a4d6a428",
       "range": {
         "startLine": 414,
         "startChar": 1,
