@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae780a6e_2647ef52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-25T11:47:23Z",
+      "side": 1,
+      "message": "Sorry for the slow reply, I was out yesterday.",
+      "revId": "a5544d9e7565af9fb9ca2f54c21d9de089b5a721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9c4692_d07d53f9",
+        "filename": "tools/turbolizer/src/graph-view.ts",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-25T11:47:23Z",
+      "side": 1,
+      "message": "Why this? I\u0027d think that you still want to add descendants even if the node survives. We often lower a node adding more nodes while preserving it.",
+      "range": {
+        "startLine": 379,
+        "startChar": 8,
+        "endLine": 379,
+        "endChar": 36
+      },
+      "revId": "a5544d9e7565af9fb9ca2f54c21d9de089b5a721",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
