@@ -16,6 +16,29 @@
       "message": "Added turbo fan changes. Needed to modify memory-optimizer to match new changes from machine-operator",
       "revId": "e9bf44dea593f9599711a03939f65dd201194f64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84c87ee8_07935f1c",
+        "filename": "src/compiler/opcodes.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-03-25T11:59:49Z",
+      "side": 1,
+      "message": "I think this should be in MACHINE_OP_LIST, given that you added it to machine-operator.h",
+      "range": {
+        "startLine": 88,
+        "startChar": 2,
+        "endLine": 88,
+        "endChar": 21
+      },
+      "revId": "e9bf44dea593f9599711a03939f65dd201194f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
