@@ -33,6 +33,24 @@
       "message": "Hello,\n\ngcc is throwing the following compile time error:\n```\nerror: variable \u0027pending_exception\u0027 set but not used\n```\nIs the variable needed and if so should we add a `USE()` expression?",
       "revId": "0a0ad98a5a4d414bb7f32766815f095387d0c498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3a5650d_86fa4491",
+        "filename": "src/objects/js-function.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-03-26T01:53:15Z",
+      "side": 1,
+      "message": "I\u0027m sorry about this. This is not used currently and it can be removed. I\u0027m wondering how can I prevent missing such errors in the future, is there any try-bot I should add to the CQ?\n\nSubmitted https://chromium-review.googlesource.com/c/v8/v8/+/3553789",
+      "parentUuid": "514a5a0c_f97bd06e",
+      "revId": "0a0ad98a5a4d414bb7f32766815f095387d0c498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
