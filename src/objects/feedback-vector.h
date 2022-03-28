@@ -234,19 +234,21 @@ class FeedbackVector
   // the world, thus 'maybe'.
   inline bool maybe_has_optimized_code() const;
   inline void set_maybe_has_optimized_code(bool value);
+  static void SetOptimizedCode(Handle<FeedbackVector> vector,
+                               Handle<CodeT> code);
+  void EvictOptimizedCodeMarkedForDeoptimization(SharedFunctionInfo shared,
+                                                 const char* reason);
+  void ClearOptimizedCode();
 
   inline bool has_optimization_marker() const;
   inline OptimizationMarker optimization_marker() const;
-  void EvictOptimizedCodeMarkedForDeoptimization(SharedFunctionInfo shared,
-                                                 const char* reason);
-  static void SetOptimizedCode(Handle<FeedbackVector> vector,
-                               Handle<CodeT> code);
-  void ClearOptimizedCode();
-  void SetOptimizationMarker(OptimizationMarker marker);
-  void InitializeOptimizationState();
+  void set_optimization_marker(OptimizationMarker marker);
+  void reset_optimization_marker();
 
-  // Clears the optimization marker in the feedback vector.
-  void ClearOptimizationMarker();
+  OptimizationMarker osr_optimization_marker();
+  void set_osr_optimization_marker(OptimizationMarker marker);
+
+  void reset_flags();
 
   // Conversion from a slot to an integer index to the underlying array.
   static int GetIndex(FeedbackSlot slot) { return slot.ToInt(); }

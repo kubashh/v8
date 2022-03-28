@@ -227,64 +227,6 @@ RUNTIME_FUNCTION(Runtime_VerifyType) {
   return *obj;
 }
 
-namespace {
-
-bool IsSuitableForOnStackReplacement(Isolate* isolate,
-                                     Handle<JSFunction> function) {
-  // Don't OSR during serialization.
-  if (isolate->serializer_enabled()) return false;
-
-  // Keep track of whether we've succeeded in optimizing.
-  if (function->shared().optimization_disabled()) return false;
-
-  // TODO(chromium:1031479): Currently, OSR triggering mechanism is tied to the
-  // bytecode array. So, it might be possible to mark closure in one native
-  // context and optimize a closure from a different native context. So check if
-  // there is a feedback vector before OSRing. We don't expect this to happen
-  // often.
-  if (!function->has_feedback_vector()) return false;
-
-  // If we are trying to do OSR when there are already optimized
-  // activations of the function, it means (a) the function is directly or
-  // indirectly recursive and (b) an optimized invocation has been
-  // deoptimized so that we are currently in an unoptimized activation.
-  // Check for optimized activations of this function.
-  for (JavaScriptFrameIterator it(isolate); !it.done(); it.Advance()) {
-    JavaScriptFrame* frame = it.frame();
-    if (frame->is_optimized() && frame->function() == *function) return false;
-  }
-
-  return true;
-}
-
-BytecodeOffset DetermineEntryAndDisarmOSRForUnoptimized(
-    JavaScriptFrame* js_frame) {
-  UnoptimizedFrame* frame = reinterpret_cast<UnoptimizedFrame*>(js_frame);
-
-  // Note that the bytecode array active on the stack might be different from
-  // the one installed on the function (e.g. patched by debugger). This however
-  // is fine because we guarantee the layout to be in sync, hence any
-  // BytecodeOffset representing the entry point will be valid for any copy of
-  // the bytecode.
-  Handle<BytecodeArray> bytecode(frame->GetBytecodeArray(), frame->isolate());
-
-  DCHECK_IMPLIES(frame->is_interpreted(),
-                 frame->LookupCode().is_interpreter_trampoline_builtin());
-  DCHECK_IMPLIES(frame->is_baseline(),
-                 frame->LookupCode().kind() == CodeKind::BASELINE);
-  DCHECK(frame->is_unoptimized());
-  DCHECK(frame->function().shared().HasBytecodeArray());
-
-  // Disarm all back edges.
-  bytecode->reset_osr_urgency();
-
-  // Return a BytecodeOffset representing the bytecode offset of the back
-  // branch.
-  return BytecodeOffset(frame->GetBytecodeOffset());
-}
-
-}  // namespace
-
 RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   HandleScope handle_scope(isolate);
   DCHECK_EQ(0, args.length());
@@ -292,37 +234,33 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
 
   // Determine the frame that triggered the OSR request.
   JavaScriptFrameIterator it(isolate);
-  JavaScriptFrame* frame = it.frame();
-  DCHECK(frame->is_unoptimized());
+  UnoptimizedFrame* frame = UnoptimizedFrame::cast(it.frame());
 
-  // Determine the entry point for which this OSR request has been fired and
-  // also disarm all back edges in the calling code to stop new requests.
-  BytecodeOffset osr_offset = DetermineEntryAndDisarmOSRForUnoptimized(frame);
+  DCHECK_IMPLIES(frame->is_interpreted(),
+                 frame->LookupCode().is_interpreter_trampoline_builtin());
+  DCHECK_IMPLIES(frame->is_baseline(),
+                 frame->LookupCode().kind() == CodeKind::BASELINE);
+  DCHECK(frame->function().shared().HasBytecodeArray());
+
+  // Determine the entry point for which this OSR request has been fired.
+  BytecodeOffset osr_offset = BytecodeOffset(frame->GetBytecodeOffset());
   DCHECK(!osr_offset.IsNone());
 
-  MaybeHandle<CodeT> maybe_result;
+  // TODO(v8:12161): If cache exists with different offset: kNotConcurrent.
+  ConcurrencyMode mode =
+      isolate->concurrent_recompilation_enabled() && FLAG_concurrent_osr
+          ? ConcurrencyMode::kConcurrent
+          : ConcurrencyMode::kNotConcurrent;
+
   Handle<JSFunction> function(frame->function(), isolate);
-  if (IsSuitableForOnStackReplacement(isolate, function)) {
-    if (FLAG_trace_osr) {
-      CodeTracer::Scope scope(isolate->GetCodeTracer());
-      PrintF(scope.file(), "[OSR - Compiling: ");
-      function->PrintName(scope.file());
-      PrintF(scope.file(), " at OSR bytecode offset %d]\n", osr_offset.ToInt());
-    }
-    maybe_result =
-        Compiler::GetOptimizedCodeForOSR(isolate, function, osr_offset, frame);
-  }
+  MaybeHandle<CodeT> maybe_result =
+      Compiler::CompileOptimizedOSR(isolate, function, osr_offset, frame, mode);
 
   Handle<CodeT> result;
   if (!maybe_result.ToHandle(&result)) {
     // No OSR'd code available.
-    if (FLAG_trace_osr) {
-      CodeTracer::Scope scope(isolate->GetCodeTracer());
-      PrintF(scope.file(), "[OSR - Failed: ");
-      function->PrintName(scope.file());
-      PrintF(scope.file(), " at OSR bytecode offset %d]\n", osr_offset.ToInt());
-    }
-
+    // TODO(v8:12161): Distinguish between actual failure and scheduling a
+    // concurrent job.
     if (!function->HasAttachedOptimizedCode()) {
       function->set_code(function->shared().GetCode(), kReleaseStore);
     }
@@ -331,7 +269,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   }
 
   DCHECK(!result.is_null());
-  DCHECK(result->is_turbofanned());
+  DCHECK(result->is_turbofanned());  // TODO(v8:7700): Support Maglev.
   DCHECK(CodeKindIsOptimizedJSFunction(result->kind()));
 
   DeoptimizationData data =
@@ -359,7 +297,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
     // a function for optimization. We should instead change it to be based
     // based on number of ticks.
     DCHECK(!function->IsInOptimizationQueue());
-    function->ClearOptimizationMarker();
+    function->reset_optimization_marker();
   }
 
   // TODO(mythria): Once we have OSR code cache we may not need to mark
@@ -377,7 +315,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
       function->PrintName(scope.file());
       PrintF(scope.file(), " for non-concurrent optimization]\n");
     }
-    function->SetOptimizationMarker(
+    function->set_optimization_marker(
         OptimizationMarker::kCompileTurbofan_NotConcurrent);
   }
 
