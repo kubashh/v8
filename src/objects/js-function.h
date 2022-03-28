@@ -192,6 +192,9 @@ class JSFunction : public TorqueGeneratedJSFunction<
   // Clears the optimization marker in the function's feedback vector.
   inline void ClearOptimizationMarker();
 
+  inline OptimizationMarker osr_optimization_marker();
+  inline void set_osr_optimization_marker(OptimizationMarker marker);
+
   // Sets the interrupt budget based on whether the function has a feedback
   // vector and any optimized code.
   void SetInterruptBudget(Isolate* isolate);

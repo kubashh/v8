@@ -248,6 +248,9 @@ class FeedbackVector
   // Clears the optimization marker in the feedback vector.
   void ClearOptimizationMarker();
 
+  OptimizationMarker osr_optimization_marker();
+  void set_osr_optimization_marker(OptimizationMarker marker);
+
   // Conversion from a slot to an integer index to the underlying array.
   static int GetIndex(FeedbackSlot slot) { return slot.ToInt(); }
 

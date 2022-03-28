@@ -521,6 +521,37 @@ RUNTIME_FUNCTION(Runtime_PrepareFunctionForOptimization) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+namespace {
+
+void FinalizeOptimization(Isolate* isolate) {
+  DCHECK(isolate->concurrent_recompilation_enabled());
+  isolate->optimizing_compile_dispatcher()->AwaitCompileTasks();
+  isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
+  isolate->optimizing_compile_dispatcher()->set_finalize(true);
+}
+
+BytecodeOffset OffsetOfNextJumpLoop(Isolate* isolate, UnoptimizedFrame* frame) {
+  Handle<BytecodeArray> bytecode_array(frame->GetBytecodeArray(), isolate);
+  const int current_offset = frame->GetBytecodeOffset();
+
+  interpreter::BytecodeArrayIterator it(bytecode_array, current_offset);
+  for (; !it.done(); it.Advance()) {
+    if (it.current_bytecode() != interpreter::Bytecode::kJumpLoop) {
+      continue;
+    }
+    if (!base::IsInRange(current_offset, it.GetJumpTargetOffset(),
+                         it.current_offset())) {
+      continue;
+    }
+
+    return BytecodeOffset(it.current_offset());
+  }
+
+  return BytecodeOffset::None();
+}
+
+}  // namespace
+
 RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   HandleScope handle_scope(isolate);
   DCHECK(args.length() == 0 || args.length() == 1);
@@ -560,10 +591,15 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
     DCHECK(function->HasAttachedOptimizedCode() ||
            function->ChecksOptimizationMarker());
     // If function is already optimized, remove the bytecode array from the
-    // pending optimize for test table and return.
+    // pending optimize for test tableand return.
     if (FLAG_testing_d8_test_runner) {
       PendingOptimizationTable::FunctionWasOptimized(isolate, function);
     }
+    return ReadOnlyRoots(isolate).undefined_value();
+  }
+
+  if (!it.frame()->is_unoptimized()) {
+    // Nothing to be done.
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
@@ -581,8 +617,39 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   function->MarkForOptimization(isolate, CodeKind::TURBOFAN,
                                 ConcurrencyMode::kNotConcurrent);
 
-  if (it.frame()->is_unoptimized()) {
-    isolate->tiering_manager()->RequestOsrAtNextOpportunity(*function);
+  isolate->tiering_manager()->RequestOsrAtNextOpportunity(*function);
+
+  // If concurrent OSR is enabled, the testing workflow is a bit tricky. We
+  // must guarantee that the next JumpLoop installs the finished OSR'd code
+  // object, but we still want to exercise concurrent code paths. To do so,
+  // we attempt to find the next JumpLoop, start an OSR job for it now, and
+  // immediately force finalization.
+  // If this succeeds and we correctly match up the next JumpLoop, once we
+  // reach the JumpLoop we'll hit the OSR cache and install the generated code.
+  // If not (e.g. because we enter a nested loop first), the next JumpLoop will
+  // see the cached OSR code with a mismatched offset, and trigger
+  // non-concurrent OSR compilation and installation.
+  if (isolate->concurrent_recompilation_enabled() && FLAG_concurrent_osr) {
+    const BytecodeOffset osr_offset =
+        OffsetOfNextJumpLoop(isolate, UnoptimizedFrame::cast(it.frame()));
+    if (osr_offset.IsNone()) {
+      // It's invalid to call %OptimizeOsr outside of a loop.
+      return CrashUnlessFuzzing(isolate);
+    }
+
+    // Finalize first to ensure all pending tasks are done (since we can't
+    // queue more than one OSR job for each function).
+    FinalizeOptimization(isolate);
+
+    // Queue the job.
+    auto unused_result = Compiler::CompileOptimizedOSR(
+        isolate, function, osr_offset, UnoptimizedFrame::cast(it.frame()),
+        ConcurrencyMode::kConcurrent);
+    USE(unused_result);
+
+    // Finalize again to finish the queued job. The next call into
+    // CompileForOnStackReplacement will pick up the cached Code object.
+    FinalizeOptimization(isolate);
   }
 
   return ReadOnlyRoots(isolate).undefined_value();
@@ -735,9 +802,7 @@ RUNTIME_FUNCTION(Runtime_WaitForBackgroundOptimization) {
 RUNTIME_FUNCTION(Runtime_FinalizeOptimization) {
   DCHECK_EQ(0, args.length());
   if (isolate->concurrent_recompilation_enabled()) {
-    isolate->optimizing_compile_dispatcher()->AwaitCompileTasks();
-    isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
-    isolate->optimizing_compile_dispatcher()->set_finalize(true);
+    FinalizeOptimization(isolate);
   }
   return ReadOnlyRoots(isolate).undefined_value();
 }
