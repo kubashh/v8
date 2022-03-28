@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1907913_fbcd0c0e",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-28T06:22:06Z",
+      "side": 1,
+      "message": "This is getting a bit hard to read.. with the added magic, could you please add comments, and/or named constants? Something like\n\n static constexpr int kBitfieldSize \u003d kUInt32Size;\n ...",
+      "revId": "2ee36e4cf515fe92b46fc66748f69d07892c0495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
