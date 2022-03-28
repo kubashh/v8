@@ -463,6 +463,7 @@ MaybeHandle<Object> JSWrappedFunction::Create(
     // TODO(v8:11989): provide a non-observable inspection on the
     // pending_exception to the newly created TypeError.
     // https://github.com/tc39/proposal-shadowrealm/issues/353
+    USE(pending_exception);
 
     // The TypeError thrown is created with creation Realm's TypeError
     // constructor instead of the executing Realm's.
