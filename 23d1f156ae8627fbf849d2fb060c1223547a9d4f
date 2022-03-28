@@ -16,6 +16,190 @@
       "message": "PTAL\nThanks!",
       "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b061c2b_706f9527",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "is it possible to do the same for CI buiders? i.e. add a link to the tester in the builder description and vice versa?",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 53,
+        "endChar": 57
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1c3f4ca_045f4fed",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "maybe the next two if statements should be skipped if this is set up in the description? Otherwise I think we can set it to `None` since it will be overriden anyway.",
+      "range": {
+        "startLine": 357,
+        "startChar": 17,
+        "endLine": 357,
+        "endChar": 52
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27722775_55a48242",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "I think what is meant here is ` - builder`",
+      "range": {
+        "startLine": 362,
+        "startChar": 59,
+        "endLine": 362,
+        "endChar": 72
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15a9d7a2_6d950130",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "nit: I think this can be an `if`",
+      "range": {
+        "startLine": 363,
+        "startChar": 4,
+        "endLine": 363,
+        "endChar": 8
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdf62e16_a1b311cb",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "should that be \"CI\"?",
+      "range": {
+        "startLine": 364,
+        "startChar": 17,
+        "endLine": 364,
+        "endChar": 19
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf99ed5_f5d6c352",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "I think what is meant here is ` - builder`",
+      "range": {
+        "startLine": 367,
+        "startChar": 75,
+        "endLine": 367,
+        "endChar": 88
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26430b87_b81b0de5",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "what about compile only builders? (e.g. `v8_android_arm_compile_rel`)\nAlso there are some CI builders that do not follow the naming convention (e.g. `V8 Linux - vtunejit`) and other builders that build and test at the same time (e.g. `V8 Linux64 - gcov coverage`).\nMaybe it would be easier to search in both `infra/mb/mb_config.pyl` and `infra/testing/builders.pyl` and add \"(if present)\" to the HTML?",
+      "range": {
+        "startLine": 387,
+        "startChar": 4,
+        "endLine": 387,
+        "endChar": 60
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa5a9267_debba9ff",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-28T13:54:02Z",
+      "side": 1,
+      "message": "I think what is meant here is ` builder`",
+      "range": {
+        "startLine": 387,
+        "startChar": 21,
+        "endLine": 387,
+        "endChar": 34
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
