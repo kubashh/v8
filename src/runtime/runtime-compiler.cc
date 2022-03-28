@@ -244,6 +244,12 @@ bool IsSuitableForOnStackReplacement(Isolate* isolate,
   // often.
   if (!function->has_feedback_vector()) return false;
 
+  // One OSR job per function at a time.
+  if (function->osr_optimization_marker() ==
+      OptimizationMarker::kInOptimizationQueue) {
+    return false;
+  }
+
   // If we are trying to do OSR when there are already optimized
   // activations of the function, it means (a) the function is directly or
   // indirectly recursive and (b) an optimized invocation has been
@@ -309,13 +315,21 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
       function->PrintName(scope.file());
       PrintF(scope.file(), " at OSR bytecode offset %d]\n", osr_offset.ToInt());
     }
-    maybe_result =
-        Compiler::GetOptimizedCodeForOSR(isolate, function, osr_offset, frame);
+    ConcurrencyMode mode = FLAG_concurrent_osr
+                               ? ConcurrencyMode::kConcurrent
+                               : ConcurrencyMode::kNotConcurrent;
+
+    // TODO(v8:12161): If cache exists with different offset: kNotConcurrent.
+
+    maybe_result = Compiler::CompileOptimizedOSR(isolate, function, osr_offset,
+                                                 frame, mode);
   }
 
   Handle<CodeT> result;
   if (!maybe_result.ToHandle(&result)) {
     // No OSR'd code available.
+    // TODO(v8:12161): Distinguish between actual failure and scheduling a
+    // concurrent job.
     if (FLAG_trace_osr) {
       CodeTracer::Scope scope(isolate->GetCodeTracer());
       PrintF(scope.file(), "[OSR - Failed: ");
@@ -331,7 +345,7 @@ RUNTIME_FUNCTION(Runtime_CompileForOnStackReplacement) {
   }
 
   DCHECK(!result.is_null());
-  DCHECK(result->is_turbofanned());
+  DCHECK(result->is_turbofanned());  // TODO(v8:7700): Support Maglev.
   DCHECK(CodeKindIsOptimizedJSFunction(result->kind()));
 
   DeoptimizationData data =

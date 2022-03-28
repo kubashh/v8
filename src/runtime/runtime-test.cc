@@ -521,6 +521,17 @@ RUNTIME_FUNCTION(Runtime_PrepareFunctionForOptimization) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+namespace {
+
+void FinalizeOptimization(Isolate* isolate) {
+  DCHECK(isolate->concurrent_recompilation_enabled());
+  isolate->optimizing_compile_dispatcher()->AwaitCompileTasks();
+  isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
+  isolate->optimizing_compile_dispatcher()->set_finalize(true);
+}
+
+}  // namespace
+
 RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   HandleScope handle_scope(isolate);
   DCHECK(args.length() == 0 || args.length() == 1);
@@ -583,6 +594,10 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
 
   if (it.frame()->is_unoptimized()) {
     isolate->tiering_manager()->RequestOsrAtNextOpportunity(*function);
+  }
+
+  if (isolate->concurrent_recompilation_enabled() && FLAG_concurrent_osr) {
+    FinalizeOptimization(isolate);
   }
 
   return ReadOnlyRoots(isolate).undefined_value();
@@ -735,9 +750,7 @@ RUNTIME_FUNCTION(Runtime_WaitForBackgroundOptimization) {
 RUNTIME_FUNCTION(Runtime_FinalizeOptimization) {
   DCHECK_EQ(0, args.length());
   if (isolate->concurrent_recompilation_enabled()) {
-    isolate->optimizing_compile_dispatcher()->AwaitCompileTasks();
-    isolate->optimizing_compile_dispatcher()->InstallOptimizedFunctions();
-    isolate->optimizing_compile_dispatcher()->set_finalize(true);
+    FinalizeOptimization(isolate);
   }
   return ReadOnlyRoots(isolate).undefined_value();
 }
