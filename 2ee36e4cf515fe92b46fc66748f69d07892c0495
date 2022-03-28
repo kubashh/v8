@@ -16,6 +16,24 @@
       "message": "This is getting a bit hard to read.. with the added magic, could you please add comments, and/or named constants? Something like\n\n static constexpr int kBitfieldSize \u003d kUInt32Size;\n ...",
       "revId": "2ee36e4cf515fe92b46fc66748f69d07892c0495",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa1f2ddd_f22c42b8",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-28T07:45:18Z",
+      "side": 1,
+      "message": "It might not matter, we\u0027re hitting UB with this change (because of unaligned Derived on x64)",
+      "parentUuid": "b1907913_fbcd0c0e",
+      "revId": "2ee36e4cf515fe92b46fc66748f69d07892c0495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
