@@ -146,10 +146,6 @@ MaybeHandle<JSPluralRules> JSPluralRules::New(Isolate* isolate, Handle<Map> map,
 
   icu::number::LocalizedNumberFormatter icu_number_formatter =
       settings.locale(icu_locale);
-  icu::number::LocalizedNumberRangeFormatter icu_number_range_formatter =
-      icu::number::UnlocalizedNumberRangeFormatter()
-          .numberFormatterBoth(settings)
-          .locale(icu_locale);
 
   Handle<Managed<icu::PluralRules>> managed_plural_rules =
       Managed<icu::PluralRules>::FromUniquePtr(isolate, 0,
@@ -164,8 +160,12 @@ MaybeHandle<JSPluralRules> JSPluralRules::New(Isolate* isolate, Handle<Map> map,
       managed_number_range_formatter =
           Managed<icu::number::LocalizedNumberRangeFormatter>::FromRawPtr(
               isolate, 0,
-              new icu::number::LocalizedNumberRangeFormatter(
-                  icu_number_range_formatter));
+              FLAG_harmony_intl_number_format_v3
+                  ? new icu::number::LocalizedNumberRangeFormatter(
+                        icu::number::UnlocalizedNumberRangeFormatter()
+                            .numberFormatterBoth(settings)
+                            .locale(icu_locale))
+                  : nullptr);
 
   // Now all properties are ready, so we can allocate the result object.
   Handle<JSPluralRules> plural_rules = Handle<JSPluralRules>::cast(
