@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "614727be_7b896508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2022-03-28T08:16:39Z",
+      "side": 1,
+      "message": "Hi,\n\nI am looking at memory footprint on ARM64 macOS, and noticed that the builtins are copied on the heap, at least once per process (in most cases?).\n\nHere is a patch that performs a remapping rather than a copy. I\u0027ve checked that it works locally (see the commit message). Similar code is applicable to Linux kernels at least, but I\u0027ve not done it yet, particularly as embedded builtins are not enabled on Android.\n\nIf it sticks, I will also add Linux-specific code, and we can experiment with embedded builtins on Android.\n\nPTAL, thanks!",
+      "revId": "ccfab502728c43365afb264096bc749f2380a022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
