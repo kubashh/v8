@@ -34,6 +34,23 @@
       "parentUuid": "bf00dafc_d368dd5b",
       "revId": "a80785f27df6c7baa9c681a5b19b109bde2b9d1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639125d8_e0efddec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-03-29T08:07:59Z",
+      "side": 1,
+      "message": "Friendly ping. Could you please try the CQ? Thanks!",
+      "revId": "a80785f27df6c7baa9c681a5b19b109bde2b9d1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
