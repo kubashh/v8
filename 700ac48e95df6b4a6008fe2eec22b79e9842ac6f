@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6560548_a8b95811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-29T20:42:32Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c134924_8de86abb",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-03-25T12:05:24Z",
       "side": 1,
       "message": "I don\u0027t think this should be on Heap but rather closer to the callsite. The root accessors are public, so that should just work.",
+      "range": {
+        "startLine": 787,
+        "startChar": 7,
+        "endLine": 787,
+        "endChar": 34
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f0e6c02_802a723a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-29T20:42:32Z",
+      "side": 1,
+      "message": "Root *setters* are private; however the `Isolate` is a `friend` of the `Heap`. Michael, would you be happier if this method lived on the `Isolate`?",
+      "parentUuid": "3c134924_8de86abb",
       "range": {
         "startLine": 787,
         "startChar": 7,
@@ -59,6 +100,75 @@
         "startChar": 31,
         "endLine": 402,
         "endChar": 35
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4f98695_122d3fe2",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-29T20:42:32Z",
+      "side": 1,
+      "message": "\"Creat\" is missing an \"e\". That said, \"Get...\" is a weird name for a function that returns `void`, so I\u0027d just stick with the old name.",
+      "range": {
+        "startLine": 213,
+        "startChar": 5,
+        "endLine": 213,
+        "endChar": 34
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a80cc78_543d2e40",
+        "filename": "test/mjsunit/wasm/runtime-type-canonicalization.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-29T20:42:32Z",
+      "side": 1,
+      "message": "nit: 2022",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed5892fd_8a3bdb50",
+        "filename": "test/mjsunit/wasm/runtime-type-canonicalization.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-03-29T20:42:32Z",
+      "side": 1,
+      "message": "Is this IIFE even necessary? Since it doesn\u0027t have any local variables, I think the behavior would be the same if you assigned `struct` directly. (But I don\u0027t mind keeping the code as-is if you prefer.)",
+      "range": {
+        "startLine": 59,
+        "startChar": 15,
+        "endLine": 59,
+        "endChar": 40
       },
       "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
