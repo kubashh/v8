@@ -48,25 +48,13 @@ bool JSFunction::HasOptimizationMarker() {
   return has_feedback_vector() && feedback_vector().has_optimization_marker();
 }
 
-void JSFunction::ClearOptimizationMarker() {
+void JSFunction::reset_optimization_marker() {
   DCHECK(has_feedback_vector());
-  feedback_vector().ClearOptimizationMarker();
+  feedback_vector().reset_optimization_marker();
 }
 
 bool JSFunction::ChecksOptimizationMarker() {
   return code().checks_optimization_marker();
-}
-
-bool JSFunction::IsMarkedForOptimization() {
-  return has_feedback_vector() &&
-         feedback_vector().optimization_marker() ==
-             OptimizationMarker::kCompileTurbofan_NotConcurrent;
-}
-
-bool JSFunction::IsMarkedForConcurrentOptimization() {
-  return has_feedback_vector() &&
-         feedback_vector().optimization_marker() ==
-             OptimizationMarker::kCompileTurbofan_Concurrent;
 }
 
 bool JSFunction::IsInOptimizationQueue() {
@@ -126,12 +114,27 @@ void JSFunction::set_shared(SharedFunctionInfo value, WriteBarrierMode mode) {
   CONDITIONAL_WRITE_BARRIER(*this, kSharedFunctionInfoOffset, value, mode);
 }
 
-void JSFunction::SetOptimizationMarker(OptimizationMarker marker) {
+OptimizationMarker JSFunction::optimization_marker() const {
+  if (!has_feedback_vector()) return OptimizationMarker::kNone;
+  return feedback_vector().optimization_marker();
+}
+
+void JSFunction::set_optimization_marker(OptimizationMarker marker) {
   DCHECK(has_feedback_vector());
   DCHECK(ChecksOptimizationMarker());
   DCHECK(!ActiveTierIsTurbofan());
 
-  feedback_vector().SetOptimizationMarker(marker);
+  feedback_vector().set_optimization_marker(marker);
+}
+
+OptimizationMarker JSFunction::osr_optimization_marker() {
+  DCHECK(has_feedback_vector());
+  return feedback_vector().osr_optimization_marker();
+}
+
+void JSFunction::set_osr_optimization_marker(OptimizationMarker marker) {
+  DCHECK(has_feedback_vector());
+  feedback_vector().set_osr_optimization_marker(marker);
 }
 
 bool JSFunction::has_feedback_vector() const {
