@@ -174,23 +174,20 @@ class JSFunction : public TorqueGeneratedJSFunction<
   // Tells whether or not this function has a (non-zero) optimization marker.
   inline bool HasOptimizationMarker();
 
+  inline OptimizationMarker optimization_marker() const;
+  inline void set_optimization_marker(OptimizationMarker marker);
+  inline void reset_optimization_marker();
+
   // Mark this function for lazy recompilation. The function will be recompiled
   // the next time it is executed.
   void MarkForOptimization(Isolate* isolate, CodeKind target_kind,
                            ConcurrencyMode mode);
 
-  // Tells whether or not the function is already marked for lazy recompilation.
-  inline bool IsMarkedForOptimization();
-  inline bool IsMarkedForConcurrentOptimization();
-
   // Tells whether or not the function is on the concurrent recompilation queue.
   inline bool IsInOptimizationQueue();
 
-  // Sets the optimization marker in the function's feedback vector.
-  inline void SetOptimizationMarker(OptimizationMarker marker);
-
-  // Clears the optimization marker in the function's feedback vector.
-  inline void ClearOptimizationMarker();
+  inline OptimizationMarker osr_optimization_marker();
+  inline void set_osr_optimization_marker(OptimizationMarker marker);
 
   // Sets the interrupt budget based on whether the function has a feedback
   // vector and any optimized code.

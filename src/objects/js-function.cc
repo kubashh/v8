@@ -209,7 +209,7 @@ void JSFunction::MarkForOptimization(Isolate* isolate, CodeKind target_kind,
     }
   }
 
-  SetOptimizationMarker(OptimizationMarkerFor(target_kind, mode));
+  set_optimization_marker(OptimizationMarkerFor(target_kind, mode));
 }
 
 void JSFunction::SetInterruptBudget(Isolate* isolate) {

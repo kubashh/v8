@@ -276,7 +276,10 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
                                         CodeKind code_kind) {
   const OptimizationMarker opt_marker =
       function.feedback_vector().optimization_marker();
-  if (V8_UNLIKELY(opt_marker == OptimizationMarker::kInOptimizationQueue)) {
+  const OptimizationMarker osr_opt_marker =
+      function.feedback_vector().osr_optimization_marker();
+  if (V8_UNLIKELY(opt_marker == OptimizationMarker::kInOptimizationQueue) ||
+      V8_UNLIKELY(osr_opt_marker == OptimizationMarker::kInOptimizationQueue)) {
     // Note: This effectively disables OSR for the function while it is being
     // compiled.
     TraceInOptimizationQueue(function);

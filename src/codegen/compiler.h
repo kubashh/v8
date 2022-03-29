@@ -30,25 +30,19 @@ namespace internal {
 
 // Forward declarations.
 class AlignedCachedData;
-class AstRawString;
 class BackgroundCompileTask;
 class IsCompiledScope;
-class JavaScriptFrame;
 class OptimizedCompilationInfo;
-class OptimizedCompilationJob;
 class ParseInfo;
-class Parser;
 class RuntimeCallStats;
 class TimedHistogram;
 class TurbofanCompilationJob;
 class UnoptimizedCompilationInfo;
 class UnoptimizedCompilationJob;
+class UnoptimizedFrame;
 class WorkerThreadRuntimeCallStats;
 struct ScriptDetails;
 struct ScriptStreamingData;
-
-using UnoptimizedCompilationJobList =
-    std::forward_list<std::unique_ptr<UnoptimizedCompilationJob>>;
 
 // The V8 compiler API.
 //
@@ -96,6 +90,23 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
 
   static void CompileOptimized(Isolate* isolate, Handle<JSFunction> function,
                                ConcurrencyMode mode, CodeKind code_kind);
+
+  // ===========================================================================
+  // The following family of methods provides support for OSR. Code generated
+  // for entry via OSR might not be suitable for normal entry, hence will be
+  // returned directly to the caller (and not installed on the Code object).
+  //
+  // Please note this interface is the only part dealing with {Code} objects
+  // directly. Other methods are agnostic to {Code} and can use an interpreter
+  // instead of generating JIT code for a function at all.
+
+  // Generate and return optimized code for OSR, or empty handle on failure.
+  V8_WARN_UNUSED_RESULT static MaybeHandle<CodeT> CompileOptimizedOSR(
+      Isolate* isolate, Handle<JSFunction> function, BytecodeOffset osr_offset,
+      UnoptimizedFrame* frame, ConcurrencyMode mode);
+
+  // ... OSR API end.
+  // ===========================================================================
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<SharedFunctionInfo>
   CompileForLiveEdit(ParseInfo* parse_info, Handle<Script> script,
@@ -223,20 +234,6 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   static Handle<SharedFunctionInfo> GetSharedFunctionInfo(FunctionLiteral* node,
                                                           Handle<Script> script,
                                                           IsolateT* isolate);
-
-  // ===========================================================================
-  // The following family of methods provides support for OSR. Code generated
-  // for entry via OSR might not be suitable for normal entry, hence will be
-  // returned directly to the caller.
-  //
-  // Please note this interface is the only part dealing with {Code} objects
-  // directly. Other methods are agnostic to {Code} and can use an interpreter
-  // instead of generating JIT code for a function at all.
-
-  // Generate and return optimized code for OSR, or empty handle on failure.
-  V8_WARN_UNUSED_RESULT static MaybeHandle<CodeT> GetOptimizedCodeForOSR(
-      Isolate* isolate, Handle<JSFunction> function, BytecodeOffset osr_offset,
-      JavaScriptFrame* osr_frame);
 };
 
 // A base class for compilation jobs intended to run concurrent to the main
