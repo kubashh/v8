@@ -897,6 +897,7 @@ struct ControlBase : public PcForErrors<validate> {
   INTERFACE_NON_CONSTANT_FUNCTIONS(F)
 
 #define INTERFACE_META_FUNCTIONS(F)    \
+  F(TraceInstruction, uint32_t value)  \
   F(StartFunction)                     \
   F(StartFunctionBody, Control* block) \
   F(FinishFunction)                    \
@@ -1085,7 +1086,19 @@ class WasmDecoder : public Decoder {
         module_(module),
         enabled_(enabled),
         detected_(detected),
-        sig_(sig) {}
+        sig_(sig) {
+    // The inst_traces will always have at least 1 instruction trace,
+    // the invalid end of array marker
+    current_inst_trace_ = &(*(module_->inst_traces.begin()));
+    std::pair<uint32_t, uint32_t> end_of_list = {0, 0};
+    // Every time a new WasmDecoder is created this loop will run, but this
+    // will have a minimal impact on runtime since we assume the number of
+    // traces is small
+    while (*current_inst_trace_ != end_of_list &&
+           current_inst_trace_->first < buffer_offset) {
+      ++current_inst_trace_;
+    }
+  }
 
   Zone* zone() const { return local_types_.get_allocator().zone(); }
 
@@ -2173,6 +2186,7 @@ class WasmDecoder : public Decoder {
   const WasmFeatures enabled_;
   WasmFeatures* detected_;
   const FunctionSig* sig_;
+  const std::pair<uint32_t, uint32_t>* current_inst_trace_;
 };
 
 // Only call this in contexts where {current_code_reachable_and_ok_} is known to
@@ -2377,6 +2391,16 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
     first_instruction_offset = this->pc_offset();
     // Decode the function body.
     while (this->pc_ < this->end_) {
+      // Because curr_module_offset will never be zero, once we reach the
+      // invalid state this will always evaluate to false
+      if (V8_UNLIKELY(this->current_inst_trace_->first == this->pc_offset())) {
+        TRACE("Emit trace at 0x%x with ID[0x%x]\n", this->pc_offset(),
+              this->current_inst_trace_->second);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(TraceInstruction,
+                                           this->current_inst_trace_->second);
+        this->current_inst_trace_++;
+      }
+
       // Most operations only grow the stack by at least one element (unary and
       // binary operations, local.get, constants, ...). Thus check that there is
       // enough space for those operations centrally, and avoid any bounds

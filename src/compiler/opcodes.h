@@ -767,7 +767,8 @@
   V(SignExtendWord16ToInt64)             \
   V(SignExtendWord32ToInt64)             \
   V(UnsafePointerAdd)                    \
-  V(StackPointerGreaterThan)
+  V(StackPointerGreaterThan)             \
+  V(TraceInstruction)
 
 #define MACHINE_SIMD_OP_LIST(V)  \
   V(F64x2Splat)                  \
