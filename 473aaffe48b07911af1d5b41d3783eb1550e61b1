@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "086c8702_cef89944",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "nit: we should change this API to take a raw SFI (not handle) for better GCMole support",
+      "range": {
+        "startLine": 903,
+        "startChar": 33,
+        "endLine": 903,
+        "endChar": 56
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b18dd6d_f821fd4e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "not changed in your CL, but I find this method name a bit weird given that there isn\u0027t a central \"code cache\" for optimized code, but rather per-function caches in the feedback vector. Maybe rename to something like \"CacheOptimizedCode\"? Maybe I\u0027m overthinking it.",
+      "range": {
+        "startLine": 924,
+        "startChar": 5,
+        "endLine": 924,
+        "endChar": 37
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8237822d_b37052af",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "nit: only needed on the OSR path",
+      "range": {
+        "startLine": 933,
+        "startChar": 0,
+        "endLine": 935,
+        "endChar": 48
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f880f12_fbafcfc5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "maybe flip the condition and early return after OSROptimizedCodeCache::AddOptimizedCode?",
+      "range": {
+        "startLine": 937,
+        "startChar": 2,
+        "endLine": 937,
+        "endChar": 27
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8f9902_bfd8fa2f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "maybe we should change this to a non-static member function? I don\u0027t think it allocates, and then we could dehandlify `vector` and `code`",
+      "range": {
+        "startLine": 949,
+        "startChar": 4,
+        "endLine": 949,
+        "endChar": 51
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad922512_d7e30ad9",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "not your CL, but while you\u0027re here, you could just do `job.release()` directly here instead of `.get()`",
+      "range": {
+        "startLine": 1043,
+        "startChar": 69,
+        "endLine": 1043,
+        "endChar": 72
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63d28fa0_3b4a7b6b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "should we make this DCHECK match the comment better, by looking at active tier etc.? Also mildly worried that there\u0027s a race which could cause bytecode to be flushed before this DCHECK.",
+      "range": {
+        "startLine": 1059,
+        "startChar": 2,
+        "endLine": 1059,
+        "endChar": 62
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2611cde5_8a26ceb8",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "this is a bit sketchy, as I assume you appreciate given the three line comment. Would it be possible to get rid of ContinuationForConcurrentOptimization entirely? a) Compiler::CompileOptimized already calls it directly, and b) it\u0027s not clear to me why we have to reset function code on a failed optimization, shouldn\u0027t the function should already have valid code? It feels like this might be left over from before the optimization marker.",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5530ea68_03fc69ab",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "nit: not your CL, but maybe explicitly use the `job-\u003ecompilation_info()` instead of caching it, to make it explicit that it\u0027s owned by the job (given the unique_ptr move / no move below)",
+      "range": {
+        "startLine": 1124,
+        "startChar": 2,
+        "endLine": 1124,
+        "endChar": 71
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95023921_84bf7e1f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "maybe we should just make GetTurbofanCode_NotConcurrent return a MaybeHandle\u003cCode\u003e and pass it ownership of the job?",
+      "range": {
+        "startLine": 1138,
+        "startChar": 8,
+        "endLine": 1138,
+        "endChar": 37
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f30741b_d8dad137",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3404,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "why is OSRing in this case a bad thing? We might have deoptimized but want to OSR re-optimize",
+      "range": {
+        "startLine": 3403,
+        "startChar": 19,
+        "endLine": 3404,
+        "endChar": 47
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e8fce4_eddce65b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3408,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "extract to helper, e.g. ShouldTriggerOSR()?",
+      "range": {
+        "startLine": 3381,
+        "startChar": 0,
+        "endLine": 3408,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d8bb19_21793196",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "are there other family members planned? Or should we remove this part of the comment?",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 25
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45acb686_8f5318a8",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-29T08:57:24Z",
+      "side": 1,
+      "message": "maybe add a static assert that OptimizationMarker::kNone and OptimizationMarker::kInOptimizationQueue both fit in OsrOptimizationMarkerBit::kMax",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 61
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
