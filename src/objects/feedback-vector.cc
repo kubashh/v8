@@ -415,19 +415,32 @@ void FeedbackVector::ClearOptimizedCode() {
   set_maybe_has_optimized_code(false);
 }
 
-void FeedbackVector::ClearOptimizationMarker() {
-  SetOptimizationMarker(OptimizationMarker::kNone);
+void FeedbackVector::reset_optimization_marker() {
+  set_optimization_marker(OptimizationMarker::kNone);
 }
 
-void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
+void FeedbackVector::set_optimization_marker(OptimizationMarker marker) {
   int32_t state = flags();
   state = OptimizationMarkerBits::update(state, marker);
   set_flags(state);
 }
 
-void FeedbackVector::InitializeOptimizationState() {
+void FeedbackVector::reset_flags() {
   set_flags(OptimizationMarkerBits::encode(OptimizationMarker::kNone) |
+            OsrOptimizationMarkerBit::encode(OptimizationMarker::kNone) |
             MaybeHasOptimizedCodeBit::encode(false));
+}
+
+OptimizationMarker FeedbackVector::osr_optimization_marker() {
+  return OsrOptimizationMarkerBit::decode(flags());
+}
+
+void FeedbackVector::set_osr_optimization_marker(OptimizationMarker marker) {
+  DCHECK(marker == OptimizationMarker::kNone ||
+         marker == OptimizationMarker::kInOptimizationQueue);
+  int32_t state = flags();
+  state = OsrOptimizationMarkerBit::update(state, marker);
+  set_flags(state);
 }
 
 void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
