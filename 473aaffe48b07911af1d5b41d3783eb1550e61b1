@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6853ab63_0d672ccb",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Will do in a followup.",
+      "parentUuid": "086c8702_cef89944",
+      "range": {
+        "startLine": 903,
+        "startChar": 33,
+        "endLine": 903,
+        "endChar": 56
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b18dd6d_f821fd4e",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "not changed in your CL, but I find this method name a bit weird given that there isn\u0027t a central \"code cache\" for optimized code, but rather per-function caches in the feedback vector. Maybe rename to something like \"CacheOptimizedCode\"? Maybe I\u0027m overthinking it.",
+      "range": {
+        "startLine": 924,
+        "startChar": 5,
+        "endLine": 924,
+        "endChar": 37
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca2c1fd2_4d20f89b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "I don\u0027t have a good idea for a better than than \u0027OptimizedCodeCache\u0027 since internally we handle both the central OSR cache and FV cache. I ended up pulling both these methods into an AllStatic OptimizedCodeCache class so at least the two methods are clearly bundled.",
+      "parentUuid": "8b18dd6d_f821fd4e",
       "range": {
         "startLine": 924,
         "startChar": 5,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7389487_9dfcca80",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8237822d_b37052af",
+      "range": {
+        "startLine": 933,
+        "startChar": 0,
+        "endLine": 935,
+        "endChar": 48
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f880f12_fbafcfc5",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "maybe flip the condition and early return after OSROptimizedCodeCache::AddOptimizedCode?",
+      "range": {
+        "startLine": 937,
+        "startChar": 2,
+        "endLine": 937,
+        "endChar": 27
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c4e4e8_158f6fe7",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f880f12_fbafcfc5",
       "range": {
         "startLine": 937,
         "startChar": 2,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc6e0fb_2e2407eb",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Will do in a followup.",
+      "parentUuid": "fa8f9902_bfd8fa2f",
+      "range": {
+        "startLine": 949,
+        "startChar": 4,
+        "endLine": 949,
+        "endChar": 51
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad922512_d7e30ad9",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7caef561_749be887",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad922512_d7e30ad9",
+      "range": {
+        "startLine": 1043,
+        "startChar": 69,
+        "endLine": 1043,
+        "endChar": 72
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63d28fa0_3b4a7b6b",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "should we make this DCHECK match the comment better, by looking at active tier etc.? Also mildly worried that there\u0027s a race which could cause bytecode to be flushed before this DCHECK.",
+      "range": {
+        "startLine": 1059,
+        "startChar": 2,
+        "endLine": 1059,
+        "endChar": 62
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b05cf3a7_bcda7de4",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "The comment is unrelated to the DCHECK, see crrev.com/c/2454714/2/src/codegen/compiler.cc. I\u0027ll just remove it.\n\nAs for the race, I *think* we\u0027re safe even without an IsCompiled scope, since the bytecode is currently active on the stack (that\u0027s where we called into compiler.cc).",
+      "parentUuid": "63d28fa0_3b4a7b6b",
       "range": {
         "startLine": 1059,
         "startChar": 2,
@@ -187,6 +355,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c07330cc_dfc8fd03",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Not sure I understand your comment. The continuation approach comes from the fact that we always jump to the returned code from the InterpreterEntryTrampoline - the continuation is that code object for the concurrent case.\n\nI agree the empty-handle-for-osr is a bit weird, but I thought it was nicer than doing `if (OSR) return {}; else return ContinuationFCO();` at callsites.",
+      "parentUuid": "2611cde5_8a26ceb8",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5530ea68_03fc69ab",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 7
@@ -198,6 +390,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "nit: not your CL, but maybe explicitly use the `job-\u003ecompilation_info()` instead of caching it, to make it explicit that it\u0027s owned by the job (given the unique_ptr move / no move below)",
+      "range": {
+        "startLine": 1124,
+        "startChar": 2,
+        "endLine": 1124,
+        "endChar": 71
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a55661d_abf4e03b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5530ea68_03fc69ab",
       "range": {
         "startLine": 1124,
         "startChar": 2,
@@ -231,6 +447,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "836a14f2_22eab4cc",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "For symmetry with GetTurbofanCode_Concurrent, I kept the bool return value, but changed to the unique_ptr arg.",
+      "parentUuid": "95023921_84bf7e1f",
+      "range": {
+        "startLine": 1138,
+        "startChar": 8,
+        "endLine": 1138,
+        "endChar": 37
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f30741b_d8dad137",
@@ -244,6 +484,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "why is OSRing in this case a bad thing? We might have deoptimized but want to OSR re-optimize",
+      "range": {
+        "startLine": 3403,
+        "startChar": 19,
+        "endLine": 3404,
+        "endChar": 47
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be6694f_ec58a736",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3404,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "I moved this code over unchanged from runtime-compiler.cc. But I think you\u0027re right, removing it sounds reasonable. Will check in a followup.",
+      "parentUuid": "8f30741b_d8dad137",
       "range": {
         "startLine": 3403,
         "startChar": 19,
@@ -277,6 +541,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b76fc1_c8242a26",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3408,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "That\u0027s what we had before in runtime-compiler.cc. I decided to inline the conditions here 1) for clarity and because they\u0027re fairly short, and 2) that\u0027s what non-OSR compiler functions do too.",
+      "parentUuid": "c5e8fce4_eddce65b",
+      "range": {
+        "startLine": 3381,
+        "startChar": 0,
+        "endLine": 3408,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28d8bb19_21793196",
@@ -300,6 +588,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9586688_1db184ed",
+        "filename": "src/codegen/compiler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28d8bb19_21793196",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 25
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45acb686_8f5318a8",
@@ -313,6 +625,30 @@
       "writtenOn": "2022-03-29T08:57:24Z",
       "side": 1,
       "message": "maybe add a static assert that OptimizationMarker::kNone and OptimizationMarker::kInOptimizationQueue both fit in OsrOptimizationMarkerBit::kMax",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 61
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f30419fd_66f9c874",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-30T09:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45acb686_8f5318a8",
       "range": {
         "startLine": 439,
         "startChar": 0,
