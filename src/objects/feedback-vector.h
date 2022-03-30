@@ -239,6 +239,9 @@ class FeedbackVector
   void set_tiering_state(TieringState state);
   void reset_tiering_state();
 
+  TieringState osr_tiering_state();
+  void set_osr_tiering_state(TieringState marker);
+
   void reset_flags();
 
   // Conversion from a slot to an integer index to the underlying array.
