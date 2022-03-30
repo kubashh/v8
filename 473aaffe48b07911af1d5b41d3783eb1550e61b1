@@ -379,6 +379,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3802116e_1417932d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-30T14:35:03Z",
+      "side": 1,
+      "message": "\"The continuation approach comes from the fact that we always jump to the returned code from the InterpreterEntryTrampoline - the continuation is that code object for the concurrent case.\"\n\nIs that the case though? By my read, we jump to the code that \"Runtime_CompileFoo_Bar\" returns, but that calls \"CompileOptimized\" which returns function-\u003ecode(): https://source.chromium.org/chromium/chromium/src/+/main:v8/src/runtime/runtime-compiler.cc;l\u003d46;drc\u003d0d4e986098193946ad69dc6f8a0c692458d28b81\n\nThen all ContinuationForConcurrentOptimization seems to be used for is setting function-\u003ecode(), which I would expect to already be correct.",
+      "parentUuid": "c07330cc_dfc8fd03",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5530ea68_03fc69ab",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 7
