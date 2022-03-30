@@ -105,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb49a5dd_7cddd9e8",
+        "filename": "src/objects/fixed-array.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-03-30T06:06:35Z",
+      "side": 1,
+      "message": "Agreed, this one can be inlined.",
+      "parentUuid": "97e59606_0f4dd9e5",
+      "range": {
+        "startLine": 402,
+        "startChar": 31,
+        "endLine": 402,
+        "endChar": 35
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4f98695_122d3fe2",
@@ -128,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "184b96ad_48773796",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-03-30T06:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f98695_122d3fe2",
+      "range": {
+        "startLine": 213,
+        "startChar": 5,
+        "endLine": 213,
+        "endChar": 34
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a80cc78_543d2e40",
@@ -141,6 +189,30 @@
       "writtenOn": "2022-03-29T20:42:32Z",
       "side": 1,
       "message": "nit: 2022",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fff4e544_af68451e",
+        "filename": "test/mjsunit/wasm/runtime-type-canonicalization.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-03-30T06:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a80cc78_543d2e40",
       "range": {
         "startLine": 1,
         "startChar": 13,
