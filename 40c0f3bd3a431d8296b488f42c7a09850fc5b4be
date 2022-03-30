@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a751c298_c3c0781c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2022-03-30T14:54:48Z",
+      "side": 1,
+      "message": "Thanks!\n\nMoved the code to base/platform, removed #ifdefs, and added a unit test (note that this is also exercized end-to-end by most d8 tests, since anything that creates an isolate will end up hitting this code. Also tested it locally, memory is still shared.",
+      "revId": "40c0f3bd3a431d8296b488f42c7a09850fc5b4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

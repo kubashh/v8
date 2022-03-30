@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0adca8fa_ce8f048b",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2022-03-30T14:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11fc307b_ef0ca154",
+      "range": {
+        "startLine": 229,
+        "startChar": 6,
+        "endLine": 230,
+        "endChar": 34
+      },
+      "revId": "2005810e3928b6956024eff2fd168f92541e78a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cde6624_b08b7e4e",
@@ -71,6 +95,24 @@
       "writtenOn": "2022-03-30T10:36:08Z",
       "side": 1,
       "message": "Could you please move this platform specific code to base::OS class (platform-macos.cc)? Instead of #ifdeffing here there could be something like base::OS::IsRemappingSupported() predicate.\n\nMichael, WDYT?",
+      "revId": "2005810e3928b6956024eff2fd168f92541e78a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbd6268_676ae015",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2022-03-30T14:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cde6624_b08b7e4e",
       "revId": "2005810e3928b6956024eff2fd168f92541e78a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
