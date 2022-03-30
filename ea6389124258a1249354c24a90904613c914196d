@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb7666e_c32719e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-03-30T15:48:39Z",
+      "side": 1,
+      "message": "Pls note that this is a first step to enable us adding builder descriptions; to make Phase 1 possible. As part of Phase 1 we should improve this constructs to handle all here unforeseen cases. And Phase 2 would refactor everything and give it a better design.",
+      "revId": "ea6389124258a1249354c24a90904613c914196d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
