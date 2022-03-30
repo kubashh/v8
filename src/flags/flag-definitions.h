@@ -937,12 +937,25 @@ DEFINE_BOOL(turbo_collect_feedback_in_generic_lowering, true,
             "enable experimental feedback collection in generic lowering.")
 DEFINE_BOOL(isolate_script_cache_ageing, true,
             "enable ageing of the isolate script cache.")
-
 DEFINE_FLOAT(script_delay, 0, "busy wait [ms] on every Script::Run")
 DEFINE_FLOAT(script_delay_once, 0, "busy wait [ms] on the first Script::Run")
 DEFINE_FLOAT(script_delay_fraction, 0.0,
              "busy wait after each Script::Run by the given fraction of the "
              "run's duration")
+
+DEFINE_BOOL(turboshaft, false, "enable TurboFan's TurboShaft phases")
+DEFINE_BOOL(turboshaft_instruction_selection, false,
+            "select instructions directly from TurboShaft IR")
+#ifdef DEBUG
+DEFINE_UINT64(turboshaft_limit_optimization_steps, -1,
+              "stop applying optional optimizations after a specified number "
+              "of steps, useful for bisecting optimization bugs")
+DEFINE_UINT64(turboshaft_break_on_optimization_step, -1,
+              "abort after a specified number of steps, useful for bisecting "
+              "optimization bugs")
+#endif  // DEBUG
+DEFINE_BOOL(turboshaft_trace_reduction, false,
+            "trace individual TurboShaft reduction steps")
 
 // Favor memory over execution speed.
 DEFINE_BOOL(optimize_for_size, false,
