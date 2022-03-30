@@ -783,6 +783,10 @@ class Heap {
         std::min(max_old_generation_size(), std::max(heap_limit, min_limit)));
   }
 
+#if V8_ENABLE_WEBASSEMBLY
+  void EnsureWasmCanonicalRttsSize(int length);
+#endif
+
   // ===========================================================================
   // Initialization. ===========================================================
   // ===========================================================================
