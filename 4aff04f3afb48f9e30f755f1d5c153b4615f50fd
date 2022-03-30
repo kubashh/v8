@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77af07a1_27d9e5a9",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "Is this really better than a single \"movl\" with the pre-computed immediate?",
+      "range": {
+        "startLine": 2077,
+        "startChar": 0,
+        "endLine": 2079,
+        "endChar": 32
+      },
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "402f2ef4_ce63f07b",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "Don\u0027t we need to pop in the inverse order?",
+      "range": {
+        "startLine": 2081,
+        "startChar": 0,
+        "endLine": 2084,
+        "endChar": 14
+      },
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ee8f11a_06ce175b",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "Maybe use \"prefix.64\" and \"prefix.67\" to make it clear what those bytes are.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ab7d6a_ff219a93",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "Please format comments like prose, i.e. with proper punctuation (see https://google.github.io/styleguide/cppguide.html#Punctuation,_Spelling_and_Grammar). This applies to all comments added in this CL, I won\u0027t repeat it everywhere.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89bc793c_688738d8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "I would propose a slight improvement here:\nIf there are no traces in the module, we should have an empty vector, instead of one containing only {0, 0}. This would save one dynamic memory allocation per module.\nThe code here then initialized current_inst_trace_ to a pointer to a global constant {0, 0} pair, and only if traces are defined (in a V8_UNLIKELY branch) updates it to point into the vector.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fb0903c_77bcb0c1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "Even though the vector is typically small, I would still prefer a proper search using e.g. std::lower_bound.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b6acfd3_01072362",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2396,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "As a validity check, you could add something like this before this condition:\n  DCHECK(this-\u003ecurrent_inst_trace_-\u003efirst \u003d\u003d 0 ||\n         this-\u003ecurrent_inst_trace_-\u003efirst \u003e\u003d this-\u003epc_offset());",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d22f7df_5789df75",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-03-30T11:28:51Z",
+      "side": 1,
+      "message": "What do we do with remaining entries in inst_traces_ after this loop? Just ignore them? Or ignore all traces, since there were obviously invalid entries in the section? The latter sounds better, and seems more consistent with what we do for other optional sections.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
