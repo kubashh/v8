@@ -261,7 +261,7 @@ Handle<FeedbackVector> FeedbackVector::New(
   DCHECK_EQ(vector->length(), slot_count);
 
   DCHECK_EQ(vector->shared_function_info(), *shared);
-  DCHECK_EQ(vector->optimization_marker(), OptimizationMarker::kNone);
+  DCHECK_EQ(vector->tiering_state(), TieringState::kNone);
   DCHECK(!vector->maybe_has_optimized_code());
   DCHECK_EQ(vector->invocation_count(), 0);
   DCHECK_EQ(vector->profiler_ticks(), 0);
@@ -394,15 +394,15 @@ void FeedbackVector::SetOptimizedCode(Handle<FeedbackVector> vector,
   DCHECK(!vector->has_optimized_code() ||
          vector->optimized_code().marked_for_deoptimization() ||
          FLAG_stress_concurrent_inlining_attach_code);
-  // TODO(mythria): We could see a CompileOptimized marker here either from
+  // TODO(mythria): We could see a CompileOptimized state here either from
   // tests that use %OptimizeFunctionOnNextCall, --always-opt or because we
   // re-mark the function for non-concurrent optimization after an OSR. We
-  // should avoid these cases and also check that marker isn't
-  // kCompileOptimized or kCompileOptimizedConcurrent.
+  // should avoid these cases and also check that state isn't
+  // TieringState::kRequestTurbofan*.
   vector->set_maybe_optimized_code(HeapObjectReference::Weak(*code),
                                    kReleaseStore);
   int32_t state = vector->flags();
-  state = OptimizationMarkerBits::update(state, OptimizationMarker::kNone);
+  state = TieringStateBits::update(state, TieringState::kNone);
   state = MaybeHasOptimizedCodeBit::update(state, true);
   vector->set_flags(state);
 }
@@ -415,18 +415,49 @@ void FeedbackVector::ClearOptimizedCode() {
   set_maybe_has_optimized_code(false);
 }
 
-void FeedbackVector::ClearOptimizationMarker() {
-  SetOptimizationMarker(OptimizationMarker::kNone);
+void FeedbackVector::reset_tiering_state() {
+  set_tiering_state(TieringState::kNone);
 }
 
-void FeedbackVector::SetOptimizationMarker(OptimizationMarker marker) {
-  int32_t state = flags();
-  state = OptimizationMarkerBits::update(state, marker);
-  set_flags(state);
+namespace {
+
+#ifdef DEBUG
+bool IsValidStateTransition(TieringState from, TieringState to) {
+  if (from == to) return true;
+  STATIC_ASSERT(static_cast<int>(TieringState::kRequestMaglev_Synchronous) +
+                    1 ==
+                static_cast<int>(TieringState::kRequestMaglev_Concurrent));
+  STATIC_ASSERT(static_cast<int>(TieringState::kRequestMaglev_Concurrent) + 1 ==
+                static_cast<int>(TieringState::kRequestTurbofan_Synchronous));
+  STATIC_ASSERT(static_cast<int>(TieringState::kRequestTurbofan_Synchronous) +
+                    1 ==
+                static_cast<int>(TieringState::kRequestTurbofan_Concurrent));
+  if (base::IsInRange(from, TieringState::kRequestMaglev_Synchronous,
+                      TieringState::kRequestTurbofan_Concurrent) &&
+      base::IsInRange(to, TieringState::kRequestMaglev_Synchronous,
+                      TieringState::kRequestTurbofan_Concurrent)) {
+    // Transitions from one request to another are invalid.
+    return false;
+  }
+  if (IsInProgress(from) && !IsNone(to)) {
+    // Gotta stop before starting again.
+    return false;
+  }
+  return true;
+}
+#endif  // DEBUG
+
+}  // namespace
+
+void FeedbackVector::set_tiering_state(TieringState state) {
+  DCHECK(IsValidStateTransition(tiering_state(), state));
+  int32_t new_flags = flags();
+  new_flags = TieringStateBits::update(new_flags, state);
+  set_flags(new_flags);
 }
 
-void FeedbackVector::InitializeOptimizationState() {
-  set_flags(OptimizationMarkerBits::encode(OptimizationMarker::kNone) |
+void FeedbackVector::reset_flags() {
+  set_flags(TieringStateBits::encode(TieringState::kNone) |
             MaybeHasOptimizedCodeBit::encode(false));
 }
 
