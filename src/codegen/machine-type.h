@@ -417,6 +417,11 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeInBytes(
   return 1 << ElementSizeLog2Of(rep);
 }
 
+V8_EXPORT_PRIVATE inline constexpr uint16_t ElementSizeInBits(
+    MachineRepresentation rep) {
+  return 8 * ElementSizeInBytes(rep);
+}
+
 V8_EXPORT_PRIVATE inline constexpr int ElementSizeInPointers(
     MachineRepresentation rep) {
   return (ElementSizeInBytes(rep) + kSystemPointerSize - 1) /

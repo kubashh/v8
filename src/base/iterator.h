@@ -6,6 +6,7 @@
 #define V8_BASE_ITERATOR_H_
 
 #include <iterator>
+#include <utility>
 
 namespace v8 {
 namespace base {
@@ -39,12 +40,12 @@ class iterator_range {
   iterator_range(ForwardIterator begin, ForwardIterator end)
       : begin_(begin), end_(end) {}
 
-  iterator begin() { return begin_; }
-  iterator end() { return end_; }
-  const_iterator begin() const { return begin_; }
-  const_iterator end() const { return end_; }
+  iterator begin() const { return begin_; }
+  iterator end() const { return end_; }
   const_iterator cbegin() const { return begin_; }
   const_iterator cend() const { return end_; }
+  auto rbegin() const { return std::make_reverse_iterator(end_); }
+  auto rend() const { return std::make_reverse_iterator(begin_); }
 
   bool empty() const { return cbegin() == cend(); }
 
@@ -73,6 +74,11 @@ auto make_iterator_range(ForwardIterator begin, ForwardIterator end) {
 //   }
 template <typename T>
 auto Reversed(T& t) {  // NOLINT(runtime/references): match {rbegin} and {rend}
+  return make_iterator_range(std::rbegin(t), std::rend(t));
+}
+
+template <typename T>
+auto Reversed(const iterator_range<T>& t) {
   return make_iterator_range(std::rbegin(t), std::rend(t));
 }
 
