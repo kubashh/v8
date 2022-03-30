@@ -27,10 +27,15 @@ namespace {
 void DisposeCompilationJob(TurbofanCompilationJob* job,
                            bool restore_function_code) {
   if (restore_function_code) {
-    Handle<JSFunction> function = job->compilation_info()->closure();
+    OptimizedCompilationInfo* info = job->compilation_info();
+    Handle<JSFunction> function = info->closure();
     function->set_code(function->shared().GetCode(), kReleaseStore);
-    if (IsInProgress(function->tiering_state())) {
-      function->reset_tiering_state();
+    if (!info->is_osr()) {
+      if (IsInProgress(function->tiering_state())) {
+        function->reset_tiering_state();
+      }
+    } else {
+      function->set_osr_tiering_state(TieringState::kNone);
     }
   }
   delete job;
@@ -205,7 +210,7 @@ void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
     }
     OptimizedCompilationInfo* info = job->compilation_info();
     Handle<JSFunction> function(*info->closure(), isolate_);
-    if (function->HasAvailableCodeKind(info->code_kind())) {
+    if (function->HasAvailableCodeKind(info->code_kind()) && !info->is_osr()) {
       if (FLAG_trace_concurrent_recompilation) {
         PrintF("  ** Aborting compilation for ");
         function->ShortPrint();

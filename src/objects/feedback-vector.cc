@@ -419,38 +419,7 @@ void FeedbackVector::reset_tiering_state() {
   set_tiering_state(TieringState::kNone);
 }
 
-namespace {
-
-#ifdef DEBUG
-bool IsValidStateTransition(TieringState from, TieringState to) {
-  if (from == to) return true;
-  STATIC_ASSERT(static_cast<int>(TieringState::kRequestMaglev_Synchronous) +
-                    1 ==
-                static_cast<int>(TieringState::kRequestMaglev_Concurrent));
-  STATIC_ASSERT(static_cast<int>(TieringState::kRequestMaglev_Concurrent) + 1 ==
-                static_cast<int>(TieringState::kRequestTurbofan_Synchronous));
-  STATIC_ASSERT(static_cast<int>(TieringState::kRequestTurbofan_Synchronous) +
-                    1 ==
-                static_cast<int>(TieringState::kRequestTurbofan_Concurrent));
-  if (base::IsInRange(from, TieringState::kRequestMaglev_Synchronous,
-                      TieringState::kRequestTurbofan_Concurrent) &&
-      base::IsInRange(to, TieringState::kRequestMaglev_Synchronous,
-                      TieringState::kRequestTurbofan_Concurrent)) {
-    // Transitions from one request to another are invalid.
-    return false;
-  }
-  if (IsInProgress(from) && !IsNone(to)) {
-    // Gotta stop before starting again.
-    return false;
-  }
-  return true;
-}
-#endif  // DEBUG
-
-}  // namespace
-
 void FeedbackVector::set_tiering_state(TieringState state) {
-  DCHECK(IsValidStateTransition(tiering_state(), state));
   int32_t new_flags = flags();
   new_flags = TieringStateBits::update(new_flags, state);
   set_flags(new_flags);
@@ -458,7 +427,21 @@ void FeedbackVector::set_tiering_state(TieringState state) {
 
 void FeedbackVector::reset_flags() {
   set_flags(TieringStateBits::encode(TieringState::kNone) |
+            OsrTieringStateBit::encode(TieringState::kNone) |
             MaybeHasOptimizedCodeBit::encode(false));
+}
+
+TieringState FeedbackVector::osr_tiering_state() {
+  return OsrTieringStateBit::decode(flags());
+}
+
+void FeedbackVector::set_osr_tiering_state(TieringState marker) {
+  DCHECK(marker == TieringState::kNone || marker == TieringState::kInProgress);
+  STATIC_ASSERT(TieringState::kNone <= OsrTieringStateBit::kMax);
+  STATIC_ASSERT(TieringState::kInProgress <= OsrTieringStateBit::kMax);
+  int32_t state = flags();
+  state = OsrTieringStateBit::update(state, marker);
+  set_flags(state);
 }
 
 void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
