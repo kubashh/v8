@@ -446,6 +446,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dad33507_29804378",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T17:55:05Z",
+      "side": 1,
+      "message": "Validation of Performance Impact\nThis is based on the current implementation so we have some numbers to work with. Still working on the other suggestions for improvement, so I expect to see this improve.\n\nSummary:\nIn summary, I can find no difference in decode time for the trace instructions. \nI modified one large Wasm module into 3 additional modules. One is the extreme \ncase, which triples the file size. One is a milder extreme case, which just \ndoubles the file size. And the last one increases the file size by ~3%. All of \nthese are what we consider the worst case, it does not make sense to add this \nmany traces. We expect users to add a maximum of a few dozen trace marks at a \ntime.\n\n\nDetails:\n\nTest Code:\n    f \u003d arguments[0]\n    b \u003d readbuffer(f);\n    start \u003d performance.now()\n    m \u003d new WebAssembly.Module(b);\n    stop \u003d performance.now()\n    t_ms \u003d stop - start;\n    print(t_ms)\n\nI ran the test code in a harness that ran it 50 times, then averaged the time.\n\n\nD8 commands:\nWithout Tracing\n    d8 harness.js -- earthwasm.wasm\n    \nWith Tracing\n    d8 harness.js --experimental-wasm-instruction-tracing -- earthwasm.wasm\n\n  \n  \nearthwasm.wasm:\n    size:                 20,410,954 bytes\n    trace count:          0 traces\n    without tracing time: 6,555.858ms +- 166,490.414ms\n    with tracing time:    6,333.822ms +-   3,089.230ms\n\nearthwasm_large.wasm:\n    size:                 60,392,786 bytes\n    trace count:          5,838,582 traces\n    without tracing time: 6,379.287ms +- 10,132.305ms\n    with tracing time:    6,342.293ms +-  3,598.859ms\n\nearthwasm_medium.wasm:\n    size:                 45,469,582 bytes\n    trace count:          3,649,917 traces\n    without tracing time: 6,325.598ms +- 5,885.890ms\n    with tracing time:    6,347.215ms +- 5,468.551ms\n\nearthwasm_small.wasm:\n    size:                 20,981,041 bytes\n    trace count:          73,285 traces\n    without tracing time: 6,374.573ms +- 14,984.142ms\n    with tracing time:    6,332.986ms +-  5,626.252ms",
+      "parentUuid": "9ab7222f_1ea7e399",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad955810_5762b57c",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 5
