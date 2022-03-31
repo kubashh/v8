@@ -403,6 +403,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b1d55c6_09da1771",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-03-31T06:12:29Z",
+      "side": 1,
+      "message": "So you mean to replace all `return CFCO()` calls with `return {}`? I\u0027m feeling a bit careful due to the sparkplug code installation that someone added in here. I don\u0027t want to mess with different topics too much in this CL, followup?",
+      "parentUuid": "3802116e_1417932d",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5530ea68_03fc69ab",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 7
