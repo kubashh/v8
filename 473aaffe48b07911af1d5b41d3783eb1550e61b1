@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41d1a4c7_6fb5017b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-31T09:53:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ca2c1fd2_4d20f89b",
+      "range": {
+        "startLine": 924,
+        "startChar": 5,
+        "endLine": 924,
+        "endChar": 37
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8237822d_b37052af",
@@ -415,6 +439,30 @@
       "side": 1,
       "message": "So you mean to replace all `return CFCO()` calls with `return {}`? I\u0027m feeling a bit careful due to the sparkplug code installation that someone added in here. I don\u0027t want to mess with different topics too much in this CL, followup?",
       "parentUuid": "3802116e_1417932d",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1072,
+        "endChar": 3
+      },
+      "revId": "473aaffe48b07911af1d5b41d3783eb1550e61b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "385e2fa6_07c22d14",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-03-31T09:53:08Z",
+      "side": 1,
+      "message": "Followup sgtm",
+      "parentUuid": "0b1d55c6_09da1771",
       "range": {
         "startLine": 1067,
         "startChar": 0,
