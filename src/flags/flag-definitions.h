@@ -528,6 +528,12 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      V8_DICT_PROPERTY_CONST_TRACKING_BOOL,
                      "Use const tracking on dictionary properties")
 
+// Flag to select wasm trace mark type
+DEFINE_STRING(
+    wasm_trace_native, nullptr,
+    "Select which native code sequence to use for wasm trace instruction: "
+    "default or cpuid")
+
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
             "Disable runtime allocation of executable memory.")

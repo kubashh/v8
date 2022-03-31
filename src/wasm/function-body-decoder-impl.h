@@ -897,6 +897,7 @@ struct ControlBase : public PcForErrors<validate> {
   INTERFACE_NON_CONSTANT_FUNCTIONS(F)
 
 #define INTERFACE_META_FUNCTIONS(F)    \
+  F(TraceInstruction, uint32_t value)  \
   F(StartFunction)                     \
   F(StartFunctionBody, Control* block) \
   F(FinishFunction)                    \
@@ -1070,6 +1071,10 @@ struct ControlBase : public PcForErrors<validate> {
   F(BrOnNonArray, const Value& object, Value* value_on_fallthrough,            \
     uint32_t br_depth)
 
+// This is a global constant invalid instruction trace, to be pointed at by
+// the current instruction trace pointer in the default case
+const std::pair<uint32_t, uint32_t> invalid_instruction_trace = {0, 0};
+
 // Generic Wasm bytecode decoder with utilities for decoding immediates,
 // lengths, etc.
 template <Decoder::ValidateFlag validate, DecodingMode decoding_mode>
@@ -1085,7 +1090,21 @@ class WasmDecoder : public Decoder {
         module_(module),
         enabled_(enabled),
         detected_(detected),
-        sig_(sig) {}
+        sig_(sig) {
+    current_inst_trace_ = &invalid_instruction_trace;
+    if (V8_UNLIKELY(!module_->inst_traces.empty())) {
+      auto first_inst_trace = std::lower_bound(
+          module_->inst_traces.begin(), module_->inst_traces.end(),
+          std::make_pair(buffer_offset, 0),
+          [](const std::pair<uint32_t, uint32_t>& a,
+             const std::pair<uint32_t, uint32_t>& b) {
+            return a.first < b.first;
+          });
+      if (V8_UNLIKELY(first_inst_trace != module_->inst_traces.end())) {
+        current_inst_trace_ = &(*(first_inst_trace));
+      }
+    }
+  }
 
   Zone* zone() const { return local_types_.get_allocator().zone(); }
 
@@ -2173,6 +2192,7 @@ class WasmDecoder : public Decoder {
   const WasmFeatures enabled_;
   WasmFeatures* detected_;
   const FunctionSig* sig_;
+  const std::pair<uint32_t, uint32_t>* current_inst_trace_;
 };
 
 // Only call this in contexts where {current_code_reachable_and_ok_} is known to
@@ -2377,6 +2397,18 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
     first_instruction_offset = this->pc_offset();
     // Decode the function body.
     while (this->pc_ < this->end_) {
+      // Because the current module offset will never be zero, once we reach the
+      // invalid state this will always evaluate to false
+      DCHECK(this->current_inst_trace_->first == 0 ||
+             this->current_inst_trace_->first >= this->pc_offset());
+      if (V8_UNLIKELY(this->current_inst_trace_->first == this->pc_offset())) {
+        TRACE("Emit trace at 0x%x with ID[0x%x]\n", this->pc_offset(),
+              this->current_inst_trace_->second);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(TraceInstruction,
+                                           this->current_inst_trace_->second);
+        this->current_inst_trace_++;
+      }
+
       // Most operations only grow the stack by at least one element (unary and
       // binary operations, local.get, constants, ...). Thus check that there is
       // enough space for those operations centrally, and avoid any bounds
