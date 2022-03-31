@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a936d88e_a4af1e94",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "compile*",
+      "range": {
+        "startLine": 363,
+        "startChar": 6,
+        "endLine": 363,
+        "endChar": 13
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abfac867_ba70fa71",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "can we change this to ` builder`? sorry I forgot that debug builder use a different naming convention.",
+      "range": {
+        "startLine": 371,
+        "startChar": 59,
+        "endLine": 371,
+        "endChar": 71
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77bbf3ba_12cfb482",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "can we handle the case for debug builders? (debug CI builders end with ` builder` without a dash). You can use the `is_ci_debug` function.",
+      "range": {
+        "startLine": 376,
+        "startChar": 75,
+        "endLine": 376,
+        "endChar": 87
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcf17d2c_e9a4c613",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "the bucket passed here should be the equivalent\u0027s bucket. It is now passing the bucket of the builder that has the description which will result in a broken link.",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 14
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45d5a177_48090bfc",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "the bucket passed here should be the triggered bucket (`try.triggered`). currently it is passing the trigger bucket.",
+      "range": {
+        "startLine": 389,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 18
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15e22fb_3b457bda",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "the bucket passed here should be the trigger bucket (`try`). currently it is passing the triggered bucket.",
+      "range": {
+        "startLine": 396,
+        "startChar": 12,
+        "endLine": 396,
+        "endChar": 18
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8946f4a_1652ea68",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "can we change this to ` builder` (same explanation as in the previous comment)",
+      "range": {
+        "startLine": 405,
+        "startChar": 47,
+        "endLine": 405,
+        "endChar": 59
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

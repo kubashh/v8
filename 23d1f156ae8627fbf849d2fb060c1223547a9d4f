@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ee0a6b_2cd2f3e3",
+        "filename": "lib/lib.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-03-31T13:52:49Z",
+      "side": 1,
+      "message": "In this case I guess it would behave the same way",
+      "parentUuid": "d83ba6ee_eced91d2",
+      "range": {
+        "startLine": 363,
+        "startChar": 4,
+        "endLine": 363,
+        "endChar": 8
+      },
+      "revId": "23d1f156ae8627fbf849d2fb060c1223547a9d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdf62e16_a1b311cb",
