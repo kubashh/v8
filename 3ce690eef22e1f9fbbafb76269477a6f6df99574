@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0331088_0ae850cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2022-03-31T22:38:33Z",
+      "side": 1,
+      "message": "Chromium tree sheriff here. I\u0027m seeing this CL cause MSAN errors: crbug.com/1312188\n\nWill try to close the V8 autoroller and revert.",
+      "revId": "3ce690eef22e1f9fbbafb76269477a6f6df99574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
