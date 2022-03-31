@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b3e95d_3dea4672",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77af07a1_27d9e5a9",
+      "range": {
+        "startLine": 2077,
+        "startChar": 0,
+        "endLine": 2079,
+        "endChar": 32
+      },
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "402f2ef4_ce63f07b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-30T11:28:51Z",
       "side": 1,
       "message": "Don\u0027t we need to pop in the inverse order?",
+      "range": {
+        "startLine": 2081,
+        "startChar": 0,
+        "endLine": 2084,
+        "endChar": 14
+      },
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7e482ea_7632c4d6",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2084,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "402f2ef4_ce63f07b",
       "range": {
         "startLine": 2081,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f8fff05_05c54ba6",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ee8f11a_06ce175b",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8ab7d6a_ff219a93",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-03-30T11:28:51Z",
       "side": 1,
       "message": "Please format comments like prose, i.e. with proper punctuation (see https://google.github.io/styleguide/cppguide.html#Punctuation,_Spelling_and_Grammar). This applies to all comments added in this CL, I won\u0027t repeat it everywhere.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec5ffab_0c17a63e",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8ab7d6a_ff219a93",
       "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e62625_5a3027eb",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89bc793c_688738d8",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fb0903c_77bcb0c1",
@@ -111,6 +213,24 @@
       "writtenOn": "2022-03-30T11:28:51Z",
       "side": 1,
       "message": "Even though the vector is typically small, I would still prefer a proper search using e.g. std::lower_bound.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1bfdf4f_3b181972",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fb0903c_77bcb0c1",
       "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -132,6 +252,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ba3f43f_3186835a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2396,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b6acfd3_01072362",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d22f7df_5789df75",
@@ -145,6 +283,24 @@
       "writtenOn": "2022-03-30T11:28:51Z",
       "side": 1,
       "message": "What do we do with remaining entries in inst_traces_ after this loop? Just ignore them? Or ignore all traces, since there were obviously invalid entries in the section? The latter sounds better, and seems more consistent with what we do for other optional sections.",
+      "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0c97eba_cd57b1f7",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-03-31T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d22f7df_5789df75",
       "revId": "4aff04f3afb48f9e30f755f1d5c153b4615f50fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
