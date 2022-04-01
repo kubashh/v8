@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb684088_0dddf6b4",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5826,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-01T18:15:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9df76f54_dc0462d7",
+      "range": {
+        "startLine": 5826,
+        "startChar": 39,
+        "endLine": 5826,
+        "endChar": 47
+      },
+      "revId": "4ced40aeb7be1b2784f0ebea642d050b1e54b7eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e38323d_34b45aac",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-04-01T17:50:14Z",
       "side": 1,
       "message": "Can you give me some background on TEMPORAL_ENTER_FUNC?",
+      "revId": "4ced40aeb7be1b2784f0ebea642d050b1e54b7eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1433cda2_dc533bb2",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5835,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-01T18:15:22Z",
+      "side": 1,
+      "message": "It is just a temporal macro which help me to debug and figure out which part of code got called if I change the definition to printf. By default it is NOOP but I can define to printf (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/js-temporal-objects.cc;l\u003d340?q\u003dTEMPORAL_ENTER_FUNC\u0026ss\u003dchromium ) if I need to trace the complex code. My plan is to remove them while we ready to STAGE it. Some of the AO is very very complex and hard to figure out what is going on.",
+      "parentUuid": "9e38323d_34b45aac",
       "revId": "4ced40aeb7be1b2784f0ebea642d050b1e54b7eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
