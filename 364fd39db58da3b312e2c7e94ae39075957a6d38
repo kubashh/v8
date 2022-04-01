@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17bda285_32018dcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Thank your noticing the bug.",
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a936d88e_a4af1e94",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-03-31T13:52:49Z",
       "side": 1,
       "message": "compile*",
+      "range": {
+        "startLine": 363,
+        "startChar": 6,
+        "endLine": 363,
+        "endChar": 13
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d355285_13b5d7d9",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a936d88e_a4af1e94",
       "range": {
         "startLine": 363,
         "startChar": 6,
@@ -47,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c77276d_e46372c9",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "I see. I am afraid we are not going to add descriptions to the debug builders then. We first need to realign the naming conventions for those. Otherwise the code for inferring the equivalent builder becomes too involved.",
+      "parentUuid": "abfac867_ba70fa71",
+      "range": {
+        "startLine": 371,
+        "startChar": 59,
+        "endLine": 371,
+        "endChar": 71
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77bbf3ba_12cfb482",
@@ -60,6 +125,30 @@
       "writtenOn": "2022-03-31T13:52:49Z",
       "side": 1,
       "message": "can we handle the case for debug builders? (debug CI builders end with ` builder` without a dash). You can use the `is_ci_debug` function.",
+      "range": {
+        "startLine": 376,
+        "startChar": 75,
+        "endLine": 376,
+        "endChar": 87
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "048076dd_103ea6c7",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "77bbf3ba_12cfb482",
       "range": {
         "startLine": 376,
         "startChar": 75,
@@ -93,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "408834d1_2c4b29ad",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Indeed! Good catch!",
+      "parentUuid": "fcf17d2c_e9a4c613",
+      "range": {
+        "startLine": 378,
+        "startChar": 8,
+        "endLine": 378,
+        "endChar": 14
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45d5a177_48090bfc",
@@ -106,6 +219,30 @@
       "writtenOn": "2022-03-31T13:52:49Z",
       "side": 1,
       "message": "the bucket passed here should be the triggered bucket (`try.triggered`). currently it is passing the trigger bucket.",
+      "range": {
+        "startLine": 389,
+        "startChar": 12,
+        "endLine": 389,
+        "endChar": 18
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9032883c_d9854077",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45d5a177_48090bfc",
       "range": {
         "startLine": 389,
         "startChar": 12,
@@ -139,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "642dab23_dcb5b6b6",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f15e22fb_3b457bda",
+      "range": {
+        "startLine": 396,
+        "startChar": 12,
+        "endLine": 396,
+        "endChar": 18
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8946f4a_1652ea68",
@@ -152,6 +313,30 @@
       "writtenOn": "2022-03-31T13:52:49Z",
       "side": 1,
       "message": "can we change this to ` builder` (same explanation as in the previous comment)",
+      "range": {
+        "startLine": 405,
+        "startChar": 47,
+        "endLine": 405,
+        "endChar": 59
+      },
+      "revId": "364fd39db58da3b312e2c7e94ae39075957a6d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a81994_2410437b",
+        "filename": "lib/lib.star",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-01T09:27:04Z",
+      "side": 1,
+      "message": "Same reason for not changing this as above.",
+      "parentUuid": "c8946f4a_1652ea68",
       "range": {
         "startLine": 405,
         "startChar": 47,
