@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2434e895_9b0c7e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-01T21:49:53Z",
+      "side": 1,
+      "message": "+leszeks, wanted to check in to see if we have any better way than CSA if a JS language feature (in this case Temporal) needs to use the iterator protocol?",
+      "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90ad074e_8bb6b6b9",
