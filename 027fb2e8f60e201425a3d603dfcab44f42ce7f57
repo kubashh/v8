@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ad074e_8bb6b6b9",
+        "filename": "src/builtins/builtins-temporal-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-01T21:42:12Z",
+      "side": 1,
+      "message": "Why does this need to be in CSA? Is it because of the use of the iterator protocol? Generally I\u0027d greatly prefer to avoid CSA implementations for Temporal.",
+      "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
