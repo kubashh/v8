@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2a89847_50859fd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-04-01T12:08:05Z",
+      "side": 1,
+      "message": "LGTM with one issue",
+      "revId": "9683d5f3d0f5b90b4299e3321a9bc7a1f17c411b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea02f22c_cb7bef19",
+        "filename": "lib/lib.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-04-01T12:08:05Z",
+      "side": 1,
+      "message": "there is an extra space here (it is causing the creation of the wrong equivalent for builders)",
+      "range": {
+        "startLine": 372,
+        "startChar": 30,
+        "endLine": 372,
+        "endChar": 31
+      },
+      "revId": "9683d5f3d0f5b90b4299e3321a9bc7a1f17c411b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
