@@ -464,6 +464,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6dd40aa9_0ac095b3",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-01T16:00:24Z",
+      "side": 1,
+      "message": "Thanks for those numbers. They are not measuring what I am most worried about though: Regressions in modules that do *not* contain trace marks. Can you compare validation time (using WebAssembly.validate) and Liftoff compilation time (\"new WebAssembly.Module\" with --liftoff-only) on earth, using a d8 before your change and d8 after this CL?",
+      "parentUuid": "dad33507_29804378",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad955810_5762b57c",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 5
