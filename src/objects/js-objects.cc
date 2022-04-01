@@ -3352,13 +3352,57 @@ Maybe<bool> JSObject::DefineOwnPropertyIgnoreAttributes(
       // TODO(verwaest): JSProxy afterwards verify the attributes that the
       // JSProxy claims it has, and verifies that they are compatible. If not,
       // they throw. Here we should do the same.
+<<<<<<< HEAD   (f3f0dc Version 9.6.180.28)
       case LookupIterator::INTERCEPTOR:
         if (handling == DONT_FORCE_FIELD) {
           Maybe<bool> result =
               JSObject::SetPropertyWithInterceptor(it, should_throw, value);
           if (result.IsNothing() || result.FromJust()) return result;
+=======
+      case LookupIterator::INTERCEPTOR: {
+        Maybe<bool> result = Just(false);
+        if (semantics == EnforceDefineSemantics::kDefine) {
+          PropertyDescriptor descriptor;
+          descriptor.set_configurable((attributes & DONT_DELETE) != 0);
+          descriptor.set_enumerable((attributes & DONT_ENUM) != 0);
+          descriptor.set_writable((attributes & READ_ONLY) != 0);
+          descriptor.set_value(value);
+          result = DefinePropertyWithInterceptorInternal(
+              it, it->GetInterceptor(), should_throw, &descriptor);
+        } else {
+          DCHECK_EQ(semantics, EnforceDefineSemantics::kSet);
+          if (handling == DONT_FORCE_FIELD) {
+            result =
+                JSObject::SetPropertyWithInterceptor(it, should_throw, value);
+          }
         }
+        if (result.IsNothing() || result.FromJust()) return result;
+
+        if (semantics == EnforceDefineSemantics::kDefine) {
+          it->Restart();
+          Maybe<bool> can_define = JSReceiver::CheckIfCanDefine(
+              it->isolate(), it, value, should_throw);
+          if (can_define.IsNothing() || !can_define.FromJust()) {
+            return can_define;
+          }
+>>>>>>> CHANGE (36b66b Merged: [runtime] Fix handling of interceptors, pt.3)
+        }
+<<<<<<< HEAD   (f3f0dc Version 9.6.180.28)
         break;
+=======
+
+        // The interceptor declined to handle the operation, so proceed defining
+        // own property without the interceptor.
+        Isolate* isolate = it->isolate();
+        Handle<Object> receiver = it->GetReceiver();
+        LookupIterator::Configuration c = LookupIterator::OWN_SKIP_INTERCEPTOR;
+        LookupIterator own_lookup =
+            it->IsElement() ? LookupIterator(isolate, receiver, it->index(), c)
+                            : LookupIterator(isolate, receiver, it->name(), c);
+        return JSObject::DefineOwnPropertyIgnoreAttributes(
+            &own_lookup, value, attributes, should_throw, handling, semantics);
+      }
+>>>>>>> CHANGE (36b66b Merged: [runtime] Fix handling of interceptors, pt.3)
 
       case LookupIterator::ACCESSOR: {
         Handle<Object> accessors = it->GetAccessors();
