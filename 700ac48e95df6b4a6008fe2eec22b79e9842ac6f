@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c706e695_b81287bf",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-01T11:06:39Z",
+      "side": 1,
+      "message": "Yes, I t hink I\u0027d prefer if `Heap` only provides the plain roots if possible and anything on top is set up closer to the caller. \n\nThat said, I realize `Isolate` is also not a great place because it\u0027s not Wasm specific, so if you think it\u0027s better in here you can keep it for now. I also don\u0027t see why we would make setters for regular object roots (\u003d\u003d not immovable) private as they are really not special from a GC perspective.",
+      "parentUuid": "8f0e6c02_802a723a",
+      "range": {
+        "startLine": 787,
+        "startChar": 7,
+        "endLine": 787,
+        "endChar": 34
+      },
+      "revId": "700ac48e95df6b4a6008fe2eec22b79e9842ac6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97e59606_0f4dd9e5",
         "filename": "src/objects/fixed-array.h",
         "patchSetId": 3
