@@ -1093,6 +1093,14 @@ ElementAccess AccessBuilder::ForTypedArrayElement(ExternalArrayType type,
 }
 
 // static
+ElementAccess AccessBuilder::ForJSForInCacheArrayElement() {
+  ElementAccess access = {kTaggedBase, FixedArray::kHeaderSize,
+                          Type::InternalizedString(), MachineType::AnyTagged(),
+                          kFullWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForHashTableBaseNumberOfElements() {
   FieldAccess access = {
       kTaggedBase,

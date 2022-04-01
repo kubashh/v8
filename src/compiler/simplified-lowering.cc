@@ -1275,11 +1275,12 @@ class RepresentationSelector {
       return MachineType(rep, MachineSemantic::kInt64);
     }
     MachineType machine_type(rep, DeoptValueSemanticOf(type));
-    DCHECK(machine_type.representation() != MachineRepresentation::kWord32 ||
-           machine_type.semantic() == MachineSemantic::kInt32 ||
-           machine_type.semantic() == MachineSemantic::kUint32);
-    DCHECK(machine_type.representation() != MachineRepresentation::kBit ||
-           type.Is(Type::Boolean()));
+    DCHECK_IMPLIES(
+        machine_type.representation() == MachineRepresentation::kWord32,
+        machine_type.semantic() == MachineSemantic::kInt32 ||
+            machine_type.semantic() == MachineSemantic::kUint32);
+    DCHECK_IMPLIES(machine_type.representation() == MachineRepresentation::kBit,
+                   type.Is(Type::Boolean()));
     return machine_type;
   }
 
@@ -4336,18 +4337,20 @@ SimplifiedLowering::SimplifiedLowering(JSGraph* jsgraph, JSHeapBroker* broker,
       node_origins_(node_origins),
       tick_counter_(tick_counter),
       linkage_(linkage),
-      observe_node_manager_(observe_node_manager) {}
+      observe_node_manager_(observe_node_manager),
+      verifier_(nullptr) {}
 
 void SimplifiedLowering::LowerAllNodes() {
-  SimplifiedLoweringVerifier* verifier = nullptr;
+  DCHECK_EQ(verifier_, nullptr);
   if (FLAG_verify_simplified_lowering) {
-    verifier = zone_->New<SimplifiedLoweringVerifier>(zone_, graph());
+    verifier_ = zone_->New<SimplifiedLoweringVerifier>(zone_, graph());
   }
-  RepresentationChanger changer(jsgraph(), broker_, verifier);
+  RepresentationChanger changer(jsgraph(), broker_, verifier_);
   RepresentationSelector selector(
       jsgraph(), broker_, zone_, &changer, source_positions_, node_origins_,
-      tick_counter_, linkage_, observe_node_manager_, verifier);
+      tick_counter_, linkage_, observe_node_manager_, verifier_);
   selector.Run(this);
+  verifier_ = nullptr;
 }
 
 void SimplifiedLowering::DoJSToNumberOrNumericTruncatesToFloat64(

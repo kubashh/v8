@@ -320,6 +320,9 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   static ElementAccess ForTypedArrayElement(ExternalArrayType type,
                                             bool is_external);
 
+  // Provides access to the for-in cache array.
+  static ElementAccess ForJSForInCacheArrayElement();
+
   // Provides access to HashTable fields.
   static FieldAccess ForHashTableBaseNumberOfElements();
   static FieldAccess ForHashTableBaseNumberOfDeletedElement();
