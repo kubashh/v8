@@ -51,6 +51,24 @@
       "parentUuid": "90ad074e_8bb6b6b9",
       "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f11feef_cdac22ce",
+        "filename": "src/builtins/builtins-temporal-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-02T02:10:49Z",
+      "side": 1,
+      "message": "I complain to Temporal Champion about Iterable in https://github.com/tc39/proposal-temporal/issues/1610 but I got a hard push back from them. They were using Array one of the Stage 3 reviewer think Iterable is more general and request them to switch from Array to Iterable on the time of Stage 3 advancement.",
+      "parentUuid": "086eec70_113e902f",
+      "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
