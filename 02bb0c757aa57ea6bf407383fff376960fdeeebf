@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f9f5c0_4b0cf096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-02T01:56:57Z",
+      "side": 1,
+      "message": "1. I added some unit tests in https://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/temporal/calendar-date-until.js\n a while ago . Currently the test fail because it depend on the Temporal.Duration.prototype.toJSON() method which is in https://chromium-review.googlesource.com/c/v8/v8/+/3438375\n2. My understanding is Temporal Champion originally wrote a lot unit test inside their repo is they are moving them to test262 and only complete about 1/3 so far. So I think instead of start writing (which I did in mjsunit/temporal/calendar-date-until.js) we should wait for them to move all their tests first.",
+      "parentUuid": "ce4c6bd2_56ba04c7",
+      "revId": "02bb0c757aa57ea6bf407383fff376960fdeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcce6ae1_98a6fd33",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-01T21:55:23Z",
       "side": 1,
       "message": "What\u0027s the design philosophy between the mix of int32_t and int64_t in this function?",
+      "revId": "02bb0c757aa57ea6bf407383fff376960fdeeebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71827962_9d8a8386",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4971,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-02T01:56:57Z",
+      "side": 1,
+      "message": "month and day are bounded to 1-12 and 1-31. year is also bounded by the the iso_year store in our internal slot which is 20 bit (see \nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/js-temporal-objects.tq;l\u003d12?q\u003dtemporal-objects.tq\u0026ss\u003dchromium )\nsee https://docs.google.com/document/d/1Huu2OUlmveBh4wjgx0D7ouC9O9vSdiZWaRK3OwkQZU0/edit#heading\u003dh.78qyu9xz5lv for the justification why we think 20 bit is enough.\n\nThe out_years, out_months, out_weeks, out_days are duration and the Duration fields are int64 based on the earlier spec text.\n\nThey recently (two days ago see https://github.com/tc39/proposal-temporal/commit/1f3fba8fd25ab775629d6b1161ae38e405ea3d75 ) changed the internal slot of Duration from \u0027An integer Number value\u0027 to \u0027A float64-representable integer\u0027\nhttps://tc39.es/proposal-temporal/#sec-properties-of-temporal-duration-instances\n\nI have not yet change the internal slot according to this very new changes and therefore still using int64_t. Later I will need to change it to a double. But I prefer we do that in a separate CL.",
+      "parentUuid": "dcce6ae1_98a6fd33",
       "revId": "02bb0c757aa57ea6bf407383fff376960fdeeebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
