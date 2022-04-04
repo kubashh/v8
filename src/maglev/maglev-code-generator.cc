@@ -361,11 +361,10 @@ class MaglevCodeGeneratorImpl final {
     deopt_exit_start_offset_ = __ pc_offset();
 
     __ RecordComment("-- Non-lazy deopts");
-    for (Checkpoint* checkpoint : code_gen_state_.non_lazy_deopts()) {
+    for (Checkpoint* checkpoint : code_gen_state_.eager_deopts()) {
       EmitEagerDeopt(checkpoint);
 
       __ bind(&checkpoint->deopt_entry_label);
-      // TODO(leszeks): Add soft deopt entry.
       __ CallForDeoptimization(Builtin::kDeoptimizationEntry_Eager, 0,
                                &checkpoint->deopt_entry_label,
                                DeoptimizeKind::kEager, nullptr, nullptr);
@@ -535,11 +534,11 @@ class MaglevCodeGeneratorImpl final {
   }
 
   Handle<DeoptimizationData> GenerateDeoptimizationData() {
-    int non_lazy_deopt_count =
-        static_cast<int>(code_gen_state_.non_lazy_deopts().size());
+    int eager_deopt_count =
+        static_cast<int>(code_gen_state_.eager_deopts().size());
     int lazy_deopt_count =
         static_cast<int>(code_gen_state_.lazy_deopts().size());
-    int deopt_count = lazy_deopt_count + non_lazy_deopt_count;
+    int deopt_count = lazy_deopt_count + eager_deopt_count;
     if (deopt_count == 0) {
       return DeoptimizationData::Empty(isolate());
     }
@@ -556,7 +555,7 @@ class MaglevCodeGeneratorImpl final {
 
     DCHECK_NE(deopt_exit_start_offset_, -1);
     data->SetDeoptExitStart(Smi::FromInt(deopt_exit_start_offset_));
-    data->SetNonLazyDeoptCount(Smi::FromInt(non_lazy_deopt_count));
+    data->SetEagerDeoptCount(Smi::FromInt(eager_deopt_count));
     data->SetLazyDeoptCount(Smi::FromInt(lazy_deopt_count));
 
     data->SetSharedFunctionInfo(
@@ -584,7 +583,7 @@ class MaglevCodeGeneratorImpl final {
 
     // Populate deoptimization entries.
     int i = 0;
-    for (Checkpoint* checkpoint : code_gen_state_.non_lazy_deopts()) {
+    for (Checkpoint* checkpoint : code_gen_state_.eager_deopts()) {
       DCHECK_NE(checkpoint->deopt_index, -1);
       data->SetBytecodeOffset(i, checkpoint->bytecode_position);
       data->SetTranslationIndex(i, Smi::FromInt(checkpoint->deopt_index));

@@ -265,7 +265,7 @@ void JumpToDeferredIf(Condition cond, MaglevCodeGenState* code_gen_state,
 void RegisterEagerDeoptCheckpoint(MaglevCodeGenState* code_gen_state,
                                   Checkpoint* checkpoint) {
   if (checkpoint->deopt_entry_label.is_unused()) {
-    code_gen_state->PushNonLazyDeopt(checkpoint);
+    code_gen_state->PushEagerDeopt(checkpoint);
   }
 }
 
@@ -372,11 +372,10 @@ void SmiConstant::PrintParams(std::ostream& os,
   os << "(" << value() << ")";
 }
 
-void SoftDeopt::AllocateVreg(MaglevVregAllocationState* vreg_state,
-                             const ProcessingState& state) {}
-void SoftDeopt::GenerateCode(MaglevCodeGenState* code_gen_state,
-                             const ProcessingState& state) {
-  // TODO(leszeks): Make this a soft deopt.
+void EagerDeopt::AllocateVreg(MaglevVregAllocationState* vreg_state,
+                              const ProcessingState& state) {}
+void EagerDeopt::GenerateCode(MaglevCodeGenState* code_gen_state,
+                              const ProcessingState& state) {
   EmitEagerDeoptIf(always, code_gen_state, this);
 }
 

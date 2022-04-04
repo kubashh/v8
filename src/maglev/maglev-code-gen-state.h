@@ -45,11 +45,9 @@ class MaglevCodeGenState {
   const std::vector<DeferredCodeInfo*>& deferred_code() const {
     return deferred_code_;
   }
-  void PushNonLazyDeopt(Checkpoint* info) { non_lazy_deopts_.push_back(info); }
+  void PushEagerDeopt(Checkpoint* info) { eager_deopts_.push_back(info); }
   void PushLazyDeopt(LazyDeoptSafepoint* info) { lazy_deopts_.push_back(info); }
-  const std::vector<Checkpoint*>& non_lazy_deopts() const {
-    return non_lazy_deopts_;
-  }
+  const std::vector<Checkpoint*>& eager_deopts() const { return eager_deopts_; }
   const std::vector<LazyDeoptSafepoint*>& lazy_deopts() const {
     return lazy_deopts_;
   }
@@ -91,7 +89,7 @@ class MaglevCodeGenState {
 
   MacroAssembler masm_;
   std::vector<DeferredCodeInfo*> deferred_code_;
-  std::vector<Checkpoint*> non_lazy_deopts_;
+  std::vector<Checkpoint*> eager_deopts_;
   std::vector<LazyDeoptSafepoint*> lazy_deopts_;
   int vreg_slots_ = 0;
 
