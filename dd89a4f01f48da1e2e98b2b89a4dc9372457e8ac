@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa5d41a_d0d996bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-04T07:34:46Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "dd89a4f01f48da1e2e98b2b89a4dc9372457e8ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c638c9d_b2149dd3",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-04T07:34:46Z",
+      "side": 1,
+      "message": "This is current c/p from chromium\u0027s deps file. Will do the python3 change also to the other deps entries...",
+      "revId": "dd89a4f01f48da1e2e98b2b89a4dc9372457e8ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
