@@ -510,11 +510,11 @@ const SLVerifierHintParameters& SLVerifierHintParametersOf(const Operator* op) {
   V(7)                       \
   V(8)
 
-#define CACHED_DEOPTIMIZE_LIST(V)                        \
-  V(Eager, MinusZero)                                    \
-  V(Eager, WrongMap)                                     \
-  V(Soft, InsufficientTypeFeedbackForGenericKeyedAccess) \
-  V(Soft, InsufficientTypeFeedbackForGenericNamedAccess)
+#define CACHED_DEOPTIMIZE_LIST(V)                         \
+  V(Eager, MinusZero)                                     \
+  V(Eager, WrongMap)                                      \
+  V(Eager, InsufficientTypeFeedbackForGenericKeyedAccess) \
+  V(Eager, InsufficientTypeFeedbackForGenericNamedAccess)
 
 #define CACHED_DEOPTIMIZE_IF_LIST(V) \
   V(Eager, DivisionByZero)           \

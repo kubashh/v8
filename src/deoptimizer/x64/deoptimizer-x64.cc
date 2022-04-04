@@ -18,7 +18,6 @@ namespace internal {
                 0x7F)
 ASSERT_OFFSET(Builtin::kDeoptimizationEntry_Eager);
 ASSERT_OFFSET(Builtin::kDeoptimizationEntry_Lazy);
-ASSERT_OFFSET(Builtin::kDeoptimizationEntry_Soft);
 #undef ASSERT_OFFSET
 
 const int Deoptimizer::kNonLazyDeoptExitSize = 4;
