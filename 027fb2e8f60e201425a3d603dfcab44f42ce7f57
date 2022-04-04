@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92591bdc_f77f62cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-04T05:51:40Z",
+      "side": 1,
+      "message": "The only things I can think of are the helper methods in IteratorBuiltinsAssembler (which could be extracted out), or actually calling the iterator builtins (e.g. Builtin::kIterableToList). I don\u0027t know if these would cover the specific behaviour required by Temporal",
+      "parentUuid": "2434e895_9b0c7e90",
+      "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "90ad074e_8bb6b6b9",
         "filename": "src/builtins/builtins-temporal-gen.cc",
         "patchSetId": 6
