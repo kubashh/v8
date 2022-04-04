@@ -479,11 +479,6 @@ class Code : public HeapObject {
   inline bool embedded_objects_cleared() const;
   inline void set_embedded_objects_cleared(bool flag);
 
-  // [deopt_already_counted]: If CodeKindCanDeoptimize(kind), tells whether
-  // the code was already deoptimized.
-  inline bool deopt_already_counted() const;
-  inline void set_deopt_already_counted(bool flag);
-
   // [is_promise_rejection]: For kind BUILTIN tells whether the
   // exception thrown by the code will lead to promise rejection or
   // uncaught if both this and is_exception_caught is set.
@@ -702,12 +697,11 @@ class Code : public HeapObject {
 #define CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS(V, _) \
   V(MarkedForDeoptimizationField, bool, 1, _)     \
   V(EmbeddedObjectsClearedField, bool, 1, _)      \
-  V(DeoptAlreadyCountedField, bool, 1, _)         \
   V(CanHaveWeakObjectsField, bool, 1, _)          \
   V(IsPromiseRejectionField, bool, 1, _)
   DEFINE_BIT_FIELDS(CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS)
 #undef CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS
-  STATIC_ASSERT(CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS_Ranges::kBitsCount == 5);
+  STATIC_ASSERT(CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS_Ranges::kBitsCount == 4);
   STATIC_ASSERT(CODE_KIND_SPECIFIC_FLAGS_BIT_FIELDS_Ranges::kBitsCount <=
                 FIELD_SIZE(CodeDataContainer::kKindSpecificFlagsOffset) *
                     kBitsPerByte);

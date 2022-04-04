@@ -304,7 +304,7 @@ void MaglevGraphBuilder::VisitGetNamedProperty() {
   FeedbackNexus nexus = feedback_nexus(2);
 
   if (nexus.ic_state() == InlineCacheState::UNINITIALIZED) {
-    AddNewNode<SoftDeopt>({});
+    AddNewNode<EagerDeopt>({});
     return;
   } else if (nexus.ic_state() == InlineCacheState::MONOMORPHIC) {
     std::vector<MapAndHandler> maps_and_handlers;
@@ -340,7 +340,7 @@ void MaglevGraphBuilder::VisitSetNamedProperty() {
   FeedbackNexus nexus = feedback_nexus(2);
 
   if (nexus.ic_state() == InlineCacheState::UNINITIALIZED) {
-    AddNewNode<SoftDeopt>({});
+    AddNewNode<EagerDeopt>({});
     return;
   } else if (nexus.ic_state() == InlineCacheState::MONOMORPHIC) {
     std::vector<MapAndHandler> maps_and_handlers;

@@ -365,7 +365,6 @@ class MaglevCodeGeneratorImpl final {
       EmitEagerDeopt(checkpoint);
 
       __ bind(&checkpoint->deopt_entry_label);
-      // TODO(leszeks): Add soft deopt entry.
       __ CallForDeoptimization(Builtin::kDeoptimizationEntry_Eager, 0,
                                &checkpoint->deopt_entry_label,
                                DeoptimizeKind::kEager, nullptr, nullptr);
