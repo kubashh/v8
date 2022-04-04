@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c53b77d_69777140",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-04T09:28:37Z",
+      "side": 1,
+      "message": "Okay, ptal again - see PS1..4 for changes since the original CL.",
+      "revId": "fb4b3c662a52070c7516b54a218d906705e42794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
