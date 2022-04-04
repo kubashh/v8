@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f68840_0a7c3a70",
+        "filename": "DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-04T07:43:04Z",
+      "side": 0,
+      "message": "These are obsolete after using the conditions already. Copied from Chromium\u0027s DEPS file where these args are also gone by now.",
+      "range": {
+        "startLine": 372,
+        "startChar": 16,
+        "endLine": 372,
+        "endChar": 35
+      },
+      "revId": "dd89a4f01f48da1e2e98b2b89a4dc9372457e8ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
