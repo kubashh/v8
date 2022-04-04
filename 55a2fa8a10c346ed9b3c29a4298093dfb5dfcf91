@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "294bca4d_27f6be0c",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4967,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-04T23:08:25Z",
+      "side": 1,
+      "message": "Why is this static_cast safe? If it is, why does this take int64_t at all?\n\nYour answer below seems to be about storage in Duration objects, but I don\u0027t see how that applies to intermediate values like this.",
+      "range": {
+        "startLine": 4967,
+        "startChar": 21,
+        "endLine": 4967,
+        "endChar": 48
+      },
+      "revId": "55a2fa8a10c346ed9b3c29a4298093dfb5dfcf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c713d5a2_9af4a957",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4992,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-04T23:08:25Z",
+      "side": 1,
+      "message": "Did you consider using a struct for this return value instead of 4 out params? I think it\u0027d make the code clearer \u0026 less error-prone while also matching the spec better.",
+      "range": {
+        "startLine": 4992,
+        "startChar": 58,
+        "endLine": 4992,
+        "endChar": 67
+      },
+      "revId": "55a2fa8a10c346ed9b3c29a4298093dfb5dfcf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b681c65_8af2b46c",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4994,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-04T23:08:25Z",
+      "side": 1,
+      "message": "Nit: input params before output params (maybe move `method` right after `isolate`?).\n\n(Not an issue if this stops using out params).",
+      "range": {
+        "startLine": 4994,
+        "startChar": 61,
+        "endLine": 4994,
+        "endChar": 67
+      },
+      "revId": "55a2fa8a10c346ed9b3c29a4298093dfb5dfcf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
