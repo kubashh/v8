@@ -39,6 +39,30 @@
       },
       "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e07bb8dc_e0268469",
+        "filename": "tools/turbolizer/src/edge.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1538442
+      },
+      "writtenOn": "2022-04-04T18:41:34Z",
+      "side": 1,
+      "message": "Yes, I pushed this code just for the review of the prototype. Not sure if this is the best thing! I have sent a mail with few other things that I would like you to review. I\u0027ll push the proper change after that. \n\nThanks a lot!",
+      "parentUuid": "0cbbb97f_d2e9ebcc",
+      "range": {
+        "startLine": 71,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
