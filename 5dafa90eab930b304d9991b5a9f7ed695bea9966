@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "524bb1d8_df142378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-04-04T11:04:09Z",
+      "side": 1,
+      "message": "still LGTM but with another issue left",
+      "revId": "5dafa90eab930b304d9991b5a9f7ed695bea9966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a22b9a_68156f97",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 9
+      },
+      "lineNbr": 25411,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-04-04T11:04:09Z",
+      "side": 1,
+      "message": "In this case the equivalent should have been specified in the descriptor because this is one of the builders that does not follow the naming convention (see `NAMING_CONVENTION_EXCLUDED_BUILDERS`)",
+      "range": {
+        "startLine": 25411,
+        "startChar": 144,
+        "endLine": 25411,
+        "endChar": 321
+      },
+      "revId": "5dafa90eab930b304d9991b5a9f7ed695bea9966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7058b5f_e97833ff",
+        "filename": "lib/description.star",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-04-04T11:04:09Z",
+      "side": 1,
+      "message": "does this override the procedure below if we set it?",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "5dafa90eab930b304d9991b5a9f7ed695bea9966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
