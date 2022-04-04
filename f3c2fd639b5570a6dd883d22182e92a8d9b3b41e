@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fa685b2_685308c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-04T07:13:51Z",
+      "side": 1,
+      "message": "Thanks a lot!\nI tried it and I think it looks a lot better. I just noticed one thing: When the origin node is moved below the target node, then the edge goes behind the node. This used to be better before.",
+      "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cbbb97f_d2e9ebcc",
+        "filename": "tools/turbolizer/src/edge.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-04T07:13:51Z",
+      "side": 1,
+      "message": "I think this code would also benefit from using template strings, and it would be more uniform. WDYT?",
+      "range": {
+        "startLine": 71,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
