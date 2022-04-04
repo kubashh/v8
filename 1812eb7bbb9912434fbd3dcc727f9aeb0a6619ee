@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a3ad24f_de23f72b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-04T08:23:39Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "1812eb7bbb9912434fbd3dcc727f9aeb0a6619ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef1dcdc7_5b04e2e7",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-04T08:23:39Z",
+      "side": 1,
+      "message": "Will start on removing the compatibility stuff in a bit. Will first remove calling the launcher on the clusterfuzz side...",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 27
+      },
+      "revId": "1812eb7bbb9912434fbd3dcc727f9aeb0a6619ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
