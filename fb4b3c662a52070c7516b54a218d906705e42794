@@ -16,6 +16,29 @@
       "message": "Okay, ptal again - see PS1..4 for changes since the original CL.",
       "revId": "fb4b3c662a52070c7516b54a218d906705e42794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed1e3b4e_25f70e96",
+        "filename": "test/mjsunit/regress/regress-1312310.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-04T09:31:54Z",
+      "side": 1,
+      "message": "best test ever.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 76
+      },
+      "revId": "fb4b3c662a52070c7516b54a218d906705e42794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
