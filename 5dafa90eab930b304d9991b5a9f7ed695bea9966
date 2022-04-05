@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14aaf721_8f2252bb",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 9
+      },
+      "lineNbr": 25411,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-05T10:23:24Z",
+      "side": 1,
+      "message": "As agreed offline, exceptions to the naming conventions should be implemented in subsequent CLs.",
+      "parentUuid": "81a22b9a_68156f97",
+      "range": {
+        "startLine": 25411,
+        "startChar": 144,
+        "endLine": 25411,
+        "endChar": 321
+      },
+      "revId": "5dafa90eab930b304d9991b5a9f7ed695bea9966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7058b5f_e97833ff",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-04T11:04:09Z",
       "side": 1,
       "message": "does this override the procedure below if we set it?",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 52
+      },
+      "revId": "5dafa90eab930b304d9991b5a9f7ed695bea9966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a54132_389176ae",
+        "filename": "lib/description.star",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-04-05T10:23:24Z",
+      "side": 1,
+      "message": "ci_base or cq_base can override these two.",
+      "parentUuid": "f7058b5f_e97833ff",
       "range": {
         "startLine": 14,
         "startChar": 4,
