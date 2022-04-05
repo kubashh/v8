@@ -23,6 +23,7 @@ class NodeOriginTable;
 class ObserveNodeManager;
 class RepresentationChanger;
 class RepresentationSelector;
+class SimplifiedLoweringVerifier;
 class SourcePositionTable;
 class TypeCache;
 
@@ -86,6 +87,8 @@ class V8_EXPORT_PRIVATE SimplifiedLowering final {
   Linkage* const linkage_;
 
   ObserveNodeManager* const observe_node_manager_;
+
+  SimplifiedLoweringVerifier* verifier_;
 
   Node* Float64Round(Node* const node);
   Node* Float64Sign(Node* const node);
