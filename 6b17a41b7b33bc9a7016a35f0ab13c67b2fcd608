@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39a5c675_aeea7f4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-05T18:24:12Z",
+      "side": 1,
+      "message": "Might be that fuchsia bots are FYI or not run by default.\nYou probably have to manually add v8_fuchsia_rel_ng",
+      "revId": "6b17a41b7b33bc9a7016a35f0ab13c67b2fcd608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
