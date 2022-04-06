@@ -1929,14 +1929,44 @@ void BaselineCompiler::VisitJumpLoop() {
   Register scratch = scope.AcquireScratch();
   Label osr_not_armed;
   {
+    Label osr;
     ASM_CODE_COMMENT_STRING(&masm_, "OSR Check Armed");
-    Register osr_urgency = scratch;
-    __ LoadRegister(osr_urgency, interpreter::Register::bytecode_array());
-    __ LoadByteField(osr_urgency, osr_urgency,
-                     BytecodeArray::kOsrUrgencyOffset);
+    Register osr_urgency_and_install_target = scratch;
+    __ LoadRegister(osr_urgency_and_install_target,
+                    interpreter::Register::bytecode_array());
+    __ LoadWideFieldZeroExtend(
+        osr_urgency_and_install_target, osr_urgency_and_install_target,
+        BytecodeArray::kOsrUrgencyAndInstallTargetOffset);
     int loop_depth = iterator().GetImmediateOperand(1);
-    __ JumpIfByte(Condition::kUnsignedLessThanEqual, osr_urgency, loop_depth,
-                  &osr_not_armed);
+    __ JumpIfImmediate(Condition::kUnsignedLessThanEqual,
+                       osr_urgency_and_install_target, loop_depth,
+                       &osr_not_armed, Label::kNear);
+
+    // TODO(jgruber): Move the extended checks into the
+    // BaselineOnStackReplacement builtin.
+
+    // OSR based on urgency, i.e. is the OSR urgency greater than the current
+    // loop depth?
+    STATIC_ASSERT(BytecodeArray::OsrUrgencyBits::kShift == 0);
+    Register scratch2 = scope.AcquireScratch();
+    __ Word32And(scratch2, osr_urgency_and_install_target,
+                 BytecodeArray::OsrUrgencyBits::kMask);
+    __ JumpIfImmediate(Condition::kUnsignedGreaterThan, scratch2, loop_depth,
+                       &osr, Label::kNear);
+
+    // OSR based on the install target offset, i.e. does the current bytecode
+    // offset match the install target offset?
+    static constexpr int kShift = BytecodeArray::OsrInstallTargetBits::kShift;
+    static constexpr int kMask = BytecodeArray::OsrInstallTargetBits::kMask;
+    const int encoded_current_offset =
+        BytecodeArray::OsrInstallTargetFor(
+            BytecodeOffset{iterator().current_offset()})
+        << kShift;
+    __ Word32And(scratch2, osr_urgency_and_install_target, kMask);
+    __ JumpIfImmediate(Condition::kNotEqual, scratch2, encoded_current_offset,
+                       &osr_not_armed, Label::kNear);
+
+    __ Bind(&osr);
     CallBuiltin<Builtin::kBaselineOnStackReplacement>();
   }
 
