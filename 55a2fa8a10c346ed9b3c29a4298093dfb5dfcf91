@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e2d2ee_4595737b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-06T06:37:28Z",
+      "side": 1,
+      "message": "looks like there are a lot of changes on the spec related to Duration. Let me create a CL first to sync what already landed to the new spec first. ",
+      "revId": "55a2fa8a10c346ed9b3c29a4298093dfb5dfcf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "294bca4d_27f6be0c",
