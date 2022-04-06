@@ -1,0 +1,22 @@
+{
+  "program": {
+    "binary": "unittests"
+  },
+  "facets": {
+    "fuchsia.test": {
+      "system-services": [
+        "fuchsia.kernel.VmexResource"
+      ]
+    }
+  },
+  "sandbox": {
+    "features": [
+      "deprecated-ambient-replace-as-executable"
+    ],
+    "services": [
+      "fuchsia.kernel.VmexResource",
+      "fuchsia.logger.LogSink",
+      "fuchsia.process.Launcher"
+    ]
+  }
+}
