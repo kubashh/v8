@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2462a426_8fc75d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-06T16:29:11Z",
+      "side": 1,
+      "message": "Rubber stamping the revert. But, note that the fuchsia builder is currently \"green\". The test failure it currently has is from some unit test that just got added.",
+      "revId": "0e8e15fcf6d04f867b71f799a050f71665a1f979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
