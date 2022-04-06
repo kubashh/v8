@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc3c3683_a498fb47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-06T12:56:06Z",
+      "side": 1,
+      "message": "ptal.\nI find that marking these as const helps (me) navigating the code.",
+      "revId": "4be760cedd08b8c582177f7e3c4878a21dcce71c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9ed1c3_82698d38",
+        "filename": "src/heap/paged-spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-06T12:56:06Z",
+      "side": 1,
+      "message": "Imo this is the only controversial thing in this CL.\nThis is needed for making `PagedSpace::Available` const.",
+      "range": {
+        "startLine": 455,
+        "startChar": 2,
+        "endLine": 455,
+        "endChar": 9
+      },
+      "revId": "4be760cedd08b8c582177f7e3c4878a21dcce71c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
