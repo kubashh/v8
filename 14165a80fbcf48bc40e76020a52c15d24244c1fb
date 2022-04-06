@@ -33,6 +33,24 @@
       "message": "nit: Maybe leave a TODO and set yourself a reminder somehow?",
       "revId": "14165a80fbcf48bc40e76020a52c15d24244c1fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d44d60_7318a8fd",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-06T12:33:02Z",
+      "side": 1,
+      "message": "Good point. Added a TODO and a \"Next action\" in the linked issue.",
+      "parentUuid": "51714c43_def8a35a",
+      "revId": "14165a80fbcf48bc40e76020a52c15d24244c1fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
