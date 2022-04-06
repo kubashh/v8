@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e07d31bc_1446a68e",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T08:27:49Z",
+      "side": 1,
+      "message": "why implement this as a CSA and not CPP builtin? You still end up doing CPP runtime calls",
+      "range": {
+        "startLine": 1646,
+        "startChar": 2,
+        "endLine": 1646,
+        "endChar": 5
+      },
+      "revId": "b644db25b1c09afa87e2607cdbeddd89aaad1c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
