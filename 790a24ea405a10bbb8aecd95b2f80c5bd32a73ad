@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc0e548_500cbec0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T13:38:23Z",
+      "side": 1,
+      "message": "I wrote and deleted a bunch of suggestions for the \"zero install target\" problem and couldn\u0027t come up with anything unconditionally better than your 0-\u003e1 approach.",
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b87c97c6_09948cfd",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T13:38:23Z",
+      "side": 1,
+      "message": "Why not LoadUint32Field or similar?",
+      "range": {
+        "startLine": 1937,
+        "startChar": 7,
+        "endLine": 1937,
+        "endChar": 30
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3525c66_e2e38fab",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1954,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T13:38:23Z",
+      "side": 1,
+      "message": "should we make a higher-level JumpIfMaskedInt32? Or an even higher level JumpIfOsrArmed?",
+      "range": {
+        "startLine": 1954,
+        "startChar": 7,
+        "endLine": 1954,
+        "endChar": 22
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "799e9463_d9035e6d",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T13:38:23Z",
+      "side": 1,
+      "message": "What would happen if we didn\u0027t do this? JumpLoop that happens to have 0-valued 13 LSBs will unconditionally always fall into the runtime?",
+      "range": {
+        "startLine": 1007,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 16
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e261345d_8c9d4c08",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-06T13:38:23Z",
+      "side": 1,
+      "message": "nit: 32",
+      "range": {
+        "startLine": 1062,
+        "startChar": 18,
+        "endLine": 1062,
+        "endChar": 20
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
