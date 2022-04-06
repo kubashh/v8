@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d51277_a86dd967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-04-06T14:40:53Z",
+      "side": 1,
+      "message": "PTAL\n\nNot going to reland before I am back from vacation (April 24)",
+      "revId": "f7de621e7ac540cd8c570995ab0668d6f34857e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
