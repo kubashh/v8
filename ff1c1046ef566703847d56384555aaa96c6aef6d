@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d476531b_524e886e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-06T16:26:07Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "ff1c1046ef566703847d56384555aaa96c6aef6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f4c73e20_e5ad80dd",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 1
@@ -31,6 +48,30 @@
       "writtenOn": "2022-04-06T12:36:46Z",
       "side": 1,
       "message": "Just adding braces here since this code looks confusing otherwise.",
+      "range": {
+        "startLine": 4201,
+        "startChar": 55,
+        "endLine": 4201,
+        "endChar": 56
+      },
+      "revId": "ff1c1046ef566703847d56384555aaa96c6aef6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6008436f_7fbe39c9",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4201,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-06T16:26:07Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "f4c73e20_e5ad80dd",
       "range": {
         "startLine": 4201,
         "startChar": 55,
