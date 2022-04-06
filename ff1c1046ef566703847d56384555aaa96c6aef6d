@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a02114c_2e2bef7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-06T12:36:46Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "ff1c1046ef566703847d56384555aaa96c6aef6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c73e20_e5ad80dd",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4201,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-06T12:36:46Z",
+      "side": 1,
+      "message": "Just adding braces here since this code looks confusing otherwise.",
+      "range": {
+        "startLine": 4201,
+        "startChar": 55,
+        "endLine": 4201,
+        "endChar": 56
+      },
+      "revId": "ff1c1046ef566703847d56384555aaa96c6aef6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e775d6c_29c0883b",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4348,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-06T12:36:46Z",
+      "side": 1,
+      "message": "DataViews don\u0027t have TypedArrayElements, so this cast is fine.",
+      "range": {
+        "startLine": 4348,
+        "startChar": 27,
+        "endLine": 4348,
+        "endChar": 39
+      },
+      "revId": "ff1c1046ef566703847d56384555aaa96c6aef6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
