@@ -1144,6 +1144,20 @@ static void MaybeOptimizeCodeOrTailCallOptimizedCodeSlot(
                             jump_mode);
 }
 
+namespace {
+
+void ResetBytecodeAgeAndOsrState(MacroAssembler* masm) {
+  // Reset the bytecode age and OSR state (optimized to a single write).
+  STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
+                BytecodeArray::kOsrUrgencyAndInstallTargetOffset + kUInt16Size);
+  STATIC_ASSERT(BytecodeArray::kNoAgeBytecodeAge == 0);
+  masm->movl(FieldOperand(kInterpreterBytecodeArrayRegister,
+                          BytecodeArray::kOsrUrgencyAndInstallTargetOffset),
+             Immediate(0));
+}
+
+}  // namespace
+
 // Generate code for entering a JS function with the interpreter.
 // On entry to the function the receiver and arguments have been pushed on the
 // stack left to right.
@@ -1219,15 +1233,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ Push(kJavaScriptCallTargetRegister);    // Callee's JS function.
   __ Push(kJavaScriptCallArgCountRegister);  // Actual argument count.
 
-  // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset are
-  // 8-bit fields next to each other, so we could just optimize by writing a
-  // 16-bit. These static asserts guard our assumption is valid.
-  STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
-                BytecodeArray::kOsrUrgencyOffset + kCharSize);
-  STATIC_ASSERT(BytecodeArray::kNoAgeBytecodeAge == 0);
-  __ movw(FieldOperand(kInterpreterBytecodeArrayRegister,
-                       BytecodeArray::kOsrUrgencyOffset),
-          Immediate(0));
+  ResetBytecodeAgeAndOsrState(masm);
 
   // Load initial bytecode offset.
   __ Move(kInterpreterBytecodeOffsetRegister,
@@ -1734,14 +1740,7 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
       Register bytecode_array = descriptor.GetRegisterParameter(
           BaselineOutOfLinePrologueDescriptor::kInterpreterBytecodeArray);
 
-      // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset
-      // are 8-bit fields next to each other, so we could just optimize by
-      // writing a 16-bit. These static asserts guard our assumption is valid.
-      STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
-                    BytecodeArray::kOsrUrgencyOffset + kCharSize);
-      STATIC_ASSERT(BytecodeArray::kNoAgeBytecodeAge == 0);
-      __ movw(FieldOperand(bytecode_array, BytecodeArray::kOsrUrgencyOffset),
-              Immediate(0));
+      ResetBytecodeAgeAndOsrState(masm);
       __ Push(bytecode_array);
 
       // Baseline code frames store the feedback vector where interpreter would
@@ -5098,12 +5097,8 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   __ popq(kInterpreterAccumulatorRegister);
 
   if (is_osr) {
-    // Reset the OSR loop nesting depth to disarm back edges.
-    // TODO(pthier): Separate baseline Sparkplug from TF arming and don't disarm
-    // Sparkplug here.
-    __ movw(FieldOperand(kInterpreterBytecodeArrayRegister,
-                         BytecodeArray::kOsrUrgencyOffset),
-            Immediate(0));
+    // TODO(pthier): Separate Sparkplug and Turbofan OSR states.
+    ResetBytecodeAgeAndOsrState(masm);
     Generate_OSREntry(masm, code_obj);
   } else {
     __ jmp(code_obj);
