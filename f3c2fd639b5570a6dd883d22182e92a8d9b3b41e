@@ -63,6 +63,30 @@
       },
       "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3258d63f_7aab3c45",
+        "filename": "tools/turbolizer/src/edge.ts",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-06T08:29:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e07bb8dc_e0268469",
+      "range": {
+        "startLine": 71,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "f3c2fd639b5570a6dd883d22182e92a8d9b3b41e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
