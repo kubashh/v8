@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac34430_2d9c83c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-06T12:56:25Z",
+      "side": 1,
+      "message": "ptal.\nI find that marking these as const helps (me) navigating the code.",
+      "revId": "4be760cedd08b8c582177f7e3c4878a21dcce71c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca9ed1c3_82698d38",
