@@ -78,6 +78,9 @@ ASSERT_UNOPTIMIZED_PATTERN = re.compile("assertUnoptimized")
 FLAGS_NO_ALWAYS_OPT = re.compile("//\s*Flags:.*--no-?always-opt.*\n")
 
 TOOLS_PATH = dirname(abspath(__file__))
+DEPS_DEPOT_TOOLS_PATH = abspath(
+    join(TOOLS_PATH, '..', 'third_party', 'depot_tools'))
+
 
 def CppLintWorker(command):
   try:
@@ -387,7 +390,11 @@ class CppLintProcessor(CacheableSourceFileProcessor):
   def GetProcessorScript(self):
     filters = ','.join([n for n in LINT_RULES])
     arguments = ['--filter', filters]
-    for path in [TOOLS_PATH] + os.environ["PATH"].split(os.pathsep):
+
+    paths = [DEPS_DEPOT_TOOLS_PATH, TOOLS_PATH]
+    paths += os.environ["PATH"].split(os.pathsep)
+
+    for path in paths:
       path = path.strip('"')
       cpplint = os.path.join(path, 'cpplint.py')
       if os.path.isfile(cpplint):
@@ -445,7 +452,10 @@ class JSLintProcessor(CacheableSourceFileProcessor):
     return JSLintWorker
 
   def GetProcessorScript(self):
-    for path in [TOOLS_PATH] + os.environ["PATH"].split(os.pathsep):
+    paths = [DEPS_DEPOT_TOOLS_PATH, TOOLS_PATH]
+    paths += os.environ["PATH"].split(os.pathsep)
+
+    for path in paths:
       path = path.strip('"')
       clang_format = os.path.join(path, 'clang_format.py')
       if os.path.isfile(clang_format):
