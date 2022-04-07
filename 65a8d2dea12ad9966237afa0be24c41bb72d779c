@@ -22,6 +22,30 @@
       },
       "revId": "65a8d2dea12ad9966237afa0be24c41bb72d779c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ee30d5_7b69b407",
+        "filename": "test/mjsunit/regress/regress-1313475.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-07T09:34:19Z",
+      "side": 1,
+      "message": "The failure only reproduced flakily, and with this GC interval (copied from the ClusterFuzz report) it reproduced in ~50% of cases. Without it, I got 0/1000 failures. So it seems to be required.\nBut if it causes problems, I am also fine with just keeping this test as a \"seed\" for fuzzers, and relying on them to add random flags, including the GC interval.",
+      "parentUuid": "0d38fc26_884bb518",
+      "range": {
+        "startLine": 5,
+        "startChar": 46,
+        "endLine": 5,
+        "endChar": 71
+      },
+      "revId": "65a8d2dea12ad9966237afa0be24c41bb72d779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
