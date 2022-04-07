@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d38fc26_884bb518",
+        "filename": "test/mjsunit/regress/regress-1313475.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-07T09:29:34Z",
+      "side": 1,
+      "message": "Do we need this? This adds a randomness to the test that we should avoid on normal bots. We use this param on one random testing bot as extra parameter:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20NumFuzz%20-%20debug/17494/overview\n\nNow it fails due to contradiction as we just pass it there.",
+      "range": {
+        "startLine": 5,
+        "startChar": 46,
+        "endLine": 5,
+        "endChar": 71
+      },
+      "revId": "65a8d2dea12ad9966237afa0be24c41bb72d779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
