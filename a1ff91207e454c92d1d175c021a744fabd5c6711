@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc20249_fd44506e",
+        "filename": "src/objects/js-objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-07T19:04:19Z",
+      "side": 0,
+      "message": "Hmm, with the original `HasTypedArrayElements` removed, the `OrRabGsab` part seems needlessly verbose, with nothing to contrast to. WDYT about keeping the `HasTypedArrayElements` name but has it mean the same thing as what\u0027s currently called `HasTypedArrayOrRabGsabTypedArrayElements`?",
+      "revId": "a1ff91207e454c92d1d175c021a744fabd5c6711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

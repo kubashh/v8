@@ -16,6 +16,57 @@
       "message": "ptal",
       "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69793200_cd485897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-07T19:04:19Z",
+      "side": 1,
+      "message": "lgtm. Would prefer keeping original `HasTypedArrayElements` name per comment below but not blocker.",
+      "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a6650e0_c04b0969",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-07T19:04:19Z",
+      "side": 1,
+      "message": "Existing, but I\u0027m curious why this is commented.",
+      "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba986ae9_5c6d8a9e",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-07T19:04:19Z",
+      "side": 1,
+      "message": "Nit: Instead of `USE` above how about inlining `Handle\u003cJSObject\u003e::cast(it-\u003eGetReceiver())` here?",
+      "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
