@@ -2776,6 +2776,34 @@ void Builtins::Generate_InterpreterOnStackReplacement(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
+  using D = BaselineOnStackReplacementDescriptor;
+  STATIC_ASSERT(D::kParameterCount == 3);
+  STATIC_ASSERT(!AreAliased(kScratchRegister, D::CurrentLoopDepthRegister(),
+                            D::EncodedCurrentBytecodeOffsetRegister(),
+                            D::OsrUrgencyAndInstallTargetRegister()));
+
+  // OSR based on urgency, i.e. is the OSR urgency greater than the current
+  // loop depth?
+  Label try_osr;
+  STATIC_ASSERT(BytecodeArray::OsrUrgencyBits::kShift == 0);
+  Register urgency = kScratchRegister;
+  __ Move(urgency, D::OsrUrgencyAndInstallTargetRegister());
+  __ andq(urgency, Immediate(BytecodeArray::OsrUrgencyBits::kMask));
+  __ cmpq(urgency, D::CurrentLoopDepthRegister());
+  __ j(above, &try_osr, Label::kNear);
+
+  // OSR based on the install target offset, i.e. does the current bytecode
+  // offset match the install target offset?
+  static constexpr int kMask = BytecodeArray::OsrInstallTargetBits::kMask;
+  Register install_target = D::OsrUrgencyAndInstallTargetRegister();
+  __ andq(install_target, Immediate(kMask));
+  __ cmpq(install_target, D::EncodedCurrentBytecodeOffsetRegister());
+  __ j(equal, &try_osr, Label::kNear);
+
+  // Neither urgency nor the install target triggered, return to the caller.
+  __ ret(0);
+
+  __ bind(&try_osr);
   __ movq(kContextRegister,
           MemOperand(rbp, BaselineFrameConstants::kContextOffset));
   OnStackReplacement(masm, OsrSourceTier::kBaseline);

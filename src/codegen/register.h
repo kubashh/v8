@@ -19,7 +19,6 @@ constexpr bool ShouldPadArguments(int argument_count) {
   return ArgumentPaddingSlots(argument_count) != 0;
 }
 
-#ifdef DEBUG
 struct CountIfValidRegisterFunctor {
   template <typename RegType>
   constexpr int operator()(int count, RegType reg) const {
@@ -38,7 +37,6 @@ inline constexpr bool AreAliased(RegType first_reg, RegTypes... regs) {
       base::fold(CountIfValidRegisterFunctor{}, 0, first_reg, regs...);
   return num_different_regs < num_given_regs;
 }
-#endif
 
 }  // namespace internal
 }  // namespace v8
