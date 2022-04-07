@@ -46,6 +46,30 @@
       },
       "revId": "65a8d2dea12ad9966237afa0be24c41bb72d779c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5414d159_d8143748",
+        "filename": "test/mjsunit/regress/regress-1313475.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-04-07T09:41:40Z",
+      "side": 1,
+      "message": "For all clusterfuzz jobs we already have this:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/tools/clusterfuzz/trials/clusterfuzz_trials_config.json;l\u003d9\n\nThat\u0027s maybe where the repro came from. So if you keep this test without the flag, CF will still with some percentage add the flag.\n\nAnd the debug and tsan bots also add a test variant with extra flag --random-gc-interval\u003d5000 for all tests. This should cover the intervals below 2000 as well. If this reproduced on linux64 dbg or tsan than it should already be covered.\n\nOtherwise, we might be able to somehow add an exception for this flag for flag inconsistencies? E.g. either auto-skip this test when a different flag is added, or let the second flag overwrite?",
+      "parentUuid": "87ee30d5_7b69b407",
+      "range": {
+        "startLine": 5,
+        "startChar": 46,
+        "endLine": 5,
+        "endChar": 71
+      },
+      "revId": "65a8d2dea12ad9966237afa0be24c41bb72d779c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
