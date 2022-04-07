@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db59634c_f84c3997",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T05:39:18Z",
+      "side": 0,
+      "message": "Why is it okay to remove these non-default template args? Perhaps extend the CL message with a brief explanation.",
+      "revId": "2be73ed6befb886a1df2bae5a2d638051472ca64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
