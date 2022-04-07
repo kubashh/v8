@@ -357,6 +357,27 @@ constexpr auto BaselineLeaveFrameDescriptor::registers() {
 }
 
 // static
+constexpr auto BaselineOnStackReplacementDescriptor::registers() {
+  return DefaultRegisterArray();
+}
+
+// static
+constexpr Register
+BaselineOnStackReplacementDescriptor::CurrentLoopDepthRegister() {
+  return registers()[0];
+}
+// static
+constexpr Register
+BaselineOnStackReplacementDescriptor::CurrentBytecodeOffsetRegister() {
+  return registers()[1];
+}
+// static
+constexpr Register
+BaselineOnStackReplacementDescriptor::OsrUrgencyAndInstallTargetRegister() {
+  return registers()[2];
+}
+
+// static
 constexpr auto VoidDescriptor::registers() { return RegisterArray(); }
 
 // static
