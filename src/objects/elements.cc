@@ -3526,6 +3526,7 @@ class TypedElementsAccessor
     JSTypedArray typed_array = JSTypedArray::cast(receiver);
 
     DCHECK(!typed_array.WasDetached());
+    DCHECK(!typed_array.IsOutOfBounds());
 
     size_t len = typed_array.GetLength();
     if (len == 0) return;
@@ -3571,7 +3572,9 @@ class TypedElementsAccessor
     DisallowGarbageCollection no_gc;
     DCHECK_EQ(destination.GetElementsKind(), AccessorClass::kind());
     CHECK(!source.WasDetached());
+    CHECK(!source.IsOutOfBounds());
     CHECK(!destination.WasDetached());
+    CHECK(!destination.IsOutOfBounds());
     DCHECK_LE(start, end);
     DCHECK_LE(end, source.GetLength());
     size_t count = end - start;
@@ -3637,7 +3640,9 @@ class TypedElementsAccessor
     DisallowGarbageCollection no_gc;
 
     CHECK(!source.WasDetached());
+    CHECK(!source.IsOutOfBounds());
     CHECK(!destination.WasDetached());
+    CHECK(!destination.IsOutOfBounds());
 
     DCHECK_LE(offset, destination.GetLength());
     DCHECK_LE(length, destination.GetLength() - offset);
