@@ -16,6 +16,24 @@
       "message": "Why is it okay to remove these non-default template args? Perhaps extend the CL message with a brief explanation.",
       "revId": "2be73ed6befb886a1df2bae5a2d638051472ca64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60afad99_7eddada5",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2022-04-07T09:01:50Z",
+      "side": 0,
+      "message": "The last case where we added X30 (LR) to the list of callee saved registers  was removed a while ago: https://chromium-review.googlesource.com/c/v8/v8/+/2060505/5/src/compiler/c-linkage.cc, leaving this here was just an omission.\n\nThis CL doesn\u0027t change the generated code, since the check `registers.IncludesAliasOf(lr)` in PushCPURegList already prevented LR from being signed unnecessarily. I\u0027ll update the commit message.",
+      "parentUuid": "db59634c_f84c3997",
+      "revId": "2be73ed6befb886a1df2bae5a2d638051472ca64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
