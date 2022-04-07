@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4e314f4_82c919e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T06:13:32Z",
+      "side": 1,
+      "message": "Yeah.. it\u0027s a bit clunky wrt the implementation, but at runtime behavior seems okay. One more potential collision case (besides the `% 2^13` collisions); and sadly one addtl branch+inc in JumpLoop.\n\nActually, now that I think of it.. Perhaps a simple unconditional `offset | 0x1` is better. That removes the clunky `if (offset \u003d\u003d 0) offset++` code, and since JumpLoop bytecode never follow each other there will be very little penalty. Wdyt?",
+      "parentUuid": "abc0e548_500cbec0",
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b87c97c6_09948cfd",
         "filename": "src/baseline/baseline-compiler.cc",
         "patchSetId": 4
@@ -31,6 +49,30 @@
       "writtenOn": "2022-04-06T13:38:23Z",
       "side": 1,
       "message": "Why not LoadUint32Field or similar?",
+      "range": {
+        "startLine": 1937,
+        "startChar": 7,
+        "endLine": 1937,
+        "endChar": 30
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ec9efc5_d70ae0b2",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1937,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T06:13:32Z",
+      "side": 1,
+      "message": "The thought was to stay consistent with LoadByteField and to make zero-extension behavior clear. Happy to change it though.. \n\nLoadWord8Field / LoadWord16FieldZeroExtend? I applied this rename for now.",
+      "parentUuid": "b87c97c6_09948cfd",
       "range": {
         "startLine": 1937,
         "startChar": 7,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "101c5617_ad80191b",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1954,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T06:13:32Z",
+      "side": 1,
+      "message": "Personally I think the `JumpIf` variety in baseline-assembler is already a bit overwhelming. I\u0027d stick with lower level primitives, in this case And+JumpIfImmediate.\n\nI\u0027m fine with either of your suggestions though if you prefer them, lmk.",
+      "parentUuid": "a3525c66_e2e38fab",
+      "range": {
+        "startLine": 1954,
+        "startChar": 7,
+        "endLine": 1954,
+        "endChar": 22
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "799e9463_d9035e6d",
         "filename": "src/objects/code.h",
         "patchSetId": 4
@@ -77,6 +143,30 @@
       "writtenOn": "2022-04-06T13:38:23Z",
       "side": 1,
       "message": "What would happen if we didn\u0027t do this? JumpLoop that happens to have 0-valued 13 LSBs will unconditionally always fall into the runtime?",
+      "range": {
+        "startLine": 1007,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 16
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c017cef2_66c45a1a",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T06:13:32Z",
+      "side": 1,
+      "message": "The install request would be lost, since the check is\n\n (target/urgency) \u003e loop depth\n \nIf `target` is 0, we only consider urgency (\u003d the osr warmup process).",
+      "parentUuid": "799e9463_d9035e6d",
       "range": {
         "startLine": 1007,
         "startChar": 0,
@@ -100,6 +190,30 @@
       "writtenOn": "2022-04-06T13:38:23Z",
       "side": 1,
       "message": "nit: 32",
+      "range": {
+        "startLine": 1062,
+        "startChar": 18,
+        "endLine": 1062,
+        "endChar": 20
+      },
+      "revId": "790a24ea405a10bbb8aecd95b2f80c5bd32a73ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7bcb224_7b335586",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-07T06:13:32Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "e261345d_8c9d4c08",
       "range": {
         "startLine": 1062,
         "startChar": 18,
