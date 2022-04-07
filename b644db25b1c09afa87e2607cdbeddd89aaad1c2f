@@ -46,6 +46,30 @@
       },
       "revId": "b644db25b1c09afa87e2607cdbeddd89aaad1c2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f48a5fdb_fa29ddb6",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-07T08:48:39Z",
+      "side": 1,
+      "message": "I see you problem, there doesn\u0027t seem to be a C++ implementation of the iterator protocol. Ok, CSA sounds good; torque would have maybe been better but I see there are other temporal implementations in CSA already so the consistency is good.",
+      "parentUuid": "9cd3f058_08c84a3a",
+      "range": {
+        "startLine": 1646,
+        "startChar": 2,
+        "endLine": 1646,
+        "endChar": 5
+      },
+      "revId": "b644db25b1c09afa87e2607cdbeddd89aaad1c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
