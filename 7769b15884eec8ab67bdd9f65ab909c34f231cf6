@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "7769b15884eec8ab67bdd9f65ab909c34f231cf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d426579f_cf4d6579",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-07T18:57:54Z",
+      "side": 1,
+      "message": "The intention of OOB was that it is treated the same as the detached state. WDYT as a followup having a single predicate `WasDetachedOrOutOfBounds` and use that in place of all `WasDetached` `(D)CHECK`s?",
+      "revId": "7769b15884eec8ab67bdd9f65ab909c34f231cf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
