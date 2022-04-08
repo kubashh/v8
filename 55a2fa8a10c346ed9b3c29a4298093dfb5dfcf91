@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c177f3cc_94180ef2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-08T18:50:16Z",
+      "side": 1,
+      "message": "So, there are a lot of changes in Duration in the spec (many of them are editorial changes) . How about we first address that in https://chromium-review.googlesource.com/c/v8/v8/+/3575464 and after that landed I will come back to update this CL to sync with that change)",
+      "revId": "55a2fa8a10c346ed9b3c29a4298093dfb5dfcf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "294bca4d_27f6be0c",
