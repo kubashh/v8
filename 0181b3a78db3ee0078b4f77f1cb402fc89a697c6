@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd8151d3_6457779b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-04-08T11:35:39Z",
+      "side": 1,
+      "message": "some minor comments",
+      "revId": "0181b3a78db3ee0078b4f77f1cb402fc89a697c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d77f61dc_17da2bab",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-04-08T11:35:39Z",
+      "side": 1,
+      "message": "Pause the main thread / park the main heap/isolate?",
+      "revId": "0181b3a78db3ee0078b4f77f1cb402fc89a697c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ea459f_a64f8deb",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-04-08T11:35:39Z",
+      "side": 1,
+      "message": "\u003d\u003d CompilationJob::FAILED?",
+      "revId": "0181b3a78db3ee0078b4f77f1cb402fc89a697c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
