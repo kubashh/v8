@@ -37,13 +37,16 @@ TEST_F(TurboAssemblerTest, TestHardAbort) {
   __ set_root_array_available(false);
   __ set_abort_hard(true);
 
-  __ CodeEntry();
+  {
+    AssemblerBufferWriteScope rw_scope(*buffer);
 
-  __ Abort(AbortReason::kNoReason);
+    __ CodeEntry();
 
-  CodeDesc desc;
-  tasm.GetCode(isolate(), &desc);
-  buffer->MakeExecutable();
+    __ Abort(AbortReason::kNoReason);
+
+    CodeDesc desc;
+    tasm.GetCode(isolate(), &desc);
+  }
   // We need an isolate here to execute in the simulator.
   auto f = GeneratedCode<void>::FromBuffer(isolate(), buffer->start());
 
@@ -57,17 +60,20 @@ TEST_F(TurboAssemblerTest, TestCheck) {
   __ set_root_array_available(false);
   __ set_abort_hard(true);
 
-  __ CodeEntry();
+  {
+    AssemblerBufferWriteScope rw_scope(*buffer);
 
-  // Fail if the first parameter is 17.
-  __ Mov(w1, Immediate(17));
-  __ Cmp(w0, w1);  // 1st parameter is in {w0}.
-  __ Check(Condition::ne, AbortReason::kNoReason);
-  __ Ret();
+    __ CodeEntry();
 
-  CodeDesc desc;
-  tasm.GetCode(isolate(), &desc);
-  buffer->MakeExecutable();
+    // Fail if the first parameter is 17.
+    __ Mov(w1, Immediate(17));
+    __ Cmp(w0, w1);  // 1st parameter is in {w0}.
+    __ Check(Condition::ne, AbortReason::kNoReason);
+    __ Ret();
+
+    CodeDesc desc;
+    tasm.GetCode(isolate(), &desc);
+  }
   // We need an isolate here to execute in the simulator.
   auto f = GeneratedCode<void, int>::FromBuffer(isolate(), buffer->start());
 

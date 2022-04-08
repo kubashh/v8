@@ -61,6 +61,11 @@ class V8_BASE_EXPORT LsanVirtualAddressSpace final
       Address hint, size_t size, size_t alignment,
       PagePermissions max_page_permissions) override;
 
+  bool CommitPages(Address address, size_t size,
+                   PagePermissions permissions) override {
+    return vas_->CommitPages(address, size, permissions);
+  }
+
   bool DiscardSystemPages(Address address, size_t size) override {
     return vas_->DiscardSystemPages(address, size);
   }

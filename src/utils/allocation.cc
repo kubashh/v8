@@ -234,6 +234,12 @@ bool SetPermissions(v8::PageAllocator* page_allocator, void* address,
   return page_allocator->SetPermissions(address, size, access);
 }
 
+bool CommitPages(v8::PageAllocator* page_allocator, void* address, size_t size,
+                 PageAllocator::Permission access) {
+  DCHECK_NOT_NULL(page_allocator);
+  return page_allocator->CommitPages(address, size, access);
+}
+
 bool OnCriticalMemoryPressure(size_t length) {
   // TODO(bbudge) Rework retry logic once embedders implement the more
   // informative overload.
@@ -279,6 +285,23 @@ bool VirtualMemory::SetPermissions(Address address, size_t size,
   CHECK(InVM(address, size));
   bool result =
       v8::internal::SetPermissions(page_allocator_, address, size, access);
+  DCHECK(result);
+  return result;
+}
+
+bool VirtualMemory::CommitPages(Address address, size_t size,
+                                PageAllocator::Permission access) {
+  CHECK(InVM(address, size));
+  bool result = page_allocator_->CommitPages(reinterpret_cast<void*>(address),
+                                             size, access);
+  DCHECK(result);
+  return result;
+}
+
+bool VirtualMemory::DecommitPages(Address address, size_t size) {
+  CHECK(InVM(address, size));
+  bool result = page_allocator_->DiscardSystemPages(
+      reinterpret_cast<void*>(address), size);
   DCHECK(result);
   return result;
 }
@@ -376,10 +399,15 @@ bool VirtualMemoryCage::InitReservation(
     Address hint =
         RoundDown(params.requested_start_hint,
                   RoundUp(params.base_alignment, allocate_page_size));
-    VirtualMemory reservation(params.page_allocator, params.reservation_size,
-                              reinterpret_cast<void*>(hint),
-                              params.base_alignment);
-    if (!reservation.IsReserved()) return false;
+    VirtualMemory reservation(
+        params.page_allocator, params.reservation_size,
+        reinterpret_cast<void*>(hint), params.base_alignment,
+        static_cast<VirtualMemory::JitPermission>(params.jit));
+    if (!reservation.IsReserved()) {
+      printf("!reservation.IsReserved(): #1, errno: %d, err: %s\n", errno,
+             strerror(errno));
+      return false;
+    }
 
     reservation_ = std::move(reservation);
     base_ = reservation_.address() + params.base_bias_size;
@@ -396,10 +424,14 @@ bool VirtualMemoryCage::InitReservation(
     for (int attempt = 0; attempt < kMaxAttempts; ++attempt) {
       // Reserve a region of twice the size so that there is an aligned address
       // within it that's usable as the cage base.
-      VirtualMemory padded_reservation(params.page_allocator,
-                                       params.reservation_size * 2,
-                                       reinterpret_cast<void*>(hint));
-      if (!padded_reservation.IsReserved()) return false;
+      VirtualMemory padded_reservation(
+          params.page_allocator, params.reservation_size * 2,
+          reinterpret_cast<void*>(hint), 1,
+          static_cast<VirtualMemory::JitPermission>(params.jit));
+      if (!padded_reservation.IsReserved()) {
+        printf("!reservation.IsReserved(): #3\n");
+        return false;
+      }
 
       // Find properly aligned sub-region inside the reservation.
       Address address =
@@ -432,10 +464,14 @@ bool VirtualMemoryCage::InitReservation(
         // of reserved address space regions.
         padded_reservation.Free();
 
-        VirtualMemory reservation(params.page_allocator,
-                                  params.reservation_size,
-                                  reinterpret_cast<void*>(address));
-        if (!reservation.IsReserved()) return false;
+        VirtualMemory reservation(
+            params.page_allocator, params.reservation_size,
+            reinterpret_cast<void*>(address), 1,
+            static_cast<VirtualMemory::JitPermission>(params.jit));
+        if (!reservation.IsReserved()) {
+          printf("!reservation.IsReserved(): #5\n");
+          return false;
+        }
 
         // The reservation could still be somewhere else but we can accept it
         // if it has the required alignment.

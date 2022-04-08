@@ -21,6 +21,53 @@
 namespace v8 {
 namespace internal {
 
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+
+thread_local int CodeSpaceWriteScope1::code_space_write_nesting_level_ = 0;
+thread_local int code_space_set_write_count_ = 0;
+thread_local int code_space_set_exec_count_ = 0;
+
+CodeSpaceWriteScope1::CodeSpaceWriteScope1() { Enter(); }
+
+CodeSpaceWriteScope1::~CodeSpaceWriteScope1() { Exit(); }
+
+void CodeSpaceWriteScope1::Enter() {
+  if (code_space_write_nesting_level_ == 0) SetWritable();
+  code_space_write_nesting_level_++;
+}
+
+void CodeSpaceWriteScope1::Exit() {
+  code_space_write_nesting_level_--;
+  if (code_space_write_nesting_level_ == 0) SetExecutable();
+}
+
+// Ignoring this warning is considered better than relying on
+// __builtin_available.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability-new"
+void CodeSpaceWriteScope1::SetWritable() {  // const {
+  // uint64_t tid;
+  // pthread_threadid_np(nullptr, &tid);
+  // printf("CSW::SetWritable:   tid: %5lld, #%d\n", tid,
+  //        code_space_set_write_count_);
+
+  code_space_set_write_count_++;
+  pthread_jit_write_protect_np(0);
+}
+
+void CodeSpaceWriteScope1::SetExecutable() {  // const {
+  code_space_set_exec_count_++;
+  pthread_jit_write_protect_np(1);
+  // uint64_t tid;
+  // pthread_threadid_np(nullptr, &tid);
+  // printf("CSW::SetExecutable: tid: %5lld, #%d\n", tid,
+  //        code_space_set_exec_count_);
+}
+#pragma clang diagnostic pop
+
+#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif
+
 // -----------------------------------------------------------------------------
 // MemoryAllocator
 //
@@ -243,6 +290,10 @@ Address MemoryAllocator::AllocateAlignedMemory(
   v8::PageAllocator* page_allocator = this->page_allocator(executable);
   DCHECK_LT(area_size, chunk_size);
 
+  VirtualMemory::JitPermission jit = executable == EXECUTABLE
+                                         ? VirtualMemory::kMapAsJittable
+                                         : VirtualMemory::kNoJit;
+  USE(jit);
   VirtualMemory reservation(page_allocator, chunk_size, hint, alignment);
   if (!reservation.IsReserved()) return HandleAllocationFailure();
 
@@ -487,6 +538,9 @@ void MemoryAllocator::PreFreeMemory(MemoryChunk* chunk) {
 }
 
 void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
+  // TODO(ishell): use this only for code space pages.
+  CodeSpaceWriteScope1 code_rw_scope;
+
   DCHECK(chunk->IsFlagSet(MemoryChunk::UNREGISTERED));
   DCHECK(chunk->IsFlagSet(MemoryChunk::PRE_FREED));
   DCHECK(!chunk->InReadOnlySpace());
@@ -671,28 +725,59 @@ bool MemoryAllocator::SetPermissionsOnExecutableMemoryChunk(VirtualMemory* vm,
   const Address code_area = start + code_area_offset;
   const Address post_guard_page = start + chunk_size - guard_size;
 
-  // Commit the non-executable header, from start to pre-code guard page.
-  if (vm->SetPermissions(start, pre_guard_offset, PageAllocator::kReadWrite)) {
-    // Create the pre-code guard page, following the header.
-    if (vm->SetPermissions(pre_guard_page, page_size,
-                           PageAllocator::kNoAccess)) {
-      // Commit the executable code body.
-      if (vm->SetPermissions(code_area, area_size,
-                             MemoryChunk::GetCodeModificationPermission())) {
-        // Create the post-code guard page.
-        if (vm->SetPermissions(post_guard_page, page_size,
-                               PageAllocator::kNoAccess)) {
-          UpdateAllocatedSpaceLimits(start, code_area + area_size);
-          return true;
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+  const bool create_non_executable_header =
+      unmapper_.heap_->isolate()->jitless();
+#else
+  const bool create_non_executable_header = true;
+#endif  // V8_OS_MACOSX
+
+  PageAllocator::Permission rwx_permissions =
+      unmapper_.heap_->isolate()->jitless() ? PageAllocator::kReadWrite
+                                            : PageAllocator::kReadWriteExecute;
+
+  if (create_non_executable_header) {
+    // Commit the non-executable header, from start to pre-code guard page.
+    if (vm->SetPermissions(start, pre_guard_offset,
+                           PageAllocator::kReadWrite)) {
+      // Create the pre-code guard page, following the header.
+      if (vm->SetPermissions(pre_guard_page, page_size,
+                             PageAllocator::kNoAccess)) {
+        // Commit the executable code body.
+        if (vm->SetPermissions(code_area, area_size, rwx_permissions)) {
+          // Create the post-code guard page.
+          if (vm->SetPermissions(post_guard_page, page_size,
+                                 PageAllocator::kNoAccess)) {
+            UpdateAllocatedSpaceLimits(start, code_area + area_size);
+            return true;
+          }
+
+          vm->SetPermissions(code_area, area_size, PageAllocator::kNoAccess);
         }
-
-        vm->SetPermissions(code_area, area_size, PageAllocator::kNoAccess);
       }
+      vm->SetPermissions(start, pre_guard_offset, PageAllocator::kNoAccess);
     }
+  } else {
+    // Commit the header, from start to pre-code guard page.
+    // We have to commit it as executable becase otherwise we'll not be able
+    // to change permissions to anything else.
+    if (vm->CommitPages(start, pre_guard_offset, rwx_permissions)) {
+      // Create the pre-code guard page, following the header.
+      if (vm->DecommitPages(pre_guard_page, page_size)) {
+        // Commit the executable code body.
+        if (vm->CommitPages(code_area, area_size, rwx_permissions)) {
+          // Create the post-code guard page.
+          if (vm->DecommitPages(post_guard_page, page_size)) {
+            UpdateAllocatedSpaceLimits(start, code_area + area_size);
+            return true;
+          }
 
-    vm->SetPermissions(start, pre_guard_offset, PageAllocator::kNoAccess);
+          vm->DecommitPages(code_area, area_size);
+        }
+      }
+      vm->DecommitPages(start, pre_guard_offset);
+    }
   }
-
   return false;
 }
 

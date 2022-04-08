@@ -97,6 +97,20 @@ class TrackingPageAllocator : public ::v8::PageAllocator {
     return result;
   }
 
+  bool CommitPages(void* address, size_t size,
+                   PageAllocator::Permission access) override {
+    bool result = page_allocator_->CommitPages(address, size, access);
+    if (result) {
+      // The page permissions passed to this function must match permissions
+      // that were set before.
+      // TODO(ishell): track commited/uncommited page state.
+      // CheckPagePermissions(reinterpret_cast<Address>(address), size, access);
+      UpdatePagePermissions(reinterpret_cast<Address>(address), size,
+                            kNoAccess);
+    }
+    return result;
+  }
+
   bool DecommitPages(void* address, size_t size) override {
     bool result = page_allocator_->DecommitPages(address, size);
     if (result) {
