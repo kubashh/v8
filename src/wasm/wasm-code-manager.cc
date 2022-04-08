@@ -1949,8 +1949,12 @@ void WasmCodeManager::Commit(base::AddressRegion region) {
   } else {
     TRACE_HEAP("Setting rwx permissions for 0x%" PRIxPTR ":0x%" PRIxPTR "\n",
                region.begin(), region.end());
-    success = SetPermissions(GetPlatformPageAllocator(), region.begin(),
-                             region.size(), permission);
+    // success = SetPermissions(GetPlatformPageAllocator(), region.begin(),
+    //                          region.size(), permission);
+
+    success = CommitPages(GetPlatformPageAllocator(),
+                          reinterpret_cast<void*>(region.begin()),
+                          region.size(), permission);
   }
 
   if (V8_UNLIKELY(!success)) {

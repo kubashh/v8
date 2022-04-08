@@ -430,6 +430,12 @@ class PageAllocator {
                               Permission permissions) = 0;
 
   /**
+   * TODO(ishell): add comment.
+   */
+  virtual bool CommitPages(void* address, size_t size,
+                           Permission permissions) = 0;
+
+  /**
    * Frees memory in the given [address, address + size) range. address and size
    * should be operating system page-aligned. The next write to this
    * memory area brings the memory transparently back. This should be treated as
@@ -819,6 +825,22 @@ class VirtualAddressSpace {
   // example by combining them into some form of page operation method that
   // takes a command enum as parameter.
   //
+
+  /**
+   * TODO(ishell): write comment.
+   *
+   * \param address The start address of the range. Must be aligned to
+   * page_size().
+   *
+   * \param size The size in bytes of the range. Must be a multiple
+   * of page_size().
+   *
+   * \param permissions The new permissions for the range.
+   *
+   * \returns true on success, false otherwise.
+   */
+  virtual V8_WARN_UNUSED_RESULT bool CommitPages(
+      Address address, size_t size, PagePermissions permissions) = 0;
 
   /**
    * Frees memory in the given [address, address + size) range. address and

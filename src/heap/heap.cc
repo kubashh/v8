@@ -1991,6 +1991,8 @@ void Heap::StartIncrementalMarking(int gc_flags,
                                    GCCallbackFlags gc_callback_flags) {
   DCHECK(incremental_marking()->IsStopped());
 
+  CodeSpaceWriteScope1 code_rw_scope;
+
   // Sweeping needs to be completed such that markbits are all cleared before
   // starting marking again.
   CompleteSweepingFull();
@@ -2789,6 +2791,7 @@ void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
 
 void Heap::UnprotectAndRegisterMemoryChunk(HeapObject object,
                                            UnprotectMemoryOrigin origin) {
+  if (!write_protect_code_memory()) return;
   UnprotectAndRegisterMemoryChunk(MemoryChunk::FromHeapObject(object), origin);
 }
 
@@ -3317,6 +3320,7 @@ HeapObject Heap::CreateFillerObjectAt(Address addr, int size,
 
 void Heap::CreateFillerObjectAtBackground(
     Address addr, int size, ClearFreedMemoryMode clear_memory_mode) {
+  CodeSpaceWriteScope1 code_rw_scope;
   CreateFillerObjectAtImpl(this, addr, size, clear_memory_mode);
   // Do not verify whether slots are cleared here: the concurrent sweeper is not
   // allowed to access the main thread's remembered set.
@@ -3638,6 +3642,8 @@ void Heap::MakeHeapIterable() {
   mark_compact_collector()->EnsureSweepingCompleted(
       MarkCompactCollector::SweepingForcedFinalizationMode::kV8Only);
 
+  CodeSpaceWriteScope1 code_rw_scope;
+
   safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
     local_heap->MakeLinearAllocationAreaIterable();
   });
@@ -3656,6 +3662,7 @@ void Heap::FreeLinearAllocationAreas() {
       [](LocalHeap* local_heap) { local_heap->FreeLinearAllocationArea(); });
 
   PagedSpaceIterator spaces(this);
+  CodeSpaceWriteScope1 code_rw_scope;
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
     space->FreeLinearAllocationArea();
@@ -5661,7 +5668,7 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
       if (!code_range_->InitReservation(isolate_->page_allocator(),
                                         requested_size)) {
         V8::FatalProcessOutOfMemory(
-            isolate_, "Failed to reserve virtual memory for CodeRange");
+            isolate_, "Failed to reserve virtual memory for CodeRange 2");
       }
     }
 
@@ -5828,7 +5835,7 @@ void Heap::SetUpSpaces(LinearAllocationArea* new_allocation_info,
     new_space()->AddAllocationObserver(stress_scavenge_observer_);
   }
 
-  write_protect_code_memory_ = FLAG_write_protect_code_memory;
+  write_protect_code_memory_ = false;  // FLAG_write_protect_code_memory;
 
   if (isolate()->shared_isolate()) {
     Heap* shared_heap = isolate()->shared_isolate()->heap();

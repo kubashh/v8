@@ -32,6 +32,31 @@ class Heap;
 class Isolate;
 class ReadOnlyPage;
 
+class V8_NODISCARD CodeSpaceWriteScope1 {
+ public:
+  explicit V8_EXPORT_PRIVATE CodeSpaceWriteScope1();
+  V8_EXPORT_PRIVATE ~CodeSpaceWriteScope1();
+
+  // Disable copy constructor and copy-assignment operator, since this manages
+  // a resource and implicit copying of the scope can yield surprising errors.
+  CodeSpaceWriteScope1(const CodeSpaceWriteScope1&) = delete;
+  CodeSpaceWriteScope1& operator=(const CodeSpaceWriteScope1&) = delete;
+
+  static void Enter();
+  static void Exit();
+
+  static void SetWritable();    // const;
+  static void SetExecutable();  // const;
+
+ private:
+  static thread_local int code_space_write_nesting_level_;
+
+  // The M1 implementation knows implicitly from the {MAP_JIT} flag during
+  // allocation which region to switch permissions for. On non-M1 hardware
+  // without memory protection key support, we need the code space from the
+  // {native_module_}.
+};
+
 // ----------------------------------------------------------------------------
 // A space acquires chunks of memory from the operating system. The memory
 // allocator allocates and deallocates pages for the paged heap spaces and large

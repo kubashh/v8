@@ -115,6 +115,9 @@ LargeObjectSpace::LargeObjectSpace(Heap* heap, AllocationSpace id)
       pending_object_(0) {}
 
 void LargeObjectSpace::TearDown() {
+  // TODO(ishell): use this only for code space pages.
+  CodeSpaceWriteScope1 code_rw_scope;
+
   while (!memory_chunk_list_.Empty()) {
     LargePage* page = first_page();
     LOG(heap()->isolate(),
@@ -587,12 +590,14 @@ CodeLargeObjectSpace::CodeLargeObjectSpace(Heap* heap)
 
 AllocationResult CodeLargeObjectSpace::AllocateRaw(int object_size) {
   DCHECK(!FLAG_enable_third_party_heap);
+  CodeSpaceWriteScope1 code_rw_scope;
   return OldLargeObjectSpace::AllocateRaw(object_size, EXECUTABLE);
 }
 
 AllocationResult CodeLargeObjectSpace::AllocateRawBackground(
     LocalHeap* local_heap, int object_size) {
   DCHECK(!FLAG_enable_third_party_heap);
+  CodeSpaceWriteScope1 code_rw_scope;
   return OldLargeObjectSpace::AllocateRawBackground(local_heap, object_size,
                                                     EXECUTABLE);
 }

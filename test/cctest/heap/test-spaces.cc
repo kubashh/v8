@@ -128,6 +128,12 @@ static void VerifyMemoryChunk(Isolate* isolate, Heap* heap,
   size_t guard_size =
       (executable == EXECUTABLE) ? MemoryChunkLayout::CodePageGuardSize() : 0;
 
+  // std::optional<CodeSpaceWriteScope1> code_rw_scope;
+  // if (executable == EXECUTABLE) {
+  //   code_rw_scope.emplace();
+  // }
+  CodeSpaceWriteScope1 code_rw_scope;
+
   MemoryChunk* memory_chunk =
       memory_allocator->AllocateLargePage(space, area_size, executable);
   size_t reserved_size =
@@ -168,7 +174,8 @@ TEST(MemoryChunk) {
     // With CodeRange.
     const size_t code_range_size = 32 * MB;
     VirtualMemory code_range_reservation(page_allocator, code_range_size,
-                                         nullptr, MemoryChunk::kAlignment);
+                                         nullptr, MemoryChunk::kAlignment,
+                                         VirtualMemory::kMapAsJittable);
     CHECK(code_range_reservation.IsReserved());
 
     base::BoundedPageAllocator code_page_allocator(
@@ -791,6 +798,10 @@ class FailingPageAllocator : public v8::PageAllocator {
   }
   bool SetPermissions(void* address, size_t length,
                       Permission permissions) override {
+    return false;
+  }
+  bool CommitPages(void* address, size_t length,
+                   Permission permissions) override {
     return false;
   }
   bool DecommitPages(void* address, size_t length) override { return false; }

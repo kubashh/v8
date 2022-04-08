@@ -197,6 +197,7 @@ void Sweeper::EnsureCompleted() {
   // If sweeping is not completed or not running at all, we try to complete it
   // here.
   ForAllSweepingSpaces([this](AllocationSpace space) {
+    CodeSpaceWriteScope1 code_rw_scope;
     ParallelSweepSpace(space, SweepingMode::kLazyOrConcurrent, 0);
   });
 

@@ -77,14 +77,17 @@ TEST(AssemblerX64ReturnOperation) {
   auto buffer = AllocateAssemblerBuffer();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
-  // Assemble a simple function that copies argument 2 and returns it.
-  __ movq(rax, arg2);
-  __ nop();
-  __ ret(0);
+  {
+    AssemblerBufferWriteScope rw_scope(*buffer);
 
-  CodeDesc desc;
-  masm.GetCode(CcTest::i_isolate(), &desc);
-  buffer->MakeExecutable();
+    // Assemble a simple function that copies argument 2 and returns it.
+    __ movq(rax, arg2);
+    __ nop();
+    __ ret(0);
+
+    CodeDesc desc;
+    masm.GetCode(CcTest::i_isolate(), &desc);
+  }
   // Call the function from C++.
   auto f = GeneratedCode<F2>::FromBuffer(CcTest::i_isolate(), buffer->start());
   int result = f.Call(3, 2);
