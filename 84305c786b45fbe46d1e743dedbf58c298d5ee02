@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "84305c786b45fbe46d1e743dedbf58c298d5ee02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "247a00e1_b55c05fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-04-08T11:29:59Z",
+      "side": 1,
+      "message": "Nice, thanks. I have one question.",
+      "revId": "84305c786b45fbe46d1e743dedbf58c298d5ee02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebad2e29_d2385e6e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-04-08T11:29:59Z",
+      "side": 1,
+      "message": "Are we sure that calling this with kNoValidation cannot result in reading outside the module wire bytes? E.g. if a call_ref is close to the end of the function.",
+      "range": {
+        "startLine": 1315,
+        "startChar": 35,
+        "endLine": 1315,
+        "endChar": 48
+      },
+      "revId": "84305c786b45fbe46d1e743dedbf58c298d5ee02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
