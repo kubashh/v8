@@ -20,6 +20,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c1dd59b_ae5be691",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 138,
+        "startChar": 6,
+        "endLine": 138,
+        "endChar": 51
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21d03401_6948ae07",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we intersect with the input type here?",
+      "range": {
+        "startLine": 157,
+        "startChar": 25,
+        "endLine": 157,
+        "endChar": 45
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e05ce9b3_ecf379c8",
         "filename": "src/compiler/simplified-lowering-verifier.cc",
         "patchSetId": 6
@@ -36,6 +82,167 @@
         "startChar": 6,
         "endLine": 159,
         "endChar": 69
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78da3816_d371015c",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "We don\u0027t track the distinction between Smi\u0027s and HeapNumbers of the same value, because types can\u0027t express it. This could be future work, perhaps when we track representations too.",
+      "range": {
+        "startLine": 164,
+        "startChar": 6,
+        "endLine": 164,
+        "endChar": 70
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18dadd2f_3c667abf",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "I\u0027d have expected that Truncation::Bool() is fine here, or don\u0027t we identify according to ToBoolean conversion?",
+      "range": {
+        "startLine": 169,
+        "startChar": 7,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a58bec_64d12f4c",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "I\u0027d think we should also check the representation on the Phi, maybe by mapping it to a truncation as I suggested for TypedStateValues?",
+      "range": {
+        "startLine": 318,
+        "startChar": 6,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5d3beba_b08b136f",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "Maybe don\u0027t commit the code yet then?",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 5
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5dcd1be_e215dd6f",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "as above: not necessary",
+      "range": {
+        "startLine": 329,
+        "startChar": 6,
+        "endLine": 329,
+        "endChar": 69
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5979022_c589c046",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "In principle (if we didn\u0027t violate representations and truncations up to this point), this check shouldn\u0027t be necessary: We already represented the value in the expected representation and therefore the type has to fit to still produce truncation Any(). But since we don\u0027t track representations properly, I agree that checking here makes sense. Would it be possible to use GeneralizeTruncation()? By mapping the MachineType to a fitting truncation and then using GeneralizeTruncation() to make sure that the truncation is still Any()?",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 340,
+        "endChar": 65
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c133cd_76cb091e",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-08T15:49:24Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 613,
+        "startChar": 33,
+        "endLine": 613,
+        "endChar": 36
       },
       "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
