@@ -145,6 +145,14 @@ bool PageAllocator::ReleasePages(void* address, size_t size, size_t new_size) {
 
 bool PageAllocator::SetPermissions(void* address, size_t size,
                                    PageAllocator::Permission access) {
+#if !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+  // kNoAccessWillJitLater is only used on Apple Silicon. Map it to regular
+  // kNoAccess on other platforms, so code doesn't have to handle both enum
+  // values.
+  // if (access == PageAllocator::kNoAccessWillJitLater) {
+  //   access = PageAllocator::kNoAccess;
+  // }
+#endif
   return base::OS::SetPermissions(
       address, size, static_cast<base::OS::MemoryPermission>(access));
 }
