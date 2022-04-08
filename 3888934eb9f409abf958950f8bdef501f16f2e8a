@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00c8850_111755c0",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-08T07:08:53Z",
+      "side": 1,
+      "message": "Based on the comment above, sounds like the reason is: when the typed array construction fails (because of length too large, since the bug is about that), the created JSTypedArray object is not initialized properly. It doesn\u0027t matter for the user, since this object is not accessible by the user, but the heap verification complains about it. Sounds plausible, but I didn\u0027t verify it.",
+      "parentUuid": "2a6650e0_c04b0969",
+      "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba986ae9_5c6d8a9e",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-04-07T19:04:19Z",
       "side": 1,
       "message": "Nit: Instead of `USE` above how about inlining `Handle\u003cJSObject\u003e::cast(it-\u003eGetReceiver())` here?",
+      "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adaa13a3_217767b8",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-08T07:08:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba986ae9_5c6d8a9e",
       "revId": "3888934eb9f409abf958950f8bdef501f16f2e8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

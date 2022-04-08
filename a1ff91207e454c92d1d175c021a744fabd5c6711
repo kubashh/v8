@@ -16,6 +16,24 @@
       "message": "Hmm, with the original `HasTypedArrayElements` removed, the `OrRabGsab` part seems needlessly verbose, with nothing to contrast to. WDYT about keeping the `HasTypedArrayElements` name but has it mean the same thing as what\u0027s currently called `HasTypedArrayOrRabGsabTypedArrayElements`?",
       "revId": "a1ff91207e454c92d1d175c021a744fabd5c6711",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1df38589_0d62e42c",
+        "filename": "src/objects/js-objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-08T07:08:53Z",
+      "side": 0,
+      "message": "I thought about it while doing this CL, but decided not to. I\u0027d like to keep the terminology UINT8_ELEMENTS, ... are \"typed array elements\" and \"RAB_GSAB_UINT8_ELEMENTS, ... are \"rab gsab typed array elements\" consistent in the code base.\n\nAt least for now, since there are still things which are using SomethingTypedArray and should be updated to SomethingTypedArrayOrRabGsabTypedArray but haven\u0027t been yet. If I do that rename now, this intermediate situation can get confusing...\n\nWe can revisit once the rab / gsab implementation is complete.",
+      "parentUuid": "efc20249_fd44506e",
+      "revId": "a1ff91207e454c92d1d175c021a744fabd5c6711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
