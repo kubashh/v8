@@ -7065,11 +7065,29 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         wasm::ObjectAccess::ToTagged(WasmApiFunctionRef::kNativeContextOffset));
     auto* call_descriptor = GetBuiltinCallDescriptor(
         Builtin::kWasmSuspend, zone_, StubCallMode::kCallWasmRuntimeStub);
+
+    // Perform promise.then(suspender.resume()).
+    // TODO(thibaudm): Add onRejected handler.
+    Node* on_fulfilled = gasm_->Load(
+        MachineType::TaggedPointer(), suspender,
+        wasm::ObjectAccess::ToTagged(WasmSuspenderObject::kResumeOffset));
+    int stack_param_count = 3;  // receiver, onFulfilled, onRejected
+    CallInterfaceDescriptor interface_descriptor =
+        Builtins::CallInterfaceDescriptorFor(Builtin::kPromisePrototypeThen);
+    auto* then_call_desc = Linkage::GetStubCallDescriptor(
+        zone_, interface_descriptor, stack_param_count,
+        CallDescriptor::kNoFlags, Operator::kNoProperties,
+        StubCallMode::kCallBuiltinPointer);
+    Node* then_target =
+        gasm_->GetBuiltinPointerTarget(Builtin::kPromisePrototypeThen);
+    Node* chained_promise =
+        gasm_->Call(then_call_desc, then_target, UndefinedValue(),
+                    UndefinedValue(), Int32Constant(4), value, on_fulfilled,
+                    UndefinedValue(), native_context);
+
+    // Suspend and return the new promise.
     Node* call_target = mcgraph()->RelocatableIntPtrConstant(
         wasm::WasmCode::kWasmSuspend, RelocInfo::WASM_STUB_CALL);
-    Node* args[] = {value, suspender};
-    Node* chained_promise = BuildCallToRuntimeWithContext(
-        Runtime::kWasmCreateResumePromise, native_context, args, 2);
     Node* resolved =
         gasm_->Call(call_descriptor, call_target, chained_promise, suspender);
     gasm_->Goto(&resume, resolved);

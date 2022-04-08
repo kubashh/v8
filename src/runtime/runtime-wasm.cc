@@ -783,24 +783,5 @@ RUNTIME_FUNCTION(Runtime_WasmSyncStackLimit) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
-// Takes a promise and a suspender, and returns promise.then(onFulfilled), where
-// onFulfilled resumes the suspender.
-RUNTIME_FUNCTION(Runtime_WasmCreateResumePromise) {
-  CHECK(FLAG_experimental_wasm_stack_switching);
-  HandleScope scope(isolate);
-  Handle<Object> promise = args.at(0);
-  Handle<WasmSuspenderObject> suspender = args.at<WasmSuspenderObject>(1);
-
-  i::Handle<i::Object> argv[] = {handle(suspender->resume(), isolate)};
-  i::Handle<i::Object> result;
-  bool has_pending_exception =
-      !i::Execution::CallBuiltin(isolate, isolate->promise_then(), promise,
-                                 arraysize(argv), argv)
-           .ToHandle(&result);
-  // TODO(thibaudm): Propagate exception.
-  CHECK(!has_pending_exception);
-  return *result;
-}
-
 }  // namespace internal
 }  // namespace v8
