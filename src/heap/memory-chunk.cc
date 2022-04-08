@@ -164,8 +164,8 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
       size_t page_size = MemoryAllocator::GetCommitPageSize();
       DCHECK(IsAligned(area_start_, page_size));
       size_t area_size = RoundUp(area_end_ - area_start_, page_size);
-      CHECK(reservation_.SetPermissions(area_start_, area_size,
-                                        DefaultWritableCodePermissions()));
+      CHECK(reservation_.CommitPages(area_start_, area_size,
+                                     DefaultWritableCodePermissions()));
     }
   }
 

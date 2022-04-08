@@ -630,6 +630,7 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  CodeSpaceWriteScope1::Enter();
   if (heap_->write_protect_code_memory()) {
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
@@ -643,6 +644,7 @@ CodePageCollectionMemoryModificationScope::
       heap_->ProtectUnprotectedMemoryChunks();
     }
   }
+  CodeSpaceWriteScope1::Exit();
 }
 
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP

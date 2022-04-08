@@ -57,10 +57,13 @@ void* BoundedPageAllocator::AllocatePages(void* hint, size_t size,
   }
 
   void* ptr = reinterpret_cast<void*>(address);
-  if (!page_allocator_->SetPermissions(ptr, size, access)) {
-    // This most likely means that we ran out of memory.
-    CHECK_EQ(region_allocator_.FreeRegion(address), size);
-    return nullptr;
+  if (access != PageAllocator::kNoAccess &&
+      access != PageAllocator::kNoAccessWillJitLater) {
+    if (!page_allocator_->SetPermissions(ptr, size, access)) {
+      // This most likely means that we ran out of memory.
+      CHECK_EQ(region_allocator_.FreeRegion(address), size);
+      return nullptr;
+    }
   }
 
   return ptr;
@@ -127,8 +130,9 @@ bool BoundedPageAllocator::FreePages(void* raw_address, size_t size) {
   } else {
     DCHECK_EQ(page_initialization_mode_,
               PageInitializationMode::kAllocatedPagesCanBeUninitialized);
-    CHECK(page_allocator_->SetPermissions(raw_address, size,
-                                          PageAllocator::kNoAccess));
+    // CHECK(page_allocator_->SetPermissions(raw_address, size,
+    //                                       PageAllocator::kNoAccess));
+    CHECK(page_allocator_->DiscardSystemPages(raw_address, size));
   }
   return true;
 }
@@ -183,6 +187,14 @@ bool BoundedPageAllocator::SetPermissions(void* address, size_t size,
   DCHECK(IsAligned(size, commit_page_size_));
   DCHECK(region_allocator_.contains(reinterpret_cast<Address>(address), size));
   return page_allocator_->SetPermissions(address, size, access);
+}
+
+bool BoundedPageAllocator::CommitPages(void* address, size_t size,
+                                       Permission access) {
+  DCHECK(IsAligned(reinterpret_cast<Address>(address), commit_page_size_));
+  DCHECK(IsAligned(size, commit_page_size_));
+  DCHECK(region_allocator_.contains(reinterpret_cast<Address>(address), size));
+  return page_allocator_->CommitPages(address, size, access);
 }
 
 bool BoundedPageAllocator::DiscardSystemPages(void* address, size_t size) {
