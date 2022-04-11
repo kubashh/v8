@@ -323,10 +323,12 @@ MaybeHandle<Code> Factory::CodeBuilder::AllocateConcurrentSparkplugCode(
 }
 
 MaybeHandle<Code> Factory::CodeBuilder::TryBuild() {
+  CodeMemoryWriteScope code_rw_scope;
   return BuildInternal(false);
 }
 
 Handle<Code> Factory::CodeBuilder::Build() {
+  CodeMemoryWriteScope code_rw_scope;
   return BuildInternal(true).ToHandleChecked();
 }
 
@@ -2289,6 +2291,8 @@ Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
   CHECK_NOT_NULL(isolate()->embedded_blob_code());
   CHECK_NE(0, isolate()->embedded_blob_code_size());
   CHECK(Builtins::IsIsolateIndependentBuiltin(*code));
+
+  CodeMemoryWriteScope code_rw_scope;
 
   bool generate_jump_to_instruction_stream =
       Builtins::CodeObjectIsExecutable(code->builtin_id());

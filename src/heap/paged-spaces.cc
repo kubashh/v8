@@ -104,6 +104,9 @@ PagedSpace::PagedSpace(Heap* heap, AllocationSpace space,
 }
 
 void PagedSpace::TearDown() {
+  // TODO(ishell): use this only for code space pages.
+  CodeMemoryWriteScope code_rw_scope;
+
   while (!memory_chunk_list_.Empty()) {
     MemoryChunk* chunk = memory_chunk_list_.front();
     memory_chunk_list_.Remove(chunk);
@@ -123,6 +126,7 @@ void PagedSpace::RefillFreeList() {
   MarkCompactCollector* collector = heap()->mark_compact_collector();
   size_t added = 0;
 
+  CodeMemoryWriteScope code_rw_scope;
   {
     Page* p = nullptr;
     while ((p = collector->sweeper()->GetSweptPageSafe(this)) != nullptr) {
@@ -161,6 +165,8 @@ void PagedSpace::MergeCompactionSpace(CompactionSpace* other) {
   base::MutexGuard guard(mutex());
 
   DCHECK(identity() == other->identity());
+
+  CodeMemoryWriteScope code_rw_scope;  // TODO(ishell): only for code spaces
 
   // Unmerged fields:
   //   area_size_
@@ -210,6 +216,7 @@ size_t PagedSpace::CommittedPhysicalMemory() const {
     DCHECK_EQ(0, committed_physical_memory());
     return CommittedMemory();
   }
+  CodeMemoryWriteScope code_rw_scope;
   BasicMemoryChunk::UpdateHighWaterMark(allocation_info_->top());
   return committed_physical_memory();
 }
@@ -307,6 +314,7 @@ void PagedSpace::RemovePage(Page* page) {
 void PagedSpace::SetTopAndLimit(Address top, Address limit) {
   DCHECK(top == limit ||
          Page::FromAddress(top) == Page::FromAddress(limit - 1));
+  CodeMemoryWriteScope code_rw_scope;
   BasicMemoryChunk::UpdateHighWaterMark(allocation_info_->top());
   allocation_info_->Reset(top, limit);
 
@@ -921,6 +929,11 @@ bool CompactionSpace::RefillLabMain(int size_in_bytes,
 }
 
 bool PagedSpace::TryExpand(int size_in_bytes, AllocationOrigin origin) {
+  std::optional<CodeMemoryWriteScope> code_rw_scope;
+  if (executable() == EXECUTABLE) {
+    code_rw_scope.emplace();
+  }
+
   Page* page = Expand();
   if (!page) return false;
   if (!is_compaction_space()) {
@@ -1000,6 +1013,7 @@ bool PagedSpace::ContributeToSweepingMain(int required_freed_bytes,
 
   MarkCompactCollector* collector = heap()->mark_compact_collector();
   if (collector->sweeping_in_progress()) {
+    CodeMemoryWriteScope code_rw_scope;
     collector->sweeper()->ParallelSweepSpace(identity(), sweeping_mode,
                                              required_freed_bytes, max_pages);
     RefillFreeList();

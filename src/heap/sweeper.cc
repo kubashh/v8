@@ -197,6 +197,10 @@ void Sweeper::EnsureCompleted() {
   // If sweeping is not completed or not running at all, we try to complete it
   // here.
   ForAllSweepingSpaces([this](AllocationSpace space) {
+    std::optional<CodeMemoryWriteScope> code_rw_scope;
+    if (space == CODE_SPACE) {
+      code_rw_scope.emplace();
+    }
     ParallelSweepSpace(space, SweepingMode::kLazyOrConcurrent, 0);
   });
 

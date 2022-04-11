@@ -639,14 +639,16 @@ void Scavenger::ScavengePage(MemoryChunk* page) {
     page->ReleaseInvalidatedSlots<OLD_TO_NEW>();
   }
 
-  RememberedSet<OLD_TO_NEW>::IterateTyped(
-      page, [=](SlotType type, Address addr) {
-        return UpdateTypedSlotHelper::UpdateTypedSlot(
-            heap_, type, addr, [this](FullMaybeObjectSlot slot) {
-              return CheckAndScavengeObject(heap(), slot);
-            });
-      });
-
+  {
+    CodeMemoryWriteScope code_rw_scope;
+    RememberedSet<OLD_TO_NEW>::IterateTyped(
+        page, [=](SlotType type, Address addr) {
+          return UpdateTypedSlotHelper::UpdateTypedSlot(
+              heap_, type, addr, [this](FullMaybeObjectSlot slot) {
+                return CheckAndScavengeObject(heap(), slot);
+              });
+        });
+  }
   AddPageToSweeperIfNecessary(page);
 }
 

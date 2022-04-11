@@ -1,0 +1,55 @@
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#ifndef V8_COMMON_CODE_MEMORY_ACCESS_INL_H_
+#define V8_COMMON_CODE_MEMORY_ACCESS_INL_H_
+
+#include "src/common/code-memory-access.h"
+
+namespace v8 {
+namespace internal {
+
+CodeMemoryWriteScope::CodeMemoryWriteScope() { Enter(); }
+
+CodeMemoryWriteScope::~CodeMemoryWriteScope() { Exit(); }
+
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+
+void CodeMemoryWriteScope::Enter() {
+  if (code_space_write_nesting_level_ == 0) SetWritable();
+  code_space_write_nesting_level_++;
+}
+
+void CodeMemoryWriteScope::Exit() {
+  code_space_write_nesting_level_--;
+  if (code_space_write_nesting_level_ == 0) SetExecutable();
+}
+
+// Ignoring this warning is considered better than relying on
+// __builtin_available.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability-new"
+void CodeMemoryWriteScope::SetWritable() { pthread_jit_write_protect_np(0); }
+
+void CodeMemoryWriteScope::SetExecutable() { pthread_jit_write_protect_np(1); }
+#pragma clang diagnostic pop
+
+#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+
+void CodeMemoryWriteScope::Enter() {
+  // Ensure that these scopes are not nested.
+  // DCHECK_EQ(code_space_write_nesting_level_++, 0);
+}
+
+void CodeMemoryWriteScope::Exit() {
+  // Ensure that these scopes are not nested.
+  // DCHECK_EQ(--code_space_write_nesting_level_, 0);
+}
+
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_COMMON_CODE_MEMORY_ACCESS_INL_H_

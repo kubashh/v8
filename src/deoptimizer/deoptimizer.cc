@@ -370,6 +370,8 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(NativeContext native_context) {
   // the code currently beings deoptimized.
   isolate->thread_manager()->IterateArchivedThreads(&visitor);
 
+  CodeMemoryWriteScope code_rw_scope;
+
   // If there's no activation of a code in any stack then we can remove its
   // deoptimization data. We do this to ensure that code objects that are
   // unlinked don't transitively keep objects alive unnecessarily.

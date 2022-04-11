@@ -6,6 +6,7 @@
 #define V8_HEAP_REMEMBERED_SET_INL_H_
 
 #include "src/common/ptr-compr-inl.h"
+#include "src/heap/memory-allocator.h"
 #include "src/heap/remembered-set.h"
 
 namespace v8 {
@@ -16,6 +17,7 @@ SlotCallbackResult UpdateTypedSlotHelper::UpdateTypedSlot(Heap* heap,
                                                           SlotType slot_type,
                                                           Address addr,
                                                           Callback callback) {
+  CodeMemoryWriteScope code_rw_scope;
   switch (slot_type) {
     case SlotType::kCodeEntry: {
       RelocInfo rinfo(addr, RelocInfo::CODE_TARGET, 0, Code());

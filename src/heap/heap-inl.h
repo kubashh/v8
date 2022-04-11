@@ -16,6 +16,7 @@
 #include "src/base/platform/platform.h"
 #include "src/base/sanitizer/msan.h"
 #include "src/common/assert-scope.h"
+#include "src/common/code-memory-access-inl.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate.h"
 #include "src/heap/code-object-registry.h"
@@ -630,6 +631,7 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  CodeMemoryWriteScope::Enter();
   if (heap_->write_protect_code_memory()) {
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
@@ -643,6 +645,7 @@ CodePageCollectionMemoryModificationScope::
       heap_->ProtectUnprotectedMemoryChunks();
     }
   }
+  CodeMemoryWriteScope::Exit();
 }
 
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP

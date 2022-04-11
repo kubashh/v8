@@ -273,6 +273,7 @@ void FreeListManyCached::RemoveCategory(FreeListCategory* category) {
 
 size_t FreeListManyCached::Free(Address start, size_t size_in_bytes,
                                 FreeMode mode) {
+  CodeMemoryWriteScope code_rw_scope;
   Page* page = Page::FromAddress(start);
   page->DecreaseAllocatedBytes(size_in_bytes);
 

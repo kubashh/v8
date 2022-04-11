@@ -159,6 +159,7 @@ void MarkingBarrier::PublishAll(Heap* heap) {
 void MarkingBarrier::Publish() {
   if (is_activated_) {
     worklist_.Publish();
+    CodeMemoryWriteScope code_rw_scope;
     for (auto& it : typed_slots_map_) {
       MemoryChunk* memory_chunk = it.first;
       // Access to TypeSlots need to be protected, since LocalHeaps might
@@ -234,7 +235,10 @@ void MarkingBarrier::Activate(bool is_compacting) {
   if (is_main_thread_barrier_) {
     ActivateSpace(heap_->old_space());
     if (heap_->map_space()) ActivateSpace(heap_->map_space());
-    ActivateSpace(heap_->code_space());
+    {
+      CodeMemoryWriteScope code_rw_scope;
+      ActivateSpace(heap_->code_space());
+    }
     ActivateSpace(heap_->new_space());
 
     for (LargePage* p : *heap_->new_lo_space()) {
@@ -246,8 +250,11 @@ void MarkingBarrier::Activate(bool is_compacting) {
       p->SetOldGenerationPageFlags(true);
     }
 
-    for (LargePage* p : *heap_->code_lo_space()) {
-      p->SetOldGenerationPageFlags(true);
+    {
+      CodeMemoryWriteScope code_rw_scope;
+      for (LargePage* p : *heap_->code_lo_space()) {
+        p->SetOldGenerationPageFlags(true);
+      }
     }
   }
 }
