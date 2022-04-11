@@ -74,6 +74,8 @@ void EventHandler(const JitCodeEvent* event) {
       const_cast<LPWSTR>(method_name.data()),
       static_cast<int>(method_name.size()));
 
+  wprintf(L"[V8][ETW] method_name=%s\n", method_name.c_str());
+
   v8::Isolate* script_context = event->isolate;
   v8::Local<v8::UnboundScript> script = event->script;
   int script_id = 0;
@@ -93,6 +95,8 @@ void EventHandler(const JitCodeEvent* event) {
             reinterpret_cast<const uint16_t*>(wstr_name.data()));
         v8str_name->Write(event->isolate, wstr_data);
       }
+
+      wprintf(L"[V8][ETW] script_name=%s\n", wstr_name.c_str());
 
       constexpr static auto source_load_event_meta =
           EventMetadata(kSourceLoadEventID, kJScriptRuntimeKeyword);
