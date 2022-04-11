@@ -16,6 +16,92 @@
       "message": "PTAL",
       "revId": "1b9f0c3b28ec83d6664c876d376f019a4d926872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67773e80_3678615f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-11T20:57:45Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "1b9f0c3b28ec83d6664c876d376f019a4d926872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f0ead90_3d0500de",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7068,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-11T20:57:45Z",
+      "side": 1,
+      "message": "nit: please move this closer to where it\u0027s needed, i.e. around line 7088.",
+      "range": {
+        "startLine": 7066,
+        "startChar": 4,
+        "endLine": 7068,
+        "endChar": 0
+      },
+      "revId": "1b9f0c3b28ec83d6664c876d376f019a4d926872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac308e6b_9f379f2a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7080,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-11T20:57:45Z",
+      "side": 1,
+      "message": "You can use `GetBuiltinCallDescriptor` (line 140) to shorten this. See line 7066 for a very-nearby example :-)",
+      "range": {
+        "startLine": 7075,
+        "startChar": 4,
+        "endLine": 7080,
+        "endChar": 43
+      },
+      "revId": "1b9f0c3b28ec83d6664c876d376f019a4d926872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297a135f_b3342334",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7086,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-11T20:57:45Z",
+      "side": 1,
+      "message": "I\u0027m confused by these parameters, I would have expected just three: receiver, onFulfilled, onRejected. Can you please add comments (or pull out descriptively named `Node*` variables) to explain what they\u0027re for?",
+      "range": {
+        "startLine": 7084,
+        "startChar": 49,
+        "endLine": 7086,
+        "endChar": 36
+      },
+      "revId": "1b9f0c3b28ec83d6664c876d376f019a4d926872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
