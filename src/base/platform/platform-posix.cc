@@ -93,6 +93,8 @@ namespace base {
 
 namespace {
 
+const bool kTraceOS = false;
+
 // 0 is never a valid thread id.
 const pthread_t kNoThread = static_cast<pthread_t>(0);
 
@@ -173,7 +175,16 @@ void* Allocate(void* hint, size_t size, OS::MemoryPermission access,
   int prot = GetProtectionFromMemoryPermission(access);
   int flags = GetFlagsForMemoryPermission(access, page_type);
   void* result = mmap(hint, size, prot, flags, kMmapFd, kMmapFdOffset);
-  if (result == MAP_FAILED) return nullptr;
+  if (result == MAP_FAILED) {
+    if (kTraceOS) {
+      printf(
+          "base::Allocate failed: hint: %p, size %p, prot: %#x, flags: %#x, "
+          "errno: %d, %s\n",
+          hint, reinterpret_cast<char*>(size), prot, flags, errno,
+          strerror(errno));
+    }
+    return nullptr;
+  }
 #if ENABLE_HUGEPAGE
   if (result != nullptr && size >= kHugePageSize) {
     const uintptr_t huge_start =
@@ -400,7 +411,14 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
   size_t request_size = size + (alignment - page_size);
   request_size = RoundUp(request_size, OS::AllocatePageSize());
   void* result = base::Allocate(hint, request_size, access, PageType::kPrivate);
-  if (result == nullptr) return nullptr;
+  if (result == nullptr) {
+    if (kTraceOS) {
+      printf("OS::Allocate failed: size %p, access: %#x, errno: %d, %s\n",
+             reinterpret_cast<char*>(size), static_cast<int>(access), errno,
+             strerror(errno));
+    }
+    return nullptr;
+  }
 
   // Unmap memory allocated before the aligned base address.
   uint8_t* base = static_cast<uint8_t*>(result);
@@ -420,6 +438,33 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
     request_size -= suffix_size;
   }
 
+  if (kTraceOS) {
+    printf("OS::Allocate: %p-%p, %#x\n", aligned_base,
+           reinterpret_cast<char*>(aligned_base) + size,
+           static_cast<int>(access));
+  }
+#if defined(V8_EXTERNAL_CODE_SPACE) && defined(V8_OS_DARWIN) && \
+    V8_HOST_ARCH_ARM64
+  if (access == OS::MemoryPermission::kNoAccessWillJitLater) {
+    // RWX page permissions are set on allocation and never changed.
+    int ret = mprotect(aligned_base, size, PROT_READ | PROT_WRITE | PROT_EXEC);
+    if (ret != 0) {
+      munmap(result, size);
+      if (kTraceOS) {
+        printf(
+            "OS::Allocate MAP_JIT failed: %p-%p, access: %#x, errno: %d, %s\n",
+            aligned_base, reinterpret_cast<char*>(aligned_base) + size,
+            static_cast<int>(access), errno, strerror(errno));
+      }
+      return nullptr;
+    }
+    // Decommit the whole region.
+    do {
+      ret = madvise(result, size, MADV_FREE_REUSABLE);
+    } while (ret != 0 && errno == EAGAIN);
+  }
+#endif
+
   DCHECK_EQ(size, request_size);
   return static_cast<void*>(aligned_base);
 }
@@ -434,6 +479,10 @@ void* OS::AllocateShared(size_t size, MemoryPermission access) {
 void OS::Free(void* address, size_t size) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % AllocatePageSize());
   DCHECK_EQ(0, size % AllocatePageSize());
+  if (kTraceOS) {
+    printf("OS::Free: %p-%p\n", address,
+           reinterpret_cast<char*>(address) + size);
+  }
   CHECK_EQ(0, munmap(address, size));
 }
 
@@ -468,6 +517,19 @@ void OS::Release(void* address, size_t size) {
 bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
+
+  if (kTraceOS) {
+    printf("OS::SetPermissions: %p-%p, %#x\n", address,
+           reinterpret_cast<char*>(address) + size, static_cast<int>(access));
+  }
+
+#if defined(V8_OS_DARWIN)
+  if (access == MemoryPermission::kReadWriteExecute) {
+    while (madvise(address, size, MADV_FREE_REUSE) == -1 && errno == EAGAIN) {
+    }
+    return true;
+  }
+#endif
 
   int prot = GetProtectionFromMemoryPermission(access);
   int ret = mprotect(address, size, prot);
@@ -506,11 +568,18 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
   // (base/allocator/partition_allocator/page_allocator_internals_posix.h)
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
+  if (kTraceOS) {
+    printf("OS::DiscardSystemPages: %p, size: %p\n", address,
+           reinterpret_cast<void*>(size));
+  }
 #if defined(V8_OS_DARWIN)
   // On OSX, MADV_FREE_REUSABLE has comparable behavior to MADV_FREE, but also
   // marks the pages with the reusable bit, which allows both Activity Monitor
   // and memory-infra to correctly track the pages.
-  int ret = madvise(address, size, MADV_FREE_REUSABLE);
+  int ret;
+  do {
+    ret = madvise(address, size, MADV_FREE_REUSABLE);
+  } while (ret != 0 && errno == EAGAIN);
   if (ret) {
     // MADV_FREE_REUSABLE sometimes fails, so fall back to MADV_DONTNEED.
     ret = madvise(address, size, MADV_DONTNEED);
@@ -533,6 +602,10 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
 bool OS::DecommitPages(void* address, size_t size) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
+  if (kTraceOS) {
+    printf("OS::DecommitPages: %p, size: %p\n", address,
+           reinterpret_cast<void*>(size));
+  }
   // From https://pubs.opengroup.org/onlinepubs/9699919799/functions/mmap.html:
   // "If a MAP_FIXED request is successful, then any previous mappings [...] for
   // those whole pages containing any part of the address range [pa,pa+len)

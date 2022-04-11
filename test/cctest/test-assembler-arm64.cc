@@ -122,9 +122,10 @@ static void InitializeVM() {
   Isolate* isolate = CcTest::i_isolate();                                  \
   HandleScope scope(isolate);                                              \
   CHECK_NOT_NULL(isolate);                                                 \
-  std::unique_ptr<byte[]> owned_buf{new byte[buf_size]};                   \
+  auto owned_buf = AllocateAssemblerBuffer(buf_size);                      \
   MacroAssembler masm(isolate, v8::internal::CodeObjectRequired::kYes,     \
                       ExternalAssemblerBuffer(owned_buf.get(), buf_size)); \
+  std::optional<AssemblerBufferWriteScope> rw_buffer_scope;                \
   Decoder<DispatchingDecoderVisitor>* decoder =                            \
       new Decoder<DispatchingDecoderVisitor>();                            \
   Simulator simulator(decoder);                                            \
@@ -177,6 +178,7 @@ static void InitializeVM() {
   HandleScope scope(isolate);                                          \
   CHECK_NOT_NULL(isolate);                                             \
   auto owned_buf = AllocateAssemblerBuffer(buf_size);                  \
+  std::optional<AssemblerBufferWriteScope> rw_buffer_scope;            \
   MacroAssembler masm(isolate, v8::internal::CodeObjectRequired::kYes, \
                       owned_buf->CreateView());                        \
   HandleScope handle_scope(isolate);                                   \
@@ -184,7 +186,7 @@ static void InitializeVM() {
   RegisterDump core;
 
 #define RESET()                                                \
-  owned_buf->MakeWritable();                                   \
+  rw_buffer_scope.emplace(*owned_buf);                         \
   __ Reset();                                                  \
   __ CodeEntry();                                              \
   /* Reset the machine state (like simulator.ResetState()). */ \
@@ -198,10 +200,12 @@ static void InitializeVM() {
   RESET();      \
   START_AFTER_RESET();
 
-#define RUN()                                      \
-  {                                                \
-    auto f = GeneratedCode<void>::FromCode(*code); \
-    f.Call();                                      \
+#define RUN()                                                  \
+  {                                                            \
+    /* Reset the scope and thus make the buffer executable. */ \
+    rw_buffer_scope.reset();                                   \
+    auto f = GeneratedCode<void>::FromCode(*code);             \
+    f.Call();                                                  \
   }
 
 #define END()                                                                  \
@@ -14880,6 +14884,7 @@ TEST(pool_size) {
 
   // This test does not execute any code. It only tests that the size of the
   // pools is read correctly from the RelocInfo.
+  rw_buffer_scope.emplace(*owned_buf);
 
   Label exit;
   __ b(&exit);
