@@ -332,6 +332,9 @@ void Builtins::InitializeIsolateDataTables(Isolate* isolate) {
 
 // static
 void Builtins::EmitCodeCreateEvents(Isolate* isolate) {
+  PrintF("[V8] Builtins::EmitCodeCreateEvents: %d, %d\n",
+    isolate->logger()->is_listening_to_code_events(),
+    isolate->is_profiling());
   if (!isolate->logger()->is_listening_to_code_events() &&
       !isolate->is_profiling()) {
     return;  // No need to iterate the entire table in this case.

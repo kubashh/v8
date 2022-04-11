@@ -8660,12 +8660,12 @@ void Isolate::Initialize(Isolate* isolate,
       code_event_handler = i::GDBJITInterface::EventHandler;
     }
 #endif  // ENABLE_GDB_JIT_INTERFACE
-#if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
-    if (code_event_handler == nullptr &&
-        i::FLAG_enable_system_instrumentation) {
-      code_event_handler = i::ETWJITInterface::EventHandler;
-    }
-#endif  // defined(V8_OS_WIN)
+// #if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+//     if (code_event_handler == nullptr &&
+//         i::FLAG_enable_system_instrumentation) {
+//       code_event_handler = i::ETWJITInterface::EventHandler;
+//     }
+// #endif  // defined(V8_OS_WIN)
 
     if (code_event_handler) {
       isolate->SetJitCodeEventHandler(kJitCodeEventEnumExisting,
@@ -9288,6 +9288,7 @@ bool Isolate::IsHeapLimitIncreasedForDebugging() { return false; }
 
 void Isolate::SetJitCodeEventHandler(JitCodeEventOptions options,
                                      JitCodeEventHandler event_handler) {
+  DCHECK(false);
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   // Ensure that logging is initialized for our isolate.
   isolate->InitializeLoggingAndCounters();

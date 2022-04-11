@@ -120,6 +120,7 @@ bool V8::InitializeSandbox() {
   }
 
 void V8::Initialize() {
+  PrintF("[V8] V8::Initialize\n");
   AdvanceStartupState(V8StartupState::kV8Initializing);
   CHECK(platform_);
 
@@ -159,6 +160,9 @@ void V8::Initialize() {
     // Profiling flags depend on logging.
     FLAG_log |= FLAG_perf_prof || FLAG_perf_basic_prof || FLAG_ll_prof ||
                 FLAG_prof || FLAG_prof_cpp;
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+    FLAG_log |= FLAG_enable_system_instrumentation;
+#endif
   }
 
   FlagList::EnforceFlagImplications();
