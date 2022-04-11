@@ -181,10 +181,11 @@ static void InitializeVM() {
                       owned_buf->CreateView());                        \
   HandleScope handle_scope(isolate);                                   \
   Handle<Code> code;                                                   \
-  RegisterDump core;
+  RegisterDump core;                                                   \
+  std::optional<AssemblerBufferWriteScope> rw_buffer_scope;
 
 #define RESET()                                                \
-  owned_buf->MakeWritable();                                   \
+  rw_buffer_scope.emplace(*owned_buf);                         \
   __ Reset();                                                  \
   __ CodeEntry();                                              \
   /* Reset the machine state (like simulator.ResetState()). */ \
@@ -198,10 +199,12 @@ static void InitializeVM() {
   RESET();      \
   START_AFTER_RESET();
 
-#define RUN()                                      \
-  {                                                \
-    auto f = GeneratedCode<void>::FromCode(*code); \
-    f.Call();                                      \
+#define RUN()                                                  \
+  {                                                            \
+    /* Reset the scope and thus make the buffer executable. */ \
+    rw_buffer_scope.reset();                                   \
+    auto f = GeneratedCode<void>::FromCode(*code);             \
+    f.Call();                                                  \
   }
 
 #define END()                                                                  \
@@ -14880,6 +14883,7 @@ TEST(pool_size) {
 
   // This test does not execute any code. It only tests that the size of the
   // pools is read correctly from the RelocInfo.
+  rw_buffer_scope.emplace(*owned_buf);
 
   Label exit;
   __ b(&exit);
