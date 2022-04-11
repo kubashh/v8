@@ -95,6 +95,8 @@ void V8::InitializePlatform(v8::Platform* platform) {
   v8::base::SetPrintStackTrace(platform_->GetStackTracePrinter());
   v8::tracing::TracingCategoryObserver::SetUp();
 #if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  printf("[V8] FLAG_enable_system_instrumentation: %d\n",
+      FLAG_enable_system_instrumentation);
   if (FLAG_enable_system_instrumentation) {
     // TODO(sartang@microsoft.com): Move to platform specific diagnostics object
     v8::internal::ETWJITInterface::Register();
@@ -120,6 +122,7 @@ bool V8::InitializeSandbox() {
   }
 
 void V8::Initialize() {
+  PrintF("[V8] V8::Initialize\n");
   AdvanceStartupState(V8StartupState::kV8Initializing);
   CHECK(platform_);
 
@@ -159,6 +162,9 @@ void V8::Initialize() {
     // Profiling flags depend on logging.
     FLAG_log |= FLAG_perf_prof || FLAG_perf_basic_prof || FLAG_ll_prof ||
                 FLAG_prof || FLAG_prof_cpp;
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+    FLAG_log |= FLAG_enable_system_instrumentation;
+#endif
   }
 
   FlagList::EnforceFlagImplications();

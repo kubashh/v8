@@ -50,6 +50,12 @@
 #include "src/wasm/wasm-objects-inl.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+#if V8_OS_WIN
+#if defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+#include "src/diagnostics/system-jit-win.h"
+#endif
+#endif  // V8_OS_WIN
+
 namespace v8 {
 namespace internal {
 
@@ -367,7 +373,8 @@ void PerfBasicLogger::LogRecordedBuffer(const wasm::WasmCode* code,
 
 // External CodeEventListener
 ExternalCodeEventListener::ExternalCodeEventListener(Isolate* isolate)
-    : is_listening_(false), isolate_(isolate), code_event_handler_(nullptr) {}
+    : is_listening_(false), isolate_(isolate), code_event_handler_(nullptr) {
+}
 
 ExternalCodeEventListener::~ExternalCodeEventListener() {
   if (is_listening_) {
@@ -1967,6 +1974,7 @@ static void PrepareLogFileName(std::ostream& os, Isolate* isolate,
 }
 
 bool Logger::SetUp(Isolate* isolate) {
+  PrintIsolate(this, "[V8] %s\n", __PRETTY_FUNCTION__);
   // Tests and EnsureInitialize() can call this twice in a row. It's harmless.
   if (is_initialized_) return true;
   is_initialized_ = true;
@@ -1994,6 +2002,21 @@ bool Logger::SetUp(Isolate* isolate) {
       "--perf-basic-prof should be statically disabled on non-Linux platforms");
 #endif
 
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_SYSTEM_INSTRUMENTATION)
+  if (i::FLAG_enable_system_instrumentation) {
+    PrintF("[V8][JIT] FLAG_enable_system_instrumentation => creating JitLogger\n");
+    auto code_event_handler = i::ETWJITInterface::EventHandler;
+    if (code_event_handler) {
+      if (jit_logger_) {
+        RemoveCodeEventListener(jit_logger_.get());
+        jit_logger_.reset();
+      }
+      jit_logger_ = std::make_unique<JitLogger>(isolate, code_event_handler);
+      AddCodeEventListener(jit_logger_.get());
+    }
+  }
+#endif  // defined(V8_OS_WIN)
+
   if (FLAG_ll_prof) {
     ll_logger_ =
         std::make_unique<LowLevelLogger>(isolate, log_file_name.str().c_str());
@@ -2014,6 +2037,9 @@ bool Logger::SetUp(Isolate* isolate) {
 
 void Logger::SetCodeEventHandler(uint32_t options,
                                  JitCodeEventHandler event_handler) {
+  // TODO(henrika): remove once we know that the new path works.
+  DCHECK(false);
+
   if (jit_logger_) {
     RemoveCodeEventListener(jit_logger_.get());
     jit_logger_.reset();
@@ -2073,6 +2099,8 @@ FILE* Logger::TearDownAndGetLogFile() {
   }
 
   if (jit_logger_) {
+    // TODO(henrika): we never hit this.
+    PrintIsolate(this, "[V8][JIT] RemoveCodeEventListener\n");
     RemoveCodeEventListener(jit_logger_.get());
     jit_logger_.reset();
   }
