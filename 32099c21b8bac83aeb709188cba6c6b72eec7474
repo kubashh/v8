@@ -16,6 +16,52 @@
       "message": "PTAL. This is an initial verifier, we should improve this later.\nExample error message:\n```\n# Fatal error in ../../src/maglev/maglev-graph-verifier.h, line 54\n# Type representation error: node #21 : Int32AddWithOverflow (input @1 \u003d SmiConstant) type TaggedValue is not UntaggedValue\n```",
       "revId": "32099c21b8bac83aeb709188cba6c6b72eec7474",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85a3e7d9_a3ea4119",
+        "filename": "src/maglev/maglev-graph-verifier.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-12T14:34:05Z",
+      "side": 1,
+      "message": "the node processor already does a switch over the opcode, you could use overloading / template specialization here instead",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 29
+      },
+      "revId": "32099c21b8bac83aeb709188cba6c6b72eec7474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e39a8c_0a550e6c",
+        "filename": "src/maglev/maglev-graph-verifier.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-12T14:34:05Z",
+      "side": 1,
+      "message": "consider doing the input loop as `default`, and special case the untagged inputs only",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 116,
+        "endChar": 42
+      },
+      "revId": "32099c21b8bac83aeb709188cba6c6b72eec7474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
