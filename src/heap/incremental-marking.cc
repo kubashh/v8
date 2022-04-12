@@ -222,6 +222,7 @@ namespace {
 
 void MarkRoots(Heap* heap) {
   IncrementalMarkingRootMarkingVisitor visitor(heap);
+  CodeMemoryWriteScope code_rw_scope;
   heap->IterateRoots(
       &visitor,
       base::EnumSet<SkipRoot>{SkipRoot::kStack, SkipRoot::kMainThreadHandles,
@@ -301,7 +302,10 @@ void IncrementalMarking::StartBlackAllocation() {
   black_allocation_ = true;
   heap()->old_space()->MarkLinearAllocationAreaBlack();
   if (heap()->map_space()) heap()->map_space()->MarkLinearAllocationAreaBlack();
-  heap()->code_space()->MarkLinearAllocationAreaBlack();
+  {
+    CodeMemoryWriteScope code_rw_scope;
+    heap()->code_space()->MarkLinearAllocationAreaBlack();
+  }
   heap()->safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
     local_heap->MarkLinearAllocationAreaBlack();
   });
@@ -315,7 +319,10 @@ void IncrementalMarking::PauseBlackAllocation() {
   DCHECK(IsMarking());
   heap()->old_space()->UnmarkLinearAllocationArea();
   if (heap()->map_space()) heap()->map_space()->UnmarkLinearAllocationArea();
-  heap()->code_space()->UnmarkLinearAllocationArea();
+  {
+    CodeMemoryWriteScope code_rw_scope;
+    heap()->code_space()->UnmarkLinearAllocationArea();
+  }
   heap()->safepoint()->IterateLocalHeaps(
       [](LocalHeap* local_heap) { local_heap->UnmarkLinearAllocationArea(); });
   if (FLAG_trace_incremental_marking) {
