@@ -173,7 +173,9 @@ void* Allocate(void* hint, size_t size, OS::MemoryPermission access,
   int prot = GetProtectionFromMemoryPermission(access);
   int flags = GetFlagsForMemoryPermission(access, page_type);
   void* result = mmap(hint, size, prot, flags, kMmapFd, kMmapFdOffset);
-  if (result == MAP_FAILED) return nullptr;
+  if (result == MAP_FAILED) {
+    return nullptr;
+  }
 #if ENABLE_HUGEPAGE
   if (result != nullptr && size >= kHugePageSize) {
     const uintptr_t huge_start =
@@ -400,7 +402,9 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
   size_t request_size = size + (alignment - page_size);
   request_size = RoundUp(request_size, OS::AllocatePageSize());
   void* result = base::Allocate(hint, request_size, access, PageType::kPrivate);
-  if (result == nullptr) return nullptr;
+  if (result == nullptr) {
+    return nullptr;
+  }
 
   // Unmap memory allocated before the aligned base address.
   uint8_t* base = static_cast<uint8_t*>(result);
@@ -419,6 +423,21 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
     Free(aligned_base + size, suffix_size);
     request_size -= suffix_size;
   }
+
+#if defined(V8_OS_DARWIN) && V8_HOST_ARCH_ARM64
+  if (access == OS::MemoryPermission::kNoAccessWillJitLater) {
+    // RWX page permissions are set on allocation and never changed.
+    int ret = mprotect(aligned_base, size, PROT_READ | PROT_WRITE | PROT_EXEC);
+    if (ret != 0) {
+      munmap(result, size);
+      return nullptr;
+    }
+    // Decommit the whole region.
+    do {
+      ret = madvise(result, size, MADV_FREE_REUSABLE);
+    } while (ret != 0 && errno == EAGAIN);
+  }
+#endif
 
   DCHECK_EQ(size, request_size);
   return static_cast<void*>(aligned_base);
@@ -469,6 +488,14 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
 
+#if defined(V8_OS_DARWIN)
+  if (access == MemoryPermission::kReadWriteExecute) {
+    while (madvise(address, size, MADV_FREE_REUSE) == -1 && errno == EAGAIN) {
+    }
+    return true;
+  }
+#endif
+
   int prot = GetProtectionFromMemoryPermission(access);
   int ret = mprotect(address, size, prot);
 
@@ -510,7 +537,10 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
   // On OSX, MADV_FREE_REUSABLE has comparable behavior to MADV_FREE, but also
   // marks the pages with the reusable bit, which allows both Activity Monitor
   // and memory-infra to correctly track the pages.
-  int ret = madvise(address, size, MADV_FREE_REUSABLE);
+  int ret;
+  do {
+    ret = madvise(address, size, MADV_FREE_REUSABLE);
+  } while (ret != 0 && errno == EAGAIN);
   if (ret) {
     // MADV_FREE_REUSABLE sometimes fails, so fall back to MADV_DONTNEED.
     ret = madvise(address, size, MADV_DONTNEED);

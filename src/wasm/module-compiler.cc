@@ -3472,6 +3472,7 @@ void CompilationStateImpl::FinalizeJSToWasmWrappers(
   TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.FinalizeJSToWasmWrappers", "wrappers",
                js_to_wasm_wrapper_units_.size());
+  // TODO(v8:11880): double scope.
   CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
   for (auto& unit : js_to_wasm_wrapper_units_) {
     DCHECK_EQ(isolate, unit->isolate());
@@ -3929,6 +3930,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module,
   // optimization we create a code memory modification scope that avoids
   // changing the page permissions back-and-forth between RWX and RX, because
   // many such wrapper are allocated in sequence below.
+  // TODO(v8:11880): double scope.
   CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
   for (auto& pair : compilation_units) {
     JSToWasmWrapperKey key = pair.first;

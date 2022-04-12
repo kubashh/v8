@@ -16,6 +16,7 @@
 #include "src/base/platform/platform.h"
 #include "src/base/sanitizer/msan.h"
 #include "src/common/assert-scope.h"
+#include "src/common/code-memory-access-inl.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate.h"
 #include "src/heap/code-object-registry.h"
@@ -630,6 +631,7 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  CodeMemoryWriteScope::Enter();
   if (heap_->write_protect_code_memory()) {
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
@@ -643,6 +645,7 @@ CodePageCollectionMemoryModificationScope::
       heap_->ProtectUnprotectedMemoryChunks();
     }
   }
+  CodeMemoryWriteScope::Exit();
 }
 
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP
@@ -658,6 +661,7 @@ CodePageMemoryModificationScope::CodePageMemoryModificationScope(
     : chunk_(chunk),
       scope_active_(chunk_->heap()->write_protect_code_memory() &&
                     chunk_->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
+  CodeMemoryWriteScope::Enter();
   if (scope_active_) {
     DCHECK(chunk_->owner()->identity() == CODE_SPACE ||
            (chunk_->owner()->identity() == CODE_LO_SPACE));
@@ -669,6 +673,7 @@ CodePageMemoryModificationScope::~CodePageMemoryModificationScope() {
   if (scope_active_) {
     MemoryChunk::cast(chunk_)->SetDefaultCodePermissions();
   }
+  CodeMemoryWriteScope::Exit();
 }
 
 IgnoreLocalGCRequests::IgnoreLocalGCRequests(Heap* heap) : heap_(heap) {

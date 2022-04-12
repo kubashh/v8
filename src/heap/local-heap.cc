@@ -83,6 +83,7 @@ LocalHeap::~LocalHeap() {
     FreeLinearAllocationArea();
 
     if (!is_main_thread()) {
+      CodeMemoryWriteScope code_rw_scope;
       marking_barrier_->Publish();
       WriteBarrier::ClearForThread(marking_barrier_.get());
     }
