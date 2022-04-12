@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56981ce6_e1b896f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1524529
+      },
+      "writtenOn": "2022-04-12T18:12:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9c57648_ccb21c8f",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "cbe8618b72b533883838075ed2b2f946262057a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5b6f400_b82ef0d9",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-12T18:03:03Z",
       "side": 1,
       "message": "This is what makes it safe to re-land?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 5
+      },
+      "revId": "cbe8618b72b533883838075ed2b2f946262057a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60593a35_b218c2e3",
+        "filename": "test/unittests/v8_unittests.cmx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1524529
+      },
+      "writtenOn": "2022-04-12T18:12:59Z",
+      "side": 1,
+      "message": "I explained in the description, but it eliminated including cmx shards, which doesn\u0027t work OOT.",
+      "parentUuid": "d5b6f400_b82ef0d9",
       "range": {
         "startLine": 5,
         "startChar": 0,
