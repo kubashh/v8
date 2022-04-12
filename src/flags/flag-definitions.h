@@ -751,8 +751,10 @@ DEFINE_BOOL(write_code_using_rwx, true,
             "flip permissions to rwx to write page instead of rw")
 DEFINE_NEG_IMPLICATION(jitless, write_code_using_rwx)
 #else
-DEFINE_BOOL_READONLY(write_code_using_rwx, false,
-                     "flip permissions to rwx to write page instead of rw")
+// DEFINE_BOOL_READONLY(write_code_using_rwx, false,
+//                      "flip permissions to rwx to write page instead of rw")
+DEFINE_BOOL(write_code_using_rwx, true,
+            "flip permissions to rwx to write page instead of rw")
 #endif
 
 // Flags for concurrent recompilation.
@@ -1260,7 +1262,7 @@ DEFINE_BOOL(scavenge_separate_stack_scanning, false,
             "use a separate phase for stack scanning in scavenge")
 DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
 #if MUST_WRITE_PROTECT_CODE_MEMORY
-DEFINE_BOOL_READONLY(write_protect_code_memory, true,
+DEFINE_BOOL_READONLY(write_protect_code_memory, false,
                      "write protect code memory")
 #else
 DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
