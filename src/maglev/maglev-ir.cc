@@ -351,7 +351,15 @@ DeoptInfo::DeoptInfo(Zone* zone, const MaglevCompilationUnit& compilation_unit,
                      CheckpointedInterpreterState state)
     : state(state),
       input_locations(zone->NewArray<InputLocation>(
-          state.register_frame->size(compilation_unit))) {}
+          state.register_frame->size(compilation_unit))) {
+  // Default initialise if we're printing the graph, to avoid printing junk
+  // values.
+  if (FLAG_print_maglev_graph) {
+    for (size_t i = 0; i < state.register_frame->size(compilation_unit); ++i) {
+      new (&input_locations[i]) InputLocation();
+    }
+  }
+}
 
 // ---
 // Nodes
