@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c57648_ccb21c8f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2022-04-12T18:03:03Z",
+      "side": 1,
+      "message": "What makes this safe to reland?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "cbe8618b72b533883838075ed2b2f946262057a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5b6f400_b82ef0d9",
+        "filename": "test/unittests/v8_unittests.cmx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2022-04-12T18:03:03Z",
+      "side": 1,
+      "message": "This is what makes it safe to re-land?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 5
+      },
+      "revId": "cbe8618b72b533883838075ed2b2f946262057a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
