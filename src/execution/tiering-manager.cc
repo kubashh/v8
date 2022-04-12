@@ -149,7 +149,7 @@ void TieringManager::Optimize(JSFunction function, CodeKind code_kind,
 namespace {
 
 bool HaveCachedOSRCodeForCurrentBytecodeOffset(UnoptimizedFrame* frame,
-                                               int* osr_urgency_out) {
+                                               BytecodeOffset* osr_offset_out) {
   JSFunction function = frame->function();
   const int current_offset = frame->GetBytecodeOffset();
   OSROptimizedCodeCache cache = function.native_context().osr_code_cache();
@@ -160,9 +160,7 @@ bool HaveCachedOSRCodeForCurrentBytecodeOffset(UnoptimizedFrame* frame,
     iterator.SetOffset(osr_offset.ToInt());
     if (base::IsInRange(current_offset, iterator.GetJumpTargetOffset(),
                         osr_offset.ToInt())) {
-      int loop_depth = iterator.GetImmediateOperand(1);
-      // `+ 1` because osr_urgency is an exclusive upper limit on the depth.
-      *osr_urgency_out = loop_depth + 1;
+      *osr_offset_out = osr_offset;
       return true;
     }
   }
@@ -246,13 +244,23 @@ void TryRequestOsrAtNextOpportunity(Isolate* isolate, JSFunction function) {
   TrySetOsrUrgency(isolate, function, BytecodeArray::kMaxOsrUrgency);
 }
 
-void TryRequestOsrForCachedOsrCode(Isolate* isolate, JSFunction function,
-                                   int osr_urgency_for_cached_osr_code) {
-  DCHECK_LE(osr_urgency_for_cached_osr_code, BytecodeArray::kMaxOsrUrgency);
-  int old_urgency = function.shared().GetBytecodeArray(isolate).osr_urgency();
-  // Make sure not to decrease the existing urgency.
-  int new_urgency = std::max(old_urgency, osr_urgency_for_cached_osr_code);
-  TrySetOsrUrgency(isolate, function, new_urgency);
+void TrySetOsrInstallTarget(Isolate* isolate, JSFunction function,
+                            BytecodeOffset osr_offset) {
+  DCHECK(!osr_offset_for_cached_osr_code.IsNone());
+  SharedFunctionInfo shared = function.shared();
+
+  if (V8_UNLIKELY(!FLAG_use_osr)) return;
+  if (V8_UNLIKELY(!shared.IsUserJavaScript())) return;
+  if (V8_UNLIKELY(shared.optimization_disabled())) return;
+
+  BytecodeArray bytecode = shared.GetBytecodeArray(isolate);
+  if (V8_UNLIKELY(FLAG_trace_osr)) {
+    PrintF(CodeTracer::Scope{isolate->GetCodeTracer()}.file(),
+           "[OSR - requesting install. function: %s, osr offset: %d]\n",
+           function.DebugNameCStr().get(), osr_offset.ToInt());
+  }
+
+  bytecode.set_osr_install_target(osr_offset);
 }
 
 bool ShouldOptimizeAsSmallFunction(int bytecode_size, bool any_ic_changed) {
@@ -297,11 +305,10 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
   }
 
   // If we have matching cached OSR'd code, request OSR at the next opportunity.
-  int osr_urgency_for_cached_osr_code;
+  BytecodeOffset osr_offset_for_cached_osr_code;
   if (HaveCachedOSRCodeForCurrentBytecodeOffset(
-          frame, &osr_urgency_for_cached_osr_code)) {
-    TryRequestOsrForCachedOsrCode(isolate_, function,
-                                  osr_urgency_for_cached_osr_code);
+          frame, &osr_offset_for_cached_osr_code)) {
+    TrySetOsrInstallTarget(isolate_, function, osr_offset_for_cached_osr_code);
   }
 
   const bool is_marked_for_any_optimization =
