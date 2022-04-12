@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9bfc687_ed0a0b7b",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-12T09:51:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5e87c01_d2d31dbe",
+      "range": {
+        "startLine": 1933,
+        "startChar": 4,
+        "endLine": 1933,
+        "endChar": 69
+      },
+      "revId": "d1bc737628458640b20a83b9fcfa81b46c85646c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e7c9605_5a87605d",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Hmm.. Right the two could be merged. Initially I thought I\u0027d prefer keeping it inline in the JumpLoop bytecode builtin, but after a bit of thought I do like the idea.",
       "parentUuid": "4e7c9605_5a87605d",
+      "range": {
+        "startLine": 2778,
+        "startChar": 15,
+        "endLine": 2778,
+        "endChar": 50
+      },
+      "revId": "d1bc737628458640b20a83b9fcfa81b46c85646c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a28eb287_6f181422",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2778,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-12T09:51:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26ae6fa0_b5b1d6dc",
       "range": {
         "startLine": 2778,
         "startChar": 15,
