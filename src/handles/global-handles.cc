@@ -6,11 +6,13 @@
 
 #include <algorithm>
 #include <atomic>
+#include <climits>
 #include <cstdint>
 #include <map>
 
 #include "include/v8-traced-handle.h"
 #include "src/api/api-inl.h"
+#include "src/base/bits.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/sanitizer/asan.h"
 #include "src/common/allow-deprecated.h"
@@ -71,7 +73,37 @@ class GlobalHandles::NodeBlock final {
   NodeBlock* next() const { return next_; }
   NodeBlock* next_used() const { return next_used_; }
 
+  void set_markbit(size_t index) {
+    const auto [cell, bit] = CellAndBit(index);
+    mark_bits_[cell].fetch_or(uint32_t{1} << bit, std::memory_order_relaxed);
+  }
+
+  void clear_markbit(size_t index) {
+    const auto [cell, bit] = CellAndBit(index);
+    mark_bits_[cell] &= ~(uint32_t{1} << bit);
+  }
+
+  bool markbit(size_t index) const {
+    const auto [cell, bit] = CellAndBit(index);
+    return mark_bits_[cell] & uint32_t{1} << bit;
+  }
+
  private:
+  using CellType = uint32_t;
+
+  std::tuple<CellType, CellType> CellAndBit(size_t index) const {
+    static constexpr CellType kMarkBitCellSizeLog2 = 5;
+    static_assert(base::bits::IsPowerOfTwo(kBlockSize),
+                  "Block size must be power of two.");
+    static_assert(
+        sizeof(CellType) * CHAR_BIT == (CellType{1} << kMarkBitCellSizeLog2),
+        "Markbit CellType not matching defined log2 size.");
+    static constexpr CellType kCellMask =
+        (CellType{1} << kMarkBitCellSizeLog2) - 1;
+    return {static_cast<CellType>(index >> kMarkBitCellSizeLog2),
+            index & kCellMask};
+  }
+
   NodeType nodes_[kBlockSize];
   NodeBlock* const next_;
   GlobalHandles* const global_handles_;
@@ -79,6 +111,7 @@ class GlobalHandles::NodeBlock final {
   NodeBlock* next_used_ = nullptr;
   NodeBlock* prev_used_ = nullptr;
   uint32_t used_nodes_ = 0;
+  std::atomic<CellType> mark_bits_[kBlockSize / sizeof(CellType)];
 };
 
 template <class NodeType>
@@ -300,7 +333,8 @@ class NodeBase {
   void Acquire(Object object) {
     DCHECK(!AsChild()->IsInUse());
     CheckFieldsAreCleared();
-    object_ = object.ptr();
+    reinterpret_cast<std::atomic<Address>*>(&object_)->store(
+        object.ptr(), std::memory_order_relaxed);
     AsChild()->MarkAsUsed();
     data_.parameter = nullptr;
     DCHECK(AsChild()->IsInUse());
@@ -420,12 +454,6 @@ class GlobalHandles::Node final : public NodeBase<GlobalHandles::Node> {
 
   Node(const Node&) = delete;
   Node& operator=(const Node&) = delete;
-
-  void Zap() {
-    DCHECK(IsInUse());
-    // Zap the values for eager trapping.
-    object_ = kGlobalHandleZapValue;
-  }
 
   const char* label() const {
     return state() == NORMAL ? reinterpret_cast<char*>(data_.parameter)
@@ -657,28 +685,18 @@ class GlobalHandles::TracedNode final
   bool is_root() const { return IsRoot::decode(flags_); }
   void set_root(bool v) { flags_ = IsRoot::update(flags_, v); }
 
-  template <AccessMode access_mode = AccessMode::NON_ATOMIC>
-  void set_markbit() {
-    if constexpr (access_mode == AccessMode::NON_ATOMIC) {
-      flags_ = Markbit::update(flags_, true);
-      return;
-    }
-    std::atomic<uint8_t>& atomic_flags =
-        reinterpret_cast<std::atomic<uint8_t>&>(flags_);
-    const uint8_t new_value =
-        Markbit::update(atomic_flags.load(std::memory_order_relaxed), true);
-    atomic_flags.fetch_or(new_value, std::memory_order_relaxed);
-  }
-
-  bool markbit() const { return Markbit::decode(flags_); }
-  void clear_markbit() { flags_ = Markbit::update(flags_, false); }
-
   bool is_on_stack() const { return IsOnStack::decode(flags_); }
   void set_is_on_stack(bool v) { flags_ = IsOnStack::update(flags_, v); }
 
-  void clear_object() { object_ = kNullAddress; }
+  void clear_object() {
+    reinterpret_cast<std::atomic<Address>*>(&object_)->store(
+        kNullAddress, std::memory_order_relaxed);
+  }
 
-  void CopyObjectReference(const TracedNode& other) { object_ = other.object_; }
+  void CopyObjectReference(const TracedNode& other) {
+    reinterpret_cast<std::atomic<Address>*>(&object_)->store(
+        other.object_, std::memory_order_relaxed);
+  }
 
   void ResetPhantomHandle() {
     DCHECK(IsInUse());
@@ -706,13 +724,13 @@ class GlobalHandles::TracedNode final
   void ClearImplFields() {
     set_root(true);
     // Nodes are black allocated for simplicity.
-    set_markbit();
+    NodeBlock<TracedNode>::From(this)->set_markbit(index());
     set_is_on_stack(false);
   }
 
   void CheckImplFieldsAreCleared() const {
     DCHECK(is_root());
-    DCHECK(markbit());
+    DCHECK(NodeBlock<TracedNode>::From(this)->markbit(index()));
   }
 
   friend class NodeBase<GlobalHandles::TracedNode>;
@@ -1064,7 +1082,7 @@ void GlobalHandles::MoveTracedReference(Address** from, Address** to) {
           GlobalHandleStoreMode::kAssigningStore, to_on_stack);
       SetSlotThreadSafe(to, o.location());
       to_node = TracedNode::FromLocation(*to);
-      DCHECK(to_node->markbit());
+      DCHECK(NodeBlock<TracedNode>::From(to_node)->markbit(to_node->index()));
     } else {
       DCHECK(to_node->IsInUse());
       to_node->CopyObjectReference(*from_node);
@@ -1103,8 +1121,8 @@ GlobalHandles* GlobalHandles::From(const TracedNode* node) {
 
 void GlobalHandles::MarkTraced(Address* location) {
   TracedNode* node = TracedNode::FromLocation(location);
-  node->set_markbit<AccessMode::ATOMIC>();
   DCHECK(node->IsInUse());
+  NodeBlock<TracedNode>::From(node)->set_markbit(node->index());
 }
 
 void GlobalHandles::Destroy(Address* location) {
@@ -1208,7 +1226,7 @@ void GlobalHandles::IterateWeakRootsForPhantomHandles(
   for (TracedNode* node : *traced_nodes_) {
     if (!node->IsInUse()) continue;
     // Detect unreachable nodes first.
-    if (!node->markbit()) {
+    if (!NodeBlock<TracedNode>::From(node)->markbit(node->index())) {
       // The handle itself is unreachable. We can clear it even if the target V8
       // object is alive.
       node->ResetPhantomHandle();
@@ -1216,7 +1234,7 @@ void GlobalHandles::IterateWeakRootsForPhantomHandles(
       continue;
     }
     // Clear the markbit for the next GC.
-    node->clear_markbit();
+    NodeBlock<TracedNode>::From(node)->clear_markbit(node->index());
     DCHECK(node->IsInUse());
     // Detect nodes with unreachable target objects.
     if (should_reset_handle(isolate()->heap(), node->location())) {
