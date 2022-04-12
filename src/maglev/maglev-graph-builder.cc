@@ -221,7 +221,8 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
           }
           // TODO(victorgomes): We could create an Int32Add node that receives
           // a constant and avoid a register move.
-          ValueNode* right = AddNewNode<Int32Constant>({}, constant);
+          ValueNode* right =
+              AddNewNode<SmiConstant>({}, Smi::FromInt(constant));
           SetAccumulator(AddNewNode<Int32AddWithOverflow>({left, right}));
           return;
         }
