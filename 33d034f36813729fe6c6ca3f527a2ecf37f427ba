@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9340d1a_f8b06350",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-12T10:57:22Z",
+      "side": 1,
+      "message": "Small cleanup now that we have the osr-install-target mechanism.",
+      "revId": "33d034f36813729fe6c6ca3f527a2ecf37f427ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
