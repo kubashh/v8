@@ -105,6 +105,24 @@
       "parentUuid": "086eec70_113e902f",
       "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1d15ee5_6105140a",
+        "filename": "src/builtins/builtins-temporal-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-12T08:13:39Z",
+      "side": 1,
+      "message": "Based on this pain, I\u0027m trying out an Iterate helper to make this iteration simpler. I\u0027ll send you the CL.",
+      "parentUuid": "8f11feef_cdac22ce",
+      "revId": "027fb2e8f60e201425a3d603dfcab44f42ce7f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

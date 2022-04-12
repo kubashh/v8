@@ -70,6 +70,29 @@
       },
       "revId": "b644db25b1c09afa87e2607cdbeddd89aaad1c2f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d88b3305_b00599b6",
+        "filename": "src/builtins/builtins-temporal-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-12T08:13:39Z",
+      "side": 1,
+      "message": "Can you add a TODO to optimize this and remove the runtime call? In particular, it could be optimized by keeping a bitfield of \"fields seen so far\" and doing the string comparisons + bitfield access directly in CSA.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 71
+      },
+      "revId": "b644db25b1c09afa87e2607cdbeddd89aaad1c2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
