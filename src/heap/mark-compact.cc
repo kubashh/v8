@@ -617,12 +617,16 @@ void MarkCompactCollector::CollectGarbage() {
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
 
-  MarkLiveObjects();
+  {
+    RwxMemoryWriteScope rwx_write_scope;
+    MarkLiveObjects();
+  }
   ClearNonLiveReferences();
   VerifyMarking();
   heap()->memory_measurement()->FinishProcessing(native_context_stats_);
   RecordObjectStats();
 
+  RwxMemoryWriteScope rwx_write_scope;
   StartSweepSpaces();
   Evacuate();
   Finish();
@@ -822,6 +826,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   using LiveBytesPagePair = std::pair<size_t, Page*>;
   std::vector<LiveBytesPagePair> pages;
   pages.reserve(number_of_pages);
+
+  RwxMemoryWriteScope rwx_write_scope;
 
   DCHECK(!sweeping_in_progress());
   Page* owner_of_linear_allocation_area =
@@ -2218,6 +2224,7 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
   bool is_per_context_mode = local_marking_worklists()->IsPerContextMode();
   Isolate* isolate = heap()->isolate();
   PtrComprCageBase cage_base(isolate);
+  RwxMemoryWriteScope rwx_write_scope;
   while (local_marking_worklists()->Pop(&object) ||
          local_marking_worklists()->PopOnHold(&object)) {
     // Left trimming may result in grey or black filler objects on the marking
@@ -2569,6 +2576,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
 
 void MarkCompactCollector::MarkDependentCodeForDeoptimization() {
   std::pair<HeapObject, Code> weak_object_in_code;
+  RwxMemoryWriteScope rwx_write_scope;
   while (local_weak_objects()->weak_objects_in_code_local.Pop(
       &weak_object_in_code)) {
     HeapObject object = weak_object_in_code.first;
@@ -3663,6 +3671,7 @@ void Evacuator::EvacuatePage(MemoryChunk* chunk) {
   {
     AlwaysAllocateScope always_allocate(heap());
     TimedScope timed_scope(&evacuation_time);
+    RwxMemoryWriteScope rwx_write_scope;
     RawEvacuatePage(chunk, &saved_live_bytes);
   }
   ReportCompactionProgress(evacuation_time, saved_live_bytes);
@@ -4457,6 +4466,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           [this](FullMaybeObjectSlot slot) {
             return CheckAndUpdateOldToNewSlot(slot);
           };
+      RwxMemoryWriteScope rwx_write_scope;
       RememberedSet<OLD_TO_NEW>::IterateTyped(
           chunk_, [=](SlotType slot_type, Address slot) {
             return UpdateTypedSlotHelper::UpdateTypedSlot(
@@ -4467,6 +4477,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
         (chunk_->typed_slot_set<OLD_TO_OLD, AccessMode::NON_ATOMIC>() !=
          nullptr)) {
       CHECK_NE(chunk_->owner(), heap_->map_space());
+      RwxMemoryWriteScope rwx_write_scope;
       RememberedSet<OLD_TO_OLD>::IterateTyped(chunk_, [=](SlotType slot_type,
                                                           Address slot) {
         // Using UpdateStrongSlot is OK here, because there are no weak
