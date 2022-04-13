@@ -350,7 +350,9 @@ class MergePointInterpreterFrameState {
 
   ValueNode* TagValue(MaglevCompilationUnit& compilation_unit,
                       ValueNode* value) {
-    DCHECK(value->is_untagged_value());
+    // TODO(victorgomes): Support Float64.
+    DCHECK_EQ(value->properties().value_representation(),
+              ValueRepresentation::kInt32);
     if (value->Is<CheckedSmiUntag>()) {
       return value->input(0).node();
     }
