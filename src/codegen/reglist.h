@@ -29,6 +29,8 @@
 #error Unknown architecture.
 #endif
 
+#include "src/codegen/reglist-base.h"
+
 namespace v8 {
 namespace internal {
 
