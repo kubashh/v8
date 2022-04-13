@@ -3526,10 +3526,10 @@ void MarkCompactCollector::EvacuateEpilogue() {
 
     // Old-to-old slot sets must be empty after evacuation.
     DCHECK_NULL((chunk->slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
-    DCHECK_NULL((chunk->slot_set<OLD_TO_SHARED, AccessMode::NON_ATOMIC>()));
     DCHECK_NULL((chunk->typed_slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
     DCHECK_NULL(chunk->invalidated_slots<OLD_TO_OLD>());
     DCHECK_NULL(chunk->invalidated_slots<OLD_TO_NEW>());
+    DCHECK_NULL(chunk->invalidated_slots<OLD_TO_SHARED>());
   }
 #endif
 }
@@ -4449,6 +4449,24 @@ class RememberedSetUpdatingItem : public UpdatingItem {
       // The invalidated slots are not needed after old-to-code slots were
       // processsed, but since there are no invalidated OLD_TO_CODE slots,
       // there's nothing to clear.
+    }
+    if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
+        (chunk_->slot_set<OLD_TO_SHARED, AccessMode::NON_ATOMIC>() !=
+         nullptr)) {
+      InvalidatedSlotsFilter filter =
+          InvalidatedSlotsFilter::OldToShared(chunk_);
+      RememberedSet<OLD_TO_SHARED>::Iterate(
+          chunk_,
+          [&filter](MaybeObjectSlot slot) {
+            return filter.IsValid(slot.address()) ? KEEP_SLOT : REMOVE_SLOT;
+          },
+          SlotSet::FREE_EMPTY_BUCKETS);
+    }
+    if ((updating_mode_ == RememberedSetUpdatingMode::ALL) &&
+        chunk_->invalidated_slots<OLD_TO_SHARED>() != nullptr) {
+      // The invalidated slots are not needed after old-to-shared slots were
+      // processsed.
+      chunk_->ReleaseInvalidatedSlots<OLD_TO_SHARED>();
     }
   }
 

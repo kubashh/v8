@@ -141,6 +141,7 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
     // Not actually used but initialize anyway for predictability.
     invalidated_slots_[OLD_TO_CODE] = nullptr;
   }
+  invalidated_slots_[OLD_TO_SHARED] = nullptr;
   progress_bar_.Initialize();
   set_concurrent_sweeping_state(ConcurrentSweepingState::kDone);
   page_protection_change_mutex_ = new base::Mutex();
@@ -348,6 +349,7 @@ InvalidatedSlots* MemoryChunk::AllocateInvalidatedSlots() {
 
 template void MemoryChunk::ReleaseInvalidatedSlots<OLD_TO_NEW>();
 template void MemoryChunk::ReleaseInvalidatedSlots<OLD_TO_OLD>();
+template void MemoryChunk::ReleaseInvalidatedSlots<OLD_TO_SHARED>();
 
 template <RememberedSetType type>
 void MemoryChunk::ReleaseInvalidatedSlots() {
