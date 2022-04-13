@@ -267,6 +267,11 @@ class VirtualMemory final {
   V8_EXPORT_PRIVATE bool SetPermissions(Address address, size_t size,
                                         PageAllocator::Permission access);
 
+  // TODO(ishell): Sets permissions according to the access argument. address
+  // and size must be multiples of CommitPageSize(). Returns true on success,
+  // otherwise false.
+  V8_EXPORT_PRIVATE bool DiscardSystemPages(Address address, size_t size);
+
   // Releases memory after |free_start|. Returns the number of bytes released.
   V8_EXPORT_PRIVATE size_t Release(Address free_start);
 
@@ -366,6 +371,8 @@ class VirtualMemoryCage {
   }
 
   struct ReservationParams {
+    enum JitPermission { kNoJit, kMapAsJittable };
+
     // The allocator to use to reserve the virtual memory.
     v8::PageAllocator* page_allocator;
     // See diagram above.
@@ -374,6 +381,7 @@ class VirtualMemoryCage {
     size_t base_bias_size;
     size_t page_size;
     Address requested_start_hint;
+    JitPermission jit;
 
     static constexpr size_t kAnyBaseAlignment = 1;
   };
