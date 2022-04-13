@@ -541,6 +541,7 @@
   F(MC_CLEAR_SLOTS_BUFFER)                           \
   F(MC_CLEAR_STRING_TABLE)                           \
   F(MC_CLEAR_WEAK_COLLECTIONS)                       \
+  F(MC_CLEAR_WEAK_GLOBAL_HANDLES)                    \
   F(MC_CLEAR_WEAK_LISTS)                             \
   F(MC_CLEAR_WEAK_REFERENCES)                        \
   F(MC_SWEEP_EXTERNAL_POINTER_TABLE)                 \
