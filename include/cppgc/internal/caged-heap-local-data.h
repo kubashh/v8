@@ -40,6 +40,10 @@ class AgeTable final {
   void SetAge(uintptr_t cage_offset, Age age) {
     table_[card(cage_offset)] = age;
   }
+
+  void SetAgeForRange(uintptr_t cage_offset_begin, uintptr_t cage_offset_end,
+                      Age age);
+
   V8_INLINE Age GetAge(uintptr_t cage_offset) const {
     return table_[card(cage_offset)];
   }
@@ -60,6 +64,16 @@ class AgeTable final {
 
 static_assert(sizeof(AgeTable) == 1 * api_constants::kMB,
               "Size of AgeTable is 1MB");
+
+inline void AgeTable::SetAgeForRange(uintptr_t cage_offset_begin,
+                                     uintptr_t cage_offset_end, Age age) {
+  CPPGC_DCHECK(cage_offset_begin % kCardSizeInBytes == 0);
+  CPPGC_DCHECK(cage_offset_end % kCardSizeInBytes == 0);
+
+  for (; cage_offset_begin < cage_offset_end;
+       cage_offset_begin += kCardSizeInBytes)
+    SetAge(cage_offset_begin, AgeTable::Age::kYoung);
+}
 
 #endif  // CPPGC_YOUNG_GENERATION
 
