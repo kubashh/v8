@@ -3526,10 +3526,10 @@ void MarkCompactCollector::EvacuateEpilogue() {
 
     // Old-to-old slot sets must be empty after evacuation.
     DCHECK_NULL((chunk->slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
-    DCHECK_NULL((chunk->slot_set<OLD_TO_SHARED, AccessMode::NON_ATOMIC>()));
     DCHECK_NULL((chunk->typed_slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
     DCHECK_NULL(chunk->invalidated_slots<OLD_TO_OLD>());
     DCHECK_NULL(chunk->invalidated_slots<OLD_TO_NEW>());
+    DCHECK_NULL(chunk->invalidated_slots<OLD_TO_SHARED>());
   }
 #endif
 }
@@ -4450,6 +4450,19 @@ class RememberedSetUpdatingItem : public UpdatingItem {
       // processsed, but since there are no invalidated OLD_TO_CODE slots,
       // there's nothing to clear.
     }
+    if (updating_mode_ == RememberedSetUpdatingMode::ALL) {
+      if (chunk_->slot_set<OLD_TO_SHARED, AccessMode::NON_ATOMIC>()) {
+        InvalidatedSlotsFilter filter =
+            InvalidatedSlotsFilter::OldToShared(chunk_);
+        RememberedSet<OLD_TO_SHARED>::Iterate(
+            chunk_,
+            [&filter](MaybeObjectSlot slot) {
+              return filter.IsValid(slot.address()) ? KEEP_SLOT : REMOVE_SLOT;
+            },
+            SlotSet::FREE_EMPTY_BUCKETS);
+      }
+      chunk_->ReleaseInvalidatedSlots<OLD_TO_SHARED>();
+    }
   }
 
   void UpdateTypedPointers() {
@@ -4666,14 +4679,16 @@ void MarkCompactCollector::UpdatePointersInClientHeap(Isolate* client) {
     MemoryChunk* chunk = chunk_iterator.Next();
     CodePageMemoryModificationScope unprotect_code_page(chunk);
 
+    InvalidatedSlotsFilter filter = InvalidatedSlotsFilter::OldToShared(chunk);
     RememberedSet<OLD_TO_SHARED>::Iterate(
         chunk,
-        [cage_base](MaybeObjectSlot slot) {
+        [cage_base, &filter](MaybeObjectSlot slot) {
+          if (!filter.IsValid(slot.address())) return REMOVE_SLOT;
           return UpdateSlot<AccessMode::NON_ATOMIC>(cage_base, slot);
         },
-        SlotSet::KEEP_EMPTY_BUCKETS);
+        SlotSet::FREE_EMPTY_BUCKETS);
 
-    chunk->ReleaseSlotSet<OLD_TO_SHARED>();
+    chunk->ReleaseInvalidatedSlots<OLD_TO_SHARED>();
 
     RememberedSet<OLD_TO_SHARED>::IterateTyped(
         chunk, [this](SlotType slot_type, Address slot) {
@@ -4686,8 +4701,6 @@ void MarkCompactCollector::UpdatePointersInClientHeap(Isolate* client) {
                                                                 slot);
               });
         });
-
-    chunk->ReleaseTypedSlotSet<OLD_TO_SHARED>();
   }
 
 #ifdef VERIFY_HEAP
@@ -4734,11 +4747,20 @@ void ReRecordPage(
   RememberedSet<OLD_TO_NEW>::RemoveRangeTyped(page, page->address(),
                                               failed_start);
 
+  RememberedSet<OLD_TO_SHARED>::RemoveRange(page, page->address(), failed_start,
+                                            SlotSet::FREE_EMPTY_BUCKETS);
+  RememberedSet<OLD_TO_SHARED>::RemoveRangeTyped(page, page->address(),
+                                                 failed_start);
+
   // Remove invalidated slots.
   if (failed_start > page->area_start()) {
     InvalidatedSlotsCleanup old_to_new_cleanup =
         InvalidatedSlotsCleanup::OldToNew(page);
     old_to_new_cleanup.Free(page->area_start(), failed_start);
+
+    InvalidatedSlotsCleanup old_to_shared_cleanup =
+        InvalidatedSlotsCleanup::OldToShared(page);
+    old_to_shared_cleanup.Free(page->area_start(), failed_start);
   }
 
   // Recompute live bytes.
