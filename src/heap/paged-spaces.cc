@@ -210,6 +210,7 @@ size_t PagedSpace::CommittedPhysicalMemory() const {
     DCHECK_EQ(0, committed_physical_memory());
     return CommittedMemory();
   }
+  CodeMemoryWriteScope code_rw_scope;
   BasicMemoryChunk::UpdateHighWaterMark(allocation_info_->top());
   return committed_physical_memory();
 }
@@ -264,6 +265,9 @@ void PagedSpace::RefineAllocatedBytesAfterSweeping(Page* page) {
   if (old_counter > new_counter) {
     DecreaseAllocatedBytes(old_counter - new_counter, page);
   }
+  // TODO(ishell): only for M1.
+  CodeMemoryWriteScope code_rw_scope;
+  // CodePageMemoryModificationScope memory_modification_scope(page);
   marking_state->SetLiveBytes(page, 0);
 }
 
