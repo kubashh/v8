@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b47c528_4dbab862",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-13T13:53:20Z",
+      "side": 1,
+      "message": "Can you please add some explanation here?",
+      "revId": "a17aefa7584a545f9f5fcadec1c26312302a01df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "86765162_e892d217",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-04-12T19:21:21Z",
       "side": 1,
       "message": "Pretty sure this is what\u0027s causing the flakes in v8:12687.\n\nI think what\u0027s happening is that a sweeper thread sweeping the shared heap is racing with a mark-compactor on the main thread, where the main thread mark-compactor is incorrectly trying to mark a weak shared object. The weak shared object in this case, judging by the TSAN stack, is probably a shared HeapNumber being recorded in a FeedbackVector.",
+      "revId": "a17aefa7584a545f9f5fcadec1c26312302a01df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2f5faf_e374f530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-13T13:53:20Z",
+      "side": 1,
+      "message": "Great catch! Thanks a lot. LGTM",
       "revId": "a17aefa7584a545f9f5fcadec1c26312302a01df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
