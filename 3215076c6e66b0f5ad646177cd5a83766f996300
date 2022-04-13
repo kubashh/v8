@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10110e98_d2a6ea8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-04-13T18:36:13Z",
+      "side": 1,
+      "message": "Hello Patrick, we are merging this fix to M96-LTS, could you please review? I need code-owners review to submit it. ",
+      "revId": "3215076c6e66b0f5ad646177cd5a83766f996300",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
