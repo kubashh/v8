@@ -44,6 +44,14 @@ static constexpr size_t kDefaultAlignment = sizeof(void*);
 // Maximum support alignment for a type as in `alignof(T)`.
 static constexpr size_t kMaxSupportedAlignment = 2 * kDefaultAlignment;
 
+#if __SIZEOF_POINTER__ == 8
+constexpr size_t kAllocationGranularity = 8;
+#elif __SIZEOF_POINTER__ == 4
+constexpr size_t kAllocationGranularity = 4;
+#else  // __SIZEOF_POINTER__ != 4
+#error "Unknown pointer size"
+#endif  // __SIZEOF_POINTER__ != 4
+
 }  // namespace api_constants
 
 }  // namespace internal
