@@ -2102,6 +2102,8 @@ void OnStackReplacement(MacroAssembler* masm, OsrSourceTier source,
   __ B(eq, &try_osr);
 
   // Neither urgency nor the install target triggered, return to the caller.
+  // Note: the return value must be nullptr or a valid Code object.
+  __ Move(x0, xzr);
   __ Ret();
 
   __ bind(&try_osr);
