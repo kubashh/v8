@@ -699,6 +699,7 @@ void CppHeap::RunMinorGC(StackState stack_state) {
   // TODO(chromium:1029379): Should be safe to run without stack.
   EnterFinalPause(cppgc::EmbedderStackState::kMayContainHeapPointers);
   AdvanceTracing(std::numeric_limits<double>::infinity());
+  FinishConcurrentMarkingIfNeeded();
   TraceEpilogue();
 }
 
