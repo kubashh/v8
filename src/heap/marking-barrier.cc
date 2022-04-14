@@ -234,7 +234,10 @@ void MarkingBarrier::Activate(bool is_compacting) {
   if (is_main_thread_barrier_) {
     ActivateSpace(heap_->old_space());
     if (heap_->map_space()) ActivateSpace(heap_->map_space());
-    ActivateSpace(heap_->code_space());
+    {
+      RwxMemoryWriteScope rwx_write_scope;
+      ActivateSpace(heap_->code_space());
+    }
     ActivateSpace(heap_->new_space());
 
     for (LargePage* p : *heap_->new_lo_space()) {
@@ -246,8 +249,11 @@ void MarkingBarrier::Activate(bool is_compacting) {
       p->SetOldGenerationPageFlags(true);
     }
 
-    for (LargePage* p : *heap_->code_lo_space()) {
-      p->SetOldGenerationPageFlags(true);
+    {
+      RwxMemoryWriteScope rwx_write_scope;
+      for (LargePage* p : *heap_->code_lo_space()) {
+        p->SetOldGenerationPageFlags(true);
+      }
     }
   }
 }
