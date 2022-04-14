@@ -321,6 +321,7 @@ void BaselineBatchCompiler::EnsureQueueCapacity() {
 }
 
 void BaselineBatchCompiler::CompileBatch(Handle<JSFunction> function) {
+  // TODO(v8:11880): double scope.
   CodePageCollectionMemoryModificationScope batch_allocation(isolate_->heap());
   {
     IsCompiledScope is_compiled_scope(
