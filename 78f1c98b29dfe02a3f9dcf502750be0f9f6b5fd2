@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a0a4691_ffcd5c8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-14T07:39:49Z",
+      "side": 1,
+      "message": "ptal, this should go in after the branch cut",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d521775_07350f9f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-14T07:39:49Z",
+      "side": 1,
+      "message": "As a follow up, I want to restructure this a bit to \n- allow a longer period of parallel marking.\n- avoid repeatedly starting and joining jobs in `ProcessEphemeronMarking()` as that sometimes shows up as wasted CPU.",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dec6930_1cee0a24",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2463,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-14T07:39:49Z",
+      "side": 1,
+      "message": "I moved this into clearing as really this is just resetting weak/traced handles after marking is done. We should also rename this in a follow up.",
+      "range": {
+        "startLine": 2463,
+        "startChar": 41,
+        "endLine": 2463,
+        "endChar": 74
+      },
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
