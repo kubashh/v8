@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8622e349_ce3ecdb3",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Handling of HeapConstants is still a bit incomplete. I did assume that those are typed, but turned out to not always be the case. I removed the comment and will leave this for following CLs to improve.",
+      "parentUuid": "1c1dd59b_ae5be691",
+      "range": {
+        "startLine": 138,
+        "startChar": 6,
+        "endLine": 138,
+        "endChar": 51
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21d03401_6948ae07",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-08T15:49:24Z",
       "side": 1,
       "message": "Shouldn\u0027t we intersect with the input type here?",
+      "range": {
+        "startLine": 157,
+        "startChar": 25,
+        "endLine": 157,
+        "endChar": 45
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d5af9a_ed714de3",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21d03401_6948ae07",
       "range": {
         "startLine": 157,
         "startChar": 25,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b9662d_e8bae2e4",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e05ce9b3_ecf379c8",
+      "range": {
+        "startLine": 159,
+        "startChar": 6,
+        "endLine": 159,
+        "endChar": 69
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78da3816_d371015c",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-04-08T15:49:24Z",
       "side": 1,
       "message": "We don\u0027t track the distinction between Smi\u0027s and HeapNumbers of the same value, because types can\u0027t express it. This could be future work, perhaps when we track representations too.",
+      "range": {
+        "startLine": 164,
+        "startChar": 6,
+        "endLine": 164,
+        "endChar": 70
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f547173_aa235167",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "78da3816_d371015c",
       "range": {
         "startLine": 164,
         "startChar": 6,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "305b5883_009063e0",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Yeah, seems okay to have boolean truncation here. It\u0027s probably also slightly more expressive to set the output truncation to Truncation::Bool here (and have it be generalized to Truncation::Any because of the output type. Wdyt?",
+      "parentUuid": "18dadd2f_3c667abf",
+      "range": {
+        "startLine": 169,
+        "startChar": 7,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89a58bec_64d12f4c",
         "filename": "src/compiler/simplified-lowering-verifier.cc",
         "patchSetId": 6
@@ -146,6 +266,30 @@
       "writtenOn": "2022-04-08T15:49:24Z",
       "side": 1,
       "message": "I\u0027d think we should also check the representation on the Phi, maybe by mapping it to a truncation as I suggested for TypedStateValues?",
+      "range": {
+        "startLine": 318,
+        "startChar": 6,
+        "endLine": 318,
+        "endChar": 62
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06cf5a1d_ebc758a8",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Yes, removed the kPhi case for now. Will add this in a following CL.",
+      "parentUuid": "89a58bec_64d12f4c",
       "range": {
         "startLine": 318,
         "startChar": 6,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bdeed8b_ab65bfb5",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d3beba_b08b136f",
+      "range": {
+        "startLine": 319,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 5
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5dcd1be_e215dd6f",
@@ -192,6 +360,30 @@
       "writtenOn": "2022-04-08T15:49:24Z",
       "side": 1,
       "message": "as above: not necessary",
+      "range": {
+        "startLine": 329,
+        "startChar": 6,
+        "endLine": 329,
+        "endChar": 69
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6db57484_39e197ec",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5dcd1be_e215dd6f",
       "range": {
         "startLine": 329,
         "startChar": 6,
@@ -227,6 +419,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b6169bc_df727f13",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "I did consider that but figured that it might not work very well for some representations for which there is no directly corresponding truncation, e.g. kWord16, kTaggedSigned or kFloat32. Should we stick with this approach for now or do you see any other approach that works better?",
+      "parentUuid": "f5979022_c589c046",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 340,
+        "endChar": 65
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24c133cd_76cb091e",
         "filename": "src/compiler/simplified-lowering-verifier.cc",
         "patchSetId": 6
@@ -238,6 +454,30 @@
       "writtenOn": "2022-04-08T15:49:24Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 613,
+        "startChar": 33,
+        "endLine": 613,
+        "endChar": 36
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a87f1f5_7b5dd684",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-04-14T13:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24c133cd_76cb091e",
       "range": {
         "startLine": 613,
         "startChar": 33,
