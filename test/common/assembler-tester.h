@@ -18,14 +18,22 @@ class TestingAssemblerBuffer : public AssemblerBuffer {
  public:
   TestingAssemblerBuffer(
       size_t requested, void* address,
-      VirtualMemory::JitPermission jit_permission = VirtualMemory::kNoJit) {
+      VirtualMemory::JitPermission jit_permission = VirtualMemory::kNoJit)
+      : must_use_rwx_permissions_(MUST_WRITE_PROTECT_CODE_MEMORY &&
+                                  jit_permission ==
+                                      VirtualMemory::kMapAsJittable) {
     size_t page_size = v8::internal::AllocatePageSize();
     size_t alloc_size = RoundUp(requested, page_size);
     CHECK_GE(kMaxInt, alloc_size);
     reservation_ = VirtualMemory(GetPlatformPageAllocator(), alloc_size,
                                  address, page_size, jit_permission);
     CHECK(reservation_.IsReserved());
-    MakeWritable();
+
+    if (must_use_rwx_permissions_) {
+      MakeWritableAndExecutable();
+    } else {
+      MakeWritable();
+    }
   }
 
   ~TestingAssemblerBuffer() override { reservation_.Free(); }
@@ -52,15 +60,19 @@ class TestingAssemblerBuffer : public AssemblerBuffer {
     // See https://bugs.chromium.org/p/v8/issues/detail?id=8157
     FlushInstructionCache(start(), size());
 
-    bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
-                                 v8::PageAllocator::kReadExecute);
-    CHECK(result);
+    if (!must_use_rwx_permissions_) {
+      bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
+                                   v8::PageAllocator::kReadExecute);
+      CHECK(result);
+    }
   }
 
   void MakeWritable() {
-    bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
-                                 v8::PageAllocator::kReadWrite);
-    CHECK(result);
+    if (!must_use_rwx_permissions_) {
+      bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
+                                   v8::PageAllocator::kReadWrite);
+      CHECK(result);
+    }
   }
 
   void MakeWritableAndExecutable() {
@@ -71,6 +83,7 @@ class TestingAssemblerBuffer : public AssemblerBuffer {
 
  private:
   VirtualMemory reservation_;
+  const bool must_use_rwx_permissions_;
 };
 
 // This scope class is mostly necesasry for arm64 tests running on Apple Silicon
@@ -101,7 +114,8 @@ class V8_NODISCARD AssemblerBufferWriteScope final {
 static inline std::unique_ptr<TestingAssemblerBuffer> AllocateAssemblerBuffer(
     size_t requested = v8::internal::AssemblerBase::kDefaultBufferSize,
     void* address = nullptr,
-    VirtualMemory::JitPermission jit_permission = VirtualMemory::kNoJit) {
+    VirtualMemory::JitPermission jit_permission =
+        VirtualMemory::kMapAsJittable) {
   return std::make_unique<TestingAssemblerBuffer>(requested, address,
                                                   jit_permission);
 }

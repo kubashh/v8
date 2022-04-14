@@ -53,7 +53,7 @@ class V8_NODISCARD RwxMemoryWriteScope final {
 #if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
   // This counter is used for supporting scope reentrance.
   static thread_local int code_space_write_nesting_level_;
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || defined(DEBUG)
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
 };
 
 }  // namespace internal
