@@ -255,6 +255,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8faa4b62_9e468a6a",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-14T15:23:44Z",
+      "side": 1,
+      "message": "Yeah, not a bad idea, as we can\u0027t represent more than a bit.",
+      "parentUuid": "305b5883_009063e0",
+      "range": {
+        "startLine": 169,
+        "startChar": 7,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "89a58bec_64d12f4c",
         "filename": "src/compiler/simplified-lowering-verifier.cc",
         "patchSetId": 6
@@ -431,6 +455,30 @@
       "side": 1,
       "message": "I did consider that but figured that it might not work very well for some representations for which there is no directly corresponding truncation, e.g. kWord16, kTaggedSigned or kFloat32. Should we stick with this approach for now or do you see any other approach that works better?",
       "parentUuid": "f5979022_c589c046",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 340,
+        "endChar": 65
+      },
+      "revId": "dd2ffefffc781216c85ec91d96d75b5a488419e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06966ff3_5f13aace",
+        "filename": "src/compiler/simplified-lowering-verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-14T15:23:44Z",
+      "side": 1,
+      "message": "Hmm, I see, makes sense. Thanks!",
+      "parentUuid": "2b6169bc_df727f13",
       "range": {
         "startLine": 339,
         "startChar": 8,
