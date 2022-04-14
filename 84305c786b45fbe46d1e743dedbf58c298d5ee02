@@ -56,6 +56,30 @@
       },
       "revId": "84305c786b45fbe46d1e743dedbf58c298d5ee02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5aa41dd_113e652e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-14T14:18:21Z",
+      "side": 1,
+      "message": "I realized that since we\u0027re looking at wire bytes anyway, it\u0027s trivially easy to check what kind of call it is, which is also a great way to address the test failures.",
+      "parentUuid": "ebad2e29_d2385e6e",
+      "range": {
+        "startLine": 1315,
+        "startChar": 35,
+        "endLine": 1315,
+        "endChar": 48
+      },
+      "revId": "84305c786b45fbe46d1e743dedbf58c298d5ee02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
