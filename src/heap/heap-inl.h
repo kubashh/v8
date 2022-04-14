@@ -16,6 +16,7 @@
 #include "src/base/platform/platform.h"
 #include "src/base/sanitizer/msan.h"
 #include "src/common/assert-scope.h"
+#include "src/common/code-memory-access-inl.h"
 #include "src/execution/isolate-data.h"
 #include "src/execution/isolate.h"
 #include "src/heap/code-object-registry.h"
@@ -600,6 +601,7 @@ CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
     : heap_(heap) {
   DCHECK_EQ(ThreadId::Current(), heap_->isolate()->thread_id());
   heap_->safepoint()->AssertActive();
+  RwxMemoryWriteScope::SetWritable();
   if (heap_->write_protect_code_memory()) {
     heap_->increment_code_space_memory_modification_scope_depth();
     heap_->code_space()->SetCodeModificationPermissions();
@@ -625,11 +627,13 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
       page = page->next_page();
     }
   }
+  RwxMemoryWriteScope::SetExecutable();
 }
 
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     : heap_(heap) {
+  RwxMemoryWriteScope::SetWritable();
   if (heap_->write_protect_code_memory()) {
     heap_->IncrementCodePageCollectionMemoryModificationScopeDepth();
   }
@@ -643,6 +647,7 @@ CodePageCollectionMemoryModificationScope::
       heap_->ProtectUnprotectedMemoryChunks();
     }
   }
+  RwxMemoryWriteScope::SetExecutable();
 }
 
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP
@@ -658,6 +663,7 @@ CodePageMemoryModificationScope::CodePageMemoryModificationScope(
     : chunk_(chunk),
       scope_active_(chunk_->heap()->write_protect_code_memory() &&
                     chunk_->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
+  RwxMemoryWriteScope::SetWritable();
   if (scope_active_) {
     DCHECK(chunk_->owner()->identity() == CODE_SPACE ||
            (chunk_->owner()->identity() == CODE_LO_SPACE));
@@ -669,6 +675,7 @@ CodePageMemoryModificationScope::~CodePageMemoryModificationScope() {
   if (scope_active_) {
     MemoryChunk::cast(chunk_)->SetDefaultCodePermissions();
   }
+  RwxMemoryWriteScope::SetExecutable();
 }
 
 IgnoreLocalGCRequests::IgnoreLocalGCRequests(Heap* heap) : heap_(heap) {

@@ -617,12 +617,16 @@ void MarkCompactCollector::CollectGarbage() {
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
 
-  MarkLiveObjects();
+  {
+    RwxMemoryWriteScope rwx_write_scope;
+    MarkLiveObjects();
+  }
   ClearNonLiveReferences();
   VerifyMarking();
   heap()->memory_measurement()->FinishProcessing(native_context_stats_);
   RecordObjectStats();
 
+  RwxMemoryWriteScope rwx_write_scope;
   StartSweepSpaces();
   Evacuate();
   Finish();
@@ -822,6 +826,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   using LiveBytesPagePair = std::pair<size_t, Page*>;
   std::vector<LiveBytesPagePair> pages;
   pages.reserve(number_of_pages);
+
+  RwxMemoryWriteScope rwx_write_scope;
 
   DCHECK(!sweeping_in_progress());
   Page* owner_of_linear_allocation_area =
@@ -2218,6 +2224,7 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
   bool is_per_context_mode = local_marking_worklists()->IsPerContextMode();
   Isolate* isolate = heap()->isolate();
   PtrComprCageBase cage_base(isolate);
+  RwxMemoryWriteScope rwx_write_scope;
   while (local_marking_worklists()->Pop(&object) ||
          local_marking_worklists()->PopOnHold(&object)) {
     // Left trimming may result in grey or black filler objects on the marking
@@ -3663,6 +3670,7 @@ void Evacuator::EvacuatePage(MemoryChunk* chunk) {
   {
     AlwaysAllocateScope always_allocate(heap());
     TimedScope timed_scope(&evacuation_time);
+    RwxMemoryWriteScope rwx_write_scope;
     RawEvacuatePage(chunk, &saved_live_bytes);
   }
   ReportCompactionProgress(evacuation_time, saved_live_bytes);
