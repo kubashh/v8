@@ -202,8 +202,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToPlainDateTime)
 TO_BE_IMPLEMENTED(TemporalDurationFrom)
 /* Temporal #sec-temporal.duration.compare */
 TO_BE_IMPLEMENTED(TemporalDurationCompare)
-/* Temporal #sec-temporal.duration.prototype.with */
-TO_BE_IMPLEMENTED(TemporalDurationPrototypeWith)
 /* Temporal #sec-temporal.duration.prototype.add */
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeAdd)
 /* Temporal #sec-temporal.duration.prototype.subtract */
@@ -768,6 +766,7 @@ TEMPORAL_GET(Duration, Seconds, seconds)
 TEMPORAL_GET(Duration, Milliseconds, milliseconds)
 TEMPORAL_GET(Duration, Microseconds, microseconds)
 TEMPORAL_GET(Duration, Nanoseconds, nanoseconds)
+TEMPORAL_PROTOTYPE_METHOD1(Duration, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Sign, sign)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Blank, blank)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Negated, negated)
