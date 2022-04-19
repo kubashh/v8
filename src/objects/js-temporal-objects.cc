@@ -6426,6 +6426,97 @@ MaybeHandle<JSTemporalInstant> JSTemporalInstant::Now(Isolate* isolate) {
   return SystemInstant(isolate);
 }
 
+// #sec-temporal.zoneddatetime.prototype.toinstant
+MaybeHandle<JSTemporalInstant> JSTemporalZonedDateTime::ToInstant(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  TEMPORAL_ENTER_FUNC();
+  // 1. Let zonedDateTime be the this value.
+  // 2. Perform ? RequireInternalSlot(zonedDateTime,
+  // [[InitializedTemporalZonedDateTime]]).
+  // 3. Return ! CreateTemporalInstant(zonedDateTime.[[Nanoseconds]]).
+  return temporal::CreateTemporalInstant(
+      isolate, handle(zoned_date_time->nanoseconds(), isolate));
+}
+
+namespace {
+
+// Function implment shared steps of toplaindate, toplaintime, toplaindatetime
+MaybeHandle<JSTemporalPlainDateTime> ZonedDateTimeToPlainDateTime(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time,
+    const char* method_name) {
+  TEMPORAL_ENTER_FUNC();
+  // 1. Let zonedDateTime be the this value.
+  // 2. Perform ? RequireInternalSlot(zonedDateTime,
+  // [[InitializedTemporalZonedDateTime]]).
+  // 3. Let timeZone be zonedDateTime.[[TimeZone]].
+  Handle<JSReceiver> time_zone = handle(zoned_date_time->time_zone(), isolate);
+  // 4. Let instant be ! CreateTemporalInstant(zonedDateTime.[[Nanoseconds]]).
+  Handle<JSTemporalInstant> instant;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, instant,
+      temporal::CreateTemporalInstant(
+          isolate, handle(zoned_date_time->nanoseconds(), isolate)),
+      JSTemporalPlainDateTime);
+  // 5. 5. Return ? BuiltinTimeZoneGetPlainDateTimeFor(timeZone, instant,
+  // zonedDateTime.[[Calendar]]).
+  return temporal::BuiltinTimeZoneGetPlainDateTimeFor(
+      isolate, time_zone, instant, handle(zoned_date_time->calendar(), isolate),
+      method_name);
+}
+
+}  // namespace
+
+// #sec-temporal.zoneddatetime.prototype.toplaindate
+MaybeHandle<JSTemporalPlainDate> JSTemporalZonedDateTime::ToPlainDate(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  // Step 1-6 are the same as toplaindatetime
+  Handle<JSTemporalPlainDateTime> temporal_date_time;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, temporal_date_time,
+      ZonedDateTimeToPlainDateTime(
+          isolate, zoned_date_time,
+          "Temporal.ZonedDateTime.prototype.toPlainDate"),
+      JSTemporalPlainDate);
+  // 7. Return ? CreateTemporalDate(temporalDateTime.[[ISOYear]],
+  // temporalDateTime.[[ISOMonth]], temporalDateTime.[[ISODay]], calendar).
+  return CreateTemporalDate(
+      isolate,
+      {temporal_date_time->iso_year(), temporal_date_time->iso_month(),
+       temporal_date_time->iso_day()},
+      handle(zoned_date_time->calendar(), isolate));
+}
+
+// #sec-temporal.zoneddatetime.prototype.toplaintime
+MaybeHandle<JSTemporalPlainTime> JSTemporalZonedDateTime::ToPlainTime(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  // Step 1-6 are the same as toplaindatetime
+  Handle<JSTemporalPlainDateTime> temporal_date_time;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, temporal_date_time,
+      ZonedDateTimeToPlainDateTime(
+          isolate, zoned_date_time,
+          "Temporal.ZonedDateTime.prototype.toPlainTime"),
+      JSTemporalPlainTime);
+  // 7. Return ?  CreateTemporalTime(temporalDateTime.[[ISOHour]],
+  // temporalDateTime.[[ISOMinute]], temporalDateTime.[[ISOSecond]],
+  // temporalDateTime.[[ISOMillisecond]], temporalDateTime.[[ISOMicrosecond]],
+  // temporalDateTime.[[ISONanosecond]]).
+  return CreateTemporalTime(
+      isolate,
+      {temporal_date_time->iso_hour(), temporal_date_time->iso_minute(),
+       temporal_date_time->iso_second(), temporal_date_time->iso_millisecond(),
+       temporal_date_time->iso_microsecond(),
+       temporal_date_time->iso_nanosecond()});
+}
+
+// #sec-temporal.zoneddatetime.prototype.toplaindatetime
+MaybeHandle<JSTemporalPlainDateTime> JSTemporalZonedDateTime::ToPlainDateTime(
+    Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time) {
+  return ZonedDateTimeToPlainDateTime(
+      isolate, zoned_date_time,
+      "Temporal.ZonedDateTime.prototype.toPlainDateTime");
+}
+
 // #sec-temporal.instant
 MaybeHandle<JSTemporalInstant> JSTemporalInstant::Constructor(
     Isolate* isolate, Handle<JSFunction> target, Handle<HeapObject> new_target,
