@@ -16,6 +16,103 @@
       "message": "Using a new template argument. PTAL!",
       "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c32de82e_505f3c1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T14:27:24Z",
+      "side": 1,
+      "message": "lgtm with final nits and suggestions",
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace96f1c_34398db9",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T14:27:24Z",
+      "side": 1,
+      "message": "// The kSupportsUnsafeInsertion flag defines whether the list supports\n// insertion of new elements into the list by just rewiring the next\n// pointers without updating the list object itself. Such an insertion\n// might invalidate the pointer to list tail and thus requires additional\n// steps to recover the pointer to the tail.",
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d3ba3a_096a2499",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T14:27:24Z",
+      "side": 1,
+      "message": "E.g.",
+      "range": {
+        "startLine": 286,
+        "startChar": 49,
+        "endLine": 286,
+        "endChar": 53
+      },
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173e1dbd_5223aa3b",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T14:27:24Z",
+      "side": 1,
+      "message": "to?",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 29
+      },
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb09c15b_e996f5bb",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T14:27:24Z",
+      "side": 1,
+      "message": "How about adding a static method to the ThreadedList:\n  // This might break ThreadedList invariants...\n  static void AddAfter(T* v) {\n    CHECK(kSupportsUnsafeInsertion);\n    ...\n  }\nand calling it from here?",
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
