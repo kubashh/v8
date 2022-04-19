@@ -18,6 +18,74 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd488826_149259b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "Awesome! LGTM with comments.\n\nThis should make global handles a LOT easier to understand. Even more so when we could get rid of the PENDING and NEAR_DEATH states.",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a62eb229_dfd1c678",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "The possible state transitions change here, right? From NEAR_DEATH we shouldn\u0027t go back to NORMAL or WEAK afaiu anymore.",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c6061ef_8560ad53",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "It looks like IsPending(), IsPendingPhantomCallback() and IsPendingPhantomResetHandle() aren\u0027t really used anymore. I suspect we could get rid of the PENDING state entirely. It looks like we set the state to PENDING with MarkPending() but then transition the state immediately to FREE (for PhantomResetHandle()) or NEAR_DEATH (for PhantomCallback()).\n\nNEAR_DEATH is only used during a GC and until the first-pass callback is run from what I can see. Wdyt about renaming this state to PENDING_CALLBACK to make behavior more clear?",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "580d960d_257099a9",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "Did this become dead code? We don\u0027t have weak traced nodes anymore so the referenced object should always be marked afaiu?",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d521775_07350f9f",
@@ -35,6 +103,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "833695e3_943f82bc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d521775_07350f9f",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dec6930_1cee0a24",
@@ -48,6 +134,30 @@
       "writtenOn": "2022-04-14T07:39:49Z",
       "side": 1,
       "message": "I moved this into clearing as really this is just resetting weak/traced handles after marking is done. We should also rename this in a follow up.",
+      "range": {
+        "startLine": 2463,
+        "startChar": 41,
+        "endLine": 2463,
+        "endChar": 74
+      },
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21524b56_3cb764cc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2463,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-19T08:28:26Z",
+      "side": 1,
+      "message": "Wdyt about running first-pass weak callbacks here as well (not necessarily in this CL though)? Instead of pushing first-pass callbacks into a vector we could just execute them here. IMHO that\u0027s easier to understand then running them later outside of scavenger.cc and/or mark-compact.cc in Heap::PerformGarbageCollection() and is more uniform with the implementation of other weak references.",
+      "parentUuid": "0dec6930_1cee0a24",
       "range": {
         "startLine": 2463,
         "startChar": 41,
