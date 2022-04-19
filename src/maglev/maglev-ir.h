@@ -652,7 +652,7 @@ constexpr bool NodeBase::Is<UnconditionalControlNode>() const {
 // The Node class hierarchy contains all non-control nodes.
 class Node : public NodeBase {
  public:
-  using List = base::ThreadedList<Node>;
+  using List = base::ThreadedListWithUnsafeInsertions<Node>;
 
   inline ValueLocation& result();
 

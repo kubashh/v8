@@ -25,7 +25,8 @@ struct ThreadedListTraits {
 // T** next() method that returns the location where the next value is stored.
 // The default can be overwritten by providing a ThreadedTraits class.
 template <typename T, typename BaseClass,
-          typename TLTraits = ThreadedListTraits<T>>
+          typename TLTraits = ThreadedListTraits<T>,
+          bool kSupportsUnsafeInsertion = false>
 class ThreadedListBase final : public BaseClass {
  public:
   ThreadedListBase() : head_(nullptr), tail_(&head_) {}
@@ -33,6 +34,7 @@ class ThreadedListBase final : public BaseClass {
   ThreadedListBase& operator=(const ThreadedListBase&) = delete;
 
   void Add(T* v) {
+    EnsureValidTail();
     DCHECK_NULL(*tail_);
     DCHECK_NULL(*TLTraits::next(v));
     *tail_ = v;
@@ -70,6 +72,7 @@ class ThreadedListBase final : public BaseClass {
   void Append(ThreadedListBase&& list) {
     if (list.is_empty()) return;
 
+    EnsureValidTail();
     *tail_ = list.head_;
     tail_ = list.tail_;
     list.Clear();
@@ -78,6 +81,7 @@ class ThreadedListBase final : public BaseClass {
   void Prepend(ThreadedListBase&& list) {
     if (list.head_ == nullptr) return;
 
+    EnsureValidTail();
     T* new_head = list.head_;
     *list.tail_ = head_;
     if (head_ == nullptr) {
@@ -116,6 +120,7 @@ class ThreadedListBase final : public BaseClass {
       return true;
     }
 
+    EnsureValidTail();
     while (current != nullptr) {
       T* next = *TLTraits::next(current);
       if (next == v) {
@@ -213,10 +218,16 @@ class ThreadedListBase final : public BaseClass {
   };
 
   Iterator begin() { return Iterator(TLTraits::start(&head_)); }
-  Iterator end() { return Iterator(tail_); }
+  Iterator end() {
+    EnsureValidTail();
+    return Iterator(tail_);
+  }
 
   ConstIterator begin() const { return ConstIterator(TLTraits::start(&head_)); }
-  ConstIterator end() const { return ConstIterator(tail_); }
+  ConstIterator end() const {
+    EnsureValidTail();
+    return ConstIterator(tail_);
+  }
 
   // Rewinds the list's tail to the reset point, i.e., cutting of the rest of
   // the list, including the reset_point.
@@ -253,7 +264,7 @@ class ThreadedListBase final : public BaseClass {
     return *t;
   }
 
-  bool Verify() {
+  bool Verify() const {
     T* last = this->first();
     if (last == nullptr) {
       CHECK_EQ(&head_, tail_);
@@ -266,7 +277,19 @@ class ThreadedListBase final : public BaseClass {
     return true;
   }
 
-  void RevalidateTail() {
+  inline void EnsureValidTail() const {
+    if (!kSupportsUnsafeInsertion) {
+      DCHECK_EQ(*tail_, nullptr);
+      return;
+    }
+    // If kSupportsUnsafeInsertion, then we support adding a new element by
+    // using the pointer from a certain element. E.g, imagine list A -> B -> C,
+    // we can add D after B, by just moving the pointer of B to D and D to
+    // whatever B used to point to. We do not need to know the beginning of the
+    // list (ie. to have a pointer to the ThreadList class). This however might
+    // break the tail_ invariant. We ensure this here, by manually looking for
+    // the tail of the list.
+    if (*tail_ == nullptr) return;
     T* last = *tail_;
     if (last != nullptr) {
       while (*TLTraits::next(last) != nullptr) {
@@ -274,18 +297,25 @@ class ThreadedListBase final : public BaseClass {
       }
       tail_ = TLTraits::next(last);
     }
-    SLOW_DCHECK(Verify());
   }
 
  private:
   T* head_;
-  T** tail_;
+  mutable T** tail_;  // We need to ensure a valid `tail_` even when using a
+                      // const Iterator.
 };
 
 struct EmptyBase {};
 
+// Check ThreadedListBase::EnsureValidTail.
+static constexpr bool kUnsafeInsertion = true;
+
 template <typename T, typename TLTraits = ThreadedListTraits<T>>
 using ThreadedList = ThreadedListBase<T, EmptyBase, TLTraits>;
+
+template <typename T, typename TLTraits = ThreadedListTraits<T>>
+using ThreadedListWithUnsafeInsertions =
+    ThreadedListBase<T, EmptyBase, TLTraits, kUnsafeInsertion>;
 
 }  // namespace base
 }  // namespace v8
