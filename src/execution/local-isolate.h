@@ -55,6 +55,8 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
 
   bool is_main_thread() { return heap()->is_main_thread(); }
 
+  bool jitless() const { return isolate_->jitless(); }
+
   LocalHeap* heap() { return &heap_; }
 
   inline Address cage_base() const;

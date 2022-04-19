@@ -16,9 +16,11 @@ namespace internal {
 
 class TestingAssemblerBuffer : public AssemblerBuffer {
  public:
-  TestingAssemblerBuffer(
-      size_t requested, void* address,
-      VirtualMemory::JitPermission jit_permission = VirtualMemory::kNoJit) {
+  TestingAssemblerBuffer(size_t requested, void* address,
+                         JitPermission jit_permission = JitPermission::kNoJit)
+      : protection_reconfiguration_is_allowed_(
+            RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED ||
+            (jit_permission == JitPermission::kNoJit)) {
     size_t page_size = v8::internal::AllocatePageSize();
     size_t alloc_size = RoundUp(requested, page_size);
     CHECK_GE(kMaxInt, alloc_size);
@@ -52,25 +54,35 @@ class TestingAssemblerBuffer : public AssemblerBuffer {
     // See https://bugs.chromium.org/p/v8/issues/detail?id=8157
     FlushInstructionCache(start(), size());
 
-    bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
-                                 v8::PageAllocator::kReadExecute);
-    CHECK(result);
+    if (protection_reconfiguration_is_allowed_) {
+      bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
+                                   v8::PageAllocator::kReadExecute);
+      CHECK(result);
+    }
   }
 
   void MakeWritable() {
-    bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
-                                 v8::PageAllocator::kReadWrite);
-    CHECK(result);
+    if (protection_reconfiguration_is_allowed_) {
+      bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
+                                   v8::PageAllocator::kReadWrite);
+      CHECK(result);
+    }
   }
 
   void MakeWritableAndExecutable() {
     bool result = SetPermissions(GetPlatformPageAllocator(), start(), size(),
                                  v8::PageAllocator::kReadWriteExecute);
     CHECK(result);
+    // Once buffer protection is set to RWX it might not be allowed to be
+    // changed anymore.
+    protection_reconfiguration_is_allowed_ =
+        RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED &&
+        protection_reconfiguration_is_allowed_;
   }
 
  private:
   VirtualMemory reservation_;
+  bool protection_reconfiguration_is_allowed_;
 };
 
 // This scope class is mostly necesasry for arm64 tests running on Apple Silicon
@@ -101,7 +113,7 @@ class V8_NODISCARD AssemblerBufferWriteScope final {
 static inline std::unique_ptr<TestingAssemblerBuffer> AllocateAssemblerBuffer(
     size_t requested = v8::internal::AssemblerBase::kDefaultBufferSize,
     void* address = nullptr,
-    VirtualMemory::JitPermission jit_permission = VirtualMemory::kNoJit) {
+    JitPermission jit_permission = JitPermission::kMapAsJittable) {
   return std::make_unique<TestingAssemblerBuffer>(requested, address,
                                                   jit_permission);
 }

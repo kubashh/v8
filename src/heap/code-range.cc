@@ -131,6 +131,7 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   params.page_size = MemoryChunk::kPageSize;
   params.requested_start_hint =
       GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
+  params.jit = JitPermission::kMapAsJittable;
 
   if (!VirtualMemoryCage::InitReservation(params)) return false;
 
@@ -234,19 +235,30 @@ uint8_t* CodeRange::RemapEmbeddedBuiltins(Isolate* isolate,
     }
   }
 
-  if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
-                                        PageAllocator::kReadWrite)) {
-    V8::FatalProcessOutOfMemory(isolate,
-                                "Re-embedded builtins: set permissions");
-  }
-  memcpy(embedded_blob_code_copy, embedded_blob_code, embedded_blob_code_size);
+  if (RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED) {
+    if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
+                                          PageAllocator::kReadWrite)) {
+      V8::FatalProcessOutOfMemory(isolate,
+                                  "Re-embedded builtins: set permissions");
+    }
+    memcpy(embedded_blob_code_copy, embedded_blob_code,
+           embedded_blob_code_size);
 
-  if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
-                                        PageAllocator::kReadExecute)) {
-    V8::FatalProcessOutOfMemory(isolate,
-                                "Re-embedded builtins: set permissions");
+    if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
+                                          PageAllocator::kReadExecute)) {
+      V8::FatalProcessOutOfMemory(isolate,
+                                  "Re-embedded builtins: set permissions");
+    }
+  } else {
+    if (!page_allocator()->SetPermissions(embedded_blob_code_copy, code_size,
+                                          PageAllocator::kReadWriteExecute)) {
+      V8::FatalProcessOutOfMemory(isolate,
+                                  "Re-embedded builtins: set permissions");
+    }
+    RwxMemoryWriteScope rwx_write_scope;
+    memcpy(embedded_blob_code_copy, embedded_blob_code,
+           embedded_blob_code_size);
   }
-
   embedded_blob_code_copy_.store(embedded_blob_code_copy,
                                  std::memory_order_release);
   return embedded_blob_code_copy;
@@ -261,7 +273,7 @@ std::shared_ptr<CodeRange> CodeRange::EnsureProcessWideCodeRange(
     code_range = std::make_shared<CodeRange>();
     if (!code_range->InitReservation(page_allocator, requested_size)) {
       V8::FatalProcessOutOfMemory(
-          nullptr, "Failed to reserve virtual memory for CodeRange");
+          nullptr, "Failed to reserve virtual memory for CodeRange 1");
     }
     *process_wide_code_range_.Pointer() = code_range;
   }
