@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79b9bcd1_a472f344",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-19T12:42:57Z",
+      "side": 0,
+      "message": "Given that this is the only use case where we modify the list on the unsafely, WDYT about adding a template parameter \"kSupportsUnsafeTailModification\" or something to the ThreadedList class or to the ThreadedListTraits?",
+      "revId": "e96b8564dd08f464f676f37c1ba6f0eb055a43bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
