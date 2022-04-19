@@ -211,10 +211,11 @@ struct MaybeBoolFlag {
 #endif
 
 #if defined(V8_OS_DARWIN) && defined(V8_HOST_ARCH_ARM64)
-// Must be enabled on M1.
-#define MUST_WRITE_PROTECT_CODE_MEMORY true
+// On MacOS on ARM64 ("Apple M1"/Apple Silicon) reconfiguration of RWX pages
+// is not allowed.
+#define RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED false
 #else
-#define MUST_WRITE_PROTECT_CODE_MEMORY false
+#define RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED true
 #endif
 
 // Supported ARM configurations are:
@@ -529,9 +530,7 @@ DEFINE_WEAK_IMPLICATION(future, flush_baseline_code)
 #if V8_SHORT_BUILTIN_CALLS
 DEFINE_WEAK_IMPLICATION(future, short_builtin_calls)
 #endif
-#if !MUST_WRITE_PROTECT_CODE_MEMORY
 DEFINE_WEAK_VALUE_IMPLICATION(future, write_protect_code_memory, false)
-#endif
 DEFINE_WEAK_IMPLICATION(future, compact_maps)
 
 DEFINE_BOOL_READONLY(dict_property_const_tracking,
@@ -745,14 +744,9 @@ DEFINE_BOOL(trace_baseline_concurrent_compilation, false,
 DEFINE_BOOL(shared_string_table, false, "internalize strings into shared table")
 DEFINE_IMPLICATION(harmony_struct, shared_string_table)
 
-#if !defined(V8_OS_DARWIN) || !defined(V8_HOST_ARCH_ARM64)
 DEFINE_BOOL(write_code_using_rwx, true,
             "flip permissions to rwx to write page instead of rw")
 DEFINE_NEG_IMPLICATION(jitless, write_code_using_rwx)
-#else
-DEFINE_BOOL_READONLY(write_code_using_rwx, false,
-                     "flip permissions to rwx to write page instead of rw")
-#endif
 
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
@@ -1259,12 +1253,7 @@ DEFINE_INT(scavenge_task_trigger, 80,
 DEFINE_BOOL(scavenge_separate_stack_scanning, false,
             "use a separate phase for stack scanning in scavenge")
 DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
-#if MUST_WRITE_PROTECT_CODE_MEMORY
-DEFINE_BOOL_READONLY(write_protect_code_memory, true,
-                     "write protect code memory")
-#else
 DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
-#endif
 #if defined(V8_ATOMIC_OBJECT_FIELD_WRITES)
 #define V8_CONCURRENT_MARKING_BOOL true
 #else
@@ -2070,9 +2059,7 @@ DEFINE_PERF_PROF_BOOL(
     "Remove the perf file right after creating it (for testing only).")
 DEFINE_NEG_IMPLICATION(perf_prof, compact_code_space)
 // TODO(v8:8462) Remove implication once perf supports remapping.
-#if !MUST_WRITE_PROTECT_CODE_MEMORY
 DEFINE_NEG_IMPLICATION(perf_prof, write_protect_code_memory)
-#endif
 #if V8_ENABLE_WEBASSEMBLY
 DEFINE_NEG_IMPLICATION(perf_prof, wasm_write_protect_code_memory)
 #endif  // V8_ENABLE_WEBASSEMBLY

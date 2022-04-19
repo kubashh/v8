@@ -70,16 +70,19 @@ void MemoryChunk::DecrementWriteUnprotectCounterAndMaybeSetPermissions(
 }
 
 void MemoryChunk::SetReadable() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED);
   DecrementWriteUnprotectCounterAndMaybeSetPermissions(PageAllocator::kRead);
 }
 
 void MemoryChunk::SetReadAndExecutable() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED);
   DCHECK(!FLAG_jitless);
   DecrementWriteUnprotectCounterAndMaybeSetPermissions(
       PageAllocator::kReadExecute);
 }
 
 void MemoryChunk::SetCodeModificationPermissions() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED);
   DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
   DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
   // Incrementing the write_unprotect_counter_ and changing the page

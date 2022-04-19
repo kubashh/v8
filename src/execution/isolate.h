@@ -2272,7 +2272,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   bool force_slow_path_ = false;
 
   bool initialized_ = false;
-  bool jitless_ = false;
 
   int next_optimization_id_ = 0;
 

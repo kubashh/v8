@@ -3235,7 +3235,6 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
       log_event_dispatcher_(new LogEventDispatcher()),
       detailed_source_positions_for_profiling_(FLAG_detailed_line_info),
       persistent_handles_list_(new PersistentHandlesList()),
-      jitless_(FLAG_jitless),
 #if V8_SFI_HAS_UNIQUE_ID
       next_unique_sfi_id_(0),
 #endif
@@ -5483,7 +5482,7 @@ void Isolate::AddCodeRange(Address begin, size_t length_in_bytes) {
 }
 
 bool Isolate::RequiresCodeRange() const {
-  return kPlatformRequiresCodeRange && !jitless_;
+  return kPlatformRequiresCodeRange && !FLAG_jitless;
 }
 
 v8::metrics::Recorder::ContextId Isolate::GetOrRegisterRecorderContextId(

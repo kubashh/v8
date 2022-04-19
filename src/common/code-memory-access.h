@@ -12,6 +12,7 @@ namespace v8 {
 namespace internal {
 
 class CodePageCollectionMemoryModificationScope;
+class CodePageHeaderModificationScope;
 class CodePageMemoryModificationScope;
 class CodeSpaceMemoryModificationScope;
 class RwxMemoryWriteScopeForTesting;
@@ -42,6 +43,7 @@ class V8_NODISCARD RwxMemoryWriteScope final {
 
  private:
   friend class CodePageCollectionMemoryModificationScope;
+  friend class CodePageHeaderModificationScope;
   friend class CodePageMemoryModificationScope;
   friend class CodeSpaceMemoryModificationScope;
   friend class RwxMemoryWriteScopeForTesting;
