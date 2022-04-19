@@ -985,9 +985,6 @@ void GCTracer::PrintNVP() const {
           "mark.weak_closure.ephemeron=%.1f "
           "mark.weak_closure.ephemeron.marking=%.1f "
           "mark.weak_closure.ephemeron.linear=%.1f "
-          "mark.weak_closure.weak_handles=%.1f "
-          "mark.weak_closure.weak_roots=%.1f "
-          "mark.weak_closure.harmony=%.1f "
           "mark.embedder_prologue=%.1f "
           "mark.embedder_tracing=%.1f "
           "prologue=%.1f "
@@ -1074,9 +1071,6 @@ void GCTracer::PrintNVP() const {
           current_scope(Scope::MC_MARK_WEAK_CLOSURE_EPHEMERON),
           current_scope(Scope::MC_MARK_WEAK_CLOSURE_EPHEMERON_MARKING),
           current_scope(Scope::MC_MARK_WEAK_CLOSURE_EPHEMERON_LINEAR),
-          current_scope(Scope::MC_MARK_WEAK_CLOSURE_WEAK_HANDLES),
-          current_scope(Scope::MC_MARK_WEAK_CLOSURE_WEAK_ROOTS),
-          current_scope(Scope::MC_MARK_WEAK_CLOSURE_HARMONY),
           current_scope(Scope::MC_MARK_EMBEDDER_PROLOGUE),
           current_scope(Scope::MC_MARK_EMBEDDER_TRACING),
           current_scope(Scope::MC_PROLOGUE), current_scope(Scope::MC_SWEEP),
