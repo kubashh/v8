@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5810c8f_d69ce3b9",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:17:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a62eb229_dfd1c678",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c6061ef_8560ad53",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe25c70a_bd8ef186",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:17:36Z",
+      "side": 1,
+      "message": "Sounds good. I\u0027d like to do this as a follow up though to keep this one as close to the existing code as possible.",
+      "parentUuid": "1c6061ef_8560ad53",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "580d960d_257099a9",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-04-19T08:28:26Z",
       "side": 1,
       "message": "Did this become dead code? We don\u0027t have weak traced nodes anymore so the referenced object should always be marked afaiu?",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c43490_10349620",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:17:36Z",
+      "side": 1,
+      "message": "`TracedNode` uses the phantom semantics (weakness) to clear the global handle node during GC. Let\u0027s fix the naming in a follow up.",
+      "parentUuid": "580d960d_257099a9",
       "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -158,6 +212,30 @@
       "side": 1,
       "message": "Wdyt about running first-pass weak callbacks here as well (not necessarily in this CL though)? Instead of pushing first-pass callbacks into a vector we could just execute them here. IMHO that\u0027s easier to understand then running them later outside of scavenger.cc and/or mark-compact.cc in Heap::PerformGarbageCollection() and is more uniform with the implementation of other weak references.",
       "parentUuid": "0dec6930_1cee0a24",
+      "range": {
+        "startLine": 2463,
+        "startChar": 41,
+        "endLine": 2463,
+        "endChar": 74
+      },
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d520c21e_b0a01810",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2463,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:17:36Z",
+      "side": 1,
+      "message": "We\u0027d need to check if that works. In theory the first pass callbacks are not allowed to allocate or do anything unreasonable but we never enforced that I think.\n\nIn any case, that should go in separately.",
+      "parentUuid": "21524b56_3cb764cc",
       "range": {
         "startLine": 2463,
         "startChar": 41,

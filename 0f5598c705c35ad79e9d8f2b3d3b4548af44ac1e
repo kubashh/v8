@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af6944b_62bb7bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:17:36Z",
+      "side": 1,
+      "message": "Thanks a lot. I will create follow up CLs to keep this one as close to mechanical as possible.",
+      "revId": "0f5598c705c35ad79e9d8f2b3d3b4548af44ac1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
