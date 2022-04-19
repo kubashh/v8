@@ -20,6 +20,7 @@ struct ThreadedListTestNode {
   ThreadedListTestNode* next_;
 
   struct OtherTraits {
+    static constexpr bool kSupportsUnsafeTailModification = false;
     static ThreadedListTestNode** start(ThreadedListTestNode** h) { return h; }
     static ThreadedListTestNode* const* start(ThreadedListTestNode* const* h) {
       return h;

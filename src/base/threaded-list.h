@@ -15,6 +15,7 @@ namespace base {
 
 template <typename T>
 struct ThreadedListTraits {
+  static constexpr bool kSupportsUnsafeTailModification = false;
   static T** next(T* t) { return t->next(); }
   static T** start(T** t) { return t; }
   static T* const* start(T* const* t) { return t; }
@@ -33,6 +34,7 @@ class ThreadedListBase final : public BaseClass {
   ThreadedListBase& operator=(const ThreadedListBase&) = delete;
 
   void Add(T* v) {
+    EnsureValidTail();
     DCHECK_NULL(*tail_);
     DCHECK_NULL(*TLTraits::next(v));
     *tail_ = v;
@@ -70,6 +72,7 @@ class ThreadedListBase final : public BaseClass {
   void Append(ThreadedListBase&& list) {
     if (list.is_empty()) return;
 
+    EnsureValidTail();
     *tail_ = list.head_;
     tail_ = list.tail_;
     list.Clear();
@@ -78,6 +81,7 @@ class ThreadedListBase final : public BaseClass {
   void Prepend(ThreadedListBase&& list) {
     if (list.head_ == nullptr) return;
 
+    EnsureValidTail();
     T* new_head = list.head_;
     *list.tail_ = head_;
     if (head_ == nullptr) {
@@ -116,6 +120,7 @@ class ThreadedListBase final : public BaseClass {
       return true;
     }
 
+    EnsureValidTail();
     while (current != nullptr) {
       T* next = *TLTraits::next(current);
       if (next == v) {
@@ -213,10 +218,16 @@ class ThreadedListBase final : public BaseClass {
   };
 
   Iterator begin() { return Iterator(TLTraits::start(&head_)); }
-  Iterator end() { return Iterator(tail_); }
+  Iterator end() {
+    EnsureValidTail();
+    return Iterator(tail_);
+  }
 
   ConstIterator begin() const { return ConstIterator(TLTraits::start(&head_)); }
-  ConstIterator end() const { return ConstIterator(tail_); }
+  ConstIterator end() const {
+    EnsureValidTail();
+    return ConstIterator(tail_);
+  }
 
   // Rewinds the list's tail to the reset point, i.e., cutting of the rest of
   // the list, including the reset_point.
@@ -253,7 +264,7 @@ class ThreadedListBase final : public BaseClass {
     return *t;
   }
 
-  bool Verify() {
+  bool Verify() const {
     T* last = this->first();
     if (last == nullptr) {
       CHECK_EQ(&head_, tail_);
@@ -266,7 +277,9 @@ class ThreadedListBase final : public BaseClass {
     return true;
   }
 
-  void RevalidateTail() {
+  inline void EnsureValidTail() const {
+    if (*tail_ == nullptr) return;
+    DCHECK(TLTraits::kSupportsUnsafeTailModification);
     T* last = *tail_;
     if (last != nullptr) {
       while (*TLTraits::next(last) != nullptr) {
@@ -274,12 +287,12 @@ class ThreadedListBase final : public BaseClass {
       }
       tail_ = TLTraits::next(last);
     }
-    SLOW_DCHECK(Verify());
   }
 
  private:
   T* head_;
-  T** tail_;
+  mutable T** tail_;  // We need to ensure a valid `tail_` even when using a
+                      // const Iterator.
 };
 
 struct EmptyBase {};

@@ -1535,6 +1535,8 @@ class VariableProxy final : public Expression {
 
   // Provides filtered access to the unresolved variable proxy threaded list.
   struct UnresolvedNext {
+    static constexpr bool kSupportsUnsafeTailModification = false;
+
     static VariableProxy** filter(VariableProxy** t) {
       VariableProxy** n = t;
       // Skip over possibly removed values.
