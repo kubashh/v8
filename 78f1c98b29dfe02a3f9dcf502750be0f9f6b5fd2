@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67cab37_723be627",
+        "filename": "src/handles/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-19T11:26:11Z",
+      "side": 1,
+      "message": "Removed the methods that are dead code. Will refactor the state machine in a follow up.",
+      "parentUuid": "fe25c70a_bd8ef186",
+      "revId": "78f1c98b29dfe02a3f9dcf502750be0f9f6b5fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "580d960d_257099a9",
