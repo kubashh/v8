@@ -430,6 +430,10 @@ class JSTemporalZonedDateTime
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalZonedDateTime> NowISO(
       Isolate* isolate, Handle<Object> temporal_time_zone_like);
 
+  // #sec-temporal.zoneddatetime.prototype.startofday
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalZonedDateTime> StartOfDay(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
+
   DECL_PRINTER(JSTemporalZonedDateTime)
 
   TQ_OBJECT_CONSTRUCTORS(JSTemporalZonedDateTime)
