@@ -2894,26 +2894,66 @@ Maybe<bool> Intl::GetTimeZoneIndex(Isolate* isolate, Handle<String> identifier,
   UNREACHABLE();
 }
 
+namespace {
+Maybe<std::string> ParseDecimalNumber(Isolate* isolate, Handle<String> str) {
+  if (str->length() >= 2 && str->Get(0) == '0') {
+    base::uc16 ch1 = str->Get(1);
+    if (ch1 == 'b' || ch1 == 'B' || ch1 == 'o' || ch1 == 'O' || ch1 == 'x' ||
+        ch1 == 'X') {
+      return Nothing<std::string>();
+    }
+  }
+  std::string result(str->ToCString().get());
+  return Just(result);
+}
+
+}  // namespace
 // #sec-tointlmathematicalvalue
 MaybeHandle<Object> Intl::ToIntlMathematicalValueAsNumberBigIntOrString(
     Isolate* isolate, Handle<Object> input) {
-  if (input->IsNumber() || input->IsBigInt()) return input;  // Shortcut.
-  // TODO(ftang) revisit the following after the resolution of
-  // https://github.com/tc39/proposal-intl-numberformat-v3/pull/82
-  if (input->IsOddball()) {
-    return Oddball::ToNumber(isolate, Handle<Oddball>::cast(input));
+  // 1. Let primValue be ? ToPrimitive(value, number).
+  Handle<Object> prim_value;
+  if (input->IsJSReceiver()) {
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, prim_value,
+        JSReceiver::ToPrimitive(isolate, Handle<JSReceiver>::cast(input),
+                                ToPrimitiveHint::kNumber),
+        Object);
+  } else {
+    prim_value = input;
   }
-  if (input->IsSymbol()) {
-    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kSymbolToNumber),
-                    Object);
+  // 2. If Type(primValue) is BigInt, return the mathematical value of
+  // primValue.
+  if (prim_value->IsBigInt()) return prim_value;  // Shortcut.
+  if (prim_value->IsNumber()) return prim_value;  // Shortcut.
+  if (prim_value->IsOddball()) {
+    return Oddball::ToNumber(isolate, Handle<Oddball>::cast(prim_value));
   }
-  ASSIGN_RETURN_ON_EXCEPTION(
-      isolate, input,
-      JSReceiver::ToPrimitive(isolate, Handle<JSReceiver>::cast(input),
-                              ToPrimitiveHint::kNumber),
-      Object);
-  if (input->IsString()) UNIMPLEMENTED();
-  return input;
+
+  if (!prim_value->IsString()) {
+    // No need to convert from Number to String, just return the result of
+    // ToNumber.
+    return Object::ToNumber(isolate, prim_value);
+  }
+  printf("IsString\n");
+  Handle<String> str = Handle<String>::cast(prim_value);
+  Maybe<std::string> maybe_decimal = ParseDecimalNumber(isolate, str);
+  if (maybe_decimal.IsJust()) {
+    printf("IsDecimal\n");
+    UErrorCode status = U_ZERO_ERROR;
+    std::string decimal = maybe_decimal.FromJust();
+    icu::Formattable result({decimal}, status);
+    CHECK(U_SUCCESS(status));
+    return isolate->factory()->NewStringFromAsciiChecked(decimal.c_str());
+  }
+  MaybeHandle<BigInt> maybe_bigint = StringToBigInt(isolate, str);
+  Handle<BigInt> bigint;
+  if (maybe_bigint.ToHandle(&bigint)) {
+    printf("IsBigInt\n");
+    return bigint;
+  }
+  printf("NaN\n");
+  return isolate->factory()->nan_value();
 }
 
 Intl::FormatRangeSourceTracker::FormatRangeSourceTracker() {
