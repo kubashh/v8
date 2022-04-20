@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "498eb6f2_ce9b41f0",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:22:05Z",
+      "side": 1,
+      "message": "DCHECK that the representation is tagged?",
+      "range": {
+        "startLine": 249,
+        "startChar": 4,
+        "endLine": 249,
+        "endChar": 29
+      },
+      "revId": "14a3ac7c17c242fb6e116ca729c09ee9c599af54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31869986_09d4973f",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:22:05Z",
+      "side": 1,
+      "message": "nit: remove Value here or make the other one Int32Value",
+      "range": {
+        "startLine": 255,
+        "startChar": 33,
+        "endLine": 255,
+        "endChar": 38
+      },
+      "revId": "14a3ac7c17c242fb6e116ca729c09ee9c599af54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f904856a_977635bf",
+        "filename": "src/maglev/maglev-graph-verifier.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:22:05Z",
+      "side": 1,
+      "message": "nit: just Tagged",
+      "range": {
+        "startLine": 18,
+        "startChar": 13,
+        "endLine": 18,
+        "endChar": 24
+      },
+      "revId": "14a3ac7c17c242fb6e116ca729c09ee9c599af54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
