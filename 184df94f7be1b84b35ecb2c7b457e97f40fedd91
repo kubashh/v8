@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8395b6d_f13f6ac3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-04-20T16:23:38Z",
+      "side": 1,
+      "message": "Hi Toon, would you mind taking a look at setup-heap-ineternal.cc and bootstrap.cc as a code owner? Thank you!",
+      "revId": "184df94f7be1b84b35ecb2c7b457e97f40fedd91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
