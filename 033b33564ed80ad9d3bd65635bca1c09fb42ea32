@@ -121,6 +121,24 @@
       "parentUuid": "a552636c_e35701fc",
       "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ec2cef_1dd03516",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-20T13:28:34Z",
+      "side": 1,
+      "message": "Ack, I\u0027ll keep the explicit list for now then.",
+      "parentUuid": "45ad23e6_f1d84cd2",
+      "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
