@@ -931,13 +931,13 @@ class OptimizedCodeCache : public AllStatic {
     return handle(code, isolate);
   }
 
-  static void Insert(OptimizedCompilationInfo* compilation_info) {
+  static void Insert(Isolate* isolate,
+                     OptimizedCompilationInfo* compilation_info) {
     const CodeKind kind = compilation_info->code_kind();
     if (!CodeKindIsStoredInOptimizedCodeCache(kind)) return;
 
     // Cache optimized code.
     Handle<JSFunction> function = compilation_info->closure();
-    Isolate* isolate = function->GetIsolate();
     Handle<CodeT> code = ToCodeT(compilation_info->code(), isolate);
     const BytecodeOffset osr_offset = compilation_info->osr_offset();
 
@@ -1013,7 +1013,7 @@ bool CompileTurbofan_NotConcurrent(Isolate* isolate,
   // Success!
   job->RecordCompilationStats(ConcurrencyMode::kSynchronous, isolate);
   DCHECK(!isolate->has_pending_exception());
-  OptimizedCodeCache::Insert(compilation_info);
+  OptimizedCodeCache::Insert(isolate, compilation_info);
   job->RecordFunctionCompilation(LogEventListener::LAZY_COMPILE_TAG, isolate);
   return true;
 }
@@ -3398,15 +3398,7 @@ MaybeHandle<CodeT> Compiler::CompileOptimizedOSR(Isolate* isolate,
 
   // -- Alright, decided to proceed. --
 
-  // Disarm all back edges, i.e. reset the OSR urgency and install target.
-  //
-  // Note that the bytecode array active on the stack might be different from
-  // the one installed on the function (e.g. patched by debugger). This however
-  // is fine because we guarantee the layout to be in sync, hence any
-  // BytecodeOffset representing the entry point will be valid for any copy of
-  // the bytecode.
-  Handle<BytecodeArray> bytecode(frame->GetBytecodeArray(), isolate);
-  bytecode->reset_osr_urgency_and_install_target();
+  function->feedback_vector().reset_osr_urgency();
 
   CompilerTracer::TraceOptimizeOSR(isolate, function, osr_offset, mode);
   MaybeHandle<CodeT> result = GetOrCompileOptimized(
@@ -3467,7 +3459,7 @@ bool Compiler::FinalizeTurbofanCompilationJob(TurbofanCompilationJob* job,
                                      isolate);
       if (V8_LIKELY(use_result)) {
         ResetTieringState(*function, osr_offset);
-        OptimizedCodeCache::Insert(compilation_info);
+        OptimizedCodeCache::Insert(isolate, compilation_info);
         CompilerTracer::TraceCompletedJob(isolate, compilation_info);
         if (IsOSR(osr_offset)) {
           if (FLAG_trace_osr) {
