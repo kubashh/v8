@@ -92,6 +92,7 @@ int WriteBarrier::MarkingFromCode(Address raw_host, Address raw_slot) {
             (uint64_t)kHeapObjectTag;
   }
 #endif
+  CodePageHeaderModificationScope rwx_write_scope;
   WriteBarrier::Marking(host, slot, MaybeObject(value));
   // Called by WriteBarrierCodeStubAssembler, which doesnt accept void type
   return 0;

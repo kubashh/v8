@@ -2808,6 +2808,18 @@ void Heap::Scavenge() {
   SetGCState(NOT_IN_GC);
 }
 
+bool Heap::write_protect_code_memory() const {
+  if (V8_HAS_PTHREAD_JIT_WRITE_PROTECT) {
+    // On MacOs on ARM64 ("Apple M1"/Apple Silicon) code protection can be
+    // achieved by APRR/MAP_JIT machinery instead of changing memory
+    // protection flags. However, currently it can be used only when pointer
+    // compression is not enabled or when external code space is enabled.
+    // Otherwise we have to change code memory protection between RW and RX.
+    return COMPRESS_POINTERS_BOOL && !V8_EXTERNAL_CODE_SPACE_BOOL;
+  }
+  return write_protect_code_memory_;
+}
+
 void Heap::ComputeFastPromotionMode() {
   if (!new_space_) return;
 
@@ -2840,6 +2852,7 @@ void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
 
 void Heap::UnprotectAndRegisterMemoryChunk(HeapObject object,
                                            UnprotectMemoryOrigin origin) {
+  if (!write_protect_code_memory()) return;
   UnprotectAndRegisterMemoryChunk(MemoryChunk::FromHeapObject(object), origin);
 }
 
@@ -6181,9 +6194,12 @@ void Heap::TearDown() {
   shared_map_space_ = nullptr;
   shared_map_allocator_.reset();
 
-  for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
-    delete space_[i];
-    space_[i] = nullptr;
+  {
+    CodePageHeaderModificationScope rwx_write_scope;
+    for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
+      delete space_[i];
+      space_[i] = nullptr;
+    }
   }
 
   isolate()->read_only_heap()->OnHeapTearDown(this);

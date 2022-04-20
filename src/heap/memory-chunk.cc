@@ -70,16 +70,22 @@ void MemoryChunk::DecrementWriteUnprotectCounterAndMaybeSetPermissions(
 }
 
 void MemoryChunk::SetReadable() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED ||
+        !V8_EXTERNAL_CODE_SPACE_BOOL);
   DecrementWriteUnprotectCounterAndMaybeSetPermissions(PageAllocator::kRead);
 }
 
 void MemoryChunk::SetReadAndExecutable() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED ||
+        !V8_EXTERNAL_CODE_SPACE_BOOL);
   DCHECK(!FLAG_jitless);
   DecrementWriteUnprotectCounterAndMaybeSetPermissions(
       PageAllocator::kReadExecute);
 }
 
 void MemoryChunk::SetCodeModificationPermissions() {
+  CHECK(RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED ||
+        !V8_EXTERNAL_CODE_SPACE_BOOL);
   DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
   DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
   // Incrementing the write_unprotect_counter_ and changing the page
@@ -113,8 +119,15 @@ void MemoryChunk::SetDefaultCodePermissions() {
 namespace {
 
 PageAllocator::Permission DefaultWritableCodePermissions() {
-  return FLAG_jitless ? PageAllocator::kReadWrite
-                      : PageAllocator::kReadWriteExecute;
+  if (V8_HAS_PTHREAD_JIT_WRITE_PROTECT) {
+    return FLAG_jitless ? PageAllocator::kReadWrite
+                        : PageAllocator::kReadWriteExecute;
+  }
+  return (!RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED ||
+          (COMPRESS_POINTERS_BOOL && !V8_EXTERNAL_CODE_SPACE_BOOL) ||
+          FLAG_jitless)
+             ? PageAllocator::kReadWrite
+             : PageAllocator::kReadWriteExecute;
 }
 
 }  // namespace
@@ -160,7 +173,7 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
     if (heap->write_protect_code_memory()) {
       write_unprotect_counter_ =
           heap->code_space_memory_modification_scope_depth();
-    } else {
+    } else if (!V8_HAS_PTHREAD_JIT_WRITE_PROTECT) {
       size_t page_size = MemoryAllocator::GetCommitPageSize();
       DCHECK(IsAligned(area_start_, page_size));
       size_t area_size = RoundUp(area_end_ - area_start_, page_size);

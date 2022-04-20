@@ -130,6 +130,8 @@ static void VerifyMemoryChunk(Isolate* isolate, Heap* heap,
   size_t guard_size =
       (executable == EXECUTABLE) ? MemoryChunkLayout::CodePageGuardSize() : 0;
 
+  CodePageHeaderModificationScope rwx_write_scope;
+
   MemoryChunk* memory_chunk =
       memory_allocator->AllocateLargePage(space, area_size, executable);
   size_t reserved_size =
@@ -170,7 +172,8 @@ TEST(MemoryChunk) {
     // With CodeRange.
     const size_t code_range_size = 32 * MB;
     VirtualMemory code_range_reservation(page_allocator, code_range_size,
-                                         nullptr, MemoryChunk::kAlignment);
+                                         nullptr, MemoryChunk::kAlignment,
+                                         JitPermission::kMapAsJittable);
     CHECK(code_range_reservation.IsReserved());
 
     base::BoundedPageAllocator code_page_allocator(

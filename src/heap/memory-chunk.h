@@ -188,8 +188,10 @@ class MemoryChunk : public BasicMemoryChunk {
   void InitializationMemoryFence();
 
   static PageAllocator::Permission GetCodeModificationPermission() {
-    return FLAG_write_code_using_rwx ? PageAllocator::kReadWriteExecute
-                                     : PageAllocator::kReadWrite;
+    return RWX_PROTECTION_RECONFIGURATION_IS_ALLOWED &&
+                   FLAG_write_code_using_rwx
+               ? PageAllocator::kReadWriteExecute
+               : PageAllocator::kReadWrite;
   }
 
   V8_EXPORT_PRIVATE void SetReadable();
