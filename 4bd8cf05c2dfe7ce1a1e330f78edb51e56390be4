@@ -16,6 +16,29 @@
       "message": "Hi Camillo, would you mind taking a look at this? Thank you :)",
       "revId": "4bd8cf05c2dfe7ce1a1e330f78edb51e56390be4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fa4deb2_07ba9a19",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-20T08:13:00Z",
+      "side": 1,
+      "message": "nit: _shared_fun \u003d\u003e _sfi",
+      "range": {
+        "startLine": 1074,
+        "startChar": 4,
+        "endLine": 1074,
+        "endChar": 68
+      },
+      "revId": "4bd8cf05c2dfe7ce1a1e330f78edb51e56390be4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
