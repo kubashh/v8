@@ -2810,14 +2810,16 @@ MaybeHandle<SharedFunctionInfo> CompileScriptOnMainThread(
     const UnoptimizedCompileFlags flags, Handle<String> source,
     const ScriptDetails& script_details, NativesFlag natives,
     v8::Extension* extension, Isolate* isolate,
-    IsCompiledScope* is_compiled_scope) {
+    MaybeHandle<Script> maybe_script, IsCompiledScope* is_compiled_scope) {
   UnoptimizedCompileState compile_state;
   ReusableUnoptimizedCompileState reusable_state(isolate);
   ParseInfo parse_info(isolate, flags, &compile_state, &reusable_state);
   parse_info.set_extension(extension);
 
-  Handle<Script> script =
-      NewScript(isolate, &parse_info, source, script_details, natives);
+  Handle<Script> script;
+  if (!maybe_script.ToHandle(&script)) {
+    script = NewScript(isolate, &parse_info, source, script_details, natives);
+  }
   DCHECK_IMPLIES(parse_info.flags().collect_type_profile(),
                  script->IsUserJavaScript());
   DCHECK_EQ(parse_info.flags().is_repl_mode(), script->is_repl_mode());
@@ -2897,7 +2899,8 @@ bool CompilationExceptionIsRangeError(Isolate* isolate, Handle<Object> obj) {
 
 MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
     Handle<String> source, const ScriptDetails& script_details,
-    Isolate* isolate, IsCompiledScope* is_compiled_scope) {
+    Isolate* isolate, MaybeHandle<Script> maybe_script,
+    IsCompiledScope* is_compiled_scope) {
   // Start a background thread compiling the script.
   StressBackgroundCompileThread background_compile_thread(
       isolate, source,
@@ -2921,7 +2924,7 @@ MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
     flags_copy.set_script_id(Script::kTemporaryScriptId);
     main_thread_maybe_result = CompileScriptOnMainThread(
         flags_copy, source, script_details, NOT_NATIVES_CODE, nullptr, isolate,
-        &inner_is_compiled_scope);
+        maybe_script, &inner_is_compiled_scope);
     if (main_thread_maybe_result.is_null()) {
       // Assume all range errors are stack overflows.
       main_thread_had_stack_overflow = CompilationExceptionIsRangeError(
@@ -3015,6 +3018,7 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
   const bool use_compilation_cache =
       extension == nullptr && script_details.repl_mode == REPLMode::kNo;
   MaybeHandle<SharedFunctionInfo> maybe_result;
+  MaybeHandle<Script> maybe_script;
   IsCompiledScope is_compiled_scope;
   if (use_compilation_cache) {
     bool can_consume_code_cache =
@@ -3024,8 +3028,16 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     }
 
     // First check per-isolate compilation cache.
-    maybe_result =
+    MaybeHandle<HeapObject> maybe_shared_or_script =
         compilation_cache->LookupScript(source, script_details, language_mode);
+    Handle<HeapObject> shared_or_script;
+    if (maybe_shared_or_script.ToHandle(&shared_or_script)) {
+      if (shared_or_script->IsSharedFunctionInfo(isolate)) {
+        maybe_result = Handle<SharedFunctionInfo>::cast(shared_or_script);
+      } else {
+        maybe_script = Handle<Script>::cast(shared_or_script);
+      }
+    }
     if (!maybe_result.is_null()) {
       compile_timer.set_hit_isolate_cache();
     } else if (can_consume_code_cache) {
@@ -3036,6 +3048,10 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
       RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
       TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                    "V8.CompileDeserialize");
+      // TODO(v8:12808): If a Script was found in the compilation cache, then
+      // both of the code paths below (Finish and Deserialize) should make use
+      // of that Script to avoid duplicating the Script itself or any
+      // preexisting SharedFunctionInfos.
       if (deserialize_task) {
         // If there's a cache consume task, finish it.
         maybe_result = deserialize_task->Finish(isolate, source,
@@ -3070,7 +3086,7 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
       // If the --stress-background-compile flag is set, do the actual
       // compilation on a background thread, and wait for its result.
       maybe_result = CompileScriptOnBothBackgroundAndMainThread(
-          source, script_details, isolate, &is_compiled_scope);
+          source, script_details, isolate, maybe_script, &is_compiled_scope);
     } else {
       UnoptimizedCompileFlags flags =
           UnoptimizedCompileFlags::ForToplevelCompile(
@@ -3081,10 +3097,14 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
               FLAG_lazy);
 
       flags.set_is_eager(compile_options == ScriptCompiler::kEagerCompile);
+      Handle<Script> script;
+      if (maybe_script.ToHandle(&script)) {
+        flags.set_script_id(script->id());
+      }
 
-      maybe_result =
-          CompileScriptOnMainThread(flags, source, script_details, natives,
-                                    extension, isolate, &is_compiled_scope);
+      maybe_result = CompileScriptOnMainThread(
+          flags, source, script_details, natives, extension, isolate,
+          maybe_script, &is_compiled_scope);
     }
 
     // Add the result to the isolate cache.
@@ -3264,8 +3284,20 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
   {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                  "V8.StreamingFinalization.CheckCache");
-    maybe_result = compilation_cache->LookupScript(
-        source, script_details, task->flags().outer_language_mode());
+    MaybeHandle<HeapObject> maybe_shared_or_script =
+        compilation_cache->LookupScript(source, script_details,
+                                        task->flags().outer_language_mode());
+
+    // TODO(v8:12808): Determine what to do if we finish streaming and find that
+    // another copy of the Script already exists but has no root
+    // SharedFunctionInfo. For now, we just ignore it and create a new Script.
+    Handle<HeapObject> shared_or_script;
+    if (maybe_shared_or_script.ToHandle(&shared_or_script)) {
+      if (shared_or_script->IsSharedFunctionInfo(isolate)) {
+        maybe_result = Handle<SharedFunctionInfo>::cast(shared_or_script);
+      }
+    }
+
     if (!maybe_result.is_null()) {
       compile_timer.set_hit_isolate_cache();
     }

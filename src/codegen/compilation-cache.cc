@@ -110,10 +110,17 @@ namespace {
 // We only re-use a cached function for some script source code if the
 // script originates from the same place. This is to avoid issues
 // when reporting errors, etc.
-bool HasOrigin(Isolate* isolate, Handle<SharedFunctionInfo> function_info,
+bool HasOrigin(Isolate* isolate, Handle<HeapObject> shared_or_script,
                const ScriptDetails& script_details) {
-  Handle<Script> script =
-      Handle<Script>(Script::cast(function_info->script()), isolate);
+  Handle<Script> script;
+  if (shared_or_script->IsSharedFunctionInfo(isolate)) {
+    script = Handle<Script>(
+        Script::cast(
+            Handle<SharedFunctionInfo>::cast(shared_or_script)->script()),
+        isolate);
+  } else {
+    script = Handle<Script>::cast(shared_or_script);
+  }
   // If the script name isn't set, the boilerplate script should have
   // an undefined name to have the same origin.
   Handle<Object> name;
@@ -165,10 +172,10 @@ bool HasOrigin(Isolate* isolate, Handle<SharedFunctionInfo> function_info,
 // be cached in the same script generation. Currently the first use
 // will be cached, but subsequent code from different source / line
 // won't.
-MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
+MaybeHandle<HeapObject> CompilationCacheScript::Lookup(
     Handle<String> source, const ScriptDetails& script_details,
     LanguageMode language_mode) {
-  MaybeHandle<SharedFunctionInfo> result;
+  MaybeHandle<HeapObject> result;
 
   // Probe the script generation tables. Make sure not to leak handles
   // into the caller's handle scope.
@@ -177,14 +184,13 @@ MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
     const int generation = 0;
     DCHECK_EQ(generations(), 1);
     Handle<CompilationCacheTable> table = GetTable(generation);
-    MaybeHandle<SharedFunctionInfo> probe = CompilationCacheTable::LookupScript(
+    MaybeHandle<HeapObject> probe = CompilationCacheTable::LookupScript(
         table, source, language_mode, isolate());
-    Handle<SharedFunctionInfo> function_info;
-    if (probe.ToHandle(&function_info)) {
-      // Break when we've found a suitable shared function info that
-      // matches the origin.
-      if (HasOrigin(isolate(), function_info, script_details)) {
-        result = scope.CloseAndEscape(function_info);
+    Handle<HeapObject> shared_or_script;
+    if (probe.ToHandle(&shared_or_script)) {
+      // Break when we've found a suitable script that matches the origin.
+      if (HasOrigin(isolate(), shared_or_script, script_details)) {
+        result = scope.CloseAndEscape(shared_or_script);
       }
     }
   }
@@ -192,13 +198,19 @@ MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
   // Once outside the manacles of the handle scope, we need to recheck
   // to see if we actually found a cached script. If so, we return a
   // handle created in the caller's handle scope.
-  Handle<SharedFunctionInfo> function_info;
-  if (result.ToHandle(&function_info)) {
+  Handle<HeapObject> shared_or_script;
+  if (result.ToHandle(&shared_or_script)) {
     // Since HasOrigin can allocate, we need to protect the SharedFunctionInfo
-    // with handles during the call.
-    DCHECK(HasOrigin(isolate(), function_info, script_details));
-    isolate()->counters()->compilation_cache_hits()->Increment();
-    LOG(isolate(), CompilationCacheEvent("hit", "script", *function_info));
+    // or Script with handles during the call.
+    DCHECK(HasOrigin(isolate(), shared_or_script, script_details));
+    if (shared_or_script->IsSharedFunctionInfo(isolate())) {
+      isolate()->counters()->compilation_cache_hits()->Increment();
+      LOG(isolate(),
+          CompilationCacheEvent("hit", "script",
+                                SharedFunctionInfo::cast(*shared_or_script)));
+    } else {
+      isolate()->counters()->compilation_cache_partial_hits()->Increment();
+    }
   } else {
     isolate()->counters()->compilation_cache_misses()->Increment();
   }
@@ -293,7 +305,7 @@ void CompilationCache::Remove(Handle<SharedFunctionInfo> function_info) {
   script_.Remove(function_info);
 }
 
-MaybeHandle<SharedFunctionInfo> CompilationCache::LookupScript(
+MaybeHandle<HeapObject> CompilationCache::LookupScript(
     Handle<String> source, const ScriptDetails& script_details,
     LanguageMode language_mode) {
   if (!IsEnabledScriptAndEval()) return MaybeHandle<SharedFunctionInfo>();

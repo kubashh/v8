@@ -86,8 +86,11 @@ class CompilationCacheTable
  public:
   NEVER_READ_ONLY_SPACE
 
-  // The 'script' cache contains SharedFunctionInfos.
-  static MaybeHandle<SharedFunctionInfo> LookupScript(
+  // The 'script' cache contains SharedFunctionInfos. Once a root
+  // SharedFunctionInfo has become old enough that its bytecode is flushed, the
+  // entry is still present and can be used to get the Script. Thus, the return
+  // type here may be either SharedFunctionInfo or Script.
+  static MaybeHandle<HeapObject> LookupScript(
       Handle<CompilationCacheTable> table, Handle<String> src,
       LanguageMode language_mode, Isolate* isolate);
   static Handle<CompilationCacheTable> PutScript(
@@ -130,6 +133,8 @@ class CompilationCacheTable
 
  private:
   void RemoveEntry(int entry_index);
+  static Handle<CompilationCacheTable> EnsureScriptTableCapacity(
+      Isolate* isolate, Handle<CompilationCacheTable> cache);
 
   OBJECT_CONSTRUCTORS(CompilationCacheTable,
                       HashTable<CompilationCacheTable, CompilationCacheShape>);

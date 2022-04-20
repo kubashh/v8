@@ -151,14 +151,6 @@ class StringSharedKey : public HashTableKey {
         language_mode_(language_mode),
         position_(position) {}
 
-  // This tuple unambiguously identifies script compilation.
-  StringSharedKey(Handle<String> source, LanguageMode language_mode)
-      : HashTableKey(
-            CompilationCacheShape::StringSharedHash(*source, language_mode)),
-        source_(source),
-        language_mode_(language_mode),
-        position_(kNoSourcePosition) {}
-
   bool IsMatch(Object other) override {
     DisallowGarbageCollection no_gc;
     if (!other.IsFixedArray()) {
@@ -167,14 +159,8 @@ class StringSharedKey : public HashTableKey {
       return Hash() == other_hash;
     }
     FixedArray other_array = FixedArray::cast(other);
-    DCHECK(other_array.get(0).IsSharedFunctionInfo() ||
-           other_array.get(0) == Smi::zero());
-    Handle<SharedFunctionInfo> shared;
-    if (shared_.ToHandle(&shared)) {
-      if (*shared != other_array.get(0)) return false;
-    } else {
-      if (Smi::zero() != other_array.get(0)) return false;
-    }
+    DCHECK(other_array.get(0).IsSharedFunctionInfo());
+    if (*shared_ != other_array.get(0)) return false;
     int language_unchecked = Smi::ToInt(other_array.get(2));
     DCHECK(is_valid_language_mode(language_unchecked));
     LanguageMode language_mode = static_cast<LanguageMode>(language_unchecked);
@@ -187,12 +173,7 @@ class StringSharedKey : public HashTableKey {
 
   Handle<Object> AsHandle(Isolate* isolate) {
     Handle<FixedArray> array = isolate->factory()->NewFixedArray(4);
-    Handle<SharedFunctionInfo> shared;
-    if (shared_.ToHandle(&shared)) {
-      array->set(0, *shared);
-    } else {
-      array->set(0, Smi::zero());
-    }
+    array->set(0, *shared_);
     array->set(1, *source_);
     array->set(2, Smi::FromEnum(language_mode_));
     array->set(3, Smi::FromInt(position_));
@@ -202,7 +183,7 @@ class StringSharedKey : public HashTableKey {
 
  private:
   Handle<String> source_;
-  MaybeHandle<SharedFunctionInfo> shared_;
+  Handle<SharedFunctionInfo> shared_;
   LanguageMode language_mode_;
   int position_;
 };
@@ -244,22 +225,53 @@ class CodeKey : public HashTableKey {
 
 }  // namespace
 
-MaybeHandle<SharedFunctionInfo> CompilationCacheTable::LookupScript(
+ScriptCacheKey::ScriptCacheKey(Handle<String> source,
+                               LanguageMode language_mode)
+    : HashTableKey(
+          CompilationCacheShape::StringSharedHash(*source, language_mode)),
+      source_(source),
+      language_mode_(language_mode) {}
+
+bool ScriptCacheKey::IsMatch(Object other) {
+  DisallowGarbageCollection no_gc;
+  auto other_data = FromObject(other);
+  return other_data && other_data->second == language_mode_ &&
+         other_data->first.Equals(*source_);
+}
+
+Handle<Object> ScriptCacheKey::AsHandle(Isolate* isolate,
+                                        Handle<SharedFunctionInfo> shared) {
+  Handle<WeakFixedArray> array = isolate->factory()->NewWeakFixedArray(kEnd);
+  // Any SharedFunctionInfo being stored in the script cache should have a
+  // Script.
+  DCHECK(shared->script().IsScript());
+  array->Set(kWeakScript,
+             MaybeObject::MakeWeak(MaybeObject::FromObject(shared->script())));
+  array->Set(kLanguageMode,
+             MaybeObject::FromSmi(Smi::FromEnum(language_mode_)));
+  return array;
+}
+
+MaybeHandle<HeapObject> CompilationCacheTable::LookupScript(
     Handle<CompilationCacheTable> table, Handle<String> src,
     LanguageMode language_mode, Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  StringSharedKey key(src, language_mode);
+  ScriptCacheKey key(src, language_mode);
   InternalIndex entry = table->FindEntry(isolate, &key);
-  if (entry.is_not_found()) return MaybeHandle<SharedFunctionInfo>();
+  if (entry.is_not_found()) return MaybeHandle<HeapObject>();
   int index = EntryToIndex(entry);
-  if (!table->get(index).IsFixedArray()) {
-    return MaybeHandle<SharedFunctionInfo>();
-  }
+  Object key_in_table = table->get(index);
+  DCHECK(key_in_table.IsWeakFixedArray());
   Object obj = table->get(index + 1);
   if (obj.IsSharedFunctionInfo()) {
     return handle(SharedFunctionInfo::cast(obj), isolate);
   }
-  return MaybeHandle<SharedFunctionInfo>();
+  DCHECK(obj.IsUndefined());
+  HeapObject script = WeakFixedArray::cast(key_in_table)
+                          .Get(ScriptCacheKey::kWeakScript)
+                          .GetHeapObjectAssumeWeak();
+  DCHECK(script.IsScript());
+  return handle(script, isolate);
 }
 
 InfoCellPair CompilationCacheTable::LookupEval(
@@ -295,18 +307,55 @@ Handle<Object> CompilationCacheTable::LookupRegExp(Handle<String> src,
   return Handle<Object>(get(EntryToIndex(entry) + 1), isolate);
 }
 
+Handle<CompilationCacheTable> CompilationCacheTable::EnsureScriptTableCapacity(
+    Isolate* isolate, Handle<CompilationCacheTable> cache) {
+  if (cache->HasSufficientCapacityToAdd(1)) return cache;
+
+  // Before resizing, delete are any entries whose keys contain cleared weak
+  // pointers.
+  {
+    DisallowGarbageCollection no_gc;
+    for (InternalIndex entry : cache->IterateEntries()) {
+      const int entry_index = EntryToIndex(entry);
+      Object key = cache->get(entry_index);
+      DCHECK(key.IsWeakFixedArray());
+      if (WeakFixedArray::cast(key)
+              .Get(ScriptCacheKey::kWeakScript)
+              .IsCleared()) {
+        DCHECK(cache->get(entry_index + 1).IsUndefined());
+        cache->RemoveEntry(entry_index);
+      }
+    }
+  }
+
+  return EnsureCapacity(isolate, cache);
+}
+
 Handle<CompilationCacheTable> CompilationCacheTable::PutScript(
     Handle<CompilationCacheTable> cache, Handle<String> src,
     LanguageMode language_mode, Handle<SharedFunctionInfo> value,
     Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  StringSharedKey key(src, language_mode);
-  Handle<Object> k = key.AsHandle(isolate);
-  cache = EnsureCapacity(isolate, cache);
-  InternalIndex entry = cache->FindInsertionEntry(isolate, key.Hash());
+  ScriptCacheKey key(src, language_mode);
+  Handle<Object> k = key.AsHandle(isolate, value);
+
+  // Check whether there is already a matching entry. If so, we must overwrite
+  // it. This allows an entry whose value is undefined to upgrade to contain a
+  // SharedFunctionInfo.
+  InternalIndex entry = cache->FindEntry(isolate, &key);
+  bool found_existing = entry.is_found();
+  if (!found_existing) {
+    cache = EnsureScriptTableCapacity(isolate, cache);
+    entry = cache->FindInsertionEntry(isolate, key.Hash());
+  }
+  // TODO(v8:12808): Once all code paths are updated to reuse a Script if
+  // available, we could DCHECK here that the Script in the existing entry
+  // matches the Script in the new key. For now, there is no such guarantee.
   cache->set(EntryToIndex(entry), *k);
   cache->set(EntryToIndex(entry) + 1, *value);
-  cache->ElementAdded();
+  if (!found_existing) {
+    cache->ElementAdded();
+  }
   return cache;
 }
 
@@ -386,8 +435,19 @@ void CompilationCacheTable::Age(Isolate* isolate) {
         DCHECK_GT(new_count, 0);
         NoWriteBarrierSet(*this, value_index, Smi::FromInt(new_count));
       }
+    } else if (key.IsWeakFixedArray()) {
+      // The ageing mechanism for script caches.
+      Object value = get(value_index);
+      if (value.IsSharedFunctionInfo(isolate)) {
+        SharedFunctionInfo info = SharedFunctionInfo::cast(get(value_index));
+        if (info.HasBytecodeArray() && info.GetBytecodeArray(isolate).IsOld()) {
+          set(value_index, ReadOnlyRoots(isolate).undefined_value());
+        }
+      } else {
+        DCHECK(value.IsUndefined());
+      }
     } else if (key.IsFixedArray()) {
-      // The ageing mechanism for script and eval caches.
+      // The ageing mechanism for eval caches.
       SharedFunctionInfo info = SharedFunctionInfo::cast(get(value_index));
       if (info.HasBytecodeArray() && info.GetBytecodeArray(isolate).IsOld()) {
         RemoveEntry(entry_index);
@@ -413,6 +473,14 @@ void CompilationCacheTable::RemoveEntry(int entry_index) {
     NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
   }
   ElementRemoved();
+
+  // This table does not shrink upon deletion. The script cache depends on that
+  // fact, in two ways:
+  // 1. EnsureScriptTableCapacity calls RemoveEntry, at a time when shrinking
+  //    the table would be counterproductive, and
+  // 2. CompilationCacheShape::HashForObject cannot produce a hash for keys that
+  //    contain cleared weak pointers, so rehashing must only occur right after
+  //    all such keys have been cleared.
 }
 
 }  // namespace internal
