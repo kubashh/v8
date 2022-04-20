@@ -103,6 +103,24 @@
       "parentUuid": "5a1fadd4_e01f7775",
       "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45ad23e6_f1d84cd2",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-20T13:12:16Z",
+      "side": 1,
+      "message": "Ah, I see. Then do whatever is easiest for you.",
+      "parentUuid": "a552636c_e35701fc",
+      "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
