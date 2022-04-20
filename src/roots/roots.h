@@ -292,7 +292,11 @@ class Symbol;
     PromiseThrowerFinallySharedFun)                                            \
   V(SharedFunctionInfo, promise_value_thunk_finally_shared_fun,                \
     PromiseValueThunkFinallySharedFun)                                         \
-  V(SharedFunctionInfo, proxy_revoke_shared_fun, ProxyRevokeSharedFun)
+  V(SharedFunctionInfo, proxy_revoke_shared_fun, ProxyRevokeSharedFun)         \
+  V(SharedFunctionInfo, source_text_module_execute_async_module_fulfilled_sfi, \
+    SourceTextModuleExecuteAsyncModuleFulfilledSFI)                            \
+  V(SharedFunctionInfo, source_text_module_execute_async_module_rejected_sfi,  \
+    SourceTextModuleExecuteAsyncModuleRejectedSFI)
 
 // These root references can be updated by the mutator.
 #define STRONG_MUTABLE_MOVABLE_ROOT_LIST(V)                                 \

@@ -559,6 +559,8 @@ KNOWN_OBJECTS = {
   ("old_space", 0x059fd): "PromiseThrowerFinallySharedFun",
   ("old_space", 0x05a21): "PromiseValueThunkFinallySharedFun",
   ("old_space", 0x05a45): "ProxyRevokeSharedFun",
+  ("old_space", 0x05a69): "SourceTextModuleExecuteAsyncModuleFulfilledSFI",
+  ("old_space", 0x05a8d): "SourceTextModuleExecuteAsyncModuleRejectedSFI",
 }
 
 # Lower 32 bits of first page addresses for various heap spaces.
