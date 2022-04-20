@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc7de46_de3e5564",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-04-20T08:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ace96f1c_34398db9",
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08d3ba3a_096a2499",
@@ -98,6 +116,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9a65639_7b30d838",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-04-20T08:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173e1dbd_5223aa3b",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 29
+      },
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34f90078_c14c53f1",
+        "filename": "src/base/threaded-list.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-04-20T08:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08d3ba3a_096a2499",
+      "range": {
+        "startLine": 286,
+        "startChar": 49,
+        "endLine": 286,
+        "endChar": 53
+      },
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb09c15b_e996f5bb",
@@ -111,6 +177,24 @@
       "writtenOn": "2022-04-19T14:27:24Z",
       "side": 1,
       "message": "How about adding a static method to the ThreadedList:\n  // This might break ThreadedList invariants...\n  static void AddAfter(T* v) {\n    CHECK(kSupportsUnsafeInsertion);\n    ...\n  }\nand calling it from here?",
+      "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "873cf1c2_b6c26628",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-04-20T08:56:15Z",
+      "side": 1,
+      "message": "Good idea, but I think a DCHECK is enough.",
+      "parentUuid": "eb09c15b_e996f5bb",
       "revId": "0c9bcf7272aa7db6b827345869c734790aeef3dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
