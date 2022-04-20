@@ -1519,6 +1519,13 @@ CompilationExecutionResult ExecuteCompilationUnits(
   CompilationUnitQueues::Queue* queue;
   base::Optional<WasmCompilationUnit> unit;
 
+  // If we use PKU to protect assembler buffers, open a CodeSpaceWriteScope now
+  // to have (thread-local) write access to the assembler buffers.
+  base::Optional<CodeSpaceWriteScope> write_scope_for_assembler_buffers;
+  if (GetWasmCodeManager()->MemoryProtectionKeysEnabled()) {
+    write_scope_for_assembler_buffers.emplace(nullptr);
+  }
+
   WasmFeatures detected_features = WasmFeatures::None();
 
   base::ThreadTicks thread_ticks = base::ThreadTicks::IsSupported()
