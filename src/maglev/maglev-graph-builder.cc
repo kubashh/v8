@@ -184,10 +184,10 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
       if (hint == BinaryOperationHint::kSignedSmall) {
         ValueNode *left, *right;
         if (IsRegisterEqualToAccumulator(0)) {
-          left = right = LoadRegisterSmiUntaggedValue(0);
+          left = right = LoadRegisterInt32(0);
         } else {
-          left = LoadRegisterSmiUntaggedValue(0);
-          right = GetAccumulatorSmiUntaggedValue();
+          left = LoadRegisterInt32(0);
+          right = GetAccumulatorInt32();
         }
 
         if (kOperation == Operation::kAdd) {
@@ -211,7 +211,7 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
       BinaryOperationHint hint = nexus.GetBinaryOperationFeedback();
 
       if (hint == BinaryOperationHint::kSignedSmall) {
-        ValueNode* left = GetAccumulatorSmiUntaggedValue();
+        ValueNode* left = GetAccumulatorInt32();
         int32_t constant = iterator_.GetImmediateOperand(0);
 
         if (kOperation == Operation::kAdd) {
