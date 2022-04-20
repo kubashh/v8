@@ -220,21 +220,21 @@ void TrySetOsrUrgency(Isolate* isolate, JSFunction function, int osr_urgency) {
 
   // We've passed all checks - bump the OSR urgency.
 
-  BytecodeArray bytecode = shared.GetBytecodeArray(isolate);
+  FeedbackVector fv = function.feedback_vector();
   if (V8_UNLIKELY(FLAG_trace_osr)) {
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintF(scope.file(),
            "[OSR - setting osr urgency. function: %s, old urgency: %d, new "
            "urgency: %d]\n",
-           function.DebugNameCStr().get(), bytecode.osr_urgency(), osr_urgency);
+           function.DebugNameCStr().get(), fv.osr_urgency(), osr_urgency);
   }
 
-  DCHECK_GE(osr_urgency, bytecode.osr_urgency());  // Never lower urgency here.
-  bytecode.set_osr_urgency(osr_urgency);
+  DCHECK_GE(osr_urgency, fv.osr_urgency());  // Never lower urgency here.
+  fv.set_osr_urgency(osr_urgency);
 }
 
 void TryIncrementOsrUrgency(Isolate* isolate, JSFunction function) {
-  int old_urgency = function.shared().GetBytecodeArray(isolate).osr_urgency();
+  int old_urgency = function.feedback_vector().osr_urgency();
   int new_urgency = std::min(old_urgency + 1, BytecodeArray::kMaxOsrUrgency);
   TrySetOsrUrgency(isolate, function, new_urgency);
 }
