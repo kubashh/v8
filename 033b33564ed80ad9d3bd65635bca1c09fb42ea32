@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a328b3_b4f173c9",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2913,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-20T13:09:31Z",
+      "side": 1,
+      "message": "We can indeed! Will do after the other comment is resolved.",
+      "parentUuid": "2af0389c_12a5e36d",
+      "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a1fadd4_e01f7775",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-04-20T12:49:07Z",
       "side": 1,
       "message": "Would it make sense to use wildcards here instead of having a huge list in the end?",
+      "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a552636c_e35701fc",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-20T13:09:31Z",
+      "side": 1,
+      "message": "No objection to something like \".../RunWasm_*Qfma_liftoff\" if that\u0027s what you mean. But I wouldn\u0027t factorizing the whole test name, because soon we will want to explicitly exclude the ones that are implemented on arm.",
+      "parentUuid": "5a1fadd4_e01f7775",
       "revId": "033b33564ed80ad9d3bd65635bca1c09fb42ea32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
