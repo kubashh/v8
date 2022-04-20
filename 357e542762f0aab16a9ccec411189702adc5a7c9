@@ -16,6 +16,75 @@
       "message": "PTAL! This is prelude for the register allocator changes.",
       "revId": "357e542762f0aab16a9ccec411189702adc5a7c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b92b57b_91078e76",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:25:56Z",
+      "side": 1,
+      "message": "nit: `else { registers_with_result_ \u003d kEmptyRegList; }`?",
+      "range": {
+        "startLine": 815,
+        "startChar": 4,
+        "endLine": 815,
+        "endChar": 5
+      },
+      "revId": "357e542762f0aab16a9ccec411189702adc5a7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2faf59f_d4696c8c",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:25:56Z",
+      "side": 1,
+      "message": "nit: maybe cleaner to just have ClearDoubleRegisters?",
+      "range": {
+        "startLine": 848,
+        "startChar": 32,
+        "endLine": 848,
+        "endChar": 46
+      },
+      "revId": "357e542762f0aab16a9ccec411189702adc5a7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d29388a7_ddca86a7",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-20T12:25:56Z",
+      "side": 1,
+      "message": "might need to add another class of \"double\" slots once we port to 32-bit...",
+      "range": {
+        "startLine": 673,
+        "startChar": 44,
+        "endLine": 673,
+        "endChar": 53
+      },
+      "revId": "357e542762f0aab16a9ccec411189702adc5a7c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
