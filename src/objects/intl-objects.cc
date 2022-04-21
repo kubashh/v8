@@ -31,6 +31,7 @@
 #include "src/objects/property-descriptor.h"
 #include "src/objects/smi.h"
 #include "src/objects/string.h"
+#include "src/strings/char-predicates-inl.h"
 #include "src/strings/string-case.h"
 #include "unicode/basictz.h"
 #include "unicode/brkiter.h"
@@ -2894,26 +2895,115 @@ Maybe<bool> Intl::GetTimeZoneIndex(Isolate* isolate, Handle<String> identifier,
   UNREACHABLE();
 }
 
+namespace {
+
+MaybeHandle<Object> HandleNonDecimalIntegerLiteral(
+    Isolate* isolate, Handle<String> str, int32_t* prefix_white_space_length) {
+  int32_t i = 0;
+  // Skip over StrWhiteSpaceChar
+  while (i < str->length()) {
+    if (!IsWhiteSpaceOrLineTerminator(str->Get(i))) {
+      break;
+    }
+    i++;
+  }
+  // Output the length of the StrWhiteSpaceChar_opt before StrNumericLiteral
+  *prefix_white_space_length = i;
+  // If there is only StrWhiteSpaceChar, return 0.
+  if (i == str->length()) {
+    return handle(Smi::zero(), isolate);
+  }
+  // return true if next is 0[bBoOxX]
+  if (i + 2 < str->length() && str->Get(i) == '0') {
+    base::uc16 ch = str->Get(i + 1);
+    if (ch == 'b' || ch == 'B' || ch == 'o' || ch == 'O' || ch == 'x' ||
+        ch == 'X') {
+      double approx = StringToDouble(isolate, str,
+                                     ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY, 0);
+      // if approx is within the precision, just return as Number.
+      if (approx < kMaxSafeInteger) {
+        return isolate->factory()->NewNumber(approx);
+      }
+      // Otherwise return the BigInt
+      return StringToBigInt(isolate, str);
+    }
+  }
+  return MaybeHandle<Object>();
+}
+
+}  // namespace
 // #sec-tointlmathematicalvalue
 MaybeHandle<Object> Intl::ToIntlMathematicalValueAsNumberBigIntOrString(
     Isolate* isolate, Handle<Object> input) {
-  if (input->IsNumber() || input->IsBigInt()) return input;  // Shortcut.
-  // TODO(ftang) revisit the following after the resolution of
-  // https://github.com/tc39/proposal-intl-numberformat-v3/pull/82
-  if (input->IsOddball()) {
-    return Oddball::ToNumber(isolate, Handle<Oddball>::cast(input));
+  Factory* factory = isolate->factory();
+  // 1. Let primValue be ? ToPrimitive(value, number).
+  Handle<Object> prim_value;
+  if (input->IsJSReceiver()) {
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, prim_value,
+        JSReceiver::ToPrimitive(isolate, Handle<JSReceiver>::cast(input),
+                                ToPrimitiveHint::kNumber),
+        Object);
+  } else {
+    prim_value = input;
   }
-  if (input->IsSymbol()) {
-    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kSymbolToNumber),
-                    Object);
+  // 2. If Type(primValue) is BigInt, return the mathematical value of
+  // primValue.
+  if (prim_value->IsBigInt()) return prim_value;  // Shortcut.
+  if (prim_value->IsNumber()) return prim_value;  // Shortcut.
+  if (prim_value->IsOddball()) {
+    return Oddball::ToNumber(isolate, Handle<Oddball>::cast(prim_value));
   }
-  ASSIGN_RETURN_ON_EXCEPTION(
-      isolate, input,
-      JSReceiver::ToPrimitive(isolate, Handle<JSReceiver>::cast(input),
-                              ToPrimitiveHint::kNumber),
-      Object);
-  if (input->IsString()) UNIMPLEMENTED();
-  return input;
+
+  if (!prim_value->IsString()) {
+    // No need to convert from Number to String, just return the result of
+    // ToNumber.
+    return Object::ToNumber(isolate, prim_value);
+  }
+  Handle<String> str = Handle<String>::cast(prim_value);
+  // ICU cannot handle NonDecimalIntegerLiteral. So if we have
+  // NonDecimalIntegerLiteral, we return as BigInt or Number.
+  int32_t prefix_white_space_length = 0;
+  MaybeHandle<Object> maybe_non_decimal =
+      HandleNonDecimalIntegerLiteral(isolate, str, &prefix_white_space_length);
+  Handle<Object> non_decimal;
+  if (maybe_non_decimal.ToHandle(&non_decimal)) {
+    return non_decimal;
+  }
+
+  if (prefix_white_space_length != 0) {
+    // Skip the StrWhiteSpace_opt before StrNumericLiteral since we alreay scan.
+    str = factory->NewSubString(str, prefix_white_space_length, str->length());
+  }
+  // IF it does not fit StrDecimalLiteral StrWhiteSpace_opt, StringToDouble will
+  // parse it as NaN, in that case, return NaN.
+  double approx = StringToDouble(isolate, str, NO_CONVERSION_FLAGS, 0);
+  if (std::isnan(approx)) {
+    return factory->nan_value();
+  }
+  // Handle Infinity / +Infinity / -Infinity
+  if (!std::isfinite(approx)) {
+    if (approx < 0) {
+      return factory->minus_infinity_value();
+    } else {
+      return factory->infinity_value();
+    }
+  }
+  // At this point, str is for sure fit
+  // "StrNumericLiteral StrWhiteSpace_opt" excluding "(+|-)?Infinity"
+  int32_t start_of_white_space = str->length();
+  // Trim StrWhiteSpaceChar from the back
+  while (start_of_white_space > 0) {
+    if (!IsWhiteSpaceOrLineTerminator(str->Get(start_of_white_space - 1))) {
+      break;
+    }
+    start_of_white_space--;
+  }
+  if (start_of_white_space == str->length()) {
+    return str;
+  }
+  // Trim the StrWhiteSpace_opt after StrNumericLiteral.
+  return factory->NewSubString(str, 0, start_of_white_space);
 }
 
 Intl::FormatRangeSourceTracker::FormatRangeSourceTracker() {
