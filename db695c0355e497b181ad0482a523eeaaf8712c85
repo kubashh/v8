@@ -482,6 +482,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5fc4e4f7_9141d80a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-04-21T22:07:50Z",
+      "side": 1,
+      "message": "I finally got good enough data for this. There is a lot of variability in measurement.  But my conclusion is that for both the validation and compilation, the typical percent difference is ~1%. \n\nWhat I have 2 test harnesses:\nfor validate\n    start \u003d performance.now();\n    valid \u003d WebAssembly.validate(b);\n    stop \u003d performance.now();\n    t_ms \u003d stop - start;\n    \nfor compile: run with liftoff\n    start \u003d performance.now();\n    m \u003d new WebAssembly.Module(b);\n    stop \u003d performance.now();\n    t_ms \u003d stop - start;\n    \n    \nWhat I call Original is my changes with code in function-body-decoder-impl.h and module-decoder.cc commented out\nWhat I call Trace is the full working change\n\nHere are the percent differences in time\n\n    For Validation N\u003d300\n    Run  1:  5.535 \n    Run  2:  2.399\n    Run  3: 15.663\n    Run  4:  3.628\n    Run  5:  2.062\n    Run  6:  0.876\n    Run  7:  3.322\n    Run  8:  6.917\n    Run  9:  6.802\n    Run 10: 11.382\n\n    For Compile N\u003d300\n    Run  1:  3.035\n    Run  2:  0.119\n    Run  3:  1.596\n    Run  4:  1.071\n    Run  5:  1.761\n    Run  6:  1.321\n    Run  7: 10.622\n    Run  8:  0.289\n    Run  9:  7.351\n    Run 10:  6.614\n    \n    For Validation N\u003d500\n    Run  1:  9.920\n    Run  2:  7.517\n    Run  3: 12.761\n    Run  4:  1.941\n    Run  5:  0.904\n    Run  6:  1.946\n    Run  7:  1.584\n    Run  8:  4.236\n    Run  9: 34.292\n    Run 10: 39.956\n    \n    For Compile N\u003d500\n    Run  1:  1.252\n    Run  2:  1.229\n    Run  3:  7.079\n    Run  4:  3.180\n    Run  5:  1.100\n    Run  6:  1.843\n    Run  7:  0.863\n    Run  8:  2.691\n    Run  9: 24.652\n    Run 10:  1.908",
+      "parentUuid": "6dd40aa9_0ac095b3",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad955810_5762b57c",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 5
