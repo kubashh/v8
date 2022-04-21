@@ -1461,7 +1461,7 @@ TEST(TestUseOfIncrementalBarrierOnCompileLazy) {
   CHECK(g_function->is_compiled());
 }
 
-TEST(CompilationCacheCachingBehavior) {
+void CompilationCacheCachingBehavior(bool retain_script) {
   // If we do not have the compilation cache turned off, this test is invalid.
   if (!FLAG_compilation_cache) {
     return;
@@ -1473,13 +1473,17 @@ TEST(CompilationCacheCachingBehavior) {
   LanguageMode language_mode = construct_language_mode(FLAG_use_strict);
 
   v8::HandleScope outer_scope(CcTest::isolate());
-  const char* raw_source =
-      "function foo() {"
-      "  var x = 42;"
-      "  var y = 42;"
-      "  var z = x + y;"
-      "};"
-      "foo();";
+  const char* raw_source = retain_script ? "function foo() {"
+                                           "  var x = 42;"
+                                           "  var y = 42;"
+                                           "  var z = x + y;"
+                                           "};"
+                                           "foo();"
+                                         : "(function foo() {"
+                                           "  var x = 42;"
+                                           "  var y = 42;"
+                                           "  var z = x + y;"
+                                           "})();";
   Handle<String> source = factory->InternalizeUtf8String(raw_source);
 
   {
@@ -1492,9 +1496,11 @@ TEST(CompilationCacheCachingBehavior) {
     v8::HandleScope scope(CcTest::isolate());
     ScriptDetails script_details(Handle<Object>(),
                                  v8::ScriptOriginOptions(true, false));
-    MaybeHandle<SharedFunctionInfo> cached_script =
+    MaybeHandle<Script> cached_script =
         compilation_cache->LookupScript(source, script_details, language_mode);
-    CHECK(!cached_script.is_null());
+    CHECK(cached_script.ToHandleChecked()
+              ->GetRootSharedFunctionInfo(isolate)
+              .IsSharedFunctionInfo());
   }
 
   // Check that the code cache entry survives at least one GC.
@@ -1503,12 +1509,15 @@ TEST(CompilationCacheCachingBehavior) {
     v8::HandleScope scope(CcTest::isolate());
     ScriptDetails script_details(Handle<Object>(),
                                  v8::ScriptOriginOptions(true, false));
-    MaybeHandle<SharedFunctionInfo> cached_script =
+    MaybeHandle<Script> cached_script =
         compilation_cache->LookupScript(source, script_details, language_mode);
     CHECK(!cached_script.is_null());
 
     // Progress code age until it's old and ready for GC.
-    Handle<SharedFunctionInfo> shared = cached_script.ToHandleChecked();
+    Handle<Script> script = cached_script.ToHandleChecked();
+    Handle<SharedFunctionInfo> shared(
+        SharedFunctionInfo::cast(script->GetRootSharedFunctionInfo(isolate)),
+        isolate);
     CHECK(shared->HasBytecodeArray());
     const int kAgingThreshold = 6;
     for (int i = 0; i < kAgingThreshold; i++) {
@@ -1523,12 +1532,25 @@ TEST(CompilationCacheCachingBehavior) {
     // Ensure code aging cleared the entry from the cache.
     ScriptDetails script_details(Handle<Object>(),
                                  v8::ScriptOriginOptions(true, false));
-    MaybeHandle<SharedFunctionInfo> cached_script =
+    MaybeHandle<Script> cached_script =
         compilation_cache->LookupScript(source, script_details, language_mode);
-    CHECK(cached_script.is_null());
+    if (retain_script) {
+      CHECK(cached_script.ToHandleChecked()
+                ->GetRootSharedFunctionInfo(isolate)
+                .IsSmi());
+    } else {
+      CHECK(cached_script.is_null());
+    }
   }
 }
 
+TEST(CompilationCacheCachingBehaviorDiscardScript) {
+  CompilationCacheCachingBehavior(false);
+}
+
+TEST(CompilationCacheCachingBehaviorRetainScript) {
+  CompilationCacheCachingBehavior(true);
+}
 
 static void OptimizeEmptyFunction(const char* name) {
   HandleScope scope(CcTest::i_isolate());
