@@ -84,6 +84,7 @@ LocalHeap::~LocalHeap() {
     FreeLinearAllocationArea();
 
     if (!is_main_thread()) {
+      CodePageHeaderModificationScope rwx_write_scope;
       marking_barrier_->Publish();
       WriteBarrier::ClearForThread(marking_barrier_.get());
     }

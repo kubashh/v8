@@ -420,6 +420,21 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
     request_size -= suffix_size;
   }
 
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+  if (access == OS::MemoryPermission::kNoAccessWillJitLater) {
+    // RWX page permissions are set on allocation and never changed.
+    int ret = mprotect(aligned_base, size, PROT_READ | PROT_WRITE | PROT_EXEC);
+    if (ret != 0) {
+      munmap(result, size);
+      return nullptr;
+    }
+    // Decommit the whole region.
+    do {
+      ret = madvise(result, size, MADV_FREE_REUSABLE);
+    } while (ret != 0 && errno == EAGAIN);
+  }
+#endif  // V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+
   DCHECK_EQ(size, request_size);
   return static_cast<void*>(aligned_base);
 }
@@ -469,6 +484,14 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
 
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+  if (access == MemoryPermission::kReadWriteExecute) {
+    while (madvise(address, size, MADV_FREE_REUSE) == -1 && errno == EAGAIN) {
+    }
+    return true;
+  }
+#endif  // V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+
   int prot = GetProtectionFromMemoryPermission(access);
   int ret = mprotect(address, size, prot);
 
@@ -510,7 +533,10 @@ bool OS::DiscardSystemPages(void* address, size_t size) {
   // On OSX, MADV_FREE_REUSABLE has comparable behavior to MADV_FREE, but also
   // marks the pages with the reusable bit, which allows both Activity Monitor
   // and memory-infra to correctly track the pages.
-  int ret = madvise(address, size, MADV_FREE_REUSABLE);
+  int ret;
+  do {
+    ret = madvise(address, size, MADV_FREE_REUSABLE);
+  } while (ret != 0 && errno == EAGAIN);
   if (ret) {
     // MADV_FREE_REUSABLE sometimes fails, so fall back to MADV_DONTNEED.
     ret = madvise(address, size, MADV_DONTNEED);
