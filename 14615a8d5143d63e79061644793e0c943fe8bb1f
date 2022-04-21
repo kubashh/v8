@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bf3f29e_9775d637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-21T05:05:58Z",
+      "side": 1,
+      "message": "Hard to be sure without an example, but all the new accessors in this CL aren\u0027t actually called. The only thing that changed is the size of FeedbackVectorFlags.",
+      "parentUuid": "428c77cb_a7a8ff54",
+      "revId": "14615a8d5143d63e79061644793e0c943fe8bb1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5e7aead_153c2eac",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-04-21T03:37:35Z",
       "side": 1,
       "message": "Hi, should we load Flags by load_halfword instead of load_word like here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/mips64/builtins-mips64.cc;l\u003d1020",
+      "range": {
+        "startLine": 7,
+        "startChar": 44,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "14615a8d5143d63e79061644793e0c943fe8bb1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13aa8e4b_ceea82f7",
+        "filename": "src/objects/feedback-vector.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-21T05:05:58Z",
+      "side": 1,
+      "message": "Yes the size is now 16 bits (I had to reduce it to get space for OsrState without changing object size).",
+      "parentUuid": "c5e7aead_153c2eac",
       "range": {
         "startLine": 7,
         "startChar": 44,
