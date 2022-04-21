@@ -16,6 +16,29 @@
       "message": "Hello, this cl seems to be causing failures on Big endian platform (ok on LE). Could you give me some tips on what could go wrong with? Thanks.",
       "revId": "14615a8d5143d63e79061644793e0c943fe8bb1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e7aead_153c2eac",
+        "filename": "src/objects/feedback-vector.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-04-21T03:37:35Z",
+      "side": 1,
+      "message": "Hi, should we load Flags by load_halfword instead of load_word like here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/mips64/builtins-mips64.cc;l\u003d1020",
+      "range": {
+        "startLine": 7,
+        "startChar": 44,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "14615a8d5143d63e79061644793e0c943fe8bb1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
