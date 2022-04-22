@@ -26,6 +26,61 @@ CompilationCacheTable::CompilationCacheTable(Address ptr)
 NEVER_READ_ONLY_SPACE_IMPL(CompilationCacheTable)
 CAST_ACCESSOR(CompilationCacheTable)
 
+// The key in a script cache is a weak pointer to the Script and the language
+// mode. The corresponding value can be either the root SharedFunctionInfo or
+// undefined. The purpose of storing the root SharedFunctionInfo as the value is
+// to keep it alive, not to save a lookup on the Script. A newly added entry
+// always contains the root SharedFunctionInfo. After the root
+// SharedFunctionInfo has aged sufficiently, it is replaced with undefined. In
+// this way, all strong references to large objects are dropped, but there is
+// still a way to get the Script if it happens to still be alive.
+class ScriptCacheKey : public HashTableKey {
+ public:
+  enum Index {
+    kWeakScript,
+    kLanguageMode,
+    kEnd,
+  };
+
+  ScriptCacheKey(Handle<String> source, LanguageMode language_mode);
+
+  bool IsMatch(Object other) override;
+
+  Handle<Object> AsHandle(Isolate* isolate, Handle<SharedFunctionInfo> shared);
+
+  static base::Optional<std::pair<String, LanguageMode>> FromObject(
+      Object obj) {
+    DisallowGarbageCollection no_gc;
+    DCHECK(obj.IsWeakFixedArray());
+    WeakFixedArray array = WeakFixedArray::cast(obj);
+    DCHECK_EQ(array.length(), kEnd);
+
+    MaybeObject maybe_script = array.Get(kWeakScript);
+    HeapObject script;
+    String source;
+    if (maybe_script.GetHeapObjectIfWeak(&script)) {
+      PrimitiveHeapObject source_or_undefined = Script::cast(script).source();
+      // Scripts stored in the script cache should always have a source string.
+      source = String::cast(source_or_undefined);
+    } else {
+      DCHECK(maybe_script.IsCleared());
+      return {};
+    }
+
+    MaybeObject maybe_language_unchecked = array.Get(kLanguageMode);
+    DCHECK(maybe_language_unchecked.IsSmi());
+    int language_unchecked = Smi::ToInt(maybe_language_unchecked.ToSmi());
+    DCHECK(is_valid_language_mode(language_unchecked));
+    LanguageMode language_mode = static_cast<LanguageMode>(language_unchecked);
+
+    return {{source, language_mode}};
+  }
+
+ private:
+  Handle<String> source_;
+  LanguageMode language_mode_;
+};
+
 uint32_t CompilationCacheShape::RegExpHash(String string, Smi flags) {
   return string.EnsureHash() + flags.value();
 }
@@ -68,7 +123,16 @@ uint32_t CompilationCacheShape::HashForObject(ReadOnlyRoots roots,
     return SharedFunctionInfo::cast(object).Hash();
   }
 
-  // Script: See StringSharedKey::ToHandle for the encoding.
+  // Script.
+  if (object.IsWeakFixedArray()) {
+    auto script_key = ScriptCacheKey::FromObject(object);
+    // Rehashing should only happen after we've removed all of the keys
+    // containing cleared weak refs.
+    DCHECK(script_key);
+    return StringSharedHash(script_key->first, script_key->second);
+  }
+
+  // Eval: See StringSharedKey::ToHandle for the encoding.
   FixedArray val = FixedArray::cast(object);
   if (val.map() == roots.fixed_cow_array_map()) {
     DCHECK_EQ(4, val.length());
@@ -77,14 +141,10 @@ uint32_t CompilationCacheShape::HashForObject(ReadOnlyRoots roots,
     DCHECK(is_valid_language_mode(language_unchecked));
     LanguageMode language_mode = static_cast<LanguageMode>(language_unchecked);
     int position = Smi::ToInt(val.get(3));
-    Object shared_or_smi = val.get(0);
-    if (shared_or_smi.IsSmi()) {
-      DCHECK_EQ(position, kNoSourcePosition);
-      return StringSharedHash(source, language_mode);
-    } else {
-      return StringSharedHash(source, SharedFunctionInfo::cast(shared_or_smi),
-                              language_mode, position);
-    }
+    Object shared = val.get(0);
+    DCHECK(shared.IsSharedFunctionInfo());
+    return StringSharedHash(source, SharedFunctionInfo::cast(shared),
+                            language_mode, position);
   }
 
   // RegExp: The key field (and the value field) contains the
