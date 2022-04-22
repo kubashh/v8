@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3a7bbf9_47be24c9",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T15:21:05Z",
+      "side": 1,
+      "message": "The better concurrent marking was working (and did have enough time), the less likely it is that we find anything useful.\n\nOn my tries with a custom Chrome build it mostly hit once per atomic pause but not more. Even when we notified the markers, the main thread was most of the time fast enough.",
+      "parentUuid": "0ddf1de0_7cb82c38",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 50
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebe732c4_12f4b74f",
@@ -102,6 +126,30 @@
       "writtenOn": "2022-04-22T14:26:06Z",
       "side": 1,
       "message": "Are we assuming the current priority is `kBestEffort`?\nIf that\u0027s the case then this assumption doesn\u0027t hold. We initialize tasks to `kUserVisible` and increase to `kUserBlocking` in `ConcurrentMarkerBase::IncreaseMarkingPriorityIfNeeded` if not enough progress has been made.\n\nIf this branch was meant as a fast bailout in case there is nothing to update, I think we need to keep track of the current priority and compare against that.",
+      "range": {
+        "startLine": 243,
+        "startChar": 20,
+        "endLine": 243,
+        "endChar": 52
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1707c56f_245c0b8a",
+        "filename": "src/heap/cppgc/concurrent-marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T15:21:05Z",
+      "side": 1,
+      "message": "\u003e If this branch was meant as a fast bailout in case there is nothing to update, I think we need to keep track of the current priority and compare against that.\n\nI wanted a bailout but didn\u0027t really consider the default value. I think it\u0027s okay to just override no matter what.",
+      "parentUuid": "ebe732c4_12f4b74f",
       "range": {
         "startLine": 243,
         "startChar": 20,
