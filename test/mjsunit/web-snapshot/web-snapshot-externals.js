@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --experimental-web-snapshots --allow-natives-syntax
+// Flags: --experimental-d8-web-snapshot-api --allow-natives-syntax
+
+
 
 const external_1 = {external: 1};
 const external_2 = {external: 2};
@@ -14,8 +16,8 @@ const object = {
 };
 
 (function testNoExternals() {
-  const snapshot = WebSnapshot.serialize(object);
-  const deserialized = WebSnapshot.deserialize(snapshot);
+  const snapshot = %WebSnapshotSerialize(object);
+  const deserialized = %WebSnapshotDeserialize(snapshot);
   %HeapObjectVerify(deserialized);
   assertEquals(deserialized, object);
   assertEquals(deserialized.b, external_1);
@@ -26,9 +28,9 @@ const object = {
 
 (function testOneExternals() {
   const externals = [ external_1];
-  const snapshot = WebSnapshot.serialize(object, externals);
+  const snapshot = %WebSnapshotSerialize(object, externals);
   const replaced_externals = [{replacement:1}]
-  const deserialized = WebSnapshot.deserialize(snapshot, replaced_externals);
+  const deserialized = %WebSnapshotDeserialize(snapshot, replaced_externals);
   %HeapObjectVerify(deserialized);
   assertEquals(deserialized.a, object.a);
   assertSame(deserialized.b, replaced_externals[0]);
@@ -41,9 +43,9 @@ const object = {
 
 (function testTwoExternals() {
   const externals = [external_1, external_2];
-  const snapshot = WebSnapshot.serialize(object, externals);
+  const snapshot = %WebSnapshotSerialize(object, externals);
   const replaced_externals = [{replacement:1}, {replacement:2}]
-  const deserialized = WebSnapshot.deserialize(snapshot, replaced_externals);
+  const deserialized = %WebSnapshotDeserialize(snapshot, replaced_externals);
   %HeapObjectVerify(deserialized);
   assertEquals(deserialized.a, object.a);
   assertSame(deserialized.b, replaced_externals[0]);
@@ -53,23 +55,24 @@ const object = {
   assertSame(deserialized.d.d_a, replaced_externals[1]);
 })();
 
+
 (function testApiObject() {
   const api_object = new d8.dom.Div();
   const source_1 = [{}, api_object];
-  assertThrows(() => WebSnapshot.serialize(source_1));
+  assertThrows(() => %WebSnapshotSerialize(source_1));
 
   let externals = [external_1]
   const source_2 = [{}, external_1, api_object, api_object];
-  const snapshot_2 = WebSnapshot.serialize(source_2, externals);
+  const snapshot_2 = %WebSnapshotSerialize(source_2, externals);
   %HeapObjectVerify(externals);
   // Check that the unhandled api object is added to the externals.
   assertArrayEquals(externals, [external_1, api_object]);
 
-  assertThrows(() => WebSnapshot.deserialize(snapshot_2));
-  assertThrows(() => WebSnapshot.deserialize(snapshot_2, []));
-  assertThrows(() => WebSnapshot.deserialize(snapshot_2, [external_1]));
+  assertThrows(() => %WebSnapshotDeserialize(snapshot_2));
+  assertThrows(() => %WebSnapshotDeserialize(snapshot_2, []));
+  assertThrows(() => %WebSnapshotDeserialize(snapshot_2, [external_1]));
 
-  const result_2 = WebSnapshot.deserialize(snapshot_2, [external_1, api_object]);
+  const result_2 = %WebSnapshotDeserialize(snapshot_2, [external_1, api_object]);
   %HeapObjectVerify(externals);
   %HeapObjectVerify(result_2);
   assertArrayEquals(result_2, source_2);
