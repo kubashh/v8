@@ -16,6 +16,75 @@
       "message": "ptal",
       "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1739652e_864d3972",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T14:26:06Z",
+      "side": 1,
+      "message": "I assume this was meant for restarting parallel marking, and I\u0027m not sure it will work.\nIf concurrent marker are not running currently, it means they ran out of work. Calling this method should eventually trigger the jobs api to call `ConcurrentMarkingTask::GetMaxConcurrency` to query how many tasks it can support. Since there is no work left, `GetMaxConcurrency` will return 0.\nWe need to seed the worklists with some work before we start concurrent markers.\nEither we assume (\u003dhope) they are still running since we started them at the start of the atomic pause after scanning roots and stack, or we need to periodically restart them within `AdvanceMarkingWithLimits` (since that one will run until it\u0027s out of work as well).",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 50
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebe732c4_12f4b74f",
+        "filename": "src/heap/cppgc/concurrent-marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T14:26:06Z",
+      "side": 1,
+      "message": "Are we assuming the current priority is `kBestEffort`?\nIf that\u0027s the case then this assumption doesn\u0027t hold. We initialize tasks to `kUserVisible` and increase to `kUserBlocking` in `ConcurrentMarkerBase::IncreaseMarkingPriorityIfNeeded` if not enough progress has been made.\n\nIf this branch was meant as a fast bailout in case there is nothing to update, I think we need to keep track of the current priority and compare against that.",
+      "range": {
+        "startLine": 243,
+        "startChar": 20,
+        "endLine": 243,
+        "endChar": 52
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f658644_8445c02c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T14:26:06Z",
+      "side": 1,
+      "message": "`ProcessEphemeronMarking` implicitly triggers wrapper tracing and drains the worklist, which I found confusing. Can we rename this method to something like `PerformTransitiveClosure` or something like that?\nAt the very least, I think we need to better document what\u0027s going on here (e.g. `ProcessEphemeronMarking` calls  `ProcessEphemeronsUntilFixpoint` which calls `PerformWrapperTracing` for Oilpan tracing, but then calls `ProcessEphemerons` which delegates to `ProcessMarkingWorklist` for V8 marking; It\u0027s quite convoluted).\n\n(btw, is `DrainMarkingWorklist` still used? `ProcessEphemeronMarking` calls `ProcessMarkingWorklist(0)` explicitly)",
+      "range": {
+        "startLine": 2397,
+        "startChar": 4,
+        "endLine": 2397,
+        "endChar": 27
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
