@@ -31,6 +31,7 @@ class Job(object):
     self.keep_output = keep_output
 
   def run(self, process_ctx):
+    print(self.cmd)
     output = self.cmd.execute()
     reduction = process_ctx.result_reduction if not self.keep_output else None
     result = self.outproc.process(output, reduction)
