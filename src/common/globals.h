@@ -1102,6 +1102,23 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
 #define DOUBLE_POINTER_ALIGN(value) \
   (((value) + ::i::kDoubleAlignmentMask) & ~::i::kDoubleAlignmentMask)
 
+// Prediction hint for branches.
+enum class BranchHint : uint8_t { kNone, kTrue, kFalse };
+
+inline size_t hash_value(BranchHint hint) { return static_cast<size_t>(hint); }
+
+inline std::ostream& operator<<(std::ostream& os, BranchHint hint) {
+  switch (hint) {
+    case BranchHint::kNone:
+      return os << "None";
+    case BranchHint::kTrue:
+      return os << "True";
+    case BranchHint::kFalse:
+      return os << "False";
+  }
+  UNREACHABLE();
+}
+
 // Defines hints about receiver values based on structural knowledge.
 enum class ConvertReceiverMode : unsigned {
   kNullOrUndefined,     // Guaranteed to be null or undefined.

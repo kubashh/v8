@@ -16,18 +16,6 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-std::ostream& operator<<(std::ostream& os, BranchHint hint) {
-  switch (hint) {
-    case BranchHint::kNone:
-      return os << "None";
-    case BranchHint::kTrue:
-      return os << "True";
-    case BranchHint::kFalse:
-      return os << "False";
-  }
-  UNREACHABLE();
-}
-
 std::ostream& operator<<(std::ostream& os, TrapId trap_id) {
   switch (trap_id) {
 #define TRAP_CASE(Name) \
