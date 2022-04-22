@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ddf1de0_7cb82c38",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T15:13:07Z",
+      "side": 1,
+      "message": "Ack.\n\nAfter each call to `AdvanceTracing`, Oilpan\u0027s worklists would be empty. HWe may find non-empty worklists here, but only if V8 found new references to Oilpan objects. I wonder how many such references we actually have (I assume not many by the time we reach the atomic pause).",
+      "parentUuid": "86927c47_92cdde0c",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 50
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebe732c4_12f4b74f",
