@@ -45,17 +45,26 @@ bool ConservativeStackVisitor::CheckPage(Address address, MemoryChunk* page) {
   Object ptr = HeapObject::FromAddress(base_ptr);
   FullObjectSlot root = FullObjectSlot(&ptr);
   delegate_->VisitRootPointer(Root::kHandleScope, nullptr, root);
+  // TODO(nikolaos): Let's figure out what this meant to do...
+  // Should it be &base_ptr or &ptr, or something else?
+#if 0
   DCHECK(root == FullObjectSlot(reinterpret_cast<Address>(&base_ptr)));
+#endif
   return true;
 }
 
 void ConservativeStackVisitor::VisitConservativelyIfPointer(
     const void* pointer) {
   auto address = reinterpret_cast<Address>(pointer);
+  // TODO(nikolaos): Let's figure out what this meant to do...
+  // This condition is always true, as the LAB invariant requires
+  // start <= top <= limit
+#if 0
   if (address > isolate_->heap()->old_space()->top() ||
       address < isolate_->heap()->old_space()->limit()) {
     return;
   }
+#endif
 
   for (Page* page : *isolate_->heap()->old_space()) {
     if (CheckPage(address, page)) {

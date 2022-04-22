@@ -227,9 +227,8 @@ HEAP_TEST(DoNotEvacuatePinnedPages) {
 }
 
 HEAP_TEST(ObjectStartBitmap) {
-  if (!FLAG_single_generation || !FLAG_conservative_stack_scanning) return;
-
 #if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (!FLAG_single_generation || !FLAG_conservative_stack_scanning) return;
 
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -239,28 +238,32 @@ HEAP_TEST(ObjectStartBitmap) {
   heap::SealCurrentObjects(heap);
 
   auto* factory = isolate->factory();
-  HeapObject obj = *factory->NewStringFromStaticChars("hello");
+  HeapObject obj1 = *factory->NewStringFromStaticChars("hello");
   HeapObject obj2 = *factory->NewStringFromStaticChars("world");
-  Page* page = Page::FromAddress(obj.ptr());
+  Page* page1 = Page::FromAddress(obj1.ptr());
+  Page* page2 = Page::FromAddress(obj2.ptr());
 
-  CHECK(page->object_start_bitmap()->CheckBit(obj.address()));
-  CHECK(page->object_start_bitmap()->CheckBit(obj2.address()));
+  CHECK(page1->object_start_bitmap()->CheckBit(obj1.address()));
+  CHECK(page2->object_start_bitmap()->CheckBit(obj2.address()));
 
-  Address obj_inner_ptr = obj.ptr() + 2;
-  CHECK(page->object_start_bitmap()->FindBasePtr(obj_inner_ptr) ==
-        obj.address());
+  for (int k = 0; k < obj1.Size(); ++k) {
+    Address obj1_inner_ptr = obj1.ptr() + k;
+    CHECK(page1->object_start_bitmap()->FindBasePtr(obj1_inner_ptr) ==
+          obj1.address());
+  }
 
-  Address obj2_inner_ptr = obj2.ptr() + 2;
-  CHECK(page->object_start_bitmap()->FindBasePtr(obj2_inner_ptr) ==
-        obj2.address());
+  for (int k = 0; k < obj2.Size(); ++k) {
+    Address obj2_inner_ptr = obj2.ptr() + k;
+    CHECK(page2->object_start_bitmap()->FindBasePtr(obj2_inner_ptr) ==
+          obj2.address());
+  }
 
   CcTest::CollectAllGarbage();
 
-  CHECK((obj).IsString());
-  CHECK((obj2).IsString());
-  CHECK(page->object_start_bitmap()->CheckBit(obj.address()));
-  CHECK(page->object_start_bitmap()->CheckBit(obj2.address()));
-
+  CHECK(obj1.IsString());
+  CHECK(obj2.IsString());
+  CHECK(page1->object_start_bitmap()->CheckBit(obj1.address()));
+  CHECK(page2->object_start_bitmap()->CheckBit(obj2.address()));
 #endif
 }
 
@@ -269,7 +272,6 @@ HEAP_TEST(ObjectStartBitmap) {
 static Handle<Map> CreateMap(Isolate* isolate) {
   return isolate->factory()->NewMap(JS_OBJECT_TYPE, JSObject::kHeaderSize);
 }
-
 
 TEST(MapCompact) {
   FLAG_max_map_space_pages = 16;
