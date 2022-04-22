@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "694964b7_a41f568d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-22T11:21:12Z",
+      "side": 1,
+      "message": "LGTM with questions",
+      "revId": "a5228c4d2af37e3ce05f142dbfaa85a97d093efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eeb07e0_f6f21c9e",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-22T11:21:12Z",
+      "side": 1,
+      "message": "Just to check my understanding: this has to be a dummy pointer and not {nullptr}, because {nullptr} would mean that we are out of the writable scope and we should switch to executable, is that correct?",
+      "range": {
+        "startLine": 37,
+        "startChar": 20,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "a5228c4d2af37e3ce05f142dbfaa85a97d093efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c1ed67a_fcc9268e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-04-22T11:21:12Z",
+      "side": 1,
+      "message": "Can this be factorized with the if block where we set the optional AssemblerBufferCache below?",
+      "range": {
+        "startLine": 1522,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 0
+      },
+      "revId": "a5228c4d2af37e3ce05f142dbfaa85a97d093efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
