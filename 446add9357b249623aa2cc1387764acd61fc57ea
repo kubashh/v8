@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e022cfe_f10edccf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T15:00:43Z",
+      "side": 1,
+      "message": "Is it inlined or is it optimized away since it can be entirely calculated at compile time?",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "446add9357b249623aa2cc1387764acd61fc57ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4b839c01_85e8de7b",
