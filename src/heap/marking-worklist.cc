@@ -171,6 +171,13 @@ bool MarkingWorklists::Local::IsEmpty() {
   return true;
 }
 
+bool MarkingWorklists::Local::IsActiveEmpty() {
+  if (!active_.IsLocalEmpty() || !active_.IsGlobalEmpty()) {
+    return false;
+  }
+  return true;
+}
+
 bool MarkingWorklists::Local::IsWrapperEmpty() const {
   if (cpp_marking_state_) {
     DCHECK(wrapper_.IsLocalAndGlobalEmpty());

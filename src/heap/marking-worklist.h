@@ -168,6 +168,7 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
 
   void Publish();
   bool IsEmpty();
+  bool IsActiveEmpty();
   bool IsWrapperEmpty() const;
   // Publishes the local active marking worklist if its global worklist is
   // empty. In the per-context marking mode it also publishes the shared
