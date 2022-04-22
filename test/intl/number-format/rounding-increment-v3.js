@@ -13,11 +13,11 @@ let invalidRoundingIncrements = [
 
 validRoundingIncrements.forEach(function(roundingIncrement) {
   assertDoesNotThrow(() => {
-    new Intl.NumberFormat(undefined, {roundingIncrement})});
+    new Intl.NumberFormat(undefined, {roundingIncrement, minimumFractionDigits:3})});
 });
 
 invalidRoundingIncrements.forEach(function(roundingIncrement) {
   assertThrows(() => {
-    let nf = new Intl.NumberFormat(undefined, {roundingIncrement})},
+    let nf = new Intl.NumberFormat(undefined, {roundingIncrement, minimumFractionDigits:3})},
     RangeError);
 });
