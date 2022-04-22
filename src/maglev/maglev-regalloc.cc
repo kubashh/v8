@@ -807,13 +807,13 @@ compiler::AllocatedOperand StraightForwardRegisterAllocator::AllocateRegister(
 template <typename RegisterT>
 compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
     RegisterFrameState<RegisterT>& registers, RegisterT reg, ValueNode* node) {
+  MachineRepresentation mach_repr = node->GetMachineRepresentation();
   if (registers.free().has(reg)) {
     // If it's already free, remove it from the free list.
     registers.RemoveFromFree(reg);
   } else if (registers.GetValue(reg) == node) {
     return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                      MachineRepresentation::kTagged,
-                                      reg.code());
+                                      mach_repr, reg.code());
   } else {
     DropRegisterValue(registers, reg);
   }
@@ -822,7 +822,7 @@ compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
 #endif
   registers.SetValue(reg, node);
   return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                    MachineRepresentation::kTagged, reg.code());
+                                    mach_repr, reg.code());
 }
 
 compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
@@ -855,8 +855,9 @@ compiler::InstructionOperand RegisterFrameState<RegisterT>::TryAllocateRegister(
   // Allocation succeeded. This might have found an existing allocation.
   // Simply update the state anyway.
   SetValue(reg, node);
+  MachineRepresentation mach_repr = node->GetMachineRepresentation();
   return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                    MachineRepresentation::kTagged, reg.code());
+                                    mach_repr, reg.code());
 }
 
 void StraightForwardRegisterAllocator::AssignTemporaries(NodeBase* node) {
