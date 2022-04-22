@@ -855,8 +855,9 @@ compiler::InstructionOperand RegisterFrameState<RegisterT>::TryAllocateRegister(
   // Allocation succeeded. This might have found an existing allocation.
   // Simply update the state anyway.
   SetValue(reg, node);
+  MachineRepresentation mach_repr = node->GetMachineRepresentation();
   return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                    MachineRepresentation::kTagged, reg.code());
+                                    mach_repr, reg.code());
 }
 
 void StraightForwardRegisterAllocator::AssignTemporaries(NodeBase* node) {

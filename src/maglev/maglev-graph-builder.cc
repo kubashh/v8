@@ -206,6 +206,7 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
     if (nexus.kind() == FeedbackSlotKind::kBinaryOp) {
       BinaryOperationHint hint = nexus.GetBinaryOperationFeedback();
 
+      printf("hint=%hhu\n", hint);
       if (hint == BinaryOperationHint::kSignedSmall) {
         ValueNode *left, *right;
         if (IsRegisterEqualToAccumulator(0)) {
@@ -217,6 +218,25 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
 
         if (kOperation == Operation::kAdd) {
           SetAccumulator(AddNewNode<Int32AddWithOverflow>({left, right}));
+          return;
+        }
+
+      } else if (hint == BinaryOperationHint::kSignedSmallInputs) {
+        // TODO(victorgomes): This does not seem to be possible. Only Divide
+        // seems to have this feedback. Why? Can we not improve that?
+        UNREACHABLE();
+
+      } else if (hint == BinaryOperationHint::kNumber) {
+        ValueNode *left, *right;
+        if (IsRegisterEqualToAccumulator(0)) {
+          left = right = AddNewNode<Float64Unbox>({LoadRegisterTagged(0)});
+        } else {
+          left = AddNewNode<Float64Unbox>({LoadRegisterTagged(0)});
+          right = AddNewNode<Float64Unbox>({GetAccumulatorTagged()});
+        }
+
+        if (kOperation == Operation::kAdd) {
+          AddNewNode<Float64Add>({left, right});
           return;
         }
       }
