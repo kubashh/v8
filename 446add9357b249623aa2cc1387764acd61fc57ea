@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "35bc4d35_88d5a083",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T15:46:16Z",
+      "side": 1,
+      "message": "Resolved offline",
+      "parentUuid": "4e022cfe_f10edccf",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "446add9357b249623aa2cc1387764acd61fc57ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4b839c01_85e8de7b",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -37,6 +61,23 @@
       "writtenOn": "2022-04-22T14:56:58Z",
       "side": 1,
       "message": "This reduces slightly the object size, both in x64 and android_arm.",
+      "revId": "446add9357b249623aa2cc1387764acd61fc57ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf906c7_d9085bab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T15:46:16Z",
+      "side": 1,
+      "message": "lgtm",
       "revId": "446add9357b249623aa2cc1387764acd61fc57ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
