@@ -442,7 +442,7 @@ void StraightForwardRegisterAllocator::AllocateNodeResult(ValueNode* node) {
     DCHECK_LT(operand.fixed_slot_index(), 0);
     // Set the stack slot to exactly where the value is.
     compiler::AllocatedOperand location(compiler::AllocatedOperand::STACK_SLOT,
-                                        MachineRepresentation::kTagged,
+                                        node->GetMachineRepresentation(),
                                         operand.fixed_slot_index());
     node->result().SetAllocated(location);
     node->Spill(location);
@@ -499,6 +499,7 @@ void StraightForwardRegisterAllocator::DropRegisterValue(
   DCHECK(!registers.free().has(reg));
 
   ValueNode* node = registers.GetValue(reg);
+  MachineRepresentation mach_repr = node->GetMachineRepresentation();
 
   // Remove the register from the node's list.
   node->RemoveRegister(reg);
@@ -512,11 +513,9 @@ void StraightForwardRegisterAllocator::DropRegisterValue(
     registers.SetValue(target_reg, node);
     // Emit a gapmove.
     compiler::AllocatedOperand source(compiler::LocationOperand::REGISTER,
-                                      MachineRepresentation::kTagged,
-                                      reg.code());
+                                      mach_repr, reg.code());
     compiler::AllocatedOperand target(compiler::LocationOperand::REGISTER,
-                                      MachineRepresentation::kTagged,
-                                      target_reg.code());
+                                      mach_repr, target_reg.code());
 
     if (FLAG_trace_maglev_regalloc) {
       printing_visitor_->os()
@@ -812,7 +811,7 @@ compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
     registers.RemoveFromFree(reg);
   } else if (registers.GetValue(reg) == node) {
     return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                      MachineRepresentation::kTagged,
+                                      node->GetMachineRepresentation(),
                                       reg.code());
   } else {
     DropRegisterValue(registers, reg);
@@ -822,7 +821,8 @@ compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
 #endif
   registers.SetValue(reg, node);
   return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                    MachineRepresentation::kTagged, reg.code());
+                                    node->GetMachineRepresentation(),
+                                    reg.code());
 }
 
 compiler::AllocatedOperand StraightForwardRegisterAllocator::ForceAllocate(
@@ -973,7 +973,7 @@ void StraightForwardRegisterAllocator::MergeRegisterValues(ControlNode* control,
     LoadMergeState(state, &node, &merge);
 
     compiler::AllocatedOperand register_info = {
-        compiler::LocationOperand::REGISTER, MachineRepresentation::kTagged,
+        compiler::LocationOperand::REGISTER, node->GetMachineRepresentation(),
         reg.code()};
 
     ValueNode* incoming = nullptr;
