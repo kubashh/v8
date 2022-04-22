@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "f2d0aa907f26c8912e4a19a403956a432e860922",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40fe892_db8450e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2022-04-22T09:39:49Z",
+      "side": 1,
+      "message": "lgtm (cannot vote though :))",
+      "revId": "f2d0aa907f26c8912e4a19a403956a432e860922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
