@@ -88,7 +88,6 @@ constexpr const char* GCTracer::Scope::Name(ScopeId id) {
       break;
   }
 #undef CASE
-  UNREACHABLE();
 }
 
 constexpr bool GCTracer::Scope::NeedsYoungEpoch(ScopeId id) {
@@ -101,7 +100,6 @@ constexpr bool GCTracer::Scope::NeedsYoungEpoch(ScopeId id) {
       return false;
   }
 #undef CASE
-  UNREACHABLE();
 }
 
 constexpr int GCTracer::Scope::IncrementalOffset(ScopeId id) {
