@@ -6,6 +6,7 @@
 #define V8_UTILS_BIT_VECTOR_H_
 
 #include "src/base/bits.h"
+#include "src/base/iterator.h"
 #include "src/utils/allocation.h"
 #include "src/zone/zone.h"
 
@@ -19,75 +20,6 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
     uintptr_t inline_;  // valid if data_length_ == 1
 
     explicit DataStorage(uintptr_t value) : inline_(value) {}
-  };
-
-  // Iterator for the elements of this BitVector.
-  class Iterator {
-   public:
-    V8_EXPORT_PRIVATE inline void operator++() {
-      current_++;
-
-      // Skip zeroed words.
-      while (current_value_ == 0) {
-        current_index_++;
-        if (Done()) return;
-        DCHECK(!target_->is_inline());
-        current_value_ = target_->data_.ptr_[current_index_];
-        current_ = current_index_ << kDataBitShift;
-      }
-
-      // Skip zeroed bits.
-      uintptr_t trailing_zeros = base::bits::CountTrailingZeros(current_value_);
-      current_ += trailing_zeros;
-      current_value_ >>= trailing_zeros;
-
-      // Get current_value ready for next advance.
-      current_value_ >>= 1;
-    }
-
-    int operator*() const {
-      DCHECK(!Done());
-      return current_;
-    }
-
-    bool operator!=(const Iterator& other) const {
-      // "other" is required to be the end sentinel value, to avoid us needing
-      // to compare exact "current" values.
-      DCHECK(other.Done());
-      DCHECK_EQ(target_, other.target_);
-      return current_index_ != other.current_index_;
-    }
-
-   private:
-    static constexpr struct StartTag {
-    } kStartTag = {};
-    static constexpr struct EndTag {
-    } kEndTag = {};
-
-    explicit Iterator(const BitVector* target, StartTag)
-        : target_(target),
-          current_value_(target->is_inline() ? target->data_.inline_
-                                             : target->data_.ptr_[0]),
-          current_index_(0),
-          current_(-1) {
-      ++(*this);
-    }
-    explicit Iterator(const BitVector* target, EndTag)
-        : target_(target),
-          current_value_(0),
-          current_index_(target->data_length_),
-          current_(-1) {
-      DCHECK(Done());
-    }
-
-    bool Done() const { return current_index_ >= target_->data_length_; }
-
-    const BitVector* target_;
-    uintptr_t current_value_;
-    int current_index_;
-    int current_;
-
-    friend class BitVector;
   };
 
   static const int kDataLengthForInline = 1;
@@ -314,9 +246,42 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
 
   int length() const { return length_; }
 
-  Iterator begin() const { return Iterator(this, Iterator::kStartTag); }
+  auto begin() const {
+    uintptr_t current_value_ = is_inline() ? data_.inline_ : data_.ptr_[0];
+    int current_index_ = 0;
+    int current_ = -1;
 
-  Iterator end() const { return Iterator(this, Iterator::kEndTag); }
+    auto iterator = MAKE_ITERATOR(current_, current_index_ != data_length_, {
+      current_++;
+
+      // Skip zeroed words.
+      while (current_value_ == 0) {
+        current_index_++;
+        if (current_index_ == data_length_) return;
+        DCHECK(!is_inline());
+        current_value_ = data_.ptr_[current_index_];
+        current_ = current_index_ << kDataBitShift;
+      }
+
+      // Skip zeroed bits.
+      uintptr_t trailing_zeros = base::bits::CountTrailingZeros(current_value_);
+      current_ += trailing_zeros;
+      current_value_ >>= trailing_zeros;
+
+      // Get current_value ready for next advance.
+      current_value_ >>= 1;
+    });
+
+    // The iterator is initialised to one before the start, so increment it once
+    // to set it to the start value.
+    ++iterator;
+
+    return iterator;
+  }
+
+  base::IterationEndSentinel end() const {
+    return base::IterationEndSentinel();
+  }
 
 #ifdef DEBUG
   void Print() const;
@@ -355,9 +320,9 @@ class GrowableBitVector {
     return length() == other.length() && bits_.Equals(other.bits_);
   }
 
-  BitVector::Iterator begin() const { return bits_.begin(); }
+  auto begin() const { return bits_.begin(); }
 
-  BitVector::Iterator end() const { return bits_.end(); }
+  auto end() const { return bits_.end(); }
 
  private:
   static constexpr int kInitialLength = 1024;

@@ -7,6 +7,7 @@
 
 #include <string>
 
+#include "src/base/iterator.h"
 #include "src/utils/bit-vector.h"
 #include "src/zone/zone.h"
 
@@ -19,38 +20,6 @@ namespace compiler {
 
 class BytecodeLivenessState : public ZoneObject {
  public:
-  class Iterator {
-   public:
-    int operator*() const {
-      // Subtract one to compensate for the accumulator at the start of the
-      // bit vector.
-      return *it_ - 1;
-    }
-
-    void operator++() { return ++it_; }
-
-    bool operator!=(const Iterator& other) const { return it_ != other.it_; }
-
-   private:
-    static constexpr struct StartTag {
-    } kStartTag = {};
-    static constexpr struct EndTag {
-    } kEndTag = {};
-    explicit Iterator(const BytecodeLivenessState& liveness, StartTag)
-        : it_(liveness.bit_vector_.begin()) {
-      // If we're not at the end, and the current value is the accumulator, skip
-      // over it.
-      if (it_ != liveness.bit_vector_.end() && *it_ == 0) {
-        ++it_;
-      }
-    }
-    explicit Iterator(const BytecodeLivenessState& liveness, EndTag)
-        : it_(liveness.bit_vector_.end()) {}
-
-    BitVector::Iterator it_;
-    friend class BytecodeLivenessState;
-  };
-
   BytecodeLivenessState(int register_count, Zone* zone)
       : bit_vector_(register_count + 1, zone) {}
   BytecodeLivenessState(const BytecodeLivenessState&) = delete;
@@ -106,9 +75,21 @@ class BytecodeLivenessState : public ZoneObject {
   // Number of live values, including the accumulator.
   int live_value_count() const { return bit_vector_.Count(); }
 
-  Iterator begin() const { return Iterator(*this, Iterator::kStartTag); }
+  auto begin() const {
+    auto it = bit_vector_.begin();
+    // If we're not at the end, and the current value is the accumulator, skip
+    // over it.
+    if (it != bit_vector_.end() && *it == 0) {
+      ++it;
+    }
+    // Subtract one on dereference to compensate for the accumulator at the
+    // start of the bit vector.
+    return MAKE_ITERATOR(*it - 1, it != base::IterationEndSentinel(), ++it);
+  }
 
-  Iterator end() const { return Iterator(*this, Iterator::kEndTag); }
+  base::IterationEndSentinel end() const {
+    return base::IterationEndSentinel();
+  }
 
  private:
   BitVector bit_vector_;

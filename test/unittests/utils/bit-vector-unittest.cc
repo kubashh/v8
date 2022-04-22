@@ -39,8 +39,8 @@ TEST_F(BitVectorTest, BitVector) {
     v.Add(30);
     v.Add(31);
     v.Add(33);
-    BitVector::Iterator iter = v.begin();
-    BitVector::Iterator end = v.end();
+    auto iter = v.begin();
+    auto end = v.end();
     EXPECT_NE(iter, end);
     EXPECT_EQ(27, *iter);
     ++iter;
