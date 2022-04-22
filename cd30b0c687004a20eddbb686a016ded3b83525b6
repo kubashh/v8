@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477401eb_39184b7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2022-04-22T17:55:40Z",
+      "side": 1,
+      "message": "Hi,\n\nI\u0027ve been using \u0027rr\u0027 (https://rr-project.org/) lately for time-travel debugging, ASLR isn\u0027t configurable when using it, so this just suppresses the error.\n\nThanks,\nPierre",
+      "revId": "cd30b0c687004a20eddbb686a016ded3b83525b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
