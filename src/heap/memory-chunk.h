@@ -122,6 +122,8 @@ class MemoryChunk : public BasicMemoryChunk {
     return typed_slot_set_[type];
   }
 
+  SlotSet* protected_slot_set() { return protected_slot_set_; }
+
   template <RememberedSetType type>
   V8_EXPORT_PRIVATE SlotSet* AllocateSlotSet();
   SlotSet* AllocateSweepingSlotSet();
@@ -142,6 +144,10 @@ class MemoryChunk : public BasicMemoryChunk {
   InvalidatedSlots* AllocateInvalidatedSlots();
   template <RememberedSetType type>
   void ReleaseInvalidatedSlots();
+
+  SlotSet* AllocateProtectedSlotSet();
+  void ReleaseProtectedSlotSet();
+
   template <RememberedSetType type>
   V8_EXPORT_PRIVATE void RegisterObjectWithInvalidatedSlots(HeapObject object);
   void InvalidateRecordedSlots(HeapObject object);
@@ -250,6 +256,8 @@ class MemoryChunk : public BasicMemoryChunk {
   // is ceil(size() / kPageSize).
   TypedSlotSet* typed_slot_set_[NUMBER_OF_REMEMBERED_SET_TYPES];
   InvalidatedSlots* invalidated_slots_[NUMBER_OF_REMEMBERED_SET_TYPES];
+
+  SlotSet* protected_slot_set_;
 
   base::Mutex* mutex_;
 

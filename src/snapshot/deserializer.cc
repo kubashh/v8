@@ -1019,10 +1019,14 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(byte data,
     case kSandboxedExternalReference:
     case kExternalReference: {
       Address address = ReadExternalReferenceCase();
-      if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL &&
+      if ((V8_SANDBOXED_EXTERNAL_POINTERS_BOOL || V8_PROTECTED_FIELDS_BOOL) &&
           data == kSandboxedExternalReference) {
-        ExternalPointerTag tag = ReadExternalPointerTag();
-        return WriteExternalPointer(slot_accessor.slot(), address, tag);
+        if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL) {
+          ExternalPointerTag tag = ReadExternalPointerTag();
+          return WriteExternalPointer(slot_accessor.slot(), address, tag);
+        }
+        return WriteExternalPointer(slot_accessor.slot(), address,
+                                    kExternalPointerNullTag);
       } else {
         DCHECK(!V8_SANDBOXED_EXTERNAL_POINTERS_BOOL);
         return WriteAddress(slot_accessor.slot(), address);
@@ -1200,10 +1204,14 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(byte data,
       } else {
         address = reinterpret_cast<Address>(NoExternalReferencesCallback);
       }
-      if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL &&
+      if ((V8_SANDBOXED_EXTERNAL_POINTERS_BOOL || V8_PROTECTED_FIELDS_BOOL) &&
           data == kSandboxedApiReference) {
-        ExternalPointerTag tag = ReadExternalPointerTag();
-        return WriteExternalPointer(slot_accessor.slot(), address, tag);
+        if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL) {
+          ExternalPointerTag tag = ReadExternalPointerTag();
+          return WriteExternalPointer(slot_accessor.slot(), address, tag);
+        }
+        return WriteExternalPointer(slot_accessor.slot(), address,
+                                    kExternalPointerNullTag);
       } else {
         DCHECK(!V8_SANDBOXED_EXTERNAL_POINTERS_BOOL);
         return WriteAddress(slot_accessor.slot(), address);

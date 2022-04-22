@@ -3273,8 +3273,16 @@ Node* WasmGraphBuilder::BuildLoadExternalPointerFromObject(
   Node* decoded_ptr = gasm_->Load(MachineType::Pointer(), table, scaled_index);
   return gasm_->WordAnd(decoded_ptr, gasm_->IntPtrConstant(~tag));
 #else
-  return gasm_->LoadFromObject(MachineType::Pointer(), object,
-                               wasm::ObjectAccess::ToTagged(offset));
+  if (V8_PROTECTED_FIELDS_BOOL) {
+    return gasm_->LoadFromObject(
+        MachineType::Pointer(),
+        gasm_->Word64Or(object, Int64Constant(static_cast<uint64_t>(0xa)
+                                              << kJSAsanTagShift)),
+        wasm::ObjectAccess::ToTagged(offset));
+  } else {
+    return gasm_->LoadFromObject(MachineType::Pointer(), object,
+                                 wasm::ObjectAccess::ToTagged(offset));
+  }
 #endif
 }
 

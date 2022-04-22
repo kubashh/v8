@@ -343,6 +343,9 @@ FUNCTION_REFERENCE(ephemeron_key_write_barrier_function,
 
 FUNCTION_REFERENCE(get_date_field_function, JSDate::GetField)
 
+FUNCTION_REFERENCE(initialize_jsasan_protected_field,
+                   Heap::InitializeJSAsanProtectedField)
+
 ExternalReference ExternalReference::date_cache_stamp(Isolate* isolate) {
   return ExternalReference(isolate->date_cache()->stamp_address());
 }
@@ -587,6 +590,11 @@ ExternalReference ExternalReference::address_of_the_hole_nan() {
 ExternalReference ExternalReference::address_of_uint32_bias() {
   return ExternalReference(
       reinterpret_cast<Address>(&double_uint32_bias_constant));
+}
+
+ExternalReference ExternalReference::address_of_protected_object_fields_flag() {
+  return ExternalReference(
+      reinterpret_cast<Address>(&FLAG_protected_object_fields));
 }
 
 ExternalReference ExternalReference::address_of_float_abs_constant() {

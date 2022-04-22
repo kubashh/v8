@@ -1517,6 +1517,7 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
   // Memory read helpers.
   template <typename T, typename A>
   T MemoryRead(A address) {
+    if (V8_PROTECTED_FIELDS_BOOL) address &= ~kJSAsanTagMask;
     T value;
     STATIC_ASSERT((sizeof(value) == 1) || (sizeof(value) == 2) ||
                   (sizeof(value) == 4) || (sizeof(value) == 8) ||
@@ -1528,6 +1529,7 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
   // Memory write helpers.
   template <typename T, typename A>
   void MemoryWrite(A address, T value) {
+    if (V8_PROTECTED_FIELDS_BOOL) address &= ~kJSAsanTagMask;
     STATIC_ASSERT((sizeof(value) == 1) || (sizeof(value) == 2) ||
                   (sizeof(value) == 4) || (sizeof(value) == 8) ||
                   (sizeof(value) == 16));

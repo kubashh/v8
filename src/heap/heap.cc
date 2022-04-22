@@ -1441,6 +1441,26 @@ void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
     ZapFromSpace();
   }
 
+#ifdef V8_PROTECTED_FIELDS
+  // TODO(pierre.langlois@arm.com): Make sure this is the correct place to clear
+  // protected fields.
+  if (new_space() &&
+      new_space()->IsFromSpaceCommitted()) {
+    for (Page* page :
+         PageRange(new_space_->from_space().first_page(), nullptr)) {
+      RememberedSetProtected::Iterate(
+          page,
+          [](MaybeObjectSlot slot) {
+            VirtualMemoryCage::WriteJSAsanTag(slot.address(),
+                                              sizeof(ExternalPointer_t), 0);
+            return REMOVE_SLOT;
+          },
+          SlotSet::FREE_EMPTY_BUCKETS);
+      page->ReleaseProtectedSlotSet();
+    }
+  }
+#endif
+
   if (new_space()) {
     TRACE_GC(tracer(), GCTracer::Scope::HEAP_EPILOGUE_REDUCE_NEW_SPACE);
     ReduceNewSpaceSize();
@@ -6424,6 +6444,18 @@ int Heap::InsertIntoRememberedSetFromCode(MemoryChunk* chunk, Address slot) {
   return 0;
 }
 
+// static
+void Heap::InitializeJSAsanProtectedField(MemoryChunk* chunk, Address slot) {
+  RememberedSetProtected::Insert(chunk, slot);
+  VirtualMemoryCage::WriteJSAsanTag(slot, sizeof(ExternalPointer_t), 0xa);
+}
+
+// static
+void Heap::ClearJSAsanProtectedField(MemoryChunk* chunk, Address slot) {
+  RememberedSetProtected::Remove(chunk, slot);
+  VirtualMemoryCage::WriteJSAsanTag(slot, sizeof(ExternalPointer_t), 0x0);
+}
+
 #ifdef DEBUG
 void Heap::VerifyClearedSlot(HeapObject object, ObjectSlot slot) {
 #ifndef V8_DISABLE_WRITE_BARRIERS
@@ -7103,6 +7135,15 @@ void VerifyPointersVisitor::VisitCodeTarget(Code host, RelocInfo* rinfo) {
 
 void VerifyPointersVisitor::VisitEmbeddedPointer(Code host, RelocInfo* rinfo) {
   VerifyHeapObjectImpl(rinfo->target_object(cage_base()));
+}
+
+void VerifyPointersVisitor::VisitExternalPointer(HeapObject host, int offset) {
+  CHECK_IMPLIES(
+      FLAG_protected_object_fields,
+      VirtualMemoryCage::ReadJSAsanTag(host.address() + offset) == 0xa);
+  CHECK_IMPLIES(FLAG_protected_object_fields,
+                VirtualMemoryCage::ReadJSAsanTag(host.address() + offset +
+                                                 kTaggedSize) == 0xa);
 }
 
 void VerifySmisVisitor::VisitRootPointers(Root root, const char* description,

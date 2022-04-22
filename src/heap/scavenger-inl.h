@@ -87,6 +87,13 @@ bool Scavenger::MigrateObject(Map map, HeapObject source, HeapObject target,
                               PromotionHeapChoice promotion_heap_choice) {
   // Copy the content of source to target.
   target.set_map_word(MapWord::FromMap(map), kRelaxedStore);
+  // TODO(pierre.langlois@arm.com): This will trigger a MTE fault because the
+  // protected fields are not yet cleared. We'll need a MTE-safe version of
+  // CopyBlock() here, which would copy 16 bytes at a time, reading the MTE
+  // allocation tags everytime.
+  // Alternatively, we could clear them first, but it would race with other
+  // threads, getting in the way of asserting that tags are set before we clear
+  // them.
   heap()->CopyBlock(target.address() + kTaggedSize,
                     source.address() + kTaggedSize, size - kTaggedSize);
 
@@ -96,6 +103,27 @@ bool Scavenger::MigrateObject(Map map, HeapObject source, HeapObject target,
     // Other task migrated the object.
     return false;
   }
+
+#ifdef V8_PROTECTED_FIELDS
+  ExternalPointerVisitor clear_protected_fields(
+      heap(), ExternalPointerVisitor::ProtectedFieldAction::kClear);
+  source.IterateBodyFast(map, size, &clear_protected_fields);
+
+  // We copy the data a second time here, to ensure that we've not left any
+  // protected fields uncleared. If any are left, MTE will trigger a fault.
+  heap()->CopyBlock(target.address() + kTaggedSize,
+                    source.address() + kTaggedSize, size - kTaggedSize);
+
+  // If there were no protected fields to clear then there are no protected
+  // fields to set. This also ensures we don't set protected fields when the GC
+  // runs between allocating an object with protected fields, and initializing
+  // it.
+  if (clear_protected_fields.success()) {
+    ExternalPointerVisitor set_protected_fields(
+        heap(), ExternalPointerVisitor::ProtectedFieldAction::kSet);
+    target.IterateBodyFast(map, size, &set_protected_fields);
+  }
+#endif
 
   if (V8_UNLIKELY(is_logging_)) {
     heap()->OnMoveEvent(target, source, size);

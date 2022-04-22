@@ -42,6 +42,9 @@ struct PtrComprCageReservationParams
             ? GetIsolateRootBiasPageSize(page_allocator)
             : 0;
     reservation_size = kPtrComprCageReservationSize + kIsolateRootBiasPageSize;
+    if (FLAG_protected_object_fields) {
+      reservation_size += (reservation_size >> kTaggedSizeLog2);
+    }
     base_alignment = kPtrComprCageBaseAlignment;
     base_bias_size = kIsolateRootBiasPageSize;
 
@@ -51,6 +54,8 @@ struct PtrComprCageReservationParams
         RoundUp(size_t{1} << kPageSizeBits, page_allocator->AllocatePageSize());
     requested_start_hint =
         reinterpret_cast<Address>(page_allocator->GetRandomMmapAddr());
+
+    with_jsasan_tags = FLAG_protected_object_fields;
   }
 };
 #endif  // V8_COMPRESS_POINTERS

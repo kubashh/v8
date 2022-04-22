@@ -13,6 +13,7 @@
 #include "src/heap/memory-allocator.h"
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/memory-chunk-layout.h"
+#include "src/heap/remembered-set.h"
 #include "src/heap/spaces.h"
 #include "src/objects/heap-object.h"
 
@@ -143,6 +144,7 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
     invalidated_slots_[OLD_TO_CODE] = nullptr;
   }
   invalidated_slots_[OLD_TO_SHARED] = nullptr;
+  base::AsAtomicPointer::Release_Store(&protected_slot_set_, nullptr);
   progress_bar_.Initialize();
   set_concurrent_sweeping_state(ConcurrentSweepingState::kDone);
   page_protection_change_mutex_ = new base::Mutex();
@@ -255,6 +257,18 @@ void MemoryChunk::ReleaseAllocatedMemoryNeededForWritableChunk() {
   ReleaseInvalidatedSlots<OLD_TO_OLD>();
   ReleaseInvalidatedSlots<OLD_TO_SHARED>();
 
+  // TODO(pierre.langlois@arm.com): Make sure this is the correct place to clear
+  // protected fields.
+  RememberedSetProtected::Iterate(
+      this,
+      [](MaybeObjectSlot slot) {
+        VirtualMemoryCage::WriteJSAsanTag(slot.address(),
+                                          sizeof(ExternalPointer_t), 0);
+        return REMOVE_SLOT;
+      },
+      SlotSet::FREE_EMPTY_BUCKETS);
+  ReleaseProtectedSlotSet();
+
   if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
 
   if (!IsLargePage()) {
@@ -361,6 +375,14 @@ void MemoryChunk::ReleaseInvalidatedSlots() {
     delete invalidated_slots_[type];
     invalidated_slots_[type] = nullptr;
   }
+}
+
+SlotSet* MemoryChunk::AllocateProtectedSlotSet() {
+  return AllocateSlotSet(&protected_slot_set_);
+}
+
+void MemoryChunk::ReleaseProtectedSlotSet() {
+  ReleaseSlotSet(&protected_slot_set_);
 }
 
 template V8_EXPORT_PRIVATE void

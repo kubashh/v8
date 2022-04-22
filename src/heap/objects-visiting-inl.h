@@ -199,6 +199,44 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitFreeSpace(
   return static_cast<ResultType>(object.size(kRelaxedLoad));
 }
 
+ExternalPointerVisitor::ExternalPointerVisitor(Heap* heap,
+                                               ProtectedFieldAction action)
+    : ObjectVisitorWithCageBases(heap), heap_(heap), action_(action) {}
+
+void ExternalPointerVisitor::VisitExternalPointer(HeapObject host, int offset) {
+  Address slot = host.address() + offset;
+  MemoryChunk* chunk = MemoryChunk::FromHeapObject(host);
+  if (action_ == ProtectedFieldAction::kClear) {
+    // When deserializing a new context via a bootstrap, we may run the GC
+    // between allocating an object and initializing it. In this case we read
+    // the tag before clearing it, rather than assert that it's already set.
+    if (heap_->isolate()->bootstrapper()->IsActive()) {
+      if (VirtualMemoryCage::ReadJSAsanTag(slot) == 0xa) {
+        CHECK_EQ(VirtualMemoryCage::ReadJSAsanTag(slot + kTaggedSize), 0xa);
+        Heap::ClearJSAsanProtectedField(chunk, slot);
+        success_ = true;
+      }
+      return;
+    }
+    // We do a release assertion to make sure that the instance type information
+    // is consistent with JSAsan tags. If inconsistent, the follow-up
+    // ProtectedFieldAction::kSet operation could be used to set JSAsan tags at
+    // arbitrary locations within objects.
+    CHECK_EQ(VirtualMemoryCage::ReadJSAsanTag(slot), 0xa);
+    CHECK_EQ(VirtualMemoryCage::ReadJSAsanTag(slot + kTaggedSize), 0xa);
+    Heap::ClearJSAsanProtectedField(chunk, slot);
+    success_ = true;
+    return;
+  }
+  DCHECK_EQ(action_, ProtectedFieldAction::kSet);
+  // TODO(pierre.langlois): This check might not be necessary, given we're
+  // initializing fresh memory.
+  CHECK_EQ(VirtualMemoryCage::ReadJSAsanTag(slot), 0x0);
+  CHECK_EQ(VirtualMemoryCage::ReadJSAsanTag(slot + kTaggedSize), 0x0);
+  Heap::InitializeJSAsanProtectedField(chunk, slot);
+  success_ = true;
+}
+
 template <typename ConcreteVisitor>
 NewSpaceVisitor<ConcreteVisitor>::NewSpaceVisitor(Isolate* isolate)
     : HeapVisitor<int, ConcreteVisitor>(isolate) {}

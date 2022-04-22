@@ -1838,6 +1838,68 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArm64U64MoveFloat64:
       __ Fmov(i.OutputRegister(), i.InputDoubleRegister(0));
       break;
+    case kArm64JSAsanTagCheck: {
+      if (!V8_PROTECTED_FIELDS_SIMULATED_TAG_CHECKS_BOOL) {
+        break;
+      }
+      Arm64JSAsanCheck mode =
+          static_cast<Arm64JSAsanCheck>(MiscField::decode(opcode));
+
+      MemOperand memop = i.MemoryOperand();
+      UseScratchRegisterScope top_scope(tasm());
+      Label skip;
+
+      Register scratch0 = top_scope.AcquireX();
+
+      __ RecordComment("-- JSAsan tag check --");
+      __ Mov(scratch0,
+             ExternalReference::address_of_protected_object_fields_flag());
+      __ Ldr(scratch0.W(), MemOperand(scratch0));
+      __ Cbz(scratch0.W(), &skip);
+
+      if (mode == Arm64JSAsanCheck::kSkipIfOffHeap) {
+        CHECK(linkage()->GetIncomingDescriptor()->flags() &
+              CallDescriptor::kCanUseRoots);
+        __ And(scratch0, memop.base(),
+               ~static_cast<uint64_t>(0xffffffff | kJSAsanTagMask));
+        __ Cmp(scratch0, kPtrComprCageBaseRegister);
+        __ B(ne, &skip);
+      }
+
+      Register slot = scratch0;
+
+      // Get the slot address.
+      __ Add(slot, memop.base(), memop.OffsetAsOperand());
+      __ And(slot, slot, ~kJSAsanTagMask);
+
+      Register scratch1 = top_scope.AcquireX();
+
+      // Get the page address.
+      Register heap_base = scratch1;
+      __ And(heap_base, memop.base(),
+             ~static_cast<uint64_t>(0xffffffff | kJSAsanTagMask));
+
+      // Get the index into the tagmap.
+      Register index = slot;
+      __ Sub(slot, slot, heap_base);
+      __ Asr(index, slot, kTaggedSizeLog2);
+
+      // Read the tag from memory.
+      Register allocation_tag = heap_base.W();
+      __ Ldrb(allocation_tag, MemOperand(heap_base, index));
+
+      // Read the tag from the base pointer
+      Register tag = scratch0;
+      __ Lsr(tag, memop.base(), kJSAsanTagShift);
+
+      // Crash if they don't match.
+      __ Cmp(tag.W(), allocation_tag);
+      __ Check(eq, AbortReason::kJSAsanTagMismatch);
+
+      __ RecordComment("--");
+      __ Bind(&skip);
+      break;
+    }
     case kArm64Ldrb:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Ldrb(i.OutputRegister(), i.MemoryOperand());

@@ -312,6 +312,9 @@ declare_args() {
   # Enable all available sandbox features. Implies v8_enable_sandbox.
   v8_enable_sandbox_future = false
 
+  v8_enable_protected_fields = false
+  v8_enable_protected_fields_simulated_tag_checks = false
+
   # Experimental feature for collecting per-class zone memory stats.
   # Requires use_rtti = true
   v8_enable_precise_zone_stats = false
@@ -998,6 +1001,12 @@ config("features") {
   }
   if (v8_fuchsia_use_vmex_resource) {
     defines += [ "V8_USE_VMEX_RESOURCE" ]
+  }
+  if (v8_enable_protected_fields) {
+    defines += [ "V8_PROTECTED_FIELDS" ]
+  }
+  if (v8_enable_protected_fields_simulated_tag_checks) {
+    defines += [ "V8_PROTECTED_FIELDS_SIMULATED_TAG_CHECKS" ]
   }
 }
 
@@ -2116,6 +2125,10 @@ template("run_mksnapshot") {
         "--turbo-profiling-log-file",
         rebase_path(v8_builtins_profiling_log_file, root_build_dir),
       ]
+    }
+
+    if (v8_enable_protected_fields) {
+      args += [ "--protected-object-fields" ]
     }
 
     # This is needed to distinguish between generating code for the simulator

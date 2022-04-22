@@ -48,10 +48,22 @@ V8_INLINE void InitExternalPointerField(Address field_address, Isolate* isolate,
   } else {
     base::Memory<ExternalPointer_t>(field_address) = encoded_value;
   }
+#ifdef V8_PROTECTED_FIELDS
+  DCHECK_IMPLIES(FLAG_protected_object_fields,
+                 VirtualMemoryCage::ReadJSAsanTag(field_address) == 0x0);
+  DCHECK_IMPLIES(
+      FLAG_protected_object_fields,
+      VirtualMemoryCage::ReadJSAsanTag(field_address + kTaggedSize) == 0x0);
+  Heap::InitializeJSAsanProtectedField(MemoryChunk::FromAddress(field_address),
+                                       field_address);
+#endif
 #endif  // V8_SANDBOXED_EXTERNAL_POINTERS
 }
 
 V8_INLINE ExternalPointer_t ReadRawExternalPointerField(Address field_address) {
+#if defined(V8_PROTECTED_FIELDS) && defined(V8_HOST_ARCH_ARM64)
+  field_address |= (uint64_t{0xa} << kJSAsanTagShift);
+#endif
   // Pointer compression causes types larger than kTaggedSize to be unaligned.
   constexpr bool v8_pointer_compression_unaligned =
       kExternalPointerSize > kTaggedSize;
@@ -77,6 +89,16 @@ V8_INLINE void WriteExternalPointerField(Address field_address,
   index >>= kExternalPointerIndexShift;
   isolate->external_pointer_table().Set(index, value, tag);
 #else
+#ifdef V8_PROTECTED_FIELDS
+  DCHECK_IMPLIES(FLAG_protected_object_fields,
+                 VirtualMemoryCage::ReadJSAsanTag(field_address) == 0xa);
+  DCHECK_IMPLIES(
+      FLAG_protected_object_fields,
+      VirtualMemoryCage::ReadJSAsanTag(field_address + kTaggedSize) == 0xa);
+#if defined(V8_HOST_ARCH_ARM64)
+  field_address |= (uint64_t{0xa} << kJSAsanTagShift);
+#endif
+#endif
   // Pointer compression causes types larger than kTaggedSize to be unaligned.
   constexpr bool v8_pointer_compression_unaligned =
       kExternalPointerSize > kTaggedSize;

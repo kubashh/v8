@@ -107,6 +107,8 @@ class StatsCounter;
   V(address_of_shared_string_table_flag, "FLAG_shared_string_table")           \
   V(address_of_the_hole_nan, "the_hole_nan")                                   \
   V(address_of_uint32_bias, "uint32_bias")                                     \
+  V(address_of_protected_object_fields_flag, "protected_object_fields_flag")   \
+  V(initialize_jsasan_protected_field, "Heap::InitializeJSAsanProtectedField") \
   V(baseline_pc_for_bytecode_offset, "BaselinePCForBytecodeOffset")            \
   V(baseline_pc_for_next_executed_bytecode,                                    \
     "BaselinePCForNextExecutedBytecode")                                       \

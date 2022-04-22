@@ -1151,6 +1151,8 @@ void ExternalString::DisposeResource(Isolate* isolate) {
     resource->Dispose();
     WriteExternalPointerField(kResourceOffset, isolate, kNullAddress,
                               kExternalStringResourceTag);
+    Heap::ClearJSAsanProtectedField(MemoryChunk::FromHeapObject(*this),
+                                    field_address(kResourceOffset));
   }
 }
 

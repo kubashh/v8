@@ -274,6 +274,20 @@ V8_INLINE void Sweeper::CleanupRememberedSetEntriesForFreedMemory(
     DCHECK_NULL(page->slot_set<OLD_TO_OLD>());
   }
 
+  // TODO(pierre.langlois@arm.com): Check if this could race with the main JS
+  // thread when concurrently sweeping, if so fix it.
+  RememberedSetProtected::Iterate(
+      page,
+      [free_start, free_end](MaybeObjectSlot slot) {
+        if (free_start <= slot.address() && slot.address() < free_end) {
+          VirtualMemoryCage::WriteJSAsanTag(slot.address(),
+                                            sizeof(ExternalPointer_t), 0);
+          return REMOVE_SLOT;
+        }
+        return KEEP_SLOT;
+      },
+      SlotSet::KEEP_EMPTY_BUCKETS);
+
   // Old-to-shared isn't reset after a full GC, so needs to be cleaned both
   // during and after a full GC.
   RememberedSet<OLD_TO_SHARED>::RemoveRange(page, free_start, free_end,

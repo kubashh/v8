@@ -74,7 +74,7 @@ DEFINE_LAZY_LEAKY_OBJECT_GETTER(Simulator::GlobalMonitor,
 
 bool Simulator::ProbeMemory(uintptr_t address, uintptr_t access_size) {
 #if V8_ENABLE_WEBASSEMBLY && V8_TRAP_HANDLER_SUPPORTED
-  uintptr_t last_accessed_byte = address + access_size - 1;
+  uintptr_t last_accessed_byte = (address & ~kJSAsanTagMask) + access_size - 1;
   uintptr_t current_pc = reinterpret_cast<uintptr_t>(pc_);
   uintptr_t landing_pad =
       trap_handler::ProbeMemory(last_accessed_byte, current_pc);

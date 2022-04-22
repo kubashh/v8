@@ -124,6 +124,30 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
   static V8_INLINE T Cast(HeapObject object);
 };
 
+class ExternalPointerVisitor : public ObjectVisitorWithCageBases {
+ public:
+  enum class ProtectedFieldAction { kClear, kSet };
+  inline ExternalPointerVisitor(Heap* heap, ProtectedFieldAction action);
+  inline void VisitPointers(HeapObject host, ObjectSlot start,
+                            ObjectSlot end) override {}
+  inline void VisitPointers(HeapObject host, MaybeObjectSlot start,
+                            MaybeObjectSlot end) override {}
+  inline void VisitMapPointer(HeapObject host) override {}
+  inline void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {}
+  inline void VisitCodeTarget(Code host, RelocInfo* rinfo) override {}
+  inline void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override {}
+  inline void VisitExternalPointer(HeapObject host, int offset) override;
+  // TODO(pierre.langlois@arm.com): Support protected fields for embedder slots.
+  inline void VisitEmbedderSlot(HeapObject host, int offset) override {}
+
+  bool success() const { return success_; }
+
+ private:
+  Heap* heap_;
+  ProtectedFieldAction action_;
+  bool success_ = false;
+};
+
 template <typename ConcreteVisitor>
 class NewSpaceVisitor : public HeapVisitor<int, ConcreteVisitor> {
  public:

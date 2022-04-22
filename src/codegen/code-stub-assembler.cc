@@ -1530,13 +1530,38 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
   }
 }
 
+TNode<HeapObject> CodeStubAssembler::ApplyProtectedFieldTag(
+    TNode<HeapObject> object) {
+  if (V8_PROTECTED_FIELDS_BOOL) {
+    return ReinterpretCast<HeapObject>(BitcastWordToTagged(
+        WordOr(BitcastTaggedToWord(object),
+               IntPtrConstant(static_cast<uint64_t>(0xa) << kJSAsanTagShift))));
+  }
+  return object;
+}
+
+void CodeStubAssembler::InitializeProtectedField(TNode<HeapObject> object,
+                                                 TNode<IntPtrT> offset) {
+  if (!V8_PROTECTED_FIELDS_BOOL) return;
+  TNode<IntPtrT> object_word = BitcastTaggedToWord(object);
+  TNode<IntPtrT> page = PageFromAddress(object_word);
+  TNode<IntPtrT> field_address =
+      IntPtrAdd(object_word, IntPtrSub(offset, IntPtrConstant(kHeapObjectTag)));
+
+  CallCFunction(
+      ExternalConstant(ExternalReference::initialize_jsasan_protected_field()),
+      MachineTypeOf<Int32T>::value,
+      std::make_pair(MachineTypeOf<IntPtrT>::value, page),
+      std::make_pair(MachineTypeOf<IntPtrT>::value, field_address));
+}
+
 TNode<RawPtrT> CodeStubAssembler::LoadSandboxedPointerFromObject(
     TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
 #ifdef V8_SANDBOXED_POINTERS
   return ReinterpretCast<RawPtrT>(
       LoadObjectField<SandboxedPtrT>(object, field_offset));
 #else
-  return LoadObjectField<RawPtrT>(object, field_offset);
+  return LoadObjectField<RawPtrT>(ApplyProtectedFieldTag(object), field_offset);
 #endif  // V8_SANDBOXED_POINTERS
 }
 
@@ -1558,7 +1583,11 @@ void CodeStubAssembler::StoreSandboxedPointerToObject(TNode<HeapObject> object,
 
   StoreObjectFieldNoWriteBarrier<SandboxedPtrT>(object, offset, sbx_ptr);
 #else
-  StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
+  // TODO(pierre.langlois@arm.com): Don't set the protected field tag here,
+  // instead have a different path to initialize sandboxed pointers.
+  InitializeProtectedField(object, offset);
+  StoreObjectFieldNoWriteBarrier<RawPtrT>(ApplyProtectedFieldTag(object),
+                                          offset, pointer);
 #endif  // V8_SANDBOXED_POINTERS
 }
 
@@ -1614,6 +1643,8 @@ void CodeStubAssembler::InitializeExternalPointerField(TNode<HeapObject> object,
 
   TNode<ExternalPointerT> pointer = ChangeIndexToExternalPointer(index);
   StoreObjectFieldNoWriteBarrier<ExternalPointerT>(object, offset, pointer);
+#else
+  InitializeProtectedField(object, offset);
 #endif
 }
 
@@ -1642,7 +1673,7 @@ TNode<RawPtrT> CodeStubAssembler::LoadExternalPointerFromObject(
   }
   return UncheckedCast<RawPtrT>(UncheckedCast<WordT>(entry));
 #else
-  return LoadObjectField<RawPtrT>(object, offset);
+  return LoadObjectField<RawPtrT>(ApplyProtectedFieldTag(object), offset);
 #endif  // V8_SANDBOXED_EXTERNAL_POINTERS
 }
 
@@ -1672,7 +1703,8 @@ void CodeStubAssembler::StoreExternalPointerToObject(
   StoreNoWriteBarrier(MachineType::PointerRepresentation(), table, table_offset,
                       value);
 #else
-  StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
+  StoreObjectFieldNoWriteBarrier<RawPtrT>(ApplyProtectedFieldTag(object),
+                                          offset, pointer);
 #endif  // V8_SANDBOXED_EXTERNAL_POINTERS
 }
 
