@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d8f2c5_db2b1760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-22T13:20:11Z",
+      "side": 1,
+      "message": "lgtm (maybe we want to turn this back into iterators in the future, but like this is fine too)",
+      "revId": "c0ced27f1a784d8732c75144201fafaff51f082b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
