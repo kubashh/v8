@@ -16,6 +16,23 @@
       "message": "Use Iterator and add TODO in comment now. PTAL",
       "revId": "896398a23aa36f89efd8086e90ab8b36b78f6b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78225ed1_686cf8df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-22T07:03:21Z",
+      "side": 1,
+      "message": "Much easier to review with the helper -- thanks!",
+      "revId": "896398a23aa36f89efd8086e90ab8b36b78f6b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
