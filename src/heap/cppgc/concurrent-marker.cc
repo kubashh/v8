@@ -238,6 +238,14 @@ void ConcurrentMarkerBase::NotifyIncrementalMutatorStepCompleted() {
   }
 }
 
+void ConcurrentMarkerBase::NotifyOfWorkIfNeeded(cppgc::TaskPriority priority) {
+  if (HasWorkForConcurrentMarking(marking_worklists_)) {
+    if (priority != cppgc::TaskPriority::kBestEffort)
+      concurrent_marking_handle_->UpdatePriority(priority);
+    concurrent_marking_handle_->NotifyConcurrencyIncrease();
+  }
+}
+
 void ConcurrentMarkerBase::IncreaseMarkingPriorityIfNeeded() {
   if (!concurrent_marking_handle_->UpdatePriorityEnabled()) return;
   if (concurrent_marking_priority_increased_) return;
