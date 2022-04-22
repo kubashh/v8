@@ -659,6 +659,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
 
   // Marks object reachable from harmony weak maps and wrapper tracing.
   void ProcessEphemeronMarking();
+  void VerifyEphemeronMarking();
 
   // If the call-site of the top optimized code was not prepared for
   // deoptimization, then treat embedded pointers in the code as strong as
