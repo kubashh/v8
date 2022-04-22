@@ -353,7 +353,8 @@ namespace compiler {
   V(Arm64Word64AtomicOrUint64)                       \
   V(Arm64Word64AtomicXorUint64)                      \
   V(Arm64Word64AtomicExchangeUint64)                 \
-  V(Arm64Word64AtomicCompareExchangeUint64)
+  V(Arm64Word64AtomicCompareExchangeUint64)          \
+  V(Arm64JSAsanTagCheck)
 
 // Addressing modes represent the "shape" of inputs to an instruction.
 // Many instructions support multiple addressing modes. Addressing modes
@@ -381,6 +382,13 @@ namespace compiler {
   V(Operand2_R_SXTH)  /* %r0 SXTH (signed extend halfword) */   \
   V(Operand2_R_SXTW)  /* %r0 SXTW (signed extend word) */       \
   V(Root)             /* [%rr + K] */
+
+enum class Arm64JSAsanCheck : uint8_t {
+  kOn,  // Enable tag check unconditionally, this assumes we know the memory
+        // access is on the JS heap.
+  kSkipIfOffHeap,  // Only perform the tag check if the memory is on the JS
+                   // heap, this assumes that the root register is available.
+};
 
 }  // namespace compiler
 }  // namespace internal

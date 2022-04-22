@@ -327,6 +327,11 @@ V8_EXPORT bool ShouldThrowOnError(v8::internal::Isolate* isolate);
 
 V8_EXPORT bool CanHaveInternalField(int instance_type);
 
+const int kJSAsanTagSize = 4;
+const int kJSAsanTagMax = (1 << kJSAsanTagSize) - 1;
+const int kJSAsanTagShift = 56;
+const Address kJSAsanTagMask = static_cast<Address>(0xff) << kJSAsanTagShift;
+
 /**
  * This class exports constants and functionality from within v8 that
  * is necessary to implement inline functions in the v8 api.  Don't

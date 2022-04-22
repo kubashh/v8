@@ -17,6 +17,7 @@
 #include "src/base/sanitizer/lsan-virtual-address-space.h"
 #include "src/base/vector.h"
 #include "src/base/virtual-address-space.h"
+#include "src/common/ptr-compr.h"
 #include "src/flags/flags.h"
 #include "src/init/v8.h"
 #include "src/sandbox/sandbox.h"
@@ -368,8 +369,9 @@ bool VirtualMemoryCage::InitReservation(
         VirtualMemory(params.page_allocator, existing_reservation.begin(),
                       existing_reservation.size());
     base_ = reservation_.address() + params.base_bias_size;
-  } else if (params.base_alignment == ReservationParams::kAnyBaseAlignment ||
-             params.base_bias_size == 0) {
+  } else if (!params.with_jsasan_tags &&
+             (params.base_alignment == ReservationParams::kAnyBaseAlignment ||
+              params.base_bias_size == 0)) {
     // When the base doesn't need to be aligned or when the requested
     // base_bias_size is zero, the virtual memory reservation fails only
     // due to OOM.
@@ -384,6 +386,7 @@ bool VirtualMemoryCage::InitReservation(
     reservation_ = std::move(reservation);
     base_ = reservation_.address() + params.base_bias_size;
     CHECK_EQ(reservation_.size(), params.reservation_size);
+    CHECK(!params.with_jsasan_tags);
   } else {
     // Otherwise, we need to try harder by first overreserving
     // in hopes of finding a correctly aligned address within the larger
@@ -453,17 +456,64 @@ bool VirtualMemoryCage::InitReservation(
   CHECK_NE(base_, kNullAddress);
   CHECK(IsAligned(base_, params.base_alignment));
 
-  const Address allocatable_base = RoundUp(base_, params.page_size);
-  const size_t allocatable_size =
+  Address allocatable_base = RoundUp(base_, params.page_size);
+  size_t allocatable_size =
       RoundDown(params.reservation_size - (allocatable_base - base_) -
                     params.base_bias_size,
                 params.page_size);
+
   size_ = allocatable_base + allocatable_size - base_;
+
+  if (params.with_jsasan_tags) {
+    const size_t kJSAsanTagMapSize =
+        kPtrComprCageReservationSize >> kTaggedSizeLog2;
+    reservation_.SetPermissions(base_, kJSAsanTagMapSize,
+                                PageAllocator::kReadWrite);
+    allocatable_base += kJSAsanTagMapSize;
+    allocatable_size -= kJSAsanTagMapSize;
+  }
+
   page_allocator_ = std::make_unique<base::BoundedPageAllocator>(
       params.page_allocator, allocatable_base, allocatable_size,
       params.page_size,
       base::PageInitializationMode::kAllocatedPagesCanBeUninitialized);
   return true;
+}
+
+namespace {
+
+byte* JSAsanTagAddress(Address address) {
+  DCHECK_EQ(0, static_cast<byte>(address >> kJSAsanTagShift));
+  Address base = address & ~static_cast<uint64_t>(0xffffffff);
+  byte* jsasan_tag_map = reinterpret_cast<byte*>(base);
+
+  uint32_t index = static_cast<uint32_t>(address - base) >> kTaggedSizeLog2;
+
+  return jsasan_tag_map + index;
+}
+
+}
+
+void VirtualMemoryCage::WriteJSAsanTag(Address address, size_t size, byte tag) {
+  if (!FLAG_protected_object_fields) return;
+  byte* allocation_tags = JSAsanTagAddress(address);
+  for (size_t i = 0; i < (size / kTaggedSize); i++) {
+    allocation_tags[i] = tag;
+  }
+}
+
+byte VirtualMemoryCage::ReadJSAsanTag(Address address) {
+  if (!FLAG_protected_object_fields) return address;
+  return *JSAsanTagAddress(address);
+}
+
+void VirtualMemoryCage::CopyJSAsanTags(Address dst, Address src, size_t size) {
+  if (!FLAG_protected_object_fields) return;
+  byte* dst_allocation_tags = JSAsanTagAddress(dst);
+  byte* src_allocation_tags = JSAsanTagAddress(src);
+  for (size_t i = 0; i < (size / kTaggedSize); i++) {
+    dst_allocation_tags[i] = src_allocation_tags[i];
+  }
 }
 
 void VirtualMemoryCage::Free() {

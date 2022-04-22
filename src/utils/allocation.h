@@ -374,6 +374,7 @@ class VirtualMemoryCage {
     size_t base_bias_size;
     size_t page_size;
     Address requested_start_hint;
+    bool with_jsasan_tags;
 
     static constexpr size_t kAnyBaseAlignment = 1;
   };
@@ -389,6 +390,10 @@ class VirtualMemoryCage {
       base::AddressRegion existing_reservation = base::AddressRegion());
 
   void Free();
+
+  static void WriteJSAsanTag(Address address, size_t size, byte tag);
+  static byte ReadJSAsanTag(Address address);
+  static void CopyJSAsanTags(Address dst, Address src, size_t size);
 
  protected:
   Address base_ = kNullAddress;

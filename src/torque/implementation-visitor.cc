@@ -4571,6 +4571,13 @@ void CppClassGenerator::EmitLoadFieldStatement(
     offset = "offset";
   }
 
+#ifdef V8_PROTECTED_FIELDS
+  if (field_type == TypeOracle::GetExternalPointerType() ||
+      field_type == TypeOracle::GetRawPtrType()) {
+    stream << "  PtrComprCageBase sandbox_base = GetPtrComprCageBase(*this);\n";
+  }
+#endif
+
   stream << "  value = ";
 
   if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
@@ -4581,8 +4588,19 @@ void CppClassGenerator::EmitLoadFieldStatement(
                FieldSynchronization::kRelaxed) {
       ReportError("Torque doesn't support @cppRelaxedRead on untagged data");
     }
+#ifdef V8_PROTECTED_FIELDS
+    if (field_type == TypeOracle::GetExternalPointerType() ||
+        field_type == TypeOracle::GetRawPtrType()) {
+      stream << "this->ReadSandboxedPointerField(" << offset
+             << ", sandbox_base);\n";
+    } else {
+      stream << "this->template ReadField<" << type_name << ">(" << offset
+             << ");\n";
+    }
+#else
     stream << "this->template ReadField<" << type_name << ">(" << offset
            << ");\n";
+#endif
   } else {
     const char* load;
     switch (class_field.read_synchronization) {
@@ -4640,8 +4658,21 @@ void CppClassGenerator::EmitStoreFieldStatement(
   }
 
   if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+#ifdef V8_PROTECTED_FIELDS
+    if (field_type == TypeOracle::GetExternalPointerType() ||
+        field_type == TypeOracle::GetRawPtrType()) {
+      stream
+          << "  PtrComprCageBase sandbox_base = GetPtrComprCageBase(*this);\n";
+      stream << "  this->WriteSandboxedPointerField(" << offset
+             << ", sandbox_base, value);\n";
+    } else {
+      stream << "  this->template WriteField<" << type_name << ">(" << offset
+             << ", value);\n";
+    }
+#else
     stream << "  this->template WriteField<" << type_name << ">(" << offset
            << ", value);\n";
+#endif
   } else {
     bool strong_pointer = field_type->IsSubtypeOf(TypeOracle::GetObjectType());
     bool is_smi = field_type->IsSubtypeOf(TypeOracle::GetSmiType());

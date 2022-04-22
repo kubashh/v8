@@ -23,6 +23,9 @@ V8_INLINE Address ReadSandboxedPointerField(Address field_address,
   Address pointer = cage_base.address() + offset;
   return pointer;
 #else
+#if defined(V8_PROTECTED_FIELDS) && defined(V8_HOST_ARCH_ARM64)
+  field_address |= (uint64_t{0xa} << kJSAsanTagShift);
+#endif
   return ReadMaybeUnalignedValue<Address>(field_address);
 #endif
 }
@@ -39,6 +42,20 @@ V8_INLINE void WriteSandboxedPointerField(Address field_address,
   base::WriteUnalignedValue<SandboxedPointer_t>(field_address,
                                                 sandboxed_pointer);
 #else
+#ifdef V8_PROTECTED_FIELDS
+  // TODO(pierre.langlois@arm.com): We should have a seperate initialization
+  // function for sandboxed pointers, like for external pointers.
+  // DCHECK_IMPLIES(FLAG_protected_object_fields,
+  //                VirtualMemoryCage::ReadJSAsanTag(field_address) == 0x0);
+  // DCHECK_IMPLIES(
+  //     FLAG_protected_object_fields,
+  //     VirtualMemoryCage::ReadJSAsanTag(field_address + kTaggedSize) == 0x0);
+  Heap::InitializeJSAsanProtectedField(MemoryChunk::FromAddress(field_address),
+                                       field_address);
+#if defined(V8_HOST_ARCH_ARM64)
+  field_address |= (uint64_t{0xa} << kJSAsanTagShift);
+#endif
+#endif
   WriteMaybeUnalignedValue<Address>(field_address, pointer);
 #endif
 }

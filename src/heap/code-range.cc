@@ -131,6 +131,7 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   params.page_size = MemoryChunk::kPageSize;
   params.requested_start_hint =
       GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
+  params.with_jsasan_tags = false;
 
   if (!VirtualMemoryCage::InitReservation(params)) return false;
 

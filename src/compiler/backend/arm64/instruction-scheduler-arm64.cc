@@ -345,6 +345,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64DmbIsh:
     case kArm64DsbIsb:
     case kArm64StoreLane:
+    case kArm64JSAsanTagCheck:
       return kHasSideEffect;
 
     case kArm64Word64AtomicLoadUint64:

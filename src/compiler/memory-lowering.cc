@@ -486,6 +486,26 @@ Reduction MemoryLowering::ReduceLoadField(Node* node) {
 
   NodeProperties::ChangeOp(node, machine()->Load(type));
 
+  if (V8_PROTECTED_FIELDS_BOOL && access.type.Is(Type::ExternalPointer())) {
+    Node* effect = NodeProperties::GetEffectInput(node);
+    Node* control = NodeProperties::GetControlInput(node);
+    __ InitializeEffectControl(effect, control);
+
+    Node* object = node->InputAt(0);
+
+    Node* untagged_pointer = effect = __ BitcastTaggedToWord(object);
+
+    Node* tagged_pointer = __ WordOr(
+        untagged_pointer,
+        __ IntPtrConstant(static_cast<uint64_t>(0xa) << kJSAsanTagShift));
+
+    __ InitializeEffectControl(effect, control);
+    Node* tagged_object = __ BitcastWordToTagged(tagged_pointer);
+
+    node->ReplaceInput(0, tagged_object);
+    NodeProperties::ReplaceEffectInput(node, tagged_object);
+  }
+
 #ifdef V8_SANDBOXED_EXTERNAL_POINTERS
   if (access.type.Is(Type::ExternalPointer())) {
     ExternalPointerTag tag = access.external_pointer_tag;

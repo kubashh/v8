@@ -1050,6 +1050,9 @@ class Heap {
   void ClearRecordedSlotRange(Address start, Address end);
   static int InsertIntoRememberedSetFromCode(MemoryChunk* chunk, Address slot);
 
+  static void InitializeJSAsanProtectedField(MemoryChunk* chunk, Address slot);
+  static void ClearJSAsanProtectedField(MemoryChunk* chunk, Address slot);
+
 #ifdef DEBUG
   void VerifyClearedSlot(HeapObject object, ObjectSlot slot);
   void VerifySlotRangeHasNoRecordedSlots(Address start, Address end);
@@ -2623,6 +2626,7 @@ class VerifyPointersVisitor : public ObjectVisitorWithCageBases,
   void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override;
   void VisitCodeTarget(Code host, RelocInfo* rinfo) override;
   void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override;
+  void VisitExternalPointer(HeapObject host, int offset) override;
 
   void VisitRootPointers(Root root, const char* description,
                          FullObjectSlot start, FullObjectSlot end) override;

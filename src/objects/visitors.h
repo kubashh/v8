@@ -184,7 +184,11 @@ class ObjectVisitor {
 
   // Visits an external pointer. This is currently only guaranteed to be called
   // when the sandbox is enabled.
-  virtual void VisitExternalPointer(HeapObject host, ExternalPointer_t ptr) {}
+  virtual void VisitExternalPointer(HeapObject host, int offset) {}
+
+  // Visits an embedder slot. This is currently only guaranteed to be called
+  // when the sandbox is enabled.
+  virtual void VisitEmbedderSlot(HeapObject host, int offset) {}
 };
 
 // Helper version of ObjectVisitor that also takes care of caching base values

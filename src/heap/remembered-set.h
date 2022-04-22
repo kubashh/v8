@@ -348,6 +348,32 @@ class UpdateTypedSlotHelper {
   }
 };
 
+class RememberedSetProtected {
+ public:
+  static void Insert(MemoryChunk* chunk, Address slot_addr) {
+    DCHECK(chunk->Contains(slot_addr));
+    SlotSet* slot_set = chunk->protected_slot_set();
+    if (slot_set == nullptr) {
+      slot_set = chunk->AllocateProtectedSlotSet();
+    }
+    RememberedSetOperations::Insert<AccessMode::NON_ATOMIC>(slot_set, chunk,
+                                                            slot_addr);
+  }
+
+  static void Remove(MemoryChunk* chunk, Address slot_addr) {
+    DCHECK(chunk->Contains(slot_addr));
+    SlotSet* slot_set = chunk->protected_slot_set();
+    RememberedSetOperations::Remove(slot_set, chunk, slot_addr);
+  }
+
+  template <typename Callback>
+  static int Iterate(MemoryChunk* chunk, Callback callback,
+                     SlotSet::EmptyBucketMode mode) {
+    SlotSet* slot_set = chunk->protected_slot_set();
+    return RememberedSetOperations::Iterate(slot_set, chunk, callback, mode);
+  }
+};
+
 }  // namespace internal
 }  // namespace v8
 

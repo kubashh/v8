@@ -1512,6 +1512,8 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
   inline void VisitRuntimeEntry(Code host, RelocInfo* rinfo) final {}
   inline void VisitInternalReference(Code host, RelocInfo* rinfo) final {}
 
+  inline void VisitExternalPointer(HeapObject host, int offset) final {}
+
   virtual void MarkArrayBufferExtensionPromoted(HeapObject object) {}
 
  protected:
@@ -1610,7 +1612,23 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
     if (dest == OLD_SPACE) {
       DCHECK_OBJECT_SIZE(size);
       DCHECK(IsAligned(size, kTaggedSize));
+#ifdef V8_PROTECTED_FIELDS
+      ExternalPointerVisitor clear_protected_fields(
+          base->heap_, ExternalPointerVisitor::ProtectedFieldAction::kClear);
+      src.IterateFast(src.map(cage_base), size, &clear_protected_fields);
+#endif
       base->heap_->CopyBlock(dst_addr, src_addr, size);
+#ifdef V8_PROTECTED_FIELDS
+      // If there were no protected fields to clear then there are no protected
+      // fields to set. This also ensures we don't set protected fields when the
+      // GC runs between allocating an object with protected fields, and
+      // initializing it.
+      if (clear_protected_fields.success()) {
+        ExternalPointerVisitor set_protected_fields(
+            base->heap_, ExternalPointerVisitor::ProtectedFieldAction::kSet);
+        dst.IterateFast(dst.map(cage_base), size, &set_protected_fields);
+      }
+#endif
       if (mode != MigrationMode::kFast)
         base->ExecuteMigrationObservers(dest, src, dst, size);
       // In case the object's map gets relocated during GC we load the old map

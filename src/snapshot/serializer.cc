@@ -985,14 +985,16 @@ void Serializer::ObjectSerializer::OutputExternalReference(
     sink_->Put(FixedRawDataWithSize::Encode(size_in_tagged), "FixedRawData");
     sink_->PutRaw(reinterpret_cast<byte*>(&target), target_size, "Bytes");
   } else if (encoded_reference.is_from_api()) {
-    if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL && sandboxify) {
+    if ((V8_SANDBOXED_EXTERNAL_POINTERS_BOOL || V8_PROTECTED_FIELDS_BOOL) &&
+        sandboxify) {
       sink_->Put(kSandboxedApiReference, "SandboxedApiRef");
     } else {
       sink_->Put(kApiReference, "ApiRef");
     }
     sink_->PutInt(encoded_reference.index(), "reference index");
   } else {
-    if (V8_SANDBOXED_EXTERNAL_POINTERS_BOOL && sandboxify) {
+    if ((V8_SANDBOXED_EXTERNAL_POINTERS_BOOL || V8_PROTECTED_FIELDS_BOOL) &&
+        sandboxify) {
       sink_->Put(kSandboxedExternalReference, "SandboxedExternalRef");
     } else {
       sink_->Put(kExternalReference, "ExternalRef");
@@ -1068,12 +1070,13 @@ void Serializer::ObjectSerializer::VisitExternalReference(Code host,
 }
 
 void Serializer::ObjectSerializer::VisitExternalPointer(HeapObject host,
-                                                        ExternalPointer_t ptr) {
+                                                        int offset) {
   // TODO(v8:12700) handle other external references here as well. This should
   // allow removing some of the other Visit* methods, should unify the sandbox
   // vs no-sandbox implementation, and should allow removing various
   // XYZForSerialization methods throughout the codebase.
   if (host.IsJSExternalObject()) {
+    Address ptr = host.RawExternalPointerField(offset);
 #ifdef V8_SANDBOXED_EXTERNAL_POINTERS
     // TODO(saelo) maybe add a helper method for this conversion if also needed
     // in other places? This might require a ExternalPointerTable::Get variant

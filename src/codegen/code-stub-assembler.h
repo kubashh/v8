@@ -1066,6 +1066,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void GotoIfForceSlowPath(Label* if_true);
 
   //
+  // Protected field related functionality.
+  //
+
+  void InitializeProtectedField(TNode<HeapObject> object,
+                                TNode<IntPtrT> offset);
+  TNode<HeapObject> ApplyProtectedFieldTag(TNode<HeapObject> object);
+  //
   // Caged pointer related functionality.
   //
 

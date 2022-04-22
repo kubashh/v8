@@ -618,20 +618,30 @@ void EmitLoad(InstructionSelector* selector, Node* node, InstructionCode opcode,
 
   inputs[0] = g.UseRegister(base);
 
+  InstructionCode jsasan_opcode = kArm64JSAsanTagCheck;
+
   if (g.CanBeImmediate(index, immediate_mode)) {
     input_count = 2;
     inputs[1] = g.UseImmediate(index);
     opcode |= AddressingModeField::encode(kMode_MRI);
+    jsasan_opcode |= AddressingModeField::encode(kMode_MRI);
   } else if (TryMatchLoadStoreShift(&g, selector, rep, node, index, &inputs[1],
                                     &inputs[2])) {
     input_count = 3;
     opcode |= AddressingModeField::encode(kMode_Operand2_R_LSL_I);
+    jsasan_opcode |= AddressingModeField::encode(kMode_Operand2_R_LSL_I);
   } else {
     input_count = 2;
     inputs[1] = g.UseRegister(index);
     opcode |= AddressingModeField::encode(kMode_MRR);
+    jsasan_opcode |= AddressingModeField::encode(kMode_MRR);
   }
 
+  if (selector->CanUseRootsRegister()) {
+    jsasan_opcode |=
+        MiscField::encode(static_cast<int>(Arm64JSAsanCheck::kSkipIfOffHeap));
+    selector->Emit(jsasan_opcode, 0, nullptr, input_count, inputs);
+  }
   selector->Emit(opcode, arraysize(outputs), outputs, input_count, inputs);
 }
 
@@ -896,6 +906,12 @@ void InstructionSelector::VisitStore(Node* node) {
     inputs[input_count++] = g.UseUniqueRegister(value);
     RecordWriteMode record_write_mode =
         WriteBarrierKindToRecordWriteMode(write_barrier_kind);
+
+    InstructionCode jsasan_opcode = kArm64JSAsanTagCheck;
+    jsasan_opcode |= MiscField::encode(static_cast<int>(Arm64JSAsanCheck::kOn));
+    jsasan_opcode |= AddressingModeField::encode(addressing_mode);
+    Emit(jsasan_opcode, 0, nullptr, input_count, inputs);
+
     InstructionCode code = kArchStoreWithWriteBarrier;
     code |= AddressingModeField::encode(addressing_mode);
     code |= MiscField::encode(static_cast<int>(record_write_mode));
@@ -981,24 +997,36 @@ void InstructionSelector::VisitStore(Node* node) {
     inputs[0] = g.UseRegisterOrImmediateZero(value);
     inputs[1] = g.UseRegister(base);
 
+    InstructionCode jsasan_opcode = kArm64JSAsanTagCheck;
+
     if (g.CanBeImmediate(index, immediate_mode)) {
       input_count = 3;
       inputs[2] = g.UseImmediate(index);
       opcode |= AddressingModeField::encode(kMode_MRI);
+      jsasan_opcode |= AddressingModeField::encode(kMode_MRI);
     } else if (TryMatchLoadStoreShift(&g, this, rep, node, index, &inputs[2],
                                       &inputs[3])) {
       input_count = 4;
       opcode |= AddressingModeField::encode(kMode_Operand2_R_LSL_I);
+      jsasan_opcode |= AddressingModeField::encode(kMode_Operand2_R_LSL_I);
     } else {
       input_count = 3;
       inputs[2] = g.UseRegister(index);
       opcode |= AddressingModeField::encode(kMode_MRR);
+      jsasan_opcode |= AddressingModeField::encode(kMode_MRR);
     }
 
     if (node->opcode() == IrOpcode::kProtectedStore) {
       opcode |= AccessModeField::encode(kMemoryAccessProtected);
+      Emit(opcode, 0, nullptr, input_count, inputs);
+      return;
     }
 
+    if (CanUseRootsRegister()) {
+      jsasan_opcode |=
+          MiscField::encode(static_cast<int>(Arm64JSAsanCheck::kSkipIfOffHeap));
+      Emit(jsasan_opcode, 0, nullptr, input_count - 1, &inputs[1]);
+    }
     Emit(opcode, 0, nullptr, input_count, inputs);
   }
 }

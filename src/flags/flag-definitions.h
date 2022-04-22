@@ -181,6 +181,18 @@ struct MaybeBoolFlag {
 #define V8_SANDBOX_BOOL false
 #endif
 
+#ifdef V8_PROTECTED_FIELDS
+#define V8_PROTECTED_FIELDS_BOOL true
+#else
+#define V8_PROTECTED_FIELDS_BOOL false
+#endif
+
+#ifdef V8_PROTECTED_FIELDS_SIMULATED_TAG_CHECKS
+#define V8_PROTECTED_FIELDS_SIMULATED_TAG_CHECKS_BOOL true
+#else
+#define V8_PROTECTED_FIELDS_SIMULATED_TAG_CHECKS_BOOL false
+#endif
+
 // D8's MultiMappedAllocator is only available on Linux, and only if the sandbox
 // is not enabled.
 #if V8_OS_LINUX && !V8_SANDBOX_BOOL
@@ -1421,6 +1433,8 @@ DEFINE_BOOL(clear_free_memory, false, "initialize free memory with 0")
 
 DEFINE_BOOL(crash_on_aborted_evacuation, false,
             "crash when evacuation of page fails")
+
+DEFINE_BOOL(protected_object_fields, false, "")
 
 // assembler-ia32.cc / assembler-arm.cc / assembler-arm64.cc / assembler-x64.cc
 #ifdef V8_ENABLE_DEBUG_CODE

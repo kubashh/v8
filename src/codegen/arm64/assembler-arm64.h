@@ -153,6 +153,10 @@ class MemOperand {
   inline bool IsPreIndex() const;
   inline bool IsPostIndex() const;
 
+  // For offset modes, return the offset as an Operand. This helper cannot
+  // handle indexed modes.
+  inline Operand OffsetAsOperand() const;
+
  private:
   Register base_;
   Register regoffset_;
