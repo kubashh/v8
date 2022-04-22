@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86927c47_92cdde0c",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T14:50:54Z",
+      "side": 1,
+      "message": "`AdvanceTracing()` is called repeatedly by V8 after processing objects on the JS side. I have verified locally that this sometimes finds non-empty worklists and then notifies concurrent markers.\n\nNote that concurrent markers are not really restarted (as they never were `Join()ed` but we rather set a new `GetMaxConcurrency()` and wake them up.",
+      "parentUuid": "1739652e_864d3972",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 50
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ebe732c4_12f4b74f",
         "filename": "src/heap/cppgc/concurrent-marker.cc",
         "patchSetId": 2
@@ -77,6 +101,30 @@
       "writtenOn": "2022-04-22T14:26:06Z",
       "side": 1,
       "message": "`ProcessEphemeronMarking` implicitly triggers wrapper tracing and drains the worklist, which I found confusing. Can we rename this method to something like `PerformTransitiveClosure` or something like that?\nAt the very least, I think we need to better document what\u0027s going on here (e.g. `ProcessEphemeronMarking` calls  `ProcessEphemeronsUntilFixpoint` which calls `PerformWrapperTracing` for Oilpan tracing, but then calls `ProcessEphemerons` which delegates to `ProcessMarkingWorklist` for V8 marking; It\u0027s quite convoluted).\n\n(btw, is `DrainMarkingWorklist` still used? `ProcessEphemeronMarking` calls `ProcessMarkingWorklist(0)` explicitly)",
+      "range": {
+        "startLine": 2397,
+        "startChar": 4,
+        "endLine": 2397,
+        "endChar": 27
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052fbea9_6eeb6199",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T14:50:54Z",
+      "side": 1,
+      "message": "It\u0027s really processing the whole transitive closure and I already had a rename in place but reverted and wanted to ask on the CL here :) \n\nDominik, wdyt about `PerformTransitiveClosure` or `MarkTransitiveClosure()`?",
+      "parentUuid": "8f658644_8445c02c",
       "range": {
         "startLine": 2397,
         "startChar": 4,
