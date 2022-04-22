@@ -560,6 +560,8 @@ KNOWN_OBJECTS = {
   ("old_space", 0x05a25): "PromiseValueThunkFinallySharedFun",
   ("old_space", 0x05a49): "ProxyRevokeSharedFun",
   ("old_space", 0x05a6d): "ShadowRealmImportValueFulfilledSFI",
+  ("old_space", 0x05a91): "SourceTextModuleExecuteAsyncModuleFulfilledSFI",
+  ("old_space", 0x05ab5): "SourceTextModuleExecuteAsyncModuleRejectedSFI",
 }
 
 # Lower 32 bits of first page addresses for various heap spaces.
