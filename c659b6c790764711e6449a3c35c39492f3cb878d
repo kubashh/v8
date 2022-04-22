@@ -16,6 +16,52 @@
       "message": "wasm LGTM",
       "revId": "c659b6c790764711e6449a3c35c39492f3cb878d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b9f7e9e_cbc83d67",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T10:39:12Z",
+      "side": 1,
+      "message": "This assumes that either\na) ever unused pages is kNoAccess, or\nb) we use RWX for M1 because of JIT?",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 12
+      },
+      "revId": "c659b6c790764711e6449a3c35c39492f3cb878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "772cecf3_5a7030b9",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-22T10:39:12Z",
+      "side": 1,
+      "message": "This changes semantics because discard may not be synchronous. Since there have been issues with handling of unused pages in the past, maybe this should go in separately?\n\nAlternatively, should this only be a Discard for M1?",
+      "range": {
+        "startLine": 133,
+        "startChar": 27,
+        "endLine": 133,
+        "endChar": 45
+      },
+      "revId": "c659b6c790764711e6449a3c35c39492f3cb878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
