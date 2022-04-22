@@ -160,6 +160,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efe3b75e_d7857841",
+        "filename": "src/heap/cppgc/concurrent-marker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-22T15:48:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1707c56f_245c0b8a",
+      "range": {
+        "startLine": 243,
+        "startChar": 20,
+        "endLine": 243,
+        "endChar": 52
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f658644_8445c02c",
