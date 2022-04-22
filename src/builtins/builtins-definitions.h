@@ -607,6 +607,8 @@ namespace internal {
   /* JSON */                                                                   \
   CPP(JsonParse)                                                               \
   CPP(JsonStringify)                                                           \
+  CPP(WebSnapshotSerialize)                                                    \
+  CPP(WebSnapshotDeserialize)                                                  \
                                                                                \
   /* ICs */                                                                    \
   TFH(LoadIC, LoadWithVector)                                                  \

@@ -39,6 +39,14 @@ inline bool AtomicIsLockFree(double size) {
   return size == 1 || size == 2 || size == 4 || size == 8;
 }
 
+BUILTIN(WebSnapshotSerialize) {
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+BUILTIN(WebSnapshotDeserialize) {
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 // https://tc39.es/ecma262/#sec-atomics.islockfree
 BUILTIN(AtomicsIsLockFree) {
   HandleScope scope(isolate);
