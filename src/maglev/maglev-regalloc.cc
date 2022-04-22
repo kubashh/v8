@@ -856,7 +856,8 @@ compiler::InstructionOperand RegisterFrameState<RegisterT>::TryAllocateRegister(
   // Simply update the state anyway.
   SetValue(reg, node);
   return compiler::AllocatedOperand(compiler::LocationOperand::REGISTER,
-                                    node->MachineRepresentation(), reg.code());
+                                    node->GetMachineRepresentation(),
+                                    reg.code());
 }
 
 void StraightForwardRegisterAllocator::AssignTemporaries(NodeBase* node) {
