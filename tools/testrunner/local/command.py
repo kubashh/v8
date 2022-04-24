@@ -10,6 +10,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 
 from ..local.android import (
     android_driver, CommandFailedException, TimeoutException)
@@ -330,6 +331,8 @@ class AndroidCommand(BaseCommand):
 Command = None
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
+  print('######################################################################')
+  traceback.print_stack()
   global Command
   if target_os == 'android':
     AndroidCommand.driver = android_driver(device)
