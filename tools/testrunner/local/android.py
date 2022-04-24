@@ -11,6 +11,8 @@ import os
 import sys
 import re
 
+import traceback
+
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 ANDROID_DIR = os.path.join(BASE_DIR, 'build', 'android')
@@ -32,6 +34,9 @@ class CommandFailedException(Exception):
 class _Driver(object):
   """Helper class to execute shell commands on an Android device."""
   def __init__(self, device=None):
+
+    print('######################################################################')
+    traceback.print_stack()
     assert os.path.exists(ANDROID_DIR)
     sys.path.insert(0, ANDROID_DIR)
 
