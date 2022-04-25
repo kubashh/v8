@@ -125,6 +125,76 @@
       },
       "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04db086e_305570ee",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T11:05:55Z",
+      "side": 1,
+      "message": "ignore me, forgot that these live in separate subtables.",
+      "parentUuid": "fa553c2a_a879e22b",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 14
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82092ceb_90a18352",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T11:05:55Z",
+      "side": 1,
+      "message": "unrelated to your CL, but since you\u0027re here -- it\u0027d be good to move CompilationCache::Age from being a custom call in the MarkCompactPrologue to using Heap::AddGCPrologueCallback",
+      "range": {
+        "startLine": 432,
+        "startChar": 28,
+        "endLine": 432,
+        "endChar": 31
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "235a46ce_31363aa9",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T11:05:55Z",
+      "side": 1,
+      "message": "should we move this into CompilationCacheScript::Age, to disentangle the script and eval caches a bit if they\u0027re to be different anyway?\n\nGenerally, I wonder how much we benefit from all the code sharing here versus all the branching we have to do for the different subcaches...",
+      "range": {
+        "startLine": 455,
+        "startChar": 6,
+        "endLine": 455,
+        "endChar": 38
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
