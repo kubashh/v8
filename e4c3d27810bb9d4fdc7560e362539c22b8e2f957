@@ -16,6 +16,115 @@
       "message": "Hello Leszek, would you please take a look at this change? Thanks!",
       "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a75a8884_a7ac9da2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T09:55:24Z",
+      "side": 1,
+      "message": "some initial comments",
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6b63fe_04237d7c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T09:55:24Z",
+      "side": 1,
+      "message": "Is this correct? Does our CompileLazy correctly handle top-level functions?",
+      "range": {
+        "startLine": 3087,
+        "startChar": 29,
+        "endLine": 3087,
+        "endChar": 74
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "964f8748_9597d48c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T09:55:24Z",
+      "side": 1,
+      "message": "what is the plan here actually? Walk the streamed compilation objects and fix up Script/SFI references?",
+      "range": {
+        "startLine": 3307,
+        "startChar": 0,
+        "endLine": 3310,
+        "endChar": 46
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b070fbce_b8997043",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T09:55:24Z",
+      "side": 1,
+      "message": "The language mode for the script table is always going to be `FLAG_use_strict ? strict : sloppy` so we don\u0027t really need to store it -- and otherwise this could just be a weakref to the Script.",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 17
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa553c2a_a879e22b",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T09:55:24Z",
+      "side": 1,
+      "message": "we should probably do this on all Capacity checks, not just the PutScript ones?",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 14
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
