@@ -16,6 +16,7 @@
   'wpt/function/type.tentative': [FAIL],
   'wpt/global/type.tentative': [FAIL],
   'wpt/interface': [FAIL],
+  'interface': [FAIL],
   'wpt/table/type.tentative': [FAIL],
 
   # Outdated proposal tests.
