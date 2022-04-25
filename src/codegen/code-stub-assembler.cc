@@ -14555,6 +14555,22 @@ TNode<BoolT> CodeStubAssembler::IsElementsKindLessThanOrEqual(
   return Int32LessThanOrEqual(target_kind, Int32Constant(reference_kind));
 }
 
+TNode<Int32T> CodeStubAssembler::GetNonRabGsabElementsKind(
+    TNode<Int32T> elements_kind) {
+  Label is_rab_gsab(this), end(this);
+  TVARIABLE(Int32T, result);
+  result = elements_kind;
+  Branch(Int32GreaterThanOrEqual(elements_kind,
+                                 Int32Constant(RAB_GSAB_UINT8_ELEMENTS)),
+         &is_rab_gsab, &end);
+  BIND(&is_rab_gsab);
+  result = Int32Sub(elements_kind,
+                    Int32Constant(RAB_GSAB_UINT8_ELEMENTS - UINT8_ELEMENTS));
+  Goto(&end);
+  BIND(&end);
+  return result.value();
+}
+
 TNode<BoolT> CodeStubAssembler::IsDebugActive() {
   TNode<Uint8T> is_debug_active = Load<Uint8T>(
       ExternalConstant(ExternalReference::debug_is_active_address(isolate())));
