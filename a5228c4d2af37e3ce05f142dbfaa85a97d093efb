@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a59084c_0d2f7bad",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-25T11:57:44Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the reason. I added a comment.",
+      "parentUuid": "1eeb07e0_f6f21c9e",
+      "range": {
+        "startLine": 37,
+        "startChar": 20,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "a5228c4d2af37e3ce05f142dbfaa85a97d093efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c1ed67a_fcc9268e",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-22T11:21:12Z",
       "side": 1,
       "message": "Can this be factorized with the if block where we set the optional AssemblerBufferCache below?",
+      "range": {
+        "startLine": 1522,
+        "startChar": 0,
+        "endLine": 1527,
+        "endChar": 0
+      },
+      "revId": "a5228c4d2af37e3ce05f142dbfaa85a97d093efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d73ec791_4b63dd4f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-25T11:57:44Z",
+      "side": 1,
+      "message": "Oh, totally, the two things (assembler buffer cache and write scope) are very related anyway.",
+      "parentUuid": "4c1ed67a_fcc9268e",
       "range": {
         "startLine": 1522,
         "startChar": 0,
