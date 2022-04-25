@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8995ad5b_9e828e3e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T14:34:41Z",
+      "side": 1,
+      "message": "Ack, thanks for checking.",
+      "parentUuid": "74baeb42_8825c291",
+      "range": {
+        "startLine": 3087,
+        "startChar": 29,
+        "endLine": 3087,
+        "endChar": 74
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "964f8748_9597d48c",
@@ -148,6 +172,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5befe430_d356a80d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T14:34:41Z",
+      "side": 1,
+      "message": "We might also be able to access the compilation cache (read-only) off-thread once we have the full source...",
+      "parentUuid": "fc1d445b_3dfa803d",
+      "range": {
+        "startLine": 3307,
+        "startChar": 0,
+        "endLine": 3310,
+        "endChar": 46
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b070fbce_b8997043",
         "filename": "src/objects/compilation-cache-table-inl.h",
         "patchSetId": 5
@@ -183,6 +231,30 @@
       "side": 1,
       "message": "Interesting point, thanks! Given that the current HashTable implementation is based on a FixedArray (which holds strong pointers), and we need the Script keys to be weak, which of the following approaches would you recommend? Or if you have another option in mind, please do let me know.\n\n1. Duplicate some basic hash table functionality to create a new hash table class which inherits from WeakFixedArray instead of FixedArray. Store the keys as weak pointers directly in this table.\n2. Keep using a standard HashTable and allocating separate key objects to hold the weak Script references, like the current implementation but minus the language mode.\n3. Define a new subclass of HashTable and implement custom visiting semantics that treat the keys as weak even though they\u0027re stored as strong pointers in the table.\n\nI\u0027m currently leaning toward option 2 because I don\u0027t expect these tables to be huge and the other options introduce rather more complexity, but I\u0027m open to suggestions.",
       "parentUuid": "b070fbce_b8997043",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 17
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe8d9c29_f73104ab",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-25T14:34:41Z",
+      "side": 1,
+      "message": "Option 2 sgtm, might still have to be a WeakFixedArray of size 1 in fact, seems we don\u0027t have (non-JS) weakrefs/weakcells anymore. Custom weakness is a last-resort kind of thing, and a WeakFixedArray-based hashtable would also have weak values.",
+      "parentUuid": "245068a9_76b944e3",
       "range": {
         "startLine": 41,
         "startChar": 4,
