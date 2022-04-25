@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f4a1d8_55ab767f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-25T14:00:51Z",
+      "side": 1,
+      "message": "Thanks for the feedback! I have a few follow-up questions.",
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e6b63fe_04237d7c",
@@ -48,6 +65,30 @@
       "writtenOn": "2022-04-25T09:55:24Z",
       "side": 1,
       "message": "Is this correct? Does our CompileLazy correctly handle top-level functions?",
+      "range": {
+        "startLine": 3087,
+        "startChar": 29,
+        "endLine": 3087,
+        "endChar": 74
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74baeb42_8825c291",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-25T14:00:51Z",
+      "side": 1,
+      "message": "As far as I can tell, yes. Everything works fine when running with --no-isolate-script-cache-ageing, which causes the cache to hold on to results indefinitely, even after bytecode flushing. I\u0027ve also added a test case in this CL which exercises this path.",
+      "parentUuid": "2e6b63fe_04237d7c",
       "range": {
         "startLine": 3087,
         "startChar": 29,
@@ -83,6 +124,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc1d445b_3dfa803d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-25T14:00:51Z",
+      "side": 1,
+      "message": "That\u0027s one option. The other options I see are:\n\n2. Keep doing what we\u0027re already doing: just accept that streaming will create a possibly duplicated Script.\n3. Throw away the off-thread work and re-parse on the main thread.\n4. I\u0027m not clear on the specifics yet, but I have a vague notion that it would be nice for the streaming thread to collect a list of all slots that contain pointers to SFIs. If such a thing is possible and sufficiently cheap to produce, then that would allow us to avoid iterating every slot of every object when merging the streamed content into the preexisting Script. (I\u0027m guessing here that the only pointers to Scripts are those in the SFIs. If Script pointers can be stored in other unpredictable places, then we would have to list those slots too.)\n\nI think it\u0027s worth at least trying the option you described, but if it is too slow, perhaps one of these other options would be better.",
+      "parentUuid": "964f8748_9597d48c",
+      "range": {
+        "startLine": 3307,
+        "startChar": 0,
+        "endLine": 3310,
+        "endChar": 46
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b070fbce_b8997043",
         "filename": "src/objects/compilation-cache-table-inl.h",
         "patchSetId": 5
@@ -94,6 +159,30 @@
       "writtenOn": "2022-04-25T09:55:24Z",
       "side": 1,
       "message": "The language mode for the script table is always going to be `FLAG_use_strict ? strict : sloppy` so we don\u0027t really need to store it -- and otherwise this could just be a weakref to the Script.",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 17
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "245068a9_76b944e3",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-25T14:00:51Z",
+      "side": 1,
+      "message": "Interesting point, thanks! Given that the current HashTable implementation is based on a FixedArray (which holds strong pointers), and we need the Script keys to be weak, which of the following approaches would you recommend? Or if you have another option in mind, please do let me know.\n\n1. Duplicate some basic hash table functionality to create a new hash table class which inherits from WeakFixedArray instead of FixedArray. Store the keys as weak pointers directly in this table.\n2. Keep using a standard HashTable and allocating separate key objects to hold the weak Script references, like the current implementation but minus the language mode.\n3. Define a new subclass of HashTable and implement custom visiting semantics that treat the keys as weak even though they\u0027re stored as strong pointers in the table.\n\nI\u0027m currently leaning toward option 2 because I don\u0027t expect these tables to be huge and the other options introduce rather more complexity, but I\u0027m open to suggestions.",
+      "parentUuid": "b070fbce_b8997043",
       "range": {
         "startLine": 41,
         "startChar": 4,
@@ -187,6 +276,30 @@
       "writtenOn": "2022-04-25T11:05:55Z",
       "side": 1,
       "message": "should we move this into CompilationCacheScript::Age, to disentangle the script and eval caches a bit if they\u0027re to be different anyway?\n\nGenerally, I wonder how much we benefit from all the code sharing here versus all the branching we have to do for the different subcaches...",
+      "range": {
+        "startLine": 455,
+        "startChar": 6,
+        "endLine": 455,
+        "endChar": 38
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cde4ced0_c48bd14c",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-25T14:00:51Z",
+      "side": 1,
+      "message": "Agreed. I was attempting to match the existing style, but these three caches behave very differently, so the code would be cleaner if we separated them more.",
+      "parentUuid": "235a46ce_31363aa9",
       "range": {
         "startLine": 455,
         "startChar": 6,
