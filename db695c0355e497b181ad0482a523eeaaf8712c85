@@ -500,6 +500,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ab3864f_eee9d1f6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2390,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-25T17:09:40Z",
+      "side": 1,
+      "message": "Let\u0027s focus on validation time, which should see most regression, since not much work is happening per bytecode. Locally I measure between 2 and 3 percent of slowdown, see this sheet: https://docs.google.com/spreadsheets/d/1YbpoJjqPsknwWzZ-1skuywWYVmrS2X_ObHSF5xCUmno/edit?usp\u003dsharing\n\nThat seems a little bit too much for a feature which is not expected to be enabled for any significant number of users. Do you see any way to avoid that regression?",
+      "parentUuid": "5fc4e4f7_9141d80a",
+      "revId": "db695c0355e497b181ad0482a523eeaaf8712c85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad955810_5762b57c",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 5
