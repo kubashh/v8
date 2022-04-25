@@ -229,6 +229,30 @@
       },
       "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2bffb08_b120111f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-25T14:43:34Z",
+      "side": 1,
+      "message": "Both sound good to me. I mean the parallel phase might not get the \"full\" transitive closure but I guess it\u0027s still the best way to describe what\u0027s happening.\n\n`ProcessEphemerons` seems like the most confusing method indeed. I guess we could rename it somehow but it would be cool if we could refactor it to perform something like this on the high-level in its loop:\n\n```\nPerformWrapperTracing();\nApplyEphemeronSemantics();\nDrainMarkingWorklist();\n```\n\nObviously not something to do for this CL, I am not even sure whether this is correct.",
+      "parentUuid": "052fbea9_6eeb6199",
+      "range": {
+        "startLine": 2397,
+        "startChar": 4,
+        "endLine": 2397,
+        "endChar": 27
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
