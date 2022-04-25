@@ -748,6 +748,43 @@ void Int32AddWithOverflow::GenerateCode(MaglevCodeGenState* code_gen_state,
   EmitEagerDeoptIf(overflow, code_gen_state, this);
 }
 
+void Float64Box::AllocateVreg(MaglevVregAllocationState* vreg_state,
+                              const ProcessingState& state) {
+  UseRegister(input());
+  DefineAsRegister(vreg_state, this);
+}
+void Float64Box::GenerateCode(MaglevCodeGenState* code_gen_state,
+                              const ProcessingState& state) {}
+
+void Float64Unbox::AllocateVreg(MaglevVregAllocationState* vreg_state,
+                                const ProcessingState& state) {
+  UseRegister(input());
+  DefineAsRegister(vreg_state, this);
+}
+void Float64Unbox::GenerateCode(MaglevCodeGenState* code_gen_state,
+                                const ProcessingState& state) {
+  Register value = ToRegister(input());
+  __ testb(value, Immediate(1));
+  EmitEagerDeoptIf(zero, code_gen_state, this);
+  __ sarl(value, Immediate(1));
+  __ Cvtlsi2sd(ToDoubleRegister(result()), value);
+}
+
+void Float64Add::AllocateVreg(MaglevVregAllocationState* vreg_state,
+                              const ProcessingState& state) {
+  UseRegister(left_input());
+  UseRegister(right_input());
+  DefineSameAsFirst(vreg_state, this);
+}
+
+void Float64Add::GenerateCode(MaglevCodeGenState* code_gen_state,
+                              const ProcessingState& state) {
+  DoubleRegister left = ToDoubleRegister(left_input());
+  DoubleRegister right = ToDoubleRegister(right_input());
+  __ Addsd(left, right);
+  __ int3();
+}
+
 void Phi::AllocateVreg(MaglevVregAllocationState* vreg_state,
                        const ProcessingState& state) {
   // Phi inputs are processed in the post-process, once loop phis' inputs'
