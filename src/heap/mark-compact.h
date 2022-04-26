@@ -26,6 +26,7 @@ namespace internal {
 class EvacuationJobTraits;
 class HeapObjectVisitor;
 class ItemParallelJob;
+class LargeObjectSpace;
 class LargePage;
 class MigrationObserver;
 class ReadOnlySpace;
@@ -743,6 +744,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // up other pages for sweeping. Does not start sweeper tasks.
   void StartSweepSpaces();
   void StartSweepSpace(PagedSpace* space);
+  enum class SweepSpaceLiveness { kKeep, kClear };
+  void StartSweepSpace(LargeObjectSpace* space, SweepSpaceLiveness liveness);
 
   void EvacuatePrologue() override;
   void EvacuateEpilogue() override;
