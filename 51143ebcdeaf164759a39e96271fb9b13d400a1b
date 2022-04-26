@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe69496_134662da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-04-26T13:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "379b7d01_750a09e7",
+      "revId": "51143ebcdeaf164759a39e96271fb9b13d400a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf2a5416_5a1cc5d6",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-26T12:29:46Z",
       "side": 1,
       "message": "I think this should be \"Fixed\". At least gerrit does not turn it into a link with \"Fix:\". Can you check?",
+      "revId": "51143ebcdeaf164759a39e96271fb9b13d400a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97d59165_0d91ea18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-04-26T13:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf2a5416_5a1cc5d6",
       "revId": "51143ebcdeaf164759a39e96271fb9b13d400a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
