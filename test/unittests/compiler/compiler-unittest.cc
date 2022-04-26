@@ -280,7 +280,7 @@ TEST_F(CompilerTest, GetScriptLineNumber) {
 }
 
 TEST_F(CompilerTest, FeedbackVectorPreservedAcrossRecompiles) {
-  if (i::FLAG_always_opt || !i::FLAG_opt) return;
+  if (i::FLAG_always_opt || !i::FLAG_turbofan) return;
   i::FLAG_allow_natives_syntax = true;
   if (!i_isolate()->use_optimizer()) return;
   v8::HandleScope scope(isolate());

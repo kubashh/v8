@@ -53,10 +53,10 @@ ALL_VARIANT_FLAGS = {
 # implications defined in flag-definitions.h.
 INCOMPATIBLE_FLAGS_PER_VARIANT = {
     "jitless": [
-        "--opt", "--always-opt", "--liftoff", "--track-field-types",
-        "--validate-asm", "--sparkplug", "--concurrent-sparkplug", "--maglev",
-        "--always-sparkplug", "--regexp-tier-up", "--no-regexp-interpret-all",
-        "--maglev"
+        "--opt", "--turbofan", "--always-opt", "--liftoff",
+        "--track-field-types", "--validate-asm", "--sparkplug",
+        "--concurrent-sparkplug", "--maglev", "--always-sparkplug",
+        "--regexp-tier-up", "--no-regexp-interpret-all", "--maglev"
     ],
     "nooptimization": ["--always-opt"],
     "slow_path": ["--no-force-slow-path"],
