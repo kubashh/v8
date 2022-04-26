@@ -16,6 +16,144 @@
       "message": "PTAL!",
       "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3c55f9_89ec1d1d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "can you document that this reinterprets the i-th register as a double register with the same code?",
+      "range": {
+        "startLine": 483,
+        "startChar": 41,
+        "endLine": 483,
+        "endChar": 67
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71bd55f8_eb85e654",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "maybe already add a LoadRegisterFloat64?",
+      "range": {
+        "startLine": 214,
+        "startChar": 36,
+        "endLine": 214,
+        "endChar": 48
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2480de8c_bac0e9a0",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "I think ChangeFloat64ToTagged already does this -- or do you mean inline in Maglev?",
+      "range": {
+        "startLine": 763,
+        "startChar": 24,
+        "endLine": 763,
+        "endChar": 77
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9ef88c6_243bbef7",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "nit: use FieldOperand and HeapObject::kMapOffset",
+      "range": {
+        "startLine": 786,
+        "startChar": 17,
+        "endLine": 786,
+        "endChar": 24
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "498fedc5_d6ba2eaa",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "nit: use FieldOperand",
+      "range": {
+        "startLine": 789,
+        "startChar": 11,
+        "endLine": 789,
+        "endChar": 18
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dccdd3d0_fd8865db",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-26T08:48:06Z",
+      "side": 1,
+      "message": "maybe call this \"checked unbox\"?",
+      "range": {
+        "startLine": 1140,
+        "startChar": 20,
+        "endLine": 1140,
+        "endChar": 30
+      },
+      "revId": "532c4cf41d790cdd6a4bf7bf6a850b54d2fa32ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
