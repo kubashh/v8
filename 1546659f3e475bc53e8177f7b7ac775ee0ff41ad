@@ -33,6 +33,24 @@
       "message": "Nit: It might be a bit surprising that we both use CommittedPhysicalMemory() and size() for the same address computation. They seem to be the same but I think it would be good to unify that.",
       "revId": "1546659f3e475bc53e8177f7b7ac775ee0ff41ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d308b6_3289a3a9",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T13:46:30Z",
+      "side": 1,
+      "message": "Relying on `size()` now for this CL.\n\nIdeally, we would only maintain one tracking mechanism. Let\u0027s check that in a follow up.",
+      "parentUuid": "3a9f8224_ec9ab657",
+      "revId": "1546659f3e475bc53e8177f7b7ac775ee0ff41ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
