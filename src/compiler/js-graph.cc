@@ -13,6 +13,7 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+
 #define GET_CACHED_FIELD(ptr, expr) (*(ptr)) ? *(ptr) : (*(ptr) = (expr))
 
 #define DEFINE_GETTER(name, expr) \
