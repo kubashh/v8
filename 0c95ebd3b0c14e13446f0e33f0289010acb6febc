@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "0c95ebd3b0c14e13446f0e33f0289010acb6febc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25467574_d88f3125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-26T11:00:59Z",
+      "side": 1,
+      "message": "Thanks, LGTM, with a question.",
+      "revId": "0c95ebd3b0c14e13446f0e33f0289010acb6febc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b7b0721_86b3ab28",
+        "filename": "test/wasm-js/wasm-js.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-26T11:00:59Z",
+      "side": 1,
+      "message": "What\u0027s the plan for those failures? Do they need to be fixed, or are they somehow expected? Should we assign an issue?",
+      "revId": "0c95ebd3b0c14e13446f0e33f0289010acb6febc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
