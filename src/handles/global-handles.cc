@@ -1274,34 +1274,27 @@ void GlobalHandles::ProcessWeakYoungObjects(
   }
 }
 
-void GlobalHandles::InvokeSecondPassPhantomCallbacksFromTask() {
-  DCHECK(second_pass_callbacks_task_posted_);
-  second_pass_callbacks_task_posted_ = false;
-  Heap::DevToolsTraceEventScope devtools_trace_event_scope(
-      isolate()->heap(), "MajorGC", "invoke weak phantom callbacks");
-  TRACE_EVENT0("v8", "V8.GCPhantomHandleProcessingCallback");
-  isolate()->heap()->CallGCPrologueCallbacks(
-      GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
-  InvokeSecondPassPhantomCallbacks();
-  isolate()->heap()->CallGCEpilogueCallbacks(
-      GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
-}
-
 void GlobalHandles::InvokeSecondPassPhantomCallbacks() {
+  GCCallbacksScope scope(isolate()->heap());
   // The callbacks may execute JS, which in turn may lead to another GC run.
   // If we are already processing the callbacks, we do not want to start over
   // from within the inner GC. Newly added callbacks will always be run by the
   // outermost GC run only.
-  if (running_second_pass_callbacks_) return;
-  running_second_pass_callbacks_ = true;
-
-  AllowJavascriptExecution allow_js(isolate());
-  while (!second_pass_callbacks_.empty()) {
-    auto callback = second_pass_callbacks_.back();
-    second_pass_callbacks_.pop_back();
-    callback.Invoke(isolate(), PendingPhantomCallback::kSecondPass);
+  if (scope.CheckReenter()) {
+    TRACE_EVENT0("v8", "V8.GCPhantomHandleProcessingCallback");
+    isolate()->heap()->CallGCPrologueCallbacks(
+        GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
+    {
+      AllowJavascriptExecution allow_js(isolate());
+      while (!second_pass_callbacks_.empty()) {
+        auto callback = second_pass_callbacks_.back();
+        second_pass_callbacks_.pop_back();
+        callback.Invoke(isolate(), PendingPhantomCallback::kSecondPass);
+      }
+    }
+    isolate()->heap()->CallGCEpilogueCallbacks(
+        GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
   }
-  running_second_pass_callbacks_ = false;
 }
 
 namespace {
@@ -1387,27 +1380,6 @@ size_t GlobalHandles::InvokeFirstPassWeakCallbacks() {
          InvokeFirstPassWeakCallbacks(&traced_pending_phantom_callbacks_);
 }
 
-void GlobalHandles::InvokeOrScheduleSecondPassPhantomCallbacks(
-    bool synchronous_second_pass) {
-  if (!second_pass_callbacks_.empty()) {
-    if (FLAG_optimize_for_size || FLAG_predictable || synchronous_second_pass) {
-      Heap::DevToolsTraceEventScope devtools_trace_event_scope(
-          isolate()->heap(), "MajorGC", "invoke weak phantom callbacks");
-      isolate()->heap()->CallGCPrologueCallbacks(
-          GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
-      InvokeSecondPassPhantomCallbacks();
-      isolate()->heap()->CallGCEpilogueCallbacks(
-          GCType::kGCTypeProcessWeakCallbacks, kNoGCCallbackFlags);
-    } else if (!second_pass_callbacks_task_posted_) {
-      second_pass_callbacks_task_posted_ = true;
-      auto taskrunner = V8::GetCurrentPlatform()->GetForegroundTaskRunner(
-          reinterpret_cast<v8::Isolate*>(isolate()));
-      taskrunner->PostTask(MakeCancelableTask(
-          isolate(), [this] { InvokeSecondPassPhantomCallbacksFromTask(); }));
-    }
-  }
-}
-
 void GlobalHandles::PendingPhantomCallback::Invoke(Isolate* isolate,
                                                    InvocationType type) {
   Data::Callback* callback_addr = nullptr;
@@ -1423,16 +1395,33 @@ void GlobalHandles::PendingPhantomCallback::Invoke(Isolate* isolate,
 
 void GlobalHandles::PostGarbageCollectionProcessing(
     GarbageCollector collector, const v8::GCCallbackFlags gc_callback_flags) {
+  if (second_pass_callbacks_.empty()) return;
+
   // Process weak global handle callbacks. This must be done after the
   // GC is completely done, because the callbacks may invoke arbitrary
   // API functions.
   DCHECK_EQ(Heap::NOT_IN_GC, isolate_->heap()->gc_state());
+
   const bool synchronous_second_pass =
+      FLAG_optimize_for_size || FLAG_predictable ||
       isolate_->heap()->IsTearingDown() ||
       (gc_callback_flags &
        (kGCCallbackFlagForced | kGCCallbackFlagCollectAllAvailableGarbage |
         kGCCallbackFlagSynchronousPhantomCallbackProcessing)) != 0;
-  InvokeOrScheduleSecondPassPhantomCallbacks(synchronous_second_pass);
+
+  if (synchronous_second_pass) {
+    InvokeSecondPassPhantomCallbacks();
+    return;
+  }
+
+  second_pass_callbacks_task_posted_ = true;
+  V8::GetCurrentPlatform()
+      ->GetForegroundTaskRunner(reinterpret_cast<v8::Isolate*>(isolate()))
+      ->PostTask(MakeCancelableTask(isolate(), [this] {
+        DCHECK(second_pass_callbacks_task_posted_);
+        second_pass_callbacks_task_posted_ = false;
+        InvokeSecondPassPhantomCallbacks();
+      }));
 }
 
 void GlobalHandles::IterateStrongRoots(RootVisitor* v) {
