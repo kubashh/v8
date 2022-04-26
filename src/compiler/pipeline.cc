@@ -1253,6 +1253,11 @@ PipelineCompilationJob::Status PipelineCompilationJob::FinalizeJobImpl(
   compilation_info()->SetCode(code);
   Handle<NativeContext> context(compilation_info()->native_context(), isolate);
   if (CodeKindCanDeoptimize(code->kind())) {
+#ifndef V8_EXTERNAL_CODE_SPACE
+    // This scope is needed because we are storing a Code object and marking
+    // barrier might be triggered.
+    CodePageHeaderModificationScope rwx_write_scope;
+#endif
     context->AddOptimizedCode(ToCodeT(*code));
   }
   RegisterWeakObjectsInOptimizedCode(isolate, context, code);
