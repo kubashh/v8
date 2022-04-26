@@ -110,6 +110,30 @@
       },
       "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0ef27c_5fb9e6c7",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T10:35:14Z",
+      "side": 1,
+      "message": "How did it complain? I think we used to have CHECK paths in constexpr which did work (and should also use Fatal() behind the scenes)",
+      "parentUuid": "a287c294_689d20ba",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
