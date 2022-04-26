@@ -555,7 +555,7 @@ UNINITIALIZED_TEST(LogAll) {
     CHECK(logger.ContainsLine({"code-creation,Script", ":1:1"}));
     CHECK(logger.ContainsLine({"code-creation,LazyCompile,", "testAddFn"}));
 
-    if (i::FLAG_opt && !i::FLAG_always_opt) {
+    if (i::FLAG_turbofan && !i::FLAG_always_opt) {
       CHECK(logger.ContainsLine({"code-deopt,", "not a Smi"}));
       CHECK(logger.ContainsLine({"timer-event-start", "V8.DeoptimizeCode"}));
       CHECK(logger.ContainsLine({"timer-event-end", "V8.DeoptimizeCode"}));
