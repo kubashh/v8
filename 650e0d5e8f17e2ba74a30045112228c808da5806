@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "483e8294_70fce864",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T12:43:08Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "650e0d5e8f17e2ba74a30045112228c808da5806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3690e5df_715ff92d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4959,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T12:43:08Z",
+      "side": 1,
+      "message": "Maybe this is a bit controversial, since I called this \"sweeping\", similar to how we call removing an empty old space page sweeping.\n\nWe could also call this during `EvacuatePrologue()` in a branch where we deal with `new_lo_space()`. Not sure about the naming then though.",
+      "range": {
+        "startLine": 4959,
+        "startChar": 30,
+        "endLine": 4959,
+        "endChar": 42
+      },
+      "revId": "650e0d5e8f17e2ba74a30045112228c808da5806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
