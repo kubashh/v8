@@ -841,11 +841,14 @@ bool TriggerImplication(bool premise, const char* premise_name,
 void FlagList::EnforceFlagImplications() {
   flag_hash = 0;
   bool changed;
+  int iteration = 0;
   do {
     changed = false;
 #define FLAG_MODE_DEFINE_IMPLICATIONS
 #include "src/flags/flag-definitions.h"  // NOLINT(build/include)
 #undef FLAG_MODE_DEFINE_IMPLICATIONS
+    // Avoid endless loops in case of buggy configurations.
+    CHECK_LT(iteration++, 1000);
   } while (changed);
 }
 

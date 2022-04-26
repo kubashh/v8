@@ -242,7 +242,7 @@ bool CanOptimizeFunction<CodeKind::TURBOFAN>(
     return CrashUnlessFuzzingReturnFalse(isolate);
   }
 
-  if (!FLAG_opt) return false;
+  if (!FLAG_turbofan) return false;
 
   if (function->shared().optimization_disabled() &&
       function->shared().disabled_optimization_reason() ==
@@ -581,7 +581,7 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
   if (!it.done()) function = handle(it.frame()->function(), isolate);
   if (function.is_null()) return CrashUnlessFuzzing(isolate);
 
-  if (V8_UNLIKELY(!FLAG_opt) || V8_UNLIKELY(!FLAG_use_osr)) {
+  if (V8_UNLIKELY(!FLAG_turbofan) || V8_UNLIKELY(!FLAG_use_osr)) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
