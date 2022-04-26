@@ -16,6 +16,52 @@
       "message": "I replaced `constexpr` with `inline` in `GCTracer::Scope::Name` and `GCTracer::Scope::NeedsYoungEpoch`, to avoid the error in gcc. I verified that both clang and gcc generate the same code.",
       "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ee4b03_fe6d3c98",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T09:56:06Z",
+      "side": 1,
+      "message": "You can use `V8_INLINE` if `inline` doesn\u0027t work. I suppose it did for you though.",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b58041_1938b41e",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T09:56:06Z",
+      "side": 1,
+      "message": "constexpr didn\u0027t work because of `UNREACHABLE()`?",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
