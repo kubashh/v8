@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1ffb05_c59915cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T08:23:40Z",
+      "side": 1,
+      "message": "lgtm, cool stuff!",
+      "revId": "c5cd82c99cfb892c9a2a64b54d97ae8e67bd998f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135ab95c_336cf38e",
+        "filename": "test/unittests/heap/cppgc/age-table-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-26T08:23:40Z",
+      "side": 1,
+      "message": "Should we add a disallow GC scope to document that this test should never GC?\n\nAlternative: Would it make sense to just initialize the backend and not reuse `TestWithHeap`?",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 9
+      },
+      "revId": "c5cd82c99cfb892c9a2a64b54d97ae8e67bd998f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
