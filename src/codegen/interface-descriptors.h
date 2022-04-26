@@ -102,6 +102,7 @@ namespace internal {
   V(LoadWithReceiverBaseline)                        \
   V(LoadWithVector)                                  \
   V(LookupBaseline)                                  \
+  V(NewHeapNumber)                                   \
   V(NoContext)                                       \
   V(ResumeGenerator)                                 \
   V(ResumeGeneratorBaseline)                         \
@@ -479,6 +480,7 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
   static constexpr inline int GetStackParameterCount();
   static constexpr inline Register* GetRegisterData();
   static constexpr inline Register GetRegisterParameter(int i);
+  static constexpr inline DoubleRegister GetDoubleRegisterParameter(int i);
 
   explicit StaticCallInterfaceDescriptor(CallDescriptors::Key key)
       : CallInterfaceDescriptor(key) {}
@@ -712,6 +714,15 @@ class AllocateDescriptor
   DECLARE_DESCRIPTOR(AllocateDescriptor)
 
   static constexpr auto registers();
+};
+
+class NewHeapNumberDescriptor
+    : public StaticCallInterfaceDescriptor<NewHeapNumberDescriptor> {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kValue)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::TaggedPointer(),  // Result
+                                    MachineType::Float64())        // kValue
+  DECLARE_DESCRIPTOR(NewHeapNumberDescriptor)
 };
 
 // This descriptor defines the JavaScript calling convention that can be used
