@@ -134,6 +134,30 @@
       },
       "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06b99b56_8812ff05",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-04-26T10:58:30Z",
+      "side": 1,
+      "message": "Here\u0027s the build that failed:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux%20gcc%20-%20builder/1646/overview\nThe message was (repeated twice):\n```\nIn file included from ../../src/base/optional.h:15:0,\n                 from ../../src/base/platform/platform.h:33,\n                 from ../../src/heap/gc-tracer-inl.h:8,\n                 from ../../check-header-includes/test-include-src-heap-gc-tracer-inl.cc:1:\n../../src/heap/gc-tracer-inl.h: In static member function ‘static constexpr const char* v8::internal::GCTracer::Scope::Name(v8::internal::GCTracer::Scope::ScopeId)’:\n../../src/base/logging.h:35:28: error: call to non-constexpr function ‘void V8_Fatal(const char*, ...)’\n #define FATAL(...) V8_Fatal(__VA_ARGS__)\n                    ~~~~~~~~^~~~~~~~~~~~~\n../../src/base/logging.h:49:23: note: in expansion of macro ‘FATAL’\n #define UNREACHABLE() FATAL(\"unreachable code\")\n                       ^~~~~\n../../src/heap/gc-tracer-inl.h:91:3: note: in expansion of macro ‘UNREACHABLE’\n   UNREACHABLE();\n   ^~~~~~~~~~~\n```\n\nI didn\u0027t find a `constexpr` with a `CHECK` somewhere in the code base, but there are many with `DCHECK`. Actually, you\u0027re right, this should also fail: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/base/optional.h;drc\u003dd67f06067200f2c9acef422dbce0b3d732148afe;l\u003d560\nI think the difference is that `DCHECK` calls `V8_Dcheck` conditionally:\n```\nif (V8_UNLIKELY(!(condition))) {          \\\n  V8_Dcheck(__FILE__, __LINE__, message); \\\n} \n```\nand if the condition evaluates as false at compile time, maybe this is the reason it doesn\u0027t complain. In our case, `UNREACHABLE` calls `V8_Fatal` unconditionally.",
+      "parentUuid": "6d0ef27c_5fb9e6c7",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
