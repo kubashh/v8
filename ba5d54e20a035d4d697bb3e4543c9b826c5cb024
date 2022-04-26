@@ -16,6 +16,57 @@
       "message": "ptal",
       "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2820d69_6d89d916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-26T18:39:35Z",
+      "side": 1,
+      "message": "lgtm\n\nI hope TF can hoist all these length divisions out!",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f578d5b9_f9042cc7",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-26T18:39:35Z",
+      "side": 1,
+      "message": "Here and below, the `THROW_ERROR_RETURN_FAILURE_ON_DETACHED_OR_OUT_OF_BOUNDS` macro was changed to take 4 parameters above, but I don\u0027t see `index` being passed here. How did this compile? o_O",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03274cbf_301faa09",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-04-26T18:39:35Z",
+      "side": 1,
+      "message": "Would this test block d8 (instead of immediately fail) in case of a bug and the worker doesn\u0027t `postMessage` back? If so, would be good to change the test so that a bug doesn\u0027t result in a timeout but a more immediate failure.",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
