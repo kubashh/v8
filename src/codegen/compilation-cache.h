@@ -65,9 +65,10 @@ class CompilationSubCache {
   Isolate* isolate() const { return isolate_; }
 
   // Ageing occurs either by removing the oldest generation, or with
-  // custom logic implemented in CompilationCacheTable::Age.
+  // custom subclass logic.
   static void AgeByGeneration(CompilationSubCache* c);
-  static void AgeCustom(CompilationSubCache* c);
+
+  base::Optional<CompilationCacheTable> GetOnlyTable();
 
  private:
   Isolate* const isolate_;
@@ -82,9 +83,9 @@ class CompilationCacheScript : public CompilationSubCache {
  public:
   explicit CompilationCacheScript(Isolate* isolate);
 
-  MaybeHandle<SharedFunctionInfo> Lookup(Handle<String> source,
-                                         const ScriptDetails& script_details,
-                                         LanguageMode language_mode);
+  MaybeHandle<Script> Lookup(Handle<String> source,
+                             const ScriptDetails& script_details,
+                             LanguageMode language_mode);
 
   void Put(Handle<String> source, LanguageMode language_mode,
            Handle<SharedFunctionInfo> function_info);
@@ -154,12 +155,14 @@ class V8_EXPORT_PRIVATE CompilationCache {
   CompilationCache(const CompilationCache&) = delete;
   CompilationCache& operator=(const CompilationCache&) = delete;
 
-  // Finds the script shared function info for a source
-  // string. Returns an empty handle if the cache doesn't contain a
-  // script for the given source string with the right origin.
-  MaybeHandle<SharedFunctionInfo> LookupScript(
-      Handle<String> source, const ScriptDetails& script_details,
-      LanguageMode language_mode);
+  // Finds the Script for a script source string. Returns an empty handle if the
+  // cache doesn't contain a script for the given source string with the right
+  // origin. Callers should check whether there is a root SharedFunctionInfo in
+  // the script and whether it is already compiled, and choose what to do
+  // accordingly.
+  MaybeHandle<Script> LookupScript(Handle<String> source,
+                                   const ScriptDetails& script_details,
+                                   LanguageMode language_mode);
 
   // Finds the shared function info for a source string for eval in a
   // given context.  Returns an empty handle if the cache doesn't
