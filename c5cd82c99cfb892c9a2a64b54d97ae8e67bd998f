@@ -39,6 +39,30 @@
       },
       "revId": "c5cd82c99cfb892c9a2a64b54d97ae8e67bd998f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84691ab2_23cd1117",
+        "filename": "test/unittests/heap/cppgc/age-table-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-04-26T09:24:37Z",
+      "side": 1,
+      "message": "Done (went with disallow-gc-scope, as a simpler fix 😊 )",
+      "parentUuid": "135ab95c_336cf38e",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 9
+      },
+      "revId": "c5cd82c99cfb892c9a2a64b54d97ae8e67bd998f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
