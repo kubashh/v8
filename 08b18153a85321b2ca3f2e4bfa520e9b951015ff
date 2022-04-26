@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a5a43e_926c8203",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-04-26T10:01:43Z",
+      "side": 1,
+      "message": "`V8_INLINE` tries to force inlining, e.g. with `__attribute__((always_inline))`.\nIt\u0027s better here if we avoid this and have a non-inline version with the full switch, for the cases that the scope id is not known at compile time. This is what `constexpr` did: it inlined and optimized away when the id was known at compile time, otherwise it introduced a regular call. This is also what `inline` does.",
+      "parentUuid": "14ee4b03_fe6d3c98",
+      "range": {
+        "startLine": 100,
+        "startChar": 11,
+        "endLine": 100,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53b58041_1938b41e",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-26T09:56:06Z",
       "side": 1,
       "message": "constexpr didn\u0027t work because of `UNREACHABLE()`?",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 17
+      },
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a287c294_689d20ba",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-04-26T10:01:43Z",
+      "side": 1,
+      "message": "Yes. `UNREACHABLE` eventually calls `V8_Fatal` and this is not a constant expression. Clang did not complain but gcc did.\n\nUnfortunately, there\u0027s currently no good way to have a non-exhaustive `switch` in a `constexpr` function.",
+      "parentUuid": "53b58041_1938b41e",
       "range": {
         "startLine": 101,
         "startChar": 11,
