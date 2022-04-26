@@ -343,6 +343,11 @@ void Deoptimizer::DeoptimizeMarkedCodeForContext(NativeContext native_context) {
     if (code.marked_for_deoptimization()) {
       codes.insert(code);
 
+#ifndef V8_EXTERNAL_CODE_SPACE
+      // This scope is needed because we are storing a Code object and marking
+      // barrier might be triggered.
+      CodePageHeaderModificationScope rwx_write_scope;
+#endif
       if (!prev.is_null()) {
         // Skip this code in the optimized code list.
         prev.set_next_code_link(next);
