@@ -69,6 +69,24 @@
       "parentUuid": "0d5162e0_73680790",
       "revId": "72268a899eb44d1da88c6cc6c4b51c159c5d9b50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad60cd2d_740eed18",
+        "filename": "cq.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-26T14:53:34Z",
+      "side": 1,
+      "message": "So maybe \"(h|cc)\" works, but that\u0027s not used anywhere in this file.",
+      "parentUuid": "870a3481_ed1b28ee",
+      "revId": "72268a899eb44d1da88c6cc6c4b51c159c5d9b50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
