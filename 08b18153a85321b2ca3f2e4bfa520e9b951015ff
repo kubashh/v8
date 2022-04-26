@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68db9f57_284b8921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-04-26T09:52:42Z",
+      "side": 1,
+      "message": "I replaced `constexpr` with `inline` in `GCTracer::Scope::Name` and `GCTracer::Scope::NeedsYoungEpoch`, to avoid the error in gcc. I verified that both clang and gcc generate the same code.",
+      "revId": "08b18153a85321b2ca3f2e4bfa520e9b951015ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
