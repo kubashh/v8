@@ -33,6 +33,24 @@
       "message": "Wait, this file was also modified in https://crrev.com/c/3398496. Why didn\u0027t this trigger?",
       "revId": "72268a899eb44d1da88c6cc6c4b51c159c5d9b50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5162e0_73680790",
+        "filename": "cq.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-26T14:02:23Z",
+      "side": 1,
+      "message": "I guess this is just an illegal regexp. I\u0027ll fix it as part of this CL.",
+      "parentUuid": "0352d249_0c4c86c9",
+      "revId": "72268a899eb44d1da88c6cc6c4b51c159c5d9b50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
