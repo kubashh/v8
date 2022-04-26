@@ -196,6 +196,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c40d9935_113ddcc5",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-26T17:52:58Z",
+      "side": 1,
+      "message": "Interesting! That way, perhaps the expensive walk of the new object graph could happen on a background thread, and the main thread could receive a simplified list of things that need rewriting.",
+      "parentUuid": "5befe430_d356a80d",
+      "range": {
+        "startLine": 3307,
+        "startChar": 0,
+        "endLine": 3310,
+        "endChar": 46
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b070fbce_b8997043",
         "filename": "src/objects/compilation-cache-table-inl.h",
         "patchSetId": 5
@@ -255,6 +279,30 @@
       "side": 1,
       "message": "Option 2 sgtm, might still have to be a WeakFixedArray of size 1 in fact, seems we don\u0027t have (non-JS) weakrefs/weakcells anymore. Custom weakness is a last-resort kind of thing, and a WeakFixedArray-based hashtable would also have weak values.",
       "parentUuid": "245068a9_76b944e3",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 17
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966612ca_4e645f00",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-26T17:52:58Z",
+      "side": 1,
+      "message": "Updated, thanks.",
+      "parentUuid": "fe8d9c29_f73104ab",
       "range": {
         "startLine": 41,
         "startChar": 4,
@@ -335,6 +383,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40fc2965_bee876ad",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-26T17:52:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82092ceb_90a18352",
+      "range": {
+        "startLine": 432,
+        "startChar": 28,
+        "endLine": 432,
+        "endChar": 31
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "235a46ce_31363aa9",
@@ -372,6 +444,30 @@
       "side": 1,
       "message": "Agreed. I was attempting to match the existing style, but these three caches behave very differently, so the code would be cleaner if we separated them more.",
       "parentUuid": "235a46ce_31363aa9",
+      "range": {
+        "startLine": 455,
+        "startChar": 6,
+        "endLine": 455,
+        "endChar": 38
+      },
+      "revId": "e4c3d27810bb9d4fdc7560e362539c22b8e2f957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ccb163_572e98c7",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-26T17:52:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cde4ced0_c48bd14c",
       "range": {
         "startLine": 455,
         "startChar": 6,
