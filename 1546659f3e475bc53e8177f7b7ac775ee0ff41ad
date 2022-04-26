@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "447f77ce_945743d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-26T13:29:08Z",
+      "side": 1,
+      "message": "Thanks, LGTM",
+      "revId": "1546659f3e475bc53e8177f7b7ac775ee0ff41ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a9f8224_ec9ab657",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-04-26T13:29:08Z",
+      "side": 1,
+      "message": "Nit: It might be a bit surprising that we both use CommittedPhysicalMemory() and size() for the same address computation. They seem to be the same but I think it would be good to unify that.",
+      "revId": "1546659f3e475bc53e8177f7b7ac775ee0ff41ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
