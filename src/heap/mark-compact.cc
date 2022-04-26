@@ -626,7 +626,7 @@ void MarkCompactCollector::CollectGarbage() {
   heap()->memory_measurement()->FinishProcessing(native_context_stats_);
   RecordObjectStats();
 
-  StartSweepSpaces();
+  Sweep();
   Evacuate();
   Finish();
 }
@@ -1071,10 +1071,6 @@ void MarkCompactCollector::Finish() {
 
   sweeper()->StartSweeperTasks();
   sweeper()->StartIterabilityTasks();
-
-  // Clear the marking state of live large objects.
-  heap_->lo_space()->ClearMarkingStateOfLiveObjects();
-  heap_->code_lo_space()->ClearMarkingStateOfLiveObjects();
 
 #ifdef DEBUG
   DCHECK(state_ == SWEEP_SPACES || state_ == RELOCATE_OBJECTS);
@@ -3543,13 +3539,6 @@ void MarkCompactCollector::EvacuateEpilogue() {
     DCHECK_EQ(0, heap()->new_space()->Size());
   }
 
-  // Deallocate unmarked large objects.
-  heap()->lo_space()->FreeUnmarkedObjects();
-  heap()->code_lo_space()->FreeUnmarkedObjects();
-  if (heap()->new_lo_space()) {
-    heap()->new_lo_space()->FreeUnmarkedObjects();
-  }
-
   // Old generation. Deallocate evacuated candidate pages.
   ReleaseEvacuationCandidates();
 
@@ -4013,6 +4002,9 @@ void MarkCompactCollector::EvacuatePagesInParallel() {
       HeapObject object = current->GetObject();
       DCHECK(!marking_state->IsGrey(object));
       if (marking_state->IsBlack(object)) {
+        Marking::MarkWhite(marking_state->MarkBitFrom(object));
+        current->ProgressBar().ResetIfEnabled();
+        marking_state->SetLiveBytes(current, 0);
         heap_->lo_space()->PromoteNewLargeObject(current);
         current->SetFlag(Page::PAGE_NEW_OLD_PROMOTION);
         promoted_large_pages_.push_back(current);
@@ -4871,6 +4863,39 @@ void MarkCompactCollector::ReleaseEvacuationCandidates() {
   compacting_ = false;
 }
 
+void MarkCompactCollector::SweepLargeSpace(LargeObjectSpace* space,
+                                           SweepSpaceLiveness liveness) {
+  auto* marking_state =
+      heap()->incremental_marking()->non_atomic_marking_state();
+  PtrComprCageBase cage_base(heap()->isolate());
+  size_t surviving_object_size = 0;
+  for (auto it = space->begin(); it != space->end();) {
+    LargePage* current = *(it++);
+    HeapObject object = current->GetObject();
+    DCHECK(!marking_state->IsGrey(object));
+    size_t object_size = static_cast<size_t>(object.Size(cage_base));
+
+    if (!marking_state->IsBlack(object)) {
+      // Object is dead and page can be released.
+      space->RemovePage(current, object_size);
+      heap()->memory_allocator()->Free(MemoryAllocator::FreeMode::kConcurrently,
+                                       current);
+      continue;
+    }
+
+    // Object is alive. Shrink to object size if needed.
+    space->ShrinkPageToObjectSize(current, object, object_size);
+    surviving_object_size += object_size;
+
+    if (liveness == SweepSpaceLiveness::kClear) {
+      Marking::MarkWhite(marking_state->MarkBitFrom(object));
+      current->ProgressBar().ResetIfEnabled();
+      marking_state->SetLiveBytes(current, 0);
+    }
+  }
+  space->set_objects_size(surviving_object_size);
+}
+
 void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
   space->ClearAllocatorState();
 
@@ -4912,13 +4937,33 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
   }
 }
 
-void MarkCompactCollector::StartSweepSpaces() {
+void MarkCompactCollector::Sweep() {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_SWEEP);
 #ifdef DEBUG
   state_ = SWEEP_SPACES;
 #endif
 
   {
+    {
+      GCTracer::Scope sweep_scope(
+          heap()->tracer(), GCTracer::Scope::MC_SWEEP_LO, ThreadKind::kMain);
+      SweepLargeSpace(heap()->lo_space(), SweepSpaceLiveness::kClear);
+    }
+    {
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_CODE_LO,
+                                  ThreadKind::kMain);
+      SweepLargeSpace(heap()->code_lo_space(), SweepSpaceLiveness::kClear);
+    }
+    if (heap()->new_lo_space()) {
+      // New large object spaces will be later on processed in the evacuation
+      // phase as well. Here we sweep dead objects and adjust possibly
+      // right-trimmed objects.
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_NEW_LO,
+                                  ThreadKind::kMain);
+      SweepLargeSpace(heap()->new_lo_space(), SweepSpaceLiveness::kKeep);
+    }
     {
       GCTracer::Scope sweep_scope(
           heap()->tracer(), GCTracer::Scope::MC_SWEEP_OLD, ThreadKind::kMain);
@@ -6088,6 +6133,9 @@ void MinorMarkCompactCollector::EvacuatePagesInParallel() {
     HeapObject object = current->GetObject();
     DCHECK(!non_atomic_marking_state_.IsBlack(object));
     if (non_atomic_marking_state_.IsGrey(object)) {
+      Marking::MarkWhite(non_atomic_marking_state_.MarkBitFrom(object));
+      current->ProgressBar().ResetIfEnabled();
+      non_atomic_marking_state_.SetLiveBytes(current, 0);
       heap_->lo_space()->PromoteNewLargeObject(current);
       current->SetFlag(Page::PAGE_NEW_OLD_PROMOTION);
       promoted_large_pages_.push_back(current);
