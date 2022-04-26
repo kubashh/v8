@@ -540,6 +540,17 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      V8_DICT_PROPERTY_CONST_TRACKING_BOOL,
                      "Use const tracking on dictionary properties")
 
+FLAG(INT, int, max_opt, -1,
+     "Set the maximal optimisation tier: "
+     "-1 == any, 0 == ignition/interpreter, 1 == sparkplug/baseline, "
+     "2 == maglev, 3 == turboshaft, 4 == turbofan")
+
+// TODO(cbruni): use --turbofan
+DEFINE_VALUE_IMPLICATION(max_opt < 4, turbofan, false)
+DEFINE_VALUE_IMPLICATION(max_opt < 3, turboshaft, false)
+DEFINE_VALUE_IMPLICATION(max_opt < 2, maglev, false)
+DEFINE_VALUE_IMPLICATION(max_opt < 1, sparkplug, false)
+
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
             "Disable runtime allocation of executable memory.")
@@ -796,6 +807,9 @@ DEFINE_BOOL(print_deopt_stress, false, "print number of possible deopt points")
 
 // Flags for TurboFan.
 DEFINE_BOOL(opt, true, "use adaptive optimizations")
+// TODO(cbruni, v8:12825): clean up
+DEFINE_BOOL(turbofan, true, "use adaptive optimizations")
+DEFINE_IMPLICATION(turbofan, opt)
 DEFINE_BOOL(turbo_sp_frame_access, false,
             "use stack pointer-relative access to frame wherever possible")
 DEFINE_BOOL(
