@@ -5143,6 +5143,31 @@ MaybeHandle<SharedFunctionInfo> Script::FindWebSnapshotSharedFunctionInfo(
   UNREACHABLE();
 }
 
+Object Script::GetRootSharedFunctionInfo(Isolate* isolate) {
+  if (shared_function_info_count() <= kFunctionLiteralIdTopLevel) {
+    return Smi::FromInt(0);
+  }
+  MaybeObject shared = shared_function_infos().Get(kFunctionLiteralIdTopLevel);
+  HeapObject heap_object;
+  if (!shared->GetHeapObject(&heap_object) ||
+      heap_object.IsUndefined(isolate)) {
+    return Smi::FromInt(0);
+  }
+  DCHECK(heap_object.IsSharedFunctionInfo());
+  return heap_object;
+}
+
+bool Script::TryGetRootSharedFunctionInfo(Handle<SharedFunctionInfo>* result,
+                                          Isolate* isolate) {
+  DisallowGarbageCollection no_gc;
+  Object maybe_sfi = GetRootSharedFunctionInfo(isolate);
+  if (maybe_sfi.IsHeapObject()) {
+    *result = handle(SharedFunctionInfo::cast(maybe_sfi), isolate);
+    return true;
+  }
+  return false;
+}
+
 Script::Iterator::Iterator(Isolate* isolate)
     : iterator_(isolate->heap()->script_list()) {}
 
