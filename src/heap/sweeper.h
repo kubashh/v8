@@ -18,6 +18,7 @@ namespace v8 {
 namespace internal {
 
 class InvalidatedSlotsCleanup;
+class LargePage;
 class MajorNonAtomicMarkingState;
 class Page;
 class PagedSpace;
@@ -74,6 +75,8 @@ class Sweeper {
   enum FreeListRebuildingMode { REBUILD_FREE_LIST, IGNORE_FREE_LIST };
   enum AddPageMode { REGULAR, READD_TEMPORARY_REMOVED_PAGE };
   enum class SweepingMode { kEagerDuringGC, kLazyOrConcurrent };
+
+  static void RawSweep(LargePage*);
 
   Sweeper(Heap* heap, MajorNonAtomicMarkingState* marking_state);
 

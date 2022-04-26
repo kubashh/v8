@@ -329,6 +329,9 @@ void Sweeper::ClearMarkBitsAndHandleLivenessStatistics(
   }
 }
 
+// static
+void Sweeper::RawSweep(LargePage*) {}
+
 int Sweeper::RawSweep(Page* p, FreeListRebuildingMode free_list_mode,
                       FreeSpaceTreatmentMode free_space_mode,
                       SweepingMode sweeping_mode,

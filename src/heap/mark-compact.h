@@ -11,6 +11,7 @@
 #include "include/v8-internal.h"
 #include "src/heap/base/worklist.h"
 #include "src/heap/concurrent-marking.h"
+#include "src/heap/large-spaces.h"
 #include "src/heap/marking-visitor.h"
 #include "src/heap/marking-worklist.h"
 #include "src/heap/marking.h"
@@ -743,6 +744,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // up other pages for sweeping. Does not start sweeper tasks.
   void StartSweepSpaces();
   void StartSweepSpace(PagedSpace* space);
+  enum class SweepSpaceLiveness { kKeep, kClear };
+  void StartSweepSpace(LargeObjectSpace* space, SweepSpaceLiveness liveness);
 
   void EvacuatePrologue() override;
   void EvacuateEpilogue() override;
