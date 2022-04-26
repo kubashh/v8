@@ -50,6 +50,24 @@
       "message": "What\u0027s the plan for those failures? Do they need to be fixed, or are they somehow expected? Should we assign an issue?",
       "revId": "0c95ebd3b0c14e13446f0e33f0289010acb6febc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0389877d_1d65cc19",
+        "filename": "test/wasm-js/wasm-js.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-04-26T11:52:28Z",
+      "side": 1,
+      "message": "These are outdated proposal tests (see the tentative), same as below. We could spend time to update proposal tests, but we didn\u0027t put energy into that up until now.",
+      "parentUuid": "3b7b0721_86b3ab28",
+      "revId": "0c95ebd3b0c14e13446f0e33f0289010acb6febc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
