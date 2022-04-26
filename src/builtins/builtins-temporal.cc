@@ -300,8 +300,6 @@ TO_BE_IMPLEMENTED(TemporalTimeZonePrototypeToJSON)
 TO_BE_IMPLEMENTED(TemporalCalendarPrototypeYearMonthFromFields)
 /* Temporal #sec-temporal.calendar.prototype.monthdayfromfields */
 TO_BE_IMPLEMENTED(TemporalCalendarPrototypeMonthDayFromFields)
-/* Temporal #sec-temporal.calendar.prototype.dateadd */
-TO_BE_IMPLEMENTED(TemporalCalendarPrototypeDateAdd)
 /* Temporal #sec-temporal.calendar.prototype.month */
 TO_BE_IMPLEMENTED(TemporalCalendarPrototypeMonth)
 /* Temporal #sec-temporal.calendar.prototype.monthcode */
@@ -792,6 +790,7 @@ TEMPORAL_GET_BIGINT_AFTER_DIVID(Instant, EpochMicroseconds, nanoseconds, 1000,
 // Calendar
 TEMPORAL_CONSTRUCTOR1(Calendar)
 TEMPORAL_ID_BY_TO_STRING(Calendar)
+TEMPORAL_PROTOTYPE_METHOD3(Calendar, DateAdd, dateAdd)
 TEMPORAL_PROTOTYPE_METHOD2(Calendar, DateFromFields, dateFromFields)
 TEMPORAL_PROTOTYPE_METHOD3(Calendar, DateUntil, dateUntil)
 TEMPORAL_PROTOTYPE_METHOD1(Calendar, DaysInMonth, daysInMonth)
