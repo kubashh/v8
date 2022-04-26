@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd58dc4_8a01e708",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-26T13:59:47Z",
+      "side": 1,
+      "message": "PTAL. This should prevent breakages like on https://crrev.com/c/3398496.",
+      "revId": "72268a899eb44d1da88c6cc6c4b51c159c5d9b50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
