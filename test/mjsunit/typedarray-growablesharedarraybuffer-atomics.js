@@ -141,3 +141,28 @@ d8.file.execute('test/mjsunit/typedarray-helpers.js');
                      TypeError);
       });
 })();
+
+(function TestAtomics() {
+  for (let ctor of intCtors) {
+    const gsab = CreateGrowableSharedArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                                 8 * ctor.BYTES_PER_ELEMENT);
+    const lengthTracking = new ctor(gsab, 0);
+    TestAtomicsOperations(lengthTracking, 0);
+
+    AssertAtomicsOperationsThrow(lengthTracking, 5, RangeError);
+    gsab.grow(6 * ctor.BYTES_PER_ELEMENT);
+    TestAtomicsOperations(lengthTracking, 5);
+  }
+})();
+
+(function AtomicsFailWithNonIntegerArray() {
+  const gsab = CreateGrowableSharedArrayBuffer(400, 800);
+
+  const ui8ca = new Uint8ClampedArray(gsab);
+  const f32a = new Float32Array(gsab);
+  const f64a = new Float64Array(gsab);
+  const mf32a = new MyFloat32Array(gsab);
+
+  [ui8ca, f32a, f64a, mf32a].forEach((ta) => {
+      AssertAtomicsOperationsThrow(ta, 0, TypeError); });
+})();
