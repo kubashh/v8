@@ -891,7 +891,7 @@ TEST(BailoutReason) {
 #ifndef V8_LITE_MODE
   i::FLAG_allow_natives_syntax = true;
   i::FLAG_always_opt = false;
-  i::FLAG_opt = true;
+  i::FLAG_turbofan = true;
   v8::HandleScope scope(CcTest::isolate());
   v8::Local<v8::Context> env = CcTest::NewContext({PROFILER_EXTENSION_ID});
   v8::Context::Scope context_scope(env);

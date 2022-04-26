@@ -1229,7 +1229,7 @@ TEST(BoundFunctionCall) {
 // This tests checks distribution of the samples through the source lines.
 static void TickLines(bool optimize) {
 #ifndef V8_LITE_MODE
-  FLAG_opt = optimize;
+  FLAG_turbofan = optimize;
 #endif  // V8_LITE_MODE
   CcTest::InitializeVM();
   LocalContext env;
@@ -4542,7 +4542,7 @@ TEST(FastApiCPUProfiler) {
 
 TEST(BytecodeFlushEventsEagerLogging) {
 #ifndef V8_LITE_MODE
-  FLAG_opt = false;
+  FLAG_turbofan = false;
   FLAG_always_opt = false;
   i::FLAG_optimize_for_size = false;
 #endif  // V8_LITE_MODE
