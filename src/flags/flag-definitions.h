@@ -540,18 +540,30 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      V8_DICT_PROPERTY_CONST_TRACKING_BOOL,
                      "Use const tracking on dictionary properties")
 
+DEFINE_UINT(max_opt, 999,
+            "Set the maximal optimisation tier: "
+            "> 3 == any, 0 == ignition/interpreter, 1 == sparkplug/baseline, "
+            "2 == maglev, 3 == turbofan")
+
+DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 3, turbofan, false)
+#ifdef V8_ENABLE_MAGLEV
+DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 2, maglev, false)
+#endif  // V8_ENABLE_MAGLEV
+#if ENABLE_SPARKPLUG
+DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 1, sparkplug, false)
+#endif  // ENABLE_SPARKPLUG
+
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
             "Disable runtime allocation of executable memory.")
 
 // Jitless V8 has a few implications:
-DEFINE_NEG_IMPLICATION(jitless, opt)
 // Field type tracking is only used by TurboFan.
 DEFINE_NEG_IMPLICATION(jitless, track_field_types)
 // Regexps are interpreted.
 DEFINE_IMPLICATION(jitless, regexp_interpret_all)
+DEFINE_NEG_IMPLICATION(jitless, turbofan)
 #if ENABLE_SPARKPLUG
-// No Sparkplug compilation.
 DEFINE_NEG_IMPLICATION(jitless, sparkplug)
 DEFINE_NEG_IMPLICATION(jitless, always_sparkplug)
 #endif  // ENABLE_SPARKPLUG
@@ -798,7 +810,9 @@ DEFINE_INT(deopt_every_n_times, 0,
 DEFINE_BOOL(print_deopt_stress, false, "print number of possible deopt points")
 
 // Flags for TurboFan.
-DEFINE_BOOL(opt, true, "use adaptive optimizations")
+DEFINE_BOOL(turbofan, true, "use adaptive optimizations")
+DEFINE_ALIAS_BOOL(opt, turbofan)
+
 DEFINE_BOOL(turbo_sp_frame_access, false,
             "use stack pointer-relative access to frame wherever possible")
 DEFINE_BOOL(
@@ -1577,8 +1591,9 @@ DEFINE_BOOL(trace_deopt_verbose, false, "extra verbose deoptimization tracing")
 DEFINE_IMPLICATION(trace_deopt_verbose, trace_deopt)
 DEFINE_BOOL(trace_file_names, false,
             "include file names in trace-opt/trace-deopt output")
+// TODO(v8:12825): further clean up
 DEFINE_BOOL(always_opt, false, "always try to optimize functions")
-DEFINE_IMPLICATION(always_opt, opt)
+DEFINE_IMPLICATION(always_opt, turbofan)
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
 

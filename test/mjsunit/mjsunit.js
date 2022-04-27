@@ -725,7 +725,7 @@ var prettyPrinted;
       testRunner.quit(0);
     }
     // Tests that use assertOptimized() do not make sense if --no-opt
-    // option is provided. Such tests must add --opt to flags comment.
+    // option is provided. Such tests must add --turbofan to flags comment.
     assertFalse((opt_status & V8OptimizationStatus.kNeverOptimize) !== 0,
                 "test does not make sense with --no-opt");
     assertTrue(

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --allow-natives-syntax --turbo-optimize-apply --opt
+// Flags: --allow-natives-syntax --turbo-optimize-apply --turbofan
 
 // These tests do not work well if this script is run more than once (e.g.
 // --stress-opt); after a few runs the whole function is immediately compiled
