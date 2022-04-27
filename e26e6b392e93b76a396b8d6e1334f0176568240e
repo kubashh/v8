@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185d9e4f_fdfc9391",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:23:37Z",
+      "side": 1,
+      "message": "this might be a bit too generic naming, e.g. it already doesn\u0027t include the GetNamedProperty fast path.",
+      "range": {
+        "startLine": 156,
+        "startChar": 5,
+        "endLine": 156,
+        "endChar": 16
+      },
+      "revId": "e26e6b392e93b76a396b8d6e1334f0176568240e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a92f626_c59f1e9c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:23:37Z",
+      "side": 1,
+      "message": "do we have any feedback other than monomorphic for binary ops?",
+      "range": {
+        "startLine": 157,
+        "startChar": 2,
+        "endLine": 157,
+        "endChar": 70
+      },
+      "revId": "e26e6b392e93b76a396b8d6e1334f0176568240e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b14fb1_68ebc353",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:23:37Z",
+      "side": 1,
+      "message": "took me a moment that you meant the group-theoretical definition of \"unit\", not the \"measurement unit\" kind. Maybe add a short disambiguation?\n\nAlso, it might be hard to use under IEEE794, e.g. `-0 * 1 \u003d\u003d -0` but `-0 + 0 \u003d\u003d +0`",
+      "range": {
+        "startLine": 174,
+        "startChar": 37,
+        "endLine": 174,
+        "endChar": 41
+      },
+      "revId": "e26e6b392e93b76a396b8d6e1334f0176568240e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47b3da1c_4067dfb7",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:23:37Z",
+      "side": 1,
+      "message": "not really part of your CL, but maybe add some TODOs to do some constant folding in these operations?",
+      "range": {
+        "startLine": 247,
+        "startChar": 25,
+        "endLine": 247,
+        "endChar": 54
+      },
+      "revId": "e26e6b392e93b76a396b8d6e1334f0176568240e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c222ef6d_c180e8d3",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:23:37Z",
+      "side": 1,
+      "message": "probably want a TODO to eventually remove this check, right? I\u0027d expect we\u0027d have fast paths for everything eventually",
+      "range": {
+        "startLine": 294,
+        "startChar": 6,
+        "endLine": 294,
+        "endChar": 17
+      },
+      "revId": "e26e6b392e93b76a396b8d6e1334f0176568240e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
