@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4ebe84e2_380fd303",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-27T13:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70abc3f5_e96c2c95",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "86457e3d76a07a6fd8c117a977d08b037ac0f25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4c88e328_1848737d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 12
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-27T13:03:02Z",
       "side": 1,
       "message": "I think this can be removed too.",
+      "range": {
+        "startLine": 205,
+        "startChar": 11,
+        "endLine": 205,
+        "endChar": 26
+      },
+      "revId": "86457e3d76a07a6fd8c117a977d08b037ac0f25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef784856_b72dc7a5",
+        "filename": "test/cctest/test-flags.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-27T13:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5189f29c_34203ebc",
       "range": {
         "startLine": 205,
         "startChar": 11,
