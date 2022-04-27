@@ -17,9 +17,6 @@ const int kLiteralInitialLength = 2;
 const int kLiteralContextOffset = 0;
 const int kLiteralLiteralsOffset = 1;
 
-// The initial placeholder insertion of the eval cache survives this many GCs.
-const int kHashGenerations = 10;
-
 int SearchLiteralsMapEntry(CompilationCacheTable cache, int cache_entry,
                            Context native_context) {
   DisallowGarbageCollection no_gc;
@@ -129,8 +126,8 @@ FeedbackCell SearchLiteralsMap(CompilationCacheTable cache, int cache_entry,
   return result;
 }
 
-// StringSharedKeys are used as keys in the eval cache.
-class StringSharedKey : public HashTableKey {
+// EvalCacheKeys are used as keys in the eval cache.
+class EvalCacheKey : public HashTableKey {
  public:
   // This tuple unambiguously identifies calls to eval() or
   // CreateDynamicFunction() (such as through the Function() constructor).
@@ -142,22 +139,14 @@ class StringSharedKey : public HashTableKey {
   // * When positive, position is the position in the source where eval is
   //   called. When negative, position is the negation of the position in the
   //   dynamic function's effective source where the ')' ends the parameters.
-  StringSharedKey(Handle<String> source, Handle<SharedFunctionInfo> shared,
-                  LanguageMode language_mode, int position)
-      : HashTableKey(CompilationCacheShape::StringSharedHash(
-            *source, *shared, language_mode, position)),
+  EvalCacheKey(Handle<String> source, Handle<SharedFunctionInfo> shared,
+               LanguageMode language_mode, int position)
+      : HashTableKey(CompilationCacheShape::EvalHash(*source, *shared,
+                                                     language_mode, position)),
         source_(source),
         shared_(shared),
         language_mode_(language_mode),
         position_(position) {}
-
-  // This tuple unambiguously identifies script compilation.
-  StringSharedKey(Handle<String> source, LanguageMode language_mode)
-      : HashTableKey(
-            CompilationCacheShape::StringSharedHash(*source, language_mode)),
-        source_(source),
-        language_mode_(language_mode),
-        position_(kNoSourcePosition) {}
 
   bool IsMatch(Object other) override {
     DisallowGarbageCollection no_gc;
@@ -167,14 +156,8 @@ class StringSharedKey : public HashTableKey {
       return Hash() == other_hash;
     }
     FixedArray other_array = FixedArray::cast(other);
-    DCHECK(other_array.get(0).IsSharedFunctionInfo() ||
-           other_array.get(0) == Smi::zero());
-    Handle<SharedFunctionInfo> shared;
-    if (shared_.ToHandle(&shared)) {
-      if (*shared != other_array.get(0)) return false;
-    } else {
-      if (Smi::zero() != other_array.get(0)) return false;
-    }
+    DCHECK(other_array.get(0).IsSharedFunctionInfo());
+    if (*shared_ != other_array.get(0)) return false;
     int language_unchecked = Smi::ToInt(other_array.get(2));
     DCHECK(is_valid_language_mode(language_unchecked));
     LanguageMode language_mode = static_cast<LanguageMode>(language_unchecked);
@@ -187,12 +170,7 @@ class StringSharedKey : public HashTableKey {
 
   Handle<Object> AsHandle(Isolate* isolate) {
     Handle<FixedArray> array = isolate->factory()->NewFixedArray(4);
-    Handle<SharedFunctionInfo> shared;
-    if (shared_.ToHandle(&shared)) {
-      array->set(0, *shared);
-    } else {
-      array->set(0, Smi::zero());
-    }
+    array->set(0, *shared_);
     array->set(1, *source_);
     array->set(2, Smi::FromEnum(language_mode_));
     array->set(3, Smi::FromInt(position_));
@@ -202,7 +180,7 @@ class StringSharedKey : public HashTableKey {
 
  private:
   Handle<String> source_;
-  MaybeHandle<SharedFunctionInfo> shared_;
+  Handle<SharedFunctionInfo> shared_;
   LanguageMode language_mode_;
   int position_;
 };
@@ -244,22 +222,62 @@ class CodeKey : public HashTableKey {
 
 }  // namespace
 
-MaybeHandle<SharedFunctionInfo> CompilationCacheTable::LookupScript(
-    Handle<CompilationCacheTable> table, Handle<String> src,
-    LanguageMode language_mode, Isolate* isolate) {
+ScriptCacheKey::ScriptCacheKey(Handle<String> source)
+    : HashTableKey(CompilationCacheShape::ScriptHash(*source)),
+      source_(source) {}
+
+bool ScriptCacheKey::IsMatch(Object other) {
+  DisallowGarbageCollection no_gc;
+  base::Optional<String> other_source = SourceFromObject(other);
+  return other_source && other_source->Equals(*source_);
+}
+
+Handle<Object> ScriptCacheKey::AsHandle(Isolate* isolate,
+                                        Handle<SharedFunctionInfo> shared) {
+  Handle<WeakFixedArray> array = isolate->factory()->NewWeakFixedArray(kEnd);
+  // Any SharedFunctionInfo being stored in the script cache should have a
+  // Script.
+  DCHECK(shared->script().IsScript());
+  array->Set(kWeakScript,
+             MaybeObject::MakeWeak(MaybeObject::FromObject(shared->script())));
+  return array;
+}
+
+MaybeHandle<Script> CompilationCacheTable::LookupScript(
+    Handle<CompilationCacheTable> table, Handle<String> src, Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  StringSharedKey key(src, language_mode);
+  ScriptCacheKey key(src);
   InternalIndex entry = table->FindEntry(isolate, &key);
-  if (entry.is_not_found()) return MaybeHandle<SharedFunctionInfo>();
-  int index = EntryToIndex(entry);
-  if (!table->get(index).IsFixedArray()) {
-    return MaybeHandle<SharedFunctionInfo>();
+
+  if (entry.is_not_found()) return MaybeHandle<Script>();
+
+  DisallowGarbageCollection no_gc;
+  Object key_in_table = table->KeyAt(entry);
+  Script script = Script::cast(WeakFixedArray::cast(key_in_table)
+                                   .Get(ScriptCacheKey::kWeakScript)
+                                   .GetHeapObjectAssumeWeak());
+
+  Object obj = table->FirstValueAt(entry);
+  if (obj.IsSharedFunctionInfo(isolate)) {
+    DCHECK_EQ(SharedFunctionInfo::cast(obj).script(), script);
+  } else {
+    DCHECK(obj.IsUndefined());
+    // Even though this cache no longer holds a strong reference to the root
+    // SharedFunctionInfo for the Script, the root SharedFunctionInfo may still
+    // exist. If it exists and is already compiled, then we should place it back
+    // into the cache to keep it alive for now. Callers will treat this case as
+    // a cache hit and assume that they needn't take any extra step to re-add
+    // the SharedFunctionInfo to the cache.
+    Object maybe_sfi = script.GetRootSharedFunctionInfo(isolate);
+    if (maybe_sfi.IsHeapObject()) {
+      SharedFunctionInfo sfi = SharedFunctionInfo::cast(maybe_sfi);
+      if (sfi.is_compiled()) {
+        table->SetFirstValueAt(entry, sfi);
+      }
+    }
   }
-  Object obj = table->get(index + 1);
-  if (obj.IsSharedFunctionInfo()) {
-    return handle(SharedFunctionInfo::cast(obj), isolate);
-  }
-  return MaybeHandle<SharedFunctionInfo>();
+
+  return {script, isolate};
 }
 
 InfoCellPair CompilationCacheTable::LookupEval(
@@ -270,18 +288,17 @@ InfoCellPair CompilationCacheTable::LookupEval(
   Isolate* isolate = native_context->GetIsolate();
   src = String::Flatten(isolate, src);
 
-  StringSharedKey key(src, outer_info, language_mode, position);
+  EvalCacheKey key(src, outer_info, language_mode, position);
   InternalIndex entry = table->FindEntry(isolate, &key);
   if (entry.is_not_found()) return empty_result;
 
-  int index = EntryToIndex(entry);
-  if (!table->get(index).IsFixedArray()) return empty_result;
-  Object obj = table->get(index + 1);
+  if (!table->KeyAt(entry).IsFixedArray()) return empty_result;
+  Object obj = table->FirstValueAt(entry);
   if (!obj.IsSharedFunctionInfo()) return empty_result;
 
   STATIC_ASSERT(CompilationCacheShape::kEntrySize == 3);
   FeedbackCell feedback_cell =
-      SearchLiteralsMap(*table, index + 2, *native_context);
+      SearchLiteralsMap(*table, EntryToIndex(entry) + 2, *native_context);
   return InfoCellPair(isolate, SharedFunctionInfo::cast(obj), feedback_cell);
 }
 
@@ -292,21 +309,57 @@ Handle<Object> CompilationCacheTable::LookupRegExp(Handle<String> src,
   RegExpKey key(src, flags);
   InternalIndex entry = FindEntry(isolate, &key);
   if (entry.is_not_found()) return isolate->factory()->undefined_value();
-  return Handle<Object>(get(EntryToIndex(entry) + 1), isolate);
+  return Handle<Object>(FirstValueAt(entry), isolate);
+}
+
+Handle<CompilationCacheTable> CompilationCacheTable::EnsureScriptTableCapacity(
+    Isolate* isolate, Handle<CompilationCacheTable> cache) {
+  if (cache->HasSufficientCapacityToAdd(1)) return cache;
+
+  // Before resizing, delete are any entries whose keys contain cleared weak
+  // pointers.
+  {
+    DisallowGarbageCollection no_gc;
+    for (InternalIndex entry : cache->IterateEntries()) {
+      Object key;
+      if (!cache->ToKey(isolate, entry, &key)) continue;
+      if (WeakFixedArray::cast(key)
+              .Get(ScriptCacheKey::kWeakScript)
+              .IsCleared()) {
+        DCHECK(cache->FirstValueAt(entry).IsUndefined());
+        cache->RemoveEntry(entry);
+      }
+    }
+  }
+
+  return EnsureCapacity(isolate, cache);
 }
 
 Handle<CompilationCacheTable> CompilationCacheTable::PutScript(
     Handle<CompilationCacheTable> cache, Handle<String> src,
-    LanguageMode language_mode, Handle<SharedFunctionInfo> value,
-    Isolate* isolate) {
+    Handle<SharedFunctionInfo> value, Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  StringSharedKey key(src, language_mode);
-  Handle<Object> k = key.AsHandle(isolate);
-  cache = EnsureCapacity(isolate, cache);
-  InternalIndex entry = cache->FindInsertionEntry(isolate, key.Hash());
-  cache->set(EntryToIndex(entry), *k);
-  cache->set(EntryToIndex(entry) + 1, *value);
-  cache->ElementAdded();
+  ScriptCacheKey key(src);
+  Handle<Object> k = key.AsHandle(isolate, value);
+
+  // Check whether there is already a matching entry. If so, we must overwrite
+  // it. This allows an entry whose value is undefined to upgrade to contain a
+  // SharedFunctionInfo.
+  InternalIndex entry = cache->FindEntry(isolate, &key);
+  bool found_existing = entry.is_found();
+  if (!found_existing) {
+    cache = EnsureScriptTableCapacity(isolate, cache);
+    entry = cache->FindInsertionEntry(isolate, key.Hash());
+  }
+  // TODO(v8:12808): Once all code paths are updated to reuse a Script if
+  // available, we could DCHECK here that the Script in the existing entry
+  // matches the Script in the new key if their origins match. For now, there is
+  // no such guarantee.
+  cache->SetKeyAt(entry, *k);
+  cache->SetFirstValueAt(entry, *value);
+  if (!found_existing) {
+    cache->ElementAdded();
+  }
   return cache;
 }
 
@@ -317,7 +370,7 @@ Handle<CompilationCacheTable> CompilationCacheTable::PutEval(
     int position) {
   Isolate* isolate = native_context->GetIsolate();
   src = String::Flatten(isolate, src);
-  StringSharedKey key(src, outer_info, value->language_mode(), position);
+  EvalCacheKey key(src, outer_info, value->language_mode(), position);
 
   // This block handles 'real' insertions, i.e. the initial dummy insert
   // (below) has already happened earlier.
@@ -325,8 +378,8 @@ Handle<CompilationCacheTable> CompilationCacheTable::PutEval(
     Handle<Object> k = key.AsHandle(isolate);
     InternalIndex entry = cache->FindEntry(isolate, &key);
     if (entry.is_found()) {
-      cache->set(EntryToIndex(entry), *k);
-      cache->set(EntryToIndex(entry) + 1, *value);
+      cache->SetKeyAt(entry, *k);
+      cache->SetFirstValueAt(entry, *value);
       // AddToFeedbackCellsMap may allocate a new sub-array to live in the
       // entry, but it won't change the cache array. Therefore EntryToIndex
       // and entry remains correct.
@@ -343,8 +396,8 @@ Handle<CompilationCacheTable> CompilationCacheTable::PutEval(
   InternalIndex entry = cache->FindInsertionEntry(isolate, key.Hash());
   Handle<Object> k =
       isolate->factory()->NewNumber(static_cast<double>(key.Hash()));
-  cache->set(EntryToIndex(entry), *k);
-  cache->set(EntryToIndex(entry) + 1, Smi::FromInt(kHashGenerations));
+  cache->SetKeyAt(entry, *k);
+  cache->SetFirstValueAt(entry, Smi::FromInt(kHashGenerations));
   cache->ElementAdded();
   return cache;
 }
@@ -357,62 +410,36 @@ Handle<CompilationCacheTable> CompilationCacheTable::PutRegExp(
   InternalIndex entry = cache->FindInsertionEntry(isolate, key.Hash());
   // We store the value in the key slot, and compare the search key
   // to the stored value with a custom IsMatch function during lookups.
-  cache->set(EntryToIndex(entry), *value);
-  cache->set(EntryToIndex(entry) + 1, *value);
+  cache->SetKeyAt(entry, *value);
+  cache->SetFirstValueAt(entry, *value);
   cache->ElementAdded();
   return cache;
-}
-
-void CompilationCacheTable::Age(Isolate* isolate) {
-  DisallowGarbageCollection no_gc;
-  for (InternalIndex entry : IterateEntries()) {
-    const int entry_index = EntryToIndex(entry);
-    const int value_index = entry_index + 1;
-
-    Object key = get(entry_index);
-    if (key.IsNumber()) {
-      // The ageing mechanism for the initial dummy entry in the eval cache.
-      // The 'key' is the hash represented as a Number. The 'value' is a smi
-      // counting down from kHashGenerations. On reaching zero, the entry is
-      // cleared.
-      // Note: The following static assert only establishes an explicit
-      // connection between initialization- and use-sites of the smi value
-      // field.
-      STATIC_ASSERT(kHashGenerations);
-      const int new_count = Smi::ToInt(get(value_index)) - 1;
-      if (new_count == 0) {
-        RemoveEntry(entry_index);
-      } else {
-        DCHECK_GT(new_count, 0);
-        NoWriteBarrierSet(*this, value_index, Smi::FromInt(new_count));
-      }
-    } else if (key.IsFixedArray()) {
-      // The ageing mechanism for script and eval caches.
-      SharedFunctionInfo info = SharedFunctionInfo::cast(get(value_index));
-      if (info.HasBytecodeArray() && info.GetBytecodeArray(isolate).IsOld()) {
-        RemoveEntry(entry_index);
-      }
-    }
-  }
 }
 
 void CompilationCacheTable::Remove(Object value) {
   DisallowGarbageCollection no_gc;
   for (InternalIndex entry : IterateEntries()) {
-    int entry_index = EntryToIndex(entry);
-    int value_index = entry_index + 1;
-    if (get(value_index) == value) {
-      RemoveEntry(entry_index);
+    if (FirstValueAt(entry) == value) {
+      RemoveEntry(entry);
     }
   }
 }
 
-void CompilationCacheTable::RemoveEntry(int entry_index) {
+void CompilationCacheTable::RemoveEntry(InternalIndex entry) {
+  int entry_index = EntryToIndex(entry);
   Object the_hole_value = GetReadOnlyRoots().the_hole_value();
   for (int i = 0; i < kEntrySize; i++) {
     NoWriteBarrierSet(*this, entry_index + i, the_hole_value);
   }
   ElementRemoved();
+
+  // This table does not shrink upon deletion. The script cache depends on that
+  // fact, in two ways:
+  // 1. EnsureScriptTableCapacity calls RemoveEntry, at a time when shrinking
+  //    the table would be counterproductive, and
+  // 2. CompilationCacheShape::HashForObject cannot produce a hash for keys that
+  //    contain cleared weak pointers, so rehashing must only occur right after
+  //    all such keys have been cleared.
 }
 
 }  // namespace internal
