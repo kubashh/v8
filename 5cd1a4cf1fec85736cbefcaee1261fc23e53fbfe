@@ -16,6 +16,24 @@
       "message": "Hi Andreas,\n\nThis is still failing on PPC similar to how it was failing before:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8852498270269324512/+/u/Check/limits\nPlus a new error message:\n```\nFatal process OOM in wasm code reservation: required minimum (104006656) is bigger than supported maximum (33554432)\n```\n\nWould you suggest we investigate this further or skip it on PPC?",
       "revId": "5cd1a4cf1fec85736cbefcaee1261fc23e53fbfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96dd5a11_1c366069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-04-27T15:19:44Z",
+      "side": 1,
+      "message": "That\u0027s probably a module with a huge number of functions, thus requiring a larger-than-supported single code space. I would suggest just skipping on PPC then.",
+      "parentUuid": "a47d6ed0_ee5c8da2",
+      "revId": "5cd1a4cf1fec85736cbefcaee1261fc23e53fbfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
