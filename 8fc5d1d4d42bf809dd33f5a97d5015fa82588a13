@@ -39,6 +39,30 @@
       },
       "revId": "8fc5d1d4d42bf809dd33f5a97d5015fa82588a13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e37d00_5af5f9c3",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-04-27T08:23:12Z",
+      "side": 1,
+      "message": "good idea, done :)",
+      "parentUuid": "56c2febe_6234b493",
+      "range": {
+        "startLine": 191,
+        "startChar": 20,
+        "endLine": 191,
+        "endChar": 25
+      },
+      "revId": "8fc5d1d4d42bf809dd33f5a97d5015fa82588a13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
