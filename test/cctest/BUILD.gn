@@ -211,8 +211,6 @@ v8_source_set("cctest_sources") {
     "test-elements-kind.cc",
     "test-factory.cc",
     "test-fast-dtoa.cc",
-    "test-feedback-vector.cc",
-    "test-feedback-vector.h",
     "test-field-type-tracking.cc",
     "test-fixed-dtoa.cc",
     "test-flags.cc",
