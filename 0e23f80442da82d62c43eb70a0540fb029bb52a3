@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eb6855c_960fe5d3",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-27T19:04:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6118b9e_29bb51cd",
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fadde6e3_2f832cb9",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b573871_9517ee2e",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-27T19:04:32Z",
+      "side": 1,
+      "message": "I double checked, the flag is available.\nHowever, we actually don\u0027t have to check the flag here because `CodeRange::InitReservation()` is called only when `Isolate::RequiresCodeRange()` predicate is true which in turn depends on FLAG_jitless.",
+      "parentUuid": "fadde6e3_2f832cb9",
+      "range": {
+        "startLine": 135,
+        "startChar": 6,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dc70694_85a4aa6e",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-04-27T13:49:58Z",
       "side": 1,
       "message": "Shouldn\u0027t this use the new `Recommit()` API?",
+      "range": {
+        "startLine": 247,
+        "startChar": 27,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5a30950_4c166cae",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-04-27T19:04:32Z",
+      "side": 1,
+      "message": "Right! Done.\nIt wasn\u0027t failing because we are actually taking the base::OS::IsRemapPageSupported() path above.",
+      "parentUuid": "4dc70694_85a4aa6e",
       "range": {
         "startLine": 247,
         "startChar": 27,
