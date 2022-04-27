@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0580847_eabaa806",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-27T12:09:54Z",
+      "side": 1,
+      "message": "thanks for reviewing!",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f578d5b9_f9042cc7",
@@ -52,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed8b594d_5cb37f34",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-27T12:09:54Z",
+      "side": 1,
+      "message": "This is compiled in only on MIPS and some other unsupported platforms. I was trying to be nice and do these changes while I\u0027m at it, but then forgot to run the MIPS bot, oops!\n\nI ran it now to double-check this error triggers a failure, but looks like the MIPS builds are already broken rn. I\u0027m not going to wait for them to get fixed, so I did some best-effort fixing here.",
+      "parentUuid": "f578d5b9_f9042cc7",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03274cbf_301faa09",
@@ -65,6 +100,24 @@
       "writtenOn": "2022-04-26T18:39:35Z",
       "side": 1,
       "message": "Would this test block d8 (instead of immediately fail) in case of a bug and the worker doesn\u0027t `postMessage` back? If so, would be good to change the test so that a bug doesn\u0027t result in a timeout but a more immediate failure.",
+      "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6118c298_6e4101d8",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-27T12:09:54Z",
+      "side": 1,
+      "message": "I added a postMessage right after Atomics.wait, that should be good enough.",
+      "parentUuid": "03274cbf_301faa09",
       "revId": "ba5d54e20a035d4d697bb3e4543c9b826c5cb024",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
