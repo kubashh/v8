@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "70abc3f5_e96c2c95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-27T13:03:02Z",
+      "side": 1,
+      "message": "Maybe remove here too?",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "86457e3d76a07a6fd8c117a977d08b037ac0f25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4c88e328_1848737d",
@@ -14,6 +37,29 @@
       "writtenOn": "2022-04-27T13:02:13Z",
       "side": 1,
       "message": "general +1 (modulo redness of course, though even if I didn\u0027t say modulo redness I guess you\u0027d still need to fix the redness, so I guess it\u0027s a medium useful comment at best)",
+      "revId": "86457e3d76a07a6fd8c117a977d08b037ac0f25c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5189f29c_34203ebc",
+        "filename": "test/cctest/test-flags.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-04-27T13:03:02Z",
+      "side": 1,
+      "message": "I think this can be removed too.",
+      "range": {
+        "startLine": 205,
+        "startChar": 11,
+        "endLine": 205,
+        "endChar": 26
+      },
       "revId": "86457e3d76a07a6fd8c117a977d08b037ac0f25c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
