@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa80d7e_e5b896d6",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "I\u0027m on the fence about this, we\u0027ve never really passed Objects around by Optional before -- usually if the presence is optional, we check object.is_null(), use a MaybeHandle, or have a function returning bool with an Object out parameter.\n\nThen again, using optional is more idiomatic modern C++...\n\nYour call.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6b1a69_6247f7b5",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "while you\u0027re here, can you clean both these loops up to use table.ToKey and table.ValueAt?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 44
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0774c76_c5a615d9",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "when is it not? deleted values? if yes then the above ToKey approach should skip these already and you can just DCHECK this.",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 31
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6727073_69c65672",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "this is the faster check (if given the Isolate), so prefer using it.",
+      "range": {
+        "startLine": 95,
+        "startChar": 15,
+        "endLine": 95,
+        "endChar": 34
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02d08706_3816df9d",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "you\u0027ll be able to DCHECK this too.",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 34
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc4126b2_54470041",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "how about MaybeGetFirstTable?",
+      "range": {
+        "startLine": 71,
+        "startChar": 40,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a5d36a3_4ac35b07",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3092,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "hm, maybe we should just compile it here instead of hoping that there\u0027s no GC coming up? This is basically just to avoid creating a new SFI in CompileScriptOnMainThread, right? Maybe it\u0027d be cleaner to drop this condition entirely and have CreateTopLevelSharedFunctionInfo support picking up an existing top-level SFI?",
+      "range": {
+        "startLine": 3090,
+        "startChar": 0,
+        "endLine": 3092,
+        "endChar": 23
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc3cbf0_6411fc87",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3102,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "why have this here? We probably want CompileScriptOnBothBackgroundAndMainThread to support a maybe_script once streaming does, probably best to pass it in already (and add a TODO to not ignore it)",
+      "range": {
+        "startLine": 3102,
+        "startChar": 0,
+        "endLine": 3102,
+        "endChar": 30
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2eb68bf_cd4aa16f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "maybe move this to the \"else\" condition in the script check in CompileScriptOnMainThread",
+      "range": {
+        "startLine": 3117,
+        "startChar": 3,
+        "endLine": 3120,
+        "endChar": 7
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8f9b5c_e6ce2c70",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "nit: EvalCacheKey",
+      "range": {
+        "startLine": 377,
+        "startChar": 2,
+        "endLine": 377,
+        "endChar": 9
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48a73a69_ccb4b279",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5160,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T09:48:21Z",
+      "side": 1,
+      "message": "you call this every time you fetch from the script cache. Maybe the script cache should return a pair of (Handle\u003cScript\u003e,MaybeHandle\u003cSFI\u003e) instead?",
+      "range": {
+        "startLine": 5160,
+        "startChar": 13,
+        "endLine": 5160,
+        "endChar": 41
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
