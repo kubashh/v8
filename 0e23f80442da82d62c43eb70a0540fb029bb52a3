@@ -16,6 +16,69 @@
       "message": "Michael, PTAL again",
       "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6118b9e_29bb51cd",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-27T13:49:58Z",
+      "side": 1,
+      "message": "Would it make sense to always emit a `CodePageHeaderModificationScope` with a reason string that gets optimized away. Also, it could be empty in case of `V8_EXTERNAL_CODE_SPACE` being false or on platforms that don\u0027t need it. I assume `V8_EXTERNAL_CODE_SPACE` will stay with us for some time :) \n\nSomething like\n\n```\nCodePageHeaderModificationScope rwx_write_scope(\n    \"Storing a code object triggers marking barrier which ...\");\n```",
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fadde6e3_2f832cb9",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-27T13:49:58Z",
+      "side": 1,
+      "message": "Did you try whether in Chromium by the time the `CodeRange` is initialized the flag is available?",
+      "range": {
+        "startLine": 135,
+        "startChar": 6,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc70694_85a4aa6e",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-27T13:49:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this use the new `Recommit()` API?",
+      "range": {
+        "startLine": 247,
+        "startChar": 27,
+        "endLine": 247,
+        "endChar": 41
+      },
+      "revId": "0e23f80442da82d62c43eb70a0540fb029bb52a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
