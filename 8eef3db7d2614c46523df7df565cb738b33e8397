@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03b7f31a_964f8b5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-27T21:02:55Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e228c00_89b13ac5",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-27T21:02:55Z",
+      "side": 1,
+      "message": "What happened to Uint32Array? If it\u0027s skipped intentionally, please add a brief comment explaining why.\n\nSame in `ctors` around line 14.",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f434aa0a_9282c0e1",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-27T21:02:55Z",
+      "side": 1,
+      "message": "nit: `\u0026`",
+      "range": {
+        "startLine": 292,
+        "startChar": 58,
+        "endLine": 292,
+        "endChar": 59
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93ff414_b339b511",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-27T21:02:55Z",
+      "side": 1,
+      "message": "You know what else can be converted to both Number and BigInt? Strings!\nI\u0027m totally fine with sticking with booleans, but fwiw an alternative would be to have `initialValue \u003d \"42\"`. JavaScript ♥",
+      "range": {
+        "startLine": 43,
+        "startChar": 33,
+        "endLine": 43,
+        "endChar": 79
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f004405e_bd7b2be6",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-04-27T21:02:55Z",
+      "side": 1,
+      "message": "This is one `one` too many.\n\nAgain in line 275.",
+      "range": {
+        "startLine": 242,
+        "startChar": 66,
+        "endLine": 242,
+        "endChar": 69
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
