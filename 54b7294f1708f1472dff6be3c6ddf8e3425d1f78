@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d939b0_414380d0",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Thanks for mentioning this! Matching with existing style is very important for coherence and readability, so I\u0027m happy to update it.",
+      "parentUuid": "0fa80d7e_e5b896d6",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba6b1a69_6247f7b5",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-04-27T09:48:21Z",
       "side": 1,
       "message": "while you\u0027re here, can you clean both these loops up to use table.ToKey and table.ValueAt?",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 44
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eff03cef_1c9336bc",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Yes, sort of. The table doesn\u0027t currently implement ValueAt, and it has two values per entry due to the eval cache. I\u0027ve added FirstValueAt and SetFirstValueAt and updated the rest of the code to use those new functions; does that look reasonable?",
+      "parentUuid": "ba6b1a69_6247f7b5",
       "range": {
         "startLine": 82,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc37198e_47a677f1",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Excellent, thanks!",
+      "parentUuid": "b0774c76_c5a615d9",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 31
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6727073_69c65672",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-04-27T09:48:21Z",
       "side": 1,
       "message": "this is the faster check (if given the Isolate), so prefer using it.",
+      "range": {
+        "startLine": 95,
+        "startChar": 15,
+        "endLine": 95,
+        "endChar": 34
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d8dd92_7bf5dc8d",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "e6727073_69c65672",
       "range": {
         "startLine": 95,
         "startChar": 15,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71308d06_c56b62ca",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02d08706_3816df9d",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 34
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc4126b2_54470041",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-04-27T09:48:21Z",
       "side": 1,
       "message": "how about MaybeGetFirstTable?",
+      "range": {
+        "startLine": 71,
+        "startChar": 40,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db16271f_562fb679",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Sure, that sounds good.",
+      "parentUuid": "cc4126b2_54470041",
       "range": {
         "startLine": 71,
         "startChar": 40,
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44400402_6234772f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3092,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "I struggled with this question for a while before I opened this CL, because the arguments in both directions seem persuasive to me. On the one hand, returning an uncompiled SFI here reduces complexity in CompileScriptOnMainThread and avoids doing work that might be unnecessary. On the other hand, callers might expect that the result SFI is compiled, so returning an uncompiled SFI might cause misreporting of compilation time or some similar problem. I\u0027ve updated to follow your recommendation.",
+      "parentUuid": "6a5d36a3_4ac35b07",
+      "range": {
+        "startLine": 3090,
+        "startChar": 0,
+        "endLine": 3092,
+        "endChar": 23
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cc3cbf0_6411fc87",
@@ -175,6 +343,30 @@
       "writtenOn": "2022-04-27T09:48:21Z",
       "side": 1,
       "message": "why have this here? We probably want CompileScriptOnBothBackgroundAndMainThread to support a maybe_script once streaming does, probably best to pass it in already (and add a TODO to not ignore it)",
+      "range": {
+        "startLine": 3102,
+        "startChar": 0,
+        "endLine": 3102,
+        "endChar": 30
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6fe7693_3bd20239",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3102,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "5cc3cbf0_6411fc87",
       "range": {
         "startLine": 3102,
         "startChar": 0,
@@ -208,6 +400,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ed069d_e2272261",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3120,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Good idea, thanks.",
+      "parentUuid": "e2eb68bf_cd4aa16f",
+      "range": {
+        "startLine": 3117,
+        "startChar": 3,
+        "endLine": 3120,
+        "endChar": 7
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d8f9b5c_e6ce2c70",
@@ -231,6 +447,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f46dc54_aa4acc30",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d8f9b5c_e6ce2c70",
+      "range": {
+        "startLine": 377,
+        "startChar": 2,
+        "endLine": 377,
+        "endChar": 9
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48a73a69_ccb4b279",
@@ -244,6 +484,30 @@
       "writtenOn": "2022-04-27T09:48:21Z",
       "side": 1,
       "message": "you call this every time you fetch from the script cache. Maybe the script cache should return a pair of (Handle\u003cScript\u003e,MaybeHandle\u003cSFI\u003e) instead?",
+      "range": {
+        "startLine": 5160,
+        "startChar": 13,
+        "endLine": 5160,
+        "endChar": 41
+      },
+      "revId": "54b7294f1708f1472dff6be3c6ddf8e3425d1f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "982ead08_81912278",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5160,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-04-27T23:17:23Z",
+      "side": 1,
+      "message": "Good point. Taking this logic a step further, every caller also checks whether the SFI is compiled, so I\u0027ve updated to return a struct containing MaybeHandle\u003cScript\u003e, MaybeHandle\u003cSFI\u003e, and IsCompiledScope.",
+      "parentUuid": "48a73a69_ccb4b279",
       "range": {
         "startLine": 5160,
         "startChar": 13,
