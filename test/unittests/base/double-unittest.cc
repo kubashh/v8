@@ -1,42 +1,23 @@
-// Copyright 2006-2008 the V8 project authors. All rights reserved.
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-//       copyright notice, this list of conditions and the following
-//       disclaimer in the documentation and/or other materials provided
-//       with the distribution.
-//     * Neither the name of Google Inc. nor the names of its
-//       contributors may be used to endorse or promote products derived
-//       from this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/base/numbers/double.h"
 
 #include <stdlib.h>
 
 #include "src/base/numbers/diy-fp.h"
-#include "src/base/numbers/double.h"
 #include "src/base/platform/platform.h"
 #include "src/init/v8.h"
-#include "test/cctest/cctest.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace v8 {
+
+using DoubleTest = ::testing::Test;
+
 namespace base {
 
-TEST(Uint64Conversions) {
+TEST_F(DoubleTest, Uint64Conversions) {
   // Start by checking the byte-order.
   uint64_t ordered = 0x0123'4567'89AB'CDEF;
   CHECK_EQ(3512700564088504e-318, Double(ordered).value());
@@ -48,8 +29,7 @@ TEST(Uint64Conversions) {
   CHECK_EQ(1.7976931348623157e308, Double(max_double64).value());
 }
 
-
-TEST(AsDiyFp) {
+TEST_F(DoubleTest, AsDiyFp) {
   uint64_t ordered = 0x0123'4567'89AB'CDEF;
   DiyFp diy_fp = Double(ordered).AsDiyFp();
   CHECK_EQ(0x12 - 0x3FF - 52, diy_fp.e());
@@ -68,8 +48,7 @@ TEST(AsDiyFp) {
   CHECK(0x001F'FFFF'FFFF'FFFF == diy_fp.f());  // NOLINT
 }
 
-
-TEST(AsNormalizedDiyFp) {
+TEST_F(DoubleTest, AsNormalizedDiyFp) {
   uint64_t ordered = 0x0123'4567'89AB'CDEF;
   DiyFp diy_fp = Double(ordered).AsNormalizedDiyFp();
   CHECK_EQ(0x12 - 0x3FF - 52 - 11, diy_fp.e());
@@ -87,8 +66,7 @@ TEST(AsNormalizedDiyFp) {
   CHECK((uint64_t{0x001F'FFFF'FFFF'FFFF} << 11) == diy_fp.f());
 }
 
-
-TEST(IsDenormal) {
+TEST_F(DoubleTest, IsDenormal) {
   uint64_t min_double64 = 0x0000'0000'0000'0001;
   CHECK(Double(min_double64).IsDenormal());
   uint64_t bits = 0x000F'FFFF'FFFF'FFFF;
@@ -97,8 +75,7 @@ TEST(IsDenormal) {
   CHECK(!Double(bits).IsDenormal());
 }
 
-
-TEST(IsSpecial) {
+TEST_F(DoubleTest, IsSpecial) {
   CHECK(Double(V8_INFINITY).IsSpecial());
   CHECK(Double(-V8_INFINITY).IsSpecial());
   CHECK(Double(std::numeric_limits<double>::quiet_NaN()).IsSpecial());
@@ -120,8 +97,7 @@ TEST(IsSpecial) {
   CHECK(!Double(-1.7976931348623157e308).IsSpecial());
 }
 
-
-TEST(IsInfinite) {
+TEST_F(DoubleTest, IsInfinite) {
   CHECK(Double(V8_INFINITY).IsInfinite());
   CHECK(Double(-V8_INFINITY).IsInfinite());
   CHECK(!Double(std::numeric_limits<double>::quiet_NaN()).IsInfinite());
@@ -133,8 +109,7 @@ TEST(IsInfinite) {
   CHECK(!Double(min_double64).IsInfinite());
 }
 
-
-TEST(Sign) {
+TEST_F(DoubleTest, Sign) {
   CHECK_EQ(1, Double(1.0).Sign());
   CHECK_EQ(1, Double(V8_INFINITY).Sign());
   CHECK_EQ(-1, Double(-V8_INFINITY).Sign());
@@ -144,8 +119,7 @@ TEST(Sign) {
   CHECK_EQ(1, Double(min_double64).Sign());
 }
 
-
-TEST(NormalizedBoundaries) {
+TEST_F(DoubleTest, NormalizedBoundaries) {
   DiyFp boundary_plus;
   DiyFp boundary_minus;
   DiyFp diy_fp = Double(1.5).AsNormalizedDiyFp();
@@ -180,8 +154,8 @@ TEST(NormalizedBoundaries) {
 
   uint64_t smallest_normal64 = 0x0010'0000'0000'0000;
   diy_fp = Double(smallest_normal64).AsNormalizedDiyFp();
-  Double(smallest_normal64).NormalizedBoundaries(&boundary_minus,
-                                                 &boundary_plus);
+  Double(smallest_normal64)
+      .NormalizedBoundaries(&boundary_minus, &boundary_plus);
   CHECK_EQ(diy_fp.e(), boundary_minus.e());
   CHECK_EQ(diy_fp.e(), boundary_plus.e());
   // Even though the significand is of the form 2^p (for some p), its boundaries
@@ -191,8 +165,8 @@ TEST(NormalizedBoundaries) {
 
   uint64_t largest_denormal64 = 0x000F'FFFF'FFFF'FFFF;
   diy_fp = Double(largest_denormal64).AsNormalizedDiyFp();
-  Double(largest_denormal64).NormalizedBoundaries(&boundary_minus,
-                                                  &boundary_plus);
+  Double(largest_denormal64)
+      .NormalizedBoundaries(&boundary_minus, &boundary_plus);
   CHECK_EQ(diy_fp.e(), boundary_minus.e());
   CHECK_EQ(diy_fp.e(), boundary_plus.e());
   CHECK(diy_fp.f() - boundary_minus.f() == boundary_plus.f() - diy_fp.f());
@@ -209,8 +183,7 @@ TEST(NormalizedBoundaries) {
   CHECK((1 << 10) == diy_fp.f() - boundary_minus.f());
 }
 
-
-TEST(NextDouble) {
+TEST_F(DoubleTest, NextDouble) {
   CHECK_EQ(4e-324, Double(0.0).NextDouble());
   CHECK_EQ(0.0, Double(-0.0).NextDouble());
   CHECK_EQ(-0.0, Double(-4e-324).NextDouble());
