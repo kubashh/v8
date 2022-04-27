@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d717fdc9_1ac92ae9",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-27T09:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fb6353d_4a4cf6d4",
+      "range": {
+        "startLine": 549,
+        "startChar": 43,
+        "endLine": 549,
+        "endChar": 53
+      },
+      "revId": "196a669b3080eb6a19c119e9b381ef1aa8f5835a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f471dd0_49354fb9",
@@ -102,6 +126,30 @@
       "writtenOn": "2022-04-27T07:42:29Z",
       "side": 1,
       "message": "move out of \"#if ENABLE_SPARKPLUG\"",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 568,
+        "endChar": 43
+      },
+      "revId": "196a669b3080eb6a19c119e9b381ef1aa8f5835a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d26d68_b691564e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-04-27T09:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f471dd0_49354fb9",
       "range": {
         "startLine": 567,
         "startChar": 0,
