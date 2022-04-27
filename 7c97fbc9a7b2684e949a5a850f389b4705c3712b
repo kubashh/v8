@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "890df8a5_aeb077e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-27T11:59:58Z",
+      "side": 1,
+      "message": "As discussed offline: I split the sweeping and shrinking phase apart as the shrunk part may stil contain slots which are filtered during the evacuation phase.",
+      "revId": "7c97fbc9a7b2684e949a5a850f389b4705c3712b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
