@@ -16,6 +16,52 @@
       "message": "PTAL... \n- The flag name is definitely up for discussion\n- Also not 100% sure about adding turboshaft in the list?\n- --opt \u003d\u003e --turbofan can definitely be discussed as well\n",
       "revId": "196a669b3080eb6a19c119e9b381ef1aa8f5835a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f4f9e01_fe767d30",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:42:29Z",
+      "side": 1,
+      "message": "as discussed offline, I\u0027m not sure turboshaft is considered a separate tier like turboprop was.",
+      "range": {
+        "startLine": 549,
+        "startChar": 43,
+        "endLine": 549,
+        "endChar": 53
+      },
+      "revId": "196a669b3080eb6a19c119e9b381ef1aa8f5835a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f471dd0_49354fb9",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-27T07:42:29Z",
+      "side": 1,
+      "message": "move out of \"#if ENABLE_SPARKPLUG\"",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 568,
+        "endChar": 43
+      },
+      "revId": "196a669b3080eb6a19c119e9b381ef1aa8f5835a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
