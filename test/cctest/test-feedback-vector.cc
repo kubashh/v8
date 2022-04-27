@@ -429,7 +429,7 @@ TEST(VectorSpeculationMode) {
 
 TEST(VectorCallSpeculationModeAndFeedbackContent) {
   if (!i::FLAG_use_ic) return;
-  if (!i::FLAG_opt) return;
+  if (!i::FLAG_turbofan) return;
   if (i::FLAG_always_opt) return;
   if (i::FLAG_jitless) return;
   FLAG_allow_natives_syntax = true;
