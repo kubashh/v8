@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f68ddaf_e09cbace",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-28T13:24:18Z",
+      "side": 1,
+      "message": "still lgtm",
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "083b4bb5_3ca4a55c",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-28T13:24:18Z",
+      "side": 1,
+      "message": "Why is this needed?\nAfaict on code search, Swap only used for the ephemeron worklists (`current_ephemerons` and `next_ephemerons`) and it seems these are accessed only from the main thread.",
+      "range": {
+        "startLine": 199,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 45
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d542b99_156994eb",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2391,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-28T13:24:18Z",
+      "side": 1,
+      "message": "I remember we talked about it but I don\u0027t remember the conclusion. Why don\u0027t we need to restart Oilpan\u0027s concurrent markers here as well?",
+      "range": {
+        "startLine": 2391,
+        "startChar": 33,
+        "endLine": 2391,
+        "endChar": 54
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
