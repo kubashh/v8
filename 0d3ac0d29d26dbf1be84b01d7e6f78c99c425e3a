@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "334d5ec9_1b217fa9",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-28T13:42:52Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "933ffc71_5921f921",
+      "range": {
+        "startLine": 199,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 45
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d542b99_156994eb",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Because Oilpan restarts them already during roots marking and we have no `Join()` anywhere.",
       "parentUuid": "2d542b99_156994eb",
+      "range": {
+        "startLine": 2391,
+        "startChar": 33,
+        "endLine": 2391,
+        "endChar": 54
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8429c786_6d57b295",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2391,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-28T13:42:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ad93cb09_2252542f",
       "range": {
         "startLine": 2391,
         "startChar": 33,
