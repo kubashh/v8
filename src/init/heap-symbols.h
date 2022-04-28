@@ -575,7 +575,10 @@
   F(MC_MARK_WEAK_CLOSURE_EPHEMERON_MARKING)          \
   F(MC_MARK_WEAK_CLOSURE_EPHEMERON_LINEAR)           \
   F(MC_SWEEP_CODE)                                   \
+  F(MC_SWEEP_CODE_LO)                                \
+  F(MC_SWEEP_LO)                                     \
   F(MC_SWEEP_MAP)                                    \
+  F(MC_SWEEP_NEW_LO)                                 \
   F(MC_SWEEP_OLD)                                    \
   F(MINOR_MARK_COMPACTOR)                            \
   F(MINOR_MC)                                        \
