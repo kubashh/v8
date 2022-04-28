@@ -74,7 +74,7 @@ enum CodeCacheType { kLazy, kEager, kAfterExecute };
 
 void DisableAlwaysOpt() {
   // Isolates prepared for serialization do not optimize. The only exception is
-  // with the flag --always-opt.
+  // with the flag --always-turbofan.
   FLAG_always_opt = false;
 }
 

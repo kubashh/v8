@@ -1101,7 +1101,7 @@ TEST(Iteration) {
 
 TEST(TestBytecodeFlushing) {
 #ifndef V8_LITE_MODE
-  FLAG_opt = false;
+  FLAG_turbofan = false;
   FLAG_always_opt = false;
   i::FLAG_optimize_for_size = false;
 #endif  // V8_LITE_MODE
@@ -1167,7 +1167,7 @@ HEAP_TEST(Regress10560) {
   i::FLAG_flush_bytecode = true;
   i::FLAG_allow_natives_syntax = true;
   // Disable flags that allocate a feedback vector eagerly.
-  i::FLAG_opt = false;
+  i::FLAG_turbofan = false;
   i::FLAG_always_opt = false;
 #if ENABLE_SPARKPLUG
   FLAG_always_sparkplug = false;
@@ -1340,7 +1340,7 @@ UNINITIALIZED_TEST(Regress12777) {
 
 TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
   if (FLAG_single_generation) return;
-  FLAG_opt = true;
+  FLAG_turbofan = true;
   FLAG_always_opt = false;
 #if ENABLE_SPARKPLUG
   FLAG_always_sparkplug = false;
@@ -3127,7 +3127,7 @@ TEST(ReleaseOverReservedPages) {
   FLAG_trace_gc = true;
   // The optimizer can allocate stuff, messing up the test.
 #ifndef V8_LITE_MODE
-  FLAG_opt = false;
+  FLAG_turbofan = false;
   FLAG_always_opt = false;
 #endif  // V8_LITE_MODE
   // - Parallel compaction increases fragmentation, depending on how existing
@@ -3667,7 +3667,7 @@ TEST(DetailedErrorStackTraceBuiltinExit) {
 TEST(Regress169928) {
   FLAG_allow_natives_syntax = true;
 #ifndef V8_LITE_MODE
-  FLAG_opt = false;
+  FLAG_turbofan = false;
 #endif  // V8_LITE_MODE
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -3956,7 +3956,9 @@ static int SlimAllocationSiteCount(Heap* heap) {
 }
 
 TEST(EnsureAllocationSiteDependentCodesProcessed) {
-  if (FLAG_always_opt || !FLAG_opt || !V8_ALLOCATION_SITE_TRACKING_BOOL) return;
+  if (FLAG_always_opt || !FLAG_turbofan || !V8_ALLOCATION_SITE_TRACKING_BOOL) {
+    return;
+  }
   FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -4121,7 +4123,7 @@ TEST(AllocationSiteCreation) {
 }
 
 TEST(CellsInOptimizedCodeAreWeak) {
-  if (FLAG_always_opt || !FLAG_opt) return;
+  if (FLAG_always_opt || !FLAG_turbofan) return;
   FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -4168,7 +4170,7 @@ TEST(CellsInOptimizedCodeAreWeak) {
 
 
 TEST(ObjectsInOptimizedCodeAreWeak) {
-  if (FLAG_always_opt || !FLAG_opt) return;
+  if (FLAG_always_opt || !FLAG_turbofan) return;
   FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -4212,7 +4214,7 @@ TEST(ObjectsInOptimizedCodeAreWeak) {
 }
 
 TEST(NewSpaceObjectsInOptimizedCode) {
-  if (FLAG_always_opt || !FLAG_opt || FLAG_single_generation) return;
+  if (FLAG_always_opt || !FLAG_turbofan || FLAG_single_generation) return;
   FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -4275,7 +4277,7 @@ TEST(NewSpaceObjectsInOptimizedCode) {
 }
 
 TEST(ObjectsInEagerlyDeoptimizedCodeAreWeak) {
-  if (FLAG_always_opt || !FLAG_opt) return;
+  if (FLAG_always_opt || !FLAG_turbofan) return;
   FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();

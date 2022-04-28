@@ -50,7 +50,7 @@ using ::v8::internal::JSFunction;
 
 // Utility class to set the following runtime flags when constructed and return
 // to their default state when destroyed:
-//   --allow-natives-syntax --always-opt --noturbo-inlining
+//   --allow-natives-syntax --always-turbofan --noturbo-inlining
 class AlwaysOptimizeAllowNativesSyntaxNoInlining {
  public:
   AlwaysOptimizeAllowNativesSyntaxNoInlining()

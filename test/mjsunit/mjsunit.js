@@ -196,7 +196,7 @@ var isNeverOptimizeLiteMode;
 // Returns true if --no-opt mode is on.
 var isNeverOptimize;
 
-// Returns true if --always-opt mode is on.
+// Returns true if --always-turbofan mode is on.
 var isAlwaysOptimize;
 
 // Returns true if given function in interpreted.
@@ -702,7 +702,7 @@ var prettyPrinted;
     // Tests that use assertUnoptimized() do not make sense if --always-opt
     // option is provided. Such tests must add --no-always-opt to flags comment.
     assertFalse((opt_status & V8OptimizationStatus.kAlwaysOptimize) !== 0,
-                "test does not make sense with --always-opt");
+                "test does not make sense with --always-turbofan");
     assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0, name_opt);
     if (skip_if_maybe_deopted &&
         (opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0) {
@@ -725,7 +725,7 @@ var prettyPrinted;
       testRunner.quit(0);
     }
     // Tests that use assertOptimized() do not make sense if --no-opt
-    // option is provided. Such tests must add --opt to flags comment.
+    // option is provided. Such tests must add --turbofan to flags comment.
     assertFalse((opt_status & V8OptimizationStatus.kNeverOptimize) !== 0,
                 "test does not make sense with --no-opt");
     assertTrue(

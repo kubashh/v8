@@ -1060,7 +1060,7 @@ bool ShouldOptimize(CodeKind code_kind, Handle<SharedFunctionInfo> shared) {
   DCHECK(CodeKindIsOptimizedJSFunction(code_kind));
   switch (code_kind) {
     case CodeKind::TURBOFAN:
-      return FLAG_opt && shared->PassesFilter(FLAG_turbo_filter);
+      return FLAG_turbofan && shared->PassesFilter(FLAG_turbo_filter);
     case CodeKind::MAGLEV:
       // TODO(v8:7700): FLAG_maglev_filter.
       return FLAG_maglev;
