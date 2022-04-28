@@ -51,6 +51,24 @@
       "parentUuid": "2e663667_3e5b6ccc",
       "revId": "ddd25730706e733301fced497f6c16c29162104c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd469e74_3c214873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-28T07:40:35Z",
+      "side": 1,
+      "message": "I think adding the explicit tiers is the intent of this CL, so that someone can write --max-opt\u003d1 and guarantee that no compilers will run past Sparkplug. We\u0027ve gotten a bit burned by individual control and people thinking that --no-opt means \"just interpreter\" (it\u0027s not, it\u0027s also sparkplug), or now --no-opt and --maglev.",
+      "parentUuid": "01342128_7c7fb3bf",
+      "revId": "ddd25730706e733301fced497f6c16c29162104c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
