@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "933ffc71_5921f921",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T13:29:49Z",
+      "side": 1,
+      "message": "https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8816169037178591873/+/u/Check/collections\n\nConcurrent marker may add while we swap.",
+      "parentUuid": "083b4bb5_3ca4a55c",
+      "range": {
+        "startLine": 199,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 45
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d542b99_156994eb",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-28T13:24:18Z",
       "side": 1,
       "message": "I remember we talked about it but I don\u0027t remember the conclusion. Why don\u0027t we need to restart Oilpan\u0027s concurrent markers here as well?",
+      "range": {
+        "startLine": 2391,
+        "startChar": 33,
+        "endLine": 2391,
+        "endChar": 54
+      },
+      "revId": "0d3ac0d29d26dbf1be84b01d7e6f78c99c425e3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad93cb09_2252542f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2391,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T13:29:49Z",
+      "side": 1,
+      "message": "Because Oilpan restarts them already during roots marking and we have no `Join()` anywhere.",
+      "parentUuid": "2d542b99_156994eb",
       "range": {
         "startLine": 2391,
         "startChar": 33,
