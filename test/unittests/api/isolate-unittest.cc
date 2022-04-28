@@ -135,4 +135,15 @@ TEST_F(IncumbentContextTest, Basic) {
   }
 }
 
+namespace {
+thread_local std::vector<std::pair<v8::CrashKeyId, std::string>> crash_keys;
+void CrashKeyCallback(v8::CrashKeyId id, const std::string& value) {
+  crash_keys.emplace_back(id, value);
+}
+}  // namespace
+TEST_F(IsolateTest, SetAddCrashKeyCallback) {
+  isolate()->SetAddCrashKeyCallback(CrashKeyCallback);
+  EXPECT_GT(crash_keys.size(), 0u);
+}
+
 }  // namespace v8
