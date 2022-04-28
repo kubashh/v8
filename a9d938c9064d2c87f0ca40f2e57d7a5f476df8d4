@@ -253,6 +253,30 @@
       },
       "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "524e82de_3351883b",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T09:11:02Z",
+      "side": 1,
+      "message": "I renamed:\n- `ProcessEphemeronMarking` -\u003e `MarkTransitiveClosure`\n- `ProcessEphemeronsLinear` -\u003e `MarkTransitiveClosureLinear`\n- `ProcessEphemeronsUntilFixpoint` -\u003e `MarkTransitiveClosureUntilFixpoint`\n\nAs Dominik noticed, there\u0027s still inconsistencies on the lower level (`ProcessEphemerons`) left to refactor.",
+      "parentUuid": "d2bffb08_b120111f",
+      "range": {
+        "startLine": 2397,
+        "startChar": 4,
+        "endLine": 2397,
+        "endChar": 27
+      },
+      "revId": "a9d938c9064d2c87f0ca40f2e57d7a5f476df8d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

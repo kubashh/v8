@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8328877_a8c422a9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T09:11:02Z",
+      "side": 1,
+      "message": "fyi: I had to introduce this flag since I missed that we would otherwise restart the job in the case it\u0027s completely done which is not what we want in the 2nd phases were we just want to go through the left overs single-threaded.",
+      "range": {
+        "startLine": 2215,
+        "startChar": 6,
+        "endLine": 2215,
+        "endChar": 23
+      },
+      "revId": "a01b9b52e751656dfd27798a7376ae69a5040018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
