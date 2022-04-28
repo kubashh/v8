@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4900e503_8fbbdca7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T16:11:35Z",
+      "side": 1,
+      "message": "expected",
+      "range": {
+        "startLine": 14,
+        "startChar": 39,
+        "endLine": 14,
+        "endChar": 48
+      },
+      "revId": "5c8eea3c56b93f8e208b9e17d544ffe2d53e66ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a152cde8_626e235c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T16:11:35Z",
+      "side": 1,
+      "message": "lgtm, but I guess some OWNERs are missing",
+      "revId": "5c8eea3c56b93f8e208b9e17d544ffe2d53e66ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "247d0a1d_6db5c19e",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3836,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-28T16:11:35Z",
+      "side": 1,
+      "message": "The idea is to do this lazily after some time X, maybe concurrently, and then update?",
+      "range": {
+        "startLine": 3836,
+        "startChar": 19,
+        "endLine": 3836,
+        "endChar": 28
+      },
+      "revId": "5c8eea3c56b93f8e208b9e17d544ffe2d53e66ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
