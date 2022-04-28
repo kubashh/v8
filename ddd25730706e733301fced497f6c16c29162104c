@@ -69,6 +69,24 @@
       "parentUuid": "01342128_7c7fb3bf",
       "revId": "ddd25730706e733301fced497f6c16c29162104c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbd82125_3466b8b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-04-28T08:03:13Z",
+      "side": 1,
+      "message": "Right, but my comment was about *how* to add control of explicit tiers. So +1 on better control, but imo we should have an overall plan that includes all other tf-related flags as well. Many of them no longer make sense in a multi-tier world.",
+      "parentUuid": "fd469e74_3c214873",
+      "revId": "ddd25730706e733301fced497f6c16c29162104c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
