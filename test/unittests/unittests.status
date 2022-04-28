@@ -111,6 +111,12 @@
   'LoggingTest.SourceLocation':[SKIP]  # issue-174
 }],
 
+##############################################################################
+['variant == no_wasm_traps', {
+  'BignumDtoaTest.*': [SKIP],
+  'DtoaTest.*': [SKIP],
+}],  # variant == no_wasm_traps
+
 ################################################################################
 ['third_party_heap', {
   # Tests on OptimizingCompileDispatcher

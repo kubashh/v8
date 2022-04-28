@@ -25,21 +25,24 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "src/base/numbers/fixed-dtoa.h"
+
 #include <stdlib.h>
 
 #include "src/base/numbers/double.h"
-#include "src/base/numbers/fixed-dtoa.h"
 #include "src/base/platform/platform.h"
 #include "src/init/v8.h"
-#include "test/cctest/cctest.h"
-#include "test/cctest/gay-fixed.h"
+#include "test/unittests/gay-fixed.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace v8 {
+
+using FixedDtoaTest = ::testing::Test;
 namespace base {
 
 static const int kBufferSize = 500;
 
-TEST(FastFixedVariousDoubles) {
+TEST_F(FixedDtoaTest, FastFixedVariousDoubles) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   int length;
@@ -74,8 +77,8 @@ TEST(FastFixedVariousDoubles) {
   CHECK_EQ(0, strcmp("999999999999999868928", buffer.begin()));
   CHECK_EQ(21, point);
 
-  CHECK(FastFixedDtoa(6.9999999999999989514240000e+21, 5, buffer,
-                      &length, &point));
+  CHECK(FastFixedDtoa(6.9999999999999989514240000e+21, 5, buffer, &length,
+                      &point));
   CHECK_EQ(0, strcmp("6999999999999998951424", buffer.begin()));
   CHECK_EQ(22, point);
 
@@ -467,29 +470,27 @@ TEST(FastFixedVariousDoubles) {
   CHECK_EQ(0, strcmp("1", buffer.begin()));
   CHECK_EQ(-19, point);
 
-  CHECK(FastFixedDtoa(9.1193616301674545152000000e+19, 0,
-                      buffer, &length, &point));
+  CHECK(FastFixedDtoa(9.1193616301674545152000000e+19, 0, buffer, &length,
+                      &point));
   CHECK_EQ(0, strcmp("91193616301674545152", buffer.begin()));
   CHECK_EQ(20, point);
 
-  CHECK(FastFixedDtoa(4.8184662102767651659096515e-04, 19,
-                      buffer, &length, &point));
+  CHECK(FastFixedDtoa(4.8184662102767651659096515e-04, 19, buffer, &length,
+                      &point));
   CHECK_EQ(0, strcmp("4818466210276765", buffer.begin()));
   CHECK_EQ(-3, point);
 
-  CHECK(FastFixedDtoa(1.9023164229540652612705182e-23, 8,
-                      buffer, &length, &point));
+  CHECK(FastFixedDtoa(1.9023164229540652612705182e-23, 8, buffer, &length,
+                      &point));
   CHECK_EQ(0, strcmp("", buffer.begin()));
   CHECK_EQ(-8, point);
 
-  CHECK(FastFixedDtoa(1000000000000000128.0, 0,
-                      buffer, &length, &point));
+  CHECK(FastFixedDtoa(1000000000000000128.0, 0, buffer, &length, &point));
   CHECK_EQ(0, strcmp("1000000000000000128", buffer.begin()));
   CHECK_EQ(19, point);
 }
 
-
-TEST(FastFixedDtoaGayFixed) {
+TEST_F(FixedDtoaTest, FastFixedDtoaGayFixed) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   bool status;
@@ -502,8 +503,7 @@ TEST(FastFixedDtoaGayFixed) {
     const PrecomputedFixed current_test = precomputed[i];
     double v = current_test.v;
     int number_digits = current_test.number_digits;
-    status = FastFixedDtoa(v, number_digits,
-                           buffer, &length, &point);
+    status = FastFixedDtoa(v, number_digits, buffer, &length, &point);
     CHECK(status);
     CHECK_EQ(current_test.decimal_point, point);
     CHECK_GE(number_digits, length - point);

@@ -25,18 +25,22 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "src/base/numbers/fast-dtoa.h"
+
 #include <stdlib.h>
 
 #include "src/base/numbers/diy-fp.h"
 #include "src/base/numbers/double.h"
-#include "src/base/numbers/fast-dtoa.h"
 #include "src/base/platform/platform.h"
 #include "src/init/v8.h"
-#include "test/cctest/cctest.h"
-#include "test/cctest/gay-precision.h"
-#include "test/cctest/gay-shortest.h"
+#include "test/unittests/gay-precision.h"
+#include "test/unittests/gay-shortest.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace v8 {
+
+using FastDtoaTest = ::testing::Test;
+
 namespace base {
 namespace test_fast_dtoa {
 
@@ -50,7 +54,7 @@ static void TrimRepresentation(char* representation) {
   representation[len] = '\0';
 }
 
-TEST(FastDtoaShortestVariousDoubles) {
+TEST_F(FastDtoaTest, FastDtoaShortestVariousDoubles) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   int length;
@@ -58,45 +62,43 @@ TEST(FastDtoaShortestVariousDoubles) {
   int status;
 
   double min_double = 5e-324;
-  status = FastDtoa(min_double, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status = FastDtoa(min_double, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("5", buffer.begin()));
   CHECK_EQ(-323, point);
 
   double max_double = 1.7976931348623157e308;
-  status = FastDtoa(max_double, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status = FastDtoa(max_double, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("17976931348623157", buffer.begin()));
   CHECK_EQ(309, point);
 
-  status = FastDtoa(4294967272.0, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(4294967272.0, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("4294967272", buffer.begin()));
   CHECK_EQ(10, point);
 
-  status = FastDtoa(4.1855804968213567e298, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status = FastDtoa(4.1855804968213567e298, FAST_DTOA_SHORTEST, 0, buffer,
+                    &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("4185580496821357", buffer.begin()));
   CHECK_EQ(299, point);
 
-  status = FastDtoa(5.5626846462680035e-309, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status = FastDtoa(5.5626846462680035e-309, FAST_DTOA_SHORTEST, 0, buffer,
+                    &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("5562684646268003", buffer.begin()));
   CHECK_EQ(-308, point);
 
-  status = FastDtoa(2147483648.0, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(2147483648.0, FAST_DTOA_SHORTEST, 0, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("2147483648", buffer.begin()));
   CHECK_EQ(10, point);
 
-  status = FastDtoa(3.5844466002796428e+298, FAST_DTOA_SHORTEST, 0,
-                    buffer, &length, &point);
+  status = FastDtoa(3.5844466002796428e+298, FAST_DTOA_SHORTEST, 0, buffer,
+                    &length, &point);
   if (status) {  // Not all FastDtoa variants manage to compute this number.
     CHECK_EQ(0, strcmp("35844466002796428", buffer.begin()));
     CHECK_EQ(299, point);
@@ -119,8 +121,7 @@ TEST(FastDtoaShortestVariousDoubles) {
   }
 }
 
-
-TEST(FastDtoaPrecisionVariousDoubles) {
+TEST_F(FastDtoaTest, FastDtoaPrecisionVariousDoubles) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   int length;
@@ -143,21 +144,21 @@ TEST(FastDtoaPrecisionVariousDoubles) {
   }
 
   double min_double = 5e-324;
-  status = FastDtoa(min_double, FAST_DTOA_PRECISION, 5,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(min_double, FAST_DTOA_PRECISION, 5, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("49407", buffer.begin()));
   CHECK_EQ(-323, point);
 
   double max_double = 1.7976931348623157e308;
-  status = FastDtoa(max_double, FAST_DTOA_PRECISION, 7,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(max_double, FAST_DTOA_PRECISION, 7, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("1797693", buffer.begin()));
   CHECK_EQ(309, point);
 
-  status = FastDtoa(4294967272.0, FAST_DTOA_PRECISION, 14,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(4294967272.0, FAST_DTOA_PRECISION, 14, buffer, &length, &point);
   if (status) {
     CHECK_GE(14, length);
     TrimRepresentation(buffer.begin());
@@ -165,26 +166,26 @@ TEST(FastDtoaPrecisionVariousDoubles) {
     CHECK_EQ(10, point);
   }
 
-  status = FastDtoa(4.1855804968213567e298, FAST_DTOA_PRECISION, 17,
-                    buffer, &length, &point);
+  status = FastDtoa(4.1855804968213567e298, FAST_DTOA_PRECISION, 17, buffer,
+                    &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("41855804968213567", buffer.begin()));
   CHECK_EQ(299, point);
 
-  status = FastDtoa(5.5626846462680035e-309, FAST_DTOA_PRECISION, 1,
-                    buffer, &length, &point);
+  status = FastDtoa(5.5626846462680035e-309, FAST_DTOA_PRECISION, 1, buffer,
+                    &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("6", buffer.begin()));
   CHECK_EQ(-308, point);
 
-  status = FastDtoa(2147483648.0, FAST_DTOA_PRECISION, 5,
-                    buffer, &length, &point);
+  status =
+      FastDtoa(2147483648.0, FAST_DTOA_PRECISION, 5, buffer, &length, &point);
   CHECK(status);
   CHECK_EQ(0, strcmp("21475", buffer.begin()));
   CHECK_EQ(10, point);
 
-  status = FastDtoa(3.5844466002796428e+298, FAST_DTOA_PRECISION, 10,
-                    buffer, &length, &point);
+  status = FastDtoa(3.5844466002796428e+298, FAST_DTOA_PRECISION, 10, buffer,
+                    &length, &point);
   CHECK(status);
   CHECK_GE(10, length);
   TrimRepresentation(buffer.begin());
@@ -220,8 +221,7 @@ TEST(FastDtoaPrecisionVariousDoubles) {
   CHECK_EQ(192, point);
 }
 
-
-TEST(FastDtoaGayShortest) {
+TEST_F(FastDtoaTest, FastDtoaGayShortest) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   bool status;
@@ -245,12 +245,11 @@ TEST(FastDtoaGayShortest) {
     CHECK_EQ(current_test.decimal_point, point);
     CHECK_EQ(0, strcmp(current_test.representation, buffer.begin()));
   }
-  CHECK_GT(succeeded*1.0/total, 0.99);
+  CHECK_GT(succeeded * 1.0 / total, 0.99);
   CHECK(needed_max_length);
 }
 
-
-TEST(FastDtoaGayPrecision) {
+TEST_F(FastDtoaTest, FastDtoaGayPrecision) {
   char buffer_container[kBufferSize];
   Vector<char> buffer(buffer_container, kBufferSize);
   bool status;
@@ -270,8 +269,8 @@ TEST(FastDtoaGayPrecision) {
     int number_digits = current_test.number_digits;
     total++;
     if (number_digits <= 15) total_15++;
-    status = FastDtoa(v, FAST_DTOA_PRECISION, number_digits,
-                      buffer, &length, &point);
+    status = FastDtoa(v, FAST_DTOA_PRECISION, number_digits, buffer, &length,
+                      &point);
     CHECK_GE(number_digits, length);
     if (!status) continue;
     succeeded++;
@@ -283,10 +282,10 @@ TEST(FastDtoaGayPrecision) {
   // The precomputed numbers contain many entries with many requested
   // digits. These have a high failure rate and we therefore expect a lower
   // success rate than for the shortest representation.
-  CHECK_GT(succeeded*1.0/total, 0.85);
+  CHECK_GT(succeeded * 1.0 / total, 0.85);
   // However with less than 15 digits almost the algorithm should almost always
   // succeed.
-  CHECK_GT(succeeded_15*1.0/total_15, 0.9999);
+  CHECK_GT(succeeded_15 * 1.0 / total_15, 0.9999);
 }
 
 }  // namespace test_fast_dtoa
