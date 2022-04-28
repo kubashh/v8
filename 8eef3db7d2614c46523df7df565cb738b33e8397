@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6e1b5b7_d1609025",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-28T07:24:10Z",
+      "side": 1,
+      "message": "Oops, it should be here (and on line 14)! Nice catch!",
+      "parentUuid": "2e228c00_89b13ac5",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f434aa0a_9282c0e1",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-27T21:02:55Z",
       "side": 1,
       "message": "nit: `\u0026`",
+      "range": {
+        "startLine": 292,
+        "startChar": 58,
+        "endLine": 292,
+        "endChar": 59
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fab29faf_6f00ed68",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-28T07:24:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f434aa0a_9282c0e1",
       "range": {
         "startLine": 292,
         "startChar": 58,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82239a8a_158e218a",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-28T07:24:10Z",
+      "side": 1,
+      "message": "Oh my goodness...",
+      "parentUuid": "b93ff414_b339b511",
+      "range": {
+        "startLine": 43,
+        "startChar": 33,
+        "endLine": 43,
+        "endChar": 79
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f004405e_bd7b2be6",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-04-27T21:02:55Z",
       "side": 1,
       "message": "This is one `one` too many.\n\nAgain in line 275.",
+      "range": {
+        "startLine": 242,
+        "startChar": 66,
+        "endLine": 242,
+        "endChar": 69
+      },
+      "revId": "8eef3db7d2614c46523df7df565cb738b33e8397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfe900e_5e923e48",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer-atomics.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-28T07:24:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f004405e_bd7b2be6",
       "range": {
         "startLine": 242,
         "startChar": 66,
