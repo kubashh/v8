@@ -4916,6 +4916,106 @@ void CodeGenerator::IncrementStackAccessCounter(
   }
 }
 
+void CodeGenerator::MoveToTempLocation(InstructionOperand* source) {
+  DCHECK(!source->IsImmediate());
+  auto rep = LocationOperand::cast(source)->representation();
+  if (!pending_move_requires_scratch_reg_) {
+    int scratch_reg_code = rep < MachineRepresentation::kFirstFPRepresentation
+                               ? kScratchRegister.code()
+                               : kScratchDoubleReg.code();
+    auto scratch =
+        AllocatedOperand(LocationOperand::REGISTER, rep, scratch_reg_code);
+    AssembleMove(source, &scratch);
+  } else {
+    X64OperandConverter g(this, nullptr);
+    if (source->IsRegister()) {
+      __ pushq(g.ToRegister(source));
+    } else if (source->IsStackSlot() || source->IsFPStackSlot()) {
+      __ pushq(g.ToOperand(source));
+    } else if (source->IsSimd128StackSlot()) {
+      __ subq(rsp, Immediate(16));
+      __ Movdqu(kScratchDoubleReg, g.ToOperand(source));
+      __ Movdqu(Operand(rsp, 0), kScratchDoubleReg);
+    } else if (source->IsSimd128Register()) {
+      switch (rep) {
+        case MachineRepresentation::kFloat32:
+          __ subq(rsp, Immediate(8));
+          __ Movss(Operand(rsp, 0), g.ToDoubleRegister(source));
+          break;
+        case MachineRepresentation::kFloat64:
+          __ subq(rsp, Immediate(8));
+          __ Movsd(Operand(rsp, 0), g.ToDoubleRegister(source));
+          break;
+        case MachineRepresentation::kSimd128:
+          __ subq(rsp, Immediate(16));
+          __ Movdqu(Operand(rsp, 0), g.ToDoubleRegister(source));
+          break;
+        default:
+          UNREACHABLE();
+      }
+    } else {
+      UNIMPLEMENTED();
+    }
+    frame_access_state()->IncreaseSPDelta(1);
+  }
+}
+
+void CodeGenerator::MoveTempLocationTo(InstructionOperand* dest,
+                                       MachineRepresentation rep) {
+  if (!pending_move_requires_scratch_reg_) {
+    int scratch_reg_code = rep < MachineRepresentation::kFirstFPRepresentation
+                               ? kScratchRegister.code()
+                               : kScratchDoubleReg.code();
+    auto scratch =
+        AllocatedOperand(LocationOperand::REGISTER, rep, scratch_reg_code);
+    AssembleMove(&scratch, dest);
+  } else {
+    X64OperandConverter g(this, nullptr);
+    frame_access_state()->IncreaseSPDelta(-1);
+    if (dest->IsRegister()) {
+      __ popq(g.ToRegister(dest));
+    } else if (dest->IsStackSlot() || dest->IsFPStackSlot()) {
+      __ popq(g.ToOperand(dest));
+    } else if (dest->IsSimd128StackSlot()) {
+      __ Movdqu(Operand(rsp, 0), kScratchDoubleReg);
+      __ Movdqu(kScratchDoubleReg, g.ToOperand(dest));
+      __ addq(rsp, Immediate(16));
+    } else if (dest->IsSimd128Register()) {
+      switch (rep) {
+        case MachineRepresentation::kFloat32:
+          __ Movss(Operand(rsp, 0), g.ToDoubleRegister(dest));
+          __ addq(rsp, Immediate(8));
+          break;
+        case MachineRepresentation::kFloat64:
+          __ Movsd(Operand(rsp, 0), g.ToDoubleRegister(dest));
+          __ addq(rsp, Immediate(8));
+          break;
+        case MachineRepresentation::kSimd128:
+          __ Movdqu(Operand(rsp, 0), g.ToDoubleRegister(dest));
+          __ addq(rsp, Immediate(16));
+          break;
+        default:
+          UNREACHABLE();
+      }
+    } else {
+      UNIMPLEMENTED();
+    }
+  }
+}
+
+void CodeGenerator::SetPendingMove(MoveOperands* move) {
+  MoveType::Type move_type =
+      MoveType::InferMove(&move->source(), &move->destination());
+  if (move_type == MoveType::kStackToStack ||
+      move_type == MoveType::kConstantToStack) {
+    pending_move_requires_scratch_reg_ = true;
+  }
+}
+
+void CodeGenerator::ResetPendingMoves() {
+  pending_move_requires_scratch_reg_ = false;
+}
+
 void CodeGenerator::AssembleMove(InstructionOperand* source,
                                  InstructionOperand* destination) {
   X64OperandConverter g(this, nullptr);
@@ -5103,99 +5203,6 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
     }
   }
   UNREACHABLE();
-}
-
-void CodeGenerator::AssembleSwap(InstructionOperand* source,
-                                 InstructionOperand* destination) {
-  if (FLAG_trace_turbo_stack_accesses) {
-    IncrementStackAccessCounter(source, destination);
-    IncrementStackAccessCounter(destination, source);
-  }
-
-  X64OperandConverter g(this, nullptr);
-  // Dispatch on the source and destination operand kinds.  Not all
-  // combinations are possible.
-  switch (MoveType::InferSwap(source, destination)) {
-    case MoveType::kRegisterToRegister: {
-      if (source->IsRegister()) {
-        Register src = g.ToRegister(source);
-        Register dst = g.ToRegister(destination);
-        __ movq(kScratchRegister, src);
-        __ movq(src, dst);
-        __ movq(dst, kScratchRegister);
-      } else {
-        DCHECK(source->IsFPRegister());
-        XMMRegister src = g.ToDoubleRegister(source);
-        XMMRegister dst = g.ToDoubleRegister(destination);
-        __ Movapd(kScratchDoubleReg, src);
-        __ Movapd(src, dst);
-        __ Movapd(dst, kScratchDoubleReg);
-      }
-      return;
-    }
-    case MoveType::kRegisterToStack: {
-      if (source->IsRegister()) {
-        Register src = g.ToRegister(source);
-        Operand dst = g.ToOperand(destination);
-        __ movq(kScratchRegister, src);
-        __ movq(src, dst);
-        __ movq(dst, kScratchRegister);
-      } else {
-        DCHECK(source->IsFPRegister());
-        XMMRegister src = g.ToDoubleRegister(source);
-        Operand dst = g.ToOperand(destination);
-        MachineRepresentation rep =
-            LocationOperand::cast(source)->representation();
-        if (rep != MachineRepresentation::kSimd128) {
-          __ Movsd(kScratchDoubleReg, src);
-          __ Movsd(src, dst);
-          __ Movsd(dst, kScratchDoubleReg);
-        } else {
-          __ Movups(kScratchDoubleReg, src);
-          __ Movups(src, dst);
-          __ Movups(dst, kScratchDoubleReg);
-        }
-      }
-      return;
-    }
-    case MoveType::kStackToStack: {
-      Operand src = g.ToOperand(source);
-      Operand dst = g.ToOperand(destination);
-      MachineRepresentation rep =
-          LocationOperand::cast(source)->representation();
-      if (rep != MachineRepresentation::kSimd128) {
-        Register tmp = kScratchRegister;
-        __ movq(tmp, dst);
-        __ pushq(src);  // Then use stack to copy src to destination.
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         kSystemPointerSize);
-        __ popq(dst);
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         -kSystemPointerSize);
-        __ movq(src, tmp);
-      } else {
-        // Without AVX, misaligned reads and writes will trap. Move using the
-        // stack, in two parts.
-        __ movups(kScratchDoubleReg, dst);  // Save dst in scratch register.
-        __ pushq(src);  // Then use stack to copy src to destination.
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         kSystemPointerSize);
-        __ popq(dst);
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         -kSystemPointerSize);
-        __ pushq(g.ToOperand(source, kSystemPointerSize));
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         kSystemPointerSize);
-        __ popq(g.ToOperand(destination, kSystemPointerSize));
-        unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
-                                                         -kSystemPointerSize);
-        __ movups(src, kScratchDoubleReg);
-      }
-      return;
-    }
-    default:
-      UNREACHABLE();
-  }
 }
 
 void CodeGenerator::AssembleJumpTable(Label** targets, size_t target_count) {

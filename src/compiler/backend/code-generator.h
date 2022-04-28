@@ -346,9 +346,12 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // ===========================================================================
 
   // Interface used by the gap resolver to emit moves and swaps.
+  void MoveToTempLocation(InstructionOperand* src) final;
+  void MoveTempLocationTo(InstructionOperand* dst,
+                          MachineRepresentation rep) final;
+  void SetPendingMove(MoveOperands* move) final;
+  void ResetPendingMoves() final;
   void AssembleMove(InstructionOperand* source,
-                    InstructionOperand* destination) final;
-  void AssembleSwap(InstructionOperand* source,
                     InstructionOperand* destination) final;
 
   // ===========================================================================
@@ -469,6 +472,10 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   ZoneVector<TurbolizerInstructionStartInfo> instr_starts_;
 
   const char* debug_name_ = nullptr;
+
+  // Whether a pending move needs the scratch register during a move cycle
+  // resolution. If so, the scratch reg cannot be used to resolve the cycle.
+  bool pending_move_requires_scratch_reg_ = false;
 };
 
 }  // namespace compiler

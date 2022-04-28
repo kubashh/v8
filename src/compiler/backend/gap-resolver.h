@@ -18,11 +18,22 @@ class GapResolver final {
    public:
     virtual ~Assembler() = default;
 
+    // Move an operand to a (unique) temporary location to break a move cycle.
+    virtual void MoveToTempLocation(InstructionOperand* src) = 0;
+    // Resolve the cycle by moving the temporary location to its destination.
+    virtual void MoveTempLocationTo(InstructionOperand* dst,
+                                    MachineRepresentation rep) = 0;
+    // On platforms where a scratch register is available, we want to use that
+    // as the temporary location. However, one of the pending moves might also
+    // require the temp register (e.g. stack-to-stack move).
+    // Detect such conflict with the following function, and choose the temp
+    // location appropriately later.
+    virtual void SetPendingMove(MoveOperands* move) = 0;
+    // Reset the scratch register state after a move cycle.
+    virtual void ResetPendingMoves() = 0;
+
     // Assemble move.
     virtual void AssembleMove(InstructionOperand* source,
-                              InstructionOperand* destination) = 0;
-    // Assemble swap.
-    virtual void AssembleSwap(InstructionOperand* source,
                               InstructionOperand* destination) = 0;
   };
 
@@ -36,6 +47,8 @@ class GapResolver final {
   // Performs the given move, possibly performing other moves to unblock the
   // destination operand.
   void PerformMove(ParallelMove* moves, MoveOperands* move);
+  void PerformMoveHelper(ParallelMove* moves, MoveOperands* move,
+                         MoveOperands** deferred_out);
 
   // Assembler used to emit moves and save registers.
   Assembler* const assembler_;

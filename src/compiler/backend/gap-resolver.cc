@@ -151,11 +151,24 @@ void GapResolver::Resolve(ParallelMove* moves) {
 }
 
 void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
-  // Each call to this function performs a move and deletes it from the move
-  // graph.  We first recursively perform any move blocking this one.  We mark a
-  // move as "pending" on entry to PerformMove in order to detect cycles in the
-  // move graph.  We use operand swaps to resolve cycles, which means that a
-  // call to PerformMove could change any source operand in the move graph.
+  MoveOperands* deferred_move_out = nullptr;
+  PerformMoveHelper(moves, move, &deferred_move_out);
+  if (deferred_move_out) {
+    auto rep =
+        LocationOperand::cast(deferred_move_out->source()).representation();
+    assembler_->MoveTempLocationTo(&deferred_move_out->destination(), rep);
+  }
+  assembler_->ResetPendingMoves();
+}
+
+void GapResolver::PerformMoveHelper(ParallelMove* moves, MoveOperands* move,
+                                    MoveOperands** deferred_move_out) {
+  // We first recursively perform any move blocking this one.  We mark a move as
+  // "pending" on entry to PerformMove in order to detect cycles in the move
+  // graph. If there is a cycle, we move one of the operands to a temporary
+  // location to break the dependency and resolve the cycle. When the move and
+  // all of its dependencies have been assembled, place the temporary location
+  // back into its destination.
   DCHECK(!move->IsPending());
   DCHECK(!move->IsRedundant());
 
@@ -164,6 +177,7 @@ void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
   InstructionOperand source = move->source();
   DCHECK(!source.IsInvalid());  // Or else it will look eliminated.
   InstructionOperand destination = move->destination();
+  assembler_->SetPendingMove(move);
   move->SetPending();
 
   // We may need to split moves between FP locations differently.
@@ -176,98 +190,45 @@ void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
   for (size_t i = 0; i < moves->size(); ++i) {
     auto other = (*moves)[i];
     if (other->IsEliminated()) continue;
-    if (other->IsPending()) continue;
+    if (other == *deferred_move_out) continue;
     if (other->source().InterferesWith(destination)) {
-      if (is_fp_loc_move &&
-          LocationOperand::cast(other->source()).representation() >
-              split_rep_) {
-        // 'other' must also be an FP location move. Break it into fragments
-        // of the same size as 'move'. 'other' is set to one of the fragments,
-        // and the rest are appended to 'moves'.
-        other = Split(other, split_rep_, moves);
-        // 'other' may not block destination now.
-        if (!other->source().InterferesWith(destination)) continue;
+      if (other->IsPending()) {
+        // The conflicting move is pending, i.e. we found a cycle. Break it by
+        // moving the source to a platform-dependent temporary location.
+        // Check that we have at most one blocker. This assumption will have to
+        // be revisited for tail-calls, which create more complex interferences.
+        DCHECK_NULL(*deferred_move_out);
+        assembler_->MoveToTempLocation(&other->source());
+        *deferred_move_out = other;
+      } else {
+        // Recursively perform the conflicting move.
+        if (is_fp_loc_move &&
+            LocationOperand::cast(other->source()).representation() >
+                split_rep_) {
+          // 'other' must also be an FP location move. Break it into fragments
+          // of the same size as 'move'. 'other' is set to one of the fragments,
+          // and the rest are appended to 'moves'.
+          other = Split(other, split_rep_, moves);
+          // 'other' may not block destination now.
+          if (!other->source().InterferesWith(destination)) continue;
+        }
+        PerformMoveHelper(moves, other, deferred_move_out);
       }
-      // Though PerformMove can change any source operand in the move graph,
-      // this call cannot create a blocking move via a swap (this loop does not
-      // miss any).  Assume there is a non-blocking move with source A and this
-      // move is blocked on source B and there is a swap of A and B.  Then A and
-      // B must be involved in the same cycle (or they would not be swapped).
-      // Since this move's destination is B and there is only a single incoming
-      // edge to an operand, this move must also be involved in the same cycle.
-      // In that case, the blocking move will be created but will be "pending"
-      // when we return from PerformMove.
-      PerformMove(moves, other);
     }
   }
 
-  // This move's source may have changed due to swaps to resolve cycles and so
-  // it may now be the last move in the cycle.  If so remove it.
-  source = move->source();
-  if (source.EqualsCanonicalized(destination)) {
-    move->Eliminate();
-    return;
-  }
+  DCHECK(!move->source().EqualsCanonicalized(destination));
 
   // We are about to resolve this move and don't need it marked as pending, so
   // restore its destination.
   move->set_destination(destination);
 
-  // The move may be blocked on a (at most one) pending move, in which case we
-  // have a cycle.  Search for such a blocking move and perform a swap to
-  // resolve it.
-  auto blocker =
-      std::find_if(moves->begin(), moves->end(), [&](MoveOperands* move) {
-        return !move->IsEliminated() &&
-               move->source().InterferesWith(destination);
-      });
-  if (blocker == moves->end()) {
-    // The easy case: This move is not blocked.
-    assembler_->AssembleMove(&source, &destination);
-    move->Eliminate();
-    return;
-  }
+  if (move == *deferred_move_out) return;
 
-  // Ensure source is a register or both are stack slots, to limit swap cases.
-  if (source.IsStackSlot() || source.IsFPStackSlot()) {
-    std::swap(source, destination);
-  }
-  assembler_->AssembleSwap(&source, &destination);
+  assembler_->AssembleMove(&source, &destination);
   move->Eliminate();
-
-  // Update outstanding moves whose source may now have been moved.
-  if (is_fp_loc_move) {
-    // We may have to split larger moves.
-    for (size_t i = 0; i < moves->size(); ++i) {
-      auto other = (*moves)[i];
-      if (other->IsEliminated()) continue;
-      if (source.InterferesWith(other->source())) {
-        if (LocationOperand::cast(other->source()).representation() >
-            split_rep_) {
-          other = Split(other, split_rep_, moves);
-          if (!source.InterferesWith(other->source())) continue;
-        }
-        other->set_source(destination);
-      } else if (destination.InterferesWith(other->source())) {
-        if (LocationOperand::cast(other->source()).representation() >
-            split_rep_) {
-          other = Split(other, split_rep_, moves);
-          if (!destination.InterferesWith(other->source())) continue;
-        }
-        other->set_source(source);
-      }
-    }
-  } else {
-    for (auto other : *moves) {
-      if (other->IsEliminated()) continue;
-      if (source.EqualsCanonicalized(other->source())) {
-        other->set_source(destination);
-      } else if (destination.EqualsCanonicalized(other->source())) {
-        other->set_source(source);
-      }
-    }
-  }
 }
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8

@@ -73,6 +73,12 @@ class InterpreterState {
     }
   }
 
+  void MoveToTempLocation(InstructionOperand& source) {
+    scratch_ = KeyFor(source);
+  }
+
+  void MoveFromTempLocation(InstructionOperand& dest) { write(dest, scratch_); }
+
   bool operator==(const InterpreterState& other) const {
     return values_ == other.values_;
   }
@@ -183,6 +189,7 @@ class InterpreterState {
   }
 
   OperandMap values_;
+  Key scratch_;
 };
 
 // An abstract interpreter for moves, swaps and parallel moves.
@@ -190,18 +197,19 @@ class MoveInterpreter : public GapResolver::Assembler {
  public:
   explicit MoveInterpreter(Zone* zone) : zone_(zone) {}
 
+  void MoveToTempLocation(InstructionOperand* source) final {
+    state_.MoveToTempLocation(*source);
+  }
+  void MoveTempLocationTo(InstructionOperand* dest,
+                          MachineRepresentation rep) final {
+    state_.MoveFromTempLocation(*dest);
+  }
+  void SetPendingMove(MoveOperands* move) final {}
+  void ResetPendingMoves() final {}
   void AssembleMove(InstructionOperand* source,
                     InstructionOperand* destination) override {
     ParallelMove* moves = zone_->New<ParallelMove>(zone_);
     moves->AddMove(*source, *destination);
-    state_.ExecuteInParallel(moves);
-  }
-
-  void AssembleSwap(InstructionOperand* source,
-                    InstructionOperand* destination) override {
-    ParallelMove* moves = zone_->New<ParallelMove>(zone_);
-    moves->AddMove(*source, *destination);
-    moves->AddMove(*destination, *source);
     state_.ExecuteInParallel(moves);
   }
 
