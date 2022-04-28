@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5baca04_f84b682e",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-04-28T19:51:56Z",
+      "side": 1,
+      "message": "Hello Marja,\n\nJust wanted to point out the newly added test is causing this check to fail on platforms which bailout to runtime such as PPC and S390X:\n```\nCheck failed: index \u003c sta-\u003elength() (4 vs. 4).\n```\n\nI\u0027ve created this CL https://crrev.com/c/3615010 to avoid a bailout on our \nplatforms which passes the test but wanted to still check if test failure was expected when calling runtime?",
+      "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
