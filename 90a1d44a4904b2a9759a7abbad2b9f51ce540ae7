@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61346e19_33cf5d1b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-04-29T11:00:52Z",
+      "side": 1,
+      "message": "nit: use FastCloneSupportedBit::decode",
+      "range": {
+        "startLine": 1020,
+        "startChar": 45,
+        "endLine": 1020,
+        "endChar": 66
+      },
+      "revId": "90a1d44a4904b2a9759a7abbad2b9f51ce540ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
