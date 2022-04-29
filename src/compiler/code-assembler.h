@@ -1250,15 +1250,6 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                           CAST(function), CAST(new_target), arity,
                           {receiver, args...});
   }
-  template <class... TArgs>
-  Node* ConstructJS(Callable const& callable, Node* context, Node* new_target,
-                    TArgs... args) {
-    return ConstructJSWithTarget(callable, context, new_target, new_target,
-                                 args...);
-  }
-
-  Node* CallCFunctionN(Signature<MachineType>* signature, int input_count,
-                       Node* const* inputs);
 
   // Type representing C function argument with type info.
   using CFunctionArg = std::pair<MachineType, Node*>;

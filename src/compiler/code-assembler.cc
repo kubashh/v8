@@ -1223,12 +1223,6 @@ void CodeAssembler::TailCallJSCode(TNode<CodeT> code, TNode<Context> context,
   raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
 }
 
-Node* CodeAssembler::CallCFunctionN(Signature<MachineType>* signature,
-                                    int input_count, Node* const* inputs) {
-  auto call_descriptor = Linkage::GetSimplifiedCDescriptor(zone(), signature);
-  return raw_assembler()->CallN(call_descriptor, input_count, inputs);
-}
-
 Node* CodeAssembler::CallCFunction(
     Node* function, base::Optional<MachineType> return_type,
     std::initializer_list<CodeAssembler::CFunctionArg> args) {

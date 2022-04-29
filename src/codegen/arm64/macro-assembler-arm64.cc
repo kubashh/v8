@@ -2541,26 +2541,6 @@ void MacroAssembler::InvokeFunctionWithNewTarget(
                      actual_parameter_count, type);
 }
 
-void MacroAssembler::InvokeFunction(Register function,
-                                    Register expected_parameter_count,
-                                    Register actual_parameter_count,
-                                    InvokeType type) {
-  ASM_CODE_COMMENT(this);
-  // You can't call a function without a valid frame.
-  DCHECK(type == InvokeType::kJump || has_frame());
-
-  // Contract with called JS functions requires that function is passed in x1.
-  // (See FullCodeGenerator::Generate().)
-  DCHECK_EQ(function, x1);
-
-  // Set up the context.
-  LoadTaggedPointerField(cp,
-                         FieldMemOperand(function, JSFunction::kContextOffset));
-
-  InvokeFunctionCode(function, no_reg, expected_parameter_count,
-                     actual_parameter_count, type);
-}
-
 void TurboAssembler::TryConvertDoubleToInt64(Register result,
                                              DoubleRegister double_input,
                                              Label* done) {
