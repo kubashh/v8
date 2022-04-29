@@ -34,6 +34,24 @@
       "parentUuid": "0d4b1d54_27897955",
       "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d584707_3beb3706",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-04-29T17:34:21Z",
+      "side": 0,
+      "message": "Liu Yu said that it also fails on x64 with pointer compression disabled, so you should be able to reproduce by adding:\n\nv8_enable_pointer_compression \u003d false\n\nto your gn args.",
+      "parentUuid": "b20dbb70_3472cc32",
+      "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
