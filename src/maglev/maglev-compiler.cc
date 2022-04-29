@@ -180,6 +180,9 @@ void MaglevCompiler::Compile(LocalIsolate* local_isolate,
   }
 
   if (FLAG_print_maglev_graph) {
+    Handle<JSFunction> top_level_function =
+        compilation_info->toplevel_compilation_unit()->function().object();
+    std::cout << "Compiling " << Brief(*top_level_function) << " with Maglev\n";
     std::cout << "After graph buiding" << std::endl;
     PrintGraph(std::cout, compilation_info, graph_builder.graph());
   }
