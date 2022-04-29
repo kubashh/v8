@@ -16,6 +16,24 @@
       "message": "Hi Frank,\n\nThis test fails on mips64el, details in https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8815570974020345857/+/u/Test262_-_default/argument-infinity-throws-rangeerror;\n\nI ran this test on x64 and arm64, and it also failed with pointer compression turned off, but test262 is not tested with pointer compression turned off on CI.\n\nSo, is this failure expected?",
       "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b20dbb70_3472cc32",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-04-29T15:02:45Z",
+      "side": 0,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/3614859\n\nFrom the stack trace I cannot tell what is going on. I am not familiar with the unique issue mips64el usually facing. Temporal implementation is still short of a lot of thing, so I skip those test in the above CL ( please review) for now. I do not have access to a mips64el machine to debug. If you have access to it, could you be able to tell which line cause the \"unreachable code\"?",
+      "parentUuid": "0d4b1d54_27897955",
+      "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
