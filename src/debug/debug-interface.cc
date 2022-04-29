@@ -520,16 +520,10 @@ bool Script::GetPossibleBreakpoints(
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   i::Isolate* isolate = script->GetIsolate();
-  i::Script::InitLineEnds(isolate, script);
-  CHECK(script->line_ends().IsFixedArray());
-  i::Handle<i::FixedArray> line_ends =
-      i::Handle<i::FixedArray>::cast(i::handle(script->line_ends(), isolate));
-  CHECK(line_ends->length());
 
-  int start_offset = GetSourceOffset(start);
-  int end_offset = end.IsEmpty()
-                       ? GetSmiValue(line_ends, line_ends->length() - 1) + 1
-                       : GetSourceOffset(end);
+  int start_offset = GetSourceOffsetClamped(start);
+  int end_offset = end.IsEmpty() ? std::numeric_limits<int>::max()
+                                 : GetSourceOffsetClamped(end);
   if (start_offset >= end_offset) return true;
 
   std::vector<i::BreakLocation> v8_locations;
@@ -540,28 +534,56 @@ bool Script::GetPossibleBreakpoints(
   }
 
   std::sort(v8_locations.begin(), v8_locations.end(), CompareBreakLocation);
-  int current_line_end_index = 0;
   for (const auto& v8_location : v8_locations) {
-    int offset = v8_location.position();
-    while (offset > GetSmiValue(line_ends, current_line_end_index)) {
-      ++current_line_end_index;
-      CHECK(current_line_end_index < line_ends->length());
-    }
-    int line_offset = 0;
-
-    if (current_line_end_index > 0) {
-      line_offset = GetSmiValue(line_ends, current_line_end_index - 1) + 1;
-    }
-    locations->emplace_back(
-        current_line_end_index + script->line_offset(),
-        offset - line_offset +
-            (current_line_end_index == 0 ? script->column_offset() : 0),
-        v8_location.type());
+    Location location = GetSourceLocation(v8_location.position());
+    locations->emplace_back(location.GetLineNumber(),
+                            location.GetColumnNumber(), v8_location.type());
   }
   return true;
 }
 
-int Script::GetSourceOffset(const Location& location) const {
+Maybe<int> Script::GetSourceOffset(const Location& location) const {
+  i::Handle<i::Script> script = Utils::OpenHandle(this);
+#if V8_ENABLE_WEBASSEMBLY
+  if (script->type() == i::Script::TYPE_WASM) {
+    DCHECK_EQ(0, location.GetLineNumber());
+    return Just(location.GetColumnNumber());
+  }
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+  int line = location.GetLineNumber();
+  int column = location.GetColumnNumber();
+  if (!script->HasSourceURLComment()) {
+    // Line/column number for inline <script>s with sourceURL annotation
+    // are supposed to be related to the <script> tag, otherwise they
+    // are relative to the parent file. Keep this in sync with the logic
+    // in GetSourceLocation() below.
+    line -= script->line_offset();
+    if (line == 0) column -= script->column_offset();
+  }
+
+  i::Script::InitLineEnds(script->GetIsolate(), script);
+  i::Handle<i::FixedArray> line_ends = i::Handle<i::FixedArray>::cast(
+      i::handle(script->line_ends(), script->GetIsolate()));
+  if (line < 0 || line >= line_ends->length()) {
+    return Nothing<int>();
+  }
+  if (column < 0) {
+    return Nothing<int>();
+  }
+  int offset = column;
+  if (line > 0) {
+    int prev_line_end_offset = GetSmiValue(line_ends, line - 1);
+    offset += prev_line_end_offset + 1;
+  }
+  int line_end_offset = GetSmiValue(line_ends, line);
+  if (offset > line_end_offset) {
+    return Nothing<int>();
+  }
+  return Just(offset);
+}
+
+int Script::GetSourceOffsetClamped(const debug::Location& location) const {
   i::Handle<i::Script> script = Utils::OpenHandle(this);
 #if V8_ENABLE_WEBASSEMBLY
   if (script->type() == i::Script::TYPE_WASM) {
@@ -570,23 +592,35 @@ int Script::GetSourceOffset(const Location& location) const {
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-  int line = std::max(location.GetLineNumber() - script->line_offset(), 0);
+  int line = location.GetLineNumber();
   int column = location.GetColumnNumber();
-  if (line == 0) {
-    column = std::max(0, column - script->column_offset());
+  if (!script->HasSourceURLComment()) {
+    // Line/column number for inline <script>s with sourceURL annotation
+    // are supposed to be related to the <script> tag, otherwise they
+    // are relative to the parent file. Keep this in sync with the logic
+    // in GetSourceLocation() below.
+    line -= script->line_offset();
+    if (line == 0) column -= script->column_offset();
   }
 
   i::Script::InitLineEnds(script->GetIsolate(), script);
-  CHECK(script->line_ends().IsFixedArray());
   i::Handle<i::FixedArray> line_ends = i::Handle<i::FixedArray>::cast(
       i::handle(script->line_ends(), script->GetIsolate()));
-  CHECK(line_ends->length());
-  if (line >= line_ends->length())
+  if (line < 0) {
+    line = 0;
+  } else if (line >= line_ends->length()) {
     return GetSmiValue(line_ends, line_ends->length() - 1);
-  int line_offset = GetSmiValue(line_ends, line);
-  if (line == 0) return std::min(column, line_offset);
-  int prev_line_offset = GetSmiValue(line_ends, line - 1);
-  return std::min(prev_line_offset + column + 1, line_offset);
+  }
+  if (column < 0) {
+    column = 0;
+  }
+  int offset = column;
+  if (line > 0) {
+    int prev_line_end_offset = GetSmiValue(line_ends, line - 1);
+    offset += prev_line_end_offset + 1;
+  }
+  int line_end_offset = GetSmiValue(line_ends, line);
+  return std::min(offset, line_end_offset);
 }
 
 Location Script::GetSourceLocation(int offset) const {
@@ -594,6 +628,10 @@ Location Script::GetSourceLocation(int offset) const {
   i::Script::PositionInfo info;
   i::Script::GetPositionInfo(script, offset, &info, i::Script::WITH_OFFSET);
   if (script->HasSourceURLComment()) {
+    // Line/column number for inline <script>s with sourceURL annotation
+    // are supposed to be related to the <script> tag, otherwise they
+    // are relative to the parent file. Keep this in sync with the logic
+    // in GetSourceOffset() above.
     info.line -= script->line_offset();
     if (info.line == 0) info.column -= script->column_offset();
   }
@@ -612,7 +650,10 @@ bool Script::SetBreakpoint(Local<String> condition, Location* location,
                            BreakpointId* id) const {
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   i::Isolate* isolate = script->GetIsolate();
-  int offset = GetSourceOffset(*location);
+  int offset;
+  if (!GetSourceOffset(*location).To(&offset)) {
+    return false;
+  }
   if (!isolate->debug()->SetBreakPointForScript(
           script, Utils::OpenHandle(*condition), &offset, id)) {
     return false;
