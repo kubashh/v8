@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d4b1d54_27897955",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-04-29T08:01:43Z",
+      "side": 0,
+      "message": "Hi Frank,\n\nThis test fails on mips64el, details in https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8815570974020345857/+/u/Test262_-_default/argument-infinity-throws-rangeerror;\n\nI ran this test on x64 and arm64, and it also failed with pointer compression turned off, but test262 is not tested with pointer compression turned off on CI.\n\nSo, is this failure expected?",
+      "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
