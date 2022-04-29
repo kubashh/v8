@@ -469,6 +469,7 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
       deoptimizing_throw_(false),
       catch_handler_data_(-1),
       catch_handler_pc_offset_(-1),
+      restart_frame_index_(-1),
       input_(nullptr),
       output_count_(0),
       output_(nullptr),
@@ -484,6 +485,13 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
   if (isolate->deoptimizer_lazy_throw()) {
     isolate->set_deoptimizer_lazy_throw(false);
     deoptimizing_throw_ = true;
+  }
+
+  if (isolate->debug()->IsRestartFrameScheduled()) {
+    CHECK(deoptimizing_throw_);
+    restart_frame_index_ = isolate->debug()->restart_inline_frame_index();
+    CHECK_GE(restart_frame_index_, 0);
+    isolate->debug()->clear_restart_frame();
   }
 
   DCHECK_NE(from, kNullAddress);
@@ -826,9 +834,13 @@ void Deoptimizer::DoComputeOutputFrames() {
 
   // Do the input frame to output frame(s) translation.
   size_t count = translated_state_.frames().size();
-  // If we are supposed to go to the catch handler, find the catching frame
-  // for the catch and make sure we only deoptimize up to that frame.
-  if (deoptimizing_throw_) {
+  if (is_restart_frame()) {
+    // If the debugger requested to restart a particular frame, only materialize
+    // up to that frame.
+    count = restart_frame_index_ + 1;
+  } else if (deoptimizing_throw_) {
+    // If we are supposed to go to the catch handler, find the catching frame
+    // for the catch and make sure we only deoptimize up to that frame.
     size_t catch_handler_frame_index = count;
     for (size_t i = count; i-- > 0;) {
       catch_handler_pc_offset_ = LookupCatchHandler(
@@ -919,7 +931,10 @@ void Deoptimizer::DoComputeOutputFrames() {
 namespace {
 
 // Get the dispatch builtin for unoptimized frames.
-Builtin DispatchBuiltinFor(bool is_baseline, bool advance_bc) {
+Builtin DispatchBuiltinFor(bool is_baseline, bool advance_bc,
+                           bool is_restart_frame) {
+  if (is_restart_frame) return Builtin::kRestartFrameTrampoline;
+
   if (is_baseline) {
     return advance_bc ? Builtin::kBaselineOrInterpreterEnterAtNextBytecode
                       : Builtin::kBaselineOrInterpreterEnterAtBytecode;
@@ -987,8 +1002,9 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
       (!is_topmost || (deopt_kind_ == DeoptimizeKind::kLazy)) &&
       !goto_catch_handler;
   const bool is_baseline = shared.HasBaselineCode();
-  Code dispatch_builtin =
-      FromCodeT(builtins->code(DispatchBuiltinFor(is_baseline, advance_bc)));
+  const bool restart_frame = goto_catch_handler && is_restart_frame();
+  Code dispatch_builtin = FromCodeT(builtins->code(
+      DispatchBuiltinFor(is_baseline, advance_bc, restart_frame)));
 
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope()->file(), "  translating %s frame ",
