@@ -1010,25 +1010,28 @@ Handle<JSObject> JSNumberFormat::ResolvedOptions(
           Just(kDontThrow))
           .FromJust());
 
-  int32_t minimum = 0, maximum = 0;
-  if (SignificantDigitsFromSkeleton(skeleton, &minimum, &maximum)) {
+  int32_t mnsd = 0, mxsd = 0, mnfd = 0, mxfd = 0;
+  bool has_significant_digits =
+      SignificantDigitsFromSkeleton(skeleton, &mnsd, &mxsd);
+  if (has_significant_digits) {
     CHECK(JSReceiver::CreateDataProperty(
               isolate, options, factory->minimumSignificantDigits_string(),
-              factory->NewNumberFromInt(minimum), Just(kDontThrow))
+              factory->NewNumberFromInt(mnsd), Just(kDontThrow))
               .FromJust());
     CHECK(JSReceiver::CreateDataProperty(
               isolate, options, factory->maximumSignificantDigits_string(),
-              factory->NewNumberFromInt(maximum), Just(kDontThrow))
+              factory->NewNumberFromInt(mxsd), Just(kDontThrow))
               .FromJust());
-  } else {
-    FractionDigitsFromSkeleton(skeleton, &minimum, &maximum);
+  }
+  if ((FLAG_harmony_intl_number_format_v3 || !has_significant_digits)) {
+    FractionDigitsFromSkeleton(skeleton, &mnfd, &mxfd);
     CHECK(JSReceiver::CreateDataProperty(
               isolate, options, factory->minimumFractionDigits_string(),
-              factory->NewNumberFromInt(minimum), Just(kDontThrow))
+              factory->NewNumberFromInt(mnfd), Just(kDontThrow))
               .FromJust());
     CHECK(JSReceiver::CreateDataProperty(
               isolate, options, factory->maximumFractionDigits_string(),
-              factory->NewNumberFromInt(maximum), Just(kDontThrow))
+              factory->NewNumberFromInt(mxfd), Just(kDontThrow))
               .FromJust());
   }
 
