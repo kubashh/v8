@@ -1919,6 +1919,45 @@ Object Isolate::UnwindAndFindHandler() {
 
     StackFrame* frame = iter.frame();
 
+    // The debugger implements the "restart frame" feature by throwing a
+    // terminate exception. Check and if we need to restart `frame`,
+    // jump into the `RestartFrameTrampoline` builtin instead of
+    // a catch handler.
+    // Optimized frames take a detour via the deoptimizer before also jumping
+    // to the `RestartFrameTrampoline` builtin.
+    if (debug()->ShouldRestartFrame(frame->id())) {
+      CHECK(!catchable_by_js);
+      CHECK(frame->is_java_script());
+
+      if (frame->is_optimized()) {
+        Code code = frame->LookupCode();
+        CHECK(code.marked_for_deoptimization());
+        set_deoptimizer_lazy_throw(true);
+
+        // Jump directly to the optimized frames return, to immediately fall
+        // into the deoptimizer.
+        SafepointTable safepoints(this, frame->pc(), code);
+        int offset = safepoints.find_return_pc(
+            code.GetOffsetFromInstructionStart(this, frame->pc()));
+
+        // Compute the stack pointer from the frame pointer. This ensures that
+        // argument slots on the stack are dropped as returning would.
+        // Note: Needed by the deoptimizer to rematerialize frames.
+        Address return_sp = frame->fp() +
+                            StandardFrameConstants::kFixedFrameSizeAboveFp -
+                            code.stack_slots() * kSystemPointerSize;
+        return FoundHandler(Context(), code.InstructionStart(this, frame->pc()),
+                            offset, code.constant_pool(), return_sp,
+                            frame->fp(), visited_frames);
+      }
+
+      debug()->clear_restart_frame();
+      Code code = FromCodeT(builtins()->code(Builtin::kRestartFrameTrampoline));
+      return FoundHandler(Context(), code.InstructionStart(), 0,
+                          code.constant_pool(), kNullAddress, frame->fp(),
+                          visited_frames);
+    }
+
     switch (frame->type()) {
       case StackFrame::ENTRY:
       case StackFrame::CONSTRUCT_ENTRY: {
