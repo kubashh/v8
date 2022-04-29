@@ -160,6 +160,13 @@ void StackFrameIterator::Reset(ThreadLocalTop* top) {
   frame_ = SingletonFor(type, &state);
 }
 
+void StackFrameIterator::Reset(Address fp, Address handler) {
+  StackFrame::State state;
+  StackFrame::Type type = ExitFrame::GetStateForFramePointer(fp, &state);
+  handler_ = StackHandler::FromAddress(handler);
+  frame_ = SingletonFor(type, &state);
+}
+
 #if V8_ENABLE_WEBASSEMBLY
 void StackFrameIterator::Reset(ThreadLocalTop* top, wasm::StackMemory* stack) {
   if (stack->jmpbuf()->sp == kNullAddress) {

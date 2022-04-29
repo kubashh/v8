@@ -282,14 +282,17 @@ class V8Unwinder(Unwinder):
       if gdb.selected_inferior().architecture().name() != "i386:x86-64":
         return None
 
-      pc = pending_frame.read_register("rip")
+      fp = pending_frame.read_register("rbp").reinterpret_cast(
+          gdb.lookup_type("void").pointer().pointer())
+
+      if int(fp) == 0:
+        return None
+
+      pc = pending_frame.read_register("pc")
       sym_and_line = gdb.current_progspace().find_pc_line(int(pc))
 
       if sym_and_line.symtab is not None:
         return None
-      fp = pending_frame.read_register("rbp").reinterpret_cast(
-          gdb.lookup_type("void").pointer().pointer())
-
       next_sp = fp
       next_fp = fp.dereference()
       next_pc = (fp+1).dereference()
@@ -308,6 +311,108 @@ class V8Unwinder(Unwinder):
     except Exception as e:
       return None
 
-gdb.unwinder.register_unwinder(None, V8Unwinder(), replace=True)
+# Frame unwinders seem to be a bit broken below gdb 11.
+if tuple(map(int,gdb.VERSION.split("-")[0].split("."))) >= (11,0):
+  gdb.unwinder.register_unwinder(None, V8Unwinder(), replace=True)
+
+import gdb
+from gdb.FrameDecorator import FrameDecorator
+
+class V8ArgumentWrapper():
+  def __init__(self, symbol, value):
+    self.sym = symbol
+    self.val = value
+  def value(self):
+    return self.val
+  def symbol(self):
+    return self.sym
+
+class V8FrameDecorator(FrameDecorator):
+  def __init__(self, fobj):
+    super(V8FrameDecorator, self).__init__(fobj)
+    self.fobj = fobj
+    self.initialized = False
+
+  def function(self):
+    self.lazy_init()
+    if self.v8_function is None:
+      return super(V8FrameDecorator, self).function()
+    return "[V8] " + self.v8_function
+
+  def filename(self):
+    self.lazy_init()
+    if self.v8_filename is None:
+      return super(V8FrameDecorator, self).filename()
+    return self.v8_filename
+
+  def line(self):
+    self.lazy_init()
+    if self.v8_line is None:
+      return super(V8FrameDecorator, self).line()
+    return int(self.v8_line)
+
+  def frame_args(self):
+    self.lazy_init()
+    if self.v8_args is None:
+      return super(V8FrameDecorator, self).frame_args()
+    return self.v8_args
+
+  def lazy_init(self):
+    if self.initialized:
+      return
+
+    self.initialized = True
+    self.v8_function = None
+    self.v8_filename = None
+    self.v8_line = None
+    self.v8_args = None
+
+    frame = self.fobj.inferior_frame()
+    if frame.type() != gdb.NORMAL_FRAME:
+      return
+
+    pc = frame.read_register("pc")
+    gdb.set_convenience_variable("_pc",pc)
+
+    if not(bool(gdb.parse_and_eval("_v8_internal_Is_Code((void*)$_pc)"))):
+      return
+    fp = frame.read_register("rbp")
+    gdb.set_convenience_variable("_fp",fp)
+    name = gdb.parse_and_eval("_v8_internal_Get_Frame_Name((void*)$_pc, (void*)$_fp)")
+    if int(name) == 0:
+      return
+    py_name = name.string()
+    gdb.set_convenience_variable("_name",name)
+    gdb.parse_and_eval("_v8_internal_Release_Frame_Name($_name)")
+
+    split = py_name.split("\n")
+    self.v8_function = split[0] if len(split) > 0 else None
+    self.v8_filename = split[1] if len(split) > 1 else None
+    self.v8_line = split[2] if len(split) > 2 else None
+    self.v8_args = []
+    for i in range(4,len(split),2):
+      self.v8_args.append(
+        V8ArgumentWrapper(
+          split[i-1],
+          gdb.Value(int(split[i],16)).reinterpret_cast(gdb.lookup_type("void").pointer())
+        )
+      )
+
+
+class V8FrameFilter():
+  def __init__(self):
+    self.name = "V8FrameFilter"
+    self.priority = 100
+    self.enabled = True
+    gdb.frame_filters[self.name] = self
+
+  def filter(self, frame_iter):
+    frame_iter = map(V8FrameDecorator, frame_iter)
+    return frame_iter
+
+
+# Frame decorators seem to be a bit broken below gdb 11.
+if tuple(map(int,gdb.VERSION.split("-")[0].split("."))) >= (11,0):
+  V8FrameFilter()
 
 end

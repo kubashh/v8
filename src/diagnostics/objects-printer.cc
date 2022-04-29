@@ -5,9 +5,11 @@
 #include <iomanip>
 #include <memory>
 
+#include "src/builtins/accessors.h"
 #include "src/common/globals.h"
 #include "src/diagnostics/disasm.h"
 #include "src/diagnostics/disassembler.h"
+#include "src/execution/frames-inl.h"
 #include "src/execution/isolate-utils-inl.h"
 #include "src/heap/heap-inl.h"                // For InOldSpace.
 #include "src/heap/heap-write-barrier-inl.h"  // For GetIsolateFromWritableObj.
@@ -18,6 +20,7 @@
 #include "src/objects/code-kind.h"
 #include "src/regexp/regexp.h"
 #include "src/snapshot/embedded/embedded-data.h"
+#include "src/strings/string-stream.h"
 #include "src/utils/ostreams.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -2861,6 +2864,103 @@ V8_EXPORT_PRIVATE extern void _v8_internal_Print_StoreHandler(void* object) {
   i::StoreHandler::PrintHandler(GetObjectFromRaw(object), os);
   os << std::flush;
 #endif
+}
+
+V8_EXPORT_PRIVATE extern bool _v8_internal_Is_Code(void* pc) {
+  i::Isolate* isolate = i::Isolate::Current();
+  i::Address pc_address = reinterpret_cast<i::Address>(pc);
+  if (!isolate->heap()->InSpaceSlow(pc_address, i::CODE_SPACE) &&
+      !isolate->heap()->InSpaceSlow(pc_address, i::CODE_LO_SPACE) &&
+      !i::OffHeapInstructionStream::PcIsOffHeap(isolate, pc_address)) {
+    return false;
+  }
+
+  i::Code code = isolate->FindCodeObject(pc_address);
+  if (!code.IsCode()) {
+    return false;
+  }
+
+  return true;
+}
+
+V8_EXPORT_PRIVATE extern char* _v8_internal_Get_Frame_Name(void* pc, void* fp) {
+  i::Isolate* isolate = i::Isolate::Current();
+
+  i::Address js_entry_sp = isolate->js_entry_sp();
+  if (js_entry_sp == 0) return nullptr;  // Not executing JS now.
+
+  i::Address fp_address = reinterpret_cast<i::Address>(fp);
+  if (fp_address > js_entry_sp) return nullptr;
+
+  i::StackFrameIterator it(isolate);
+  while (true) {
+    if (it.done()) {
+      return nullptr;
+    }
+    if (fp_address <= it.frame()->sp()) return nullptr;
+    if (v8::base::IsInRange(fp_address, it.frame()->sp(), it.frame()->fp())) {
+      break;
+    }
+    it.Advance();
+  }
+
+  i::HandleScope scope(isolate);
+  i::HeapStringAllocator allocator;
+  i::StringStream::ClearMentionedObjectCache(isolate);
+  i::StringStream accumulator(&allocator);
+  if (it.frame()->is_java_script()) {
+    i::JavaScriptFrame* frame = i::JavaScriptFrame::cast(it.frame());
+    i::Code code;
+    accumulator.PrintFunction(frame->function(), frame->receiver(), &code);
+    accumulator.Put('\n');
+
+    i::Script script = frame->script();
+    accumulator.PrintName(script.name());
+    accumulator.Put('\n');
+
+    i::SharedFunctionInfo shared = frame->function().shared();
+    if (frame->is_interpreted()) {
+      const i::InterpretedFrame* iframe = i::InterpretedFrame::cast(frame);
+      i::BytecodeArray bytecodes = iframe->GetBytecodeArray();
+      int offset = iframe->GetBytecodeOffset();
+      int source_pos = i::AbstractCode::cast(bytecodes).SourcePosition(offset);
+      int line = script.GetLineNumber(source_pos) + 1;
+      accumulator.Add("%d", line);
+    } else {
+      int function_start_pos = shared.StartPosition();
+      int line = script.GetLineNumber(function_start_pos) + 1;
+      accumulator.Add("%d", line);
+    }
+    accumulator.Put('\n');
+
+    accumulator.Add("this\n%p\n",
+                    reinterpret_cast<void*>(frame->receiver().ptr()));
+
+    int argc = frame->GetActualArgumentCount();
+    for (int i = 0; i < argc; ++i) {
+      accumulator.Add("a%d\n%p\n", i,
+                      reinterpret_cast<void*>(frame->GetParameter(i).ptr()));
+    }
+  } else if (it.frame()->is_builtin()) {
+    i::BuiltinFrame* frame = i::BuiltinFrame::cast(it.frame());
+    i::Code code;
+    accumulator.PrintFunction(frame->function(), frame->receiver(), &code);
+    accumulator.Put('\n');
+  } else {
+    i::Code code = it.frame()->LookupCode();
+    if (!code.is_null()) {
+      const char* name = isolate->builtins()->Lookup(it.frame()->pc());
+      if (name != nullptr) {
+        accumulator.Add(name);
+      }
+    }
+    accumulator.Put('\n');
+  }
+  return accumulator.ToCString().release();
+}
+
+V8_EXPORT_PRIVATE extern void _v8_internal_Release_Frame_Name(char* name) {
+  i::DeleteArray(name);
 }
 
 V8_EXPORT_PRIVATE extern void _v8_internal_Print_Code(void* object) {

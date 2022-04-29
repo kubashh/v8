@@ -1257,6 +1257,8 @@ class StackFrameIterator : public StackFrameIteratorBase {
   V8_EXPORT_PRIVATE void Advance();
   StackFrame* Reframe();
 
+  void Reset(Address fp, Address handler);
+
  private:
   // Go back to the first frame.
   void Reset(ThreadLocalTop* top);
