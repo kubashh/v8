@@ -34,6 +34,24 @@
       "parentUuid": "b5baca04_f84b682e",
       "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b678a40_e4813733",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-04-29T14:02:45Z",
+      "side": 1,
+      "message": "Thanks, I tried GetLength() but it\u0027s also causing failures:\n```\n# Fatal error in ../../src/runtime/runtime-atomics.cc, line 510\n# Check failed: index \u003c sta-\u003eGetLength() (2 vs. 0).\n```\nYou can try using our build and run it with the simulator to see the error if you like:\n```\n$ tools/dev/gm.py ppc64.release\n```\nI\u0027ve just enabled TF atomic builtins on our platforms here which solves it, would you please take a look when you have a chance, https://crrev.com/c/3616722",
+      "parentUuid": "5535cfbc_9a0340fc",
+      "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
