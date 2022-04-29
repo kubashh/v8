@@ -364,6 +364,12 @@ class V8_EXPORT V8Inspector {
   virtual std::unique_ptr<V8InspectorSession> connect(int contextGroupId,
                                                       Channel*,
                                                       StringView state) = 0;
+  virtual std::unique_ptr<V8InspectorSession> connect(int contextGroupId,
+                                                      Channel* channel,
+                                                      StringView state,
+                                                      bool client_is_trusted) {
+    return connect(contextGroupId, channel, state);
+  }
 
   // API methods.
   virtual std::unique_ptr<V8StackTrace> createStackTrace(

@@ -87,16 +87,14 @@ int V8ContextInfo::executionContextId(v8::Local<v8::Context> context) {
 
 std::unique_ptr<V8InspectorSessionImpl> V8InspectorSessionImpl::create(
     V8InspectorImpl* inspector, int contextGroupId, int sessionId,
-    V8Inspector::Channel* channel, StringView state) {
+    V8Inspector::Channel* channel, StringView state, bool clientIsTrusted) {
   return std::unique_ptr<V8InspectorSessionImpl>(new V8InspectorSessionImpl(
-      inspector, contextGroupId, sessionId, channel, state));
+      inspector, contextGroupId, sessionId, channel, state, clientIsTrusted));
 }
 
-V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
-                                               int contextGroupId,
-                                               int sessionId,
-                                               V8Inspector::Channel* channel,
-                                               StringView savedState)
+V8InspectorSessionImpl::V8InspectorSessionImpl(
+    V8InspectorImpl* inspector, int contextGroupId, int sessionId,
+    V8Inspector::Channel* channel, StringView savedState, bool clientIsTrusted)
     : m_contextGroupId(contextGroupId),
       m_sessionId(sessionId),
       m_inspector(inspector),
@@ -109,7 +107,8 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
       m_heapProfilerAgent(nullptr),
       m_profilerAgent(nullptr),
       m_consoleAgent(nullptr),
-      m_schemaAgent(nullptr) {
+      m_schemaAgent(nullptr),
+      m_clientIsTrusted(clientIsTrusted) {
   m_state->getBoolean("use_binary_protocol", &use_binary_protocol_);
 
   m_runtimeAgent.reset(new V8RuntimeAgentImpl(
