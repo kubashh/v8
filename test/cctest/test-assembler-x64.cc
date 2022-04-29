@@ -25,6 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include <x86intrin.h>
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -32,6 +34,7 @@
 #include "include/v8-function.h"
 #include "src/base/numbers/double.h"
 #include "src/base/platform/platform.h"
+#include "src/base/platform/time.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/execution/simulator.h"
@@ -943,6 +946,130 @@ TEST(AssemblerX64SSE3) {
 
   auto f = GeneratedCode<F6>::FromCode(*code);
   CHECK_EQ(4, f.Call(1.0, 2.0));
+}
+
+static Code GenerateXchgTest(int variant, i::Isolate* isolate) {
+  v8::internal::byte buffer[256];
+  MacroAssembler masm(isolate, v8::internal::CodeObjectRequired::kYes,
+                      ExternalAssemblerBuffer(buffer, sizeof(buffer)));
+
+  // The following program implements:
+  // for (var i = x; i > 0; i--) i%2;
+
+  Label end, loop;
+  __ movq(rax, arg1);  // Operand(rsp, 4));
+  __ pushq(rbx);
+  __ pushq(rcx);
+  __ pushq(rcx);           // Scratch stack slot to play with.
+  Register divisor = rcx;  // rbx;
+  Register index = rbx;    // ecx;
+  Register scratch = rdx;
+  __ movq(divisor, Immediate(2));  // Divisor.
+
+  __ bind(&loop);
+  //__ lfence();
+  __ cmpq(rax, Immediate(0));
+  __ j(equal, &end);
+
+  __ movq(index, rax);  // Save rax.
+
+  // "idiv" version of the test.
+  __ cdq();
+  __ idivl(divisor);
+  // "add" version -- same effect, less pronounced.
+  __ addq(rax, divisor);
+
+  __ nop();
+  __ nop();
+  __ nop();
+  // Restore rax in various ways.
+  // For this simple example, we really only need to "mov (rax, ecx)",
+  // but what we're interested in is performance of exchanging the contents
+  // of two registers.
+#if 1
+  if (variant == 1) {
+    __ xchgq(rax, index);
+  } else if (variant == 2) {
+    __ movq(scratch, rax);
+    __ movq(rax, index);
+    __ movq(index, scratch);
+  } else if (variant == 3) {
+    __ xorq(rax, index);
+    __ xorq(index, rax);
+    __ xorq(rax, index);
+  } else if (variant == 4) {
+    __ pushq(rax);
+    __ movq(rax, index);
+    __ popq(index);
+  }
+#else  // same as the previous version, but with swap operands inverted.
+  if (variant == 1) {
+    __ xchgq(index, rax);
+  } else if (variant == 2) {
+    __ movq(scratch, index);
+    __ movq(index, rax);
+    __ movq(rax, scratch);
+  } else if (variant == 3) {
+    __ xorq(index, rax);
+    __ xorq(rax, index);
+    __ xorq(index, rax);
+  } else if (variant == 4) {
+    __ pushq(index);
+    __ movq(index, rax);
+    __ popq(rax);
+  }
+#endif
+
+  __ decq(rax);
+  __ jmp(&loop);
+
+  __ bind(&end);
+  __ popq(rcx);  // Drop scratch.
+  __ popq(rcx);
+  __ popq(rbx);
+  __ ret(0);
+
+  CodeDesc desc;
+  masm.GetCode(isolate, &desc);
+  Handle<Code> code =
+      Factory::CodeBuilder(isolate, desc, CodeKind::FOR_TESTING).Build();
+  return *code;
+}
+
+static void DoXchgTest(int variant, const char* description, Isolate* isolate) {
+  Code code = GenerateXchgTest(variant, isolate);
+  auto f = GeneratedCode<F1>::FromCode(code);
+  int input = 100000000;
+
+  // v8::base::TimeTicks start = v8::base::TimeTicks::Now();
+  unsigned int garbage;
+  uint64_t timer = __rdtscp(&garbage);
+  f.Call(input);
+  timer = __rdtscp(&garbage) - timer;
+  // v8::base::TimeTicks end = v8::base::TimeTicks::Now();
+
+  // printf("%s: %d ms\n", description,
+  //        static_cast<int>((end - start).InMilliseconds()));
+
+  printf("%s: %.2f cycles\n", description, static_cast<double>(timer) / input);
+}
+
+// Only for manual execution.
+TEST(xchg) {
+  i::FLAG_logfile_per_isolate = false;
+  CcTest::InitializeVM();
+  Isolate* isolate = reinterpret_cast<Isolate*>(CcTest::isolate());
+  HandleScope scope(isolate);
+
+  unsigned int garbage;
+  uint64_t timer = __rdtscp(&garbage);
+  DoXchgTest(1, "xchg", isolate);
+  DoXchgTest(2, "move", isolate);
+  DoXchgTest(3, "xor", isolate);
+  DoXchgTest(4, "push-pop", isolate);
+  timer = __rdtscp(&garbage) - timer;
+
+  printf("Total time: %ld cycles\n", timer);
 }
 
 using F7 = int(double x, double y, double z);
