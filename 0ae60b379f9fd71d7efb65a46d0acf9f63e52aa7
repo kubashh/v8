@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce298e9_a58514eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T12:29:35Z",
+      "side": 1,
+      "message": "lgtm, thanks, I think that\u0027s much cleaner",
+      "revId": "0ae60b379f9fd71d7efb65a46d0acf9f63e52aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec806501_54641a43",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T12:29:35Z",
+      "side": 1,
+      "message": "Please add braces to make reading this easier. (or add a newline)",
+      "range": {
+        "startLine": 193,
+        "startChar": 30,
+        "endLine": 193,
+        "endChar": 32
+      },
+      "revId": "0ae60b379f9fd71d7efb65a46d0acf9f63e52aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
