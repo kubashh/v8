@@ -170,6 +170,12 @@ void Heap::FinalizeGarbageCollection(Config::StackState stack_state) {
   config_.stack_state = stack_state;
   SetStackEndOfCurrentGC(v8::base::Stack::GetCurrentStackPosition());
   in_atomic_pause_ = true;
+
+#if defined(CPPGC_YOUNG_GENERATION)
+  if (generational_gc_enabled_) {
+    HeapBase::EnableGenerationalGC();
+  }
+#endif  // defined(CPPGC_YOUNG_GENERATION)
   {
     // This guards atomic pause marking, meaning that no internal method or
     // external callbacks are allowed to allocate new objects.
@@ -190,9 +196,6 @@ void Heap::FinalizeGarbageCollection(Config::StackState stack_state) {
   USE(bytes_allocated_in_prefinalizers);
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  if (generational_gc_enabled_) {
-    HeapBase::EnableGenerationalGC();
-  }
   ResetRememberedSet();
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
