@@ -637,6 +637,13 @@ bool CppHeap::FinishConcurrentMarkingIfNeeded() {
 void CppHeap::TraceEpilogue() {
   CHECK(in_atomic_pause_);
   CHECK(marking_done_);
+
+#if defined(CPPGC_YOUNG_GENERATION)
+  // Check if the young generation was enabled via flag. We must enable young
+  // generation before calling the custom weak callbacks to make sure that the
+  // callbacks for old objects are registered in the remembered set.
+  if (FLAG_cppgc_young_generation) EnableGenerationalGC();
+#endif
   {
     cppgc::subtle::DisallowGarbageCollectionScope disallow_gc_scope(*this);
     marker_->LeaveAtomicPause();
@@ -662,9 +669,6 @@ void CppHeap::TraceEpilogue() {
   USE(bytes_allocated_in_prefinalizers);
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  // Check if the young generation was enabled via flag.
-  if (FLAG_cppgc_young_generation) EnableGenerationalGC();
-
   ResetRememberedSet();
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
