@@ -39,6 +39,30 @@
       },
       "revId": "04f8b9c0f6dfc769b0ec8fc597f969301b1fb005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "560f2dba_150136f7",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-04-29T11:27:46Z",
+      "side": 1,
+      "message": "You mean forward OOMs? Yeah I guess that could be hooked in here. Alternatively, the users of these APIs (e.g. `SetPagePermission`) will receive the OOM (due to `fase` being returned) and can forward to an OOM handler themselves with potentially more context.",
+      "parentUuid": "36a39592_b58409b1",
+      "range": {
+        "startLine": 1012,
+        "startChar": 15,
+        "endLine": 1012,
+        "endChar": 30
+      },
+      "revId": "04f8b9c0f6dfc769b0ec8fc597f969301b1fb005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
