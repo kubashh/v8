@@ -16,6 +16,24 @@
       "message": "Hello Marja,\n\nJust wanted to point out the newly added test is causing this check to fail on platforms which bailout to runtime such as PPC and S390X:\n```\nCheck failed: index \u003c sta-\u003elength() (4 vs. 4).\n```\n\nI\u0027ve created this CL https://crrev.com/c/3615010 to avoid a bailout on our \nplatforms which passes the test but wanted to still check if test failure was expected when calling runtime?",
       "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5535cfbc_9a0340fc",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-04-29T07:31:47Z",
+      "side": 1,
+      "message": "Oops, thanks for pointing that out. Probably this check needs to be adapted. I think the fix is using GetLength() instead of length(), but I don\u0027t have a quick way to test it.",
+      "parentUuid": "b5baca04_f84b682e",
+      "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
