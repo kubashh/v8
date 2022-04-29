@@ -63,6 +63,30 @@
       },
       "revId": "04f8b9c0f6dfc769b0ec8fc597f969301b1fb005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72bc12de_bbc33491",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T11:31:58Z",
+      "side": 1,
+      "message": "Ah, yeah, sure, the caller should do that.",
+      "parentUuid": "560f2dba_150136f7",
+      "range": {
+        "startLine": 1012,
+        "startChar": 15,
+        "endLine": 1012,
+        "endChar": 30
+      },
+      "revId": "04f8b9c0f6dfc769b0ec8fc597f969301b1fb005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
