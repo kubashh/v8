@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7392ea18_0a8a6500",
+        "filename": "src/heap/large-spaces.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T11:39:14Z",
+      "side": 1,
+      "message": "There\u0027s only 1 call left which adjusts accounting which is during promotion. This one is actually not really needed as we sweep the space afterwards, returning all objects, leaving us with 0 object size.\n\nI am inclined to remove it and rely on the fact that we recompute the object size in GC. wdyt?",
+      "range": {
+        "startLine": 99,
+        "startChar": 15,
+        "endLine": 99,
+        "endChar": 25
+      },
+      "revId": "109a5caf0910e78abef3344e890db9a0b596164c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5737dda_b8195635",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T11:39:14Z",
+      "side": 1,
+      "message": "I refactored this call here to start the tasks only after we also give back new LO memory. Otherwise, this memory would only be reclaimed on the next cycle.",
+      "range": {
+        "startLine": 1107,
+        "startChar": 42,
+        "endLine": 1107,
+        "endChar": 58
+      },
+      "revId": "109a5caf0910e78abef3344e890db9a0b596164c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5700fe2e_dbe545ab",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4947,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-04-29T11:39:14Z",
+      "side": 1,
+      "message": "Recomputing object size means that we don\u0027t need to access it for dead objects which avoids the initial bug in first place.",
+      "range": {
+        "startLine": 4947,
+        "startChar": 9,
+        "endLine": 4947,
+        "endChar": 25
+      },
+      "revId": "109a5caf0910e78abef3344e890db9a0b596164c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
