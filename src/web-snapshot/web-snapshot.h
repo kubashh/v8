@@ -47,12 +47,13 @@ class WebSnapshotSerializerDeserializer {
     UNDEFINED_CONSTANT,
     INTEGER,
     DOUBLE,
+    REGEXP,
     STRING_ID,
     ARRAY_ID,
     OBJECT_ID,
     FUNCTION_ID,
     CLASS_ID,
-    REGEXP,
+    SYMBOL_ID,
     EXTERNAL_ID,
     IN_PLACE_STRING_ID
   };
@@ -131,6 +132,10 @@ class V8_EXPORT WebSnapshotSerializer
     return static_cast<uint32_t>(string_ids_.size());
   }
 
+  uint32_t symbol_count() const {
+    return static_cast<uint32_t>(symbol_ids_.size());
+  }
+
   uint32_t map_count() const { return static_cast<uint32_t>(map_ids_.size()); }
 
   uint32_t context_count() const {
@@ -181,6 +186,7 @@ class V8_EXPORT WebSnapshotSerializer
   void Discover(Handle<HeapObject> object);
   void DiscoverString(Handle<String> string,
                       AllowInPlace can_be_in_place = AllowInPlace::No);
+  void DiscoverSymbol(Handle<Symbol> symbol);
   void DiscoverMap(Handle<Map> map);
   void DiscoverFunction(Handle<JSFunction> function);
   void DiscoverClass(Handle<JSFunction> function);
@@ -195,6 +201,7 @@ class V8_EXPORT WebSnapshotSerializer
                              Handle<JSFunction> function);
 
   void SerializeString(Handle<String> string, ValueSerializer& serializer);
+  void SerializeSymbol(Handle<Symbol> symbol);
   void SerializeMap(Handle<Map> map);
   void SerializeFunction(Handle<JSFunction> function);
   void SerializeClass(Handle<JSFunction> function);
@@ -209,6 +216,7 @@ class V8_EXPORT WebSnapshotSerializer
   void WriteStringId(Handle<String> string, ValueSerializer& serializer);
 
   uint32_t GetStringId(Handle<String> string, bool& in_place);
+  uint32_t GetSymbolId(Symbol symbol);
   uint32_t GetMapId(Map map);
   uint32_t GetFunctionId(JSFunction function);
   uint32_t GetClassId(JSFunction function);
@@ -218,6 +226,7 @@ class V8_EXPORT WebSnapshotSerializer
   uint32_t GetExternalId(HeapObject object);
 
   ValueSerializer string_serializer_;
+  ValueSerializer symbol_serializer_;
   ValueSerializer map_serializer_;
   ValueSerializer context_serializer_;
   ValueSerializer function_serializer_;
@@ -227,13 +236,14 @@ class V8_EXPORT WebSnapshotSerializer
   ValueSerializer export_serializer_;
 
   // These are needed for being able to serialize items in order.
+  Handle<ArrayList> strings_;
+  Handle<ArrayList> symbols_;
+  Handle<ArrayList> maps_;
   Handle<ArrayList> contexts_;
   Handle<ArrayList> functions_;
   Handle<ArrayList> classes_;
   Handle<ArrayList> arrays_;
   Handle<ArrayList> objects_;
-  Handle<ArrayList> strings_;
-  Handle<ArrayList> maps_;
 
   // IndexMap to keep track of explicitly blocked external objects and
   // non-serializable/not-supported objects (e.g. API Objects).
@@ -244,6 +254,7 @@ class V8_EXPORT WebSnapshotSerializer
   // them in the reverse order. This ensures that the items this item points to
   // have a lower ID and will be deserialized first.
   ObjectCacheIndexMap string_ids_;
+  ObjectCacheIndexMap symbol_ids_;
   ObjectCacheIndexMap map_ids_;
   ObjectCacheIndexMap context_ids_;
   ObjectCacheIndexMap function_ids_;
@@ -283,6 +294,7 @@ class V8_EXPORT WebSnapshotDeserializer
 
   // For inspecting the state after deserializing a snapshot.
   uint32_t string_count() const { return string_count_; }
+  uint32_t symbol_count() const { return symbol_count_; }
   uint32_t map_count() const { return map_count_; }
   uint32_t context_count() const { return context_count_; }
   uint32_t function_count() const { return function_count_; }
@@ -312,6 +324,7 @@ class V8_EXPORT WebSnapshotDeserializer
   WebSnapshotDeserializer& operator=(const WebSnapshotDeserializer&) = delete;
 
   void DeserializeStrings();
+  void DeserializeSymbols();
   void DeserializeMaps();
   void DeserializeContexts();
   Handle<ScopeInfo> CreateScopeInfo(uint32_t variable_count, bool has_parent,
@@ -335,6 +348,7 @@ class V8_EXPORT WebSnapshotDeserializer
   Object ReadNumber();
   String ReadString(bool internalize = false);
   String ReadInPlaceString(bool internalize = false);
+  Object ReadSymbol();
   Object ReadArray(Handle<HeapObject> container, uint32_t container_index);
   Object ReadObject(Handle<HeapObject> container, uint32_t container_index);
   Object ReadFunction(Handle<HeapObject> container, uint32_t container_index);
@@ -354,6 +368,9 @@ class V8_EXPORT WebSnapshotDeserializer
 
   Handle<FixedArray> strings_handle_;
   FixedArray strings_;
+
+  Handle<FixedArray> symbols_handle_;
+  FixedArray symbols_;
 
   Handle<FixedArray> maps_handle_;
   FixedArray maps_;
@@ -389,6 +406,7 @@ class V8_EXPORT WebSnapshotDeserializer
   Handle<Object> return_value_;
 
   uint32_t string_count_ = 0;
+  uint32_t symbol_count_ = 0;
   uint32_t map_count_ = 0;
   uint32_t context_count_ = 0;
   uint32_t function_count_ = 0;
