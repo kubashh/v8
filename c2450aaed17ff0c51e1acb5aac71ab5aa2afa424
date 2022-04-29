@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e304471e_f8307031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-04-29T09:55:51Z",
+      "side": 1,
+      "message": "Hi Deepti, according to your comments, we add a test case for this CL. PTAL.",
+      "revId": "c2450aaed17ff0c51e1acb5aac71ab5aa2afa424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
