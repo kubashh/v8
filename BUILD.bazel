@@ -2707,6 +2707,8 @@ filegroup(
         "src/compiler/js-type-hint-lowering.h",
         "src/compiler/js-typed-lowering.cc",
         "src/compiler/js-typed-lowering.h",
+        "src/compiler/linear-scheduler.cc",
+        "src/compiler/linear-scheduler.h",
         "src/compiler/linkage.cc",
         "src/compiler/linkage.h",
         "src/compiler/load-elimination.cc",
