@@ -16,6 +16,46 @@
       "message": "ptal, delta in https://chromium-review.googlesource.com/c/v8/v8/+/3616519/1..3",
       "revId": "d8a3158e4a3b9797dd677cc89282c70426ed7170",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dee6082_26b0c8e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-29T13:36:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "d8a3158e4a3b9797dd677cc89282c70426ed7170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b03b9185_b857f458",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-04-29T13:36:15Z",
+      "side": 1,
+      "message": "Can we instead set it such that FLAG_single_threaded_gc overrides FLAG_parallel_marking and FLAG_concurrent_marking to false when it is enabled?",
+      "range": {
+        "startLine": 436,
+        "startChar": 6,
+        "endLine": 436,
+        "endChar": 29
+      },
+      "revId": "d8a3158e4a3b9797dd677cc89282c70426ed7170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
