@@ -677,8 +677,7 @@ TF_BUILTIN(AtomicsCompareExchange, SharedArrayBufferBuiltinsAssembler) {
   // This shouldn't happen, we've already validated the type.
   BIND(&other);
   Unreachable();
-#endif  // V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64 || V8_TARGET_ARCH_PPC64
-        // || V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_S390 || V8_TARGET_ARCH_S390X
+#endif  // V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64
         // || V8_TARGET_ARCH_RISCV64
 
   BIND(&detached_or_out_of_bounds);
@@ -734,7 +733,6 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
     V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_S390 || V8_TARGET_ARCH_S390X
   TNode<Number> index_number = ChangeUintPtrToTagged(index_word);
   Return(CallRuntime(runtime_function, context, array, index_number, value));
-#else
   Label i8(this), u8(this), i16(this), u16(this), i32(this), u32(this),
       i64(this), u64(this), big(this), other(this);
 
@@ -821,8 +819,7 @@ void SharedArrayBufferBuiltinsAssembler::AtomicBinopBuiltinCommon(
   // // This shouldn't happen, we've already validated the type.
   BIND(&other);
   Unreachable();
-#endif  // V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64 || V8_TARGET_ARCH_PPC64
-        // || V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_S390 || V8_TARGET_ARCH_S390X
+#endif  // V8_TARGET_ARCH_MIPS || V8_TARGET_ARCH_MIPS64
         // || V8_TARGET_ARCH_RISCV64
 
   BIND(&detached_or_out_of_bounds);
