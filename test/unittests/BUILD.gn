@@ -277,6 +277,7 @@ v8_source_set("unittests_sources") {
     "compiler/js-native-context-specialization-unittest.cc",
     "compiler/js-operator-unittest.cc",
     "compiler/js-typed-lowering-unittest.cc",
+    "compiler/linear-scheduler-unittest.cc",
     "compiler/linkage-tail-call-unittest.cc",
     "compiler/load-elimination-unittest.cc",
     "compiler/loop-peeling-unittest.cc",
