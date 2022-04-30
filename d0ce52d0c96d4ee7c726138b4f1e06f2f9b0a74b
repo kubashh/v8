@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09565fc8_6af58463",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 1181561
+      },
+      "writtenOn": "2022-04-30T18:42:16Z",
+      "side": 1,
+      "message": "It looks like you are unconditionally fetching the fraction digits in NFv3 mode. This is not quite right: there are still cases in NFv3 where fraction digits should not be returned in resolvedOptions.\n\nIf FractionDigitsFromSkeleton returns true if it found the fraction digits in the skeleton, starting in NFv3, you should be able to print them in that case.",
+      "range": {
+        "startLine": 1026,
+        "startChar": 7,
+        "endLine": 1026,
+        "endChar": 41
+      },
+      "revId": "d0ce52d0c96d4ee7c726138b4f1e06f2f9b0a74b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
