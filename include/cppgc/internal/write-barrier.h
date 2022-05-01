@@ -190,12 +190,14 @@ class V8_EXPORT WriteBarrierTypeForCagedHeapPolicy final {
     if (!value) return false;
     params.start = reinterpret_cast<uintptr_t>(value) &
                    ~(api_constants::kCagedHeapReservationAlignment - 1);
-    const uintptr_t slot_offset =
-        reinterpret_cast<uintptr_t>(slot) - params.start;
-    if (slot_offset > api_constants::kCagedHeapReservationSize) {
-      // Check if slot is on stack or value is sentinel or nullptr. This relies
-      // on the fact that kSentinelPointer is encoded as 0x1.
-      return false;
+    if (reinterpret_cast<uintptr_t>(slot) >= params.start) {
+      const uintptr_t slot_offset =
+          reinterpret_cast<uintptr_t>(slot) - params.start;
+      if (slot_offset > api_constants::kCagedHeapReservationSize) {
+        // Check if slot is on stack or value is sentinel or nullptr. This
+        // relies on the fact that kSentinelPointer is encoded as 0x1.
+        return false;
+      }
     }
     return true;
   }
