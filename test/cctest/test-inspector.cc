@@ -57,7 +57,7 @@ TEST(WrapInsideWrapOnInterrupt) {
   const char* state = "{}";
   StringView state_view(reinterpret_cast<const uint8_t*>(state), strlen(state));
   std::unique_ptr<V8InspectorSession> session =
-      inspector->connect(1, &channel, state_view);
+      inspector->connect(1, &channel, state_view, /*client_is_trusted=*/true);
 
   const char* object_group = "";
   StringView object_group_view(reinterpret_cast<const uint8_t*>(object_group),
