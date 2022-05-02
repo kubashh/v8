@@ -202,13 +202,27 @@ Maybe<std::vector<icu::UnicodeString>> ToUnicodeStringArray(
     Isolate* isolate, Handle<FixedArray> array) {
   int length = array->length();
   std::vector<icu::UnicodeString> result;
+  // To avoid very slow return time while the item in the list is very long to
+  // cause ICU to take a very long time to return for unreasonable real usage
+  // which crafted for security attack, check the total length of the content
+  // and throw exception before call ICU if it is larger than the following
+  // threshold.
+  const int64_t kTextLengthThreshold = 16777216;  // 2^24 = 16M
+  int64_t text_length = 0;
   for (int i = 0; i < length; i++) {
     Handle<Object> item = FixedArray::get(*array, i, isolate);
     DCHECK(item->IsString());
     Handle<String> item_str = Handle<String>::cast(item);
+    text_length = item_str->length();
     if (!item_str->IsFlat()) item_str = String::Flatten(isolate, item_str);
     result.push_back(Intl::ToICUUnicodeString(isolate, item_str));
+    if (text_length > kTextLengthThreshold) {
+      THROW_NEW_ERROR_RETURN_VALUE(
+          isolate, NewRangeError(MessageTemplate::kListFormatBadParameters),
+          Nothing<std::vector<icu::UnicodeString>>());
+    }
   }
+
   return Just(result);
 }
 
