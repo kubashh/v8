@@ -52,6 +52,24 @@
       "parentUuid": "5535cfbc_9a0340fc",
       "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "418e5025_bd055ab7",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-02T06:30:47Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/3616501  \u003c\u003c\u003c here are the fixes",
+      "parentUuid": "4b678a40_e4813733",
+      "revId": "a64bb799878bc6952a5c6b1dfa7fdc2641d57b4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
