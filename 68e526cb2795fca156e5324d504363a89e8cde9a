@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3154b3f0_fc18f9a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-02T06:27:07Z",
+      "side": 1,
+      "message": "Oops, this CL needed one more fix. The length check is only valid after we\u0027ve done THROW_ERROR_RETURN_FAILURE_ON_DETACHED_OR_OUT_OF_BOUNDS, not before. So removed one check which was before that macro.",
+      "revId": "68e526cb2795fca156e5324d504363a89e8cde9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
