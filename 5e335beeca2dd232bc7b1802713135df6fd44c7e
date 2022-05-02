@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26067f0_7670cd05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-02T07:50:43Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "5e335beeca2dd232bc7b1802713135df6fd44c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ad38938_0d7f15fb",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-02T07:50:43Z",
+      "side": 1,
+      "message": "nit: magic constants are magic :P \u003d\u003e you could probably just drop the comments above if you had named constants.",
+      "range": {
+        "startLine": 483,
+        "startChar": 72,
+        "endLine": 483,
+        "endChar": 78
+      },
+      "revId": "5e335beeca2dd232bc7b1802713135df6fd44c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d439344a_6f7f4b3f",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-02T07:50:43Z",
+      "side": 1,
+      "message": "nit: same as above, named constants / enums would make this more readable",
+      "range": {
+        "startLine": 1581,
+        "startChar": 65,
+        "endLine": 1581,
+        "endChar": 66
+      },
+      "revId": "5e335beeca2dd232bc7b1802713135df6fd44c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
