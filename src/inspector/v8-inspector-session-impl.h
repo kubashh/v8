@@ -32,11 +32,9 @@ using protocol::Response;
 class V8InspectorSessionImpl : public V8InspectorSession,
                                public protocol::FrontendChannel {
  public:
-  static std::unique_ptr<V8InspectorSessionImpl> create(V8InspectorImpl*,
-                                                        int contextGroupId,
-                                                        int sessionId,
-                                                        V8Inspector::Channel*,
-                                                        StringView state);
+  static std::unique_ptr<V8InspectorSessionImpl> create(
+      V8InspectorImpl*, int contextGroupId, int sessionId,
+      V8Inspector::Channel*, StringView state, bool clientIsTrusted);
   ~V8InspectorSessionImpl() override;
   V8InspectorSessionImpl(const V8InspectorSessionImpl&) = delete;
   V8InspectorSessionImpl& operator=(const V8InspectorSessionImpl&) = delete;
@@ -102,7 +100,8 @@ class V8InspectorSessionImpl : public V8InspectorSession,
 
  private:
   V8InspectorSessionImpl(V8InspectorImpl*, int contextGroupId, int sessionId,
-                         V8Inspector::Channel*, StringView state);
+                         V8Inspector::Channel*, StringView state,
+                         bool clientIsTrusted);
   protocol::DictionaryValue* agentState(const String16& name);
 
   // protocol::FrontendChannel implementation.
@@ -134,6 +133,7 @@ class V8InspectorSessionImpl : public V8InspectorSession,
   std::vector<std::unique_ptr<V8InspectorSession::Inspectable>>
       m_inspectedObjects;
   bool use_binary_protocol_ = false;
+  bool m_clientIsTrusted = false;
 };
 
 }  // namespace v8_inspector
