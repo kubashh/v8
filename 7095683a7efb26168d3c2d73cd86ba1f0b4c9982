@@ -52,6 +52,24 @@
       "parentUuid": "b20dbb70_3472cc32",
       "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a25bb8_f940b9c2",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-02T15:38:03Z",
+      "side": 0,
+      "message": "ok I debug and the root issue is in https://bugs.chromium.org/p/v8/issues/detail?id\u003d12848 . The problem is in Temporal.Calendar.prototype.fields and one block of the code in CSA is somehow not executed in the buggy configuration. Let\u0027s follow up in there instead of in this CL",
+      "parentUuid": "6d584707_3beb3706",
+      "revId": "7095683a7efb26168d3c2d73cd86ba1f0b4c9982",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
