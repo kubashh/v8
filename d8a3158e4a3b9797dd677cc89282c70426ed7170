@@ -104,6 +104,30 @@
       },
       "revId": "d8a3158e4a3b9797dd677cc89282c70426ed7170",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a410237_412fdd7b",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-02T11:46:46Z",
+      "side": 1,
+      "message": "It\u0027s used the other way round to avoid the problem that disabling e.g. concurrent marking disabled all concurrency features in the GC. (if anybody would read that flag)",
+      "parentUuid": "2fecd9cf_c9ed0a53",
+      "range": {
+        "startLine": 436,
+        "startChar": 6,
+        "endLine": 436,
+        "endChar": 29
+      },
+      "revId": "d8a3158e4a3b9797dd677cc89282c70426ed7170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
