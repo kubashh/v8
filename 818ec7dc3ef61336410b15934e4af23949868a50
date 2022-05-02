@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e6880b_7eb6f091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-02T22:36:20Z",
+      "side": 1,
+      "message": "I understand the desire to get rid of a 10s+ hang in the corner case, but I\u0027m pretty worried about shipping this:\n\n1. The limit is chosen more or less arbitrarily right now IIUC\n2. We\u0027re making a case that didn\u0027t use to throw now throw\n3. We haven\u0027t yet consulted other implementations to see what limits make sense\n\nA limit to throw a RangeError should be a normative change.\n\nCan we mitigate this another way? And how bad is it to keep this hang around?",
+      "revId": "818ec7dc3ef61336410b15934e4af23949868a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b3c3a09_b62fe852",
+        "filename": "src/objects/js-list-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-02T22:36:20Z",
+      "side": 1,
+      "message": "An `int` here should suffice for the limit you chose.",
+      "range": {
+        "startLine": 210,
+        "startChar": 8,
+        "endLine": 210,
+        "endChar": 15
+      },
+      "revId": "818ec7dc3ef61336410b15934e4af23949868a50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
