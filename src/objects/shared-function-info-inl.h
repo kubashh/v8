@@ -826,18 +826,19 @@ void SharedFunctionInfo::ClearPreparseData() {
   Heap* heap = GetHeapFromWritableObject(data);
 
   // Swap the map.
-  heap->NotifyObjectLayoutChange(data, no_gc);
+  heap->NotifyObjectLayoutChange(data, no_gc, InvalidateRecordedSlots::kNo);
   STATIC_ASSERT(UncompiledDataWithoutPreparseData::kSize <
                 UncompiledDataWithPreparseData::kSize);
   STATIC_ASSERT(UncompiledDataWithoutPreparseData::kSize ==
                 UncompiledData::kHeaderSize);
-  data.set_map(GetReadOnlyRoots().uncompiled_data_without_preparse_data_map(),
-               kReleaseStore);
 
   // Fill the remaining space with filler.
   heap->NotifyObjectSizeChange(data, UncompiledDataWithPreparseData::kSize,
                                UncompiledDataWithoutPreparseData::kSize,
                                ClearRecordedSlots::kYes);
+
+  data.set_map(GetReadOnlyRoots().uncompiled_data_without_preparse_data_map(),
+               kReleaseStore);
 
   // Ensure that the clear was successful.
   DCHECK(HasUncompiledDataWithoutPreparseData());
