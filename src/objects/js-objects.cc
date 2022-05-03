@@ -186,6 +186,53 @@ Maybe<bool> JSReceiver::HasInPrototypeChain(Isolate* isolate,
 }
 
 // static
+Maybe<bool> JSReceiver::CheckPrivateNameStore(LookupIterator* it,
+                                              bool is_define) {
+  DCHECK(it->GetName()->IsPrivateName());
+  Isolate* isolate = it->isolate();
+  Handle<String> name_string(
+      String::cast(Handle<Symbol>::cast(it->GetName())->description()),
+      isolate);
+  for (; it->IsFound(); it->Next()) {
+    switch (it->state()) {
+      case LookupIterator::TRANSITION:
+      case LookupIterator::INTERCEPTOR:
+      case LookupIterator::JSPROXY:
+      case LookupIterator::NOT_FOUND:
+        UNREACHABLE();
+      case LookupIterator::ACCESS_CHECK:
+        if (!it->HasAccess()) {
+          isolate->ReportFailedAccessCheck(
+              Handle<JSObject>::cast(it->GetReceiver()));
+          RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
+          return Just(false);
+        }
+        break;
+      case LookupIterator::ACCESSOR:
+      case LookupIterator::INTEGER_INDEXED_EXOTIC:
+      case LookupIterator::DATA:
+        if (is_define) {
+          MessageTemplate message =
+              it->GetName()->IsPrivateBrand()
+                  ? MessageTemplate::kInvalidPrivateBrandReinitialization
+                  : MessageTemplate::kInvalidPrivateFieldReinitialization;
+          RETURN_FAILURE(isolate,
+                         GetShouldThrow(isolate, Nothing<ShouldThrow>()),
+                         NewTypeError(message, name_string, it->GetReceiver()));
+        }
+        return Just(true);
+    }
+  }
+  DCHECK(!it->IsFound());
+  if (!is_define) {
+    RETURN_FAILURE(isolate, GetShouldThrow(isolate, Nothing<ShouldThrow>()),
+                   NewTypeError(MessageTemplate::kInvalidPrivateMemberWrite,
+                                name_string, it->GetReceiver()));
+  }
+  return Just(true);
+}
+
+// static
 Maybe<bool> JSReceiver::CheckIfCanDefine(Isolate* isolate, LookupIterator* it,
                                          Handle<Object> value,
                                          Maybe<ShouldThrow> should_throw) {
