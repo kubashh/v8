@@ -33,6 +33,23 @@
       "message": "Please also update CodeKindIsStoredInOptimizedCodeCache.",
       "revId": "48285b216b71b28b19de5dc3c7a7e8c437187a93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de25345_d1fc73c3",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-05-03T11:18:07Z",
+      "side": 1,
+      "message": "Gotta update this code path too (otherwise we mistake ML code for TF code).",
+      "revId": "48285b216b71b28b19de5dc3c7a7e8c437187a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
