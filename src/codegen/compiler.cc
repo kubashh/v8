@@ -943,7 +943,7 @@ class OptimizedCodeCache : public AllStatic {
       return;
     }
 
-    function->feedback_vector().SetOptimizedCode(code);
+    function->feedback_vector().SetOptimizedCode(*code);
   }
 };
 
@@ -1174,6 +1174,7 @@ MaybeHandle<CodeT> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
     }
 
     RecordMaglevFunctionCompilation(isolate, function);
+    function->feedback_vector().SetOptimizedCode(function->code());
     return handle(function->code(), isolate);
   }
 
@@ -3464,6 +3465,7 @@ bool Compiler::FinalizeMaglevCompilationJob(maglev::MaglevCompilationJob* job,
                                             Isolate* isolate) {
 #ifdef V8_ENABLE_MAGLEV
   VMState<COMPILER> state(isolate);
+  job->function()->feedback_vector().SetOptimizedCode(job->function()->code());
   RecordMaglevFunctionCompilation(isolate, job->function());
 #endif
   return CompilationJob::SUCCEEDED;
