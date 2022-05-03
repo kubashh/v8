@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2333329d_32c64c2d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2022-05-03T08:18:10Z",
+      "side": 1,
+      "message": "Can you please spell out which CDP domains will be disabled?",
+      "range": {
+        "startLine": 7,
+        "startChar": 58,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "17712e2aa6a4649411a6c1aa669b995dc38f9e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68f7d5a6_4602db69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2022-05-03T08:18:10Z",
+      "side": 1,
+      "message": "LGTM with some comments.\n\nMarja, could you rubberstamp d8? Thanks.",
+      "revId": "17712e2aa6a4649411a6c1aa669b995dc38f9e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9266c864_d8ecad0a",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2022-05-03T08:18:10Z",
+      "side": 1,
+      "message": "I wonder whether it would be more future-proof (and also more readable) to use an enum. What if we want to use more than true/false to distinguish different levels of trustedness?",
+      "range": {
+        "startLine": 373,
+        "startChar": 54,
+        "endLine": 373,
+        "endChar": 58
+      },
+      "revId": "17712e2aa6a4649411a6c1aa669b995dc38f9e51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
