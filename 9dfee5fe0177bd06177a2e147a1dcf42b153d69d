@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d4fb80_c2d3eaf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "Hey, v. sorry, forgot to send my draft comments.",
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cfcb93a_4a2a6212",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "hm, not in this CL because I\u0027m already asking alot, but I might just get rid of this base class, it\u0027s mostly complexity around generations that are only used by one subclass anyway...",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 25
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfb705c1_f98fba44",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "nit: better name that indicates this is the toplevel function -- toplevel_sfi? toplevel_shared_function_info?",
+      "range": {
+        "startLine": 89,
+        "startChar": 36,
+        "endLine": 89,
+        "endChar": 42
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f480ff9e_da97e28e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "add a DCHECK that `shared-\u003efunction_literal_id() \u003d\u003d parse_info-\u003eliteral()-\u003efunction_literal_id()`",
+      "range": {
+        "startLine": 1409,
+        "startChar": 11,
+        "endLine": 1409,
+        "endChar": 17
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ff38cc_e9c38c81",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "might be worth promoting this to the HashTable interface, since KeyAt is already there.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2213e1d8_110ba521",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "nit: already return the Script/SFI pair here, similar to the eval cache\u0027s InfoCellPair",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 19
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bca16c3_716af38f",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "nit: use `handle(script, isolate)` to be explicit about handle creation",
+      "range": {
+        "startLine": 280,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 10
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7774dc2e_a4a8ba3a",
+        "filename": "src/objects/compilation-cache-table.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "use a more informative name here, e.g. SharedFunctionInfoValueAt, and add a getter/setter for the eval cache\u0027s second slot, e.g. FeedbackCellValueAt",
+      "range": {
+        "startLine": 129,
+        "startChar": 16,
+        "endLine": 129,
+        "endChar": 28
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9819393_f32a0c32",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5148,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-03T07:21:05Z",
+      "side": 1,
+      "message": "don\u0027t return Smis like this as markers (in the general case), GetRootSharedFunctionInfo should just be shared_function_infos().Get(kFunctionLiteralIdTopLevel) and return a MaybeObject, letting DCHECKs catch anything else -- maybe we should even just not have GetRootSharedFunctionInfo and call shared_function_infos().Get(kFunctionLiteralIdTopLevel) directly",
+      "range": {
+        "startLine": 5148,
+        "startChar": 0,
+        "endLine": 5148,
+        "endChar": 27
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
