@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "797b5ba0_836ba639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-03T03:20:54Z",
+      "side": 1,
+      "message": "w/ this patch, yes.",
+      "parentUuid": "90929868_056268e6",
+      "revId": "bf281cab141088a3456477c590aebed1060b1d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b31a613b_a59db9f8",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-05-03T01:49:44Z",
       "side": 1,
       "message": "Just making sure it\u0027s intentional that `precision-integer` doesn\u0027t have a trailing `/` but `precision-increment/` has a trailing `/`?",
+      "revId": "bf281cab141088a3456477c590aebed1060b1d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b900078_64dd8b8c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-03T03:20:54Z",
+      "side": 1,
+      "message": "yes, that is intentional",
+      "parentUuid": "b31a613b_a59db9f8",
       "revId": "bf281cab141088a3456477c590aebed1060b1d73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
