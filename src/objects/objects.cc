@@ -5143,6 +5143,19 @@ MaybeHandle<SharedFunctionInfo> Script::FindWebSnapshotSharedFunctionInfo(
   UNREACHABLE();
 }
 
+bool Script::TryGetRootSharedFunctionInfo(Handle<SharedFunctionInfo>* result,
+                                          Isolate* isolate) {
+  DisallowGarbageCollection no_gc;
+  MaybeObject shared = shared_function_infos().Get(kFunctionLiteralIdTopLevel);
+  HeapObject heap_object;
+  if (!shared->GetHeapObject(&heap_object) ||
+      heap_object.IsUndefined(isolate)) {
+    return false;
+  }
+  *result = handle(SharedFunctionInfo::cast(heap_object), isolate);
+  return true;
+}
+
 Script::Iterator::Iterator(Isolate* isolate)
     : iterator_(isolate->heap()->script_list()) {}
 

@@ -222,6 +222,9 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
       Handle<Script> script, LocalIsolate* isolate,
       FunctionLiteral* function_literal);
 
+  bool V8_EXPORT_PRIVATE TryGetRootSharedFunctionInfo(
+      Handle<SharedFunctionInfo>* result, Isolate* isolate);
+
   // Iterate over all script objects on the heap.
   class V8_EXPORT_PRIVATE Iterator {
    public:
