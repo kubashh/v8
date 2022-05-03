@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94c269c5_3e722527",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "No worries, thanks as always for the great feedback 😊",
+      "parentUuid": "d8d4fb80_c2d3eaf9",
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cfcb93a_4a2a6212",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-05-03T07:21:05Z",
       "side": 1,
       "message": "hm, not in this CL because I\u0027m already asking alot, but I might just get rid of this base class, it\u0027s mostly complexity around generations that are only used by one subclass anyway...",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 25
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbcf1253_6258b137",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Agreed, I\u0027ll create a follow-up CL to remove this class.",
+      "parentUuid": "7cfcb93a_4a2a6212",
       "range": {
         "startLine": 26,
         "startChar": 6,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "864723db_71a6d4ad",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Great point, thanks.",
+      "parentUuid": "dfb705c1_f98fba44",
+      "range": {
+        "startLine": 89,
+        "startChar": 36,
+        "endLine": 89,
+        "endChar": 42
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f480ff9e_da97e28e",
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95e0c4d_7a047aad",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f480ff9e_da97e28e",
+      "range": {
+        "startLine": 1409,
+        "startChar": 11,
+        "endLine": 1409,
+        "endChar": 17
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86ff38cc_e9c38c81",
@@ -100,6 +190,30 @@
       "writtenOn": "2022-05-03T07:21:05Z",
       "side": 1,
       "message": "might be worth promoting this to the HashTable interface, since KeyAt is already there.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 0
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a978f5_b60717aa",
+        "filename": "src/objects/compilation-cache-table-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Good idea, thanks.",
+      "parentUuid": "86ff38cc_e9c38c81",
       "range": {
         "startLine": 33,
         "startChar": 0,
@@ -135,6 +249,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce61c1d5_912e9b95",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "The only reason I didn\u0027t already do this was because I was unsure of how to escape multiple values from the HandleScope in CompilationCacheScript::Lookup. I\u0027ve tried a few approaches, but they all seem more complicated than re-fetching the SFI from the Script.",
+      "parentUuid": "2213e1d8_110ba521",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 19
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3bca16c3_716af38f",
         "filename": "src/objects/compilation-cache-table.cc",
         "patchSetId": 9
@@ -146,6 +284,30 @@
       "writtenOn": "2022-05-03T07:21:05Z",
       "side": 1,
       "message": "nit: use `handle(script, isolate)` to be explicit about handle creation",
+      "range": {
+        "startLine": 280,
+        "startChar": 8,
+        "endLine": 280,
+        "endChar": 10
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18f0a681_f887c66d",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Good catch. Makes sense we\u0027d want handle creation to be clearly visible.",
+      "parentUuid": "3bca16c3_716af38f",
       "range": {
         "startLine": 280,
         "startChar": 8,
@@ -181,6 +343,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b61d781a_451f62ee",
+        "filename": "src/objects/compilation-cache-table.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Here again, we have the trouble of sharing implementations between unrelated caches. The first value might be a SFI, but it also might not: it can be an integer counter for the eval cache or a FixedArray for the RegExp cache. I\u0027m not sure what name can capture all of those options in a somewhat readable way. I\u0027ve currently updated to PrimaryValueAt and EvalFeedbackValueAt, but I\u0027d welcome any further recommendations.",
+      "parentUuid": "7774dc2e_a4a8ba3a",
+      "range": {
+        "startLine": 129,
+        "startChar": 16,
+        "endLine": 129,
+        "endChar": 28
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9819393_f32a0c32",
         "filename": "src/objects/objects.cc",
         "patchSetId": 9
@@ -192,6 +378,30 @@
       "writtenOn": "2022-05-03T07:21:05Z",
       "side": 1,
       "message": "don\u0027t return Smis like this as markers (in the general case), GetRootSharedFunctionInfo should just be shared_function_infos().Get(kFunctionLiteralIdTopLevel) and return a MaybeObject, letting DCHECKs catch anything else -- maybe we should even just not have GetRootSharedFunctionInfo and call shared_function_infos().Get(kFunctionLiteralIdTopLevel) directly",
+      "range": {
+        "startLine": 5148,
+        "startChar": 0,
+        "endLine": 5148,
+        "endChar": 27
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ade3c13_a45a8620",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5148,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-03T20:44:23Z",
+      "side": 1,
+      "message": "Okay, thanks!",
+      "parentUuid": "d9819393_f32a0c32",
       "range": {
         "startLine": 5148,
         "startChar": 0,
