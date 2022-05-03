@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500fc0de_5364a670",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-03T12:56:44Z",
+      "side": 1,
+      "message": "PTAL, thanks!",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f79a74_59d89c88",
+        "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-03T12:56:44Z",
+      "side": 1,
+      "message": "I have a question regarding this case: this currently hits HandleStoreICHandlerCase and then StoreGlobalIC_PropertyCellCase if the map of the receiver matches the cache (and didn\u0027t need access checks), though normal names in this case always go to the slow path. Is it okay to reuse the StoreGlobalIC_PropertyCellCase path here, or should we also just store the slow handler for stores that need access checks?",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
