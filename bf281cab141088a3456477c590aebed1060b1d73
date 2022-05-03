@@ -33,6 +33,40 @@
       "message": "Looks good! The tests look correct; do they all pass?",
       "revId": "bf281cab141088a3456477c590aebed1060b1d73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96345f3f_2cc92aa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-03T01:49:44Z",
+      "side": 1,
+      "message": "The v8 code lgtm, deferring the actual semantics here to sffc@.",
+      "revId": "bf281cab141088a3456477c590aebed1060b1d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31a613b_a59db9f8",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-03T01:49:44Z",
+      "side": 1,
+      "message": "Just making sure it\u0027s intentional that `precision-integer` doesn\u0027t have a trailing `/` but `precision-increment/` has a trailing `/`?",
+      "revId": "bf281cab141088a3456477c590aebed1060b1d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
