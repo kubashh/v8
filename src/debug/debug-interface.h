@@ -563,7 +563,8 @@ void SetReturnValue(v8::Isolate* isolate, v8::Local<v8::Value> value);
 enum class NativeAccessorType {
   None = 0,
   HasGetter = 1 << 0,
-  HasSetter = 1 << 1
+  HasSetter = 1 << 1,
+  IsValueUnavailable = 1 << 2
 };
 
 int64_t GetNextRandomInt64(v8::Isolate* isolate);
@@ -682,6 +683,8 @@ class V8_EXPORT_PRIVATE PropertyIterator {
   virtual bool has_native_setter() = 0;
   virtual Maybe<PropertyAttribute> attributes() = 0;
   virtual Maybe<PropertyDescriptor> descriptor() = 0;
+
+  virtual bool is_value_unavailable() = 0;
 
   virtual bool is_own() = 0;
   virtual bool is_array_index() = 0;

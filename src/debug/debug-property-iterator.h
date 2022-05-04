@@ -39,6 +39,8 @@ class DebugPropertyIterator final : public debug::PropertyIterator {
   v8::Maybe<v8::PropertyAttribute> attributes() override;
   v8::Maybe<v8::debug::PropertyDescriptor> descriptor() override;
 
+  bool is_value_unavailable() override;
+
   bool is_own() override;
   bool is_array_index() override;
 

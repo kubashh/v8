@@ -75,7 +75,9 @@ bool DebugPropertyIterator::AdvanceInternal() {
 
 bool DebugPropertyIterator::is_native_accessor() {
   CalculateNativeAccessorFlags();
-  return native_accessor_flags_;
+  return native_accessor_flags_ &
+         (static_cast<int>(debug::NativeAccessorType::HasGetter) |
+          static_cast<int>(debug::NativeAccessorType::HasSetter));
 }
 
 bool DebugPropertyIterator::has_native_getter() {
@@ -88,6 +90,12 @@ bool DebugPropertyIterator::has_native_setter() {
   CalculateNativeAccessorFlags();
   return native_accessor_flags_ &
          static_cast<int>(debug::NativeAccessorType::HasSetter);
+}
+
+bool DebugPropertyIterator::is_value_unavailable() {
+  CalculateNativeAccessorFlags();
+  return native_accessor_flags_ &
+         static_cast<int>(debug::NativeAccessorType::IsValueUnavailable);
 }
 
 Handle<Name> DebugPropertyIterator::raw_name() const {
@@ -211,14 +219,17 @@ base::Flags<debug::NativeAccessorType, int> GetNativeAccessorDescriptorInternal(
     return debug::NativeAccessorType::None;
   }
   Handle<Object> structure = it.GetAccessors();
-  if (!structure->IsAccessorInfo()) return debug::NativeAccessorType::None;
-  base::Flags<debug::NativeAccessorType, int> result;
+  if (*structure == *isolate->factory()->value_unavailable_accessor()) {
+    return debug::NativeAccessorType::IsValueUnavailable;
+  }
 #define IS_BUILTIN_ACCESSOR(_, name, ...)                   \
   if (*structure == *isolate->factory()->name##_accessor()) \
     return debug::NativeAccessorType::None;
   ACCESSOR_INFO_LIST_GENERATOR(IS_BUILTIN_ACCESSOR, /* not used */)
 #undef IS_BUILTIN_ACCESSOR
+  if (!structure->IsAccessorInfo()) return debug::NativeAccessorType::None;
   Handle<AccessorInfo> accessor_info = Handle<AccessorInfo>::cast(structure);
+  base::Flags<debug::NativeAccessorType, int> result;
   if (accessor_info->getter() != Object()) {
     result |= debug::NativeAccessorType::HasGetter;
   }

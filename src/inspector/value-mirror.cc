@@ -1409,6 +1409,9 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
       exceptionMirror =
           ValueMirror::create(context, tryCatchAttributes.Exception());
     } else {
+      writable = !(attributes & v8::PropertyAttribute::ReadOnly);
+      enumerable = !(attributes & v8::PropertyAttribute::DontEnum);
+      configurable = !(attributes & v8::PropertyAttribute::DontDelete);
       if (iterator->is_native_accessor()) {
         if (iterator->has_native_getter()) {
           getterMirror = createNativeGetter(context, object, v8Name);
@@ -1416,11 +1419,8 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
         if (iterator->has_native_setter()) {
           setterMirror = createNativeSetter(context, object, v8Name);
         }
-        writable = !(attributes & v8::PropertyAttribute::ReadOnly);
-        enumerable = !(attributes & v8::PropertyAttribute::DontEnum);
-        configurable = !(attributes & v8::PropertyAttribute::DontDelete);
         isAccessorProperty = getterMirror || setterMirror;
-      } else {
+      } else if (!iterator->is_value_unavailable()) {
         v8::TryCatch tryCatchDescriptor(isolate);
         v8::debug::PropertyDescriptor descriptor;
         if (!iterator->descriptor().To(&descriptor)) {

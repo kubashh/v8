@@ -1606,6 +1606,8 @@ DEFINE_BOOL(hard_abort, true, "abort by crashing")
 
 DEFINE_BOOL(experimental_async_stack_tagging_api, false,
             "enable experimental async stacks tagging API")
+DEFINE_BOOL(experimental_value_unavailable, false,
+            "enable experimental <value unavailable> in scopes")
 
 // disassembler
 DEFINE_BOOL(log_colour, ENABLE_LOG_COLOUR,
