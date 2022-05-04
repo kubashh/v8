@@ -103,6 +103,41 @@
       "parentUuid": "7de25345_d1fc73c3",
       "revId": "48285b216b71b28b19de5dc3c7a7e8c437187a93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03ba2350_60d1c234",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-05-04T07:38:48Z",
+      "side": 1,
+      "message": "Ah, good old TP leftovers.",
+      "parentUuid": "a8a4a2a0_890bada8",
+      "revId": "48285b216b71b28b19de5dc3c7a7e8c437187a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c32929e_264cceaa",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-05-04T07:38:48Z",
+      "side": 1,
+      "message": "Let\u0027s please use OptimizedCodeCache::Insert here and below",
+      "revId": "48285b216b71b28b19de5dc3c7a7e8c437187a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
