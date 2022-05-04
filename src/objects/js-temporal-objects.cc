@@ -6491,6 +6491,39 @@ MaybeHandle<JSTemporalPlainDate> JSTemporalPlainDate::WithCalendar(
       calendar);
 }
 
+namespace {
+
+// #sec-temporal-calendarmergefields
+MaybeHandle<JSReceiver> CalendarMergeFields(
+    Isolate* isolate, Handle<JSReceiver> calendar, Handle<JSReceiver> fields,
+    Handle<JSReceiver> additional_fields) {
+  // 1. Let mergeFields be ? GetMethod(calendar, "mergeFields").
+  Handle<Object> merge_fields;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, merge_fields,
+      Object::GetMethod(calendar, isolate->factory()->mergeFields_string()),
+      JSReceiver);
+  // 2. If mergeFields is undefined, then
+  if (merge_fields->IsUndefined()) {
+    // a. Return ? DefaultMergeFields(fields, additionalFields).
+    return DefaultMergeFields(isolate, fields, additional_fields);
+  }
+  // 3. Return ? Call(mergeFields, calendar, « fields, additionalFields »).
+  Handle<Object> argv[] = {fields, additional_fields};
+  Handle<Object> result;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, result,
+      Execution::Call(isolate, merge_fields, calendar, 2, argv), JSReceiver);
+  // 4. If Type(result) is not Object, throw a TypeError exception.
+  if (!result->IsJSReceiver()) {
+    THROW_NEW_ERROR(isolate, NEW_TEMPORAL_INVALID_ARG_TYPE_ERROR(),
+                    JSTemporalDuration);
+  }
+  Handle<JSReceiver> obj = Handle<JSReceiver>::cast(result);
+  return obj;
+}
+
+}  // namespace
 // #sec-temporal.now.plaindate
 MaybeHandle<JSTemporalPlainDate> JSTemporalPlainDate::Now(
     Isolate* isolate, Handle<Object> calendar_like,
@@ -7021,6 +7054,120 @@ MaybeHandle<JSTemporalPlainMonthDay> JSTemporalPlainMonthDay::Constructor(
                                 calendar, ref);
 }
 
+// Common code shared by PlainMonthDay and PlainYearMonth.prototype.toPlainDate
+template <typename T>
+MaybeHandle<JSTemporalPlainDate> PlainMonthDayOrYearMonthToPlainDate(
+    Isolate* isolate, Handle<T> temporal, Handle<Object> item_obj,
+    Handle<String> receiver_field_name_1, Handle<String> receiver_field_name_2,
+    Handle<String> input_field_name) {
+  Factory* factory = isolate->factory();
+  // 1. Let monthDay be the this value.
+  // 2. Perform ? RequireInternalSlot(monthDay,
+  // [[InitializedTemporalXXX]]).
+  // 3. If Type(item) is not Object, then
+  if (!item_obj->IsJSReceiver()) {
+    // a. Throw a TypeError exception.
+    THROW_NEW_ERROR(isolate, NEW_TEMPORAL_INVALID_ARG_TYPE_ERROR(),
+                    JSTemporalPlainDate);
+  }
+  Handle<JSReceiver> item = Handle<JSReceiver>::cast(item_obj);
+  // 4. Let calendar be Xxx.[[Calendar]].
+  Handle<JSReceiver> calendar = handle(temporal->calendar(), isolate);
+  // 5. Let receiverFieldNames be ? CalendarFields(calendar, «
+  // receiverFieldName1, receiverFieldName2 »).
+  Handle<FixedArray> receiver_field_names = factory->NewFixedArray(2);
+  receiver_field_names->set(0, *receiver_field_name_1);
+  receiver_field_names->set(1, *receiver_field_name_2);
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, receiver_field_names,
+      CalendarFields(isolate, calendar, receiver_field_names),
+      JSTemporalPlainDate);
+  // 6. Let fields be ? PrepareTemporalFields(temporal, receiverFieldNames, «»).
+  Handle<JSReceiver> fields;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, fields,
+      PrepareTemporalFields(isolate, temporal, receiver_field_names,
+                            RequiredFields::kNone),
+      JSTemporalPlainDate);
+  // 7. Let inputFieldNames be ? CalendarFields(calendar, « inputFieldName »).
+  Handle<FixedArray> input_field_names = factory->NewFixedArray(1);
+  input_field_names->set(0, *input_field_name);
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, input_field_names,
+      CalendarFields(isolate, calendar, input_field_names),
+      JSTemporalPlainDate);
+  // 8. Let inputFields be ? PrepareTemporalFields(item, inputFieldNames, «»).
+  Handle<JSReceiver> input_fields;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, input_fields,
+      PrepareTemporalFields(isolate, item, input_field_names,
+                            RequiredFields::kNone),
+      JSTemporalPlainDate);
+  // 9. Let mergedFields be ? CalendarMergeFields(calendar, fields,
+  // inputFields).
+  Handle<JSReceiver> merged_fields;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, merged_fields,
+      CalendarMergeFields(isolate, calendar, fields, input_fields),
+      JSTemporalPlainDate);
+  // 10. Let mergedFieldNames be the List containing all the elements of
+  // receiverFieldNames followed by all the elements of inputFieldNames, with
+  // duplicate elements removed.
+  Handle<FixedArray> merged_field_names = factory->NewFixedArray(
+      receiver_field_names->length() + input_field_names->length());
+  std::set<std::string> added;
+  for (int j = 0; j < receiver_field_names->length(); j++) {
+    Handle<Object> item = Handle<Object>(receiver_field_names->get(j), isolate);
+    CHECK(item->IsString());
+    Handle<String> string = Handle<String>::cast(item);
+    if (added.find(string->ToCString().get()) == added.end()) {
+      merged_field_names->set(static_cast<int>(added.size()), *item);
+      added.insert(string->ToCString().get());
+    }
+  }
+  for (int j = 0; j < input_field_names->length(); j++) {
+    Handle<Object> item = Handle<Object>(input_field_names->get(j), isolate);
+    CHECK(item->IsString());
+    Handle<String> string = Handle<String>::cast(item);
+    if (added.find(string->ToCString().get()) == added.end()) {
+      merged_field_names->set(static_cast<int>(added.size()), *item);
+      added.insert(string->ToCString().get());
+    }
+  }
+  merged_field_names = FixedArray::ShrinkOrEmpty(
+      isolate, merged_field_names, static_cast<int>(added.size()));
+
+  // 11. Set mergedFields to ? PrepareTemporalFields(mergedFields,
+  // mergedFieldNames, «»).
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, merged_fields,
+      PrepareTemporalFields(isolate, merged_fields, merged_field_names,
+                            RequiredFields::kNone),
+      JSTemporalPlainDate);
+  // 12. Let options be ! OrdinaryObjectCreate(null).
+  Handle<JSObject> options = factory->NewJSObjectWithNullProto();
+  // 13. Perform ! CreateDataPropertyOrThrow(options, "overflow", "reject").
+  CHECK(JSReceiver::CreateDataProperty(
+            isolate, options, factory->overflow_string(),
+            factory->reject_string(), Just(kThrowOnError))
+            .FromJust());
+  // 14. Return ? DateFromFields(calendar, mergedFields, options).
+  return DateFromFields(isolate, calendar, merged_fields, options);
+}
+
+// #sec-temporal.plainmonthday.prototype.toplaindate
+MaybeHandle<JSTemporalPlainDate> JSTemporalPlainMonthDay::ToPlainDate(
+    Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day,
+    Handle<Object> item_obj) {
+  Factory* factory = isolate->factory();
+  // 5. Let receiverFieldNames be ? CalendarFields(calendar, « "day",
+  // "monthCode" »).
+  // 7. Let inputFieldNames be ? CalendarFields(calendar, « "year" »).
+  return PlainMonthDayOrYearMonthToPlainDate<JSTemporalPlainMonthDay>(
+      isolate, month_day, item_obj, factory->day_string(),
+      factory->monthCode_string(), factory->year_string());
+}
+
 // #sec-temporal.plainmonthday.prototype.getisofields
 MaybeHandle<JSReceiver> JSTemporalPlainMonthDay::GetISOFields(
     Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day) {
@@ -7091,6 +7238,19 @@ MaybeHandle<JSTemporalPlainYearMonth> JSTemporalPlainYearMonth::Constructor(
   // 10. Return ? CreateTemporalYearMonth(y, m, calendar, ref, NewTarget).
   return CreateTemporalYearMonth(isolate, target, new_target, iso_year,
                                  iso_month, calendar, ref);
+}
+
+// #sec-temporal.plainyearmonth.prototype.toplaindate
+MaybeHandle<JSTemporalPlainDate> JSTemporalPlainYearMonth::ToPlainDate(
+    Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month,
+    Handle<Object> item_obj) {
+  Factory* factory = isolate->factory();
+  // 5. Let receiverFieldNames be ? CalendarFields(calendar, « "monthCode",
+  // "year" »).
+  // 7. Let inputFieldNames be ? CalendarFields(calendar, « "day" »).
+  return PlainMonthDayOrYearMonthToPlainDate<JSTemporalPlainYearMonth>(
+      isolate, year_month, item_obj, factory->monthCode_string(),
+      factory->year_string(), factory->day_string());
 }
 
 // #sec-temporal.plainyearmonth.prototype.getisofields
