@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad48f042_ec33238b",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5349,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-04T05:20:43Z",
+      "side": 1,
+      "message": "I want to group all JSTemporalCalendar related method together. If I move it down, I need to move it below JSTemporalDuration.",
+      "parentUuid": "cc5ee0b3_58c1db7d",
+      "revId": "d1630781ebaba01bcf4816d4356c4f6b295e64eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa321ecb_b196d86d",
         "filename": "src/objects/js-temporal-objects.cc",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-03T22:58:46Z",
       "side": 1,
       "message": "I was curious about this pattern, and noticed that there exists a macro that may be slightly better-suited to cases like this. At the least, it\u0027s more regular with the above ASSIGN_RETURN_ON_EXCEPTION usages:\n\n```\nShowOverflow overflow;\nMAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(\n    isolate, overflow, ToTemporalOverflow(isolate, options, method_name),\n    Handle\u003cJSTemporalPlainDate\u003e());\n```\n    \nMain advantage I see is it avoids polluting the scope with these maybe_overflow variables. No need to change in this CL, but curious if you think it\u0027d be an improvement to apply this style throughout?\n\nThere is one (sort of) functional difference: MAYBE_RETURN doesn\u0027t actually care if there\u0027s a pending exception, but this one does check for that.",
+      "revId": "d1630781ebaba01bcf4816d4356c4f6b295e64eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d24dd860_b5cde89d",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5390,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-04T05:20:43Z",
+      "side": 1,
+      "message": "good to know. I will put that into a separate CL",
+      "parentUuid": "fa321ecb_b196d86d",
       "revId": "d1630781ebaba01bcf4816d4356c4f6b295e64eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,30 @@
       "writtenOn": "2022-05-03T22:58:46Z",
       "side": 1,
       "message": "You can use UNIMPLEMENTED() here, which would make this pair of UNREACHABLES slightly easier to read.",
+      "range": {
+        "startLine": 5423,
+        "startChar": 4,
+        "endLine": 5423,
+        "endChar": 15
+      },
+      "revId": "d1630781ebaba01bcf4816d4356c4f6b295e64eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ba8c00_d7428dfe",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5423,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-04T05:20:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cef6aa18_2d104bf7",
       "range": {
         "startLine": 5423,
         "startChar": 4,
