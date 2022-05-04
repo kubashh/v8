@@ -273,6 +273,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7375b0a2_3d6faefc",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-04T09:07:04Z",
+      "side": 1,
+      "message": "Well InfoCellPair returns raw pointers, not handles, so this could do the same -- that would also be a bit more consistent, which is a plus. If this did return a pair of raw pointers, it would allow us to get rid of TryGetRootSharedFunctionInfo and be explicit that \"top-level exists\" \u003d\u003d \"top-level in cache\", which would be nice",
+      "parentUuid": "ce61c1d5_912e9b95",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 19
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3bca16c3_716af38f",
         "filename": "src/objects/compilation-cache-table.cc",
         "patchSetId": 9
@@ -355,6 +379,30 @@
       "side": 1,
       "message": "Here again, we have the trouble of sharing implementations between unrelated caches. The first value might be a SFI, but it also might not: it can be an integer counter for the eval cache or a FixedArray for the RegExp cache. I\u0027m not sure what name can capture all of those options in a somewhat readable way. I\u0027ve currently updated to PrimaryValueAt and EvalFeedbackValueAt, but I\u0027d welcome any further recommendations.",
       "parentUuid": "7774dc2e_a4a8ba3a",
+      "range": {
+        "startLine": 129,
+        "startChar": 16,
+        "endLine": 129,
+        "endChar": 28
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0b075a_42e95020",
+        "filename": "src/objects/compilation-cache-table.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-04T09:07:04Z",
+      "side": 1,
+      "message": "PrimaryValueAt makes sense, thanks.",
+      "parentUuid": "b61d781a_451f62ee",
       "range": {
         "startLine": 129,
         "startChar": 16,
