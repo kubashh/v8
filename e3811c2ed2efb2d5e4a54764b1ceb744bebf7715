@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae86389_30721217",
+        "filename": "src/heap/conservative-stack-visitor.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-05-04T08:51:48Z",
+      "side": 0,
+      "message": "I think object/page pinning is something we should keep for now.\nIIRC we still don\u0027t bailout of compaction when we have a stack, thus for full GCs we would (currently) need some way to tell the GC not to move objects reachable from stack.",
+      "range": {
+        "startLine": 43,
+        "startChar": 40,
+        "endLine": 43,
+        "endChar": 46
+      },
+      "revId": "e3811c2ed2efb2d5e4a54764b1ceb744bebf7715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
