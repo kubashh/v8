@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb1e4f50_e7262f9f",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-04T09:12:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d587dce5_8078a894",
+      "revId": "ff31ca051e859fd57f0d1079f68a04ea32f737ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98ebed4b_49b4b635",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-04T07:38:48Z",
       "side": 1,
       "message": "Also here; generally I\u0027m not certain this function should update the TieringState. We may want to move that to callers.",
+      "revId": "ff31ca051e859fd57f0d1079f68a04ea32f737ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "371aa086_4c203a0b",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-04T09:12:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98ebed4b_49b4b635",
       "revId": "ff31ca051e859fd57f0d1079f68a04ea32f737ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
