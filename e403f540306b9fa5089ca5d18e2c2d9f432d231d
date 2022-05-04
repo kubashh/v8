@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24d56284_b4a3bfca",
+        "filename": "src/heap/object-start-bitmap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-04T10:58:38Z",
+      "side": 1,
+      "message": "Not for this CL: Since this one was almost certainly copied from cppgc, can we generalize the cppgc version and put it in heap/base/ for reuse?",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "e403f540306b9fa5089ca5d18e2c2d9f432d231d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
