@@ -295,6 +295,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "186be7cd_fcff7ba1",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-04T17:03:59Z",
+      "side": 1,
+      "message": "Great points; there was some nice opportunity for simplification. I think that handlified values are generally safer in this case, since CompilationCacheScript::Lookup has multiple steps that can allocate. I\u0027ve updated the implementation to use handles most of the time and call a function to explicitly extract the raw values when necessary.\n\nBy the way, InfoCellPair does contain a Handle hidden within its IsCompiledScope, so the protection of the IsCompiledScope ends at the end of CompilationCacheEval::Lookup. I don\u0027t think that\u0027s a problem because Compiler::GetFunctionFromEval immediately establishes a new IsCompiledScope, but I thought it was somewhat interesting.",
+      "parentUuid": "7375b0a2_3d6faefc",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 19
+      },
+      "revId": "9dfee5fe0177bd06177a2e147a1dcf42b153d69d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bca16c3_716af38f",
