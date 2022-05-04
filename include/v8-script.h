@@ -80,6 +80,12 @@ class V8_EXPORT UnboundScript {
    */
   int GetLineNumber(int code_pos);
 
+  /**
+   * Returns zero based column number of the code_pos location in the script.
+   * -1 will be returned if no information available.
+   */
+  int GetColumnNumber(int code_pos);
+
   static const int kNoScriptId = 0;
 };
 
