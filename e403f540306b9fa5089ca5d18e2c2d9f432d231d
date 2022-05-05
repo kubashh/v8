@@ -56,6 +56,30 @@
       },
       "revId": "e403f540306b9fa5089ca5d18e2c2d9f432d231d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8cf3566_115ac689",
+        "filename": "src/heap/object-start-bitmap.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-05-05T10:09:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "24d56284_b4a3bfca",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "e403f540306b9fa5089ca5d18e2c2d9f432d231d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
