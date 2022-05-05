@@ -48,8 +48,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainMonthDay)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeAdd)
 /* Temporal #sec-temporal.plaindate.prototype.substract */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeSubtract)
-/* Temporal #sec-temporal.plaindate.prototype.with */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeWith)
 /* Temporal #sec-temporal.plaindate.prototype.until */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeUntil)
 /* Temporal #sec-temporal.plaindate.prototype.since */
@@ -238,8 +236,6 @@ TO_BE_IMPLEMENTED(TemporalInstantPrototypeToZonedDateTimeISO)
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthFrom)
 /* Temporal #sec-temporal.plainyearmonth.compare */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthCompare)
-/* Temporal #sec-temporal.plainyearmonth.prototype.with */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeWith)
 /* Temporal #sec-temporal.plainyearmonth.prototype.add */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeAdd)
 /* Temporal #sec-temporal.plainyearmonth.prototype.subtract */
@@ -264,8 +260,6 @@ TO_BE_IMPLEMENTED(TemporalPlainMonthDayFrom)
 /* There is no compare for PlainMonthDay. See
  * https://github.com/tc39/proposal-temporal/issues/1547 */
 
-/* Temporal #sec-temporal.plainmonthday.prototype.with */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeWith)
 /* Temporal #sec-temporal.plainmonthday.prototype.equals */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeEquals)
 /* Temporal #sec-temporal.plainmonthday.prototype.tostring */
@@ -516,6 +510,7 @@ TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainDate, DaysInYear, daysInYear)
 TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainDate, MonthsInYear, monthsInYear)
 TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainDate, InLeapYear, inLeapYear)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, WithCalendar, withCalendar)
+TEMPORAL_PROTOTYPE_METHOD2(PlainDate, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainDate)
 
@@ -605,6 +600,7 @@ TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainYearMonth, DaysInMonth, daysInMonth)
 TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainYearMonth, MonthsInYear,
                                        monthsInYear)
 TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainYearMonth, InLeapYear, inLeapYear)
+TEMPORAL_PROTOTYPE_METHOD2(PlainYearMonth, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainYearMonth)
 
@@ -622,6 +618,7 @@ BUILTIN(TemporalPlainMonthDayConstructor) {
 TEMPORAL_GET(PlainMonthDay, Calendar, calendar)
 TEMPORAL_GET_BY_FORWARD_CALENDAR(PlainMonthDay, MonthCode, monthCode)
 TEMPORAL_GET_BY_FORWARD_CALENDAR(PlainMonthDay, Day, day)
+TEMPORAL_PROTOTYPE_METHOD2(PlainMonthDay, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainMonthDay)
 
