@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6f9146_3a8c09ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-06T15:48:44Z",
+      "side": 1,
+      "message": "FYI, https://crrev.com/c/3629365 is the CL to move gin to the new typedef. It compiles locally, but of course the v8-side CL needs to land before the bots are happy.",
+      "revId": "0fdc7701c3aa0d3e2df52860bff768b46f3e4280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
