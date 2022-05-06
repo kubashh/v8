@@ -16,6 +16,24 @@
       "message": "If we remove this flag for scripts, that means that we might return the wrong value if FLAG_use_strict is dynamically modified (which some tests do). I\u0027m ok with removing the flag since it\u0027s mostly going to be false, but we should disable the compilation cache in case FLAG_use_strict is set to true.",
       "revId": "9d31f8663ad72fdf04d15a72d83b54a6ac33b640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38dba375_2096cc1b",
+        "filename": "src/codegen/compilation-cache.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-06T17:15:31Z",
+      "side": 0,
+      "message": "Interesting point, thanks! I\u0027ve re-added the LanguageMode paramater on PutScript and LookupScript, and updated those functions to do nothing if the LanguageMode is strict.",
+      "parentUuid": "7d4116e7_e939772a",
+      "revId": "9d31f8663ad72fdf04d15a72d83b54a6ac33b640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

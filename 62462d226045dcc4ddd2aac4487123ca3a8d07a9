@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0a1087_b016fc9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-06T17:15:31Z",
+      "side": 1,
+      "message": "Leszek, do you prefer this CL split up? I\u0027m happy to if you like, but I think at this point you\u0027ve already reviewed most of it, so splitting would likely increase the review burden.",
+      "parentUuid": "6cd0a145_a4f0849c",
+      "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d26ed557_e325635b",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-06T11:26:51Z",
       "side": 1,
       "message": "This isn\u0027t guaranteed if use_strict is dynamically modified?\nTo match the comment above we should not insert the script into the cache if FLAG_use_strict is true.",
+      "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7360dbb3_4a33004f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-06T17:15:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d26ed557_e325635b",
       "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
