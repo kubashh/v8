@@ -36,7 +36,8 @@
   'kraken/imaging-gaussian-blur': [PASS, SLOW],
   'octane/box2d': [PASS, SLOW],
   'octane/regexp': [PASS, SLOW],
-  'octane/typescript': [PASS, SLOW],
+  # BUG(v8:12445) adding FAIL until we remove flakes on NumFuzz.
+  'octane/typescript': [PASS, SLOW, FAIL],
 
   # https://crbug.com/v8/11905
   'kraken/stanford-crypto-pbkdf2': [PASS, SLOW],
