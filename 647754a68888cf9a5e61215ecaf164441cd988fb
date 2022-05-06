@@ -16,6 +16,23 @@
       "message": "Tobias, PTAL.\nPatrick for regexp.",
       "revId": "647754a68888cf9a5e61215ecaf164441cd988fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b751d18b_40492ded",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-05-06T12:36:26Z",
+      "side": 1,
+      "message": "regexp LGTM",
+      "revId": "647754a68888cf9a5e61215ecaf164441cd988fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
