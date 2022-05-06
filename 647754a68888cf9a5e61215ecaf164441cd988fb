@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f085c2af_b6e68ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-06T12:24:39Z",
+      "side": 1,
+      "message": "Tobias, PTAL.\nPatrick for regexp.",
+      "revId": "647754a68888cf9a5e61215ecaf164441cd988fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
