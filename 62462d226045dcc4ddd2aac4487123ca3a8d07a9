@@ -16,6 +16,40 @@
       "message": "Hello Toon, would you please take a look at src/heap and src/execution? The context for the changes in those files is the following comment from Leszek:\n\n\"unrelated to your CL, but since you\u0027re here -- it\u0027d be good to move CompilationCache::Age from being a custom call in the MarkCompactPrologue to using Heap::AddGCPrologueCallback\"",
       "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd0a145_a4f0849c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-06T11:26:51Z",
+      "side": 1,
+      "message": "This CL is fairly big and seems to mix a bunch of things. It makes sense to split this kind of CL up in pieces to simplify reviewing and increase reviewing velocity, while reducing risk.\n\nOtherwise the pieces you asked a review for look ok, so lgtm on those.",
+      "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d26ed557_e325635b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-06T11:26:51Z",
+      "side": 1,
+      "message": "This isn\u0027t guaranteed if use_strict is dynamically modified?\nTo match the comment above we should not insert the script into the cache if FLAG_use_strict is true.",
+      "revId": "62462d226045dcc4ddd2aac4487123ca3a8d07a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
