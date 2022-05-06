@@ -16,6 +16,24 @@
       "message": "Please say in the CL description what\u0027s different about the reland compared to the original CL that\u0027ll avoid the problems hit by the original.",
       "revId": "6f739cf68558a18f5257aa8981efb9b717e3f20c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "400dd21b_4185db9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-06T18:30:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "060af942_363a06c0",
+      "revId": "6f739cf68558a18f5257aa8981efb9b717e3f20c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
