@@ -110,6 +110,30 @@
       },
       "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49937ea6_7e8c2413",
+        "filename": "src/diagnostics/system-jit-win.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-09T14:20:37Z",
+      "side": 1,
+      "message": "If GetColumnNumber returns -1, that\u0027s invalid and we don\u0027t have a script and thus no source position, currently this maps to 0, which is probably treated as a valid source position by whoever processes this.\n\nBut let\u0027s deal with this another time.",
+      "parentUuid": "2376a7c9_90a3eb51",
+      "range": {
+        "startLine": 57,
+        "startChar": 79,
+        "endLine": 58,
+        "endChar": 20
+      },
+      "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
