@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "223ddd3b_0d65c7fd",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T16:00:38Z",
+      "side": 1,
+      "message": "Ah ok, I got the nesting wrong in that case. I suppose that\u0027s alright then.",
+      "parentUuid": "27053051_0c47455a",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4bcefe65_a5c29b1e",
         "filename": "src/ic/ic.cc",
         "patchSetId": 1
@@ -175,6 +193,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8880eede_4a5e60d7",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T16:00:38Z",
+      "side": 1,
+      "message": "What I mean is that we should just remove this condition entirely. We only check is_element because we don\u0027t (necessarily) have a name_ if we\u0027re in the is_element case. We should always return ACCESS_CHECK if it\u0027s needed.\n\nYou can\u0027t do `cross_origin_window.a \u003d function() {}`. That will throw an access violation.",
+      "parentUuid": "8a600dde_52deeb22",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
@@ -222,6 +258,24 @@
       "side": 1,
       "message": "To clarify the slow handler doesn\u0027t throw here (neither for fields nor for ordinary properties), it just loads/stores the property via a runtime call, because the access doesn\u0027t fail until the global is detached.",
       "parentUuid": "5ffe0c4b_9c485acf",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e805b8c_d62885c3",
+        "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T16:00:38Z",
+      "side": 1,
+      "message": "Ah I see. That\u0027s explicitly allowed because you _do_ have access. This isn\u0027t a cross-realm global because you\u0027re doing `createAllowCrossRealmAccess` above. Detach just \"navigates it away\" to one that doesn\u0027t provide access (equivalent of `Realm.create()`).\n\nAs long as the global object doesn\u0027t change it is alright to keep using the PropertyCell. It\u0027s not alright anymore after navigation/detach.",
+      "parentUuid": "b9778901_030b00ee",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
