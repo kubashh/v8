@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9f6a1c_696f7d10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1232049
+      },
+      "writtenOn": "2022-05-09T12:42:51Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "0ac156d482489de0b140ee48ebe8a430028f3294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04d8505_56239f25",
+        "filename": "src/logging/runtime-call-stats.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1232049
+      },
+      "writtenOn": "2022-05-09T12:42:51Z",
+      "side": 1,
+      "message": "Had to add --bypass-hooks to pass presubmit here",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 1
+      },
+      "revId": "0ac156d482489de0b140ee48ebe8a430028f3294",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
