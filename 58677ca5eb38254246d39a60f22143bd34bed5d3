@@ -54,6 +54,91 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d795bba_d13ffbc6",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "We should be able to drop this if since IsPrivateName implies IsPrivate. You could add a DCHECK(name-\u003eIsPrivate()) in the branch below though.",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bcefe65_a5c29b1e",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "It\u0027s a little weird to support both `IsNothing` _and_ `!FromJust`. What about just returning a `bool` instead of `Maybe\u003cbool\u003e`? The one RETURN_FAILURE case can just `return false;` as well.",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08bc63bb_282d672e",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "I presume ACCESSOR shouldn\u0027t ever happen?",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02df2376_fd058dcc",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "INTEGER_INDEXED_EXOTIC is UNREACHABLE",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb55a37_453cf826",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "Since we\u0027re changing this anyway, should we reconsider this entirely and just always do an access check? In the past we used private symbols to internally associate data with objects (which iiuc are now is_private_name), but now that this also applies to user-land private symbols, I\u0027m worried this will simply result in memory leaks. E.g.:\n\n class X extends function(o){ return o } {\n   constructor(o) { super(o) };\n   #a \u003d function() {};\n   static getX(o) { return o.#a }\n }\n new X(cross_origin_window)\n \nwill simply install a cross-origin function on the on the object, leaking its entire context...\n\nIf we exclude private names but include user-land private symbols, we probably throw away the benefit and expose the risk. This may need a spec-change though.",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
@@ -65,6 +150,24 @@
       "writtenOn": "2022-05-03T12:56:44Z",
       "side": 1,
       "message": "I have a question regarding this case: this currently hits HandleStoreICHandlerCase and then StoreGlobalIC_PropertyCellCase if the map of the receiver matches the cache (and didn\u0027t need access checks), though normal names in this case always go to the slow path. Is it okay to reuse the StoreGlobalIC_PropertyCellCase path here, or should we also just store the slow handler for stores that need access checks?",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ffe0c4b_9c485acf",
+        "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-09T09:38:57Z",
+      "side": 1,
+      "message": "Iiuc this is basically the case I\u0027m talking about above. I think it makes sense to throw here as well.\n\nIf we don\u0027t throw, we should probably install the property on the global proxy instead of the global object, which would change all of this. Otherwise navigating the iframe will cause the property to disappear. But I very much prefer to throw instead!",
+      "parentUuid": "80f79a74_59d89c88",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
