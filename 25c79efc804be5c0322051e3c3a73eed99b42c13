@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d85c091_abc3bf3c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1232049
+      },
+      "writtenOn": "2022-05-09T13:32:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7d156fb_810c1a8f",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 50
+      },
+      "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40c1d91c_22f9846b",
