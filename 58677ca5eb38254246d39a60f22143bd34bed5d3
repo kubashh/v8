@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27053051_0c47455a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-09T10:12:43Z",
+      "side": 1,
+      "message": "I think this is here because we still need to set use_ic to false below for private symbols (that are not private names)?",
+      "parentUuid": "4d795bba_d13ffbc6",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4bcefe65_a5c29b1e",
         "filename": "src/ic/ic.cc",
         "patchSetId": 1
@@ -139,6 +157,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a600dde_52deeb22",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-09T10:12:43Z",
+      "side": 1,
+      "message": "Do you mean that we should also fail the access checks for globals that are not detached? (in addition to changing this condition to just `is_element`, because that alone doesn\u0027t forbid this leak if the object is added while the global is still attached) Then yeah that would entail a spec change, I think.\n\nSeparately, is this specific to the fields? Doesn\u0027t it also leak if one just does `cross_origin_window.a \u003d function() {}` while the `cross_origin_window` is not yet detached?",
+      "parentUuid": "ffb55a37_453cf826",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
@@ -168,6 +204,24 @@
       "side": 1,
       "message": "Iiuc this is basically the case I\u0027m talking about above. I think it makes sense to throw here as well.\n\nIf we don\u0027t throw, we should probably install the property on the global proxy instead of the global object, which would change all of this. Otherwise navigating the iframe will cause the property to disappear. But I very much prefer to throw instead!",
       "parentUuid": "80f79a74_59d89c88",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9778901_030b00ee",
+        "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-09T10:12:43Z",
+      "side": 1,
+      "message": "To clarify the slow handler doesn\u0027t throw here (neither for fields nor for ordinary properties), it just loads/stores the property via a runtime call, because the access doesn\u0027t fail until the global is detached.",
+      "parentUuid": "5ffe0c4b_9c485acf",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
