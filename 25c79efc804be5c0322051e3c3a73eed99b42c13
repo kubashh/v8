@@ -16,6 +16,52 @@
       "message": "I need one more change to make this build, but if I make that change presubmit fails with the following message:\n\nhttps://paste.googleplex.com/6109461774073856\n\nThe last step needed is to add V(UnboundScript_GetColumnNumber) here:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/logging/runtime-call-stats.h;l\u003d284?q\u003dUnboundScript_GetId\u0026ss\u003dchromium\n",
       "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d156fb_810c1a8f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2064,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-09T08:54:24Z",
+      "side": 1,
+      "message": "Nice 👍, could you add a test for this in `test/unittest/api/v8-script-unittest.cc` (sorry the infra isn\u0027t fully there yet as we\u0027re migrating)\n\n\nTake `v8-object-unittest.cc` as a template (typos pending...):\n```\n  using ScriptTest \u003d TestWithContext;\n  \n  TEST_F(ScriptTest, UnboundScriptPosition) {\n    const char* url \u003d \"http://www.foo.com/foo.js\";\n    v8::ScriptOrigin origin(isolate(), NewString(url), 13, 0);\n    v8::ScriptCompiler::Source script_source(NewString(\"var foo;\"), origin);\n    \n    Local\u003cScript\u003e script \u003d\n      v8::ScriptCompiler::Compile(env.local(), \u0026script_source).ToLocalChecked();\n    EXPECT_EQ(ValueEqualsString(isolate, script-\u003eGetUnboundScript()-\u003eGetScriptName(),\n                          url));\n    Local\u003cUnboundScript\u003e unbound_script \u003d  script-\u003eGetUnboundScript();\n    \n    int line_number \u003d unbound_script)-\u003eGetLineNumber();\n    EXPECT_EQ(13, line_number);\n    int column_number \u003d unbound_script-\u003eGetColumnNumber();\n    EXPECT_EQ(0, line_number);\n  }\n```\n\nYou can also check https://chromium-review.googlesource.com/c/v8/v8/+/3596443 on where you add the new unittest file to the BUILD.gn files",
+      "range": {
+        "startLine": 2064,
+        "startChar": 0,
+        "endLine": 2064,
+        "endChar": 50
+      },
+      "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c1d91c_22f9846b",
+        "filename": "src/diagnostics/system-jit-win.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-09T08:54:24Z",
+      "side": 1,
+      "message": "I just realised that this is probably not needed in both cases, since if `GetColumnNumber` or `GetLineNumber` returns -1 it\u0027s also invalid (aka. unknown position).",
+      "range": {
+        "startLine": 57,
+        "startChar": 79,
+        "endLine": 58,
+        "endChar": 20
+      },
+      "revId": "25c79efc804be5c0322051e3c3a73eed99b42c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
