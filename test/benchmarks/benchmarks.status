@@ -104,6 +104,12 @@
   'octane/typescript': [SKIP],
 }],  # 'gc_fuzzer'
 
+##############################################################################
+['gc_fuzzer or deopt_fuzzer', {
+  # BUG(v8:12445) adding FAIL until we remove flakes on NumFuzz.
+  'octane/typescript': [SKIP],
+}], # gc_fuzzer or deopt_fuzzer
+
 ['predictable', {
   # https://crbug.com/v8/8537
   'octane/typescript': [SKIP],
