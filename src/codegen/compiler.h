@@ -538,7 +538,8 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
 
   MaybeHandle<SharedFunctionInfo> FinalizeScript(
       Isolate* isolate, Handle<String> source,
-      const ScriptDetails& script_details);
+      const ScriptDetails& script_details,
+      MaybeHandle<Script> maybe_cached_script);
 
   bool FinalizeFunction(Isolate* isolate, Compiler::ClearExceptionFlag flag);
 

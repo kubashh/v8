@@ -23844,7 +23844,7 @@ TEST(StreamingWithHarmonyScopes) {
 }
 
 namespace {
-void StreamingWithIsolateScriptCache(bool run_gc) {
+void StreamingWithIsolateScriptCache(bool run_gc, bool stream_second) {
   i::FLAG_expose_gc = true;
   const char* chunks[] = {"'use strict'; (function test() { return 13; })",
                           nullptr};
@@ -23896,7 +23896,7 @@ void StreamingWithIsolateScriptCache(bool run_gc) {
   first_function = i::Handle<i::JSFunction>::cast(
       v8::Utils::OpenHandle(*first_function_untyped));
 
-  // Run the same script in another Context without streaming.
+  // Run the same script in another Context.
   {
     LocalContext env;
 
@@ -23908,10 +23908,24 @@ void StreamingWithIsolateScriptCache(bool run_gc) {
       CompileRun("gc();");
     }
 
-    v8::ScriptCompiler::Source script_source(v8_str(full_source), origin);
-    Local<Script> script =
-        v8::ScriptCompiler::Compile(env.local(), &script_source)
-            .ToLocalChecked();
+    Local<Script> script;
+    if (stream_second) {
+      v8::ScriptCompiler::StreamedSource source(
+          std::make_unique<TestSourceStream>(chunks),
+          v8::ScriptCompiler::StreamedSource::ONE_BYTE);
+      v8::ScriptCompiler::ScriptStreamingTask* task =
+          v8::ScriptCompiler::StartStreaming(isolate, &source,
+                                             v8::ScriptType::kClassic);
+      StreamerThread::StartThreadForTaskAndJoin(task);
+      delete task;
+      script = v8::ScriptCompiler::Compile(env.local(), &source,
+                                           v8_str(full_source), origin)
+                   .ToLocalChecked();
+    } else {
+      v8::ScriptCompiler::Source script_source(v8_str(full_source), origin);
+      script = v8::ScriptCompiler::Compile(env.local(), &script_source)
+                   .ToLocalChecked();
+    }
     v8::Local<Value> result(script->Run(env.local()).ToLocalChecked());
     second_function =
         i::Handle<i::JSFunction>::cast(v8::Utils::OpenHandle(*result));
@@ -23927,19 +23941,21 @@ void StreamingWithIsolateScriptCache(bool run_gc) {
 // is inserted into the isolate script cache, a non-streamed script with
 // identical origin can reuse that data.
 TEST(StreamingWithIsolateScriptCache) {
-  StreamingWithIsolateScriptCache(false);
+  StreamingWithIsolateScriptCache(false, false);
 }
 
 // Variant of the above test which evicts the root SharedFunctionInfo from the
 // Isolate script cache but still reuses the same Script.
 TEST(StreamingWithIsolateScriptCacheClearingRootSFI) {
-  // TODO(v8:12808): Remove this check once background compilation is capable of
-  // reusing an existing Script.
-  if (v8::internal::FLAG_stress_background_compile) {
-    return;
-  }
+  StreamingWithIsolateScriptCache(true, false);
+}
 
-  StreamingWithIsolateScriptCache(true);
+// Two more variants which stream the second load also.
+TEST(StreamingWithIsolateScriptCacheStreamingSecondLoad) {
+  StreamingWithIsolateScriptCache(false, true);
+}
+TEST(StreamingWithIsolateScriptCacheClearingRootSFIStreamingSecondLoad) {
+  StreamingWithIsolateScriptCache(true, true);
 }
 
 TEST(CodeCache) {
