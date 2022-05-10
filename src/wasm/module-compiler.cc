@@ -2242,9 +2242,6 @@ void AsyncCompileJob::FinishCompile(bool is_after_cache_hit) {
   bool is_after_deserialization = !module_object_.is_null();
   auto compilation_state = Impl(native_module_->compilation_state());
   if (!is_after_deserialization) {
-    if (stream_) {
-      stream_->NotifyNativeModuleCreated(native_module_);
-    }
     PrepareRuntimeObjects();
   }
 
@@ -2655,6 +2652,7 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
     if (streaming) {
       // Streaming compilation already checked for cache hits.
       job->CreateNativeModule(module_, code_size_estimate_);
+      job->stream_->NotifyNativeModuleCreated(job->native_module_);
     } else if (job->GetOrCreateNativeModule(std::move(module_),
                                             code_size_estimate_)) {
       job->FinishCompile(true);
@@ -3088,6 +3086,7 @@ bool AsyncStreamingProcessor::Deserialize(
   job_->module_object_ =
       job_->isolate_->global_handles()->Create(*result.ToHandleChecked());
   job_->native_module_ = job_->module_object_->shared_native_module();
+  job_->stream_->NotifyNativeModuleCreated(job_->native_module_);
   job_->wire_bytes_ = ModuleWireBytes(job_->native_module_->wire_bytes());
   job_->FinishCompile(false);
   return true;
