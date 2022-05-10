@@ -964,6 +964,8 @@ void MarkCompactCollector::AbortCompaction() {
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
       RememberedSet<OLD_TO_CODE>::ClearAll(heap());
     }
+    CodePageHeaderModificationScope rwx_write_scope(
+        "Changing Code page flags requires write access to the page header");
     for (Page* p : evacuation_candidates_) {
       p->ClearEvacuationCandidate();
     }

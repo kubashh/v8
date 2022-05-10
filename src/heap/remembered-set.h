@@ -277,6 +277,8 @@ class RememberedSet : public AllStatic {
   static void ClearAll(Heap* heap) {
     STATIC_ASSERT(type == OLD_TO_OLD || type == OLD_TO_CODE);
     OldGenerationMemoryChunkIterator it(heap);
+    CodePageHeaderModificationScope rwx_write_scope(
+        "Changing remembered sets requires write access to the page header");
     MemoryChunk* chunk;
     while ((chunk = it.next()) != nullptr) {
       chunk->ReleaseSlotSet<OLD_TO_OLD>();
