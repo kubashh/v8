@@ -16,6 +16,23 @@
       "message": "PTAL. This can land after the chromium LKGR moved after the gin CL.",
       "revId": "0ab0f7fa61c0e3a298657b9612973438f8655608",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64ebb5e1_b8339821",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-10T14:29:19Z",
+      "side": 1,
+      "message": "Lutz, FYI, I plan to land this later today, when chromium LKGR includes https://crrev.com/c/3629365. This will allow us to update the OOMErrorCallback on M-104 (V8 10.4) to include more details about OOMs.\nThis would only cause problems if that chromium side CL would need to be reverted, which is unlikely.",
+      "revId": "0ab0f7fa61c0e3a298657b9612973438f8655608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
