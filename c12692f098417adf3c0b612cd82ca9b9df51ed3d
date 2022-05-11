@@ -138,6 +138,24 @@
       "parentUuid": "a1cc23aa_cc598dcd",
       "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cfda5f9_9decf192",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-05-11T06:35:20Z",
+      "side": 1,
+      "message": "I checked and from staring at the code at least it looks fine. Done.",
+      "parentUuid": "a5994380_31c9a778",
+      "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
