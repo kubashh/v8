@@ -120,6 +120,24 @@
       "message": "Shouldn\u0027t we do that only in case the `restartFrame()` call below succeeds?",
       "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5994380_31c9a778",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-05-11T06:28:14Z",
+      "side": 1,
+      "message": "I\u0027m unsure. All other call-sites call it directly before the `continueProgram` call. Is there an ordering dependency there that \"releaseObjectGroup\" must be called before \"continueProgram\"?",
+      "parentUuid": "a1cc23aa_cc598dcd",
+      "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
