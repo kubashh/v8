@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a421dc4_b808d7df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-11T04:42:56Z",
+      "side": 1,
+      "message": "adding Shu wrt to the private name semantics in the global proxies (AFAICT [from the spec](https://html.spec.whatwg.org/multipage/window-object.html#the-windowproxy-exotic-object) there are no cross-origin checks for the private names in the global proxies at this moment).",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d795bba_d13ffbc6",
@@ -205,6 +222,24 @@
       "side": 1,
       "message": "What I mean is that we should just remove this condition entirely. We only check is_element because we don\u0027t (necessarily) have a name_ if we\u0027re in the is_element case. We should always return ACCESS_CHECK if it\u0027s needed.\n\nYou can\u0027t do `cross_origin_window.a \u003d function() {}`. That will throw an access violation.",
       "parentUuid": "8a600dde_52deeb22",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "456dab57_8a501324",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-11T04:42:56Z",
+      "side": 1,
+      "message": "I see, to be clear, is this the semantics that you are looking for?\n\n```\nclass X extends function(o){ return o } {\n  constructor(o) { super(o) };\n  #a \u003d function() {};\n  static getX(o) { return o.#a }\n}\n\nconst realm2 \u003d Realm.create();\nconst g \u003d Realm.global(realm2);\n\ng.x \u003d function() {}  // throws\nnew X(g);  // throws\ng[%CreatePrivateSymbol(\u0027x\u0027)] \u003d 1;  // throws\n```\n\nBefore this patch, neither `new X(g)` nor `g[%CreatePrivateSymbol(\u0027x\u0027)] \u003d 1` throws. This patch makes `new X(g)` throw, but `g[%CreatePrivateSymbol(\u0027x\u0027)] \u003d 1` still passes. I think making `g[%CreatePrivateSymbol(\u0027x\u0027)] \u003d 1` throw doesn\u0027t need a spec change (because it\u0027s still going through the [[[Set]] internal method](https://html.spec.whatwg.org/multipage/window-object.html#windowproxy-set)), while `new X(g)` may need one - AFAICT it\u0027s allowed in the HTML spec at this point, since the HTML spec does not provide additional checks for the PrivateSet or PrivateGet methods from ecma262.",
+      "parentUuid": "8880eede_4a5e60d7",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
