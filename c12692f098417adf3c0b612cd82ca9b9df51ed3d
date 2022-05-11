@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a1f3d5b_b732c09c",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-05-11T06:58:59Z",
+      "side": 1,
+      "message": "I see, thanks for the explanation!",
+      "parentUuid": "efbcafcd_db8a663a",
+      "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1cc23aa_cc598dcd",
