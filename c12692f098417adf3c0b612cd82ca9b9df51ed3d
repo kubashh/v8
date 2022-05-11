@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "093e0480_72ede63e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-05-11T06:13:48Z",
+      "side": 1,
+      "message": "LGTM with comment",
+      "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f757b8f_e3d328ce",
@@ -84,6 +101,23 @@
       "side": 1,
       "message": "The `restartFrame` command currently always returns with an \"not implemented\" error. We want to preserve this behavior for existing clients. So to get the new functionality you have to provide the `mode` parameter.\n\nNow, we use `mode`, as opposed to e.g. a boolean flag, because we might extend the \"follow-up behavior\" later. So in addition of offering to immediately pause at the beginning of the restarted function, we might offer a `Continue` as well as  `StepInto`. `Continue` would restart the frame as usual, but not pause in the beginning. Maybe `Pause` would be a better name than `StepInto`.",
       "parentUuid": "4e61b694_ef1bddb9",
+      "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1cc23aa_cc598dcd",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-05-11T06:13:48Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we do that only in case the `restartFrame()` call below succeeds?",
       "revId": "c12692f098417adf3c0b612cd82ca9b9df51ed3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
