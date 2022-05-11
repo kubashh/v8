@@ -246,6 +246,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c55045ba_512c39fb",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-11T09:13:39Z",
+      "side": 1,
+      "message": "I\u0027m not sure what internal uses of CreatePrivateSymbol are that would break. The one thing that comes to mind is that weakmaps and private symbols were seen as interchangeable. This makes that not be the case for access checked objects. I\u0027m personally fine with that ...  The alternatives I can think of don\u0027t really seem appealing. (Do we want private symbols installed from the outside to disappear as an iframe navigations? Otherwise, how do we avoid memory leaks?)\n\nIf this breaks we could use that fact though. Instead of actually installing the property we could have a weak map to keep track of such associations. That at least could help avoid memory leaks perhaps? (Store the association in the only place that can access the association)",
+      "parentUuid": "456dab57_8a501324",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
