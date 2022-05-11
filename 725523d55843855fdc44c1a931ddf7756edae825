@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aeec2dc_2dabd2ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-11T15:53:21Z",
+      "side": 1,
+      "message": "Hello again Leszek,\n\nWould you please take a look at this change? I first tried removing CompilationSubCache as you suggested, but found that CompilationCacheScript and CompilationCacheEval required several precisely identical member functions. In this change, I propose that CompilationCacheScript and CompilationCacheEval can share a base class, but CompilationCacheRegExp does not share anything with the others. I\u0027m open to other options if you prefer something different.\n\nThanks!",
+      "revId": "725523d55843855fdc44c1a931ddf7756edae825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
