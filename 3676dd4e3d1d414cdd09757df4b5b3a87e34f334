@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dab581fe_e3cbe9fd",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-11T22:10:50Z",
+      "side": 1,
+      "message": "The `Subslice` actually does this, just need to not use `unreachable` :)",
+      "parentUuid": "96d274d0_e61ca4f4",
+      "range": {
+        "startLine": 707,
+        "startChar": 7,
+        "endLine": 707,
+        "endChar": 27
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1803405b_c60f71e9",
         "filename": "src/builtins/wasm.tq",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-11T22:01:31Z",
       "side": 1,
       "message": "why \"OffHeap\"? WasmArrays are on-heap.",
+      "range": {
+        "startLine": 712,
+        "startChar": 31,
+        "endLine": 712,
+        "endChar": 51
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0909bdb8_ab7287b4",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-11T22:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1803405b_c60f71e9",
       "range": {
         "startLine": 712,
         "startChar": 31,
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-11T22:01:31Z",
       "side": 1,
       "message": "here too: you\u0027ve just allocated this on-heap!",
+      "range": {
+        "startLine": 737,
+        "startChar": 31,
+        "endLine": 737,
+        "endChar": 53
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b174a8_3693eb4f",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-11T22:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b557365f_d6611c96",
       "range": {
         "startLine": 737,
         "startChar": 31,
