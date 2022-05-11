@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d274d0_e61ca4f4",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-11T22:01:31Z",
+      "side": 1,
+      "message": "Should probably also check that `start` and `start+count` are in bounds.",
+      "range": {
+        "startLine": 707,
+        "startChar": 7,
+        "endLine": 707,
+        "endChar": 27
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1803405b_c60f71e9",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-11T22:01:31Z",
+      "side": 1,
+      "message": "why \"OffHeap\"? WasmArrays are on-heap.",
+      "range": {
+        "startLine": 712,
+        "startChar": 31,
+        "endLine": 712,
+        "endChar": 51
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b557365f_d6611c96",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-11T22:01:31Z",
+      "side": 1,
+      "message": "here too: you\u0027ve just allocated this on-heap!",
+      "range": {
+        "startLine": 737,
+        "startChar": 31,
+        "endLine": 737,
+        "endChar": 53
+      },
+      "revId": "3676dd4e3d1d414cdd09757df4b5b3a87e34f334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
