@@ -2796,6 +2796,10 @@ void WasmJs::Install(Isolate* isolate, bool exposed_on_global_object) {
   InstallFunc(isolate, webassembly, "compile", WebAssemblyCompile, 1);
   InstallFunc(isolate, webassembly, "validate", WebAssemblyValidate, 1);
   InstallFunc(isolate, webassembly, "instantiate", WebAssemblyInstantiate, 1);
+  SimpleInstallFunction(isolate, webassembly, "convertArrayToString",
+                        Builtin::kWasmConvertArrayToString, 0, true);
+  SimpleInstallFunction(isolate, webassembly, "convertStringToArray",
+                        Builtin::kWasmConvertStringToArray, 0, true);
 
   if (FLAG_wasm_test_streaming) {
     isolate->set_wasm_streaming_callback(WasmStreamingCallbackForTesting);

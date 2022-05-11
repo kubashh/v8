@@ -315,7 +315,7 @@ builtin WasmAllocateStructWithRtt(rtt: Map): HeapObject {
 
 macro WasmAllocateArray(
     rtt: Map, length: uint32, elementSize: uint32,
-    initializationMode: constexpr InitializationMode): HeapObject {
+    initializationMode: constexpr InitializationMode): WasmArray {
   // instanceSize = RoundUp(elementSize * length, kObjectAlignment)
   //              + WasmArray::kHeaderSize
   const instanceSize: intptr =
@@ -328,7 +328,7 @@ macro WasmAllocateArray(
   // TODO(ishell): consider removing properties_or_hash field from WasmObjects.
   %RawDownCast<WasmArray>(result).properties_or_hash = kEmptyFixedArray;
   %RawDownCast<WasmArray>(result).length = length;
-  return result;
+  return %RawDownCast<WasmArray>(result);
 }
 
 builtin WasmAllocateArray_Uninitialized(
@@ -662,5 +662,99 @@ builtin ThrowWasmTrapArrayOutOfBounds(): JSAny {
 
 builtin ThrowWasmTrapArrayTooLarge(): JSAny {
   tail WasmTrap(SmiConstant(MessageTemplate::kWasmTrapArrayTooLarge));
+}
+
+macro TryNumberToIntptr(value: JSAny): intptr labels Failure {
+  typeswitch (value) {
+    case (s: Smi): {
+      return Convert<intptr>(s);
+    }
+    case (hn: HeapNumber): deferred {
+      let value = Convert<float64>(hn);
+      if (Float64IsNaN(value)) goto Failure;
+      value = math::Float64Trunc(value);
+      return ChangeFloat64ToIntPtr(value);
+    }
+    case (JSAny): deferred {
+      goto Failure;
+    }
+  }
+}
+
+macro WasmTypeInfo(map: Map): WasmTypeInfo {
+  return UnsafeCast<WasmTypeInfo>(
+      map.constructor_or_back_pointer_or_native_context);
+}
+
+const kWasmI16ValueType: constexpr int32
+    generates 'wasm::ValueType::Primitive(wasm::kI16).bit_field()';
+
+macro IsWord16WasmArrayMap(map: Map): bool {
+  const arrayTypePtr: RawPtr<int32> =
+      %RawDownCast<RawPtr<int32>>(WasmTypeInfo(map).foreign_address_ptr);
+  const arrayTypeRef: &int32 =
+      torque_internal::unsafe::NewOffHeapReference(arrayTypePtr);
+  return *arrayTypeRef == kWasmI16ValueType;
+}
+
+transitioning javascript builtin WasmConvertArrayToString(
+    js-implicit context: NativeContext)(
+    array: JSAny, start: JSAny, count: JSAny): JSAny {
+  const start = TryNumberToIntptr(start) otherwise return Undefined;
+  const count = TryNumberToIntptr(count) otherwise return Undefined;
+
+  const array = Cast<WasmArray>(array) otherwise return Undefined;
+  if (!IsWord16WasmArrayMap(array.map)) return Undefined;
+  const arrayContentStart: RawPtr<char16> = %RawDownCast<RawPtr<char16>>(
+      torque_internal::unsafe::GCUnsafeReferenceToRawPtr(
+          array, kWasmArrayHeaderSize));
+  const arrayContent: ConstSlice<char16> =
+      torque_internal::unsafe::NewOffHeapConstSlice(
+          arrayContentStart, Convert<intptr>(array.length));
+
+  return AllocateSeqTwoByteString(
+      array.length,
+      (Subslice(arrayContent, start, count) otherwise unreachable).Iterator());
+}
+
+transitioning javascript builtin WasmConvertStringToArray(
+    js-implicit context: NativeContext)(
+    string: JSAny, sampleArray: JSAny): JSAny {
+  const sampleArray = Cast<WasmArray>(sampleArray) otherwise return Undefined;
+  const arrayMap = sampleArray.map;
+  if (!IsWord16WasmArrayMap(arrayMap)) return Undefined;
+
+  const string = Cast<String>(string) otherwise return Undefined;
+  const length = string.length;
+
+  const result = WasmAllocateArray(
+      arrayMap, Unsigned(length), 2, InitializationMode::kUninitialized);
+
+  const arrayContentStart: RawPtr<char16> = %RawDownCast<RawPtr<char16>>(
+      torque_internal::unsafe::GCUnsafeReferenceToRawPtr(
+          result, kWasmArrayHeaderSize));
+  const arrayContent: MutableSlice<char16> =
+      torque_internal::unsafe::NewOffHeapMutableSlice(
+          arrayContentStart, Convert<intptr>(length));
+
+  try {
+    StringToSlice(string) otherwise OneByte, TwoByte;
+  } label OneByte(slice: ConstSlice<char8>) {
+    let fromIt = slice.Iterator();
+    let toIt = arrayContent.Iterator();
+    while (true) {
+      let toRef = toIt.NextReference() otherwise break;
+      *toRef = %RawDownCast<char16>(Convert<uint16>(fromIt.NextNotEmpty()));
+    }
+  } label TwoByte(slice: ConstSlice<char16>) {
+    let fromIt = slice.Iterator();
+    let toIt = arrayContent.Iterator();
+    while (true) {
+      let toRef = toIt.NextReference() otherwise break;
+      *toRef = fromIt.NextNotEmpty();
+    }
+  }
+
+  return result;
 }
 }

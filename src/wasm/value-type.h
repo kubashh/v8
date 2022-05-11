@@ -550,6 +550,8 @@ class ValueType {
   static constexpr int kKindBits = 5;
   static constexpr int kHeapTypeBits = 20;
 
+  uint32_t bit_field() const { return bit_field_; }
+
  private:
   // {hash_value} directly reads {bit_field_}.
   friend size_t hash_value(ValueType type);
