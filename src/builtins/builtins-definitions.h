@@ -364,6 +364,9 @@ namespace internal {
   /* ES6 #sec-array.prototype.fill */                                          \
   CPP(ArrayPrototypeFill)                                                      \
   /* ES7 #sec-array.prototype.includes */                                      \
+  TFS(ArrayIncludesPackedSmi, kElements, kSearchElement, kLength, kFromIndex)  \
+  TFS(ArrayIncludesPackedObject, kElements, kSearchElement, kLength,           \
+      kFromIndex)                                                              \
   TFS(ArrayIncludesSmiOrObject, kElements, kSearchElement, kLength,            \
       kFromIndex)                                                              \
   TFS(ArrayIncludesPackedDoubles, kElements, kSearchElement, kLength,          \
@@ -372,6 +375,9 @@ namespace internal {
       kFromIndex)                                                              \
   TFJ(ArrayIncludes, kDontAdaptArgumentsSentinel)                              \
   /* ES6 #sec-array.prototype.indexof */                                       \
+  TFS(ArrayIndexOfPackedSmi, kElements, kSearchElement, kLength, kFromIndex)   \
+  TFS(ArrayIndexOfPackedObject, kElements, kSearchElement, kLength,            \
+      kFromIndex)                                                              \
   TFS(ArrayIndexOfSmiOrObject, kElements, kSearchElement, kLength, kFromIndex) \
   TFS(ArrayIndexOfPackedDoubles, kElements, kSearchElement, kLength,           \
       kFromIndex)                                                              \
