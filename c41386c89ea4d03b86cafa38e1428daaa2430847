@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "010849c4_9eededfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-12T15:34:05Z",
+      "side": 1,
+      "message": "This generates some nasty code for now, since we don\u0027t know what registers to save (and thus save all of them).",
+      "revId": "c41386c89ea4d03b86cafa38e1428daaa2430847",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
