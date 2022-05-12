@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7956d3f1_f18c160d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-05-12T15:12:40Z",
+      "side": 1,
+      "message": "ptal.\nI wanted to make it PagedSpace::Verify const because it is called from PagedNewSpace::Verify which is also const. The other Verify* method are just a cleanup.",
+      "revId": "e2a2f1ad385631f26c77ef5d602a08eef4aba2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aaaef9c_09f924c0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4791,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-05-12T15:12:40Z",
+      "side": 1,
+      "message": "Ideally I would make this one const as well so that Verify* methods just verify and don\u0027t change anything, but I still need to call `RefillFreeList` somewhere",
+      "range": {
+        "startLine": 4791,
+        "startChar": 11,
+        "endLine": 4791,
+        "endChar": 49
+      },
+      "revId": "e2a2f1ad385631f26c77ef5d602a08eef4aba2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
