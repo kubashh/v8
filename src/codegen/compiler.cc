@@ -52,6 +52,7 @@
 #include "src/objects/js-function-inl.h"
 #include "src/objects/map.h"
 #include "src/objects/object-list-macros.h"
+#include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/string.h"
 #include "src/parsing/parse-info.h"
@@ -68,6 +69,9 @@
 #include "src/maglev/maglev-concurrent-dispatcher.h"
 #include "src/maglev/maglev.h"
 #endif  // V8_ENABLE_MAGLEV
+
+// Has to be the last include (doesn't have include guards):
+#include "src/objects/object-macros.h"
 
 namespace v8 {
 namespace internal {
@@ -1749,9 +1753,161 @@ void BackgroundCompileTask::Run(
   persistent_handles_ = isolate->heap()->DetachPersistentHandles();
 }
 
+class ScriptMerger final : public ObjectVisitor {
+ public:
+  // old_script is a pre-existing script from the compilation cache.
+  // new_script is a newly compiled copy of the same script.
+  // This function merges compilation artifacts from new_script into old_script
+  // so that old_script ends up with as many compiled SharedFunctionInfos as
+  // possible. Returns the top-level SharedFunctionInfo to use.
+  static SharedFunctionInfo MergeScripts(Isolate* isolate, Script old_script,
+                                         Script new_script) {
+    // The new script should provide a top-level SharedFunctionInfo. This way,
+    // we can guarantee there is always something to return.
+    DCHECK(new_script.shared_function_infos()
+               .Get(kFunctionLiteralIdTopLevel)
+               .IsWeak());
+
+    ScriptMerger merger(isolate);
+    merger.MergeScriptsImpl(old_script, new_script);
+
+    MaybeObject maybe_toplevel_sfi =
+        old_script.shared_function_infos().Get(kFunctionLiteralIdTopLevel);
+    CHECK(maybe_toplevel_sfi.IsWeak());
+    return SharedFunctionInfo::cast(
+        maybe_toplevel_sfi.GetHeapObjectAssumeWeak());
+  }
+
+  // ObjectVisitor implementation:
+  void VisitPointers(HeapObject host, ObjectSlot start,
+                     ObjectSlot end) override {
+    for (ObjectSlot current = start; current != end; ++current) {
+      Object obj = current.load(isolate_);
+      if (obj.IsHeapObject()) {
+        HeapObject heap_obj = HeapObject::cast(obj);
+        HeapObject forward_obj = QueueVisitOrGetForwardingPointer(heap_obj);
+        if (!forward_obj.is_null()) {
+          current.store(forward_obj);
+          CONDITIONAL_WRITE_BARRIER(
+              host, static_cast<int>(current.address() - host.address()),
+              forward_obj, UPDATE_WRITE_BARRIER);
+        }
+      }
+    }
+  }
+  void VisitPointers(HeapObject host, MaybeObjectSlot start,
+                     MaybeObjectSlot end) override {
+    for (MaybeObjectSlot current = start; current != end; ++current) {
+      MaybeObject maybe_obj = current.load(isolate_);
+      HeapObject obj;
+      bool is_weak = maybe_obj.IsWeak();
+      if (maybe_obj.GetHeapObject(isolate_, &obj)) {
+        HeapObject forward_obj = QueueVisitOrGetForwardingPointer(obj);
+        if (!forward_obj.is_null()) {
+          MaybeObject value = MaybeObject::FromObject(forward_obj);
+          if (is_weak) value = MaybeObject::MakeWeak(value);
+          current.store(value);
+          CONDITIONAL_WEAK_WRITE_BARRIER(
+              host, static_cast<int>(current.address() - host.address()), value,
+              is_weak ? UPDATE_WEAK_WRITE_BARRIER : UPDATE_WRITE_BARRIER);
+        }
+      }
+    }
+  }
+
+  // The object graph for a newly compiled Script shouldn't yet contain any
+  // Code. If any of these functions are called, then that would indicate that
+  // the graph was not disjoint from the rest of the heap as expected.
+  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+    UNREACHABLE();
+  }
+  void VisitCodeTarget(Code host, RelocInfo* rinfo) override { UNREACHABLE(); }
+  void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override {
+    UNREACHABLE();
+  }
+
+ private:
+  explicit ScriptMerger(Isolate* isolate) : isolate_(isolate) {}
+
+  void MergeScriptsImpl(Script old_script, Script new_script) {
+    // Iterate the SFI lists on both Scripts to set up the forwarding table and
+    // copy relevant data from the new script to the old script.
+    Forward(new_script, old_script);
+    CHECK_EQ(old_script.shared_function_infos().length(),
+             new_script.shared_function_infos().length());
+    for (int i = 0; i < old_script.shared_function_infos().length(); ++i) {
+      MaybeObject maybe_new_sfi = new_script.shared_function_infos().Get(i);
+      if (maybe_new_sfi.IsWeak()) {
+        SharedFunctionInfo new_sfi =
+            SharedFunctionInfo::cast(maybe_new_sfi.GetHeapObjectAssumeWeak());
+        MaybeObject maybe_old_sfi = old_script.shared_function_infos().Get(i);
+        if (maybe_old_sfi.IsWeak()) {
+          // The old script and the new script both have SharedFunctionInfos for
+          // this function literal.
+          SharedFunctionInfo old_sfi =
+              SharedFunctionInfo::cast(maybe_old_sfi.GetHeapObjectAssumeWeak());
+          Forward(new_sfi, old_sfi);
+          if (!old_sfi.is_compiled() && new_sfi.is_compiled()) {
+            // Copy the compiled data from the new SFI to the old SFI.
+            Object function_data = new_sfi.function_data(kAcquireLoad);
+            old_sfi.set_function_data(function_data, kReleaseStore);
+            if (function_data.IsHeapObject()) {
+              QueueVisitOrGetForwardingPointer(HeapObject::cast(function_data));
+            }
+            FeedbackMetadata feedback_metadata = new_sfi.feedback_metadata();
+            old_sfi.set_feedback_metadata(feedback_metadata, kReleaseStore);
+            QueueVisitOrGetForwardingPointer(feedback_metadata);
+          }
+        } else {
+          // The old script didn't have a SharedFunctionInfo for this function
+          // literal, so it can use the new SharedFunctionInfo.
+          old_script.shared_function_infos().Set(i, maybe_new_sfi);
+          QueueVisitOrGetForwardingPointer(new_sfi);
+        }
+      }
+    }
+
+    // Visit objects until the stack is empty, to forward all pointers.
+    while (to_visit_.size() > 0) {
+      HeapObject current = to_visit_.top();
+      to_visit_.pop();
+      current.IterateBodyFast(isolate_, this);
+    }
+  }
+
+  HeapObject QueueVisitOrGetForwardingPointer(HeapObject obj) {
+    auto emplace_result = forwarding_table_.try_emplace(obj, HeapObject());
+    if (emplace_result.second) {
+      to_visit_.push(obj);
+      return {};
+    }
+    return emplace_result.first->second;
+  }
+
+  void Forward(HeapObject from, HeapObject to) { forwarding_table_[from] = to; }
+
+  Isolate* isolate_;
+  std::stack<HeapObject> to_visit_;
+
+  // To minimize hash table lookups, this table is used for two separate but
+  // related purposes:
+  // 1. The presence of an object as the key indicates that the object needn't
+  //    be added to the to_visit_ stack: either the object has already been
+  //    added, or there is no need to visit the object.
+  // 2. If the value in an entry is non-null, that indicates that any slots
+  //    that currently point to the key object should be updated to point to the
+  //    value object.
+  // It is okay to double up on these meanings because any forwarded objects
+  // will be excised from the graph so there is no need to visit them.
+  std::unordered_map<HeapObject, HeapObject, Object::Hasher> forwarding_table_;
+
+  DisallowGarbageCollection no_gc_;
+};
+
 MaybeHandle<SharedFunctionInfo> BackgroundCompileTask::FinalizeScript(
     Isolate* isolate, Handle<String> source,
-    const ScriptDetails& script_details) {
+    const ScriptDetails& script_details,
+    MaybeHandle<Script> maybe_cached_script) {
   ScriptOriginOptions origin_options = script_details.origin_options;
 
   DCHECK(flags_.is_toplevel());
@@ -1772,10 +1928,12 @@ MaybeHandle<SharedFunctionInfo> BackgroundCompileTask::FinalizeScript(
   script_->set_origin_options(origin_options);
 
   // The one post-hoc fix-up: Add the script to the script list.
-  Handle<WeakArrayList> scripts = isolate->factory()->script_list();
-  scripts =
-      WeakArrayList::Append(isolate, scripts, MaybeObjectHandle::Weak(script_));
-  isolate->heap()->SetRootScriptList(*scripts);
+  if (maybe_cached_script.is_null()) {
+    Handle<WeakArrayList> scripts = isolate->factory()->script_list();
+    scripts = WeakArrayList::Append(isolate, scripts,
+                                    MaybeObjectHandle::Weak(script_));
+    isolate->heap()->SetRootScriptList(*scripts);
+  }
 
   // Set the script fields after finalization, to keep this path the same
   // between main-thread and off-thread finalization.
@@ -1797,6 +1955,15 @@ MaybeHandle<SharedFunctionInfo> BackgroundCompileTask::FinalizeScript(
   FinalizeUnoptimizedScriptCompilation(isolate, script_, flags_,
                                        &compile_state_,
                                        finalize_unoptimized_compilation_data_);
+
+  // If there was already a Script, we must merge the newly compiled content
+  // into it.
+  if (Handle<Script> cached_script;
+      maybe_cached_script.ToHandle(&cached_script)) {
+    result = handle(
+        ScriptMerger::MergeScripts(isolate, *cached_script, *script_), isolate);
+    maybe_result = result;
+  }
 
   return handle(*result, isolate);
 }
@@ -2914,10 +3081,8 @@ bool CompilationExceptionIsRangeError(Isolate* isolate, Handle<Object> obj) {
 
 MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
     Handle<String> source, const ScriptDetails& script_details,
-    MaybeHandle<Script> maybe_script, Isolate* isolate,
-    IsCompiledScope* is_compiled_scope) {
+    Isolate* isolate, IsCompiledScope* is_compiled_scope) {
   // Start a background thread compiling the script.
-  // TODO(v8:12808): Use maybe_script for the background compilation.
   StressBackgroundCompileThread background_compile_thread(
       isolate, source,
       script_details.origin_options.IsModule() ? ScriptType::kModule
@@ -3056,10 +3221,6 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
       RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
       TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                    "V8.CompileDeserialize");
-      // TODO(v8:12808): If a Script was found in the compilation cache, then
-      // both of the code paths below (Finish and Deserialize) should make use
-      // of that Script to avoid duplicating the Script itself or any
-      // preexisting SharedFunctionInfos.
       if (deserialize_task) {
         // If there's a cache consume task, finish it.
         maybe_result = deserialize_task->Finish(isolate, source,
@@ -3072,6 +3233,17 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
       bool consuming_code_cache_succeeded = false;
       Handle<SharedFunctionInfo> result;
       if (maybe_result.ToHandle(&result)) {
+        // If there was already a Script, we must merge the newly compiled
+        // content into it.
+        if (Handle<Script> cached_script;
+            maybe_script.ToHandle(&cached_script)) {
+          result =
+              handle(ScriptMerger::MergeScripts(isolate, *cached_script,
+                                                Script::cast(result->script())),
+                     isolate);
+          maybe_result = result;
+        }
+
         is_compiled_scope = result->is_compiled_scope(isolate);
         if (is_compiled_scope.is_compiled()) {
           consuming_code_cache_succeeded = true;
@@ -3093,8 +3265,12 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
                              natives)) {
       // If the --stress-background-compile flag is set, do the actual
       // compilation on a background thread, and wait for its result.
+      // There is no need to pass maybe_script here, because the compilation
+      // cache will be checked again once the background compilation completes,
+      // simulating the realistic scenario where checking ahead of time is
+      // impossible because the source string doesn't exist yet.
       maybe_result = CompileScriptOnBothBackgroundAndMainThread(
-          source, script_details, maybe_script, isolate, &is_compiled_scope);
+          source, script_details, isolate, &is_compiled_scope);
     } else {
       UnoptimizedCompileFlags flags =
           UnoptimizedCompileFlags::ForToplevelCompile(
@@ -3275,6 +3451,7 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
   BackgroundCompileTask* task = streaming_data->task.get();
 
   MaybeHandle<SharedFunctionInfo> maybe_result;
+  MaybeHandle<Script> maybe_script;
   // Check if compile cache already holds the SFI, if so no need to finalize
   // the code compiled on the background thread.
   CompilationCache* compilation_cache = isolate->compilation_cache();
@@ -3285,10 +3462,7 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
         compilation_cache->LookupScript(source, script_details,
                                         task->flags().outer_language_mode());
 
-    // TODO(v8:12808): Determine what to do if we finish streaming and find that
-    // another copy of the Script already exists but has no root
-    // SharedFunctionInfo or has an uncompiled SharedFunctionInfo. For now, we
-    // just ignore it and create a new Script.
+    maybe_script = lookup_result.script();
     if (!lookup_result.toplevel_sfi().is_null()) {
       maybe_result = lookup_result.toplevel_sfi();
     }
@@ -3306,7 +3480,8 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                  "V8.OffThreadFinalization.Publish");
 
-    maybe_result = task->FinalizeScript(isolate, source, script_details);
+    maybe_result =
+        task->FinalizeScript(isolate, source, script_details, maybe_script);
 
     Handle<SharedFunctionInfo> result;
     if (maybe_result.ToHandle(&result)) {
@@ -3596,3 +3771,5 @@ void ScriptStreamingData::Release() { task.reset(); }
 
 }  // namespace internal
 }  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
