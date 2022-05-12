@@ -56,6 +56,30 @@
       },
       "revId": "3b558181d81d27ddd4e4e694f2846e0bce716683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6441154_272054ff",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-05-12T17:57:01Z",
+      "side": 1,
+      "message": "It actually iterates over all pages in new space starting from `page` (see lines 509 and 546). I added a comment in the .h file to explain what `VerifyImpl` does and a DCHECK here to clarify that `address` should reside in `page`.",
+      "parentUuid": "503b1981_28e61873",
+      "range": {
+        "startLine": 497,
+        "startChar": 15,
+        "endLine": 497,
+        "endChar": 25
+      },
+      "revId": "3b558181d81d27ddd4e4e694f2846e0bce716683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
