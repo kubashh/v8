@@ -309,6 +309,7 @@ class NewSpace : NON_EXPORTED_BASE(public SpaceWithLinearArea) {
 
 #ifdef VERIFY_HEAP
   virtual void Verify(Isolate* isolate) const = 0;
+  void VerifyImpl(Isolate* isolate, const Page* page, Address address) const;
 #endif
 
   virtual iterator begin() = 0;
