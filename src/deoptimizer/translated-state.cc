@@ -13,6 +13,7 @@
 #include "src/diagnostics/disasm.h"
 #include "src/execution/frames.h"
 #include "src/execution/isolate.h"
+#include "src/heap/heap.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/arguments.h"
 #include "src/objects/heap-number-inl.h"
@@ -1850,7 +1851,17 @@ void TranslatedState::InitializeJSObjectAt(
   CHECK_GE(children_count, 2);
 
   // Notify the concurrent marker about the layout change.
-  isolate()->heap()->NotifyObjectLayoutChange(*object_storage, no_gc);
+  isolate()->heap()->NotifyObjectLayoutChange(*object_storage, no_gc,
+                                              InvalidateRecordedSlots::kNo);
+
+#if DEBUG
+  // No need to invalidate slots in object because no slot was recorded yet.
+  // Verify this here.
+  Address object_start = object_storage->address();
+  Address object_end = object_start + children_count * kTaggedSize;
+  isolate()->heap()->VerifySlotRangeHasNoRecordedSlots(object_start,
+                                                       object_end);
+#endif
 
   // Fill the property array field.
   {
@@ -1902,7 +1913,17 @@ void TranslatedState::InitializeObjectWithTaggedFieldsAt(
   }
 
   // Notify the concurrent marker about the layout change.
-  isolate()->heap()->NotifyObjectLayoutChange(*object_storage, no_gc);
+  isolate()->heap()->NotifyObjectLayoutChange(*object_storage, no_gc,
+                                              InvalidateRecordedSlots::kNo);
+
+#if DEBUG
+  // No need to invalidate slots in object because no slot was recorded yet.
+  // Verify this here.
+  Address object_start = object_storage->address();
+  Address object_end = object_start + children_count * kTaggedSize;
+  isolate()->heap()->VerifySlotRangeHasNoRecordedSlots(object_start,
+                                                       object_end);
+#endif
 
   // Write the fields to the object.
   for (int i = 1; i < children_count; i++) {
