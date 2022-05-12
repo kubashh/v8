@@ -109,6 +109,7 @@ class ObjectIterator;
 class ObjectStats;
 class Page;
 class PagedSpace;
+class PromoteYoungGenerationGC;
 class ReadOnlyHeap;
 class RootVisitor;
 class RwxMemoryWriteScope;
@@ -1941,7 +1942,6 @@ class Heap {
 
   // Performs a minor collection in new generation.
   void Scavenge();
-  void EvacuateYoungGeneration();
 
   void UpdateYoungReferencesInExternalStringTable(
       ExternalStringTableUpdaterCallback updater_func);
@@ -2487,6 +2487,7 @@ class Heap {
   friend class ObjectStatsCollector;
   friend class Page;
   friend class PagedSpace;
+  friend class PromoteYoungGenerationGC;
   friend class ReadOnlyRoots;
   friend class Scavenger;
   friend class ScavengerCollector;

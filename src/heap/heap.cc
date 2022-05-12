@@ -70,6 +70,7 @@
 #include "src/heap/objects-visiting.h"
 #include "src/heap/paged-spaces-inl.h"
 #include "src/heap/parked-scope.h"
+#include "src/heap/promote-young-generation.h"
 #include "src/heap/read-only-heap.h"
 #include "src/heap/remembered-set.h"
 #include "src/heap/safepoint.h"
@@ -2683,60 +2684,6 @@ void Heap::CheckNewSpaceExpansionCriteria() {
   new_lo_space()->SetCapacity(new_space()->Capacity());
 }
 
-void Heap::EvacuateYoungGeneration() {
-  TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_FAST_PROMOTE);
-  base::MutexGuard guard(relocation_mutex());
-  // Young generation garbage collection is orthogonal from full GC marking. It
-  // is possible that objects that are currently being processed for marking are
-  // reclaimed in the young generation GC that interleaves concurrent marking.
-  // Pause concurrent markers to allow processing them using
-  // `UpdateMarkingWorklistAfterYoungGenGC()`.
-  ConcurrentMarking::PauseScope pause_js_marking(concurrent_marking());
-  CppHeap::PauseConcurrentMarkingScope pause_cpp_marking(
-      CppHeap::From(cpp_heap_));
-  if (!FLAG_concurrent_marking) {
-    DCHECK(fast_promotion_mode_);
-    DCHECK(CanPromoteYoungAndExpandOldGeneration(0));
-  }
-
-  SemiSpaceNewSpace* semi_space_new_space =
-      SemiSpaceNewSpace::From(new_space());
-  // Move pages from new->old generation.
-  PageRange range(semi_space_new_space->first_allocatable_address(),
-                  semi_space_new_space->top());
-  for (auto it = range.begin(); it != range.end();) {
-    Page* p = (*++it)->prev_page();
-    semi_space_new_space->from_space().RemovePage(p);
-    Page::ConvertNewToOld(p);
-    if (incremental_marking()->IsMarking())
-      mark_compact_collector()->RecordLiveSlotsOnPage(p);
-  }
-
-  // Reset new space.
-  if (!semi_space_new_space->Rebalance()) {
-    FatalProcessOutOfMemory("NewSpace::Rebalance");
-  }
-  semi_space_new_space->ResetLinearAllocationArea();
-  semi_space_new_space->set_age_mark(semi_space_new_space->top());
-
-  for (auto it = new_lo_space()->begin(); it != new_lo_space()->end();) {
-    LargePage* page = *it;
-    // Increment has to happen after we save the page, because it is going to
-    // be removed below.
-    it++;
-    lo_space()->PromoteNewLargeObject(page);
-  }
-
-  // Fix up special trackers.
-  external_string_table_.PromoteYoung();
-  // GlobalHandles are updated in PostGarbageCollectonProcessing
-
-  size_t promoted = new_space()->Size() + new_lo_space()->Size();
-  IncrementYoungSurvivorsCounter(promoted);
-  IncrementPromotedObjectsSize(promoted);
-  IncrementSemiSpaceCopiedObjectSize(0);
-}
-
 void Heap::Scavenge() {
   DCHECK_NOT_NULL(new_space());
   DCHECK_IMPLIES(FLAG_separate_gc_phases, !incremental_marking()->IsMarking());
@@ -2749,7 +2696,7 @@ void Heap::Scavenge() {
   if (fast_promotion_mode_ && CanPromoteYoungAndExpandOldGeneration(0)) {
     tracer()->NotifyYoungGenerationHandling(
         YoungGenerationHandling::kFastPromotionDuringScavenge);
-    EvacuateYoungGeneration();
+    PromoteYoungGenerationGC::EvacuateYoungGeneration(this);
     return;
   }
   tracer()->NotifyYoungGenerationHandling(
