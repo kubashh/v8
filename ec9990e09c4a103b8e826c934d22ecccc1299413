@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96203932_ac59a073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-12T18:31:58Z",
+      "side": 1,
+      "message": "LGTM % line lengths",
+      "revId": "ec9990e09c4a103b8e826c934d22ecccc1299413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa3ba6c9_ad3e8a80",
+        "filename": "test/mjsunit/wasm/gc-experimental-string-conversions.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-12T18:31:58Z",
+      "side": 1,
+      "message": "nit: 80col, again several times below",
+      "range": {
+        "startLine": 38,
+        "startChar": 80,
+        "endLine": 38,
+        "endChar": 91
+      },
+      "revId": "ec9990e09c4a103b8e826c934d22ecccc1299413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
