@@ -550,6 +550,10 @@ class ValueType {
   static constexpr int kKindBits = 5;
   static constexpr int kHeapTypeBits = 20;
 
+  uint32_t bit_field() const { return bit_field_; }
+
+  static const intptr_t kBitFieldOffset;
+
  private:
   // {hash_value} directly reads {bit_field_}.
   friend size_t hash_value(ValueType type);
@@ -575,6 +579,8 @@ class ValueType {
 
   uint32_t bit_field_;
 };
+
+constexpr intptr_t ValueType::kBitFieldOffset = offsetof(ValueType, bit_field_);
 
 static_assert(sizeof(ValueType) <= kUInt32Size,
               "ValueType is small and can be passed by value");
