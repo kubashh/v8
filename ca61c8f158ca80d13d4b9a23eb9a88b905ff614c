@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42133804_f0088150",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-12T15:04:27Z",
+      "side": 1,
+      "message": "This is redundant, see raw_bit_field() above.",
+      "revId": "ca61c8f158ca80d13d4b9a23eb9a88b905ff614c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
