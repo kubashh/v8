@@ -16,6 +16,24 @@
       "message": "This is redundant, see raw_bit_field() above.",
       "revId": "ca61c8f158ca80d13d4b9a23eb9a88b905ff614c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ac8452_c6e7943b",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-12T15:05:33Z",
+      "side": 1,
+      "message": "Oh, thanks :)",
+      "parentUuid": "42133804_f0088150",
+      "revId": "ca61c8f158ca80d13d4b9a23eb9a88b905ff614c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
