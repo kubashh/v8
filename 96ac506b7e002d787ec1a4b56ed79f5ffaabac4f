@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e37699_bdbb30fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-12T10:41:19Z",
+      "side": 1,
+      "message": "Toon: PTAL. Happy to restructure the parser/scanner integration if you think there\u0027s a better way; this looked reasonably clean to me.",
+      "revId": "96ac506b7e002d787ec1a4b56ed79f5ffaabac4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
