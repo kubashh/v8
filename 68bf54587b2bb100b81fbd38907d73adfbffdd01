@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550f2973_3a7abd1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-12T16:58:19Z",
+      "side": 1,
+      "message": "PTAL, I spent some time on C++ magic, and I really like the outcome. I think there are several place where we can use the new helper. See https://crrev.com/c/3644625 for some first uses.",
+      "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
