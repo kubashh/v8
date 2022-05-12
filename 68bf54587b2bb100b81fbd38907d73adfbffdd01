@@ -16,6 +16,46 @@
       "message": "PTAL, I spent some time on C++ magic, and I really like the outcome. I think there are several place where we can use the new helper. See https://crrev.com/c/3644625 for some first uses.",
       "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "853cb483_46343c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-12T17:12:13Z",
+      "side": 1,
+      "message": "lgtm\n\n+leszek since we coincidentally talked about printing (different context) the other time",
+      "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8eabdb5_fd3ea165",
+        "filename": "src/base/string-format.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-12T17:12:13Z",
+      "side": 1,
+      "message": "No need to change but I am curious here.\n\nI guess you are using `string_view` because it\u0027s easy to work with in a constexpr context?\n\nSince we really only seem to need `constexpr const char[N]` (and can get the length of those), this would also work, no?",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
