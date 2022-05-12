@@ -149,14 +149,11 @@ Handle<Object> FunctionCallbackArguments::Call(CallHandlerInfo handler) {
 }
 
 PropertyCallbackArguments::~PropertyCallbackArguments(){
-#ifdef DEBUG
-// TODO(chromium:1310062): enable this check.
-// if (javascript_execution_counter_) {
-//   CHECK_WITH_MSG(javascript_execution_counter_ ==
-//                      isolate()->javascript_execution_counter(),
-//                  "Unexpected side effect detected");
-// }
-#endif  // DEBUG
+  if (javascript_execution_counter_) {
+    CHECK_WITH_MSG(javascript_execution_counter_ ==
+                       isolate()->javascript_execution_counter(),
+                   "Unexpected side effect detected");
+  }
 }
 
 Handle<JSObject> PropertyCallbackArguments::CallNamedEnumerator(

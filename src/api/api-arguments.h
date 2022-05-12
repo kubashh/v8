@@ -139,11 +139,7 @@ class PropertyCallbackArguments final
 
   // Accept potential JavaScript side effects that might occurr during life
   // time of this object.
-  inline void AcceptSideEffects() {
-#ifdef DEBUG
-    javascript_execution_counter_ = 0;
-#endif  // DEBUG
-  }
+  inline void AcceptSideEffects() { javascript_execution_counter_ = 0; }
 
  private:
   /*
@@ -166,12 +162,10 @@ class PropertyCallbackArguments final
   inline JSObject holder();
   inline Object receiver();
 
-#ifdef DEBUG
   // This stores current value of Isolate::javascript_execution_counter().
   // It's used for detecting whether JavaScript code was executed between
   // PropertyCallbackArguments's constructior and destructor.
   uint32_t javascript_execution_counter_;
-#endif  // DEBUG
 };
 
 class FunctionCallbackArguments
