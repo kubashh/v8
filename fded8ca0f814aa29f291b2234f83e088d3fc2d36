@@ -16,6 +16,29 @@
       "message": "Andreas: PTAL.\n\nAndy: FYI.",
       "revId": "fded8ca0f814aa29f291b2234f83e088d3fc2d36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "113ad2f4_5a4bb710",
+        "filename": "test/mjsunit/regress/wasm/regress-12867.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-05-12T12:37:41Z",
+      "side": 1,
+      "message": "You could use kWasmH0 - kWasmH3 and kWasmV0 - kWasmV3 here.",
+      "range": {
+        "startLine": 9,
+        "startChar": 32,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "fded8ca0f814aa29f291b2234f83e088d3fc2d36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
