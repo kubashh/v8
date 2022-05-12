@@ -111,6 +111,8 @@ STATIC_ASSERT(V8_DEFAULT_STACK_SIZE_KB* KB +
                   kStackLimitSlackForDeoptimizationInBytes <=
               MB);
 
+// Whitespace change.
+
 // The V8_ENABLE_NEAR_CODE_RANGE_BOOL enables logic that tries to allocate
 // code range within a pc-relative call/jump proximity from embedded builtins.
 // This machinery could help only when we have an opportunity to choose where
