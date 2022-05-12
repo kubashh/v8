@@ -378,7 +378,7 @@ template V8_EXPORT_PRIVATE void MemoryChunk::RegisterObjectWithInvalidatedSlots<
 
 template <RememberedSetType type>
 void MemoryChunk::RegisterObjectWithInvalidatedSlots(HeapObject object) {
-  DCHECK(!object.IsJSReceiver());
+  DCHECK(object.IsString());
   bool skip_slot_recording;
 
   switch (type) {
