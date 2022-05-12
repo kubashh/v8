@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a74b422_30c7f370",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-12T12:08:22Z",
+      "side": 1,
+      "message": "Manos: PTAL. Let me know if you\u0027d prefer a different way of making this robust.\n\nAndy: FYI.",
+      "revId": "938bbe092ca91a303818e8d32c54be5ca526f2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f783418_f8279f95",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-12T12:08:22Z",
+      "side": 1,
+      "message": "For empty lists of type IDs, this dereferences an invalid pointer, which segfaults.",
+      "range": {
+        "startLine": 667,
+        "startChar": 10,
+        "endLine": 667,
+        "endChar": 11
+      },
+      "revId": "938bbe092ca91a303818e8d32c54be5ca526f2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
