@@ -56,6 +56,30 @@
       },
       "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1daa7558_98a285f6",
+        "filename": "src/base/string-format.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-13T10:16:36Z",
+      "side": 1,
+      "message": "The main problem with `const char[N]` is that the length is part of the type, which makes it much more difficult (or impossible?) to declare a template that receives several static strings of different lengths. We could just go with `const char[]`, and compute the length using another constexpr function (or using `std::string_view{str}.size()`, which is also constexpr). But then again it would be tricky to initialize those arrays. `std::string_view` is just much nicer to work with, because they allow for copy initialization (just like `std::array`), and the length is part of the value and not the type.",
+      "parentUuid": "e8eabdb5_fd3ea165",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "68bf54587b2bb100b81fbd38907d73adfbffdd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
