@@ -787,6 +787,43 @@ struct HeapTypeImmediate {
 };
 
 template <Decoder::ValidateFlag validate>
+struct StringConstImmediate {
+  uint32_t index;
+  uint32_t length;
+  StringConstImmediate(Decoder* decoder, const byte* pc) {
+    index =
+        decoder->read_u32v<validate>(pc, &length, "stringref literal index");
+  }
+};
+
+template <Decoder::ValidateFlag validate>
+struct Wtf8PolicyImmediate {
+  uint8_t value = {0};
+  uint32_t length = 1;
+
+  Wtf8PolicyImmediate(Decoder* decoder, const byte* pc) {
+    value = decoder->read_u8<validate>(pc, "wtf8 policy");
+    if (!VALIDATE(value <= kLastWtf8Policy)) {
+      DecodeError<validate>(
+          decoder, pc, "invalid wtf8 policy; expected 0, 1, or 2, but got %u",
+          value);
+    }
+  }
+};
+
+template <Decoder::ValidateFlag validate>
+struct EncodeWtf8Immediate {
+  MemoryIndexImmediate<validate> memory;
+  Wtf8PolicyImmediate<validate> policy;
+  uint32_t length;
+
+  EncodeWtf8Immediate(Decoder* decoder, const byte* pc)
+      : memory(decoder, pc),
+        policy(decoder, pc + memory.length),
+        length(memory.length + policy.length) {}
+};
+
+template <Decoder::ValidateFlag validate>
 struct PcForErrors {
   PcForErrors(const byte* /* pc */) {}
 
@@ -1094,7 +1131,46 @@ struct ControlBase : public PcForErrors<validate> {
   F(BrOnNonI31, const Value& object, Value* value_on_fallthrough,              \
     uint32_t br_depth)                                                         \
   F(BrOnNonArray, const Value& object, Value* value_on_fallthrough,            \
-    uint32_t br_depth)
+    uint32_t br_depth)                                                         \
+  F(StringNewWtf8, const MemoryIndexImmediate<validate>& imm,                  \
+    const Value& index_val, const Value& bytes_val, Value* result_val)         \
+  F(StringNewWtf16, const MemoryIndexImmediate<validate>& imm,                 \
+    const Value& index_val, const Value& codeunits_val, Value* result_val)     \
+  F(StringConst, const StringConstImmediate<validate>& imm, Value* result_val) \
+  F(StringMeasureUtf8, const Value& str, Value* result_val)                    \
+  F(StringMeasureWtf8, const Value& str, Value* result_val)                    \
+  F(StringMeasureWtf16, const Value& str, Value* result_val)                   \
+  F(StringEncodeWtf8, const EncodeWtf8Immediate<validate>& memory,             \
+    const Value& str, const Value& address)                                    \
+  F(StringEncodeWtf16, const MemoryIndexImmediate<validate>& memory,           \
+    const Value& str, const Value& address)                                    \
+  F(StringConcat, const Value& head, const Value& tail, Value* result_val)     \
+  F(StringEq, const Value& a, const Value& b, Value* result_val)               \
+  F(StringAsWtf8, const Value& str, Value* result_val)                         \
+  F(StringViewWtf8Advance, const Value& view, const Value& pos,                \
+    const Value& bytes, Value* result_val)                                     \
+  F(StringViewWtf8Encode, const EncodeWtf8Immediate<validate>& memory,         \
+    const Value& view, const Value& addr, const Value& pos,                    \
+    const Value& bytes, Value* next_pos, Value* bytes_written)                 \
+  F(StringViewWtf8Slice, const Value& view, const Value& start,                \
+    const Value& end, Value* result)                                           \
+  F(StringAsWtf16, const Value& str, Value* result_val)                        \
+  F(StringViewWtf16Length, const Value& view, Value* result_val)               \
+  F(StringViewWtf16GetCodeUnit, const Value& view, const Value& pos,           \
+    Value* result)                                                             \
+  F(StringViewWtf16Encode, const MemoryIndexImmediate<validate>& memory,       \
+    const Value& view, const Value& addr, const Value& pos,                    \
+    const Value& codeunits)                                                    \
+  F(StringViewWtf16Slice, const Value& view, const Value& start,               \
+    const Value& end, Value* result)                                           \
+  F(StringAsIter, const Value& str, Value* result_val)                         \
+  F(StringViewIterCur, const Value& view, Value* result)                       \
+  F(StringViewIterAdvance, const Value& view, const Value& codepoints,         \
+    Value* result)                                                             \
+  F(StringViewIterRewind, const Value& view, const Value& codepoints,          \
+    Value* result)                                                             \
+  F(StringViewIterSlice, const Value& view, const Value& codepoints,           \
+    Value* result)
 
 // Generic Wasm bytecode decoder with utilities for decoding immediates,
 // lengths, etc.
@@ -1528,6 +1604,18 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
+  bool Validate(const byte* pc, EncodeWtf8Immediate<validate>& imm) {
+    return Validate(pc, imm.memory);
+  }
+
+  bool Validate(const byte* pc, StringConstImmediate<validate>& imm) {
+    if (!VALIDATE(imm.index < module_->stringref_literals.size())) {
+      DecodeError(pc, "Invalid string literal index: %u", imm.index);
+      return false;
+    }
+    return true;
+  }
+
   // The following Validate* functions all validate an IndexImmediate, albeit
   // differently according to context.
   bool ValidateTable(const byte* pc, IndexImmediate<validate>& imm) {
@@ -1924,6 +2012,41 @@ class WasmDecoder : public Decoder {
           case kExprRefTest:
           case kExprRefCast:
             return length;
+          case kExprStringNewWtf8:
+          case kExprStringNewWtf16:
+          case kExprStringEncodeWtf16:
+          case kExprStringViewWtf16Encode: {
+            MemoryIndexImmediate<validate> imm(decoder, pc + length);
+            return length + imm.length;
+          }
+          case kExprStringEncodeWtf8:
+          case kExprStringViewWtf8Encode: {
+            EncodeWtf8Immediate<validate> imm(decoder, pc + length);
+            return length + imm.length;
+          }
+          case kExprStringConst: {
+            StringConstImmediate<validate> imm(decoder, pc + length);
+            return length + imm.length;
+          }
+          case kExprStringMeasureUtf8:
+          case kExprStringMeasureWtf8:
+          case kExprStringMeasureWtf16:
+          case kExprStringConcat:
+          case kExprStringEq:
+          case kExprStringIsUSVSequence:
+          case kExprStringAsWtf8:
+          case kExprStringViewWtf8Advance:
+          case kExprStringViewWtf8Slice:
+          case kExprStringAsWtf16:
+          case kExprStringViewWtf16Length:
+          case kExprStringViewWtf16GetCodeUnit:
+          case kExprStringViewWtf16Slice:
+          case kExprStringAsIter:
+          case kExprStringViewIterCur:
+          case kExprStringViewIterAdvance:
+          case kExprStringViewIterRewind:
+          case kExprStringViewIterSlice:
+            return length;
           default:
             // This is unreachable except for malformed modules.
             if (validate) {
@@ -2123,6 +2246,50 @@ class WasmDecoder : public Decoder {
                                                 "array length");
             return {length_imm.index + (opcode == kExprArrayInit ? 1 : 0), 1};
           }
+          case kExprStringNewWtf8:
+          case kExprStringNewWtf16:
+            return { 2, 1 };
+          case kExprStringConst:
+            return { 0, 1 };
+          case kExprStringMeasureUtf8:
+          case kExprStringMeasureWtf8:
+          case kExprStringMeasureWtf16:
+            return { 1, 1 };
+          case kExprStringEncodeWtf8:
+          case kExprStringEncodeWtf16:
+            return { 3, 0 };
+          case kExprStringConcat:
+          case kExprStringEq:
+            return { 2, 1 };
+          case kExprStringIsUSVSequence:
+            return { 1, 1 };
+          case kExprStringAsWtf8:
+            return { 1, 1 };
+          case kExprStringViewWtf8Advance:
+            return { 3, 1 };
+          case kExprStringViewWtf8Encode:
+            return { 4, 2 };
+          case kExprStringViewWtf8Slice:
+            return { 3, 1 };
+          case kExprStringAsWtf16:
+          case kExprStringViewWtf16Length:
+            return { 1, 1 };
+          case kExprStringViewWtf16GetCodeUnit:
+            return { 2, 1 };
+          case kExprStringViewWtf16Encode:
+            return { 4, 0 };
+          case kExprStringViewWtf16Slice:
+            return { 3, 1 };
+          case kExprStringAsIter:
+            return { 1, 1 };
+          case kExprStringViewIterCur:
+            return { 3, 1 };
+          case kExprStringViewIterAdvance:
+            return { 2, 1 };
+          case kExprStringViewIterRewind:
+            return { 2, 1 };
+          case kExprStringViewIterSlice:
+            return { 2, 1 };
           default:
             UNREACHABLE();
         }
@@ -3486,12 +3653,17 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
   }
 
   DECODE(GC) {
-    CHECK_PROTOTYPE_OPCODE(gc);
     uint32_t opcode_length = 0;
-    WasmOpcode full_opcode = this->template read_prefixed_opcode<validate>(
+    WasmOpcode full_opcode = this->template read_gc_opcode<validate>(
         this->pc_, &opcode_length, "gc index");
     trace_msg->AppendOpcode(full_opcode);
-    return DecodeGCOpcode(full_opcode, opcode_length);
+    if (full_opcode >= kExprStringNewWtf8) {
+      CHECK_PROTOTYPE_OPCODE(stringref);
+      return DecodeStringRefOpcode(full_opcode, opcode_length);
+    } else {
+      CHECK_PROTOTYPE_OPCODE(gc);
+      return DecodeGCOpcode(full_opcode, opcode_length);
+    }
   }
 
 #define SIMPLE_PROTOTYPE_CASE(name, opc, sig) \
@@ -4977,6 +5149,301 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       }
       default:
         this->DecodeError("invalid gc opcode: %x", opcode);
+        return 0;
+    }
+  }
+
+  int DecodeStringRefOpcode(WasmOpcode opcode, uint32_t opcode_length) {
+    switch (opcode) {
+      case kExprStringNewWtf8: {
+        NON_CONST_ONLY
+        MemoryIndexImmediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value addr = Peek(1, 0, addr_type);
+        Value bytes = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf8, imm, addr, bytes,
+                                           &result);
+        Drop(bytes);
+        Drop(addr);
+        Push(result);
+        return opcode_length + imm.length;
+      }
+      case kExprStringNewWtf16: {
+        NON_CONST_ONLY
+        MemoryIndexImmediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value addr = Peek(1, 0, addr_type);
+        Value codeunits = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf16, imm, addr, codeunits,
+                                           &result);
+        Drop(codeunits);
+        Drop(addr);
+        Push(result);
+        return opcode_length + imm.length;
+      }
+      case kExprStringConst: {
+        StringConstImmediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringConst, imm, &result);
+        Push(result);
+        return opcode_length + imm.length;
+      }
+      case kExprStringMeasureUtf8: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureUtf8, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringMeasureWtf8: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureWtf8, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringMeasureWtf16: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureWtf16, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringEncodeWtf8: {
+        NON_CONST_ONLY
+        EncodeWtf8Immediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value str = Peek(1, 0, kWasmStringRef);
+        Value addr = Peek(0, 1, addr_type);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf8, imm, str, addr);
+        Drop(addr);
+        Drop(str);
+        return opcode_length + imm.length;
+      }
+      case kExprStringEncodeWtf16: {
+        NON_CONST_ONLY
+        MemoryIndexImmediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value str = Peek(1, 0, kWasmStringRef);
+        Value addr = Peek(0, 1, addr_type);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf16, imm, str, addr);
+        Drop(addr);
+        Drop(str);
+        return opcode_length + imm.length;
+      }
+      case kExprStringConcat: {
+        NON_CONST_ONLY
+        Value head = Peek(1, 0, kWasmStringRef);
+        Value tail = Peek(0, 1, kWasmStringRef);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringConcat, head, tail, &result);
+        Drop(tail);
+        Drop(head);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringEq: {
+        NON_CONST_ONLY
+        Value a = Peek(1, 0, kWasmStringRef);
+        Value b = Peek(0, 1, kWasmStringRef);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEq, a, b, &result);
+        Drop(b);
+        Drop(a);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringAsWtf8: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmStringViewWtf8);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsWtf8, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewWtf8Advance: {
+        NON_CONST_ONLY
+        Value view = Peek(2, 0, kWasmStringViewWtf8);
+        Value pos = Peek(1, 1, kWasmI32);
+        Value bytes = Peek(0, 2, kWasmI32);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf8Advance, view, pos,
+                                           bytes, &result);
+        Drop(bytes);
+        Drop(pos);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewWtf8Encode: {
+        NON_CONST_ONLY
+        EncodeWtf8Immediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value view = Peek(3, 0, kWasmStringViewWtf8);
+        Value addr = Peek(2, 1, addr_type);
+        Value pos = Peek(1, 2, kWasmI32);
+        Value bytes = Peek(0, 3, kWasmI32);
+        Value next_pos = CreateValue(kWasmI32);
+        Value bytes_out = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf8Encode, imm, view,
+                                           addr, pos, bytes, &next_pos,
+                                           &bytes_out);
+        Drop(bytes);
+        Drop(pos);
+        Drop(addr);
+        Drop(view);
+        Push(next_pos);
+        Push(bytes_out);
+        return opcode_length + imm.length;
+      }
+      case kExprStringViewWtf8Slice: {
+        NON_CONST_ONLY
+        Value view = Peek(2, 0, kWasmStringViewWtf8);
+        Value start = Peek(1, 1, kWasmI32);
+        Value end = Peek(0, 2, kWasmI32);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf8Slice, view, start,
+                                           end, &result);
+        Drop(end);
+        Drop(start);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringAsWtf16: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmStringViewWtf16);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsWtf16, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewWtf16Length: {
+        NON_CONST_ONLY
+        Value view = Peek(0, 0, kWasmStringViewWtf16);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16Length, view,
+                                           &result);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewWtf16GetCodeUnit: {
+        NON_CONST_ONLY
+        Value view = Peek(1, 0, kWasmStringViewWtf16);
+        Value pos = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16GetCodeUnit, view,
+                                           pos, &result);
+        Drop(pos);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewWtf16Encode: {
+        NON_CONST_ONLY
+        MemoryIndexImmediate<validate> imm(this, this->pc_ + opcode_length);
+        if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
+        ValueType addr_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+        Value view = Peek(3, 0, kWasmStringViewWtf16);
+        Value addr = Peek(2, 1, addr_type);
+        Value pos = Peek(1, 2, kWasmI32);
+        Value codeunits = Peek(0, 3, kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16Encode, imm, view,
+                                           addr, pos, codeunits);
+        Drop(codeunits);
+        Drop(pos);
+        Drop(addr);
+        Drop(view);
+        return opcode_length + imm.length;
+      }
+      case kExprStringViewWtf16Slice: {
+        NON_CONST_ONLY
+        Value view = Peek(2, 0, kWasmStringViewWtf16);
+        Value start = Peek(1, 1, kWasmI32);
+        Value end = Peek(0, 2, kWasmI32);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16Slice, view, start,
+                                           end, &result);
+        Drop(end);
+        Drop(start);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+
+      case kExprStringAsIter: {
+        NON_CONST_ONLY
+        Value str = Peek(0, 0, kWasmStringRef);
+        Value result = CreateValue(kWasmStringViewIter);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsIter, str, &result);
+        Drop(str);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewIterCur: {
+        NON_CONST_ONLY
+        Value view = Peek(0, 0, kWasmStringViewIter);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterCur, view, &result);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewIterAdvance: {
+        NON_CONST_ONLY
+        Value view = Peek(1, 0, kWasmStringViewIter);
+        Value codepoints = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterAdvance, view,
+                                           codepoints, &result);
+        Drop(codepoints);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewIterRewind: {
+        NON_CONST_ONLY
+        Value view = Peek(1, 0, kWasmStringViewIter);
+        Value codepoints = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmI32);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterAdvance, view,
+                                           codepoints, &result);
+        Drop(codepoints);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      case kExprStringViewIterSlice: {
+        NON_CONST_ONLY
+        Value view = Peek(1, 0, kWasmStringViewIter);
+        Value codepoints = Peek(0, 1, kWasmI32);
+        Value result = CreateValue(kWasmStringRef);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterSlice, view,
+                                           codepoints, &result);
+        Drop(codepoints);
+        Drop(view);
+        Push(result);
+        return opcode_length;
+      }
+      default:
+        this->DecodeError("invalid stringref opcode: %x", opcode);
         return 0;
     }
   }
