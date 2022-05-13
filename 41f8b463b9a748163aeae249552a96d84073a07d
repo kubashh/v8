@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c48416a_1c898515",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-13T07:31:24Z",
+      "side": 1,
+      "message": "Here and below: I\u0027d move the verification before the notification.",
+      "revId": "41f8b463b9a748163aeae249552a96d84073a07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
