@@ -22,6 +22,30 @@
       },
       "revId": "bd9ed6ce24f8cf407a7885e298fe5a77acec4440",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "431f7fff_8e75ac11",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3958,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-13T07:51:44Z",
+      "side": 0,
+      "message": "Thanks, that was an oversight to drop this condition.",
+      "parentUuid": "3d79b13a_d25b7079",
+      "range": {
+        "startLine": 3958,
+        "startChar": 31,
+        "endLine": 3958,
+        "endChar": 43
+      },
+      "revId": "bd9ed6ce24f8cf407a7885e298fe5a77acec4440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
