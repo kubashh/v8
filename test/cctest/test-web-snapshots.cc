@@ -1008,5 +1008,73 @@ TEST(BuiltinObjectsDeduplicated) {
                   kFunctionCount, kObjectCount, kArrayCount);
 }
 
+TEST(ConstructorFunctionKinds) {
+  CcTest::InitializeVM();
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+
+  WebSnapshotData snapshot_data;
+  {
+    v8::Local<v8::Context> new_context = CcTest::NewContext();
+    v8::Context::Scope context_scope(new_context);
+    const char* snapshot_source =
+        "class Base { constructor() {} };\n"
+        "class Derived extends Base { constructor() {} };\n"
+        "class BaseDefault {};\n"
+        "class DerivedDefault extends BaseDefault {};\n";
+
+    CompileRun(snapshot_source);
+    v8::Local<v8::PrimitiveArray> exports = v8::PrimitiveArray::New(isolate, 4);
+    exports->Set(isolate, 0,
+                 v8::String::NewFromUtf8(isolate, "Base").ToLocalChecked());
+    exports->Set(isolate, 1,
+                 v8::String::NewFromUtf8(isolate, "Derived").ToLocalChecked());
+    exports->Set(
+        isolate, 2,
+        v8::String::NewFromUtf8(isolate, "BaseDefault").ToLocalChecked());
+    exports->Set(
+        isolate, 3,
+        v8::String::NewFromUtf8(isolate, "DerivedDefault").ToLocalChecked());
+    WebSnapshotSerializer serializer(isolate);
+    CHECK(serializer.TakeSnapshot(new_context, exports, snapshot_data));
+    CHECK(!serializer.has_error());
+    CHECK_NOT_NULL(snapshot_data.buffer);
+  }
+
+  {
+    v8::Local<v8::Context> new_context = CcTest::NewContext();
+    v8::Context::Scope context_scope(new_context);
+    WebSnapshotDeserializer deserializer(isolate, snapshot_data.buffer,
+                                         snapshot_data.buffer_size);
+    CHECK(deserializer.Deserialize());
+    CHECK(!deserializer.has_error());
+
+    v8::Local<v8::Function> v8_base = CompileRun("Base").As<v8::Function>();
+    Handle<JSFunction> base =
+        Handle<JSFunction>::cast(Utils::OpenHandle(*v8_base));
+    CHECK_EQ(FunctionKind::kBaseConstructor, base->shared().kind());
+
+    v8::Local<v8::Function> v8_derived =
+        CompileRun("Derived").As<v8::Function>();
+    Handle<JSFunction> derived =
+        Handle<JSFunction>::cast(Utils::OpenHandle(*v8_derived));
+    CHECK_EQ(FunctionKind::kDerivedConstructor, derived->shared().kind());
+
+    v8::Local<v8::Function> v8_base_default =
+        CompileRun("BaseDefault").As<v8::Function>();
+    Handle<JSFunction> base_default =
+        Handle<JSFunction>::cast(Utils::OpenHandle(*v8_base_default));
+    CHECK_EQ(FunctionKind::kDefaultBaseConstructor,
+             base_default->shared().kind());
+
+    v8::Local<v8::Function> v8_derived_default =
+        CompileRun("DerivedDefault").As<v8::Function>();
+    Handle<JSFunction> derived_default =
+        Handle<JSFunction>::cast(Utils::OpenHandle(*v8_derived_default));
+    CHECK_EQ(FunctionKind::kDefaultDerivedConstructor,
+             derived_default->shared().kind());
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
