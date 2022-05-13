@@ -16,6 +16,24 @@
       "message": "Here and below: I\u0027d move the verification before the notification.",
       "revId": "41f8b463b9a748163aeae249552a96d84073a07d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b4a1af_5ab22621",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-13T08:40:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c48416a_1c898515",
+      "revId": "41f8b463b9a748163aeae249552a96d84073a07d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
