@@ -99,7 +99,7 @@ class WebSnapshotSerializerDeserializer {
 
   void IterateBuiltinObjects(std::function<void(String, HeapObject)> func);
 
-  static constexpr int kBuiltinObjectCount = 4;
+  static constexpr int kBuiltinObjectCount = 6;
 
   inline Factory* factory() const { return isolate_->factory(); }
 
@@ -220,8 +220,8 @@ class V8_EXPORT WebSnapshotSerializer
   void DiscoverObjectPropertiesWithDictionaryMap(T dict);
   void ConstructSource();
 
-  void SerializeFunctionInfo(ValueSerializer* serializer,
-                             Handle<JSFunction> function);
+  void SerializeFunctionInfo(Handle<JSFunction> function,
+                             ValueSerializer& serializer);
 
   void SerializeString(Handle<String> string, ValueSerializer& serializer);
   void SerializeSymbol(Handle<Symbol> symbol);
@@ -321,8 +321,12 @@ class V8_EXPORT WebSnapshotSerializer
   // strings_.
   IdentityMap<int, base::DefaultAllocationPolicy> all_strings_;
 
+  // --------------------------------
   // For constructing the minimal, "compacted", source string to cover all
   // function bodies.
+
+  // Script id -> offset of the script source code in full_source_.
+  std::map<int, int> script_offsets_;
   Handle<String> full_source_;
   uint32_t source_id_;
   // Ordered set of (start, end) pairs of all functions we've discovered.
@@ -330,6 +334,7 @@ class V8_EXPORT WebSnapshotSerializer
   // Maps function positions in the real source code into the function positions
   // in the constructed source code (which we'll include in the web snapshot).
   std::unordered_map<int, int> source_offset_to_compacted_source_offset_;
+  // --------------------------------
 };
 
 class V8_EXPORT WebSnapshotDeserializer
@@ -399,6 +404,7 @@ class V8_EXPORT WebSnapshotDeserializer
   void DeserializeExports(bool skip_exports);
   void DeserializeObjectPrototype(Handle<Map> map);
   Handle<Map> DeserializeObjectPrototypeAndCreateEmptyMap();
+  void DeserializeObjectPrototypeForFunction(Handle<JSFunction> function);
   void SetPrototype(Handle<Map> map, Handle<Object> prototype);
 
   template <typename T>

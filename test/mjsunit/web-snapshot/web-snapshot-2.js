@@ -293,6 +293,33 @@ d8.file.execute('test/mjsunit/web-snapshot/web-snapshot-helpers.js');
   assertEquals(7, x.f());
 })();
 
+(function TestDerivedClass() {
+  function createObjects() {
+    globalThis.Base = class { f() { return 8; }};
+    globalThis.Foo = class extends Base { };
+  }
+  const realm = Realm.create();
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo'], realm);
+  const x = new Foo();
+  assertEquals(8, x.f());
+})();
+
+(function TestDerivedClassWithConstructor() {
+  function createObjects() {
+    globalThis.Base = class { constructor() {this.m = 43;}};
+    globalThis.Foo = class extends Base{
+      constructor() {
+        super();
+        this.n = 42;
+      }
+    };
+  }
+  const { Foo } = takeAndUseWebSnapshot(createObjects, ['Foo']);
+  const x = new Foo();
+  assertEquals(42, x.n);
+  assertEquals(43, x.m);
+})();
+
 (async function TestClassWithAsyncMethods() {
   function createObjects() {
     globalThis.Foo = class {
