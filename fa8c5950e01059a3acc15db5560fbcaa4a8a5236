@@ -34,6 +34,24 @@
       "parentUuid": "7715c2c0_c6209503",
       "revId": "fa8c5950e01059a3acc15db5560fbcaa4a8a5236",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d831459a_f57624ec",
+        "filename": "src/base/string-format.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-13T19:04:35Z",
+      "side": 1,
+      "message": "I can take a look on Monday. It should be possible to work around this by something like `if constexpr (kFormat.size() \u003d\u003d 0) {...} else {...}`.",
+      "parentUuid": "c1620f23_ee4ebaa3",
+      "revId": "fa8c5950e01059a3acc15db5560fbcaa4a8a5236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
