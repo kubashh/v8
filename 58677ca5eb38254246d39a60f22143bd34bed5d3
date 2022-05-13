@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aab30ab2_416ffdca",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "223ddd3b_0d65c7fd",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4bcefe65_a5c29b1e",
@@ -135,6 +153,24 @@
       "writtenOn": "2022-05-09T09:38:57Z",
       "side": 1,
       "message": "It\u0027s a little weird to support both `IsNothing` _and_ `!FromJust`. What about just returning a `bool` instead of `Maybe\u003cbool\u003e`? The one RETURN_FAILURE case can just `return false;` as well.",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9617a580_49d44e0a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bcefe65_a5c29b1e",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19aed11d_f4a1064a",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08bc63bb_282d672e",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02df2376_fd058dcc",
@@ -169,6 +223,24 @@
       "writtenOn": "2022-05-09T09:38:57Z",
       "side": 1,
       "message": "INTEGER_INDEXED_EXOTIC is UNREACHABLE",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dfd5846_e605c96c",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02df2376_fd058dcc",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -264,6 +336,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b593a1ed_b287283d",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "I\u0027ve removed this condition, and added some tests for both private names and normal private symbols, personally I prefer just throwing for all of them too (IIUC that\u0027s what your preference as well).",
+      "parentUuid": "c55045ba_512c39fb",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
@@ -329,6 +419,24 @@
       "side": 1,
       "message": "Ah I see. That\u0027s explicitly allowed because you _do_ have access. This isn\u0027t a cross-realm global because you\u0027re doing `createAllowCrossRealmAccess` above. Detach just \"navigates it away\" to one that doesn\u0027t provide access (equivalent of `Realm.create()`).\n\nAs long as the global object doesn\u0027t change it is alright to keep using the PropertyCell. It\u0027s not alright anymore after navigation/detach.",
       "parentUuid": "b9778901_030b00ee",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71c2713_c6377a41",
+        "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "Added some tests for Realm.create() globals too. For realms that allowed cross realm access, detaching changes the map so it shouldn\u0027t hit the fast case again after that.",
+      "parentUuid": "6e805b8c_d62885c3",
       "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

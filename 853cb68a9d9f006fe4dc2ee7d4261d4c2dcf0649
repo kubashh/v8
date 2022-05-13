@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3dd74ae_173f88ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-13T05:20:23Z",
+      "side": 1,
+      "message": "I think that the HTML spec only allowed private names to be installed/loaded on the global proxies that disallows ordinary property stores/loads by accident (because the private name adds are not \"intercepted\" through the [[[Set]]](https://html.spec.whatwg.org/multipage/window-object.html#windowproxy-set) and [[[Get]]](https://html.spec.whatwg.org/multipage/window-object.html#windowproxy-get)  method override, will try to see if an update to the spec is necessary. @syg WDYT?",
+      "revId": "853cb68a9d9f006fe4dc2ee7d4261d4c2dcf0649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
