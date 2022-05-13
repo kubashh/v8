@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "478f83d5_1659cf61",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "nit: unnecessary",
+      "range": {
+        "startLine": 801,
+        "startChar": 15,
+        "endLine": 801,
+        "endChar": 21
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa630a6d_1324083d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "nit: could mark this `const` to clarify that it intentionally won\u0027t get updated later.",
+      "range": {
+        "startLine": 802,
+        "startChar": 2,
+        "endLine": 802,
+        "endChar": 10
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e003b589_18aafaa6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "yup, I see you got the hang of it.",
+      "range": {
+        "startLine": 816,
+        "startChar": 2,
+        "endLine": 817,
+        "endChar": 39
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44cd0f43_c242f1e8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "suggestion: you could avoid some verbosity by dropping all the `_val` suffixes. (If you think they\u0027re nice to have, that\u0027s fine too.)",
+      "range": {
+        "startLine": 1136,
+        "startChar": 22,
+        "endLine": 1136,
+        "endChar": 26
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d8646d_7f033bde",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "nit: save a couple of lines by grouping instructions (within the range of stringref instructions) that return identical values, e.g. add StringConcat, StringEq, StringViewWtf16GetCodeUnit, StringViewIter{Advance,Rewind,Slice} after line 2250. \n\nAgain several times below.",
+      "range": {
+        "startLine": 2263,
+        "startChar": 12,
+        "endLine": 2263,
+        "endChar": 28
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3def079_2d053a3a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5309,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "nit: optionally, you can also `Drop(4)` if you prefer conciseness (and a tiny efficiency benefit) over explicitness.\n\nSame for the other instructions that drop more than one value.",
+      "range": {
+        "startLine": 5306,
+        "startChar": 8,
+        "endLine": 5309,
+        "endChar": 19
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73b79037_00be40f0",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5332,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "If I understand our implementation plans correctly, `string.as_wtf16` will be a no-op in V8, so we won\u0027t need this interface method, and can instead use the existing generic `Forward`. But it\u0027s fine to keep everything 100% regular in this CL; we can figure out the details and possible simplifications later.",
+      "range": {
+        "startLine": 5332,
+        "startChar": 43,
+        "endLine": 5332,
+        "endChar": 56
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01294c2b_179ca4af",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5426,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "Rewind",
+      "range": {
+        "startLine": 5426,
+        "startChar": 43,
+        "endLine": 5426,
+        "endChar": 64
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1aca42_d797e812",
+        "filename": "test/mjsunit/wasm/stringrefs-valid.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "You can drop these two, they\u0027re on-by-default anyway. (Alternatively, please prefer two `// Flags: ...` lines over exceeding the 80col line length.)",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 46
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06e694c3_aaa1c7e5",
+        "filename": "test/mjsunit/wasm/stringrefs-valid.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "Confusingly enough, the existing convention is `kSig_r_ppp \u003d makeSig([p, p, p], [r])`, with `p` being parameters and `r` being return values. So I find myself torn between preferring consistency with existing code, and liking your new ordering better than what we have so far... so I\u0027m not requesting a change, just pointing it out.",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 15
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e9ea9f_3adbf836",
+        "filename": "test/mjsunit/wasm/stringrefs-valid.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-13T18:02:06Z",
+      "side": 1,
+      "message": "Might be nice to also have a test that an invalid immediate (i.e. `kExprStringEncodeWtf8, 0, 3`) is rejected.",
+      "range": {
+        "startLine": 105,
+        "startChar": 22,
+        "endLine": 105,
+        "endChar": 48
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
