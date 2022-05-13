@@ -8409,19 +8409,17 @@ CallDescriptor* GetI32WasmCallDescriptor(
 }
 
 AssemblerOptions WasmAssemblerOptions() {
-  AssemblerOptions options;
-  // Relocation info required to serialize {WasmCode} for proper functions.
-  options.record_reloc_info_for_serialization = true;
-  options.enable_root_relative_access = false;
-  return options;
+  return AssemblerOptions{
+      // Relocation info required to serialize {WasmCode} for proper functions.
+      .record_reloc_info_for_serialization = true,
+      .enable_root_relative_access = false};
 }
 
 AssemblerOptions WasmStubAssemblerOptions() {
-  AssemblerOptions options;
-  // Relocation info not necessary because stubs are not serialized.
-  options.record_reloc_info_for_serialization = false;
-  options.enable_root_relative_access = false;
-  return options;
+  return AssemblerOptions{
+      // Relocation info not necessary because stubs are not serialized.
+      .record_reloc_info_for_serialization = false,
+      .enable_root_relative_access = false};
 }
 
 #undef FATAL_UNSUPPORTED_OPCODE
