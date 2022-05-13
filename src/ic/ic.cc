@@ -1849,20 +1849,9 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       IsAnyDefineOwn() ? LookupIterator::OWN : LookupIterator::DEFAULT);
 
   if (name->IsPrivate()) {
-    bool exists = it.IsFound();
-    if (name->IsPrivateName() && exists == IsDefineKeyedOwnIC()) {
-      Handle<String> name_string(
-          String::cast(Symbol::cast(*name).description()), isolate());
-      if (exists) {
-        MessageTemplate message =
-            name->IsPrivateBrand()
-                ? MessageTemplate::kInvalidPrivateBrandReinitialization
-                : MessageTemplate::kInvalidPrivateFieldReinitialization;
-        return TypeError(message, object, name_string);
-      } else {
-        return TypeError(MessageTemplate::kInvalidPrivateMemberWrite, object,
-                         name_string);
-      }
+    DCHECK_IMPLIES(name->IsPrivateName(), !IsDefineNamedOwnIC());
+    if (!JSReceiver::CheckPrivateStore(&it, IsDefineKeyedOwnIC())) {
+      return MaybeHandle<Object>();
     }
 
     // IC handling of private fields/symbols stores on JSProxy is not
