@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7715c2c0_c6209503",
+        "filename": "src/base/string-format.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-05-13T17:32:24Z",
+      "side": 1,
+      "message": "Hi Clemens, this line isn\u0027t compiling with gcc, including on x64, with the following message:\n```\nerror: zero-length gnu_printf format string [-Werror\u003dformat-zero-length]\n   int characters \u003d base::OS::SNPrintF(message.data(), kMaxLen, kFormatString,\n                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n                                       parts.value...);\n                                       ~~~~~~~~~~~~~~~\n```",
+      "revId": "fa8c5950e01059a3acc15db5560fbcaa4a8a5236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
