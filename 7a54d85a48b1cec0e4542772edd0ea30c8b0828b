@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09706ae_c48414be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-14T18:19:16Z",
+      "side": 1,
+      "message": "I had a bug in JSTemporalTimeZone::offset_nanoseconds() which fix by this CL. That bug cause some flakiness and inconsistency on different config. This CL will close the gap and also complete the UTC-only of Temporal.TimeZone implementation.",
+      "revId": "7a54d85a48b1cec0e4542772edd0ea30c8b0828b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
