@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "075da586_54ddcfe0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-16T23:34:28Z",
+      "side": 1,
+      "message": "Please say more about this bug fix in the CL description; it\u0027s hard to understand what\u0027s happening from the code alone.",
+      "revId": "7a54d85a48b1cec0e4542772edd0ea30c8b0828b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b09706ae_c48414be",
@@ -14,6 +31,41 @@
       "writtenOn": "2022-05-14T18:19:16Z",
       "side": 1,
       "message": "I had a bug in JSTemporalTimeZone::offset_nanoseconds() which fix by this CL. That bug cause some flakiness and inconsistency on different config. This CL will close the gap and also complete the UTC-only of Temporal.TimeZone implementation.",
+      "revId": "7a54d85a48b1cec0e4542772edd0ea30c8b0828b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc4ee785_4de3a57c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-16T23:34:28Z",
+      "side": 1,
+      "message": "Which flakiness/different config? I\u0027d like to see a test that exactly covers this (it looks like something to do with integer overflow?).",
+      "parentUuid": "b09706ae_c48414be",
+      "revId": "7a54d85a48b1cec0e4542772edd0ea30c8b0828b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fac12fb_1e55263d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-16T23:34:28Z",
+      "side": 1,
+      "message": "In future I\u0027d appreciate if you could split out bug fixes from new code. If you\u0027d rather leave this CL as one that\u0027s OK.",
       "revId": "7a54d85a48b1cec0e4542772edd0ea30c8b0828b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
