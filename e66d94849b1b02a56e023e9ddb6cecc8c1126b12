@@ -16,6 +16,92 @@
       "message": "Here goes nothing!  Regarding our Unreachable discussion, perhaps gasm_-\u003eUnreachable() does the right thing; it makes the end control-dependent on the run-time throw call without making the result of the CheckString take some value from that branch as a phi input.  Maybe?  Feedback welcome.",
       "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48d4a226_41fbc2fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-16T16:37:18Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "160ce09b_c1c65b52",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6249,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-16T16:37:18Z",
+      "side": 1,
+      "message": "Looking at other uses of kWasmThrowJSTypeError, the right thing to do here is:\n\n  TerminateThrow(effect(), control());\n\n(`Unreachable` also hooks up `control()` to the End, but `TerminateThrow` is more explicit about the semantic circumstances.)",
+      "range": {
+        "startLine": 6249,
+        "startChar": 4,
+        "endLine": 6249,
+        "endChar": 25
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3860ff_b676c05a",
+        "filename": "test/mjsunit/wasm/stringrefs-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-16T16:37:18Z",
+      "side": 1,
+      "message": "Let\u0027s also have a test that passes `undefined` (or no argument at all, which should be the same thing), just to document what happens then.",
+      "range": {
+        "startLine": 33,
+        "startChar": 48,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c27dc0b6_c3fa9dba",
+        "filename": "test/mjsunit/wasm/stringrefs-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-16T16:37:18Z",
+      "side": 1,
+      "message": "Aren\u0027t you testing such calls already? Every single test in this file calls from JS to Wasm...",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 43
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
