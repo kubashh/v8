@@ -16,6 +16,24 @@
       "message": "Hi, Leszek, the reverted `[test] Move cctest/test-regexp to unittests` has been landed in https://chromium-review.googlesource.com/c/v8/v8/+/3612663. And the reverted `[test] Move cctest/test-log to unittests/logging/log-unittest` has been landed in https://chromium-review.googlesource.com/c/v8/v8/+/3616424 seven days ago, but it seems that some tests break on aix. Should we continue migrating the tests or wait until https://chromium-review.googlesource.com/c/v8/v8/+/3647092 has been fixed? Thanks!",
       "revId": "4d2723e220f8aab6d050e504f0048c753a3f07c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "276a9b0c_cda6fc3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-16T12:41:46Z",
+      "side": 1,
+      "message": "I think we can continue simple migrations like this one, it\u0027ll be interesting to find out the root cause of the AIX crashes (since the behaviour of the test should be the same)",
+      "parentUuid": "68d2f55d_66a317b2",
+      "revId": "4d2723e220f8aab6d050e504f0048c753a3f07c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
