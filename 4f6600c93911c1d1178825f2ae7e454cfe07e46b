@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e83925e_78d5f785",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-16T18:48:56Z",
+      "side": 1,
+      "message": "I think that could cause a data race when called from a background thread (the race is on isolate-\u003ethread_id() since the main thread can be migrated between threads). So we can\u0027t use `!Heap::IsMainThread()` to check whether we are on the background thread without a race. We can only assert that we are on the main thread. That\u0027s why I would actually prefer AssertMainThread() here.",
+      "revId": "4f6600c93911c1d1178825f2ae7e454cfe07e46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677dd096_d24dc874",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-16T18:48:56Z",
+      "side": 1,
+      "message": "In GCTracer this was more internal but imho also already a bit surprising. Since this new method here is supposed to be used from other places as well, I think it\u0027s even more surprising that we have handle shared isolates implicitly as well. Can we make this more explicit?",
+      "revId": "4f6600c93911c1d1178825f2ae7e454cfe07e46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
