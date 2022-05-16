@@ -10584,17 +10584,13 @@ char* HandleScopeImplementer::Iterate(RootVisitor* v, char* storage) {
 }
 
 std::unique_ptr<PersistentHandles> HandleScopeImplementer::DetachPersistent(
-    Address* prev_limit) {
+    Address* prev_block) {
   std::unique_ptr<PersistentHandles> ph(new PersistentHandles(isolate()));
-  DCHECK_NOT_NULL(prev_limit);
+  DCHECK_NOT_NULL(prev_block);
 
   while (!blocks_.empty()) {
     Address* block_start = blocks_.back();
-    Address* block_limit = &block_start[kHandleBlockSize];
-    // We should not need to check for SealHandleScope here. Assert this.
-    DCHECK_IMPLIES(block_start <= prev_limit && prev_limit <= block_limit,
-                   prev_limit == block_limit);
-    if (prev_limit == block_limit) break;
+    if (prev_block == block_start) break;
     ph->blocks_.push_back(blocks_.back());
 #if DEBUG
     ph->ordered_blocks_.insert(blocks_.back());
