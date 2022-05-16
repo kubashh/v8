@@ -123,6 +123,7 @@ def make_clang_command_line(plugin, plugin_args, options):
       "-DV8_ENABLE_WEBASSEMBLY",
       "-DV8_GC_MOLE",
       "-DV8_INTL_SUPPORT",
+      "--sysroot=build/linux/debian_bullseye_i386-sysroot",
       "-I{}".format(options.v8_root_dir),
       "-I{}".format(options.v8_root_dir / 'include'),
       "-I{}".format(options.v8_build_dir / 'gen'),

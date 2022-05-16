@@ -4836,6 +4836,7 @@ int Shell::RunMain(Isolate* isolate, bool last_run) {
       options.isolate_sources[i].WaitForThread();
     }
   }
+  
   WaitForRunningWorkers();
   if (Shell::unhandled_promise_rejections_.load() > 0) {
     printf("%i pending unhandled Promise rejection(s) detected.\n",

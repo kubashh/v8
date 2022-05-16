@@ -33,7 +33,7 @@ if len(sys.argv) < 2:
   print_help()
   exit(1)
 
-if not os.path.isfile("out/build/gen/torque-generated/builtin-definitions.h"):
+if not os.path.isfile("out/x86/gen/torque-generated/builtin-definitions.h"):
   print("Expected generated headers in out/build/gen.")
   print("Either build v8 in out/build or change the 'out/build/gen' location in gcmole.py")
   sys.exit(-1)
@@ -43,7 +43,7 @@ proc = subprocess.Popen(
     [
         sys.executable,
         GCMOLE_PY,
-        "--v8-build-dir=%s" % os.path.join(V8_ROOT_DIR, 'out', 'build'),
+        "--v8-build-dir=%s" % os.path.join(V8_ROOT_DIR, 'out', 'x86'),
         "--v8-target-cpu=%s" % sys.argv[1],
         "--clang-plugins-dir=%s" % CLANG_PLUGINS,
         "--clang-bin-dir=%s" % CLANG_BIN,
