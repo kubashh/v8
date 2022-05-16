@@ -328,6 +328,37 @@ void CsaLoadElimination::HalfState::Print() const {
   Print(arbitrary_unknown_entries_);
 }
 
+// We may encounter a mutable/immutable inconsistency if the same field offset
+// is loaded/stored from the same object both as mutable and immutable. This can
+// only happen in code where the object has been cast to two different
+// incompatible types, i.e. in unreachable code. For safety, we replace this
+// unreachable control branch with a trap.
+Reduction CsaLoadElimination::KillControl(Node* node) {
+  DCHECK_NOT_NULL(jsgraph());
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  for (Edge edge : control->use_edges()) {
+    if (edge.from() != control && edge.from() != effect) {
+      edge.UpdateTo(jsgraph()->Dead());
+      Revisit(edge.from());
+    }
+  }
+  for (Edge edge : effect->use_edges()) {
+    if (edge.from() != control && edge.from() != effect) {
+      edge.UpdateTo(jsgraph()->Dead());
+      Revisit(edge.from());
+    }
+  }
+  Node* trap = graph()->NewNode(common()->TrapUnless(TrapId::kTrapIllegalCast),
+                                jsgraph()->Int32Constant(0), effect, control);
+  Node* throw_node = graph()->NewNode(common()->Throw(), effect, trap);
+  NodeProperties::MergeControlToEnd(graph(), jsgraph()->common(), throw_node);
+  Revisit(graph()->end());
+  Revisit(control);
+  Revisit(effect);
+  return Changed(node);
+}
+
 Reduction CsaLoadElimination::ReduceLoadFromObject(Node* node,
                                                    ObjectAccess const& access) {
   DCHECK(node->opcode() == IrOpcode::kLoadFromObject ||
@@ -338,10 +369,12 @@ Reduction CsaLoadElimination::ReduceLoadFromObject(Node* node,
   AbstractState const* state = node_states_.Get(effect);
   if (state == nullptr) return NoChange();
   bool is_mutable = node->opcode() == IrOpcode::kLoadFromObject;
-  // We should never find a field in the wrong half-state.
-  DCHECK((is_mutable ? &state->immutable_state : &state->mutable_state)
-             ->Lookup(object, offset)
-             .IsEmpty());
+  // We can only find the field in the wrong half-state in unreachable code.
+  if (!(is_mutable ? &state->immutable_state : &state->mutable_state)
+           ->Lookup(object, offset)
+           .IsEmpty()) {
+    return KillControl(node);
+  }
   HalfState const* half_state =
       is_mutable ? &state->mutable_state : &state->immutable_state;
 
@@ -384,8 +417,10 @@ Reduction CsaLoadElimination::ReduceStoreToObject(Node* node,
   if (state == nullptr) return NoChange();
   MachineRepresentation repr = access.machine_type.representation();
   if (node->opcode() == IrOpcode::kStoreToObject) {
-    // We should not find the field in the wrong half-state.
-    DCHECK(state->immutable_state.Lookup(object, offset).IsEmpty());
+    // We can only find the field in the wrong half-state in unreachable code.
+    if (!(state->immutable_state.Lookup(object, offset).IsEmpty())) {
+      return KillControl(node);
+    }
     HalfState const* mutable_state =
         state->mutable_state.KillField(object, offset, repr);
     mutable_state = mutable_state->AddField(object, offset, value, repr);
@@ -393,8 +428,10 @@ Reduction CsaLoadElimination::ReduceStoreToObject(Node* node,
         zone()->New<AbstractState>(*mutable_state, state->immutable_state);
     return UpdateState(node, new_state);
   } else {
-    // We should not find the field in the wrong half-state.
-    DCHECK(state->mutable_state.Lookup(object, offset).IsEmpty());
+    // We can only find the field in the wrong half-state in unreachable code.
+    if (!(state->mutable_state.Lookup(object, offset).IsEmpty())) {
+      return KillControl(node);
+    }
     // We should not initialize the same immutable field twice.
     DCHECK(state->immutable_state.Lookup(object, offset).IsEmpty());
     HalfState const* immutable_state =
