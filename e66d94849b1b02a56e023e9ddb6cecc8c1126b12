@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb05d1d_c60d54a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T15:11:30Z",
+      "side": 1,
+      "message": "Here goes nothing!  Regarding our Unreachable discussion, perhaps gasm_-\u003eUnreachable() does the right thing; it makes the end control-dependent on the run-time throw call without making the result of the CheckString take some value from that branch as a phi input.  Maybe?  Feedback welcome.",
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
