@@ -2631,6 +2631,14 @@ struct ScriptCompileTimerScope {
     kNoCacheBecauseInDocumentWrite,
     kNoCacheBecauseResourceWithNoCacheHandler,
     kHitIsolateCacheWhenStreamingSource,
+
+    // "Partial" hits in the Isolate cache means that there is no top-level
+    // bytecode available, but there is a pre-existing Script object which may
+    // contain data for other functions within the script.
+    kPartialHitIsolateCacheWhenNoCache,
+    kPartialHitIsolateCacheWhenConsumeCodeCache,
+    kPartialHitIsolateCacheWhenStreamingSource,
+
     kCount
   };
 
@@ -2640,7 +2648,7 @@ struct ScriptCompileTimerScope {
         all_scripts_histogram_scope_(isolate->counters()->compile_script()),
         no_cache_reason_(no_cache_reason),
         hit_isolate_cache_(false),
-        producing_code_cache_(false),
+        isolate_cache_contained_script_(false),
         consuming_code_cache_(false),
         consuming_code_cache_failed_(false) {}
 
@@ -2663,7 +2671,9 @@ struct ScriptCompileTimerScope {
 
   void set_hit_isolate_cache() { hit_isolate_cache_ = true; }
 
-  void set_producing_code_cache() { producing_code_cache_ = true; }
+  void set_isolate_cache_contained_script() {
+    isolate_cache_contained_script_ = true;
+  }
 
   void set_consuming_code_cache() { consuming_code_cache_ = true; }
 
@@ -2679,24 +2689,18 @@ struct ScriptCompileTimerScope {
   NestedTimedHistogramScope all_scripts_histogram_scope_;
   ScriptCompiler::NoCacheReason no_cache_reason_;
   bool hit_isolate_cache_;
-  bool producing_code_cache_;
+  bool isolate_cache_contained_script_;
   bool consuming_code_cache_;
   bool consuming_code_cache_failed_;
 
   CacheBehaviour GetCacheBehaviour() {
-    if (producing_code_cache_) {
-      if (hit_isolate_cache_) {
-        return CacheBehaviour::kHitIsolateCacheWhenProduceCodeCache;
-      } else {
-        return CacheBehaviour::kProduceCodeCache;
-      }
-    }
-
     if (consuming_code_cache_) {
       if (hit_isolate_cache_) {
         return CacheBehaviour::kHitIsolateCacheWhenConsumeCodeCache;
       } else if (consuming_code_cache_failed_) {
         return CacheBehaviour::kConsumeCodeCacheFailed;
+      } else if (isolate_cache_contained_script_) {
+        return CacheBehaviour::kPartialHitIsolateCacheWhenConsumeCodeCache;
       }
       return CacheBehaviour::kConsumeCodeCache;
     }
@@ -2706,6 +2710,11 @@ struct ScriptCompileTimerScope {
         return CacheBehaviour::kHitIsolateCacheWhenStreamingSource;
       }
       return CacheBehaviour::kHitIsolateCacheWhenNoCache;
+    } else if (isolate_cache_contained_script_) {
+      if (no_cache_reason_ == ScriptCompiler::kNoCacheBecauseStreamingSource) {
+        return CacheBehaviour::kPartialHitIsolateCacheWhenStreamingSource;
+      }
+      return CacheBehaviour::kPartialHitIsolateCacheWhenNoCache;
     }
 
     switch (no_cache_reason_) {
@@ -2763,12 +2772,14 @@ struct ScriptCompileTimerScope {
       case CacheBehaviour::kConsumeCodeCacheFailed:
         return isolate_->counters()->compile_script_consume_failed();
       case CacheBehaviour::kConsumeCodeCache:
+      case CacheBehaviour::kPartialHitIsolateCacheWhenConsumeCodeCache:
         return isolate_->counters()->compile_script_with_consume_cache();
 
       // Note that this only counts the finalization part of streaming, the
       // actual streaming compile is counted by BackgroundCompileTask into
       // "compile_script_on_background".
       case CacheBehaviour::kNoCacheBecauseStreamingSource:
+      case CacheBehaviour::kPartialHitIsolateCacheWhenStreamingSource:
         return isolate_->counters()->compile_script_streaming_finalization();
 
       case CacheBehaviour::kNoCacheBecauseInlineScript:
@@ -2795,6 +2806,7 @@ struct ScriptCompileTimerScope {
       case CacheBehaviour::kNoCacheBecausePacScript:
       case CacheBehaviour::kNoCacheBecauseInDocumentWrite:
       case CacheBehaviour::kNoCacheBecauseResourceWithNoCacheHandler:
+      case CacheBehaviour::kPartialHitIsolateCacheWhenNoCache:
         return isolate_->counters()->compile_script_no_cache_other();
 
       case CacheBehaviour::kCount:
@@ -3044,6 +3056,9 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     CompilationCacheScript::LookupResult lookup_result =
         compilation_cache->LookupScript(source, script_details, language_mode);
     maybe_script = lookup_result.script();
+    if (!maybe_script.is_null()) {
+      compile_timer.set_isolate_cache_contained_script();
+    }
     maybe_result = lookup_result.toplevel_sfi();
     is_compiled_scope = lookup_result.is_compiled_scope();
     if (!maybe_result.is_null()) {
@@ -3289,6 +3304,9 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
     // another copy of the Script already exists but has no root
     // SharedFunctionInfo or has an uncompiled SharedFunctionInfo. For now, we
     // just ignore it and create a new Script.
+    if (!lookup_result.script().is_null()) {
+      compile_timer.set_isolate_cache_contained_script();
+    }
     if (!lookup_result.toplevel_sfi().is_null()) {
       maybe_result = lookup_result.toplevel_sfi();
     }
