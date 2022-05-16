@@ -354,6 +354,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "071121bc_35d3e80d",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-16T11:05:34Z",
+      "side": 1,
+      "message": "I noticed that checking access for private symbols (that are not private names) breaks a few test262 tests (from Object::NoSideEffectsToMaybeString -\u003e IsErrorObject which attempts to load the error_stack_symbol from the receiver which can be a global proxy without access) as well as a cctest that does something like `context-\u003eGlobal()-\u003eSetPrivate(context, v8::Private::ForApi(...), ...)` with the embedder API (Node.js has a similar use case in https://github.com/nodejs/node/blob/aa14ff904ec4afa9ad2c8fce2144fea3b7fcf9a7/src/api/environment.cc#L528), so I reverted back to only checking private names.",
+      "parentUuid": "b593a1ed_b287283d",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
