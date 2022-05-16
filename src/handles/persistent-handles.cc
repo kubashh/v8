@@ -134,13 +134,14 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
     : impl_(isolate->handle_scope_implementer()) {
   impl_->BeginDeferredScope();
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
+  prev_block_ = impl_->blocks()->back();
   Address* new_next = impl_->GetSpareOrNewBlock();
   Address* new_limit = &new_next[kHandleBlockSize];
   // Check that at least one HandleScope with at least one Handle in it exists,
   // see the class description.
   DCHECK(!impl_->blocks()->empty());
-  // Check that we are not in a SealHandleScope.
-  DCHECK(data->limit == &impl_->blocks()->back()[kHandleBlockSize]);
+  // Make sure we're not in a SealHandleScope.
+  DCHECK_LT(data->sealed_level, data->level);
   impl_->blocks()->push_back(new_next);
 
 #ifdef DEBUG
@@ -160,7 +161,7 @@ PersistentHandlesScope::~PersistentHandlesScope() {
 }
 
 std::unique_ptr<PersistentHandles> PersistentHandlesScope::Detach() {
-  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent(prev_limit_);
+  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent(prev_block_);
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
   data->next = prev_next_;
   data->limit = prev_limit_;
