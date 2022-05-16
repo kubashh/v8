@@ -1894,10 +1894,20 @@ namespace internal {
   CPP(StringPrototypeToUpperCase)
 #endif  // V8_INTL_SUPPORT
 
+#ifdef V8_EXPOSE_MEMORY_CORRUPTION_API
+#define BUILTIN_LIST_MEMORY_CORRUPTION_API(CPP, TFJ, TFS) \
+  CPP(GlobalAddrof)                                       \
+  CPP(GlobalReadMem)                                      \
+  CPP(GlobalWriteMem)
+#else
+#define BUILTIN_LIST_MEMORY_CORRUPTION_API(CPP, TFJ, TFS)
+#endif  // V8_EXPOSE_MEMORY_CORRUPTION_API
+
 #define BUILTIN_LIST(CPP, TFJ, TFC, TFS, TFH, BCH, ASM)  \
   BUILTIN_LIST_BASE(CPP, TFJ, TFC, TFS, TFH, ASM)        \
   BUILTIN_LIST_FROM_TORQUE(CPP, TFJ, TFC, TFS, TFH, ASM) \
   BUILTIN_LIST_INTL(CPP, TFJ, TFS)                       \
+  BUILTIN_LIST_MEMORY_CORRUPTION_API(CPP, TFJ, TFS)      \
   BUILTIN_LIST_BYTECODE_HANDLERS(BCH)
 
 // See the comment on top of BUILTIN_LIST_BASE_TIER0 for an explanation of

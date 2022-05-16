@@ -112,5 +112,55 @@ BUILTIN(GlobalEval) {
       Execution::Call(isolate, function, target_global_proxy, 0, nullptr));
 }
 
+#ifdef V8_EXPOSE_MEMORY_CORRUPTION_API
+BUILTIN(GlobalAddrof) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 2);
+
+  Object arg = args[1];
+  if (!arg.IsHeapObject()) return ReadOnlyRoots(isolate).undefined_value();
+  uint32_t addr = static_cast<uint32_t>(HeapObject::cast(arg).address());
+
+  return *isolate->factory()->NewNumberFromUint(addr);
+}
+
+BUILTIN(GlobalReadMem) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 2);
+
+  Handle<Object> arg1;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, arg1,
+                                     Object::ToNumber(isolate, args.at(1)));
+  uint32_t offset = NumberToUint32(*arg1);
+  Address sandbox_base = GetProcessWideSandbox()->base();
+  uint32_t* addr = reinterpret_cast<uint32_t*>(sandbox_base + offset);
+
+  uint32_t value = *addr;
+
+  return *isolate->factory()->NewNumberFromUint(value);
+}
+
+BUILTIN(GlobalWriteMem) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 3);
+
+  Handle<Object> arg1;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, arg1,
+                                     Object::ToNumber(isolate, args.at(1)));
+  uint32_t offset = NumberToUint32(*arg1);
+  Address sandbox_base = GetProcessWideSandbox()->base();
+  uint32_t* addr = reinterpret_cast<uint32_t*>(sandbox_base + offset);
+
+  Handle<Object> arg2;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, arg2,
+                                     Object::ToNumber(isolate, args.at(2)));
+  uint32_t value = NumberToUint32(*arg2);
+
+  *addr = value;
+
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+#endif  // V8_EXPOSE_MEMORY_CORRUPTION_API
+
 }  // namespace internal
 }  // namespace v8

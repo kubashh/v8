@@ -5564,6 +5564,20 @@ bool Genesis::InstallABunchOfRandomThings() {
   InstallFunctionWithBuiltinId(isolate(), global_object, "isNaN",
                                Builtin::kGlobalIsNaN, 1, true);
 
+#ifdef V8_EXPOSE_MEMORY_CORRUPTION_API
+  // Install Global.addrof
+  InstallFunctionWithBuiltinId(isolate(), global_object, "addrof",
+                               Builtin::kGlobalAddrof, 1, true);
+
+  // Install Global.readmem
+  InstallFunctionWithBuiltinId(isolate(), global_object, "readmem",
+                               Builtin::kGlobalReadMem, 1, true);
+
+  // Install Global.writemem
+  InstallFunctionWithBuiltinId(isolate(), global_object, "writemem",
+                               Builtin::kGlobalWriteMem, 2, true);
+#endif  // V8_EXPOSE_MEMORY_CORRUPTION_API
+
   // Install Array builtin functions.
   {
     Handle<JSFunction> array_constructor(native_context()->array_function(),
