@@ -95,7 +95,19 @@ base::EnumSet<CodeFlushMode> Heap::GetCodeFlushMode(Isolate* isolate) {
   return code_flush_mode;
 }
 
-Isolate* Heap::isolate() { return Isolate::FromHeap(this); }
+Isolate* Heap::isolate() const { return Isolate::FromHeap(this); }
+
+#ifdef DEBUG
+bool Heap::IsMainThread() const {
+  Isolate* isolate = this->isolate();
+  ThreadId thread_id = ThreadId::Current();
+  // We run on isolate's main thread.
+  if (isolate->thread_id() == thread_id) return true;
+  // Or on the current main thread of the shared isolate during shared GCs.
+  Isolate* shared_isolate = isolate->shared_isolate();
+  return shared_isolate && shared_isolate->thread_id() == thread_id;
+}
+#endif
 
 int64_t Heap::external_memory() { return external_memory_.total(); }
 
