@@ -37,9 +37,7 @@ GCTracer::Scope::Scope(GCTracer* tracer, ScopeId scope, ThreadKind thread_kind)
 #ifdef V8_RUNTIME_CALL_STATS
   if (V8_LIKELY(!TracingFlags::is_runtime_stats_enabled())) return;
   if (thread_kind_ == ThreadKind::kMain) {
-#if DEBUG
-    AssertMainThread();
-#endif  // DEBUG
+    DCHECK(tracer_->heap_->IsMainThread());
     runtime_stats_ = tracer_->heap_->isolate_->counters()->runtime_call_stats();
     runtime_stats_->Enter(&timer_, GCTracer::RCSCounterFromScope(scope));
   } else {
@@ -56,10 +54,7 @@ GCTracer::Scope::~Scope() {
   tracer_->AddScopeSample(scope_, duration_ms);
 
   if (thread_kind_ == ThreadKind::kMain) {
-#if DEBUG
-    AssertMainThread();
-#endif  // DEBUG
-
+    DCHECK(tracer_->heap_->IsMainThread());
     if (scope_ == ScopeId::MC_INCREMENTAL ||
         scope_ == ScopeId::MC_INCREMENTAL_START ||
         scope_ == ScopeId::MC_INCREMENTAL_FINALIZE) {
