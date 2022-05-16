@@ -16,6 +16,29 @@
       "message": "Tobias: PTAL.\nJakob: FYI.",
       "revId": "a6c9d8c2a4fe953652d5d751ab5f5ea7b98dd6d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1370e8fa_edca0253",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-16T14:11:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure if the control information of an effect-chain node is always reliable as being the immediately dominating control node. It might be in Wasm and CSA, but at least in JS we could never rely on this. So merging it to End is risky. There is an `Unreachable` operator that is in the effect chain only that could be used as an alternative. It will also trap. This should be rare, so cleaning up the control flow for better performance should not be too necessary.",
+      "range": {
+        "startLine": 338,
+        "startChar": 2,
+        "endLine": 338,
+        "endChar": 56
+      },
+      "revId": "a6c9d8c2a4fe953652d5d751ab5f5ea7b98dd6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
