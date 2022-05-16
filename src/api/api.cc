@@ -167,9 +167,8 @@
 
 namespace v8 {
 
-// TODO(chromium:1323177): Add a separate global for OOMErrorCallback once the
-// types diverge.
-static LegacyOOMErrorCallback g_oom_error_callback = nullptr;
+static DeprecatedLegacyOOMErrorCallback g_legacy_oom_error_callback = nullptr;
+static OOMErrorCallback g_oom_error_callback = nullptr;
 
 static ScriptOrigin GetScriptOriginForScript(i::Isolate* i_isolate,
                                              i::Handle<i::Script> script) {
@@ -207,7 +206,7 @@ Local<PrimitiveArray> ScriptOrigin::HostDefinedOptions() const {
 // When V8 cannot allocate memory FatalProcessOutOfMemory is called. The default
 // OOM error handler is called and execution is stopped.
 void i::V8::FatalProcessOutOfMemory(i::Isolate* i_isolate, const char* location,
-                                    bool is_heap_oom) {
+                                    const OOMDetails& details) {
   char last_few_messages[Heap::kTraceRingBufferSize + 1];
   char js_stacktrace[Heap::kStacktraceBufferSize + 1];
   i::HeapStats heap_stats;
@@ -225,7 +224,10 @@ void i::V8::FatalProcessOutOfMemory(i::Isolate* i_isolate, const char* location,
     memset(&heap_stats, 0xBADC0DE, sizeof(heap_stats));
     // Give the embedder a chance to handle the condition. If it doesn't,
     // just crash.
-    if (g_oom_error_callback) g_oom_error_callback(location, is_heap_oom);
+    if (g_oom_error_callback) g_oom_error_callback(location, details);
+    if (g_legacy_oom_error_callback) {
+      g_legacy_oom_error_callback(location, details.is_heap_oom);
+    }
     FATAL("Fatal process out of memory: %s", location);
     UNREACHABLE();
   }
@@ -299,11 +301,18 @@ void i::V8::FatalProcessOutOfMemory(i::Isolate* i_isolate, const char* location,
       base::OS::PrintError("\n<--- JS stacktrace --->\n%s\n", js_stacktrace);
     }
   }
-  Utils::ReportOOMFailure(i_isolate, location, is_heap_oom);
-  if (g_oom_error_callback) g_oom_error_callback(location, is_heap_oom);
+  Utils::ReportOOMFailure(i_isolate, location, details);
+  if (g_oom_error_callback) g_oom_error_callback(location, details);
+  if (g_legacy_oom_error_callback) {
+    g_legacy_oom_error_callback(location, details.is_heap_oom);
+  }
   // If the fatal error handler returns, we stop execution.
   FATAL("API fatal error handler returned after process out of memory");
 }
+
+// static
+const OOMDetails i::V8::kNoOOMDetails{false, nullptr};
+const OOMDetails i::V8::kHeapOOM{true, nullptr};
 
 void Utils::ReportApiFailure(const char* location, const char* message) {
   i::Isolate* i_isolate = i::Isolate::TryGetCurrent();
@@ -322,15 +331,19 @@ void Utils::ReportApiFailure(const char* location, const char* message) {
 }
 
 void Utils::ReportOOMFailure(i::Isolate* i_isolate, const char* location,
-                             bool is_heap_oom) {
-  LegacyOOMErrorCallback oom_callback = i_isolate->oom_behavior();
-  if (oom_callback == nullptr) {
+                             const OOMDetails& details) {
+  if (auto legacy_oom_callback = i_isolate->legacy_oom_behavior()) {
+    legacy_oom_callback(location, details.is_heap_oom);
+  } else if (auto oom_callback = i_isolate->oom_behavior()) {
+    oom_callback(location, details);
+  } else {
     // TODO(wfh): Remove this fallback once Blink is setting OOM handler. See
     // crbug.com/614440.
     FatalErrorCallback fatal_callback = i_isolate->exception_behavior();
     if (fatal_callback == nullptr) {
       base::OS::PrintError("\n#\n# Fatal %s OOM in %s\n#\n\n",
-                           is_heap_oom ? "javascript" : "process", location);
+                           details.is_heap_oom ? "javascript" : "process",
+                           location);
 #ifdef V8_FUZZILLI
       exit(0);
 #else
@@ -338,12 +351,10 @@ void Utils::ReportOOMFailure(i::Isolate* i_isolate, const char* location,
 #endif  // V8_FUZZILLI
     } else {
       fatal_callback(location,
-                     is_heap_oom
+                     details.is_heap_oom
                          ? "Allocation failed - JavaScript heap out of memory"
                          : "Allocation failed - process out of memory");
     }
-  } else {
-    oom_callback(location, is_heap_oom);
   }
   i_isolate->SignalFatalError();
 }
@@ -6129,8 +6140,13 @@ void V8::SetUnhandledExceptionCallback(
 #endif  // V8_OS_WIN
 
 void v8::V8::SetFatalMemoryErrorCallback(
-    v8::LegacyOOMErrorCallback oom_error_callback) {
+    v8::OOMErrorCallback oom_error_callback) {
   g_oom_error_callback = oom_error_callback;
+}
+
+void v8::V8::SetFatalMemoryErrorCallback(
+    v8::LegacyOOMErrorCallback legacy_oom_error_callback) {
+  g_legacy_oom_error_callback = legacy_oom_error_callback;
 }
 
 void v8::V8::SetEntropySource(EntropySource entropy_source) {
@@ -9394,7 +9410,9 @@ size_t Isolate::CopyCodePages(size_t capacity, MemoryRange* code_pages_out) {
   }
 
 CALLBACK_SETTER(FatalErrorHandler, FatalErrorCallback, exception_behavior)
-CALLBACK_SETTER(OOMErrorHandler, LegacyOOMErrorCallback, oom_behavior)
+CALLBACK_SETTER(OOMErrorHandler, OOMErrorCallback, oom_behavior)
+CALLBACK_SETTER(OOMErrorHandler, DeprecatedLegacyOOMErrorCallback,
+                legacy_oom_behavior)
 CALLBACK_SETTER(ModifyCodeGenerationFromStringsCallback,
                 ModifyCodeGenerationFromStringsCallback2,
                 modify_code_gen_callback2)

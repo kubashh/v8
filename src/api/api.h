@@ -46,6 +46,12 @@ class Script;
 class EphemeronTable;
 }  // namespace debug
 
+// Redefine LegacyOOMErrorCallback here for internal usage. We still need to
+// support it but it is deprecated so would trigger warnings.
+// TODO(chromium:1323177): Remove this.
+using DeprecatedLegacyOOMErrorCallback = void (*)(const char* location,
+                                                  bool is_heap_oom);
+
 // Constants used in the implementation of the API.  The most natural thing
 // would usually be to place these with the classes that use them, but
 // we want to keep them out of v8.h because it is an externally
@@ -156,7 +162,7 @@ class Utils {
     return condition;
   }
   static void ReportOOMFailure(v8::internal::Isolate* isolate,
-                               const char* location, bool is_heap_oom);
+                               const char* location, const OOMDetails& details);
 
   static inline Local<debug::AccessorPair> ToLocal(
       v8::internal::Handle<v8::internal::AccessorPair> obj);
