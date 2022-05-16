@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "535c94c2_14f897f4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "478f83d5_1659cf61",
+      "range": {
+        "startLine": 801,
+        "startChar": 15,
+        "endLine": 801,
+        "endChar": 21
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa630a6d_1324083d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-13T18:02:06Z",
       "side": 1,
       "message": "nit: could mark this `const` to clarify that it intentionally won\u0027t get updated later.",
+      "range": {
+        "startLine": 802,
+        "startChar": 2,
+        "endLine": 802,
+        "endChar": 10
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69b23bfd_64d8822b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa630a6d_1324083d",
       "range": {
         "startLine": 802,
         "startChar": 2,
@@ -93,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c82ee5_c47eff02",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44cd0f43_c242f1e8",
+      "range": {
+        "startLine": 1136,
+        "startChar": 22,
+        "endLine": 1136,
+        "endChar": 26
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08d8646d_7f033bde",
@@ -116,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07b30420_40178c98",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Thanks.  Also a bit less copy-paste-error-prone this way; I found that StringViewIterCur had an incorrect arity.",
+      "parentUuid": "08d8646d_7f033bde",
+      "range": {
+        "startLine": 2263,
+        "startChar": 12,
+        "endLine": 2263,
+        "endChar": 28
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3def079_2d053a3a",
@@ -129,6 +225,30 @@
       "writtenOn": "2022-05-13T18:02:06Z",
       "side": 1,
       "message": "nit: optionally, you can also `Drop(4)` if you prefer conciseness (and a tiny efficiency benefit) over explicitness.\n\nSame for the other instructions that drop more than one value.",
+      "range": {
+        "startLine": 5306,
+        "startChar": 8,
+        "endLine": 5309,
+        "endChar": 19
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc01e1dc_86afa18d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5309,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3def079_2d053a3a",
       "range": {
         "startLine": 5306,
         "startChar": 8,
@@ -185,6 +305,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "029b0ee3_0720aa53",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5426,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01294c2b_179ca4af",
+      "range": {
+        "startLine": 5426,
+        "startChar": 43,
+        "endLine": 5426,
+        "endChar": 64
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c1aca42_d797e812",
@@ -198,6 +342,30 @@
       "writtenOn": "2022-05-13T18:02:06Z",
       "side": 1,
       "message": "You can drop these two, they\u0027re on-by-default anyway. (Alternatively, please prefer two `// Flags: ...` lines over exceeding the 80col line length.)",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 46
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1593a322_1c564923",
+        "filename": "test/mjsunit/wasm/stringrefs-valid.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c1aca42_d797e812",
       "range": {
         "startLine": 5,
         "startChar": 10,
@@ -244,6 +412,30 @@
       "writtenOn": "2022-05-13T18:02:06Z",
       "side": 1,
       "message": "Might be nice to also have a test that an invalid immediate (i.e. `kExprStringEncodeWtf8, 0, 3`) is rejected.",
+      "range": {
+        "startLine": 105,
+        "startChar": 22,
+        "endLine": 105,
+        "endChar": 48
+      },
+      "revId": "21eb3ef53ccaeeb8c8d9b6566e7470d6e14b5f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63041199_4eb07e1f",
+        "filename": "test/mjsunit/wasm/stringrefs-valid.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-16T08:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06e9ea9f_3adbf836",
       "range": {
         "startLine": 105,
         "startChar": 22,
