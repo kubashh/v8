@@ -58,8 +58,16 @@ void WebSnapshotSerializerDeserializer::IterateBuiltinObjects(
   func(roots.Object_string(), isolate_->context().object_function());
   func(*factory()->NewStringFromAsciiChecked("Object.prototype"),
        isolate_->context().initial_object_prototype());
-
-  static_assert(kBuiltinObjectCount == 4);
+  func(roots.Function_string(), isolate_->context().function_function());
+  func(*factory()->NewStringFromAsciiChecked("Function.prototype"),
+       isolate_->context().function_prototype());
+  // TODO(v8:11525): There are no obvious names for these, since AsyncFunction
+  // is not a global object.
+  func(*factory()->NewStringFromAsciiChecked("AsyncFunction"),
+       isolate_->context().async_function_constructor());
+  func(*factory()->NewStringFromAsciiChecked("AsyncFunction.prototype"),
+       isolate_->context().async_function_constructor().instance_prototype());
+  STATIC_ASSERT(kBuiltinObjectCount == 8);
 }
 
 uint32_t WebSnapshotSerializerDeserializer::FunctionKindToFunctionFlags(
@@ -74,6 +82,8 @@ uint32_t WebSnapshotSerializerDeserializer::FunctionKindToFunctionFlags(
     case FunctionKind::kAsyncGeneratorFunction:
     case FunctionKind::kBaseConstructor:
     case FunctionKind::kDefaultBaseConstructor:
+    case FunctionKind::kDerivedConstructor:
+    case FunctionKind::kDefaultDerivedConstructor:
     case FunctionKind::kConciseMethod:
     case FunctionKind::kAsyncConciseMethod:
       break;
@@ -642,8 +652,8 @@ void WebSnapshotSerializer::ConstructSource() {
   DCHECK(!in_place);
 }
 
-void WebSnapshotSerializer::SerializeFunctionInfo(ValueSerializer* serializer,
-                                                  Handle<JSFunction> function) {
+void WebSnapshotSerializer::SerializeFunctionInfo(Handle<JSFunction> function,
+                                                  ValueSerializer& serializer) {
   if (!function->shared().HasSourceCode()) {
     Throw("Function without source code");
     return;
@@ -653,33 +663,34 @@ void WebSnapshotSerializer::SerializeFunctionInfo(ValueSerializer* serializer,
     DisallowGarbageCollection no_gc;
     Context context = function->context();
     if (context.IsNativeContext() || context.IsScriptContext()) {
-      serializer->WriteUint32(0);
+      serializer.WriteUint32(0);
     } else {
       DCHECK(context.IsFunctionContext() || context.IsBlockContext());
       uint32_t context_id = GetContextId(context);
-      serializer->WriteUint32(context_id + 1);
+      serializer.WriteUint32(context_id + 1);
     }
   }
 
-  serializer->WriteUint32(source_id_);
+  serializer.WriteUint32(source_id_);
   int start = function->shared().StartPosition();
   int end = function->shared().EndPosition();
-  serializer->WriteUint32(source_offset_to_compacted_source_offset_[start]);
-  serializer->WriteUint32(end - start);
+  serializer.WriteUint32(source_offset_to_compacted_source_offset_[start]);
+  serializer.WriteUint32(end - start);
 
-  serializer->WriteUint32(
+  serializer.WriteUint32(
       function->shared().internal_formal_parameter_count_without_receiver());
-  serializer->WriteUint32(
+  serializer.WriteUint32(
       FunctionKindToFunctionFlags(function->shared().kind()));
 
   if (function->has_prototype_slot() && function->has_instance_prototype()) {
     DisallowGarbageCollection no_gc;
     JSObject prototype = JSObject::cast(function->instance_prototype());
     uint32_t prototype_id = GetObjectId(prototype);
-    serializer->WriteUint32(prototype_id + 1);
+    serializer.WriteUint32(prototype_id + 1);
   } else {
-    serializer->WriteUint32(0);
+    serializer.WriteUint32(0);
   }
+  WriteValue(handle(function->map().prototype(), isolate_), serializer);
 }
 
 void WebSnapshotSerializer::ShallowDiscoverExternals(FixedArray externals) {
@@ -882,6 +893,8 @@ void WebSnapshotSerializer::DiscoverContextAndPrototype(
         handle(function->instance_prototype(), isolate_));
     discovery_queue_.push(prototype);
   }
+
+  discovery_queue_.push(handle(function->map().prototype(), isolate_));
 }
 
 void WebSnapshotSerializer::DiscoverContext(Handle<Context> context) {
@@ -915,16 +928,40 @@ void WebSnapshotSerializer::DiscoverSource(Handle<JSFunction> function) {
     Throw("Function without source code");
     return;
   }
-  source_intervals_.emplace(function->shared().StartPosition(),
-                            function->shared().EndPosition());
+  // We might have multiple scripts pieced together (some of them generated).
+  Handle<Script> script =
+      handle(Script::cast(function->shared().script()), isolate_);
   Handle<String> function_script_source =
-      handle(String::cast(Script::cast(function->shared().script()).source()),
-             isolate_);
+      handle(String::cast(script->source()), isolate_);
+
+  int script_offset_int;
   if (full_source_.is_null()) {
+    // This is the first script.
+    script_offset_int = 0;
     full_source_ = function_script_source;
-  } else if (!full_source_->Equals(*function_script_source)) {
-    Throw("Cannot include functions from multiple scripts");
+    script_offsets_.insert({script->id(), script_offset_int});
+  } else {
+    auto it = script_offsets_.find(script->id());
+    if (it == script_offsets_.end()) {
+      // This script hasn't been encountered yet and its source code has to be
+      // added to full_source_.
+      DCHECK(!full_source_.is_null());
+      script_offset_int = full_source_->length();
+      script_offsets_.insert({script->id(), script_offset_int});
+      if (!factory()
+               ->NewConsString(full_source_, function_script_source)
+               .ToHandle(&full_source_)) {
+        Throw("Can't construct source");
+        return;
+      }
+    } else {
+      // The script source is already somewhere in full_source_.
+      script_offset_int = it->second;
+    }
   }
+  source_intervals_.emplace(
+      script_offset_int + function->shared().StartPosition(),
+      script_offset_int + function->shared().EndPosition());
 }
 
 void WebSnapshotSerializer::DiscoverArray(Handle<JSArray> array) {
@@ -1126,7 +1163,7 @@ void WebSnapshotSerializer::DiscoverSymbol(Handle<Symbol> symbol) {
 // prototype otherwise
 // TODO(v8:11525): Investigate whether the length is really needed.
 void WebSnapshotSerializer::SerializeFunction(Handle<JSFunction> function) {
-  SerializeFunctionInfo(&function_serializer_, function);
+  SerializeFunctionInfo(function, function_serializer_);
   // TODO(v8:11525): Support properties in functions.
 }
 
@@ -1139,7 +1176,7 @@ void WebSnapshotSerializer::SerializeFunction(Handle<JSFunction> function) {
 // - Flags (see FunctionFlags)
 // - 1 + object id for the function prototype
 void WebSnapshotSerializer::SerializeClass(Handle<JSFunction> function) {
-  SerializeFunctionInfo(&class_serializer_, function);
+  SerializeFunctionInfo(function, class_serializer_);
   // TODO(v8:11525): Support properties in classes.
   // TODO(v8:11525): Support class members.
 }
@@ -2356,6 +2393,7 @@ void WebSnapshotDeserializer::DeserializeFunctions() {
     functions_.set(current_function_count_, *function);
 
     ReadFunctionPrototype(function);
+    DeserializeObjectPrototypeForFunction(function);
   }
 }
 
@@ -2412,9 +2450,10 @@ void WebSnapshotDeserializer::DeserializeClasses() {
     Handle<JSFunction> function = CreateJSFunction(
         function_count_ + current_class_count_ + 1, start_position, length,
         parameter_count, flags, context_id);
-    classes_.set(current_class_count_, *function);
 
     ReadFunctionPrototype(function);
+    DeserializeObjectPrototypeForFunction(function);
+    classes_.set(current_class_count_, *function);
   }
 }
 
@@ -2425,6 +2464,28 @@ void WebSnapshotDeserializer::DeserializeObjectPrototype(Handle<Map> map) {
   if (!was_deferred) {
     SetPrototype(map, handle(prototype, isolate_));
   }
+}
+
+void WebSnapshotDeserializer::DeserializeObjectPrototypeForFunction(
+    Handle<JSFunction> function) {
+  Handle<Map> map(function->map(), isolate_);
+  map = Map::CopyDropDescriptors(isolate_, map);
+  auto result = ReadValue(map, 0, InternalizeStrings::kNo);
+  Object prototype = std::get<0>(result);
+  bool was_deferred = std::get<1>(result);
+  // If we got a deferred reference, the prototype cannot be a builtin; those
+  // references aren't deferred.
+  // TODO(v8:11525): if the object order is relaxed, it's possible to have a
+  // deferred reference to Function.prototype, and we'll need to recognize and
+  // handle that case.
+  if (prototype == isolate_->context().function_prototype()) {
+    // TODO(v8:11525): Avoid map creation (above) in this case.
+    return;
+  }
+  if (!was_deferred) {
+    SetPrototype(map, handle(prototype, isolate_));
+  }
+  function->set_map(*map, kReleaseStore);
 }
 
 Handle<Map>
