@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce21da5c_4ee44e70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-05-17T16:38:31Z",
+      "side": 1,
+      "message": "Hey, WDYT of this CL, does that seem reasonable? I want to make the sandbox testable so you can e.g. write regression tests for sandbox issues. This API should enable that. See also the referenced issue",
+      "revId": "ff977884647841c48a80c76ab611741e590b8c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
