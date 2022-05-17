@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81ea6dd4_79818408",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5332,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-17T15:19:57Z",
+      "side": 1,
+      "message": "This is a little confusing; but I\u0027m guessing the result is a vector containing either 0 or FF; anding with this and using vmax gives us the highest index?",
+      "revId": "b15e81f05551bb6339277371c2920e247ce9a5ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71f68b6d_932baa6b",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5337,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-17T15:19:57Z",
+      "side": 1,
+      "message": "and here we just have 2 values out. Could we also have used {1,0,2,0}? or {1,1,2,2}?\n\nI think adding at ~5324 what the output is in case of match/failure would help understand what\u0027s going on. (I just partially know because i already read about the intel variant in other documentation)",
+      "revId": "b15e81f05551bb6339277371c2920e247ce9a5ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
