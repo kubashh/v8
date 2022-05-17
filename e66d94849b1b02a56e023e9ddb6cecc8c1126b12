@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5863a67e_156b3ba2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6249,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-17T06:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "160ce09b_c1c65b52",
+      "range": {
+        "startLine": 6249,
+        "startChar": 4,
+        "endLine": 6249,
+        "endChar": 25
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e3860ff_b676c05a",
@@ -83,6 +107,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "07c357c2_0b5d6bb7",
+        "filename": "test/mjsunit/wasm/stringrefs-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-17T06:25:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e3860ff_b676c05a",
+      "range": {
+        "startLine": 33,
+        "startChar": 48,
+        "endLine": 33,
+        "endChar": 50
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c27dc0b6_c3fa9dba",
         "filename": "test/mjsunit/wasm/stringrefs-js.js",
         "patchSetId": 1
@@ -94,6 +142,30 @@
       "writtenOn": "2022-05-16T16:37:18Z",
       "side": 1,
       "message": "Aren\u0027t you testing such calls already? Every single test in this file calls from JS to Wasm...",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 43
+      },
+      "revId": "e66d94849b1b02a56e023e9ddb6cecc8c1126b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7acb2a1_8ede21fa",
+        "filename": "test/mjsunit/wasm/stringrefs-js.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-17T06:25:24Z",
+      "side": 1,
+      "message": "Right, typo - meant to say \"wasm to js\".",
+      "parentUuid": "c27dc0b6_c3fa9dba",
       "range": {
         "startLine": 94,
         "startChar": 0,
