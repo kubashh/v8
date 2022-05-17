@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1065e73_ee2195e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-05-17T07:58:06Z",
+      "side": 1,
+      "message": "Uploaded patch has TerminateThrow clear the graph assembler\u0027s current effect and control nodes.  Otherwise the label bind doesn\u0027t work because it sees that the current control is non-null.  Passes a x64.debug.check locally.  PTAL :)",
+      "revId": "38a588aa2e445de203ff7308067b0c4bc5265bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
