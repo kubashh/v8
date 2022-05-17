@@ -994,6 +994,9 @@ FUNCTION_REFERENCE(try_string_to_index_or_lookup_existing,
 FUNCTION_REFERENCE(string_from_forward_table,
                    StringForwardingTable::GetForwardStringAddress)
 FUNCTION_REFERENCE(string_to_array_index_function, String::ToArrayIndex)
+FUNCTION_REFERENCE(array_indexof_includes_smi_or_object,
+                   ArrayIndexOfIncludesSmiOrObject)
+FUNCTION_REFERENCE(array_indexof_includes_double, ArrayIndexOfIncludesDouble)
 
 static Address LexicographicCompareWrapper(Isolate* isolate, Address smi_x,
                                            Address smi_y) {
