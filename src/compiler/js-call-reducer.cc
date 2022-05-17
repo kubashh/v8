@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "src/api/api-inl.h"
+#include "src/base/cpu.h"
 #include "src/base/small-vector.h"
 #include "src/builtins/builtins-promise.h"
 #include "src/builtins/builtins-utils.h"
@@ -2074,8 +2075,11 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
   if (variant == ArrayIndexOfIncludesVariant::kIndexOf) {
     switch (elements_kind) {
       case PACKED_SMI_ELEMENTS:
-      case HOLEY_SMI_ELEMENTS:
+        return Builtins::CallableFor(isolate, Builtin::kArrayIndexOfPackedSmi);
       case PACKED_ELEMENTS:
+        return Builtins::CallableFor(isolate,
+                                     Builtin::kArrayIndexOfPackedObject);
+      case HOLEY_SMI_ELEMENTS:
       case HOLEY_ELEMENTS:
         return Builtins::CallableFor(isolate,
                                      Builtin::kArrayIndexOfSmiOrObject);
@@ -2091,8 +2095,11 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
     DCHECK_EQ(variant, ArrayIndexOfIncludesVariant::kIncludes);
     switch (elements_kind) {
       case PACKED_SMI_ELEMENTS:
-      case HOLEY_SMI_ELEMENTS:
+        return Builtins::CallableFor(isolate, Builtin::kArrayIncludesPackedSmi);
       case PACKED_ELEMENTS:
+        return Builtins::CallableFor(isolate,
+                                     Builtin::kArrayIncludesPackedObject);
+      case HOLEY_SMI_ELEMENTS:
       case HOLEY_ELEMENTS:
         return Builtins::CallableFor(isolate,
                                      Builtin::kArrayIncludesSmiOrObject);
@@ -2109,7 +2116,6 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
 }
 
 }  // namespace
-
 TNode<Object>
 IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeIndexOfIncludes(
     ElementsKind kind, ArrayIndexOfIncludesVariant variant) {
@@ -2147,7 +2153,6 @@ IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeIndexOfIncludes(
   return Call4(GetCallableForArrayIndexOfIncludes(variant, kind, isolate()),
                context, elements, search_element, length, from_index);
 }
-
 namespace {
 
 struct PromiseCtorFrameStateParams {
