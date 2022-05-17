@@ -16,6 +16,75 @@
       "message": "Happy reviewing :)",
       "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a300d781_629bfa90",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T13:39:49Z",
+      "side": 1,
+      "message": "This looks wrong, given that it\u0027s actually an untagged value. CAST will return a runtime check, which could fail in principle. (I guess it doesn\u0027t because there is not much to check for `Object`, but still...).\nThe better alternative is `UncheckedCast\u003cIntPtrT\u003e(CallCFunction(...`",
+      "range": {
+        "startLine": 843,
+        "startChar": 4,
+        "endLine": 843,
+        "endChar": 32
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7649bc89_0c871955",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T13:39:49Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 899,
+        "startChar": 6,
+        "endLine": 899,
+        "endChar": 33
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2407a831_95f0193f",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T13:39:49Z",
+      "side": 1,
+      "message": "see above",
+      "range": {
+        "startLine": 1055,
+        "startChar": 4,
+        "endLine": 1055,
+        "endChar": 32
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
