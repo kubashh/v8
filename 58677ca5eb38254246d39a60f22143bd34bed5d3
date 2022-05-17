@@ -372,6 +372,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aaf0de35_7cb71019",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-17T12:53:26Z",
+      "side": 1,
+      "message": "Node.js perhaps sets the property, but afaik there are no access checks there. If you do have access, setting the symbol should simply succeed.",
+      "parentUuid": "071121bc_35d3e80d",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
