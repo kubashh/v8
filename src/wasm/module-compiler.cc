@@ -1267,12 +1267,11 @@ void ThrowLazyCompilationError(Isolate* isolate,
 
 class TransitiveTypeFeedbackProcessor {
  public:
-  TransitiveTypeFeedbackProcessor(const WasmModule* module,
-                                  Handle<WasmInstanceObject> instance,
-                                  int func_index)
+  TransitiveTypeFeedbackProcessor(WasmInstanceObject instance, int func_index)
       : instance_(instance),
-        feedback_for_function_(module->type_feedback.feedback_for_function) {
-    base::MutexGuard mutex_guard(&module->type_feedback.mutex);
+        feedback_for_function_(
+            instance.module()->type_feedback.feedback_for_function) {
+    base::MutexGuard mutex_guard(&instance.module()->type_feedback.mutex);
     queue_.insert(func_index);
     while (!queue_.empty()) {
       auto next = queue_.cbegin();
@@ -1301,22 +1300,20 @@ class TransitiveTypeFeedbackProcessor {
     }
   }
 
-  Handle<WasmInstanceObject> instance_;
+  DisallowGarbageCollection no_gc_scope_;
+  WasmInstanceObject instance_;
   std::map<uint32_t, FunctionTypeFeedback>& feedback_for_function_;
   std::unordered_set<int> queue_;
 };
 
 void TransitiveTypeFeedbackProcessor::Process(int func_index) {
-  int which_vector = declared_function_index(instance_->module(), func_index);
-  Object maybe_feedback = instance_->feedback_vectors().get(which_vector);
+  const WasmModule* module = instance_.module();
+  int which_vector = declared_function_index(module, func_index);
+  Object maybe_feedback = instance_.feedback_vectors().get(which_vector);
   if (!maybe_feedback.IsFixedArray()) return;
   FixedArray feedback = FixedArray::cast(maybe_feedback);
   std::vector<CallSiteFeedback> result(feedback.length() / 2);
-  int imported_functions =
-      static_cast<int>(instance_->module()->num_imported_functions);
-  WasmModuleObject module_object = instance_->module_object();
-  const NativeModule* native_module = module_object.native_module();
-  const WasmModule* module = native_module->module();
+  int imported_functions = static_cast<int>(module->num_imported_functions);
   const std::vector<uint32_t>& call_direct_targets(
       module->type_feedback.feedback_for_function[func_index].call_targets);
   for (int i = 0; i < feedback.length(); i += 2) {
@@ -1329,7 +1326,7 @@ void TransitiveTypeFeedbackProcessor::Process(int func_index) {
       // if it's defined in the same module.
       WasmExportedFunction target = WasmExportedFunction::cast(
           WasmInternalFunction::cast(value).external());
-      if (target.instance() == *instance_ &&
+      if (target.instance() == instance_ &&
           target.function_index() >= imported_functions) {
         if (FLAG_trace_wasm_speculative_inlining) {
           PrintF("[Function #%d call_ref #%d inlineable (monomorphic)]\n",
@@ -1370,7 +1367,7 @@ void TransitiveTypeFeedbackProcessor::Process(int func_index) {
         }
         WasmExportedFunction target =
             WasmExportedFunction::cast(internal.external());
-        if (target.instance() != *instance_ ||
+        if (target.instance() != instance_ ||
             target.function_index() < imported_functions) {
           continue;
         }
@@ -1415,8 +1412,12 @@ void TransitiveTypeFeedbackProcessor::Process(int func_index) {
   feedback_for_function_[func_index].feedback_vector = std::move(result);
 }
 
-void TriggerTierUp(Isolate* isolate, NativeModule* native_module,
-                   int func_index, Handle<WasmInstanceObject> instance) {
+void ProcessTransitiveTypeFeedback(WasmInstanceObject instance,
+                                   int func_index) {
+  TransitiveTypeFeedbackProcessor process(instance, func_index);
+}
+
+void TriggerTierUp(NativeModule* native_module, int func_index) {
   CompilationStateImpl* compilation_state =
       Impl(native_module->compilation_state());
   WasmCompilationUnit tiering_unit{func_index, ExecutionTier::kTurbofan,
@@ -1439,12 +1440,6 @@ void TriggerTierUp(Isolate* isolate, NativeModule* native_module,
       return;
     }
     priority = saved_priority;
-  }
-  if (FLAG_wasm_speculative_inlining) {
-    // TODO(jkummerow): we could have collisions here if different instances
-    // of the same module have collected different feedback. If that ever
-    // becomes a problem, figure out a solution.
-    TransitiveTypeFeedbackProcessor process(module, instance, func_index);
   }
 
   compilation_state->AddTopTierPriorityCompilationUnit(tiering_unit, priority);
