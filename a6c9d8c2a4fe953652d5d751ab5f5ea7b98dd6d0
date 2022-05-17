@@ -39,6 +39,30 @@
       },
       "revId": "a6c9d8c2a4fe953652d5d751ab5f5ea7b98dd6d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad0d87bc_c0bde001",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-17T11:09:11Z",
+      "side": 1,
+      "message": "Thanks, that sounds better. I updated the implementation to the simpler approach.",
+      "parentUuid": "1370e8fa_edca0253",
+      "range": {
+        "startLine": 338,
+        "startChar": 2,
+        "endLine": 338,
+        "endChar": 56
+      },
+      "revId": "a6c9d8c2a4fe953652d5d751ab5f5ea7b98dd6d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
