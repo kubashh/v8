@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150d0fd7_f8c11e7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-17T19:19:16Z",
+      "side": 1,
+      "message": "lgtm, thanks for the explanation in the description. I take it the removal of the \"L\" suffix on the literals is to avoid any further confusion about the width of those constants?",
+      "revId": "0c33b53cdb44a184284020310adba939548a76b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f63b1f6_708e0a39",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 7128,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-17T19:19:16Z",
+      "side": 1,
+      "message": "I\u0027d prefer not to have this constant and just use the literal.",
+      "revId": "0c33b53cdb44a184284020310adba939548a76b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
