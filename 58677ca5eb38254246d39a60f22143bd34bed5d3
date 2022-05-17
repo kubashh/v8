@@ -390,6 +390,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11909343_2d7442bf",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-05-17T13:02:03Z",
+      "side": 1,
+      "message": "Re error_stack_symbol; I presume that currently throws? If so we should fix the NoSideEffects versions of methods to not throw on failed access check but do something default.",
+      "parentUuid": "aaf0de35_7cb71019",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
