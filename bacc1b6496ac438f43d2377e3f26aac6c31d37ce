@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "692729b6_16e3945a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-17T16:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a300d781_629bfa90",
+      "range": {
+        "startLine": 843,
+        "startChar": 4,
+        "endLine": 843,
+        "endChar": 32
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7649bc89_0c871955",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d3e7119_5307e7fc",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-17T16:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7649bc89_0c871955",
+      "range": {
+        "startLine": 899,
+        "startChar": 6,
+        "endLine": 899,
+        "endChar": 33
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2407a831_95f0193f",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-05-17T13:39:49Z",
       "side": 1,
       "message": "see above",
+      "range": {
+        "startLine": 1055,
+        "startChar": 4,
+        "endLine": 1055,
+        "endChar": 32
+      },
+      "revId": "bacc1b6496ac438f43d2377e3f26aac6c31d37ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5eabd58_cc70d238",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-17T16:38:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2407a831_95f0193f",
       "range": {
         "startLine": 1055,
         "startChar": 4,

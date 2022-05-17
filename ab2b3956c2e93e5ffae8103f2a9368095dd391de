@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b831cd3_31120a75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-17T16:38:35Z",
+      "side": 1,
+      "message": "I\u0027ve updated the code to support HOLEY arrays, and merged the Object and Smi case, since they were doing the same thing.",
+      "revId": "ab2b3956c2e93e5ffae8103f2a9368095dd391de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
