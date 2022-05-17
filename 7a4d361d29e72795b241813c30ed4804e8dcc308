@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88252d64_0016d7d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T12:10:20Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "7a4d361d29e72795b241813c30ed4804e8dcc308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b718a2_8a83cb11",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T12:10:20Z",
+      "side": 1,
+      "message": "Nit: The control flow should be unreachable before already, we are just asserting that it really is. So I\u0027d suggest to call this function `AssertUnreachable` or `MarkAsUnreachable`.",
+      "range": {
+        "startLine": 336,
+        "startChar": 30,
+        "endLine": 336,
+        "endChar": 45
+      },
+      "revId": "7a4d361d29e72795b241813c30ed4804e8dcc308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a092fba4_2277643a",
+        "filename": "src/compiler/csa-load-elimination.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-17T12:10:20Z",
+      "side": 1,
+      "message": "nit: I think this can be `return Replace(unreachable);`, since we replace all uses anyway.",
+      "range": {
+        "startLine": 341,
+        "startChar": 2,
+        "endLine": 342,
+        "endChar": 23
+      },
+      "revId": "7a4d361d29e72795b241813c30ed4804e8dcc308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
