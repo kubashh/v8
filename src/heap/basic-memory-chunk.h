@@ -174,6 +174,10 @@ class BasicMemoryChunk {
 
   void set_owner(BaseSpace* space) { owner_ = space; }
 
+  HugePageRange* huge_page() const { return huge_page_; }
+
+  void set_huge_page(HugePageRange* huge_page) { huge_page_ = huge_page; }
+
   void SetFlag(Flag flag) { main_thread_flags_ |= flag; }
   bool IsFlagSet(Flag flag) const { return main_thread_flags_ & flag; }
   void ClearFlag(Flag flag) {
@@ -364,6 +368,9 @@ class BasicMemoryChunk {
 
   // If the chunk needs to remember its memory reservation, it is stored here.
   VirtualMemory reservation_;
+
+  // // The huge page range owning this memory chunk.
+  HugePageRange* huge_page_;
 
   friend class BasicMemoryChunkValidator;
   friend class ConcurrentMarkingState;

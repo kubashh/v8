@@ -241,11 +241,13 @@ void MemoryAllocator::FreeMemoryRegion(v8::PageAllocator* page_allocator,
 
 Address MemoryAllocator::AllocateAlignedMemory(
     size_t chunk_size, size_t area_size, size_t alignment,
-    Executability executable, void* hint, VirtualMemory* controller) {
+    Executability executable, void* hint, VirtualMemory* controller,
+    bool huge_page) {
   v8::PageAllocator* page_allocator = this->page_allocator(executable);
-  DCHECK_LT(area_size, chunk_size);
+  DCHECK_LE(area_size, chunk_size);
 
-  VirtualMemory reservation(page_allocator, chunk_size, hint, alignment);
+  VirtualMemory reservation(page_allocator, chunk_size, hint, alignment,
+                            JitPermission::kNoJit, huge_page);
   if (!reservation.IsReserved()) return HandleAllocationFailure();
 
   // We cannot use the last chunk in the address space because we would
@@ -272,9 +274,14 @@ Address MemoryAllocator::AllocateAlignedMemory(
   } else {
     // No guard page between page header and object area. This allows us to make
     // all OS pages for both regions readable+writable at once.
-    const size_t commit_size =
-        ::RoundUp(MemoryChunkLayout::ObjectStartOffsetInDataPage() + area_size,
-                  GetCommitPageSize());
+    size_t commit_size;
+    if (huge_page) {
+      commit_size = area_size;
+    } else {
+      commit_size = ::RoundUp(
+          MemoryChunkLayout::ObjectStartOffsetInDataPage() + area_size,
+          GetCommitPageSize());
+    }
 
     if (reservation.SetPermissions(base, commit_size,
                                    PageAllocator::kReadWrite)) {
@@ -404,6 +411,11 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
   DCHECK(reservation->IsReserved());
   chunk->set_size(chunk->size() - bytes_to_free);
   chunk->set_area_end(new_area_end);
+  // Don't really free if in huge page range.
+  if (chunk->huge_page()) {
+    size_ -= bytes_to_free;
+    return;
+  }
   if (chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
     // Add guard page at the end.
     size_t page_size = GetCommitPageSize();
@@ -511,6 +523,10 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
 }
 
 void MemoryAllocator::Free(MemoryAllocator::FreeMode mode, MemoryChunk* chunk) {
+  if (chunk->huge_page()) {
+    FreeFromHugePageRange(chunk);
+    return;
+  }
   switch (mode) {
     case FreeMode::kImmediately:
       PreFreeMemory(chunk);
@@ -538,6 +554,11 @@ void MemoryAllocator::FreePooledChunk(MemoryChunk* chunk) {
 
 Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
                                     Space* space, Executability executable) {
+  if (CanAllocateInHugePage(space)) {
+    Page* page = AllocatePageInHugePageRange(space);
+    if (page) return page;
+  }
+
   size_t size =
       MemoryChunkLayout::AllocatableMemoryInMemoryChunk(space->identity());
   base::Optional<MemoryChunkAllocationResult> chunk_info;
@@ -734,5 +755,127 @@ bool MemoryAllocator::SetPermissionsOnExecutableMemoryChunk(VirtualMemory* vm,
   return false;
 }
 
+// huge page api
+// Huge page
+#ifdef DEBUG
+bool MemoryAllocator::CheckRangeNum() {
+  size_t num = 0;
+  for (size_t i = 0; i <= HugePageRange::kMaxPageNum; ++i) {
+    num += ranges_[i].size();
+  }
+  return num == huge_page_num_;
+}
+#endif  // DEBUG
+void MemoryAllocator::FreeFromHugePageRange(MemoryChunk* chunk) {
+  size_ -= chunk->size();
+  chunk->ReleaseAllAllocatedMemory();
+  FreePageInHugePageRange(chunk);
+}
+
+bool MemoryAllocator::CanAllocateInHugePage(Space* space) {
+  AllocationSpace identity = space->identity();
+  return FLAG_huge_page && isolate_->heap()->deserialization_complete() &&
+         (identity == OLD_SPACE || identity == NEW_SPACE ||
+          identity == MAP_SPACE);
+}
+
+Page* MemoryAllocator::AllocatePageInHugePageRange(Space* owner) {
+  HugePageRange* range = FetchHugePageRange();
+  // We don't allow new space to create new huge page range to
+  // reduce fragmentation.
+  if (!range && owner->identity() != NEW_SPACE) {
+    range = AllocateHugePageRange();
+  }
+
+  if (!range) {
+    return nullptr;
+  }
+
+  Address base = range->Allocate();
+  {
+    base::MutexGuard guard(&recording_huge_page_mutex_);
+    ranges_[range->page_num()].push_back(range);
+    huge_page_num_++;
+    DCHECK(CheckRangeNum());
+  }
+
+  if (V8_UNLIKELY(!base)) {
+    return nullptr;
+  }
+  const size_t size = Page::kPageSize;
+  Address area_start = base + MemoryChunkLayout::ObjectStartOffsetInDataPage();
+  Address area_end = base + size;
+  VirtualMemory reservation(page_allocator(NOT_EXECUTABLE), base, size);
+
+  if (Heap::ShouldZapGarbage()) {
+    // Zap both page header and object area at once. No guard page in-between.
+    ZapBlock(base, size, kZapValue);
+  }
+
+  void* ptr = reinterpret_cast<void*>(base);
+  Page* page = new (ptr) Page(isolate_->heap(), owner, size, area_start,
+                              area_end, std::move(reservation), NOT_EXECUTABLE);
+  page = owner->InitializePage(page);
+  page->set_huge_page(range);
+  size_ += page->size();
+  return page;
+}
+
+HugePageRange* MemoryAllocator::AllocateHugePageRange() {
+  HugePageRange* range = nullptr;
+  if (range == nullptr) {
+#ifdef V8_COMPRESS_POINTERS
+    void* address_hint = nullptr;
+#else
+    void* address_hint = AlignedAddress(isolate_->heap()->GetRandomMmapAddr(),
+                                        MemoryChunk::kAlignment);
+#endif
+    Address base = kNullAddress;
+    VirtualMemory reserved;
+    base = AllocateAlignedMemory(HugePageRange::kHugeRangeSize,
+                                 HugePageRange::kHugeRangeSize,
+                                 HugePageRange::kHugeRangeSize, NOT_EXECUTABLE,
+                                 address_hint, &reserved, true);
+    if (base == kNullAddress) {
+      return nullptr;
+    }
+    range = HugePageRange::Initialize(isolate_->heap(), std::move(reserved));
+  }
+  return range;
+}
+
+HugePageRange* MemoryAllocator::FetchHugePageRange() {
+  base::MutexGuard guard(&recording_huge_page_mutex_);
+  for (int i = HugePageRange::kMaxPageNum - 1; i >= 0; --i) {
+    if (ranges_[i].size() > 0) {
+      HugePageRange* range = ranges_[i].back();
+      ranges_[i].pop_back();
+      huge_page_num_--;
+      DCHECK(CheckRangeNum());
+      return range;
+    }
+  }
+  return nullptr;
+}
+
+void MemoryAllocator::FreePageInHugePageRange(MemoryChunk* chunk) {
+  HugePageRange* range = chunk->huge_page();
+  CHECK(range);
+  size_t range_page_num = range->page_num();
+  range->Remove(chunk);
+
+  base::MutexGuard guard(&recording_huge_page_mutex_);
+  ranges_[range_page_num].remove(range);
+  huge_page_num_--;
+  DCHECK(CheckRangeNum());
+  range_page_num--;
+  if (range_page_num == 0) {
+    delete range;
+  } else {
+    ranges_[range_page_num].push_back(range);
+    huge_page_num_++;
+    DCHECK(CheckRangeNum());
+  }
+}
 }  // namespace internal
 }  // namespace v8

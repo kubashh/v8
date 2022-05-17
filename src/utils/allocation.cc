@@ -213,6 +213,27 @@ void* AllocatePages(v8::PageAllocator* page_allocator, void* hint, size_t size,
   return result;
 }
 
+void* AllocateHugePages(v8::PageAllocator* page_allocator, void* hint,
+                        size_t size, size_t alignment,
+                        PageAllocator::Permission access) {
+  DCHECK_NOT_NULL(page_allocator);
+  size_t allocate_page_size = 1 << kHugePageBits;
+  DCHECK_EQ(alignment % allocate_page_size, 0);
+  DCHECK_EQ(hint, AlignedAddress(hint, alignment));
+  DCHECK(IsAligned(size, allocate_page_size));
+  if (FLAG_randomize_all_allocations) {
+    hint = AlignedAddress(page_allocator->GetRandomMmapAddr(), alignment);
+  }
+  void* result = nullptr;
+  for (int i = 0; i < kAllocationTries; ++i) {
+    result = page_allocator->AllocateHugePages(hint, size, alignment, access);
+    if (result != nullptr) break;
+    size_t request_size = size + alignment - allocate_page_size;
+    if (!OnCriticalMemoryPressure(request_size)) break;
+  }
+  return result;
+}
+
 void FreePages(v8::PageAllocator* page_allocator, void* address,
                const size_t size) {
   DCHECK_NOT_NULL(page_allocator);
@@ -246,18 +267,29 @@ bool OnCriticalMemoryPressure(size_t length) {
 VirtualMemory::VirtualMemory() = default;
 
 VirtualMemory::VirtualMemory(v8::PageAllocator* page_allocator, size_t size,
-                             void* hint, size_t alignment, JitPermission jit)
+                             void* hint, size_t alignment, JitPermission jit,
+                             bool huge_page)
     : page_allocator_(page_allocator) {
   DCHECK_NOT_NULL(page_allocator);
   DCHECK(IsAligned(size, page_allocator_->CommitPageSize()));
-  size_t page_size = page_allocator_->AllocatePageSize();
+  size_t page_size =
+      huge_page ? 1 << kHugePageBits : page_allocator_->AllocatePageSize();
   alignment = RoundUp(alignment, page_size);
   PageAllocator::Permission permissions =
       jit == JitPermission::kMapAsJittable
           ? PageAllocator::kNoAccessWillJitLater
           : PageAllocator::kNoAccess;
-  Address address = reinterpret_cast<Address>(AllocatePages(
-      page_allocator_, hint, RoundUp(size, page_size), alignment, permissions));
+
+  Address address;
+  if (huge_page) {
+    address = reinterpret_cast<Address>(
+        AllocateHugePages(page_allocator_, hint, RoundUp(size, page_size),
+                          alignment, permissions));
+  } else {
+    address = reinterpret_cast<Address>(AllocatePages(page_allocator_, hint,
+                                                      RoundUp(size, page_size),
+                                                      alignment, permissions));
+  }
   if (address != kNullAddress) {
     DCHECK(IsAligned(address, alignment));
     region_ = base::AddressRegion(address, size);

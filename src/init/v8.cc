@@ -254,6 +254,13 @@ void V8::Initialize() {
   ExternalReferenceTable::InitializeOncePerProcess();
 
   AdvanceStartupState(V8StartupState::kV8Initialized);
+#ifdef V8_OS_WIN
+  if (FLAG_huge_page) {
+    if (!base::OS::TrySetLargePagePrivilege()) {
+      FLAG_huge_page = false;
+    }
+  }
+#endif  // V8_OS_WIN
 }
 
 #undef DISABLE_FLAG

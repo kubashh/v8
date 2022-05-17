@@ -254,6 +254,18 @@ Address VirtualAddressSubspace::AllocatePages(Address hint, size_t size,
   return address;
 }
 
+Address VirtualAddressSubspace::AllocateHugePages(Address hint, size_t size,
+                                                  size_t alignment,
+                                                  PagePermissions permissions) {
+  DCHECK(IsAligned(alignment, allocation_granularity()));
+  DCHECK(IsAligned(hint, alignment));
+  DCHECK(IsAligned(size, allocation_granularity()));
+
+  return reinterpret_cast<Address>(
+      OS::AllocateHugePage(reinterpret_cast<void*>(hint), size, alignment,
+                           static_cast<OS::MemoryPermission>(permissions)));
+}
+
 void VirtualAddressSubspace::FreePages(Address address, size_t size) {
   DCHECK(IsAligned(address, allocation_granularity()));
   DCHECK(IsAligned(size, allocation_granularity()));

@@ -57,6 +57,21 @@ void* PageAllocator::AllocatePages(void* hint, size_t size, size_t alignment,
                             static_cast<base::OS::MemoryPermission>(access));
 }
 
+void* PageAllocator::AllocateHugePages(void* hint, size_t size,
+                                       size_t alignment,
+                                       PageAllocator::Permission access) {
+#if !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+  // kNoAccessWillJitLater is only used on Apple Silicon. Map it to regular
+  // kNoAccess on other platforms, so code doesn't have to handle both enum
+  // values.
+  if (access == PageAllocator::kNoAccessWillJitLater) {
+    access = PageAllocator::kNoAccess;
+  }
+#endif
+  return base::OS::AllocateHugePage(
+      hint, size, alignment, static_cast<base::OS::MemoryPermission>(access));
+}
+
 class SharedMemoryMapping : public ::v8::PageAllocator::SharedMemoryMapping {
  public:
   explicit SharedMemoryMapping(PageAllocator* page_allocator, void* ptr,

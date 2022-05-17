@@ -425,6 +425,24 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
 }
 
 // static
+void* OS::AllocateHugePage(void* hint, size_t size, size_t alignment,
+                           MemoryPermission access) {
+  void* base = hint;
+#ifndef V8_COMPRESS_POINTERS
+  base = OS::Allocate(hint, size, alignment, access);
+#endif  // V8_COMPRESS_POINTERS
+#if V8_OS_LINUX
+  if (madvise(base, size, MADV_HUGEPAGE) != 0) {
+#ifndef V8_COMPRESS_POINTERS
+    OS::Free(base, size);
+#endif  // V8_COMPRESS_POINTERS
+    return nullptr;
+  }
+#endif  // V8_OS_LINUX
+  return base;
+}
+
+// static
 void* OS::AllocateShared(size_t size, MemoryPermission access) {
   DCHECK_EQ(0, size % AllocatePageSize());
   return base::Allocate(nullptr, size, access, PageType::kShared);

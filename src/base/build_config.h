@@ -236,6 +236,7 @@
 constexpr int kReturnAddressStackSlotCount =
     V8_TARGET_ARCH_STORES_RETURN_ADDRESS_ON_STACK ? 1 : 0;
 
+const int kHugePageBits = 21;
 // Number of bits to represent the page size for paged spaces.
 #if (defined(V8_HOST_ARCH_PPC) || defined(V8_HOST_ARCH_PPC64)) && !defined(_AIX)
 // Native PPC linux has large (64KB) physical pages.
@@ -244,7 +245,6 @@ const int kPageSizeBits = 19;
 #elif defined(ENABLE_HUGEPAGE)
 // When enabling huge pages, adjust V8 page size to take up exactly one huge
 // page. This avoids huge-page-internal fragmentation for unused address ranges.
-const int kHugePageBits = 21;
 const int kHugePageSize = (1U) << kHugePageBits;
 const int kPageSizeBits = kHugePageBits;
 #else

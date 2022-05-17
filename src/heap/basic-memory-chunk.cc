@@ -61,7 +61,8 @@ BasicMemoryChunk::BasicMemoryChunk(Heap* heap, BaseSpace* space,
       wasted_memory_(0),
       high_water_mark_(area_start - reinterpret_cast<Address>(this)),
       owner_(space),
-      reservation_(std::move(reservation)) {
+      reservation_(std::move(reservation)),
+      huge_page_(nullptr) {
   marking_bitmap<AccessMode::NON_ATOMIC>()->Clear();
 }
 

@@ -770,6 +770,41 @@ void OS::EnsureWin32MemoryAPILoaded() {
   }
 }
 
+#ifdef V8_OS_WIN
+// static
+bool OS::TrySetLargePagePrivilege() {
+  HANDLE hToken = NULL;
+  TOKEN_PRIVILEGES tp;
+
+  if (!OpenProcessToken(GetCurrentProcess(),
+                        TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hToken)) {
+    CloseHandle(hToken);
+    return false;
+  }
+
+  tp.PrivilegeCount = 1;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+  if (!LookupPrivilegeValue(NULL, SE_LOCK_MEMORY_NAME,
+                            &tp.Privileges[0].Luid)) {
+    CloseHandle(hToken);
+    return false;
+  }
+
+  BOOL result =
+      AdjustTokenPrivileges(hToken, FALSE, &tp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+  DWORD error = GetLastError();
+
+  if (!result || (error != ERROR_SUCCESS)) {
+    CloseHandle(hToken);
+    return false;
+  }
+
+  CloseHandle(hToken);
+  return true;
+}
+#endif  // V8_OS_WIN
+
 // static
 size_t OS::AllocatePageSize() {
   static size_t allocate_alignment = 0;
@@ -952,6 +987,15 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
   DWORD protect = GetProtectionFromMemoryPermission(access);
 
   return AllocateInternal(hint, size, alignment, page_size, flags, protect);
+}
+
+void* OS::AllocateHugePage(void* address, size_t size, size_t alignment,
+                           MemoryPermission access) {
+  DWORD protect = GetProtectionFromMemoryPermission(access);
+  // If failed to allocate large page, will return nullptr.
+  void* base = VirtualAlloc2(nullptr, address, size,
+                             MEM_COMMIT | MEM_LARGE_PAGES, protect, NULL, 0);
+  return base;
 }
 
 // static

@@ -24,6 +24,7 @@ class FreeListCategory;
 class Heap;
 class TypedSlotsSet;
 class SlotSet;
+class HugePageRange;
 
 enum RememberedSetType {
   OLD_TO_NEW,
@@ -53,6 +54,7 @@ class V8_EXPORT_PRIVATE MemoryChunkLayout {
     FIELD(std::atomic<intptr_t>, HighWaterMark),
     FIELD(Address, Owner),
     FIELD(VirtualMemory, Reservation),
+    FIELD(HugePageRange*, HugePage),
     // MemoryChunk fields:
     FIELD(SlotSet* [kNumSets], SlotSet),
     FIELD(ProgressBar, ProgressBar),

@@ -20,6 +20,7 @@
 #include "src/common/globals.h"
 #include "src/heap/basic-memory-chunk.h"
 #include "src/heap/code-range.h"
+#include "src/heap/huge-page-range.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/spaces.h"
 #include "src/tasks/cancelable-task.h"
@@ -285,7 +286,8 @@ class MemoryAllocator {
   // sets the right memory permissions.
   Address AllocateAlignedMemory(size_t chunk_size, size_t area_size,
                                 size_t alignment, Executability executable,
-                                void* hint, VirtualMemory* controller);
+                                void* hint, VirtualMemory* controller,
+                                bool huge_page = false);
 
   // Commit memory region owned by given reservation object.  Returns true if
   // it succeeded and false otherwise.
@@ -367,6 +369,18 @@ class MemoryAllocator {
   }
 #endif  // DEBUG
 
+// Huge page
+#ifdef DEBUG
+  bool CheckRangeNum();
+#endif  // DEBUG
+  V8_EXPORT_PRIVATE Page* AllocatePageInHugePageRange(Space* owner);
+  V8_EXPORT_PRIVATE
+  HugePageRange* AllocateHugePageRange();
+  void FreeFromHugePageRange(MemoryChunk* chunk);
+  bool CanAllocateInHugePage(Space* space);
+  HugePageRange* FetchHugePageRange();
+  void FreePageInHugePageRange(MemoryChunk* chunk);
+
   Isolate* isolate_;
 
   // Page allocator used for allocating data pages. Depending on the
@@ -400,6 +414,11 @@ class MemoryAllocator {
 
   base::Optional<VirtualMemory> reserved_chunk_at_virtual_memory_limit_;
   Unmapper unmapper_;
+
+  // Huge page
+  base::Mutex recording_huge_page_mutex_;
+  std::list<HugePageRange*> ranges_[HugePageRange::kMaxPageNum + 1];
+  std::atomic<size_t> huge_page_num_;
 
 #ifdef DEBUG
   // Data structure to remember allocated executable memory chunks.

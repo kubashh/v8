@@ -109,6 +109,9 @@ class V8_BASE_EXPORT VirtualAddressSubspace : public VirtualAddressSpaceBase {
 
   void FreePages(Address address, size_t size) override;
 
+  Address AllocateHugePages(Address hint, size_t size, size_t alignment,
+                            PagePermissions permissions) override;
+
   bool SetPagePermissions(Address address, size_t size,
                           PagePermissions permissions) override;
 

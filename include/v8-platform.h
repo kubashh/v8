@@ -412,6 +412,11 @@ class PageAllocator {
   virtual void* AllocatePages(void* address, size_t length, size_t alignment,
                               Permission permissions) = 0;
 
+  virtual void* AllocateHugePages(void* address, size_t length,
+                                  size_t alignment, Permission permissions) {
+    return nullptr;
+  }
+
   /**
    * Frees memory in a range that was allocated by a call to AllocatePages.
    */
@@ -691,6 +696,12 @@ class VirtualAddressSpace {
   virtual V8_WARN_UNUSED_RESULT Address
   AllocatePages(Address hint, size_t size, size_t alignment,
                 PagePermissions permissions) = 0;
+
+  virtual V8_WARN_UNUSED_RESULT Address
+  AllocateHugePages(Address hint, size_t size, size_t alignment,
+                    PagePermissions permissions) {
+    return 0;
+  }
 
   /**
    * Frees previously allocated pages.

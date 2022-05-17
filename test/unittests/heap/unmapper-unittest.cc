@@ -380,6 +380,9 @@ SequentialUnmapperTestMixin<TMixin>::~SequentialUnmapperTestMixin() {
 // See v8:5945.
 TEST_F(SequentialUnmapperTest, UnmapOnTeardownAfterAlreadyFreeingPooled) {
   if (FLAG_enable_third_party_heap) return;
+  // Disable huge page for this test.
+  const char* flag_no_huge_page = "--no-huge-page";
+  FlagList::SetFlagsFromString(flag_no_huge_page, strlen(flag_no_huge_page));
   Page* page =
       allocator()->AllocatePage(MemoryAllocator::AllocationMode::kRegular,
                                 static_cast<PagedSpace*>(heap()->old_space()),
@@ -409,6 +412,9 @@ TEST_F(SequentialUnmapperTest, UnmapOnTeardownAfterAlreadyFreeingPooled) {
 // See v8:5945.
 TEST_F(SequentialUnmapperTest, UnmapOnTeardown) {
   if (FLAG_enable_third_party_heap) return;
+  // Disable huge page for this test.
+  const char* flag_no_huge_page = "--no-huge-page";
+  FlagList::SetFlagsFromString(flag_no_huge_page, strlen(flag_no_huge_page));
   Page* page =
       allocator()->AllocatePage(MemoryAllocator::AllocationMode::kRegular,
                                 static_cast<PagedSpace*>(heap()->old_space()),

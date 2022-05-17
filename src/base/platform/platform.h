@@ -145,6 +145,8 @@ class V8_BASE_EXPORT OS {
   // part of V8::Initialize, at which point this function can probably be
   // merged into OS::Initialize.
   static void EnsureWin32MemoryAPILoaded();
+
+  static bool TrySetLargePagePrivilege();
 #endif
 
   // Returns the accumulated user time for thread. This routine
@@ -355,6 +357,11 @@ class V8_BASE_EXPORT OS {
   V8_WARN_UNUSED_RESULT static void* Allocate(void* address, size_t size,
                                               size_t alignment,
                                               MemoryPermission access);
+
+  V8_WARN_UNUSED_RESULT static void* AllocateHugePage(void* address,
+                                                      size_t size,
+                                                      size_t alignment,
+                                                      MemoryPermission access);
 
   V8_WARN_UNUSED_RESULT static void* AllocateShared(size_t size,
                                                     MemoryPermission access);

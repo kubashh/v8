@@ -32,28 +32,7 @@ void* BoundedPageAllocator::AllocatePages(void* hint, size_t size,
                                           size_t alignment,
                                           PageAllocator::Permission access) {
   MutexGuard guard(&mutex_);
-  DCHECK(IsAligned(alignment, region_allocator_.page_size()));
-  DCHECK(IsAligned(alignment, allocate_page_size_));
-
-  Address address = RegionAllocator::kAllocationFailure;
-
-  Address hint_address = reinterpret_cast<Address>(hint);
-  if (hint_address && IsAligned(hint_address, alignment) &&
-      region_allocator_.contains(hint_address, size)) {
-    if (region_allocator_.AllocateRegionAt(hint_address, size)) {
-      address = hint_address;
-    }
-  }
-
-  if (address == RegionAllocator::kAllocationFailure) {
-    if (alignment <= allocate_page_size_) {
-      // TODO(ishell): Consider using randomized version here.
-      address = region_allocator_.AllocateRegion(size);
-    } else {
-      address = region_allocator_.AllocateAlignedRegion(size, alignment);
-    }
-  }
-
+  Address address = AllocateRegion(hint, size, alignment);
   if (address == RegionAllocator::kAllocationFailure) {
     return nullptr;
   }
@@ -71,6 +50,27 @@ void* BoundedPageAllocator::AllocatePages(void* hint, size_t size,
   }
 
   return ptr;
+}
+
+void* BoundedPageAllocator::AllocateHugePages(
+    void* hint, size_t size, size_t alignment,
+    PageAllocator::Permission access) {
+  MutexGuard guard(&mutex_);
+
+  Address address = AllocateRegion(hint, size, alignment);
+  if (address == RegionAllocator::kAllocationFailure) {
+    return nullptr;
+  }
+  void* ptr = reinterpret_cast<void*>(address);
+  void* huge_page_base =
+      page_allocator_->AllocateHugePages(ptr, size, alignment, access);
+  if (!huge_page_base) {
+    size_t freed_size = region_allocator_.FreeRegion(address);
+    CHECK_EQ(size, freed_size);
+    return nullptr;
+  }
+  CHECK_EQ(huge_page_base, ptr);
+  return huge_page_base;
 }
 
 bool BoundedPageAllocator::AllocatePagesAt(Address address, size_t size,
@@ -217,6 +217,32 @@ bool BoundedPageAllocator::DiscardSystemPages(void* address, size_t size) {
 
 bool BoundedPageAllocator::DecommitPages(void* address, size_t size) {
   return page_allocator_->DecommitPages(address, size);
+}
+
+BoundedPageAllocator::Address BoundedPageAllocator::AllocateRegion(
+    void* hint, size_t size, size_t alignment) {
+  DCHECK(IsAligned(alignment, region_allocator_.page_size()));
+  DCHECK(IsAligned(alignment, allocate_page_size_));
+
+  Address address = RegionAllocator::kAllocationFailure;
+
+  Address hint_address = reinterpret_cast<Address>(hint);
+  if (hint_address && IsAligned(hint_address, alignment) &&
+      region_allocator_.contains(hint_address, size)) {
+    if (region_allocator_.AllocateRegionAt(hint_address, size)) {
+      address = hint_address;
+    }
+  }
+
+  if (address == RegionAllocator::kAllocationFailure) {
+    if (alignment <= allocate_page_size_) {
+      // TODO(ishell): Consider using randomized version here.
+      address = region_allocator_.AllocateRegion(size);
+    } else {
+      address = region_allocator_.AllocateAlignedRegion(size, alignment);
+    }
+  }
+  return address;
 }
 
 }  // namespace base
