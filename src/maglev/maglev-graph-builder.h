@@ -583,6 +583,8 @@ class MaglevGraphBuilder {
   void VisitBinaryOperation();
   template <Operation kOperation>
   void VisitBinarySmiOperation();
+  template <Operation kOperation>
+  void VisitCompareOperation();
 
   void MergeIntoFrameState(BasicBlock* block, int target);
   void MergeDeadIntoFrameState(int target);
