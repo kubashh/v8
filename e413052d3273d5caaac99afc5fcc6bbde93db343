@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bf9bd8_842e8d92",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-05-17T15:42:21Z",
+      "side": 1,
+      "message": "oh, do you think this was the reason gcmole complained?\nEval-order of arguments is not defined, and the second thing is a raw pointer?",
+      "range": {
+        "startLine": 78,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 29
+      },
+      "revId": "e413052d3273d5caaac99afc5fcc6bbde93db343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
