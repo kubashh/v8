@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b091f4fb_971d7347",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-17T10:58:29Z",
+      "side": 1,
+      "message": "Nice! LGTM with a small nit.",
+      "revId": "c7df46e077232240d62bcb6baec2170b0f55f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8bdbcfa_79c8cf4b",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-17T10:58:29Z",
+      "side": 1,
+      "message": "nit: I would prefer a name that signifies function over form. Maybe DirectCalleeFeedback or something similar.",
+      "range": {
+        "startLine": 402,
+        "startChar": 7,
+        "endLine": 402,
+        "endChar": 29
+      },
+      "revId": "c7df46e077232240d62bcb6baec2170b0f55f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
