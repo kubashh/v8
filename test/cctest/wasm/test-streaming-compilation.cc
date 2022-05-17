@@ -1155,10 +1155,9 @@ STREAM_TEST(TestIncrementalCaching) {
       i_isolate, tester.native_module(), script, export_wrappers);
   ErrorThrower thrower(i_isolate, "Instantiation");
   // We instantiated before, so the second instantiation must also succeed:
-  Handle<WasmInstanceObject> instance =
-      GetWasmEngine()
-          ->SyncInstantiate(i_isolate, &thrower, module_object, {}, {})
-          .ToHandleChecked();
+  GetWasmEngine()
+      ->SyncInstantiate(i_isolate, &thrower, module_object, {}, {})
+      .Check();
   CHECK(!thrower.error());
 
   WasmCodeRefScope code_scope;
@@ -1167,7 +1166,7 @@ STREAM_TEST(TestIncrementalCaching) {
   CHECK(tester.native_module()->GetCode(2)->is_liftoff());
   // No TurboFan compilation happened yet, and therefore no call to the cache.
   CHECK_EQ(0, call_cache_counter);
-  i::wasm::TriggerTierUp(i_isolate, tester.native_module().get(), 0, instance);
+  i::wasm::TriggerTierUp(tester.native_module().get(), 0);
   tester.RunCompilerTasks();
   CHECK(!tester.native_module()->GetCode(0)->is_liftoff());
   CHECK(tester.native_module()->GetCode(1)->is_liftoff());
@@ -1178,7 +1177,7 @@ STREAM_TEST(TestIncrementalCaching) {
     i::wasm::WasmSerializer serializer(tester.native_module().get());
     serialized_size = serializer.GetSerializedNativeModuleSize();
   }
-  i::wasm::TriggerTierUp(i_isolate, tester.native_module().get(), 1, instance);
+  i::wasm::TriggerTierUp(tester.native_module().get(), 1);
   tester.RunCompilerTasks();
   CHECK(!tester.native_module()->GetCode(0)->is_liftoff());
   CHECK(!tester.native_module()->GetCode(1)->is_liftoff());

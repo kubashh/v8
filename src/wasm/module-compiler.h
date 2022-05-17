@@ -83,8 +83,9 @@ void ThrowLazyCompilationError(Isolate* isolate,
                                const NativeModule* native_module,
                                int func_index);
 
-V8_EXPORT_PRIVATE void TriggerTierUp(Isolate*, NativeModule*, int func_index,
-                                     Handle<WasmInstanceObject> instance);
+void ProcessTransitiveTypeFeedback(WasmInstanceObject, int func_index);
+
+V8_EXPORT_PRIVATE void TriggerTierUp(NativeModule*, int func_index);
 
 template <typename Key, typename Hash>
 class WrapperQueue {
