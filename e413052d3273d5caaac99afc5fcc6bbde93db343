@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "61eb547b_3a1bf0c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-18T07:00:53Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "e413052d3273d5caaac99afc5fcc6bbde93db343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e4bf9bd8_842e8d92",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 10
@@ -14,6 +31,30 @@
       "writtenOn": "2022-05-17T15:42:21Z",
       "side": 1,
       "message": "oh, do you think this was the reason gcmole complained?\nEval-order of arguments is not defined, and the second thing is a raw pointer?",
+      "range": {
+        "startLine": 78,
+        "startChar": 12,
+        "endLine": 79,
+        "endChar": 29
+      },
+      "revId": "e413052d3273d5caaac99afc5fcc6bbde93db343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f989849_35b69a0e",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-18T07:00:53Z",
+      "side": 1,
+      "message": "No, as discussed offline.",
+      "parentUuid": "e4bf9bd8_842e8d92",
       "range": {
         "startLine": 78,
         "startChar": 12,
@@ -49,6 +90,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d454a0c0_b472f9b8",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-18T07:00:53Z",
+      "side": 1,
+      "message": "Yes, this is purely for forcing the engineer to update the constant.",
+      "parentUuid": "337d7eb6_4c96ba49",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 43
+      },
+      "revId": "e413052d3273d5caaac99afc5fcc6bbde93db343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d304f4c9_c18674eb",
         "filename": "src/web-snapshot/web-snapshot.cc",
         "patchSetId": 10
@@ -60,6 +125,30 @@
       "writtenOn": "2022-05-17T18:13:14Z",
       "side": 1,
       "message": "I wonder whether we could come up with tests that do the same thing in the rest of the runtime and make sure we don\u0027t accidentally create different map trees.",
+      "range": {
+        "startLine": 2487,
+        "startChar": 0,
+        "endLine": 2487,
+        "endChar": 49
+      },
+      "revId": "e413052d3273d5caaac99afc5fcc6bbde93db343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6854c3cc_47edc8f5",
+        "filename": "src/web-snapshot/web-snapshot.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-18T07:00:53Z",
+      "side": 1,
+      "message": "We\u0027re anyway not yet creating reasonable map trees for deserialized objects; I was cutting corners in that area a lot! 😞\n\nI\u0027ll add a TODO here.",
+      "parentUuid": "d304f4c9_c18674eb",
       "range": {
         "startLine": 2487,
         "startChar": 0,
