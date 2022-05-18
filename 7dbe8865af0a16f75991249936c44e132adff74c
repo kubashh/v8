@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b5c456_ec90dd9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-18T16:08:44Z",
+      "side": 1,
+      "message": "I like the core idea here, but disagree with the splitting of steps, because it causes increased workload (see comment below).",
+      "revId": "7dbe8865af0a16f75991249936c44e132adff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b91274_04b8eaee",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-18T16:08:44Z",
+      "side": 1,
+      "message": "This early return is the reason why feedback processing happened later in this function: it can be fairly expensive, so we shouldn\u0027t do it unless it\u0027s necessary. (We could even consider skipping it when upping priority of an existing task, but the tradeoff there is that we might get better feedback when looking at it again.)",
+      "range": {
+        "startLine": 1457,
+        "startChar": 6,
+        "endLine": 1457,
+        "endChar": 12
+      },
+      "revId": "7dbe8865af0a16f75991249936c44e132adff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
