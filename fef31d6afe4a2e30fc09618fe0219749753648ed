@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23011719_9c604ea7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-05-18T13:07:27Z",
+      "side": 1,
+      "message": "Usage example:\n```\nlet o \u003d {a: 42};\nlet memory \u003d new Sandbox.MemoryView(0, 0x100000000);\nlet v \u003d new DataView(memory);\nlet addr \u003d Sandbox.getAddressOf(o);\nv.setUint8(addr + 12, 43 \u003c\u003c 1);\nprint(o.a);\n// 43\n```",
+      "revId": "fef31d6afe4a2e30fc09618fe0219749753648ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
