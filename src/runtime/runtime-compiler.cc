@@ -267,9 +267,43 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   // still worth jumping to the OSR'd code on the next run. The reduced cost of
   // the loop should pay for the deoptimization costs.
   const BytecodeOffset osr_offset = optimized_code->osr_offset();
-  if (osr_offset.IsNone() ||
-      DeoptExitIsInsideOsrLoop(isolate, *function, deopt_exit_offset,
-                               osr_offset)) {
+  if (osr_offset.IsNone()) {
+    Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
+    if (function->feedback_vector().maybe_has_optimized_osr_code()) {
+      DisallowGarbageCollection no_gc;
+
+      Handle<BytecodeArray> bytecode_array(
+          function->shared().GetBytecodeArray(isolate), isolate);
+      DCHECK(interpreter::BytecodeArrayIterator::IsValidOffset(
+          bytecode_array, deopt_exit_offset.ToInt()));
+
+      interpreter::BytecodeArrayIterator it(bytecode_array,
+                                            deopt_exit_offset.ToInt());
+
+      for (; !it.done(); it.Advance()) {
+        // We're only interested in loop ranges.
+        if (it.current_bytecode() == interpreter::Bytecode::kJumpLoop) {
+          // Is the deopt exit contained in the current loop?
+          if (base::IsInRange(deopt_exit_offset.ToInt(),
+                              it.GetJumpTargetOffset(), it.current_offset())) {
+            base::Optional<CodeT> maybe_code =
+                function->feedback_vector().GetOptimizedOsrCode(
+                    isolate, it.GetSlotOperand(2));
+            if (maybe_code.has_value()) {
+              maybe_code.value().set_marked_for_deoptimization(true);
+            }
+            return ReadOnlyRoots(isolate).undefined_value();
+          }
+          // We've reached nesting level 0, i.e. the current JumpLoop concludes
+          // a top-level loop.
+          const int loop_nesting_level = it.GetImmediateOperand(1);
+          if (loop_nesting_level == 0)
+            return ReadOnlyRoots(isolate).undefined_value();
+        }
+      }
+    }
+  } else if (DeoptExitIsInsideOsrLoop(isolate, *function, deopt_exit_offset,
+                                      osr_offset)) {
     Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
   }
 
