@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "src/api/api-inl.h"
+#include "src/base/cpu.h"
 #include "src/base/small-vector.h"
 #include "src/builtins/builtins-promise.h"
 #include "src/builtins/builtins-utils.h"
@@ -2075,6 +2076,7 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
     switch (elements_kind) {
       case PACKED_SMI_ELEMENTS:
       case HOLEY_SMI_ELEMENTS:
+        return Builtins::CallableFor(isolate, Builtin::kArrayIndexOfSmi);
       case PACKED_ELEMENTS:
       case HOLEY_ELEMENTS:
         return Builtins::CallableFor(isolate,
@@ -2092,6 +2094,7 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
     switch (elements_kind) {
       case PACKED_SMI_ELEMENTS:
       case HOLEY_SMI_ELEMENTS:
+        return Builtins::CallableFor(isolate, Builtin::kArrayIncludesSmi);
       case PACKED_ELEMENTS:
       case HOLEY_ELEMENTS:
         return Builtins::CallableFor(isolate,
@@ -2109,7 +2112,6 @@ Callable GetCallableForArrayIndexOfIncludes(ArrayIndexOfIncludesVariant variant,
 }
 
 }  // namespace
-
 TNode<Object>
 IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeIndexOfIncludes(
     ElementsKind kind, ArrayIndexOfIncludesVariant variant) {
@@ -2147,7 +2149,6 @@ IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeIndexOfIncludes(
   return Call4(GetCallableForArrayIndexOfIncludes(variant, kind, isolate()),
                context, elements, search_element, length, from_index);
 }
-
 namespace {
 
 struct PromiseCtorFrameStateParams {
