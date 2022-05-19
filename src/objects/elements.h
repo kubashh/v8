@@ -5,6 +5,8 @@
 #ifndef V8_OBJECTS_ELEMENTS_H_
 #define V8_OBJECTS_ELEMENTS_H_
 
+#include <cstdint>
+
 #include "src/builtins/builtins-utils.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/internal-index.h"
@@ -234,6 +236,14 @@ void CopyTypedArrayElementsToTypedArray(Address raw_source,
 // {raw_source}, {raw_destination}: JSTypedArray pointers.
 void CopyTypedArrayElementsSlice(Address raw_source, Address raw_destination,
                                  uintptr_t start, uintptr_t end);
+
+uintptr_t ArrayIndexOfIncludesSmiOrObject(Address array_start,
+                                          uintptr_t array_len,
+                                          uintptr_t from_index,
+                                          Address search_element);
+uintptr_t ArrayIndexOfIncludesDouble(Address array_start, uintptr_t array_len,
+                                     uintptr_t from_index,
+                                     Address search_element);
 
 }  // namespace internal
 }  // namespace v8
