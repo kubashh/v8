@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996b6852_a9abd9ba",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-19T14:27:35Z",
+      "side": 1,
+      "message": "ok, looking at this implementation this is sufficiently different from the original DeoptExitIsInsideOsrLoop that it should be split off after all. Maybe there should be two functions: DeoptExitIsInsideGivenOsrLoop and DeoptExitIsInsideAnyOsrLoop?",
+      "range": {
+        "startLine": 209,
+        "startChar": 8,
+        "endLine": 209,
+        "endChar": 28
+      },
+      "revId": "5ae45b772bc558917e5f47313429fbcb9b64aa9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
