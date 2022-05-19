@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "71b1d28e_5b1e361d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-19T11:29:51Z",
+      "side": 1,
+      "message": "possibly adding a Shape-based hook into Rehash would be the right way of this alternative, but we can cross that bridge if we decide this simplest solution is an issue.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "16cb378eb0b4f8d7c7fe2b19535591c00bebbdcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "083b2efd_8d684626",
