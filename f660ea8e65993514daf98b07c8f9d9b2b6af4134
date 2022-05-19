@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b03a6f4_feea2d8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-19T10:51:33Z",
+      "side": 1,
+      "message": "I\u0027ve updated a bit builtins-array-gen.c after talking to Tobias, and I\u0027ve added a comment to extract_first_nonzero_index (in elements.cc) as well as a test to catch issues in this code.",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

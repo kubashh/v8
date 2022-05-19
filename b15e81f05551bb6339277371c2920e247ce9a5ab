@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7abd265_6e25b7d6",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5332,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-19T10:51:33Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment, and a test to catch mistakes in this function.",
+      "parentUuid": "0f736d6b_2d3e348a",
+      "revId": "b15e81f05551bb6339277371c2920e247ce9a5ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71f68b6d_932baa6b",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Yes, both {1,0,2,0} and {1,1,2,2}. I\u0027ll add a comment saying that as well.",
       "parentUuid": "71f68b6d_932baa6b",
+      "revId": "b15e81f05551bb6339277371c2920e247ce9a5ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c36834_4f107fcc",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5337,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-19T10:51:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf950120_53a08158",
       "revId": "b15e81f05551bb6339277371c2920e247ce9a5ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
