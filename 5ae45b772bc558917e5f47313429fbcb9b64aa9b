@@ -22,6 +22,30 @@
       },
       "revId": "5ae45b772bc558917e5f47313429fbcb9b64aa9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b2d9ecc_93422f04",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-20T02:52:15Z",
+      "side": 1,
+      "message": "Split to two functions is a good idea. Could you please further review?.",
+      "parentUuid": "996b6852_a9abd9ba",
+      "range": {
+        "startLine": 209,
+        "startChar": 8,
+        "endLine": 209,
+        "endChar": 28
+      },
+      "revId": "5ae45b772bc558917e5f47313429fbcb9b64aa9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
