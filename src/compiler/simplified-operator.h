@@ -36,9 +36,10 @@ class Zone;
 namespace compiler {
 
 // Forward declarations.
+class CallDescriptor;
 class Operator;
 struct SimplifiedOperatorGlobalCache;
-class CallDescriptor;
+struct WasmTypeCheckConfig;
 
 enum BaseTaggedness : uint8_t { kUntaggedBase, kTaggedBase };
 
@@ -211,6 +212,12 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, ObjectAccess const&);
 
 V8_EXPORT_PRIVATE ObjectAccess const& ObjectAccessOf(const Operator* op)
     V8_WARN_UNUSED_RESULT;
+
+bool operator==(const WasmTypeCheckConfig& p1, const WasmTypeCheckConfig& p2);
+size_t hash_value(WasmTypeCheckConfig const&);
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           WasmTypeCheckConfig const&);
 
 // The ConvertReceiverMode is used as parameter by ConvertReceiver operators.
 ConvertReceiverMode ConvertReceiverModeOf(Operator const* op)
@@ -1059,6 +1066,15 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // Abort if the value does not match the node's computed type after
   // SimplifiedLowering.
   const Operator* VerifyType();
+
+#if V8_ENABLE_WEBASSEMBLY
+  const Operator* AssertNotNull();
+  const Operator* IsNull();
+  const Operator* Null();
+  const Operator* RttCanon(int index);
+  const Operator* WasmTypeCheck(WasmTypeCheckConfig config);
+  const Operator* WasmTypeCast(WasmTypeCheckConfig config);
+#endif
 
   const Operator* DateNow();
 
