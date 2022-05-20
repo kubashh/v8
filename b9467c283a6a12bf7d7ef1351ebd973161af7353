@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5e63be9_db028e11",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-20T08:54:46Z",
+      "side": 1,
+      "message": "I modified this comment a little.",
+      "parentUuid": "5be9ac2f_cc44df6d",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 63
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "67c39a41_ab993720",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-20T07:45:34Z",
       "side": 1,
       "message": "you can move this check into DeoptExitIsInsideAnyOsrLoop",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 318,
+        "endChar": 66
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff5fa1a3_73a697de",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-20T08:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67c39a41_ab993720",
       "range": {
         "startLine": 318,
         "startChar": 8,
@@ -77,6 +125,30 @@
       "writtenOn": "2022-05-20T07:45:34Z",
       "side": 1,
       "message": "can you add a comment explaining why we check this here?",
+      "range": {
+        "startLine": 319,
+        "startChar": 8,
+        "endLine": 319,
+        "endChar": 35
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5506ddf1_7f2a4430",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-20T08:54:46Z",
+      "side": 1,
+      "message": "I add comment to the existing comment. What do you think?",
+      "parentUuid": "cab16b95_09570a3b",
       "range": {
         "startLine": 319,
         "startChar": 8,
