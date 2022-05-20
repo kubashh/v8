@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39133767_bec1e7b0",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T10:44:50Z",
+      "side": 1,
+      "message": "Does this code find those cases though? I\u0027m thinking of e.g. \n\n    for (;;) {\n      for (;;) {\n      } // \u003c- OSR\n      // \u003c- Deopt\n    } // \u003c- Outermost loop\n    \nIt sounds like you want to, once you find the outermost loop, also find any loops _before_ the deopt point that are still inside the outermost loop.\n\nYour current code also doesn\u0027t catch the case\n\n    for (;;) {\n      // \u003c- Deopt\n      for (;;) {\n      } // \u003c- OSR\n    } // \u003c- Outermost loop\n    \nbecause you only check for GetOptimizedOsrCode if the deopt is inside the loop\u0027s jump range.",
+      "parentUuid": "efe140d7_b0e5a71f",
+      "range": {
+        "startLine": 221,
+        "startChar": 3,
+        "endLine": 222,
+        "endChar": 14
+      },
+      "revId": "94a1689705d0232bf23e4e51b11fd35782dbc9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "adddbd3d_c3ddc564",
         "filename": "src/runtime/runtime-compiler.cc",
         "patchSetId": 4
