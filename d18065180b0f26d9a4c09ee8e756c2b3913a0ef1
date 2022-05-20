@@ -16,6 +16,24 @@
       "message": "I find it a bit suspicious and have not experienced this so far. I do see however what is happening and can follow the reasoning :/",
       "revId": "d18065180b0f26d9a4c09ee8e756c2b3913a0ef1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "247c719b_1ff83622",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-20T14:47:08Z",
+      "side": 1,
+      "message": "The contention unittest at https://chromium-review.googlesource.com/c/v8/v8/+/3595460 is an artificially contended use case where I spin 32 threads and wait for them to all get to the same point first to maximize contention. I\u0027d be very surprised if non-artificial uses of atomics in the GC and other parts ever reach that level of contention.",
+      "parentUuid": "d72214db_db327c57",
+      "revId": "d18065180b0f26d9a4c09ee8e756c2b3913a0ef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
