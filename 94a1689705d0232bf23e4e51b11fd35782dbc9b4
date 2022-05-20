@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f300730d_e4582533",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T09:33:46Z",
+      "side": 1,
+      "message": "we don\u0027t actually check this though, right? We check for whether there exists an osr loop containing the current deopt point, the \"outermost\" part is irrelevant (just an early exit)",
+      "range": {
+        "startLine": 221,
+        "startChar": 3,
+        "endLine": 222,
+        "endChar": 14
+      },
+      "revId": "94a1689705d0232bf23e4e51b11fd35782dbc9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adddbd3d_c3ddc564",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T09:33:46Z",
+      "side": 1,
+      "message": "we only mark the first found osr_code here. Should we not really mark _all_ osr codes containing the deopt exit for deopt? Maybe there should really be a DeoptAllOsrLoopsContainingDeoptExit function?",
+      "range": {
+        "startLine": 324,
+        "startChar": 6,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "94a1689705d0232bf23e4e51b11fd35782dbc9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
