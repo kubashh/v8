@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7400ab8c_ed727107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T07:45:34Z",
+      "side": 1,
+      "message": "ok, general lgtm with a few more comments. Thanks for the back and forth",
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be9ac2f_cc44df6d",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T07:45:34Z",
+      "side": 1,
+      "message": "can you update this comment to explain what this function is doing?",
+      "range": {
+        "startLine": 221,
+        "startChar": 0,
+        "endLine": 227,
+        "endChar": 63
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67c39a41_ab993720",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T07:45:34Z",
+      "side": 1,
+      "message": "you can move this check into DeoptExitIsInsideAnyOsrLoop",
+      "range": {
+        "startLine": 318,
+        "startChar": 8,
+        "endLine": 318,
+        "endChar": 66
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab16b95_09570a3b",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-20T07:45:34Z",
+      "side": 1,
+      "message": "can you add a comment explaining why we check this here?",
+      "range": {
+        "startLine": 319,
+        "startChar": 8,
+        "endLine": 319,
+        "endChar": 35
+      },
+      "revId": "b9467c283a6a12bf7d7ef1351ebd973161af7353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
