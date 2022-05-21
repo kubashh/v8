@@ -54,8 +54,6 @@ TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeSince)
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeEquals)
 /* Temporal #sec-temporal.plaindate.prototype.toplaindatetime */
 TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToPlainDateTime)
-/* Temporal #sec-temporal.plaindate.prototype.tozoneddatetime */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeToZonedDateTime)
 
 /* Temporal.PlaneTime */
 /* Temporal #sec-temporal.plaintime.compare */
@@ -423,6 +421,7 @@ TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToPlainYearMonth, toPlainYearMonth)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToPlainMonthDay, toPlainMonthDay)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, WithCalendar, withCalendar)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
+TEMPORAL_PROTOTYPE_METHOD1(PlainDate, ToZonedDateTime, toZonedDateTime)
 TEMPORAL_VALUE_OF(PlainDate)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, ToJSON, toJSON)
 TEMPORAL_PROTOTYPE_METHOD2(PlainDate, ToLocaleString, toLocaleString)
