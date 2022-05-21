@@ -385,6 +385,11 @@ class JSTemporalPlainMonthDay
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainMonthDay> From(
       Isolate* isolate, Handle<Object> item, Handle<Object> options);
 
+  // #sec-temporal.plainmonthday.prototype.toplaindate
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainDate> ToPlainDate(
+      Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day,
+      Handle<Object> item);
+
   // #sec-temporal.plainmonthday.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalPlainMonthDay> month_day);
@@ -462,6 +467,11 @@ class JSTemporalPlainYearMonth
   // #sec-temporal.plainyearmonth.from
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainYearMonth> From(
       Isolate* isolate, Handle<Object> item, Handle<Object> options);
+
+  // #sec-temporal.plainyearmonth.prototype.toplaindate
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainDate> ToPlainDate(
+      Isolate* isolate, Handle<JSTemporalPlainYearMonth> year_month,
+      Handle<Object> item);
 
   // #sec-temporal.plainyearmonth.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
