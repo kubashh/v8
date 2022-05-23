@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2782a7b_cc6db007",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-23T07:11:34Z",
+      "side": 1,
+      "message": "@Liviu, FYI, I think this works out-of-the box because we turned the trigger relation around at some point. Without that, this kind of change would have been more involved...",
+      "revId": "89cb014dcc067c29e03ffa3327e55a6d649e26d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
