@@ -151,11 +151,53 @@ void GapResolver::Resolve(ParallelMove* moves) {
 }
 
 void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
-  // Each call to this function performs a move and deletes it from the move
-  // graph.  We first recursively perform any move blocking this one.  We mark a
-  // move as "pending" on entry to PerformMove in order to detect cycles in the
-  // move graph.  We use operand swaps to resolve cycles, which means that a
-  // call to PerformMove could change any source operand in the move graph.
+  auto cycle = PerformMoveHelper(moves, move);
+  if (!cycle.has_value()) return;
+  DCHECK_EQ(cycle->back(), move);
+  if (cycle->size() == 2) {
+    MoveOperands* move2 = cycle->front();
+    MachineRepresentation rep =
+        LocationOperand::cast(move->source()).representation();
+    MachineRepresentation rep2 =
+        LocationOperand::cast(move2->source()).representation();
+    if (rep == rep2) {
+      InstructionOperand* source = &move->source();
+      InstructionOperand* destination = &move->destination();
+      // Ensure source is a register or both are stack slots, to limit swap
+      // cases.
+      if (move->source().IsAnyStackSlot()) {
+        std::swap(source, destination);
+      }
+      assembler_->AssembleSwap(source, destination);
+      move->Eliminate();
+      move2->Eliminate();
+      return;
+    }
+  }
+  MachineRepresentation rep =
+      LocationOperand::cast(move->source()).representation();
+  cycle->pop_back();
+  for (auto* move : *cycle) {
+    assembler_->SetPendingMove(move);
+  }
+  assembler_->MoveToTempLocation(&move->source());
+  InstructionOperand destination = move->destination();
+  move->Eliminate();
+  for (auto* move : *cycle) {
+    assembler_->AssembleMove(&move->source(), &move->destination());
+    move->Eliminate();
+  }
+  assembler_->MoveTempLocationTo(&destination, rep);
+}
+
+base::Optional<std::vector<MoveOperands*>> GapResolver::PerformMoveHelper(
+    ParallelMove* moves, MoveOperands* move) {
+  // We first recursively perform any move blocking this one.  We mark a move as
+  // "pending" on entry to PerformMove in order to detect cycles in the move
+  // graph. If there is a cycle, we move one of the operands to a temporary
+  // location to break the dependency and resolve the cycle. When the move and
+  // all of its dependencies have been assembled, place the temporary location
+  // back into its destination.
   DCHECK(!move->IsPending());
   DCHECK(!move->IsRedundant());
 
@@ -165,6 +207,7 @@ void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
   DCHECK(!source.IsInvalid());  // Or else it will look eliminated.
   InstructionOperand destination = move->destination();
   move->SetPending();
+  base::Optional<std::vector<MoveOperands*>> cycle;
 
   // We may need to split moves between FP locations differently.
   const bool is_fp_loc_move = kFPAliasing == AliasingKind::kCombine &&
@@ -176,98 +219,51 @@ void GapResolver::PerformMove(ParallelMove* moves, MoveOperands* move) {
   for (size_t i = 0; i < moves->size(); ++i) {
     auto other = (*moves)[i];
     if (other->IsEliminated()) continue;
-    if (other->IsPending()) continue;
+    if (other == move) continue;
     if (other->source().InterferesWith(destination)) {
-      if (is_fp_loc_move &&
-          LocationOperand::cast(other->source()).representation() >
-              split_rep_) {
-        // 'other' must also be an FP location move. Break it into fragments
-        // of the same size as 'move'. 'other' is set to one of the fragments,
-        // and the rest are appended to 'moves'.
-        other = Split(other, split_rep_, moves);
-        // 'other' may not block destination now.
-        if (!other->source().InterferesWith(destination)) continue;
+      if (other->IsPending()) {
+        // The conflicting move is pending, i.e. we found a cycle. Break it by
+        // moving the source to a platform-dependent temporary location.
+        // Check that we have at most one blocker. This assumption will have to
+        // be revisited for tail-calls, which create more complex interferences.
+        // DCHECK_NULL(*deferred_move_out);
+        // assembler_->MoveToTempLocation(&other->source());
+        cycle = std::vector<MoveOperands*>();
+      } else {
+        // Recursively perform the conflicting move.
+        if (is_fp_loc_move &&
+            LocationOperand::cast(other->source()).representation() >
+                split_rep_) {
+          // 'other' must also be an FP location move. Break it into fragments
+          // of the same size as 'move'. 'other' is set to one of the fragments,
+          // and the rest are appended to 'moves'.
+          other = Split(other, split_rep_, moves);
+          // 'other' may not block destination now.
+          if (!other->source().InterferesWith(destination)) continue;
+        }
+        auto cycle_rec = PerformMoveHelper(moves, other);
+        if (cycle_rec.has_value()) {
+          DCHECK(!cycle.has_value());
+          cycle = cycle_rec;
+        }
       }
-      // Though PerformMove can change any source operand in the move graph,
-      // this call cannot create a blocking move via a swap (this loop does not
-      // miss any).  Assume there is a non-blocking move with source A and this
-      // move is blocked on source B and there is a swap of A and B.  Then A and
-      // B must be involved in the same cycle (or they would not be swapped).
-      // Since this move's destination is B and there is only a single incoming
-      // edge to an operand, this move must also be involved in the same cycle.
-      // In that case, the blocking move will be created but will be "pending"
-      // when we return from PerformMove.
-      PerformMove(moves, other);
     }
-  }
-
-  // This move's source may have changed due to swaps to resolve cycles and so
-  // it may now be the last move in the cycle.  If so remove it.
-  source = move->source();
-  if (source.EqualsCanonicalized(destination)) {
-    move->Eliminate();
-    return;
   }
 
   // We are about to resolve this move and don't need it marked as pending, so
   // restore its destination.
   move->set_destination(destination);
 
-  // The move may be blocked on a (at most one) pending move, in which case we
-  // have a cycle.  Search for such a blocking move and perform a swap to
-  // resolve it.
-  auto blocker =
-      std::find_if(moves->begin(), moves->end(), [&](MoveOperands* move) {
-        return !move->IsEliminated() &&
-               move->source().InterferesWith(destination);
-      });
-  if (blocker == moves->end()) {
-    // The easy case: This move is not blocked.
-    assembler_->AssembleMove(&source, &destination);
-    move->Eliminate();
-    return;
+  if (cycle.has_value()) {
+    cycle->push_back(move);
+    return cycle;
   }
 
-  // Ensure source is a register or both are stack slots, to limit swap cases.
-  if (source.IsStackSlot() || source.IsFPStackSlot()) {
-    std::swap(source, destination);
-  }
-  assembler_->AssembleSwap(&source, &destination);
+  assembler_->AssembleMove(&source, &destination);
   move->Eliminate();
-
-  // Update outstanding moves whose source may now have been moved.
-  if (is_fp_loc_move) {
-    // We may have to split larger moves.
-    for (size_t i = 0; i < moves->size(); ++i) {
-      auto other = (*moves)[i];
-      if (other->IsEliminated()) continue;
-      if (source.InterferesWith(other->source())) {
-        if (LocationOperand::cast(other->source()).representation() >
-            split_rep_) {
-          other = Split(other, split_rep_, moves);
-          if (!source.InterferesWith(other->source())) continue;
-        }
-        other->set_source(destination);
-      } else if (destination.InterferesWith(other->source())) {
-        if (LocationOperand::cast(other->source()).representation() >
-            split_rep_) {
-          other = Split(other, split_rep_, moves);
-          if (!destination.InterferesWith(other->source())) continue;
-        }
-        other->set_source(source);
-      }
-    }
-  } else {
-    for (auto other : *moves) {
-      if (other->IsEliminated()) continue;
-      if (source.EqualsCanonicalized(other->source())) {
-        other->set_source(destination);
-      } else if (destination.EqualsCanonicalized(other->source())) {
-        other->set_source(source);
-      }
-    }
-  }
+  return {};
 }
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
