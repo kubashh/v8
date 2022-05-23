@@ -29,9 +29,11 @@ def experiment_builder(**kwargs):
             name = "notification for %s" % builder_name,
             notify_emails = to_notify,
             notified_by = [builder_name],
+            notify_blamelist = True,
         )
 
     return v8_builder(
+        repo = "https://chromium.googlesource.com/v8/v8",
         **kwargs
     )
 
