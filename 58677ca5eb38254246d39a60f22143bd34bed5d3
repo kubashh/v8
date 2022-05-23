@@ -408,6 +408,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e28aa60c_3b0c7a84",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-05-23T05:41:07Z",
+      "side": 1,
+      "message": "I looked into the breakages a bit, regarding embedder\u0027s breakage, the cause is that contexts created from `v8::Context::New` do not allow cross-context accesses by default, because it uses each context\u0027s global object as the security token. But since V8 has not been enforcing access checks for private symbols, embedders have been able to do `context-\u003eGlobal()-\u003eSetPrivate(another_context, ...)` just fine without having to change the security tokens, which was also what test-api-accessors/CachedAccessorOnGlobalObject did. If we turn on the check for private symbols now, the embedders would need to update their code to make sure that the security tokens are set to allow private symbols properties to be accessed. I checked again and I think Node.js should be fine for now as it happens to always set the security tokens to be the one of the main context (this wouldn\u0027t be true for the upcoming shadow realms though, and similarly checking private symbols broke the test262 of shadow realms here for a similar reason). Not sure about other embedders, but since a test already depends on this behavior and so do V8 internals to some extent (e.g. the error_stack_symbol case), there could be embedders that also depend on it, and they might also need to update their AccessCheckCallback to handle private symbols (do we leak V8\u0027s internal private symbols to these callbacks in that case?).\n\nRegarding not throwing on checking error_stack_symbol, isn\u0027t checking private names but not non-private-name private symbols (what this patch currently does) already achieves what we want? Non-private-name private symbols are generally only available to V8 internals and the embedder. As long as the embedder doesn\u0027t leak them, users can\u0027t use them to create memory leaks, we can see them as a way to bypass the access check internally. If we check all the private symbols, we need to find an update all internal access to private symbols where the receiver could fail the access check, and the embedders might need to update their code, too. If we only check private names the breakage is relatively small (super-return is rare anyway) and it already prevents the leak for the generally possible use cases.",
+      "parentUuid": "11909343_2d7442bf",
+      "revId": "58677ca5eb38254246d39a60f22143bd34bed5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80f79a74_59d89c88",
         "filename": "test/mjsunit/regress/regress-crbug-1321899.js",
         "patchSetId": 1
