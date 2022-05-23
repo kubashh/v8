@@ -217,6 +217,7 @@ class RuntimeCallTimer final {
   V(Object_Set)                                            \
   V(Object_SetAccessor)                                    \
   V(Object_SetIntegrityLevel)                              \
+  V(Object_TestIntegrityLevel)                             \
   V(Object_SetPrivate)                                     \
   V(Object_SetPrototype)                                   \
   V(ObjectTemplate_New)                                    \
