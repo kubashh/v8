@@ -690,6 +690,10 @@ inline Operand FieldOperand(Register object, Register index, ScaleFactor scale,
   return Operand(object, index, scale, offset - kHeapObjectTag);
 }
 
+struct MoveCycleState {
+  bool pending_double_scratch_register_use = false;
+};
+
 #define ACCESS_MASM(masm) masm->
 
 }  // namespace internal
