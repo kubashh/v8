@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d9651d_45478a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-23T20:55:04Z",
+      "side": 1,
+      "message": "lgtm with one minor comment",
+      "revId": "001ed9ada35110dc9f3b2853bba663afdf8cc09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcfd5f57_4e42934b",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 7828,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-23T20:55:04Z",
+      "side": 1,
+      "message": "No need for a local, just return Handle\u003cJSReceiver\u003e::cast(result)",
+      "revId": "001ed9ada35110dc9f3b2853bba663afdf8cc09b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
