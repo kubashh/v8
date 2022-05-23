@@ -63,6 +63,30 @@
       },
       "revId": "943ead137160c12c82babdd8221487ca98ae8491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13cdb33d_a9fbc05c",
+        "filename": "notify.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-05-23T18:36:04Z",
+      "side": 1,
+      "message": "Personally, I prefer the object type in the name for those rarely touched configurations. It helps new people to find the object definition when they read its application only (e.g. `notifies \u003d [\"beta/stable notifier\"],`).\n\nBut I get your point as well that it seems redundant for daily users.",
+      "parentUuid": "f6c2530e_de0b9b16",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
