@@ -16,6 +16,29 @@
       "message": "PTAL\nThanks!",
       "revId": "943ead137160c12c82babdd8221487ca98ae8491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a93d5a8_493a33e0",
+        "filename": "notify.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-05-23T18:10:22Z",
+      "side": 1,
+      "message": "My understanding is that it is notifying sheriffs *and* the authors in the blamelist? Most other notifiers in the file end with `notifier` as well.\n\nCould we call this object `sheriffs and blamelist author notifier` ?",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
