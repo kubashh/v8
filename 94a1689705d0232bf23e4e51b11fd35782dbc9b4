@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "777da6b2_8b66e9a3",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-23T03:55:51Z",
+      "side": 1,
+      "message": "Could you please further review?",
+      "parentUuid": "8acdf2a2_10ee3f15",
+      "range": {
+        "startLine": 221,
+        "startChar": 3,
+        "endLine": 222,
+        "endChar": 14
+      },
+      "revId": "94a1689705d0232bf23e4e51b11fd35782dbc9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adddbd3d_c3ddc564",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Great idea!\nYes, it\u0027s possible multiple OSR codes contain the deopt exit when the later OSR miss previous OSR code cache. BTW, it\u0027s the second problem of another OSR topic \"Regression caused by current OSR implementation\".\nI\u0027ll modify this part to DeoptAllOsrLoopsContainingDeoptExit later.",
       "parentUuid": "adddbd3d_c3ddc564",
+      "range": {
+        "startLine": 324,
+        "startChar": 6,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "94a1689705d0232bf23e4e51b11fd35782dbc9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "410a62e7_220a0108",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-23T03:55:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd70b7e_d230da03",
       "range": {
         "startLine": 324,
         "startChar": 6,
