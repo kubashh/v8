@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "964a4af3_1c82ff82",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-23T13:33:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e10f83cf_36e3a7e3",
+      "range": {
+        "startLine": 184,
+        "startChar": 5,
+        "endLine": 184,
+        "endChar": 34
+      },
+      "revId": "b7bef553e50704fb46412b88840ebd51d8b9c681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74ea5666_9f9cd38b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-23T08:10:17Z",
       "side": 1,
       "message": "this function is very hard to follow or to review, especially with the nested loop for \u0027type a\u0027 and the \"is_in_loop_range\" logic. Would it be possible to split it into multiple loops and a bit more explicit state changing (between \u0027collecting type b\u0027, \u0027processing type c\u0027 and \u0027revisiting start of outer loop to process type a\u0027)?",
+      "range": {
+        "startLine": 232,
+        "startChar": 5,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b7bef553e50704fb46412b88840ebd51d8b9c681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f8b3d68_0c05cbcf",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-23T13:33:28Z",
+      "side": 1,
+      "message": "I split the nested loop into two loops, modified comments and changed is_in_loop_range to is_deopt_exit_in_loop_range. Could you please further review?",
+      "parentUuid": "74ea5666_9f9cd38b",
       "range": {
         "startLine": 232,
         "startChar": 5,
