@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d20cd3d_41c41953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "LGTM % a few nits, thanks!",
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72308857_bb692c3b",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "nit: you could add a comment that this implements https://nicedoc.io/WebAssembly/gc/proposals/gc/MVP.md#runtime-types (if my googling is correct).",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 45
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d5d47e_9ec61032",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "nit: you could introduce the magic stanza of `#define __ gasm_.` if you like it.",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 83,
+        "endChar": 7
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32c8e647_ce0b64ea",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "Just for my better understanding - why do we explicitly replace all inputs of the current node, as we\u0027ve just replaced it anyway?",
+      "range": {
+        "startLine": 123,
+        "startChar": 10,
+        "endLine": 123,
+        "endChar": 22
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de2719ab_b3e6198d",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "This method seems almost equivalent to `ReduceWasmTypeCheck` from above, except for trapping instead of calling `GotoIfNot`. Is it possible to extract the common parts and e.g. use a boolean flag to differentiate between the two behaviours?",
+      "range": {
+        "startLine": 165,
+        "startChar": 10,
+        "endLine": 165,
+        "endChar": 20
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

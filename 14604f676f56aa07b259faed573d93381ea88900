@@ -16,6 +16,29 @@
       "message": "Jakob: PTAL at graph-builder-interface, wasm-compiler, and wasm-gc-lowering.\nMaya: PTAL at the rest, and also at wasm-gc-lowering.",
       "revId": "14604f676f56aa07b259faed573d93381ea88900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e754a3eb_a663de5e",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-23T15:21:43Z",
+      "side": 1,
+      "message": "Possibly noob question, but what does it mean to have 0 effect outputs and 1 effect input? Is it related to the issue you were discussing with Tobias in the chat?",
+      "range": {
+        "startLine": 1168,
+        "startChar": 43,
+        "endLine": 1168,
+        "endChar": 47
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
