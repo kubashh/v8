@@ -15,6 +15,17 @@ luci.notifier(
 )
 
 luci.notifier(
+    name = "sheriffs with blamelist",
+    on_occurrence = ["FAILURE"],
+    failed_step_regexp_exclude = FAILED_STEPS_EXCLUDE,
+    notify_emails = [
+        "v8-waterfall-sheriff@grotations.appspotmail.com",
+        "mtv-sf-v8-sheriff@grotations.appspotmail.com",
+    ],
+    notify_blamelist = True,
+)
+
+luci.notifier(
     name = "infra",
     on_occurrence = ["FAILURE"],
     failed_step_regexp_exclude = FAILED_STEPS_EXCLUDE,
