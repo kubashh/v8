@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f7af70_1a7bca19",
+        "filename": "src/builtins/array-to-reversed.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-23T22:07:57Z",
+      "side": 1,
+      "message": "array.length is a Number per the Torque definition, how do we know it\u0027s a Smi here (perhaps the elements kind guarantees that)? I\u0027m also curious about why Torque allows this implicit downcast in the caller.",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbaeb7ac_cde2cbea",
+        "filename": "test/mjsunit/harmony/array-to-reversed.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-23T22:07:57Z",
+      "side": 1,
+      "message": "Super nit: expected value should be the first argument, here and below.",
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25849980_0d102ccb",
+        "filename": "test/mjsunit/harmony/array-to-reversed.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-23T22:07:57Z",
+      "side": 1,
+      "message": "Not sure how much testing you want to do ahead of test262, but a few more ideas:\n\n- Test that we read up the prototype chain\n- Test what happens if you mutate the array in the middle of the operation\n- Verify that reading happens from back-to-front order\n- Test with an arrayLike\n- ... with a length \u003e 2^32\n- ... with a length \u003e 2^53",
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
