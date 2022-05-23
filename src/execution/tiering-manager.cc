@@ -124,6 +124,12 @@ void TraceRecompile(Isolate* isolate, JSFunction function,
            CodeKindToString(d.code_kind), ToString(d.concurrency_mode),
            OptimizationReasonToString(d.optimization_reason));
     PrintF(scope.file(), "]\n");
+    /*    printf(
+            "%s %s %d %s "
+            "function.feedback_vector().maybe_has_optimized_osr_code(): %d\n",
+            __FILE__, __func__, __LINE__,
+       function.shared().DebugNameCStr().get(),
+            function.feedback_vector().maybe_has_optimized_osr_code());*/
   }
 }
 
