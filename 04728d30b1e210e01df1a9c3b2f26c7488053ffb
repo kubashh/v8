@@ -16,6 +16,92 @@
       "message": "PTAL -- this is semi tested and likely incomplete, but I wanted to get an initial review in while I wait for a case where I want to use it.",
       "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54611792_731ceed2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-23T07:38:26Z",
+      "side": 1,
+      "message": "CC almuthanna to think about the testing of such scripts. The existing test setup is very cumbersome so that I don\u0027t even suggest to add a test to land this. We should get it into a state that makes adding tests easy.\n\nIt\u0027s debatable though, how much can be tested in a script like this, without the test becoming a change detector. Some functionality like the ExtractVersion function should be easily testable. The gerrit_tool interactions are probably less useful.",
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85f00545_6f96fb87",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-23T07:38:26Z",
+      "side": 1,
+      "message": "nit: Keep all python imports together and alpha sort. E.g. also add logging etc here.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f1e6a89_3b3176f6",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-23T07:38:26Z",
+      "side": 1,
+      "message": "Could you be more specific here?",
+      "range": {
+        "startLine": 46,
+        "startChar": 19,
+        "endLine": 46,
+        "endChar": 49
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa1c1042_dc474e62",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-23T07:38:26Z",
+      "side": 1,
+      "message": "Not sure how forgiving this is for wrong usage. Maybe also add an example to the help line?\n\nAlso maybe we want to restrict the branches?\n\nConsider adding an assert that verifies the options.branch content, e.g. against a regexp. Are we expecting refs/heads/\\d+\\.\\d+\\.\\d+ ? Nobody should be able to use this for e.g. refs/branch-heads/* or refs/heads/*.*-lkgr.",
+      "range": {
+        "startLine": 107,
+        "startChar": 56,
+        "endLine": 107,
+        "endChar": 70
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
