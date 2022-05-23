@@ -218,6 +218,81 @@ bool DeoptExitIsInsideOsrLoop(Isolate* isolate, JSFunction function,
   UNREACHABLE();
 }
 
+// Deoptimize all osr'd loops which is in the same outermost loop with deopt
+// exit. For example:
+//  for (;;) {
+//    for (;;) {
+//    }  // Type a: loop start < OSR backedge < deopt exit
+//    for (;;) {
+//      <- Deopt
+//      for (;;) {
+//      }  // Type b: deopt exit < loop start < OSR backedge
+//    } // Type c: loop start < deopt exit < OSR backedge
+//  }  // The outermost loop
+void DeoptAllOsrLoopsContainingDeoptExit(Isolate* isolate, JSFunction function,
+                                         BytecodeOffset deopt_exit_offset) {
+  DisallowGarbageCollection no_gc;
+  DCHECK(!deopt_exit_offset.IsNone());
+
+  if (!function.feedback_vector().maybe_has_optimized_osr_code()) return;
+  Handle<BytecodeArray> bytecode_array(
+      function.shared().GetBytecodeArray(isolate), isolate);
+  DCHECK(interpreter::BytecodeArrayIterator::IsValidOffset(
+      bytecode_array, deopt_exit_offset.ToInt()));
+
+  interpreter::BytecodeArrayIterator it(bytecode_array);
+
+  std::vector<CodeT> osr_codes;
+  bool is_deopt_exit_in_loop_range = false;
+  // Visit from deopt exit to deoptimize type b and type c osr'd loops
+  for (it.SetOffset(deopt_exit_offset.ToInt()); !it.done(); it.Advance()) {
+    // We're only interested in loop ranges.
+    if (it.current_bytecode() != interpreter::Bytecode::kJumpLoop) continue;
+    // Is the deopt exit contained in the current loop?
+    if (!is_deopt_exit_in_loop_range &&
+        base::IsInRange(deopt_exit_offset.ToInt(), it.GetJumpTargetOffset(),
+                        it.current_offset())) {
+      is_deopt_exit_in_loop_range = true;
+      for (size_t i = 0, size = osr_codes.size(); i < size; i++) {
+        //  Deoptimize type b osr'd loops
+        osr_codes[i].set_marked_for_deoptimization(true);
+      }
+    }
+    base::Optional<CodeT> maybe_code =
+        function.feedback_vector().GetOptimizedOsrCode(isolate,
+                                                       it.GetSlotOperand(2));
+    if (maybe_code.has_value()) {
+      if (is_deopt_exit_in_loop_range) {
+        // Deoptimize type c osr'd loops
+        maybe_code.value().set_marked_for_deoptimization(true);
+      } else {
+        // Collect type b osr'd loops
+        osr_codes.push_back(maybe_code.value());
+      }
+    }
+    // We've reached nesting level 0, i.e. the current JumpLoop concludes a
+    // top-level loop.
+    const int loop_nesting_level = it.GetImmediateOperand(1);
+    if (loop_nesting_level == 0) {
+      break;
+    }
+  }
+  if (it.done() || !is_deopt_exit_in_loop_range) return;
+  // Revisit start of outermost loop to deoptimize type a osr'd loops
+  for (it.SetOffset(it.GetJumpTargetOffset());
+       it.current_offset() < deopt_exit_offset.ToInt(); it.Advance()) {
+    // We're only interested in loop ranges.
+    if (it.current_bytecode() != interpreter::Bytecode::kJumpLoop) continue;
+    base::Optional<CodeT> maybe_code =
+        function.feedback_vector().GetOptimizedOsrCode(isolate,
+                                                       it.GetSlotOperand(2));
+    if (maybe_code.has_value()) {
+      // Deoptimize type a osr'd loops
+      maybe_code.value().set_marked_for_deoptimization(true);
+    }
+  }
+}
+
 }  // namespace
 
 RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
@@ -258,7 +333,10 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
-  // Non-OSR'd code is deoptimized unconditionally.
+  // Non-OSR'd code is deoptimized unconditionally. If the deoptimization occurs
+  // inside the outermost loop containning the loop that triggered OSR
+  // compilation, we remove the OSR code, it will avoid hit the out of date OSR
+  // code and soon later deoptimization.
   //
   // For OSR'd code, we keep the optimized code around if deoptimization occurs
   // outside the outermost loop containing the loop that triggered OSR
@@ -267,9 +345,11 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   // still worth jumping to the OSR'd code on the next run. The reduced cost of
   // the loop should pay for the deoptimization costs.
   const BytecodeOffset osr_offset = optimized_code->osr_offset();
-  if (osr_offset.IsNone() ||
-      DeoptExitIsInsideOsrLoop(isolate, *function, deopt_exit_offset,
-                               osr_offset)) {
+  if (osr_offset.IsNone()) {
+    Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
+    DeoptAllOsrLoopsContainingDeoptExit(isolate, *function, deopt_exit_offset);
+  } else if (DeoptExitIsInsideOsrLoop(isolate, *function, deopt_exit_offset,
+                                      osr_offset)) {
     Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
   }
 
