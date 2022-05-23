@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40b0d00d_e3010042",
+        "filename": "src/builtins/array-to-reversed.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-23T23:10:26Z",
+      "side": 1,
+      "message": "Good question. Did some digging and this is because of the `FastJSArray` type. The magic is this line [0] which is implemented in [1].\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/base.tq;l\u003d1299?q\u003dbase.tq\u0026ss\u003dchromium\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/code-stub-assembler.cc;l\u003d1836?q\u003dLoadFastJSArrayLength\u0026sq\u003d\u0026ss\u003dchromium",
+      "parentUuid": "b6f7af70_1a7bca19",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbaeb7ac_cde2cbea",
         "filename": "test/mjsunit/harmony/array-to-reversed.js",
         "patchSetId": 3
@@ -37,6 +61,24 @@
       "writtenOn": "2022-05-23T22:07:57Z",
       "side": 1,
       "message": "Super nit: expected value should be the first argument, here and below.",
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35804e51_4d199842",
+        "filename": "test/mjsunit/harmony/array-to-reversed.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-23T23:10:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbaeb7ac_cde2cbea",
       "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +96,24 @@
       "writtenOn": "2022-05-23T22:07:57Z",
       "side": 1,
       "message": "Not sure how much testing you want to do ahead of test262, but a few more ideas:\n\n- Test that we read up the prototype chain\n- Test what happens if you mutate the array in the middle of the operation\n- Verify that reading happens from back-to-front order\n- Test with an arrayLike\n- ... with a length \u003e 2^32\n- ... with a length \u003e 2^53",
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "077c888e_dc823a96",
+        "filename": "test/mjsunit/harmony/array-to-reversed.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-23T23:10:26Z",
+      "side": 1,
+      "message": "- Added a prototype read in `TestNoHoles`\n- Added tests for array mutation and length-changing shenanigans\n- Added a back-to-front order test\n- `TestGeneric` already tests array-likes\n\nAdding arrays with huge lengths is probably a bad idea because because `toReversed` always produces packed JS arrays, so those tests will be going up against the memory limit and will be pretty slow.",
+      "parentUuid": "25849980_0d102ccb",
       "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
