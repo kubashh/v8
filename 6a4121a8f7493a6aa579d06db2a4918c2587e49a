@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "542984ad_0acc4e33",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:07:36Z",
+      "side": 0,
+      "message": "Wait, this is a different address. Please treat it like notify_owners. We can have our sheriffs and blamelist on top...",
+      "range": {
+        "startLine": 124,
+        "startChar": 13,
+        "endLine": 124,
+        "endChar": 58
+      },
+      "revId": "6a4121a8f7493a6aa579d06db2a4918c2587e49a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

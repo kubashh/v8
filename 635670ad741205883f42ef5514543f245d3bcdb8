@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34c7e47_a0447301",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:07:36Z",
+      "side": 1,
+      "message": "I think we\u0027re not yet on the same page here. I though this group to be a CC of everything we notify on. E.g. if we already notify anyone (blamelist, sheriffs or an owner) we\u0027d now additionally notify v8-infra-cc. Ideally in the exact same way as the other notification, e.g. on new failures, if the other is also on new failures. But if a builder has no notification, let\u0027s also not add the infra-cc. E.g. not here, since as I assume, nobody gets notified now.\n\nIf we as infra team want to get alerted on certain builders, we should use the other v8-infra alert group.\n\nAs implementation, maybe it\u0027s easiest to just add v8-infra-cc group as address in all the other notifiers? Or create a v8_notifier base function that always adds the cc group? Or add it using a generator in the end?",
+      "range": {
+        "startLine": 113,
+        "startChar": 20,
+        "endLine": 113,
+        "endChar": 33
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "175ae285_6a019809",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:07:36Z",
+      "side": 1,
+      "message": "Fly by: Is this builder still broken?",
+      "range": {
+        "startLine": 249,
+        "startChar": 8,
+        "endLine": 249,
+        "endChar": 73
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6e83261_39cbaab3",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:07:36Z",
+      "side": 1,
+      "message": "Maybe drop the blamelist part from the reclient category. Those builders are really only meant for the reclient folks. They are copies of existing builders, and if they break with a v8 reason, the existing builders will be broken too.",
+      "range": {
+        "startLine": 264,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 33
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf9def84_6aeef639",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:07:36Z",
+      "side": 1,
+      "message": "Just for clarification: The feature failed_step_regexp_exclude and on_new_status can not be combined? In this case we might start spamming the sheriffs potentially more than before now.\n\nIs there maybe a separation between tree-closers (can spam sheriffs on every failure, because they want to get them green anyways) and non-tree-closers (might be red for a while, so here the focus would be on on_new_status only).",
+      "range": {
+        "startLine": 1713,
+        "startChar": 4,
+        "endLine": 1713,
+        "endChar": 30
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
