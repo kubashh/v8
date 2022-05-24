@@ -16,6 +16,24 @@
       "message": "Alternatively, you can also check out the exact gc stress flags from the build page it uses and run the corresponding thing locally. That should give us some idea what the timing is.",
       "revId": "b843776be6fcb756b21001bbc604d35a5c88a196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d81fb866_89764976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-05-24T07:08:18Z",
+      "side": 1,
+      "message": "Ack. Thanks! I tested locally and found that the reason should be that web-snapshot-2.js grew to be big. `web-snapshot-2.js` cost 51.65s and `web-snapshot-6.js` cost only 1.79s. I try to split and reorganize the websnapshot tests, and now all the websnapshot tests cost under 23s. WDYT? Thanks!",
+      "parentUuid": "fcfb0edb_1a2abdf7",
+      "revId": "b843776be6fcb756b21001bbc604d35a5c88a196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
