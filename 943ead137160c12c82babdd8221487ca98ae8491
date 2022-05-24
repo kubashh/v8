@@ -20,6 +20,115 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17a3346f_8e3905d9",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T07:11:44Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be the default for v8_builder? In case there are exceptions, maybe those should not use v8_builder but some wrapper with different defaults...",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 57
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e180e811_494cb0ef",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T07:11:44Z",
+      "side": 1,
+      "message": "I have second thoughts about the integration builders as they tend to be quite spammy and they might have a bunch of false positives... But we can give it a try and potentially drop those again...",
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e7ee5f_53ac9f3b",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T07:11:44Z",
+      "side": 1,
+      "message": "It\u0027d be great if we only get a notification on the first failure and also only if the overall outcome was a failure (not just failed steps).\n\nBecause I\u0027m not so sure what actually happens, I\u0027d suggest to add the newly added group to all notifications by default:\nv8-infra-alerts-cc@google.com\n\nThen we can hopefully follow whom we spam with what in the group conversations.",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 16
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da69ea96_797ca442",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T07:11:44Z",
+      "side": 1,
+      "message": "It\u0027d be great if we could split those up to be more composable and look like this here:\n[\"sheriffs\", \"blamelist\"]\n\nThen we could also make other combinations later.",
+      "range": {
+        "startLine": 20,
+        "startChar": 20,
+        "endLine": 20,
+        "endChar": 45
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c9b8e7b_bc2eaa04",
+        "filename": "notify.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T07:11:44Z",
+      "side": 1,
+      "message": "How about we call this one just \"sheriffs\" now? It\u0027d be more like what it does, not where it is used.",
+      "range": {
+        "startLine": 8,
+        "startChar": 12,
+        "endLine": 8,
+        "endChar": 32
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a93d5a8_493a33e0",
         "filename": "notify.star",
         "patchSetId": 2
