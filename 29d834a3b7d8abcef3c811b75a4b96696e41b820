@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3082037e_8ca84c15",
+        "filename": "src/builtins/array-to-reversed.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-24T00:17:27Z",
+      "side": 1,
+      "message": "Thanks for the pointer, makes sense (and that\u0027s fancy!).",
+      "parentUuid": "40b0d00d_e3010042",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbaeb7ac_cde2cbea",
@@ -114,6 +138,24 @@
       "side": 1,
       "message": "- Added a prototype read in `TestNoHoles`\n- Added tests for array mutation and length-changing shenanigans\n- Added a back-to-front order test\n- `TestGeneric` already tests array-likes\n\nAdding arrays with huge lengths is probably a bad idea because because `toReversed` always produces packed JS arrays, so those tests will be going up against the memory limit and will be pretty slow.",
       "parentUuid": "25849980_0d102ccb",
+      "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1447f2_6cb4b0a5",
+        "filename": "test/mjsunit/harmony/array-to-reversed.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-24T00:17:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "077c888e_dc823a96",
       "revId": "29d834a3b7d8abcef3c811b75a4b96696e41b820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
