@@ -8,6 +8,167 @@
 
 d8.file.execute('test/mjsunit/web-snapshot/web-snapshot-helpers.js');
 
+(function TestOptimizingFunctionFromSnapshot() {
+  function createObjects() {
+    globalThis.f = function(a, b) { return a + b; }
+  }
+  const { f } = takeAndUseWebSnapshot(createObjects, ['f']);
+  %PrepareFunctionForOptimization(f);
+  assertEquals(3, f(1, 2));
+  %OptimizeFunctionOnNextCall(f);
+  assertEquals(4, f(1, 3));
+})();
+
+(function TestOptimizingConstructorFromSnapshot() {
+  function createObjects() {
+    globalThis.C = class {
+      constructor(a, b) {
+        this.x = a + b;
+      }
+    }
+  }
+  const { C } = takeAndUseWebSnapshot(createObjects, ['C']);
+  %PrepareFunctionForOptimization(C);
+  assertEquals(3, new C(1, 2).x);
+  %OptimizeFunctionOnNextCall(C);
+  assertEquals(4, new C(1, 3).x);
+})();
+
+(function TestFunctionPrototype() {
+  function createObjects() {
+    globalThis.F = function(p1, p2) {
+      this.x = p1 + p2;
+    }
+    globalThis.F.prototype.m = function(p1, p2) {
+      return this.x + p1 + p2;
+    }
+  }
+  const { F } = takeAndUseWebSnapshot(createObjects, ['F']);
+  const o = new F(1, 2);
+  assertEquals(3, o.x);
+  assertEquals(10, o.m(3, 4));
+})();
+
+(function TestFunctionPrototypeBecomesProto() {
+  function createObjects() {
+    globalThis.F = function() {}
+    globalThis.F.prototype.x = 100;
+  }
+  const { F } = takeAndUseWebSnapshot(createObjects, ['F']);
+  const o = new F();
+  assertEquals(100, Object.getPrototypeOf(o).x);
+})();
+
+(function TestFunctionCtorCallsFunctionInPrototype() {
+  function createObjects() {
+    globalThis.F = function() {
+      this.fooCalled = false;
+      this.foo();
+    }
+    globalThis.F.prototype.foo = function() { this.fooCalled = true; };
+  }
+  const { F } = takeAndUseWebSnapshot(createObjects, ['F']);
+  const o = new F();
+  assertTrue(o.fooCalled);
+})();
+
+(function TestFunctionPrototypeConnectedToObjectPrototype() {
+  function createObjects() {
+    globalThis.F = function() {}
+  }
+  const { F } = takeAndUseWebSnapshot(createObjects, ['F']);
+  const o = new F();
+  assertEquals(Object.prototype,
+               Object.getPrototypeOf(Object.getPrototypeOf(o)));
+})();
+
+(function TestFunctionInheritance() {
+  function createObjects() {
+    globalThis.Super = function() {}
+    globalThis.Super.prototype.superfunc = function() { return 'superfunc'; };
+    globalThis.Sub = function() {}
+    globalThis.Sub.prototype = Object.create(Super.prototype);
+    globalThis.Sub.prototype.subfunc = function() { return 'subfunc'; };
+  }
+  const realm = Realm.create();
+  const { Sub, Super } =
+      takeAndUseWebSnapshot(createObjects, ['Sub', 'Super'], realm);
+  const o = new Sub();
+  assertEquals('superfunc', o.superfunc());
+  assertEquals('subfunc', o.subfunc());
+  assertSame(Super.prototype, Sub.prototype.__proto__);
+  const realmFunctionPrototype = Realm.eval(realm, 'Function.prototype');
+  assertSame(realmFunctionPrototype, Super.__proto__);
+  assertSame(realmFunctionPrototype, Sub.__proto__);
+})();
+
+(function TestFunctionKinds() {
+  function createObjects() {
+    globalThis.normalFunction = function() {}
+    globalThis.asyncFunction = async function() {}
+    globalThis.generatorFunction = function*() {}
+    globalThis.asyncGeneratorFunction = async function*() {}
+  }
+  const realm = Realm.create();
+  const {normalFunction, asyncFunction, generatorFunction,
+         asyncGeneratorFunction} =
+      takeAndUseWebSnapshot(createObjects, ['normalFunction', 'asyncFunction',
+          'generatorFunction', 'asyncGeneratorFunction'], realm);
+  const newNormalFunction = Realm.eval(realm, 'f1 = function() {}');
+  const newAsyncFunction = Realm.eval(realm, 'f2 = async function() {}');
+  const newGeneratorFunction = Realm.eval(realm, 'f3 = function*() {}');
+  const newAsyncGeneratorFunction =
+      Realm.eval(realm, 'f4 = async function*() {}');
+
+  assertSame(newNormalFunction.__proto__, normalFunction.__proto__);
+  assertSame(newNormalFunction.prototype.__proto__,
+             normalFunction.prototype.__proto__);
+
+  assertSame(newAsyncFunction.__proto__, asyncFunction.__proto__);
+  assertEquals(undefined, asyncFunction.prototype);
+  assertEquals(undefined, newAsyncFunction.prototype);
+
+  assertSame(newGeneratorFunction.__proto__, generatorFunction.__proto__);
+  assertSame(newGeneratorFunction.prototype.__proto__,
+             generatorFunction.prototype.__proto__);
+
+  assertSame(newAsyncGeneratorFunction.__proto__,
+             asyncGeneratorFunction.__proto__);
+  assertSame(newAsyncGeneratorFunction.prototype.__proto__,
+             asyncGeneratorFunction.prototype.__proto__);
+})();
+
+(function TestContextTree() {
+  function createObjects() {
+    (function outer() {
+      let a = 10;
+      let b = 20;
+      (function inner1() {
+        let c = 5;
+        globalThis.f1 = function() { return a + b + c; };
+      })();
+      (function inner2() {
+        let d = 10;
+        globalThis.f2 = function() { return a - b - d; };
+      })();
+    })();
+  }
+  const {f1, f2} = takeAndUseWebSnapshot(createObjects, ['f1', 'f2']);
+  assertEquals(35, f1());
+  assertEquals(-20, f2());
+})();
+
+(function TestContextReferringToFunction() {
+  function createObjects() {
+    (function outer() {
+      let a = function() { return 10; }
+      globalThis.f = function() { return a(); };
+    })();
+  }
+  const {f} = takeAndUseWebSnapshot(createObjects, ['f']);
+  assertEquals(10, f());
+})();
+
 (function TestNonInlinedScopeInfoInContext() {
   function createObjects() {
     globalThis.bar = (function() {
@@ -334,42 +495,4 @@ d8.file.execute('test/mjsunit/web-snapshot/web-snapshot-helpers.js');
   }
   const {foo} = takeAndUseWebSnapshot(createObjects, ['foo']);
   assertEquals('bar', foo());
-})();
-
-(function TestNonGlobalSymbol() {
-  function createObjects() {
-    const s = Symbol('description');
-    globalThis.foo = {mySymbol: s, innerObject: { symbolHereToo: s}};
-  }
-  const {foo} = takeAndUseWebSnapshot(createObjects, ['foo']);
-  assertEquals(foo.mySymbol, foo.innerObject.symbolHereToo);
-  assertEquals('description', foo.mySymbol.description);
-  assertNotEquals(foo.mySymbol, Symbol('description'));
-  assertNotEquals(foo.mySymbol, Symbol.for('description'));
-})();
-
-(function TestGlobalSymbol() {
-  function createObjects() {
-    const s = Symbol.for('this is global');
-    globalThis.foo = {mySymbol: s, innerObject: { symbolHereToo: s}};
-  }
-  const {foo} = takeAndUseWebSnapshot(createObjects, ['foo']);
-  assertEquals(foo.mySymbol, foo.innerObject.symbolHereToo);
-  assertEquals('this is global', foo.mySymbol.description);
-  assertEquals(Symbol.for('this is global'), foo.mySymbol);
-})();
-
-(function TestSymbolAsMapKey() {
-  function createObjects() {
-    globalThis.obj1 = {};
-    const global_symbol = Symbol.for('this is global');
-    obj1[global_symbol] = 'global symbol value';
-    globalThis.obj2 = {};
-    const nonglobal_symbol = Symbol('this is not global');
-    obj2[nonglobal_symbol] = 'nonglobal symbol value';
-  }
-  const {obj1, obj2} = takeAndUseWebSnapshot(createObjects, ['obj1', 'obj2']);
-  assertEquals('global symbol value', obj1[Symbol.for('this is global')]);
-  const nonglobal_symbol = Object.getOwnPropertySymbols(obj2)[0];
-  assertEquals('nonglobal symbol value', obj2[nonglobal_symbol]);
 })();

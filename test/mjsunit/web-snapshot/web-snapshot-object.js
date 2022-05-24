@@ -8,6 +8,77 @@
 
 d8.file.execute('test/mjsunit/web-snapshot/web-snapshot-helpers.js');
 
+(function TestObjectReferencingObject() {
+  function createObjects() {
+    globalThis.foo = {
+      bar: { baz: 11525 }
+    };
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertEquals(11525, foo.bar.baz);
+})();
+
+(function TestContextReferencingObject() {
+  function createObjects() {
+    function outer() {
+      let o = { value: 11525 };
+      function inner() { return o; }
+      return inner;
+    }
+    globalThis.foo = {
+      func: outer()
+    };
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertEquals(11525, foo.func().value);
+})();
+
+(function TestCircularObjectReference() {
+  function createObjects() {
+    globalThis.foo = {
+      bar: {}
+    };
+    globalThis.foo.bar.circular = globalThis.foo;
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertSame(foo, foo.bar.circular);
+})();
+
+(function TestInPlaceStringsInObject() {
+  function createObjects() {
+    globalThis.foo = {a: 'foo', b: 'bar', c: 'baz'};
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  // We cannot test that the strings are really in-place; that's covered by
+  // cctests.
+  assertEquals('foobarbaz', foo.a + foo.b + foo.c);
+})();
+
+(function TestRepeatedInPlaceStringsInObject() {
+  function createObjects() {
+    globalThis.foo = {a: 'foo', b: 'bar', c: 'foo'};
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  // We cannot test that the strings are really in-place; that's covered by
+  // cctests.
+  assertEquals('foobarfoo', foo.a + foo.b + foo.c);
+})();
+
+(function TestContextReferencingArray() {
+  function createObjects() {
+    function outer() {
+      let o = [11525];
+      function inner() { return o; }
+      return inner;
+    }
+    globalThis.foo = {
+      func: outer()
+    };
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertEquals(11525, foo.func()[0]);
+})();
+
 (function TestObjectWithPackedElements() {
   function createObjects() {
     globalThis.foo = {
@@ -118,4 +189,64 @@ d8.file.execute('test/mjsunit/web-snapshot/web-snapshot-helpers.js');
   for (let i = 0; i < 2000; i++){
     assertEquals(`value${i}`, foo[`key${i}`]);
   }
+})();
+
+(function TwoExportedObjects() {
+  function createObjects() {
+    globalThis.one = {x: 1};
+    globalThis.two = {x: 2};
+  }
+  const { one, two } = takeAndUseWebSnapshot(createObjects, ['one', 'two']);
+  assertEquals(1, one.x);
+  assertEquals(2, two.x);
+})();
+
+(function TestObjectPrototype() {
+  function createObjects() {
+    globalThis.obj = {a: 1, __proto__: {x: 1}};
+  }
+  const realm = Realm.create();
+  const {obj} = takeAndUseWebSnapshot(createObjects, ['obj'], realm);
+  assertEquals(1, obj.x);
+  assertEquals(1, obj.__proto__.x);
+  assertSame(Realm.eval(realm, 'Object.prototype'), obj.__proto__.__proto__);
+})();
+
+(function TestEmptyObjectPrototype() {
+  function createObjects() {
+    globalThis.obj = {__proto__: {x: 1}};
+  }
+  const realm = Realm.create();
+  const {obj} = takeAndUseWebSnapshot(createObjects, ['obj'], realm);
+  assertEquals(1, obj.x);
+  assertEquals(1, obj.__proto__.x);
+  assertSame(Realm.eval(realm, 'Object.prototype'), obj.__proto__.__proto__);
+})();
+
+(function TestDictionaryObjectPrototype() {
+  function createObjects() {
+    const obj = {};
+    // Create an object with dictionary map.
+    for (let i = 0; i < 2000; i++){
+      obj[`key${i}`] = `value${i}`;
+    }
+    obj.__proto__ = {x: 1};
+    globalThis.foo = obj;
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertEquals(2000, Object.keys(foo).length);
+  assertEquals(2000, Object.values(foo).length);
+  for (let i = 0; i < 2000; i++){
+    assertEquals(`value${i}`, foo[`key${i}`]);
+  }
+  assertEquals(1, foo.x);
+  assertEquals(1, foo.__proto__.x);
+})();
+
+(function TestNullPrototype() {
+  function createObjects() {
+    globalThis.foo = Object.create(null);
+  }
+  const { foo } = takeAndUseWebSnapshot(createObjects, ['foo']);
+  assertEquals(null, Object.getPrototypeOf(foo));
 })();
