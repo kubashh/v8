@@ -22,16 +22,17 @@ RECLIENT = struct(
 )
 
 def experiment_builder(**kwargs):
-    to_notify = kwargs.pop("to_notify", None)
-    if to_notify:
+    notify_owners = kwargs.pop("notify_owners", None)
+    if notify_owners:
         builder_name = kwargs["name"]
         v8_notifier(
             name = "notification for %s" % builder_name,
-            notify_emails = to_notify,
+            notify_emails = notify_owners,
             notified_by = [builder_name],
         )
 
     return v8_builder(
+        repo = "https://chromium.googlesource.com/v8/v8",
         **kwargs
     )
 
@@ -47,7 +48,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = ["mlippautz@chromium.org"],
+        notify_owners = ["mlippautz@chromium.org"],
+        notifies = ["blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux64 - debug - perfetto",
@@ -56,7 +58,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = ["skyostil@google.com"],
+        notify_owners = ["skyostil@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux64 - debug - single generation",
@@ -65,11 +68,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = [
-            "dinfuehr@chromium.org",
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notify_owners = ["dinfuehr@chromium.org"],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux64 - disable runtime call stats",
@@ -78,7 +78,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = ["cbruni@chromium.org"],
+        notify_owners = ["cbruni@chromium.org"],
+        notifies = ["blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux64 - external code space - debug",
@@ -87,7 +88,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = ["ishell@chromium.org"],
+        notify_owners = ["ishell@chromium.org"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - Fuzzilli - builder",
@@ -96,7 +98,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = ["mvstanton@google.com", "msarm@google.com"],
+        notify_owners = ["mvstanton@google.com", "msarm@google.com"],
+        notifies = ["blamelist"],
     ),
 )
 
@@ -109,6 +112,7 @@ in_category(
         dimensions = {"host_class": "multibot"},
         execution_timeout = 19800,
         properties = {"builder_group": "client.v8"},
+        notifies = ["v8-infra-cc"],
     ),
 )
 
@@ -120,9 +124,7 @@ in_category(
         triggered_by = ["v8-trigger"],
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         executable = "recipe:v8/bazel",
-        to_notify = [
-            "v8-google3-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - debug - fyi",
@@ -131,7 +133,8 @@ in_category(
         dimensions = {"host_class": "multibot"},
         execution_timeout = 19800,
         properties = {"builder_group": "client.v8"},
-        to_notify = ["jgruber@chromium.org"],
+        notify_owners = ["jgruber@chromium.org"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - fyi",
@@ -140,7 +143,8 @@ in_category(
         dimensions = {"host_class": "multibot"},
         execution_timeout = 19800,
         properties = {"builder_group": "client.v8"},
-        to_notify = ["jgruber@chromium.org"],
+        notify_owners = ["jgruber@chromium.org"],
+        notifies = ["blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux gcc",
@@ -150,10 +154,7 @@ in_category(
         properties = {"builder_group": "client.v8"},
         gclient_vars = [GCLIENT_VARS.V8_HEADER_INCLUDES],
         use_goma = GOMA.NO,
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 gcc - debug builder",
@@ -163,10 +164,7 @@ in_category(
         properties = {"builder_group": "client.v8"},
         gclient_vars = [GCLIENT_VARS.V8_HEADER_INCLUDES],
         use_goma = GOMA.NO,
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - gcov coverage",
@@ -176,10 +174,7 @@ in_category(
         properties = {"enable_swarming": False, "builder_group": "client.v8", "clobber": True, "coverage": "gcov"},
         use_goma = GOMA.NO,
         execution_timeout = 10800,
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder_pair(
         name = "V8 Linux - predictable",
@@ -188,10 +183,7 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
 )
 
@@ -204,11 +196,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.DEFAULT,
-        to_notify = [
-            "saelo@chromium.org",
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notify_owners = ["saelo@chromium.org"],
+        notifies = ["sheriffs", "blamelist"],
         description = {
             "purpose": "Arm64 simulator heap sandbox",
             "request": "https://crbug.com/v8/12257",
@@ -232,6 +221,7 @@ in_category(
             ),
         ],
         use_goma = GOMA.DEFAULT,
+        notifies = ["v8-infra-cc"],
     ),
     experiment_builder(
         name = "V8 Mac - arm64 - sim - debug",
@@ -240,10 +230,7 @@ in_category(
         dimensions = {"host_class": "multibot"},
         execution_timeout = 19800,
         properties = {"builder_group": "client.v8"},
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder(
         name = "V8 Mac - arm64 - sim - release",
@@ -252,10 +239,7 @@ in_category(
         dimensions = {"host_class": "multibot"},
         execution_timeout = 19800,
         properties = {"builder_group": "client.v8"},
-        to_notify = [
-            "v8-waterfall-sheriff@grotations.appspotmail.com",
-            "mtv-sf-v8-sheriff@grotations.appspotmail.com",
-        ],
+        notifies = ["sheriffs", "blamelist"],
     ),
     experiment_builder(
         name = "V8 Mac64 - full debug builder",
@@ -278,7 +262,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - builder (reclient)",
@@ -288,7 +273,8 @@ in_category(
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - builder (reclient compare)",
@@ -298,7 +284,8 @@ in_category(
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.COMPARE,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - node.js integration ng (goma cache silo)",
@@ -308,7 +295,8 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"v8_tot": True, "builder_group": "client.v8"},
         use_goma = GOMA.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - node.js integration ng (reclient)",
@@ -319,7 +307,8 @@ in_category(
         properties = {"v8_tot": True, "builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Linux64 - node.js integration ng (reclient compare)",
@@ -330,7 +319,8 @@ in_category(
         properties = {"v8_tot": True, "builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.COMPARE,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Win32 - builder (goma cache silo)",
@@ -339,7 +329,8 @@ in_category(
         dimensions = {"os": "Windows-10", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Win32 - builder (reclient)",
@@ -349,7 +340,8 @@ in_category(
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.CACHE_SILO,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
     experiment_builder(
         name = "V8 Win32 - builder (reclient compare)",
@@ -359,6 +351,7 @@ in_category(
         properties = {"builder_group": "client.v8"},
         use_goma = GOMA.NO,
         use_rbe = RECLIENT.COMPARE,
-        to_notify = ["abdelaal@google.com"],
+        notify_owners = ["abdelaal@google.com"],
+        notifies = ["blamelist"],
     ),
 )

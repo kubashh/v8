@@ -370,7 +370,7 @@ def multibranch_builder(**kwargs):
                 notifies.append("v8 tree closer")
                 args["notifies"] = notifies
         else:
-            args["notifies"] = ["beta/stable notifier"]
+            args["notifies"] = ["sheriffs"]
             if _builder_is_not_supported(branch.bucket, first_branch_version):
                 continue
         v8_basic_builder(defaults_ci, bucket = branch.bucket, **args)
