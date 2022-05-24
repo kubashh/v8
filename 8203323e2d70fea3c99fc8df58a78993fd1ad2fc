@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebbf601b_090f30c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-24T11:26:07Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Code-Review+1\n\nWill land this after the 10.5 branch cut, because we only added the `V8_DEPRECATE_SOON` in 10.4.",
+      "revId": "8203323e2d70fea3c99fc8df58a78993fd1ad2fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
