@@ -16,6 +16,41 @@
       "message": "As discussed via chat. However, always performing the generational barrier may be a bit controversial.",
       "revId": "1f58b024ef4d9fa0a23bef0842cc887acb3fb74f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "852f550f_d2cc85bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-24T07:36:16Z",
+      "side": 1,
+      "message": "Since we deserialize into old space we anyways bail out? The page flags should already be hot in the cache for the other WB checks.",
+      "parentUuid": "1789d824_6a6fb13f",
+      "revId": "1f58b024ef4d9fa0a23bef0842cc887acb3fb74f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a025f4d3_8d0cbefc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-05-24T07:36:16Z",
+      "side": 1,
+      "message": "lgtm from my side",
+      "revId": "1f58b024ef4d9fa0a23bef0842cc887acb3fb74f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
