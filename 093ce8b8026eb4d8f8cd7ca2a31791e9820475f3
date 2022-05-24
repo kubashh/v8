@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a2c07d3_f05e7342",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-05-24T06:23:21Z",
+      "side": 1,
+      "message": "Thanks for working on this!\n\nI think we should split the test, yes, but I\u0027m not sure about skipping in debug mode... then we won\u0027t get the debug mode checks for this which is not optimal.\n\nIs there a reason why these tests would be particularly slow, or is it that web-snapshot-2.js grew to be big and needed splitting? I\u0027m hoping it\u0027s the latter. We could then split it in roughly equal parts...",
+      "revId": "093ce8b8026eb4d8f8cd7ca2a31791e9820475f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
