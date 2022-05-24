@@ -295,6 +295,7 @@ def v8_builder(defaults = None, **kwargs):
     parent_builder = kwargs.pop("parent_builder", None)
     if parent_builder:
         resolve_parent_tiggering(kwargs, bucket_name, parent_builder)
+    kwargs["repo"] = "https://chromium.googlesource.com/v8/v8"
     v8_basic_builder(defaults, **kwargs)
     if in_console:
         splited = in_console.split("/")
@@ -370,7 +371,7 @@ def multibranch_builder(**kwargs):
                 notifies.append("v8 tree closer")
                 args["notifies"] = notifies
         else:
-            args["notifies"] = ["beta/stable notifier"]
+            args["notifies"] = ["sheriffs"]
             if _builder_is_not_supported(branch.bucket, first_branch_version):
                 continue
         v8_basic_builder(defaults_ci, bucket = branch.bucket, **args)

@@ -5,13 +5,25 @@
 load("//lib/lib.star", "FAILED_STEPS_EXCLUDE")
 
 luci.notifier(
-    name = "beta/stable notifier",
+    name = "sheriffs",
     on_occurrence = ["FAILURE"],
     failed_step_regexp_exclude = FAILED_STEPS_EXCLUDE,
     notify_emails = [
         "v8-waterfall-sheriff@grotations.appspotmail.com",
         "mtv-sf-v8-sheriff@grotations.appspotmail.com",
     ],
+)
+
+luci.notifier(
+    name = "blamelist",
+    on_new_status = ["FAILURE"],
+    notify_blamelist = True,
+)
+
+luci.notifier(
+    name = "v8-infra-cc",
+    on_new_status = ["FAILURE"],
+    notify_emails = ["v8-infra-alerts-cc@google.com"],
 )
 
 luci.notifier(
