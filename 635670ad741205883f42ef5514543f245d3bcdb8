@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cabcfa4b_ff32b4ac",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T14:52:11Z",
+      "side": 1,
+      "message": "Indeed, I was under the impression we only care about not introducing more spam. You want to be able to assess the amount of existing spam? Pls note that if we are present in multiple notifiers with the same email address we will probably get multiple notifications for the same builders (luci-notify should treat every notification as a distinct concern). Do we want to see all notifications in our cc group? If want to address a certain spam complaint we can add ourselves on demand. And if we want to preemptively analyze the amount of existing spam we could do that from luci-notify logs.",
+      "parentUuid": "a34c7e47_a0447301",
+      "range": {
+        "startLine": 113,
+        "startChar": 20,
+        "endLine": 113,
+        "endChar": 33
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "175ae285_6a019809",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-24T12:07:36Z",
       "side": 1,
       "message": "Fly by: Is this builder still broken?",
+      "range": {
+        "startLine": 249,
+        "startChar": 8,
+        "endLine": 249,
+        "endChar": 73
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d725bfc_bff62fd4",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T14:52:11Z",
+      "side": 1,
+      "message": "No, it\u0027s green now. Will notify sheriffs.",
+      "parentUuid": "175ae285_6a019809",
       "range": {
         "startLine": 249,
         "startChar": 8,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd190ae_30937bf0",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T14:52:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6e83261_39cbaab3",
+      "range": {
+        "startLine": 264,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 33
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf9def84_6aeef639",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-05-24T12:07:36Z",
       "side": 1,
       "message": "Just for clarification: The feature failed_step_regexp_exclude and on_new_status can not be combined? In this case we might start spamming the sheriffs potentially more than before now.\n\nIs there maybe a separation between tree-closers (can spam sheriffs on every failure, because they want to get them green anyways) and non-tree-closers (might be red for a while, so here the focus would be on on_new_status only).",
+      "range": {
+        "startLine": 1713,
+        "startChar": 4,
+        "endLine": 1713,
+        "endChar": 30
+      },
+      "revId": "635670ad741205883f42ef5514543f245d3bcdb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc67fbf_41ad2fee",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T14:52:11Z",
+      "side": 1,
+      "message": "My mistake. Corrected it.",
+      "parentUuid": "cf9def84_6aeef639",
       "range": {
         "startLine": 1713,
         "startChar": 4,
