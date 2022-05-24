@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7756cea3_76732649",
+        "filename": "BUILD.bazel",
+        "patchSetId": 3
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-24T16:13:23Z",
+      "side": 1,
+      "message": "I don\u0027t think any of these should be in the \"base_without_compiler\" file group.",
+      "range": {
+        "startLine": 2442,
+        "startChar": 12,
+        "endLine": 2448,
+        "endChar": 47
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e754a3eb_a663de5e",
         "filename": "src/compiler/simplified-operator.cc",
         "patchSetId": 3
@@ -36,6 +59,75 @@
         "startChar": 43,
         "endLine": 1168,
         "endChar": 47
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bdc57eb_5a3e6c49",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-24T16:13:23Z",
+      "side": 1,
+      "message": "...and these would go into their own .cc file. Or just inline them in the header, they\u0027re small enough.",
+      "range": {
+        "startLine": 1760,
+        "startChar": 0,
+        "endLine": 1775,
+        "endChar": 32
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e5340ae_15bc1b3f",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-24T16:13:23Z",
+      "side": 1,
+      "message": "These should go next to the `WasmTypeCheckConfig` struct definition.",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 71
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f385f220_6642ac93",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-24T16:13:23Z",
+      "side": 1,
+      "message": "This is now unused, that doesn\u0027t seem right.",
+      "range": {
+        "startLine": 5350,
+        "startChar": 66,
+        "endLine": 5350,
+        "endChar": 79
       },
       "revId": "14604f676f56aa07b259faed573d93381ea88900",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
