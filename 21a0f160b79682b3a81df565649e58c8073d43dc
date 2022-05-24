@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "528a8ea8_ecfc2a0b",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-24T16:25:48Z",
+      "side": 1,
+      "message": "Ack, I realised the spec itself is WIP, so my suggestion makes no sense.",
+      "parentUuid": "df4cb93d_f5d9154a",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 45
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5d5d47e_9ec61032",
