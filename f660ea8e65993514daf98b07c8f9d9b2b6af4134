@@ -16,6 +16,241 @@
       "message": "I\u0027ve updated a bit builtins-array-gen.c after talking to Tobias, and I\u0027ve added a comment to extract_first_nonzero_index (in elements.cc) as well as a test to catch issues in this code.",
       "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4640bae3_9377997b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "Cool stuff, thanks!",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc2fcda_843e8b7d",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand this requirement. In the else-case, we go to `ident_loop`, which does the same as the SIMD-code, no?",
+      "range": {
+        "startLine": 825,
+        "startChar": 23,
+        "endLine": 825,
+        "endChar": 60
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d5e5b08_4c75dc2f",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5269,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "`elements.cc` is already huge, and I don\u0027t see much of a reason to put it in the same compilation unit, since the SIMD code is completely independent. How about adding another `.cc` file for SIMD stuff?",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e165b7_7ec5b32b",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5289,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "nit: combining two architectures like this is a bit confusing. How about having separate enum values?",
+      "range": {
+        "startLine": 5289,
+        "startChar": 23,
+        "endLine": 5289,
+        "endChar": 31
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b57d895a_1a470173",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5344,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "How about using template specializtion:\n\n template\u003ctypename T\u003e\n inline int extract_first_nonzero_index(T v);\n template\u003c\u003e\n inline int extract_first_nonzero_index(int64x2_t v) { ...\n \nThe first definition can also have a body with `UNREACHABLE();` if that\u0027s needed for compiling successfully.",
+      "range": {
+        "startLine": 5342,
+        "startChar": 0,
+        "endLine": 5344,
+        "endChar": 52
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "561f96f6_b3df2c07",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "This could result in smaller immediates? It\u0027s hard to say without looking at the generated code...",
+      "range": {
+        "startLine": 5350,
+        "startChar": 66,
+        "endLine": 5350,
+        "endChar": 75
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da9dfecb_c6f38dd5",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5477,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 5477,
+        "startChar": 62,
+        "endLine": 5477,
+        "endChar": 64
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "469bbdc2_bfb8c9a5",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5514,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "`if constexpr`?",
+      "range": {
+        "startLine": 5514,
+        "startChar": 9,
+        "endLine": 5514,
+        "endChar": 11
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8eabeec_b39a50cf",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5521,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 5521,
+        "startChar": 9,
+        "endLine": 5521,
+        "endChar": 11
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1b8da8_07e79392",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5585,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "You\u0027re returning a tagged value? Then I guess the return type should be `Address` to be consistent with the parameters?",
+      "range": {
+        "startLine": 5585,
+        "startChar": 4,
+        "endLine": 5585,
+        "endChar": 34
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f603c0_8e38d546",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5589,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-05-24T14:53:40Z",
+      "side": 1,
+      "message": "I think this `DCHECK` is already included in `cast`.",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
