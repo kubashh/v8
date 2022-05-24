@@ -52,6 +52,24 @@
       "parentUuid": "d81fb866_89764976",
       "revId": "b843776be6fcb756b21001bbc604d35a5c88a196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0197218_20125481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535087
+      },
+      "writtenOn": "2022-05-24T07:52:37Z",
+      "side": 1,
+      "message": "Done. Thanks! And now all the websnapshot tests cost under 10s.",
+      "parentUuid": "03e07df9_bed0d324",
+      "revId": "b843776be6fcb756b21001bbc604d35a5c88a196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
