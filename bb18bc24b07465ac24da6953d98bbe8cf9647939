@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b121b3_b177bd57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-24T12:21:02Z",
+      "side": 1,
+      "message": "Note this broke the bazel build: https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20bazel%20-%20builder/2166/overview",
+      "revId": "bb18bc24b07465ac24da6953d98bbe8cf9647939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
