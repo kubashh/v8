@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1e7628_96c16e5b",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "Cache the FeedbackVector on a local so that you\u0027re not looking it up on every access.",
+      "range": {
+        "startLine": 237,
+        "startChar": 7,
+        "endLine": 237,
+        "endChar": 33
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8663f777_b8ac19a4",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "consider using a SmallVector for this, since it\u0027s unlikely to be many loops we can probably save a stack allocation",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 20
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50db1241_2cfb1f05",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "suggestion: deopt_exit_found_inside_loop",
+      "range": {
+        "startLine": 246,
+        "startChar": 7,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9724bfe8_3b5568c2",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "add a helper: `bool TryGetOptimizedOsrCode(Isolate*, FeedbackVector, const BytecodeArrayIterator\u0026, CodeT* code_out)`",
+      "range": {
+        "startLine": 261,
+        "startChar": 4,
+        "endLine": 263,
+        "endChar": 77
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "881d6276_8854e876",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "any way you can split this up into two loops, one before the first loop-with-deopt is found, and another for after?",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 7
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6b0e9d_fc0e5138",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "DCHECK that this \u003c deopt_exit_offset.ToInt()",
+      "range": {
+        "startLine": 282,
+        "startChar": 20,
+        "endLine": 282,
+        "endChar": 44
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aed1379_7512f26e",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-24T08:45:58Z",
+      "side": 1,
+      "message": "nit: ... containing *a* loop that *can trigger* ...",
+      "range": {
+        "startLine": 337,
+        "startChar": 31,
+        "endLine": 337,
+        "endChar": 56
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
