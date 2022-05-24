@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3ece045_00025065",
+        "filename": "builders/experiments.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T08:51:13Z",
+      "side": 1,
+      "message": "notify_blamelist has some additional requrements on the builder fields and I thought it could calculate the repo from the bucket fields. Unfortunately I need to be explicit in this place. I lifted the field even though not all the other builders need it.",
+      "parentUuid": "17a3346f_8e3905d9",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 57
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e180e811_494cb0ef",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-05-24T07:11:44Z",
       "side": 1,
       "message": "I have second thoughts about the integration builders as they tend to be quite spammy and they might have a bunch of false positives... But we can give it a try and potentially drop those again...",
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80db1c95_f834f0b1",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T08:51:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e180e811_494cb0ef",
       "revId": "943ead137160c12c82babdd8221487ca98ae8491",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +146,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b811b3_ad271939",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T08:51:13Z",
+      "side": 1,
+      "message": "I can do that for blamelist authors, but for the regular notification (sheriffs) it\u0027s impossible to notify on new status and use failure step name exclusion list. So I will keep the regular notifications on failure occurrence (every time we fail).",
+      "parentUuid": "08e7ee5f_53ac9f3b",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 16
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "262058ef_039908a8",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T08:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da69ea96_797ca442",
+      "range": {
+        "startLine": 20,
+        "startChar": 20,
+        "endLine": 20,
+        "endChar": 45
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c9b8e7b_bc2eaa04",
@@ -117,6 +207,30 @@
       "writtenOn": "2022-05-24T07:11:44Z",
       "side": 1,
       "message": "How about we call this one just \"sheriffs\" now? It\u0027d be more like what it does, not where it is used.",
+      "range": {
+        "startLine": 8,
+        "startChar": 12,
+        "endLine": 8,
+        "endChar": 32
+      },
+      "revId": "943ead137160c12c82babdd8221487ca98ae8491",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a738ec1_8ddc2c31",
+        "filename": "notify.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-05-24T08:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c9b8e7b_bc2eaa04",
       "range": {
         "startLine": 8,
         "startChar": 12,
