@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebecaa17_83caa60d",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8960,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-25T21:47:43Z",
+      "side": 1,
+      "message": "Using std::set\u003cstd::string\u003e here is quite painful since it requires copying strings out of the JS heap. Can you use v8\u0027s StringSet (src/objects/string-set.h) instead? The API is a little annoying since you have to re-assign the set after calling Add(), but it\u0027ll save the need to copy strings out of the heap which will make other things simpler.",
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd7e04b4_db348ab8",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8961,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-25T21:47:43Z",
+      "side": 1,
+      "message": "Nit: use `i` instead here, `j` made me think this was somehow an inner loop.",
+      "range": {
+        "startLine": 8961,
+        "startChar": 11,
+        "endLine": 8961,
+        "endChar": 12
+      },
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99e8ce9d_162c206e",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8970,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-05-25T21:47:43Z",
+      "side": 1,
+      "message": "Same nit as above, s/j/i/ please",
+      "range": {
+        "startLine": 8970,
+        "startChar": 11,
+        "endLine": 8970,
+        "endChar": 12
+      },
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
