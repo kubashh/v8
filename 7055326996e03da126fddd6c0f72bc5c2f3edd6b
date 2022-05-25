@@ -16,6 +16,24 @@
       "message": "ToHandleChecked() per spec.",
       "revId": "7055326996e03da126fddd6c0f72bc5c2f3edd6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6296aae3_e85d5cfd",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 9040,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-25T00:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b89aaa6_dae873f3",
+      "revId": "7055326996e03da126fddd6c0f72bc5c2f3edd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
