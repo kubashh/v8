@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1edf568a_bd247103",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Thanks for the review Tobias. I\u0027ve left one comment unresolved; could you have a look please?",
+      "revId": "03cdb2080fc911d6eea3564b1d8f117487170d77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

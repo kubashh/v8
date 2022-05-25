@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79bf13d4_a18a6d1e",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Yes indeed. I think that earlier patchsets needed this test, but here it\u0027s useless. I\u0027ve removed it.",
+      "parentUuid": "9dc2fcda_843e8b7d",
+      "range": {
+        "startLine": 825,
+        "startChar": 23,
+        "endLine": 825,
+        "endChar": 60
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d5e5b08_4c75dc2f",
@@ -77,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92ed0525_b82240ae",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5269,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "I\u0027ve moved everything to `src/objects/simd.cc`. Could you take a high-level look to make sure that everything looks right (eg, includes, namespaces...)?",
+      "parentUuid": "2d5e5b08_4c75dc2f",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44e165b7_7ec5b32b",
         "filename": "src/objects/elements.cc",
         "patchSetId": 16
@@ -88,6 +130,30 @@
       "writtenOn": "2022-05-24T14:53:40Z",
       "side": 1,
       "message": "nit: combining two architectures like this is a bit confusing. How about having separate enum values?",
+      "range": {
+        "startLine": 5289,
+        "startChar": 23,
+        "endLine": 5289,
+        "endChar": 31
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc25a853_744c90aa",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5289,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44e165b7_7ec5b32b",
       "range": {
         "startLine": 5289,
         "startChar": 23,
@@ -121,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0eba2b0_023e2083",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5344,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b57d895a_1a470173",
+      "range": {
+        "startLine": 5342,
+        "startChar": 0,
+        "endLine": 5344,
+        "endChar": 52
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "561f96f6_b3df2c07",
@@ -134,6 +224,30 @@
       "writtenOn": "2022-05-24T14:53:40Z",
       "side": 1,
       "message": "This could result in smaller immediates? It\u0027s hard to say without looking at the generated code...",
+      "range": {
+        "startLine": 5350,
+        "startChar": 66,
+        "endLine": 5350,
+        "endChar": 75
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4a5c60_b05c1646",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "As discussed offline, it doesn\u0027t change the size of the generated code in that case.",
+      "parentUuid": "561f96f6_b3df2c07",
       "range": {
         "startLine": 5350,
         "startChar": 66,
@@ -167,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba0db7a9_18d30cd6",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5477,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9dfecb_c6f38dd5",
+      "range": {
+        "startLine": 5477,
+        "startChar": 62,
+        "endLine": 5477,
+        "endChar": 64
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "469bbdc2_bfb8c9a5",
@@ -180,6 +318,30 @@
       "writtenOn": "2022-05-24T14:53:40Z",
       "side": 1,
       "message": "`if constexpr`?",
+      "range": {
+        "startLine": 5514,
+        "startChar": 9,
+        "endLine": 5514,
+        "endChar": 11
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbc358cb_10c15091",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5514,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Yes indeed. I couldn\u0027t do that until I had fixed the linter, but since this is done, I\u0027ll put `contexpr` here :)",
+      "parentUuid": "469bbdc2_bfb8c9a5",
       "range": {
         "startLine": 5514,
         "startChar": 9,
@@ -213,6 +375,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "292ce37a_2132afa1",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5521,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8eabeec_b39a50cf",
+      "range": {
+        "startLine": 5521,
+        "startChar": 9,
+        "endLine": 5521,
+        "endChar": 11
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a1b8da8_07e79392",
@@ -236,6 +422,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba7e716_0a01d1d0",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5585,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a1b8da8_07e79392",
+      "range": {
+        "startLine": 5585,
+        "startChar": 4,
+        "endLine": 5585,
+        "endChar": 34
+      },
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46f603c0_8e38d546",
@@ -249,6 +459,24 @@
       "writtenOn": "2022-05-24T14:53:40Z",
       "side": 1,
       "message": "I think this `DCHECK` is already included in `cast`.",
+      "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6b359f_e3bd04a1",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5589,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-25T13:03:31Z",
+      "side": 1,
+      "message": "Yes indeed.",
+      "parentUuid": "46f603c0_8e38d546",
       "revId": "f660ea8e65993514daf98b07c8f9d9b2b6af4134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
