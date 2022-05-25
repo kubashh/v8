@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbdfb0a9_d3e0dabd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-25T09:35:33Z",
+      "side": 1,
+      "message": "Thanks, LGTM!",
+      "revId": "d3a7bbd25bf2e07a76c179971329f99281d87cb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d65918b2_d9dbcae3",
+        "filename": "builders/experiments.star",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-25T09:35:33Z",
+      "side": 1,
+      "message": "Fly-by: Exchange mvstanton with saelo",
+      "range": {
+        "startLine": 99,
+        "startChar": 26,
+        "endLine": 99,
+        "endChar": 49
+      },
+      "revId": "d3a7bbd25bf2e07a76c179971329f99281d87cb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d74061d_fb9b1d42",
+        "filename": "lib/lib.star",
+        "patchSetId": 10
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-05-25T09:35:33Z",
+      "side": 1,
+      "message": "Can we make notify_emails a named argument now? Potentially with a default if it\u0027s not used always?",
+      "range": {
+        "startLine": 561,
+        "startChar": 18,
+        "endLine": 561,
+        "endChar": 24
+      },
+      "revId": "d3a7bbd25bf2e07a76c179971329f99281d87cb8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
