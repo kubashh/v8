@@ -16,6 +16,23 @@
       "message": "PTAL!",
       "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9a58150_ec165f39",
+        "filename": "src/deoptimizer/deoptimizer-cfi-builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-25T16:13:11Z",
+      "side": 1,
+      "message": "I\u0027m afraid that the offset comparing approach might not always work because of this feature:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/code.cc;l\u003d53?q\u003dfile:code.cc\u0026ss\u003dchromium\n\nIsolate might suddenly start using remapped builtins while the Isolate::embedded_blob_code() still points to the embedded builtins blob in the binary.\n\nSee OffHeapInstructionStream::TryLookupCode() which has to deal with the same issue.\n\nMoreover, in order to support bigger code ranges on arm64 while still allowing short builtin calls we are considering as one of the options remapping the builtins blob into code range multiple times (once per 256Mb).\n\nI think you might handle this issue by passing here both Isolate* and pc, using EmbeddedData::GetEmbeddedDataForPC() and then comparing pc against EmbeddedData::InstructionStartOfBuiltin(Builtin::kXXX).",
+      "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
