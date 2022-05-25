@@ -86,12 +86,13 @@ class Deoptimizer : public Malloced {
   // refer to that code.
   static void DeoptimizeMarkedCode(Isolate* isolate);
 
-  // Check the given address against a list of allowed addresses, to prevent a
-  // potential attacker from using the frame creation process in the
-  // deoptimizer, in particular the signing process, to gain control over the
-  // program.
+  // This function takes an offset from the start of the embedded code as
+  // input, and checks whether the code at that offset is in a list of allowed
+  // addresses. The purpose it to prevent a potential attacker from using the
+  // frame creation process in the deoptimizer, in particular the signing
+  // process, to gain control over the program.
   // When building mksnapshot, always return false.
-  static bool IsValidReturnAddress(Address address);
+  static bool IsValidReturnAddress(uint32_t offset);
 
   ~Deoptimizer();
 

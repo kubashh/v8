@@ -24,7 +24,8 @@ Float32 RegisterValues::GetFloatRegister(unsigned n) const {
 void FrameDescription::SetCallerPc(unsigned offset, intptr_t value) {
   Address new_context =
       static_cast<Address>(GetTop()) + offset + kPCOnStackSize;
-  value = PointerAuthentication::SignAndCheckPC(value, new_context);
+  value = PointerAuthentication::SignAndCheckPC(embedded_blob_code_, value,
+                                                new_context);
   SetFrameSlot(offset, value);
 }
 
@@ -39,8 +40,9 @@ void FrameDescription::SetCallerConstantPool(unsigned offset, intptr_t value) {
 
 void FrameDescription::SetPc(intptr_t pc) {
   if (ENABLE_CONTROL_FLOW_INTEGRITY_BOOL) {
-    CHECK(
-        Deoptimizer::IsValidReturnAddress(PointerAuthentication::StripPAC(pc)));
+    uint32_t offset = static_cast<uint32_t>(
+        PointerAuthentication::StripPAC(pc) - embedded_blob_code_);
+    CHECK(Deoptimizer::IsValidReturnAddress(offset));
   }
   pc_ = pc;
 }

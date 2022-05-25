@@ -57,14 +57,17 @@ class RegisterValues {
 
 class FrameDescription {
  public:
-  FrameDescription(uint32_t frame_size, int parameter_count)
+  FrameDescription(uint32_t frame_size, int parameter_count,
+                   const uint8_t* embedded_blob_code)
       : frame_size_(frame_size),
         parameter_count_(parameter_count),
         top_(kZapUint32),
         pc_(kZapUint32),
         fp_(kZapUint32),
         context_(kZapUint32),
-        constant_pool_(kZapUint32) {
+        constant_pool_(kZapUint32),
+        embedded_blob_code_(reinterpret_cast<Address>(embedded_blob_code)) {
+    USE(embedded_blob_code_);
     // Zap all the registers.
     for (int r = 0; r < Register::kNumRegisters; r++) {
       // TODO(jbramley): It isn't safe to use kZapUint32 here. If the register
@@ -210,6 +213,10 @@ class FrameDescription {
   intptr_t fp_;
   intptr_t context_;
   intptr_t constant_pool_;
+
+  // TODO(v8:10026): Sign the pointer to the embedded blob, ideally also where
+  // it's stored in the isolate.
+  Address embedded_blob_code_;
 
   // Continuation is the PC where the execution continues after
   // deoptimizing.

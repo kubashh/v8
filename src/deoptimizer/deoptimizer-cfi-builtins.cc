@@ -23,6 +23,9 @@ typedef void (*function_ptr)();
 namespace v8 {
 namespace internal {
 
+extern "C" const uint8_t v8_Default_embedded_blob_code_[];
+extern "C" uint32_t v8_Default_embedded_blob_code_size_;
+
 // List of allowed builtin addresses that we can return to in the deoptimizer.
 constexpr function_ptr builtins[] = {
     &Builtins_InterpreterEnterAtBytecode,
@@ -38,7 +41,11 @@ constexpr function_ptr builtins[] = {
     &Builtins_RestartFrameTrampoline,
 };
 
-bool Deoptimizer::IsValidReturnAddress(Address address) {
+bool Deoptimizer::IsValidReturnAddress(uint32_t offset) {
+  DCHECK_LT(offset, v8_Default_embedded_blob_code_size_);
+  Address blob_start =
+      reinterpret_cast<Address>(v8_Default_embedded_blob_code_);
+  Address address = blob_start + offset;
   for (function_ptr builtin : builtins) {
     if (address == FUNCTION_ADDR(builtin)) {
       return true;
