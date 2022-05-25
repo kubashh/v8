@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a0f4a8_88199820",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e1e7628_96c16e5b",
+      "range": {
+        "startLine": 237,
+        "startChar": 7,
+        "endLine": 237,
+        "endChar": 33
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8663f777_b8ac19a4",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-24T08:45:58Z",
       "side": 1,
       "message": "consider using a SmallVector for this, since it\u0027s unlikely to be many loops we can probably save a stack allocation",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 20
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0744e2ea_56ec49ae",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8663f777_b8ac19a4",
       "range": {
         "startLine": 245,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e75c9c8_f7eff43a",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "After split this loop into before and after loops, this local variable is unnecessary, I removed it.",
+      "parentUuid": "50db1241_2cfb1f05",
+      "range": {
+        "startLine": 246,
+        "startChar": 7,
+        "endLine": 246,
+        "endChar": 34
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9724bfe8_3b5568c2",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-05-24T08:45:58Z",
       "side": 1,
       "message": "add a helper: `bool TryGetOptimizedOsrCode(Isolate*, FeedbackVector, const BytecodeArrayIterator\u0026, CodeT* code_out)`",
+      "range": {
+        "startLine": 261,
+        "startChar": 4,
+        "endLine": 263,
+        "endChar": 77
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077ae87c_300a69bf",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9724bfe8_3b5568c2",
       "range": {
         "startLine": 261,
         "startChar": 4,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c8dc822_f55120fd",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "I split this up into two loops.",
+      "parentUuid": "881d6276_8854e876",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 7
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca6b0e9d_fc0e5138",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2bfdc12_fa2e27e8",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "I added DCHECK that this \u003c\u003d deopt_exit_offset.ToInt()",
+      "parentUuid": "ca6b0e9d_fc0e5138",
+      "range": {
+        "startLine": 282,
+        "startChar": 20,
+        "endLine": 282,
+        "endChar": 44
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aed1379_7512f26e",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-05-24T08:45:58Z",
       "side": 1,
       "message": "nit: ... containing *a* loop that *can trigger* ...",
+      "range": {
+        "startLine": 337,
+        "startChar": 31,
+        "endLine": 337,
+        "endChar": 56
+      },
+      "revId": "d026c5af878807a28270dfa1f9ea19d3448c11a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "170d965e_093e3fb2",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-25T00:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aed1379_7512f26e",
       "range": {
         "startLine": 337,
         "startChar": 31,
