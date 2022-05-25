@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2c3b3f_7ac02b90",
+        "filename": "BUILD.bazel",
+        "patchSetId": 3
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "Right, moving them to compiler files.",
+      "parentUuid": "7756cea3_76732649",
+      "range": {
+        "startLine": 2442,
+        "startChar": 12,
+        "endLine": 2448,
+        "endChar": 47
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e754a3eb_a663de5e",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-23T15:21:43Z",
       "side": 1,
       "message": "Possibly noob question, but what does it mean to have 0 effect outputs and 1 effect input? Is it related to the issue you were discussing with Tobias in the chat?",
+      "range": {
+        "startLine": 1168,
+        "startChar": 43,
+        "endLine": 1168,
+        "endChar": 47
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbfdf2ce_325d5dbf",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "This will be desugared to a trap conditional and is modelled after it. I agree it is strange. It is very likely we have to put trap conditionals in the effect chain, as opposed to the control chain. But this is out of scope of this CL.",
+      "parentUuid": "e754a3eb_a663de5e",
       "range": {
         "startLine": 1168,
         "startChar": 43,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f57f77d_abe0aed2",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bdc57eb_5a3e6c49",
+      "range": {
+        "startLine": 1760,
+        "startChar": 0,
+        "endLine": 1775,
+        "endChar": 32
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e5340ae_15bc1b3f",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26632c40_b79489f4",
+        "filename": "src/compiler/simplified-operator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e5340ae_15bc1b3f",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 71
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f385f220_6642ac93",
@@ -123,6 +219,30 @@
       "writtenOn": "2022-05-24T16:13:23Z",
       "side": 1,
       "message": "This is now unused, that doesn\u0027t seem right.",
+      "range": {
+        "startLine": 5350,
+        "startChar": 66,
+        "endLine": 5350,
+        "endChar": 79
+      },
+      "revId": "14604f676f56aa07b259faed573d93381ea88900",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb0529d8_0676ace6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5350,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "In fact, the whole function is unused now. Removing it.",
+      "parentUuid": "f385f220_6642ac93",
       "range": {
         "startLine": 5350,
         "startChar": 66,

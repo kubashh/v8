@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c7e0598_7f44f3f1",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "I think it is best to skip it here, because we do not use it in wasm-compiler either.",
+      "parentUuid": "f5d5d47e_9ec61032",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 83,
+        "endChar": 7
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32c8e647_ce0b64ea",
@@ -154,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a447b06_d8d8c670",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "ReplaceWithValue does not replace the node, it only replaces its outputs to point to the replacing value, effect, and control nodes. I do not like this structure either; I would prefer to just kill the node here. The problem is that, if we do, we cannot call Changed(node) afterwards, because the reducer fails for dead changed nodes. We could return NoChange(), but I\u0027m not sure this would work correctly. WDYT?",
+      "parentUuid": "32c8e647_ce0b64ea",
+      "range": {
+        "startLine": 123,
+        "startChar": 10,
+        "endLine": 123,
+        "endChar": 22
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de2719ab_b3e6198d",
         "filename": "src/compiler/wasm-gc-lowering.cc",
         "patchSetId": 4
@@ -165,6 +213,30 @@
       "writtenOn": "2022-05-23T15:21:43Z",
       "side": 1,
       "message": "This method seems almost equivalent to `ReduceWasmTypeCheck` from above, except for trapping instead of calling `GotoIfNot`. Is it possible to extract the common parts and e.g. use a boolean flag to differentiate between the two behaviours?",
+      "range": {
+        "startLine": 165,
+        "startChar": 10,
+        "endLine": 165,
+        "endChar": 20
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfae358b_750134e0",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-25T10:57:30Z",
+      "side": 1,
+      "message": "We unified the implementation in the wasm compiler by passing different callbacks to ref.test, ref.cast and br_on_cast. This is my TODO to \"use the Callbacks infrastructure\". Unfortunately, this will require additional refactoring, so I would like to postpone it for now.",
+      "parentUuid": "de2719ab_b3e6198d",
       "range": {
         "startLine": 165,
         "startChar": 10,
