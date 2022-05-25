@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "268414ef_5872240c",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4167,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Thanks, removed. This was supposed to reserve the GP scratch register, but I removed that since the GP register is implicitly reserved now (because it can always conflict with the move to/from the temp location).",
+      "parentUuid": "8a716f26_36c8989a",
+      "range": {
+        "startLine": 4167,
+        "startChar": 4,
+        "endLine": 4167,
+        "endChar": 42
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77b62306_9ae3da69",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-25T15:02:55Z",
       "side": 1,
       "message": "If I\u0027m not mistaken, this is the same `else if` as the next one: same condition and same body, except for one comment.",
+      "range": {
+        "startLine": 4181,
+        "startChar": 4,
+        "endLine": 4196,
+        "endChar": 4
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b2f7204_11ffc4d1",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4196,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77b62306_9ae3da69",
       "range": {
         "startLine": 4181,
         "startChar": 4,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "040499e8_952c5789",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3419,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done (they\u0027re not necessary)",
+      "parentUuid": "5688c1f8_c77adf21",
+      "range": {
+        "startLine": 3418,
+        "startChar": 0,
+        "endLine": 3419,
+        "endChar": 63
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e38894d8_10329607",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-05-25T15:02:55Z",
       "side": 1,
       "message": "Could you add a comment explaining why there is a special case for size\u003d2? (something like \"A cycles of size 2 is in fact a swap (it can only be \"a\u003db \u0026\u0026 b\u003da\"), which can be efficiently resolved by performing assembling a single swap (if both moves have the same MachineRepresentation).\")",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 161,
+        "endChar": 27
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f79d6f_b7b47da3",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e38894d8_10329607",
       "range": {
         "startLine": 161,
         "startChar": 2,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "994672c2_06f899df",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ca09a9_09158642",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 2
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95ac7000_1fa452d2",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-05-25T15:02:55Z",
       "side": 1,
       "message": "nit: maybe rename to `other_move` or at least something that is not `move`.",
+      "range": {
+        "startLine": 190,
+        "startChar": 13,
+        "endLine": 190,
+        "endChar": 17
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e393a34_4cac386c",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done, also for the loop below.",
+      "parentUuid": "95ac7000_1fa452d2",
       "range": {
         "startLine": 190,
         "startChar": 13,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2607ccc_1ea6f03a",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aef411d_16da50be",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 29
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9bfff81_bde2c12d",
@@ -202,6 +370,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a4f5b84_91b73570",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4913,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done (also for other archs)",
+      "parentUuid": "d9bfff81_bde2c12d",
+      "range": {
+        "startLine": 4913,
+        "startChar": 0,
+        "endLine": 4913,
+        "endChar": 2
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e997c00f_01c19896",
@@ -215,6 +407,30 @@
       "writtenOn": "2022-05-25T15:02:55Z",
       "side": 1,
       "message": "nit: maybe add a comment saying \"The scratch register is available\". (and in the else branch, \"The scratch register is not available, using the stack as temporary location\")",
+      "range": {
+        "startLine": 4918,
+        "startChar": 0,
+        "endLine": 4918,
+        "endChar": 3
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a247902_9d721ad7",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4918,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e997c00f_01c19896",
       "range": {
         "startLine": 4918,
         "startChar": 0,
@@ -250,6 +466,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "834ea110_daad66bc",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4931,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "Done. Note that the code is generic though, and the same code pattern also handles 64 bit values on 32 bit platforms for instance. I left a more generic comment on other platforms.",
+      "parentUuid": "8af25345_66dd77cf",
+      "range": {
+        "startLine": 4931,
+        "startChar": 1,
+        "endLine": 4931,
+        "endChar": 5
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e778d88e_4592ecb2",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 5
@@ -261,6 +501,30 @@
       "writtenOn": "2022-05-25T15:02:55Z",
       "side": 1,
       "message": "I find it a bit sad that this function can be called without MoveToTempLocation having been called before (and that it will work, and maybe (or maybe not) result in a runtime crash), but I\u0027m not sure if it\u0027s worth putting some safeguards in place...",
+      "range": {
+        "startLine": 4943,
+        "startChar": 0,
+        "endLine": 4944,
+        "endChar": 67
+      },
+      "revId": "3b23b4bb4f8186ec2fe70346f512fc656ad9d2f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d525cce2_9db849fc",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4944,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-25T17:37:42Z",
+      "side": 1,
+      "message": "It would be pretty simple to check that by adding a bit in the MoveCycleState, but that would need to be done on each platform, and I\u0027m also not sure it\u0027s worth it. Many things would break already if this was misused.",
+      "parentUuid": "e778d88e_4592ecb2",
       "range": {
         "startLine": 4943,
         "startChar": 0,
