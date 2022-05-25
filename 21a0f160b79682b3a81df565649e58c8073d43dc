@@ -224,6 +224,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "872dc65b_8d11b1e1",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-05-25T15:37:13Z",
+      "side": 1,
+      "message": "Ack, thanks for checking and for the explanation!",
+      "parentUuid": "99e6db90_624bd7ba",
+      "range": {
+        "startLine": 123,
+        "startChar": 10,
+        "endLine": 123,
+        "endChar": 22
+      },
+      "revId": "21a0f160b79682b3a81df565649e58c8073d43dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de2719ab_b3e6198d",
