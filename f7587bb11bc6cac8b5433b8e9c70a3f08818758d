@@ -1,0 +1,499 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ef60874_33a6ce3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Need to do a second pass. Mostly interested in correctness of `StrDecimalLiteral`.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baf7ed96_be524f0d",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Why did these variables get renamed? I like the current, more descriptive names instead of `rfmt` and `mfmt` and `mrfmt`.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f53c41d_4e762eea",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "This class needs a bigger comment on how it\u0027s meant to be used.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be6b3f4_d9130072",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Since this is designed to be used on stack, let\u0027s make it `class V8_NODISCARD StrDecimalLiteral`",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3a3eac_c633f806",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Instead of making `Parse` a friend function, please make it a `static` member method.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c3f1c0_2bc9f373",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "For clarity could you please name all the position integers as `_pos_` and rename `exp_` as `exp_value_`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8981ee7e_f924528c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Could you add a comment on why the length of the integer - 1 part being the default exponent value is correct, i.e. the normalization to have 1 digit left of the decimal part.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1738,
+        "endChar": 71
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ec4a87f_2d1b733e",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "What does this sentence mean?",
+      "range": {
+        "startLine": 1739,
+        "startChar": 0,
+        "endLine": 1739,
+        "endChar": 40
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f8e476e_b90150cc",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Style nit: this would reader better as a `while` loop.",
+      "range": {
+        "startLine": 1742,
+        "startChar": 0,
+        "endLine": 1745,
+        "endChar": 5
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f93428_32ad5cc0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Typo: Exponent",
+      "range": {
+        "startLine": 1757,
+        "startChar": 10,
+        "endLine": 1757,
+        "endChar": 19
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a21e51a_2fe0e899",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Why is this correct?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b581e92_2e912666",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "If I have leading 0\u0027s, how does this work? E.g. for `00123`, `integer_start_ \u003d\u003d 2` and `integer_end_ \u003d\u003d 4`.\n\nIf I want to get the `Digit(0)`, `0 \u003c 4 - 2` is true, so wouldn\u0027t this try to do `str_-\u003eGet(-2)`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb74031a_a99a8946",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Similar question as above. Doesn\u0027t this get the wrong digit with leading or trailing `0`s? What happens if I try to get the digit of the `.`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "794ca1a9_0f63f4c4",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Should it assert `index` is in bounds instead of returning 0 by default?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9d789e_541a8635",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "`max`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f2493b3_00f07013",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Please make this `V8_NODISCARD` as well.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db6cfce7_aabcdcf0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Do you mean `||`?",
+      "range": {
+        "startLine": 1862,
+        "startChar": 21,
+        "endLine": 1862,
+        "endChar": 23
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2780fb8_007f7df8",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Style nit: no `else` after `return`.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7d91e94_4e4bd227",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Is there a reason you\u0027re flattening here? The pattern is usually that we flatten \"just in time\" right before each use of character data, not preemptively.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98aa2fde_7d89d264",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Incomplete sentence: \"return false since we have no more precision than approx_.\"",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8765802_edb0fa25",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Does it make sense to cache the result here? I.e. is `IsLessThan` ever called multiple times?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49817caf_e52bef36",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "`size_t`",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78ccdc92_2d3dee57",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Prefer `size()` over `length()`, which is a `size_t`.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52d5c94e_00f63142",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "You do another `string-\u003elength() - result.second` below to recover `trailing_start`, so please return `trailing_start` directly as `second` of the pair.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed8d8be_50d202c0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Nit: more descriptive name than `result` would be nice, like `whitespace_offsets`?",
+      "range": {
+        "startLine": 2088,
+        "startChar": 22,
+        "endLine": 2088,
+        "endChar": 28
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10275e2d_4027f713",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "It\u0027s a good idea to flatten here since you\u0027re accessing character data below.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a19b969_c61da77a",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2190,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-05-25T01:04:35Z",
+      "side": 1,
+      "message": "Where\u0027s the \"(+|-)Infinity\" case handled?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
