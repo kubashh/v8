@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "895e7b0f_babd51d6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5211,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bff2a04_7bb85356",
+      "range": {
+        "startLine": 5211,
+        "startChar": 28,
+        "endLine": 5211,
+        "endChar": 44
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c967c86_5ed4f711",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-05-25T15:55:14Z",
       "side": 1,
       "message": "This is the wrong way round.",
+      "range": {
+        "startLine": 121,
+        "startChar": 19,
+        "endLine": 121,
+        "endChar": 46
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8afbe470_825a8b86",
+        "filename": "test/mjsunit/wasm/array-copy-benchmark.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c967c86_5ed4f711",
       "range": {
         "startLine": 121,
         "startChar": 19,
@@ -121,6 +169,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "638f7b11_e66aec23",
+        "filename": "test/mjsunit/wasm/array-copy-benchmark.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04d69100_a0409df6",
+      "range": {
+        "startLine": 139,
+        "startChar": 57,
+        "endLine": 140,
+        "endChar": 24
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeb982b4_fb655c31",
@@ -134,6 +206,30 @@
       "writtenOn": "2022-05-25T15:55:14Z",
       "side": 1,
       "message": "nit: unnecessary",
+      "range": {
+        "startLine": 149,
+        "startChar": 2,
+        "endLine": 149,
+        "endChar": 3
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41052ebc_58a09c59",
+        "filename": "test/mjsunit/wasm/array-copy-benchmark.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeb982b4_fb655c31",
       "range": {
         "startLine": 149,
         "startChar": 2,
@@ -167,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d7ed3d_c39cd941",
+        "filename": "test/mjsunit/wasm/array-copy-benchmark.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39417578_bd376391",
+      "range": {
+        "startLine": 153,
+        "startChar": 10,
+        "endLine": 153,
+        "endChar": 57
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e6fcda8_36ce932b",
@@ -180,6 +300,30 @@
       "writtenOn": "2022-05-25T15:55:14Z",
       "side": 1,
       "message": "Same as above.\n\nAnd the other comments repeat below as well.",
+      "range": {
+        "startLine": 165,
+        "startChar": 19,
+        "endLine": 165,
+        "endChar": 46
+      },
+      "revId": "4704fb53cffd4f0e8b613c7bcbcc6ecf518ada3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1633ea27_3b7644b5",
+        "filename": "test/mjsunit/wasm/array-copy-benchmark.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-26T16:33:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e6fcda8_36ce932b",
       "range": {
         "startLine": 165,
         "startChar": 19,
