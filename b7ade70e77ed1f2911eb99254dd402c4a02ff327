@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fe46850_8dedb79a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-26T13:14:02Z",
+      "side": 1,
+      "message": "builtin calls",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "641b52ca_8db6e835",
@@ -49,6 +72,24 @@
       "side": 1,
       "message": "I\u0027m trying to understand how I can test this issue, because testing with `v8_enable_pointer_compression_shared_cage \u003d true` in addition to CFI and short builtins doesn\u0027t show any problems.\n\nThe addresses we pass to `IsValidReturnAddress` in this case are all builtin addresses chosen by the deoptimizer, which calls `Code::InstructionStart` to get their address and therefore ultimately gets to the function you linked to. I don\u0027t understand how the isolate wouldn\u0027t know about the per-process code range, though, since the heap is initialised before we get to remapping the builtins and setting `embedded_blob_code_`, and it should take care of the shared code space initialisation (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/heap.cc;l\u003d5717) (unless we\u0027re running jitless, but that seems a simpler configuration to think about). What am I missing?",
       "parentUuid": "f9a58150_ec165f39",
+      "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd67f1c7_58d079b4",
+        "filename": "src/deoptimizer/deoptimizer-cfi-builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-26T13:14:02Z",
+      "side": 1,
+      "message": "It\u0027s a bit of a mess what\u0027s going on there, but it can happen when:\n1) the first Isolate is created under memory pressure and thus it decides to not enable short builtin calls: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate.cc;l\u003d4016?q\u003dfile:isolate.cc\u0026ss\u003dchromium \n2) then memory pressure goes away and another Isolate (worker) is created which in turn decides to enable short builtin calls and thus remap the embedded builtins,\n3) from now on Code::InstructionStart() will always return pointers to remapped embedded builtins for all the Isolates (even though the first one doesn\u0027t known about the remapped builtins copy).\n\nSo, if you reuse the existing machinery then it would be easier to clean this up or extend it without unexpected breakages.",
+      "parentUuid": "5cbfaffa_5d692cd1",
       "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
