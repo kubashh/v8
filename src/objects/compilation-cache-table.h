@@ -81,10 +81,32 @@ class CompilationCacheTable
  public:
   NEVER_READ_ONLY_SPACE
 
-  // The 'script' cache contains SharedFunctionInfos.
-  static MaybeHandle<SharedFunctionInfo> LookupScript(
-      Handle<CompilationCacheTable> table, Handle<String> src,
-      Isolate* isolate);
+  // The 'script' cache contains SharedFunctionInfos. It can contain multiple
+  // entries with identical sources, which were added separately due to
+  // differing origins or host-defined options. ScriptLookupResult defines the
+  // necessary functionality to use a range-based for loop to iterate all
+  // matching entries, and is valid until the next modification of the table.
+  class ScriptLookupResult {
+   public:
+    inline ScriptLookupResult(Isolate* isolate,
+                              Handle<CompilationCacheTable> table,
+                              CompilationCacheTable::LookupState state,
+                              Handle<String> source);
+    inline ScriptLookupResult begin() const;
+    inline ScriptLookupResult end() const;
+    inline ScriptLookupResult& operator++();
+    inline bool operator!=(const ScriptLookupResult& other) const;
+    inline bool IsEnd() const;
+    inline Handle<SharedFunctionInfo> operator*() const;
+
+   private:
+    Isolate* isolate_;
+    Handle<CompilationCacheTable> table_;
+    CompilationCacheTable::LookupState state_;
+    Handle<String> source_;
+  };
+  static ScriptLookupResult LookupScript(Handle<CompilationCacheTable> table,
+                                         Handle<String> src, Isolate* isolate);
   static Handle<CompilationCacheTable> PutScript(
       Handle<CompilationCacheTable> cache, Handle<String> src,
       Handle<SharedFunctionInfo> value, Isolate* isolate);

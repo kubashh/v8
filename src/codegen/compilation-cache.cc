@@ -203,27 +203,23 @@ bool HasOrigin(Isolate* isolate, Handle<SharedFunctionInfo> function_info,
 }
 }  // namespace
 
-// TODO(245): Need to allow identical code from different contexts to
-// be cached in the same script generation. Currently the first use
-// will be cached, but subsequent code from different source / line
-// won't.
 MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
     Handle<String> source, const ScriptDetails& script_details) {
   MaybeHandle<SharedFunctionInfo> result;
 
-  // Probe the script generation tables. Make sure not to leak handles
+  // Probe the script generation table. Make sure not to leak handles
   // into the caller's handle scope.
   {
     HandleScope scope(isolate());
     Handle<CompilationCacheTable> table = GetTable();
-    MaybeHandle<SharedFunctionInfo> probe =
+    CompilationCacheTable::ScriptLookupResult lookup_result =
         CompilationCacheTable::LookupScript(table, source, isolate());
-    Handle<SharedFunctionInfo> function_info;
-    if (probe.ToHandle(&function_info)) {
+    for (Handle<SharedFunctionInfo> function_info : lookup_result) {
       // Break when we've found a suitable shared function info that
       // matches the origin.
       if (HasOrigin(isolate(), function_info, script_details)) {
         result = scope.CloseAndEscape(function_info);
+        break;
       }
     }
   }

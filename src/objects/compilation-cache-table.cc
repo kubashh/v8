@@ -253,18 +253,13 @@ Handle<Object> ScriptCacheKey::AsHandle(Isolate* isolate,
   return array;
 }
 
-MaybeHandle<SharedFunctionInfo> CompilationCacheTable::LookupScript(
+CompilationCacheTable::ScriptLookupResult CompilationCacheTable::LookupScript(
     Handle<CompilationCacheTable> table, Handle<String> src, Isolate* isolate) {
   src = String::Flatten(isolate, src);
   ScriptCacheKey key(src);
-  InternalIndex entry = table->FindEntry(isolate, &key);
-  if (entry.is_not_found()) return MaybeHandle<SharedFunctionInfo>();
-  DCHECK(table->KeyAt(entry).IsWeakFixedArray());
-  Object obj = table->PrimaryValueAt(entry);
-  if (obj.IsSharedFunctionInfo()) {
-    return handle(SharedFunctionInfo::cast(obj), isolate);
-  }
-  return MaybeHandle<SharedFunctionInfo>();
+  LookupState state =
+      table->FindFirstEntry(isolate, ReadOnlyRoots(isolate), &key, key.Hash());
+  return {isolate, table, state, src};
 }
 
 InfoCellPair CompilationCacheTable::LookupEval(

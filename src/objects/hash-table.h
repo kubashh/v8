@@ -233,6 +233,25 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
   template <typename IsolateT>
   InternalIndex FindInsertionEntry(IsolateT* isolate, uint32_t hash);
 
+  struct LookupState {
+    InternalIndex entry;
+    uint32_t probe_count;
+  };
+
+  // Returns the first entry matching the key. Usually you want FindEntry
+  // instead for improved ergonomics, unless the hash table may have multiple
+  // entries for the same key. The returned entry will be
+  // InternalIndex::NotFound() if no such entry exists.
+  inline LookupState FindFirstEntry(PtrComprCageBase cage_base,
+                                    ReadOnlyRoots roots, Key key, int32_t hash);
+
+  // Returns the next entry matching the key, after a LookupState previously
+  // obtained from FindFirstEntry or FindNextEntryAfter. The returned entry will
+  // be InternalIndex::NotFound() if no such entry exists.
+  inline LookupState FindNextEntryAfter(PtrComprCageBase cage_base,
+                                        ReadOnlyRoots roots, Key key,
+                                        LookupState state);
+
   // Computes the capacity a table with the given capacity would need to have
   // room for the given number of elements, also allowing it to shrink.
   static int ComputeCapacityWithShrink(int current_capacity,
@@ -267,6 +286,11 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
   // number _probe_.
   InternalIndex EntryForProbe(ReadOnlyRoots roots, Object k, int probe,
                               InternalIndex expected);
+
+  inline LookupState FindEntryStartingAt(PtrComprCageBase cage_base,
+                                         ReadOnlyRoots roots, Key key,
+                                         InternalIndex entry,
+                                         uint32_t probe_count);
 
   void Swap(InternalIndex entry1, InternalIndex entry2, WriteBarrierMode mode);
 

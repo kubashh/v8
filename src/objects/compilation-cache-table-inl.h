@@ -91,6 +91,45 @@ class ScriptCacheKey : public HashTableKey {
   Handle<String> source_;
 };
 
+CompilationCacheTable::ScriptLookupResult::ScriptLookupResult(
+    Isolate* isolate, Handle<CompilationCacheTable> table,
+    CompilationCacheTable::LookupState state, Handle<String> source)
+    : isolate_(isolate), table_(table), state_(state), source_(source) {}
+CompilationCacheTable::ScriptLookupResult
+CompilationCacheTable::ScriptLookupResult::begin() const {
+  return *this;
+}
+CompilationCacheTable::ScriptLookupResult
+CompilationCacheTable::ScriptLookupResult::end() const {
+  return {isolate_, table_, {InternalIndex::NotFound(), 0}, source_};
+}
+CompilationCacheTable::ScriptLookupResult&
+CompilationCacheTable::ScriptLookupResult::operator++() {
+  ScriptCacheKey key(source_);
+  state_ = table_->FindNextEntryAfter(isolate_, ReadOnlyRoots(isolate_), &key,
+                                      state_);
+  return *this;
+}
+bool CompilationCacheTable::ScriptLookupResult::operator!=(
+    const CompilationCacheTable::ScriptLookupResult& other) const {
+  // Any two end iterators are equal, regardless of other fields.
+  if (IsEnd() && other.IsEnd()) return false;
+  if (IsEnd() != other.IsEnd()) return true;
+  // Usage in range-based for loops will always compare against an end iterator.
+  // Rather than including untested code here, just crash.
+  UNREACHABLE();
+}
+bool CompilationCacheTable::ScriptLookupResult::IsEnd() const {
+  return state_.entry.is_not_found();
+}
+Handle<SharedFunctionInfo>
+CompilationCacheTable::ScriptLookupResult::operator*() const {
+  DCHECK(!IsEnd());
+  DCHECK(table_->KeyAt(state_.entry).IsWeakFixedArray());
+  return handle(SharedFunctionInfo::cast(table_->PrimaryValueAt(state_.entry)),
+                isolate_);
+}
+
 uint32_t CompilationCacheShape::RegExpHash(String string, Smi flags) {
   return string.EnsureHash() + flags.value();
 }

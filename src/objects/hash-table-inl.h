@@ -163,20 +163,49 @@ template <typename Derived, typename Shape>
 InternalIndex HashTable<Derived, Shape>::FindEntry(PtrComprCageBase cage_base,
                                                    ReadOnlyRoots roots, Key key,
                                                    int32_t hash) {
+  return FindFirstEntry(cage_base, roots, key, hash).entry;
+}
+
+template <typename Derived, typename Shape>
+typename HashTable<Derived, Shape>::LookupState
+HashTable<Derived, Shape>::FindFirstEntry(PtrComprCageBase cage_base,
+                                          ReadOnlyRoots roots, Key key,
+                                          int32_t hash) {
+  return FindEntryStartingAt(cage_base, roots, key,
+                             FirstProbe(hash, Capacity()), 1);
+}
+
+template <typename Derived, typename Shape>
+typename HashTable<Derived, Shape>::LookupState
+HashTable<Derived, Shape>::FindNextEntryAfter(
+    PtrComprCageBase cage_base, ReadOnlyRoots roots, Key key,
+    typename HashTable<Derived, Shape>::LookupState state) {
+  DCHECK(state.entry.is_found());
+  DCHECK_GE(state.probe_count, 1);
+  state.entry = NextProbe(state.entry, state.probe_count++, Capacity());
+  return FindEntryStartingAt(cage_base, roots, key, state.entry,
+                             state.probe_count);
+}
+
+template <typename Derived, typename Shape>
+typename HashTable<Derived, Shape>::LookupState
+HashTable<Derived, Shape>::FindEntryStartingAt(PtrComprCageBase cage_base,
+                                               ReadOnlyRoots roots, Key key,
+                                               InternalIndex entry,
+                                               uint32_t probe_count) {
   DisallowGarbageCollection no_gc;
   uint32_t capacity = Capacity();
-  uint32_t count = 1;
+  uint32_t count = probe_count;
   Object undefined = roots.undefined_value();
   Object the_hole = roots.the_hole_value();
   // EnsureCapacity will guarantee the hash table is never full.
-  for (InternalIndex entry = FirstProbe(hash, capacity);;
-       entry = NextProbe(entry, count++, capacity)) {
+  for (;; entry = NextProbe(entry, count++, capacity)) {
     Object element = KeyAt(cage_base, entry);
     // Empty entry. Uses raw unchecked accessors because it is called by the
     // string table during bootstrapping.
-    if (element == undefined) return InternalIndex::NotFound();
+    if (element == undefined) return {InternalIndex::NotFound(), count};
     if (Shape::kMatchNeedsHoleCheck && element == the_hole) continue;
-    if (Shape::IsMatch(key, element)) return entry;
+    if (Shape::IsMatch(key, element)) return {entry, count};
   }
 }
 
