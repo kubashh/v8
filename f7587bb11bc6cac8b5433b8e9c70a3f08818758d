@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99c32f7a_5807685f",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1652,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "ok, I will change back. I just feel it is way too long.",
+      "parentUuid": "baf7ed96_be524f0d",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f53c41d_4e762eea",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "This class needs a bigger comment on how it\u0027s meant to be used.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ccd052_b6c0373c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f53c41d_4e762eea",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28818567_63a5c185",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2be6b3f4_d9130072",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64c5192f_d824771c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2be6b3f4_d9130072",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b3a3eac_c633f806",
@@ -82,6 +154,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Instead of making `Parse` a friend function, please make it a `static` member method.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "257c7c15_e61e3af1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b3a3eac_c633f806",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +193,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "385078ee_bfb8e870",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3c3f1c0_2bc9f373",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e79d01c4_484d8ccb",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3c3f1c0_2bc9f373",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8981ee7e_f924528c",
@@ -116,6 +242,30 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Could you add a comment on why the length of the integer - 1 part being the default exponent value is correct, i.e. the normalization to have 1 digit left of the decimal part.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 0,
+        "endLine": 1738,
+        "endChar": 71
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "207bfa07_e678ebd7",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8981ee7e_f924528c",
       "range": {
         "startLine": 1737,
         "startChar": 0,
@@ -149,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "326bbee9_13a21579",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ec4a87f_2d1b733e",
+      "range": {
+        "startLine": 1739,
+        "startChar": 0,
+        "endLine": 1739,
+        "endChar": 40
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f8e476e_b90150cc",
@@ -162,6 +336,54 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Style nit: this would reader better as a `while` loop.",
+      "range": {
+        "startLine": 1742,
+        "startChar": 0,
+        "endLine": 1745,
+        "endChar": 5
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0466918f_7e0a0f65",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f8e476e_b90150cc",
+      "range": {
+        "startLine": 1742,
+        "startChar": 0,
+        "endLine": 1745,
+        "endChar": 5
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "574dddc5_84dfa94e",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f8e476e_b90150cc",
       "range": {
         "startLine": 1742,
         "startChar": 0,
@@ -195,6 +417,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4092d57f_3c10d9ee",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1f93428_32ad5cc0",
+      "range": {
+        "startLine": 1757,
+        "startChar": 10,
+        "endLine": 1757,
+        "endChar": 19
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7adc6c51_1bd0dd4d",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1f93428_32ad5cc0",
+      "range": {
+        "startLine": 1757,
+        "startChar": 10,
+        "endLine": 1757,
+        "endChar": 19
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a21e51a_2fe0e899",
@@ -208,6 +478,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Why is this correct?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ea3d0b_d5baec66",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a21e51a_2fe0e899",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -231,6 +519,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd35394c_0e17a0e0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "you surely spot one of my bug in the code. I think I need to build up more tests on this.",
+      "parentUuid": "6b581e92_2e912666",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb74031a_a99a8946",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 17
@@ -242,6 +548,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Similar question as above. Doesn\u0027t this get the wrong digit with leading or trailing `0`s? What happens if I try to get the digit of the `.`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc80168_246f68d1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "you surely spot one of my bug in the code. I think I need to build up more tests on this.",
+      "parentUuid": "fb74031a_a99a8946",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -265,6 +589,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90bcf4e1_f2c682c1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "so we are comparing two number here, Let\u0027s say one is x\u003d\"-12.34567\" another is \ny\u003d\"-12.345\", we will compare 7 digits and we need to make y.Digit(5) return 0.",
+      "parentUuid": "794ca1a9_0f63f4c4",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb9d789e_541a8635",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 17
@@ -276,6 +618,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "`max`?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd11576_ce8086fc",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1842,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb9d789e_541a8635",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -293,6 +653,42 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Please make this `V8_NODISCARD` as well.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d3f6033_3af04c43",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f2493b3_00f07013",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e98bbdf2_5036638a",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1853,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f2493b3_00f07013",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -320,6 +716,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b953e987_33abafe9",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1862,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db6cfce7_aabcdcf0",
+      "range": {
+        "startLine": 1862,
+        "startChar": 21,
+        "endLine": 1862,
+        "endChar": 23
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2780fb8_007f7df8",
@@ -333,6 +753,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Style nit: no `else` after `return`.",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31bc584c_385e4c68",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2780fb8_007f7df8",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -354,6 +792,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fab3b2e_279098ba",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d91e94_4e4bd227",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98aa2fde_7d89d264",
@@ -367,6 +823,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Incomplete sentence: \"return false since we have no more precision than approx_.\"",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b0153e_edb74d3f",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98aa2fde_7d89d264",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -390,6 +864,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07af9232_da2d6bfb",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "no, it will not be called multiple time during the lifetime of an IsMathematicalValue. The only place could ever invoke this now is\nstep 2a  If y is a mathematical value and y \u003c x, throw a RangeError exception.\nin https://tc39.es/proposal-intl-numberformat-v3/out/numberformat/diff.html#sec-partitionnumberrangepattern",
+      "parentUuid": "f8765802_edb0fa25",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49817caf_e52bef36",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 17
@@ -401,6 +893,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "`size_t`",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf28f9b_c83ff2ec",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49817caf_e52bef36",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -422,6 +932,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10e06005_cd972786",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2070,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78ccdc92_2d3dee57",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52d5c94e_00f63142",
@@ -439,6 +967,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "defd089f_96f6cc19",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52d5c94e_00f63142",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ed8d8be_50d202c0",
@@ -452,6 +998,30 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Nit: more descriptive name than `result` would be nice, like `whitespace_offsets`?",
+      "range": {
+        "startLine": 2088,
+        "startChar": 22,
+        "endLine": 2088,
+        "endChar": 28
+      },
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "099457e9_92bf099a",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ed8d8be_50d202c0",
       "range": {
         "startLine": 2088,
         "startChar": 22,
@@ -481,6 +1051,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60be2d40_8e15fe8e",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "I make it flatten inside TrimWhiteSpaceOrLineTerminator",
+      "parentUuid": "10275e2d_4027f713",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a19b969_c61da77a",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 17
@@ -492,6 +1080,24 @@
       "writtenOn": "2022-05-25T01:04:35Z",
       "side": 1,
       "message": "Where\u0027s the \"(+|-)Infinity\" case handled?",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f152ed3d_05d17ea0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2190,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "The \"if (!std::isfinite(result.approx_)) {\" block right above this line handle the case of  \"(+|-)Infinity\"",
+      "parentUuid": "3a19b969_c61da77a",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

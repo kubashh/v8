@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f46c3047_c404a210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-26T00:18:31Z",
+      "side": 1,
+      "message": "PTAL . I should  add more unit test to test the case of leading / trailing whitespace and leading/trailing zeros of integer and fractional part.",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
