@@ -362,6 +362,9 @@ declare_args() {
   # TODO(victorgomes): Remove this flag once Chormium no longer needs
   # the deprecated feature.
   v8_fuchsia_use_vmex_resource = is_fuchsia && !build_with_chromium
+
+  # Enable 256-bit long vector re-vectorization pass in WASM compilation pipeline.
+  v8_enable_simd256_revec = false
 }
 
 # Derived defaults.
@@ -3564,6 +3567,10 @@ v8_header_set("v8_internal_headers") {
     ]
   }
 
+  if (v8_enable_simd256_revec) {
+    sources += [ "src/compiler/linear-scheduler.h" ]
+  }
+
   if (!v8_enable_third_party_heap) {
     sources += filter_include(v8_third_party_heap_files, [ "*.h" ])
   } else {
@@ -3999,6 +4006,10 @@ if (v8_enable_webassembly) {
     "src/compiler/wasm-inlining.cc",
     "src/compiler/wasm-loop-peeling.cc",
   ]
+}
+
+if (v8_enable_simd256_revec) {
+  v8_compiler_sources += [ "src/compiler/linear-scheduler.cc" ]
 }
 
 # The src/compiler files with optimizations.
