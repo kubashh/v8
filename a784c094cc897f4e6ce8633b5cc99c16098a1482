@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "577f9e3c_260f47b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:44:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7120dc6d_5f4cd728",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "438fdffc_1ceab647",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Possible. My current leading theory for the original regressions is that they\u0027re because I changed the behavior when multiple identical scripts have different origin info or options, as described in https://chromium-review.googlesource.com/c/chromium/src/+/3645098 . I\u0027m working on a change to improve that situation over here, which is written to land after this one: https://chromium-review.googlesource.com/c/v8/v8/+/3671615 . If you\u0027d prefer, I\u0027m happy to split the language mode logic into a separate change and land it first.",
       "parentUuid": "e4454e26_ff852744",
+      "range": {
+        "startLine": 219,
+        "startChar": 39,
+        "endLine": 219,
+        "endChar": 77
+      },
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc782f36_5ca3d5dd",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:44:12Z",
+      "side": 1,
+      "message": "Nah, yours sounds more plausible.",
+      "parentUuid": "757b06f5_caacfd3a",
       "range": {
         "startLine": 219,
         "startChar": 39,
