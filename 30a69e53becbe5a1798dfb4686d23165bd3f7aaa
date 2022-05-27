@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43534053_d4e0dc57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-05-27T11:09:35Z",
+      "side": 1,
+      "message": "Leszek: PTAL.\nAndreas: Please approve bazel/defs.bzl.",
+      "revId": "30a69e53becbe5a1798dfb4686d23165bd3f7aaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
