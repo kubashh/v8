@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e2d4ee_41a00e83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-05-27T15:44:18Z",
+      "side": 1,
+      "message": "Hi Manos,\n\nCompilation is failing with gcc (including on x64 Linux) as all the link stages are failing:\n```\n[2844/3141] LINK ./v8_hello_world\nFAILED: v8_hello_world \n...\n...\ng++: error: obj/v8_snapshot/embedded.o: No such file or directory\n```",
+      "revId": "68a7736bdf70b44ca034b4e4e41a69b939d7708a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
