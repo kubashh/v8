@@ -64,7 +64,8 @@ class ScriptCacheKey : public HashTableKey {
     kEnd,
   };
 
-  explicit ScriptCacheKey(Handle<String> source);
+  ScriptCacheKey(Handle<String> source, const ScriptDetails* script_details,
+                 Isolate* isolate);
 
   bool IsMatch(Object other) override;
 
@@ -89,6 +90,8 @@ class ScriptCacheKey : public HashTableKey {
 
  private:
   Handle<String> source_;
+  const ScriptDetails* script_details_;
+  Isolate* isolate_;
 };
 
 uint32_t CompilationCacheShape::RegExpHash(String string, Smi flags) {
@@ -129,16 +132,6 @@ uint32_t CompilationCacheShape::HashForObject(ReadOnlyRoots roots,
   if (object.IsWeakFixedArray()) {
     uint32_t result = static_cast<uint32_t>(Smi::ToInt(
         WeakFixedArray::cast(object).Get(ScriptCacheKey::kHash).ToSmi()));
-#ifdef DEBUG
-    base::Optional<String> script_key =
-        ScriptCacheKey::SourceFromObject(object);
-    if (script_key) {
-      uint32_t source_hash;
-      if (script_key->TryGetHash(&source_hash)) {
-        DCHECK_EQ(result, source_hash);
-      }
-    }
-#endif
     return result;
   }
 
