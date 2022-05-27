@@ -164,8 +164,6 @@ TO_BE_IMPLEMENTED(TemporalInstantPrototypeToString)
 TO_BE_IMPLEMENTED(TemporalInstantPrototypeToJSON)
 
 /* Temporal.PlainYearMonth */
-/* Temporal #sec-temporal.plainyearmonth.compare */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthCompare)
 /* Temporal #sec-temporal.plainyearmonth.prototype.add */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeAdd)
 /* Temporal #sec-temporal.plainyearmonth.prototype.subtract */
@@ -174,16 +172,12 @@ TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeSubtract)
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeUntil)
 /* Temporal #sec-temporal.plainyearmonth.prototype.since */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeSince)
-/* Temporal #sec-temporal.plainyearmonth.prototype.equals */
-TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeEquals)
 /* Temporal #sec-temporal.plainyearmonth.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainYearMonthPrototypeToPlainDate)
 
 /* Temporal.PlainMonthDay */
 /* There is no compare for PlainMonthDay. See
  * https://github.com/tc39/proposal-temporal/issues/1547 */
-/* Temporal #sec-temporal.plainmonthday.prototype.equals */
-TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeEquals)
 /* Temporal #sec-temporal.plainmonthday.prototype.toplaindate */
 TO_BE_IMPLEMENTED(TemporalPlainMonthDayPrototypeToPlainDate)
 
@@ -498,6 +492,8 @@ TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainYearMonth, MonthsInYear,
                                        monthsInYear)
 TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(PlainYearMonth, InLeapYear, inLeapYear)
 TEMPORAL_METHOD2(PlainYearMonth, From)
+TEMPORAL_METHOD2(PlainYearMonth, Compare)
+TEMPORAL_PROTOTYPE_METHOD1(PlainYearMonth, Equals, equals)
 TEMPORAL_PROTOTYPE_METHOD2(PlainYearMonth, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainYearMonth, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainYearMonth)
@@ -520,6 +516,7 @@ TEMPORAL_GET(PlainMonthDay, Calendar, calendar)
 TEMPORAL_GET_BY_FORWARD_CALENDAR(PlainMonthDay, MonthCode, monthCode)
 TEMPORAL_GET_BY_FORWARD_CALENDAR(PlainMonthDay, Day, day)
 TEMPORAL_METHOD2(PlainMonthDay, From)
+TEMPORAL_PROTOTYPE_METHOD1(PlainMonthDay, Equals, equals)
 TEMPORAL_PROTOTYPE_METHOD2(PlainMonthDay, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainMonthDay, GetISOFields, getISOFields)
 TEMPORAL_VALUE_OF(PlainMonthDay)
