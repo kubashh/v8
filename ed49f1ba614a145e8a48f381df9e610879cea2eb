@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1367339_c78c5727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Glad that you like the design. :)\n\nThere was a small mistake in my latest patch (gap-resolver.cc:208) which I fixed now. The bots were green before so it should work now, trying again.",
+      "parentUuid": "4acb2f8c_63649e31",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b8bc816_fc743233",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d197632a_0e1a63f6",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b8bc816_fc743233",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b30a4e6_d59e7af8",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-05-27T11:52:50Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f22b98f_d6c6b6df",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b30a4e6_d59e7af8",
       "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0aa2949d_6689998a",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Note that `*available` is actually just a `uint64_t` here. `VfpRegList` is a typedef of `uint64_t`, unlike `RegList` above which is its own class.\nLet me know if you think we should still address this somehow, maybe by turning `VfpRegList` into a class with some helper methods.\nI don\u0027t think the subtraction is really clearer, it makes it less obvious to me that this is correct because it\u0027s not a bitwise operation.",
+      "parentUuid": "d84c4ecb_7998e259",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc6d43cb_bd94caaa",
         "filename": "src/compiler/backend/arm/code-generator-arm.cc",
         "patchSetId": 6
@@ -82,6 +154,30 @@
       "writtenOn": "2022-05-27T11:52:50Z",
       "side": 1,
       "message": "Could/should this be another UseScratchRegisterScope, instead of Include\u0027ing back to the existing scope?",
+      "range": {
+        "startLine": 4100,
+        "startChar": 0,
+        "endLine": 4103,
+        "endChar": 29
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80acd974_f72b02ec",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4103,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "It definitely can, no opinion on whether it should, they both look clear to me. I went ahead and added the scope.",
+      "parentUuid": "dc6d43cb_bd94caaa",
       "range": {
         "startLine": 4100,
         "startChar": 0,
@@ -115,6 +211,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b435c2_d9e0f8fd",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4150,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5db2c16_1c0b61d2",
+      "range": {
+        "startLine": 4148,
+        "startChar": 0,
+        "endLine": 4150,
+        "endChar": 44
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d06f87ee_90cacffe",
@@ -132,6 +252,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1381298_e979edb8",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d06f87ee_90cacffe",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "167de7b0_6c9e7766",
@@ -145,6 +283,30 @@
       "writtenOn": "2022-05-27T11:52:50Z",
       "side": 1,
       "message": "Same as for arm: temp scope?",
+      "range": {
+        "startLine": 3406,
+        "startChar": 0,
+        "endLine": 3409,
+        "endChar": 29
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95a0fade_f1b32edc",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3409,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "167de7b0_6c9e7766",
       "range": {
         "startLine": 3406,
         "startChar": 0,
@@ -178,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79306f55_b201306d",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3458,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19872688_b4e5acb6",
+      "range": {
+        "startLine": 3456,
+        "startChar": 0,
+        "endLine": 3458,
+        "endChar": 52
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce7f5632_06757584",
@@ -191,6 +377,30 @@
       "writtenOn": "2022-05-27T11:52:50Z",
       "side": 1,
       "message": "just: \"source-\u003e\"",
+      "range": {
+        "startLine": 175,
+        "startChar": 10,
+        "endLine": 175,
+        "endChar": 24
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f99dfe_d7573fad",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7f5632_06757584",
       "range": {
         "startLine": 175,
         "startChar": 10,
@@ -218,6 +428,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c001328e_e5ec05e5",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76496d60_20ea8368",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3e8bcf2_b209971f",
@@ -231,6 +459,30 @@
       "writtenOn": "2022-05-27T11:52:50Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 50
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e48b5394_d9bda6d6",
+        "filename": "src/compiler/backend/gap-resolver.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-05-27T14:01:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3e8bcf2_b209971f",
       "range": {
         "startLine": 52,
         "startChar": 41,
