@@ -1,0 +1,244 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4acb2f8c_63649e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Phew, heavy stuff. Thanks for the numerous comments, this makes it a lot easier to follow the overall algorithm.\nI like the design, it makes it easy to review each single piece in isolate.\n\nThe bots are not happy yet, so something seems to be borked.\n\nI left a number of smaller comments, LGTM otherwise.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b8bc816_fc743233",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "The `Include` method above checks that the new registers are not already included. Can we check the same here?",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b30a4e6_d59e7af8",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84c4ecb_7998e259",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Above we do `available-\u003eclear(...)`, which reads a bit nicer. We could also do `*available -\u003d list`, but I think `clear` makes the semantics more clear.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc6d43cb_bd94caaa",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4103,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Could/should this be another UseScratchRegisterScope, instead of Include\u0027ing back to the existing scope?",
+      "range": {
+        "startLine": 4100,
+        "startChar": 0,
+        "endLine": 4103,
+        "endChar": 29
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5db2c16_1c0b61d2",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4150,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Should this be another temp scope?",
+      "range": {
+        "startLine": 4148,
+        "startChar": 0,
+        "endLine": 4150,
+        "endChar": 44
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d06f87ee_90cacffe",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4186,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Nit: Better would this out of the if, as above. Actually, we could have a single scope across this whole method.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "167de7b0_6c9e7766",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3409,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "Same as for arm: temp scope?",
+      "range": {
+        "startLine": 3406,
+        "startChar": 0,
+        "endLine": 3409,
+        "endChar": 29
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19872688_b4e5acb6",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3458,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "and here again.",
+      "range": {
+        "startLine": 3456,
+        "startChar": 0,
+        "endLine": 3458,
+        "endChar": 52
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7f5632_06757584",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "just: \"source-\u003e\"",
+      "range": {
+        "startLine": 175,
+        "startChar": 10,
+        "endLine": 175,
+        "endChar": 24
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76496d60_20ea8368",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "I was wondering if this could be replaced by \"cycle.resize(0)\", until I understood that this actually initialized the base::Optional. I think replacing this by \"cycle.emplace()\" makes this more obvious.",
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e8bcf2_b209971f",
+        "filename": "src/compiler/backend/gap-resolver.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-27T11:52:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 50
+      },
+      "revId": "ed49f1ba614a145e8a48f381df9e610879cea2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
