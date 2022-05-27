@@ -16,6 +16,29 @@
       "message": "Nice catch! thanks!",
       "revId": "9c4f57f66ea4642eb1fd84847a847927c60e6696",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f9dae2d_d7d7eeb7",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T07:58:42Z",
+      "side": 1,
+      "message": "This is also used elsewhere, which will presumably have similar bugs. Could you move this change to be inside SharedFunctionInfo::EnsureBytecodeArrayAvailable in a followup?",
+      "range": {
+        "startLine": 36,
+        "startChar": 22,
+        "endLine": 36,
+        "endChar": 50
+      },
+      "revId": "9c4f57f66ea4642eb1fd84847a847927c60e6696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
