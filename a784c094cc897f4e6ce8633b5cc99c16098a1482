@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "60d9833f_f93f96f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T08:18:55Z",
+      "side": 1,
+      "message": "If I read this CL correctly, it\u0027s in the state where these pointers can die, but we don\u0027t do any cleanup of the compilation cache. Doesn\u0027t this cause the compilation cache to grow unboundedly?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "438fdffc_1ceab647",
@@ -14,6 +37,29 @@
       "writtenOn": "2022-05-25T18:42:41Z",
       "side": 1,
       "message": "PTAL, thanks.",
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4454e26_ff852744",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T08:18:55Z",
+      "side": 1,
+      "message": "is it possible that the original regressions came from us missing something in this logic?",
+      "range": {
+        "startLine": 219,
+        "startChar": 39,
+        "endLine": 219,
+        "endChar": 77
+      },
       "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
