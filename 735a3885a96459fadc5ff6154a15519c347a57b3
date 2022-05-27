@@ -16,6 +16,115 @@
       "message": "Thanks for detail review comments! Could you please further review?",
       "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e643408_f60c0073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:15:51Z",
+      "side": 1,
+      "message": "thanks, just a few comments remaining.",
+      "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "318f1efb_7786cdf6",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:15:51Z",
+      "side": 1,
+      "message": "nit: move this out of the loop, to after the `if (it.done()) return;`",
+      "range": {
+        "startLine": 268,
+        "startChar": 6,
+        "endLine": 271,
+        "endChar": 7
+      },
+      "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc3b816_b8c54161",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:15:51Z",
+      "side": 1,
+      "message": "no need for this check, SmallVector supports larger sizes (just does a heap allocation for them)",
+      "range": {
+        "startLine": 276,
+        "startChar": 5,
+        "endLine": 276,
+        "endChar": 33
+      },
+      "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "371e4fd5_e59fa6ca",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:15:51Z",
+      "side": 1,
+      "message": "this should never happen, we know we\u0027re in a JumpLoop range due to the first loop, and we know we\u0027ll eventually hit a JumpLoop with depth 0.\n\nSo, you can turn this into a while loop and just DCHECK that `!it.done()`",
+      "range": {
+        "startLine": 283,
+        "startChar": 9,
+        "endLine": 283,
+        "endChar": 19
+      },
+      "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bdf5ab0_e9ca9284",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-27T13:15:51Z",
+      "side": 1,
+      "message": "this should never happen.",
+      "range": {
+        "startLine": 297,
+        "startChar": 2,
+        "endLine": 297,
+        "endChar": 24
+      },
+      "revId": "735a3885a96459fadc5ff6154a15519c347a57b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
