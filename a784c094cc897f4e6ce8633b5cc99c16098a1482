@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7120dc6d_5f4cd728",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-27T13:25:26Z",
+      "side": 1,
+      "message": "Good question! This is sort of an awkward transitional state, but I don\u0027t expect it to leak. The top-level SFI keeps the Script alive while the entry is still present in the cache. When the entry is removed, it is fully deleted (key and value become TheHole), so entries with cleared keys should never linger.",
+      "parentUuid": "60d9833f_f93f96f1",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "438fdffc_1ceab647",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-05-27T08:18:55Z",
       "side": 1,
       "message": "is it possible that the original regressions came from us missing something in this logic?",
+      "range": {
+        "startLine": 219,
+        "startChar": 39,
+        "endLine": 219,
+        "endChar": 77
+      },
+      "revId": "a784c094cc897f4e6ce8633b5cc99c16098a1482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "757b06f5_caacfd3a",
+        "filename": "src/codegen/compilation-cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-05-27T13:25:26Z",
+      "side": 1,
+      "message": "Possible. My current leading theory for the original regressions is that they\u0027re because I changed the behavior when multiple identical scripts have different origin info or options, as described in https://chromium-review.googlesource.com/c/chromium/src/+/3645098 . I\u0027m working on a change to improve that situation over here, which is written to land after this one: https://chromium-review.googlesource.com/c/v8/v8/+/3671615 . If you\u0027d prefer, I\u0027m happy to split the language mode logic into a separate change and land it first.",
+      "parentUuid": "e4454e26_ff852744",
       "range": {
         "startLine": 219,
         "startChar": 39,
