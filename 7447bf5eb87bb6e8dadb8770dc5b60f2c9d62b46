@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e15878_40fc2ffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-05-27T13:35:35Z",
+      "side": 1,
+      "message": "There was a bug with FixedDoubleArrays that can be unaligned (well, aligned on 4 bytes and not 8 I mean), which was causing UB. When this is the case, we do not use the SIMD code anymore and use a scalar loop that accounts for unaligned accesses. \nPatchset 1 is my old CL, patchsets 2-3 are my fix.",
+      "revId": "7447bf5eb87bb6e8dadb8770dc5b60f2c9d62b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
