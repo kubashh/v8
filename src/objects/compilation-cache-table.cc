@@ -4,6 +4,7 @@
 
 #include "src/objects/compilation-cache-table.h"
 
+#include "src/codegen/script-details.h"
 #include "src/common/assert-scope.h"
 #include "src/objects/compilation-cache-table-inl.h"
 
@@ -223,21 +224,104 @@ class CodeKey : public HashTableKey {
   Handle<SharedFunctionInfo> key_;
 };
 
+Smi ScriptHash(String source, const ScriptDetails& script_details,
+               Isolate* isolate) {
+  DisallowGarbageCollection no_gc;
+  size_t hash = base::hash_combine(source.EnsureHash());
+  if (Handle<Object> name;
+      script_details.name_obj.ToHandle(&name) && name->IsString(isolate)) {
+    hash = base::hash_combine(
+        hash, String::cast(*name).EnsureHash(), script_details.line_offset,
+        script_details.column_offset, script_details.origin_options.Flags());
+  }
+  // The upper bits of the hash are discarded so that the value fits in a Smi.
+  return Smi::From31BitPattern(static_cast<int>(hash));
+}
+
+// We only re-use a cached function for some script source code if the
+// script originates from the same place. This is to avoid issues
+// when reporting errors, etc.
+bool HasOrigin(Isolate* isolate, Script script,
+               const ScriptDetails& script_details) {
+  DisallowGarbageCollection no_gc;
+
+  // If the script name isn't set, the boilerplate script should have
+  // an undefined name to have the same origin.
+  Handle<Object> name;
+  if (!script_details.name_obj.ToHandle(&name)) {
+    return script.name().IsUndefined(isolate);
+  }
+  // Do the fast bailout checks first.
+  if (script_details.line_offset != script.line_offset()) return false;
+  if (script_details.column_offset != script.column_offset()) return false;
+  // Check that both names are strings. If not, no match.
+  if (!name->IsString(isolate) || !script.name().IsString(isolate))
+    return false;
+  // Are the origin_options same?
+  if (script_details.origin_options.Flags() !=
+      script.origin_options().Flags()) {
+    return false;
+  }
+  // Compare the two name strings for equality.
+  if (!String::cast(*name).Equals(String::cast(script.name()))) {
+    return false;
+  }
+
+  // TODO(cbruni, chromium:1244145): Remove once migrated to the context
+  Handle<Object> maybe_host_defined_options;
+  if (!script_details.host_defined_options.ToHandle(
+          &maybe_host_defined_options)) {
+    maybe_host_defined_options = isolate->factory()->empty_fixed_array();
+  }
+  FixedArray host_defined_options =
+      FixedArray::cast(*maybe_host_defined_options);
+  FixedArray script_options = FixedArray::cast(script.host_defined_options());
+  int length = host_defined_options.length();
+  if (length != script_options.length()) return false;
+
+  for (int i = 0; i < length; i++) {
+    // host-defined options is a v8::PrimitiveArray.
+    DCHECK(host_defined_options.get(i).IsPrimitive());
+    DCHECK(script_options.get(i).IsPrimitive());
+    if (!host_defined_options.get(i).StrictEquals(script_options.get(i))) {
+      return false;
+    }
+  }
+  return true;
+}
+
 }  // namespace
 
-ScriptCacheKey::ScriptCacheKey(Handle<String> source)
-    : HashTableKey(source->EnsureHash()), source_(source) {
-  // Hash values must fit within a Smi.
-  static_assert(Name::HashBits::kSize <= kSmiValueSize);
-  DCHECK_EQ(
-      static_cast<uint32_t>(Smi::ToInt(Smi::FromInt(static_cast<int>(Hash())))),
-      Hash());
-}
+ScriptCacheKey::ScriptCacheKey(Handle<String> source,
+                               const ScriptDetails* script_details,
+                               Isolate* isolate)
+    : HashTableKey(static_cast<uint32_t>(
+          ScriptHash(*source, *script_details, isolate).value())),
+      source_(source),
+      script_details_(script_details),
+      isolate_(isolate) {}
 
 bool ScriptCacheKey::IsMatch(Object other) {
   DisallowGarbageCollection no_gc;
-  base::Optional<String> other_source = SourceFromObject(other);
-  return other_source && other_source->Equals(*source_);
+  DCHECK(other.IsWeakFixedArray());
+  WeakFixedArray other_array = WeakFixedArray::cast(other);
+  DCHECK_EQ(other_array.length(), kEnd);
+
+  // A hash check can quickly reject many non-matches, even though this step
+  // isn't strictly necessary.
+  uint32_t other_hash =
+      static_cast<uint32_t>(other_array.Get(kHash).ToSmi().value());
+  if (other_hash != Hash()) return false;
+
+  MaybeObject maybe_other_script = other_array.Get(kWeakScript);
+  HeapObject other_script_object;
+  if (!maybe_other_script.GetHeapObjectIfWeak(&other_script_object)) {
+    return false;
+  }
+  Script other_script = Script::cast(other_script_object);
+  String other_source = String::cast(other_script.source());
+  return other_source.Equals(*source_) &&
+         HasOrigin(isolate_, other_script, *script_details_);
 }
 
 Handle<Object> ScriptCacheKey::AsHandle(Isolate* isolate,
@@ -254,9 +338,10 @@ Handle<Object> ScriptCacheKey::AsHandle(Isolate* isolate,
 }
 
 MaybeHandle<SharedFunctionInfo> CompilationCacheTable::LookupScript(
-    Handle<CompilationCacheTable> table, Handle<String> src, Isolate* isolate) {
+    Handle<CompilationCacheTable> table, Handle<String> src,
+    const ScriptDetails& script_details, Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  ScriptCacheKey key(src);
+  ScriptCacheKey key(src, &script_details, isolate);
   InternalIndex entry = table->FindEntry(isolate, &key);
   if (entry.is_not_found()) return MaybeHandle<SharedFunctionInfo>();
   DCHECK(table->KeyAt(entry).IsWeakFixedArray());
@@ -303,7 +388,19 @@ Handle<CompilationCacheTable> CompilationCacheTable::PutScript(
     Handle<CompilationCacheTable> cache, Handle<String> src,
     Handle<SharedFunctionInfo> value, Isolate* isolate) {
   src = String::Flatten(isolate, src);
-  ScriptCacheKey key(src);
+  Handle<Script> script = handle(Script::cast(value->script()), isolate);
+
+  // Copy relevant information from the Script to a ScriptDetails struct so that
+  // it can be hashed.
+  Handle<Object> script_name;
+  if (script->name().IsString(isolate)) {
+    script_name = handle(script->name(), isolate);
+  }
+  ScriptDetails script_details(script_name, script->origin_options());
+  script_details.line_offset = script->line_offset();
+  script_details.column_offset = script->column_offset();
+
+  ScriptCacheKey key(src, &script_details, isolate);
   Handle<Object> k = key.AsHandle(isolate, value);
   cache = EnsureCapacity(isolate, cache);
   InternalIndex entry = cache->FindInsertionEntry(isolate, key.Hash());
