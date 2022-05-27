@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7750dd8_01a10cfd",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8960,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-27T00:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebecaa17_83caa60d",
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd7e04b4_db348ab8",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c589851_1331fe9f",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8961,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-27T00:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd7e04b4_db348ab8",
+      "range": {
+        "startLine": 8961,
+        "startChar": 11,
+        "endLine": 8961,
+        "endChar": 12
+      },
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99e8ce9d_162c206e",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-05-25T21:47:43Z",
       "side": 1,
       "message": "Same nit as above, s/j/i/ please",
+      "range": {
+        "startLine": 8970,
+        "startChar": 11,
+        "endLine": 8970,
+        "endChar": 12
+      },
+      "revId": "fad09ac15f3ab25050c2ae603273129ceba5aa1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95b081a2_6f1d1792",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8970,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-05-27T00:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e8ce9d_162c206e",
       "range": {
         "startLine": 8970,
         "startChar": 11,
