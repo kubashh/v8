@@ -32,9 +32,9 @@ void PendingOptimizationTable::PreparedForOptimization(
   }
   Handle<SharedFunctionInfo> shared_info(function->shared(), isolate);
 
-  IsCompiledScope is_compiled_scope = shared_info->is_compiled_scope(isolate);
-  SharedFunctionInfo::EnsureBytecodeArrayAvailable(isolate, shared_info,
-                                                   &is_compiled_scope);
+  IsCompiledScope is_compiled_scope =
+      SharedFunctionInfo::EnsureBytecodeArrayAvailable(isolate, shared_info);
+  USE(is_compiled_scope);
 
   Handle<ObjectHashTable> table =
       isolate->heap()->pending_optimize_for_test_bytecode().IsUndefined()

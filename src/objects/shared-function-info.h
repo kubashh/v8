@@ -603,9 +603,8 @@ class SharedFunctionInfo
   void SetFunctionTokenPosition(int function_token_position,
                                 int start_position);
 
-  static void EnsureBytecodeArrayAvailable(
+  static V8_WARN_UNUSED_RESULT IsCompiledScope EnsureBytecodeArrayAvailable(
       Isolate* isolate, Handle<SharedFunctionInfo> shared_info,
-      IsCompiledScope* is_compiled,
       CreateSourcePositions flag = CreateSourcePositions::kNo);
 
   inline bool CanCollectSourcePosition(Isolate* isolate);
