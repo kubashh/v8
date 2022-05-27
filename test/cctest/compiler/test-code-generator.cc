@@ -848,6 +848,12 @@ class TestEnvironment : public HandleAndZoneScope {
     kCannotBeConstant
   };
 
+  base::Optional<InstructionOperand> TryReuseDestination(
+      base::Vector<InstructionOperand*> destinations) {
+    if (destinations.empty()) return {};
+    return *destinations[rng_->NextInt(static_cast<int>(destinations.size()))];
+  }
+
   // Generate parallel moves at random.
   // In sequential mode, they can be incompatible between each other as this
   // doesn't matter to the code generator.
@@ -861,30 +867,29 @@ class TestEnvironment : public HandleAndZoneScope {
 
     for (int i = 0; i < size;) {
       MachineRepresentation rep = CreateRandomMachineRepresentation();
-      InstructionOperand source;
-      if (move_mode == kParallelMoves && !destinations[rep].empty()) {
-        // Try reusing a destination.
-        source = *destinations[rep][rng_->NextInt(
-            static_cast<int>(destinations[rep].size()))];
-      } else {
+      base::Optional<InstructionOperand> source;
+      if (move_mode == kParallelMoves) {
+        source = TryReuseDestination(base::VectorOf(destinations[rep]));
+      }
+      if (!source.has_value()) {
         source = CreateRandomOperand(kNone, rep);
       }
-      MoveOperands mo(source, CreateRandomOperand(kCannotBeConstant, rep));
+      MoveOperands mo(*source, CreateRandomOperand(kCannotBeConstant, rep));
       // It isn't valid to call `AssembleMove` and `AssembleSwap` with redundant
       // moves.
       if (mo.IsRedundant()) continue;
       // Do not generate parallel moves with conflicting destinations.
+      bool conflict = false;
       if (move_mode == kParallelMoves) {
-        bool conflict = std::any_of(
-            destinations.begin(), destinations.end(), [&mo](auto& p) {
-              return std::any_of(
-                  p.second.begin(), p.second.end(), [&mo](auto& dest) {
-                    return dest->InterferesWith(mo.destination());
-                  });
-            });
-
-        if (conflict) continue;
+        for (auto p : destinations) {
+          for (auto dest : p.second) {
+            conflict = dest->InterferesWith(mo.destination());
+            if (conflict) break;
+          }
+          if (conflict) break;
+        }
       }
+      if (conflict) continue;
       MoveOperands* operands =
           parallel_move->AddMove(mo.source(), mo.destination());
       // Iterate only when a move was created.
