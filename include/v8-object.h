@@ -459,6 +459,11 @@ class V8_EXPORT Object : public Value {
    */
   Maybe<bool> SetIntegrityLevel(Local<Context> context, IntegrityLevel level);
 
+  /**
+   * Tests the integrity level of the object.
+   */
+  Maybe<bool> TestIntegrityLevel(Local<Context> context, IntegrityLevel level);
+
   /** Gets the number of internal fields for this Object. */
   int InternalFieldCount() const;
 
