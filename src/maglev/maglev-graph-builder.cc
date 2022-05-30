@@ -700,42 +700,79 @@ void MaglevGraphBuilder::VisitGetNamedProperty() {
     case compiler::ProcessedFeedback::kNamedAccess: {
       const compiler::NamedAccessFeedback& named_feedback =
           processed_feedback.AsNamedAccess();
-      if (named_feedback.maps().size() == 1) {
-        // Monomorphic load, check the handler.
-        // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
-        MaybeObjectHandle handler =
-            FeedbackNexusForSlot(slot).FindHandlerForMap(
-                named_feedback.maps()[0].object());
-        if (!handler.is_null() && handler->IsSmi()) {
-          // Smi handler, emit a map check and LoadField.
-          int smi_handler = handler->ToSmi().value();
-          LoadHandler::Kind kind = LoadHandler::KindBits::decode(smi_handler);
-          if (kind == LoadHandler::Kind::kField &&
-              !LoadHandler::IsWasmStructBits::decode(smi_handler)) {
-            AddNewNode<CheckMaps>({object}, named_feedback.maps()[0]);
+      if (named_feedback.maps().size() != 1) break;
+      compiler::MapRef map = named_feedback.maps()[0];
 
-            ValueNode* load_source;
-            if (LoadHandler::IsInobjectBits::decode(smi_handler)) {
-              load_source = object;
-            } else {
-              // The field is in the property array, first load it from there.
-              load_source = AddNewNode<LoadTaggedField>(
-                  {object}, JSReceiver::kPropertiesOrHashOffset);
-            }
-            if (LoadHandler::IsDoubleBits::decode(smi_handler)) {
-              SetAccumulator(AddNewNode<LoadDoubleField>(
-                  {load_source},
-                  LoadHandler::FieldIndexBits::decode(smi_handler) *
-                      kTaggedSize));
-            } else {
-              SetAccumulator(AddNewNode<LoadTaggedField>(
-                  {load_source},
-                  LoadHandler::FieldIndexBits::decode(smi_handler) *
-                      kTaggedSize));
-            }
-            return;
+      // Monomorphic load, check the handler.
+      // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
+      MaybeObjectHandle handler =
+          FeedbackNexusForSlot(slot).FindHandlerForMap(map.object());
+      if (handler.is_null()) break;
+
+      if (handler->IsSmi()) {
+        // Smi handler, emit a map check and LoadField.
+        int smi_handler = handler->ToSmi().value();
+        LoadHandler::Kind kind = LoadHandler::KindBits::decode(smi_handler);
+        if (kind == LoadHandler::Kind::kField &&
+            !LoadHandler::IsWasmStructBits::decode(smi_handler)) {
+          AddNewNode<CheckMaps>({object}, map);
+
+          ValueNode* load_source;
+          if (LoadHandler::IsInobjectBits::decode(smi_handler)) {
+            load_source = object;
+          } else {
+            // The field is in the property array, first load it from there.
+            load_source = AddNewNode<LoadTaggedField>(
+                {object}, JSReceiver::kPropertiesOrHashOffset);
           }
+          if (LoadHandler::IsDoubleBits::decode(smi_handler)) {
+            SetAccumulator(AddNewNode<LoadDoubleField>(
+                {load_source},
+                LoadHandler::FieldIndexBits::decode(smi_handler) *
+                    kTaggedSize));
+          } else {
+            SetAccumulator(AddNewNode<LoadTaggedField>(
+                {load_source},
+                LoadHandler::FieldIndexBits::decode(smi_handler) *
+                    kTaggedSize));
+          }
+          return;
         }
+      } else if (handler->GetHeapObject().IsCodeT()) {
+        // TODO(leszeks): Call the code object directly.
+        break;
+      } else {
+        LoadHandler load_handler = LoadHandler::cast(handler->GetHeapObject());
+        Object maybe_smi_handler = load_handler.smi_handler(local_isolate_);
+        if (!maybe_smi_handler.IsSmi()) break;
+        int smi_handler = Smi::cast(maybe_smi_handler).value();
+        LoadHandler::Kind kind = LoadHandler::KindBits::decode(smi_handler);
+        bool do_access_check_on_lookup_start_object =
+            LoadHandler::DoAccessCheckOnLookupStartObjectBits::decode(
+                smi_handler);
+        bool lookup_on_lookup_start_object =
+            LoadHandler::LookupOnLookupStartObjectBits::decode(smi_handler);
+        if (do_access_check_on_lookup_start_object) break;
+        if (lookup_on_lookup_start_object) break;
+        if (kind != LoadHandler::Kind::kConstantFromPrototype) break;
+
+        AddNewNode<CheckMaps>({object}, map);
+
+        Object validity_cell = load_handler.validity_cell(local_isolate_);
+        if (validity_cell.IsCell(local_isolate_)) {
+          broker()->dependencies()->DependOnStablePrototypeChains(
+              named_feedback.maps(), kStartAtPrototype, base::nullopt);
+        }
+        MaybeObject value = load_handler.data1(local_isolate_);
+        if (value.IsSmi()) {
+          SetAccumulator(AddNewNode<SmiConstant>({}, value.ToSmi()));
+        } else {
+          SetAccumulator(AddNewNode<Constant>(
+              {}, MakeRefAssumeMemoryFence(broker(),
+                                           broker()->CanonicalPersistentHandle(
+                                               value.GetHeapObject()))));
+        }
+        return;
       }
     } break;
 
