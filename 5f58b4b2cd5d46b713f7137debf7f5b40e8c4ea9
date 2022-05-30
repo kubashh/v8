@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11b9c6cf_c7301fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-30T09:52:05Z",
+      "side": 1,
+      "message": "Thanks, looking good from my side, just two more temp scopes that are redundant now.",
+      "revId": "5f58b4b2cd5d46b713f7137debf7f5b40e8c4ea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f0c03fe_7f134b19",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4191,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-30T09:52:05Z",
+      "side": 1,
+      "message": "This one can also be removed now.",
+      "revId": "5f58b4b2cd5d46b713f7137debf7f5b40e8c4ea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d897215b_dd003b0f",
+        "filename": "src/compiler/backend/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-30T09:52:05Z",
+      "side": 1,
+      "message": "And this one.",
+      "revId": "5f58b4b2cd5d46b713f7137debf7f5b40e8c4ea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
