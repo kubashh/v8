@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88adee2f_1419edd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-30T14:58:08Z",
+      "side": 1,
+      "message": "Thanks for your review!",
+      "parentUuid": "be881599_4573b2a5",
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e03c4592_2be75dfd",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "460e42aa_05ecbf56",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-30T14:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e03c4592_2be75dfd",
+      "range": {
+        "startLine": 280,
+        "startChar": 2,
+        "endLine": 280,
+        "endChar": 25
+      },
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49b2aa95_494895c0",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-05-30T14:24:05Z",
       "side": 1,
       "message": "... and have the definition live here, inside the loop.",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 291,
+        "endChar": 22
+      },
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc90821c_cd780e25",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-30T14:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49b2aa95_494895c0",
       "range": {
         "startLine": 291,
         "startChar": 4,
