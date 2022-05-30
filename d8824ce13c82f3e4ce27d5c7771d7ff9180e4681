@@ -16,6 +16,23 @@
       "message": "looks great thanks, and thanks for being patient in the code review.",
       "revId": "d8824ce13c82f3e4ce27d5c7771d7ff9180e4681",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b55505a_307e8041",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-30T06:16:06Z",
+      "side": 1,
+      "message": "Thanks for your detail review! I learned a lot from you.",
+      "revId": "d8824ce13c82f3e4ce27d5c7771d7ff9180e4681",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
