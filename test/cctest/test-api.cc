@@ -25631,6 +25631,24 @@ TEST(SetIntegrityLevel) {
   CHECK(is_frozen->BooleanValue(isolate));
 }
 
+TEST(TestIntegrityLevel) {
+  LocalContext context;
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+
+  v8::Local<v8::Object> obj = v8::Object::New(isolate);
+  CHECK(context->Global()->Set(context.local(), v8_str("o"), obj).FromJust());
+
+  CHECK(!obj->TestIntegrityLevel(context.local(), v8::IntegrityLevel::kFrozen)
+             .FromJust());
+
+  v8::Local<v8::Value> obj2 = CompileRun("Object.freeze(o)");
+  CHECK(obj2->StrictEquals(obj));
+
+  CHECK(obj->TestIntegrityLevel(context.local(), v8::IntegrityLevel::kFrozen)
+            .FromJust());
+}
+
 TEST(PrivateForApiIsNumber) {
   LocalContext context;
   v8::Isolate* isolate = CcTest::isolate();

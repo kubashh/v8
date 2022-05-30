@@ -4720,6 +4720,20 @@ Maybe<bool> v8::Object::SetIntegrityLevel(Local<Context> context,
   return result;
 }
 
+Maybe<bool> v8::Object::TestIntegrityLevel(Local<Context> context,
+                                           IntegrityLevel level) {
+  auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  ENTER_V8(i_isolate, context, Object, TestIntegrityLevel, Nothing<bool>(),
+           i::HandleScope);
+  auto self = Utils::OpenHandle(this);
+  i::JSReceiver::IntegrityLevel i_level =
+      level == IntegrityLevel::kFrozen ? i::FROZEN : i::SEALED;
+  Maybe<bool> result = i::JSReceiver::TestIntegrityLevel(self, i_level);
+  has_pending_exception = result.IsNothing();
+  RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+  return result;
+}
+
 Maybe<bool> v8::Object::Delete(Local<Context> context, Local<Value> key) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
   auto self = Utils::OpenHandle(this);
