@@ -34,6 +34,74 @@
       "parentUuid": "268627a3_c54620cf",
       "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a36b54f8_45befccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-30T19:31:03Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47f61ee5_a79ce122",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-30T19:31:03Z",
+      "side": 1,
+      "message": "Here and above: please consider moving handler decoding logic to separate [inline] functions.",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5684f407_2382e0ea",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-30T19:31:03Z",
+      "side": 1,
+      "message": "Nit: at most one of the bits is supposed to be set here (see \"Check smi handler bits\" block in AccessorAssembler::HandleProtoHandler()).",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f5813c1_371c8699",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-30T19:31:03Z",
+      "side": 1,
+      "message": "else {\n  DCHECK_EQ(Smi::ToInt(validity_cell), Map::kPrototypeChainValid);\n}",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
