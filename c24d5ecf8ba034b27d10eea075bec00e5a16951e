@@ -67,6 +67,24 @@
       "message": "I think I understand why here we can make the code range for arm64 twice as large (offset +128M before the embedded code and -128M as offset for code afterwards). But why is it 4 times as large for non-arm64 devices?",
       "revId": "c24d5ecf8ba034b27d10eea075bec00e5a16951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1ca305_5e940849",
+        "filename": "src/common/globals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-05-30T09:57:28Z",
+      "side": 1,
+      "message": "We\u0027d like to make it 512Mb on Arm64 too but we\u0027d have to maintain multiple copies of embedded builtins (one per 256Mb) in order to support short builtin calls. Those changes will follow.",
+      "parentUuid": "c7a2bdd9_0b0a94b2",
+      "revId": "c24d5ecf8ba034b27d10eea075bec00e5a16951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
