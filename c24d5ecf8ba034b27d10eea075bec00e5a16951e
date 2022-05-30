@@ -33,6 +33,40 @@
       "message": "PTAL",
       "revId": "c24d5ecf8ba034b27d10eea075bec00e5a16951e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "483513e1_615079c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-30T09:50:16Z",
+      "side": 1,
+      "message": "Nice, LGTM",
+      "revId": "c24d5ecf8ba034b27d10eea075bec00e5a16951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a2bdd9_0b0a94b2",
+        "filename": "src/common/globals.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-05-30T09:50:16Z",
+      "side": 1,
+      "message": "I think I understand why here we can make the code range for arm64 twice as large (offset +128M before the embedded code and -128M as offset for code afterwards). But why is it 4 times as large for non-arm64 devices?",
+      "revId": "c24d5ecf8ba034b27d10eea075bec00e5a16951e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
