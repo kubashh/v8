@@ -27,28 +27,28 @@
 
 #include <stdlib.h>
 
-#include "src/init/v8.h"
-
 #include "src/codegen/code-factory.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/debug/debug.h"
 #include "src/diagnostics/disasm.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/frames-inl.h"
+#include "src/init/v8.h"
 #include "src/utils/ostreams.h"
-#include "test/cctest/cctest.h"
+#include "test/unittests/test-utils.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace v8 {
 namespace internal {
+
+using DisasmIa320Test = TestWithIsolate;
 
 #define __ assm.
 
 static void DummyStaticFunction(Object result) {}
 
-TEST(DisasmIa320) {
-  CcTest::InitializeVM();
-  Isolate* isolate = CcTest::i_isolate();
-  HandleScope scope(isolate);
+TEST_F(DisasmIa320Test, DisasmIa320) {
+  HandleScope scope(isolate());
   v8::internal::byte buffer[8192];
   Assembler assm(AssemblerOptions{},
                  ExternalAssemblerBuffer(buffer, sizeof buffer));
@@ -64,7 +64,7 @@ TEST(DisasmIa320) {
   __ cmp(eax, foo);
 
   // ---- This one caused crash
-  __ mov(ebx,  Operand(esp, ecx, times_2, 0));  // [esp+ecx*4]
+  __ mov(ebx, Operand(esp, ecx, times_2, 0));  // [esp+ecx*4]
 
   // ---- All instructions that I can think of
   __ add(edx, ebx);
@@ -232,7 +232,6 @@ TEST(DisasmIa320) {
   __ shr(Operand(ebx, ecx, times_4, 10000), 6);
   __ shr_cl(Operand(ebx, ecx, times_4, 10000));
 
-
   // Immediates
 
   __ adc(edx, 12345);
@@ -301,7 +300,6 @@ TEST(DisasmIa320) {
   __ jmp(Operand(ebx, ecx, times_4, 10000));
   __ jmp(ic, RelocInfo::CODE_TARGET);
   __ nop();
-
 
   Label Ljcc;
   __ nop();
