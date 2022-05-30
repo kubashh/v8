@@ -25,29 +25,32 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "src/diagnostics/arm64/disasm-arm64.h"
+
 #include <stdio.h>
+
 #include <cstring>
 
 #include "src/codegen/arm64/assembler-arm64.h"
 #include "src/codegen/arm64/decoder-arm64-inl.h"
 #include "src/codegen/arm64/utils-arm64.h"
 #include "src/codegen/macro-assembler-inl.h"
-#include "src/diagnostics/arm64/disasm-arm64.h"
 #include "src/execution/frames-inl.h"
 #include "src/init/v8.h"
-#include "test/cctest/cctest.h"
+#include "test/unittests/test-utils.h"
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace v8 {
 namespace internal {
 
-#define TEST_(name)  TEST(DISASM_##name)
+using DisasmArm64Test = TestWithIsolate;
 
-#define EXP_SIZE   (256)
+#define TEST_(name) TEST_F(DisasmArm64Test, DISASM_##name)
+
+#define EXP_SIZE (256)
 #define INSTR_SIZE (1024)
 #define SET_UP_MASM()                                                     \
-  InitializeVM();                                                         \
-  Isolate* isolate = CcTest::i_isolate();                                 \
-  HandleScope scope(isolate);                                             \
+  HandleScope scope(isolate());                                           \
   byte* buf = static_cast<byte*>(malloc(INSTR_SIZE));                     \
   uint32_t encoding = 0;                                                  \
   MacroAssembler* assm =                                                  \
@@ -59,9 +62,7 @@ namespace internal {
   decoder->AppendVisitor(disasm)
 
 #define SET_UP_ASM()                                                         \
-  InitializeVM();                                                            \
-  Isolate* isolate = CcTest::i_isolate();                                    \
-  HandleScope scope(isolate);                                                \
+  HandleScope scope(isolate());                                              \
   byte* buf = static_cast<byte*>(malloc(INSTR_SIZE));                        \
   uint32_t encoding = 0;                                                     \
   Assembler* assm = new Assembler(AssemblerOptions{},                        \
@@ -107,18 +108,6 @@ namespace internal {
   delete assm;    \
   free(buf)
 
-
-static bool vm_initialized = false;
-
-
-static void InitializeVM() {
-  if (!vm_initialized) {
-    CcTest::InitializeVM();
-    vm_initialized = true;
-  }
-}
-
-
 TEST_(bootstrap) {
   SET_UP_ASM();
 
@@ -147,7 +136,6 @@ TEST_(bootstrap) {
 
   CLEANUP();
 }
-
 
 TEST_(mov_mvn) {
   SET_UP_MASM();
@@ -181,7 +169,6 @@ TEST_(mov_mvn) {
 
   CLEANUP();
 }
-
 
 TEST_(move_immediate) {
   SET_UP_ASM();
@@ -218,7 +205,6 @@ TEST_(move_immediate) {
 
   CLEANUP();
 }
-
 
 TEST(move_immediate_2) {
   SET_UP_MASM();
@@ -275,7 +261,6 @@ TEST(move_immediate_2) {
   CLEANUP();
 }
 
-
 TEST_(add_immediate) {
   SET_UP_ASM();
 
@@ -289,8 +274,7 @@ TEST_(add_immediate) {
   COMPARE(add(w12, w13, Operand(0xfff000)),
           "add w12, w13, #0xfff000 (16773120)");
   COMPARE(adds(w14, w15, Operand(0xff)), "adds w14, w15, #0xff (255)");
-  COMPARE(adds(x16, x17, Operand(0xaa000)),
-          "adds x16, x17, #0xaa000 (696320)");
+  COMPARE(adds(x16, x17, Operand(0xaa000)), "adds x16, x17, #0xaa000 (696320)");
   COMPARE(cmn(w18, Operand(0xff)), "cmn w18, #0xff (255)");
   COMPARE(cmn(x19, Operand(0xff000)), "cmn x19, #0xff000 (1044480)");
   COMPARE(add(w0, wsp, Operand(0)), "mov w0, wsp");
@@ -305,7 +289,6 @@ TEST_(add_immediate) {
   CLEANUP();
 }
 
-
 TEST_(sub_immediate) {
   SET_UP_ASM();
 
@@ -319,8 +302,7 @@ TEST_(sub_immediate) {
   COMPARE(sub(w12, w13, Operand(0xfff000)),
           "sub w12, w13, #0xfff000 (16773120)");
   COMPARE(subs(w14, w15, Operand(0xff)), "subs w14, w15, #0xff (255)");
-  COMPARE(subs(x16, x17, Operand(0xaa000)),
-          "subs x16, x17, #0xaa000 (696320)");
+  COMPARE(subs(x16, x17, Operand(0xaa000)), "subs x16, x17, #0xaa000 (696320)");
   COMPARE(cmp(w18, Operand(0xff)), "cmp w18, #0xff (255)");
   COMPARE(cmp(x19, Operand(0xff000)), "cmp x19, #0xff000 (1044480)");
 
@@ -332,7 +314,6 @@ TEST_(sub_immediate) {
 
   CLEANUP();
 }
-
 
 TEST_(add_shifted) {
   SET_UP_ASM();
@@ -358,7 +339,6 @@ TEST_(add_shifted) {
 
   CLEANUP();
 }
-
 
 TEST_(sub_shifted) {
   SET_UP_ASM();
@@ -389,7 +369,6 @@ TEST_(sub_shifted) {
   CLEANUP();
 }
 
-
 TEST_(add_extended) {
   SET_UP_ASM();
 
@@ -414,7 +393,6 @@ TEST_(add_extended) {
 
   CLEANUP();
 }
-
 
 TEST_(sub_extended) {
   SET_UP_ASM();
@@ -441,7 +419,6 @@ TEST_(sub_extended) {
   CLEANUP();
 }
 
-
 TEST_(adc_subc_ngc) {
   SET_UP_ASM();
 
@@ -460,7 +437,6 @@ TEST_(adc_subc_ngc) {
 
   CLEANUP();
 }
-
 
 TEST_(mul_and_div) {
   SET_UP_ASM();
@@ -494,7 +470,6 @@ TEST_(mul_and_div) {
   CLEANUP();
 }
 
-
 TEST(maddl_msubl) {
   SET_UP_ASM();
 
@@ -510,7 +485,6 @@ TEST(maddl_msubl) {
 
   CLEANUP();
 }
-
 
 TEST_(dp_1_source) {
   SET_UP_ASM();
@@ -529,7 +503,6 @@ TEST_(dp_1_source) {
 
   CLEANUP();
 }
-
 
 TEST_(bitfield) {
   SET_UP_ASM();
@@ -572,7 +545,6 @@ TEST_(bitfield) {
   CLEANUP();
 }
 
-
 TEST_(extract) {
   SET_UP_ASM();
 
@@ -586,10 +558,9 @@ TEST_(extract) {
   CLEANUP();
 }
 
-
 TEST_(logical_immediate) {
   SET_UP_ASM();
-  #define RESULT_SIZE (256)
+#define RESULT_SIZE (256)
 
   char result[RESULT_SIZE];
 
@@ -653,33 +624,25 @@ TEST_(logical_immediate) {
           "and w0, w0, #0x55555555");  // 2-bit pattern.
 
   // Test other instructions.
-  COMPARE(tst(w1, Operand(0x11111111)),
-          "tst w1, #0x11111111");
-  COMPARE(tst(x2, Operand(0x8888888888888888L)),
-          "tst x2, #0x8888888888888888");
-  COMPARE(orr(w7, w8, Operand(0xaaaaaaaa)),
-          "orr w7, w8, #0xaaaaaaaa");
+  COMPARE(tst(w1, Operand(0x11111111)), "tst w1, #0x11111111");
+  COMPARE(tst(x2, Operand(0x8888888888888888L)), "tst x2, #0x8888888888888888");
+  COMPARE(orr(w7, w8, Operand(0xaaaaaaaa)), "orr w7, w8, #0xaaaaaaaa");
   COMPARE(orr(x9, x10, Operand(0x5555555555555555L)),
           "orr x9, x10, #0x5555555555555555");
-  COMPARE(eor(w15, w16, Operand(0x00000001)),
-          "eor w15, w16, #0x1");
-  COMPARE(eor(x17, x18, Operand(0x0000000000000003L)),
-          "eor x17, x18, #0x3");
+  COMPARE(eor(w15, w16, Operand(0x00000001)), "eor w15, w16, #0x1");
+  COMPARE(eor(x17, x18, Operand(0x0000000000000003L)), "eor x17, x18, #0x3");
   COMPARE(ands(w23, w24, Operand(0x0000000f)), "ands w23, w24, #0xf");
   COMPARE(ands(x25, x26, Operand(0x800000000000000fL)),
           "ands x25, x26, #0x800000000000000f");
 
   // Test inverse.
-  COMPARE(bic(w3, w4, Operand(0x20202020)),
-          "and w3, w4, #0xdfdfdfdf");
+  COMPARE(bic(w3, w4, Operand(0x20202020)), "and w3, w4, #0xdfdfdfdf");
   COMPARE(bic(x5, x6, Operand(0x4040404040404040L)),
           "and x5, x6, #0xbfbfbfbfbfbfbfbf");
-  COMPARE(orn(w11, w12, Operand(0x40004000)),
-          "orr w11, w12, #0xbfffbfff");
+  COMPARE(orn(w11, w12, Operand(0x40004000)), "orr w11, w12, #0xbfffbfff");
   COMPARE(orn(x13, x14, Operand(0x8181818181818181L)),
           "orr x13, x14, #0x7e7e7e7e7e7e7e7e");
-  COMPARE(eon(w19, w20, Operand(0x80000001)),
-          "eor w19, w20, #0x7ffffffe");
+  COMPARE(eon(w19, w20, Operand(0x80000001)), "eor w19, w20, #0x7ffffffe");
   COMPARE(eon(x21, x22, Operand(0xc000000000000003L)),
           "eor x21, x22, #0x3ffffffffffffffc");
   COMPARE(bics(w27, w28, Operand(0xfffffff7)), "ands w27, w28, #0x8");
@@ -711,7 +674,6 @@ TEST_(logical_immediate) {
 
   CLEANUP();
 }
-
 
 TEST_(logical_shifted) {
   SET_UP_ASM();
@@ -782,7 +744,6 @@ TEST_(logical_shifted) {
   CLEANUP();
 }
 
-
 TEST_(dp_2_source) {
   SET_UP_ASM();
 
@@ -797,7 +758,6 @@ TEST_(dp_2_source) {
 
   CLEANUP();
 }
-
 
 TEST_(adr) {
   SET_UP_ASM();
@@ -820,7 +780,6 @@ TEST_(adr) {
 
   CLEANUP();
 }
-
 
 TEST_(branch) {
   SET_UP_ASM();
@@ -858,7 +817,6 @@ TEST_(branch) {
 
   CLEANUP();
 }
-
 
 TEST_(load_store) {
   SET_UP_ASM();
@@ -914,7 +872,6 @@ TEST_(load_store) {
 
   CLEANUP();
 }
-
 
 TEST_(load_store_regoffset) {
   SET_UP_ASM();
@@ -999,7 +956,6 @@ TEST_(load_store_regoffset) {
   CLEANUP();
 }
 
-
 TEST_(load_store_byte) {
   SET_UP_ASM();
 
@@ -1018,8 +974,7 @@ TEST_(load_store_byte) {
   COMPARE(strb(w22, MemOperand(x23, -256, PreIndex)),
           "strb w22, [x23, #-256]!");
   COMPARE(strb(w24, MemOperand(x25, 255, PostIndex)), "strb w24, [x25], #255");
-  COMPARE(strb(w26, MemOperand(cp, -256, PostIndex)),
-          "strb w26, [cp], #-256");
+  COMPARE(strb(w26, MemOperand(cp, -256, PostIndex)), "strb w26, [cp], #-256");
   COMPARE(ldrb(w28, MemOperand(x28, 3, PostIndex)), "ldrb w28, [x28], #3");
   COMPARE(strb(fp, MemOperand(x28, -42, PreIndex)), "strb w29, [x28, #-42]!");
   COMPARE(ldrsb(w0, MemOperand(x1)), "ldrsb w0, [x1]");
@@ -1029,7 +984,6 @@ TEST_(load_store_byte) {
 
   CLEANUP();
 }
-
 
 TEST_(load_store_half) {
   SET_UP_ASM();
@@ -1049,8 +1003,7 @@ TEST_(load_store_half) {
   COMPARE(strh(w22, MemOperand(x23, -256, PreIndex)),
           "strh w22, [x23, #-256]!");
   COMPARE(strh(w24, MemOperand(x25, 255, PostIndex)), "strh w24, [x25], #255");
-  COMPARE(strh(w26, MemOperand(cp, -256, PostIndex)),
-          "strh w26, [cp], #-256");
+  COMPARE(strh(w26, MemOperand(cp, -256, PostIndex)), "strh w26, [cp], #-256");
   COMPARE(ldrh(w28, MemOperand(x28, 3, PostIndex)), "ldrh w28, [x28], #3");
   COMPARE(strh(fp, MemOperand(x28, -42, PreIndex)), "strh w29, [x28, #-42]!");
   COMPARE(ldrh(w30, MemOperand(x0, 255)), "ldurh w30, [x0, #255]");
@@ -1295,7 +1248,6 @@ TEST(load_store_v_regoffset) {
   CLEANUP();
 }
 
-
 TEST_(load_store_unscaled) {
   SET_UP_ASM();
 
@@ -1338,7 +1290,6 @@ TEST_(load_store_unscaled) {
 
   CLEANUP();
 }
-
 
 TEST_(load_store_pair) {
   SET_UP_ASM();
@@ -1552,7 +1503,6 @@ TEST_(cond_select) {
   CLEANUP();
 }
 
-
 TEST(cond_select_macro) {
   SET_UP_MASM();
 
@@ -1565,7 +1515,6 @@ TEST(cond_select_macro) {
 
   CLEANUP();
 }
-
 
 TEST_(cond_cmp) {
   SET_UP_ASM();
@@ -1584,7 +1533,6 @@ TEST_(cond_cmp) {
   CLEANUP();
 }
 
-
 TEST_(cond_cmp_macro) {
   SET_UP_MASM();
 
@@ -1596,7 +1544,6 @@ TEST_(cond_cmp_macro) {
   CLEANUP();
 }
 
-
 TEST_(fmov_imm) {
   SET_UP_ASM();
 
@@ -1607,7 +1554,6 @@ TEST_(fmov_imm) {
 
   CLEANUP();
 }
-
 
 TEST_(fmov_reg) {
   SET_UP_ASM();
@@ -1623,7 +1569,6 @@ TEST_(fmov_reg) {
 
   CLEANUP();
 }
-
 
 TEST_(fp_dp1) {
   SET_UP_ASM();
@@ -1679,7 +1624,6 @@ TEST_(fp_dp1) {
   CLEANUP();
 }
 
-
 TEST_(fp_dp2) {
   SET_UP_ASM();
 
@@ -1705,7 +1649,6 @@ TEST_(fp_dp2) {
   CLEANUP();
 }
 
-
 TEST(fp_dp3) {
   SET_UP_ASM();
 
@@ -1722,7 +1665,6 @@ TEST(fp_dp3) {
   CLEANUP();
 }
 
-
 TEST_(fp_compare) {
   SET_UP_ASM();
 
@@ -1735,7 +1677,6 @@ TEST_(fp_compare) {
 
   CLEANUP();
 }
-
 
 TEST_(fp_cond_compare) {
   SET_UP_ASM();
@@ -1754,7 +1695,6 @@ TEST_(fp_cond_compare) {
   CLEANUP();
 }
 
-
 TEST_(fp_select) {
   SET_UP_ASM();
 
@@ -1767,7 +1707,6 @@ TEST_(fp_select) {
 
   CLEANUP();
 }
-
 
 TEST_(fcvt_scvtf_ucvtf) {
   SET_UP_ASM();
@@ -1851,7 +1790,6 @@ TEST_(fcvt_scvtf_ucvtf) {
   CLEANUP();
 }
 
-
 TEST_(system_mrs) {
   SET_UP_ASM();
 
@@ -1862,7 +1800,6 @@ TEST_(system_mrs) {
   CLEANUP();
 }
 
-
 TEST_(system_msr) {
   SET_UP_ASM();
 
@@ -1872,7 +1809,6 @@ TEST_(system_msr) {
 
   CLEANUP();
 }
-
 
 TEST_(system_nop) {
   {
@@ -1968,7 +1904,6 @@ TEST_(debug) {
   }
 }
 
-
 TEST_(hlt) {
   SET_UP_ASM();
 
@@ -1979,7 +1914,6 @@ TEST_(hlt) {
   CLEANUP();
 }
 
-
 TEST_(brk) {
   SET_UP_ASM();
 
@@ -1989,7 +1923,6 @@ TEST_(brk) {
 
   CLEANUP();
 }
-
 
 TEST_(add_sub_negative) {
   SET_UP_MASM();
@@ -2020,7 +1953,6 @@ TEST_(add_sub_negative) {
 
   CLEANUP();
 }
-
 
 TEST_(logical_immediate_move) {
   SET_UP_MASM();
@@ -2059,7 +1991,6 @@ TEST_(logical_immediate_move) {
 
   CLEANUP();
 }
-
 
 TEST_(barriers) {
   SET_UP_MASM();
