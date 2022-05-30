@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "028b0515_a8c63b0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-05-30T13:32:43Z",
+      "side": 1,
+      "message": "Hi Leszek, I submitted patchset10 for fixing CQ DRY RUN failure after your review. Could you please help to review the new modification?",
+      "revId": "01de05e3de60c8fa49922511f34c61a7294acd37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
