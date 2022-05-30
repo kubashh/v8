@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be881599_4573b2a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-30T14:24:05Z",
+      "side": 1,
+      "message": "lgtm with one more comment",
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e03c4592_2be75dfd",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-30T14:24:05Z",
+      "side": 1,
+      "message": "you can remove this...",
+      "range": {
+        "startLine": 280,
+        "startChar": 2,
+        "endLine": 280,
+        "endChar": 25
+      },
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49b2aa95_494895c0",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-30T14:24:05Z",
+      "side": 1,
+      "message": "... and have the definition live here, inside the loop.",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 291,
+        "endChar": 22
+      },
+      "revId": "6175e548c1588b41f1f40e1653b5ef267e42be33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
