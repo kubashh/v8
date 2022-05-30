@@ -16,6 +16,29 @@
       "message": "Hi Leszek, I submitted patchset10 for fixing CQ DRY RUN failure after your review. Could you please help to review the new modification?",
       "revId": "01de05e3de60c8fa49922511f34c61a7294acd37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7aa70a6_172f729a",
+        "filename": "src/runtime/runtime-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-30T13:36:20Z",
+      "side": 1,
+      "message": "can this be rewritten as a for loop? e.g.\n\n    for (;;it.Advance()) {\n       ...\n       if (loop_nesting_level \u003d\u003d 0) break;\n    }\n    \nThen you can get rid of the `int loop_nesting_level;` definition hoisted out of the loop.",
+      "range": {
+        "startLine": 282,
+        "startChar": 2,
+        "endLine": 282,
+        "endChar": 4
+      },
+      "revId": "01de05e3de60c8fa49922511f34c61a7294acd37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
