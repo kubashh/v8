@@ -33,6 +33,24 @@
       "message": "Could you add a comment here that we need to collect the native module so that sync compilation does not load it from the cache?\n\nI think it would be nicer if we had a way to remove the native module from the cache explicitly. This would make the fuzzer much faster.",
       "revId": "2ec512b6aad599bc9526a58e207ecaf9d64f9210",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd064ef_4b520914",
+        "filename": "test/fuzzer/wasm-streaming.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-05-31T08:56:58Z",
+      "side": 1,
+      "message": "Oh, yes, that comment totally should be there. Done.\n\nAgreed that this could make the fuzzer unnecessarily slow. Let\u0027s see what the execs/sec are, and then maybe explicitly clear the cache here (or introduce a flag to skip the cache). We just have to be careful not to break internal assumptions then, if we produce identical modules and scripts.",
+      "parentUuid": "1b3910e4_1bc7912a",
+      "revId": "2ec512b6aad599bc9526a58e207ecaf9d64f9210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
