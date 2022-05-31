@@ -33,6 +33,24 @@
       "message": "nit: `DCHECK_NE(hint_reg, kUnassignedRegister);`",
       "revId": "801773541e8db230f77a88d87daf756d3f80a45a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5382a17c_01a88b99",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2331,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2022-05-31T09:28:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "296ac030_4f162679",
+      "revId": "801773541e8db230f77a88d87daf756d3f80a45a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

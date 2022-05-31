@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7be0881_42c18291",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2022-05-31T09:28:51Z",
+      "side": 1,
+      "message": "Thanks thibaudm! I have updated the patch.",
+      "revId": "baf221e8275fa54439ed7a2e1e2d4317f35df297",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
