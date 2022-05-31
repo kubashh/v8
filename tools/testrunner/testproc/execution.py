@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import collections
+import traceback
 
 from . import base
 from ..local import pool

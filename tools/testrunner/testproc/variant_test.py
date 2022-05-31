@@ -5,6 +5,7 @@
 
 import os
 import sys
+import tempfile
 import unittest
 
 # Needed because the test runner contains relative imports.

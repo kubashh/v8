@@ -83,7 +83,7 @@ class StatusFileTest(unittest.TestCase):
     self.assertRaises(
         SyntaxError, lambda: statusfile._EvalExpression(
             'system==linux and mode=release', variables))
-    self.assertEqual(
+    self.assertEquals(
         statusfile.VARIANT_EXPRESSION,
         statusfile._EvalExpression('system==linux and variant==default',
                                    variables))
@@ -92,41 +92,41 @@ class StatusFileTest(unittest.TestCase):
     rules, prefix_rules = statusfile.ReadStatusFile(
         TEST_STATUS_FILE % 'system==linux', make_variables())
 
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/bar': set(['PASS', 'SKIP']),
             'baz/bar': set(['PASS', 'FAIL', 'SLOW']),
         },
         rules[''],
     )
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/': set(['SLOW', 'FAIL']),
         },
         prefix_rules[''],
     )
-    self.assertEqual({}, rules['default'])
-    self.assertEqual({}, prefix_rules['default'])
+    self.assertEquals({}, rules['default'])
+    self.assertEquals({}, prefix_rules['default'])
 
   def test_read_statusfile_section_false(self):
     rules, prefix_rules = statusfile.ReadStatusFile(
         TEST_STATUS_FILE % 'system==windows', make_variables())
 
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/bar': set(['PASS', 'SKIP']),
             'baz/bar': set(['PASS', 'FAIL']),
         },
         rules[''],
     )
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/': set(['PASS', 'SLOW']),
         },
         prefix_rules[''],
     )
-    self.assertEqual({}, rules['default'])
-    self.assertEqual({}, prefix_rules['default'])
+    self.assertEquals({}, rules['default'])
+    self.assertEquals({}, prefix_rules['default'])
 
   def test_read_statusfile_section_variant(self):
     rules, prefix_rules = statusfile.ReadStatusFile(
@@ -134,26 +134,26 @@ class StatusFileTest(unittest.TestCase):
         make_variables(),
     )
 
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/bar': set(['PASS', 'SKIP']),
             'baz/bar': set(['PASS', 'FAIL']),
         },
         rules[''],
     )
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/': set(['PASS', 'SLOW']),
         },
         prefix_rules[''],
     )
-    self.assertEqual(
+    self.assertEquals(
         {
             'baz/bar': set(['PASS', 'SLOW']),
         },
         rules['default'],
     )
-    self.assertEqual(
+    self.assertEquals(
         {
             'foo/': set(['FAIL']),
         },

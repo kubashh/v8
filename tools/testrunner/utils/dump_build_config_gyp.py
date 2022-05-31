@@ -12,6 +12,7 @@ Raw gyp values are supported - they will be tranformed into valid json.
 # TODO(machenbach): Remove this when gyp is deprecated.
 
 import json
+import os
 import sys
 
 assert len(sys.argv) > 2
