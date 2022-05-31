@@ -13,15 +13,6 @@ import shlex
 import sys
 import traceback
 
-
-
-# Add testrunner to the path.
-sys.path.insert(
-  0,
-  os.path.dirname(
-    os.path.dirname(os.path.abspath(__file__))))
-
-
 from testrunner.local import command
 from testrunner.local import testsuite
 from testrunner.local import utils
