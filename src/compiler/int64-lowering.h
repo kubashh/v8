@@ -72,6 +72,8 @@ class V8_EXPORT_PRIVATE Int64Lowering {
 
   const CallDescriptor* LowerCallDescriptor(
       const CallDescriptor* call_descriptor);
+  void SetInt32Type(Node* node);
+  void SetFloat64Type(Node* node);
 
   void ReplaceNode(Node* old, Node* new_low, Node* new_high);
   bool HasReplacementLow(Node* node);
@@ -99,6 +101,8 @@ class V8_EXPORT_PRIVATE Int64Lowering {
   Signature<MachineRepresentation>* signature_;
   Node* placeholder_;
   std::unique_ptr<Int64LoweringSpecialCase> special_case_;
+  Type int32_type_;
+  Type float64_type_;
 };
 
 }  // namespace compiler
