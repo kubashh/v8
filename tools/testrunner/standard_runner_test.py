@@ -22,16 +22,21 @@ import contextlib
 import json
 import os
 import shutil
-import subprocess
 import sys
 import tempfile
 import unittest
+from testrunner import standard_runner
+from testrunner import num_fuzzer
+from testrunner.local import command
+from testrunner.local import pool
+
 
 from io import StringIO
 
 TOOLS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 TEST_DATA_ROOT = os.path.join(TOOLS_ROOT, 'unittests', 'testdata')
-RUN_TESTS_PY = os.path.join(TOOLS_ROOT, 'run-tests.py')
 
 Result = collections.namedtuple(
     'Result', ['stdout', 'stderr', 'returncode'])
@@ -143,13 +148,6 @@ class SystemTest(unittest.TestCase):
       cls._cov.start()
     except ImportError:
       print('Running without python coverage.')
-    sys.path.append(TOOLS_ROOT)
-    global standard_runner
-    from testrunner import standard_runner
-    global num_fuzzer
-    from testrunner import num_fuzzer
-    from testrunner.local import command
-    from testrunner.local import pool
     command.setup_testing()
     pool.setup_testing()
 
