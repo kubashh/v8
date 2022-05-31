@@ -168,6 +168,14 @@ function IncludesHelper(array, n, fromIndex) {
   return array.includes(n, fromIndex);
 }
 
+function ArrayIncludesHelper(array, n, fromIndex) {
+  if (typeof n == 'number' &&
+      (array instanceof BigInt64Array || array instanceof BigUint64Array)) {
+    return Array.prototype.includes.call(array, BigInt(n), fromIndex);
+  }
+  return Array.prototype.includes.call(array, n, fromIndex);
+}
+
 function IndexOfHelper(array, n, fromIndex) {
   if (typeof n == 'number' &&
       (array instanceof BigInt64Array || array instanceof BigUint64Array)) {
