@@ -2871,6 +2871,8 @@ filegroup(
             "src/compiler/wasm-graph-assembler.h",
             "src/compiler/wasm-inlining.cc",
             "src/compiler/wasm-inlining.h",
+            "src/compiler/wasm-typer.cc",
+            "src/compiler/wasm-typer.h",
         ],
         "//conditions:default": [],
     }),
