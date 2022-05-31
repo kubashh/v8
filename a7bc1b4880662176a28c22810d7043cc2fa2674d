@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5040513f_3268fc2e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-31T10:45:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47f61ee5_a79ce122",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5684f407_2382e0ea",
@@ -89,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f0663a2_89f56f01",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-31T10:45:14Z",
+      "side": 1,
+      "message": "I think that\u0027s fine here, I\u0027m checking both individually but I\u0027d expect the compiler to fold these checks together.",
+      "parentUuid": "5684f407_2382e0ea",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f5813c1_371c8699",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 1
@@ -100,6 +136,24 @@
       "writtenOn": "2022-05-30T19:31:03Z",
       "side": 1,
       "message": "else {\n  DCHECK_EQ(Smi::ToInt(validity_cell), Map::kPrototypeChainValid);\n}",
+      "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46d9c092_c99cb665",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-05-31T10:45:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f5813c1_371c8699",
       "revId": "a7bc1b4880662176a28c22810d7043cc2fa2674d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
