@@ -16,6 +16,115 @@
       "message": "Marking this as WIP as I discovered a couple of issues.",
       "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "114a4b68_2d5908fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-31T14:33:05Z",
+      "side": 1,
+      "message": "A few nits and a curiosity question. Will take a final look when you\u0027re ready.",
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b244c92e_14365cff",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-31T14:33:05Z",
+      "side": 1,
+      "message": "nit: {} please. And looking at the following DCHECK, you probably want to `return NoChange()` as well? Or is this a debugging leftover that can be deleted entirely?",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 53
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3fe5e79_303eb50e",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-31T14:33:05Z",
+      "side": 1,
+      "message": "nit: leftover",
+      "range": {
+        "startLine": 180,
+        "startChar": 10,
+        "endLine": 180,
+        "endChar": 31
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5747a12_b6a70ffa",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-31T14:33:05Z",
+      "side": 1,
+      "message": "Out of curiosity, does it happen much in practice that this field type is more precise than what the decoder knew statically? (I\u0027m aware that in theory it can happen, just wondering how often we hit that case.)",
+      "range": {
+        "startLine": 181,
+        "startChar": 26,
+        "endLine": 181,
+        "endChar": 36
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48b3ab71_13713342",
+        "filename": "test/mjsunit/wasm/wasm-typed-optimizations.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-05-31T14:33:05Z",
+      "side": 1,
+      "message": "This comment is creating expectations that the test below can\u0027t fulfill",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
