@@ -16,6 +16,24 @@
       "message": "Hello Camillo, would you please review this change?\n\nSome background info: This change is based on a predecessor change (already reviewed but not yet landed) which changes the key format in the script compilation cache table to include the Script and the hash of the source text. With the Script available from the key, we can pretty easily move the HasOrigin check within the table lookup and make the behavior more consistent. HasOrigin required some light modification to be non-allocating.\n\nThanks!",
       "revId": "64c0894c1c6063ff3e0dd88c89f0ccf1bd9ec13f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18983329_88c5403a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-06-01T16:59:33Z",
+      "side": 1,
+      "message": "Update: the predecessor change has landed, so you can ignore that part of the previous message 😊",
+      "parentUuid": "538501c7_9147d5a5",
+      "revId": "64c0894c1c6063ff3e0dd88c89f0ccf1bd9ec13f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
