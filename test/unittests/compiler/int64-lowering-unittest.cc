@@ -50,7 +50,7 @@ class Int64LoweringTest : public GraphTest {
     NodeProperties::MergeControlToEnd(graph(), common(), ret);
 
     Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
-                           signature);
+                           nullptr, signature);
     lowering.LowerGraph();
   }
 
@@ -69,7 +69,8 @@ class Int64LoweringTest : public GraphTest {
     sig_builder.AddReturn(rep);
 
     Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
-                           sig_builder.Build(), std::move(special_case));
+                           nullptr, sig_builder.Build(),
+                           std::move(special_case));
     lowering.LowerGraph();
   }
 
@@ -291,7 +292,7 @@ TEST_F(Int64LoweringTest, Int64LoadImmutable) {
   NodeProperties::MergeControlToEnd(graph(), common(), ret);                 \
                                                                              \
   Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(), \
-                         sig_builder.Build());                               \
+                         nullptr, sig_builder.Build());                      \
   lowering.LowerGraph();                                                     \
                                                                              \
   STORE_VERIFY(kStore, kRep32)
@@ -325,7 +326,7 @@ TEST_F(Int64LoweringTest, Int32Store) {
   NodeProperties::MergeControlToEnd(graph(), common(), ret);
 
   Int64Lowering lowering(graph(), machine(), common(), simplified(), zone(),
-                         sig_builder.Build());
+                         nullptr, sig_builder.Build());
   lowering.LowerGraph();
 
   EXPECT_THAT(
