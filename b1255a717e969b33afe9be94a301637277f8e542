@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "b1255a717e969b33afe9be94a301637277f8e542",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb12ae67_e6853fd1",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5328,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-01T12:34:58Z",
+      "side": 1,
+      "message": "Nit: I know you didn\u0027t add this comment, but I think this comment is outdated and can be removed. V8 used to have some form of marking worklist overflows - but the worklist is now unbounded.",
+      "revId": "b1255a717e969b33afe9be94a301637277f8e542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
