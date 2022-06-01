@@ -16,6 +16,24 @@
       "message": "This line of code will cause a macro redefine error",
       "revId": "ab76ffc8bd2023b38904d30829ec9e9d1a6b4c05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad70405_095ec8c3",
+        "filename": "src/objects/simd.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-06-01T16:37:34Z",
+      "side": 1,
+      "message": "Thanks for reporting that. On which system and with which compiler?",
+      "parentUuid": "a9b284eb_ca3be936",
+      "revId": "ab76ffc8bd2023b38904d30829ec9e9d1a6b4c05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
