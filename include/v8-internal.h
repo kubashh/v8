@@ -36,6 +36,12 @@ constexpr int GB = MB * 1024;
 constexpr size_t TB = size_t{GB} * 1024;
 #endif
 
+// Integral constants defined here for defining v8::TypedArray::kMaxLength
+constexpr int kMaxInt = 0x7FFFFFFF;
+// ES6 section 20.1.2.6 Number.MAX_SAFE_INTEGER
+constexpr uint64_t kMaxSafeIntegerUint64 = 9007199254740991;  // 2^53-1
+constexpr double kMaxSafeInteger = static_cast<double>(kMaxSafeIntegerUint64);
+
 /**
  * Configuration of tagging scheme.
  */

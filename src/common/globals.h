@@ -234,7 +234,7 @@ using byte = uint8_t;
 // -----------------------------------------------------------------------------
 // Constants
 
-constexpr int kMaxInt = 0x7FFFFFFF;
+// kMaxInt defined in v8-internal.h
 constexpr int kMinInt = -kMaxInt - 1;
 constexpr int kMaxInt8 = (1 << 7) - 1;
 constexpr int kMinInt8 = -(1 << 7);
@@ -1271,8 +1271,8 @@ constexpr uint64_t kHoleNanInt64 =
     (static_cast<uint64_t>(kHoleNanUpper32) << 32) | kHoleNanLower32;
 
 // ES6 section 20.1.2.6 Number.MAX_SAFE_INTEGER
-constexpr uint64_t kMaxSafeIntegerUint64 = 9007199254740991;  // 2^53-1
-constexpr double kMaxSafeInteger = static_cast<double>(kMaxSafeIntegerUint64);
+// kMaxSafeInteger defined in v8-internal.h
+
 // ES6 section 21.1.2.8 Number.MIN_SAFE_INTEGER
 constexpr double kMinSafeInteger = -kMaxSafeInteger;
 
