@@ -1818,9 +1818,8 @@ void TurboAssembler::Jump(Address destination, RelocInfo::Mode rmode) {
 }
 
 void TurboAssembler::Jump(Handle<CodeT> code_object, RelocInfo::Mode rmode) {
-  DCHECK_IMPLIES(
-      options().isolate_independent_code,
-      Builtins::IsIsolateIndependentBuiltin(FromCodeT(*code_object)));
+  DCHECK_IMPLIES(options().isolate_independent_code,
+                 Builtins::IsIsolateIndependentBuiltin(*code_object));
   if (options().inline_offheap_trampolines) {
     Builtin builtin = Builtin::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code_object, &builtin)) {
@@ -1833,9 +1832,8 @@ void TurboAssembler::Jump(Handle<CodeT> code_object, RelocInfo::Mode rmode) {
 
 void TurboAssembler::Jump(Handle<CodeT> code_object, RelocInfo::Mode rmode,
                           Condition cc) {
-  DCHECK_IMPLIES(
-      options().isolate_independent_code,
-      Builtins::IsIsolateIndependentBuiltin(FromCodeT(*code_object)));
+  DCHECK_IMPLIES(options().isolate_independent_code,
+                 Builtins::IsIsolateIndependentBuiltin(*code_object));
   if (options().inline_offheap_trampolines) {
     Builtin builtin = Builtin::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code_object, &builtin)) {
@@ -1875,9 +1873,8 @@ void TurboAssembler::Call(Address destination, RelocInfo::Mode rmode) {
 
 void TurboAssembler::Call(Handle<CodeT> code_object, RelocInfo::Mode rmode) {
   // TODO(v8:11880): avoid roundtrips between cdc and code.
-  DCHECK_IMPLIES(
-      options().isolate_independent_code,
-      Builtins::IsIsolateIndependentBuiltin(FromCodeT(*code_object)));
+  DCHECK_IMPLIES(options().isolate_independent_code,
+                 Builtins::IsIsolateIndependentBuiltin(*code_object));
   if (options().inline_offheap_trampolines) {
     Builtin builtin = Builtin::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code_object, &builtin)) {

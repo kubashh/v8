@@ -94,18 +94,23 @@ class CodeDataContainer : public HeapObject {
   // the code() value.
   inline void UpdateCodeEntryPoint(Isolate* isolate_for_sandbox, Code code);
 
+  inline void SetOffHeapCodeEntryPoint(Isolate* isolate_for_sandbox,
+                                       Address entry_point);
+
   inline void AllocateExternalPointerEntries(Isolate* isolate);
 
   // Initializes internal flags field which stores cached values of some
   // properties of the respective Code object.
   // Available only when V8_EXTERNAL_CODE_SPACE is enabled.
-  inline void initialize_flags(CodeKind kind, Builtin builtin_id);
+  inline void initialize_flags(CodeKind kind, Builtin builtin_id,
+                               bool is_turbofanned,
+                               bool is_off_heap_trampoline);
 
   // Alias for code_entry_point to make it API compatible with Code.
   inline Address InstructionStart() const;
 
   // Alias for code_entry_point to make it API compatible with Code.
-  inline Address raw_instruction_start();
+  inline Address raw_instruction_start() const;
 
   // Alias for code_entry_point to make it API compatible with Code.
   inline Address entry() const;
@@ -154,6 +159,12 @@ class CodeDataContainer : public HeapObject {
   DECL_GETTER(source_position_table, ByteArray)
   DECL_GETTER(bytecode_offset_table, ByteArray)
 
+  Address OffHeapInstructionStart(Isolate* isolate, Address pc) const;
+  Address OffHeapInstructionEnd(Isolate* isolate, Address pc) const;
+
+  inline Address InstructionStart(Isolate* isolate, Address pc) const;
+  inline Address InstructionEnd(Isolate* isolate, Address pc) const;
+
 #endif  // V8_EXTERNAL_CODE_SPACE
 
   DECL_CAST(CodeDataContainer)
@@ -190,13 +201,15 @@ class CodeDataContainer : public HeapObject {
   class BodyDescriptor;
 
   // Flags layout.
-#define FLAGS_BIT_FIELDS(V, _) \
-  V(KindField, CodeKind, 4, _) \
-  /* The other 12 bits are still free. */
+#define FLAGS_BIT_FIELDS(V, _)      \
+  V(KindField, CodeKind, 4, _)      \
+  V(IsTurbofannedField, bool, 1, _) \
+  V(IsOffHeapTrampoline, bool, 1, _)
+  /* The other 10 bits are still free. */
 
   DEFINE_BIT_FIELDS(FLAGS_BIT_FIELDS)
 #undef FLAGS_BIT_FIELDS
-  static_assert(FLAGS_BIT_FIELDS_Ranges::kBitsCount == 4);
+  static_assert(FLAGS_BIT_FIELDS_Ranges::kBitsCount == 6);
   static_assert(!V8_EXTERNAL_CODE_SPACE_BOOL ||
                 (FLAGS_BIT_FIELDS_Ranges::kBitsCount <=
                  FIELD_SIZE(CodeDataContainer::kFlagsOffset) * kBitsPerByte));
@@ -763,6 +776,56 @@ V8_EXPORT_PRIVATE Address OffHeapUnwindingInfoAddress(HeapObject code,
 V8_EXPORT_PRIVATE int OffHeapUnwindingInfoSize(HeapObject code,
                                                Builtin builtin);
 
+class CodeLookupResult {
+ public:
+  CodeLookupResult() = default;
+  explicit CodeLookupResult(Code code) : code_(code) {}
+#ifdef V8_EXTERNAL_CODE_SPACE
+  explicit CodeLookupResult(CodeDataContainer code_data_container)
+      : code_data_container_(code_data_container) {}
+#endif
+
+  bool IsFound() const {
+#ifdef V8_EXTERNAL_CODE_SPACE
+    return !code_.is_null() || !code_data_container_.is_null();
+#else
+    return !code_.is_null();
+#endif
+  }
+
+  bool IsEmbeddedBuiltinCode() const {
+#ifdef V8_EXTERNAL_CODE_SPACE
+    return code_.is_null();
+#else
+    return false;
+#endif
+  }
+
+  Code code() const {
+    DCHECK(!IsEmbeddedBuiltinCode());
+    return code_;
+  }
+
+  CodeDataContainer code_data_container() const {
+#ifdef V8_EXTERNAL_CODE_SPACE
+    DCHECK(IsEmbeddedBuiltinCode());
+    DCHECK(!code_data_container_.is_null());
+    return code_data_container_;
+#else
+    UNREACHABLE();
+#endif
+  }
+
+  inline Code ToCode() const;
+  inline CodeT ToCodeT() const;
+
+ private:
+  Code code_;
+#ifdef V8_EXTERNAL_CODE_SPACE
+  CodeDataContainer code_data_container_;
+#endif
+};
+
 class Code::OptimizedCodeIterator {
  public:
   explicit OptimizedCodeIterator(Isolate* isolate);
@@ -782,6 +845,11 @@ class Code::OptimizedCodeIterator {
 // when V8_EXTERNAL_CODE_SPACE is enabled.
 inline CodeT ToCodeT(Code code);
 inline Handle<CodeT> ToCodeT(Handle<Code> code, Isolate* isolate);
+inline MaybeHandle<CodeT> ToCodeT(MaybeHandle<Code> maybe_code,
+                                  Isolate* isolate);
+inline CodeT ToCodeT(Code code, CodeDataContainer code_data_container);
+inline Handle<CodeT> ToCodeT(Handle<Code> code,
+                             Handle<CodeDataContainer> code_data_container);
 inline Code FromCodeT(CodeT code);
 inline Code FromCodeT(CodeT code, RelaxedLoadTag);
 inline Code FromCodeT(CodeT code, AcquireLoadTag);

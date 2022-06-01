@@ -57,6 +57,7 @@
 #include "src/ic/ic.h"
 #include "src/numbers/hash-seed-inl.h"
 #include "src/objects/call-site-info-inl.h"
+#include "src/objects/code.h"
 #include "src/objects/elements.h"
 #include "src/objects/field-type.h"
 #include "src/objects/heap-number-inl.h"
@@ -252,16 +253,16 @@ static void CheckFindCodeObject(Isolate* isolate) {
   Address obj_addr = obj.address();
 
   for (int i = 0; i < obj.Size(cage_base); i += kTaggedSize) {
-    Object found = isolate->FindCodeObject(obj_addr + i);
-    CHECK_EQ(*code, found);
+    CodeLookupResult lookup_result = isolate->FindCodeObject(obj_addr + i);
+    CHECK_EQ(*code, lookup_result.ToCode());
   }
 
   Handle<Code> copy =
       Factory::CodeBuilder(isolate, desc, CodeKind::FOR_TESTING).Build();
   HeapObject obj_copy = HeapObject::cast(*copy);
-  Object not_right = isolate->FindCodeObject(obj_copy.address() +
-                                             obj_copy.Size(cage_base) / 2);
-  CHECK(not_right != *code);
+  CodeLookupResult not_right = isolate->FindCodeObject(
+      obj_copy.address() + obj_copy.Size(cage_base) / 2);
+  CHECK(not_right.ToCode() != *code);
 }
 
 

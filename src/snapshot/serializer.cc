@@ -131,7 +131,7 @@ void Serializer::SerializeObject(Handle<HeapObject> obj) {
   if (obj->IsThinString(isolate())) {
     obj = handle(ThinString::cast(*obj).actual(isolate()), isolate());
   } else if (obj->IsCodeT(isolate())) {
-    Code code = FromCodeT(CodeT::cast(*obj));
+    CodeT code = CodeT::cast(*obj);
     if (code.kind() == CodeKind::BASELINE) {
       // For now just serialize the BytecodeArray instead of baseline code.
       // TODO(v8:11429,pthier): Handle Baseline code in cases we want to
@@ -947,14 +947,20 @@ void Serializer::ObjectSerializer::VisitCodePointer(HeapObject host,
   PtrComprCageBase code_cage_base(isolate());
 #endif
   Object contents = slot.load(code_cage_base);
-  DCHECK(HAS_STRONG_HEAP_OBJECT_TAG(contents.ptr()));
-  DCHECK(contents.IsCode());
 
-  Handle<HeapObject> obj = handle(HeapObject::cast(contents), isolate());
-  if (!serializer_->SerializePendingObject(*obj)) {
-    serializer_->SerializeObject(obj);
+  if (HAS_SMI_TAG(contents.ptr())) {
+    DCHECK(CodeDataContainer::cast(host).is_off_heap_trampoline());
+    OutputRawData((slot + 1).address());
+  } else {
+    DCHECK(HAS_STRONG_HEAP_OBJECT_TAG(contents.ptr()));
+    DCHECK(contents.IsCode());
+
+    Handle<HeapObject> obj = handle(HeapObject::cast(contents), isolate());
+    if (!serializer_->SerializePendingObject(*obj)) {
+      serializer_->SerializeObject(obj);
+    }
+    bytes_processed_so_far_ += kTaggedSize;
   }
-  bytes_processed_so_far_ += kTaggedSize;
 }
 
 void Serializer::ObjectSerializer::OutputExternalReference(

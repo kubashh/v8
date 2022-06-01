@@ -241,7 +241,7 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
       RelocInfo* rinfo = on_heap_it.rinfo();
       DCHECK_EQ(rinfo->rmode(), off_heap_it.rinfo()->rmode());
       Code target = Code::GetCodeFromTargetAddress(rinfo->target_address());
-      CHECK(Builtins::IsIsolateIndependentBuiltin(target));
+      CHECK(Builtins::IsIsolateIndependentBuiltin(ToCodeT(target)));
 
       // Do not emit write-barrier for off-heap writes.
       off_heap_it.rinfo()->set_target_address(
@@ -277,7 +277,8 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
   static_assert(Builtins::kAllBuiltinsAreIsolateIndependent);
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
        ++builtin) {
-    Code code = FromCodeT(builtins->code(builtin));
+    CodeT codet = builtins->code(builtin);
+    Code code = FromCodeT(codet);
 
     // Sanity-check that the given builtin is isolate-independent and does not
     // use the trampoline register in its calling convention.

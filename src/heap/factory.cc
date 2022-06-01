@@ -11,6 +11,7 @@
 
 #include "src/ast/ast-source-ranges.h"
 #include "src/base/bits.h"
+#include "src/base/logging.h"
 #include "src/builtins/accessors.h"
 #include "src/builtins/constants-table-builder.h"
 #include "src/codegen/compilation-cache.h"
@@ -94,8 +95,8 @@ Factory::CodeBuilder::CodeBuilder(LocalIsolate* local_isolate,
       kind_(kind),
       position_table_(isolate_->factory()->empty_byte_array()) {}
 
-MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
-    bool retry_allocation_or_fail) {
+std::pair<MaybeHandle<Code>, MaybeHandle<CodeDataContainer>>
+Factory::CodeBuilder::BuildInternal(bool retry_allocation_or_fail) {
   const auto factory = isolate_->factory();
   // Allocate objects needed for code initialization.
   Handle<ByteArray> reloc_info =
@@ -108,7 +109,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
   // Use a canonical off-heap trampoline CodeDataContainer if possible.
   const int32_t promise_rejection_flag =
       Code::IsPromiseRejectionField::encode(true);
-  if (read_only_data_container_ &&
+  if (!V8_EXTERNAL_CODE_SPACE_BOOL && read_only_data_container_ &&
       (kind_specific_flags_ == 0 ||
        kind_specific_flags_ == promise_rejection_flag)) {
     const ReadOnlyRoots roots(isolate_);
@@ -129,10 +130,18 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
                                        : AllocationType::kOld);
     }
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      data_container->initialize_flags(kind_, builtin_);
+      const bool set_is_off_heap_trampoline = read_only_data_container_;
+      data_container->initialize_flags(kind_, builtin_, is_turbofanned_,
+                                       set_is_off_heap_trampoline);
     }
     data_container->set_kind_specific_flags(kind_specific_flags_,
                                             kRelaxedStore);
+  }
+
+  if (V8_EXTERNAL_CODE_SPACE_BOOL && read_only_data_container_) {
+    DCHECK_IMPLIES(read_only_data_container_, Builtins::IsBuiltinId(builtin_));
+    data_container->set_code_entry_point(isolate_, off_heap_entry_point_);
+    return {{}, data_container};
   }
 
   // Basic block profiling data for builtins is stored in the JS heap rather
@@ -159,10 +168,10 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
   if (CompiledWithConcurrentBaseline()) {
     if (!AllocateConcurrentSparkplugCode(retry_allocation_or_fail)
              .ToHandle(&code)) {
-      return MaybeHandle<Code>();
+      return {{}, {}};
     }
   } else if (!AllocateCode(retry_allocation_or_fail).ToHandle(&code)) {
-    return MaybeHandle<Code>();
+    return {{}, {}};
   }
 
   {
@@ -232,8 +241,12 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     raw_code.clear_padding();
 
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+      // if (read_only_data_container_) {
+      //   data_container->set_code_entry_point(isolate_, );
+      // } else {
       raw_code.set_main_cage_base(isolate_->cage_base(), kRelaxedStore);
       data_container->SetCodeAndEntryPoint(isolate_, raw_code);
+      // }
     }
 #ifdef VERIFY_HEAP
     if (FLAG_verify_heap) HeapObject::VerifyCodePointer(isolate_, raw_code);
@@ -262,7 +275,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
 #endif  // ENABLE_DISASSEMBLER
   }
 
-  return code;
+  return {code, data_container};
 }
 
 // TODO(victorgomes): Unify the two AllocateCodes
@@ -324,11 +337,29 @@ MaybeHandle<Code> Factory::CodeBuilder::AllocateConcurrentSparkplugCode(
 }
 
 MaybeHandle<Code> Factory::CodeBuilder::TryBuild() {
-  return BuildInternal(false);
+  return BuildInternal(false).first;
+}
+
+MaybeHandle<CodeT> Factory::CodeBuilder::TryBuildT() {
+  auto pair = BuildInternal(false);
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return pair.second;
+#else
+  return pair.first;
+#endif
 }
 
 Handle<Code> Factory::CodeBuilder::Build() {
-  return BuildInternal(true).ToHandleChecked();
+  return BuildInternal(true).first.ToHandleChecked();
+}
+
+Handle<CodeT> Factory::CodeBuilder::BuildT() {
+  auto pair = BuildInternal(true);
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return pair.second.ToHandleChecked();
+#else
+  return pair.first.ToHandleChecked();
+#endif
 }
 
 HeapObject Factory::AllocateRaw(int size, AllocationType allocation,
@@ -2287,23 +2318,28 @@ Handle<DeoptimizationLiteralArray> Factory::NewDeoptimizationLiteralArray(
       NewWeakFixedArray(length, AllocationType::kOld));
 }
 
-Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
-                                              Address off_heap_entry) {
+Handle<CodeT> Factory::NewOffHeapTrampolineFor(Handle<CodeT> code,
+                                               Address off_heap_entry) {
   CHECK_NOT_NULL(isolate()->embedded_blob_code());
   CHECK_NE(0, isolate()->embedded_blob_code_size());
   CHECK(Builtins::IsIsolateIndependentBuiltin(*code));
 
   bool generate_jump_to_instruction_stream =
       Builtins::CodeObjectIsExecutable(code->builtin_id());
-  Handle<Code> result = Builtins::GenerateOffHeapTrampolineFor(
-      isolate(), off_heap_entry,
-      code->code_data_container(kAcquireLoad).kind_specific_flags(kRelaxedLoad),
+  Handle<CodeT> result = Builtins::GenerateOffHeapTrampolineFor(
+      isolate(), off_heap_entry, code->kind(), code->builtin_id(),
+      CodeDataContainerFromCodeT(*code).kind_specific_flags(kRelaxedLoad),
       generate_jump_to_instruction_stream);
+
+  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+    return result;
+  }
 
   // Trampolines may not contain any metadata since all metadata offsets,
   // stored on the Code object, refer to the off-heap metadata area.
+#ifndef V8_EXTERNAL_CODE_SPACE
   CHECK_EQ(result->raw_metadata_size(), 0);
-
+#endif
   // The CodeDataContainer should not be modified beyond this point since it's
   // now possibly canonicalized.
 
@@ -2311,9 +2347,9 @@ Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
   // builtin (e.g. the safepoint-table offset). We set them manually here.
   {
     DisallowGarbageCollection no_gc;
-    CodePageMemoryModificationScope code_allocation(*result);
-    Code raw_code = *code;
-    Code raw_result = *result;
+    Code raw_result = FromCodeT(*result);
+    CodePageMemoryModificationScope code_allocation(raw_result);
+    Code raw_code = FromCodeT(*code);
 
     const bool set_is_off_heap_trampoline = true;
     raw_result.initialize_flags(raw_code.kind(), raw_code.is_turbofanned(),
@@ -2348,8 +2384,9 @@ Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
       // the value of the instruction start, so update it here.
       code_data_container.UpdateCodeEntryPoint(isolate(), raw_result);
       // Also update flag values cached on the code data container.
-      code_data_container.initialize_flags(raw_code.kind(),
-                                           raw_code.builtin_id());
+      code_data_container.initialize_flags(
+          raw_code.kind(), raw_code.builtin_id(), raw_code.is_turbofanned(),
+          set_is_off_heap_trampoline);
     }
   }
 
@@ -2389,7 +2426,9 @@ Handle<Code> Factory::CopyCode(Handle<Code> code) {
 #endif
   }
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    data_container->initialize_flags(code->kind(), code->builtin_id());
+    data_container->initialize_flags(code->kind(), code->builtin_id(),
+                                     code->is_turbofanned(),
+                                     code->is_off_heap_trampoline());
     data_container->SetCodeAndEntryPoint(isolate(), *new_code);
   }
 
@@ -3945,7 +3984,7 @@ Handle<JSFunction> Factory::JSFunctionBuilder::Build() {
   PrepareMap();
   PrepareFeedbackCell();
 
-  Handle<Code> code = handle(FromCodeT(sfi_->GetCode()), isolate_);
+  Handle<CodeT> code = handle(sfi_->GetCode(), isolate_);
   Handle<JSFunction> result = BuildRaw(code);
 
   if (code->kind() == CodeKind::BASELINE) {
@@ -3957,7 +3996,7 @@ Handle<JSFunction> Factory::JSFunctionBuilder::Build() {
   return result;
 }
 
-Handle<JSFunction> Factory::JSFunctionBuilder::BuildRaw(Handle<Code> code) {
+Handle<JSFunction> Factory::JSFunctionBuilder::BuildRaw(Handle<CodeT> code) {
   Isolate* isolate = isolate_;
   Factory* factory = isolate_->factory();
 

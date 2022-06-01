@@ -23,6 +23,7 @@
 #include "src/objects/js-regexp.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/string.h"
+#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -703,8 +704,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   // Allocates a new code object and initializes it as the trampoline to the
   // given off-heap entry point.
-  Handle<Code> NewOffHeapTrampolineFor(Handle<Code> code,
-                                       Address off_heap_entry);
+  Handle<CodeT> NewOffHeapTrampolineFor(Handle<CodeT> code,
+                                        Address off_heap_entry);
 
   Handle<Code> CopyCode(Handle<Code> code);
 
@@ -868,7 +869,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     void PrepareMap();
     void PrepareFeedbackCell();
 
-    V8_WARN_UNUSED_RESULT Handle<JSFunction> BuildRaw(Handle<Code> code);
+    V8_WARN_UNUSED_RESULT Handle<JSFunction> BuildRaw(Handle<CodeT> code);
 
     Isolate* const isolate_;
     Handle<SharedFunctionInfo> sfi_;
@@ -893,9 +894,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     // Builds a new code object (fully initialized). All header fields of the
     // returned object are immutable and the code object is write protected.
     V8_WARN_UNUSED_RESULT Handle<Code> Build();
+    V8_WARN_UNUSED_RESULT Handle<CodeT> BuildT();
     // Like Build, builds a new code object. May return an empty handle if the
     // allocation fails.
     V8_WARN_UNUSED_RESULT MaybeHandle<Code> TryBuild();
+    V8_WARN_UNUSED_RESULT MaybeHandle<CodeT> TryBuildT();
 
     // Sets the self-reference object in which a reference to the code object is
     // stored. This allows generated code to reference its own Code object by
@@ -957,7 +960,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     }
 
     CodeBuilder& set_is_executable(bool executable) {
-      DCHECK_EQ(kind_, CodeKind::BUILTIN);
+      // DCHECK_EQ(kind_, CodeKind::BUILTIN);
+      DCHECK(kind_ == CodeKind::BUILTIN || kind_ == CodeKind::BYTECODE_HANDLER);
       is_executable_ = executable;
       return *this;
     }
@@ -966,8 +970,13 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     // As an optimization, if the kind-specific flags match that of a canonical
     // container, it will be used instead.
     CodeBuilder& set_read_only_data_container(bool read_only) {
-      CHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !read_only);
+      // CHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !read_only);
       read_only_data_container_ = read_only;
+      return *this;
+    }
+
+    CodeBuilder& set_off_heap_entry_point(Address off_heap_entry_point) {
+      off_heap_entry_point_ = off_heap_entry_point;
       return *this;
     }
 
@@ -989,7 +998,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     inline bool CompiledWithConcurrentBaseline() const;
 
    private:
-    MaybeHandle<Code> BuildInternal(bool retry_allocation_or_fail);
+    std::pair<MaybeHandle<Code>, MaybeHandle<CodeDataContainer>> BuildInternal(
+        bool retry_allocation_or_fail);
     MaybeHandle<Code> AllocateCode(bool retry_allocation_or_fail);
     MaybeHandle<Code> AllocateConcurrentSparkplugCode(
         bool retry_allocation_or_fail);
@@ -1011,6 +1021,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
         DeoptimizationData::Empty(isolate_);
     Handle<HeapObject> interpreter_data_;
     BasicBlockProfilerData* profiler_data_ = nullptr;
+    Address off_heap_entry_point_ = kNullAddress;
     bool is_executable_ = true;
     bool read_only_data_container_ = false;
     bool is_turbofanned_ = false;

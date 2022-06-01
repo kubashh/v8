@@ -257,8 +257,9 @@ static void PrintRelocInfo(std::ostringstream& out, Isolate* isolate,
     out << "    ;; external reference (" << reference_name << ")";
   } else if (RelocInfo::IsCodeTargetMode(rmode)) {
     out << "    ;; code:";
-    Code code = isolate->heap()->GcSafeFindCodeForInnerPointer(
-        relocinfo->target_address());
+    Code code = isolate->heap()
+                    ->GcSafeFindCodeForInnerPointer(relocinfo->target_address())
+                    .code();
     CodeKind kind = code.kind();
     if (code.is_builtin()) {
       out << " Builtin::" << Builtins::name(code.builtin_id());

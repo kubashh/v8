@@ -295,6 +295,23 @@ inline MaybeHandle<CodeT> ToCodeT(MaybeHandle<Code> maybe_code,
 #endif
 }
 
+inline CodeT ToCodeT(Code code, CodeDataContainer code_data_container) {
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return code_data_container;
+#else
+  return code;
+#endif
+}
+
+inline Handle<CodeT> ToCodeT(Handle<Code> code,
+                             Handle<CodeDataContainer> code_data_container) {
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return code_data_container;
+#else
+  return code;
+#endif
+}
+
 inline Code FromCodeT(CodeT code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
   return code.code();
@@ -329,6 +346,22 @@ inline CodeDataContainer CodeDataContainerFromCodeT(CodeT code) {
   return code;
 #else
   return code.code_data_container(kAcquireLoad);
+#endif
+}
+
+Code CodeLookupResult::ToCode() const {
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return IsEmbeddedBuiltinCode() ? FromCodeT(code_data_container()) : code();
+#else
+  return code();
+#endif
+}
+
+CodeT CodeLookupResult::ToCodeT() const {
+#ifdef V8_EXTERNAL_CODE_SPACE
+  return IsEmbeddedBuiltinCode() ? code_data_container() : i::ToCodeT(code());
+#else
+  return code();
 #endif
 }
 
@@ -418,11 +451,30 @@ Address Code::InstructionStart(Isolate* isolate, Address pc) const {
              : raw_instruction_start();
 }
 
+#ifdef V8_EXTERNAL_CODE_SPACE
+Address CodeDataContainer::InstructionStart(Isolate* isolate,
+                                            Address pc) const {
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  return V8_UNLIKELY(is_off_heap_trampoline())
+             ? OffHeapInstructionStart(isolate, pc)
+             : raw_instruction_start();
+}
+#endif
+
 Address Code::InstructionEnd(Isolate* isolate, Address pc) const {
   return V8_UNLIKELY(is_off_heap_trampoline())
              ? OffHeapInstructionEnd(isolate, pc)
              : raw_instruction_end();
 }
+
+#ifdef V8_EXTERNAL_CODE_SPACE
+Address CodeDataContainer::InstructionEnd(Isolate* isolate, Address pc) const {
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  return V8_UNLIKELY(is_off_heap_trampoline())
+             ? OffHeapInstructionEnd(isolate, pc)
+             : code().raw_instruction_end();
+}
+#endif
 
 int Code::GetOffsetFromInstructionStart(Isolate* isolate, Address pc) const {
   Address instruction_start = InstructionStart(isolate, pc);
@@ -651,17 +703,39 @@ inline bool Code::checks_tiering_state() const {
          (CodeKindCanDeoptimize(kind()) && marked_for_deoptimization());
 }
 
-inline bool Code::has_tagged_outgoing_params() const {
-  return kind() != CodeKind::JS_TO_WASM_FUNCTION &&
-         kind() != CodeKind::C_WASM_ENTRY && kind() != CodeKind::WASM_FUNCTION;
+inline bool HasTaggedOutgoingParams(CodeKind kind) {
+  return kind != CodeKind::JS_TO_WASM_FUNCTION &&
+         kind != CodeKind::C_WASM_ENTRY && kind != CodeKind::WASM_FUNCTION;
 }
+
+inline bool Code::has_tagged_outgoing_params() const {
+  return HasTaggedOutgoingParams(kind());
+}
+
+#ifdef V8_EXTERNAL_CODE_SPACE
+inline bool CodeDataContainer::has_tagged_outgoing_params() const {
+  return HasTaggedOutgoingParams(kind());
+}
+#endif
 
 inline bool Code::is_turbofanned() const {
   const uint32_t flags = RELAXED_READ_UINT32_FIELD(*this, kFlagsOffset);
   return IsTurbofannedField::decode(flags);
 }
 
+#ifdef V8_EXTERNAL_CODE_SPACE
+inline bool CodeDataContainer::is_turbofanned() const {
+  return IsTurbofannedField::decode(flags(kRelaxedLoad));
+}
+#endif
+
 bool Code::is_maglevved() const { return kind() == CodeKind::MAGLEV; }
+
+#ifdef V8_EXTERNAL_CODE_SPACE
+inline bool CodeDataContainer::is_maglevved() const {
+  return kind() == CodeKind::MAGLEV;
+}
+#endif
 
 inline bool Code::can_have_weak_objects() const {
   DCHECK(CodeKindIsOptimizedJSFunction(kind()));
@@ -1052,11 +1126,18 @@ void CodeDataContainer::UpdateCodeEntryPoint(Isolate* isolate_for_sandbox,
   set_code_entry_point(isolate_for_sandbox, code.InstructionStart());
 }
 
+void CodeDataContainer::SetOffHeapCodeEntryPoint(Isolate* isolate_for_sandbox,
+                                                 Address entry_point) {
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  DCHECK_EQ(raw_code(), Smi::zero());
+  set_code_entry_point(isolate_for_sandbox, entry_point);
+}
+
 Address CodeDataContainer::InstructionStart() const {
   return code_entry_point();
 }
 
-Address CodeDataContainer::raw_instruction_start() {
+Address CodeDataContainer::raw_instruction_start() const {
   return code_entry_point();
 }
 
@@ -1075,9 +1156,13 @@ RELAXED_UINT16_ACCESSORS(CodeDataContainer, flags, kFlagsOffset)
 static_assert(static_cast<int>(Builtin::kNoBuiltinId) == -1);
 static_assert(Builtins::kBuiltinCount < std::numeric_limits<int16_t>::max());
 
-void CodeDataContainer::initialize_flags(CodeKind kind, Builtin builtin_id) {
+void CodeDataContainer::initialize_flags(CodeKind kind, Builtin builtin_id,
+                                         bool is_turbofanned,
+                                         bool is_off_heap_trampoline) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
-  uint16_t value = KindField::encode(kind);
+  uint16_t value = KindField::encode(kind) |
+                   IsTurbofannedField::encode(is_turbofanned) |
+                   IsOffHeapTrampoline::encode(is_off_heap_trampoline);
   set_flags(value, kRelaxedStore);
 
   WriteField<int16_t>(kBuiltinIdOffset, static_cast<int16_t>(builtin_id));
@@ -1104,12 +1189,24 @@ bool CodeDataContainer::is_builtin() const {
   return builtin_id() != Builtin::kNoBuiltinId;
 }
 
+bool CodeDataContainer::is_off_heap_trampoline() const {
+  return IsOffHeapTrampoline::decode(flags(kRelaxedLoad));
+}
+
 bool CodeDataContainer::is_optimized_code() const {
   return CodeKindIsOptimizedJSFunction(kind());
 }
 
 inline bool CodeDataContainer::is_interpreter_trampoline_builtin() const {
   return IsInterpreterTrampolineBuiltin(builtin_id());
+}
+
+inline bool CodeDataContainer::is_baseline_trampoline_builtin() const {
+  return IsBaselineTrampolineBuiltin(builtin_id());
+}
+
+inline bool CodeDataContainer::is_baseline_leave_frame_builtin() const {
+  return builtin_id() == Builtin::kBaselineLeaveFrame;
 }
 
 //
@@ -1124,10 +1221,6 @@ inline bool CodeDataContainer::is_interpreter_trampoline_builtin() const {
   DEF_GETTER(CodeDataContainer, name, type) { \
     return FromCodeT(*this).name(cage_base);  \
   }
-
-DEF_PRIMITIVE_FORWARDING_CDC_GETTER(is_maglevved, bool)
-DEF_PRIMITIVE_FORWARDING_CDC_GETTER(is_turbofanned, bool)
-DEF_PRIMITIVE_FORWARDING_CDC_GETTER(is_off_heap_trampoline, bool)
 
 DEF_FORWARDING_CDC_GETTER(deoptimization_data, FixedArray)
 DEF_FORWARDING_CDC_GETTER(bytecode_or_interpreter_data, HeapObject)

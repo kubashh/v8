@@ -34,6 +34,7 @@
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/flush-instruction-cache.h"
 #include "src/common/assert-scope.h"
+#include "src/common/globals.h"
 #include "src/common/ptr-compr-inl.h"
 #include "src/compiler-dispatcher/lazy-compile-dispatcher.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
@@ -419,7 +420,7 @@ size_t Isolate::HashIsolateForEmbeddedBlob() {
   // Hash data sections of builtin code objects.
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
        ++builtin) {
-    Code code = FromCodeT(builtins()->code(builtin));
+    CodeT code = builtins()->code(builtin);
 
     DCHECK(Internals::HasHeapObjectTag(code.ptr()));
     uint8_t* const code_ptr =
@@ -442,7 +443,10 @@ size_t Isolate::HashIsolateForEmbeddedBlob() {
     static_assert(Code::kBuiltinIndexOffset == Code::kFlagsOffsetEnd + 1);
     static constexpr int kStartOffset = Code::kBuiltinIndexOffset;
 
-    for (int j = kStartOffset; j < Code::kUnalignedHeaderSize; j++) {
+    const int header_size = V8_EXTERNAL_CODE_SPACE_BOOL
+                                ? CodeT::kHeaderSize
+                                : Code::kUnalignedHeaderSize;
+    for (int j = kStartOffset; j < header_size; j++) {
       hash = base::hash_combine(hash, size_t{code_ptr[j]});
     }
   }
@@ -2269,21 +2273,23 @@ Isolate::CatchType Isolate::PredictExceptionCatcher() {
       }
 
       case StackFrame::STUB: {
-        Handle<Code> code(frame->LookupCode(), this);
-        if (!code->IsCode() || code->kind() != CodeKind::BUILTIN ||
-            !code->has_handler_table() || !code->is_turbofanned()) {
+        Code code = frame->LookupCode();
+        if (!code.IsCode() || code.kind() != CodeKind::BUILTIN ||
+            !code.has_handler_table() || !code.is_turbofanned()) {
           break;
         }
 
-        CatchType prediction = ToCatchType(code->GetBuiltinCatchPrediction());
+        CatchType prediction = ToCatchType(code.GetBuiltinCatchPrediction());
         if (prediction != NOT_CAUGHT) return prediction;
-      } break;
+        break;
+      }
 
       case StackFrame::JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH: {
-        Handle<Code> code(frame->LookupCode(), this);
-        CatchType prediction = ToCatchType(code->GetBuiltinCatchPrediction());
+        Code code = frame->LookupCode();
+        CatchType prediction = ToCatchType(code.GetBuiltinCatchPrediction());
         if (prediction != NOT_CAUGHT) return prediction;
-      } break;
+        break;
+      }
 
       default:
         // All other types can not handle exception.
@@ -3671,13 +3677,12 @@ void CreateOffHeapTrampolines(Isolate* isolate) {
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
        ++builtin) {
     Address instruction_start = d.InstructionStartOfBuiltin(builtin);
-    // TODO(v8:11880): avoid roundtrips between cdc and code.
-    Handle<Code> trampoline = isolate->factory()->NewOffHeapTrampolineFor(
-        FromCodeT(builtins->code_handle(builtin), isolate), instruction_start);
+    Handle<CodeT> trampoline = isolate->factory()->NewOffHeapTrampolineFor(
+        builtins->code_handle(builtin), instruction_start);
 
     // From this point onwards, the old builtin code object is unreachable and
     // will be collected by the next GC.
-    builtins->set_code(builtin, ToCodeT(*trampoline));
+    builtins->set_code(builtin, *trampoline);
   }
 }
 
@@ -4547,7 +4552,7 @@ int Isolate::GenerateIdentityHash(uint32_t mask) {
   return hash != 0 ? hash : 1;
 }
 
-Code Isolate::FindCodeObject(Address a) {
+CodeLookupResult Isolate::FindCodeObject(Address a) {
   return heap()->GcSafeFindCodeForInnerPointer(a);
 }
 

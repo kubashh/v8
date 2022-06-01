@@ -1904,7 +1904,7 @@ void TurboAssembler::Jump(Handle<CodeT> code, RelocInfo::Mode rmode,
                           Condition cond) {
   DCHECK(RelocInfo::IsCodeTarget(rmode));
   DCHECK_IMPLIES(options().isolate_independent_code,
-                 Builtins::IsIsolateIndependentBuiltin(FromCodeT(*code)));
+                 Builtins::IsIsolateIndependentBuiltin(*code));
 
   if (options().inline_offheap_trampolines) {
     Builtin builtin = Builtin::kNoBuiltinId;
@@ -1950,7 +1950,7 @@ void TurboAssembler::Call(Address target, RelocInfo::Mode rmode) {
 
 void TurboAssembler::Call(Handle<CodeT> code, RelocInfo::Mode rmode) {
   DCHECK_IMPLIES(options().isolate_independent_code,
-                 Builtins::IsIsolateIndependentBuiltin(FromCodeT(*code)));
+                 Builtins::IsIsolateIndependentBuiltin(*code));
   BlockPoolsScope scope(this);
 
   if (options().inline_offheap_trampolines) {

@@ -181,9 +181,9 @@ FullObjectSlot Builtins::builtin_tier0_slot(Builtin builtin) {
 
 void Builtins::set_code(Builtin builtin, CodeT code) {
   DCHECK_EQ(builtin, code.builtin_id());
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    DCHECK_EQ(builtin, FromCodeT(code).builtin_id());
-  }
+  // if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+  //   DCHECK_EQ(builtin, FromCodeT(code).builtin_id());
+  // }
   DCHECK(Internals::HasHeapObjectTag(code.ptr()));
   // The given builtin may be uninitialized thus we cannot check its type here.
   isolate_->builtin_table()[Builtins::ToInt(builtin)] = code.ptr();
@@ -302,7 +302,7 @@ bool Builtins::IsBuiltinHandle(Handle<HeapObject> maybe_code,
 }
 
 // static
-bool Builtins::IsIsolateIndependentBuiltin(const Code code) {
+bool Builtins::IsIsolateIndependentBuiltin(CodeT code) {
   const Builtin builtin = code.builtin_id();
   return Builtins::IsBuiltinId(builtin) &&
          Builtins::IsIsolateIndependent(builtin);
@@ -407,9 +407,9 @@ constexpr int OffHeapTrampolineGenerator::kBufferSize;
 }  // namespace
 
 // static
-Handle<Code> Builtins::GenerateOffHeapTrampolineFor(
-    Isolate* isolate, Address off_heap_entry, int32_t kind_specfic_flags,
-    bool generate_jump_to_instruction_stream) {
+Handle<CodeT> Builtins::GenerateOffHeapTrampolineFor(
+    Isolate* isolate, Address off_heap_entry, CodeKind kind, Builtin builtin,
+    int32_t kind_specfic_flags, bool generate_jump_to_instruction_stream) {
   DCHECK_NOT_NULL(isolate->embedded_blob_code());
   DCHECK_NE(0, isolate->embedded_blob_code_size());
 
@@ -420,12 +420,15 @@ Handle<Code> Builtins::GenerateOffHeapTrampolineFor(
                                              ? TrampolineType::kJump
                                              : TrampolineType::kAbort);
 
-  return Factory::CodeBuilder(isolate, desc, CodeKind::BUILTIN)
+  return Factory::CodeBuilder(isolate, desc, kind)  // CodeKind::BUILTIN)
+      .set_builtin(builtin)
       .set_kind_specific_flags(kind_specfic_flags)
-      .set_read_only_data_container(!V8_EXTERNAL_CODE_SPACE_BOOL)
+      .set_read_only_data_container(true)
+      //.set_read_only_data_container(!V8_EXTERNAL_CODE_SPACE_BOOL)
+      .set_off_heap_entry_point(off_heap_entry)
       .set_self_reference(generator.CodeObject())
       .set_is_executable(generate_jump_to_instruction_stream)
-      .Build();
+      .BuildT();
 }
 
 // static

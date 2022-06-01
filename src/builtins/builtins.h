@@ -8,6 +8,7 @@
 #include "src/base/flags.h"
 #include "src/builtins/builtins-definitions.h"
 #include "src/common/globals.h"
+#include "src/objects/code-kind.h"
 
 namespace v8 {
 namespace internal {
@@ -192,7 +193,7 @@ class Builtins {
   bool IsBuiltinHandle(Handle<HeapObject> maybe_code, Builtin* index) const;
 
   // True, iff the given code object is a builtin with off-heap embedded code.
-  static bool IsIsolateIndependentBuiltin(const Code code);
+  static bool IsIsolateIndependentBuiltin(CodeT code);
 
   // True, iff the given builtin contains no isolate-specific code and can be
   // embedded into the binary.
@@ -237,9 +238,9 @@ class Builtins {
   // function.
   // TODO(delphick): Come up with a better name since it may not generate an
   // executable trampoline.
-  static Handle<Code> GenerateOffHeapTrampolineFor(
-      Isolate* isolate, Address off_heap_entry, int32_t kind_specific_flags,
-      bool generate_jump_to_instruction_stream);
+  static Handle<CodeT> GenerateOffHeapTrampolineFor(
+      Isolate* isolate, Address off_heap_entry, CodeKind kind, Builtin builtin,
+      int32_t kind_specific_flags, bool generate_jump_to_instruction_stream);
 
   // Generate the RelocInfo ByteArray that would be generated for an offheap
   // trampoline.
