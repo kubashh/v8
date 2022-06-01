@@ -16,6 +16,57 @@
       "message": "PTAL!",
       "revId": "d1881285ff1d109e17305fb01744b1fa9b989c75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4e8a130_e31c9b09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-01T17:33:19Z",
+      "side": 1,
+      "message": "lgtm with a suggestion",
+      "revId": "d1881285ff1d109e17305fb01744b1fa9b989c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed4ae8b_d7a5bd2b",
+        "filename": "src/deoptimizer/deoptimizer-cfi-builtins.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-01T17:33:19Z",
+      "side": 1,
+      "message": "How about removing this check ...",
+      "revId": "d1881285ff1d109e17305fb01744b1fa9b989c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465164c7_571cfc79",
+        "filename": "src/deoptimizer/deoptimizer-cfi-builtins.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-01T17:33:19Z",
+      "side": 1,
+      "message": "... in favour of:\n  Address offset \u003d address - code_start;\n  CHECK_LT(offset, v8_Default_embedded_blob_code_size_);\n\nBTW, shouldn\u0027t we just return false instead of failing the CHECK?",
+      "revId": "d1881285ff1d109e17305fb01744b1fa9b989c75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
