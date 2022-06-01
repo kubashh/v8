@@ -2,6 +2,7 @@
 # Copyright 2017 the V8 project authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+from uplib.g3src.google3 import basedir
 
 """
 Global system tests for V8 test runners and fuzzers.
@@ -37,7 +38,7 @@ from testrunner.local import command
 from testrunner.local import pool
 
 
-TEST_DATA_ROOT = os.path.join(TOOLS_ROOT, 'unittests', 'testdata')
+TEST_DATA_ROOT = os.path.join(TOOLS_ROOT, 'testrunner', 'testdata')
 
 Result = collections.namedtuple(
     'Result', ['stdout', 'stderr', 'returncode'])
@@ -70,6 +71,9 @@ def temp_base(baseroot='testroot1'):
   """
   basedir = os.path.join(TEST_DATA_ROOT, baseroot)
   with temp_dir() as tempbase:
+    if not os.path.exists(basedir):
+      yield tempbase
+      return
     builddir = os.path.join(tempbase, 'out', 'build')
     testroot = os.path.join(tempbase, 'test')
     os.makedirs(builddir)
@@ -100,7 +104,6 @@ def capture():
     sys.stdout = oldout
     sys.stderr = olderr
 
-
 def run_tests(basedir, *args, **kwargs):
   """Executes the test runner with captured output."""
   with capture() as (stdout, stderr):
@@ -113,8 +116,24 @@ def run_tests(basedir, *args, **kwargs):
     return Result(stdout.getvalue(), stderr.getvalue(), code)
 
 
+def run_tests_with(*args, baseroot='testroot1', config_overrides={}, **kwargs):
+  with temp_base(baseroot=baseroot) as basedir:
+    override_build_config(basedir, **config_overrides)
+    """Executes the test runner with captured output."""
+    with capture() as (stdout, stderr):
+      sys_args = ['--command-prefix', sys.executable] + list(args)
+      if kwargs.get('infra_staging', False):
+        sys_args.append('--infra-staging')
+      else:
+        sys_args.append('--no-infra-staging')
+      code = standard_runner.StandardTestRunner(basedir=basedir).execute(sys_args)
+      return Result(stdout.getvalue(), stderr.getvalue(), code)      
+
+
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
+  if not kwargs:
+    return
   path = os.path.join(basedir, 'out', 'build', 'v8_build_config.json')
   with open(path) as f:
     config = json.load(f)
@@ -126,130 +145,91 @@ def override_build_config(basedir, **kwargs):
 class SystemTest(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
-    # Try to set up python coverage and run without it if not available.
-    cls._cov = None
-    try:
-      import coverage
-      if int(coverage.__version__.split('.')[0]) < 4:
-        cls._cov = None
-        print('Python coverage version >= 4 required.')
-        raise ImportError()
-      cls._cov = coverage.Coverage(
-          source=([os.path.join(TOOLS_ROOT, 'testrunner')]),
-          omit=['*unittest*', '*__init__.py'],
-      )
-      cls._cov.exclude('raise NotImplementedError')
-      cls._cov.exclude('if __name__ == .__main__.:')
-      cls._cov.exclude('except TestRunnerError:')
-      cls._cov.exclude('except KeyboardInterrupt:')
-      cls._cov.exclude('if options.verbose:')
-      cls._cov.exclude('if verbose:')
-      cls._cov.exclude('pass')
-      cls._cov.exclude('assert False')
-      cls._cov.start()
-    except ImportError:
-      print('Running without python coverage.')
     command.setup_testing()
     pool.setup_testing()
-
-  @classmethod
-  def tearDownClass(cls):
-    if cls._cov:
-      cls._cov.stop()
-      print('')
-      print(cls._cov.report(show_missing=True))
 
   def testPass(self):
     """Test running only passing tests in two variants.
 
     Also test printing durations.
     """
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default,stress',
-          '--time',
-          'sweet/bananas',
-          'sweet/raspberries',
-      )
-      self.assertIn('sweet/bananas default: PASS', result.stdout, result)
-      # TODO(majeski): Implement for test processors
-      # self.assertIn('Total time:', result.stderr, result)
-      # self.assertIn('sweet/bananas', result.stderr, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default,stress',
+        '--time',
+        'sweet/bananas',
+        'sweet/raspberries',
+    )
+    self.assertIn('sweet/bananas default: PASS', result.stdout, result)
+    # TODO(majeski): Implement for test processors
+    # self.assertIn('Total time:', result.stderr, result)
+    # self.assertIn('sweet/bananas', result.stderr, result)
+    self.assertEqual(0, result.returncode, result)
 
   def testPassHeavy(self):
     """Test running with some tests marked heavy."""
-    with temp_base(baseroot='testroot3') as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=nooptimization',
-          '-j2',
-          'sweet',
-      )
-      self.assertIn('7 tests ran', result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=nooptimization',
+        '-j2',
+        'sweet',
+        baseroot='testroot3',
+    )
+    self.assertIn('7 tests ran', result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
   def testShardedProc(self):
-    with temp_base() as basedir:
-      for shard in [1, 2]:
-        result = run_tests(
-            basedir,
-            '--progress=verbose',
-            '--variants=default,stress',
-            '--shard-count=2',
-            '--shard-run=%d' % shard,
-            'sweet/blackberries',
-            'sweet/raspberries',
-            infra_staging=False,
-        )
-        # One of the shards gets one variant of each test.
-        self.assertIn('2 tests ran', result.stdout, result)
-        if shard == 1:
-          self.assertIn('sweet/raspberries default', result.stdout, result)
-          self.assertIn('sweet/raspberries stress', result.stdout, result)
-          self.assertEqual(0, result.returncode, result)
-        else:
-          self.assertIn(
-            'sweet/blackberries default: FAIL', result.stdout, result)
-          self.assertIn(
-            'sweet/blackberries stress: FAIL', result.stdout, result)
-          self.assertEqual(1, result.returncode, result)
+    for shard in [1, 2]:
+      result = run_tests_with(
+          '--progress=verbose',
+          '--variants=default,stress',
+          '--shard-count=2',
+          '--shard-run=%d' % shard,
+          'sweet/blackberries',
+          'sweet/raspberries',
+          infra_staging=False,
+      )
+      # One of the shards gets one variant of each test.
+      self.assertIn('2 tests ran', result.stdout, result)
+      if shard == 1:
+        self.assertIn('sweet/raspberries default', result.stdout, result)
+        self.assertIn('sweet/raspberries stress', result.stdout, result)
+        self.assertEqual(0, result.returncode, result)
+      else:
+        self.assertIn(
+          'sweet/blackberries default: FAIL', result.stdout, result)
+        self.assertIn(
+          'sweet/blackberries stress: FAIL', result.stdout, result)
+        self.assertEqual(1, result.returncode, result)
 
   @unittest.skip("incompatible with test processors")
   def testSharded(self):
     """Test running a particular shard."""
-    with temp_base() as basedir:
-      for shard in [1, 2]:
-        result = run_tests(
-            basedir,
-            '--progress=verbose',
-            '--variants=default,stress',
-            '--shard-count=2',
-            '--shard-run=%d' % shard,
-            'sweet/bananas',
-            'sweet/raspberries',
-        )
-        # One of the shards gets one variant of each test.
-        self.assertIn('Running 2 tests', result.stdout, result)
-        self.assertIn('sweet/bananas', result.stdout, result)
-        self.assertIn('sweet/raspberries', result.stdout, result)
-        self.assertEqual(0, result.returncode, result)
+    for shard in [1, 2]:
+      result = run_tests_with(
+          '--progress=verbose',
+          '--variants=default,stress',
+          '--shard-count=2',
+          '--shard-run=%d' % shard,
+          'sweet/bananas',
+          'sweet/raspberries',
+      )
+      # One of the shards gets one variant of each test.
+      self.assertIn('Running 2 tests', result.stdout, result)
+      self.assertIn('sweet/bananas', result.stdout, result)
+      self.assertIn('sweet/raspberries', result.stdout, result)
+      self.assertEqual(0, result.returncode, result)
 
   def testFail(self):
     """Test running only failing tests in two variants."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default,stress',
-          'sweet/strawberries',
-          infra_staging=False,
-      )
-      self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default,stress',
+        'sweet/strawberries',
+        infra_staging=False,
+    )
+    self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def check_cleaned_json_output(
       self, expected_results_name, actual_json, basedir):
@@ -294,7 +274,7 @@ class SystemTest(unittest.TestCase):
           '--variants=default',
           '--rerun-failures-count=2',
           '--random-seed=123',
-          '--json-test-results', json_path,
+          '--json-test-results', json_path, #with_json_output('out.json'),
           'sweet/strawberries',
           infra_staging=False,
       )
@@ -341,105 +321,94 @@ class SystemTest(unittest.TestCase):
     Using all those options at once doesn't really make much sense. This is
     merely for getting coverage.
     """
-    with temp_base() as basedir:
-      override_build_config(
-          basedir, dcheck_always_on=True, is_asan=True, is_cfi=True,
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        'sweet/bananas',
+        config_overrides=dict(
+          dcheck_always_on=True, is_asan=True, is_cfi=True,
           is_msan=True, is_tsan=True, is_ubsan_vptr=True, target_cpu='x86',
           v8_enable_i18n_support=False, v8_target_cpu='x86',
           v8_enable_verify_csa=False, v8_enable_lite_mode=False,
           v8_enable_pointer_compression=False,
           v8_enable_pointer_compression_shared_cage=False,
           v8_enable_shared_ro_heap=False,
-          v8_enable_sandbox=False)
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          'sweet/bananas',
-      )
-      expect_text = (
-          '>>> Autodetected:\n'
-          'asan\n'
-          'cfi_vptr\n'
-          'dcheck_always_on\n'
-          'msan\n'
-          'no_i18n\n'
-          'tsan\n'
-          'ubsan_vptr\n'
-          'webassembly\n'
-          '>>> Running tests for ia32.release')
-      self.assertIn(expect_text, result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
-      # TODO(machenbach): Test some more implications of the auto-detected
-      # options, e.g. that the right env variables are set.
+          v8_enable_sandbox=False
+        )
+    )
+    expect_text = (
+        '>>> Autodetected:\n'
+        'asan\n'
+        'cfi_vptr\n'
+        'dcheck_always_on\n'
+        'msan\n'
+        'no_i18n\n'
+        'tsan\n'
+        'ubsan_vptr\n'
+        'webassembly\n'
+        '>>> Running tests for ia32.release')
+    self.assertIn(expect_text, result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
+    # TODO(machenbach): Test some more implications of the auto-detected
+    # options, e.g. that the right env variables are set.
 
   def testSkips(self):
     """Test skipping tests in status file for a specific variant."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=nooptimization',
-          'sweet/strawberries',
-          infra_staging=False,
-      )
-      self.assertIn('0 tests ran', result.stdout, result)
-      self.assertEqual(2, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=nooptimization',
+        'sweet/strawberries',
+        infra_staging=False,
+    )
+    self.assertIn('0 tests ran', result.stdout, result)
+    self.assertEqual(2, result.returncode, result)
 
   def testRunSkips(self):
     """Inverse the above. Test parameter to keep running skipped tests."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=nooptimization',
-          '--run-skipped',
-          'sweet/strawberries',
-      )
-      self.assertIn('1 tests failed', result.stdout, result)
-      self.assertIn('1 tests ran', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=nooptimization',
+        '--run-skipped',
+        'sweet/strawberries',
+    )
+    self.assertIn('1 tests failed', result.stdout, result)
+    self.assertIn('1 tests ran', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def testDefault(self):
     """Test using default test suites, though no tests are run since they don't
     exist in a test setting.
     """
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          infra_staging=False,
-      )
-      self.assertIn('0 tests ran', result.stdout, result)
-      self.assertEqual(2, result.returncode, result)
+    result = run_tests_with(
+        infra_staging=False,
+    )
+    self.assertIn('0 tests ran', result.stdout, result)
+    self.assertEqual(2, result.returncode, result)
 
   def testNoBuildConfig(self):
     """Test failing run when build config is not found."""
-    with temp_dir() as basedir:
-      result = run_tests(basedir)
-      self.assertIn('Failed to load build config', result.stdout, result)
-      self.assertEqual(5, result.returncode, result)
+    result = run_tests_with(baseroot='wrong_path')
+    self.assertIn('Failed to load build config', result.stdout, result)
+    self.assertEqual(5, result.returncode, result)
 
   def testInconsistentArch(self):
     """Test failing run when attempting to wrongly override the arch."""
-    with temp_base() as basedir:
-      result = run_tests(basedir, '--arch=ia32')
-      self.assertIn(
-          '--arch value (ia32) inconsistent with build config (x64).',
-          result.stdout, result)
-      self.assertEqual(5, result.returncode, result)
+    result = run_tests_with('--arch=ia32')
+    self.assertIn(
+        '--arch value (ia32) inconsistent with build config (x64).',
+        result.stdout, result)
+    self.assertEqual(5, result.returncode, result)
 
   def testWrongVariant(self):
     """Test using a bogus variant."""
-    with temp_base() as basedir:
-      result = run_tests(basedir, '--variants=meh')
-      self.assertEqual(5, result.returncode, result)
+    result = run_tests_with('--variants=meh')
+    self.assertEqual(5, result.returncode, result)
 
   def testModeFromBuildConfig(self):
     """Test auto-detection of mode from build config."""
-    with temp_base() as basedir:
-      result = run_tests(basedir, '--outdir=out/build', 'sweet/bananas')
-      self.assertIn('Running tests for x64.release', result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with('--outdir=out/build', 'sweet/bananas')
+    self.assertIn('Running tests for x64.release', result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
   @unittest.skip("not available with test processors")
   def testReport(self):
@@ -447,45 +416,39 @@ class SystemTest(unittest.TestCase):
 
     This also exercises various paths in statusfile logic.
     """
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--variants=default',
-          'sweet',
-          '--report',
-      )
-      self.assertIn(
-          '3 tests are expected to fail that we should fix',
-          result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--variants=default',
+        'sweet',
+        '--report',
+    )
+    self.assertIn(
+        '3 tests are expected to fail that we should fix',
+        result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   @unittest.skip("not available with test processors")
   def testWarnUnusedRules(self):
     """Test the unused-rules feature."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--variants=default,nooptimization',
-          'sweet',
-          '--warn-unused',
-      )
-      self.assertIn( 'Unused rule: carrots', result.stdout, result)
-      self.assertIn( 'Unused rule: regress/', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--variants=default,nooptimization',
+        'sweet',
+        '--warn-unused',
+    )
+    self.assertIn( 'Unused rule: carrots', result.stdout, result)
+    self.assertIn( 'Unused rule: regress/', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   @unittest.skip("not available with test processors")
   def testCatNoSources(self):
     """Test printing sources, but the suite's tests have none available."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--variants=default',
-          'sweet/bananas',
-          '--cat',
-      )
-      self.assertIn('begin source: sweet/bananas', result.stdout, result)
-      self.assertIn('(no source available)', result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--variants=default',
+        'sweet/bananas',
+        '--cat',
+    )
+    self.assertIn('begin source: sweet/bananas', result.stdout, result)
+    self.assertIn('(no source available)', result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
   def testPredictable(self):
     """Test running a test in verify-predictable mode.
@@ -493,65 +456,57 @@ class SystemTest(unittest.TestCase):
     The test will fail because of missing allocation output. We verify that and
     that the predictable flags are passed and printed after failure.
     """
-    with temp_base() as basedir:
-      override_build_config(basedir, v8_enable_verify_predictable=True)
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          'sweet/bananas',
-          infra_staging=False,
-      )
-      self.assertIn('1 tests ran', result.stdout, result)
-      self.assertIn('sweet/bananas default: FAIL', result.stdout, result)
-      self.assertIn('Test had no allocation output', result.stdout, result)
-      self.assertIn('--predictable --verify-predictable', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        'sweet/bananas',
+        infra_staging=False,
+        config_overrides=dict(v8_enable_verify_predictable=True),
+    )
+    self.assertIn('1 tests ran', result.stdout, result)
+    self.assertIn('sweet/bananas default: FAIL', result.stdout, result)
+    self.assertIn('Test had no allocation output', result.stdout, result)
+    self.assertIn('--predictable --verify-predictable', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def testSlowArch(self):
     """Test timeout factor manipulation on slow architecture."""
-    with temp_base() as basedir:
-      override_build_config(basedir, v8_target_cpu='arm64')
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          'sweet/bananas',
-      )
-      # TODO(machenbach): We don't have a way for testing if the correct
-      # timeout was used.
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        'sweet/bananas',
+        config_overrides=dict(v8_target_cpu='arm64'),
+    )
+    # TODO(machenbach): We don't have a way for testing if the correct
+    # timeout was used.
+    self.assertEqual(0, result.returncode, result)
 
   def testRandomSeedStressWithDefault(self):
     """Test using random-seed-stress feature has the right number of tests."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          '--random-seed-stress-count=2',
-          'sweet/bananas',
-          infra_staging=False,
-      )
-      self.assertIn('2 tests ran', result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        '--random-seed-stress-count=2',
+        'sweet/bananas',
+        infra_staging=False,
+    )
+    self.assertIn('2 tests ran', result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
   def testRandomSeedStressWithSeed(self):
     """Test using random-seed-stress feature passing a random seed."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          '--random-seed-stress-count=2',
-          '--random-seed=123',
-          'sweet/strawberries',
-      )
-      self.assertIn('2 tests ran', result.stdout, result)
-      # We use a failing test so that the command is printed and we can verify
-      # that the right random seed was passed.
-      self.assertIn('--random-seed=123', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        '--random-seed-stress-count=2',
+        '--random-seed=123',
+        'sweet/strawberries',
+    )
+    self.assertIn('2 tests ran', result.stdout, result)
+    # We use a failing test so that the command is printed and we can verify
+    # that the right random seed was passed.
+    self.assertIn('--random-seed=123', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def testSpecificVariants(self):
     """Test using NO_VARIANTS modifiers in status files skips the desire tests.
@@ -560,19 +515,17 @@ class SystemTest(unittest.TestCase):
     But the status file applies a modifier to each skipping one of the
     variants.
     """
-    with temp_base() as basedir:
-      override_build_config(basedir, is_asan=True)
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default,stress',
-          'sweet/bananas',
-          'sweet/raspberries',
-      )
-      # Both tests are either marked as running in only default or only
-      # slow variant.
-      self.assertIn('2 tests ran', result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default,stress',
+        'sweet/bananas',
+        'sweet/raspberries',
+        config_overrides=dict(is_asan=True),
+    )
+    # Both tests are either marked as running in only default or only
+    # slow variant.
+    self.assertIn('2 tests ran', result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
   def testStatusFilePresubmit(self):
     """Test that the fake status file is well-formed."""
@@ -582,18 +535,16 @@ class SystemTest(unittest.TestCase):
           os.path.join(basedir, 'test', 'sweet', 'sweet.status')))
 
   def testDotsProgress(self):
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=dots',
-          'sweet/cherries',
-          'sweet/bananas',
-          '--no-sorting', '-j1', # make results order deterministic
-          infra_staging=False,
-      )
-      self.assertIn('2 tests ran', result.stdout, result)
-      self.assertIn('F.', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=dots',
+        'sweet/cherries',
+        'sweet/bananas',
+        '--no-sorting', '-j1', # make results order deterministic
+        infra_staging=False,
+    )
+    self.assertIn('2 tests ran', result.stdout, result)
+    self.assertIn('F.', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def testMonoProgress(self):
     self._testCompactProgress('mono')
@@ -602,45 +553,41 @@ class SystemTest(unittest.TestCase):
     self._testCompactProgress('color')
 
   def _testCompactProgress(self, name):
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=%s' % name,
-          'sweet/cherries',
-          'sweet/bananas',
-          infra_staging=False,
-      )
-      if name == 'color':
-        expected = ('\033[34m%  28\033[0m|'
-                    '\033[32m+   1\033[0m|'
-                    '\033[31m-   1\033[0m]: Done')
-      else:
-        expected = '%  28|+   1|-   1]: Done'
-      self.assertIn(expected, result.stdout)
-      self.assertIn('sweet/cherries', result.stdout)
-      self.assertIn('sweet/bananas', result.stdout)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=%s' % name,
+        'sweet/cherries',
+        'sweet/bananas',
+        infra_staging=False,
+    )
+    if name == 'color':
+      expected = ('\033[34m%  28\033[0m|'
+                  '\033[32m+   1\033[0m|'
+                  '\033[31m-   1\033[0m]: Done')
+    else:
+      expected = '%  28|+   1|-   1]: Done'
+    self.assertIn(expected, result.stdout)
+    self.assertIn('sweet/cherries', result.stdout)
+    self.assertIn('sweet/bananas', result.stdout)
+    self.assertEqual(1, result.returncode, result)
 
   def testExitAfterNFailures(self):
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--exit-after-n-failures=2',
-          '-j1',
-          'sweet/mangoes',       # PASS
-          'sweet/strawberries',  # FAIL
-          'sweet/blackberries',  # FAIL
-          'sweet/raspberries',   # should not run
-      )
-      self.assertIn('sweet/mangoes default: PASS', result.stdout, result)
-      self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
-      self.assertIn('Too many failures, exiting...', result.stdout, result)
-      self.assertIn('sweet/blackberries default: FAIL', result.stdout, result)
-      self.assertNotIn('sweet/raspberries', result.stdout, result)
-      self.assertIn('2 tests failed', result.stdout, result)
-      self.assertIn('3 tests ran', result.stdout, result)
-      self.assertEqual(1, result.returncode, result)
+    result = run_tests_with(
+        '--progress=verbose',
+        '--exit-after-n-failures=2',
+        '-j1',
+        'sweet/mangoes',       # PASS
+        'sweet/strawberries',  # FAIL
+        'sweet/blackberries',  # FAIL
+        'sweet/raspberries',   # should not run
+    )
+    self.assertIn('sweet/mangoes default: PASS', result.stdout, result)
+    self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
+    self.assertIn('Too many failures, exiting...', result.stdout, result)
+    self.assertIn('sweet/blackberries default: FAIL', result.stdout, result)
+    self.assertNotIn('sweet/raspberries', result.stdout, result)
+    self.assertIn('2 tests failed', result.stdout, result)
+    self.assertIn('3 tests ran', result.stdout, result)
+    self.assertEqual(1, result.returncode, result)
 
   def testNumFuzzer(self):
     sys_args = ['--command-prefix', sys.executable, '--outdir', 'out/build']
@@ -654,20 +601,18 @@ class SystemTest(unittest.TestCase):
 
   def testRunnerFlags(self):
     """Test that runner-specific flags are passed to tests."""
-    with temp_base() as basedir:
-      result = run_tests(
-          basedir,
-          '--progress=verbose',
-          '--variants=default',
-          '--random-seed=42',
-          'sweet/bananas',
-          '-v',
-      )
+    result = run_tests_with(
+        '--progress=verbose',
+        '--variants=default',
+        '--random-seed=42',
+        'sweet/bananas',
+        '-v',
+    )
 
-      self.assertIn(
-          '--test bananas --random-seed=42 --nohard-abort --testing-d8-test-runner',
-          result.stdout, result)
-      self.assertEqual(0, result.returncode, result)
+    self.assertIn(
+        '--test bananas --random-seed=42 --nohard-abort --testing-d8-test-runner',
+        result.stdout, result)
+    self.assertEqual(0, result.returncode, result)
 
 
 if __name__ == '__main__':
