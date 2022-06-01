@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a1717e2_df89bb2d",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-01T09:40:30Z",
+      "side": 1,
+      "message": "This should have been removed, thanks.",
+      "parentUuid": "b244c92e_14365cff",
+      "range": {
+        "startLine": 159,
+        "startChar": 8,
+        "endLine": 159,
+        "endChar": 53
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3fe5e79_303eb50e",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-05-31T14:33:05Z",
       "side": 1,
       "message": "nit: leftover",
+      "range": {
+        "startLine": 180,
+        "startChar": 10,
+        "endLine": 180,
+        "endChar": 31
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c4a95e4_284d5afe",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-01T09:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3fe5e79_303eb50e",
       "range": {
         "startLine": 180,
         "startChar": 10,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a477ffc_9b872bff",
+        "filename": "src/compiler/wasm-typer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-01T09:40:30Z",
+      "side": 1,
+      "message": "That is a good question. I have not measured it. However since type narrowing in subtypes is supported in source-level languages as well, I would expect it to be reasonably common.",
+      "parentUuid": "b5747a12_b6a70ffa",
+      "range": {
+        "startLine": 181,
+        "startChar": 26,
+        "endLine": 181,
+        "endChar": 36
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48b3ab71_13713342",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-05-31T14:33:05Z",
       "side": 1,
       "message": "This comment is creating expectations that the test below can\u0027t fulfill",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "c508e32fdb25447470cf6f0729e32933a38f352a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451bc427_fef1a623",
+        "filename": "test/mjsunit/wasm/wasm-typed-optimizations.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-01T09:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48b3ab71_13713342",
       "range": {
         "startLine": 9,
         "startChar": 0,
