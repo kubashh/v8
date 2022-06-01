@@ -16,6 +16,52 @@
       "message": "PTAL, thanks",
       "revId": "90c064cbb4eee2a0ff5806e313f664549a6172e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "090f7990_fb4446e0",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-01T15:28:38Z",
+      "side": 1,
+      "message": "I guess we could even check `DCHECK_EQ(origin-\u003egraph_generation_ + 1, graph_generation_)`",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 231,
+        "endChar": 13
+      },
+      "revId": "90c064cbb4eee2a0ff5806e313f664549a6172e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5db4ebd_31491bfb",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-01T15:28:38Z",
+      "side": 1,
+      "message": "How about:\n  std::swap(generation_, companion.generation_);\n  companion.generation_ \u003d generation_ + 1;",
+      "range": {
+        "startLine": 498,
+        "startChar": 4,
+        "endLine": 499,
+        "endChar": 42
+      },
+      "revId": "90c064cbb4eee2a0ff5806e313f664549a6172e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
