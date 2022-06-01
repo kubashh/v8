@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1938dad2_e8b72eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-01T13:08:31Z",
+      "side": 1,
+      "message": "Camillo, PTAL. Will add more reviewers after your feedback.",
+      "revId": "4b03399a1127ddc01cead976ed9a6ad1a0487886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
