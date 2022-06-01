@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b8c01d8_be41c729",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-01T21:25:47Z",
+      "side": 1,
+      "message": "marja@ found an issue with resizable buffers where the different max lengths cause problems. If possible we should make them the same, as the TODO says.\n\nishell@, v8:4153 looks mostly done, but we never actually made the TypedArray and ArrayBuffer max lengths equal. All the V8 tests pass (ignoring the downstream failures in blink and Node). Am I missing anything or is it actually this easy? 😊\n\nIf I\u0027m not missing anything, I\u0027ll fix the downstream issues.",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
