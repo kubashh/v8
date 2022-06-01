@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe259ac0_ff7e1a03",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-01T07:47:45Z",
+      "side": 1,
+      "message": "moving this guy closer to home; helps with coverage measurement as well",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 28
+      },
+      "revId": "7041824a8ad351203ad57eae10372ec6e6d1c794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
