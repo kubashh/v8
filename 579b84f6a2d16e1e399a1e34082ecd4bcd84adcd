@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9150d660_88ae96d0",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-01T18:45:02Z",
+      "side": 1,
+      "message": "nit: maybe let\u0027s keep `DCHECK(Smi::IsValid(Hash());` for documentation purposes",
+      "range": {
+        "startLine": 302,
+        "startChar": 24,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c43977da_f8733fc7",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-01T18:45:02Z",
+      "side": 1,
+      "message": "nit: I\u0027d probably drop this temp var here",
+      "range": {
+        "startLine": 316,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 64
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93ff794a_86baec3b",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-01T18:45:02Z",
+      "side": 1,
+      "message": "I\u0027m not 100% certain this is the right object for this.",
+      "range": {
+        "startLine": 399,
+        "startChar": 2,
+        "endLine": 399,
+        "endChar": 15
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
