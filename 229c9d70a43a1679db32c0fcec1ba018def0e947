@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "360e3f35_d997a91a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-01T08:28:23Z",
+      "side": 1,
+      "message": "Btw, when moving test files around, please make sure that they keep being executed. Though, Almothana changed the way tests are hooked up in presubmit to be more flexible, so I guess it should be fine wherever we move the tests...",
+      "revId": "229c9d70a43a1679db32c0fcec1ba018def0e947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -46,6 +46,30 @@
       },
       "revId": "b0a5ad3162d3d3f8af16c1c12f0608c072e95995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1de8a64_7d63f887",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-01T08:28:23Z",
+      "side": 0,
+      "message": "Yea that\u0027d be fine. At some point it\u0027d be nice to have a workflow for testing this that hooks up the coverage in a better way. This should be all much easier now with python3 and vpython. I think this dynamic code here was to work for setups that don\u0027t have python-coverage module. But I think we can just assume we have it through vpython now.",
+      "parentUuid": "b97d9422_ec0b1bed",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 152,
+        "endChar": 37
+      },
+      "revId": "b0a5ad3162d3d3f8af16c1c12f0608c072e95995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
