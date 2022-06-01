@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e77cfa71_e9d547f8",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-06-01T21:37:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9150d660_88ae96d0",
+      "range": {
+        "startLine": 302,
+        "startChar": 24,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43977da_f8733fc7",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b9f95d5_1442885c",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-06-01T21:37:08Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "c43977da_f8733fc7",
+      "range": {
+        "startLine": 316,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 64
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93ff794a_86baec3b",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-06-01T18:45:02Z",
       "side": 1,
       "message": "I\u0027m not 100% certain this is the right object for this.",
+      "range": {
+        "startLine": 399,
+        "startChar": 2,
+        "endLine": 399,
+        "endChar": 15
+      },
+      "revId": "579b84f6a2d16e1e399a1e34082ecd4bcd84adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eeaddee_168cb965",
+        "filename": "src/objects/compilation-cache-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-06-01T21:37:08Z",
+      "side": 1,
+      "message": "Agreed. I also had some hesitation writing this code, because not all fields of ScriptDetails are used. I\u0027ve updated to avoid creating a ScriptDetails here; what do you think of the new iteration?",
+      "parentUuid": "93ff794a_86baec3b",
       "range": {
         "startLine": 399,
         "startChar": 2,
