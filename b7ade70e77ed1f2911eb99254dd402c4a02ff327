@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7b835ceb_e12b2c7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2022-06-01T09:26:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fe46850_8dedb79a",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "641b52ca_8db6e835",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -90,6 +114,24 @@
       "side": 1,
       "message": "It\u0027s a bit of a mess what\u0027s going on there, but it can happen when:\n1) the first Isolate is created under memory pressure and thus it decides to not enable short builtin calls: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate.cc;l\u003d4016?q\u003dfile:isolate.cc\u0026ss\u003dchromium \n2) then memory pressure goes away and another Isolate (worker) is created which in turn decides to enable short builtin calls and thus remap the embedded builtins,\n3) from now on Code::InstructionStart() will always return pointers to remapped embedded builtins for all the Isolates (even though the first one doesn\u0027t known about the remapped builtins copy).\n\nSo, if you reuse the existing machinery then it would be easier to clean this up or extend it without unexpected breakages.",
       "parentUuid": "5cbfaffa_5d692cd1",
+      "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da43454_908f944d",
+        "filename": "src/deoptimizer/deoptimizer-cfi-builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2022-06-01T09:26:17Z",
+      "side": 1,
+      "message": "Thanks for the explanation! I\u0027m now passing the Isolate pointer to `IsValidReturnAddress` and using `EmbeddedData::GetEmbeddedDataForPC` as you suggested. I can\u0027t use `EmbeddedData::InstructionStartOfBuiltin` because some of the labels we compare against are not at the start of builtins, but I\u0027d also like to keep the read-only allowlist. We should be able to sign the few pointers to the embedded data blob that `EmbeddedData::GetEmbeddedDataForPC` uses in a follow-up, to provide additional protection.",
+      "parentUuid": "dd67f1c7_58d079b4",
       "revId": "b7ade70e77ed1f2911eb99254dd402c4a02ff327",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
