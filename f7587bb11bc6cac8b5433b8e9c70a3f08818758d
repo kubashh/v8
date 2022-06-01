@@ -572,6 +572,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f74d5944_1f2467b3",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-01T00:46:33Z",
+      "side": 1,
+      "message": "Does PS18 contain a fix for the leading/trailing `0`s bug? If not, mind pinging me again when the fix is uploaded?",
+      "parentUuid": "1cc80168_246f68d1",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "794ca1a9_0f63f4c4",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 17
