@@ -34,6 +34,24 @@
       "parentUuid": "65aa0bf9_b5b5f33f",
       "revId": "aee0ec979ab23db1211b8214bd27d999aca774c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8eade0c_1c19aa40",
+        "filename": "test/unittests/compiler/int64-lowering-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-06-02T15:30:08Z",
+      "side": 1,
+      "message": "I think it\u0027s related to lines 157 and 248 of unittest, only the LE blocks are changed, making the same change on BE blocks passes the test, I will make a CL, sorry about the noise.",
+      "parentUuid": "789b32c7_209b04a3",
+      "revId": "aee0ec979ab23db1211b8214bd27d999aca774c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
