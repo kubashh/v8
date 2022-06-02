@@ -52,6 +52,24 @@
       "parentUuid": "989d82c7_0c6ded69",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fc335f8_adeadb44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-02T14:54:09Z",
+      "side": 1,
+      "message": "Thanks for the tips, I\u0027ll look into the testing and go through the TODOs. Testing seems pretty gnarly, since we don\u0027t want to actually be allocating sorting 9-petabyte TAs.\n\nI don\u0027t quite understand the Smi point, however, since the hard work was already done to make max TA length 2^32 on 64bit archs, which already exceeds the Smi range. I looked a bit at TF\u0027s assumptions as well but the the TA length has a custom range type already AFAICT.",
+      "parentUuid": "46c0b033_80639a09",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
