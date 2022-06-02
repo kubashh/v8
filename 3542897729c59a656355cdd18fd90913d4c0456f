@@ -33,6 +33,24 @@
       "message": "LGTM\nnice :) (can you also change Maybe to base::Optional while we\u0027re at it 😜).",
       "revId": "3542897729c59a656355cdd18fd90913d4c0456f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3d02f8f_61d984cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-02T12:53:02Z",
+      "side": 1,
+      "message": "That would be a really good cleanup. `Maybe` should only be used in the API, internally we should only use `base::Optional`. I\u0027ll put it on my list for future cleanup Fridays.",
+      "parentUuid": "9907ce3c_6bca2bd4",
+      "revId": "3542897729c59a656355cdd18fd90913d4c0456f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
