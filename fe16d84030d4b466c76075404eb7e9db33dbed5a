@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "359ee31f_1a27cd8c",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-02T21:21:48Z",
+      "side": 1,
+      "message": "It\u0027s a very first CL in a row, so currently it guaranteed to be valid because we still have both Code and CodeDataContainer objects lying around even for builtins.",
+      "parentUuid": "28c34b9c_502ddf80",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9698406a_cceaad0b",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c89d3d_aabe3698",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-02T21:21:48Z",
+      "side": 1,
+      "message": "Exactly. The code.code_data_container() accessor tries to perform a CodeDataContainer::cast() when slow checks are enabled.\n\nIn order to simplify things I decided to introduce CodeLookupResult::builtin_id().",
+      "parentUuid": "9698406a_cceaad0b",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05254554_0b1719cb",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-06-02T17:43:34Z",
       "side": 1,
       "message": "Nit: Isn\u0027t this generated automatically by the compiler?",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5bad8c1_c1a18368",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-02T21:21:48Z",
+      "side": 1,
+      "message": "No they aren\u0027t. Since C++20 there will be an option to default define them.",
+      "parentUuid": "05254554_0b1719cb",
       "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
