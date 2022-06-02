@@ -106,6 +106,24 @@
       "parentUuid": "0798983f_d2521346",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59ecbb8_5f646f40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-02T22:07:01Z",
+      "side": 1,
+      "message": "Thanks for the detailed thoughts Jakob!\n\nI should\u0027ve led with the motivation, which is not at all about any particular limit, but just that the TA max length and the AB max length are exactly the same. For resizable buffers, marja@ spotted an issue if the max lengths differ. With resizable buffers, you can have \"length-tracking\" TAs that track the underlying AB\u0027s byte length. So if you have different max lengths, you\u0027d need to throw somewhere for ABs whose max lengths are \u003e TA max lengths. Otherwise, if you have e.g. a length-tracking `Int8Array`, resizes can make it exceed the max TA length. That seems kind of gross if we can make the max lengths the same, whatever that is.",
+      "parentUuid": "970df4e9_8945a348",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
