@@ -88,6 +88,24 @@
       "parentUuid": "0fc335f8_adeadb44",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "970df4e9_8945a348",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-02T22:01:00Z",
+      "side": 1,
+      "message": "A couple of thoughts:\n\n- On 32-bit platforms, 1 GiB is plenty. It is practically impossible to find 2 GiB of contiguous free _address space_ (even aside from free physical memory) in real-world, non-toy processes. Even finding 256MiB often fails when it\u0027s been a while since renderer startup and address space has experienced fragmentation.\n\n- 64-bit platforms, despite their name, use 48 bits for virtual addresses (of which the kernel typically reserves one for itself); the number of bits for physical addresses depends on specific hardware and in current CPUs typically ranges from 35 (lightweight laptops) to 42 (servers). Additionally, Chrome has a 100 TiB per renderer sandbox limit. So going to 2**53 is absolute overkill, and will be for decades to come (sure, memory grows every year, but look at the past two decades and make an extrapolating guess how that flattening curve will continue!). I\u0027d keep `kMaxSafeInteger` in `v8::internal`.\n\n- One reason against raising V8\u0027s limits too much is that, given sufficient virtual address space, allocations will typically appear to succeed, and only writing to those array elements will cause the kernel to actually reserve the pages and potentially crash the process when that fails. Since \"RangeError\" is a better UX/DX than \"Aw, snap!\", it\u0027s not necessarily a good idea to allow, say, 128 GiB for everyone just because a few expensive workstations might actually have that much memory.\n\n- Keep in mind that a Float64Array with length `N` needs an ArrayBuffer with length `N*8` as its backing store. Perfect equality of limits is hence elusive.\n\n- There should already be no places in the code that attempt to store TypedArray lengths in Smis without checking first. That said, AFAIK there are some builtins that will simply refuse to work on overly large arrays and throw an exception instead. This can already be triggered, so shouldn\u0027t block raising the limit further, but we should address these eventually. (There appears to be very little demand.)\n\n- For testing, we have `--mock-arraybuffer-allocator` (see d8.h/cc), which repeatedly maps the same small memory chunk into a huge address range. It has limitations (Linux only, don\u0027t call `std::sort` on it, expect array elements to alias each other), and you won\u0027t be able to allocate 9 PiB due to virtual address limits (see above).",
+      "parentUuid": "0798983f_d2521346",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
