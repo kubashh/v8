@@ -52,6 +52,24 @@
       "parentUuid": "4ad70405_095ec8c3",
       "revId": "ab76ffc8bd2023b38904d30829ec9e9d1a6b4c05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f88800_d837da63",
+        "filename": "src/objects/simd.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-06-02T07:12:33Z",
+      "side": 1,
+      "message": "Thanks for your reply. I\u0027ve landed a fix: https://chromium-review.googlesource.com/c/v8/v8/+/3683037.",
+      "parentUuid": "86bb7914_2c07c694",
+      "revId": "ab76ffc8bd2023b38904d30829ec9e9d1a6b4c05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
