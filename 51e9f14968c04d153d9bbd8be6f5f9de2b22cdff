@@ -142,6 +142,24 @@
       "parentUuid": "a59ecbb8_5f646f40",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11d71906_6aab0a07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-02T22:21:23Z",
+      "side": 1,
+      "message": "Given all of this, it sounds like we could also _lower_ the max AB length to be 2^32 instead? I wonder if there are uses of ABs \u003e 4G.",
+      "parentUuid": "34291286_09282622",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
