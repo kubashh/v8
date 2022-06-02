@@ -257,14 +257,18 @@ class WindowsCommand(BaseCommand):
 
 
 class AndroidCommand(BaseCommand):
-  # This must be initialized before creating any instances of this class.
-  driver = None
+  @staticmethod
+  def init_driver():
+    # The driver must be initialized before creating any instances of this class.
+    if not AndroidCommand.driver:
+      AndroidCommand.driver = android_driver(device)
 
   def __init__(self, shell, args=None, cmd_prefix=None, timeout=60, env=None,
                verbose=False, resources_func=None, handle_sigterm=False):
     """Initialize the command and all files that need to be pushed to the
     Android device.
     """
+    AndroidCommand.init_driver()
     self.shell_name = os.path.basename(shell)
     self.shell_dir = os.path.dirname(shell)
     self.files_to_push = (resources_func or (lambda: []))()
@@ -331,7 +335,6 @@ def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
   if target_os == 'android':
-    AndroidCommand.driver = android_driver(device)
     Command = AndroidCommand
   elif target_os == 'windows':
     Command = WindowsCommand
