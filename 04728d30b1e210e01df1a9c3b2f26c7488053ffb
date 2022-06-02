@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "113bc381_b050aa68",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-06-02T12:58:56Z",
+      "side": 1,
+      "message": "The reason I have them weirdly here is that these are the minimum imports for messing with the sys.path -- I can move this path manipulation to just before `import gerrit_util` instead?",
+      "parentUuid": "85f00545_6f96fb87",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f1e6a89_3b3176f6",
         "filename": "tools/release/roll_merge_gerrit.py",
         "patchSetId": 1
