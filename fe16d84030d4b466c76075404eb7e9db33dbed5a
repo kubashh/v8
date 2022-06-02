@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d1c9568_d350110d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-02T17:43:34Z",
+      "side": 1,
+      "message": "Cool, LGTM with questions.",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c34b9c_502ddf80",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-02T17:43:34Z",
+      "side": 1,
+      "message": "Is this guaranteed to return a valid Code object? What about embedded builtins with the external code space enabled? AFAIU those would not have a Code object anymore (at least in the future). Or we would that be addressed in a subsequent CL?",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9698406a_cceaad0b",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-02T17:43:34Z",
+      "side": 1,
+      "message": "What\u0027s the problem here with the GC? That the map word of that object is replaced with a forwarding pointer here?",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05254554_0b1719cb",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-02T17:43:34Z",
+      "side": 1,
+      "message": "Nit: Isn\u0027t this generated automatically by the compiler?",
+      "revId": "fe16d84030d4b466c76075404eb7e9db33dbed5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
