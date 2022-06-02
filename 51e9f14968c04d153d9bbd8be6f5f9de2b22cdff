@@ -16,6 +16,24 @@
       "message": "marja@ found an issue with resizable buffers where the different max lengths cause problems. If possible we should make them the same, as the TODO says.\n\nishell@, v8:4153 looks mostly done, but we never actually made the TypedArray and ArrayBuffer max lengths equal. All the V8 tests pass (ignoring the downstream failures in blink and Node). Am I missing anything or is it actually this easy? 😊\n\nIf I\u0027m not missing anything, I\u0027ll fix the downstream issues.",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "989d82c7_0c6ded69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-02T07:43:42Z",
+      "side": 1,
+      "message": "Re: \"is it actually this easy\", if there were problems with this approach, I don\u0027t think you\u0027d find them out, in the current form of the CL.\n\nThere are no existing tests that use large TypedArrays in the code base, since they aren\u0027t currently allowed. And this CL doesn\u0027t add any tests. So just changing the constant is probably a NOOP.\n\nI\u0027d guess this is most likely to break when somebody creates a large TypedArray and then it flows to some part of the code which assumes the length is a SMI. Possibly that\u0027d happen in optimized code.\n\nWhat would be the acceptable minimum testing before we can conclude this probably works? At least testing element access + optimizing it for large TypedArrays. Maybe also calling all possible TypedArray.prototype (and Array.prototype?) functions with large TypedArrays, and making sure those also get optimized?\n\nIf you look for v8:4153, there are some comments saying \"support large TypedArrays here\" which sounds like they\u0027re not supported at the moment. They are in various TA.p functions which makes it sound like we\u0027d need testing for all of them to be convinced this works...",
+      "parentUuid": "0b8c01d8_be41c729",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
