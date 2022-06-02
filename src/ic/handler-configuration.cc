@@ -50,7 +50,7 @@ int InitPrototypeChecksImpl(Isolate* isolate, Handle<ICHandler> handler,
     if (fill_handler) {
       Handle<Context> native_context = isolate->native_context();
       handler->set_data2(HeapObjectReference::Weak(*native_context));
-    } else {
+    } else if (lookup_start_object_map->is_access_check_needed()) {
       // Enable access checks on the lookup start object.
       *smi_handler = SetBitFieldValue<
           typename ICHandler::DoAccessCheckOnLookupStartObjectBits>(

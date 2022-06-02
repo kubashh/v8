@@ -2958,10 +2958,26 @@ void AccessorAssembler::TryProbeStubCache(StubCache* stub_cache,
   Counters* counters = isolate()->counters();
   IncrementCounter(counters->megamorphic_stub_cache_probes(), 1);
 
-  // Check that the {lookup_start_object} isn't a smi.
-  GotoIf(TaggedIsSmi(lookup_start_object), &miss);
+  Label smi(this), non_smi(this), do_lookup(this);
+  TVARIABLE(Map, map_var);
+  Branch(TaggedIsSmi(lookup_start_object), &smi, &non_smi);
 
-  TNode<Map> lookup_start_object_map = LoadMap(CAST(lookup_start_object));
+  BIND(&smi);
+  {
+    // Also for smis the HeapNumberMap is used to identify number feedback.
+    map_var = HeapNumberMapConstant();
+    Goto(&do_lookup);
+  }
+
+  BIND(&non_smi);
+  {
+    map_var = LoadMap(CAST(lookup_start_object));
+    Goto(&do_lookup);
+  }
+
+  BIND(&do_lookup);
+
+  TNode<Map> lookup_start_object_map = map_var.value();
 
   // Probe the primary table.
   TNode<IntPtrT> primary_offset =
