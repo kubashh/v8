@@ -155,10 +155,9 @@ def clean_json_out(json_path, basedir):
   def sort_key(x):
     return str(sorted(x.items()))
   json_output['slowest_tests'].sort(key=sort_key)
-  
+
   return json_output
 
-  
 
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
@@ -260,7 +259,7 @@ class SystemTest(unittest.TestCase):
     )
     self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
     self.assertEqual(1, result.returncode, result)
-  
+
 
   def check_cleaned_json_output(
       self, expected_results_name, actual_json_out, basedir=None):
@@ -611,7 +610,7 @@ class SystemTest(unittest.TestCase):
     self.assertIn(
         '--test bananas --random-seed=42 --nohard-abort --testing-d8-test-runner',
         result.stdout, result)
-    self.assertEqual(0, result.returncode, result)  
+    self.assertEqual(0, result.returncode, result)
 
 
 if __name__ == '__main__':
