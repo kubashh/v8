@@ -4103,7 +4103,7 @@ class LiftoffCompiler {
         return EmitUnOp<kS128, kS128>(
             &LiftoffAssembler::emit_i32x4_relaxed_trunc_f64x2_u_zero);
       default:
-        unsupported(decoder, kSimd, "simd");
+        UNREACHABLE();
     }
   }
 
