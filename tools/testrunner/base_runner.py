@@ -271,26 +271,24 @@ class BaseTestRunner(object):
   def execute(self, sys_args=None):
     if sys_args is None:  # pragma: no cover
       sys_args = sys.argv[1:]
+    parser = self._create_parser()
+    options, args = self._parse_args(parser, sys_args)
+    self.infra_staging = options.infra_staging
+    if options.swarming:
+      # Swarming doesn't print how isolated commands are called. Lets make
+      # this less cryptic by printing it ourselves.
+      print(' '.join(sys.argv))
+
+      # TODO(machenbach): Print used Python version until we have switched to
+      # Python3 everywhere.
+      print('Running with:')
+      print(sys.version)
+
+      # Kill stray processes from previous tasks on swarming.
+      util.kill_processes_linux()
+
     try:
-      parser = self._create_parser()
-      options, args = self._parse_args(parser, sys_args)
-      self.infra_staging = options.infra_staging
-      if options.swarming:
-        # Swarming doesn't print how isolated commands are called. Lets make
-        # this less cryptic by printing it ourselves.
-        print(' '.join(sys.argv))
-
-        # TODO(machenbach): Print used Python version until we have switched to
-        # Python3 everywhere.
-        print('Running with:')
-        print(sys.version)
-
-        # Kill stray processes from previous tasks on swarming.
-        util.kill_processes_linux()
-
       self._load_build_config(options)
-      command.setup(self.target_os, options.device)
-
       try:
         self._process_default_options(options)
         self._process_options(options)
@@ -299,15 +297,17 @@ class BaseTestRunner(object):
         raise
 
       args = self._parse_test_args(args)
-      tests = self._load_testsuite_generators(args, options)
-      self._setup_env()
-      print(">>> Running tests for %s.%s" % (self.build_config.arch,
-                                             self.mode_options.label))
-      exit_code = self._do_execute(tests, args, options)
-      if exit_code == utils.EXIT_CODE_FAILURES and options.json_test_results:
-        print("Force exit code 0 after failures. Json test results file "
-              "generated with failure information.")
-        exit_code = utils.EXIT_CODE_PASS
+
+      with command.command_context(self.target_os, options.device):
+        tests = self._load_testsuite_generators(args, options)
+        self._setup_env()
+        print(">>> Running tests for %s.%s" % (self.build_config.arch,
+                                               self.mode_options.label))
+        exit_code = self._do_execute(tests, args, options)
+        if exit_code == utils.EXIT_CODE_FAILURES and options.json_test_results:
+          print("Force exit code 0 after failures. Json test results file "
+                "generated with failure information.")
+          exit_code = utils.EXIT_CODE_PASS
       return exit_code
     except TestRunnerError:
       traceback.print_exc()
@@ -317,8 +317,7 @@ class BaseTestRunner(object):
     except Exception:
       traceback.print_exc()
       return utils.EXIT_CODE_INTERNAL_ERROR
-    finally:
-      command.tear_down()
+
 
   def _create_parser(self):
     parser = optparse.OptionParser()
