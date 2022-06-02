@@ -16,6 +16,24 @@
       "message": "Hi Manos,\n\nWe are seeing 6 unittest failures on big endian platforms, they include the following: Int64Load, Int64LoadFromObject, Int64Store, Int64UnalignedStore, Int64StoreToObject and UnalignedInt64Load.\n\nThey do not currently have a `V8_TARGET_BIG_ENDIAN` workaround under `int64-lowering-unittest.cc` and they were passing before this CL. I was wondering if such ifdefs need to be added here or issue could be related to `compiler/int64-lowering.cc` changes?",
       "revId": "aee0ec979ab23db1211b8214bd27d999aca774c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "789b32c7_209b04a3",
+        "filename": "test/unittests/compiler/int64-lowering-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-02T15:24:07Z",
+      "side": 1,
+      "message": "Hi Milad,\nthe behavior definitely changed, but I have to investigate if it is the the code or the tests that is wrong. Are you seeing any other issues on 32-bit big endian platforms?",
+      "parentUuid": "65aa0bf9_b5b5f33f",
+      "revId": "aee0ec979ab23db1211b8214bd27d999aca774c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
