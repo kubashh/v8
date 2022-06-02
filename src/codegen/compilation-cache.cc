@@ -76,9 +76,7 @@ void CompilationCacheScript::Age() {
     Object value = table.PrimaryValueAt(entry);
     if (!value.IsUndefined(isolate())) {
       SharedFunctionInfo info = SharedFunctionInfo::cast(value);
-      if (info.HasBytecodeArray() && info.GetBytecodeArray(isolate()).IsOld()) {
-        table.RemoveEntry(entry);
-      }
+      if (!info.HasBytecodeArray()) table.RemoveEntry(entry);
     }
   }
 }
@@ -114,9 +112,7 @@ void CompilationCacheEval::Age() {
       // The ageing mechanism for eval caches.
       SharedFunctionInfo info =
           SharedFunctionInfo::cast(table.PrimaryValueAt(entry));
-      if (info.HasBytecodeArray() && info.GetBytecodeArray(isolate()).IsOld()) {
-        table.RemoveEntry(entry);
-      }
+      if (!info.HasBytecodeArray()) table.RemoveEntry(entry);
     }
   }
 }
