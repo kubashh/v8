@@ -79,7 +79,8 @@ namespace internal {
 
 SaveFlags::SaveFlags() {
   // For each flag, save the current flag value.
-#define FLAG_MODE_APPLY(ftype, ctype, nam, def, cmt) SAVED_##nam = FLAG_##nam;
+#define FLAG_MODE_APPLY(ftype, ctype, nam, def, cmt) \
+  SAVED_##nam = FLAG_##nam.value();
 #include "src/flags/flag-definitions.h"
 #undef FLAG_MODE_APPLY
 }
