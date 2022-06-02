@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "de2a0477_7430fedd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "I\u0027ll add this with another CL. Right now I am using my IDE tools.",
+      "parentUuid": "a0fc34fe_43944a0e",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 35
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "49626152_49499e26",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc6ad50a_91c3ddcd",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "386ae747_37b5a0d4",
+      "range": {
+        "startLine": 129,
+        "startChar": 4,
+        "endLine": 129,
+        "endChar": 20
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9edd7fb9_e6a67b6b",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-06-02T13:38:24Z",
       "side": 1,
       "message": "nit: clean_json_output to be aligned with other names.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 18
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "224b4dc7_06bb01ce",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9edd7fb9_e6a67b6b",
       "range": {
         "startLine": 132,
         "startChar": 4,
@@ -105,6 +177,76 @@
         "startChar": 2,
         "endLine": 412,
         "endChar": 54
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b45b9ed_4fec8bbf",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "options.report stopped being used after https://chromium-review.googlesource.com/c/v8/v8/+/897624/",
+      "parentUuid": "3c6f4b1a_fc44d4e8",
+      "range": {
+        "startLine": 412,
+        "startChar": 2,
+        "endLine": 412,
+        "endChar": 54
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12c623f8_2f74dfce",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "removed since https://chromium-review.googlesource.com/c/v8/v8/+/897624/",
+      "range": {
+        "startLine": 429,
+        "startChar": 6,
+        "endLine": 429,
+        "endChar": 25
+      },
+      "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8fd2b62_411d22b8",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-02T14:39:25Z",
+      "side": 1,
+      "message": "removed since https://chromium-review.googlesource.com/c/v8/v8/+/897624/",
+      "range": {
+        "startLine": 441,
+        "startChar": 6,
+        "endLine": 441,
+        "endChar": 22
       },
       "revId": "f400ca355a0e14e261ee526b5b3396c0c6facda6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
