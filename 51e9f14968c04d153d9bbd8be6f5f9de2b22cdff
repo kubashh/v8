@@ -34,6 +34,24 @@
       "parentUuid": "0b8c01d8_be41c729",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c0b033_80639a09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-02T10:16:59Z",
+      "side": 1,
+      "message": "+1 to Marja\u0027s points, it\u0027s worth going over TODOs first. For example, TypedArrayPrototypeSort\u0027s implementation is not suitable for huge typed arrays at all.\n\nRe testing, we have a --mock-arraybuffer-allocator flag for testing some basic functionality for huge typed arrays but it helps only in very simple scenarios.\nIIRC we discussed this issue with Jakob before, and the idea was to consider throwing an error when TA.p methods see unreasonably huge typed array.\n\nCC\u0027ing Jakob, who had been working on supporting huge typed arrays in the past.",
+      "parentUuid": "989d82c7_0c6ded69",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
