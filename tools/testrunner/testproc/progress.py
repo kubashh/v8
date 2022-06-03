@@ -57,6 +57,10 @@ class ProgressIndicator(base.TestProcObserver):
 
   def configure(self, options):
     self.options = options
+  
+  def set_test_count(self, test_count):
+    self._total = test_count
+
 
 
 class SimpleProgressIndicator(ProgressIndicator):
@@ -245,9 +249,6 @@ class CompactProgressIndicator(ProgressIndicator):
 
     self._passed = 0
     self._failed = 0
-
-  def set_test_count(self, test_count):
-    self._total = test_count
 
   def _on_result_for(self, test, result):
     # TODO(majeski): Support for dummy/grouped results
