@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a3cc21f_22168ffe",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "towards a creation protocol for processors",
+      "range": {
+        "startLine": 150,
+        "startChar": 28,
+        "endLine": 150,
+        "endChar": 48
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70642f87_995789a2",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "covering some gn related paths",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 12
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a9b2b4_90236006",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "covering an exceptional path",
+      "range": {
+        "startLine": 131,
+        "startChar": 6,
+        "endLine": 131,
+        "endChar": 29
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6321aeb_18d37cb5",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "splitting tests by runners ...",
+      "range": {
+        "startLine": 422,
+        "startChar": 6,
+        "endLine": 422,
+        "endChar": 19
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1446bd96_31283424",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "... and other concerns",
+      "range": {
+        "startLine": 440,
+        "startChar": 6,
+        "endLine": 440,
+        "endChar": 15
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c31227b1_dd083a5f",
+        "filename": "tools/testrunner/testproc/combiner.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "common creation protocol and less noise in the runner classes",
+      "range": {
+        "startLine": 11,
+        "startChar": 6,
+        "endLine": 11,
+        "endChar": 12
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e893204_844f5982",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "all indicators have a common protocol now; most do not need this count, but the noise gets reduced",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f4b8a6_7c864be0",
+        "filename": "tools/testrunner/utils/augmented_options.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "A proper place for options related abstractions.",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52471560_d0d7bb42",
+        "filename": "tools/testrunner/utils/test_utils.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "making tests easier to read",
+      "range": {
+        "startLine": 125,
+        "startChar": 6,
+        "endLine": 125,
+        "endChar": 20
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24b9bfa_8d1f779e",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "This guy was getting tired of being passed around. Now it has a home.",
+      "range": {
+        "startLine": 244,
+        "startChar": 9,
+        "endLine": 244,
+        "endChar": 16
+      },
+      "revId": "5d9e94627d5270eccd90cb4d7280e1f4bbdda9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f900a10c_530d2906",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "solving the issue at line 292 in the original code",
+      "range": {
+        "startLine": 281,
+        "startChar": 6,
+        "endLine": 281,
+        "endChar": 72
+      },
+      "revId": "5d9e94627d5270eccd90cb4d7280e1f4bbdda9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a494b2_0986027d",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "Removing some \u0027feature envy\u0027 around option values. Calculations should stay close to the data.",
+      "range": {
+        "startLine": 415,
+        "startChar": 11,
+        "endLine": 415,
+        "endChar": 44
+      },
+      "revId": "5d9e94627d5270eccd90cb4d7280e1f4bbdda9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

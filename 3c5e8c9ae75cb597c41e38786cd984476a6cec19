@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "772565d5_b3579792",
+        "filename": "tools/testrunner/testproc/loader.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "maybe junk change, but does no harm; will revert if I cannot align this with a common creation protocol",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 46
+      },
+      "revId": "3c5e8c9ae75cb597c41e38786cd984476a6cec19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "648b7098_db9042f7",
+        "filename": "tools/testrunner/utils/test_utils.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-03T18:35:44Z",
+      "side": 1,
+      "message": "moved from the test original standart runner test file ... and abstracted",
+      "range": {
+        "startLine": 155,
+        "startChar": 6,
+        "endLine": 155,
+        "endChar": 15
+      },
+      "revId": "3c5e8c9ae75cb597c41e38786cd984476a6cec19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
