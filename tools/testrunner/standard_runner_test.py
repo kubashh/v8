@@ -64,27 +64,14 @@ def temp_base(baseroot='testroot1'):
   """Wrapper that sets up a temporary V8 test root.
 
   Args:
-    baseroot: The folder with the test root blueprint. Relevant files will be
+    baseroot: The folder with the test root blueprint. All files will be
         copied to the temporary test root, to guarantee a fresh setup with no
         dirty state.
   """
   basedir = os.path.join(TEST_DATA_ROOT, baseroot)
   with temp_dir() as tempbase:
-    if not os.path.exists(basedir):
-      yield tempbase
-      return
-    builddir = os.path.join(tempbase, 'out', 'build')
-    testroot = os.path.join(tempbase, 'test')
-    os.makedirs(builddir)
-    shutil.copy(os.path.join(basedir, 'v8_build_config.json'), builddir)
-    shutil.copy(os.path.join(basedir, 'd8_mocked.py'), builddir)
-
-    for suite in os.listdir(os.path.join(basedir, 'test')):
-      os.makedirs(os.path.join(testroot, suite))
-      for entry in os.listdir(os.path.join(basedir, 'test', suite)):
-        shutil.copy(
-            os.path.join(basedir, 'test', suite, entry),
-            os.path.join(testroot, suite))
+    if os.path.exists(basedir):
+      shutil.copytree(basedir, tempbase, dirs_exist_ok=True)
     yield tempbase
 
 
@@ -159,9 +146,7 @@ def clean_json_output(json_path, basedir):
   def sort_key(x):
     return str(sorted(x.items()))
   json_output['slowest_tests'].sort(key=sort_key)
-
   return json_output
-
 
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
@@ -263,6 +248,21 @@ class SystemTest(unittest.TestCase):
     )
     self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
     self.assertEqual(1, result.returncode, result)
+
+  def testGN(self):
+    """Test running only failing tests in two variants."""
+    result = run_tests('--gn',baseroot="testroot5")
+    self.assertIn('>>> Latest GN build found: build', result.stdout, result)
+    self.assertIn('Build found: ', result.stdout, result)
+    self.assertIn('v8_test_/out.gn/build', result.stdout, result)
+    self.assertEqual(2, result.returncode, result)
+
+  def testMalformedJsonConfig(self):
+    """Test running only failing tests in two variants."""
+    result = run_tests(baseroot="testroot4")
+    self.assertIn('Failed to load build config', result.stdout, result)
+    self.assertIn('testrunner.base_runner.TestRunnerError', result.stderr, result)
+    self.assertEqual(5, result.returncode, result)
 
 
   def check_cleaned_json_output(
