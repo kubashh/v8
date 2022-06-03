@@ -2,6 +2,7 @@
 # Copyright 2017 the V8 project authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+from testrunner.base_runner import TestRunnerError
 
 """
 Global system tests for V8 test runners and fuzzers.
@@ -73,18 +74,25 @@ def temp_base(baseroot='testroot1'):
     if not os.path.exists(basedir):
       yield tempbase
       return
-    builddir = os.path.join(tempbase, 'out', 'build')
-    testroot = os.path.join(tempbase, 'test')
-    os.makedirs(builddir)
-    shutil.copy(os.path.join(basedir, 'v8_build_config.json'), builddir)
-    shutil.copy(os.path.join(basedir, 'd8_mocked.py'), builddir)
-
-    for suite in os.listdir(os.path.join(basedir, 'test')):
-      os.makedirs(os.path.join(testroot, suite))
-      for entry in os.listdir(os.path.join(basedir, 'test', suite)):
-        shutil.copy(
-            os.path.join(basedir, 'test', suite, entry),
-            os.path.join(testroot, suite))
+    if True:
+      builddir = os.path.join(tempbase, 'out', 'build')
+      testroot = os.path.join(tempbase, 'test')
+      os.makedirs(builddir)
+      shutil.copy(os.path.join(basedir, 'v8_build_config.json'), builddir)
+      d8_mocked_path = os.path.join(basedir, 'd8_mocked.py')
+      if os.path.exists(d8_mocked_path):
+        shutil.copy(d8_mocked_path, builddir)
+      
+      test_path = os.path.join(basedir, 'test')
+      if os.path.exists(test_path):
+        for suite in os.listdir(test_path):
+          os.makedirs(os.path.join(testroot, suite))
+          for entry in os.listdir(os.path.join(basedir, 'test', suite)):
+            shutil.copy(
+                os.path.join(basedir, 'test', suite, entry),
+                os.path.join(testroot, suite))
+    else:
+      pass
     yield tempbase
 
 
@@ -159,9 +167,7 @@ def clean_json_output(json_path, basedir):
   def sort_key(x):
     return str(sorted(x.items()))
   json_output['slowest_tests'].sort(key=sort_key)
-
   return json_output
-
 
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
@@ -263,6 +269,12 @@ class SystemTest(unittest.TestCase):
     )
     self.assertIn('sweet/strawberries default: FAIL', result.stdout, result)
     self.assertEqual(1, result.returncode, result)
+
+  def testMalfomedJsonConfig(self):
+    """Test running only failing tests in two variants."""
+    result = run_tests(baseroot="testroot4")
+    self.assertIn('exists but contains invalid json. Is your build up-to-date?', result.stdout, result)
+    self.assertEqual(5, result.returncode, result)
 
 
   def check_cleaned_json_output(

@@ -143,7 +143,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     return variables
 
   def _do_execute(self, tests, args, options):
-    loader = LoadProc(tests)
+    loader = LoadProc(tests, float('inf'))
     fuzzer_rng = random.Random(options.fuzzer_random_seed)
 
     combiner = self._create_combiner(fuzzer_rng, options)
@@ -170,7 +170,6 @@ class NumFuzzer(base_runner.BaseTestRunner):
       execproc,
     ]
     self._prepare_procs(procs)
-    loader.load_initial_tests(initial_batch_size=float('inf'))
 
     # TODO(majeski): maybe some notification from loader would be better?
     if combiner:

@@ -25,6 +25,7 @@ from testrunner.testproc.shard import ShardProc
 from testrunner.testproc.sigproc import SignalProc
 from testrunner.testproc.timeout import TimeoutProc
 from testrunner.testproc import util
+from symbol import factor
 
 
 DEFAULT_OUT_GN = 'out.gn'
@@ -192,46 +193,45 @@ class BuildConfig(object):
     return (self.asan or self.cfi_vptr or self.msan or self.tsan or
             self.ubsan_vptr)
 
+  def timeout_scalefactor(self, initial_factor):
+    """Increases timeout for slow build configurations."""
+    factors = dict(
+      lite_mode         = 2  ,
+      predictable       = 4  ,
+      tsan              = 2  ,
+      use_sanitizer     = 1.5,
+      is_full_debug     = 4  ,
+    )
+    result = initial_factor
+    for k,v in factors.items():
+      if getattr(self, k, False):
+        result *= v
+    if self.arch in SLOW_ARCHS:
+      result *= 4.5
+    return result
+
   def __str__(self):
-    detected_options = []
-
-    if self.asan:
-      detected_options.append('asan')
-    if self.cfi_vptr:
-      detected_options.append('cfi_vptr')
-    if self.control_flow_integrity:
-      detected_options.append('control_flow_integrity')
-    if self.dcheck_always_on:
-      detected_options.append('dcheck_always_on')
-    if self.gcov_coverage:
-      detected_options.append('gcov_coverage')
-    if self.msan:
-      detected_options.append('msan')
-    if self.no_i18n:
-      detected_options.append('no_i18n')
-    if self.predictable:
-      detected_options.append('predictable')
-    if self.tsan:
-      detected_options.append('tsan')
-    if self.ubsan_vptr:
-      detected_options.append('ubsan_vptr')
-    if self.verify_csa:
-      detected_options.append('verify_csa')
-    if self.lite_mode:
-      detected_options.append('lite_mode')
-    if self.pointer_compression:
-      detected_options.append('pointer_compression')
-    if self.pointer_compression_shared_cage:
-      detected_options.append('pointer_compression_shared_cage')
-    if self.sandbox:
-      detected_options.append('sandbox')
-    if self.third_party_heap:
-      detected_options.append('third_party_heap')
-    if self.webassembly:
-      detected_options.append('webassembly')
-    if self.dict_property_const_tracking:
-      detected_options.append('dict_property_const_tracking')
-
+    attrs = [
+      'asan',
+      'cfi_vptr',
+      'control_flow_integrity',
+      'dcheck_always_on',
+      'gcov_coverage',
+      'msan',
+      'no_i18n',
+      'predictable',
+      'tsan',
+      'ubsan_vptr',
+      'verify_csa',
+      'lite_mode',
+      'pointer_compression',
+      'pointer_compression_shared_cage',
+      'sandbox',
+      'third_party_heap',
+      'webassembly',
+      'dict_property_const_tracking',
+    ]
+    detected_options = [attr for attr in attrs if getattr(self, attr, False)]
     return '\n'.join(detected_options)
 
 
@@ -266,31 +266,29 @@ class BaseTestRunner(object):
   @property
   def framework_name(self):
     """String name of the base-runner subclass, used in test results."""
-    raise NotImplementedError()
+    raise NotImplementedError() # pragma: no cover
 
   def execute(self, sys_args=None):
     if sys_args is None:  # pragma: no cover
       sys_args = sys.argv[1:]
+    parser = self._create_parser()
+    options, args = self._parse_args(parser, sys_args)
+    self.infra_staging = options.infra_staging
+    if options.swarming:
+      # Swarming doesn't print how isolated commands are called. Lets make
+      # this less cryptic by printing it ourselves.
+      print(' '.join(sys.argv))
+
+      # TODO(machenbach): Print used Python version until we have switched to
+      # Python3 everywhere.
+      print('Running with:')
+      print(sys.version)
+
+      # Kill stray processes from previous tasks on swarming.
+      util.kill_processes_linux()
+
     try:
-      parser = self._create_parser()
-      options, args = self._parse_args(parser, sys_args)
-      self.infra_staging = options.infra_staging
-      if options.swarming:
-        # Swarming doesn't print how isolated commands are called. Lets make
-        # this less cryptic by printing it ourselves.
-        print(' '.join(sys.argv))
-
-        # TODO(machenbach): Print used Python version until we have switched to
-        # Python3 everywhere.
-        print('Running with:')
-        print(sys.version)
-
-        # Kill stray processes from previous tasks on swarming.
-        util.kill_processes_linux()
-
       self._load_build_config(options)
-      command.setup(self.target_os, options.device)
-
       try:
         self._process_default_options(options)
         self._process_options(options)
@@ -299,15 +297,17 @@ class BaseTestRunner(object):
         raise
 
       args = self._parse_test_args(args)
-      tests = self._load_testsuite_generators(args, options)
-      self._setup_env()
-      print(">>> Running tests for %s.%s" % (self.build_config.arch,
-                                             self.mode_options.label))
-      exit_code = self._do_execute(tests, args, options)
-      if exit_code == utils.EXIT_CODE_FAILURES and options.json_test_results:
-        print("Force exit code 0 after failures. Json test results file "
-              "generated with failure information.")
-        exit_code = utils.EXIT_CODE_PASS
+
+      with command.command_context(self.target_os, options.device):
+        tests = self._load_testsuite_generators(args, options)
+        self._setup_env()
+        print(">>> Running tests for %s.%s" % (self.build_config.arch,
+                                               self.mode_options.label))
+        exit_code = self._do_execute(tests, args, options)
+        if exit_code == utils.EXIT_CODE_FAILURES and options.json_test_results:
+          print("Force exit code 0 after failures. Json test results file "
+                "generated with failure information.")
+          exit_code = utils.EXIT_CODE_PASS
       return exit_code
     except TestRunnerError:
       traceback.print_exc()
@@ -317,8 +317,7 @@ class BaseTestRunner(object):
     except Exception:
       traceback.print_exc()
       return utils.EXIT_CODE_INTERNAL_ERROR
-    finally:
-      command.tear_down()
+
 
   def _create_parser(self):
     parser = optparse.OptionParser()
@@ -423,7 +422,7 @@ class BaseTestRunner(object):
                            "setting this option indicates manual usage.")
 
   def _add_parser_options(self, parser):
-    pass
+    pass # pragma: no cover
 
   def _parse_args(self, parser, sys_args):
     options, args = parser.parse_args(sys_args)
@@ -731,7 +730,8 @@ class BaseTestRunner(object):
     return []
 
   def _create_test_config(self, options):
-    timeout = options.timeout * self._timeout_scalefactor(options)
+    timeout = self.build_config.timeout_scalefactor(
+        options.timeout * self.mode_options.timeout_scalefactor)
     return TestConfig(
         command_prefix=options.command_prefix,
         extra_flags=options.extra_flags,
@@ -746,28 +746,10 @@ class BaseTestRunner(object):
         verbose=options.verbose,
         regenerate_expected_files=options.regenerate_expected_files,
     )
-
-  def _timeout_scalefactor(self, options):
-    """Increases timeout for slow build configurations."""
-    factor = self.mode_options.timeout_scalefactor
-    if self.build_config.arch in SLOW_ARCHS:
-      factor *= 4.5
-    if self.build_config.lite_mode:
-      factor *= 2
-    if self.build_config.predictable:
-      factor *= 4
-    if self.build_config.tsan:
-      factor *= 2
-    if self.build_config.use_sanitizer:
-      factor *= 1.5
-    if self.build_config.is_full_debug:
-      factor *= 4
-
-    return factor
-
+    
   # TODO(majeski): remove options & args parameters
   def _do_execute(self, suites, args, options):
-    raise NotImplementedError()
+    raise NotImplementedError() # pragma: no coverage
 
   def _prepare_procs(self, procs):
     procs = list([_f for _f in procs if _f])
@@ -825,12 +807,7 @@ class BaseTestRunner(object):
 
     for proc in procs:
       proc.configure(options)
-
-    for proc in procs:
-      try:
-        proc.set_test_count(test_count)
-      except AttributeError:
-        pass
+      proc.set_test_count(test_count)
 
     return procs
 

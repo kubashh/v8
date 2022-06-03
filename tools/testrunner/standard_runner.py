@@ -276,7 +276,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     jobs = options.j
 
     print('>>> Running with test processors')
-    loader = LoadProc(tests)
+    loader = LoadProc(tests, options.j * 2)
     results = self._create_result_tracker(options)
     indicators = self._create_progress_indicators(
         tests.test_count_estimate, options)
@@ -306,8 +306,6 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     ]
 
     self._prepare_procs(procs)
-
-    loader.load_initial_tests(initial_batch_size=options.j * 2)
 
     # This starts up worker processes and blocks until all tests are
     # processed.
