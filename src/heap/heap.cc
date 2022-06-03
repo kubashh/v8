@@ -2768,13 +2768,14 @@ void Heap::ComputeFastPromotionMode() {
 void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
                                            UnprotectMemoryOrigin origin) {
   if (!write_protect_code_memory()) return;
-  if (code_page_collection_memory_modification_scope_depth_ > 0) {
-    base::MutexGuard guard(&unprotected_memory_chunks_mutex_);
-    if (unprotected_memory_chunks_.insert(chunk).second) {
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+
+  if (code_space_memory_modification_scope_depth_ > 0) return;
+
+  if (local_heap->code_page_collection_memory_modification_scope_depth_ > 0) {
+    if (local_heap->unprotected_memory_chunks_.insert(chunk).second) {
       chunk->SetCodeModificationPermissions();
     }
-  } else {
-    DCHECK_GT(code_space_memory_modification_scope_depth_, 0);
   }
 }
 
@@ -2785,17 +2786,17 @@ void Heap::UnprotectAndRegisterMemoryChunk(HeapObject object,
 }
 
 void Heap::UnregisterUnprotectedMemoryChunk(MemoryChunk* chunk) {
-  unprotected_memory_chunks_.erase(chunk);
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+  local_heap->unprotected_memory_chunks_.erase(chunk);
 }
 
 void Heap::ProtectUnprotectedMemoryChunks() {
-  base::MutexGuard guard(&unprotected_memory_chunks_mutex_);
-  for (auto chunk = unprotected_memory_chunks_.begin();
-       chunk != unprotected_memory_chunks_.end(); chunk++) {
-    DCHECK(memory_allocator()->IsMemoryChunkExecutable(*chunk));
-    (*chunk)->SetDefaultCodePermissions();
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+  for (MemoryChunk* chunk : local_heap->unprotected_memory_chunks_) {
+    DCHECK(memory_allocator()->IsMemoryChunkExecutable(chunk));
+    chunk->SetDefaultCodePermissions();
   }
-  unprotected_memory_chunks_.clear();
+  local_heap->unprotected_memory_chunks_.clear();
 }
 
 bool Heap::ExternalStringTable::Contains(String string) {

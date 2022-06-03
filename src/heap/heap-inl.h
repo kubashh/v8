@@ -622,6 +622,21 @@ CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
   }
 }
 
+void Heap::IncrementCodePageCollectionMemoryModificationScopeDepth() {
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+  local_heap->code_page_collection_memory_modification_scope_depth_++;
+}
+
+void Heap::DecrementCodePageCollectionMemoryModificationScopeDepth() {
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+  local_heap->code_page_collection_memory_modification_scope_depth_--;
+}
+
+uintptr_t Heap::code_page_collection_memory_modification_scope_depth() {
+  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
+  return local_heap->code_page_collection_memory_modification_scope_depth_;
+}
+
 CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
   if (heap_->write_protect_code_memory()) {
     heap_->decrement_code_space_memory_modification_scope_depth();
