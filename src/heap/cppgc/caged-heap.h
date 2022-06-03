@@ -8,16 +8,18 @@
 #include <limits>
 #include <memory>
 
+#include "include/cppgc/internal/caged-heap.h"
 #include "include/cppgc/platform.h"
 #include "src/base/bounded-page-allocator.h"
+#include "src/base/lazy-instance.h"
 #include "src/heap/cppgc/globals.h"
 #include "src/heap/cppgc/virtual-memory.h"
 
 namespace cppgc {
 namespace internal {
 
+class LargePage;
 struct CagedHeapLocalData;
-class HeapBase;
 
 class CagedHeap final {
  public:
@@ -37,18 +39,27 @@ class CagedHeap final {
            ~(kCagedHeapReservationAlignment - 1);
   }
 
-  CagedHeap(HeapBase& heap, PageAllocator& platform_allocator);
-  ~CagedHeap();
+  static void InitializeIfNeeded(PageAllocator& platform_allocator);
 
-  CagedHeap(const CagedHeap&) = delete;
-  CagedHeap& operator=(const CagedHeap&) = delete;
+  static CagedHeap& Instance();
 
-#if defined(CPPGC_YOUNG_GENERATION)
+#if defined(CPPGC_YOUNG_GENERATION) && 0
   void EnableGenerationalGC();
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
-  AllocatorType& allocator() { return *bounded_allocator_; }
-  const AllocatorType& allocator() const { return *bounded_allocator_; }
+  AllocatorType& normal_page_allocator() {
+    return *normal_page_bounded_allocator_;
+  }
+  const AllocatorType& normal_page_allocator() const {
+    return *normal_page_bounded_allocator_;
+  }
+
+  AllocatorType& large_page_allocator() {
+    return *large_page_bounded_allocator_;
+  }
+  const AllocatorType& large_page_allocator() const {
+    return *large_page_bounded_allocator_;
+  }
 
   CagedHeapLocalData& local_data() {
     return *static_cast<CagedHeapLocalData*>(reserved_area_.address());
@@ -58,15 +69,33 @@ class CagedHeap final {
   }
 
   bool IsOnHeap(const void* address) const {
+    // TODO: change.
     return reinterpret_cast<void*>(BaseFromAddress(address)) ==
            reserved_area_.address();
   }
 
   void* base() const { return reserved_area_.address(); }
 
+  void NotifyLargePageCreated(LargePage* page);
+  void NotifyLargePageDestroyed(LargePage* page);
+
+  LargePage* LookupLargePageFromInnerPointer(void* ptr);
+
  private:
+  friend class v8::base::LeakyObject<CagedHeap>;
+
+  explicit CagedHeap(PageAllocator& platform_allocator);
+  ~CagedHeap();
+
+  CagedHeap(const CagedHeap&) = delete;
+  CagedHeap& operator=(const CagedHeap&) = delete;
+
+  static CagedHeap* instance_;
+
   const VirtualMemory reserved_area_;
-  std::unique_ptr<AllocatorType> bounded_allocator_;
+  std::unique_ptr<AllocatorType> normal_page_bounded_allocator_;
+  std::unique_ptr<AllocatorType> large_page_bounded_allocator_;
+  std::set<LargePage*> large_pages_;
 };
 
 }  // namespace internal

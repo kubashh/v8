@@ -725,6 +725,8 @@ void CppHeap::RunMinorGC(StackState stack_state) {
   // Minor GCs with the stack are currently not supported.
   if (stack_state == StackState::kMayContainHeapPointers) return;
 
+  fprintf(stderr, "RUN MINOR GC\n");
+
   // Notify GC tracer that CppGC started young GC cycle.
   isolate_->heap()->tracer()->NotifyYoungCppGCRunning();
 

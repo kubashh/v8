@@ -24,7 +24,7 @@
 #include "src/heap/cppgc/write-barrier.h"
 
 #if defined(CPPGC_CAGED_HEAP)
-#include "include/cppgc/internal/caged-heap-local-data.h"
+#include "include/cppgc/internal/caged-heap.h"
 #endif
 
 namespace cppgc {
@@ -38,9 +38,12 @@ bool EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
       config.marking_type ==
           Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     WriteBarrier::FlagUpdater::Enter();
+    heap.set_incremental_marking_in_progress(true);
+#if 0
 #if defined(CPPGC_CAGED_HEAP)
-    heap.caged_heap().local_data().is_incremental_marking_in_progress = true;
+    CagedHeap::Instance().local_data().is_incremental_marking_in_progress = true;
 #endif  // defined(CPPGC_CAGED_HEAP)
+#endif
     return true;
   }
   return false;
@@ -52,9 +55,13 @@ bool ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
       config.marking_type ==
           Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     WriteBarrier::FlagUpdater::Exit();
+    heap.set_incremental_marking_in_progress(false);
+#if 0
 #if defined(CPPGC_CAGED_HEAP)
-    heap.caged_heap().local_data().is_incremental_marking_in_progress = false;
+    //heap.caged_heap().local_data().is_incremental_marking_in_progress = false;
+    CagedHeap::Instance().local_data().is_incremental_marking_in_progress = false;
 #endif  // defined(CPPGC_CAGED_HEAP)
+#endif
     return true;
   }
   return false;

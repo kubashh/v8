@@ -50,6 +50,19 @@ class ObjectSizeCounter : private HeapVisitor<ObjectSizeCounter> {
   size_t accumulated_size_ = 0;
 };
 
+std::unique_ptr<PageBackend> InitializePageBackend(
+    PageAllocator& allocator, FatalOutOfMemoryHandler& oom_handler) {
+#if defined(CPPGC_CAGED_HEAP)
+  CagedHeap::InitializeIfNeeded(allocator);
+  auto& caged_heap = CagedHeap::Instance();
+  return std::make_unique<PageBackend>(caged_heap.normal_page_allocator(),
+                                       caged_heap.large_page_allocator(),
+                                       oom_handler);
+#else   // !CPPGC_CAGED_HEAP
+  return std::make_unique<PageBackend>(allocator, allocator, oom_handler_);
+#endif  // !CPPGC_CAGED_HEAP
+}
+
 }  // namespace
 
 HeapBase::HeapBase(
@@ -64,14 +77,7 @@ HeapBase::HeapBase(
       lsan_page_allocator_(std::make_unique<v8::base::LsanPageAllocator>(
           platform_->GetPageAllocator())),
 #endif  // LEAK_SANITIZER
-#if defined(CPPGC_CAGED_HEAP)
-      caged_heap_(*this, *page_allocator()),
-      page_backend_(std::make_unique<PageBackend>(caged_heap_.allocator(),
-                                                  *oom_handler_.get())),
-#else   // !CPPGC_CAGED_HEAP
-      page_backend_(std::make_unique<PageBackend>(*page_allocator(),
-                                                  *oom_handler_.get())),
-#endif  // !CPPGC_CAGED_HEAP
+      page_backend_(InitializePageBackend(*page_allocator(), *oom_handler_)),
       stats_collector_(std::make_unique<StatsCollector>(platform_.get())),
       stack_(std::make_unique<heap::base::Stack>(
           v8::base::Stack::GetStackStart())),
@@ -127,7 +133,10 @@ void HeapBase::EnableGenerationalGC() {
   // Notify the global flag that the write barrier must always be enabled.
   YoungGenerationEnabler::Enable();
   // Enable young generation for the current heap.
-  caged_heap().EnableGenerationalGC();
+#if 0
+  CagedHeap::Instance().EnableGenerationalGC();
+#endif
+  is_young_generation_enabled_ = true;
   generation_support_ = GenerationSupport::kYoungAndOldGenerations;
 }
 
@@ -158,7 +167,7 @@ void HeapBase::ResetRememberedSet() {
     return;
   }
 
-  caged_heap().local_data().age_table.Reset(&caged_heap().allocator());
+  CagedHeap::Instance().local_data().age_table.Reset(page_allocator());
   remembered_set_.Reset();
   return;
 }
@@ -173,10 +182,17 @@ void HeapBase::Terminate() {
 
 #if defined(CPPGC_YOUNG_GENERATION)
   if (generational_gc_supported()) {
+#if 0
     DCHECK(caged_heap().local_data().is_young_generation_enabled);
+#endif
+    DCHECK(IsYoungGenerationEnabled());
     DCHECK_EQ(GenerationSupport::kYoungAndOldGenerations, generation_support_);
 
+#if 0
     caged_heap().local_data().is_young_generation_enabled = false;
+#endif
+    is_young_generation_enabled_ = false;
+
     generation_support_ = GenerationSupport::kSingleGeneration;
     YoungGenerationEnabler::Disable();
   }

@@ -60,12 +60,6 @@ class OverrideEmbedderStackStateScope;
 
 class Platform;
 
-class V8_EXPORT HeapHandle {
- private:
-  HeapHandle() = default;
-  friend class internal::HeapBase;
-};
-
 namespace internal {
 
 class FatalOutOfMemoryHandler;
@@ -117,9 +111,11 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
     return stats_collector_.get();
   }
 
+#if 0
 #if defined(CPPGC_CAGED_HEAP)
   CagedHeap& caged_heap() { return caged_heap_; }
   const CagedHeap& caged_heap() const { return caged_heap_; }
+#endif
 #endif
 
   heap::base::Stack* stack() { return stack_.get(); }
@@ -235,6 +231,10 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
     name_for_unnamed_object_ = value;
   }
 
+  void set_incremental_marking_in_progress(bool value) {
+    is_incremental_marking_in_progress_ = value;
+  }
+
  protected:
   enum class GenerationSupport : uint8_t {
     kSingleGeneration,
@@ -267,9 +267,6 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
   std::unique_ptr<v8::base::LsanPageAllocator> lsan_page_allocator_;
 #endif  // LEAK_SANITIZER
 
-#if defined(CPPGC_CAGED_HEAP)
-  CagedHeap caged_heap_;
-#endif  // CPPGC_CAGED_HEAP
   std::unique_ptr<PageBackend> page_backend_;
 
   // HeapRegistry requires access to page_backend_.

@@ -14,7 +14,7 @@
 #include "src/heap/cppgc/marking-visitor.h"
 
 #if defined(CPPGC_CAGED_HEAP)
-#include "include/cppgc/internal/caged-heap-local-data.h"
+#include "include/cppgc/internal/caged-heap.h"
 #endif
 
 namespace cppgc {
@@ -28,12 +28,7 @@ namespace {
 template <MarkerBase::WriteBarrierType type>
 void ProcessMarkValue(HeapObjectHeader& header, MarkerBase* marker,
                       const void* value) {
-#if defined(CPPGC_CAGED_HEAP)
-  DCHECK(reinterpret_cast<CagedHeapLocalData*>(
-             reinterpret_cast<uintptr_t>(value) &
-             ~(kCagedHeapReservationAlignment - 1))
-             ->is_incremental_marking_in_progress);
-#endif
+  DCHECK(marker->heap().IsIncrementalMarkingInProgress());
   DCHECK(header.IsMarked<AccessMode::kAtomic>());
   DCHECK(marker);
 
@@ -128,32 +123,48 @@ void WriteBarrier::SteeleMarkingBarrierSlow(const void* value) {
 void WriteBarrier::GenerationalBarrierSlow(const CagedHeapLocalData& local_data,
                                            const AgeTable& age_table,
                                            const void* slot,
-                                           uintptr_t value_offset) {
+                                           uintptr_t value_offset,
+                                           HeapHandle& heap_handle) {
   DCHECK(slot);
+  DCHECK_GT(kCagedHeapReservationSize, value_offset);
+#if 0
   // A write during atomic pause (e.g. pre-finalizer) may trigger the slow path
   // of the barrier. This is a result of the order of bailouts where not marking
   // results in applying the generational barrier.
   if (local_data.heap_base.in_atomic_pause()) return;
+#endif
 
   if (value_offset > 0 && age_table.GetAge(value_offset) == AgeTable::Age::kOld)
     return;
 
   // Record slot.
+  static_cast<HeapBase&>(heap_handle)
+      .remembered_set()
+      .AddSlot((const_cast<void*>(slot)));
+#if 0
   local_data.heap_base.remembered_set().AddSlot((const_cast<void*>(slot)));
+#endif
 }
 
 // static
 void WriteBarrier::GenerationalBarrierForSourceObjectSlow(
-    const CagedHeapLocalData& local_data, const void* inner_pointer) {
+    const CagedHeapLocalData& local_data, const void* inner_pointer,
+    HeapHandle& heap_handle) {
   DCHECK(inner_pointer);
 
   auto& object_header =
-      BasePage::FromInnerAddress(&local_data.heap_base, inner_pointer)
+      BasePage::FromInnerAddress(static_cast<HeapBase*>(&heap_handle),
+                                 inner_pointer)
           ->ObjectHeaderFromInnerAddress<AccessMode::kAtomic>(inner_pointer);
 
   // Record the source object.
+#if 0
   local_data.heap_base.remembered_set().AddSourceObject(
       const_cast<HeapObjectHeader&>(object_header));
+#endif
+  static_cast<HeapBase&>(heap_handle)
+      .remembered_set()
+      .AddSourceObject(const_cast<HeapObjectHeader&>(object_header));
 }
 #endif  // CPPGC_YOUNG_GENERATION
 
@@ -191,9 +202,12 @@ bool WriteBarrierTypeForCagedHeapPolicy::IsMarking(
   const bool is_marking = heap_base.marker() && heap_base.marker()->IsMarking();
   // Also set caged heap start here to avoid another call immediately after
   // checking IsMarking().
+#if 0
 #if defined(CPPGC_YOUNG_GENERATION)
   params.start = reinterpret_cast<uintptr_t>(heap_base.caged_heap().base());
 #endif  // !CPPGC_YOUNG_GENERATION
+#endif
+  params.start = CagedHeapBase::GetBase();
   return is_marking;
 }
 

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_LOCAL_DATA_H_
-#define INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_LOCAL_DATA_H_
+#ifndef INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_H_
+#define INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_H_
 
 #include <array>
 #include <cstddef>
@@ -21,7 +21,53 @@
 namespace cppgc {
 namespace internal {
 
-class HeapBase;
+class BasePageHandle;
+
+class V8_EXPORT CagedHeapBase {
+ public:
+  static constexpr size_t kCagedHeapNormalPageReservationSize =
+      api_constants::kCagedHeapReservationSize / 2;
+
+  static V8_INLINE bool IsWithinCage(const void* ptr) {
+    CPPGC_DCHECK(g_heap_base_);
+    return (reinterpret_cast<uintptr_t>(ptr) &
+            ~(api_constants::kCagedHeapReservationAlignment - 1)) ==
+           g_heap_base_;
+  }
+
+  static V8_INLINE bool AreWithinCage(const void* ptr1, const void* ptr2) {
+    static constexpr size_t kHalfWordShift = sizeof(uint32_t) * CHAR_BIT;
+    static_assert((1lu << kHalfWordShift) ==
+                  api_constants::kCagedHeapReservationSize);
+    CPPGC_DCHECK(g_heap_base_);
+    return !(((reinterpret_cast<uintptr_t>(ptr1) ^ g_heap_base_) |
+              (reinterpret_cast<uintptr_t>(ptr2) ^ g_heap_base_)) >>
+             kHalfWordShift);
+  }
+
+  static V8_INLINE bool IsWithinNormalPageReservation(const void* ptr) {
+    CPPGC_DCHECK(g_heap_base_);
+    // TODO: Rework with bit ops.
+    return (reinterpret_cast<uintptr_t>(ptr) - g_heap_base_) <
+           kCagedHeapNormalPageReservationSize;
+  }
+
+  static V8_INLINE bool IsWithinLargePageReservation(const void* ptr) {
+    CPPGC_DCHECK(g_heap_base_);
+    // TODO: Rework with bit ops.
+    auto uptr = reinterpret_cast<uintptr_t>(ptr);
+    return (uptr >= g_heap_base_ + kCagedHeapNormalPageReservationSize) &&
+           (uptr < g_heap_base_ + api_constants::kCagedHeapReservationSize);
+  }
+
+  static V8_INLINE uintptr_t GetBase() { return g_heap_base_; }
+
+  static BasePageHandle* LookupLargePageFromInnerPointer(const void* ptr);
+
+ private:
+  friend class CagedHeap;
+  static uintptr_t g_heap_base_;
+};
 
 #if defined(CPPGC_YOUNG_GENERATION)
 
@@ -83,11 +129,12 @@ static_assert(sizeof(AgeTable) == 1 * api_constants::kMB,
 #endif  // CPPGC_YOUNG_GENERATION
 
 struct CagedHeapLocalData final {
-  CagedHeapLocalData(HeapBase&, PageAllocator&);
+  explicit CagedHeapLocalData(PageAllocator&);
 
+#if 0
   bool is_incremental_marking_in_progress = false;
   bool is_young_generation_enabled = false;
-  HeapBase& heap_base;
+#endif
 #if defined(CPPGC_YOUNG_GENERATION)
   AgeTable age_table;
 #endif
@@ -96,4 +143,4 @@ struct CagedHeapLocalData final {
 }  // namespace internal
 }  // namespace cppgc
 
-#endif  // INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_LOCAL_DATA_H_
+#endif  // INCLUDE_CPPGC_INTERNAL_CAGED_HEAP_H_

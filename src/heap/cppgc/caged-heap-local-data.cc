@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "include/cppgc/internal/caged-heap-local-data.h"
+#include "include/cppgc/internal/caged-heap.h"
 
 #include <algorithm>
 #include <type_traits>
@@ -13,9 +13,7 @@
 namespace cppgc {
 namespace internal {
 
-CagedHeapLocalData::CagedHeapLocalData(HeapBase& heap_base,
-                                       PageAllocator& allocator)
-    : heap_base(heap_base) {
+CagedHeapLocalData::CagedHeapLocalData(PageAllocator& allocator) {
 #if defined(CPPGC_YOUNG_GENERATION)
   age_table.Reset(&allocator);
 #endif  // defined(CPPGC_YOUNG_GENERATION)

@@ -5682,7 +5682,7 @@ v8_header_set("cppgc_headers") {
   ]
 
   if (cppgc_enable_caged_heap) {
-    sources += [ "include/cppgc/internal/caged-heap-local-data.h" ]
+    sources += [ "include/cppgc/internal/caged-heap.h" ]
   }
 
   deps = [
