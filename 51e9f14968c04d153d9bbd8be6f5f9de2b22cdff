@@ -160,6 +160,24 @@
       "parentUuid": "34291286_09282622",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb63ccf_8cda2a2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-03T09:07:56Z",
+      "side": 1,
+      "message": "I don\u0027t think there can be any such uses yet, because there\u0027s no way to construct larger ABs.\n- Wasm Memories are capped to 4GiB currently (though Clemens is looking into raising that to 8 or possibly 16 GiB for \"wasm64\", so capping ABs to 4 GiB is not an option going forward).\n- PartitionAlloc won\u0027t give you more than ~2.1 GiB (if I recall the limit correctly) for direct `new ArrayBuffer(N)` construction.\nThat said, I\u0027m not sure about Node and other non-Chrome embedders.",
+      "parentUuid": "11d71906_6aab0a07",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
