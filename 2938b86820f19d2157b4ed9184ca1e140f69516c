@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30503270_9aeb02c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-06-03T21:56:12Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "2938b86820f19d2157b4ed9184ca1e140f69516c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d8ba91_520610d7",
+        "filename": "src/heap/cppgc/globals.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-06-03T21:56:12Z",
+      "side": 1,
+      "message": "I think this split introduces some tradeoffs that we would need to reason about if we decide to keep this fixed split solution.\nMostly we would need to decide if we want an even (2GB-2GB) split or perhaps some uneven one (e.g. 1GB-3GB).\n\nSince we\u0027re planning to replace this with a moving needle implementation, I don\u0027t think we need to deal with these questions now. The 2GB split is a good starting point and good enough for now.\n\nJust in case the moving needle doesn\u0027t work out, can you add a TODO to better optimize/calibrate the split?",
+      "range": {
+        "startLine": 78,
+        "startChar": 17,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "2938b86820f19d2157b4ed9184ca1e140f69516c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
