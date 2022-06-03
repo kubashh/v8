@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e3cc3a_ae10c44b",
+        "filename": "src/compiler/linear-scheduler.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-03T09:52:18Z",
+      "side": 1,
+      "message": "\"Immediate dominator\" normally refers to the parent of a block in the dominator tree of basic blocks. I think a more accurate term here would be \"early schedule position\", because we compute the earliest block (represented by a control node) where a node could be scheduled.",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "ca37e9b46f85c8b98a05c644dd870e1b5641dd3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c37054_4a3e6a0f",
+        "filename": "src/compiler/linear-scheduler.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-03T09:52:18Z",
+      "side": 1,
+      "message": "I think this shouldn\u0027t be called \"dominator level\", because it\u0027s somewhat unrelated to dominators. How about calling it \"control level\" and explaining that it\u0027s the length of the shortest control path from the start node.",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "ca37e9b46f85c8b98a05c644dd870e1b5641dd3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
