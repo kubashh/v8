@@ -233,3 +233,23 @@ d8.file.execute('test/mjsunit/typedarray-helpers.js');
     assertEquals(expected([]), helper(lengthTrackingWithOffset));
   }
 })();
+
+// Array.prototype.includes doesn't convert the search value to a Number, so
+// there are no opportunities for resizing the buffer during parameter
+// conversion of the search value.
+(function ArrayIncludesNoEvilObjectParameter() {
+  for (let ctor of ctors) {
+    const rab = CreateResizableArrayBuffer(4 * ctor.BYTES_PER_ELEMENT,
+                                           8 * ctor.BYTES_PER_ELEMENT);
+    const fixedLength = new ctor(rab, 0, 4);
+    let evil = { valueOf: () => {
+      rab.resize(2 * ctor.BYTES_PER_ELEMENT);
+      return 0;
+    }};
+    assertFalse(IncludesHelper(fixedLength, evil));
+    // The buffer didn't get resized.
+    assertEquals(4 * ctor.BYTES_PER_ELEMENT, rab.byteLength);
+  }
+})();
+
+// FIXME: Converting the index is done though and can resize!
