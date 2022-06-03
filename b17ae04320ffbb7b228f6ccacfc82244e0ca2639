@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5df4f389_a1d6f369",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3321,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-03T13:24:03Z",
+      "side": 1,
+      "message": "We do now 😊",
+      "parentUuid": "bcfff02e_e7225308",
+      "range": {
+        "startLine": 3321,
+        "startChar": 66,
+        "endLine": 3321,
+        "endChar": 68
+      },
+      "revId": "b17ae04320ffbb7b228f6ccacfc82244e0ca2639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58d43e68_9e1880db",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-06-03T12:33:09Z",
       "side": 1,
       "message": "Would it be relevant to add a comment that this can be done whenever all bytes are the same?",
+      "range": {
+        "startLine": 3322,
+        "startChar": 55,
+        "endLine": 3322,
+        "endChar": 56
+      },
+      "revId": "b17ae04320ffbb7b228f6ccacfc82244e0ca2639",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25701553_22fa2428",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-03T13:24:03Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "58d43e68_9e1880db",
       "range": {
         "startLine": 3322,
         "startChar": 55,
