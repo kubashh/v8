@@ -4,6 +4,8 @@
 
 #include "src/compiler/js-heap-broker.h"
 
+#include "src/compiler/processed-feedback.h"
+
 #ifdef ENABLE_SLOW_DCHECKS
 #include <algorithm>
 #endif
@@ -485,6 +487,7 @@ const ProcessedFeedback& JSHeapBroker::NewInsufficientFeedback(
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
     FeedbackSource const& source, AccessMode mode,
     base::Optional<NameRef> static_name) {
+  PrintF("JSHeapBroker::ReadFeedbackForPropertyAccess\n");
   FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
   FeedbackSlotKind kind = nexus.kind();
   if (nexus.IsUninitialized()) return NewInsufficientFeedback(kind);
@@ -513,6 +516,8 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
       maps.push_back(map);
     }
   }
+
+  PrintF("name.has_value() = %d\n", static_name.has_value());
 
   base::Optional<NameRef> name =
       static_name.has_value() ? static_name : GetNameFeedback(nexus);
@@ -782,7 +787,12 @@ ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForForIn(
 ProcessedFeedback const& JSHeapBroker::GetFeedbackForPropertyAccess(
     FeedbackSource const& source, AccessMode mode,
     base::Optional<NameRef> static_name) {
-  if (HasFeedback(source)) return GetFeedback(source);
+  PrintF("JSHeapBroker::GetFeedbackForPropertyAccess\n");
+  if (HasFeedback(source)) {
+    PrintF("Source has feedback, returning that\n");
+    return GetFeedback(source);
+  }
+  PrintF("Source has no feedback, doing something else\n");
   ProcessedFeedback const& feedback =
       ReadFeedbackForPropertyAccess(source, mode, static_name);
   SetFeedback(source, &feedback);
@@ -953,7 +963,42 @@ InstanceOfFeedback const& ProcessedFeedback::AsInstanceOf() const {
   return *static_cast<InstanceOfFeedback const*>(this);
 }
 
+namespace {
+const char* kind_to_str(ProcessedFeedback::Kind kind) {
+  switch (kind) {
+    case ProcessedFeedback::Kind::kInsufficient:
+      return "kInsufficient";
+    case ProcessedFeedback::Kind::kBinaryOperation:
+      return "kBinaryOperation";
+    case ProcessedFeedback::Kind::kCall:
+      return "kCall";
+    case ProcessedFeedback::Kind::kCompareOperation:
+      return "kCompareOperation";
+    case ProcessedFeedback::Kind::kElementAccess:
+      return "kElementAccess";
+    case ProcessedFeedback::Kind::kForIn:
+      return "kForIn";
+    case ProcessedFeedback::Kind::kGlobalAccess:
+      return "kGlobalAccess";
+    case ProcessedFeedback::Kind::kInstanceOf:
+      return "kInstanceOf";
+    case ProcessedFeedback::Kind::kLiteral:
+      return "kLiteral";
+    case ProcessedFeedback::Kind::kMegaDOMPropertyAccess:
+      return "kMegaDOMPropertyAccess";
+    case ProcessedFeedback::Kind::kNamedAccess:
+      return "kNamedAccess";
+    case ProcessedFeedback::Kind::kRegExpLiteral:
+      return "kRegExpLiteral";
+    case ProcessedFeedback::Kind::kTemplateObject:
+      return "kTemplateObject";
+  }
+}
+}  // namespace
+
 NamedAccessFeedback const& ProcessedFeedback::AsNamedAccess() const {
+  PrintF("ProcessedFeedback::AsNamedAccess()\n");
+  PrintF("Kind: %s\n", kind_to_str(kind()));
   CHECK_EQ(kNamedAccess, kind());
   return *static_cast<NamedAccessFeedback const*>(this);
 }

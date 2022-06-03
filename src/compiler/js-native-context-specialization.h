@@ -105,6 +105,7 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
                                  Node* value, FeedbackSource const& source,
                                  AccessMode access_mode);
   Reduction ReduceNamedAccess(Node* node, Node* value,
+                              FeedbackSource const& source,
                               NamedAccessFeedback const& feedback,
                               AccessMode access_mode, Node* key = nullptr);
   Reduction ReduceMegaDOMPropertyAccess(

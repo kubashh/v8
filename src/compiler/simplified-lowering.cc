@@ -3254,6 +3254,12 @@ class RepresentationSelector {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);
       }
+      case IrOpcode::kStringCharCodeAtWithFeedback: {
+        // TODO: this is wrong because this operator now has a variable arity.
+        // I'm not sure how to handle that. We'll see.
+        return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
+                             MachineRepresentation::kWord32);
+      }
       case IrOpcode::kStringCodePointAt: {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);

@@ -234,6 +234,9 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   // On bailout from a reduction, be sure to return inference.NoChange().
   bool DoPromiseChecks(MapInference* inference);
 
+  Node* CreateStringCharAtNode(Node* node, Node* receiver, Node* index,
+                               Effect effect, Control control);
+
   Node* CreateClosureFromBuiltinSharedFunctionInfo(SharedFunctionInfoRef shared,
                                                    Node* context, Node* effect,
                                                    Node* control);

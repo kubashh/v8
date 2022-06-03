@@ -308,6 +308,7 @@ void NodeProperties::CollectControlProjections(Node* node, Node** projections,
 
 // static
 bool NodeProperties::IsSame(Node* a, Node* b) {
+  PrintF("IsSame(%p, %p)\n", a, b);
   for (;;) {
     if (a->opcode() == IrOpcode::kCheckHeapObject) {
       a = GetValueInput(a, 0);
@@ -371,8 +372,12 @@ ZoneRefUnorderedSet<MapRef> RefSetOf(JSHeapBroker* broker, const MapRef& ref) {
 NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
     JSHeapBroker* broker, Node* receiver, Effect effect,
     ZoneRefUnorderedSet<MapRef>* maps_out) {
+  PrintF("NodeProperties::InferMapsUnsafe\n");
+  PrintF("Receiver: ");
+  receiver->Print();
   HeapObjectMatcher m(receiver);
   if (m.HasResolvedValue()) {
+    PrintF("m.HasResolvedValue()\n");
     HeapObjectRef ref = m.Ref(broker);
     // We don't use ICs for the Array.prototype and the Object.prototype
     // because the runtime has to be able to intercept them properly, so
@@ -383,18 +388,26 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
     // Object.prototype have NO_ELEMENTS elements kind.
     if (!ref.IsJSObject() ||
         !broker->IsArrayOrObjectPrototype(ref.AsJSObject())) {
+      PrintF("In this if?\n");
       if (ref.map().is_stable()) {
+        PrintF("Map is stable...\n");
         // The {receiver_map} is only reliable when we install a stability
         // code dependency.
         *maps_out = RefSetOf(broker, ref.map());
         return kUnreliableMaps;
+      } else {
+        PrintF("Map is not stable...\n");
       }
+    } else {
+      PrintF("This else?\n");
     }
   }
+  PrintF("Not sure how it went, but we're here\n");
   InferMapsResult result = kReliableMaps;
   while (true) {
     switch (effect->opcode()) {
       case IrOpcode::kMapGuard: {
+        PrintF("case IrOpcode::kMapGuard\n");
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_out = ToRefSet(broker, MapGuardMapsOf(effect->op()));
@@ -403,6 +416,7 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         break;
       }
       case IrOpcode::kCheckMaps: {
+        PrintF("case IrOpcode::kCheckMaps\n");
         Node* const object = GetValueInput(effect, 0);
         if (IsSame(receiver, object)) {
           *maps_out =
@@ -412,6 +426,7 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         break;
       }
       case IrOpcode::kJSCreate: {
+        PrintF("case IrOpcode::kJSCreate\n");
         if (IsSame(receiver, effect)) {
           base::Optional<MapRef> initial_map = GetJSCreateMap(broker, receiver);
           if (initial_map.has_value()) {
@@ -425,6 +440,7 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         break;
       }
       case IrOpcode::kJSCreatePromise: {
+        PrintF("case IrOpcode::kJSCreatePromise\n");
         if (IsSame(receiver, effect)) {
           *maps_out = RefSetOf(
               broker,
@@ -435,6 +451,7 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         break;
       }
       case IrOpcode::kStoreField: {
+        PrintF("case IrOpcode::kStoreField\n");
         // We only care about StoreField of maps.
         Node* const object = GetValueInput(effect, 0);
         FieldAccess const& access = FieldAccessOf(effect->op());
@@ -458,10 +475,12 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
       case IrOpcode::kJSStoreModule:
       case IrOpcode::kStoreElement:
       case IrOpcode::kStoreTypedElement: {
+        PrintF("case IrOpcode::kStoreTypedElement & more\n");
         // These never change the map of objects.
         break;
       }
       case IrOpcode::kFinishRegion: {
+        PrintF("case IrOpcode::kFinishRegion\n");
         // FinishRegion renames the output of allocations, so we need
         // to update the {receiver} that we are looking for, if the
         // {receiver} matches the current {effect}.
@@ -469,6 +488,7 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         break;
       }
       case IrOpcode::kEffectPhi: {
+        PrintF("case IrOpcode::kEffectPhi\n");
         Node* control = GetControlInput(effect);
         if (control->opcode() != IrOpcode::kLoop) {
           DCHECK(control->opcode() == IrOpcode::kDead ||
@@ -483,15 +503,18 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
         continue;
       }
       default: {
+        PrintF("case default\n");
         DCHECK_EQ(1, effect->op()->EffectOutputCount());
         if (effect->op()->EffectInputCount() != 1) {
           // Didn't find any appropriate CheckMaps node.
+          PrintF("EffectInputCount != 1  =====>  kNoMaps\n");
           return kNoMaps;
         }
         if (!effect->op()->HasProperty(Operator::kNoWrite)) {
           // Without alias/escape analysis we cannot tell whether this
           // {effect} affects {receiver} or not.
           result = kUnreliableMaps;
+          PrintF("kNoWrite  =====>  kUnreliableMaps\n");
         }
         break;
       }
@@ -499,7 +522,10 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
 
     // Stop walking the effect chain once we hit the definition of
     // the {receiver} along the {effect}s.
-    if (IsSame(receiver, effect)) return kNoMaps;
+    if (IsSame(receiver, effect)) {
+      PrintF("IsSame ==> returning kNoMaps\n");
+      return kNoMaps;
+    }
 
     // Continue with the next {effect}.
     DCHECK_EQ(1, effect->op()->EffectInputCount());

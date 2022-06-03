@@ -990,6 +990,8 @@ class InitialMapInstanceSizePredictionDependency final
 
 void CompilationDependencies::RecordDependency(
     CompilationDependency const* dependency) {
+  PrintF("CompilationDependencies::RecordDependency\n");
+  PrintF("dependency: %s\n", dependency->ToString());
   if (dependency != nullptr) dependencies_.insert(dependency);
 }
 
@@ -1124,6 +1126,7 @@ void CompilationDependencies::DependOnOwnConstantElement(
 void CompilationDependencies::DependOnOwnConstantDataProperty(
     const JSObjectRef& holder, const MapRef& map, Representation representation,
     FieldIndex index, const ObjectRef& value) {
+  PrintF("CompilationDependencies::DependOnOwnConstantDataProperty\n");
   RecordDependency(zone_->New<OwnConstantDataPropertyDependency>(
       broker_, holder, map, representation, index, value));
 }

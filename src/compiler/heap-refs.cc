@@ -293,6 +293,7 @@ base::Optional<ObjectRef> GetOwnFastDataPropertyFromHeap(
     FieldIndex field_index) {
   base::Optional<Object> constant;
   {
+    PrintF("GetOwnFastDataPropertyFromHeap\n");
     DisallowGarbageCollection no_gc;
     PtrComprCageBase cage_base = broker->cage_base();
 
@@ -1862,9 +1863,11 @@ base::Optional<Object> JSObjectRef::GetOwnConstantElementFromHeap(
 base::Optional<ObjectRef> JSObjectRef::GetOwnFastDataProperty(
     Representation field_representation, FieldIndex index,
     CompilationDependencies* dependencies) const {
+  PrintF("JSObjectRef::GetOwnFastDataProperty\n");
   base::Optional<ObjectRef> result = GetOwnFastDataPropertyFromHeap(
       broker(), *this, field_representation, index);
   if (result.has_value()) {
+    PrintF("result.has_value(). Adding a dependency somehow?\n");
     dependencies->DependOnOwnConstantDataProperty(
         *this, map(), field_representation, index, *result);
   }

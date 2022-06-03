@@ -10,6 +10,7 @@
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/processed-feedback.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/execution/isolate-inl.h"
 #include "src/objects/field-index-inl.h"
@@ -52,16 +53,64 @@ bool HasOnlyNumberMaps(JSHeapBroker* broker, ZoneVector<MapRef> const& maps) {
 
 }  // namespace
 
-bool PropertyAccessBuilder::TryBuildStringCheck(JSHeapBroker* broker,
-                                                ZoneVector<MapRef> const& maps,
-                                                Node** receiver, Effect* effect,
-                                                Control control) {
+namespace {
+const char* kind_to_str(ProcessedFeedback::Kind kind) {
+  switch (kind) {
+    case ProcessedFeedback::Kind::kInsufficient:
+      return "kInsufficient";
+    case ProcessedFeedback::Kind::kBinaryOperation:
+      return "kBinaryOperation";
+    case ProcessedFeedback::Kind::kCall:
+      return "kCall";
+    case ProcessedFeedback::Kind::kCompareOperation:
+      return "kCompareOperation";
+    case ProcessedFeedback::Kind::kElementAccess:
+      return "kElementAccess";
+    case ProcessedFeedback::Kind::kForIn:
+      return "kForIn";
+    case ProcessedFeedback::Kind::kGlobalAccess:
+      return "kGlobalAccess";
+    case ProcessedFeedback::Kind::kInstanceOf:
+      return "kInstanceOf";
+    case ProcessedFeedback::Kind::kLiteral:
+      return "kLiteral";
+    case ProcessedFeedback::Kind::kMegaDOMPropertyAccess:
+      return "kMegaDOMPropertyAccess";
+    case ProcessedFeedback::Kind::kNamedAccess:
+      return "kNamedAccess";
+    case ProcessedFeedback::Kind::kRegExpLiteral:
+      return "kRegExpLiteral";
+    case ProcessedFeedback::Kind::kTemplateObject:
+      return "kTemplateObject";
+  }
+}
+}  // namespace
+
+bool PropertyAccessBuilder::TryBuildStringCheck(
+    JSHeapBroker* broker, ZoneVector<MapRef> const& maps, Node** receiver,
+    Effect* effect, Control control,
+    base::Optional<FeedbackSource const> source) {
+  PrintF("PropertyAccessBuilder::TryBuildStringCheck\n");
+  PrintF("feedback has value: %d\n", source.has_value());
+  if (source.has_value()) {
+    ProcessedFeedback const& feedback = broker->GetFeedbackForPropertyAccess(
+        source.value(), AccessMode::kLoad, {});
+    PrintF("Source feedback kind = %s\n", kind_to_str(feedback.kind()));
+  }
+
   if (HasOnlyStringMaps(broker, maps)) {
     // Monormorphic string access (ignoring the fact that there are multiple
     // String maps).
-    *receiver = *effect =
-        graph()->NewNode(simplified()->CheckString(FeedbackSource()), *receiver,
-                         *effect, control);
+    *receiver = *effect = graph()->NewNode(
+        simplified()->CheckString(source.has_value() ? source.value()
+                                                     : FeedbackSource()),
+        *receiver, *effect, control);
+    // *receiver = *effect =
+    //     graph()->NewNode(simplified()->CheckString(FeedbackSource()),
+    //     *receiver,
+    //                      *effect, control);
+    PrintF("Just built this node: ");
+    (*receiver)->Print();
     return true;
   }
   return false;
@@ -183,6 +232,7 @@ base::Optional<Node*> PropertyAccessBuilder::FoldLoadDictPrototypeConstant(
 Node* PropertyAccessBuilder::TryFoldLoadConstantDataField(
     NameRef const& name, PropertyAccessInfo const& access_info,
     Node* lookup_start_object) {
+  PrintF("PropertyAccessBuilder::TryFoldLoadConstantDataField\n");
   if (!access_info.IsFastDataConstant()) return nullptr;
 
   // First, determine if we have a constant holder to load from.
@@ -190,6 +240,7 @@ Node* PropertyAccessBuilder::TryFoldLoadConstantDataField(
 
   // If {access_info} has a holder, just use it.
   if (!holder.has_value()) {
+    PrintF("!holder.has_value()\n");
     // Otherwise, try to match the {lookup_start_object} as a constant.
     HeapObjectMatcher m(lookup_start_object);
     if (!m.HasResolvedValue() || !m.Ref(broker()).IsJSObject()) return nullptr;
@@ -208,6 +259,7 @@ Node* PropertyAccessBuilder::TryFoldLoadConstantDataField(
     }
     holder = m.Ref(broker()).AsJSObject();
   }
+  PrintF("About to build value node\n");
 
   base::Optional<ObjectRef> value =
       holder->GetOwnFastDataProperty(access_info.field_representation(),
@@ -220,6 +272,7 @@ Node* PropertyAccessBuilder::BuildLoadDataField(NameRef const& name,
                                                 FieldAccess& field_access,
                                                 bool is_inobject, Node** effect,
                                                 Node** control) {
+  PrintF("PropertyAccessBuilder::BuildLoadDataField (1)\n");
   Node* storage = holder;
   if (!is_inobject) {
     storage = *effect = graph()->NewNode(
@@ -229,7 +282,9 @@ Node* PropertyAccessBuilder::BuildLoadDataField(NameRef const& name,
   }
   if (field_access.machine_type.representation() ==
       MachineRepresentation::kFloat64) {
+    PrintF("machine_type == kFloat64\n");
     if (dependencies() == nullptr) {
+      PrintF("dependencies() == nullptr\n");
       FieldAccess const storage_access = {kTaggedBase,
                                           field_access.offset,
                                           name.object(),
@@ -257,6 +312,7 @@ Node* PropertyAccessBuilder::BuildLoadDataField(NameRef const& name,
           simplified()->CheckIf(DeoptimizeReason::kNotAHeapNumber),
           is_heap_number, *effect, *control);
     } else {
+      PrintF("dependencies() not nullptr\n");
       FieldAccess const storage_access = {kTaggedBase,
                                           field_access.offset,
                                           name.object(),
@@ -273,16 +329,23 @@ Node* PropertyAccessBuilder::BuildLoadDataField(NameRef const& name,
   }
   Node* value = *effect = graph()->NewNode(
       simplified()->LoadField(field_access), storage, *effect, *control);
+  PrintF("Just created the node: ");
+  value->Print();
   return value;
 }
 
 Node* PropertyAccessBuilder::BuildLoadDataField(
     NameRef const& name, PropertyAccessInfo const& access_info,
     Node* lookup_start_object, Node** effect, Node** control) {
+  PrintF("PropertyAccessBuilder::BuildLoadDataField (2)\nname = ");
+  name.object()->NameShortPrint();
+  PrintF("\n");
   DCHECK(access_info.IsDataField() || access_info.IsFastDataConstant());
 
   if (Node* value = TryFoldLoadConstantDataField(name, access_info,
                                                  lookup_start_object)) {
+    PrintF("TryFoldLoadConstantDataField succeeded: ");
+    value->Print();
     return value;
   }
 
@@ -301,6 +364,7 @@ Node* PropertyAccessBuilder::BuildLoadDataField(
       access_info.GetConstFieldInfo()};
   if (field_representation == MachineRepresentation::kTaggedPointer ||
       field_representation == MachineRepresentation::kCompressedPointer) {
+    PrintF("Gonna insert some map checks?\n");
     // Remember the map of the field value, if its map is stable. This is
     // used by the LoadElimination to eliminate map checks on the result.
     base::Optional<MapRef> field_map = access_info.field_map();

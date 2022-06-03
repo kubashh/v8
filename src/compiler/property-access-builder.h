@@ -35,7 +35,8 @@ class PropertyAccessBuilder {
   // Builds the appropriate string check if the maps are only string
   // maps.
   bool TryBuildStringCheck(JSHeapBroker* broker, ZoneVector<MapRef> const& maps,
-                           Node** receiver, Effect* effect, Control control);
+                           Node** receiver, Effect* effect, Control control,
+                           base::Optional<FeedbackSource const> feedback = {});
   // Builds a number check if all maps are number maps.
   bool TryBuildNumberCheck(JSHeapBroker* broker, ZoneVector<MapRef> const& maps,
                            Node** receiver, Effect* effect, Control control);

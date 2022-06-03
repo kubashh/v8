@@ -16,6 +16,7 @@ namespace compiler {
 
 MapInference::MapInference(JSHeapBroker* broker, Node* object, Effect effect)
     : broker_(broker), object_(object), maps_(broker->zone()) {
+  PrintF("Creating a MapInference\n");
   ZoneRefUnorderedSet<MapRef> maps(broker->zone());
   auto result =
       NodeProperties::InferMapsUnsafe(broker_, object_, effect, &maps);

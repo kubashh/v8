@@ -1130,8 +1130,11 @@ Reduction JSNativeContextSpecialization::ReduceMegaDOMPropertyAccess(
 }
 
 Reduction JSNativeContextSpecialization::ReduceNamedAccess(
-    Node* node, Node* value, NamedAccessFeedback const& feedback,
-    AccessMode access_mode, Node* key) {
+    Node* node, Node* value, FeedbackSource const& source,
+    NamedAccessFeedback const& feedback, AccessMode access_mode, Node* key) {
+  PrintF("ReduceNamedAccess: ");
+  node->Print();
+  PrintF("Maps in feedback: %d\n", static_cast<int>(feedback.maps().size()));
   DCHECK(node->opcode() == IrOpcode::kJSLoadNamed ||
          node->opcode() == IrOpcode::kJSSetNamedProperty ||
          node->opcode() == IrOpcode::kJSLoadProperty ||
@@ -1174,6 +1177,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   // Either infer maps from the graph or use the feedback.
   ZoneVector<MapRef> inferred_maps(zone());
   if (!InferMaps(lookup_start_object, effect, &inferred_maps)) {
+    PrintF("Didn't manage to infer maps. In feedback: %d\n",
+           static_cast<int>(feedback.maps().size()));
     for (const MapRef& map : feedback.maps()) {
       inferred_maps.push_back(map);
     }
@@ -1199,6 +1204,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       }
     }
   }
+
+  PrintF("Still here 1\n");
 
   ZoneVector<PropertyAccessInfo> access_infos(zone());
   {
@@ -1226,6 +1233,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
     }
   }
 
+  PrintF("Still here 2\n");
+
   // Ensure that {key} matches the specified name (if {key} is given).
   if (key != nullptr) {
     effect = BuildCheckEqualsName(feedback.name(), key, effect, control);
@@ -1243,8 +1252,10 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
   // Check for the monomorphic cases.
   if (access_infos.size() == 1) {
+    PrintF("Monomorphic: access_infos.size() == 1\n");
     PropertyAccessInfo access_info = access_infos.front();
     if (receiver != lookup_start_object) {
+      PrintF("receiver != lookup_start_object\n");
       // Super property access. lookup_start_object is a JSReceiver or
       // null. It can't be a number, a string etc. So trying to build the
       // checks in the "else if" branch doesn't make sense.
@@ -1253,10 +1264,11 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
     } else if (!access_builder.TryBuildStringCheck(
                    broker(), access_info.lookup_start_object_maps(), &receiver,
-                   &effect, control) &&
+                   &effect, control, source) &&
                !access_builder.TryBuildNumberCheck(
                    broker(), access_info.lookup_start_object_maps(), &receiver,
                    &effect, control)) {
+      PrintF("else if (........)\n");
       // Try to build string check or number check if possible. Otherwise build
       // a map check.
 
@@ -1286,6 +1298,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
                                       access_info.lookup_start_object_maps());
       }
     } else {
+      PrintF("else: nothing\n");
       // At least one of TryBuildStringCheck & TryBuildNumberCheck succeeded
       // and updated the receiver. Update lookup_start_object to match (they
       // should be the same).
@@ -1304,10 +1317,12 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       // trimming.
       return NoChange();
     }
+    PrintF("Gonna set value here\n");
     value = continuation->value();
     effect = continuation->effect();
     control = continuation->control();
   } else {
+    PrintF("Polymorphic: access_infos.size() != 1\n");
     // The final states for every polymorphic branch. We join them with
     // Merge+Phi+EffectPhi at the bottom.
     ZoneVector<Node*> values(zone());
@@ -1464,6 +1479,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
     }
   }
 
+  PrintF("Still here 3\n");
+
   // Properly rewire IfException edges if {node} is inside a try-block.
   if (!if_exception_nodes.empty()) {
     DCHECK_NOT_NULL(if_exception);
@@ -1481,11 +1498,15 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
     ReplaceWithValue(if_exception, phi, ephi, merge);
   }
 
+  PrintF("New thingy: ");
+  value->Print();
+
   ReplaceWithValue(node, value, effect, control);
   return Replace(value);
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
+  PrintF("JSNativeContextSpecialization::ReduceJSLoadNamed\n");
   JSLoadNamedNode n(node);
   NamedAccess const& p = n.Parameters();
   Node* const receiver = n.object();
@@ -1726,6 +1747,9 @@ Reduction JSNativeContextSpecialization::ReduceElementAccessOnString(
   Node* receiver = NodeProperties::GetValueInput(node, 0);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
+
+  PrintF("Gonna insert a CheckString for: ");
+  node->Print();
 
   // Strings are immutable in JavaScript.
   if (keyed_mode.access_mode() == AccessMode::kStore) return NoChange();
@@ -2116,6 +2140,7 @@ Reduction JSNativeContextSpecialization::ReduceElementLoadFromHeapConstant(
 Reduction JSNativeContextSpecialization::ReducePropertyAccess(
     Node* node, Node* key, base::Optional<NameRef> static_name, Node* value,
     FeedbackSource const& source, AccessMode access_mode) {
+  PrintF("JSNativeContextSpecialization::ReducePropertyAccess\n");
   DCHECK_EQ(key == nullptr, static_name.has_value());
   DCHECK(node->opcode() == IrOpcode::kJSLoadProperty ||
          node->opcode() == IrOpcode::kJSSetKeyedProperty ||
@@ -2137,7 +2162,7 @@ Reduction JSNativeContextSpecialization::ReducePropertyAccess(
           node,
           DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
     case ProcessedFeedback::kNamedAccess:
-      return ReduceNamedAccess(node, value, feedback.AsNamedAccess(),
+      return ReduceNamedAccess(node, value, source, feedback.AsNamedAccess(),
                                access_mode, key);
     case ProcessedFeedback::kMegaDOMPropertyAccess:
       DCHECK_EQ(access_mode, AccessMode::kLoad);
@@ -2457,6 +2482,7 @@ JSNativeContextSpecialization::BuildPropertyLoad(
     Node* lookup_start_object, Node* receiver, Node* context, Node* frame_state,
     Node* effect, Node* control, NameRef const& name,
     ZoneVector<Node*>* if_exceptions, PropertyAccessInfo const& access_info) {
+  PrintF("JSNativeContextSpecialization::BuildPropertyLoad\n");
   // Determine actual holder and perform prototype chain checks.
   base::Optional<JSObjectRef> holder = access_info.holder();
   if (holder.has_value() && !access_info.HasDictionaryHolder()) {
@@ -2468,9 +2494,11 @@ JSNativeContextSpecialization::BuildPropertyLoad(
   // Generate the actual property access.
   Node* value;
   if (access_info.IsNotFound()) {
+    PrintF("If 1\n");
     value = jsgraph()->UndefinedConstant();
   } else if (access_info.IsFastAccessorConstant() ||
              access_info.IsDictionaryProtoAccessorConstant()) {
+    PrintF("If 2\n");
     ConvertReceiverMode receiver_mode =
         receiver == lookup_start_object
             ? ConvertReceiverMode::kNotNullOrUndefined
@@ -2479,23 +2507,28 @@ JSNativeContextSpecialization::BuildPropertyLoad(
         receiver, receiver_mode, lookup_start_object, context, frame_state,
         &effect, &control, if_exceptions, access_info);
   } else if (access_info.IsModuleExport()) {
+    PrintF("If 3\n");
     Node* cell = jsgraph()->Constant(access_info.constant().value().AsCell());
     value = effect =
         graph()->NewNode(simplified()->LoadField(AccessBuilder::ForCellValue()),
                          cell, effect, control);
   } else if (access_info.IsStringLength()) {
+    PrintF("If 4\n");
     DCHECK_EQ(receiver, lookup_start_object);
     value = graph()->NewNode(simplified()->StringLength(), receiver);
   } else {
+    PrintF("If 5\n");
     DCHECK(access_info.IsDataField() || access_info.IsFastDataConstant() ||
            access_info.IsDictionaryProtoDataConstant());
     PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
     if (access_info.IsDictionaryProtoDataConstant()) {
+      PrintF("If-2 1\n");
       auto maybe_value =
           access_builder.FoldLoadDictPrototypeConstant(access_info);
       if (!maybe_value) return {};
       value = maybe_value.value();
     } else {
+      PrintF("If-2 2\n");
       value = access_builder.BuildLoadDataField(
           name, access_info, lookup_start_object, &effect, &control);
     }
@@ -2531,6 +2564,7 @@ JSNativeContextSpecialization::BuildPropertyAccess(
     Node* frame_state, Node* effect, Node* control, NameRef const& name,
     ZoneVector<Node*>* if_exceptions, PropertyAccessInfo const& access_info,
     AccessMode access_mode) {
+  PrintF("JSNativeContextSpecialization::BuildPropertyAccess\n");
   switch (access_mode) {
     case AccessMode::kLoad:
       return BuildPropertyLoad(lookup_start_object, receiver, context,
