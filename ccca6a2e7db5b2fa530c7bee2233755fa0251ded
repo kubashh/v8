@@ -56,6 +56,30 @@
       },
       "revId": "ccca6a2e7db5b2fa530c7bee2233755fa0251ded",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acd9921c_2263b358",
+        "filename": "src/wasm/wasm-opcodes-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-03T08:40:51Z",
+      "side": 1,
+      "message": "Oh, right. Done.",
+      "parentUuid": "3515be50_bb9cf3ce",
+      "range": {
+        "startLine": 698,
+        "startChar": 6,
+        "endLine": 698,
+        "endChar": 15
+      },
+      "revId": "ccca6a2e7db5b2fa530c7bee2233755fa0251ded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
