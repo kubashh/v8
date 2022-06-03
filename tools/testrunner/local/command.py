@@ -327,6 +327,39 @@ class AndroidCommand(BaseCommand):
 
 
 Command = None
+
+class CommandContext():
+  def __init__(self, command):
+    global Command
+    Command = command
+
+  @contextmanager
+  def context(self, device):
+    yield
+
+class AndroidContext():
+  def __init__(self):
+    global Command
+    Command = AndroidCommand
+
+  @contextmanager
+  def context(self, device):
+    try:
+      AndroidCommand.driver = android_driver(device)
+    finally:
+      AndroidCommand.driver.tear_down()
+
+@contextmanager
+def command_context(target_os, device):
+  factory = dict(
+    android=AndroidContext(),
+    windows=CommandContext(WindowsCommand),
+  )
+  context = factory.get(target_os, CommandContext(PosixCommand))
+  with context.context(device):
+    yield
+
+# Deprecated : use command_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
@@ -338,6 +371,7 @@ def setup(target_os, device):
   else:
     Command = PosixCommand
 
+# Deprecated : use command_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:
