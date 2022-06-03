@@ -8,6 +8,7 @@ import os
 import platform
 import signal
 import subprocess
+import sys
 
 # Base dir of the build products for Release and Debug.
 OUT_DIR = os.path.abspath(
@@ -29,7 +30,7 @@ def list_processes_linux():
     ]
     # Filter strange process with name as out dir.
     return [p for p in processes if p[1] != OUT_DIR]
-  except:
+  except Exception:
     return []
 
 
