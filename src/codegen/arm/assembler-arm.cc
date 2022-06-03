@@ -59,17 +59,18 @@ static const unsigned kArmv8 = kArmv7WithSudiv | (1u << ARMv8);
 
 static unsigned CpuFeaturesFromCommandLine() {
   unsigned result;
-  if (strcmp(FLAG_arm_arch, "armv8") == 0) {
+  const char* arm_arch = FLAG_arm_arch;
+  if (strcmp(arm_arch, "armv8") == 0) {
     result = kArmv8;
-  } else if (strcmp(FLAG_arm_arch, "armv7+sudiv") == 0) {
+  } else if (strcmp(arm_arch, "armv7+sudiv") == 0) {
     result = kArmv7WithSudiv;
-  } else if (strcmp(FLAG_arm_arch, "armv7") == 0) {
+  } else if (strcmp(arm_arch, "armv7") == 0) {
     result = kArmv7;
-  } else if (strcmp(FLAG_arm_arch, "armv6") == 0) {
+  } else if (strcmp(arm_arch, "armv6") == 0) {
     result = kArmv6;
   } else {
     fprintf(stderr, "Error: unrecognised value for --arm-arch ('%s').\n",
-            FLAG_arm_arch);
+            arm_arch);
     fprintf(stderr,
             "Supported values are:  armv8\n"
             "                       armv7+sudiv\n"
