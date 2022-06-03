@@ -4498,10 +4498,7 @@ bool Heap::ShouldBeInSharedOldSpace(HeapObject value) {
   if (ReadOnlyHeap::Contains(value)) return false;
   if (Heap::InYoungGeneration(value)) return false;
   if (value.IsExternalString()) return false;
-  if (value.IsString()) {
-    return value.IsInternalizedString() ||
-           String::IsInPlaceInternalizable(String::cast(value));
-  }
+  if (value.IsInternalizedString()) return true;
   return false;
 }
 

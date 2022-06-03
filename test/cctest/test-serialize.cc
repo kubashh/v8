@@ -4977,7 +4977,10 @@ void CheckObjectsAreInSharedHeap(Isolate* isolate) {
   DisallowGarbageCollection no_gc;
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
-    if (heap->ShouldBeInSharedOldSpace(obj)) {
+    const bool must_be_in_shared_old =
+        heap->ShouldBeInSharedOldSpace(obj) ||
+        (obj.IsString() && String::IsInPlaceInternalizable(String::cast(obj)));
+    if (must_be_in_shared_old) {
       CHECK(obj.InSharedHeap());
     }
   }
