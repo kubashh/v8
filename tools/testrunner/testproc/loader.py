@@ -4,24 +4,28 @@
 
 from . import base
 
-
 class LoadProc(base.TestProc):
   """First processor in the chain that passes all tests to the next processor.
   """
 
-  def __init__(self, tests):
+  def __init__(self, tests, initial_batch_size):
     super(LoadProc, self).__init__()
 
     self.tests = tests
+    self.initial_batch_size = initial_batch_size*10
 
-  def load_initial_tests(self, initial_batch_size):
+  def setup(self, requirement=base.DROP_RESULT):
+    super(LoadProc, self).setup(requirement, )
+    self.load_initial_tests()
+
+  def load_initial_tests(self):
     """
     Args:
       exec_proc: execution processor that the tests are being loaded into
       initial_batch_size: initial number of tests to load
     """
     loaded_tests = 0
-    while loaded_tests < initial_batch_size:
+    while loaded_tests < self.initial_batch_size:
       try:
         t = next(self.tests)
       except StopIteration:
