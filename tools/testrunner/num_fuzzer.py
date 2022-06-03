@@ -19,6 +19,9 @@ from testrunner.testproc.expectation import ExpectationProc
 from testrunner.testproc.filter import StatusFileFilterProc, NameFilterProc
 from testrunner.testproc.loader import LoadProc
 from testrunner.utils import random_utils
+from testrunner.testproc.rerun import RerunProc
+from testrunner.testproc.timeout import TimeoutProc
+from testrunner.testproc.progress import ResultsTracker
 
 
 DEFAULT_SUITES = ["mjsunit", "webkit", "benchmarks"]
@@ -97,20 +100,20 @@ class NumFuzzer(base_runner.BaseTestRunner):
     return parser
 
 
-  def _process_options(self, options):
-    if not options.fuzzer_random_seed:
-      options.fuzzer_random_seed = random_utils.random_seed()
+  def _process_options(self):
+    if not self.options.fuzzer_random_seed:
+      self.options.fuzzer_random_seed = random_utils.random_seed()
 
-    if options.total_timeout_sec:
-      options.tests_count = 0
+    if self.options.total_timeout_sec:
+      self.options.tests_count = 0
 
-    if options.combine_tests:
-      if options.combine_min > options.combine_max:
+    if self.options.combine_tests:
+      if self.options.combine_min > self.options.combine_max:
         print(('min_group_size (%d) cannot be larger than max_group_size (%d)' %
-               options.min_group_size, options.max_group_size))
+               self.options.min_group_size, self.options.max_group_size))
         raise base_runner.TestRunnerError()
 
-    if options.variants != 'default':
+    if self.options.variants != 'default':
       print ('Only default testing variant is supported with numfuzz')
       raise base_runner.TestRunnerError()
 
@@ -125,56 +128,53 @@ class NumFuzzer(base_runner.BaseTestRunner):
         '--exit-on-contradictory-flags', '--testing-d8-test-runner', '--no-fail'
     ]
 
-  def _get_statusfile_variables(self, options):
+  def _get_statusfile_variables(self):
     variables = (
-        super(NumFuzzer, self)._get_statusfile_variables(options))
+        super(NumFuzzer, self)._get_statusfile_variables())
     variables.update({
-      'deopt_fuzzer': bool(options.stress_deopt),
-      'endurance_fuzzer': bool(options.combine_tests),
-      'gc_stress': bool(options.stress_gc),
-      'gc_fuzzer': bool(max([options.stress_marking,
-                             options.stress_scavenge,
-                             options.stress_compaction,
-                             options.stress_gc,
-                             options.stress_delay_tasks,
-                             options.stress_stack_size,
-                             options.stress_thread_pool_size])),
+      'deopt_fuzzer': bool(self.options.stress_deopt),
+      'endurance_fuzzer': bool(self.options.combine_tests),
+      'gc_stress': bool(self.options.stress_gc),
+      'gc_fuzzer': bool(max([self.options.stress_marking,
+                             self.options.stress_scavenge,
+                             self.options.stress_compaction,
+                             self.options.stress_gc,
+                             self.options.stress_delay_tasks,
+                             self.options.stress_stack_size,
+                             self.options.stress_thread_pool_size])),
     })
     return variables
 
-  def _do_execute(self, tests, args, options):
-    loader = LoadProc(tests)
-    fuzzer_rng = random.Random(options.fuzzer_random_seed)
-
-    combiner = self._create_combiner(fuzzer_rng, options)
-    results = self._create_result_tracker(options)
-    execproc = ExecutionProc(options.j)
+  def _do_execute(self, tests, args):
+    loader = LoadProc(tests, float('inf'))
+    combiner = CombinerProc.create(self.options)
+    results = ResultsTracker.create(self.options)
+    execproc = ExecutionProc(self.options.j)
     sigproc = self._create_signal_proc()
     indicators = self._create_progress_indicators(
-      tests.test_count_estimate, options)
+      tests.test_count_estimate)
     procs = [
       loader,
       NameFilterProc(args) if args else None,
       StatusFileFilterProc(None, None),
       # TODO(majeski): Improve sharding when combiner is present. Maybe select
       # different random seeds for shards instead of splitting tests.
-      self._create_shard_proc(options),
+      self._create_shard_proc(),
       ExpectationProc(),
       combiner,
-      self._create_fuzzer(fuzzer_rng, options),
+      self._create_fuzzer(),
       sigproc,
     ] + indicators + [
       results,
-      self._create_timeout_proc(options),
-      self._create_rerun_proc(options),
+      TimeoutProc.create(self.options),
+      RerunProc.create(self.options),
       execproc,
     ]
     self._prepare_procs(procs)
-    loader.load_initial_tests(initial_batch_size=float('inf'))
 
     # TODO(majeski): maybe some notification from loader would be better?
     if combiner:
-      combiner.generate_initial_tests(options.j * 4)
+      combiner.generate_initial_tests(self.options.j * 4)
 
     # This starts up worker processes and blocks until all tests are
     # processed.
@@ -190,46 +190,40 @@ class NumFuzzer(base_runner.BaseTestRunner):
     # Indicate if a SIGINT or SIGTERM happened.
     return sigproc.exit_code
 
-  def _is_testsuite_supported(self, suite, options):
-    return not options.combine_tests or suite.test_combiner_available()
+  def _is_testsuite_supported(self, suite):
+    return not self.options.combine_tests or suite.test_combiner_available()
 
-  def _create_combiner(self, rng, options):
-    if not options.combine_tests:
-      return None
-    return CombinerProc(rng, options.combine_min, options.combine_max,
-                        options.tests_count)
-
-  def _create_fuzzer(self, rng, options):
+  def _create_fuzzer(self):
     return fuzzer.FuzzerProc(
-        rng,
-        self._tests_count(options),
-        self._create_fuzzer_configs(options),
-        self._disable_analysis(options),
+        self.options.fuzzer_rng(),
+        self._tests_count(),
+        self._create_fuzzer_configs(),
+        self._disable_analysis(),
     )
 
-  def _tests_count(self, options):
-    if options.combine_tests:
+  def _tests_count(self):
+    if self.options.combine_tests:
       return 1
-    return options.tests_count
+    return self.options.tests_count
 
-  def _disable_analysis(self, options):
+  def _disable_analysis(self):
     """Disable analysis phase when options are used that don't support it."""
-    return options.combine_tests
+    return self.options.combine_tests
 
-  def _create_fuzzer_configs(self, options):
+  def _create_fuzzer_configs(self):
     fuzzers = []
     def add(name, prob, *args):
       if prob:
         fuzzers.append(fuzzer.create_fuzzer_config(name, prob, *args))
 
-    add('compaction', options.stress_compaction)
-    add('marking', options.stress_marking)
-    add('scavenge', options.stress_scavenge)
-    add('gc_interval', options.stress_gc)
-    add('stack', options.stress_stack_size)
-    add('threads', options.stress_thread_pool_size)
-    add('delay', options.stress_delay_tasks)
-    add('deopt', options.stress_deopt, options.stress_deopt_min)
+    add('compaction', self.options.stress_compaction)
+    add('marking', self.options.stress_marking)
+    add('scavenge', self.options.stress_scavenge)
+    add('gc_interval', self.options.stress_gc)
+    add('stack', self.options.stress_stack_size)
+    add('threads', self.options.stress_thread_pool_size)
+    add('delay', self.options.stress_delay_tasks)
+    add('deopt', self.options.stress_deopt, self.options.stress_deopt_min)
     return fuzzers
 
 
