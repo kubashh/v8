@@ -75,6 +75,8 @@ constexpr size_t kFreeListEntrySize = 2 * sizeof(uintptr_t);
 
 constexpr size_t kCagedHeapReservationSize = static_cast<size_t>(4) * kGB;
 constexpr size_t kCagedHeapReservationAlignment = kCagedHeapReservationSize;
+constexpr size_t kCagedHeapNormalPageReservationSize =
+    kCagedHeapReservationSize / 2;
 
 }  // namespace internal
 }  // namespace cppgc
