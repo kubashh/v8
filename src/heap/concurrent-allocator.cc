@@ -102,6 +102,12 @@ void ConcurrentAllocator::MarkLinearAllocationAreaBlack() {
   Address limit = lab_.limit();
 
   if (top != kNullAddress && top != limit) {
+    base::Optional<CodePageHeaderModificationScope> optional_rwx_write_scope;
+    if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
+        space_->identity() == CODE_SPACE) {
+      optional_rwx_write_scope.emplace(
+          "Marking Code objects requires write access to the Code page header");
+    }
     Page::FromAllocationAreaAddress(top)->CreateBlackAreaBackground(top, limit);
   }
 }
@@ -111,6 +117,12 @@ void ConcurrentAllocator::UnmarkLinearAllocationArea() {
   Address limit = lab_.limit();
 
   if (top != kNullAddress && top != limit) {
+    base::Optional<CodePageHeaderModificationScope> optional_rwx_write_scope;
+    if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
+        space_->identity() == CODE_SPACE) {
+      optional_rwx_write_scope.emplace(
+          "Marking Code objects requires write access to the Code page header");
+    }
     Page::FromAllocationAreaAddress(top)->DestroyBlackAreaBackground(top,
                                                                      limit);
   }
