@@ -16,6 +16,29 @@
       "message": "PTAL\nThanks!",
       "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fdf5024_ed54cfee",
+        "filename": "tools/testrunner/utils/test_utils.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-06-04T08:55:06Z",
+      "side": 1,
+      "message": "notice the simplified test data copy",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 13
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
