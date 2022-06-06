@@ -51,9 +51,24 @@ VirtualMemory ReserveCagedHeap(PageAllocator& platform_allocator) {
         reinterpret_cast<uintptr_t>(platform_allocator.GetRandomMmapAddr()),
         kCagedHeapReservationAlignment));
 
+#if defined(CPPGC_POINTER_COMPRESSION)
+    // If pointer compression is enabled, reserve 2x of cage size and leave the
+    // half that has the least significant bit of the most significant halfword
+    // set. This is needed for compression to make sure that compressed normal
+    // pointers have the most significant bit set to 1, so that on decompression
+    // the bit will be sign-extended. This saves us a branch and 'or' operation
+    // during compression.
+    VirtualMemory memory(&platform_allocator, 2 * kCagedHeapReservationSize,
+                         2 * kCagedHeapReservationAlignment, hint);
+    if (!memory.IsReserved()) continue;
+
+    VirtualMemory second_half = memory.Split(kCagedHeapReservationSize);
+    return second_half;
+#else   // !defined(CPPGC_POINTER_COMPRESSION)
     VirtualMemory memory(&platform_allocator, kCagedHeapReservationSize,
                          kCagedHeapReservationAlignment, hint);
     if (memory.IsReserved()) return memory;
+#endif  // !defined(CPPGC_POINTER_COMPRESSION)
   }
 
   FATAL("Fatal process out of memory: Failed to reserve memory for caged heap");
