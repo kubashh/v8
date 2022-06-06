@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "411119c234c5b8c777f3d6eacd3c20ca46d8f702",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f0f252_18b6710a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-06T23:13:05Z",
+      "side": 1,
+      "message": "Cool! Glad to see the tests reused.",
+      "revId": "411119c234c5b8c777f3d6eacd3c20ca46d8f702",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
