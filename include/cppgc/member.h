@@ -23,14 +23,22 @@ namespace internal {
 
 #if defined(CPPGC_POINTER_COMPRESSION)
 
+#if !V8_CC_MSVC
+// Attribute const allows the compiler to assume that CageBaseGlobal::g_base_
+// doesn't change (e.g. across calls) and thereby avoid redundant loads.
+#define CPPGC_CONST __attribute__((const))
+#else  // V8_CC_MSVC
+#define CPPGC_CONST
+#endif  // V8_CC_MSVC
+
 class CageBaseGlobal final {
  public:
-  V8_INLINE static uintptr_t Get() {
+  V8_INLINE CPPGC_CONST static uintptr_t Get() {
     CPPGC_DCHECK(IsBaseConsistent());
     return g_base_;
   }
 
-  V8_INLINE static bool IsSet() {
+  V8_INLINE CPPGC_CONST static bool IsSet() {
     CPPGC_DCHECK(IsBaseConsistent());
     return (g_base_ & ~kLowerHalfWordMask) != 0;
   }
@@ -54,6 +62,8 @@ class CageBaseGlobal final {
 
   friend class CageBaseGlobalUpdater;
 };
+
+#undef CPPGC_CONST
 
 class CompressedPointer final {
  public:
