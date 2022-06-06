@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "213cd71924f0515daf074cfa02b077f4fc5e9001",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b94b16b1_22602f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-06T23:26:27Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "213cd71924f0515daf074cfa02b077f4fc5e9001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eac9bb7_88dc4bcd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4496,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-06T23:26:27Z",
+      "side": 1,
+      "message": "Naming nit: Let\u0027s rename this `MustBeInSharedOldSpace`, since when sharing the string table, it is still an invariant that internalized strings must be in the shared old space.",
+      "range": {
+        "startLine": 4496,
+        "startChar": 11,
+        "endLine": 4496,
+        "endChar": 35
+      },
+      "revId": "213cd71924f0515daf074cfa02b077f4fc5e9001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ba497e_fc8f8bea",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4980,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-06T23:26:27Z",
+      "side": 1,
+      "message": "Naming nit: Let\u0027s rename this `expected_in_shared_old`.",
+      "range": {
+        "startLine": 4980,
+        "startChar": 15,
+        "endLine": 4980,
+        "endChar": 36
+      },
+      "revId": "213cd71924f0515daf074cfa02b077f4fc5e9001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
