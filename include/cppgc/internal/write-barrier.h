@@ -48,10 +48,6 @@ class V8_EXPORT WriteBarrier final {
     Type type = Type::kNone;
 #endif  // !V8_ENABLE_CHECKS
 #if defined(CPPGC_CAGED_HEAP)
-    uintptr_t start = 0;
-    CagedHeapLocalData& caged_heap() const {
-      return *reinterpret_cast<CagedHeapLocalData*>(start);
-    }
     uintptr_t slot_offset = 0;
     uintptr_t value_offset = 0;
 #endif  // CPPGC_CAGED_HEAP
@@ -169,12 +165,11 @@ class V8_EXPORT WriteBarrierTypeForCagedHeapPolicy final {
   static V8_INLINE WriteBarrier::Type GetNoSlot(const void* value,
                                                 WriteBarrier::Params& params,
                                                 HeapHandleCallback) {
-    if (!TryGetCagedHeap(value, value, params)) {
-      return WriteBarrier::Type::kNone;
-    }
+    const bool within_cage = CagedHeapBase::IsWithinCage(value);
+    if (!within_cage) return WriteBarrier::Type::kNone;
 
-    BasePageHandle* page = CagedHeapBase::LookupPageFromInnerPointer(
-        params.start, const_cast<void*>(value));
+    BasePageHandle* page =
+        CagedHeapBase::LookupPageFromInnerPointer(const_cast<void*>(value));
 
     HeapHandle& heap_handle = page->heap_handle();
     if (V8_UNLIKELY(heap_handle.is_incremental_marking_in_progress())) {
@@ -186,35 +181,6 @@ class V8_EXPORT WriteBarrierTypeForCagedHeapPolicy final {
 
   template <WriteBarrier::ValueMode value_mode>
   struct ValueModeDispatch;
-
-  static V8_INLINE bool TryGetCagedHeap(const void* slot, const void* value,
-                                        WriteBarrier::Params& params) {
-    // The compiler must fold these checks into a single one.
-    if (!value || value == kSentinelPointer) return false;
-
-    // Now we are certain that |value| points within the cage.
-    const uintptr_t real_cage_base =
-        reinterpret_cast<uintptr_t>(value) &
-        ~(api_constants::kCagedHeapReservationAlignment - 1);
-
-    const uintptr_t cage_base_from_slot =
-        reinterpret_cast<uintptr_t>(slot) &
-        ~(api_constants::kCagedHeapReservationAlignment - 1);
-
-    // If |cage_base_from_slot| is different from |real_cage_base|, the slot
-    // must be on stack, bail out.
-    if (V8_UNLIKELY(real_cage_base != cage_base_from_slot)) return false;
-
-    // Otherwise, set params.start and return.
-    params.start = real_cage_base;
-    return true;
-  }
-
-  // Returns whether marking is in progress. If marking is not in progress
-  // sets the start of the cage accordingly.
-  //
-  // TODO(chromium:1056170): Create fast path on API.
-  static bool IsMarking(const HeapHandle&, WriteBarrier::Params&);
 };
 
 template <>
@@ -227,11 +193,11 @@ struct WriteBarrierTypeForCagedHeapPolicy::ValueModeDispatch<
     if (V8_LIKELY(!WriteBarrier::IsEnabled()))
       return SetAndReturnType<WriteBarrier::Type::kNone>(params);
 
-    const bool within_cage = TryGetCagedHeap(slot, value, params);
+    const bool within_cage = CagedHeapBase::AreWithinCage(slot, value);
     if (!within_cage) return WriteBarrier::Type::kNone;
 
-    BasePageHandle* page = CagedHeapBase::LookupPageFromInnerPointer(
-        params.start, const_cast<void*>(value));
+    BasePageHandle* page =
+        CagedHeapBase::LookupPageFromInnerPointer(const_cast<void*>(value));
 
     HeapHandle& heap_handle = page->heap_handle();
     if (V8_LIKELY(!heap_handle.is_incremental_marking_in_progress())) {
@@ -239,8 +205,8 @@ struct WriteBarrierTypeForCagedHeapPolicy::ValueModeDispatch<
       if (!heap_handle.is_young_generation_enabled())
         return WriteBarrier::Type::kNone;
       params.heap = &heap_handle;
-      params.slot_offset = reinterpret_cast<uintptr_t>(slot) - params.start;
-      params.value_offset = reinterpret_cast<uintptr_t>(value) - params.start;
+      params.slot_offset = CagedHeapBase::OffsetFromAddress(slot);
+      params.value_offset = CagedHeapBase::OffsetFromAddress(value);
       return SetAndReturnType<WriteBarrier::Type::kGenerational>(params);
 #else   // !CPPGC_YOUNG_GENERATION
       return SetAndReturnType<WriteBarrier::Type::kNone>(params);
@@ -265,18 +231,16 @@ struct WriteBarrierTypeForCagedHeapPolicy::ValueModeDispatch<
 
 #if defined(CPPGC_YOUNG_GENERATION)
     HeapHandle& handle = callback();
-    if (V8_LIKELY(!IsMarking(handle, params))) {
-      // params.start is populated by IsMarking().
+    if (V8_LIKELY(!handle.is_incremental_marking_in_progress())) {
       if (!handle.is_young_generation_enabled()) {
         return WriteBarrier::Type::kNone;
       }
       params.heap = &handle;
-      params.slot_offset = reinterpret_cast<uintptr_t>(slot) - params.start;
-      // params.value_offset stays 0.
-      if (params.slot_offset > api_constants::kCagedHeapReservationSize) {
-        // Check if slot is on stack.
+      // Check if slot is on stack.
+      if (V8_UNLIKELY(!CagedHeapBase::IsWithinCage(slot))) {
         return SetAndReturnType<WriteBarrier::Type::kNone>(params);
       }
+      params.slot_offset = CagedHeapBase::OffsetFromAddress(slot);
       return SetAndReturnType<WriteBarrier::Type::kGenerational>(params);
     }
 #else   // !defined(CPPGC_YOUNG_GENERATION)
@@ -424,7 +388,7 @@ void WriteBarrier::SteeleMarkingBarrier(const Params& params,
 void WriteBarrier::GenerationalBarrier(const Params& params, const void* slot) {
   CheckParams(Type::kGenerational, params);
 
-  const CagedHeapLocalData& local_data = params.caged_heap();
+  const CagedHeapLocalData& local_data = CagedHeapLocalData::Get();
   const AgeTable& age_table = local_data.age_table;
 
   // Bail out if the slot is in young generation.
@@ -440,7 +404,7 @@ void WriteBarrier::GenerationalBarrierForSourceObject(
     const Params& params, const void* inner_pointer) {
   CheckParams(Type::kGenerational, params);
 
-  const CagedHeapLocalData& local_data = params.caged_heap();
+  const CagedHeapLocalData& local_data = CagedHeapLocalData::Get();
   const AgeTable& age_table = local_data.age_table;
 
   // Assume that if the first element is in young generation, the whole range is
