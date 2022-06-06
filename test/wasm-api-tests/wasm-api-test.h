@@ -53,6 +53,16 @@ class WasmCapiTest : public ::testing::Test {
                        ownvec<ValType>::make(ValType::make(::wasm::I32)));
   }
 
+  bool Validate() {
+    builder_->WriteTo(&wire_bytes_);
+    size_t size = wire_bytes_.end() - wire_bytes_.begin();
+    vec<byte_t> binary = vec<byte_t>::make(
+        size,
+        reinterpret_cast<byte_t*>(const_cast<byte*>(wire_bytes_.begin())));
+
+    return Module::validate(store_.get(), binary);
+  }
+
   void Compile() {
     builder_->WriteTo(&wire_bytes_);
     size_t size = wire_bytes_.end() - wire_bytes_.begin();
