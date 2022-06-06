@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fd7e0a6_cf0d7d34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546117
+      },
+      "writtenOn": "2022-06-06T19:57:06Z",
+      "side": 1,
+      "message": "First time sending a CL to this project -- I couldn\u0027t find specific tests for the C API so I used the example as a regression test. Please do point out if I made any mistakes in the submission process. Thank you!",
+      "revId": "f117f16db9ae0858240c08d00e01dc9146e45f24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
