@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a932c6d6_8c0856bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-06-06T02:34:58Z",
+      "side": 1,
+      "message": "+Almothana Could you please help to review v8.gni? Thanks!",
+      "revId": "32acbd276511d67a8b487a443f0f44897e41f030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

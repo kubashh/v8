@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "756fa87d_fb4a5166",
+        "filename": "src/compiler/linear-scheduler.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-06-06T02:34:58Z",
+      "side": 1,
+      "message": "Done. Thanks for your suggestion. Do you think we should also rename this class to EarlyScheduler?",
+      "parentUuid": "69e3cc3a_ae10c44b",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 44
+      },
+      "revId": "ca37e9b46f85c8b98a05c644dd870e1b5641dd3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "34c37054_4a3e6a0f",
         "filename": "src/compiler/linear-scheduler.h",
         "patchSetId": 19
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-03T09:52:18Z",
       "side": 1,
       "message": "I think this shouldn\u0027t be called \"dominator level\", because it\u0027s somewhat unrelated to dominators. How about calling it \"control level\" and explaining that it\u0027s the length of the shortest control path from the start node.",
+      "range": {
+        "startLine": 36,
+        "startChar": 14,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "ca37e9b46f85c8b98a05c644dd870e1b5641dd3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97467c1_77e827d4",
+        "filename": "src/compiler/linear-scheduler.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-06-06T02:34:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34c37054_4a3e6a0f",
       "range": {
         "startLine": 36,
         "startChar": 14,
