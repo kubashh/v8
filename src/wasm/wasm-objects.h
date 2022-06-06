@@ -549,7 +549,9 @@ class WasmTagObject
 };
 
 // A Wasm exception that has been thrown out of Wasm code.
-class V8_EXPORT_PRIVATE WasmExceptionPackage : public JSObject {
+class V8_EXPORT_PRIVATE WasmExceptionPackage
+    : public TorqueGeneratedWasmExceptionPackage<WasmExceptionPackage,
+                                                 JSObject> {
  public:
   static Handle<WasmExceptionPackage> New(
       Isolate* isolate, Handle<WasmExceptionTag> exception_tag,
@@ -570,7 +572,7 @@ class V8_EXPORT_PRIVATE WasmExceptionPackage : public JSObject {
   static uint32_t GetEncodedSize(const wasm::WasmTag* tag);
 
   DECL_CAST(WasmExceptionPackage)
-  OBJECT_CONSTRUCTORS(WasmExceptionPackage, JSObject);
+  TQ_OBJECT_CONSTRUCTORS(WasmExceptionPackage)
 };
 
 void V8_EXPORT_PRIVATE EncodeI32ExceptionValue(
