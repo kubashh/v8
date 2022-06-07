@@ -896,11 +896,11 @@ bool HasDefaultToNumberBehaviour(Isolate* isolate,
   // Just a default function, which will convert to "Nan". Accept this.
   return true;
 }
+}  // namespace
 
-V8_INLINE WasmValue EvaluateInitExpression(Zone* zone, ConstantExpression expr,
-                                           ValueType expected, Isolate* isolate,
-                                           Handle<WasmInstanceObject> instance,
-                                           ErrorThrower* thrower) {
+WasmValue EvaluateInitExpression(Zone* zone, ConstantExpression expr,
+                                 ValueType expected, Isolate* isolate,
+                                 Handle<WasmInstanceObject> instance) {
   switch (expr.kind()) {
     case ConstantExpression::kEmpty:
       UNREACHABLE();
@@ -938,16 +938,10 @@ V8_INLINE WasmValue EvaluateInitExpression(Zone* zone, ConstantExpression expr,
 
       decoder.DecodeFunctionBody();
 
-      if (decoder.interface().runtime_error()) {
-        thrower->RuntimeError("%s", decoder.interface().runtime_error_msg());
-        return {};
-      }
-
-      return decoder.interface().result();
+      return decoder.interface().computed_value();
     }
   }
 }
-}  // namespace
 
 // Look up an import value in the {ffi_} object specifically for linking an
 // asm.js module. This only performs non-observable lookups, which allows
@@ -995,6 +989,17 @@ MaybeHandle<Object> InstanceBuilder::LookupImportAsm(
   }
 }
 
+namespace {
+bool MaybeMarkError(WasmValue value, ErrorThrower* thrower) {
+  if (value.is_error()) {
+    thrower->RuntimeError(
+        "%s", MessageFormatter::TemplateString(value.to_error_template()));
+    return true;
+  }
+  return false;
+}
+}  // namespace
+
 // Load data segments into the memory.
 void InstanceBuilder::LoadDataSegments(Handle<WasmInstanceObject> instance) {
   base::Vector<const uint8_t> wire_bytes =
@@ -1007,22 +1012,21 @@ void InstanceBuilder::LoadDataSegments(Handle<WasmInstanceObject> instance) {
 
     size_t dest_offset;
     if (module_->is_memory64) {
-      uint64_t dest_offset_64 =
-          EvaluateInitExpression(&init_expr_zone_, segment.dest_addr, kWasmI64,
-                                 isolate_, instance, thrower_)
-              .to_u64();
-      if (thrower_->error()) return;
+      WasmValue value = EvaluateInitExpression(
+          &init_expr_zone_, segment.dest_addr, kWasmI64, isolate_, instance);
+      if (MaybeMarkError(value, thrower_)) return;
+      uint64_t dest_offset_64 = value.to_u64();
+
       // Clamp to {std::numeric_limits<size_t>::max()}, which is always an
       // invalid offset.
       DCHECK_GT(std::numeric_limits<size_t>::max(), instance->memory_size());
       dest_offset = static_cast<size_t>(std::min(
           dest_offset_64, uint64_t{std::numeric_limits<size_t>::max()}));
     } else {
-      dest_offset =
-          EvaluateInitExpression(&init_expr_zone_, segment.dest_addr, kWasmI32,
-                                 isolate_, instance, thrower_)
-              .to_u32();
-      if (thrower_->error()) return;
+      WasmValue value = EvaluateInitExpression(
+          &init_expr_zone_, segment.dest_addr, kWasmI32, isolate_, instance);
+      if (MaybeMarkError(value, thrower_)) return;
+      dest_offset = value.to_u32();
     }
 
     if (!base::IsInBounds<size_t>(dest_offset, size, instance->memory_size())) {
@@ -1719,10 +1723,9 @@ void InstanceBuilder::InitGlobals(Handle<WasmInstanceObject> instance) {
     // Happens with imported globals.
     if (!global.init.is_set()) continue;
 
-    WasmValue value =
-        EvaluateInitExpression(&init_expr_zone_, global.init, global.type,
-                               isolate_, instance, thrower_);
-    if (thrower_->error()) return;
+    WasmValue value = EvaluateInitExpression(&init_expr_zone_, global.init,
+                                             global.type, isolate_, instance);
+    if (MaybeMarkError(value, thrower_)) return;
 
     if (global.type.is_reference()) {
       tagged_globals_->set(global.offset, *value.to_ref());
@@ -1988,8 +1991,8 @@ void InstanceBuilder::InitializeNonDefaultableTables(
       } else {
         WasmValue value =
             EvaluateInitExpression(&init_expr_zone_, table.initial_value,
-                                   table.type, isolate_, instance, thrower_);
-        if (thrower_->error()) return;
+                                   table.type, isolate_, instance);
+        if (MaybeMarkError(value, thrower_)) return;
         for (uint32_t entry_index = 0; entry_index < table.initial_size;
              entry_index++) {
           WasmTableObject::Set(isolate_, table_object, entry_index,
@@ -2001,23 +2004,24 @@ void InstanceBuilder::InitializeNonDefaultableTables(
 }
 
 namespace {
-bool LoadElemSegmentImpl(Zone* zone, Isolate* isolate,
-                         Handle<WasmInstanceObject> instance,
-                         Handle<WasmTableObject> table_object,
-                         uint32_t table_index, uint32_t segment_index,
-                         uint32_t dst, uint32_t src, size_t count) {
+base::Optional<MessageTemplate> LoadElemSegmentImpl(
+    Zone* zone, Isolate* isolate, Handle<WasmInstanceObject> instance,
+    Handle<WasmTableObject> table_object, uint32_t table_index,
+    uint32_t segment_index, uint32_t dst, uint32_t src, size_t count) {
   DCHECK_LT(segment_index, instance->module()->elem_segments.size());
   auto& elem_segment = instance->module()->elem_segments[segment_index];
   // TODO(wasm): Move this functionality into wasm-objects, since it is used
   // for both instantiation and in the implementation of the table.init
   // instruction.
-  if (!base::IsInBounds<uint64_t>(dst, count, table_object->current_length()) ||
-      !base::IsInBounds<uint64_t>(
+  if (!base::IsInBounds<uint64_t>(dst, count, table_object->current_length())) {
+    return {MessageTemplate::kWasmTrapTableOutOfBounds};
+  }
+  if (!base::IsInBounds<uint64_t>(
           src, count,
           instance->dropped_elem_segments()[segment_index] == 0
               ? elem_segment.entries.size()
               : 0)) {
-    return false;
+    return {MessageTemplate::kWasmTrapElementSegmentOutOfBounds};
   }
 
   bool is_function_table =
@@ -2036,12 +2040,12 @@ bool LoadElemSegmentImpl(Zone* zone, Isolate* isolate,
       SetFunctionTableNullEntry(isolate, table_object, entry_index);
     } else {
       WasmValue value = EvaluateInitExpression(zone, entry, elem_segment.type,
-                                               isolate, instance, &thrower);
-      if (thrower.error()) return false;
+                                               isolate, instance);
+      if (value.is_error()) return {value.to_error_template()};
       WasmTableObject::Set(isolate, table_object, entry_index, value.to_ref());
     }
   }
-  return true;
+  return {};
 }
 }  // namespace
 
@@ -2053,15 +2057,15 @@ void InstanceBuilder::LoadTableSegments(Handle<WasmInstanceObject> instance) {
     if (elem_segment.status != WasmElemSegment::kStatusActive) continue;
 
     uint32_t table_index = elem_segment.table_index;
-    uint32_t dst =
-        EvaluateInitExpression(&init_expr_zone_, elem_segment.offset, kWasmI32,
-                               isolate_, instance, thrower_)
-            .to_u32();
+    WasmValue value = EvaluateInitExpression(
+        &init_expr_zone_, elem_segment.offset, kWasmI32, isolate_, instance);
+    if (MaybeMarkError(value, thrower_)) return;
+    uint32_t dst = value.to_u32();
     if (thrower_->error()) return;
     uint32_t src = 0;
     size_t count = elem_segment.entries.size();
 
-    bool success = LoadElemSegmentImpl(
+    base::Optional<MessageTemplate> opt_error = LoadElemSegmentImpl(
         &init_expr_zone_, isolate_, instance,
         handle(WasmTableObject::cast(
                    instance->tables().get(elem_segment.table_index)),
@@ -2070,8 +2074,9 @@ void InstanceBuilder::LoadTableSegments(Handle<WasmInstanceObject> instance) {
     // Set the active segments to being already dropped, since table.init on
     // a dropped passive segment and an active segment have the same behavior.
     instance->dropped_elem_segments()[segment_index] = 1;
-    if (!success) {
-      thrower_->RuntimeError("table initializer is out of bounds");
+    if (opt_error.has_value()) {
+      thrower_->RuntimeError(
+          "%s", MessageFormatter::TemplateString(opt_error.value()));
       return;
     }
   }
@@ -2086,9 +2091,9 @@ void InstanceBuilder::InitializeTags(Handle<WasmInstanceObject> instance) {
   }
 }
 
-bool LoadElemSegment(Isolate* isolate, Handle<WasmInstanceObject> instance,
-                     uint32_t table_index, uint32_t segment_index, uint32_t dst,
-                     uint32_t src, uint32_t count) {
+base::Optional<MessageTemplate> LoadElemSegment(
+    Isolate* isolate, Handle<WasmInstanceObject> instance, uint32_t table_index,
+    uint32_t segment_index, uint32_t dst, uint32_t src, uint32_t count) {
   AccountingAllocator allocator;
   // This {Zone} will be used only by the temporary WasmFullDecoder allocated
   // down the line from this call. Therefore it is safe to stack-allocate it
