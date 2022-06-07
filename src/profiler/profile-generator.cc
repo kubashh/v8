@@ -342,7 +342,6 @@ CpuProfileNode::SourceType ProfileNode::source_type() const {
   switch (entry_->tag()) {
     case LogEventListener::EVAL_TAG:
     case LogEventListener::SCRIPT_TAG:
-    case LogEventListener::LAZY_COMPILE_TAG:
     case LogEventListener::FUNCTION_TAG:
       return CpuProfileNode::kScript;
     case LogEventListener::BUILTIN_TAG:
@@ -350,7 +349,6 @@ CpuProfileNode::SourceType ProfileNode::source_type() const {
     case LogEventListener::BYTECODE_HANDLER_TAG:
     case LogEventListener::NATIVE_FUNCTION_TAG:
     case LogEventListener::NATIVE_SCRIPT_TAG:
-    case LogEventListener::NATIVE_LAZY_COMPILE_TAG:
       return CpuProfileNode::kBuiltin;
     case LogEventListener::CALLBACK_TAG:
       return CpuProfileNode::kCallback;
