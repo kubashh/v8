@@ -38,6 +38,7 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmTagObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmExceptionTag)
+TQ_OBJECT_CONSTRUCTORS_IMPL(WasmExceptionPackage)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmCapiFunctionData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmExportedFunctionData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmGlobalObject)
@@ -277,7 +278,6 @@ ImportedFunctionEntry::ImportedFunctionEntry(
 }
 
 // WasmExceptionPackage
-OBJECT_CONSTRUCTORS_IMPL(WasmExceptionPackage, JSObject)
 CAST_ACCESSOR(WasmExceptionPackage)
 
 // WasmExportedFunction
