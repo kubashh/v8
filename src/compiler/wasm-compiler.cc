@@ -224,7 +224,7 @@ Node* WasmGraphBuilder::LoopExit(Node* loop_node) {
 
 Node* WasmGraphBuilder::LoopExitValue(Node* value,
                                       MachineRepresentation representation) {
-  DCHECK(control()->opcode() == IrOpcode::kLoopExit);
+  DCHECK_EQ(control()->opcode(), IrOpcode::kLoopExit);
   return graph()->NewNode(mcgraph()->common()->LoopExitValue(representation),
                           value, control());
 }
@@ -2957,7 +2957,6 @@ Node* WasmGraphBuilder::BuildCallRef(const wasm::FunctionSig* real_sig,
       call_target = BuildLoadExternalPointerFromObject(
           wrapper_code, CodeDataContainer::kCodeEntryPointOffset,
           kCodeEntryPointTag);
-
     } else {
       call_target = gasm_->IntAdd(
           wrapper_code, gasm_->IntPtrConstant(
@@ -2987,6 +2986,8 @@ void WasmGraphBuilder::CompareToInternalFunctionAtIndex(Node* func_ref,
       MachineType::TaggedPointer(), GetInstance(),
       wasm::ObjectAccess::ToTagged(
           WasmInstanceObject::kWasmInternalFunctionsOffset));
+  // We cannot use an immutable load here, since function references are
+  // initialized lazily.
   Node* function_ref_at_index = gasm_->LoadFixedArrayElement(
       internal_functions, gasm_->IntPtrConstant(function_index),
       MachineType::AnyTagged());
