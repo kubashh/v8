@@ -33,6 +33,24 @@
       "message": "Thanks for this patch! The code change itself looks good. \n\nTests for the Wasm C API are in test/wasm-api-test/, and the new test should be added there. Either pick one of the existing files (maybe startup-errors.cc, which sounds fitting for validation), or create a new file if you prefer (e.g. regressions.cc); it probably also makes sense to add a `Validate()` helper to wasm-api-tests.h in the style of the `Compile()` that\u0027s already there.\n\nthird_party/wasm-api/ should remain an unmodified (if slightly outdated) copy of the upstream repo (github.com/WebAssembly/wasm-c-api), so we shouldn\u0027t add any custom stuff there (in particular to make future updates easier).",
       "revId": "f117f16db9ae0858240c08d00e01dc9146e45f24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7aa9b46_bf0976fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546117
+      },
+      "writtenOn": "2022-06-07T15:03:50Z",
+      "side": 1,
+      "message": "Thanks for the review! I added the regressions test file per your suggestions and verified locally that it does trigger the issue when executed without the fix and passes when the fix is included.\n\nI\u0027m new to Gerrit and its review process: once the changes are good and I get a +1 from you, do I need to ping a second reviewer to get a +2?",
+      "parentUuid": "4c3c0037_3ea7f85e",
+      "revId": "f117f16db9ae0858240c08d00e01dc9146e45f24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
