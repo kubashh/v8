@@ -702,24 +702,6 @@ class Foreign::BodyDescriptor final : public BodyDescriptorBase {
 };
 
 #if V8_ENABLE_WEBASSEMBLY
-class WasmTypeInfo::BodyDescriptor final : public BodyDescriptorBase {
- public:
-  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    UNREACHABLE();
-  }
-
-  template <typename ObjectVisitor>
-  static inline void IterateBody(Map map, HeapObject obj, int object_size,
-                                 ObjectVisitor* v) {
-    Foreign::BodyDescriptor::IterateBody<ObjectVisitor>(map, obj, object_size,
-                                                        v);
-    IteratePointer(obj, kSupertypesOffset, v);
-    IteratePointer(obj, kInstanceOffset, v);
-  }
-
-  static inline int SizeOf(Map map, HeapObject object) { return kSize; }
-};
-
 class WasmApiFunctionRef::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
@@ -1161,8 +1143,6 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
       return CALL_APPLY(WasmOnFulfilledData);
     case WASM_STRUCT_TYPE:
       return CALL_APPLY(WasmStruct);
-    case WASM_TYPE_INFO_TYPE:
-      return CALL_APPLY(WasmTypeInfo);
 #endif  // V8_ENABLE_WEBASSEMBLY
     case JS_API_OBJECT_TYPE:
     case JS_ARGUMENTS_OBJECT_TYPE:

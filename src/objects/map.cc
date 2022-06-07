@@ -381,8 +381,6 @@ VisitorId Map::GetVisitorId(Map map) {
       return kVisitWasmArray;
     case WASM_STRUCT_TYPE:
       return kVisitWasmStruct;
-    case WASM_TYPE_INFO_TYPE:
-      return kVisitWasmTypeInfo;
     case WASM_INTERNAL_FUNCTION_TYPE:
       return kVisitWasmInternalFunction;
     case WASM_JS_FUNCTION_DATA_TYPE:
