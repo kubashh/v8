@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3565312e_0f9c1fd4",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-07T12:14:18Z",
+      "side": 1,
+      "message": "Summarizing offline discussion: I think it\u0027d probably be fine to use an immutable load here (the expected use cases would only try to compare against initialized functions; \"weird\" usages would only miss out on an optimization), but we can also keep it as-is for now.",
+      "parentUuid": "175c3246_bf9945d3",
+      "range": {
+        "startLine": 2989,
+        "startChar": 5,
+        "endLine": 2990,
+        "endChar": 24
+      },
+      "revId": "796ad3667073c882da05e1dbfdafa3435edfdb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4383652_aed89581",
@@ -183,6 +207,30 @@
       "side": 1,
       "message": "When I did so, I ran into another issue. I think we can keep this for now.",
       "parentUuid": "575872c1_eada5264",
+      "range": {
+        "startLine": 5299,
+        "startChar": 4,
+        "endLine": 5300,
+        "endChar": 34
+      },
+      "revId": "796ad3667073c882da05e1dbfdafa3435edfdb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72db3e1e_7145c465",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-07T12:14:18Z",
+      "side": 1,
+      "message": "If you use `instance_size \u003d pinned.set(__ GetUnusedRegister(kGpReg, pinned));`, then moving these two lines back to where they were should work.",
+      "parentUuid": "e88442e4_c72614d8",
       "range": {
         "startLine": 5299,
         "startChar": 4,
