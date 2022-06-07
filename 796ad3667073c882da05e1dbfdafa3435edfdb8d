@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "175c3246_bf9945d3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-07T11:42:17Z",
+      "side": 1,
+      "message": "Imagine the following sequence:\n```\nCompareToInternalFunctionAtIndex(0);\nRefFunc(0);\nCompareToInternalFunctionAtIndex(0);\n```\nThe first invocation of Compare fetches the uninitialized entry. Then it gets initialized by RefFunc. We then want the second invocation to fetch the initialized entry, so we cannot eliminate it.\n\nI\u0027m extending the comment here to make it more clear.",
+      "parentUuid": "b72e97a3_401ce465",
+      "range": {
+        "startLine": 2989,
+        "startChar": 5,
+        "endLine": 2990,
+        "endChar": 24
+      },
+      "revId": "796ad3667073c882da05e1dbfdafa3435edfdb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4383652_aed89581",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07317fc8_5142d96a",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-07T11:42:17Z",
+      "side": 1,
+      "message": "Thanks. Using ternary operators to simplify this further.",
+      "parentUuid": "d4383652_aed89581",
+      "range": {
+        "startLine": 3087,
+        "startChar": 12,
+        "endLine": 3087,
+        "endChar": 30
+      },
+      "revId": "796ad3667073c882da05e1dbfdafa3435edfdb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "575872c1_eada5264",
@@ -111,6 +159,30 @@
       "writtenOn": "2022-06-07T11:01:16Z",
       "side": 1,
       "message": "I don\u0027t think these two lines should move. It\u0027s perfectly fine if `instance_size` chooses the `kReturnRegister0` if that happens to be free, right?",
+      "range": {
+        "startLine": 5299,
+        "startChar": 4,
+        "endLine": 5300,
+        "endChar": 34
+      },
+      "revId": "796ad3667073c882da05e1dbfdafa3435edfdb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e88442e4_c72614d8",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5300,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-07T11:42:17Z",
+      "side": 1,
+      "message": "When I did so, I ran into another issue. I think we can keep this for now.",
+      "parentUuid": "575872c1_eada5264",
       "range": {
         "startLine": 5299,
         "startChar": 4,
