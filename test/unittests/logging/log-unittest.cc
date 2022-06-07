@@ -541,7 +541,7 @@ TEST_F(LogAllTest, LogAll) {
     CHECK(logger.ContainsLine({"timer-event-start", "V8.CompileCode"}));
     CHECK(logger.ContainsLine({"timer-event-end", "V8.CompileCode"}));
     CHECK(logger.ContainsLine({"code-creation,Script", ":1:1"}));
-    CHECK(logger.ContainsLine({"code-creation,LazyCompile,", "testAddFn"}));
+    CHECK(logger.ContainsLine({"code-creation,Function,", "testAddFn"}));
 
     if (i::FLAG_turbofan && !i::FLAG_always_turbofan) {
       CHECK(logger.ContainsLine({"code-deopt,", "not a Smi"}));
@@ -573,8 +573,8 @@ TEST_F(LogInterpretedFramesNativeStackTest, LogInterpretedFramesNativeStack) {
     logger.StopLogging();
 
     CHECK(logger.ContainsLinesInOrder(
-        {{"LazyCompile", "testLogInterpretedFramesNativeStack"},
-         {"LazyCompile", "testLogInterpretedFramesNativeStack"}}));
+        {{"Function", "testLogInterpretedFramesNativeStack"},
+         {"Function", "testLogInterpretedFramesNativeStack"}}));
   }
 }
 
@@ -699,6 +699,7 @@ TEST_F(LogExternalLogEventListenerTest, ExternalLogEventListener) {
     CHECK_EQ(code_event_handler.CountLines("Function",
                                            "testLogEventListenerBeforeStart"),
              0);
+    // We no longer log LazyCompile.
     CHECK_EQ(code_event_handler.CountLines("LazyCompile",
                                            "testLogEventListenerBeforeStart"),
              0);
@@ -714,9 +715,13 @@ TEST_F(LogExternalLogEventListenerTest, ExternalLogEventListener) {
         "testLogEventListenerAfterStart('1', 1);";
     RunJS(source_text_after_start);
 
-    CHECK_GE(code_event_handler.CountLines("LazyCompile",
+    CHECK_GE(code_event_handler.CountLines("Function",
                                            "testLogEventListenerAfterStart"),
              1);
+    // We no longer log LazyCompile.
+    CHECK_GE(code_event_handler.CountLines("LazyCompile",
+                                           "testLogEventListenerAfterStart"),
+             0);
   }
 }
 
@@ -845,7 +850,7 @@ TEST_F(LogExternalInterpretedFramesNativeStackTest,
         "testLogEventListenerAfterStart('1', 1);";
     RunJS(source_text_after_start);
 
-    CHECK_GE(code_event_handler.CountLines("LazyCompile",
+    CHECK_GE(code_event_handler.CountLines("Function",
                                            "testLogEventListenerAfterStart"),
              2);
 
@@ -1214,7 +1219,7 @@ TEST_F(LogTest, BuiltinsNotLoggedAsLazyCompile) {
         i_isolate);
     v8::base::EmbeddedVector<char, 100> buffer;
 
-    // Should only be logged as "Builtin" with a name, never as "LazyCompile".
+    // Should only be logged as "Builtin" with a name, never as "Function".
     v8::base::SNPrintF(buffer, ",0x%" V8PRIxPTR ",%d,BooleanConstructor",
                        builtin->InstructionStart(), builtin->InstructionSize());
     CHECK(logger.ContainsLine(
@@ -1223,7 +1228,7 @@ TEST_F(LogTest, BuiltinsNotLoggedAsLazyCompile) {
     v8::base::SNPrintF(buffer, ",0x%" V8PRIxPTR ",%d,",
                        builtin->InstructionStart(), builtin->InstructionSize());
     CHECK(!logger.ContainsLine(
-        {"code-creation,LazyCompile,2,", std::string(buffer.begin())}));
+        {"code-creation,Function,2,", std::string(buffer.begin())}));
   }
 }
 }  // namespace v8
