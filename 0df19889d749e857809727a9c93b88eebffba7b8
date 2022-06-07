@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14923c45_3868bf27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-07T15:13:17Z",
+      "side": 1,
+      "message": "Well.  Inspired by the need to call StringNewFromWtf8 from the WebAssembly initializer expression interpreter, I moved StringNewFromWtf8 to factory, which brought a number of other pieces along for the ride.  Some of this may be in bad taste; any feedback is welcome.",
+      "revId": "0df19889d749e857809727a9c93b88eebffba7b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
