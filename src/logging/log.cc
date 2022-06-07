@@ -128,8 +128,14 @@ class CodeEventLogger::NameBuffer {
 
   void Init(LogEventsAndTags tag) {
     Reset();
-    AppendBytes(kLogEventsNames[tag]);
-    AppendByte(':');
+    if (tag == LogEventsAndTags::FUNCTION_TAG ||
+        tag == LogEventsAndTags::NATIVE_FUNCTION_TAG) {
+      // More readable shortcut
+      AppendBytes("JS:");
+    } else {
+      AppendBytes(kLogEventsNames[tag]);
+      AppendByte(':');
+    }
   }
 
   void AppendName(Name name) {

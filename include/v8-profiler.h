@@ -1168,7 +1168,6 @@ struct HeapStatsUpdate {
   V(InterpretedFunction)    \
   V(Handler)                \
   V(BytecodeHandler)        \
-  V(LazyCompile)            \
   V(RegExp)                 \
   V(Script)                 \
   V(Stub)                   \
