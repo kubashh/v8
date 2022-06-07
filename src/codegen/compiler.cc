@@ -333,9 +333,6 @@ void Compiler::LogFunctionCompilation(Isolate* isolate,
       break;
     case LogEventListener::SCRIPT_TAG:
       break;
-    case LogEventListener::LAZY_COMPILE_TAG:
-      name += "-lazy";
-      break;
     case LogEventListener::FUNCTION_TAG:
       break;
     default:
@@ -1022,7 +1019,7 @@ bool CompileTurbofan_NotConcurrent(Isolate* isolate,
                              compilation_info->osr_offset(),
                              ToCodeT(*compilation_info->code()),
                              compilation_info->function_context_specializing());
-  job->RecordFunctionCompilation(LogEventListener::LAZY_COMPILE_TAG, isolate);
+  job->RecordFunctionCompilation(LogEventListener::FUNCTION_TAG, isolate);
   return true;
 }
 
@@ -1370,8 +1367,7 @@ void FinalizeUnoptimizedCompilation(
       log_tag = flags.is_eval() ? LogEventListener::EVAL_TAG
                                 : LogEventListener::SCRIPT_TAG;
     } else {
-      log_tag = flags.is_lazy_compile() ? LogEventListener::LAZY_COMPILE_TAG
-                                        : LogEventListener::FUNCTION_TAG;
+      log_tag = LogEventListener::FUNCTION_TAG;
     }
     log_tag = V8FileLogger::ToNativeByScript(log_tag, *script);
     if (FLAG_interpreted_frames_native_stack) {
@@ -3448,8 +3444,7 @@ bool Compiler::FinalizeTurbofanCompilationJob(TurbofanCompilationJob* job,
       job->RetryOptimization(BailoutReason::kOptimizationDisabled);
     } else if (job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED) {
       job->RecordCompilationStats(ConcurrencyMode::kConcurrent, isolate);
-      job->RecordFunctionCompilation(LogEventListener::LAZY_COMPILE_TAG,
-                                     isolate);
+      job->RecordFunctionCompilation(LogEventListener::FUNCTION_TAG, isolate);
       if (V8_LIKELY(use_result)) {
         ResetTieringState(*function, osr_offset);
         OptimizedCodeCache::Insert(

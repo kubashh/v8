@@ -19,8 +19,6 @@ LogEventListener::LogEventsAndTags V8FileLogger::ToNativeByScript(
   switch (tag) {
     case LogEventListener::FUNCTION_TAG:
       return LogEventListener::NATIVE_FUNCTION_TAG;
-    case LogEventListener::LAZY_COMPILE_TAG:
-      return LogEventListener::NATIVE_LAZY_COMPILE_TAG;
     case LogEventListener::SCRIPT_TAG:
       return LogEventListener::NATIVE_SCRIPT_TAG;
     default:
