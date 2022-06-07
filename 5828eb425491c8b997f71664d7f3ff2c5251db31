@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83269140_28621487",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2624,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-06-07T14:02:50Z",
+      "side": 0,
+      "message": "These features are shipped, I don\u0027t think this is needed anymore.",
+      "range": {
+        "startLine": 2623,
+        "startChar": 0,
+        "endLine": 2624,
+        "endChar": 30
+      },
+      "revId": "5828eb425491c8b997f71664d7f3ff2c5251db31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

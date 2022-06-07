@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2296554_7d0e9a65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-06-07T14:02:50Z",
+      "side": 1,
+      "message": "PTAL, Manos for fuzzer knowledge, Deepti for relaxed simd.",
+      "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
