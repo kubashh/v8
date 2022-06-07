@@ -205,6 +205,9 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {
     case WASM_VALUE_OBJECT_TYPE:
       WasmValueObject::cast(*this).WasmValueObjectPrint(os);
       break;
+    case WASM_EXCEPTION_PACKAGE_TYPE:
+      WasmExceptionPackage::cast(*this).WasmExceptionPackagePrint(os);
+      break;
 #endif  // V8_ENABLE_WEBASSEMBLY
     case CODE_TYPE:
       Code::cast(*this).CodePrint(os);
@@ -2060,6 +2063,11 @@ void WasmCapiFunctionData::WasmCapiFunctionDataPrint(std::ostream& os) {
   os << "\n";
 }
 
+void WasmExceptionPackage::WasmExceptionPackagePrint(std::ostream& os) {
+  PrintHeader(os, "WasmExceptionPackage");
+  os << "\n";
+}
+
 void WasmModuleObject::WasmModuleObjectPrint(std::ostream& os) {
   PrintHeader(os, "WasmModuleObject");
   os << "\n - module: " << module();
@@ -2103,6 +2111,7 @@ void WasmValueObject::WasmValueObjectPrint(std::ostream& os) {
   os << "\n - value: " << Brief(value());
   os << "\n";
 }
+
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 void LoadHandler::LoadHandlerPrint(std::ostream& os) {
