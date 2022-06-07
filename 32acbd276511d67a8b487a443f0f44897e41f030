@@ -33,6 +33,23 @@
       "message": "+Almothana Could you please help to review v8.gni? Thanks!",
       "revId": "32acbd276511d67a8b487a443f0f44897e41f030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef20c228_4233c390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-06-07T12:59:55Z",
+      "side": 1,
+      "message": "LGTM from my side on `gni/v8.gni`",
+      "revId": "32acbd276511d67a8b487a443f0f44897e41f030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
