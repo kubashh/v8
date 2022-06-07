@@ -475,13 +475,13 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
                                uint32_t src,
                                uint32_t count) V8_WARN_UNUSED_RESULT;
 
-  // Copy table entries from an element segment. Returns {false} if the ranges
-  // are out-of-bounds.
-  static bool InitTableEntries(Isolate* isolate,
-                               Handle<WasmInstanceObject> instance,
-                               uint32_t table_index, uint32_t segment_index,
-                               uint32_t dst, uint32_t src,
-                               uint32_t count) V8_WARN_UNUSED_RESULT;
+  // Copy table entries from an element segment.
+  // If the operation succeeds, returns an empty {Optional}. Otherwise, returns
+  // an {Optional} containing the {MessageTemplate} code of the error.
+  static base::Optional<MessageTemplate> InitTableEntries(
+      Isolate* isolate, Handle<WasmInstanceObject> instance,
+      uint32_t table_index, uint32_t segment_index, uint32_t dst, uint32_t src,
+      uint32_t count) V8_WARN_UNUSED_RESULT;
 
   // Iterates all fields in the object except the untagged fields.
   class BodyDescriptor;

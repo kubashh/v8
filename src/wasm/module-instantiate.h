@@ -12,6 +12,8 @@
 #include <stdint.h>
 
 #include "include/v8config.h"
+#include "src/base/optional.h"
+#include "src/common/message-template.h"
 
 namespace v8 {
 namespace internal {
@@ -30,17 +32,26 @@ class MaybeHandle;
 
 namespace wasm {
 
+class ConstantExpression;
 class ErrorThrower;
+class ValueType;
+class WasmValue;
 
 MaybeHandle<WasmInstanceObject> InstantiateToInstanceObject(
     Isolate* isolate, ErrorThrower* thrower,
     Handle<WasmModuleObject> module_object, MaybeHandle<JSReceiver> imports,
     MaybeHandle<JSArrayBuffer> memory);
 
-bool LoadElemSegment(Isolate* isolate, Handle<WasmInstanceObject> instance,
-                     uint32_t table_index, uint32_t segment_index, uint32_t dst,
-                     uint32_t src, uint32_t count) V8_WARN_UNUSED_RESULT;
+// If the operation succeeds, returns an empty {Optional}. Otherwise, returns an
+// {Optional} containing the {MessageTemplate} code of the error.
+base::Optional<MessageTemplate> LoadElemSegment(
+    Isolate* isolate, Handle<WasmInstanceObject> instance, uint32_t table_index,
+    uint32_t segment_index, uint32_t dst, uint32_t src,
+    uint32_t count) V8_WARN_UNUSED_RESULT;
 
+WasmValue EvaluateInitExpression(Zone* zone, ConstantExpression expr,
+                                 ValueType expected, Isolate* isolate,
+                                 Handle<WasmInstanceObject> instance);
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8

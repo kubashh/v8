@@ -169,6 +169,8 @@ extern class AsmWasmData extends Struct {
   uses_bitset: HeapNumber;
 }
 
+// The foreign field points to null for signature types, otherwise to one of
+// wasm::ArrayType or wasm::StructType.
 extern class WasmTypeInfo extends Foreign {
   supertypes: FixedArray;
   subtypes: ArrayList;
