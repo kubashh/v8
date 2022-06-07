@@ -18,6 +18,7 @@
 #include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/slots-inl.h"
 #include "src/objects/smi.h"
+#include "src/sandbox/external-pointer.h"
 #include "src/snapshot/serializer-deserializer.h"
 #include "src/snapshot/serializer-inl.h"
 
@@ -1005,11 +1006,12 @@ void Serializer::ObjectSerializer::OutputExternalReference(
   }
 }
 
-void Serializer::ObjectSerializer::VisitExternalReference(Foreign host,
-                                                          Address* p) {
+void Serializer::ObjectSerializer::VisitExternalReference(
+    ExternalPointer_t* slot, ExternalPointerTag tag) {
   // "Sandboxify" external reference.
-  OutputExternalReference(host.foreign_address(), kSystemPointerSize, true,
-                          kForeignForeignAddressTag);
+  Address value =
+      ReadExternalPointerField(reinterpret_cast<Address>(slot), isolate(), tag);
+  OutputExternalReference(value, kSystemPointerSize, true, tag);
   bytes_processed_so_far_ += kExternalPointerSize;
 }
 
