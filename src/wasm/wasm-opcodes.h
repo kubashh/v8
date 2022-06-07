@@ -691,13 +691,13 @@ bool V8_EXPORT_PRIVATE IsJSCompatibleSignature(const FunctionSig* sig,
   V(ArrayGetU, 0xfb15, _)                                                      \
   V(ArraySet, 0xfb16, _)                                                       \
   V(ArrayLen, 0xfb17, _)                                                       \
-  V(ArrayCopy, 0xfb18, _)       /* not standardized - V8 experimental */       \
-  V(ArrayInit, 0xfb19, _)       /* not standardized - V8 experimental */       \
-  V(ArrayInitStatic, 0xfb1a, _) /* not standardized - V8 experimental */       \
+  V(ArrayCopy, 0xfb18, _) /* not standardized - V8 experimental */             \
+  V(ArrayInit, 0xfb19, _)                                                      \
+  V(ArrayInitStatic, 0xfb1a, _)                                                \
   V(ArrayNew, 0xfb1b, _)                                                       \
   V(ArrayNewDefault, 0xfb1c, _)                                                \
-  V(ArrayInitFromData, 0xfb1e, _)       /* not stand. - V8 experimental */     \
-  V(ArrayInitFromDataStatic, 0xfb1d, _) /* not stand. - V8 experimental */     \
+  V(ArrayInitFromData, 0xfb1e, _)                                              \
+  V(ArrayInitFromDataStatic, 0xfb1d, _)                                        \
   V(I31New, 0xfb20, _)                                                         \
   V(I31GetS, 0xfb21, _)                                                        \
   V(I31GetU, 0xfb22, _)                                                        \
@@ -884,6 +884,7 @@ class V8_EXPORT_PRIVATE WasmOpcodes {
   static constexpr bool IsBreakable(WasmOpcode);
 
   static constexpr MessageTemplate TrapReasonToMessageId(TrapReason);
+  static constexpr TrapReason MessageIdToTrapReason(MessageTemplate message);
 
   // Extract the prefix byte (or 0x00) from a {WasmOpcode}.
   static constexpr byte ExtractPrefix(WasmOpcode);
