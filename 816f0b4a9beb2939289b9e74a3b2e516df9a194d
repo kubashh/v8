@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80ef56d0_a4ec46a0",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-06-07T15:07:17Z",
+      "side": 1,
+      "message": "for i::SKIP_NONE",
+      "revId": "816f0b4a9beb2939289b9e74a3b2e516df9a194d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
