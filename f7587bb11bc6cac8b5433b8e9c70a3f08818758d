@@ -535,6 +535,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74a44dfe_8e8d7bce",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd35394c_0e17a0e0",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb74031a_a99a8946",
@@ -602,6 +620,24 @@
       "side": 1,
       "message": "I think I fixed this.",
       "parentUuid": "f74d5944_1f2467b3",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be6f3fd0_545bf1c0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "373ed4ec_dafd1966",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -916,6 +952,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f284008_82bff8d4",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2061,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "07af9232_da2d6bfb",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49817caf_e52bef36",
@@ -1103,6 +1157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6245a3b5_7cf350f7",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "60be2d40_8e15fe8e",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a19b969_c61da77a",
@@ -1134,6 +1206,24 @@
       "side": 1,
       "message": "The \"if (!std::isfinite(result.approx_)) {\" block right above this line handle the case of  \"(+|-)Infinity\"",
       "parentUuid": "3a19b969_c61da77a",
+      "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d47caf0_76fb8739",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 2190,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Ah right, I didn\u0027t realize `StringToDouble` already knows how to parse the infinity strings.",
+      "parentUuid": "f152ed3d_05d17ea0",
       "revId": "f7587bb11bc6cac8b5433b8e9c70a3f08818758d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

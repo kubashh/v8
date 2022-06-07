@@ -16,6 +16,137 @@
       "message": "PTAL . I should  add more unit test to test the case of leading / trailing whitespace and leading/trailing zeros of integer and fractional part.",
       "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60d1838f_d0269df2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Looks mostly good now. I don\u0027t see any formatRange errors, could you add those? We should actually test the IsLessThan implementation.",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c74806_f969842c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1697,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Nit: `Parse` can be private.",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f6cda0_34566b68",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Might be worth noting that the end positions are 1 beyond the character.",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92387b9f_53d5a678",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "So this `length` is what\u0027s considered in-bounds for calls to `Digit`, is that right?",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0c1f66_93469a3f",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Typo: comparison",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f795b16f_417dc99c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "This is just a call to `length()`, right?",
+      "range": {
+        "startLine": 1891,
+        "startChar": 14,
+        "endLine": 1892,
+        "endChar": 37
+      },
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c3afca4_a33761f4",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-07T22:18:27Z",
+      "side": 1,
+      "message": "Nit: capitalize So",
+      "range": {
+        "startLine": 2102,
+        "startChar": 16,
+        "endLine": 2102,
+        "endChar": 18
+      },
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
