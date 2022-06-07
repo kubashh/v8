@@ -70,19 +70,21 @@ class InitExprInterface {
   INTERFACE_CONSTANT_FUNCTIONS(DECLARE_INTERFACE_FUNCTION)
 #undef DECLARE_INTERFACE_FUNCTION
 
-  WasmValue result() {
+  WasmValue computed_value() {
     DCHECK_NOT_NULL(isolate_);
-    return result_;
+    return computed_value_;
   }
   bool end_found() { return end_found_; }
-  bool runtime_error() { return error_ != nullptr; }
-  const char* runtime_error_msg() { return error_; }
+  bool has_runtime_error() { return computed_value_.type().is_bottom(); }
+  MessageTemplate error_template() {
+    DCHECK(has_runtime_error());
+    return computed_value_.to_error_template();
+  }
 
  private:
-  bool generate_result() { return isolate_ != nullptr && !runtime_error(); }
+  bool generate_value() { return isolate_ != nullptr && !has_runtime_error(); }
   bool end_found_ = false;
-  const char* error_ = nullptr;
-  WasmValue result_;
+  WasmValue computed_value_;
   const WasmModule* module_;
   WasmModule* outer_module_;
   Isolate* isolate_;

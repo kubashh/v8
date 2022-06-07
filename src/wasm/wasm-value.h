@@ -10,6 +10,7 @@
 #define V8_WASM_WASM_VALUE_H_
 
 #include "src/base/memory.h"
+#include "src/common/message-template.h"
 #include "src/handles/handles.h"
 #include "src/utils/boxed-float.h"
 #include "src/wasm/value-type.h"
@@ -91,24 +92,25 @@ FOREACH_SIMD_TYPE(DECLARE_CAST)
 ASSERT_TRIVIALLY_COPYABLE(Handle<Object>);
 
 // A wasm value with type information.
+// A value of type {kWasmVoid} is uninitialized. A value of type {kWasmBottom}
+// represents a runtime error template, whose template code can be retrieved
+// with {to_error_code}.
 class WasmValue {
  public:
   WasmValue() : type_(kWasmVoid), bit_pattern_{} {}
 
-#define DEFINE_TYPE_SPECIFIC_METHODS(name, localtype, ctype)                  \
-  explicit WasmValue(ctype v) : type_(localtype), bit_pattern_{} {            \
-    static_assert(sizeof(ctype) <= sizeof(bit_pattern_),                      \
-                  "size too big for WasmValue");                              \
-    base::WriteUnalignedValue<ctype>(reinterpret_cast<Address>(bit_pattern_), \
-                                     v);                                      \
-  }                                                                           \
-  ctype to_##name() const {                                                   \
-    DCHECK_EQ(localtype, type_);                                              \
-    return to_##name##_unchecked();                                           \
-  }                                                                           \
-  ctype to_##name##_unchecked() const {                                       \
-    return base::ReadUnalignedValue<ctype>(                                   \
-        reinterpret_cast<Address>(bit_pattern_));                             \
+#define DEFINE_TYPE_SPECIFIC_METHODS(name, localtype, ctype)       \
+  explicit WasmValue(ctype v) : type_(localtype), bit_pattern_{} { \
+    static_assert(sizeof(ctype) <= sizeof(bit_pattern_),           \
+                  "size too big for WasmValue");                   \
+    base::WriteUnalignedValue<ctype>(address(), v);                \
+  }                                                                \
+  ctype to_##name() const {                                        \
+    DCHECK_EQ(localtype, type_);                                   \
+    return to_##name##_unchecked();                                \
+  }                                                                \
+  ctype to_##name##_unchecked() const {                            \
+    return base::ReadUnalignedValue<ctype>(address());             \
   }
 
   FOREACH_PRIMITIVE_WASMVAL_TYPE(DEFINE_TYPE_SPECIFIC_METHODS)
@@ -123,15 +125,26 @@ class WasmValue {
     static_assert(sizeof(Handle<Object>) <= sizeof(bit_pattern_),
                   "bit_pattern_ must be large enough to fit a Handle");
     DCHECK(type.is_reference());
-    base::WriteUnalignedValue<Handle<Object>>(
-        reinterpret_cast<Address>(bit_pattern_), ref);
+    base::WriteUnalignedValue<Handle<Object>>(address(), ref);
+  }
+
+  explicit WasmValue(MessageTemplate message)
+      : type_(kWasmBottom), bit_pattern_{} {
+    base::WriteUnalignedValue(address(), message);
   }
 
   Handle<Object> to_ref() const {
     DCHECK(type_.is_reference());
-    return base::ReadUnalignedValue<Handle<Object>>(
-        reinterpret_cast<Address>(bit_pattern_));
+    return base::ReadUnalignedValue<Handle<Object>>(address());
   }
+
+  MessageTemplate to_error_template() {
+    DCHECK(type_.is_bottom());
+    return base::ReadUnalignedValue<MessageTemplate>(address());
+  }
+
+  bool is_error() { return type() == kWasmBottom; }
+  bool is_initialized() { return type() != kWasmVoid; }
 
   ValueType type() const { return type_; }
 
@@ -210,6 +223,7 @@ class WasmValue {
   }
 
  private:
+  Address address() const { return reinterpret_cast<Address>(bit_pattern_); }
   ValueType type_;
   uint8_t bit_pattern_[16];
 };

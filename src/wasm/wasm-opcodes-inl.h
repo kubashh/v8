@@ -738,6 +738,19 @@ constexpr MessageTemplate WasmOpcodes::TrapReasonToMessageId(
   }
 }
 
+constexpr TrapReason WasmOpcodes::MessageIdToTrapReason(
+    MessageTemplate message) {
+  switch (message) {
+#define MESSAGE_TO_TRAPREASON(name)  \
+  case MessageTemplate::kWasm##name: \
+    return k##name;
+    FOREACH_WASM_TRAPREASON(MESSAGE_TO_TRAPREASON)
+#undef TRAPREASON_TO_MESSAGE
+    default:
+      return TrapReason::kTrapUnreachable;
+  }
+}
+
 const char* WasmOpcodes::TrapReasonMessage(TrapReason reason) {
   return MessageFormatter::TemplateString(TrapReasonToMessageId(reason));
 }
