@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a96ea8_62147e8d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-08T12:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0aa85e7e_fca854be",
+      "range": {
+        "startLine": 712,
+        "startChar": 11,
+        "endLine": 712,
+        "endChar": 29
+      },
+      "revId": "d106ac67cb87dc24f19cce7a0d55b5cc075b141f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45ca62af_3b7be420",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-08T11:49:19Z",
       "side": 1,
       "message": "nit: shorter: `return {};`, or spell it out as `return MaybeHandle\u003cString\u003e();`.",
+      "range": {
+        "startLine": 713,
+        "startChar": 11,
+        "endLine": 713,
+        "endChar": 27
+      },
+      "revId": "d106ac67cb87dc24f19cce7a0d55b5cc075b141f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0d9009b_c54df6f1",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-08T12:09:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45ca62af_3b7be420",
       "range": {
         "startLine": 713,
         "startChar": 11,
