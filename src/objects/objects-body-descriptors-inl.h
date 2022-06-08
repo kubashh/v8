@@ -35,6 +35,7 @@
 #include "src/objects/torque-defined-classes-inl.h"
 #include "src/objects/transitions.h"
 #include "src/objects/turbofan-types-inl.h"
+#include "v8-internal.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/wasm-objects-inl.h"
@@ -692,8 +693,9 @@ class Foreign::BodyDescriptor final : public BodyDescriptorBase {
   static inline void IterateBody(Map map, HeapObject obj, int object_size,
                                  ObjectVisitor* v) {
     v->VisitExternalReference(
-        Foreign::cast(obj), reinterpret_cast<Address*>(
-                                obj.RawField(kForeignAddressOffset).address()));
+        reinterpret_cast<ExternalPointer_t*>(
+            obj.RawField(kForeignAddressOffset).address()),
+        kForeignForeignAddressTag);
     v->VisitExternalPointer(obj,
                             obj.RawExternalPointerField(kForeignAddressOffset));
   }
@@ -1003,14 +1005,14 @@ class NativeContext::BodyDescriptor final : public BodyDescriptorBase {
 class CodeDataContainer::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    return offset >= CodeDataContainer::kHeaderSize &&
+    return offset >= HeapObject::kHeaderSize &&
            offset <= CodeDataContainer::kPointerFieldsWeakEndOffset;
   }
 
   template <typename ObjectVisitor>
   static inline void IterateBody(Map map, HeapObject obj, int object_size,
                                  ObjectVisitor* v) {
-    IteratePointers(obj, CodeDataContainer::kHeaderSize,
+    IteratePointers(obj, HeapObject::kHeaderSize,
                     CodeDataContainer::kPointerFieldsStrongEndOffset, v);
     IterateCustomWeakPointers(
         obj, CodeDataContainer::kPointerFieldsStrongEndOffset,
@@ -1408,6 +1410,26 @@ class EphemeronHashTable::BodyDescriptor final : public BodyDescriptorBase {
   static inline int SizeOf(Map map, HeapObject object) {
     return object.SizeFromMap(map);
   }
+};
+
+class CallHandlerInfo::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) { return false; }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointers(obj, HeapObject::kHeaderSize,
+                    CallHandlerInfo::kCallbackOffset, v);
+    v->VisitExternalReference(reinterpret_cast<ExternalPointer_t*>(
+                                  obj.RawField(kCallbackOffset).address()),
+                              kCallHandlerInfoCallbackTag);
+    v->VisitExternalReference(reinterpret_cast<ExternalPointer_t*>(
+                                  obj.RawField(kJsCallbackOffset).address()),
+                              kCallHandlerInfoJsCallbackTag);
+  }
+
+  static inline int SizeOf(Map map, HeapObject object) { return kSize; }
 };
 
 #include "torque-generated/objects-body-descriptors-inl.inc"

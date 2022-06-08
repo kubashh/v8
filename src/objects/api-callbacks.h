@@ -104,7 +104,7 @@ class InterceptorInfo
 };
 
 class CallHandlerInfo
-    : public TorqueGeneratedCallHandlerInfo<CallHandlerInfo, Struct> {
+    : public TorqueGeneratedCallHandlerInfo<CallHandlerInfo, HeapObject> {
  public:
   inline bool IsSideEffectFreeCallHandlerInfo() const;
   inline bool IsSideEffectCallHandlerInfo() const;
@@ -117,9 +117,24 @@ class CallHandlerInfo
   DECL_PRINTER(CallHandlerInfo)
   DECL_VERIFIER(CallHandlerInfo)
 
+  // [callback]: field containing the address.
+  DECL_GETTER(callback, Address)
+  inline void set_callback(Isolate* isolate, Address value);
+
+  // [js_callback]: field containing the address.
+  DECL_GETTER(js_callback, Address)
+  inline void set_js_callback(Isolate* isolate, Address value);
+
   Address redirected_callback() const;
 
-  using BodyDescriptor = StructBodyDescriptor;
+  class BodyDescriptor;
+
+ private:
+  friend class Factory;
+  friend class SerializerDeserializer;
+  friend class StartupSerializer;
+
+  inline void AllocateExternalPointerEntries(Isolate* isolate);
 
   TQ_OBJECT_CONSTRUCTORS(CallHandlerInfo)
 };
