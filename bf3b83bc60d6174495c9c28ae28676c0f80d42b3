@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4d8231_776f0f77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T10:21:34Z",
+      "side": 1,
+      "message": "PTAL.\n\nFunction entry gets slightly cheaper, function exit and loop back edge slightly more expensive. The case of the budget running out also needs a few more instructions, but those don\u0027t matter.\n\nI can look into crafting a regression test (probably by observing the internal tiering budget from a cctest?).",
+      "revId": "bf3b83bc60d6174495c9c28ae28676c0f80d42b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
