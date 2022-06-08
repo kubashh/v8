@@ -33,6 +33,69 @@
       "message": "heap/ lgtm",
       "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e557fc3a_c5306d30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T13:38:06Z",
+      "side": 1,
+      "message": "LGTM with nits. Nice!",
+      "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2d1c609_2e623a43",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T13:38:06Z",
+      "side": 1,
+      "message": "Isn\u0027t this the same as `WasmTypeInfo::SizeFor(supertypes.size())`?",
+      "range": {
+        "startLine": 1519,
+        "startChar": 23,
+        "endLine": 1520,
+        "endChar": 72
+      },
+      "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad768640_831b54c0",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5711,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T13:38:06Z",
+      "side": 1,
+      "message": "`ObjectAccess::ToTagged(WasmTypeInfo::kSupertypesLengthOffset)` for consistency.",
+      "range": {
+        "startLine": 5711,
+        "startChar": 19,
+        "endLine": 5711,
+        "endChar": 73
+      },
+      "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
