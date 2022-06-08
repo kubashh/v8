@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e4d3bd_05454c3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-06-08T09:09:22Z",
+      "side": 1,
+      "message": "Hey Camillo, could you take a look at d8/? Thanks!",
+      "revId": "2b9a92ab2cbc152c6d1d327824e1e3852b4fd52b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
