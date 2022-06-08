@@ -16,6 +16,23 @@
       "message": "PTAL.\n\nFunction entry gets slightly cheaper, function exit and loop back edge slightly more expensive. The case of the budget running out also needs a few more instructions, but those don\u0027t matter.\n\nI can look into crafting a regression test (probably by observing the internal tiering budget from a cctest?).",
       "revId": "bf3b83bc60d6174495c9c28ae28676c0f80d42b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d460e6_3494f638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-08T11:50:56Z",
+      "side": 1,
+      "message": "Before landing, can you measure what the binary size impact is? On the photoshop module, I measured that more than half of the tier up checks are for loops, and this CL makes both the loop-header check and the OOL code significantly bigger.\n\nI see two options for improving this (if needed):\n1) make compromises with precision, and e.g. in loop header just compare against the flag value (constant) instead of the value from the instance; I remember you saying that this would regress performance though.\n2) optimize the instruction sequences, e.g. by trying to reuse the loaded instance in the OOL code, or merging load+sub or load+jcc instructions. This would probably require adding more platform-specific methods.",
+      "revId": "bf3b83bc60d6174495c9c28ae28676c0f80d42b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
