@@ -69,6 +69,24 @@
       "parentUuid": "8933bd2f_91e75344",
       "revId": "f44d4bc6299a7751b2178b53d0dcd0ef6504acd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2274b97_4540d272",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-08T12:57:11Z",
+      "side": 1,
+      "message": "I will use std::variant then.",
+      "parentUuid": "ebaba55d_baf02507",
+      "revId": "f44d4bc6299a7751b2178b53d0dcd0ef6504acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
