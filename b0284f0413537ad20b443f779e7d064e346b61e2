@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "b0284f0413537ad20b443f779e7d064e346b61e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "966dee83_5d4604b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T11:33:07Z",
+      "side": 1,
+      "message": "LGTM with a question.",
+      "revId": "b0284f0413537ad20b443f779e7d064e346b61e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2ce164e_cb61c340",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T11:33:07Z",
+      "side": 1,
+      "message": "Why? Wouldn\u0027t we expect most exception packages to be very short-lived?",
+      "range": {
+        "startLine": 1698,
+        "startChar": 54,
+        "endLine": 1698,
+        "endChar": 74
+      },
+      "revId": "b0284f0413537ad20b443f779e7d064e346b61e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
