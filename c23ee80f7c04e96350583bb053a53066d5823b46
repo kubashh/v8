@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ee697c7_e13176cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-08T18:21:05Z",
+      "side": 1,
+      "message": "I wonder if there are reasonable patchset increments that can be reviewed in separation or if 0..26 need to be reviewed in one go?",
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fdf5024_ed54cfee",
