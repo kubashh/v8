@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fcced25_f8f43179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T11:49:19Z",
+      "side": 1,
+      "message": "LGTM % build failure.",
+      "revId": "d106ac67cb87dc24f19cce7a0d55b5cc075b141f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aa85e7e_fca854be",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T11:49:19Z",
+      "side": 1,
+      "message": "You can solve the \"`isolate()` is private\" problem here simply by passing an `Isolate*` to this helper function, and converting in the other direction (i.e. `isolate-\u003efactory()`) where needed. That accessor compiles to no code, as Isolate inherits from Factory, so it\u0027s actually the same pointer, and the distinction only exists for code organization reasons :-)",
+      "range": {
+        "startLine": 712,
+        "startChar": 11,
+        "endLine": 712,
+        "endChar": 29
+      },
+      "revId": "d106ac67cb87dc24f19cce7a0d55b5cc075b141f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45ca62af_3b7be420",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-08T11:49:19Z",
+      "side": 1,
+      "message": "nit: shorter: `return {};`, or spell it out as `return MaybeHandle\u003cString\u003e();`.",
+      "range": {
+        "startLine": 713,
+        "startChar": 11,
+        "endLine": 713,
+        "endChar": 27
+      },
+      "revId": "d106ac67cb87dc24f19cce7a0d55b5cc075b141f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
