@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d8d49d1_9a9e055a",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-08T20:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2d1c609_2e623a43",
+      "range": {
+        "startLine": 1519,
+        "startChar": 23,
+        "endLine": 1520,
+        "endChar": 72
+      },
+      "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad768640_831b54c0",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-06-08T13:38:06Z",
       "side": 1,
       "message": "`ObjectAccess::ToTagged(WasmTypeInfo::kSupertypesLengthOffset)` for consistency.",
+      "range": {
+        "startLine": 5711,
+        "startChar": 19,
+        "endLine": 5711,
+        "endChar": 73
+      },
+      "revId": "82e504c8dbe81aa5366987664d784ff91f069f79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48313046_f2707815",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5711,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-08T20:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad768640_831b54c0",
       "range": {
         "startLine": 5711,
         "startChar": 19,
