@@ -16,6 +16,24 @@
       "message": "The \"v8:\" prefix on the \"Bug:\" line is easy to fix, but the new test is actually failing, that\u0027ll require a new patch set.",
       "revId": "baed2409404c57f69cdb35c8e33baa111f55d537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "825cd5ab_209db85c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546117
+      },
+      "writtenOn": "2022-06-08T23:13:01Z",
+      "side": 1,
+      "message": "I reproduced and fixed the issue with the test (I had it running locally on x64.release, not x64.optdebug, so DCHECKs weren\u0027t running here - oops!).\n\nRegarding the error mentioned in the logs above about my email address and the AUTHORS file, is this something I should worry about? I signed up here with gmail, but added my non-gmail address to AUTHORS and also registered/verified it at chromium-review.googlesource.com - now I also set it to \"preferred\" just in case, hope it works.",
+      "parentUuid": "2fe78f50_fc68d24d",
+      "revId": "baed2409404c57f69cdb35c8e33baa111f55d537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
