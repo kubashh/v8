@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-extern class CallHandlerInfo extends Struct {
-  callback: NonNullForeign|Undefined|Zero;
-  js_callback: NonNullForeign|Undefined|Zero;
+extern class CallHandlerInfo extends HeapObject {
   data: Object;
+  callback: ExternalPointer;
+  js_callback: ExternalPointer;
 }
 
 bitfield struct InterceptorInfoFlags extends uint31 {
