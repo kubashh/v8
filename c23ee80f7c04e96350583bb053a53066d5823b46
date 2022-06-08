@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "165ed16f_07eaab37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-08T18:19:41Z",
+      "side": 1,
+      "message": "Since Alex is now committer, adding him on this review. I\u0027m not sure if I find enough time before being OOO.",
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fdf5024_ed54cfee",
