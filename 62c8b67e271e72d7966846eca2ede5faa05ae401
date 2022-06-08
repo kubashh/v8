@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af4e96d7_849f6c1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2022-06-08T12:16:43Z",
+      "side": 1,
+      "message": "Thank you, Igor! I still need approval for src/deoptimizer, could you take a look, Toon?",
+      "revId": "62c8b67e271e72d7966846eca2ede5faa05ae401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
