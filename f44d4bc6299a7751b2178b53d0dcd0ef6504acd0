@@ -33,6 +33,24 @@
       "message": "Isn\u0027t this mixing unrelated things? If we want to either return a value, or flag an error, couldn\u0027t that be represented by a `Result\u003cWasmValue\u003e`?",
       "revId": "f44d4bc6299a7751b2178b53d0dcd0ef6504acd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8933bd2f_91e75344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-08T08:25:48Z",
+      "side": 1,
+      "message": "It is not necessarily mixing unrelated things. It is common for errors to be seen as language values. That said, we should reuse infrastructure that we already have. My issue is that `Result`\u0027s WasmError contains a string message and a position, which is not what I want. We could generalize Result to have a parameterized error as well as value. WDYT?",
+      "parentUuid": "e9fcf1a6_7dbe9c3a",
+      "revId": "f44d4bc6299a7751b2178b53d0dcd0ef6504acd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
