@@ -205,6 +205,9 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {
     case WASM_VALUE_OBJECT_TYPE:
       WasmValueObject::cast(*this).WasmValueObjectPrint(os);
       break;
+    case WASM_EXCEPTION_PACKAGE_TYPE:
+      WasmExceptionPackage::cast(*this).WasmExceptionPackagePrint(os);
+      break;
 #endif  // V8_ENABLE_WEBASSEMBLY
     case CODE_TYPE:
       Code::cast(*this).CodePrint(os);
@@ -2057,6 +2060,11 @@ void WasmCapiFunctionData::WasmCapiFunctionDataPrint(std::ostream& os) {
   WasmFunctionDataPrint(os);
   os << "\n - embedder_data: " << Brief(embedder_data());
   os << "\n - serialized_signature: " << Brief(serialized_signature());
+  os << "\n";
+}
+
+void WasmExceptionPackage::WasmExceptionPackagePrint(std::ostream& os) {
+  PrintHeader(os, "WasmExceptionPackage");
   os << "\n";
 }
 
