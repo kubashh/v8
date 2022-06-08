@@ -115,6 +115,35 @@ bool CallHandlerInfo::NextCallHasNoSideEffect() {
   return false;
 }
 
+void CallHandlerInfo::AllocateExternalPointerEntries(Isolate* isolate) {
+  InitExternalPointerField(kCallbackOffset, isolate,
+                           kCallHandlerInfoCallbackTag);
+  InitExternalPointerField(kJsCallbackOffset, isolate,
+                           kCallHandlerInfoJsCallbackTag);
+}
+
+DEF_GETTER(CallHandlerInfo, callback, Address) {
+  Isolate* isolate = GetIsolateForSandbox(*this);
+  return ReadExternalPointerField(kCallbackOffset, isolate,
+                                  kCallHandlerInfoCallbackTag);
+}
+
+void CallHandlerInfo::set_callback(Isolate* isolate, Address value) {
+  WriteExternalPointerField(kCallbackOffset, isolate, value,
+                            kCallHandlerInfoCallbackTag);
+}
+
+DEF_GETTER(CallHandlerInfo, js_callback, Address) {
+  Isolate* isolate = GetIsolateForSandbox(*this);
+  return ReadExternalPointerField(kJsCallbackOffset, isolate,
+                                  kCallHandlerInfoJsCallbackTag);
+}
+
+void CallHandlerInfo::set_js_callback(Isolate* isolate, Address value) {
+  WriteExternalPointerField(kJsCallbackOffset, isolate, value,
+                            kCallHandlerInfoJsCallbackTag);
+}
+
 }  // namespace internal
 }  // namespace v8
 

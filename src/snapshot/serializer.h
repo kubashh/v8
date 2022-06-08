@@ -447,7 +447,8 @@ class Serializer::ObjectSerializer : public ObjectVisitor {
                      MaybeObjectSlot end) override;
   void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override;
   void VisitEmbeddedPointer(Code host, RelocInfo* target) override;
-  void VisitExternalReference(Foreign host, Address* p) override;
+  void VisitExternalReference(ExternalPointer_t* slot,
+                              ExternalPointerTag tag) override;
   void VisitExternalReference(Code host, RelocInfo* rinfo) override;
   void VisitExternalPointer(HeapObject host, ExternalPointer_t ptr) override;
   void VisitInternalReference(Code host, RelocInfo* rinfo) override;
