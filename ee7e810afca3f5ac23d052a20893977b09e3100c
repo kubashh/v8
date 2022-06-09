@@ -33,6 +33,29 @@
       "message": "@Igor: PTAL as well (for src/execution but also in general since you\u0027ve fixed the recent race condition)",
       "revId": "ee7e810afca3f5ac23d052a20893977b09e3100c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f7347d7_29134b95",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-09T13:49:54Z",
+      "side": 1,
+      "message": "You can move this into the function with the DCHECK since it\u0027s not used anywhere else.",
+      "range": {
+        "startLine": 409,
+        "startChar": 23,
+        "endLine": 409,
+        "endChar": 73
+      },
+      "revId": "ee7e810afca3f5ac23d052a20893977b09e3100c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
