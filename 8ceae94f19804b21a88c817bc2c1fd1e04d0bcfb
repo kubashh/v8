@@ -33,6 +33,24 @@
       "message": "Lgtm! Thanks for adding the ops. One note: While evaluating ship readiness, I just realized that the QFMA operations aren\u0027t implemented on ARM turbofan. I\u0027m wondering if we would hit UNIMPLEMENTED() crashes for the turbofan variant? If so, we can either wait to land this CL or land it without the FMA ops, and I can add them back with the ARM implementation CL (hoping to carve some time to wrap that up tomorrow).",
       "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8bc5f4d_be88da16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-06-09T11:12:57Z",
+      "side": 1,
+      "message": "Good point, I wasn\u0027t aware of that and this would definitely cause spurious reports.\nI am trying to avoid doing small incremental changes to the wasm-compile fuzzer, because it tends to make fuzzer reports less accurate (typically blaming bugs on fuzzer changes) and harder to reproduce. So I will wait and merge it when the implementation is ready.",
+      "parentUuid": "5f025a7c_5aae74c6",
+      "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
