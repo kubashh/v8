@@ -16,6 +16,23 @@
       "message": "PTAL, Manos for fuzzer knowledge, Deepti for relaxed simd.",
       "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f025a7c_5aae74c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-06-09T06:11:59Z",
+      "side": 1,
+      "message": "Lgtm! Thanks for adding the ops. One note: While evaluating ship readiness, I just realized that the QFMA operations aren\u0027t implemented on ARM turbofan. I\u0027m wondering if we would hit UNIMPLEMENTED() crashes for the turbofan variant? If so, we can either wait to land this CL or land it without the FMA ops, and I can add them back with the ARM implementation CL (hoping to carve some time to wrap that up tomorrow).",
+      "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
