@@ -33,6 +33,24 @@
       "message": "OK, the presubmit check is happy, but you\u0027ll still have to sign the CLA (with the email address you\u0027re using for the commit).",
       "revId": "ab66443f381fd9880ef12e462946ae4fe06acf0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5319fb1_436aa14d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546117
+      },
+      "writtenOn": "2022-06-09T16:35:23Z",
+      "side": 1,
+      "message": "Done, signed with the other email as well!",
+      "parentUuid": "76ea7d2b_b1bff994",
+      "revId": "ab66443f381fd9880ef12e462946ae4fe06acf0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
