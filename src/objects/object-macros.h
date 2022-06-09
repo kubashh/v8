@@ -398,6 +398,25 @@
                 kRelaxedStore);                                      \
   }
 
+#define DECL_EXTERNAL_POINTER_ACCESSORS(name, type)        \
+  inline type name() const;                                \
+  inline type name(i::Isolate* isolate_for_sandbox) const; \
+  inline void set_##name(i::Isolate* isolate, type value);
+
+#define EXTERNAL_POINTER_ACCESSORS(holder, name, type, offset, tag)           \
+  type holder::name() const {                                                 \
+    i::Isolate* isolate_for_sandbox = GetIsolateForSandbox(*this);            \
+    return holder::name(isolate_for_sandbox);                                 \
+  }                                                                           \
+  type holder::name(i::Isolate* isolate_for_sandbox) const {                  \
+    return reinterpret_cast<type>(                                            \
+        Object::ReadExternalPointerField(offset, isolate_for_sandbox, tag));  \
+  }                                                                           \
+  void holder::set_##name(i::Isolate* isolate, type value) {                  \
+    Object::WriteExternalPointerField(offset, isolate,                        \
+                                      reinterpret_cast<Address>(value), tag); \
+  }
+
 #define BIT_FIELD_ACCESSORS2(holder, get_field, set_field, name, BitField) \
   typename BitField::FieldType holder::name() const {                      \
     return BitField::decode(get_field());                                  \
