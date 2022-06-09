@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a538123_c05e85d3",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1697,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61c74806_f969842c",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84f6cda0_34566b68",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-06-07T22:18:27Z",
       "side": 1,
       "message": "Might be worth noting that the end positions are 1 beyond the character.",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c1915db_00047d99",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84f6cda0_34566b68",
       "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "780f9499_08f7d796",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1710,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "no, it is the length of valid significant digits we have. Calling any value greater than length will make Digit() return 0.",
+      "parentUuid": "92387b9f_53d5a678",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db0c1f66_93469a3f",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 18
@@ -99,6 +153,24 @@
       "writtenOn": "2022-06-07T22:18:27Z",
       "side": 1,
       "message": "Typo: comparison",
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12dcfbcc_ab4f37cb",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1772,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db0c1f66_93469a3f",
       "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +198,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa7feeb_e5e64571",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f795b16f_417dc99c",
+      "range": {
+        "startLine": 1891,
+        "startChar": 14,
+        "endLine": 1892,
+        "endChar": 37
+      },
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c3afca4_a33761f4",
@@ -139,6 +235,30 @@
       "writtenOn": "2022-06-07T22:18:27Z",
       "side": 1,
       "message": "Nit: capitalize So",
+      "range": {
+        "startLine": 2102,
+        "startChar": 16,
+        "endLine": 2102,
+        "endChar": 18
+      },
+      "revId": "0ab07664b1e4526771c02e3eed9472e5311f03b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5dd880f_b46276bb",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-09T06:36:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c3afca4_a33761f4",
       "range": {
         "startLine": 2102,
         "startChar": 16,
