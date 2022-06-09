@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a630746e_4f64273c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-09T14:23:42Z",
+      "side": 1,
+      "message": "We do have to get all try jobs green. I\u0027m not sure how Gerrit handles multiple associated accounts, I would have guessed that the metadata on the git commit is what matters, but I may well be wrong. Let\u0027s see if it works now.\n\nYou\u0027ll also have to sign the \"Contributor License Agreement\", see https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/contributing.md#Legal-stuff .",
+      "revId": "ab66443f381fd9880ef12e462946ae4fe06acf0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
