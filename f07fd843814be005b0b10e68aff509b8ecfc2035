@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "972e19c1_5aa3a6f7",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-06-09T13:08:37Z",
+      "side": 1,
+      "message": "My understanding is that this is a function attribute and is likely no-op or warning on variables: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html\n\nI\u0027ll give it a try on godbolt.",
+      "parentUuid": "423cc058_eddfb9a9",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "983e542b_92eb82c7",
         "filename": "include/cppgc/member.h",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-09T13:03:31Z",
       "side": 1,
       "message": "Can you also create a `CPPGC_REQUIRE_CONSTANT_INIT` define above?",
+      "range": {
+        "startLine": 52,
+        "startChar": 5,
+        "endLine": 52,
+        "endChar": 15
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc92efa8_ac5667ce",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-06-09T13:08:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "983e542b_92eb82c7",
       "range": {
         "startLine": 52,
         "startChar": 5,
