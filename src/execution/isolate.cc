@@ -5583,7 +5583,9 @@ LocalHeap* Isolate::main_thread_local_heap() {
 
 LocalHeap* Isolate::CurrentLocalHeap() {
   LocalHeap* local_heap = LocalHeap::Current();
-  return local_heap ? local_heap : main_thread_local_heap();
+  if (local_heap) return local_heap;
+  DCHECK_EQ(ThreadId::Current(), thread_id());
+  return main_thread_local_heap();
 }
 
 // |chunk| is either a Page or an executable LargePage.
