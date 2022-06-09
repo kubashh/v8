@@ -48,6 +48,11 @@ class JSNumberFormat
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSNumberFormat> UnwrapNumberFormat(
       Isolate* isolate, Handle<JSReceiver> format_holder);
 
+  // #sec-number-format-functions
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> NumberFormatFunction(
+      Isolate* isolate, Handle<JSNumberFormat> number_format,
+      Handle<Object> numeric_obj);
+
   // ecma402/#sec-intl.numberformat.prototype.resolvedoptions
   static Handle<JSObject> ResolvedOptions(Isolate* isolate,
                                           Handle<JSNumberFormat> number_format);
