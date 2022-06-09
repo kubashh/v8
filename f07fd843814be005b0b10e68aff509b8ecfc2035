@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88bc4091_855c9728",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-06-09T14:18:02Z",
+      "side": 1,
+      "message": "yeah, doesn\u0027t seem to work on variables: https://godbolt.org/z/9YYz88fe5",
+      "parentUuid": "972e19c1_5aa3a6f7",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "983e542b_92eb82c7",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "983e542b_92eb82c7",
+      "range": {
+        "startLine": 52,
+        "startChar": 5,
+        "endLine": 52,
+        "endChar": 15
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c151f6_b286433e",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-06-09T14:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc92efa8_ac5667ce",
       "range": {
         "startLine": 52,
         "startChar": 5,
