@@ -1010,14 +1010,14 @@ class NativeContext::BodyDescriptor final : public BodyDescriptorBase {
 class CodeDataContainer::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    return offset >= CodeDataContainer::kHeaderSize &&
+    return offset >= HeapObject::kHeaderSize &&
            offset <= CodeDataContainer::kPointerFieldsWeakEndOffset;
   }
 
   template <typename ObjectVisitor>
   static inline void IterateBody(Map map, HeapObject obj, int object_size,
                                  ObjectVisitor* v) {
-    IteratePointers(obj, CodeDataContainer::kHeaderSize,
+    IteratePointers(obj, HeapObject::kHeaderSize,
                     CodeDataContainer::kPointerFieldsStrongEndOffset, v);
     IterateCustomWeakPointers(
         obj, CodeDataContainer::kPointerFieldsStrongEndOffset,
@@ -1420,6 +1420,23 @@ class EphemeronHashTable::BodyDescriptor final : public BodyDescriptorBase {
   static inline int SizeOf(Map map, HeapObject object) {
     return object.SizeFromMap(map);
   }
+};
+
+class CallHandlerInfo::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) { return false; }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointers(obj, HeapObject::kHeaderSize, kCallbackOffset, v);
+    v->VisitExternalPointer(obj, obj.RawExternalPointerField(kCallbackOffset),
+                            kCallHandlerInfoCallbackTag);
+    v->VisitExternalPointer(obj, obj.RawExternalPointerField(kJsCallbackOffset),
+                            kCallHandlerInfoJsCallbackTag);
+  }
+
+  static inline int SizeOf(Map map, HeapObject object) { return kSize; }
 };
 
 #include "torque-generated/objects-body-descriptors-inl.inc"
