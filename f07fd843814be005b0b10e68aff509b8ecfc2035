@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1b05cf8_50b0c247",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-09T13:03:31Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "423cc058_eddfb9a9",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-09T13:03:31Z",
+      "side": 1,
+      "message": "Given that the getters are `V8_INLINE`, would it be the same if we just annotated `g_base_` as attribute const?\n\n(Which would mean all attributes are actually grouped on the field.)",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983e542b_92eb82c7",
+        "filename": "include/cppgc/member.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-09T13:03:31Z",
+      "side": 1,
+      "message": "Can you also create a `CPPGC_REQUIRE_CONSTANT_INIT` define above?",
+      "range": {
+        "startLine": 52,
+        "startChar": 5,
+        "endLine": 52,
+        "endChar": 15
+      },
+      "revId": "f07fd843814be005b0b10e68aff509b8ecfc2035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
