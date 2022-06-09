@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "ee7e810afca3f5ac23d052a20893977b09e3100c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d0bfd0_0029be36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-09T12:17:59Z",
+      "side": 1,
+      "message": "@Igor: PTAL as well (for src/execution but also in general since you\u0027ve fixed the recent race condition)",
+      "revId": "ee7e810afca3f5ac23d052a20893977b09e3100c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
