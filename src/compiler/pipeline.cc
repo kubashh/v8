@@ -116,6 +116,10 @@
 #include "src/wasm/wasm-engine.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+#if V8_ENABLE_WASM_SIMD256_REVEC
+#include "src/compiler/revectorizer.h"
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
+
 namespace v8 {
 namespace internal {
 namespace compiler {
@@ -714,6 +718,10 @@ class PipelineImpl final {
   // Substep B.1. Produce a scheduled graph.
   void ComputeScheduledGraph();
 
+#if V8_ENABLE_WASM_SIMD256_REVEC
+  void Revectorize();
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
+
   // Substep B.2. Select instructions from a scheduled graph.
   bool SelectInstructions(Linkage* linkage);
 
@@ -1057,13 +1065,14 @@ PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
 #if V8_ENABLE_WEBASSEMBLY
 PipelineStatistics* CreatePipelineStatistics(
     wasm::FunctionBody function_body, const wasm::WasmModule* wasm_module,
-    OptimizedCompilationInfo* info, ZoneStats* zone_stats) {
+    OptimizedCompilationInfo* info, ZoneStats* zone_stats,
+    bool collect = true) {
   PipelineStatistics* pipeline_statistics = nullptr;
 
   bool tracing_enabled;
   TRACE_EVENT_CATEGORY_GROUP_ENABLED(
       TRACE_DISABLED_BY_DEFAULT("v8.wasm.turbofan"), &tracing_enabled);
-  if (tracing_enabled || FLAG_turbo_stats_wasm) {
+  if (collect && (tracing_enabled || FLAG_turbo_stats_wasm)) {
     pipeline_statistics = new PipelineStatistics(
         info, wasm::GetWasmEngine()->GetOrCreateTurboStatistics(), zone_stats);
     pipeline_statistics->BeginPhaseKind("V8.WasmInitializing");
@@ -2256,6 +2265,17 @@ struct ComputeSchedulePhase {
   }
 };
 
+#if V8_ENABLE_WASM_SIMD256_REVEC
+struct RevectorizePhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(Revectorizer)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    Revectorizer revec(temp_zone, data->graph(), data->mcgraph());
+    revec.TryRevectorize(data->info()->GetDebugName().get());
+  }
+};
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
+
 struct InstructionRangesAsJSON {
   const InstructionSequence* sequence;
   const ZoneVector<std::pair<int, int>>* instr_origins;
@@ -3276,8 +3296,21 @@ void Pipeline::GenerateCodeForWasmFunction(
     start_time = base::TimeTicks::Now();
   }
   ZoneStats zone_stats(wasm_engine->allocator());
+
+  bool collect = true;
+#if V8_ENABLE_WASM_SIMD256_REVEC
+  char target[255];
+  snprintf(target, sizeof(target), "wasm-function#%d",
+           FLAG_wasm_revectorize_function_index);
+
+  if (FLAG_wasm_revectorize_function_index != -1 &&
+      strcmp(target, info->GetDebugName().get()) != 0)
+    collect = false;
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
+
   std::unique_ptr<PipelineStatistics> pipeline_statistics(
-      CreatePipelineStatistics(function_body, module, info, &zone_stats));
+      CreatePipelineStatistics(function_body, module, info, &zone_stats,
+                               collect));
   PipelineData data(&zone_stats, wasm_engine, info, mcgraph,
                     pipeline_statistics.get(), source_positions, node_origins,
                     WasmAssemblerOptions(), buffer_cache);
@@ -3293,6 +3326,13 @@ void Pipeline::GenerateCodeForWasmFunction(
   }
 
   pipeline.RunPrintAndVerify("V8.WasmMachineCode", true);
+
+#if V8_ENABLE_WASM_SIMD256_REVEC
+  if (FLAG_experimental_wasm_revectorize) {
+    pipeline.Revectorize();
+    pipeline.RunPrintAndVerify("V8.WasmRevec", true);
+  }
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
 
   data.BeginPhaseKind("V8.WasmOptimization");
   if (FLAG_wasm_inlining) {
@@ -3554,6 +3594,16 @@ void PipelineImpl::ComputeScheduledGraph() {
   Run<ComputeSchedulePhase>();
   TraceScheduleAndVerify(data->info(), data, data->schedule(), "schedule");
 }
+
+#if V8_ENABLE_WASM_SIMD256_REVEC
+void PipelineImpl::Revectorize() {
+  // PipelineData* data = this->data_;
+
+  Run<RevectorizePhase>();
+  // ///// TraceScheduleAndVerify(data->info(), data, data->schedule(),
+  // "schedule");
+}
+#endif  // V8_ENABLE_WASM_SIMD256_REVEC
 
 bool PipelineImpl::SelectInstructions(Linkage* linkage) {
   auto call_descriptor = linkage->GetIncomingDescriptor();
