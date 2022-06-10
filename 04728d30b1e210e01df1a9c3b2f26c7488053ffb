@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "32d7da3c_ecac9588",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-06-10T13:27:57Z",
+      "side": 1,
+      "message": "Leaving as is for now, can update later.",
+      "parentUuid": "113bc381_b050aa68",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f1e6a89_3b3176f6",
         "filename": "tools/release/roll_merge_gerrit.py",
         "patchSetId": 1
@@ -129,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c41f787_6c681f9c",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-06-10T13:27:57Z",
+      "side": 1,
+      "message": "Done and removed.",
+      "parentUuid": "f4ec1d6b_a98d9439",
+      "range": {
+        "startLine": 46,
+        "startChar": 19,
+        "endLine": 46,
+        "endChar": 49
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa1c1042_dc474e62",
@@ -142,6 +190,30 @@
       "writtenOn": "2022-05-23T07:38:26Z",
       "side": 1,
       "message": "Not sure how forgiving this is for wrong usage. Maybe also add an example to the help line?\n\nAlso maybe we want to restrict the branches?\n\nConsider adding an assert that verifies the options.branch content, e.g. against a regexp. Are we expecting refs/heads/\\d+\\.\\d+\\.\\d+ ? Nobody should be able to use this for e.g. refs/branch-heads/* or refs/heads/*.*-lkgr.",
+      "range": {
+        "startLine": 107,
+        "startChar": 56,
+        "endLine": 107,
+        "endChar": 70
+      },
+      "revId": "04728d30b1e210e01df1a9c3b2f26c7488053ffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b27983e_ab90d76e",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-06-10T13:27:57Z",
+      "side": 1,
+      "message": "Added an example, but the assert is a bit tricky because I don\u0027t want to rely on local state. Maybe we can figure it out in a followup?",
+      "parentUuid": "fa1c1042_dc474e62",
       "range": {
         "startLine": 107,
         "startChar": 56,
