@@ -42,17 +42,17 @@ class V8_EXPORT_PRIVATE FlagList {
    public:
     enum ExitBehavior : bool { kExit = true, kDontExit = false };
 
-    explicit HelpOptions(ExitBehavior exit_behavior = kExit,
-                         const char* usage = nullptr)
+    constexpr HelpOptions(ExitBehavior exit_behavior = kExit,
+                          const char* usage = nullptr)
         : exit_behavior_(exit_behavior), usage_(usage) {}
 
-    bool ShouldExit() { return exit_behavior_ == kExit; }
-    bool HasUsage() { return usage_ != nullptr; }
-    const char* usage() { return usage_; }
+    bool ShouldExit() const { return exit_behavior_ == kExit; }
+    bool HasUsage() const { return usage_ != nullptr; }
+    const char* usage() const { return usage_; }
 
    private:
-    ExitBehavior exit_behavior_;
-    const char* usage_;
+    const ExitBehavior exit_behavior_;
+    const char* const usage_;
   };
 
   // Set the flag values by parsing the command line. If remove_flags is
@@ -73,9 +73,8 @@ class V8_EXPORT_PRIVATE FlagList {
   //   --flag=value  (non-bool flags only, no spaces around '=')
   //   --flag value  (non-bool flags only)
   //   --            (capture all remaining args in JavaScript)
-  static int SetFlagsFromCommandLine(
-      int* argc, char** argv, bool remove_flags,
-      FlagList::HelpOptions help_options = FlagList::HelpOptions());
+  static int SetFlagsFromCommandLine(int* argc, char** argv, bool remove_flags,
+                                     FlagList::HelpOptions help_options = {});
 
   // Set the flag values by parsing the string str. Splits string into argc
   // substrings argv[], each of which consisting of non-white-space chars,
@@ -101,8 +100,11 @@ class V8_EXPORT_PRIVATE FlagList {
   // Set flags as consequence of being implied by another flag.
   static void EnforceFlagImplications();
 
-  // Hash of flags (to quickly determine mismatching flag expectations).
-  // This hash is calculated during V8::Initialize and cached.
+  // Compute the flag hash; called once during V8 initialization.
+  static void ComputeHash();
+
+  // Hash of flags (to quickly determine mismatching flag expectations). This
+  // uses the cached hash from a previous {ComputeHash} call.
   static uint32_t Hash();
 };
 
