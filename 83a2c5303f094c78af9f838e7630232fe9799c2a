@@ -50,6 +50,23 @@
       "message": "src/heap LGTM",
       "revId": "83a2c5303f094c78af9f838e7630232fe9799c2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a03ea207_0b2ac7e4",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-06-10T08:40:37Z",
+      "side": 1,
+      "message": "does torque generate a kEndStrongFields or similar that you can use here? Maybe also static assert that it\u0027s equal to kCallbackOffset?",
+      "revId": "83a2c5303f094c78af9f838e7630232fe9799c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
