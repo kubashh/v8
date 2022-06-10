@@ -80,10 +80,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToJSON)
 /* Temporal.Duration */
 /* Temporal #sec-temporal.duration.compare */
 TO_BE_IMPLEMENTED(TemporalDurationCompare)
-/* Temporal #sec-temporal.duration.prototype.add */
-TO_BE_IMPLEMENTED(TemporalDurationPrototypeAdd)
-/* Temporal #sec-temporal.duration.prototype.subtract */
-TO_BE_IMPLEMENTED(TemporalDurationPrototypeSubtract)
 /* Temporal #sec-temporal.duration.prototype.round */
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeRound)
 /* Temporal #sec-temporal.duration.prototype.total */
@@ -272,8 +268,8 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeToLocaleString)
 #define TEMPORAL_GET_BY_INVOKE_CALENDAR_METHOD(T, METHOD, name)              \
   BUILTIN(Temporal##T##Prototype##METHOD) {                                  \
     HandleScope scope(isolate);                                              \
-    /* 2. Perform ? RequireInternalSlot(temporalDate, [[InitializedTemporal  \
-     * #T]]). */                                                             \
+    /* 2. Perform ? RequireInternalSlot(temporalDate, */                     \
+    /*    [[InitializedTemporal#T]]). */                                     \
     CHECK_RECEIVER(JSTemporal##T, date_like,                                 \
                    "get Temporal." #T ".prototype." #name);                  \
     /* 3. Let calendar be temporalDate.[[Calendar]]. */                      \
@@ -624,6 +620,8 @@ TEMPORAL_PROTOTYPE_METHOD0(Duration, Sign, sign)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Blank, blank)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Negated, negated)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, Abs, abs)
+TEMPORAL_PROTOTYPE_METHOD2(Duration, Add, add)
+TEMPORAL_PROTOTYPE_METHOD2(Duration, Subtract, subtract)
 TEMPORAL_VALUE_OF(Duration)
 TEMPORAL_PROTOTYPE_METHOD0(Duration, ToJSON, toJSON)
 
