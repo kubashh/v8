@@ -47,6 +47,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5da8546_c8a94e86",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70642f87_995789a2",
+      "range": {
+        "startLine": 123,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 12
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6a9b2b4_90236006",
@@ -60,6 +84,30 @@
       "writtenOn": "2022-06-03T18:35:44Z",
       "side": 1,
       "message": "covering an exceptional path",
+      "range": {
+        "startLine": 131,
+        "startChar": 6,
+        "endLine": 131,
+        "endChar": 29
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "718d9783_8decf903",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f6a9b2b4_90236006",
       "range": {
         "startLine": 131,
         "startChar": 6,
@@ -175,6 +223,30 @@
       "writtenOn": "2022-06-03T18:35:44Z",
       "side": 1,
       "message": "A proper place for options related abstractions.",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "0d5207a2895d082e80d6fca1603f87f3941c9d0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31930a81_9a248341",
+        "filename": "tools/testrunner/utils/augmented_options.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 1,
+      "message": "Please add a file doc string to newly added files and classes.",
+      "parentUuid": "b7f4b8a6_7c864be0",
       "range": {
         "startLine": 10,
         "startChar": 6,

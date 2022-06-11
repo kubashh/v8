@@ -72,6 +72,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46ee565d_6fb00cde",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 0,
+      "message": "Please run the option n5x trybot. It doesn\u0027t run by default and only the Android use case relies on this.",
+      "parentUuid": "99dc15c1_8dfbed31",
+      "range": {
+        "startLine": 292,
+        "startChar": 5,
+        "endLine": 292,
+        "endChar": 51
+      },
+      "revId": "95799b80e8815343a828dfa915b0d513aeeb41f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62e04cbe_f94befe5",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 19
@@ -164,6 +188,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0114398f_a3e8c7c2",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 0,
+      "message": "That ack! Though when moved to a different file, I\u0027d pass the 2 or 3 parameters rather explicitly, instead of always passing the whole options.\n\nE.g. instead of a shard_info in the augmented options, how about moving all this logic into the shard proc class?\n\nOr was _get_shard_info used for anything else?",
+      "parentUuid": "88c906e3_4578aa06",
+      "range": {
+        "startLine": 784,
+        "startChar": 6,
+        "endLine": 784,
+        "endChar": 21
+      },
+      "revId": "95799b80e8815343a828dfa915b0d513aeeb41f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "553b4281_40265adc",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 19
@@ -208,6 +256,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc0ad9a_6db0703a",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "9d7368e0_2a70b76f",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 6
+      },
+      "revId": "95799b80e8815343a828dfa915b0d513aeeb41f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49c41573_3a654c21",
@@ -221,6 +293,30 @@
       "writtenOn": "2022-06-03T18:35:44Z",
       "side": 0,
       "message": "too much trouble; why not align the testdata folder with the aimed at layout? see below",
+      "range": {
+        "startLine": 71,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 42
+      },
+      "revId": "95799b80e8815343a828dfa915b0d513aeeb41f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f52142f_d0b89119",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-11T13:48:30Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "49c41573_3a654c21",
       "range": {
         "startLine": 71,
         "startChar": 2,
