@@ -115,6 +115,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48706434_59cdd9d1",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3833444b_3f79ee6d",
+      "range": {
+        "startLine": 196,
+        "startChar": 27,
+        "endLine": 196,
+        "endChar": 29
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b9fe05c_38487130",
@@ -128,6 +152,30 @@
       "writtenOn": "2022-06-11T13:48:30Z",
       "side": 1,
       "message": "It is not ideal yet that there is this device stuff here. It is only needed in the Android case. Probably you get back to it...",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 9
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a875f6b_ca7a8eaa",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9b9fe05c_38487130",
       "range": {
         "startLine": 335,
         "startChar": 0,
@@ -161,6 +209,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3bfe3d0_432ac2e3",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "This is work in progress. The aim is to have a uniform processor creation protocol and defer details to the actual processor.",
+      "parentUuid": "6df77e44_e7d02cfa",
+      "range": {
+        "startLine": 305,
+        "startChar": 11,
+        "endLine": 305,
+        "endChar": 28
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33c6d44a_9bed498d",
@@ -174,6 +246,30 @@
       "writtenOn": "2022-06-11T13:48:30Z",
       "side": 1,
       "message": "What happened here? I guess that is not needed any more?",
+      "range": {
+        "startLine": 433,
+        "startChar": 4,
+        "endLine": 438,
+        "endChar": 3
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6e786d3_af926710",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "refactoring leftover; removed",
+      "parentUuid": "33c6d44a_9bed498d",
       "range": {
         "startLine": 433,
         "startChar": 4,
@@ -230,6 +326,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "373993cd_17b5694a",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "daedc1a6_8000511d",
+      "range": {
+        "startLine": 147,
+        "startChar": 8,
+        "endLine": 147,
+        "endChar": 29
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "535e351a_1d5e61d3",
@@ -243,6 +363,30 @@
       "writtenOn": "2022-06-11T13:48:30Z",
       "side": 1,
       "message": "Maybe also hide this myid - 1 operation in shard_info? So that all calculations are in one place.\n\nWe need to be careful not to have an off-by-1 error in this. E.g. something that results in us testing shards 0, 0, 1, 2 instead of 0, 1, 2, 3... I\u0027m not sure if the tests are rich enough to catch this.",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 15
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12ee9cd0_effe8067",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "535e351a_1d5e61d3",
       "range": {
         "startLine": 23,
         "startChar": 4,
@@ -270,6 +414,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2390fe06_921040c8",
+        "filename": "tools/testrunner/utils/augmented_options.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "673c9fdc_ac4cf78c",
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e742e55a_8448a090",
@@ -293,6 +455,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b48210_3dbe45b8",
+        "filename": "tools/testrunner/utils/augmented_options.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Renamed some vars to clear the confusion. This feels more like validation for the option parser. I will come back to it.",
+      "parentUuid": "e742e55a_8448a090",
+      "range": {
+        "startLine": 35,
+        "startChar": 18,
+        "endLine": 35,
+        "endChar": 32
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab5fe0ae_d9aec919",
@@ -306,6 +492,30 @@
       "writtenOn": "2022-06-11T13:48:30Z",
       "side": 1,
       "message": "Not so sure if I like this move here. Before it was in the fuzzer test proc, together where every fuzzer type is defined. Now it\u0027s more scattered and you need to touch multiple files to add a new fuzzer type.",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 27
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91486e95_98a87a2d",
+        "filename": "tools/testrunner/utils/augmented_options.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "Actually not true as far as I can see. This comes from the runner. Indeed there is similar code in the testproc.fuzzer and I will take this as a suggestion to bring the two together.",
+      "parentUuid": "ab5fe0ae_d9aec919",
       "range": {
         "startLine": 58,
         "startChar": 2,
@@ -352,6 +562,30 @@
       "writtenOn": "2022-06-11T13:48:30Z",
       "side": 1,
       "message": "Please add proper doc string to all new and not self-explanatory functions in new files.",
+      "range": {
+        "startLine": 76,
+        "startChar": 2,
+        "endLine": 76,
+        "endChar": 51
+      },
+      "revId": "c23ee80f7c04e96350583bb053a53066d5823b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74949600_2113b532",
+        "filename": "tools/testrunner/utils/test_utils.py",
+        "patchSetId": 26
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-06-12T12:06:40Z",
+      "side": 1,
+      "message": "This is not a new function, it was moved from the standard_runner_test. My take is: if existing code makes sense to me, I do not need to improve the documentation. The function is a bit ugly and I will come back to it.",
+      "parentUuid": "ebd90073_544342b9",
       "range": {
         "startLine": 76,
         "startChar": 2,
