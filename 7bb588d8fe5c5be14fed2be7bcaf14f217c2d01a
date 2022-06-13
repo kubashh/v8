@@ -16,6 +16,24 @@
       "message": "Hello all,\n\nSimon: would you please review src/inspector?\nClemens/Nico: would one of you please review the rest?\n\nThis fix is speculative; I\u0027m not sure how to test that this reland fixes the problem from the original. I tried running the somewhat similar sounding CQ bot \"linux_chromium_archive_rel_ng\", but it succeeded even without the fix in patchset 2. Any advice is appreciated, or we can just land it and see what happens.\n\nThanks!",
       "revId": "7bb588d8fe5c5be14fed2be7bcaf14f217c2d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf79d1a_3cd4149b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-13T08:18:41Z",
+      "side": 1,
+      "message": "I tried to find the configuration for that bot, but failed. There is also nothing special in the executed steps. From the name, and the failure, I could imagine that that bot archives all source files (extracted from GN dependencies), and then tries to build from that archive. But that\u0027s just speculation.\n\nThe fix looks promising, so landing and seeing what happens LGTM. We can also try to add more bots to the roll of this CL into chromium.",
+      "parentUuid": "18b55a41_a1943c37",
+      "revId": "7bb588d8fe5c5be14fed2be7bcaf14f217c2d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
