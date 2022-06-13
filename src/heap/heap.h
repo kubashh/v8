@@ -649,6 +649,9 @@ class Heap {
       //    doesn not require memory protection changes => return false.
       return !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT;
     }
+    if (V8_HEAP_USE_PKU_WRITE_PROTECT) {
+      return v8::base::OS::GetPermissionsProtectionKey() == -1;
+    }
     return write_protect_code_memory_;
   }
 
@@ -2615,7 +2618,8 @@ class V8_NODISCARD CodeSpaceMemoryModificationScope {
   inline ~CodeSpaceMemoryModificationScope();
 
  private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
   V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
 #endif
   Heap* heap_;
@@ -2629,7 +2633,8 @@ class V8_NODISCARD CodePageCollectionMemoryModificationScope {
   inline ~CodePageCollectionMemoryModificationScope();
 
  private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
   V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
 #endif
   Heap* heap_;
@@ -2662,7 +2667,8 @@ class V8_EXPORT_PRIVATE V8_NODISCARD
 // header.
 // The scope can be used from any thread and affects only current thread, see
 // RwxMemoryWriteScope for details about semantics of the scope.
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
 using CodePageHeaderModificationScope = RwxMemoryWriteScope;
 #else
 // When write protection of code page headers is not required the scope is
@@ -2694,7 +2700,8 @@ class V8_NODISCARD CodePageMemoryModificationScope {
   inline ~CodePageMemoryModificationScope();
 
  private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
   V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
 #endif
   BasicMemoryChunk* chunk_;

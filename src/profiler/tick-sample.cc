@@ -65,8 +65,14 @@ bool IsNoFrameRegion(i::Address address) {
       int offset = *offset_ptr;
       if (!offset || IsSamePage(address, address - offset)) {
         MSAN_MEMORY_IS_INITIALIZED(pc - offset, pattern->bytes_count);
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) && \
+    !defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
+        // The PKRU needs to re-establish their desired protection key rights
+        // So there may be some problem for modifying memory without set
+        // permission
         if (!memcmp(pc - offset, pattern->bytes, pattern->bytes_count))
           return true;
+#endif
       } else {
         // It is not safe to examine bytes on another page as it might not be
         // allocated thus causing a SEGFAULT.

@@ -7,7 +7,8 @@
 namespace v8 {
 namespace internal {
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HAS_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_MAY_HAS_PKU_JIT_WRITE_PROTECT)
 
 thread_local int RwxMemoryWriteScope::code_space_write_nesting_level_ = 0;
 
@@ -19,7 +20,7 @@ RwxMemoryWriteScopeForTesting::~RwxMemoryWriteScopeForTesting() {
   RwxMemoryWriteScope::SetExecutable();
 }
 
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_MAY_HAS_PKU_JIT_WRITE_PROTECT
 
 }  // namespace internal
 }  // namespace v8
