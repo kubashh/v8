@@ -50,6 +50,24 @@
       "message": "Could you add a comment here about the difference? Could `kNoGcViaStackGuard` be called something `GcViaTask`?",
       "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc94251_d68ea11b",
+        "filename": "src/heap/incremental-marking.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-14T13:57:22Z",
+      "side": 1,
+      "message": "Done, it\u0027s really a mix of \"no action\" and \"scheduling a task\".",
+      "parentUuid": "8b3821ff_c1980c59",
+      "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
