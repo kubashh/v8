@@ -326,6 +326,8 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
 // static
 void HeapObject::VerifyHeapPointer(Isolate* isolate, Object p) {
   CHECK(p.IsHeapObject());
+  // If you crashed here and {isolate->is_shared()}, there is a bug causing the
+  // host of {p} to point to a non-shared object.
   CHECK(IsValidHeapObject(isolate->heap(), HeapObject::cast(p)));
   CHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !p.IsCode());
 }
@@ -1221,21 +1223,16 @@ USE_TORQUE_VERIFIER(JSWrappedFunction)
 
 void JSSharedStruct::JSSharedStructVerify(Isolate* isolate) {
   CHECK(IsJSSharedStruct());
+  CHECK(InSharedWritableHeap());
   JSObjectVerify(isolate);
   CHECK(HasFastProperties());
   // Shared structs can only point to primitives or other shared HeapObjects,
   // even internally.
-  // TODO(v8:12547): Generalize shared -> shared pointer verification.
   Map struct_map = map();
-  CHECK(struct_map.InSharedHeap());
   CHECK(struct_map.GetBackPointer().IsUndefined(isolate));
-  Object maybe_cell = struct_map.prototype_validity_cell();
-  if (maybe_cell.IsCell()) CHECK(maybe_cell.InSharedHeap());
   CHECK(!struct_map.is_extensible());
   CHECK(!struct_map.is_prototype_map());
-  CHECK(property_array().InSharedHeap());
   DescriptorArray descriptors = struct_map.instance_descriptors(isolate);
-  CHECK(descriptors.InSharedHeap());
   for (InternalIndex i : struct_map.IterateOwnDescriptors()) {
     PropertyDetails details = descriptors.GetDetails(i);
     CHECK_EQ(PropertyKind::kData, details.kind());
@@ -1248,10 +1245,9 @@ void JSSharedStruct::JSSharedStructVerify(Isolate* isolate) {
 
 void JSAtomicsMutex::JSAtomicsMutexVerify(Isolate* isolate) {
   CHECK(IsJSAtomicsMutex());
-  CHECK(InSharedHeap());
+  CHECK(InSharedWritableHeap());
   JSObjectVerify(isolate);
   Map mutex_map = map();
-  CHECK(mutex_map.InSharedHeap());
   CHECK(mutex_map.GetBackPointer().IsUndefined(isolate));
   CHECK(!mutex_map.is_extensible());
   CHECK(!mutex_map.is_prototype_map());

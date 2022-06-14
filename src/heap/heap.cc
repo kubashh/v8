@@ -2436,6 +2436,26 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   tracer()->StopFullCycleIfNeeded();
 }
 
+void Heap::VerifyShared(Isolate* initiator) {
+  DCHECK(IsShared());
+
+  // Stop all client isolates attached to this isolate.
+  GlobalSafepointScope global_safepoint(initiator);
+
+  // Migrate shared isolate to the main thread of the initiator isolate.
+  v8::Locker locker(reinterpret_cast<v8::Isolate*>(isolate()));
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate()));
+
+  DCHECK_NOT_NULL(isolate()->global_safepoint());
+
+  // Free all shared LABs to make the shared heap iterable.
+  isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
+    client->heap()->FreeSharedLinearAllocationAreas();
+  });
+
+  Verify();
+}
+
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {
   GCTracer::Scope::ScopeId scope_id;
 
@@ -6078,9 +6098,14 @@ void Heap::StartTearDown() {
   // tear down parts of the Isolate.
   if (FLAG_verify_heap) {
     AllowGarbageCollection allow_gc;
-    IgnoreLocalGCRequests ignore_gc_requests(this);
-    SafepointScope scope(this);
     Verify();
+
+    // If this is a client Isolate of a shared Isolate, verify that there are no
+    // shared-to-local pointers before tearing down the client Isolate and
+    // creating dangling pointers.
+    if (Isolate* shared_isolate = isolate()->shared_isolate()) {
+      shared_isolate->heap()->VerifyShared(isolate());
+    }
   }
 #endif
 }

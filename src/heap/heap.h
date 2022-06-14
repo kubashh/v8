@@ -1821,6 +1821,10 @@ class Heap {
   void PerformSharedGarbageCollection(Isolate* initiator,
                                       GarbageCollectionReason gc_reason);
 
+  // Verify the shared heap, initiating from a client heap. This performs a
+  // global safepoint, then the normal heap verification.
+  void VerifyShared(Isolate* initiator);
+
   inline void UpdateOldSpaceLimits();
 
   bool CreateInitialMaps();
