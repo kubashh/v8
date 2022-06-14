@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c44f750_9f96d1d6",
+        "filename": "test/mjsunit/regress/regress-crbug-1335445.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-06-14T18:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6269c2_0afa1ec3",
+      "range": {
+        "startLine": 8,
+        "startChar": 14,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "be49baa566dd7d41a192d7a76fdcb7d99c5e558e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5e08d75_a631bb08",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-14T14:18:11Z",
       "side": 1,
       "message": "It\u0027s better to store the objects somehwere, to prevent things like escape analysis.",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "be49baa566dd7d41a192d7a76fdcb7d99c5e558e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feadc694_8702394f",
+        "filename": "test/mjsunit/regress/regress-crbug-1335445.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-06-14T18:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5e08d75_a631bb08",
       "range": {
         "startLine": 17,
         "startChar": 6,
