@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de29005e_49d2ca73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-14T21:46:37Z",
+      "side": 1,
+      "message": "lgtm with comments below addressed.\n\nThanks! It\u0027s been a journey.",
+      "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce8257d_398582c1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-14T21:46:37Z",
+      "side": 1,
+      "message": "Typo: the last",
+      "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0903e3fe_41024631",
+        "filename": "test/intl/number-format/format-range-string.js",
+        "patchSetId": 27
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-14T21:46:37Z",
+      "side": 1,
+      "message": "Probably also worth it to have a small number tests testing the expected output and not just throw/no throw, even if most of the functionality is already tested by `format`.",
+      "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
