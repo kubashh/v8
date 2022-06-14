@@ -168,7 +168,8 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
       return false;
     }
   }
-  if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
+  if ((V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT ||
+       V8_HEAP_USE_PKU_WRITE_PROTECT) &&
       params.jit == JitPermission::kMapAsJittable) {
     void* base = reinterpret_cast<void*>(page_allocator_->begin());
     size_t size = page_allocator_->size();
@@ -278,7 +279,7 @@ uint8_t* CodeRange::RemapEmbeddedBuiltins(Isolate* isolate,
     }
   }
 
-  if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) {
+  if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_WRITE_PROTECT) {
     if (!page_allocator()->RecommitPages(embedded_blob_code_copy, code_size,
                                          PageAllocator::kReadWriteExecute)) {
       V8::FatalProcessOutOfMemory(isolate,

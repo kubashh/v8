@@ -49,7 +49,10 @@ class MemoryProtectionTest : public TestWithNativeContext {
  public:
   void Initialize(MemoryProtectionMode mode) {
     mode_ = mode;
-    bool enable_pku = mode == kPku || mode == kPkuWithMprotectFallback;
+    // For
+    // MemoryProtection/ParameterizedMemoryProtectionTest.CodeNotWritableAfterCompilation/NoProtection
+    bool enable_pku = mode == kPku || mode == kPkuWithMprotectFallback ||
+                      GetWasmCodeManager()->HasMemoryProtectionKeySupport();
     FLAG_wasm_memory_protection_keys = enable_pku;
     // The key is initially write-protected.
     CHECK_IMPLIES(GetWasmCodeManager()->HasMemoryProtectionKeySupport(),
@@ -71,7 +74,10 @@ class MemoryProtectionTest : public TestWithNativeContext {
   WasmCode* code() const { return code_; }
 
   bool code_is_protected() {
-    return V8_HAS_PTHREAD_JIT_WRITE_PROTECT || uses_pku() || uses_mprotect();
+    // For
+    // MemoryProtection/ParameterizedMemoryProtectionTest.CodeNotWritableAfterCompilation/NoProtection
+    return V8_HAS_PTHREAD_JIT_WRITE_PROTECT || uses_pku() || uses_mprotect() ||
+           GetWasmCodeManager()->HasMemoryProtectionKeySupport();
   }
 
   void MakeCodeWritable() {
@@ -300,7 +306,8 @@ TEST_P(ParameterizedMemoryProtectionTestWithSignalHandling, TestSignalHandler) {
   // An exception is M1, where an open scope still has an effect in the signal
   // handler.
   bool expect_crash = write_in_signal_handler && code_is_protected() &&
-                      (!V8_HAS_PTHREAD_JIT_WRITE_PROTECT || !open_write_scope);
+                      (!V8_HAS_PTHREAD_JIT_WRITE_PROTECT || !open_write_scope ||
+                       V8_MAY_HAS_PKU_JIT_WRITE_PROTECT);
   if (expect_crash) {
     // Avoid {ASSERT_DEATH_IF_SUPPORTED}, because it only accepts a regex as
     // second parameter, and not a matcher as {ASSERT_DEATH}.

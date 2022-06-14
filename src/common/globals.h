@@ -193,6 +193,13 @@ using CodeT = Code;
 #define V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT false
 #endif
 
+#if V8_MAY_HAS_PKU_JIT_WRITE_PROTECT && \
+    !(defined(V8_COMPRESS_POINTERS) && !defined(V8_EXTERNAL_CODE_SPACE))
+#define V8_HEAP_USE_PKU_WRITE_PROTECT true
+#else
+#define V8_HEAP_USE_PKU_WRITE_PROTECT false
+#endif
+
 // Determine whether tagged pointers are 8 bytes (used in Torque layouts for
 // choosing where to insert padding).
 #if V8_TARGET_ARCH_64_BIT && !defined(V8_COMPRESS_POINTERS)

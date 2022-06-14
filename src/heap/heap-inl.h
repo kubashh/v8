@@ -603,7 +603,8 @@ AlwaysAllocateScopeForTesting::AlwaysAllocateScopeForTesting(Heap* heap)
 
 CodeSpaceMemoryModificationScope::CodeSpaceMemoryModificationScope(Heap* heap)
     :
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
       rwx_write_scope_("A part of CodeSpaceMemoryModificationScope"),
 #endif
       heap_(heap) {
@@ -662,7 +663,8 @@ CodeSpaceMemoryModificationScope::~CodeSpaceMemoryModificationScope() {
 CodePageCollectionMemoryModificationScope::
     CodePageCollectionMemoryModificationScope(Heap* heap)
     :
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
       rwx_write_scope_("A part of CodePageCollectionMemoryModificationScope"),
 #endif
       heap_(heap) {
@@ -683,7 +685,8 @@ CodePageCollectionMemoryModificationScope::
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP
 CodePageMemoryModificationScope::CodePageMemoryModificationScope(Code code)
     :
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
       rwx_write_scope_("A part of CodePageMemoryModificationScope"),
 #endif
       chunk_(nullptr),
@@ -697,7 +700,8 @@ CodePageMemoryModificationScope::CodePageMemoryModificationScope(Code code)
 CodePageMemoryModificationScope::CodePageMemoryModificationScope(
     BasicMemoryChunk* chunk)
     :
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_HEAP_USE_PKU_WRITE_PROTECT)
       rwx_write_scope_("A part of CodePageMemoryModificationScope"),
 #endif
       chunk_(chunk),

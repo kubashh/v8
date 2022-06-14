@@ -7,6 +7,7 @@
 
 #include "src/base/build_config.h"
 #include "src/base/macros.h"
+#include "src/base/platform/platform.h"
 
 namespace v8 {
 namespace internal {
@@ -63,10 +64,11 @@ class V8_NODISCARD RwxMemoryWriteScope final {
   V8_INLINE static void SetWritable();
   V8_INLINE static void SetExecutable();
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HAS_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_MAY_HAS_PKU_JIT_WRITE_PROTECT)
   // This counter is used for supporting scope reentrance.
   static thread_local int code_space_write_nesting_level_;
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_MAY_HAS_PKU_JIT_WRITE_PROTECT
 };
 
 // This class is a no-op version of the RwxMemoryWriteScope class above.
@@ -84,14 +86,15 @@ class V8_NODISCARD NopRwxMemoryWriteScope final {
 // a thread_local value can't be properly exported.
 class V8_NODISCARD RwxMemoryWriteScopeForTesting final {
  public:
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if defined(V8_HAS_PTHREAD_JIT_WRITE_PROTECT) || \
+    defined(V8_MAY_HAS_PKU_JIT_WRITE_PROTECT)
   V8_EXPORT_PRIVATE RwxMemoryWriteScopeForTesting();
   V8_EXPORT_PRIVATE ~RwxMemoryWriteScopeForTesting();
 #else
   V8_INLINE RwxMemoryWriteScopeForTesting() {
     // Define a constructor to avoid unused variable warnings.
   }
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT | V8_MAY_HAS_PKU_JIT_WRITE_PROTECT
 
   // Disable copy constructor and copy-assignment operator, since this manages
   // a resource and implicit copying of the scope can yield surprising errors.

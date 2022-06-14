@@ -5696,7 +5696,9 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
   // Ensure that RwxMemoryWriteScope and other dependent scopes (in particular,
   // CodePage*ModificationScope and CodeSpaceMemoryModificationScope)
   // are allowed to be used when jitless mode is not enabled.
+#if !V8_HEAP_USE_PKU_WRITE_PROTECT
   CHECK_IMPLIES(!FLAG_jitless, RwxMemoryWriteScope::IsAllowed());
+#endif
 
   v8::PageAllocator* code_page_allocator;
   if (isolate_->RequiresCodeRange() || code_range_size_ != 0) {
