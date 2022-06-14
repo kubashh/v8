@@ -15,32 +15,13 @@ namespace internal {
 
 V8_INLINE Address ReadSandboxedPointerField(Address field_address,
                                             PtrComprCageBase cage_base) {
-#ifdef V8_SANDBOXED_POINTERS
-  SandboxedPointer_t sandboxed_pointer =
-      base::ReadUnalignedValue<SandboxedPointer_t>(field_address);
-
-  Address offset = sandboxed_pointer >> kSandboxedPointerShift;
-  Address pointer = cage_base.address() + offset;
-  return pointer;
-#else
   return ReadMaybeUnalignedValue<Address>(field_address);
-#endif
 }
 
 V8_INLINE void WriteSandboxedPointerField(Address field_address,
                                           PtrComprCageBase cage_base,
                                           Address pointer) {
-#ifdef V8_SANDBOXED_POINTERS
-  // The pointer must point into the sandbox.
-  CHECK(GetProcessWideSandbox()->Contains(pointer));
-
-  Address offset = pointer - cage_base.address();
-  SandboxedPointer_t sandboxed_pointer = offset << kSandboxedPointerShift;
-  base::WriteUnalignedValue<SandboxedPointer_t>(field_address,
-                                                sandboxed_pointer);
-#else
   WriteMaybeUnalignedValue<Address>(field_address, pointer);
-#endif
 }
 
 }  // namespace internal
