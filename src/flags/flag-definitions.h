@@ -515,19 +515,12 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
                      V8_DICT_PROPERTY_CONST_TRACKING_BOOL,
                      "Use const tracking on dictionary properties")
 
-DEFINE_UINT(max_opt, 999,
-            "Set the maximal optimisation tier: "
-            "> 3 == any, 0 == ignition/interpreter, 1 == sparkplug/baseline, "
-            "2 == maglev, 3 == turbofan")
+// Flag to select wasm trace mark type
+DEFINE_STRING(
+    wasm_trace_native, nullptr,
+    "Select which native code sequence to use for wasm trace instruction: "
+    "default or cpuid")
 
-DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 3, turbofan, false)
-#ifdef V8_ENABLE_MAGLEV
-DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 2, maglev, false)
-#endif  // V8_ENABLE_MAGLEV
-#if ENABLE_SPARKPLUG
-DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 1, sparkplug, false)
-#endif  // ENABLE_SPARKPLUG
-        //
 // Flags for jitless
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
             "Disable runtime allocation of executable memory.")
