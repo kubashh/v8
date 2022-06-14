@@ -199,7 +199,7 @@ class Worker : public std::enable_shared_from_this<Worker> {
   // If there are no messages in the queue and the worker is no longer running,
   // return nullptr.
   // This function should only be called by the thread that created the Worker.
-  std::unique_ptr<SerializationData> GetMessage();
+  std::unique_ptr<SerializationData> GetMessage(Isolate* requester);
   // Terminate the worker's event loop. Messages from the worker that have been
   // queued can still be read via GetMessage().
   // This function can be called by any thread.

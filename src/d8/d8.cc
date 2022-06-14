@@ -2723,7 +2723,7 @@ void Shell::WorkerGetMessage(const v8::FunctionCallbackInfo<v8::Value>& args) {
     return;
   }
 
-  std::unique_ptr<SerializationData> data = worker->GetMessage();
+  std::unique_ptr<SerializationData> data = worker->GetMessage(isolate);
   if (data) {
     Local<Value> value;
     if (Shell::DeserializeValue(isolate, std::move(data)).ToLocal(&value)) {
@@ -4331,12 +4331,14 @@ class TerminateTask : public i::CancelableTask {
   std::shared_ptr<Worker> worker_;
 };
 
-std::unique_ptr<SerializationData> Worker::GetMessage() {
+std::unique_ptr<SerializationData> Worker::GetMessage(Isolate* requester) {
   std::unique_ptr<SerializationData> result;
   while (!out_queue_.Dequeue(&result)) {
     // If the worker is no longer running, and there are no messages in the
     // queue, don't expect any more messages from it.
     if (!is_running()) break;
+    i::ParkedScope parked(
+        reinterpret_cast<i::Isolate*>(requester)->main_thread_local_isolate());
     out_semaphore_.Wait();
   }
   return result;
