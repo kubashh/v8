@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35425463_7efd7bfa",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 1694,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-14T22:22:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ce8257d_398582c1",
+      "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0903e3fe_41024631",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-14T21:46:37Z",
       "side": 1,
       "message": "Probably also worth it to have a small number tests testing the expected output and not just throw/no throw, even if most of the functionality is already tested by `format`.",
+      "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72e97fa_cc227311",
+        "filename": "test/intl/number-format/format-range-string.js",
+        "patchSetId": 27
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-14T22:22:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0903e3fe_41024631",
       "revId": "ddbc97f530dc8598da99574004e0acc32c309f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
