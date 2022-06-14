@@ -16,6 +16,23 @@
       "message": "ptal. There\u0027s more to simplify and clean up but I want to make a cut here.",
       "revId": "ed2afad56310f495e70145873d3f7abcd095407a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd005233_c661e38a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-14T13:45:10Z",
+      "side": 1,
+      "message": "Great! LGTM",
+      "revId": "ed2afad56310f495e70145873d3f7abcd095407a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
