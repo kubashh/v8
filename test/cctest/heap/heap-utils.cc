@@ -198,14 +198,11 @@ void SimulateIncrementalMarking(i::Heap* heap, bool force_completion) {
   while (!marking->IsComplete()) {
     marking->Step(kStepSizeInMs, i::IncrementalMarking::NO_GC_VIA_STACK_GUARD,
                   i::StepOrigin::kV8);
-    if (marking->IsReadyToOverApproximateWeakClosure()) {
-      SafepointScope scope(heap);
-      MarkingBarrier::PublishAll(heap);
-      marking->MarkRootsForTesting();
-      marking->FinalizeIncrementally();
-    }
   }
   CHECK(marking->IsComplete());
+  SafepointScope scope(heap);
+  MarkingBarrier::PublishAll(heap);
+  marking->MarkRootsForTesting();
 }
 
 void SimulateFullSpace(v8::internal::PagedSpace* space) {

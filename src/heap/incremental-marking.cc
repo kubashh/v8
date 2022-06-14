@@ -363,20 +363,6 @@ void IncrementalMarking::EnsureBlackAllocated(Address allocated, size_t size) {
   }
 }
 
-void IncrementalMarking::FinalizeIncrementally() {
-  TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_INCREMENTAL_FINALIZE_BODY);
-  DCHECK(!finalize_marking_completed_);
-  DCHECK(IsMarking());
-
-  // TODO(v8:12775): Remove the finalization step.
-  finalize_marking_completed_ = true;
-
-  if (FLAG_trace_incremental_marking) {
-    heap()->isolate()->PrintWithTimestamp(
-        "[IncrementalMarking] Finalize incrementally.\n");
-  }
-}
-
 void IncrementalMarking::UpdateMarkingWorklistAfterYoungGenGC() {
   if (!IsMarking()) return;
 
@@ -556,19 +542,6 @@ bool IncrementalMarking::Stop() {
   return true;
 }
 
-void IncrementalMarking::FinalizeMarking(CompletionAction action) {
-  DCHECK(!finalize_marking_completed_);
-  if (FLAG_trace_incremental_marking) {
-    heap()->isolate()->PrintWithTimestamp(
-        "[IncrementalMarking] requesting finalization of incremental "
-        "marking.\n");
-  }
-  request_type_ = GCRequestType::FINALIZATION;
-  if (action == GC_VIA_STACK_GUARD) {
-    heap_->isolate()->stack_guard()->RequestGC();
-  }
-}
-
 double IncrementalMarking::CurrentTimeToMarkingTask() const {
   const double recorded_time_to_marking_task =
       heap_->tracer()->AverageTimeToIncrementalMarkingTask();
@@ -641,7 +614,7 @@ void IncrementalMarking::MarkingComplete(CompletionAction action) {
 
 void IncrementalMarking::Epilogue() {
   was_activated_ = false;
-  finalize_marking_completed_ = false;
+  request_type_ = GCRequestType::NONE;
 }
 
 bool IncrementalMarking::ShouldDoEmbedderStep() {
@@ -882,15 +855,10 @@ StepResult IncrementalMarking::Step(double max_step_size_in_ms,
     combined_result = CombineStepResults(v8_result, embedder_result);
 
     if (combined_result == StepResult::kNoImmediateWork) {
-      if (!finalize_marking_completed_) {
-        FinalizeMarking(action);
-        FastForwardSchedule();
-        combined_result = StepResult::kWaitingForFinalization;
-        incremental_marking_job()->Start(heap_);
-      } else {
-        MarkingComplete(action);
-        combined_result = StepResult::kWaitingForFinalization;
-      }
+      incremental_marking_job()->Start(heap_);
+      FastForwardSchedule();
+      MarkingComplete(action);
+      combined_result = StepResult::kWaitingForFinalization;
     }
     if (FLAG_concurrent_marking) {
       local_marking_worklists()->ShareWork();
