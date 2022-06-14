@@ -640,8 +640,11 @@ void IncrementalMarking::MarkingComplete(CompletionAction action) {
 }
 
 void IncrementalMarking::Epilogue() {
+  DCHECK(IsStopped());
+
   was_activated_ = false;
   finalize_marking_completed_ = false;
+  request_type_ = GCRequestType::NONE;
 }
 
 bool IncrementalMarking::ShouldDoEmbedderStep() {

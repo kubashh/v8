@@ -110,11 +110,9 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
     finalize_marking_completed_ = val;
   }
 
-  inline bool IsStopped() const { return state() == STOPPED; }
-
-  inline bool IsMarking() const { return state() >= MARKING; }
-
-  inline bool IsComplete() const { return state() == COMPLETE; }
+  bool IsStopped() const { return state() == STOPPED; }
+  bool IsMarking() const { return state() >= MARKING; }
+  bool IsComplete() const { return state() == COMPLETE; }
 
   inline bool IsReadyToOverApproximateWeakClosure() const {
     return request_type_ == GCRequestType::FINALIZATION &&
@@ -128,10 +126,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
 
   GCRequestType request_type() const { return request_type_; }
 
-  void reset_request_type() { request_type_ = GCRequestType::NONE; }
-
   bool CanBeActivated();
-
   bool WasActivated();
 
   void Start(GarbageCollectionReason gc_reason);
