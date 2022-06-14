@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f116c1_c1fb1b22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-14T13:42:49Z",
+      "side": 1,
+      "message": "ptal, some tear offs from the larger refactoring CL",
+      "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
