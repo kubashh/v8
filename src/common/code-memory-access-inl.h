@@ -52,7 +52,35 @@ void RwxMemoryWriteScope::SetExecutable() {
 }
 #pragma clang diagnostic pop
 
-#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#elif V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+
+// static
+bool RwxMemoryWriteScope::IsAllowed() {
+  return v8::base::OS::GetPermissionsProtectionKey() != -1;
+}
+
+// static
+void RwxMemoryWriteScope::SetWritable() {
+  if (v8::base::OS::GetPermissionsProtectionKey() == -1) return;
+  if (code_space_write_nesting_level_ == 0) {
+    v8::base::OS::SetPermissionsForMemoryProtectionKey(true);
+    // PrintF("pku %d set writeable!\n", pkey);
+  }
+  code_space_write_nesting_level_++;
+}
+
+// static
+void RwxMemoryWriteScope::SetExecutable() {
+  if (v8::base::OS::GetPermissionsProtectionKey() == -1) return;
+  code_space_write_nesting_level_--;
+  if (code_space_write_nesting_level_ == 0) {
+    // int pkey = v8::internal::pku::getPKU();
+    v8::base::OS::SetPermissionsForMemoryProtectionKey(false);
+    // PrintF("pku %d set executable!\n", pkey);
+  }
+}
+
+#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT && !V8_TRY_USE_PKU_JIT_WRITE_PROTECT
 
 // static
 bool RwxMemoryWriteScope::IsAllowed() { return true; }
