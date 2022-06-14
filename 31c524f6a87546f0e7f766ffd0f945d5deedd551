@@ -16,6 +16,24 @@
       "message": "Hm, this extra shared heap verification is too slow for some tests and causing timeouts. I wonder how to make this cheaper.",
       "revId": "31c524f6a87546f0e7f766ffd0f945d5deedd551",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2094c09_2b84a044",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-14T23:54:23Z",
+      "side": 1,
+      "message": "Ah wait no, those are probably deadlocks.",
+      "parentUuid": "c4429444_846ac5f8",
+      "revId": "31c524f6a87546f0e7f766ffd0f945d5deedd551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
