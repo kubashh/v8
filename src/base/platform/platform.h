@@ -136,6 +136,21 @@ class V8_BASE_EXPORT OS {
   // - gc_fake_mmap: Name of the file for fake gc mmap used in ll_prof.
   static void Initialize(bool hard_abort, const char* const gc_fake_mmap);
 
+#if V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+  enum MemoryProtectionKeyPermission {
+    kNoRestrictions = 0,
+    kDisableAccess = 1,
+    kDisableWrite = 2,
+  };
+
+  static void SetPermissionsForMemoryProtectionKey(bool writeable);
+  static bool SetPermissionsAndMemoryProtectionKey(void* address, size_t size,
+                                                   int permissions);
+  static int GetPermissionsProtectionKey();
+  static MemoryProtectionKeyPermission GetMemoryProtectionKeyPermission();
+  friend class pku;
+#endif
+
 #if V8_OS_WIN
   // On Windows, ensure the newer memory API is loaded if available.  This
   // includes function like VirtualAlloc2 and MapViewOfFile3.

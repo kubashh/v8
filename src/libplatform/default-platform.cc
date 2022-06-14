@@ -47,6 +47,9 @@ std::unique_ptr<v8::Platform> NewDefaultPlatform(
     int thread_pool_size, IdleTaskSupport idle_task_support,
     InProcessStackDumping in_process_stack_dumping,
     std::unique_ptr<v8::TracingController> tracing_controller) {
+#if V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+  v8::base::OS::GetPermissionsProtectionKey();
+#endif
   if (in_process_stack_dumping == InProcessStackDumping::kEnabled) {
     v8::base::debug::EnableInProcessStackDumping();
   }
