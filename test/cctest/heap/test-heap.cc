@@ -2361,7 +2361,8 @@ TEST(InstanceOfStubWriteBarrier) {
   while (!marking_state->IsBlack(f->code()) && !marking->IsStopped()) {
     // Discard any pending GC requests otherwise we will get GC when we enter
     // code below.
-    marking->Step(kStepSizeInMs, IncrementalMarking::NO_GC_VIA_STACK_GUARD,
+    marking->Step(kStepSizeInMs,
+                  IncrementalMarking::CompletionAction::kNoGcViaStackGuard,
                   StepOrigin::kV8);
   }
 
@@ -5702,7 +5703,7 @@ TEST(Regress598319) {
   const double kSmallStepSizeInMs = 0.1;
   while (!marking->IsComplete()) {
     marking->Step(kSmallStepSizeInMs,
-                  i::IncrementalMarking::NO_GC_VIA_STACK_GUARD,
+                  i::IncrementalMarking::CompletionAction::kNoGcViaStackGuard,
                   StepOrigin::kV8);
     ProgressBar& progress_bar = page->ProgressBar();
     if (progress_bar.IsEnabled() && progress_bar.Value() > 0) {
@@ -5817,7 +5818,8 @@ TEST(Regress615489) {
   }
   const double kStepSizeInMs = 100;
   while (!marking->IsComplete()) {
-    marking->Step(kStepSizeInMs, i::IncrementalMarking::NO_GC_VIA_STACK_GUARD,
+    marking->Step(kStepSizeInMs,
+                  i::IncrementalMarking::CompletionAction::kNoGcViaStackGuard,
                   StepOrigin::kV8);
     if (marking->IsReadyToOverApproximateWeakClosure()) {
       SafepointScope safepoint_scope(heap);
@@ -5880,7 +5882,8 @@ TEST(Regress631969) {
   const double kStepSizeInMs = 100;
   IncrementalMarking* marking = heap->incremental_marking();
   while (!marking->IsComplete()) {
-    marking->Step(kStepSizeInMs, i::IncrementalMarking::NO_GC_VIA_STACK_GUARD,
+    marking->Step(kStepSizeInMs,
+                  i::IncrementalMarking::CompletionAction::kNoGcViaStackGuard,
                   StepOrigin::kV8);
     if (marking->IsReadyToOverApproximateWeakClosure()) {
       SafepointScope safepoint_scope(heap);
@@ -6497,7 +6500,8 @@ HEAP_TEST(Regress670675) {
     if (marking->IsStopped()) break;
     double deadline = heap->MonotonicallyIncreasingTimeInMs() + 1;
     marking->AdvanceWithDeadline(
-        deadline, IncrementalMarking::GC_VIA_STACK_GUARD, StepOrigin::kV8);
+        deadline, IncrementalMarking::CompletionAction::kGcViaStackGuard,
+        StepOrigin::kV8);
   }
   DCHECK(marking->IsStopped());
 }
