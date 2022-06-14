@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e08d75_a631bb08",
+        "filename": "test/mjsunit/regress/regress-crbug-1335445.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-14T14:18:11Z",
+      "side": 1,
+      "message": "It\u0027s better to store the objects somehwere, to prevent things like escape analysis.",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "be49baa566dd7d41a192d7a76fdcb7d99c5e558e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
