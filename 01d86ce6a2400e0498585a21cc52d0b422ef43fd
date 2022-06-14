@@ -16,6 +16,40 @@
       "message": "ptal, some tear offs from the larger refactoring CL",
       "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "348d482e_f0d081f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-14T13:48:02Z",
+      "side": 1,
+      "message": "Thanks, LGTM",
+      "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b3821ff_c1980c59",
+        "filename": "src/heap/incremental-marking.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-06-14T13:48:02Z",
+      "side": 1,
+      "message": "Could you add a comment here about the difference? Could `kNoGcViaStackGuard` be called something `GcViaTask`?",
+      "revId": "01d86ce6a2400e0498585a21cc52d0b422ef43fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
