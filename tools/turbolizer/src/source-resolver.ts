@@ -326,7 +326,11 @@ export class SourceResolver {
           this.phases.push(graphPhase);
           break;
         case PhaseType.TurboshaftGraph:
-          // Allow to avoid exception and view turboshaft schedule phase
+          const castedTurboshaftGraph = genericPhase as TurboshaftGraphPhase;
+          const turboshaftGraphPhase = new TurboshaftGraphPhase(castedTurboshaftGraph.name, 0);
+          turboshaftGraphPhase.parseDataFromJSON(castedTurboshaftGraph.data);
+          this.phaseNames.set(turboshaftGraphPhase.name, this.phases.length);
+          this.phases.push(turboshaftGraphPhase);
           break;
         default:
           throw "Unsupported phase type";

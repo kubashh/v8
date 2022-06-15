@@ -25,6 +25,7 @@ export class GraphPhase extends Phase {
   }
 
   public parseDataFromJSON(dataJson, nodeLabelMap: Array<NodeLabel>): void {
+    this.data = new GraphData();
     this.nodeIdToNodeMap = this.parseNodesFromJSON(dataJson.nodes, nodeLabelMap);
     this.parseEdgesFromJSON(dataJson.edges);
   }
