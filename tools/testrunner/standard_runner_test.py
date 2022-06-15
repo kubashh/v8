@@ -236,19 +236,22 @@ class StandardRunnerTest(TestRunnerTest):
     with patch('testrunner.local.command.find_os_context', return_value=FakeOSContext()):
       result = self.run_tests(
           '--progress=verbose',
-          'sweet/cherries',
+          'sweet',
       )
       result.stdout_includes('===>Starting stuff\n'
           '>>> Running tests for x64.release\n'
           '>>> Running with test processors\n')
       result.stdout_includes('--- stdout ---\nfake stdout 1')
       result.stdout_includes('--- stderr ---\nfake stderr 1')
+      result.stdout_includes('=== sweet/raspberries ===')
+      result.stdout_includes('=== sweet/cherries ===')
+      result.stdout_includes('=== sweet/apples ===')
       result.stdout_includes('Command: fake_wrapper ')
       result.stdout_includes('===\n'
-          '=== 1 tests failed\n'
+          '=== 3 tests failed\n'
           '===\n'
-          '>>> 7 base tests produced 1 (14%) non-filtered tests\n'
-          '>>> 1 tests ran\n'
+          '>>> 7 base tests produced 7 (100%) non-filtered tests\n'
+          '>>> 7 tests ran\n'
           '<===Stopping stuff\n')
 
   def testSkips(self):
