@@ -72,7 +72,7 @@
     "type": "script",
   },
   "unittests": {
-    "label": "//test/unittests:unittests",
+    "label": "//test/unittests:unittests_combo",
     "type": "script",
   },
   "fuchsia-unittests": {
