@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b38c4d_e37a057f",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfed438f_f391b1e6",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "714927ce_0d7d2494",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "I think I made the comment before: If the arm64 implementation is meant to stay empty, you should just drop the ArchOpcode and change the instruction selector to ignore the instruction.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a78b11e_68ea941a",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "714927ce_0d7d2494",
       "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90915dfb_33917c09",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "703e398e_522bd554",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a633c92_f6374364",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d47e38_5c2de9e8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a633c92_f6374364",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63ab3498_4f5f5e0b",
@@ -99,6 +171,30 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "I don\u0027t get this comment. What is \"the invalid state\"? Also, the \"#ifdef _I_AM_DEF_NOT_DEFINED\" seems like a leftover from development/debugging?",
+      "range": {
+        "startLine": 2611,
+        "startChar": 0,
+        "endLine": 2613,
+        "endChar": 32
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "020c5162_470e367a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "upon further examination, I removed the comment and removed part of the check. this-\u003ecurrent_inst_trace_-\u003efirst \u003d\u003d 0 will never be zero because it it is, then then previous if statement will evaluate to true and this branch will never run",
+      "parentUuid": "63ab3498_4f5f5e0b",
       "range": {
         "startLine": 2611,
         "startChar": 0,
@@ -132,6 +228,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc523da_e044daf4",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "844d311f_fff527c6",
+      "range": {
+        "startLine": 2616,
+        "startChar": 0,
+        "endLine": 2617,
+        "endChar": 32
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de809c5e_df029772",
@@ -145,6 +265,24 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "And one more.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04f43c43_abf2f3c5",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2627,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de809c5e_df029772",
       "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -172,6 +310,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7509c2c_6daa088f",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8621600_9239bb0a",
+      "range": {
+        "startLine": 2638,
+        "startChar": 0,
+        "endLine": 2646,
+        "endChar": 16
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d299e93b_2e25a82c",
@@ -189,6 +351,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78882302_a88466cf",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d299e93b_2e25a82c",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd1b8324_91249fae",
@@ -202,6 +382,24 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "Typos: custom -\u003e Custom, follwing -\u003e following",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a2487b8_8ece3c1d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd1b8324_91249fae",
       "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -229,6 +427,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43930971_43eb0755",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74414cf4_87f4a90c",
+      "range": {
+        "startLine": 561,
+        "startChar": 46,
+        "endLine": 561,
+        "endChar": 47
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50587537_93d763af",
@@ -242,6 +464,24 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "kInstTraceSectionCode, here and in the line below.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b41fb6c_9ada8595",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50587537_93d763af",
       "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -263,6 +503,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a05e2fcd_d505cf00",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccb95999_e20d4307",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebf6856c_2e84ab7e",
@@ -280,6 +538,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57e6f46e_c978d5da",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebf6856c_2e84ab7e",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82a48bd6_5fc05cc4",
@@ -293,6 +569,24 @@
       "writtenOn": "2022-06-15T15:48:16Z",
       "side": 1,
       "message": "This is also referring to branch hints, please fix.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb286592_d1703b2c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-15T18:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82a48bd6_5fc05cc4",
       "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
