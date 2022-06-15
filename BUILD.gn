@@ -2255,6 +2255,7 @@ action("v8_dump_build_config") {
     "is_clang=$is_clang",
     "is_component_build=$is_component_build",
     "is_debug=$v8_enable_debugging_features",
+    "is_fuchsia=$is_fuchsia",
     "is_full_debug=$is_full_debug",
     "is_gcov_coverage=$is_gcov_coverage",
     "is_msan=$is_msan",
