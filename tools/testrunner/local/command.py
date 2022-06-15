@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from contextlib import contextmanager
+import collections
 import os
 import re
 import signal
@@ -15,8 +16,16 @@ from ..local.android import (
     Driver, CommandFailedException, TimeoutException)
 from ..objects import output
 
+from .run_test_package import InstallTestPackage, RunTest
+
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
+
+FUCHSIA_DIR = os.path.join(BASE_DIR, 'build', 'fuchsia')
+sys.path.insert(0, FUCHSIA_DIR)
+
+import device_target
+import fvdl_target
 
 SEM_INVALID_VALUE = -1
 SEM_NOGPFAULTERRORBOX = 0x0002  # Microsoft Platform SDK WinBase.h
@@ -335,7 +344,7 @@ class DefaultOSContext():
     pass
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     yield
 
 class AndroidOSContext(DefaultOSContext):
@@ -343,26 +352,119 @@ class AndroidOSContext(DefaultOSContext):
     self.command = AndroidCommand
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     try:
-      AndroidCommand.driver = Driver.instance(device)
+      AndroidCommand.driver = Driver.instance(options.device)
       yield
     finally:
       AndroidCommand.driver.tear_down()
 
 
+class FStream():
+  def __init__(self):
+    self.buffer = []
+
+  def print(self, text):
+    self.buffer.append(text)
+
+class FuchsiaCommand(BaseCommand):
+  def __init__(self, target, package_paths, package_args, kernel_logger,
+               shell, args=None, cmd_prefix=None, timeout=60, env=None,
+               verbose=False, resources_func=None, handle_sigterm=False):
+    super(FuchsiaCommand, self).__init__(
+        shell, args=args, cmd_prefix=cmd_prefix, timeout=timeout, env=env,
+        verbose=verbose, resources_func=None, handle_sigterm=handle_sigterm)
+    self.target = target
+    self.package_paths = package_paths
+    self.package_args = package_args
+    self.kernel_logger = kernel_logger
+
+  def execute(self):
+    start_time = time.time()
+    st = FStream()
+    # TODO: Use correct shell from test definition.
+    return_code = RunTest(self.target, None,
+        self.package_paths, 'v8_unittests', '1',
+        self.args, 
+        self.package_args, 
+        self.kernel_logger,
+        print_stream=st)
+    duration = time.time() - start_time
+    return output.Output(
+        return_code,
+        False,  # TODO: Figure out timeouts.
+        '\n'.join(st.buffer),
+        '',  # No stderr available.
+        -1,  # No pid available.
+        duration,
+    )
+
+Args = collections.namedtuple('Args', ['out_dir', 'target_cpu', 'require_kvm',
+                      'enable_graphics', 'hardware_gpu',
+                      'with_network', 'cpu_cores', 'ram_size_mb',
+                      'logs_dir', 'custom_image', 'code_coverage', 'host',
+                      'node_name', 'port', 'ssh_config', 'fuchsia_out_dir',
+                      'os_check', 'system_image_dir'])
+LOCAL_HOST = '127.0.0.1'
+
+class FuchsiaOSContext(DefaultOSContext):
+  def __init__(self):
+    self.command = None
+
+  @contextmanager
+  def context(self, options):
+    self.options = options
+    with fvdl_target.FvdlTarget.CreateFromArgs(self._target_args()) as target:
+      self.target = target
+      target.Start()
+      far_location = os.path.join(self.options.outdir,
+          'gen', 'test', 'unittests', 'v8_unittests', 'v8_unittests.far')
+      with InstallTestPackage(target, [far_location]) as kernel_logger:
+        self.command = self.command_factory(target, far_location, kernel_logger)
+        yield
+
+  def command_factory(self, target, package_paths, kernel_logger):
+    def factory(shell, args=None, cmd_prefix=None, timeout=60, env=None,
+               verbose=False, resources_func=None, handle_sigterm=False):
+      return FuchsiaCommand(target, package_paths, self._args(LOCAL_HOST, target._host_ssh_port), kernel_logger,
+          shell, args, cmd_prefix, timeout, env, verbose, resources_func, handle_sigterm)
+    return factory
+
+  def _target_args(self, host=None, port=None):
+    return Args(
+        out_dir=self.options.outdir,
+        target_cpu='x64',
+        require_kvm=True,
+        enable_graphics=False,
+        hardware_gpu=False,
+        with_network=False,
+        cpu_cores=4,
+        ram_size_mb=8192,
+        logs_dir=None, 
+        custom_image=None,
+        code_coverage=None,
+        host=host,
+        node_name=None,
+        port=port,
+        ssh_config=None,
+        fuchsia_out_dir=self.options.outdir,
+        os_check='ignore',
+        system_image_dir=None,
+    )
+
 def find_os_context(target_os):
   registry = dict(
     android=AndroidOSContext(),
-    windows=DefaultOSContext(WindowsCommand)
+    windows=DefaultOSContext(WindowsCommand),
+    fuchsia=FuchsiaOSContext(),
   )
   default = DefaultOSContext(PosixCommand)
   return registry.get(target_os, default)
 
 @contextmanager
-def os_context(target_os, device):
+def os_context(target_os, options):
   context = find_os_context(target_os)
-  with context.context(device):
+  with context.context(options):
     yield context
 
 # Deprecated : use os_context
