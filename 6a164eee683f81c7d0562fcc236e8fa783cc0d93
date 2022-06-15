@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e5fc92_125b4807",
+        "filename": "test/intl/intl.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-15T21:00:26Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "49fed777_9af4282e",
+      "revId": "6a164eee683f81c7d0562fcc236e8fa783cc0d93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1ab5053_ea00c822",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-15T20:51:46Z",
       "side": 1,
       "message": "This test is unrelated to PR85, is that right?",
+      "revId": "6a164eee683f81c7d0562fcc236e8fa783cc0d93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfbbb65b_6c2c2a50",
+        "filename": "test/intl/number-format/format-range-numbering-system.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-15T21:00:26Z",
+      "side": 1,
+      "message": "this test is to show the broken of https://bugs.chromium.org/p/v8/issues/detail?id\u003d12977 which will be later fixed by cherrypicking https://github.com/unicode-org/icu/pull/2085",
+      "parentUuid": "f1ab5053_ea00c822",
       "revId": "6a164eee683f81c7d0562fcc236e8fa783cc0d93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
