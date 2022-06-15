@@ -34,6 +34,23 @@
       "parentUuid": "c4429444_846ac5f8",
       "revId": "31c524f6a87546f0e7f766ffd0f945d5deedd551",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ea2f926_44126b62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-15T03:22:16Z",
+      "side": 1,
+      "message": "Retracting review request for now while I fix these deadlocks. I\u0027m thinking we should add `v8::internal::Parking*` variants for the various `base::` synchronization primitives that can block.",
+      "revId": "31c524f6a87546f0e7f766ffd0f945d5deedd551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
