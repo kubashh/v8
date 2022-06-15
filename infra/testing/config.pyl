@@ -1,0 +1,6 @@
+{
+  'unittests_combo': {
+    'name': 'Unittests',
+    'tests': ['unittests'],
+  },
+}
