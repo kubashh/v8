@@ -665,3 +665,10 @@ v8_executable("generate-bytecode-expectations") {
 
   data = [ "interpreter/bytecode_expectations/" ]
 }
+
+if (is_fuchsia) {
+  group("unittests_combo") {
+    testonly = true
+    deps = [ ":unittests", ":v8_unittests_fuchsia"]
+  }
+}
