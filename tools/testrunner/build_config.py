@@ -37,6 +37,7 @@ class BuildConfig(object):
     self.is_android = build_config['is_android']
     self.is_clang = build_config['is_clang']
     self.is_debug = build_config['is_debug']
+    self.is_fuchsia = build_config['is_fuchsia']
     self.is_full_debug = build_config['is_full_debug']
     self.msan = build_config['is_msan']
     self.no_i18n = not build_config['v8_enable_i18n_support']
