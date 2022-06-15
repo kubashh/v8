@@ -5,7 +5,6 @@
 import collections
 
 from . import base
-from testrunner.local.command import DefaultExecutionPool
 
 JobResult = collections.namedtuple('JobResult', ['id', 'result'])
 

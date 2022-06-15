@@ -191,7 +191,7 @@ class FakeOSContext(DefaultOSContext):
     super(FakeOSContext, self).__init__(FakeCommand)
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     print("===>Starting stuff")
     yield
     print("<===Stopping stuff")

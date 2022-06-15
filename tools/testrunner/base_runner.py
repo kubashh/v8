@@ -336,6 +336,8 @@ class BaseTestRunner(object):
     # Android, which is determined by build output.
     if self.build_config.is_android:
       self.target_os = 'android'
+    if self.build_config.is_fuchsia:
+      self.target_os = 'fuchsia'
     else:
       self.target_os = utils.GuessOS()
 
