@@ -12,8 +12,10 @@ import threading
 import time
 
 from ..local.android import (
-    android_driver, CommandFailedException, TimeoutException)
+    Driver, CommandFailedException, TimeoutException)
 from ..objects import output
+from testrunner.local import pool
+import collections
 
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
@@ -325,54 +327,83 @@ class AndroidCommand(BaseCommand):
         duration,
     )
 
-
 Command = None
 
-class CommandContext():
-  def __init__(self, command):
+"""===POOLS==="""
+# Global function for multiprocessing, because pickling a static method doesn't
+# work on Windows.
+def run_job(job, process_context):
+  return job.run(process_context)
+
+ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
+
+class DefaultExecutionPool():
+  def init(self, jobs, notify_fun):
+    self._pool = pool.Pool(jobs, notify_fun=notify_fun)
+
+  def add_jobs(self, jobs):
+    self._pool.add(jobs)
+
+  def results(self, requirement):
+    return self._pool.imap_unordered(
+        fn=run_job,
+        gen=[],
+        process_context_fn=ProcessContext,
+        process_context_args=[requirement],
+    )
+
+  def abort(self):
+    self._pool.abort()
+
+class DefaultOSContext():
+  def __init__(self, command, pool=None):
     self.command = command
+    self.pool = pool or DefaultExecutionPool()
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     yield
 
-class AndroidContext():
+class AndroidOSContext(DefaultOSContext):
   def __init__(self):
-    self.command = AndroidCommand
+    super(AndroidOSContext, self).__init__(AndroidCommand)
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     try:
-      AndroidCommand.driver = android_driver(device)
+      AndroidCommand.driver = Driver.instance(options.device)
       yield
     finally:
       AndroidCommand.driver.tear_down()
 
-@contextmanager
-def command_context(target_os, device):
-  factory = dict(
-    android=AndroidContext(),
-    windows=CommandContext(WindowsCommand),
-  )
-  context = factory.get(target_os, CommandContext(PosixCommand))
-  with context.context(device):
-    global Command
-    Command = context.command
-    yield
 
-# Deprecated : use command_context
+def find_os_context(target_os):
+  registry = dict(
+    android=AndroidOSContext(),
+    windows=DefaultOSContext(WindowsCommand)
+  )
+  default = DefaultOSContext(PosixCommand)
+  return registry.get(target_os, default)
+
+@contextmanager
+def os_context(target_os, options):
+  context = find_os_context(target_os)
+  with context.context(options):
+    yield context
+
+# Deprecated : use os_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
   if target_os == 'android':
-    AndroidCommand.driver = android_driver(device)
+    AndroidCommand.driver = Driver.instance(device)
     Command = AndroidCommand
   elif target_os == 'windows':
     Command = WindowsCommand
   else:
     Command = PosixCommand
 
-# Deprecated : use command_context
+# Deprecated : use os_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:

@@ -145,11 +145,11 @@ class NumFuzzer(base_runner.BaseTestRunner):
     })
     return variables
 
-  def _do_execute(self, tests, args):
+  def _do_execute(self, tests, args, ctx):
     loader = LoadProc(tests)
     combiner = CombinerProc.create(self.options)
     results = ResultsTracker.create(self.options)
-    execproc = ExecutionProc(self.options.j)
+    execproc = ExecutionProc(ctx, self.options.j)
     sigproc = self._create_signal_proc()
     indicators = self._create_progress_indicators(
       tests.test_count_estimate)

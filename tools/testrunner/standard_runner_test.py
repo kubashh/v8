@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
 """
 Global system tests for V8 test runners and fuzzers.
 
@@ -21,6 +22,7 @@ import os
 import sys
 import unittest
 from os.path import dirname as up
+from mock import patch
 
 TOOLS_ROOT = up(up(os.path.abspath(__file__)))
 sys.path.append(TOOLS_ROOT)
@@ -31,6 +33,7 @@ from testrunner.utils.test_utils import (
   temp_base,
   TestRunnerTest,
   with_json_output,
+  FakeOSContext,
 )
 
 class StandardRunnerTest(TestRunnerTest):
@@ -214,6 +217,39 @@ class StandardRunnerTest(TestRunnerTest):
     result.has_returncode(0)
     # TODO(machenbach): Test some more implications of the auto-detected
     # options, e.g. that the right env variables are set.
+
+  def testLimitedPreloading(self):
+    result = self.run_tests(
+        '--progress=verbose',
+        '--variants=default',
+        '-j1',
+        'sweet/*')
+    result.stdout_includes("sweet/mangoes default: PASS")
+    result.stdout_includes("sweet/cherries default: FAIL")
+    result.stdout_includes("sweet/apples default: FAIL")
+    result.stdout_includes("sweet/strawberries default: FAIL")
+    result.stdout_includes("sweet/bananas default: PASS")
+    result.stdout_includes("sweet/blackberries default: FAIL")
+    result.stdout_includes("sweet/raspberries default: PASS")
+
+  def testWithFakeContext(self):
+    with patch('testrunner.local.command.find_os_context', return_value=FakeOSContext()):
+      result = self.run_tests(
+          '--progress=verbose',
+          'sweet/cherries',
+      )
+      result.stdout_includes('===>Starting stuff\n'
+          '>>> Running tests for x64.release\n'
+          '>>> Running with test processors\n')
+      result.stdout_includes('--- stdout ---\nfake stdout 1')
+      result.stdout_includes('--- stderr ---\nfake stderr 1')
+      result.stdout_includes('Command: fake_wrapper ')
+      result.stdout_includes('===\n'
+          '=== 1 tests failed\n'
+          '===\n'
+          '>>> 7 base tests produced 1 (14%) non-filtered tests\n'
+          '>>> 1 tests ran\n'
+          '<===Stopping stuff\n')
 
   def testSkips(self):
     """Test skipping tests in status file for a specific variant."""

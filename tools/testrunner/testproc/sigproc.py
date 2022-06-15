@@ -29,3 +29,8 @@ class SignalProc(base.TestProcObserver):
     print('>>> SIGTERM received, early abort...')
     self.exit_code = utils.EXIT_CODE_TERMINATED
     self.stop()
+
+  def worst_exit_code(self, results):
+    exit_code = results.exit_code()
+    # Indicate if a SIGINT or SIGTERM happened.
+    return max(exit_code, self.exit_code)
