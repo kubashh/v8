@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6e9bdc_d3a6c08f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-15T17:31:33Z",
+      "side": 1,
+      "message": "Patch set delta 1-\u003e5 LGTM with a nit. (That\u0027s the relevant diff, right?)",
+      "revId": "116a7292e577b1a79476aae32dc48288b0c53520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b43fa72_466b8d8b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-15T17:31:33Z",
+      "side": 1,
+      "message": "nit: we usually put setters of this kind into the -inl.h file.",
+      "range": {
+        "startLine": 1621,
+        "startChar": 16,
+        "endLine": 1621,
+        "endChar": 32
+      },
+      "revId": "116a7292e577b1a79476aae32dc48288b0c53520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
