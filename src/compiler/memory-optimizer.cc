@@ -22,6 +22,7 @@ namespace {
 
 bool CanAllocate(const Node* node) {
   switch (node->opcode()) {
+    case IrOpcode::kTraceInstruction:
     case IrOpcode::kAbortCSADcheck:
     case IrOpcode::kBitcastTaggedToWord:
     case IrOpcode::kBitcastWordToTagged:
