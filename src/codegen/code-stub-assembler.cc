@@ -1504,12 +1504,7 @@ void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,
 
 TNode<RawPtrT> CodeStubAssembler::LoadSandboxedPointerFromObject(
     TNode<HeapObject> object, TNode<IntPtrT> field_offset) {
-#ifdef V8_SANDBOXED_POINTERS
-  return ReinterpretCast<RawPtrT>(
-      LoadObjectField<SandboxedPtrT>(object, field_offset));
-#else
   return LoadObjectField<RawPtrT>(object, field_offset);
-#endif  // V8_SANDBOXED_POINTERS
 }
 
 void CodeStubAssembler::StoreSandboxedPointerToObject(TNode<HeapObject> object,
@@ -1527,11 +1522,8 @@ void CodeStubAssembler::StoreSandboxedPointerToObject(TNode<HeapObject> object,
   TNode<UintPtrT> sandbox_end = Load<UintPtrT>(sandbox_end_address);
   CSA_CHECK(this, UintPtrGreaterThanOrEqual(sbx_ptr, sandbox_base));
   CSA_CHECK(this, UintPtrLessThan(sbx_ptr, sandbox_end));
-
-  StoreObjectFieldNoWriteBarrier<SandboxedPtrT>(object, offset, sbx_ptr);
-#else
-  StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
 #endif  // V8_SANDBOXED_POINTERS
+  StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
 }
 
 TNode<RawPtrT> CodeStubAssembler::EmptyBackingStoreBufferConstant() {

@@ -3084,13 +3084,8 @@ void WasmGraphBuilder::InitInstanceCache(
   // elimination.
 
   // Load the memory start.
-#ifdef V8_SANDBOXED_POINTERS
-  instance_cache->mem_start = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
-      MemoryStart, MachineType::SandboxedPointer());
-#else
   instance_cache->mem_start =
       LOAD_INSTANCE_FIELD_NO_ELIMINATION(MemoryStart, MachineType::UintPtr());
-#endif
 
   // Load the memory size.
   instance_cache->mem_size =
