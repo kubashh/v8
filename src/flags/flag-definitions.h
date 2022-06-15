@@ -696,30 +696,34 @@ DEFINE_BOOL(sparkplug, ENABLE_SPARKPLUG_BY_DEFAULT,
 DEFINE_BOOL(always_sparkplug, false, "directly tier up to Sparkplug code")
 #if ENABLE_SPARKPLUG
 DEFINE_IMPLICATION(always_sparkplug, sparkplug)
-DEFINE_BOOL(baseline_batch_compilation, true, "batch compile Sparkplug code")
 #if defined(V8_OS_DARWIN) && defined(V8_HOST_ARCH_ARM64) && \
     !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
 // M1 requires W^X.
 DEFINE_BOOL_READONLY(concurrent_sparkplug, false,
                      "compile Sparkplug code in a background thread")
-#else
-DEFINE_BOOL(concurrent_sparkplug, true,
+DEFINE_BOOL(baseline_batch_compilation, true, "batch compile Sparkplug code")
+#else   // defined(V8_OS_DARWIN) && defined(V8_HOST_ARCH_ARM64) &&
+        // !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
+
+DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
+DEFINE_BOOL(concurrent_sparkplug, false,
             "compile Sparkplug code in a background thread")
 DEFINE_WEAK_IMPLICATION(future, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(predictable, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(single_threaded, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(jitless, concurrent_sparkplug)
-#endif
+#endif  // defined(V8_OS_DARWIN) && defined(V8_HOST_ARCH_ARM64) &&
+        // !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
 DEFINE_UINT(
     concurrent_sparkplug_max_threads, 2,
     "max number of threads that concurrent Sparkplug can use (0 for unbounded)")
 DEFINE_BOOL(concurrent_sparkplug_high_priority_threads, false,
             "use high priority compiler threads for concurrent Sparkplug")
-#else
+#else   // ENABLE_SPARKPLUG
 DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
 DEFINE_BOOL_READONLY(concurrent_sparkplug, false,
                      "compile Sparkplug code in a background thread")
-#endif
+#endif  // ENABLE_SPARKPLUG
 DEFINE_STRING(sparkplug_filter, "*", "filter for Sparkplug baseline compiler")
 DEFINE_BOOL(sparkplug_needs_short_builtins, false,
             "only enable Sparkplug baseline compiler when "
