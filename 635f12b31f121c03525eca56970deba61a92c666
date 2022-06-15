@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec93481_b70f86a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-06-15T20:51:28Z",
+      "side": 1,
+      "message": "This CL failed on Blink Win \u0026 Mac bots. I\u0027m landing a fix in https://crrev.com/c/3708021, but it seems like we have a hole in CQ coverage for sandbox changes like this, and wanted to bring that to your attention.",
+      "revId": "635f12b31f121c03525eca56970deba61a92c666",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
