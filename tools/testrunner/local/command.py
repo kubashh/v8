@@ -14,6 +14,7 @@ import time
 from ..local.android import (
     Driver, CommandFailedException, TimeoutException)
 from ..objects import output
+from testrunner.local.fuchsia.context import FuchsiaOSContext
 
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
@@ -335,7 +336,7 @@ class DefaultOSContext():
     pass
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     yield
 
 class AndroidOSContext(DefaultOSContext):
@@ -343,9 +344,9 @@ class AndroidOSContext(DefaultOSContext):
     self.command = AndroidCommand
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     try:
-      AndroidCommand.driver = Driver.instance(device)
+      AndroidCommand.driver = Driver.instance(options.device)
       yield
     finally:
       AndroidCommand.driver.tear_down()
@@ -354,15 +355,16 @@ class AndroidOSContext(DefaultOSContext):
 def find_os_context(target_os):
   registry = dict(
     android=AndroidOSContext(),
-    windows=DefaultOSContext(WindowsCommand)
+    windows=DefaultOSContext(WindowsCommand),
+    fuchsia=FuchsiaOSContext(),
   )
   default = DefaultOSContext(PosixCommand)
   return registry.get(target_os, default)
 
 @contextmanager
-def os_context(target_os, device):
+def os_context(target_os, options):
   context = find_os_context(target_os)
-  with context.context(device):
+  with context.context(options):
     yield context
 
 # Deprecated : use os_context
