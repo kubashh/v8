@@ -12,7 +12,7 @@ import threading
 import time
 
 from ..local.android import (
-    android_driver, CommandFailedException, TimeoutException)
+    Driver, CommandFailedException, TimeoutException)
 from ..objects import output
 
 BASE_DIR = os.path.normpath(
@@ -325,54 +325,59 @@ class AndroidCommand(BaseCommand):
         duration,
     )
 
-
 Command = None
 
-class CommandContext():
+class DefaultOSContext():
   def __init__(self, command):
     self.command = command
+
+  def on_load(self):
+    pass
 
   @contextmanager
   def context(self, device):
     yield
 
-class AndroidContext():
+class AndroidOSContext(DefaultOSContext):
   def __init__(self):
     self.command = AndroidCommand
 
   @contextmanager
   def context(self, device):
     try:
-      AndroidCommand.driver = android_driver(device)
+      AndroidCommand.driver = Driver.instance(device)
       yield
     finally:
       AndroidCommand.driver.tear_down()
 
-@contextmanager
-def command_context(target_os, device):
-  factory = dict(
-    android=AndroidContext(),
-    windows=CommandContext(WindowsCommand),
-  )
-  context = factory.get(target_os, CommandContext(PosixCommand))
-  with context.context(device):
-    global Command
-    Command = context.command
-    yield
 
-# Deprecated : use command_context
+def find_os_context(target_os):
+  registry = dict(
+    android=AndroidOSContext(),
+    windows=DefaultOSContext(WindowsCommand)
+  )
+  default = DefaultOSContext(PosixCommand)
+  return registry.get(target_os, default)
+
+@contextmanager
+def os_context(target_os, device):
+  context = find_os_context(target_os)
+  with context.context(device):
+    yield context
+
+# Deprecated : use os_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
   if target_os == 'android':
-    AndroidCommand.driver = android_driver(device)
+    AndroidCommand.driver = Driver.instance(device)
     Command = AndroidCommand
   elif target_os == 'windows':
     Command = WindowsCommand
   else:
     Command = PosixCommand
 
-# Deprecated : use command_context
+# Deprecated : use os_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:

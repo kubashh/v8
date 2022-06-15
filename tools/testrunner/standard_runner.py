@@ -284,7 +284,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     """Create processor for sequencing heavy tests on swarming."""
     return SequenceProc(self.options.max_heavy_tests) if self.options.swarming else None
 
-  def _do_execute(self, tests, args):
+  def _do_execute(self, tests, args, ctx):
     jobs = self.options.j
 
     print('>>> Running with test processors')
@@ -296,7 +296,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     outproc_factory = None
     if self.build_config.predictable:
       outproc_factory = predictable.get_outproc
-    execproc = ExecutionProc(jobs, outproc_factory)
+    execproc = ExecutionProc(ctx, jobs, outproc_factory)
     sigproc = self._create_signal_proc()
 
     procs = [
@@ -327,28 +327,13 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     for indicator in indicators:
       indicator.finished()
 
-    if tests.test_count_estimate:
-      percentage = float(results.total) / tests.test_count_estimate * 100
-    else:
-      percentage = 0
+    results.standard_show(tests)
 
-    print (('>>> %d base tests produced %d (%d%s)'
-           ' non-filtered tests') % (
-        tests.test_count_estimate, results.total, percentage, '%'))
-
-    print('>>> %d tests ran' % (results.total - results.remaining))
-
-    exit_code = utils.EXIT_CODE_PASS
-    if results.failed:
-      exit_code = utils.EXIT_CODE_FAILURES
-    if not results.total:
-      exit_code = utils.EXIT_CODE_NO_TESTS
 
     if self.options.time:
       self._print_durations()
 
-    # Indicate if a SIGINT or SIGTERM happened.
-    return max(exit_code, sigproc.exit_code)
+    return sigproc.worst_exit_code(results)
 
   def _print_durations(self):
 

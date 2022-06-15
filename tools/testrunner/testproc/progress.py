@@ -10,6 +10,7 @@ import time
 
 from . import base
 from . import util
+from testrunner.local import utils
 
 
 def print_failure_header(test, is_flaky=False):
@@ -50,6 +51,25 @@ class ResultsTracker(base.TestProcObserver):
         print('>>> Too many failures, exiting...')
         self.stop()
 
+  def standard_show(self, tests):
+    if tests.test_count_estimate:
+      percentage = float(self.total) / tests.test_count_estimate * 100
+    else:
+      percentage = 0
+    print(
+      ('>>> %d base tests produced %d (%d%s)'
+        ' non-filtered tests') %
+      (tests.test_count_estimate, self.total, percentage, '%'))
+    print('>>> %d tests ran' % (self.total - self.remaining))
+
+  def exit_code(self):
+    exit_code = utils.EXIT_CODE_PASS
+    if self.failed:
+      exit_code = utils.EXIT_CODE_FAILURES
+    if not self.total:
+      exit_code = utils.EXIT_CODE_NO_TESTS
+    return exit_code
+
 
 class ProgressIndicator(base.TestProcObserver):
   def __init__(self):
@@ -64,7 +84,6 @@ class ProgressIndicator(base.TestProcObserver):
 
   def set_test_count(self, test_count):
     self._total = test_count
-
 
 
 class SimpleProgressIndicator(ProgressIndicator):

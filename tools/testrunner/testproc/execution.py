@@ -14,10 +14,6 @@ def run_job(job, process_context):
   return job.run(process_context)
 
 
-def create_process_context(result_reduction):
-  return ProcessContext(result_reduction)
-
-
 JobResult = collections.namedtuple('JobResult', ['id', 'result'])
 ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
 
@@ -42,20 +38,22 @@ class ExecutionProc(base.TestProc):
   sends results to the previous processor.
   """
 
-  def __init__(self, jobs, outproc_factory=None):
+  def __init__(self, ctx, jobs, outproc_factory=None):
     super(ExecutionProc, self).__init__()
+    self.ctx = ctx
     self._pool = pool.Pool(jobs, notify_fun=self.notify_previous)
     self._outproc_factory = outproc_factory or (lambda t: t.output_proc)
     self._tests = {}
 
   def connect_to(self, next_proc):
-    assert False, 'ExecutionProc cannot be connected to anything'
+    assert False, \
+        'ExecutionProc cannot be connected to anything' # pragma: no cover
 
   def run(self):
     it = self._pool.imap_unordered(
         fn=run_job,
         gen=[],
-        process_context_fn=create_process_context,
+        process_context_fn=ProcessContext,
         process_context_args=[self._prev_requirement],
     )
     for pool_result in it:
@@ -66,7 +64,7 @@ class ExecutionProc(base.TestProc):
       return False
 
     test_id = test.procid
-    cmd = test.get_command()
+    cmd = test.get_command(self.ctx)
     self._tests[test_id] = test, cmd
 
     outproc = self._outproc_factory(test)
@@ -75,7 +73,8 @@ class ExecutionProc(base.TestProc):
     return True
 
   def result_for(self, test, result):
-    assert False, 'ExecutionProc cannot receive results'
+    assert False, \
+        'ExecutionProc cannot receive results' # pragma: no cover
 
   def stop(self):
     super(ExecutionProc, self).stop()
