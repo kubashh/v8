@@ -175,7 +175,7 @@ class BaseTestRunner(object):
 
       args = self._parse_test_args(args)
 
-      with command.os_context(self.target_os, self.options.device) as ctx:
+      with command.os_context(self.target_os, self.options) as ctx:
         names = self._args_to_suite_names(args)
         tests = self._load_testsuite_generators(ctx, names)
         self._setup_env()
