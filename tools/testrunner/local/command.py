@@ -15,8 +15,16 @@ from ..local.android import (
     Driver, CommandFailedException, TimeoutException)
 from ..objects import output
 
+from .run_test_package import InstallTestPackage
+
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
+
+FUCHSIA_DIR = os.path.join(BASE_DIR, 'build', 'fuchsia')
+sys.path.insert(0, FUCHSIA_DIR)
+
+import device_target
+import fvdl_target
 
 SEM_INVALID_VALUE = -1
 SEM_NOGPFAULTERRORBOX = 0x0002  # Microsoft Platform SDK WinBase.h
@@ -335,7 +343,7 @@ class DefaultOSContext():
     pass
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     yield
 
 class AndroidOSContext(DefaultOSContext):
@@ -343,26 +351,74 @@ class AndroidOSContext(DefaultOSContext):
     self.command = AndroidCommand
 
   @contextmanager
-  def context(self, device):
+  def context(self, options):
     try:
-      AndroidCommand.driver = Driver.instance(device)
+      AndroidCommand.driver = Driver.instance(options.device)
       yield
     finally:
       AndroidCommand.driver.tear_down()
 
+import collections
+
+
+Args = collections.namedtuple('Args', ['out_dir', 'target_cpu', 'require_kvm',
+                      'enable_graphics', 'hardware_gpu',
+                      'with_network', 'cpu_cores', 'ram_size_mb',
+                      'logs_dir', 'custom_image', 'code_coverage', 'host',
+                      'node_name', 'port', 'ssh_config', 'fuchsia_out_dir',
+                      'os_check', 'system_image_dir'])
+
+class FuchsiaOSContext(DefaultOSContext):
+  def __init__(self):
+    self.command = None
+
+  @contextmanager
+  def context(self, options):
+    self.options = options
+    with fvdl_target.FvdlTarget.CreateFromArgs(self._target_args()) as target:
+      self.target = target
+      target.Start()
+      far_location = os.path.join(self.options.outdir,
+          'gen', 'test', 'unittests', 'v8_unittests', 'v8_unittests.far')
+      with InstallTestPackage(target, [far_location]) as kernel_logger:
+        self.kernel_logger = kernel_logger
+        yield
+
+  def _target_args(self):
+    return Args(
+        out_dir=self.options.outdir,
+        target_cpu='x64',
+        require_kvm=True,
+        enable_graphics=False,
+        hardware_gpu=False,
+        with_network=False,
+        cpu_cores=4,
+        ram_size_mb=8192,
+        logs_dir=None, 
+        custom_image=None,
+        code_coverage=None,
+        host=None,
+        node_name=None,
+        port=None,
+        ssh_config=None,
+        fuchsia_out_dir=self.options.outdir,
+        os_check='ignore',
+        system_image_dir=None,
+    )
 
 def find_os_context(target_os):
   registry = dict(
     android=AndroidOSContext(),
-    windows=DefaultOSContext(WindowsCommand)
+    windows=DefaultOSContext(WindowsCommand),
+    fuchsia=FuchsiaOSContext(),
   )
   default = DefaultOSContext(PosixCommand)
   return registry.get(target_os, default)
 
 @contextmanager
-def os_context(target_os, device):
+def os_context(target_os, options):
   context = find_os_context(target_os)
-  with context.context(device):
+  with context.context(options):
     yield context
 
 # Deprecated : use os_context
