@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50696493_4048f1c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-15T21:05:35Z",
+      "side": 1,
+      "message": "I\u0027ve rewritten the CL to systematically fix the parking issues in d8. PTAL again, thanks.",
+      "revId": "98f9df7af4c1127b7bc8b88b7a612dca20d7fcda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
