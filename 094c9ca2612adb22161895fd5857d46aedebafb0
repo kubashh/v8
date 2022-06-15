@@ -1,0 +1,300 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc11230_9283bae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "Thanks, this looks mostly good now. Left a number of comments to address.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfed438f_f391b1e6",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "The masking is not quite right. Shifting a bit into the MSB of a signed integer is undefined behaviour, so we should cast that to uint32_t. Also, the masking at the end is a noop.\nThis should do it:\nuint32_t magic_num \u003d 0x4711 | (static_cast\u003cuint32_t\u003e(markid.value_) \u003c\u003c 16);",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "714927ce_0d7d2494",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "I think I made the comment before: If the arm64 implementation is meant to stay empty, you should just drop the ArchOpcode and change the instruction selector to ignore the instruction.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "703e398e_522bd554",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "nit: Please add a newline between methods.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a633c92_f6374364",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "No need for parentheses. Just \u0026*first_inst_trace.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63ab3498_4f5f5e0b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "I don\u0027t get this comment. What is \"the invalid state\"? Also, the \"#ifdef _I_AM_DEF_NOT_DEFINED\" seems like a leftover from development/debugging?",
+      "range": {
+        "startLine": 2611,
+        "startChar": 0,
+        "endLine": 2613,
+        "endChar": 32
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844d311f_fff527c6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2617,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "Another leftover?",
+      "range": {
+        "startLine": 2616,
+        "startChar": 0,
+        "endLine": 2617,
+        "endChar": 32
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de809c5e_df029772",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2627,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "And one more.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8621600_9239bb0a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "Please remove all this. This is an optimization that we don\u0027t need for the tracing case.",
+      "range": {
+        "startLine": 2638,
+        "startChar": 0,
+        "endLine": 2646,
+        "endChar": 16
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d299e93b_2e25a82c",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "More leftover code?",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd1b8324_91249fae",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "Typos: custom -\u003e Custom, follwing -\u003e following",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74414cf4_87f4a90c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "typo: is",
+      "range": {
+        "startLine": 561,
+        "startChar": 46,
+        "endLine": 561,
+        "endChar": 47
+      },
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50587537_93d763af",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "kInstTraceSectionCode, here and in the line below.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb95999_e20d4307",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "nit: missing punctuation",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf6856c_2e84ab7e",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "nit: missing punctuation",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a48bd6_5fc05cc4",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-15T15:48:16Z",
+      "side": 1,
+      "message": "This is also referring to branch hints, please fix.",
+      "revId": "094c9ca2612adb22161895fd5857d46aedebafb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
