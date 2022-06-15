@@ -10,6 +10,7 @@
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/processed-feedback.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/execution/isolate-inl.h"
 #include "src/objects/field-index-inl.h"
@@ -52,16 +53,17 @@ bool HasOnlyNumberMaps(JSHeapBroker* broker, ZoneVector<MapRef> const& maps) {
 
 }  // namespace
 
-bool PropertyAccessBuilder::TryBuildStringCheck(JSHeapBroker* broker,
-                                                ZoneVector<MapRef> const& maps,
-                                                Node** receiver, Effect* effect,
-                                                Control control) {
+bool PropertyAccessBuilder::TryBuildStringCheck(
+    JSHeapBroker* broker, ZoneVector<MapRef> const& maps, Node** receiver,
+    Effect* effect, Control control,
+    base::Optional<FeedbackSource const> source) {
   if (HasOnlyStringMaps(broker, maps)) {
     // Monormorphic string access (ignoring the fact that there are multiple
     // String maps).
-    *receiver = *effect =
-        graph()->NewNode(simplified()->CheckString(FeedbackSource()), *receiver,
-                         *effect, control);
+    *receiver = *effect = graph()->NewNode(
+        simplified()->CheckString(source.has_value() ? source.value()
+                                                     : FeedbackSource()),
+        *receiver, *effect, control);
     return true;
   }
   return false;

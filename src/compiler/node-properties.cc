@@ -499,7 +499,9 @@ NodeProperties::InferMapsResult NodeProperties::InferMapsUnsafe(
 
     // Stop walking the effect chain once we hit the definition of
     // the {receiver} along the {effect}s.
-    if (IsSame(receiver, effect)) return kNoMaps;
+    if (IsSame(receiver, effect)) {
+      return kNoMaps;
+    }
 
     // Continue with the next {effect}.
     DCHECK_EQ(1, effect->op()->EffectInputCount());
