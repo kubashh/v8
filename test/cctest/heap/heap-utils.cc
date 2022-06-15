@@ -199,14 +199,11 @@ void SimulateIncrementalMarking(i::Heap* heap, bool force_completion) {
     marking->Step(kStepSizeInMs,
                   i::IncrementalMarking::CompletionAction::kGCViaTask,
                   i::StepOrigin::kV8);
-    if (marking->IsReadyToOverApproximateWeakClosure()) {
-      SafepointScope scope(heap);
-      MarkingBarrier::PublishAll(heap);
-      marking->MarkRootsForTesting();
-      marking->FinalizeIncrementally();
-    }
   }
   CHECK(marking->IsComplete());
+  SafepointScope scope(heap);
+  MarkingBarrier::PublishAll(heap);
+  marking->MarkRootsForTesting();
 }
 
 void SimulateFullSpace(v8::internal::PagedSpace* space) {
