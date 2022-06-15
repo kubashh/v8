@@ -51,7 +51,7 @@
       'os': 'Ubuntu-18.04',
     },
     'tests': [
-      {'name': 'fuchsia-unittests'},
+      {'name': 'unittests_combo', 'shards': 8},
     ],
   },
   'V8 Fuchsia': {
@@ -59,7 +59,7 @@
       'os': 'Ubuntu-18.04',
     },
     'tests': [
-      {'name': 'fuchsia-unittests'},
+      {'name': 'unittests_combo', 'shards': 8},
     ],
   },
   ##############################################################################
