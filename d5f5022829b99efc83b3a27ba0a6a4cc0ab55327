@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "491f27db_162f4207",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-16T00:13:02Z",
+      "side": 1,
+      "message": "PTAL, thanks!\n\ntebbi@ for main review\n\ndinfuehr@ for src/heap/ OWNER",
+      "revId": "d5f5022829b99efc83b3a27ba0a6a4cc0ab55327",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
