@@ -108,8 +108,12 @@ CodeT SharedFunctionInfo::GetCode() const {
   if (data.IsWasmCapiFunctionData()) {
     return wasm_capi_function_data().wrapper_code();
   }
-  if (data.IsWasmOnFulfilledData()) {
-    return isolate->builtins()->code(Builtin::kWasmResume);
+  if (data.IsWasmResumeData()) {
+    if (wasm_resume_data().rejected()) {
+      return isolate->builtins()->code(Builtin::kWasmReject);
+    } else {
+      return isolate->builtins()->code(Builtin::kWasmResume);
+    }
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
   if (data.IsUncompiledData()) {
@@ -146,6 +150,11 @@ WasmJSFunctionData SharedFunctionInfo::wasm_js_function_data() const {
 WasmCapiFunctionData SharedFunctionInfo::wasm_capi_function_data() const {
   DCHECK(HasWasmCapiFunctionData());
   return WasmCapiFunctionData::cast(function_data(kAcquireLoad));
+}
+
+WasmResumeData SharedFunctionInfo::wasm_resume_data() const {
+  DCHECK(HasWasmResumeData());
+  return WasmResumeData::cast(function_data(kAcquireLoad));
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 

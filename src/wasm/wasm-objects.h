@@ -784,14 +784,13 @@ class WasmCapiFunctionData
   TQ_OBJECT_CONSTRUCTORS(WasmCapiFunctionData)
 };
 
-class WasmOnFulfilledData
-    : public TorqueGeneratedWasmOnFulfilledData<WasmOnFulfilledData,
-                                                HeapObject> {
+class WasmResumeData
+    : public TorqueGeneratedWasmResumeData<WasmResumeData, HeapObject> {
  public:
   using BodyDescriptor =
-      FlexibleBodyDescriptor<WasmOnFulfilledData::kStartOfStrongFieldsOffset>;
-  DECL_PRINTER(WasmOnFulfilledData)
-  TQ_OBJECT_CONSTRUCTORS(WasmOnFulfilledData)
+      FlexibleBodyDescriptor<WasmResumeData::kStartOfStrongFieldsOffset>;
+  DECL_PRINTER(WasmResumeData)
+  TQ_OBJECT_CONSTRUCTORS(WasmResumeData)
 };
 
 class WasmScript : public AllStatic {
