@@ -16,6 +16,24 @@
       "message": "This CL failed on Blink Win \u0026 Mac bots. I\u0027m landing a fix in https://crrev.com/c/3708021, but it seems like we have a hole in CQ coverage for sandbox changes like this, and wanted to bring that to your attention.",
       "revId": "635f12b31f121c03525eca56970deba61a92c666",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c3eb18_ec926696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-06-16T07:29:38Z",
+      "side": 1,
+      "message": "Thanks! I guess you beat me to it: https://chromium-review.googlesource.com/c/v8/v8/+/3707108 next time I\u0027ll link the fixing CL at the original CL... Anyway yeah, we currently only have Linux CQ coverage for sandbox changes, and this broke everywhere but Linux I guess. I\u0027ll take another stab at getting other V8 bots to run with the sandbox enabled.",
+      "parentUuid": "8ec93481_b70f86a3",
+      "revId": "635f12b31f121c03525eca56970deba61a92c666",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
