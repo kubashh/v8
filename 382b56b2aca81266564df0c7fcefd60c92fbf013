@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ab678ad_17c001ab",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6659,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-06-17T18:44:24Z",
+      "side": 1,
+      "message": "Is this really a ToHandleChecked situation, given that the Create call in the spec says it might throw?",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee519ec_e97d2895",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6673,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-06-17T18:44:24Z",
+      "side": 1,
+      "message": "Why is this BalanceDuration using ToChecked() when the calls below, which also have a `!` preceding, don\u0027t do that?",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57469129_cc8c6a57",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6859,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-06-17T18:44:24Z",
+      "side": 1,
+      "message": "DCHECK",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "046dfc0c_ef2ea7b5",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-06-17T18:44:24Z",
+      "side": 1,
+      "message": "Please expand on this. Is there an mjsunit test you can write that gets at the limits here? I\u0027m uncomfortable with possibly crashing in this case (due to the CHECK below) without understanding whether this happens.",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
