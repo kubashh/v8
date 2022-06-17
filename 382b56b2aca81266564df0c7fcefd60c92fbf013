@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af342d0c_57f15308",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6659,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-17T22:26:12Z",
+      "side": 1,
+      "message": "The spec updated to \" ! CreateTemporalZonedDateTime\" but I forgot toe update the comment.",
+      "parentUuid": "8ab678ad_17c001ab",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ee519ec_e97d2895",
         "filename": "src/objects/js-temporal-objects.cc",
         "patchSetId": 4
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-17T18:44:24Z",
       "side": 1,
       "message": "Why is this BalanceDuration using ToChecked() when the calls below, which also have a `!` preceding, don\u0027t do that?",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "613f66e3_68e39ae7",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6673,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-17T22:26:12Z",
+      "side": 1,
+      "message": "what do you mean \"when the calls below, which also have a ! preceding, don\u0027t do that? \" Are you talking about \"! CreateDurationRecord()\"? I DID.",
+      "parentUuid": "0ee519ec_e97d2895",
       "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6f294f_af5d8fa6",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6859,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-17T22:26:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57469129_cc8c6a57",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "046dfc0c_ef2ea7b5",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-06-17T18:44:24Z",
       "side": 1,
       "message": "Please expand on this. Is there an mjsunit test you can write that gets at the limits here? I\u0027m uncomfortable with possibly crashing in this case (due to the CHECK below) without understanding whether this happens.",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b25b49_bb70b83a",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-17T22:26:12Z",
+      "side": 1,
+      "message": "I still try to figure could diff_ns \u003e 9.223372e+18 (which is 2^63) and how to create a case for that.",
+      "parentUuid": "046dfc0c_ef2ea7b5",
       "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
