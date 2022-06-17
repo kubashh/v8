@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9be79bd_4953d1c7",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-17T16:41:33Z",
+      "side": 1,
+      "message": "I\u0027d actually keep it as is. Such a default value might cause assertion failures down the file on configurations where the shared cage or external code space are not enabled.",
+      "revId": "e9571a128e1afaeca7061116a2d3fcbb235c24cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
