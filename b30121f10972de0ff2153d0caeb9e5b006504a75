@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b32a0b50_3594193a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-17T13:33:55Z",
+      "side": 1,
+      "message": "Thanks, LGTM from my side. I will be OOO for the next two weeks, but Tobias can coordinate the landing of this CL (and provide the outstanding review of compiler parts).",
+      "revId": "b30121f10972de0ff2153d0caeb9e5b006504a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
