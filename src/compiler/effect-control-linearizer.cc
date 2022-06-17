@@ -162,7 +162,10 @@ class EffectControlLinearizer {
   Node* LowerStringConcat(Node* node);
   Node* LowerStringToNumber(Node* node);
   Node* LowerStringCharCodeAt(Node* node);
+  Node* LowerStringCharCodeAtWithFeedback(Node* node);
   Node* StringCharCodeAt(Node* receiver, Node* position);
+  Node* StringCharCodeAtWithFeedback(Node* receiver, Node* position,
+                                     ZoneVector<Handle<Map>> maps);
   Node* LowerStringCodePointAt(Node* node);
   Node* LowerStringToLowerCaseIntl(Node* node);
   Node* LowerStringToUpperCaseIntl(Node* node);
@@ -1211,6 +1214,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kStringCharCodeAt:
       result = LowerStringCharCodeAt(node);
+      break;
+    case IrOpcode::kStringCharCodeAtWithFeedback:
+      result = LowerStringCharCodeAtWithFeedback(node);
       break;
     case IrOpcode::kStringCodePointAt:
       result = LowerStringCodePointAt(node);
@@ -3831,6 +3837,12 @@ Node* EffectControlLinearizer::LowerStringToNumber(Node* node) {
 
 Node* EffectControlLinearizer::StringCharCodeAt(Node* receiver,
                                                 Node* position) {
+  // PrintF("EffectControlLinearizer::StringCharCodeAt\n");
+  //  PrintF("receiver: ");
+  //  receiver->Print();
+  //  PrintF("position: ");
+  //  position->Print();
+
   // We need a loop here to properly deal with indirect strings
   // (SlicedString, ConsString and ThinString).
   auto loop = __ MakeLoopLabel(MachineRepresentation::kTagged,
@@ -3977,9 +3989,199 @@ Node* EffectControlLinearizer::StringCharCodeAt(Node* receiver,
 }
 
 Node* EffectControlLinearizer::LowerStringCharCodeAt(Node* node) {
+  // PrintF("LowerStringCharCodeAt\n");
+  //  PrintF("node = ");
+  //  node->Print();
   Node* receiver = node->InputAt(0);
   Node* position = node->InputAt(1);
   return StringCharCodeAt(receiver, position);
+}
+
+Node* EffectControlLinearizer::StringCharCodeAtWithFeedback(
+    Node* receiver, Node* position, ZoneVector<Handle<Map>> maps) {
+  // PrintF("\n\nEffectControlLinearizer::StringCharCodeAtWithFeedback\n");
+  //  PrintF("receiver: ");
+  //  receiver->Print();
+  //  PrintF("position: ");
+  //  position->Print();
+
+  auto done = __ MakeLabel(MachineRepresentation::kWord32);
+  auto fallback_char_code_at = __ MakeLabel(
+      MachineRepresentation::kTagged, MachineType::PointerRepresentation());
+
+  bool need_runtime_code = false;
+  auto if_runtime = __ MakeDeferredLabel();
+
+  for (Handle<Map> map : maps) {
+    StringShape shape(*map);
+    // PrintF("IsSequential? %d\n", shape.IsSequential());
+    // PrintF("IsCons? %d\n", shape.IsCons());
+    // PrintF("IsInternalized? %d\n", shape.IsInternalized());
+
+    // PrintF("instance_type: %08x\n", map->instance_type());
+    // int string_type = map->instance_type() & kStringRepresentationMask;
+    // PrintF("Type: %08x\n", string_type);
+    // switch (string_type) {
+    //   case kSeqStringTag:
+    //     PrintF("  ==> kSeqStringTag\n");
+    //     break;
+    //   case kConsStringTag:
+    //     PrintF("  ==> kConsStringTag\n");
+    //     break;
+    //   case kExternalStringTag:
+    //     PrintF("  ==> kExternalStringTag\n");
+    //     break;
+    //   case kSlicedStringTag:
+    //     PrintF("  ==> kSlicedStringTag\n");
+    //     break;
+    //   case kThinStringTag:
+    //     PrintF("  ==> kThinStringTag\n");
+    //     break;
+
+    //   default:
+    //     PrintF("I knew it\n");
+    //     UNREACHABLE();
+    // }
+
+    if (shape.IsSequentialOneByte()) {
+      // PrintF("Gonna generate IsSequentialOneByte\n");
+      auto correct_map_lbl = __ MakeLabel(), wrong_map_lbl = __ MakeLabel();
+      Node* cond =
+          __ Word32Equal(__ HeapConstant(map),
+                         __ LoadField(AccessBuilder::ForMap(), receiver));
+      __ Branch(cond, &correct_map_lbl, &wrong_map_lbl);
+      __ Bind(&correct_map_lbl);
+      Node* result = __ LoadElement(
+          AccessBuilder::ForSeqOneByteStringCharacter(), receiver, position);
+      __ Goto(&done, result);
+      __ Bind(&wrong_map_lbl);
+      // PrintF("Done generating IsSequentialOneByte\n");
+    } else if (shape.IsSequentialTwoByte()) {
+      // PrintF("Gonna generate IsSequentialTwoByte\n");
+      auto correct_map_lbl = __ MakeLabel(), wrong_map_lbl = __ MakeLabel();
+      Node* cond =
+          __ Word32Equal(__ HeapConstant(map),
+                         __ LoadField(AccessBuilder::ForMap(), receiver));
+      __ Branch(cond, &correct_map_lbl, &wrong_map_lbl);
+      __ Bind(&correct_map_lbl);
+      Node* result = __ LoadElement(
+          AccessBuilder::ForSeqTwoByteStringCharacter(), receiver, position);
+      __ Goto(&done, result);
+      __ Bind(&wrong_map_lbl);
+      // PrintF("Done generating IsSequentialTwoByte\n");
+    } else if (shape.IsCons()) {
+      need_runtime_code = true;
+      // PrintF("Gonna generate IsCons\n");
+      auto correct_map_lbl = __ MakeLabel(), wrong_map_lbl = __ MakeLabel();
+      Node* cond =
+          __ Word32Equal(__ HeapConstant(map),
+                         __ LoadField(AccessBuilder::ForMap(), receiver));
+      __ Branch(cond, &correct_map_lbl, &wrong_map_lbl);
+
+      __ Bind(&correct_map_lbl);
+      Node* receiver_second =
+          __ LoadField(AccessBuilder::ForConsStringSecond(), receiver);
+      __ GotoIfNot(__ TaggedEqual(receiver_second, __ EmptyStringConstant()),
+                   &if_runtime);
+      Node* receiver_first =
+          __ LoadField(AccessBuilder::ForConsStringFirst(), receiver);
+      __ Goto(&fallback_char_code_at, receiver_first, position);
+
+      __ Bind(&wrong_map_lbl);
+      // PrintF("Done generating IsCons\n");
+    } else if (shape.IsThin()) {
+      // PrintF("Gonna generate IsThin\n");
+      auto correct_map_lbl = __ MakeLabel(), wrong_map_lbl = __ MakeLabel();
+      Node* cond =
+          __ Word32Equal(__ HeapConstant(map),
+                         __ LoadField(AccessBuilder::ForMap(), receiver));
+      __ Branch(cond, &correct_map_lbl, &wrong_map_lbl);
+
+      __ Bind(&correct_map_lbl);
+      Node* receiver_actual =
+          __ LoadField(AccessBuilder::ForThinStringActual(), receiver);
+      __ Goto(&fallback_char_code_at, receiver_actual, position);
+
+      __ Bind(&wrong_map_lbl);
+      // PrintF("Done generating IsThin\n");
+    } else if (shape.IsSliced()) {
+      // PrintF("Gonna generate IsSliced\n");
+      auto correct_map_lbl = __ MakeLabel(), wrong_map_lbl = __ MakeLabel();
+      Node* cond =
+          __ Word32Equal(__ HeapConstant(map),
+                         __ LoadField(AccessBuilder::ForMap(), receiver));
+      __ Branch(cond, &correct_map_lbl, &wrong_map_lbl);
+
+      __ Bind(&correct_map_lbl);
+      Node* receiver_offset =
+          __ LoadField(AccessBuilder::ForSlicedStringOffset(), receiver);
+      Node* receiver_parent =
+          __ LoadField(AccessBuilder::ForSlicedStringParent(), receiver);
+      __ Goto(&fallback_char_code_at, receiver_parent,
+              __ IntAdd(position, ChangeSmiToIntPtr(receiver_offset)));
+
+      __ Bind(&wrong_map_lbl);
+      // PrintF("Done generating IsThin\n");
+    }
+  }
+
+  // PrintF("After the loop\n");
+
+  // If the String has a type that isn't handled by the above loop (either it
+  // wasn't in the feedback, or this function doesn't have a fast path for this
+  // type), we fall back to the regular StringCharCodeAt (which doesn't take
+  // feedback into account). Additionally,this "fallback_char_code_at" block is
+  // used for cases that need runtime map information (for instance, when
+  // dealing with a ConsString or a ThinString), to avoid having
+  // StringCharCodeAt inlined multiple times.
+  __ Goto(&fallback_char_code_at, receiver, position);
+  __ Bind(&fallback_char_code_at);
+  {
+    Node* this_receiver = fallback_char_code_at.PhiAt(0);
+    Node* this_position = fallback_char_code_at.PhiAt(0);
+    Node* result = StringCharCodeAt(this_receiver, this_position);
+    __ Goto(&done, result);
+  }
+
+  if (need_runtime_code) {
+    // PrintF("Gonna generate if_runtime\n");
+    __ Bind(&if_runtime);
+    // PrintF("Managed to Bind the thing\n");
+    {
+      Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
+      Runtime::FunctionId id = Runtime::kStringCharCodeAt;
+      auto call_descriptor = Linkage::GetRuntimeCallDescriptor(
+          graph()->zone(), id, 2, properties, CallDescriptor::kNoFlags);
+      Node* result = __ Call(call_descriptor, __ CEntryStubConstant(1),
+                             receiver, ChangeIntPtrToSmi(position),
+                             __ ExternalConstant(ExternalReference::Create(id)),
+                             __ Int32Constant(2), __ NoContextConstant());
+      __ Goto(&done, ChangeSmiToInt32(result));
+    }
+    // PrintF("Done generating if_runtime\n");
+  }
+
+  __ Bind(&done);
+
+  return done.PhiAt(0);
+}
+
+Node* EffectControlLinearizer::LowerStringCharCodeAtWithFeedback(Node* node) {
+  // PrintF("LowerStringCharCodeAt\n");
+  //  PrintF("node = ");
+  //  node->Print();
+  Node* receiver = node->InputAt(0);
+  Node* position = node->InputAt(1);
+
+  ZoneVector<Handle<Map>> maps(temp_zone());
+  for (int i = 2; i < node->op()->ValueInputCount(); i++) {
+    Node* map_node = node->InputAt(i);
+    DCHECK_EQ(map_node->opcode(), IrOpcode::kHeapConstant);
+    Handle<Map> map = Handle<Map>::cast(HeapConstantOf(map_node->op()));
+    maps.push_back(map);
+  }
+
+  return StringCharCodeAtWithFeedback(receiver, position, maps);
 }
 
 Node* EffectControlLinearizer::LowerStringCodePointAt(Node* node) {

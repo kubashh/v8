@@ -476,6 +476,7 @@
   V(StoreToObject)                      \
   V(StoreTypedElement)                  \
   V(StringCharCodeAt)                   \
+  V(StringCharCodeAtWithFeedback)       \
   V(StringCodePointAt)                  \
   V(StringConcat)                       \
   V(StringFromCodePointAt)              \

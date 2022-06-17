@@ -3254,6 +3254,16 @@ class RepresentationSelector {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);
       }
+      case IrOpcode::kStringCharCodeAtWithFeedback: {
+        // I'm not sure what I'm doing here.
+        ProcessInput<T>(node, 0, UseInfo::AnyTagged());
+        ProcessInput<T>(node, 1, UseInfo::Word());
+        for (int i = 2; i < node->op()->ValueInputCount(); i++) {
+          ProcessInput<T>(node, i, UseInfo::AnyTagged());
+        }
+        SetOutput<T>(node, MachineRepresentation::kWord32);
+        return;
+      }
       case IrOpcode::kStringCodePointAt: {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);

@@ -974,6 +974,9 @@ int FeedbackNexus::GetCallCount() {
 }
 
 void FeedbackNexus::SetSpeculationMode(SpeculationMode mode) {
+  // Should I get rid of this DCHECK and instead do:
+  //   if (!IsCallICKind(kind())) return;
+  // ?
   DCHECK(IsCallICKind(kind()));
 
   Object call_count = GetFeedbackExtra()->cast<Object>();

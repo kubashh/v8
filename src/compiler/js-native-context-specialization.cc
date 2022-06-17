@@ -1129,9 +1129,24 @@ Reduction JSNativeContextSpecialization::ReduceMegaDOMPropertyAccess(
   return Replace(value);
 }
 
+namespace {
+
+bool NeedsStringFeedback(Node* node, JSHeapBroker* broker) {
+  if (node->opcode() != IrOpcode::kJSLoadProperty) return false;
+
+  JSLoadNamedNode n(node);
+  Handle<Name> name = n.Parameters().name(broker).AsName().object();
+  if (name->IsString()) {
+    return strcmp(String::cast(*name).ToCString().get(), "charAt") == 0;
+  }
+  return false;
+}
+
+}  // namespace
+
 Reduction JSNativeContextSpecialization::ReduceNamedAccess(
-    Node* node, Node* value, NamedAccessFeedback const& feedback,
-    AccessMode access_mode, Node* key) {
+    Node* node, Node* value, FeedbackSource const& source,
+    NamedAccessFeedback const& feedback, AccessMode access_mode, Node* key) {
   DCHECK(node->opcode() == IrOpcode::kJSLoadNamed ||
          node->opcode() == IrOpcode::kJSSetNamedProperty ||
          node->opcode() == IrOpcode::kJSLoadProperty ||
@@ -1151,6 +1166,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
                 JSHasPropertyNode::ObjectIndex() == 0 &&
                 JSDefineKeyedOwnPropertyNode::ObjectIndex() == 0);
   static_assert(JSLoadNamedFromSuperNode::ReceiverIndex() == 0);
+
+  bool save_feedback_in_string_check = NeedsStringFeedback(node, broker());
 
   Node* context = NodeProperties::GetContextInput(node);
   FrameState frame_state{NodeProperties::GetFrameStateInput(node)};
@@ -1253,7 +1270,10 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
 
     } else if (!access_builder.TryBuildStringCheck(
                    broker(), access_info.lookup_start_object_maps(), &receiver,
-                   &effect, control) &&
+                   &effect, control,
+                   save_feedback_in_string_check
+                       ? base::Optional<FeedbackSource const>(source)
+                       : base::Optional<FeedbackSource const>()) &&
                !access_builder.TryBuildNumberCheck(
                    broker(), access_info.lookup_start_object_maps(), &receiver,
                    &effect, control)) {
@@ -1463,6 +1483,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
                                 control_count + 1, &effects.front());
     }
   }
+
+  // F("Still here 3\n");
 
   // Properly rewire IfException edges if {node} is inside a try-block.
   if (!if_exception_nodes.empty()) {
@@ -2137,7 +2159,7 @@ Reduction JSNativeContextSpecialization::ReducePropertyAccess(
           node,
           DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
     case ProcessedFeedback::kNamedAccess:
-      return ReduceNamedAccess(node, value, feedback.AsNamedAccess(),
+      return ReduceNamedAccess(node, value, source, feedback.AsNamedAccess(),
                                access_mode, key);
     case ProcessedFeedback::kMegaDOMPropertyAccess:
       DCHECK_EQ(access_mode, AccessMode::kLoad);
