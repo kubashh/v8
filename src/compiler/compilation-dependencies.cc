@@ -4,6 +4,8 @@
 
 #include "src/compiler/compilation-dependencies.h"
 
+#include <cstdio>
+
 #include "src/base/optional.h"
 #include "src/execution/protectors.h"
 #include "src/handles/handles-inl.h"

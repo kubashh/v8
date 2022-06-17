@@ -2059,6 +2059,10 @@ Type Typer::Visitor::TypeStringCharCodeAt(Node* node) {
   return typer_->cache_->kUint16;
 }
 
+Type Typer::Visitor::TypeStringCharCodeAtWithFeedback(Node* node) {
+  return typer_->cache_->kUint16;
+}
+
 Type Typer::Visitor::TypeStringCodePointAt(Node* node) {
   return Type::Range(0.0, String::kMaxCodePoint, zone());
 }

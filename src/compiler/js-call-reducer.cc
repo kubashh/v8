@@ -3577,6 +3577,9 @@ Reduction JSCallReducer::ReduceArrayIncludes(Node* node) {
   IteratingArrayBuiltinHelper h(node, broker(), jsgraph(), dependencies());
   if (!h.can_reduce()) return h.inference()->NoChange();
 
+  // MapRef map = h.inference()->GetMaps().at(0);
+  // Node* map_node = jsgraph()->HeapConstant(map.object());
+
   IteratingArrayBuiltinReducerAssembler a(this, node);
   a.InitializeEffectControl(h.effect(), h.control());
 
@@ -6686,6 +6689,167 @@ Reduction JSCallReducer::ReduceStringPrototypeStartsWith(Node* node) {
   return ReplaceWithSubgraph(&a, subgraph);
 }
 
+// namespace {
+// // Searches the effect chain for a valid CheckString, and returns its
+// // FeedbackSource.
+// base::Optional<FeedbackSource> GetFeedbackForCharAt(Node* receiver,
+//                                                     Effect effect) {
+//   PrintF("GetFeedbackForCharAt\n");
+//   PrintF("Receiver = ");
+//   receiver->Print();
+//   while (true) {
+//     PrintF("Could it be this effect: ");
+//     effect->Print();
+//     switch (effect->opcode()) {
+//       case IrOpcode::kCheckString: {
+//         Node* const object = NodeProperties::GetValueInput(effect, 0);
+//         PrintF("Gotta check object: ");
+//         object->Print();
+//         if (NodeProperties::IsSame(object, receiver)) {
+//           PrintF("Found what I wanted in node: ");
+//           return CheckParametersOf(effect->op()).feedback();
+//         } else {
+//           PrintF("It's a CheckString, but not the one I want\n");
+//         }
+//         break;
+//       }
+//       default: {
+//         if (effect->op()->EffectInputCount() != 1) {
+//           PrintF("EffectInputCount > 1, have to stop\n");
+//           return {};
+//         }
+//         break;
+//       }
+//     }
+//     if (NodeProperties::IsSame(receiver, effect)) {
+//       PrintF("Reached receiver, I have to stop\n");
+//       return {};
+//     }
+//     // Continue
+//     // with the next {effect}.
+//     DCHECK_EQ(1, effect->op()->EffectInputCount());
+//     effect = NodeProperties::GetEffectInput(effect);
+//   }
+// }
+// }
+
+Node* JSCallReducer::CreateStringCharAtNode(Node* node, Node* receiver,
+                                            Node* index, Effect effect,
+                                            Control control) {
+  USE(node);
+  // MapInference inference(broker(), receiver, effect);
+
+  // PrintF("Node: ");
+  // node->Print();
+  // PrintF("Recevier: ");
+  // receiver->Print();
+
+  // if (!inference.HaveMaps()) {
+  //   PrintF("Inference has no map, returning old operator\n");
+  //   // No maps, generating a regular StringCharCodeAt node.
+  //   return graph()->NewNode(simplified()->StringCharCodeAt(), receiver,
+  //   index,
+  //                           effect, control);
+  // }
+  // PrintF("Inference has map, brand new operator!\n");
+
+  // ZoneVector<Node*> maps(temp_zone());
+  // for (MapRef map : inference.GetMaps()) {
+  //   maps.push_back(jsgraph()->HeapConstant(map.object()));
+  // }
+
+  // PrintF("Gonna start messing around\n");
+
+  // PrintF("Effect: ");
+  // effect->Print();
+
+  // JSLoadNamedNode n(receiver);
+  // NamedAccess const& p = n.Parameters();
+  // NameRef name = p.name(broker());
+  // FeedbackSource source(p.feedback());
+  // ProcessedFeedback const& feedback =
+  //     broker()->GetFeedbackForPropertyAccess(source, AccessMode::kLoad,
+  //     name);
+  // NamedAccessFeedback feedback_ = feedback.AsNamedAccess();
+  // ZoneVector<Node*> maps(temp_zone());
+  // for (MapRef map : feedback.AsNamedAccess().maps()) {
+  //   maps.push_back(jsgraph()->HeapConstant(map.object()));
+  // }
+
+  // base::Optional<FeedbackSource> source = GetFeedbackForCharAt(receiver,
+  // effect); if (!source.has_value()) {
+  //   PrintF("Found no feedback\n");
+  //   return graph()->NewNode(simplified()->StringCharCodeAt(), receiver,
+  //   index,
+  //                           effect, control);
+  // }
+
+  if (receiver->opcode() != IrOpcode::kCheckString) {
+    // PrintF("Receiver is not kCheckString...\n");
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+
+  Node* receiver_effect = NodeProperties::GetEffectInput(receiver);
+  if (receiver_effect->opcode() != IrOpcode::kCheckString) {
+    // PrintF("The effect of the receiver is not CheckString...\n");
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+
+  FeedbackSource const& source =
+      CheckParametersOf(receiver_effect->op()).feedback();
+
+  NamedAccessFeedback const& feedback =
+      broker()
+          ->GetFeedbackForPropertyAccess(source, AccessMode::kLoad, {})
+          .AsNamedAccess();
+
+  if (feedback.maps().empty()) {
+    // PrintF("Maps empty, too bad\n");
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+  // PrintF("Wow, maps are not empty :o\n");
+
+  // TODO: do not use temp_zone() here because it allocates in temporary
+  // storage, which can be overwritten after this pass.
+  ZoneVector<Node*> maps(temp_zone());
+  for (MapRef map : feedback.maps()) {
+    maps.push_back(jsgraph()->HeapConstant(map.object()));
+  }
+
+  const int kCharCodeAtValueInputCount = 2;
+  const int kEffectInputCount = 1;
+  const int kControlInputCount = 1;
+  const int kValueOutputCount = 1;
+  const int kEffectOutputCount = 1;
+  const int kControlOutputCount = 0;
+  int value_input_count =
+      kCharCodeAtValueInputCount + static_cast<int>(maps.size());
+  Operator* op = graph()->zone()->New<Operator>(
+      IrOpcode::kStringCharCodeAtWithFeedback, Operator::kNoProperties,
+      "StringCharCodeAtWithFeedback", value_input_count, kEffectInputCount,
+      kControlInputCount, kValueOutputCount, kEffectOutputCount,
+      kControlOutputCount);
+
+  switch (maps.size()) {
+    case 1:
+      return graph()->NewNode(op, receiver, index, maps[0], effect, control);
+    case 2:
+      return graph()->NewNode(op, receiver, index, maps[0], maps[1], effect,
+                              control);
+    case 3:
+      return graph()->NewNode(op, receiver, index, maps[0], maps[1], maps[2],
+                              effect, control);
+    case 4:
+      return graph()->NewNode(op, receiver, index, maps[0], maps[1], maps[2],
+                              maps[3], effect, control);
+    default:
+      UNREACHABLE();
+  }
+}
+
 // ES section 21.1.3.1 String.prototype.charAt ( pos )
 Reduction JSCallReducer::ReduceStringPrototypeCharAt(Node* node) {
   JSCallNode n(node);
@@ -6693,6 +6857,8 @@ Reduction JSCallReducer::ReduceStringPrototypeCharAt(Node* node) {
   if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
     return NoChange();
   }
+
+  // PrintF("ReduceStringPrototypeCharAt\n");
 
   Node* receiver = n.receiver();
   Node* index = n.ArgumentOr(0, jsgraph()->ZeroConstant());
@@ -6712,8 +6878,10 @@ Reduction JSCallReducer::ReduceStringPrototypeCharAt(Node* node) {
                                     index, receiver_length, effect, control);
 
   // Return the character from the {receiver} as single character string.
-  Node* value = effect = graph()->NewNode(simplified()->StringCharCodeAt(),
-                                          receiver, index, effect, control);
+  Node* value = effect =
+      CreateStringCharAtNode(node, receiver, index, effect, control);
+  // Node* value = effect = graph()->NewNode(simplified()->StringCharCodeAt(),
+  //                                         receiver, index, effect, control);
   value = graph()->NewNode(simplified()->StringFromSingleCharCode(), value);
 
   ReplaceWithValue(node, value, effect, control);

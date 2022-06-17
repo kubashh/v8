@@ -4,6 +4,8 @@
 
 #include "src/compiler/js-heap-broker.h"
 
+#include "src/compiler/processed-feedback.h"
+
 #ifdef ENABLE_SLOW_DCHECKS
 #include <algorithm>
 #endif
@@ -782,7 +784,9 @@ ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForForIn(
 ProcessedFeedback const& JSHeapBroker::GetFeedbackForPropertyAccess(
     FeedbackSource const& source, AccessMode mode,
     base::Optional<NameRef> static_name) {
-  if (HasFeedback(source)) return GetFeedback(source);
+  if (HasFeedback(source)) {
+    return GetFeedback(source);
+  }
   ProcessedFeedback const& feedback =
       ReadFeedbackForPropertyAccess(source, mode, static_name);
   SetFeedback(source, &feedback);
