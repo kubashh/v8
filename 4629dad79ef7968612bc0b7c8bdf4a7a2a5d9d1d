@@ -16,6 +16,57 @@
       "message": "PTAL. Patch set 2 is a complete rewrite that implements what we discussed: just work with the on-instance value every time. Using a stack slot to cache the vector (or slot address) wouldn\u0027t save any code, so I skipped that. This is code size neutral compared to the previous dynamic tiering implementation. It might be slightly slower, but reliable tier-up is more important.",
       "revId": "4629dad79ef7968612bc0b7c8bdf4a7a2a5d9d1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f07e39d_7e9a2d03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-17T14:03:40Z",
+      "side": 1,
+      "message": "Awesome! This looks much nicer overall than both the ToT implementation and the previous patchset.\nOne comment, one nit, LGTM otherwise.",
+      "revId": "4629dad79ef7968612bc0b7c8bdf4a7a2a5d9d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2096ac7c_cd395030",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-17T14:03:40Z",
+      "side": 1,
+      "message": "This should use the declared index instead of function index.",
+      "revId": "4629dad79ef7968612bc0b7c8bdf4a7a2a5d9d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd113661_180ab71e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-06-17T14:03:40Z",
+      "side": 1,
+      "message": "nit: We usually skip the \" \u003d {}\" part.",
+      "revId": "4629dad79ef7968612bc0b7c8bdf4a7a2a5d9d1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
