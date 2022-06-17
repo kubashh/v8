@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c788fbc_d400027f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-17T16:07:09Z",
+      "side": 1,
+      "message": "Thanks for separating editing from moving!",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 71
+      },
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6507fca3_f184b6b2",
@@ -14,6 +37,86 @@
       "writtenOn": "2022-06-16T07:32:14Z",
       "side": 1,
       "message": "CL is ready for review. PTAL.",
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ca39f7_a3f022ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-17T16:07:09Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t finish the review, here are some comments already.",
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5dbb7c3_1d62558a",
+        "filename": "tools/turbolizer/src/node.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-17T16:07:09Z",
+      "side": 1,
+      "message": "nit: Since you already edit it: Why not a for-of loop? Should be at least as fast, and I find it more readable.",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 34
+      },
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43643d5f_5e3e33d5",
+        "filename": "tools/turbolizer/src/node.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-17T16:07:09Z",
+      "side": 1,
+      "message": "Why not implement these as methods? It\u0027s much more efficient than creating closures and storing them as instance properties.",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 48
+      },
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbb1c319_119b3f20",
+        "filename": "tools/turbolizer/src/phases/graph-phase/graph-edge.ts",
+        "patchSetId": 8
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-17T16:07:09Z",
+      "side": 1,
+      "message": "Also here: Why not a method?",
       "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
