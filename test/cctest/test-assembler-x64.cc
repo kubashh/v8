@@ -74,7 +74,9 @@ static const Register arg2 = rsi;
 
 TEST(AssemblerX64ReturnOperation) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that copies argument 2 and returns it.
@@ -94,7 +96,9 @@ TEST(AssemblerX64ReturnOperation) {
 
 TEST(AssemblerX64StackOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that copies argument 2 and returns it.
@@ -124,7 +128,9 @@ TEST(AssemblerX64StackOperations) {
 
 TEST(AssemblerX64ArithmeticOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that adds arguments returning the sum.
@@ -144,7 +150,9 @@ TEST(AssemblerX64ArithmeticOperations) {
 
 TEST(AssemblerX64CmpbOperation) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a function that compare argument byte returing 1 if equal else 0.
@@ -172,7 +180,9 @@ TEST(AssemblerX64CmpbOperation) {
 
 TEST(AssemblerX64ImulOperation) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that multiplies arguments returning the high
@@ -198,7 +208,9 @@ TEST(AssemblerX64ImulOperation) {
 TEST(AssemblerX64testbwqOperation) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ pushq(rbx);
@@ -363,7 +375,9 @@ TEST(AssemblerX64testbwqOperation) {
 
 TEST(AssemblerX64XchglOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(rax, Operand(arg1, 0));
@@ -389,7 +403,9 @@ TEST(AssemblerX64XchglOperations) {
 
 TEST(AssemblerX64OrlOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(rax, Operand(arg2, 0));
@@ -411,7 +427,9 @@ TEST(AssemblerX64OrlOperations) {
 
 TEST(AssemblerX64RollOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(rax, arg1);
@@ -431,7 +449,9 @@ TEST(AssemblerX64RollOperations) {
 
 TEST(AssemblerX64SublOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(rax, Operand(arg2, 0));
@@ -453,7 +473,9 @@ TEST(AssemblerX64SublOperations) {
 
 TEST(AssemblerX64TestlOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Set rax with the ZF flag of the testl instruction.
@@ -480,7 +502,9 @@ TEST(AssemblerX64TestlOperations) {
 TEST(AssemblerX64TestwOperations) {
   using F = uint16_t(uint16_t * x);
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Set rax with the ZF flag of the testl instruction.
@@ -504,7 +528,9 @@ TEST(AssemblerX64TestwOperations) {
 
 TEST(AssemblerX64XorlOperations) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(rax, Operand(arg2, 0));
@@ -526,7 +552,9 @@ TEST(AssemblerX64XorlOperations) {
 
 TEST(AssemblerX64MemoryOperands) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that copies argument 2 and returns it.
@@ -558,7 +586,9 @@ TEST(AssemblerX64MemoryOperands) {
 
 TEST(AssemblerX64ControlFlow) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble a simple function that copies argument 1 and returns it.
@@ -585,7 +615,9 @@ TEST(AssemblerX64ControlFlow) {
 
 TEST(AssemblerX64LoopImmediates) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   // Assemble two loops using rax as counter, and verify the ending counts.
@@ -2470,7 +2502,9 @@ TEST(AssemblerX64JumpTables2) {
 
 TEST(AssemblerX64PslldWithXmm15) {
   CcTest::InitializeVM();
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
 
   __ movq(xmm15, arg1);
@@ -2526,7 +2560,9 @@ TEST(AssemblerX64Regmove256bit) {
   if (!CpuFeatures::IsSupported(AVX)) return;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Isolate* isolate = CcTest::i_isolate();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
   CpuFeatureScope fscope(&masm, AVX);
@@ -2594,7 +2630,9 @@ TEST(AssemblerX64AVX2Op256bit) {
   if (!CpuFeatures::IsSupported(AVX2)) return;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Isolate* isolate = CcTest::i_isolate();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
   CpuFeatureScope fscope(&masm, AVX2);
@@ -2665,7 +2703,9 @@ TEST(AssemblerX64FloatingPoint256bit) {
   if (!CpuFeatures::IsSupported(AVX)) return;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Isolate* isolate = CcTest::i_isolate();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
   CpuFeatureScope fscope(&masm, AVX);
@@ -2747,7 +2787,9 @@ TEST(AssemblerX64Integer256bit) {
   if (!CpuFeatures::IsSupported(AVX2)) return;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Isolate* isolate = CcTest::i_isolate();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
   CpuFeatureScope fscope(&masm, AVX2);
@@ -2855,7 +2897,9 @@ TEST(AssemblerX64CmpOperations256bit) {
   if (!CpuFeatures::IsSupported(AVX)) return;
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   Isolate* isolate = CcTest::i_isolate();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());
   CpuFeatureScope fscope(&masm, AVX);

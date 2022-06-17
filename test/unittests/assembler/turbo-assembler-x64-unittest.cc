@@ -20,7 +20,9 @@ namespace internal {
 class TurboAssemblerTest : public TestWithIsolate {};
 
 TEST_F(TurboAssemblerTest, TestHardAbort) {
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   TurboAssembler tasm(isolate(), AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
   __ set_root_array_available(false);
@@ -37,7 +39,9 @@ TEST_F(TurboAssemblerTest, TestHardAbort) {
 }
 
 TEST_F(TurboAssemblerTest, TestCheck) {
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   TurboAssembler tasm(isolate(), AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
   __ set_root_array_available(false);
