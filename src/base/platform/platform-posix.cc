@@ -170,6 +170,12 @@ void* Allocate(void* hint, size_t size, OS::MemoryPermission access,
   }
 #endif
 
+#if V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+  if (access == OS::MemoryPermission::kNoAccessWillJitLater) {
+    PKU::SetPermissionsAndMemoryProtectionKey(
+        result, size, OS::MemoryPermission::kReadWriteExecute);
+  }
+#endif
   return result;
 }
 
@@ -1243,6 +1249,115 @@ Stack::StackSlot Stack::GetStackStart() {
 Stack::StackSlot Stack::GetCurrentStackPosition() {
   return __builtin_frame_address(0);
 }
+
+#if V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+
+int PKU::GetPermissionsProtectionKey() {
+  PKU& instance = PKU::getInstance();
+  return instance.pku_key_;
+}
+
+PKU& PKU::getInstance() {
+  static PKU instance;
+  if (!instance.is_initialized) {
+    instance.InitializeMemoryProtectionKeySupport();
+    instance.pku_key_ = instance.AllocateMemoryProtectionKey();
+    instance.is_initialized = true;
+  }
+  return instance;
+}
+
+void PKU::InitializeMemoryProtectionKeySupport() {
+  // Try to find the pkey functions in glibc.
+  void* pkey_alloc_ptr = dlsym(RTLD_DEFAULT, "pkey_alloc");
+  if (!pkey_alloc_ptr) return;
+
+  // If {pkey_alloc} is available, the others must also be available.
+  void* pkey_free_ptr = dlsym(RTLD_DEFAULT, "pkey_free");
+  void* pkey_mprotect_ptr = dlsym(RTLD_DEFAULT, "pkey_mprotect");
+  void* pkey_get_ptr = dlsym(RTLD_DEFAULT, "pkey_get");
+  void* pkey_set_ptr = dlsym(RTLD_DEFAULT, "pkey_set");
+  CHECK(pkey_free_ptr && pkey_mprotect_ptr && pkey_get_ptr && pkey_set_ptr);
+
+  pkey_alloc = reinterpret_cast<pkey_alloc_t>(pkey_alloc_ptr);
+  pkey_free = reinterpret_cast<pkey_free_t>(pkey_free_ptr);
+  pkey_mprotect = reinterpret_cast<pkey_mprotect_t>(pkey_mprotect_ptr);
+  pkey_get = reinterpret_cast<pkey_get_t>(pkey_get_ptr);
+  pkey_set = reinterpret_cast<pkey_set_t>(pkey_set_ptr);
+}
+
+int PKU::AllocateMemoryProtectionKey() {
+  if (!pkey_alloc) return OS::kNoMemoryProtectionKey;
+  return pkey_alloc(0, OS::kDisableWrite);
+}
+
+void PKU::FreeMemoryProtectionKey() {
+  // Only free the key if one was allocated.
+  if (pku_key_ == OS::kNoMemoryProtectionKey) return;
+  DCHECK_NOT_NULL(pkey_free);
+  CHECK_EQ(0, pkey_free(pku_key_));
+}
+
+bool PKU::SetPermissionsAndMemoryProtectionKey(
+    void* address, size_t size, OS::MemoryPermission permissions) {
+  PKU& instance = PKU::getInstance();
+  if (instance.pkey_mprotect) {
+    // Copied with slight modifications from base/platform/platform-posix.cc
+    // {OS::SetPermissions()}.
+    // TODO(dlehmann): Move this block into its own function at the right
+    // abstraction boundary (likely some static method in platform.h {OS})
+    // once the whole PKU code is moved into base/platform/.
+
+    int protection = GetProtectionFromMemoryPermission(permissions);
+
+    int ret =
+        instance.pkey_mprotect(address, size, protection, instance.pku_key_);
+
+    if (ret == 0 && permissions == OS::MemoryPermission::kNoAccess) {
+      // Similar to {OS::SetPermissions}, also discard the pages after switching
+      // to no access. This is advisory; ignore errors and continue execution.
+      USE(OS::DiscardSystemPages(address, size));
+    }
+
+    return ret == 0;
+  }
+  UNREACHABLE();
+}
+
+void PKU::SetPermissionsForMemoryProtectionKey(bool writeable) {
+  PKU& instance = PKU::getInstance();
+  // If a valid key was allocated, {pkey_set()} must also be available.
+  DCHECK_NOT_NULL(instance.pkey_set);
+  int permissions = writeable ? OS::kNoRestrictions : OS::kDisableWrite;
+
+  CHECK_EQ(0, instance.pkey_set(instance.pku_key_, permissions));
+}
+
+OS::MemoryProtectionKeyPermission PKU::GetMemoryProtectionKeyPermission() {
+  PKU& instance = PKU::getInstance();
+  int permission = instance.pkey_get(instance.pku_key_);
+  CHECK(permission == OS::kNoRestrictions || permission == OS::kDisableAccess ||
+        permission == OS::kDisableWrite);
+  return static_cast<OS::MemoryProtectionKeyPermission>(permission);
+}
+
+bool OS::SetPermissionsAndMemoryProtectionKey(
+    void* address, size_t size, OS::MemoryPermission permissions) {
+  return PKU::SetPermissionsAndMemoryProtectionKey(address, size, permissions);
+}
+
+void OS::SetPermissionsForMemoryProtectionKey(bool writeable) {
+  return PKU::SetPermissionsForMemoryProtectionKey(writeable);
+}
+
+int OS::GetPermissionsProtectionKey() {
+  return PKU::GetPermissionsProtectionKey();
+}
+
+OS::MemoryProtectionKeyPermission OS::GetMemoryProtectionKeyPermission() {
+  return PKU::GetMemoryProtectionKeyPermission();
+}
+#endif  // V8_TRY_USE_PKU_JIT_WRITE_PROTECT
 
 #undef LOG_TAG
 #undef MAP_ANONYMOUS

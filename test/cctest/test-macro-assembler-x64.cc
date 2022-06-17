@@ -111,7 +111,9 @@ static void TestMoveSmi(MacroAssembler* masm, Label* exit, int id, Smi value) {
 TEST(SmiMove) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
   MacroAssembler* masm = &assembler;  // Create a pointer for the __ macro.
@@ -202,7 +204,9 @@ void TestSmiCompare(MacroAssembler* masm, Label* exit, int id, int x, int y) {
 TEST(SmiCompare) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer(2 * Assembler::kDefaultBufferSize);
+  auto buffer = AllocateAssemblerBuffer(
+      2 * v8::internal::AssemblerBase::kDefaultBufferSize, nullptr,
+      JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -247,7 +251,9 @@ TEST(SmiCompare) {
 TEST(SmiTag) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -345,7 +351,9 @@ TEST(SmiTag) {
 TEST(SmiCheck) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -446,7 +454,9 @@ TEST(EmbeddedObj) {
 
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -498,7 +508,9 @@ TEST(EmbeddedObj) {
 TEST(SmiIndex) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -532,7 +544,9 @@ TEST(OperandOffset) {
 
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -1005,7 +1019,9 @@ void TestFloat64x2Neg(MacroAssembler* masm, Label* exit, double x, double y) {
 TEST(SIMDMacros) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler assembler(isolate, v8::internal::CodeObjectRequired::kYes,
                            buffer->CreateView());
 
@@ -1052,7 +1068,9 @@ TEST(AreAliased) {
 TEST(DeoptExitSizeIsFixed) {
   Isolate* isolate = CcTest::i_isolate();
   HandleScope handles(isolate);
-  auto buffer = AllocateAssemblerBuffer();
+  auto buffer =
+      AllocateAssemblerBuffer(v8::internal::AssemblerBase::kDefaultBufferSize,
+                              nullptr, JitPermission::kNoJit);
   MacroAssembler masm(isolate, v8::internal::CodeObjectRequired::kYes,
                       buffer->CreateView());
 

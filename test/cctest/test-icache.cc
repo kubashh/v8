@@ -152,7 +152,8 @@ CONDITIONAL_TEST(TestFlushICacheOfExecutable) {
   HandleScope handles(isolate);
 
   for (int i = 0; i < kNumIterations; ++i) {
-    auto buffer = AllocateAssemblerBuffer(kBufferSize);
+    auto buffer =
+        AllocateAssemblerBuffer(kBufferSize, nullptr, JitPermission::kNoJit);
 
     // Allow calling the function from C++.
     auto f = GeneratedCode<F0>::FromBuffer(isolate, buffer->start());

@@ -562,6 +562,8 @@ class LogInterpretedFramesNativeStackTest : public LogTest {
 };
 
 TEST_F(LogInterpretedFramesNativeStackTest, LogInterpretedFramesNativeStack) {
+#if !V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+  // For LogInterpretedFramesNativeStackTest.LogInterpretedFramesNativeStack
   {
     ScopedLoggerInitializer logger(isolate());
 
@@ -576,6 +578,7 @@ TEST_F(LogInterpretedFramesNativeStackTest, LogInterpretedFramesNativeStack) {
         {{"LazyCompile", "testLogInterpretedFramesNativeStack"},
          {"LazyCompile", "testLogInterpretedFramesNativeStack"}}));
   }
+#endif
 }
 
 class LogInterpretedFramesNativeStackWithSerializationTest

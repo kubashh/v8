@@ -204,6 +204,27 @@ class V8_BASE_EXPORT OS {
     kNoAccessWillJitLater
   };
 
+  static const int kNoMemoryProtectionKey = -1;
+
+#if V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+  friend class PKU;
+
+  enum MemoryProtectionKeyPermission {
+    kNoRestrictions = 0,
+    kDisableAccess = 1,
+    kDisableWrite = 2,
+  };
+
+  static bool SetPermissionsAndMemoryProtectionKey(
+      void* address, size_t size, OS::MemoryPermission permissions);
+
+  static void SetPermissionsForMemoryProtectionKey(bool writeable);
+
+  static int GetPermissionsProtectionKey();
+
+  static MemoryProtectionKeyPermission GetMemoryProtectionKeyPermission();
+#endif  // V8_TRY_USE_PKU_JIT_WRITE_PROTECT
+
   // Helpers to create shared memory objects. Currently only used for testing.
   static PlatformSharedMemoryHandle CreateSharedMemoryHandleForTesting(
       size_t size);
