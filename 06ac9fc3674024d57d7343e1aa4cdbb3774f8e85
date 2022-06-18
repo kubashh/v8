@@ -82,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f132cb9_6ea7bf14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-06-18T13:12:20Z",
+      "side": 1,
+      "message": "I also refactored tabs.ts and turbo-visualizer.ts. All new changes don\u0027t affect previously reviewed code (except your comments).",
+      "parentUuid": "86ca39f7_a3f022ac",
+      "revId": "06ac9fc3674024d57d7343e1aa4cdbb3774f8e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5dbb7c3_1d62558a",
