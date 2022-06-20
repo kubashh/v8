@@ -16,6 +16,23 @@
       "message": "This is unfortunately ugly after using such nice C++17 syntax, but I don\u0027t know of a better way (after reading https://stackoverflow.com/questions/40673080/stdignore-with-structured-bindings).",
       "revId": "ae37cb9e077c56ad3a787704c4bf184de942e529",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a32245f8_6ff4c0dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-06-20T07:44:10Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "revId": "ae37cb9e077c56ad3a787704c4bf184de942e529",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
