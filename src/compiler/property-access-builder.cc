@@ -10,6 +10,7 @@
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/node-matchers.h"
+#include "src/compiler/processed-feedback.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/execution/isolate-inl.h"
 #include "src/objects/field-index-inl.h"
@@ -60,8 +61,8 @@ bool PropertyAccessBuilder::TryBuildStringCheck(JSHeapBroker* broker,
     // Monormorphic string access (ignoring the fact that there are multiple
     // String maps).
     *receiver = *effect =
-        graph()->NewNode(simplified()->CheckString(FeedbackSource()), *receiver,
-                         *effect, control);
+        graph()->NewNode(simplified()->CheckString(FeedbackSource(), maps),
+                         *receiver, *effect, control);
     return true;
   }
   return false;
