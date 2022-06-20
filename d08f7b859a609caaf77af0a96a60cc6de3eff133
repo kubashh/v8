@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85c93b7d_4a30340f",
+        "filename": "tools/turbolizer/src/source-resolver.ts",
+        "patchSetId": 13
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-06-20T19:21:26Z",
+      "side": 1,
+      "message": "Unfortunately, TS doesn\u0027t have the familiar to us constructor overloading. I decided to leave the constructor with already parsed data as  parameters (for possible future using) and create this method. GraphView has the similar approach,  it has a constructor and a “CreateGraph” method. In the future it will be easier to move this call to constructor than vice versa.",
+      "parentUuid": "62ffc361_7827e282",
+      "range": {
+        "startLine": 339,
+        "startChar": 10,
+        "endLine": 340,
+        "endChar": 77
+      },
+      "revId": "d08f7b859a609caaf77af0a96a60cc6de3eff133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c037b7a0_2dce2d64",
         "filename": "tools/turbolizer/src/turbo-visualizer.ts",
         "patchSetId": 13
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-20T16:35:09Z",
       "side": 1,
       "message": "I saw you change `[]` into `new Array\u003cSomeType\u003e()` in a bunch of places. What is the advantage of the latter?",
+      "range": {
+        "startLine": 18,
+        "startChar": 37,
+        "endLine": 18,
+        "endChar": 58
+      },
+      "revId": "d08f7b859a609caaf77af0a96a60cc6de3eff133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c38ed9bd_e6ca14c7",
+        "filename": "tools/turbolizer/src/turbo-visualizer.ts",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1536964
+      },
+      "writtenOn": "2022-06-20T19:21:26Z",
+      "side": 1,
+      "message": "You\u0027re right in this case (variable declaration level), in other places of the project I used latter approach, so I decided to use it everywhere.\nLet\u0027s see why I decided so.\nFor example, we have a field `nodes: Array\u003cGraphNode\u003e`.\nYou see `this.nodes \u003d []` in any method.\nCan you tell what type of this field? (for example, is it nodes of turboshaft or sea-of-nodes IR?😊) \nYes, if you are familiar with the code base or hover mouse in a IDE, it won\u0027t be a problem. Gerrit hasn\u0027t type highlighting and you have to scroll to the top to see type of this array.\nIn this way, we minimize the type lookup time as much as possible.",
+      "parentUuid": "c037b7a0_2dce2d64",
       "range": {
         "startLine": 18,
         "startChar": 37,
