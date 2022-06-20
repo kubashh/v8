@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c222b0d6_11be7b4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-20T16:35:09Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "d08f7b859a609caaf77af0a96a60cc6de3eff133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62ffc361_7827e282",
+        "filename": "tools/turbolizer/src/source-resolver.ts",
+        "patchSetId": 13
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-20T16:35:09Z",
+      "side": 1,
+      "message": "I know the other phases work differently, but why not just a constructor that takes the JSON object as argument and does all of the parsing.",
+      "range": {
+        "startLine": 339,
+        "startChar": 10,
+        "endLine": 340,
+        "endChar": 77
+      },
+      "revId": "d08f7b859a609caaf77af0a96a60cc6de3eff133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c037b7a0_2dce2d64",
+        "filename": "tools/turbolizer/src/turbo-visualizer.ts",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-20T16:35:09Z",
+      "side": 1,
+      "message": "I saw you change `[]` into `new Array\u003cSomeType\u003e()` in a bunch of places. What is the advantage of the latter?",
+      "range": {
+        "startLine": 18,
+        "startChar": 37,
+        "endLine": 18,
+        "endChar": 58
+      },
+      "revId": "d08f7b859a609caaf77af0a96a60cc6de3eff133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
