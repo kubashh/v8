@@ -98,6 +98,11 @@ MATCHER(IsUndefined, std::string(negation ? "isn't" : "is") + " Undefined") {
   return arg->IsUndefined();
 }
 
+// Creates a polymorphic matcher that matches JSValue to True.
+MATCHER(IsTrue, std::string(negation ? "isn't" : "is") + " True") {
+  return arg->IsTrue();
+}
+
 // CaptureEq(capture) captures the value passed in during matching as long as it
 // is unset, and once set, compares the value for equality with the argument.
 template <typename T>
