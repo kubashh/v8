@@ -16,6 +16,24 @@
       "message": "I\u0027d actually keep it as is. Such a default value might cause assertion failures down the file on configurations where the shared cage or external code space are not enabled.",
       "revId": "e9571a128e1afaeca7061116a2d3fcbb235c24cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a18ee73c_32fb6b9d",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-06-20T06:48:34Z",
+      "side": 1,
+      "message": "That\u0027s fair! My thinking here was that our assumption currently is \"the sandbox is enabled everywhere where we have pointer compression (except Fuchsia)\" so wanted to make that assumption obvious in the configuration (e.g. so that future changes that impact e.g. external code space don\u0027t accidentally turn off the sandbox). On the other hand, we have UMA metrics that capture whether the sandbox is enabled or not, so I guess that should be good enough as well. Let me know if you have any more thoughts on this, otherwise I\u0027ll just abandon this CL and leave things as they are now :)",
+      "parentUuid": "e9be79bd_4953d1c7",
+      "revId": "e9571a128e1afaeca7061116a2d3fcbb235c24cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
