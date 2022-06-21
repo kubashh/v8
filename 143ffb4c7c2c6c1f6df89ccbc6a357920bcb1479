@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa17c472_84820d69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-06-21T02:02:43Z",
+      "side": 1,
+      "message": "Pls see my comments.",
+      "revId": "143ffb4c7c2c6c1f6df89ccbc6a357920bcb1479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a285f78f_293ac382",
+        "filename": "src/codegen/riscv64/macro-assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-06-21T02:02:43Z",
+      "side": 1,
+      "message": "\"src \u003d\u003d base::bit_cast\u003cuint32_t\u003e(0.0f)\" condition is dulicated with line 2418, should be removed.",
+      "revId": "143ffb4c7c2c6c1f6df89ccbc6a357920bcb1479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "124fdc01_166586be",
+        "filename": "src/codegen/riscv64/macro-assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2440,
+      "author": {
+        "id": 1523827
+      },
+      "writtenOn": "2022-06-21T02:02:43Z",
+      "side": 1,
+      "message": "The second condition judge is duplicated with line 2441. It should be removed.",
+      "revId": "143ffb4c7c2c6c1f6df89ccbc6a357920bcb1479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
