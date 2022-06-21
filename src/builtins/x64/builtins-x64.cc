@@ -4116,8 +4116,11 @@ void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   __ ret(0);
 }
 
-// Resume the suspender stored in the closure.
-void Builtins::Generate_WasmResume(MacroAssembler* masm) {
+namespace {
+// Resume the suspender stored in the closure. We generate two variants of this
+// builtin: the onFulfilled variant resumes execution at the saved PC and
+// forwards the value, the onRejected variant throws the value.
+void Generate_WasmResumeHelper(MacroAssembler* masm, bool reject) {
   __ EnterFrame(StackFrame::STACK_SWITCH);
 
   Register param_count = rax;
@@ -4152,8 +4155,7 @@ void Builtins::Generate_WasmResume(MacroAssembler* masm) {
       FieldOperand(sfi, SharedFunctionInfo::kFunctionDataOffset));
   Register suspender = rax;
   __ LoadAnyTaggedField(
-      suspender,
-      FieldOperand(function_data, WasmOnFulfilledData::kSuspenderOffset));
+      suspender, FieldOperand(function_data, WasmResumeData::kSuspenderOffset));
   // Check the suspender state.
   Label suspender_is_suspended;
   Register state = rdx;
@@ -4232,11 +4234,28 @@ void Builtins::Generate_WasmResume(MacroAssembler* masm) {
   // Move resolved value to return register.
   __ movq(kReturnRegister0, Operand(rbp, 3 * kSystemPointerSize));
   __ Move(GCScanSlotPlace, 0);
-  LoadJumpBuffer(masm, target_jmpbuf, true);
+  if (reject) {
+    // Switch to the continuation's stack and throw.
+    LoadJumpBuffer(masm, target_jmpbuf, false);
+    __ pushq(kReturnRegister0);
+    __ CallRuntime(Runtime::kThrow);
+  } else {
+    // Resume the continuation normally.
+    LoadJumpBuffer(masm, target_jmpbuf, true);
+  }
   __ Trap();
   __ bind(&suspend);
   __ LeaveFrame(StackFrame::STACK_SWITCH);
   __ ret(3);
+}
+}  // namespace
+
+void Builtins::Generate_WasmResume(MacroAssembler* masm) {
+  Generate_WasmResumeHelper(masm, false);
+}
+
+void Builtins::Generate_WasmReject(MacroAssembler* masm) {
+  Generate_WasmResumeHelper(masm, true);
 }
 
 void Builtins::Generate_WasmOnStackReplace(MacroAssembler* masm) {
