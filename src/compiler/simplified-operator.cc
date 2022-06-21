@@ -833,21 +833,21 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(CheckedUint32Div, 2, 1)               \
   V(CheckedUint32Mod, 2, 1)
 
-#define CHECKED_WITH_FEEDBACK_OP_LIST(V)    \
-  V(CheckNumber, 1, 1)                      \
-  V(CheckSmi, 1, 1)                         \
-  V(CheckString, 1, 1)                      \
-  V(CheckBigInt, 1, 1)                      \
-  V(CheckedInt32ToTaggedSigned, 1, 1)       \
-  V(CheckedInt64ToInt32, 1, 1)              \
-  V(CheckedInt64ToTaggedSigned, 1, 1)       \
-  V(CheckedTaggedToArrayIndex, 1, 1)        \
-  V(CheckedTaggedSignedToInt32, 1, 1)       \
-  V(CheckedTaggedToTaggedPointer, 1, 1)     \
-  V(CheckedTaggedToTaggedSigned, 1, 1)      \
-  V(CheckedUint32ToInt32, 1, 1)             \
-  V(CheckedUint32ToTaggedSigned, 1, 1)      \
-  V(CheckedUint64ToInt32, 1, 1)             \
+#define CHECKED_WITH_FEEDBACK_OP_LIST(V) \
+  V(CheckNumber, 1, 1)                   \
+  V(CheckSmi, 1, 1)                      \
+  /*V(CheckString, 1, 1) */              \
+  V(CheckBigInt, 1, 1)                   \
+  V(CheckedInt32ToTaggedSigned, 1, 1)    \
+  V(CheckedInt64ToInt32, 1, 1)           \
+  V(CheckedInt64ToTaggedSigned, 1, 1)    \
+  V(CheckedTaggedToArrayIndex, 1, 1)     \
+  V(CheckedTaggedSignedToInt32, 1, 1)    \
+  V(CheckedTaggedToTaggedPointer, 1, 1)  \
+  V(CheckedTaggedToTaggedSigned, 1, 1)   \
+  V(CheckedUint32ToInt32, 1, 1)          \
+  V(CheckedUint32ToTaggedSigned, 1, 1)   \
+  V(CheckedUint64ToInt32, 1, 1)          \
   V(CheckedUint64ToTaggedSigned, 1, 1)
 
 #define CHECKED_BOUNDS_OP_LIST(V) \
@@ -921,6 +921,15 @@ struct SimplifiedOperatorGlobalCache final {
       CheckBoundsFlags(CheckBoundsFlag::kAbortOnOutOfBounds) |
           CheckBoundsFlags(CheckBoundsFlag::kConvertStringAndMinusZero)};
 #undef CHECKED_BOUNDS
+
+  struct CheckStringOperator final : public Operator1<CheckStringParameters> {
+    CheckStringOperator(FeedbackSource feedback, ZoneVector<MapRef> maps)
+        : Operator1<CheckStringParameters>(
+              IrOpcode::kCheckString, Operator::kFoldable | Operator::kNoThrow,
+              "CheckString", 1, 1, 1, 1, 1, 0,
+              CheckStringParameters(feedback, maps)) {}
+  };
+  // CheckStringOperator kCheckString;
 
   template <DeoptimizeReason kDeoptimizeReason>
   struct CheckIfOperator final : public Operator1<CheckIfParameters> {
@@ -1288,7 +1297,21 @@ const Operator* SimplifiedOperatorBuilder::CheckBounds(
       feedback, flags);
 }
 
+const Operator* SimplifiedOperatorBuilder::CheckString(
+    const FeedbackSource& feedback, ZoneVector<MapRef> maps) {
+  // TODO(dmercadier): do something with the cache?
+  // TODO(dmercadier): is this function needed?
+  CheckStringParameters const parameters(feedback, maps);
+  return zone()->New<Operator1<CheckStringParameters>>(  // --
+      IrOpcode::kCheckString,                            // opcode
+      Operator::kNoThrow | Operator::kNoWrite,           // flags
+      "CheckString",                                     // name
+      1, 1, 1, 1, 1, 0,                                  // counts
+      parameters);                                       // parameter
+}
+
 bool IsCheckedWithFeedback(const Operator* op) {
+  // TODO(dmercadier): add CheckString to this list?
 #define CASE(Name, ...) case IrOpcode::k##Name:
   switch (op->opcode()) {
     CHECKED_WITH_FEEDBACK_OP_LIST(CASE) return true;
@@ -1736,6 +1759,33 @@ CheckBoundsParameters const& CheckBoundsParametersOf(Operator const* op) {
          op->opcode() == IrOpcode::kCheckedUint32Bounds ||
          op->opcode() == IrOpcode::kCheckedUint64Bounds);
   return OpParameter<CheckBoundsParameters>(op);
+}
+
+bool operator==(CheckStringParameters const& lhs,
+                CheckStringParameters const& rhs) {
+  // TODO(dmercadier): take maps into account.
+  return lhs.feedback() == rhs.feedback();
+}
+
+size_t hash_value(CheckStringParameters const& p) {
+  // TODO(dmercadier): take maps into account.
+  FeedbackSource::Hash feedback_hash;
+  return feedback_hash(p.feedback());
+}
+
+std::ostream& operator<<(std::ostream& os, CheckStringParameters const& p) {
+  os << p.feedback() << "[";
+  for (size_t i = 0; i < p.maps().size(); ++i) {
+    if (i > 0) os << ", ";
+    os << p.maps()[i].object();
+  }
+  os << "]";
+  return os;
+}
+
+CheckStringParameters const& CheckStringParametersOf(Operator const* op) {
+  DCHECK(op->opcode() == IrOpcode::kCheckString);
+  return OpParameter<CheckStringParameters>(op);
 }
 
 bool operator==(CheckIfParameters const& lhs, CheckIfParameters const& rhs) {

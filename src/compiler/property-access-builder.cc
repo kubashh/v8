@@ -60,8 +60,8 @@ bool PropertyAccessBuilder::TryBuildStringCheck(JSHeapBroker* broker,
     // Monormorphic string access (ignoring the fact that there are multiple
     // String maps).
     *receiver = *effect =
-        graph()->NewNode(simplified()->CheckString(FeedbackSource()), *receiver,
-                         *effect, control);
+        graph()->NewNode(simplified()->CheckString(FeedbackSource(), maps),
+                         *receiver, *effect, control);
     return true;
   }
   return false;
