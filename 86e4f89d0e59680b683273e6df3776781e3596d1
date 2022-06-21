@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a879c4_f4c759f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-06-21T05:45:30Z",
+      "side": 1,
+      "message": "We tried to port PKU from WASM to OS library, which also benefits JavaScript, PTAL, thanks.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
