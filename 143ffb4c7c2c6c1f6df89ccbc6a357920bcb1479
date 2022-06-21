@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b96825ea_05e31934",
+        "filename": "src/codegen/riscv64/macro-assembler-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2022-06-21T02:04:13Z",
+      "side": 1,
+      "message": "if dst is kDoubleRegZero, it can be run. so it should\u0027t be removed.",
+      "parentUuid": "a285f78f_293ac382",
+      "revId": "143ffb4c7c2c6c1f6df89ccbc6a357920bcb1479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "124fdc01_166586be",
         "filename": "src/codegen/riscv64/macro-assembler-riscv64.cc",
         "patchSetId": 2
