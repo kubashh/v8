@@ -40,6 +40,7 @@ Reduction RedundancyElimination::Reduce(Node* node) {
     case IrOpcode::kBigIntAdd:
     case IrOpcode::kBigIntSubtract:
     case IrOpcode::kStringCharCodeAt:
+    case IrOpcode::kStringCharCodeAtWithFeedback:
     case IrOpcode::kStringCodePointAt:
     case IrOpcode::kStringFromCodePointAt:
     case IrOpcode::kStringSubstring:
@@ -155,6 +156,11 @@ bool CheckSubsumes(Node const* a, Node const* b) {
     } else if (a->opcode() == IrOpcode::kCheckReceiver &&
                b->opcode() == IrOpcode::kCheckReceiverOrNullOrUndefined) {
       // CheckReceiver(node) implies CheckReceiverOrNullOrUndefined(node)
+    } else if (a->opcode() == IrOpcode::kStringCharCodeAtWithFeedback &&
+               b->opcode() == IrOpcode::kStringCharCodeAtWithFeedback) {
+      // op() will differ because StringCharCodeAtWithFeedback is not cached.
+      // Still, a first StringCharCodeAtWithFeedback subsumes a subsequent one
+      // with the same inputs.
     } else if (a->opcode() != b->opcode()) {
       return false;
     } else {
@@ -235,6 +241,7 @@ Node* RedundancyElimination::EffectPathChecks::LookupCheck(Node* node) const {
   for (Check const* check = head_; check != nullptr; check = check->next) {
     if (CheckSubsumes(check->node, node) && TypeSubsumes(node, check->node)) {
       DCHECK(!check->node->IsDead());
+      // TODO(dmercadier): merge maps for CharCodeAtWithFeedback.
       return check->node;
     }
   }
