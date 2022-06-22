@@ -111,6 +111,30 @@
       },
       "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6193cccc_9741582a",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-22T18:54:41Z",
+      "side": 1,
+      "message": "IMHO verification on GC is good enough. If it happens to often we can always make it more fine-granular.",
+      "parentUuid": "8325c95f_b374c7cf",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
