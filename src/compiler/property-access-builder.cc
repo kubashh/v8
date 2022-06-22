@@ -59,9 +59,13 @@ bool PropertyAccessBuilder::TryBuildStringCheck(JSHeapBroker* broker,
   if (HasOnlyStringMaps(broker, maps)) {
     // Monormorphic string access (ignoring the fact that there are multiple
     // String maps).
+    ZoneHandleSet<Map> map_set;
+    for (MapRef map : maps) {
+      map_set.insert(map.object(), graph()->zone());
+    }
     *receiver = *effect =
-        graph()->NewNode(simplified()->CheckString(FeedbackSource()), *receiver,
-                         *effect, control);
+        graph()->NewNode(simplified()->CheckString(FeedbackSource(), map_set),
+                         *receiver, *effect, control);
     return true;
   }
   return false;
