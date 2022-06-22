@@ -33,6 +33,40 @@
       "message": "Also +Jakob for src/snapshot OWNER stamp and +Dominik for src/heap OWNER stamp",
       "revId": "304530f76f80673b3d2066df96862a4d640e4429",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e47707_a1fa59ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-06-22T15:38:26Z",
+      "side": 1,
+      "message": "Nice Fix!\nLGTM with nit.\n\nPS: Jakob is still OOO for some time.",
+      "revId": "304530f76f80673b3d2066df96862a4d640e4429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f04d75_52949f90",
+        "filename": "src/snapshot/snapshot-source-sink.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-06-22T15:38:26Z",
+      "side": 1,
+      "message": "nit: The overload/naming is a little confusing.\nMaybe rename it to `PutN` or similar?",
+      "revId": "304530f76f80673b3d2066df96862a4d640e4429",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
