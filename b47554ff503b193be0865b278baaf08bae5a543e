@@ -39,6 +39,30 @@
       },
       "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f00e1a6e_16fdf7c1",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-22T18:38:43Z",
+      "side": 1,
+      "message": "This would be dangling if client Heaps were torn down and their memory unmapped first, which is why I added the shared heap verification before each client Heap teardown in this CL. Maybe I\u0027m misunderstanding though -- is there another way this could become dangling?\n\n\u003e Could we add [...]\n\nHappy to add that `CHECK`.\n\n\u003e E.g. on  Heap::Verify()  that happens for each (shared) GC?\n\nA client Heap might be torn down without any shared GC happening and would create dangling pointers if there was a buggy shared-\u003enon-shared edge.",
+      "parentUuid": "a22028fa_c85cdf07",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
