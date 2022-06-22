@@ -5,6 +5,7 @@
 #include "src/compiler/simplified-operator.h"
 
 #include "include/v8-fast-api-calls.h"
+#include "src/base/functional.h"
 #include "src/base/lazy-instance.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/opcodes.h"
@@ -833,21 +834,20 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(CheckedUint32Div, 2, 1)               \
   V(CheckedUint32Mod, 2, 1)
 
-#define CHECKED_WITH_FEEDBACK_OP_LIST(V)    \
-  V(CheckNumber, 1, 1)                      \
-  V(CheckSmi, 1, 1)                         \
-  V(CheckString, 1, 1)                      \
-  V(CheckBigInt, 1, 1)                      \
-  V(CheckedInt32ToTaggedSigned, 1, 1)       \
-  V(CheckedInt64ToInt32, 1, 1)              \
-  V(CheckedInt64ToTaggedSigned, 1, 1)       \
-  V(CheckedTaggedToArrayIndex, 1, 1)        \
-  V(CheckedTaggedSignedToInt32, 1, 1)       \
-  V(CheckedTaggedToTaggedPointer, 1, 1)     \
-  V(CheckedTaggedToTaggedSigned, 1, 1)      \
-  V(CheckedUint32ToInt32, 1, 1)             \
-  V(CheckedUint32ToTaggedSigned, 1, 1)      \
-  V(CheckedUint64ToInt32, 1, 1)             \
+#define CHECKED_WITH_FEEDBACK_OP_LIST(V) \
+  V(CheckNumber, 1, 1)                   \
+  V(CheckSmi, 1, 1)                      \
+  V(CheckBigInt, 1, 1)                   \
+  V(CheckedInt32ToTaggedSigned, 1, 1)    \
+  V(CheckedInt64ToInt32, 1, 1)           \
+  V(CheckedInt64ToTaggedSigned, 1, 1)    \
+  V(CheckedTaggedToArrayIndex, 1, 1)     \
+  V(CheckedTaggedSignedToInt32, 1, 1)    \
+  V(CheckedTaggedToTaggedPointer, 1, 1)  \
+  V(CheckedTaggedToTaggedSigned, 1, 1)   \
+  V(CheckedUint32ToInt32, 1, 1)          \
+  V(CheckedUint32ToTaggedSigned, 1, 1)   \
+  V(CheckedUint64ToInt32, 1, 1)          \
   V(CheckedUint64ToTaggedSigned, 1, 1)
 
 #define CHECKED_BOUNDS_OP_LIST(V) \
@@ -992,6 +992,25 @@ struct SimplifiedOperatorGlobalCache final {
       kCheckedFloat64ToInt32CheckForMinusZeroOperator;
   CheckedFloat64ToInt32Operator<CheckForMinusZeroMode::kDontCheckForMinusZero>
       kCheckedFloat64ToInt32DontCheckForMinusZeroOperator;
+
+  template <int kMapCount>
+  struct StringCharCodeAtWithFeedbackOperator final : public Operator {
+    StringCharCodeAtWithFeedbackOperator()
+        : Operator(IrOpcode::kStringCharCodeAtWithFeedback,
+                   Operator::kEliminatable, "StringCharCodeAtWithFeedback",
+                   2 + kMapCount, 1, 1, 1, 1, 0) {}
+  };
+#define STRING_CHAR_CODE_AT_WITH_FEEDBACK_OP_LIST(V) \
+  V(1)                                               \
+  V(2)                                               \
+  V(3)                                               \
+  V(4)
+#define DECLARE_STRING_CHAR_CODE_AT_WITH_FEEDBACK_OPERATORS(map_count) \
+  StringCharCodeAtWithFeedbackOperator<map_count>                      \
+      kStringCharCodeAtWithFeedback##map_count##MapOperator;
+  STRING_CHAR_CODE_AT_WITH_FEEDBACK_OP_LIST(
+      DECLARE_STRING_CHAR_CODE_AT_WITH_FEEDBACK_OPERATORS)
+#undef DECLARE_STRING_CHAR_CODE_AT_WITH_FEEDBACK_OPERATORS
 
   template <CheckForMinusZeroMode kMode>
   struct CheckedFloat64ToInt64Operator final
@@ -1288,10 +1307,34 @@ const Operator* SimplifiedOperatorBuilder::CheckBounds(
       feedback, flags);
 }
 
+const Operator* SimplifiedOperatorBuilder::CheckString(
+    const FeedbackSource& feedback, ZoneHandleSet<Map> maps) {
+  CheckStringParameters const parameters(feedback, maps);
+  return zone()->New<Operator1<CheckStringParameters>>(  // --
+      IrOpcode::kCheckString,                            // opcode
+      Operator::kFoldable | Operator::kNoThrow,          // flags
+      "CheckString",                                     // name
+      1, 1, 1, 1, 1, 0,                                  // counts
+      parameters);                                       // parameter
+}
+
+const Operator* SimplifiedOperatorBuilder::StringCharCodeAtWithFeedback(
+    ZoneHandleSet<Map> maps) {
+  StringCharCodeAtWithFeedbackParameters const parameters(maps);
+  return zone()->New<Operator1<StringCharCodeAtWithFeedbackParameters>>(  // --
+      IrOpcode::kStringCharCodeAtWithFeedback,  // opcode
+      Operator::kEliminatable,                  // flags
+      "StringCharCodeAtWithFeedback",           // name
+      2, 1, 1, 1, 1, 0,                         // counts
+      parameters);                              // parameter
+}
+
 bool IsCheckedWithFeedback(const Operator* op) {
 #define CASE(Name, ...) case IrOpcode::k##Name:
   switch (op->opcode()) {
     CHECKED_WITH_FEEDBACK_OP_LIST(CASE) return true;
+    case IrOpcode::kCheckString:
+      return true;
     default:
       return false;
   }
@@ -1736,6 +1779,45 @@ CheckBoundsParameters const& CheckBoundsParametersOf(Operator const* op) {
          op->opcode() == IrOpcode::kCheckedUint32Bounds ||
          op->opcode() == IrOpcode::kCheckedUint64Bounds);
   return OpParameter<CheckBoundsParameters>(op);
+}
+
+bool operator==(CheckStringParameters const& lhs,
+                CheckStringParameters const& rhs) {
+  return lhs.feedback() == rhs.feedback() && lhs.maps() == rhs.maps();
+}
+
+size_t hash_value(CheckStringParameters const& p) {
+  FeedbackSource::Hash feedback_hash;
+  return base::hash_combine(p.maps(), feedback_hash(p.feedback()));
+}
+
+std::ostream& operator<<(std::ostream& os, CheckStringParameters const& p) {
+  return os << p.feedback() << "[" << p.maps() << "]";
+}
+
+CheckStringParameters const& CheckStringParametersOf(Operator const* op) {
+  DCHECK(op->opcode() == IrOpcode::kCheckString);
+  return OpParameter<CheckStringParameters>(op);
+}
+
+bool operator==(StringCharCodeAtWithFeedbackParameters const& lhs,
+                StringCharCodeAtWithFeedbackParameters const& rhs) {
+  return lhs.maps() == rhs.maps();
+}
+
+size_t hash_value(StringCharCodeAtWithFeedbackParameters const& p) {
+  return base::hash_combine(p.maps());
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         StringCharCodeAtWithFeedbackParameters const& p) {
+  return os << p.maps();
+}
+
+StringCharCodeAtWithFeedbackParameters const&
+StringCharCodeAtWithFeedbackParametersOf(Operator const* op) {
+  DCHECK_EQ(op->opcode(), IrOpcode::kStringCharCodeAtWithFeedback);
+  return OpParameter<StringCharCodeAtWithFeedbackParameters>(op);
 }
 
 bool operator==(CheckIfParameters const& lhs, CheckIfParameters const& rhs) {

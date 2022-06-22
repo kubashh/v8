@@ -268,6 +268,50 @@ std::ostream& operator<<(std::ostream&, CheckBoundsParameters const&);
 CheckBoundsParameters const& CheckBoundsParametersOf(Operator const*)
     V8_WARN_UNUSED_RESULT;
 
+class CheckStringParameters final {
+ public:
+  CheckStringParameters(const FeedbackSource& feedback, ZoneHandleSet<Map> maps)
+      : feedback_(feedback), maps_(maps) {}
+
+  FeedbackSource const& feedback() const { return feedback_; }
+  ZoneHandleSet<Map> maps() const { return maps_; }
+
+ private:
+  FeedbackSource feedback_;
+  ZoneHandleSet<Map> maps_;
+};
+
+bool operator==(CheckStringParameters const&, CheckStringParameters const&);
+
+size_t hash_value(CheckStringParameters const&);
+
+std::ostream& operator<<(std::ostream&, CheckStringParameters const&);
+
+CheckStringParameters const& CheckStringParametersOf(Operator const*)
+    V8_WARN_UNUSED_RESULT;
+
+class StringCharCodeAtWithFeedbackParameters final {
+ public:
+  explicit StringCharCodeAtWithFeedbackParameters(ZoneHandleSet<Map> maps)
+      : maps_(maps) {}
+
+  ZoneHandleSet<Map> maps() const { return maps_; }
+
+ private:
+  ZoneHandleSet<Map> maps_;
+};
+
+bool operator==(StringCharCodeAtWithFeedbackParameters const&,
+                StringCharCodeAtWithFeedbackParameters const&);
+
+size_t hash_value(StringCharCodeAtWithFeedbackParameters const&);
+
+std::ostream& operator<<(std::ostream&,
+                         StringCharCodeAtWithFeedbackParameters const&);
+
+StringCharCodeAtWithFeedbackParameters const&
+StringCharCodeAtWithFeedbackParametersOf(Operator const*) V8_WARN_UNUSED_RESULT;
+
 class CheckIfParameters final {
  public:
   explicit CheckIfParameters(DeoptimizeReason reason,
@@ -838,6 +882,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* StringToUpperCaseIntl();
   const Operator* StringSubstring();
 
+  const Operator* StringCharCodeAtWithFeedback(ZoneHandleSet<Map> maps);
+
   const Operator* FindOrderedHashMapEntry();
   const Operator* FindOrderedHashMapEntryForInt32Key();
 
@@ -898,7 +944,11 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckReceiver();
   const Operator* CheckReceiverOrNullOrUndefined();
   const Operator* CheckSmi(const FeedbackSource& feedback);
-  const Operator* CheckString(const FeedbackSource& feedback);
+  const Operator* CheckString(const FeedbackSource& feedback,
+                              ZoneHandleSet<Map> maps);
+  const Operator* CheckString(const FeedbackSource& feedback) {
+    return CheckString(feedback, ZoneHandleSet<Map>());
+  }
   const Operator* CheckSymbol();
 
   const Operator* CheckedFloat64ToInt32(CheckForMinusZeroMode,

@@ -40,6 +40,7 @@ Reduction RedundancyElimination::Reduce(Node* node) {
     case IrOpcode::kBigIntAdd:
     case IrOpcode::kBigIntSubtract:
     case IrOpcode::kStringCharCodeAt:
+    case IrOpcode::kStringCharCodeAtWithFeedback:
     case IrOpcode::kStringCodePointAt:
     case IrOpcode::kStringFromCodePointAt:
     case IrOpcode::kStringSubstring:
@@ -155,6 +156,11 @@ bool CheckSubsumes(Node const* a, Node const* b) {
     } else if (a->opcode() == IrOpcode::kCheckReceiver &&
                b->opcode() == IrOpcode::kCheckReceiverOrNullOrUndefined) {
       // CheckReceiver(node) implies CheckReceiverOrNullOrUndefined(node)
+    } else if (a->opcode() == IrOpcode::kStringCharCodeAtWithFeedback &&
+               b->opcode() == IrOpcode::kStringCharCodeAtWithFeedback) {
+      // op() will differ because StringCharCodeAtWithFeedback is not cached.
+      // Still, a first StringCharCodeAtWithFeedback subsumes a subsequent one
+      // with the same inputs.
     } else if (a->opcode() != b->opcode()) {
       return false;
     } else {
@@ -276,6 +282,18 @@ Reduction RedundancyElimination::ReduceCheckNode(Node* node) {
   if (checks == nullptr) return NoChange();
   // See if we have another check that dominates us.
   if (Node* check = checks->LookupCheck(node)) {
+    if (node->opcode() == IrOpcode::kStringCharCodeAtWithFeedback) {
+      // When removing a StringCharCodeAtWithFeedback, we add its maps to the
+      // other StringCharCodeAtWithFeedback that replaces it.
+      DCHECK_EQ(check->opcode(), IrOpcode::kStringCharCodeAtWithFeedback);
+      StringCharCodeAtWithFeedbackParameters check_params =
+          StringCharCodeAtWithFeedbackParametersOf(node->op());
+      StringCharCodeAtWithFeedbackParameters node_params =
+          StringCharCodeAtWithFeedbackParametersOf(node->op());
+      for (Handle<Map> map : node_params.maps()) {
+        check_params.maps().insert(map, zone());
+      }
+    }
     ReplaceWithValue(node, check);
     return Replace(check);
   }
