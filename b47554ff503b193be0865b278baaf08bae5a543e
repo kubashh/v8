@@ -135,6 +135,30 @@
       },
       "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d77f9205_877b80a5",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-22T20:47:30Z",
+      "side": 1,
+      "message": "Turns out `CHECK_IMPLIES(isolate-\u003eis_shared(), GetIsolateFromWritableObject(p)-\u003eis_shared())`, if `p` is dangling, is also a dangling deref, because `GetIsolateFromWritableObject` gets the Isolate from `MemoryChunk::FromHeapObject()-\u003eGetHeap()`. So if `p`\u0027s `MemoryChunk` is already unmapped, it\u0027ll be a dangling deref.\n\nMechanically, `IsValidHeapObject` basically does the same logic as the suggested `CHECK_IMPLIES` already. For the shared Heap, it checks that `p` is either in the RO heap or in itself.\n\n\nFor adding verification of the shared heap when we do shared GCs, my reading is that this already happens. `PerformSharedGarbageCollection` does a global safepoint then calls out to `PerformGarbageCollection`, which does heap verification to ensure all its pointers are self-contained, effectively checking that there aren\u0027t any backedges.\n\n\ntl;dr: I don\u0027t think there\u0027s any need to add anything actually, since it\u0027ll be redundant.",
+      "parentUuid": "6193cccc_9741582a",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
