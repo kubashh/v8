@@ -6637,8 +6637,15 @@ Reduction JSCallReducer::ReduceStringPrototypeStringAt(
                                     index, receiver_length, effect, control);
 
   // Return the character from the {receiver} as single character string.
-  Node* value = effect = graph()->NewNode(string_access_operator, receiver,
-                                          index, effect, control);
+  Node* value;
+  if (string_access_operator->opcode() == IrOpcode::kStringCodePointAt) {
+    value = effect = graph()->NewNode(string_access_operator, receiver, index,
+                                      effect, control);
+  } else {
+    DCHECK_EQ(string_access_operator->opcode(), IrOpcode::kStringCharCodeAt);
+    value = effect =
+        CreateStringCharCodeAtNode(receiver, index, effect, control);
+  }
 
   ReplaceWithValue(node, value, effect, control);
   return Replace(value);
@@ -6686,6 +6693,51 @@ Reduction JSCallReducer::ReduceStringPrototypeStartsWith(Node* node) {
   return ReplaceWithSubgraph(&a, subgraph);
 }
 
+Node* JSCallReducer::CreateStringCharCodeAtNode(Node* receiver, Node* index,
+                                                Effect effect,
+                                                Control control) {
+  // The effect chain before kStringPrototypeCharAt contains 2 kCheckString: one
+  // introduced by JSCallReducer (which should be the |receiver| parameter of
+  // this function), without maps, and the other one introduced by
+  // JSNativeContextSpecialization, potentially with maps. The 2
+  // CheckString are not necessarily consecutive, so we walk the effect chain to
+  // find the 1st one in order to get the maps. If we can find it and if it does
+  // have maps, we return a kStringCharCodeAtWithFeedback, which will take the
+  // maps as parameters, and, otherwise, we simply return a kStringCharCodeAt.
+
+  if (receiver->opcode() != IrOpcode::kCheckString) {
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+
+  Node* receiver_string = NodeProperties::GetValueInput(receiver, 0);
+  Node* receiver_effect = NodeProperties::GetEffectInput(receiver);
+  while (receiver_effect->opcode() != IrOpcode::kCheckString &&
+         receiver_effect->op()->EffectInputCount() == 1) {
+    receiver_effect = NodeProperties::GetEffectInput(receiver_effect);
+  }
+
+  if (receiver_effect->opcode() != IrOpcode::kCheckString ||
+      NodeProperties::GetValueInput(receiver, 0) != receiver_string) {
+    // We didn't manage to find the 1st kCheckString, where we wanted to find
+    // the maps.
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+
+  const CheckStringParameters& params =
+      CheckStringParametersOf(receiver_effect->op());
+
+  if (params.maps().is_empty()) {
+    return graph()->NewNode(simplified()->StringCharCodeAt(), receiver, index,
+                            effect, control);
+  }
+
+  return graph()->NewNode(
+      simplified()->StringCharCodeAtWithFeedback(params.maps()), receiver,
+      index, effect, control);
+}
+
 // ES section 21.1.3.1 String.prototype.charAt ( pos )
 Reduction JSCallReducer::ReduceStringPrototypeCharAt(Node* node) {
   JSCallNode n(node);
@@ -6712,8 +6764,8 @@ Reduction JSCallReducer::ReduceStringPrototypeCharAt(Node* node) {
                                     index, receiver_length, effect, control);
 
   // Return the character from the {receiver} as single character string.
-  Node* value = effect = graph()->NewNode(simplified()->StringCharCodeAt(),
-                                          receiver, index, effect, control);
+  Node* value = effect =
+      CreateStringCharCodeAtNode(receiver, index, effect, control);
   value = graph()->NewNode(simplified()->StringFromSingleCharCode(), value);
 
   ReplaceWithValue(node, value, effect, control);

@@ -3261,6 +3261,10 @@ class RepresentationSelector {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);
       }
+      case IrOpcode::kStringCharCodeAtWithFeedback: {
+        return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
+                             MachineRepresentation::kWord32);
+      }
       case IrOpcode::kStringCodePointAt: {
         return VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::Word(),
                              MachineRepresentation::kWord32);
@@ -3367,7 +3371,8 @@ class RepresentationSelector {
         return;
       }
       case IrOpcode::kCheckString: {
-        const CheckParameters& params = CheckParametersOf(node->op());
+        const CheckStringParameters& params =
+            CheckStringParametersOf(node->op());
         if (InputIs(node, Type::String())) {
           VisitUnop<T>(node, UseInfo::AnyTagged(),
                        MachineRepresentation::kTaggedPointer);
