@@ -268,6 +268,28 @@ std::ostream& operator<<(std::ostream&, CheckBoundsParameters const&);
 CheckBoundsParameters const& CheckBoundsParametersOf(Operator const*)
     V8_WARN_UNUSED_RESULT;
 
+class CheckStringParameters final {
+ public:
+  CheckStringParameters(const FeedbackSource& feedback, ZoneVector<MapRef> maps)
+      : feedback_(feedback), maps_(maps) {}
+
+  FeedbackSource const& feedback() const { return feedback_; }
+  ZoneVector<MapRef> maps() const { return maps_; }
+
+ private:
+  FeedbackSource feedback_;
+  ZoneVector<MapRef> maps_;
+};
+
+bool operator==(CheckStringParameters const&, CheckStringParameters const&);
+
+size_t hash_value(CheckStringParameters const&);
+
+std::ostream& operator<<(std::ostream&, CheckStringParameters const&);
+
+CheckStringParameters const& CheckStringParametersOf(Operator const*)
+    V8_WARN_UNUSED_RESULT;
+
 class CheckIfParameters final {
  public:
   explicit CheckIfParameters(DeoptimizeReason reason,
@@ -838,6 +860,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* StringToUpperCaseIntl();
   const Operator* StringSubstring();
 
+  const Operator* StringCharCodeAtWithFeedback(int map_count);
+
   const Operator* FindOrderedHashMapEntry();
   const Operator* FindOrderedHashMapEntryForInt32Key();
 
@@ -898,7 +922,12 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckReceiver();
   const Operator* CheckReceiverOrNullOrUndefined();
   const Operator* CheckSmi(const FeedbackSource& feedback);
-  const Operator* CheckString(const FeedbackSource& feedback);
+  const Operator* CheckString(const FeedbackSource& feedback,
+                              ZoneVector<MapRef> maps);
+  const Operator* CheckString(const FeedbackSource& feedback) {
+    // TODO(dmercadier): does that allocate in temporary or permanent storage?
+    return CheckString(feedback, ZoneVector<MapRef>(zone()));
+  }
   const Operator* CheckSymbol();
 
   const Operator* CheckedFloat64ToInt32(CheckForMinusZeroMode,

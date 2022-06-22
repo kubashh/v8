@@ -40,6 +40,7 @@ Reduction RedundancyElimination::Reduce(Node* node) {
     case IrOpcode::kBigIntAdd:
     case IrOpcode::kBigIntSubtract:
     case IrOpcode::kStringCharCodeAt:
+    case IrOpcode::kStringCharCodeAtWithFeedback:
     case IrOpcode::kStringCodePointAt:
     case IrOpcode::kStringFromCodePointAt:
     case IrOpcode::kStringSubstring:
@@ -235,6 +236,7 @@ Node* RedundancyElimination::EffectPathChecks::LookupCheck(Node* node) const {
   for (Check const* check = head_; check != nullptr; check = check->next) {
     if (CheckSubsumes(check->node, node) && TypeSubsumes(node, check->node)) {
       DCHECK(!check->node->IsDead());
+      // TODO(dmercadier): merge maps for CharCodeAtWithFeedback.
       return check->node;
     }
   }
