@@ -87,6 +87,30 @@
       },
       "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8325c95f_b374c7cf",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-22T18:46:37Z",
+      "side": 1,
+      "message": "Oh sure, will add in this CL.\n\n\nTo get even closer to the introduction of the backedge itself, we can also add checks in:\n\n- Torque-generated setters\n- The `set_foo` Object macros\n- CSA helpers\n\nI started doing that at first but it required more refactoring since sometimes you temporarily introduce backedges in certain `Factory` methods for convenience before fixing them up. If that doesn\u0027t seem too intrusive to you happy to do those in a followup CL.",
+      "parentUuid": "ae9dec84_ebdfee9d",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
