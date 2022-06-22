@@ -16,6 +16,24 @@
       "message": "We tried to port PKU from WASM to OS library, which also benefits JavaScript, PTAL, thanks.",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef6fb0c_c8386028",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-06-22T01:12:01Z",
+      "side": 1,
+      "message": "We found this feature can reduce compilation time in sparkplug, there is 30% for speedometer2, 10% for Web Tooling.(We did the test by parsing the log of \u0027--log-function-events\u0027, and get the sum of all baseline compiler compilation time cost)",
+      "parentUuid": "08a879c4_f4c759f5",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
