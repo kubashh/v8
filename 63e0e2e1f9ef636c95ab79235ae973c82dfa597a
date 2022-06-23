@@ -16,6 +16,23 @@
       "message": "Thanks for the review. I\u0027ve made it even shorter. Landing.",
       "revId": "63e0e2e1f9ef636c95ab79235ae973c82dfa597a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a814d9fc_552879fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-23T14:17:40Z",
+      "side": 1,
+      "message": "nice! still LGTM",
+      "revId": "63e0e2e1f9ef636c95ab79235ae973c82dfa597a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
