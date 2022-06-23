@@ -16,6 +16,29 @@
       "message": "Niko: PTAL\nCamillo: FYI, this should fix the linked crasher",
       "revId": "e29b36b1003c6191646e152a3e3e39c8be7b7bf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a0214f_d51dd328",
+        "filename": "src/heap/concurrent-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-23T15:09:38Z",
+      "side": 1,
+      "message": "should we guard the call with `if(filler_size \u003e 0) {` ?",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 71
+      },
+      "revId": "e29b36b1003c6191646e152a3e3e39c8be7b7bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
