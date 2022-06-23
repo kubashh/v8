@@ -3626,6 +3626,7 @@ v8_header_set("v8_internal_headers") {
   }
 
   if (v8_enable_wasm_simd256_revec) {
+    # To create relation chain
     sources += [ "src/compiler/linear-scheduler.h" ]
   }
 
