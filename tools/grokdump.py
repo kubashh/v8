@@ -741,7 +741,7 @@ class MinidumpReader(object):
       return None
     print(("# Looking for platform specific (%s) objdump in "
            "third_party directory.") % platform_filter)
-    objdumps = list(filter(lambda file: platform_filter in file >= 0, objdumps))
+    objdumps = list(filter(lambda file: platform_filter in file, objdumps))
     if len(objdumps) == 0:
       print("# Could not find platform specific objdump in third_party.")
       print("# Make sure you installed the correct SDK.")
