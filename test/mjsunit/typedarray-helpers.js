@@ -168,6 +168,38 @@ function ArrayFillHelper(array, n, start, end) {
   }
 }
 
+function FindHelper(array, p) {
+  return array.find(p);
+}
+
+function ArrayFindHelper(array, p) {
+  return Array.prototype.find.call(array, p);
+}
+
+function FindIndexHelper(array, p) {
+  return array.findIndex(p);
+}
+
+function ArrayFindIndexHelper(array, p) {
+  return Array.prototype.findIndex.call(array, p);
+}
+
+function FindLastHelper(array, p) {
+  return array.findLast(p);
+}
+
+function ArrayFindLastHelper(array, p) {
+  return Array.prototype.findLast.call(array, p);
+}
+
+function FindLastIndexHelper(array, p) {
+  return array.findLastIndex(p);
+}
+
+function ArrayFindLastIndexHelper(array, p) {
+  return Array.prototype.findLastIndex.call(array, p);
+}
+
 function IncludesHelper(array, n, fromIndex) {
   if (typeof n == 'number' &&
       (array instanceof BigInt64Array || array instanceof BigUint64Array)) {
