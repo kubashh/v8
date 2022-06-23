@@ -49,6 +49,17 @@ template("proto_library") {
     generate_descriptor = invoker.generate_descriptor
   }
 
+  # exclude_imports is only used for generating the descriptor. Therefore, the
+  # check needs to be here to avoid complaints from GN about the unused
+  # variable.
+  if (generate_descriptor != "") {
+    if (defined(invoker.exclude_imports)) {
+      exclude_imports = invoker.exclude_imports
+    } else {
+      exclude_imports = false
+    }
+  }
+
   if (defined(invoker.generator_plugin_label)) {
     plugin_host_label = invoker.generator_plugin_label + "($host_toolchain)"
     plugin_path =
@@ -163,6 +174,11 @@ template("proto_library") {
     }
     if (generate_descriptor != "") {
       depfile = "$out_dir/$generate_descriptor.d"
+
+      if (exclude_imports) {
+        args += [ "--exclude-imports" ]
+      }
+
       args += [
         "--include_imports",
         "--descriptor_set_out",

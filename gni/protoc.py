@@ -23,6 +23,14 @@ def main():
   parser.add_argument('--descriptor_set_out', default=None)
   parser.add_argument('--dependency_out', default=None)
   parser.add_argument('protoc')
+  # The meaning of this flag is flipped compared to the corresponding protoc
+  # flag due to this script previously passing --include_imports. Removing the
+  # --include_imports is likely to have unintended consequences.
+  parser.add_argument(
+      "--exclude-imports",
+      help="Do not include imported files into generated descriptor.",
+      action="store_true",
+      default=False)
   args, remaining = parser.parse_known_args()
 
   if args.dependency_out and args.descriptor_set_out:
@@ -31,6 +39,12 @@ def main():
         '--descriptor_set_out', args.descriptor_set_out, '--dependency_out',
         tmp_path
     ]
+    if not args.exclude_imports:
+      # TODO(): v8 is using very old version of protoc. It doesn't support
+      # `--include_imports` argument. Upgrad to latest version and pass
+      # "--include_imports" to it.
+      # custom += [ "--include_imports" ]
+      pass
     try:
       cmd = [args.protoc] + custom + remaining
       subprocess.check_call(cmd)
