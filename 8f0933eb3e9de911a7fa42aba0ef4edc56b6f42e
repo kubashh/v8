@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d3d9e48_b5a38acb",
+        "filename": "gni/proto_library.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1242479
+      },
+      "writtenOn": "2022-06-23T15:53:57Z",
+      "side": 1,
+      "message": "This is *not* the solution. As I explained, the correct fix is to not specify --include_imports below (your comment is not accurate - the flag is very much supported in the protoc v8 and is infact being specified just below).",
+      "range": {
+        "startLine": 18,
+        "startChar": 33,
+        "endLine": 28,
+        "endChar": 42
+      },
+      "revId": "8f0933eb3e9de911a7fa42aba0ef4edc56b6f42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8fa59b7_d6469123",
+        "filename": "gni/proto_library.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1242479
+      },
+      "writtenOn": "2022-06-23T15:53:57Z",
+      "side": 1,
+      "message": "Specified right here.",
+      "range": {
+        "startLine": 176,
+        "startChar": 15,
+        "endLine": 177,
+        "endChar": 28
+      },
+      "revId": "8f0933eb3e9de911a7fa42aba0ef4edc56b6f42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
