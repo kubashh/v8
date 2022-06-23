@@ -16,6 +16,29 @@
       "message": "PTAL.",
       "revId": "5664953e3e640bb04f2ce7f538ec2f25a7daba9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ef4d23_3998704d",
+        "filename": "tools/grokdump.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-06-23T13:58:33Z",
+      "side": 1,
+      "message": "über nit sadly not shorter: \n\n  `list(file for file in objdumps if platform_filter in file)`",
+      "range": {
+        "startLine": 744,
+        "startChar": 20,
+        "endLine": 744,
+        "endChar": 74
+      },
+      "revId": "5664953e3e640bb04f2ce7f538ec2f25a7daba9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
