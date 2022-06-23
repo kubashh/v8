@@ -568,6 +568,14 @@ struct FastApiCallbackOptions {
     uintptr_t data_ptr;
     v8::Value data;
   };
+
+  /**
+   * If the function is invoked from WebAssembly, `wasm_memory_start` points to
+   * the start of the instance's current memory. `wasm_memory_size` is the size
+   * of the memory in bytes.
+   */
+  char* wasm_memory_start;
+  uint64_t wasm_memory_size;
 };
 
 namespace internal {

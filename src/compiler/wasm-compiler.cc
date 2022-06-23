@@ -181,9 +181,9 @@ void WasmGraphBuilder::Start(unsigned params) {
               Param(Linkage::kJSCallClosureParamIndex, "%closure")));
       break;
     case kWasmApiFunctionRefMode:
-      // We need an instance node anyway, because FromJS() needs to pass it to
-      // the WasmIsValidRefValue runtime function.
-      instance_node_ = UndefinedValue();
+      instance_node = gasm_->Load(
+          MachineType::TaggedPointer(), Param(0),
+          wasm::ObjectAccess::ToTagged(WasmApiFunctionRef::kInstanceOffset));
       break;
   }
   graph()->SetEnd(graph()->NewNode(mcgraph()->common()->End(0)));
@@ -7243,6 +7243,33 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         // Convert return value (no conversion needed for wasm)
         [](const CFunctionInfo* signature, Node* c_return_value) {
           return c_return_value;
+        },
+        // Initialize wasm-specific callback options fields
+        [this](Node* options_stack_slot) {
+#ifdef V8_SANDBOXED_POINTERS
+          Node* mem_start = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
+              MemoryStart, MachineType::SandboxedPointer());
+#else
+          Node* mem_start = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
+              MemoryStart, MachineType::UintPtr());
+#endif
+
+          Node* mem_size = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
+              MemorySize, MachineType::UintPtr());
+
+          gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                           kNoWriteBarrier),
+                       options_stack_slot,
+                       static_cast<int>(offsetof(v8::FastApiCallbackOptions,
+                                                 wasm_memory_start)),
+                       mem_start);
+
+          gasm_->Store(StoreRepresentation(MachineRepresentation::kWord64,
+                                           kNoWriteBarrier),
+                       options_stack_slot,
+                       static_cast<int>(offsetof(v8::FastApiCallbackOptions,
+                                                 wasm_memory_size)),
+                       mem_size);
         },
         // Generate fallback slow call if fast call fails
         [this, callable_node, native_context, receiver_node]() -> Node* {
