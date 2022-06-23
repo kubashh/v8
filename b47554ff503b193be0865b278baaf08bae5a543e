@@ -159,6 +159,30 @@
       },
       "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "752256fe_c5ef8600",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-23T08:03:31Z",
+      "side": 1,
+      "message": "Thanks for digging \\o/",
+      "parentUuid": "d77f9205_877b80a5",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "b47554ff503b193be0865b278baaf08bae5a543e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
