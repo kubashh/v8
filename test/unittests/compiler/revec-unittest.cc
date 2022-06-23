@@ -80,13 +80,62 @@ TEST_F(RevecTest, F32x8Add) {
                                   load4, start);
   Node* store2 = graph()->NewNode(machine()->Store(store_rep), mem_store, p3,
                                   add2, store1, start);
-  Node* ret =
-      graph()->NewNode(common()->Return(), zero, store2, graph()->start());
+  Node* ret = graph()->NewNode(common()->Return(), zero, store2, start, start);
   Node* end = graph()->NewNode(common()->End(1), ret);
   graph()->SetEnd(end);
 
   graph()->RecordStore(store1);
   graph()->RecordStore(store2);
+  graph()->SetSimd(true);
+
+  Revectorizer revec(zone(), graph(), mcgraph());
+  EXPECT_TRUE(revec.TryRevectorize(nullptr));
+}
+
+TEST_F(RevecTest, F32x8Mul) {
+  Node* start = graph()->NewNode(common()->Start(4));
+  graph()->SetStart(start);
+
+  Node* zero = graph()->NewNode(common()->Int32Constant(0));
+  Node* sixteen = graph()->NewNode(common()->Int64Constant(16));
+  Node* offset = graph()->NewNode(common()->Int64Constant(23));
+
+  // Wasm array base address
+  Node* p0 = graph()->NewNode(common()->Parameter(0), start);
+  // Load base address
+  Node* p1 = graph()->NewNode(common()->Parameter(0), start);
+  // LoadTransfrom base address
+  Node* p2 = graph()->NewNode(common()->Parameter(1), start);
+  // Store base address
+  Node* p3 = graph()->NewNode(common()->Parameter(2), start);
+
+  LoadRepresentation load_rep(MachineType::Simd128());
+  StoreRepresentation store_rep(MachineRepresentation::kSimd128,
+                                WriteBarrierKind::kNoWriteBarrier);
+  Node* base = graph()->NewNode(machine()->Load(MachineType::Int64()), p0,
+                                offset, start, start);
+  Node* base16 = graph()->NewNode(machine()->Int64Add(), base, sixteen);
+  Node* base16_store = graph()->NewNode(machine()->Int64Add(), base, sixteen);
+  Node* load0 = graph()->NewNode(machine()->ProtectedLoad(load_rep), base, p1,
+                                 base, start);
+  Node* load1 = graph()->NewNode(machine()->ProtectedLoad(load_rep), base16, p1,
+                                 load0, start);
+  Node* load2 = graph()->NewNode(
+      machine()->LoadTransform(MemoryAccessKind::kProtected,
+                               LoadTransformation::kS128Load32Splat),
+      base, p2, load1, start);
+  Node* mul0 = graph()->NewNode(machine()->F32x4Mul(), load0, load2);
+  Node* mul1 = graph()->NewNode(machine()->F32x4Mul(), load1, load2);
+  Node* store0 = graph()->NewNode(machine()->Store(store_rep), base, p3, mul0,
+                                  load2, start);
+  Node* store1 = graph()->NewNode(machine()->Store(store_rep), base16_store, p3,
+                                  mul1, store0, start);
+  Node* ret = graph()->NewNode(common()->Return(), zero, store1, start, start);
+  Node* end = graph()->NewNode(common()->End(1), ret);
+  graph()->SetEnd(end);
+
+  graph()->RecordStore(store0);
+  graph()->RecordStore(store1);
   graph()->SetSimd(true);
 
   Revectorizer revec(zone(), graph(), mcgraph());
