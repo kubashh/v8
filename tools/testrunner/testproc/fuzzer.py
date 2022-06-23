@@ -138,6 +138,7 @@ class Fuzzer(object):
 
 # TODO(majeski): Allow multiple subtests to run at once.
 class FuzzerProc(base.TestProcProducer):
+
   @staticmethod
   def create(options):
     return FuzzerProc(

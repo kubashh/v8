@@ -51,6 +51,7 @@ class Reducer;
   V(TruncateFloat64ToFloat32)            \
   V(TruncateFloat64ToWord32)             \
   V(TruncateInt64ToInt32)                \
+  V(TryTruncateFloat64ToInt64)           \
   V(Word32ReverseBytes)                  \
   V(Word64ReverseBytes)
 

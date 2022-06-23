@@ -28,12 +28,14 @@ sys.path.append(TOOLS_ROOT)
 from testrunner import standard_runner
 from testrunner import num_fuzzer
 from testrunner.utils.test_utils import (
-  temp_base,
-  TestRunnerTest,
-  with_json_output,
+    temp_base,
+    TestRunnerTest,
+    with_json_output,
 )
 
+
 class StandardRunnerTest(TestRunnerTest):
+
   def get_runner_class(self):
     return standard_runner.StandardTestRunner
 
@@ -85,10 +87,8 @@ class StandardRunnerTest(TestRunnerTest):
         result.stdout_includes('sweet/raspberries stress')
         result.has_returncode(0)
       else:
-        result.stdout_includes(
-          'sweet/blackberries default: FAIL')
-        result.stdout_includes(
-          'sweet/blackberries stress: FAIL')
+        result.stdout_includes('sweet/blackberries default: FAIL')
+        result.stdout_includes('sweet/blackberries stress: FAIL')
         result.has_returncode(1)
 
   @unittest.skip("incompatible with test processors")
@@ -122,7 +122,7 @@ class StandardRunnerTest(TestRunnerTest):
 
   def testGN(self):
     """Test running only failing tests in two variants."""
-    result = self.run_tests('--gn',baseroot="testroot5")
+    result = self.run_tests('--gn', baseroot="testroot5")
     result.stdout_includes('>>> Latest GN build found: build')
     result.stdout_includes('Build found: ')
     result.stdout_includes('v8_test_/out.gn/build')
@@ -143,7 +143,8 @@ class StandardRunnerTest(TestRunnerTest):
         '--variants=default',
         '--rerun-failures-count=2',
         '--random-seed=123',
-        '--json-test-results', with_json_output,
+        '--json-test-results',
+        with_json_output,
         'sweet/strawberries',
         infra_staging=False,
     )
@@ -166,7 +167,8 @@ class StandardRunnerTest(TestRunnerTest):
         '--variants=default',
         '--rerun-failures-count=2',
         '--random-seed=123',
-        '--json-test-results', with_json_output,
+        '--json-test-results',
+        with_json_output,
         'sweet',
         baseroot='testroot2',
         infra_staging=False,
@@ -189,16 +191,21 @@ class StandardRunnerTest(TestRunnerTest):
         '--variants=default',
         'sweet/bananas',
         config_overrides=dict(
-          dcheck_always_on=True, is_asan=True, is_cfi=True,
-          is_msan=True, is_tsan=True, is_ubsan_vptr=True, target_cpu='x86',
-          v8_enable_i18n_support=False, v8_target_cpu='x86',
-          v8_enable_verify_csa=False, v8_enable_lite_mode=False,
-          v8_enable_pointer_compression=False,
-          v8_enable_pointer_compression_shared_cage=False,
-          v8_enable_shared_ro_heap=False,
-          v8_enable_sandbox=False
-        )
-    )
+            dcheck_always_on=True,
+            is_asan=True,
+            is_cfi=True,
+            is_msan=True,
+            is_tsan=True,
+            is_ubsan_vptr=True,
+            target_cpu='x86',
+            v8_enable_i18n_support=False,
+            v8_target_cpu='x86',
+            v8_enable_verify_csa=False,
+            v8_enable_lite_mode=False,
+            v8_enable_pointer_compression=False,
+            v8_enable_pointer_compression_shared_cage=False,
+            v8_enable_shared_ro_heap=False,
+            v8_enable_sandbox=False))
     expect_text = (
         '>>> Autodetected:\n'
         'asan\n'
@@ -242,9 +249,7 @@ class StandardRunnerTest(TestRunnerTest):
     """Test using default test suites, though no tests are run since they don't
     exist in a test setting.
     """
-    result = self.run_tests(
-        infra_staging=False,
-    )
+    result = self.run_tests(infra_staging=False,)
     result.stdout_includes('0 tests ran')
     result.has_returncode(2)
 
@@ -354,7 +359,8 @@ class StandardRunnerTest(TestRunnerTest):
         '--progress=dots',
         'sweet/cherries',
         'sweet/bananas',
-        '--no-sorting', '-j1', # make results order deterministic
+        '--no-sorting',
+        '-j1',  # make results order deterministic
         infra_staging=False,
     )
     result.stdout_includes('2 tests ran')
@@ -390,10 +396,10 @@ class StandardRunnerTest(TestRunnerTest):
         '--progress=verbose',
         '--exit-after-n-failures=2',
         '-j1',
-        'sweet/mangoes',       # PASS
+        'sweet/mangoes',  # PASS
         'sweet/strawberries',  # FAIL
         'sweet/blackberries',  # FAIL
-        'sweet/raspberries',   # should not run
+        'sweet/raspberries',  # should not run
     )
     result.stdout_includes('sweet/mangoes default: PASS')
     result.stdout_includes('sweet/strawberries default: FAIL')
@@ -415,29 +421,37 @@ class StandardRunnerTest(TestRunnerTest):
     )
 
     result.stdout_includes(
-        '--test bananas --random-seed=42 --nohard-abort --testing-d8-test-runner')
+        '--test bananas --random-seed=42 --nohard-abort --testing-d8-test-runner'
+    )
     result.has_returncode(0)
 
 
 class NumFuzzerTest(TestRunnerTest):
+
   def get_runner_class(self):
     return num_fuzzer.NumFuzzer
 
   def testNumFuzzer(self):
     result = self.run_tests(
-      '--command-prefix', sys.executable,
-      '--outdir', 'out/build',
+        '--command-prefix',
+        sys.executable,
+        '--outdir',
+        'out/build',
     )
     result.has_returncode(0)
     result.stdout_includes('>>> Autodetected')
 
+
 class OtherTest(TestRunnerTest):
+
   def testStatusFilePresubmit(self):
     """Test that the fake status file is well-formed."""
     with temp_base() as basedir:
       from testrunner.local import statusfile
-      self.assertTrue(statusfile.PresubmitCheck(
-          os.path.join(basedir, 'test', 'sweet', 'sweet.status')))
+      self.assertTrue(
+          statusfile.PresubmitCheck(
+              os.path.join(basedir, 'test', 'sweet', 'sweet.status')))
+
 
 if __name__ == '__main__':
   unittest.main()
