@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a9c219c_5189acfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-23T16:39:15Z",
+      "side": 1,
+      "message": "+syg: see below",
+      "revId": "20d7e6e0d71a6bbb80d5f797fa687b9144a59989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54d952bb_d4b8faa6",
+        "filename": "src/heap/concurrent-allocator-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-23T16:39:15Z",
+      "side": 1,
+      "message": "Shu: `JSAtomicsMutex` seems the only type that requires alignment these days. Unfortuntaly, most aligned allocations are gated behind `USE_ALLOCATION_ALIGNMENT_BOOL` which is only enabled on 32bit. This is a bit of an inconsistency here as we would love to do faster allocations here as well.",
+      "range": {
+        "startLine": 36,
+        "startChar": 5,
+        "endLine": 36,
+        "endChar": 9
+      },
+      "revId": "20d7e6e0d71a6bbb80d5f797fa687b9144a59989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
