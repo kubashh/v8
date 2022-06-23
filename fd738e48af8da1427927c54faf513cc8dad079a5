@@ -50,6 +50,23 @@
       "message": "src/heap lgtm",
       "revId": "fd738e48af8da1427927c54faf513cc8dad079a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7950b6ad_1617c3af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-06-23T11:14:44Z",
+      "side": 1,
+      "message": "Thanks! Landing.",
+      "revId": "fd738e48af8da1427927c54faf513cc8dad079a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
