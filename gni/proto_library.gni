@@ -17,6 +17,16 @@ template("proto_library") {
   assert(defined(invoker.sources))
   proto_sources = invoker.sources
 
+  # |exclude_imports| flag is set in some of the perfetto's
+  # proto_library targets to indicate that we don't need to generate
+  # the proto-descriptor for the protos included in those `x.proto`
+  # files. This flag is unused in v8 because we are using very old
+  # protoc in v8, and it doesn't have support for `--include_imports`
+  # command line option. In future when we upgrade protoc, we can use
+  # this flag, similar to the CL (https://crrev.com/c/2632759) to pass
+  # it to protoc.
+  not_needed(invoker, ["exclude_imports"])
+
   # All the proto imports should be relative to the project root.
   proto_in_dir = "//"
   if (defined(invoker.proto_in_dir)) {
