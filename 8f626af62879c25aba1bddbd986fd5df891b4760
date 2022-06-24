@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eefa7d63_9c7c377b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-24T00:05:05Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec96d49c_c22e9063",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-24T00:05:05Z",
+      "side": 1,
+      "message": "FFIFLFLI!",
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f694b9_78c0fdd3",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-24T00:05:05Z",
+      "side": 1,
+      "message": "I wonder if the default versions should be named something else (`TAFindHelper`?) since the parameter names are named the same except not capitalized. One typo could mean we\u0027re calling the global function instead of the parameter.\n\nCan also rename the parameter names, I don\u0027t feel very strongly at all.\n\nIn fact I don\u0027t feel that strongly that anything be renamed, since it\u0027s probably not *that* big a footgun. Thoughts?",
+      "range": {
+        "startLine": 171,
+        "startChar": 9,
+        "endLine": 171,
+        "endChar": 19
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d8a7a98_1daad21b",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 2679,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-24T00:05:05Z",
+      "side": 1,
+      "message": "Nit: extra space",
+      "range": {
+        "startLine": 2679,
+        "startChar": 50,
+        "endLine": 2679,
+        "endChar": 52
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf499ec0_c2998cc2",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-24T00:05:05Z",
+      "side": 1,
+      "message": "Nit: extra space",
+      "range": {
+        "startLine": 2692,
+        "startChar": 53,
+        "endLine": 2692,
+        "endChar": 55
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
