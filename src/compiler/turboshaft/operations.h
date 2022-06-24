@@ -225,6 +225,8 @@ struct OpProperties {
     return {false, false, false, true};
   }
 };
+std::ostream& operator<<(std::ostream& os, OpProperties prop);
+
 
 // Baseclass for all Turboshaft operations.
 // The `alignas(OpIndex)` is necessary because it is followed by an array of
