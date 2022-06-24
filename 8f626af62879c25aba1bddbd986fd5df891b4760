@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc7f76c9_85bd042d",
+        "filename": "test/mjsunit/typedarray-helpers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-24T06:32:36Z",
+      "side": 1,
+      "message": "Good idea! The tests are so complex that we should take all changes to *not* shoot ourselves in the foot.\n\nI\u0027ll also rename the parameter \"array\" to \"ta\" to make it clearer which one it is.\n\nIn this CL I\u0027ll rename the ones which have the corresponding ArrayFooHelper already there, and I\u0027ll rename the rest as I go.",
+      "parentUuid": "58f694b9_78c0fdd3",
+      "range": {
+        "startLine": 171,
+        "startChar": 9,
+        "endLine": 171,
+        "endChar": 19
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8a7a98_1daad21b",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "190eee85_3e0adb52",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 2679,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-24T06:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d8a7a98_1daad21b",
+      "range": {
+        "startLine": 2679,
+        "startChar": 50,
+        "endLine": 2679,
+        "endChar": 52
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf499ec0_c2998cc2",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-06-24T00:05:05Z",
       "side": 1,
       "message": "Nit: extra space",
+      "range": {
+        "startLine": 2692,
+        "startChar": 53,
+        "endLine": 2692,
+        "endChar": 55
+      },
+      "revId": "8f626af62879c25aba1bddbd986fd5df891b4760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "963a3e7f_486ba565",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-24T06:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf499ec0_c2998cc2",
       "range": {
         "startLine": 2692,
         "startChar": 53,
