@@ -1,0 +1,46 @@
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// Flags: --no-liftoff --experimental-wasm-gc
+
+d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
+
+let builder = new WasmModuleBuilder();
+let supertype = builder.addStruct([]);
+let sub1 = builder.addStruct([makeField(kWasmI32, true)], supertype);
+let sub2 = builder.addStruct([makeField(kWasmF64, true)], supertype);
+
+let crash = builder.addFunction("crash", kSig_v_i).exportFunc()
+ .addLocals(wasmOptRefType(sub1), 1)
+ .addBody([
+   kGCPrefix, kExprStructNewDefault, sub1,
+   kExprLocalSet, 1,
+   kExprLocalGet, 0,
+   kExprI32Eqz,
+   kExprIf, kWasmVoid,
+     kExprLocalGet, 1,
+     kGCPrefix, kExprStructGet, sub1, 0,
+     kExprDrop,
+   kExprElse,
+     kExprLocalGet, 1,
+     kGCPrefix, kExprRefCastStatic, sub2,
+     kGCPrefix, kExprStructGet, sub2, 0,
+     kExprDrop,
+   kExprEnd,
+]);
+
+let instance = builder.instantiate();
+instance.exports.crash(0);
+// With a dependency on test/mjsunit/mjsunit.js, the rest can be just:
+// assertThrows(() => instance.exports.crash(1),
+//              WebAssembly.RuntimeError, 'illegal cast');
+try {
+ instance.exports.crash(1);
+ console.log("ERROR: expected trap");
+} catch (e) {
+ if (!(e instanceof WebAssembly.RuntimeError) ||
+     e.message !== "illegal cast") {
+   console.log("ERROR: expected 'illegal cast' trap");
+ }
+}
