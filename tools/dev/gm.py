@@ -46,13 +46,13 @@ ARCHES = ["ia32", "x64", "arm", "arm64", "mipsel", "mips64el", "ppc", "ppc64",
 DEFAULT_ARCHES = ["ia32", "x64", "arm", "arm64"]
 # Modes that this script understands.
 MODES = {
-  "release": "release",
-  "rel": "release",
-  "debug": "debug",
-  "dbg": "debug",
-  "optdebug": "optdebug",
-  "opt": "optdebug"
-  }
+    "release": "release",
+    "rel": "release",
+    "debug": "debug",
+    "dbg": "debug",
+    "optdebug": "optdebug",
+    "opt": "optdebug"
+}
 # Modes that get built/run when you don't specify any.
 DEFAULT_MODES = ["release", "debug"]
 # Build targets that can be manually specified.
@@ -104,9 +104,11 @@ HELP = """<arch> can be any of: %(arches)s
  - tests (build test binaries)
  - check (build test binaries, run most tests)
  - checkall (build all binaries, run more tests)
-""" % {"arches": " ".join(ARCHES),
-       "modes": " ".join(MODES.keys()),
-       "targets": ", ".join(TARGETS)}
+""" % {
+    "arches": " ".join(ARCHES),
+    "modes": " ".join(MODES.keys()),
+    "targets": ", ".join(TARGETS)
+}
 
 TESTSUITES_TARGETS = {"benchmarks": "d8",
               "bigint": "bigint_shell",
