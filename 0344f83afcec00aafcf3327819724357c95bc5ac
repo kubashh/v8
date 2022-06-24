@@ -16,6 +16,46 @@
       "message": "Jakob, PTAL and thanks for the reproducer!",
       "revId": "0344f83afcec00aafcf3327819724357c95bc5ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2637df_c7b5a6f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-24T12:50:44Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "0344f83afcec00aafcf3327819724357c95bc5ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "158ae162_dba6aa97",
+        "filename": "test/mjsunit/regress/wasm/wasm-typer-incompatible-ref-cast.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-24T12:50:44Z",
+      "side": 1,
+      "message": "As line 35 says: all this should be just\n\n  assertThrows(() \u003d\u003e instance.exports.crash(1),\n               WebAssembly.RuntimeError, \u0027illegal cast\u0027);",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 1
+      },
+      "revId": "0344f83afcec00aafcf3327819724357c95bc5ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
