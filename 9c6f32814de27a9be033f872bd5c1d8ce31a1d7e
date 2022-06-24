@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d5464e9_abc58e5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-24T14:50:08Z",
+      "side": 1,
+      "message": "As discussed, I am removing this optimization. I am leaving the test, since it can\u0027t hurt to have another one. PTAL.",
+      "revId": "9c6f32814de27a9be033f872bd5c1d8ce31a1d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
