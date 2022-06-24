@@ -56,6 +56,30 @@
       },
       "revId": "0344f83afcec00aafcf3327819724357c95bc5ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9a476d_64fb7bab",
+        "filename": "test/mjsunit/regress/wasm/wasm-typer-incompatible-ref-cast.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-06-24T13:02:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "158ae162_dba6aa97",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 1
+      },
+      "revId": "0344f83afcec00aafcf3327819724357c95bc5ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
