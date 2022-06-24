@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c138e1e5_3d2fb9ac",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-24T10:00:53Z",
+      "side": 1,
+      "message": "This is not very future-proof, if we change/add more flags to `OpProperties`. I\u0027d suggest to add an `operator\u003d\u003d` to OpProperties and compare with `OpProperties::Pure()`, `OpProperties::AnySideEffects()`, ... and put `UNREACHABLE()` in the last else-case.",
+      "range": {
+        "startLine": 425,
+        "startChar": 2,
+        "endLine": 437,
+        "endChar": 3
+      },
+      "revId": "2fcd978229a240937338fad72ff3475158626135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
