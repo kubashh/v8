@@ -217,10 +217,13 @@ Reduction BranchElimination::ReduceTrapConditional(Node* node) {
 
           Node* effect_input = NodeProperties::GetEffectInput(node);
           Node* other_effect = nullptr;
-          for (Node* use : effect_input->uses()) {
-            if (use != node) {
+          int effect_edge_index = -1;
+          for (Edge use_edge : effect_input->use_edges()) {
+            if (NodeProperties::IsEffectEdge(use_edge) &&
+                use_edge.from() != node) {
               DCHECK_EQ(other_effect, nullptr);
-              other_effect = use;
+              other_effect = use_edge.from();
+              effect_edge_index = use_edge.index();
             }
           }
           DCHECK_NOT_NULL(other_effect);
@@ -229,8 +232,7 @@ Reduction BranchElimination::ReduceTrapConditional(Node* node) {
                              NodeProperties::GetControlInput(branch));
           ReplaceWithValue(node, dead(), dead(), dead());
           ReplaceWithValue(other_if_branch, dead(), dead(), node);
-          other_effect->ReplaceInput(
-              NodeProperties::FirstEffectIndex(other_effect), node);
+          other_effect->ReplaceInput(effect_edge_index, node);
           other_if_branch->Kill();
           control_input->Kill();
           branch->Kill();
