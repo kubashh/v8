@@ -16,6 +16,29 @@
       "message": "Tobias, PTAL.",
       "revId": "088c8c3a527ff7099e95db07d9258aad3dfd03a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03590897_31f7c168",
+        "filename": "src/compiler/branch-elimination.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-24T12:45:31Z",
+      "side": 1,
+      "message": "I\u0027m sorry I missed this in the first review, but this approach fundamentally can\u0027t work. There is no guarantee the computed `other_effect` belongs to the `IfFalse` control node, as there could be multiple such nodes. Consider another branch before with no effectful node in-between, with the effect chain splitting into three paths. Then the predecessor on the effect chain has three uses, two in addition to the `TrapIf` node. And distinguishing them is quite hard, one would need to keep visiting uses until hitting the control chain again, and then go backwards in the control chain until we hit our `IfFalse` node. All of this is caused be the fact that `IfTrue`/`IfFalse` are not on the effect chain... -.-",
+      "range": {
+        "startLine": 220,
+        "startChar": 10,
+        "endLine": 229,
+        "endChar": 40
+      },
+      "revId": "088c8c3a527ff7099e95db07d9258aad3dfd03a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
