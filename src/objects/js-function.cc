@@ -576,6 +576,168 @@ void JSFunction::CreateAndAttachFeedbackVector(
   function->SetInterruptBudget(isolate);
 }
 
+static const int stable_within_one_tick_index[32][2] = {
+    {0, 2},  {2, 2},  {4, 1},  {5, 1},  {6, 3},  {9, 1},  {10, 4}, {14, 4},
+    {18, 5}, {23, 3}, {26, 0}, {26, 2}, {28, 2}, {30, 2}, {32, 3}, {35, 2},
+    {37, 2}, {39, 2}, {41, 1}, {42, 1}, {43, 1}, {44, 2}, {46, 0}, {46, 0},
+    {46, 0}, {46, 0}, {46, 0}, {46, 0}, {46, 0}, {46, 0}, {46, 0}, {46, 1},
+};
+
+static int stable_within_one_tick_script_length[12] = {24, 16, 12, 16, 42, 9,
+                                                       14, 40, 9,  9,  6,  37};
+
+static const char stable_within_one_tick_script[12][64] = {
+    "react-with-addons.min.js",
+    "react-dom.min.js",
+    "build.min.js",
+    "main.18b409e1.js",
+    "vendor-820919567eb7bd4d9fac358a90a5aac4.js",
+    "vendor.js",
+    "angular.min.js",
+    "polyfills.3a2aed82a0c9b24e6585.bundle.js",
+    "jquery.js",
+    "bundle.js",
+    "elm.js",
+    "vendor.9a296bbc1909830a9106.bundle.js",
+};
+
+static const int stable_within_one_tick_script_index[][5] = {
+    {1, 4},  // "U"
+    {1, 7},  // "w"
+
+    {1, 6},   // "Ga"
+    {1, 10},  // "A2"
+
+    {1, 5},  // "set"
+
+    {1, 10},  // "Cons"
+
+    {1, 3},   // "value"
+    {1, 10},  // "foldr"
+    {1, 9},   // "patch"
+
+    {1, 5},   // "inline"
+    {1, 11},  // "t.check"
+    {1, 5},   // "content"
+    {1, 5},   // "trigger"
+    {1, 10},  // "toArray"
+
+    {1, 4},   // "n.update"
+    {1, 10},  // "nodeHelp"
+    {1, 10},  // "diffHelp"
+    {1, 9},   // "setState"
+
+    {1, 5},   // "attribute"
+    {1, 10},  //"makePatch"
+    {1, 10},  // "fromArray"
+    {1, 5},   // "sendEvent"
+    {1, 8},   // "cleanData"
+
+    {1, 5},   // "dirtyCheck"
+    {1, 10},  // "applyPatch"
+    {1, 5},   // "unwatchKey"
+
+    {1, 10},  // "diffChildren"
+    {1, 5},   // "notifyExcept"
+
+    {1, 10},  // "organizeFacts"
+    {1, 3},   // "updateWrapper"
+
+    {1, 5},  // "removeListener"
+    {1, 9},  // "patchComponent"
+
+    {1, 0},  // "p.createElement"
+    {1, 3},  // "addDomNodesHelp"
+    {1, 3},  // "l.createElement"
+
+    {1, 1},   // "receiveComponent"
+    {1, 10},  // "applyPatchesHelp"
+
+    {1, 9},  // "queueStateChanges"
+    {1, 5},  // "notifySubscribers"
+
+    {1, 11},  // "t.forEachOperation"
+    {1, 1},   // "a.shouldUpdateRefs"
+
+    {1, 5},  // "removeFromListeners"
+
+    {1, 1},  // "_updateDOMProperties"
+
+    {1, 2},  // "shouldComponentUpdate"
+    {1, 9},  // "patchNonKeyedChildren"
+
+    {1, 10},  // "_evancz$elm_todomvc$Todo_Task$view"
+};
+
+static const char stable_within_one_tick_func[][36] = {
+    "U",
+    "w",
+
+    "Ga",
+    "A2",
+
+    "set",
+
+    "Cons",
+
+    "value",
+    "foldr",
+    "patch",
+
+    "inline",
+
+    "t.check",
+    "content",
+    "trigger",
+    "toArray",
+
+    "n.update",
+    "nodeHelp",
+    "diffHelp",
+    "setState",
+
+    "attribute",
+    "makePatch",
+    "fromArray",
+    "sendEvent",
+    "cleanData",
+
+    "dirtyCheck",
+    "applyPatch",
+    "unwatchKey",
+
+    "diffChildren",
+    "notifyExcept",
+
+    "organizeFacts",
+    "updateWrapper",
+
+    "removeListener",
+    "patchComponent",
+
+    "p.createElement",
+    "addDomNodesHelp",
+    "l.createElement",
+
+    "receiveComponent",
+    "applyPatchesHelp",
+
+    "queueStateChanges",
+    "notifySubscribers",
+
+    "t.forEachOperation",
+    "a.shouldUpdateRefs",
+
+    "removeFromListeners",
+
+    "_updateDOMProperties",
+
+    "shouldComponentUpdate",
+    "patchNonKeyedChildren",
+
+    "_evancz$elm_todomvc$Todo_Task$view",
+};
+
 // static
 void JSFunction::InitializeFeedbackCell(
     Handle<JSFunction> function, IsCompiledScope* is_compiled_scope,
@@ -601,19 +763,54 @@ void JSFunction::InitializeFeedbackCell(
         function->closure_feedback_cell_array().length(),
         function->shared().feedback_metadata().create_closure_slot_count());
   }
+  SharedFunctionInfo shared = function->shared();
+  String func_name = shared.Name();
+  if (shared.script().IsScript() &&
+      Script::cast(shared.script()).name().IsString()) {
+    String script_name = String::cast(Script::cast(shared.script()).name());
+    int length = func_name.length();
+    if (length == 0 && length <= 32) {
+      for (int i = 0; i < stable_within_one_tick_index[length - 1][1]; i++) {
+        if (strcmp(func_name.ToCString().get(),
+                   stable_within_one_tick_func
+                       [stable_within_one_tick_index[length - 1][0] + i]) ==
+            0) {
+          int func_index = stable_within_one_tick_index[length - 1][0] + i;
+          for (int j = 0;
+               j < stable_within_one_tick_script_index[func_index][0]; j++) {
+            int script_index =
+                stable_within_one_tick_script_index[func_index][j + 1];
+            if (strcmp(script_name.ToCString().get() + script_name.length() -
+                           stable_within_one_tick_script_length[script_index],
+                       stable_within_one_tick_script[script_index]) == 0) {
+              shared.set_stable_within_one_tick(true);
+            }
+          }
+        }
+      }
+    }
+  }
 
   const bool needs_feedback_vector =
       !FLAG_lazy_feedback_allocation || FLAG_always_turbofan ||
       // We also need a feedback vector for certain log events, collecting type
       // profile and more precise code coverage.
       FLAG_log_function_events || !isolate->is_best_effort_code_coverage() ||
-      isolate->is_collecting_type_profile();
+      isolate->is_collecting_type_profile() || shared.stable_within_one_tick();
 
   if (needs_feedback_vector) {
     CreateAndAttachFeedbackVector(isolate, function, is_compiled_scope);
   } else {
     EnsureClosureFeedbackCellArray(function,
                                    reset_budget_for_feedback_allocation);
+  }
+  if (function->shared().stable_within_one_tick() &&
+      CanCompileWithBaseline(isolate, function->shared()) &&
+      !function->ActiveTierIsBaseline()) {
+    IsCompiledScope is_compiled_scope(
+        function->shared().is_compiled_scope(isolate));
+    Compiler::CompileBaseline(isolate, function, Compiler::CLEAR_EXCEPTION,
+                              &is_compiled_scope);
   }
 }
 

@@ -454,6 +454,8 @@ class SharedFunctionInfo
   // Indicates if this function can be lazy compiled.
   DECL_BOOLEAN_ACCESSORS(allows_lazy_compilation)
 
+  DECL_BOOLEAN_ACCESSORS(stable_within_one_tick)
+
   // Indicates the language mode.
   inline LanguageMode language_mode() const;
   inline void set_language_mode(LanguageMode language_mode);
