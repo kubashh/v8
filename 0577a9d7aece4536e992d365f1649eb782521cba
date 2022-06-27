@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4453e8ea_90d713ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-06-27T13:36:06Z",
+      "side": 1,
+      "message": "lgtm \u0026 nit-ed",
+      "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68060ce2_78e87d8b",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-06-27T13:36:06Z",
+      "side": 1,
+      "message": "Should branches be supported by our auto-rollers?",
+      "range": {
+        "startLine": 285,
+        "startChar": 93,
+        "endLine": 285,
+        "endChar": 110
+      },
+      "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
