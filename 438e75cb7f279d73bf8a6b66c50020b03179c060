@@ -50,6 +50,24 @@
       "message": "Nit: indention seems wrong",
       "revId": "438e75cb7f279d73bf8a6b66c50020b03179c060",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d865c8a9_e8e3442e",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-06-27T12:16:14Z",
+      "side": 1,
+      "message": "Done\n\nclang-format hiccup",
+      "parentUuid": "25825206_e9f8d207",
+      "revId": "438e75cb7f279d73bf8a6b66c50020b03179c060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
