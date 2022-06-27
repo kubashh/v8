@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ae0a22_0aa4b4c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-06-27T06:17:54Z",
+      "side": 1,
+      "message": "Hi Jakob Kummerow,\n\nCould you please help to review this cleanup patch? Parameter of JavaScriptFrame and UnoptimizedFrame was removed in OSR or tiering related optimization patches.",
+      "revId": "c9383efb31c20033c904baf3613ed194fbf390cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
