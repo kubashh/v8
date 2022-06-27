@@ -87,6 +87,30 @@
       },
       "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e1be151_959803e2",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-06-27T21:12:09Z",
+      "side": 1,
+      "message": "The library did not get an update since December 2020, so the update process might actually still work but there was no chance to confirm that.\n\nI am wondering why we don\u0027t use https://github.com/psf/requests, which is (nowadays) the upstream repository for python requests (also, it includes the commit which was used before).\n\n\n[1] https://chromium.googlesource.com/external/github.com/kennethreitz/requests.git",
+      "parentUuid": "cbdf6624_468daa9a",
+      "range": {
+        "startLine": 285,
+        "startChar": 93,
+        "endLine": 285,
+        "endChar": 110
+      },
+      "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
