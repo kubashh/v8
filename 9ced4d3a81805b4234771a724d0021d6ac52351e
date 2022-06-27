@@ -33,6 +33,24 @@
       "message": "Should we put a comment here saying how the archs play into the cross-compile triple and what the extra V8 arch for JIT means?",
       "revId": "9ced4d3a81805b4234771a724d0021d6ac52351e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c9ee6df_4ce173a0",
+        "filename": "include/v8config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-06-27T11:39:13Z",
+      "side": 1,
+      "message": "Done (added a comment explaining what V8_HOST_ARCH_* and V8_TARGET_ARCH_* are).",
+      "parentUuid": "45457e59_502424b9",
+      "revId": "9ced4d3a81805b4234771a724d0021d6ac52351e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
