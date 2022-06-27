@@ -193,14 +193,14 @@ class BuildConfig(object):
   def timeout_scalefactor(self, initial_factor):
     """Increases timeout for slow build configurations."""
     factors = dict(
-      lite_mode         = 2,
-      predictable       = 4,
-      tsan              = 2,
-      use_sanitizer     = 1.5,
-      is_full_debug     = 4,
+        lite_mode=2,
+        predictable=4,
+        tsan=2,
+        use_sanitizer=1.5,
+        is_full_debug=4,
     )
     result = initial_factor
-    for k,v in factors.items():
+    for k, v in factors.items():
       if getattr(self, k, False):
         result *= v
     if self.arch in SLOW_ARCHS:
@@ -209,24 +209,24 @@ class BuildConfig(object):
 
   def __str__(self):
     attrs = [
-      'asan',
-      'cfi_vptr',
-      'control_flow_integrity',
-      'dcheck_always_on',
-      'gcov_coverage',
-      'msan',
-      'no_i18n',
-      'predictable',
-      'tsan',
-      'ubsan_vptr',
-      'verify_csa',
-      'lite_mode',
-      'pointer_compression',
-      'pointer_compression_shared_cage',
-      'sandbox',
-      'third_party_heap',
-      'webassembly',
-      'dict_property_const_tracking',
+        'asan',
+        'cfi_vptr',
+        'control_flow_integrity',
+        'dcheck_always_on',
+        'gcov_coverage',
+        'msan',
+        'no_i18n',
+        'predictable',
+        'tsan',
+        'ubsan_vptr',
+        'verify_csa',
+        'lite_mode',
+        'pointer_compression',
+        'pointer_compression_shared_cage',
+        'sandbox',
+        'third_party_heap',
+        'webassembly',
+        'dict_property_const_tracking',
     ]
     detected_options = [attr for attr in attrs if getattr(self, attr, False)]
     return '\n'.join(detected_options)
@@ -246,7 +246,7 @@ class BaseTestRunner(object):
   @property
   def framework_name(self):
     """String name of the base-runner subclass, used in test results."""
-    raise NotImplementedError() # pragma: no cover
+    raise NotImplementedError()  # pragma: no cover
 
   def execute(self, sys_args=None):
     if sys_args is None:  # pragma: no cover
@@ -282,8 +282,8 @@ class BaseTestRunner(object):
         names = self._args_to_suite_names(args)
         tests = self._load_testsuite_generators(names)
         self._setup_env()
-        print(">>> Running tests for %s.%s" % (self.build_config.arch,
-                                               self.mode_options.label))
+        print(">>> Running tests for %s.%s" %
+              (self.build_config.arch, self.mode_options.label))
         exit_code = self._do_execute(tests, args)
         if exit_code == utils.EXIT_CODE_FAILURES and self.options.json_test_results:
           print("Force exit code 0 after failures. Json test results file "
@@ -403,7 +403,7 @@ class BaseTestRunner(object):
                            "setting this option indicates manual usage.")
 
   def _add_parser_options(self, parser):
-    pass # pragma: no cover
+    pass  # pragma: no cover
 
   def _parse_args(self, parser, sys_args):
     options, args = parser.parse_args(sys_args)
@@ -453,8 +453,8 @@ class BaseTestRunner(object):
       try:
         build_config_json = json.load(f)
       except Exception:  # pragma: no cover
-        print("%s exists but contains invalid json. Is your build up-to-date?"
-              % build_config_path)
+        print("%s exists but contains invalid json. Is your build up-to-date?" %
+              build_config_path)
         raise TestRunnerError()
 
     return BuildConfig(build_config_json)
@@ -464,6 +464,7 @@ class BaseTestRunner(object):
   # outdir
   # outdir on bots
   def _possible_outdirs(self):
+
     def outdirs():
       if self.options.gn:
         yield self._get_gn_outdir()
@@ -501,8 +502,8 @@ class BaseTestRunner(object):
       self.mode_options = RELEASE_MODE
 
     if self.options.arch and self.options.arch != self.build_config.arch:
-      print('--arch value (%s) inconsistent with build config (%s).' % (
-        self.options.arch, self.build_config.arch))
+      print('--arch value (%s) inconsistent with build config (%s).' %
+            (self.options.arch, self.build_config.arch))
       raise TestRunnerError()
 
     if self.options.shell_dir:  # pragma: no cover
@@ -517,10 +518,11 @@ class BaseTestRunner(object):
         self.options.j = multiprocessing.cpu_count()
 
     self.options.command_prefix = shlex.split(self.options.command_prefix)
-    self.options.extra_flags = sum(list(map(shlex.split, self.options.extra_flags)), [])
+    self.options.extra_flags = sum(
+        list(map(shlex.split, self.options.extra_flags)), [])
 
   def _process_options(self):
-    pass # pragma: no cover
+    pass  # pragma: no cover
 
   def _setup_env(self):
     # Use the v8 root as cwd as some test cases use "load" with relative paths.
@@ -613,7 +615,7 @@ class BaseTestRunner(object):
     return [name for name in args_names if name in all_names]
 
   def _get_default_suite_names(self):
-    return [] # pragma: no cover
+    return []  # pragma: no cover
 
   def _load_testsuite_generators(self, names):
     test_config = self._create_test_config()
@@ -649,13 +651,10 @@ class BaseTestRunner(object):
       self.build_config.arch in ['mipsel', 'mips', 'mips64', 'mips64el'] and
       self.build_config.mips_arch_variant)
 
-    no_simd_hardware = any(
-        i in self.options.extra_flags for i in ['--noenable-sse3',
-                                           '--no-enable-sse3',
-                                           '--noenable-ssse3',
-                                           '--no-enable-ssse3',
-                                           '--noenable-sse4-1',
-                                           '--no-enable-sse4_1'])
+    no_simd_hardware = any(i in self.options.extra_flags for i in [
+        '--noenable-sse3', '--no-enable-sse3', '--noenable-ssse3',
+        '--no-enable-ssse3', '--noenable-sse4-1', '--no-enable-sse4_1'
+    ])
 
     # Set no_simd_hardware on architectures without Simd enabled.
     if self.build_config.arch == 'mips64el' or \
@@ -678,53 +677,92 @@ class BaseTestRunner(object):
       no_simd_hardware = True
 
     return {
-      "arch": self.build_config.arch,
-      "asan": self.build_config.asan,
-      "byteorder": sys.byteorder,
-      "cfi_vptr": self.build_config.cfi_vptr,
-      "control_flow_integrity": self.build_config.control_flow_integrity,
-      "concurrent_marking": self.build_config.concurrent_marking,
-      "single_generation": self.build_config.single_generation,
-      "dcheck_always_on": self.build_config.dcheck_always_on,
-      "deopt_fuzzer": False,
-      "endurance_fuzzer": False,
-      "gc_fuzzer": False,
-      "gc_stress": False,
-      "gcov_coverage": self.build_config.gcov_coverage,
-      "has_webassembly": self.build_config.webassembly,
-      "isolates": self.options.isolates,
-      "is_clang": self.build_config.is_clang,
-      "is_full_debug": self.build_config.is_full_debug,
-      "mips_arch_variant": mips_arch_variant,
-      "mode": self.mode_options.status_mode,
-      "msan": self.build_config.msan,
-      "no_harness": self.options.no_harness,
-      "no_i18n": self.build_config.no_i18n,
-      "no_simd_hardware": no_simd_hardware,
-      "novfp3": False,
-      "optimize_for_size": "--optimize-for-size" in self.options.extra_flags,
-      "predictable": self.build_config.predictable,
-      "simd_mips": simd_mips,
-      "simulator_run": self.build_config.simulator_run and
-                       not self.options.dont_skip_simulator_slow_tests,
-      "system": self.target_os,
-      "third_party_heap": self.build_config.third_party_heap,
-      "tsan": self.build_config.tsan,
-      "ubsan_vptr": self.build_config.ubsan_vptr,
-      "verify_csa": self.build_config.verify_csa,
-      "lite_mode": self.build_config.lite_mode,
-      "pointer_compression": self.build_config.pointer_compression,
-      "pointer_compression_shared_cage": self.build_config.pointer_compression_shared_cage,
-      "no_js_shared_memory": (not self.build_config.shared_ro_heap) or
-                             (self.build_config.pointer_compression and
-                              not self.build_config.pointer_compression_shared_cage),
-      "sandbox": self.build_config.sandbox,
-      "dict_property_const_tracking": self.build_config.dict_property_const_tracking,
+        "arch":
+            self.build_config.arch,
+        "asan":
+            self.build_config.asan,
+        "byteorder":
+            sys.byteorder,
+        "cfi_vptr":
+            self.build_config.cfi_vptr,
+        "control_flow_integrity":
+            self.build_config.control_flow_integrity,
+        "concurrent_marking":
+            self.build_config.concurrent_marking,
+        "single_generation":
+            self.build_config.single_generation,
+        "dcheck_always_on":
+            self.build_config.dcheck_always_on,
+        "deopt_fuzzer":
+            False,
+        "endurance_fuzzer":
+            False,
+        "gc_fuzzer":
+            False,
+        "gc_stress":
+            False,
+        "gcov_coverage":
+            self.build_config.gcov_coverage,
+        "has_webassembly":
+            self.build_config.webassembly,
+        "isolates":
+            self.options.isolates,
+        "is_clang":
+            self.build_config.is_clang,
+        "is_full_debug":
+            self.build_config.is_full_debug,
+        "mips_arch_variant":
+            mips_arch_variant,
+        "mode":
+            self.mode_options.status_mode,
+        "msan":
+            self.build_config.msan,
+        "no_harness":
+            self.options.no_harness,
+        "no_i18n":
+            self.build_config.no_i18n,
+        "no_simd_hardware":
+            no_simd_hardware,
+        "novfp3":
+            False,
+        "optimize_for_size":
+            "--optimize-for-size" in self.options.extra_flags,
+        "predictable":
+            self.build_config.predictable,
+        "simd_mips":
+            simd_mips,
+        "simulator_run":
+            self.build_config.simulator_run
+            and not self.options.dont_skip_simulator_slow_tests,
+        "system":
+            self.target_os,
+        "third_party_heap":
+            self.build_config.third_party_heap,
+        "tsan":
+            self.build_config.tsan,
+        "ubsan_vptr":
+            self.build_config.ubsan_vptr,
+        "verify_csa":
+            self.build_config.verify_csa,
+        "lite_mode":
+            self.build_config.lite_mode,
+        "pointer_compression":
+            self.build_config.pointer_compression,
+        "pointer_compression_shared_cage":
+            self.build_config.pointer_compression_shared_cage,
+        "no_js_shared_memory":
+            (not self.build_config.shared_ro_heap) or
+            (self.build_config.pointer_compression and
+             not self.build_config.pointer_compression_shared_cage),
+        "sandbox":
+            self.build_config.sandbox,
+        "dict_property_const_tracking":
+            self.build_config.dict_property_const_tracking,
     }
 
   def _runner_flags(self):
     """Extra default flags specific to the test runner implementation."""
-    return [] # pragma: no cover
+    return []  # pragma: no cover
 
   def _create_test_config(self):
     timeout = self.build_config.timeout_scalefactor(
@@ -746,7 +784,7 @@ class BaseTestRunner(object):
 
   # TODO(majeski): remove options & args parameters
   def _do_execute(self, suites, args):
-    raise NotImplementedError() # pragma: no coverage
+    raise NotImplementedError()  # pragma: no coverage
 
   def _prepare_procs(self, procs):
     procs = list([_f for _f in procs if _f])
