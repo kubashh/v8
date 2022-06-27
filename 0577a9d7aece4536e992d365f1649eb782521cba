@@ -111,6 +111,30 @@
       },
       "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc02898_91445692",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-27T21:23:30Z",
+      "side": 1,
+      "message": "Feel free to file a bug to chromium or just change it there. From V8 p-o-v: I just put it to what chromium uses. Another requirement would be another googlesource mirror.",
+      "parentUuid": "4e1be151_959803e2",
+      "range": {
+        "startLine": 285,
+        "startChar": 93,
+        "endLine": 285,
+        "endChar": 110
+      },
+      "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
