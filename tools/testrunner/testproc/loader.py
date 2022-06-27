@@ -14,7 +14,6 @@ class LoadProc(base.TestProc):
     self.tests = tests
     self.initial_batch_size = initial_batch_size
 
-
   def load_initial_tests(self):
     """
     Args:

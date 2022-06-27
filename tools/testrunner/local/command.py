@@ -328,7 +328,9 @@ class AndroidCommand(BaseCommand):
 
 Command = None
 
+
 class CommandContext():
+
   def __init__(self, command):
     self.command = command
 
@@ -336,7 +338,9 @@ class CommandContext():
   def context(self, device):
     yield
 
+
 class AndroidContext():
+
   def __init__(self):
     self.command = AndroidCommand
 
@@ -348,17 +352,19 @@ class AndroidContext():
     finally:
       AndroidCommand.driver.tear_down()
 
+
 @contextmanager
 def command_context(target_os, device):
   factory = dict(
-    android=AndroidContext(),
-    windows=CommandContext(WindowsCommand),
+      android=AndroidContext(),
+      windows=CommandContext(WindowsCommand),
   )
   context = factory.get(target_os, CommandContext(PosixCommand))
   with context.context(device):
     global Command
     Command = context.command
     yield
+
 
 # Deprecated : use command_context
 def setup(target_os, device):
@@ -371,6 +377,7 @@ def setup(target_os, device):
     Command = WindowsCommand
   else:
     Command = PosixCommand
+
 
 # Deprecated : use command_context
 def tear_down():
