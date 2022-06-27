@@ -16,6 +16,92 @@
       "message": "Jakob, PTAL.",
       "revId": "af041307d4efe0050d36adf1ecf64758de96a742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "774745de_a3e99557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-27T09:40:31Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "af041307d4efe0050d36adf1ecf64758de96a742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43fa4e24_cc489e49",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-27T09:40:31Z",
+      "side": 1,
+      "message": "nit: would a DCHECK be enough?",
+      "range": {
+        "startLine": 484,
+        "startChar": 12,
+        "endLine": 484,
+        "endChar": 17
+      },
+      "revId": "af041307d4efe0050d36adf1ecf64758de96a742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc6e2b2_74c3d4fc",
+        "filename": "test/mjsunit/regress/wasm/i32-lowering-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-27T09:40:31Z",
+      "side": 1,
+      "message": "nit: tolerates",
+      "range": {
+        "startLine": 7,
+        "startChar": 28,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "af041307d4efe0050d36adf1ecf64758de96a742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df6bbee_0be515b7",
+        "filename": "test/mjsunit/regress/wasm/i32-lowering-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-27T09:40:31Z",
+      "side": 1,
+      "message": "nit: how about calling the function for good measure, just to make sure it actually did get compiled?",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 19
+      },
+      "revId": "af041307d4efe0050d36adf1ecf64758de96a742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
