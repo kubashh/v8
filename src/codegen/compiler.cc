@@ -554,6 +554,7 @@ void TurbofanCompilationJob::RecordCompilationStats(ConcurrencyMode mode,
     counters->turbofan_ticks()->AddSample(static_cast<int>(
         compilation_info()->tick_counter().CurrentTicks() / 1000));
   }
+  function->shared().set_turbofan_compiled(true);
 }
 
 void TurbofanCompilationJob::RecordFunctionCompilation(
