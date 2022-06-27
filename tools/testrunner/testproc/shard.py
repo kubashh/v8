@@ -18,6 +18,7 @@ def radix_hash(capacity, key):
 
 
 class ShardProc(base.TestProcFilter):
+
   @staticmethod
   def create(options):
     myid, count = options.shard_info()

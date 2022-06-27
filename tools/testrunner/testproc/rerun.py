@@ -9,12 +9,12 @@ from .result import RerunResult
 
 
 class RerunProc(base.TestProcProducer):
+
   @staticmethod
   def create(options):
     if not options.rerun_failures_count:
       return None
-    return RerunProc(options.rerun_failures_count,
-                     options.rerun_failures_max)
+    return RerunProc(options.rerun_failures_count, options.rerun_failures_max)
 
   def __init__(self, rerun_max, rerun_max_total=None):
     super(RerunProc, self).__init__('Rerun')

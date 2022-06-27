@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-
 import contextlib
 import json
 import os
@@ -22,6 +21,7 @@ TEST_DATA_ROOT = os.path.join(TOOLS_ROOT, 'testrunner', 'testdata')
 
 from testrunner.local import command
 from testrunner.local import pool
+
 
 @contextlib.contextmanager
 def temp_dir():
@@ -57,8 +57,8 @@ def capture():
   oldout = sys.stdout
   olderr = sys.stderr
   try:
-    stdout=StringIO()
-    stderr=StringIO()
+    stdout = StringIO()
+    stderr = StringIO()
     sys.stdout = stdout
     sys.stderr = stderr
     yield stdout, stderr
@@ -72,6 +72,7 @@ def with_json_output(basedir):
   context of a temporary test configuration"""
   return os.path.join(basedir, 'out.json')
 
+
 def clean_json_output(json_path, basedir):
   # Extract relevant properties of the json output.
   if not json_path:
@@ -84,21 +85,25 @@ def clean_json_output(json_path, basedir):
   # path dependent on where this runs.
   def replace_variable_data(data):
     data['duration'] = 1
-    data['command'] = ' '.join(
-        ['/usr/bin/python'] + data['command'].split()[1:])
+    data['command'] = ' '.join(['/usr/bin/python'] +
+                               data['command'].split()[1:])
     data['command'] = data['command'].replace(basedir + '/', '')
+
   for data in json_output['slowest_tests']:
     replace_variable_data(data)
   for data in json_output['results']:
     replace_variable_data(data)
   json_output['duration_mean'] = 1
+
   # We need lexicographic sorting here to avoid non-deterministic behaviour
   # The original sorting key is duration, but in our fake test we have
   # non-deterministic durations before we reset them to 1
   def sort_key(x):
     return str(sorted(x.items()))
+
   json_output['slowest_tests'].sort(key=sort_key)
   return json_output
+
 
 def override_build_config(basedir, **kwargs):
   """Override the build config with new values provided as kwargs."""
@@ -110,6 +115,7 @@ def override_build_config(basedir, **kwargs):
     config.update(kwargs)
   with open(path, 'w') as f:
     json.dump(config, f)
+
 
 @dataclass
 class TestResult():
@@ -143,20 +149,27 @@ class TestResult():
 
     pretty_json = json.dumps(self.json, indent=2, sort_keys=True)
     msg = None  # Set to pretty_json for bootstrapping.
-    self.current_test_case.assertDictEqual(self.json, expected_test_results, msg)
+    self.current_test_case.assertDictEqual(self.json, expected_test_results,
+                                           msg)
 
 
 class TestRunnerTest(unittest.TestCase):
+
   @classmethod
   def setUpClass(cls):
     command.setup_testing()
     pool.setup_testing()
 
-  def run_tests(self, *args, baseroot='testroot1', config_overrides={}, **kwargs):
+  def run_tests(self,
+                *args,
+                baseroot='testroot1',
+                config_overrides={},
+                **kwargs):
     """Executes the test runner with captured output."""
     with temp_base(baseroot=baseroot) as basedir:
       override_build_config(basedir, **config_overrides)
       json_out_path = None
+
       def resolve_arg(arg):
         """Some arguments come as function objects to be called (resolved)
         in the context of a temporary test configuration"""
@@ -165,6 +178,7 @@ class TestRunnerTest(unittest.TestCase):
           json_out_path = with_json_output(basedir)
           return json_out_path
         return arg
+
       resolved_args = [resolve_arg(arg) for arg in args]
       with capture() as (stdout, stderr):
         sys_args = ['--command-prefix', sys.executable] + resolved_args
@@ -174,7 +188,8 @@ class TestRunnerTest(unittest.TestCase):
           sys_args.append('--no-infra-staging')
         code = self.get_runner_class()(basedir=basedir).execute(sys_args)
         json_out = clean_json_output(json_out_path, basedir)
-        return TestResult(stdout.getvalue(), stderr.getvalue(), code, json_out, self)
+        return TestResult(stdout.getvalue(), stderr.getvalue(), code, json_out,
+                          self)
 
     def get_runner_class():
       """Implement to return the runner class"""

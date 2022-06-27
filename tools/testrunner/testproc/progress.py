@@ -24,6 +24,7 @@ def print_failure_header(test, is_flaky=False):
 
 
 class ResultsTracker(base.TestProcObserver):
+
   @staticmethod
   def create(options):
     return ResultsTracker(options.exit_after_n_failures)
@@ -64,7 +65,6 @@ class ProgressIndicator(base.TestProcObserver):
 
   def set_test_count(self, test_count):
     self._total = test_count
-
 
 
 class SimpleProgressIndicator(ProgressIndicator):
