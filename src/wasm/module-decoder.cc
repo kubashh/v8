@@ -1593,6 +1593,9 @@ class ModuleDecoderImpl : public Decoder {
     WasmSectionIterator section_iter(&decoder);
 
     while (ok()) {
+      if (section_iter.section_code() == SectionCode::kNameSectionCode) {
+        module_->name_section_offset = offset;
+      }
       // Shift the offset by the section header length
       offset += section_iter.payload_start() - section_iter.section_start();
       if (section_iter.section_code() != SectionCode::kUnknownSectionCode) {
@@ -1744,9 +1747,9 @@ class ModuleDecoderImpl : public Decoder {
   void VerifyFunctionBody(AccountingAllocator* allocator, uint32_t func_num,
                           const ModuleWireBytes& wire_bytes,
                           const WasmModule* module, WasmFunction* function) {
-    WasmFunctionName func_name(function,
-                               wire_bytes.GetNameOrNull(function, module));
     if (FLAG_trace_wasm_decoder) {
+      WasmFunctionName func_name(function,
+                                 wire_bytes.GetNameOrNull(function, module));
       StdoutStream{} << "Verifying wasm function " << func_name << std::endl;
     }
     FunctionBody body = {
@@ -1762,6 +1765,8 @@ class ModuleDecoderImpl : public Decoder {
     // location.
     if (result.failed() && intermediate_error_.empty()) {
       // Wrap the error message from the function decoder.
+      WasmFunctionName func_name(function,
+                                 wire_bytes.GetNameOrNull(function, module));
       std::ostringstream error_msg;
       error_msg << "in function " << func_name << ": "
                 << result.error().message();
@@ -2561,10 +2566,7 @@ bool FindNameSection(Decoder* decoder) {
 }  // namespace
 
 void DecodeFunctionNames(const byte* module_start, const byte* module_end,
-                         std::unordered_map<uint32_t, WireBytesRef>* names) {
-  DCHECK_NOT_NULL(names);
-  DCHECK(names->empty());
-
+                         std::unordered_map<uint32_t, WireBytesRef>& names) {
   Decoder decoder(module_start, module_end);
   if (FindNameSection(&decoder)) {
     while (decoder.ok() && decoder.more()) {
@@ -2589,52 +2591,77 @@ void DecodeFunctionNames(const byte* module_start, const byte* module_end,
         // You can even assign to the same function multiple times (last valid
         // one wins).
         if (decoder.ok() && validate_utf8(&decoder, name)) {
-          names->insert(std::make_pair(function_index, name));
+          names.insert(std::make_pair(function_index, name));
         }
       }
     }
   }
 }
 
-NameMap DecodeNameMap(base::Vector<const uint8_t> module_bytes,
-                      uint8_t name_section_kind) {
-  Decoder decoder(module_bytes);
-  if (!FindNameSection(&decoder)) return NameMap{{}};
+namespace {
 
+void DecodeNameMap(NameMap& target, Decoder& decoder) {
   std::vector<NameAssoc> names;
-  while (decoder.ok() && decoder.more()) {
-    uint8_t name_type = decoder.consume_u8("name type");
-    if (name_type & 0x80) break;  // no varuint7
+  uint32_t count = decoder.consume_u32v("names count");
+  names.reserve(count);
+  for (uint32_t i = 0; i < count; i++) {
+    uint32_t index = decoder.consume_u32v("index");
+    WireBytesRef name =
+        consume_string(&decoder, StringValidation::kNone, "name");
+    if (!decoder.ok()) break;
+    if (index > kMaxInt) continue;
+    if (!validate_utf8(&decoder, name)) continue;
+    names.emplace_back(static_cast<int>(index), name);
+  }
+  std::stable_sort(names.begin(), names.end(), NameAssoc::IndexLess{});
+  target = NameMap{std::move(names)};
+}
 
-    uint32_t name_payload_len = decoder.consume_u32v("name payload length");
-    if (!decoder.checkAvailable(name_payload_len)) break;
-
-    if (name_type != name_section_kind) {
-      decoder.consume_bytes(name_payload_len, "name subsection payload");
-      continue;
-    }
-
-    uint32_t count = decoder.consume_u32v("names count");
-    for (uint32_t i = 0; i < count; i++) {
-      uint32_t index = decoder.consume_u32v("index");
+void DecodeIndirectNameMap(IndirectNameMap& target, Decoder& decoder) {
+  std::vector<IndirectNameMapEntry> entries;
+  uint32_t outer_count = decoder.consume_u32v("outer count");
+  entries.reserve(outer_count);
+  for (uint32_t i = 0; i < outer_count; ++i) {
+    uint32_t outer_index = decoder.consume_u32v("outer index");
+    if (outer_index > kMaxInt) continue;
+    std::vector<NameAssoc> names;
+    uint32_t inner_count = decoder.consume_u32v("inner count");
+    names.reserve(inner_count);
+    for (uint32_t k = 0; k < inner_count; ++k) {
+      uint32_t inner_index = decoder.consume_u32v("inner index");
       WireBytesRef name =
           consume_string(&decoder, StringValidation::kNone, "name");
       if (!decoder.ok()) break;
-      if (index > kMaxInt) continue;
+      if (inner_index > kMaxInt) continue;
+      // Ignore non-utf8 names.
       if (!validate_utf8(&decoder, name)) continue;
-      names.emplace_back(static_cast<int>(index), name);
+      names.emplace_back(static_cast<int>(inner_index), name);
     }
+    // Use stable sort to get deterministic names (the first one declared)
+    // even in the presence of duplicates.
+    std::stable_sort(names.begin(), names.end(), NameAssoc::IndexLess{});
+    entries.emplace_back(static_cast<int>(outer_index), std::move(names));
   }
-  std::stable_sort(names.begin(), names.end(), NameAssoc::IndexLess{});
-  return NameMap{std::move(names)};
+  std::stable_sort(entries.begin(), entries.end(),
+                   IndirectNameMapEntry::IndexLess{});
+  target = IndirectNameMap{std::move(entries)};
 }
 
-IndirectNameMap DecodeIndirectNameMap(base::Vector<const uint8_t> module_bytes,
-                                      uint8_t name_section_kind) {
-  Decoder decoder(module_bytes);
-  if (!FindNameSection(&decoder)) return IndirectNameMap{{}};
+}  // namespace
 
-  std::vector<IndirectNameMapEntry> entries;
+DecodedNameSection::DecodedNameSection(base::Vector<const uint8_t> wire_bytes,
+                                       uint32_t name_section_offset) {
+  if (name_section_offset == 0) return;  // No name section.
+  Decoder decoder(wire_bytes.begin() + name_section_offset, wire_bytes.end(),
+                  name_section_offset);
+  uint8_t section_code = decoder.consume_u8("name section");
+  DCHECK(section_code == kUnknownSectionCode);
+  USE(section_code);
+  uint32_t size = decoder.consume_u32v("section size");
+  const byte* end = decoder.pc() + size;
+  DCHECK(end <= decoder.end());  // Was checked before.
+  consume_utf8_string(&decoder, "section name");
+  decoder.Reset(decoder.pc(), end, decoder.pc_offset());
   while (decoder.ok() && decoder.more()) {
     uint8_t name_type = decoder.consume_u8("name type");
     if (name_type & 0x80) break;  // no varuint7
@@ -2642,36 +2669,44 @@ IndirectNameMap DecodeIndirectNameMap(base::Vector<const uint8_t> module_bytes,
     uint32_t name_payload_len = decoder.consume_u32v("name payload length");
     if (!decoder.checkAvailable(name_payload_len)) break;
 
-    if (name_type != name_section_kind) {
-      decoder.consume_bytes(name_payload_len, "name subsection payload");
-      continue;
-    }
-
-    uint32_t outer_count = decoder.consume_u32v("outer count");
-    for (uint32_t i = 0; i < outer_count; ++i) {
-      uint32_t outer_index = decoder.consume_u32v("outer index");
-      if (outer_index > kMaxInt) continue;
-      std::vector<NameAssoc> names;
-      uint32_t inner_count = decoder.consume_u32v("inner count");
-      for (uint32_t k = 0; k < inner_count; ++k) {
-        uint32_t inner_index = decoder.consume_u32v("inner index");
-        WireBytesRef name =
-            consume_string(&decoder, StringValidation::kNone, "name");
-        if (!decoder.ok()) break;
-        if (inner_index > kMaxInt) continue;
-        // Ignore non-utf8 names.
-        if (!validate_utf8(&decoder, name)) continue;
-        names.emplace_back(static_cast<int>(inner_index), name);
-      }
-      // Use stable sort to get deterministic names (the first one declared)
-      // even in the presence of duplicates.
-      std::stable_sort(names.begin(), names.end(), NameAssoc::IndexLess{});
-      entries.emplace_back(static_cast<int>(outer_index), std::move(names));
+    switch (name_type) {
+      case kModuleCode:
+      case kFunctionCode:
+        // Already handled elsewhere.
+        decoder.consume_bytes(name_payload_len);
+        break;
+      case kLocalCode:
+        DecodeIndirectNameMap(local_names_, decoder);
+        break;
+      case kLabelCode:
+        DecodeIndirectNameMap(label_names_, decoder);
+        break;
+      case kTypeCode:
+        DecodeNameMap(type_names_, decoder);
+        break;
+      case kTableCode:
+        DecodeNameMap(table_names_, decoder);
+        break;
+      case kMemoryCode:
+        DecodeNameMap(memory_names_, decoder);
+        break;
+      case kGlobalCode:
+        DecodeNameMap(global_names_, decoder);
+        break;
+      case kElementSegmentCode:
+        DecodeNameMap(element_segment_names_, decoder);
+        break;
+      case kDataSegmentCode:
+        DecodeNameMap(data_segment_names_, decoder);
+        break;
+      case kFieldCode:
+        DecodeIndirectNameMap(field_names_, decoder);
+        break;
+      case kTagCode:
+        DecodeNameMap(tag_names_, decoder);
+        break;
     }
   }
-  std::stable_sort(entries.begin(), entries.end(),
-                   IndirectNameMapEntry::IndexLess{});
-  return IndirectNameMap{std::move(entries)};
 }
 
 #undef TRACE
