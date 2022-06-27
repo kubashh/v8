@@ -39,6 +39,30 @@
       },
       "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6ecd6a3_af72d36d",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-27T17:27:02Z",
+      "side": 1,
+      "message": "It depends. Does requests actually auto-roll? Or is it excluded? If it is supposed to roll, then probably we\u0027d need to support this, but we can also treat it as a strange one-off that we handle manually. The updates to requests were rare I think.",
+      "parentUuid": "68060ce2_78e87d8b",
+      "range": {
+        "startLine": 285,
+        "startChar": 93,
+        "endLine": 285,
+        "endChar": 110
+      },
+      "revId": "0577a9d7aece4536e992d365f1649eb782521cba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
