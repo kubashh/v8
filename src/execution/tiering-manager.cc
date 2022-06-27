@@ -298,6 +298,9 @@ OptimizationDecision TieringManager::ShouldOptimize(JSFunction function,
     return OptimizationDecision::DoNotOptimize();
   }
 
+  if (function.shared().stable_within_one_tick()) {
+    return OptimizationDecision::TurbofanHotAndStable();
+  }
   BytecodeArray bytecode = function.shared().GetBytecodeArray(isolate_);
   const int ticks = function.feedback_vector().profiler_ticks();
   const int ticks_for_optimization =
