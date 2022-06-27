@@ -51,19 +51,19 @@ void NamesProvider::ComputeNamesFromImportsExports() {
       case kExternalFunction:
         continue;  // Functions are handled separately.
       case kExternalTable:
-        if (names_->table_names_.GetName(import.index).is_set()) continue;
+        if (names_->table_names_.Has(import.index)) continue;
         ComputeImportName(import, import_export_table_names_);
         break;
       case kExternalMemory:
-        if (names_->memory_names_.GetName(import.index).is_set()) continue;
+        if (names_->memory_names_.Has(import.index)) continue;
         ComputeImportName(import, import_export_memory_names_);
         break;
       case kExternalGlobal:
-        if (names_->global_names_.GetName(import.index).is_set()) continue;
+        if (names_->global_names_.Has(import.index)) continue;
         ComputeImportName(import, import_export_global_names_);
         break;
       case kExternalTag:
-        if (names_->tag_names_.GetName(import.index).is_set()) continue;
+        if (names_->tag_names_.Has(import.index)) continue;
         ComputeImportName(import, import_export_tag_names_);
         break;
     }
@@ -73,19 +73,19 @@ void NamesProvider::ComputeNamesFromImportsExports() {
       case kExternalFunction:
         continue;  // Functions are handled separately.
       case kExternalTable:
-        if (names_->table_names_.GetName(ex.index).is_set()) continue;
+        if (names_->table_names_.Has(ex.index)) continue;
         ComputeExportName(ex, import_export_table_names_);
         break;
       case kExternalMemory:
-        if (names_->memory_names_.GetName(ex.index).is_set()) continue;
+        if (names_->memory_names_.Has(ex.index)) continue;
         ComputeExportName(ex, import_export_memory_names_);
         break;
       case kExternalGlobal:
-        if (names_->global_names_.GetName(ex.index).is_set()) continue;
+        if (names_->global_names_.Has(ex.index)) continue;
         ComputeExportName(ex, import_export_global_names_);
         break;
       case kExternalTag:
-        if (names_->tag_names_.GetName(ex.index).is_set()) continue;
+        if (names_->tag_names_.Has(ex.index)) continue;
         ComputeExportName(ex, import_export_tag_names_);
         break;
     }
@@ -204,12 +204,25 @@ bool NamesProvider::PrintFunctionName(StringBuilder& out,
   return true;
 }
 
+WireBytesRef Get(const NameMap& map, uint32_t index) {
+  const WireBytesRef* result = map.Get(index);
+  if (!result) return {};
+  return *result;
+}
+
+WireBytesRef Get(const IndirectNameMap& map, uint32_t outer_index,
+                 uint32_t inner_index) {
+  const NameMap* inner = map.Get(outer_index);
+  if (!inner) return {};
+  return Get(*inner, inner_index);
+}
+
 void NamesProvider::PrintLocalName(StringBuilder& out, uint32_t function_index,
                                    uint32_t local_index,
                                    bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->local_names_.GetName(function_index, local_index);
+  WireBytesRef ref = Get(names_->local_names_, function_index, local_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -224,7 +237,7 @@ void NamesProvider::PrintLabelName(StringBuilder& out, uint32_t function_index,
                                    uint32_t fallback_index) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->label_names_.GetName(function_index, label_index);
+  WireBytesRef ref = Get(names_->label_names_, function_index, label_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -237,7 +250,7 @@ void NamesProvider::PrintTypeName(StringBuilder& out, uint32_t type_index,
                                   bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->type_names_.GetName(type_index);
+  WireBytesRef ref = Get(names_->type_names_, type_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -250,7 +263,7 @@ void NamesProvider::PrintTableName(StringBuilder& out, uint32_t table_index,
                                    bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->table_names_.GetName(table_index);
+  WireBytesRef ref = Get(names_->table_names_, table_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -269,7 +282,7 @@ void NamesProvider::PrintMemoryName(StringBuilder& out, uint32_t memory_index,
                                     bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->memory_names_.GetName(memory_index);
+  WireBytesRef ref = Get(names_->memory_names_, memory_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -289,7 +302,7 @@ void NamesProvider::PrintGlobalName(StringBuilder& out, uint32_t global_index,
                                     bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->global_names_.GetName(global_index);
+  WireBytesRef ref = Get(names_->global_names_, global_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -309,8 +322,7 @@ void NamesProvider::PrintElementSegmentName(StringBuilder& out,
                                             uint32_t element_segment_index) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref =
-      names_->element_segment_names_.GetName(element_segment_index);
+  WireBytesRef ref = Get(names_->element_segment_names_, element_segment_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -323,7 +335,7 @@ void NamesProvider::PrintDataSegmentName(StringBuilder& out,
                                          uint32_t data_segment_index) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->data_segment_names_.GetName(data_segment_index);
+  WireBytesRef ref = Get(names_->data_segment_names_, data_segment_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -337,7 +349,7 @@ void NamesProvider::PrintFieldName(StringBuilder& out, uint32_t struct_index,
                                    bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->field_names_.GetName(struct_index, field_index);
+  WireBytesRef ref = Get(names_->field_names_, struct_index, field_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
@@ -350,7 +362,7 @@ void NamesProvider::PrintTagName(StringBuilder& out, uint32_t tag_index,
                                  bool index_as_comment) {
   base::MutexGuard lock(&mutex_);
   if (!has_decoded_) DecodeNames();
-  WireBytesRef ref = names_->tag_names_.GetName(tag_index);
+  WireBytesRef ref = Get(names_->tag_names_, tag_index);
   if (ref.is_set()) {
     out << '$';
     WriteRef(out, ref);
