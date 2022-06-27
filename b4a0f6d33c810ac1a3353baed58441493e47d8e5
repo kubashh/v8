@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "260923eb_107b1da1",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-27T13:25:29Z",
+      "side": 1,
+      "message": "The key here is to only compute `func_name` when we need it, otherwise this triggers \"lazy\" name section decoding quite eagerly 😊\n(I haven\u0027t yet verified whether there are other overly-eager triggers, that\u0027s left for a follow-up.)",
+      "range": {
+        "startLine": 1751,
+        "startChar": 6,
+        "endLine": 1751,
+        "endChar": 32
+      },
+      "revId": "b4a0f6d33c810ac1a3353baed58441493e47d8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
