@@ -9,6 +9,8 @@
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
 #include "src/base/sanitizer/asan.h"
+#include "src/base/sanitizer/lsan-page-allocator.h"
+#include "src/heap/cppgc/caged-heap.h"
 #include "src/heap/cppgc/gc-info-table.h"
 #include "src/heap/cppgc/globals.h"
 #include "src/heap/cppgc/platform.h"
@@ -54,6 +56,14 @@ TracingController* Platform::GetTracingController() {
 }
 
 void InitializeProcess(PageAllocator* page_allocator) {
+  DCHECK_NOT_NULL(page_allocator);
+#if defined(LEAK_SANITIZER)
+  // If lsan is enabled, override the given allocator with the custom lsan
+  // allocator.
+  static v8::base::LeakyObject<v8::base::LsanPageAllocator> lsan_page_allocator(
+      page_allocator);
+  page_allocator = lsan_page_allocator.get();
+#endif  // LEAK_SANITIZER
 #if defined(V8_USE_ADDRESS_SANITIZER) && defined(V8_TARGET_ARCH_64_BIT)
   // Retrieve asan's internal shadow memory granularity and check that Oilpan's
   // object alignment/sizes are multiple of this granularity. This is needed to
@@ -67,6 +77,9 @@ void InitializeProcess(PageAllocator* page_allocator) {
 
   CHECK(!g_page_allocator);
   internal::GlobalGCInfoTable::Initialize(page_allocator);
+#if defined(CPPGC_CAGED_HEAP)
+  internal::CagedHeap::InitializeIfNeeded(*page_allocator);
+#endif  // defined(CPPGC_CAGED_HEAP)
   g_page_allocator = page_allocator;
 }
 
