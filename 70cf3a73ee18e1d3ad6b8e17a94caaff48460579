@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f01d49_2b2d4fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-28T01:55:13Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7aff96f_66480f66",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-28T01:55:13Z",
+      "side": 1,
+      "message": "Nit: A bunch of stray double spaces. Maybe `s/  lastIndexOfHelper/ lastIndexOfHelper/g`.",
+      "range": {
+        "startLine": 2397,
+        "startChar": 19,
+        "endLine": 2397,
+        "endChar": 21
+      },
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "474aa222_16f896fe",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 4511,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-06-28T01:55:13Z",
+      "side": 1,
+      "message": "Ditto on the 2-space nit in this file.",
+      "range": {
+        "startLine": 4511,
+        "startChar": 19,
+        "endLine": 4511,
+        "endChar": 21
+      },
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
