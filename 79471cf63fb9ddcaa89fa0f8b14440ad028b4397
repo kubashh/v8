@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5275c6ce_82184caf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "mostly nits",
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6c7047_c555c679",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Could you add a comment here explaining why this function is not part of ComputeNamesFromImportsExports?",
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0afa3ffe_1b043120",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Here could be a place to explain why functions get handled separately.",
+      "range": {
+        "startLine": 52,
+        "startChar": 22,
+        "endLine": 52,
+        "endChar": 55
+      },
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5844129_6e6afec5",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "This is the only case where there is no `$` before WriteRef. Is it correct? Could we just write the `$` here as well, and move the writting of `$` into WriteRef?",
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8088c82_18b9430c",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "What\u0027s the meaning of this return value? Afaict, it\u0027s unused.",
+      "range": {
+        "startLine": 192,
+        "startChar": 33,
+        "endLine": 192,
+        "endChar": 38
+      },
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "873ebf68_297c4399",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Only this line would have to be guarded by the lock, or not?",
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99487ead_d199d0de",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Nit: What about renaming {names_} into {name_section_names_}. Reading through the code I forgot that that {names_} only contains the names defined in the name section.",
+      "range": {
+        "startLine": 272,
+        "startChar": 21,
+        "endLine": 272,
+        "endChar": 27
+      },
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f216339_124e3f78",
+        "filename": "src/wasm/string-builder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Could you add a comment describing the purpose of {chunks_}? At the moment it looks like a big memory leak: you save up all memory you ever used, until the StringBuilder gets released, even if you don\u0027t need the memory anymore. As far as I can tell, you could also just deallocate the chunk immediately in Grow.",
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a5f07b5_208bda46",
+        "filename": "src/wasm/string-builder.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "wouldn\u0027t static_cast\u003cuint32_t\u003e(-value) be easier to read? Shouldn\u0027t that be the same?",
+      "range": {
+        "startLine": 130,
+        "startChar": 18,
+        "endLine": 130,
+        "endChar": 53
+      },
+      "revId": "79471cf63fb9ddcaa89fa0f8b14440ad028b4397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

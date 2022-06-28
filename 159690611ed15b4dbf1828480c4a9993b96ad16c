@@ -16,6 +16,154 @@
       "message": "PTAL:\nAndreas as primary reviewer.\nPhilip for src/debug/.",
       "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884901ca_60552bb9",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Is it necessary to do this calculation here? Could this not also be done in DecodeNameSection, by undoing the calculation of line 1600?",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dd14228_d4a35d9c",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2620,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Why do you return the value here through a parameter, and not as a return value?",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aba445e_265677ed",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2643,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "It may be good to add this comment also in DecodeNameMap.",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb6cee2_0c40a0d5",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Why do you return the value here through a parameter, and not as a return value?",
+      "range": {
+        "startLine": 2650,
+        "startChar": 2,
+        "endLine": 2650,
+        "endChar": 8
+      },
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2bb206c_ff8add83",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be sufficient in production code to just increment the PC by 1, and consume and check the section code only in debug code?",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db8b702b_e1cca282",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Update: all the code above is just necessary in debug mode. Would this not be worth it, because this code is only executed once per module?",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94554f63_42990bac",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "Why do you iterate over the table differently than above, i.e.\nfor (const WasmImport\u0026 import : module_-\u003eimport_table) {",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3177d2_e0d95ff0",
+        "filename": "src/wasm/names-provider.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-06-28T13:17:24Z",
+      "side": 1,
+      "message": "what about defining an enum here to make the code more readable? Same for other bool parameters.",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
