@@ -289,6 +289,17 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
     builder.AddParam(machine_type);
   }
 
+  // for (int i = 0; i < c_arg_count; ++i) {
+  //   CTypeInfo type = c_signature->ArgumentInfo(i);
+  //   if (uint8_t(type.GetFlags()) &
+  //   uint8_t(CTypeInfo::Flags::kEnforceRangeBit)) {
+  //     Node* truncation = inputs[i + kFastTargetAddressInputCount];
+  //     inputs[i + kFastTargetAddressInputCount] = __ Projection(0,
+  //     truncation);
+  //     __ GotoIf(__ Projection(1, truncation), &if_error);
+  //   }
+  // }
+
   Node* stack_slot = nullptr;
   if (c_signature->HasOptions()) {
     int kAlign = alignof(v8::FastApiCallbackOptions);
