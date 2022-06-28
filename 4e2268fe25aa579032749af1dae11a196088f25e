@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebacdbff_a229f225",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-28T13:39:59Z",
+      "side": 1,
+      "message": "Added also this now. Let\u0027s see if we can run tests on bionic after building on focal. But there\u0027s no test pool for focal yet...",
+      "range": {
+        "startLine": 1131,
+        "startChar": 13,
+        "endLine": 1131,
+        "endChar": 25
+      },
+      "revId": "4e2268fe25aa579032749af1dae11a196088f25e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
