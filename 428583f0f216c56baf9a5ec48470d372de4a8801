@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed707a6e_680232c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-06-28T09:47:48Z",
+      "side": 1,
+      "message": "Adding Manos, thanks for volunteering to take a look while I\u0027m on leave!\n\nSo the question Gus has raised was whether we want FastApiCallbackOptions to contain the extra Wasm-specific fields this CL is adding. I got confused that the other `fallback` and `data` fields are used only for JS, but they\u0027re already supported by Wasm too. So we could think of some other way to compose/derive the \"options\" struct. E.g. if the C++ callbacks that receive it are not reused between JS and Wasm, my proposal would be to allocate separate structs for the shared and Wasm-specific parts.\n\nAnother security note, a potentially malicious callback might use the Wasm memory pointer to do arbitrary memory accesses and we should find a proper way to guard against this. For Chromium it should not be an issue, as all callbacks are specified statically by Blink, but not sure that\u0027s the case with Node.js and native modules. @Gus do you know how much the fast API is used in Node.js and if this could be an issue?",
+      "revId": "428583f0f216c56baf9a5ec48470d372de4a8801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
