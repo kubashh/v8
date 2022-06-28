@@ -33,14 +33,6 @@ void IncrementalMarking::TransferColor(HeapObject from, HeapObject to) {
   }
 }
 
-bool IncrementalMarking::WhiteToGreyAndPush(HeapObject obj) {
-  if (marking_state()->WhiteToGrey(obj)) {
-    local_marking_worklists()->Push(obj);
-    return true;
-  }
-  return false;
-}
-
 void IncrementalMarking::RestartIfNotMarking() {
   if (state_ == COMPLETE) {
     state_ = MARKING;
