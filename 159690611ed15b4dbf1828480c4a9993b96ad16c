@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "184eeec2_90355f8e",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Done. As discussed offline: changed to storing a `WireBytesRef name_section` on the `WasmModule`, which lets me move this.\n(Previously this code did have to be here, because `DecodeNameSection` didn\u0027t have enough information to undo that calculation.)",
+      "parentUuid": "884901ca_60552bb9",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8dd14228_d4a35d9c",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b02b830_c8dc0f22",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2620,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Good question; I suppose it\u0027s equivalent. The next CL in the chain will change it anyway, though, so I\u0027d prefer to just leave it until then if that\u0027s okay?",
+      "parentUuid": "8dd14228_d4a35d9c",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aba445e_265677ed",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-06-28T13:17:24Z",
       "side": 1,
       "message": "It may be good to add this comment also in DecodeNameMap.",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0baf75e2_32374836",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2643,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "True; however the entire comment (along with the sorting) will disappear in the next CL in the chain. I\u0027m just maintaining it here (see old line 2666) in the spirit of making incremental changes.",
+      "parentUuid": "8aba445e_265677ed",
       "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2441722a_437a2f5d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "9bb6cee2_0c40a0d5",
+      "range": {
+        "startLine": 2650,
+        "startChar": 2,
+        "endLine": 2650,
+        "endChar": 8
+      },
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2bb206c_ff8add83",
@@ -105,6 +183,24 @@
       "writtenOn": "2022-06-28T13:17:24Z",
       "side": 1,
       "message": "Wouldn\u0027t it be sufficient in production code to just increment the PC by 1, and consume and check the section code only in debug code?",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae487bab_be4a21a3",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2660,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Done (by storing `WireBytesRef name_section` on the `WasmModule`).",
+      "parentUuid": "b2bb206c_ff8add83",
       "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +222,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abbb7010_0eccbad6",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Done (by storing `WireBytesRef name_section` on the `WasmModule`).",
+      "parentUuid": "db8b702b_e1cca282",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94554f63_42990bac",
@@ -143,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed6ed76_04ad2d57",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94554f63_42990bac",
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb3177d2_e0d95ff0",
@@ -156,6 +288,30 @@
       "writtenOn": "2022-06-28T13:17:24Z",
       "side": 1,
       "message": "what about defining an enum here to make the code more readable? Same for other bool parameters.",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 29
+      },
+      "revId": "159690611ed15b4dbf1828480c4a9993b96ad16c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4aa3ac0_7a11db64",
+        "filename": "src/wasm/names-provider.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-28T19:53:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb3177d2_e0d95ff0",
       "range": {
         "startLine": 34,
         "startChar": 25,
