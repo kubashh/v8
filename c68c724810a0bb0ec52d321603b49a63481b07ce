@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0f94577_e4fbd957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-06-28T16:47:14Z",
+      "side": 1,
+      "message": "Is there a trick how to add this and not confuse msvc?\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Win64%20-%20msvc%20-%20builder/2684/overview",
+      "revId": "c68c724810a0bb0ec52d321603b49a63481b07ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
