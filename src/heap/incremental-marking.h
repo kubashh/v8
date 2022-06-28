@@ -46,7 +46,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   class V8_NODISCARD PauseBlackAllocationScope {
    public:
     explicit PauseBlackAllocationScope(IncrementalMarking* marking)
-        : marking_(marking), paused_(false) {
+        : marking_(marking) {
       if (marking_->black_allocation()) {
         paused_ = true;
         marking_->PauseBlackAllocation();
@@ -61,7 +61,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
 
    private:
     IncrementalMarking* marking_;
-    bool paused_;
+    bool paused_ = false;
   };
 
   // It's hard to know how much work the incremental marker should do to make
@@ -85,8 +85,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   static constexpr size_t kEmbedderActivationThreshold = 0;
 #endif
 
-  static const AccessMode kAtomicity = AccessMode::ATOMIC;
-
   IncrementalMarking(Heap* heap, WeakObjects* weak_objects);
 
   MarkingState* marking_state() { return &marking_state_; }
@@ -102,24 +100,21 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   V8_INLINE void TransferColor(HeapObject from, HeapObject to);
 
   bool IsStopped() const { return state() == STOPPED; }
+  bool IsRunning() const { return !IsStopped(); }
   bool IsMarking() const { return state() >= MARKING; }
   bool IsComplete() const { return state() == COMPLETE; }
 
   bool CollectionRequested() const { return collection_requested_; }
 
-  bool CanBeActivated();
-  bool WasActivated();
+  bool CanBeStarted() const;
 
   void Start(GarbageCollectionReason gc_reason);
   // Returns true if incremental marking was running and false otherwise.
   bool Stop();
+  void Epilogue();
 
   void UpdateMarkingWorklistAfterYoungGenGC();
   void UpdateMarkedBytesAfterScavenge(size_t dead_bytes_in_new_space);
-
-  void MarkingComplete(CompletionAction action);
-
-  void Epilogue();
 
   // Performs incremental marking steps and returns before the deadline_in_ms is
   // reached. It may return earlier if the marker is already ahead of the
@@ -128,15 +123,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
                                  CompletionAction completion_action,
                                  StepOrigin step_origin);
 
-  void FinalizeSweeping();
-  bool ContinueConcurrentSweeping();
-  void SupportConcurrentSweeping();
-
   StepResult Step(double max_step_size_in_ms, CompletionAction action,
                   StepOrigin step_origin);
-
-  bool ShouldDoEmbedderStep();
-  StepResult EmbedderStep(double expected_duration_ms, double* duration_ms);
 
   V8_INLINE void RestartIfNotMarking();
 
@@ -173,8 +161,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
     return collector_->local_marking_worklists();
   }
 
-  void Deactivate();
-
   // Ensures that the given region is black allocated if it is in the old
   // generation.
   void EnsureBlackAllocated(Address allocated, size_t size);
@@ -202,6 +188,9 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   };
 
   void StartMarking();
+
+  bool ShouldDoEmbedderStep();
+  StepResult EmbedderStep(double expected_duration_ms, double* duration_ms);
 
   void StartBlackAllocation();
   void PauseBlackAllocation();
@@ -231,6 +220,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   // Returns the bytes to mark in the current step based on the scheduled
   // bytes and already marked bytes.
   size_t ComputeStepSizeInBytes(StepOrigin step_origin);
+
+  void MarkingComplete(CompletionAction action);
 
   void AdvanceOnAllocation();
 
@@ -269,7 +260,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   std::atomic<State> state_;
 
   bool is_compacting_ = false;
-  bool was_activated_ = false;
   bool black_allocation_ = false;
   bool collection_requested_ = false;
   IncrementalMarkingJob incremental_marking_job_;

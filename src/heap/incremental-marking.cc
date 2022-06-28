@@ -79,14 +79,16 @@ void IncrementalMarking::MarkBlackBackground(HeapObject obj, int object_size) {
 }
 
 void IncrementalMarking::NotifyLeftTrimming(HeapObject from, HeapObject to) {
-  DCHECK(IsMarking());
+  if (IsMarking()) return;
+
   DCHECK(MemoryChunk::FromHeapObject(from)->SweepingDone());
   DCHECK_EQ(MemoryChunk::FromHeapObject(from), MemoryChunk::FromHeapObject(to));
   DCHECK_NE(from, to);
 
   MarkBit new_mark_bit = marking_state()->MarkBitFrom(to);
 
-  if (black_allocation() && Marking::IsBlack<kAtomicity>(new_mark_bit)) {
+  if (black_allocation() &&
+      Marking::IsBlack<AccessMode::ATOMIC>(new_mark_bit)) {
     // Nothing to do if the object is in black area.
     return;
   }
@@ -96,19 +98,17 @@ void IncrementalMarking::NotifyLeftTrimming(HeapObject from, HeapObject to) {
   if (from.address() + kTaggedSize == to.address()) {
     // The old and the new markbits overlap. The |to| object has the
     // grey color. To make it black, we need to set the second bit.
-    DCHECK(new_mark_bit.Get<kAtomicity>());
-    new_mark_bit.Next().Set<kAtomicity>();
+    DCHECK(new_mark_bit.Get<AccessMode::ATOMIC>());
+    new_mark_bit.Next().Set<AccessMode::ATOMIC>();
   } else {
-    bool success = Marking::WhiteToBlack<kAtomicity>(new_mark_bit);
+    bool success = Marking::WhiteToBlack<AccessMode::ATOMIC>(new_mark_bit);
     DCHECK(success);
     USE(success);
   }
   DCHECK(marking_state()->IsBlack(to));
 }
 
-bool IncrementalMarking::WasActivated() { return was_activated_; }
-
-bool IncrementalMarking::CanBeActivated() {
+bool IncrementalMarking::CanBeStarted() const {
   // Only start incremental marking in a safe state:
   //   1) when incremental marking is turned on
   //   2) when we are currently not in a GC, and
@@ -173,7 +173,6 @@ void IncrementalMarking::Start(GarbageCollectionReason gc_reason) {
   scheduled_bytes_to_mark_ = 0;
   schedule_update_time_ms_ = start_time_ms_;
   bytes_marked_concurrently_ = 0;
-  was_activated_ = true;
 
   StartMarking();
 
@@ -618,11 +617,7 @@ void IncrementalMarking::MarkingComplete(CompletionAction action) {
   }
 }
 
-void IncrementalMarking::Epilogue() {
-  DCHECK(IsStopped());
-
-  was_activated_ = false;
-}
+void IncrementalMarking::Epilogue() { DCHECK(IsStopped()); }
 
 bool IncrementalMarking::ShouldDoEmbedderStep() {
   return state_ == MARKING && FLAG_incremental_marking_wrappers &&
