@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aaa27a0_330ec991",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-28T11:45:59Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "9f8188526d1b59818fff35942272d17a6e3ffa97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65b62c06_58cc008e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-06-28T11:45:59Z",
+      "side": 1,
+      "message": "This was the only real change: We can use MC here as incremental marking would also just put things on the same marking worklist.",
+      "range": {
+        "startLine": 6031,
+        "startChar": 28,
+        "endLine": 6031,
+        "endChar": 58
+      },
+      "revId": "9f8188526d1b59818fff35942272d17a6e3ffa97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
