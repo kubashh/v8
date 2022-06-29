@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf2735c_24cb656a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T13:34:43Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d71bf2_1664b0de",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T13:34:43Z",
+      "side": 1,
+      "message": "Kind of implied by the next check... but fine to keep.",
+      "range": {
+        "startLine": 925,
+        "startChar": 2,
+        "endLine": 925,
+        "endChar": 56
+      },
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34335ea4_26806c71",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T13:34:43Z",
+      "side": 1,
+      "message": "nit: `wasmRefType` for a very minor efficiency improvement",
+      "range": {
+        "startLine": 106,
+        "startChar": 36,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c41736b3_226eb975",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T13:34:43Z",
+      "side": 1,
+      "message": "nit: use `kExprArrayNewDataStatic` here, and drop the RttCanon line above.",
+      "range": {
+        "startLine": 111,
+        "startChar": 17,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
