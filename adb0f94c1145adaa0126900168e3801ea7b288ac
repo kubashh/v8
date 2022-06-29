@@ -58,6 +58,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db86470_6620d413",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:14:06Z",
+      "side": 1,
+      "message": "Either is fine. `AllocateSeqTwoByteString` is likely a bit faster because it avoids the runtime call, but without a benchmark it\u0027s hard to say whether the difference matters.",
+      "parentUuid": "ad21c841_3bf7ff53",
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4af01a5_77ef3be0",
