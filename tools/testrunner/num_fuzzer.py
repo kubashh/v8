@@ -129,19 +129,23 @@ class NumFuzzer(base_runner.BaseTestRunner):
     ]
 
   def _get_statusfile_variables(self):
-    variables = (
-        super(NumFuzzer, self)._get_statusfile_variables())
+    variables = (super(NumFuzzer, self)._get_statusfile_variables())
     variables.update({
-      'deopt_fuzzer': bool(self.options.stress_deopt),
-      'endurance_fuzzer': bool(self.options.combine_tests),
-      'gc_stress': bool(self.options.stress_gc),
-      'gc_fuzzer': bool(max([self.options.stress_marking,
-                             self.options.stress_scavenge,
-                             self.options.stress_compaction,
-                             self.options.stress_gc,
-                             self.options.stress_delay_tasks,
-                             self.options.stress_stack_size,
-                             self.options.stress_thread_pool_size])),
+        'deopt_fuzzer':
+            bool(self.options.stress_deopt),
+        'endurance_fuzzer':
+            bool(self.options.combine_tests),
+        'gc_stress':
+            bool(self.options.stress_gc),
+        'gc_fuzzer':
+            bool(
+                max([
+                    self.options.stress_marking, self.options.stress_scavenge,
+                    self.options.stress_compaction, self.options.stress_gc,
+                    self.options.stress_delay_tasks,
+                    self.options.stress_stack_size,
+                    self.options.stress_thread_pool_size
+                ])),
     })
     return variables
 
@@ -151,24 +155,23 @@ class NumFuzzer(base_runner.BaseTestRunner):
     results = ResultsTracker.create(self.options)
     execproc = ExecutionProc(self.options.j)
     sigproc = self._create_signal_proc()
-    indicators = self._create_progress_indicators(
-      tests.test_count_estimate)
+    indicators = self._create_progress_indicators(tests.test_count_estimate)
     procs = [
-      loader,
-      NameFilterProc(args) if args else None,
-      StatusFileFilterProc(None, None),
-      # TODO(majeski): Improve sharding when combiner is present. Maybe select
-      # different random seeds for shards instead of splitting tests.
-      ShardProc.create(self.options),
-      ExpectationProc(),
-      combiner,
-      fuzzer.FuzzerProc.create(self.options),
-      sigproc,
+        loader,
+        NameFilterProc(args) if args else None,
+        StatusFileFilterProc(None, None),
+        # TODO(majeski): Improve sharding when combiner is present. Maybe select
+        # different random seeds for shards instead of splitting tests.
+        ShardProc.create(self.options),
+        ExpectationProc(),
+        combiner,
+        fuzzer.FuzzerProc.create(self.options),
+        sigproc,
     ] + indicators + [
-      results,
-      TimeoutProc.create(self.options),
-      RerunProc.create(self.options),
-      execproc,
+        results,
+        TimeoutProc.create(self.options),
+        RerunProc.create(self.options),
+        execproc,
     ]
     self._prepare_procs(procs)
     loader.load_initial_tests()
@@ -196,4 +199,4 @@ class NumFuzzer(base_runner.BaseTestRunner):
 
 
 if __name__ == '__main__':
-  sys.exit(NumFuzzer().execute()) # pragma: no cover
+  sys.exit(NumFuzzer().execute())  # pragma: no cover

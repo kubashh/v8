@@ -202,7 +202,8 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       self.options.extra_flags.append('--no-inline-new')
       # Add predictable wrapper to command prefix.
       self.options.command_prefix = (
-          [sys.executable, self._predictable_wrapper()] + self.options.command_prefix)
+          [sys.executable, self._predictable_wrapper()] +
+          self.options.command_prefix)
 
     # TODO(machenbach): Figure out how to test a bigger subset of variants on
     # msan.
@@ -218,6 +219,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       if option not in ['run', 'skip', 'dontcare']:
         print('Unknown %s mode %s' % (name, option))
         raise base_runner.TestRunnerError()
+
     CheckTestMode('slow test', self.options.slow_tests)
     CheckTestMode('pass|fail test', self.options.pass_fail_tests)
     if self.build_config.no_i18n:
@@ -254,7 +256,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
         print('    Available variants: %s' % ALL_VARIANTS)
         print('    Available variant aliases: %s' % VARIANT_ALIASES.keys());
         raise base_runner.TestRunnerError()
-    assert False, 'Unreachable' # pragma: no cover
+    assert False, 'Unreachable'  # pragma: no cover
 
   def _setup_env(self):
     super(StandardTestRunner, self)._setup_env()
@@ -270,19 +272,19 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       ])
 
   def _get_statusfile_variables(self):
-    variables = (
-        super(StandardTestRunner, self)._get_statusfile_variables())
+    variables = (super(StandardTestRunner, self)._get_statusfile_variables())
 
     variables.update({
-      'gc_stress': self.options.gc_stress or self.options.random_gc_stress,
-      'gc_fuzzer': self.options.random_gc_stress,
-      'novfp3': self.options.novfp3,
+        'gc_stress': self.options.gc_stress or self.options.random_gc_stress,
+        'gc_fuzzer': self.options.random_gc_stress,
+        'novfp3': self.options.novfp3,
     })
     return variables
 
   def _create_sequence_proc(self):
     """Create processor for sequencing heavy tests on swarming."""
-    return SequenceProc(self.options.max_heavy_tests) if self.options.swarming else None
+    return SequenceProc(
+        self.options.max_heavy_tests) if self.options.swarming else None
 
   def _do_execute(self, tests, args):
     jobs = self.options.j
@@ -290,8 +292,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     print('>>> Running with test processors')
     loader = LoadProc(tests, initial_batch_size=self.options.j * 2)
     results = ResultsTracker.create(self.options)
-    indicators = self._create_progress_indicators(
-        tests.test_count_estimate)
+    indicators = self._create_progress_indicators(tests.test_count_estimate)
 
     outproc_factory = None
     if self.build_config.predictable:
@@ -300,21 +301,23 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     sigproc = self._create_signal_proc()
 
     procs = [
-      loader,
-      NameFilterProc(args) if args else None,
-      StatusFileFilterProc(self.options.slow_tests, self.options.pass_fail_tests),
-      VariantProc(self._variants),
-      StatusFileFilterProc(self.options.slow_tests, self.options.pass_fail_tests),
-      self._create_predictable_filter(),
-      ShardProc.create(self.options),
-      self._create_seed_proc(),
-      self._create_sequence_proc(),
-      sigproc,
+        loader,
+        NameFilterProc(args) if args else None,
+        StatusFileFilterProc(self.options.slow_tests,
+                             self.options.pass_fail_tests),
+        VariantProc(self._variants),
+        StatusFileFilterProc(self.options.slow_tests,
+                             self.options.pass_fail_tests),
+        self._create_predictable_filter(),
+        ShardProc.create(self.options),
+        self._create_seed_proc(),
+        self._create_sequence_proc(),
+        sigproc,
     ] + indicators + [
-      results,
-      TimeoutProc.create(self.options),
-      RerunProc.create(self.options),
-      execproc,
+        results,
+        TimeoutProc.create(self.options),
+        RerunProc.create(self.options),
+        execproc,
     ]
 
     self._prepare_procs(procs)
@@ -391,9 +394,9 @@ class StandardTestRunner(base_runner.BaseTestRunner):
   def _create_seed_proc(self):
     if self.options.random_seed_stress_count == 1:
       return None
-    return SeedProc(self.options.random_seed_stress_count, self.options.random_seed,
-                    self.options.j * 4)
+    return SeedProc(self.options.random_seed_stress_count,
+                    self.options.random_seed, self.options.j * 4)
 
 
 if __name__ == '__main__':
-  sys.exit(StandardTestRunner().execute()) # pragma: no cover
+  sys.exit(StandardTestRunner().execute())  # pragma: no cover
