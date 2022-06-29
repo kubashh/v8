@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e622e6e5_18537856",
+        "filename": "src/wasm/names-provider.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-06-29T17:19:34Z",
+      "side": 1,
+      "message": "Hi Jakob,\n\nThis line isn\u0027t compiling with gcc (due to the forward declaration I assume):\n```\nerror: invalid application of \u0027sizeof\u0027 to incomplete type \u0027v8::internal::wasm::DecodedNameSection\u0027\n```",
+      "revId": "9983fda8a989c1860b3dcedc63bea4d3f883792f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
