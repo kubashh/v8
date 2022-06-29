@@ -50,6 +50,24 @@
       "message": "Nit: You could put this block now into its own function, something like \"GuaranteeDecodedNamesExist\".",
       "revId": "9094874d38ddbfe30338f42c6f8c658fb7356cd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d104ca_38b9eeb4",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:23:58Z",
+      "side": 1,
+      "message": "Done. I just moved the lock+check into `DecodeNames` and renamed it accordingly.",
+      "parentUuid": "db3bd786_a73b77ab",
+      "revId": "9094874d38ddbfe30338f42c6f8c658fb7356cd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
