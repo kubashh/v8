@@ -16,6 +16,23 @@
       "message": "tx!",
       "revId": "22fad831f90997465ea097db0851508bf69a98ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccbcfdda_4b9f029a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T14:19:29Z",
+      "side": 1,
+      "message": "Resetting CQ to address https://chromium-review.googlesource.com/c/v8/v8/+/3734808/comment/d15427da_052092b3/",
+      "revId": "22fad831f90997465ea097db0851508bf69a98ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
