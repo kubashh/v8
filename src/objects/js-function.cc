@@ -576,6 +576,58 @@ void JSFunction::CreateAndAttachFeedbackVector(
   function->SetInterruptBudget(isolate);
 }
 
+static char turbofan_compiled_scripts[11][64] = {
+    "polymer_bundled.min.js",
+    "vendor.js",
+    "polyfills.3a2aed82a0c9b24e6585.bundle.js",
+    "vendor.9a296bbc1909830a9106.bundle.js",
+    "main.f1c5d33a6950c335064d.bundle.js",
+    "vendor.e7008001a8bed009bbf1.js",
+    "handlebars.js",
+    "bundle.js",
+    "elm.js",
+    "jquery.js",
+    "depot.js",
+};
+
+static int turbofan_compiled_scripts_length[11] = {22, 9, 40, 37, 35, 30,
+                                                   13, 9, 6,  9,  8};
+
+static int turbofan_compiled_start_positions[11][128] = {
+    {2, 62407, 65446},
+    {91,      95613,   780774,  922892,  923043,  925472,  924181,  925872,
+     954410,  547330,  852130,  548949,  1517932, 929595,  929958,  1858282,
+     1872018, 1872605, 769306,  770443,  773006,  984668,  797914,  968942,
+     867151,  932825,  1373385, 30324,   1055933, 396741,  383366,  166656,
+     351453,  988143,  1061365, 386113,  1548030, 545924,  1436709, 1018333,
+     981628,  1018498, 963375,  863269,  1061978, 1060932, 970927,  1780978,
+     747757,  746317,  718643,  1032846, 1035566, 1841541, 630384,  1037283,
+     1859124, 1820386, 1027246, 1020222, 1023903, 1029529, 732447,  964267,
+     89912,   1030471, 1031843, 1863332, 1864366, 1882182, 1863766, 1862904,
+     1860205, 612720,  1400908, 1540184, 599951,  1830342, 1318328, 1318208,
+     1064311, 1540719, 965190,  864513,  931626,  963862,  1863127, 1863211,
+     716045,  718450,  719763,  1451714},
+    {1, 27233},
+    {20,    131437, 132595, 136230, 148755, 22244,  83158,
+     83663, 80524,  70083,  85024,  86984,  80857,  81205,
+     55074, 60760,  61168,  55161,  40190,  150007, 75018},
+    {1, 1194},
+    {4, 55777, 253, 211, 71279},
+    {8, 36027, 35845, 39120, 39208, 25301, 21962, 22635, 15859},
+    {30,     19496,  107241, 108606, 118423, 16536,  9324,   8742,
+     9195,   8658,   15467,  15202,  13748,  31046,  26676,  24275,
+     67000,  102431, 6284,   35812,  39989,  50957,  120734, 120884,
+     121349, 80398,  42825,  67642,  66213,  111463, 115385},
+    {47,     25839,  2070,   242,    25764,  2160,   26315,  25982,
+     261953, 261730, 219428, 215964, 216064, 218233, 193312, 66418,
+     29478,  5509,   5741,   22412,  12162,  217543, 223986, 271903,
+     251118, 219844, 292632, 279093, 191631, 30423,  10676,  227876,
+     233076, 234642, 204684, 227694, 242323, 245992, 246345, 302926,
+     33901,  309037, 33510,  311504, 295769, 263,    34246,  314351},
+    {7, 137523, 195253, 264917, 252041, 124878, 155810},
+    {1, 2142},
+};
+
 // static
 void JSFunction::InitializeFeedbackCell(
     Handle<JSFunction> function, IsCompiledScope* is_compiled_scope,
@@ -602,18 +654,48 @@ void JSFunction::InitializeFeedbackCell(
         function->shared().feedback_metadata().create_closure_slot_count());
   }
 
+  if (function->shared().script().IsScript() &&
+      Script::cast(function->shared().script()).name().IsString()) {
+    String script_name =
+        String::cast(Script::cast(function->shared().script()).name());
+    int script_name_length = script_name.length();
+    for (int i = 0; i < 11; i++) {
+      if (script_name_length > turbofan_compiled_scripts_length[i] &&
+          strcmp(script_name.ToCString().get() + script_name_length -
+                     turbofan_compiled_scripts_length[i],
+                 turbofan_compiled_scripts[i]) == 0) {
+        int start_position = function->shared().StartPosition();
+        for (int j = 0; j < turbofan_compiled_start_positions[i][0]; j++) {
+          if (start_position == turbofan_compiled_start_positions[i][j + 1]) {
+            function->shared().set_turbofan_compiled(true);
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
   const bool needs_feedback_vector =
       !FLAG_lazy_feedback_allocation || FLAG_always_turbofan ||
       // We also need a feedback vector for certain log events, collecting type
       // profile and more precise code coverage.
       FLAG_log_function_events || !isolate->is_best_effort_code_coverage() ||
-      isolate->is_collecting_type_profile();
+      isolate->is_collecting_type_profile() ||
+      function->shared().turbofan_compiled();
 
   if (needs_feedback_vector) {
     CreateAndAttachFeedbackVector(isolate, function, is_compiled_scope);
   } else {
     EnsureClosureFeedbackCellArray(function,
                                    reset_budget_for_feedback_allocation);
+  }
+  if (function->shared().turbofan_compiled() &&
+      CanCompileWithBaseline(isolate, function->shared()) &&
+      !function->ActiveTierIsBaseline()) {
+    IsCompiledScope is_compiled_scope(
+        function->shared().is_compiled_scope(isolate));
+    Compiler::CompileBaseline(isolate, function, Compiler::CLEAR_EXCEPTION,
+                              &is_compiled_scope);
   }
 }
 
