@@ -1470,22 +1470,19 @@ void InstructionSelector::VisitTryTruncateFloat32ToInt64(Node* node) {
   Emit(kSSEFloat32ToInt64, output_count, outputs, 1, inputs, temp_count, temps);
 }
 
-void InstructionSelector::VisitTryTruncateFloat64ToInt64(Node* node) {
+void InstructionSelector::VisitTryTruncateFloat64ToUint32(Node* node) {
   X64OperandGenerator g(this);
   InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
   InstructionOperand outputs[2];
-  InstructionOperand temps[1];
   size_t output_count = 0;
-  size_t temp_count = 0;
   outputs[output_count++] = g.DefineAsRegister(node);
 
   Node* success_output = NodeProperties::FindProjection(node, 1);
   if (success_output) {
     outputs[output_count++] = g.DefineAsRegister(success_output);
-    temps[temp_count++] = g.TempSimd128Register();
   }
 
-  Emit(kSSEFloat64ToInt64, output_count, outputs, 1, inputs, temp_count, temps);
+  Emit(kSSEFloat64ToUint32, output_count, outputs, 1, inputs);
 }
 
 void InstructionSelector::VisitTryTruncateFloat32ToUint64(Node* node) {
@@ -1516,6 +1513,78 @@ void InstructionSelector::VisitTryTruncateFloat64ToUint64(Node* node) {
   }
 
   Emit(kSSEFloat64ToUint64, output_count, outputs, 1, inputs);
+}
+
+void InstructionSelector::VisitTryTruncateFloat64ToInt64(Node* node) {
+  X64OperandGenerator g(this);
+  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+  InstructionOperand outputs[2];
+  InstructionOperand temps[1];
+  size_t output_count = 0;
+  size_t temp_count = 0;
+  outputs[output_count++] = g.DefineAsRegister(node);
+
+  Node* success_output = NodeProperties::FindProjection(node, 1);
+  if (success_output) {
+    outputs[output_count++] = g.DefineAsRegister(success_output);
+    temps[temp_count++] = g.TempSimd128Register();
+  }
+
+  Emit(kSSEFloat64ToInt64, output_count, outputs, 1, inputs, temp_count, temps);
+}
+
+void InstructionSelector::VisitTryTruncateFloat64ToInt32(Node* node) {
+  X64OperandGenerator g(this);
+  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+  InstructionOperand outputs[2];
+  InstructionOperand temps[1];
+  size_t output_count = 0;
+  size_t temp_count = 0;
+  outputs[output_count++] = g.DefineAsRegister(node);
+
+  Node* success_output = NodeProperties::FindProjection(node, 1);
+  if (success_output) {
+    outputs[output_count++] = g.DefineAsRegister(success_output);
+    temps[temp_count++] = g.TempSimd128Register();
+  }
+
+  Emit(kSSEFloat64ToInt32, output_count, outputs, 1, inputs, temp_count, temps);
+}
+
+void InstructionSelector::VisitTryTruncateFloat64ToInt64(Node* node) {
+  X64OperandGenerator g(this);
+  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+  InstructionOperand outputs[2];
+  InstructionOperand temps[1];
+  size_t output_count = 0;
+  size_t temp_count = 0;
+  outputs[output_count++] = g.DefineAsRegister(node);
+
+  Node* success_output = NodeProperties::FindProjection(node, 1);
+  if (success_output) {
+    outputs[output_count++] = g.DefineAsRegister(success_output);
+    temps[temp_count++] = g.TempSimd128Register();
+  }
+
+  Emit(kSSEFloat64ToInt64, output_count, outputs, 1, inputs, temp_count, temps);
+}
+
+void InstructionSelector::VisitTryTruncateFloat64ToInt32(Node* node) {
+  X64OperandGenerator g(this);
+  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+  InstructionOperand outputs[2];
+  InstructionOperand temps[1];
+  size_t output_count = 0;
+  size_t temp_count = 0;
+  outputs[output_count++] = g.DefineAsRegister(node);
+
+  Node* success_output = NodeProperties::FindProjection(node, 1);
+  if (success_output) {
+    outputs[output_count++] = g.DefineAsRegister(success_output);
+    temps[temp_count++] = g.TempSimd128Register();
+  }
+
+  Emit(kSSEFloat64ToInt32, output_count, outputs, 1, inputs, temp_count, temps);
 }
 
 void InstructionSelector::VisitBitcastWord32ToWord64(Node* node) {

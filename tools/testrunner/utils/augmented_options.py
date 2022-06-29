@@ -7,17 +7,19 @@ import os
 import random
 from testrunner.testproc import fuzzer
 
+
 class AugmentedOptions(optparse.Values):
   """This class will augment exiting options object with
   a couple of convenient methods and properties.
   """
+
   @staticmethod
   def augment(options_object):
     options_object.__class__ = AugmentedOptions
     return options_object
 
   def fuzzer_rng(self):
-    if not getattr(self,'_fuzzer_rng', None):
+    if not getattr(self, '_fuzzer_rng', None):
       self._fuzzer_rng = random.Random(self.fuzzer_random_seed)
     return self._fuzzer_rng
 
@@ -28,8 +30,7 @@ class AugmentedOptions(optparse.Values):
     """
     # Read gtest shard configuration from environment (e.g. set by swarming).
     # If none is present, use values passed on the command line.
-    count = int(
-      os.environ.get('GTEST_TOTAL_SHARDS', self.shard_count))
+    count = int(os.environ.get('GTEST_TOTAL_SHARDS', self.shard_count))
     run = os.environ.get('GTEST_SHARD_INDEX')
     # The v8 shard_run starts at 1, while GTEST_SHARD_INDEX starts at 0.
     run = int(run) + 1 if run else self.shard_run
@@ -40,8 +41,7 @@ class AugmentedOptions(optparse.Values):
       if self.shard_count != count:  # pragma: no cover
         print("shard_count from cmd line differs from environment variable "
               "GTEST_TOTAL_SHARDS")
-      if (self.shard_run > 1 and
-          self.shard_run != run):  # pragma: no cover
+      if (self.shard_run > 1 and self.shard_run != run):  # pragma: no cover
         print("shard_run from cmd line differs from environment variable "
               "GTEST_SHARD_INDEX")
 
@@ -53,10 +53,11 @@ class AugmentedOptions(optparse.Values):
       print("defaulting back to running all tests")
       return 0, 1
 
-    return run - 1, count # coming back to 0 based counting
+    return run - 1, count  # coming back to 0 based counting
 
   def fuzzer_configs(self):
     fuzzers = []
+
     def add(name, prob, *args):
       if prob:
         fuzzers.append(fuzzer.create_fuzzer_config(name, prob, *args))
