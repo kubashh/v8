@@ -5761,10 +5761,24 @@ Node* WasmGraphBuilder::StringNewWtf8(uint32_t memory,
                             gasm_->SmiConstant(static_cast<int32_t>(policy)));
 }
 
+Node* WasmGraphBuilder::StringNewWtf8Array(wasm::StringRefWtf8Policy policy,
+                                           Node* array, Node* start,
+                                           Node* end) {
+  return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf8Array,
+                            Operator::kNoDeopt, start, end, array,
+                            gasm_->SmiConstant(static_cast<int32_t>(policy)));
+}
+
 Node* WasmGraphBuilder::StringNewWtf16(uint32_t memory, Node* offset,
                                        Node* size) {
   return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf16, Operator::kNoDeopt,
                             gasm_->Uint32Constant(memory), offset, size);
+}
+
+Node* WasmGraphBuilder::StringNewWtf16Array(Node* array, Node* start,
+                                            Node* end) {
+  return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf16Array,
+                            Operator::kNoDeopt, array, start, end);
 }
 
 Node* WasmGraphBuilder::StringConst(uint32_t index) {

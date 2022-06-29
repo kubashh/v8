@@ -857,6 +857,31 @@ RUNTIME_FUNCTION(Runtime_WasmCreateResumePromise) {
   return *result;
 }
 
+namespace {
+Object StringFromWtf8(Isolate* isolate, wasm::StringRefWtf8Policy policy,
+                      const base::Vector<const uint8_t> bytes) {
+  // TODO(12868): Override any exception with an uncatchable-by-wasm trap.
+  Handle<String> result;
+  switch (policy) {
+    case wasm::kWtf8PolicyReject:
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+          isolate, result, isolate->factory()->NewStringFromStrictUtf8(bytes));
+      break;
+    case wasm::kWtf8PolicyAccept:
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+          isolate, result, isolate->factory()->NewStringFromWtf8(bytes));
+      break;
+    case wasm::kWtf8PolicyReplace: {
+      auto string = base::Vector<const char>::cast(bytes);
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+          isolate, result, isolate->factory()->NewStringFromUtf8(string));
+      break;
+    }
+  }
+  return *result;
+}
+}  // namespace
+
 // Returns the new string if the operation succeeds.  Otherwise throws an
 // exception and returns an empty result.
 RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8) {
@@ -882,25 +907,28 @@ RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8) {
 
   const base::Vector<const uint8_t> bytes{instance->memory_start() + offset,
                                           size};
-  // TODO(12868): Override any exception with an uncatchable-by-wasm trap.
-  Handle<String> result;
-  switch (policy) {
-    case wasm::kWtf8PolicyReject:
-      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
-          isolate, result, isolate->factory()->NewStringFromStrictUtf8(bytes));
-      break;
-    case wasm::kWtf8PolicyAccept:
-      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
-          isolate, result, isolate->factory()->NewStringFromWtf8(bytes));
-      break;
-    case wasm::kWtf8PolicyReplace: {
-      auto string = base::Vector<const char>::cast(bytes);
-      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
-          isolate, result, isolate->factory()->NewStringFromUtf8(string));
-      break;
-    }
-  }
-  return *result;
+  return StringFromWtf8(isolate, policy, bytes);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8Array) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  DCHECK_EQ(4, args.length());
+  HandleScope scope(isolate);
+  uint32_t policy_value = args.positive_smi_value_at(0);
+  Handle<WasmArray> array = args.at<WasmArray>(1);
+  uint32_t start = NumberToUint32(args[2]);
+  uint32_t end = NumberToUint32(args[3]);
+
+  DCHECK(policy_value <= wasm::kLastWtf8Policy);
+  auto policy = static_cast<wasm::StringRefWtf8Policy>(policy_value);
+
+  DCHECK_EQ(sizeof(uint8_t), array->type()->element_type().value_kind_size());
+  const void* src = ArrayElementAddress(array, start, sizeof(uint8_t));
+  DCHECK_LE(start, end);
+  DCHECK_LE(end, array->length());
+  const base::Vector<const uint8_t> bytes{static_cast<const uint8_t*>(src),
+                                          end - start};
+  return StringFromWtf8(isolate, policy, bytes);
 }
 
 RUNTIME_FUNCTION(Runtime_WasmStringNewWtf16) {
@@ -932,6 +960,29 @@ RUNTIME_FUNCTION(Runtime_WasmStringNewWtf16) {
       isolate, result,
       isolate->factory()->NewStringFromTwoByteLittleEndian(
           {codeunits, size_in_codeunits}));
+  return *result;
+}
+
+RUNTIME_FUNCTION(Runtime_WasmStringNewWtf16Array) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  DCHECK_EQ(3, args.length());
+  HandleScope scope(isolate);
+  Handle<WasmArray> array = args.at<WasmArray>(0);
+  uint32_t start = NumberToUint32(args[1]);
+  uint32_t end = NumberToUint32(args[2]);
+
+  DCHECK(!array->type()->element_type().is_reference());
+  DCHECK_EQ(sizeof(uint16_t), array->type()->element_type().value_kind_size());
+  const void* src = ArrayElementAddress(array, start, sizeof(uint16_t));
+  DCHECK_LE(start, end);
+  DCHECK_LE(end, array->length());
+  const base::uc16* codeunits = static_cast<const base::uc16*>(src);
+  size_t size_in_codeunits = end - start;
+  // TODO(12868): Override any exception with an uncatchable-by-wasm trap.
+  Handle<String> result;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, result,
+      isolate->factory()->NewStringFromTwoByte({codeunits, size_in_codeunits}));
   return *result;
 }
 
