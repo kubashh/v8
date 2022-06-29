@@ -1723,6 +1723,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArm64Float64ToInt32:
       __ Fcvtzs(i.OutputRegister32(), i.InputDoubleRegister(0));
+      if (i.OutputCount() > 1) {
+        // Check for inputs below INT32_MIN and NaN.
+        __ Fcmp(i.InputDoubleRegister(0), static_cast<double>(INT32_MIN));
+        // See kArm64Float32ToInt64 for a detailed description.
+        __ Ccmp(i.OutputRegister(0).W(), -1, VFlag, gt);
+        __ Cset(i.OutputRegister(1).W(), vc);
+      }
       break;
     case kArm64Float32ToUint32: {
       __ Fcvtzu(i.OutputRegister32(), i.InputFloat32Register(0));
@@ -1737,6 +1744,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kArm64Float64ToUint32:
       __ Fcvtzu(i.OutputRegister32(), i.InputDoubleRegister(0));
+      if (i.OutputCount() > 1) {
+        // See kArm64Float32ToInt64 for a detailed description.
+        __ Fcmp(i.InputDoubleRegister(0), -1.0);
+        __ Ccmp(i.OutputRegister(0).W(), -1, ZFlag, gt);
+        __ Cset(i.OutputRegister(1).W(), ne);
+      }
       break;
     case kArm64Float32ToInt64:
       __ Fcvtzs(i.OutputRegister64(), i.InputFloat32Register(0));
