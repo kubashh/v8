@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8124e6_53b4cfe1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:11:02Z",
+      "side": 1,
+      "message": "LGTM with an important comment and two nits.",
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d15427da_052092b3",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:11:02Z",
+      "side": 1,
+      "message": "Come to think of it, you mean `end` here and in line 814. Please add tests that flush this out (`start` in bounds, `end` not).",
+      "range": {
+        "startLine": 835,
+        "startChar": 23,
+        "endLine": 835,
+        "endChar": 28
+      },
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad21c841_3bf7ff53",
@@ -14,6 +54,52 @@
       "writtenOn": "2022-06-29T13:07:47Z",
       "side": 1,
       "message": "Alternately we could `AllocateSeqTwoByteString` as ExperimentalWasmConvertArrayToString does.",
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4af01a5_77ef3be0",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:11:02Z",
+      "side": 1,
+      "message": "nit: `wasmRefType`",
+      "range": {
+        "startLine": 192,
+        "startChar": 37,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07e735c7_0bb213df",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-06-29T14:11:02Z",
+      "side": 1,
+      "message": "nit: `kExprArrayNewDataStatic` here, and drop the line above.",
+      "range": {
+        "startLine": 197,
+        "startChar": 17,
+        "endLine": 197,
+        "endChar": 34
+      },
       "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
