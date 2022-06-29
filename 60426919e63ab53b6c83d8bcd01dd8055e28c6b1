@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7ba2a5c_b0d0dac9",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T14:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34335ea4_26806c71",
+      "range": {
+        "startLine": 106,
+        "startChar": 36,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c41736b3_226eb975",
@@ -77,6 +101,30 @@
       "writtenOn": "2022-06-29T13:34:43Z",
       "side": 1,
       "message": "nit: use `kExprArrayNewDataStatic` here, and drop the RttCanon line above.",
+      "range": {
+        "startLine": 111,
+        "startChar": 17,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "60426919e63ab53b6c83d8bcd01dd8055e28c6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1db9c5_536848db",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T14:14:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c41736b3_226eb975",
       "range": {
         "startLine": 111,
         "startChar": 17,
