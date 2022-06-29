@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52bf25c6_c27411b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-06-29T12:15:40Z",
+      "side": 1,
+      "message": "Hi Tobias, this is the easiest implementation for EnforceRange that happens in EffectControlLinearizer. It\u0027s not so slow anyway, as we build the extra branches only when we have the annotation, in the regular case the code is the same as before. I don\u0027t have benchmark to measure it with, we\u0027ll have to see the numbers once it gets used in Blink. PTAL, thanks!",
+      "revId": "4a45605f3209e6044057e6d90807342985c642ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

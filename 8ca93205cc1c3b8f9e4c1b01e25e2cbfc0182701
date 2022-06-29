@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0bf633b_c391200b",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1473,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-06-29T12:15:40Z",
+      "side": 0,
+      "message": "note: this is just moved to line 1518, but the diff gets confused.",
+      "revId": "8ca93205cc1c3b8f9e4c1b01e25e2cbfc0182701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
