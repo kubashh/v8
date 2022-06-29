@@ -825,7 +825,7 @@ struct EncodeWtf8Immediate {
 
 template <Decoder::ValidateFlag validate>
 struct PcForErrors {
-  PcForErrors(const byte* /* pc */) {}
+  explicit PcForErrors(const byte* /* pc */) {}
 
   const byte* pc() const { return nullptr; }
 };
@@ -834,7 +834,7 @@ template <>
 struct PcForErrors<Decoder::kFullValidation> {
   const byte* pc_for_errors = nullptr;
 
-  PcForErrors(const byte* pc) : pc_for_errors(pc) {}
+  explicit PcForErrors(const byte* pc) : pc_for_errors(pc) {}
 
   const byte* pc() const { return pc_for_errors; }
 };

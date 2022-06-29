@@ -43,7 +43,7 @@ enum WasmFeature {
 class WasmFeatures : public base::EnumSet<WasmFeature> {
  public:
   constexpr WasmFeatures() = default;
-  explicit constexpr WasmFeatures(std::initializer_list<WasmFeature> features)
+  constexpr WasmFeatures(std::initializer_list<WasmFeature> features)
       : EnumSet(features) {}
 
   // Simplified getters. Use {has_foo()} instead of {contains(kFeature_foo)}.

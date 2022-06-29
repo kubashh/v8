@@ -574,13 +574,13 @@ inline WasmValue WasmValueInitializer(int16_t value) {
 template <typename ReturnType, typename... ParamTypes>
 class WasmRunner : public WasmRunnerBase {
  public:
-  WasmRunner(TestExecutionTier execution_tier,
-             ManuallyImportedJSFunction* maybe_import = nullptr,
-             const char* main_fn_name = "main",
-             RuntimeExceptionSupport runtime_exception_support =
-                 kNoRuntimeExceptionSupport,
-             TestingModuleMemoryType mem_type = kMemory32,
-             Isolate* isolate = nullptr)
+  explicit WasmRunner(TestExecutionTier execution_tier,
+                      ManuallyImportedJSFunction* maybe_import = nullptr,
+                      const char* main_fn_name = "main",
+                      RuntimeExceptionSupport runtime_exception_support =
+                          kNoRuntimeExceptionSupport,
+                      TestingModuleMemoryType mem_type = kMemory32,
+                      Isolate* isolate = nullptr)
       : WasmRunnerBase(maybe_import, execution_tier, sizeof...(ParamTypes),
                        runtime_exception_support, mem_type, isolate) {
     WasmFunctionCompiler& main_fn =
