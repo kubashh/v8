@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50a935f8_04c37bbb",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T15:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e2c5c4f_49b83bf0",
+      "range": {
+        "startLine": 835,
+        "startChar": 23,
+        "endLine": 835,
+        "endChar": 28
+      },
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad21c841_3bf7ff53",
@@ -123,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "500f02f2_8dac5532",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T15:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4af01a5_77ef3be0",
+      "range": {
+        "startLine": 192,
+        "startChar": 37,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07e735c7_0bb213df",
@@ -136,6 +184,30 @@
       "writtenOn": "2022-06-29T14:11:02Z",
       "side": 1,
       "message": "nit: `kExprArrayNewDataStatic` here, and drop the line above.",
+      "range": {
+        "startLine": 197,
+        "startChar": 17,
+        "endLine": 197,
+        "endChar": 34
+      },
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a198990_1ae38362",
+        "filename": "test/mjsunit/wasm/stringrefs-exec-gc.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T15:36:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07e735c7_0bb213df",
       "range": {
         "startLine": 197,
         "startChar": 17,
