@@ -155,3 +155,60 @@ function makeWtf8TestDataSegment() {
                  WebAssembly.RuntimeError, "invalid UTF-8 string");
   }
 })();
+
+function encodeWtf16LE(str) {
+  // String iterator coalesces surrogate pairs.
+  let out = [];
+  for (let i = 0; i < str.length; i++) {
+    codeunit = str.charCodeAt(i);
+    out.push(codeunit & 0xff)
+    out.push(codeunit >> 8);
+  }
+  return out;
+}
+
+function makeWtf16TestDataSegment() {
+  let data = []
+  let valid = {};
+
+  for (let str of interestingStrings) {
+    valid[str] = { offset: data.length, length: str.length };
+    for (let byte of encodeWtf16LE(str)) {
+      data.push(byte);
+    }
+  }
+
+  return { valid, data: Uint8Array.from(data) };
+};
+
+(function TestStringNewWtf16Array() {
+  let builder = new WasmModuleBuilder();
+
+  let data = makeWtf16TestDataSegment();
+  let data_index = builder.addPassiveDataSegment(data.data);
+  let i16_array = builder.addArray(kWasmI16, true);
+
+  let make_i16_array = builder.addFunction(
+      "make_i16_array", makeSig([], [wasmOptRefType(i16_array)]))
+    .addBody([
+      ...wasmI32Const(0),
+      ...wasmI32Const(data.data.length / 2),
+      kGCPrefix, kExprRttCanon, i16_array,
+      kGCPrefix, kExprArrayNewData, i16_array, data_index
+    ]).index;
+
+  builder.addFunction("new_wtf16", kSig_w_ii)
+    .exportFunc()
+    .addBody([
+      kExprCallFunction, make_i16_array,
+      kExprLocalGet, 0, kExprLocalGet, 1,
+      kGCPrefix, kExprStringNewWtf16Array
+    ]);
+
+  let instance = builder.instantiate();
+  for (let [str, {offset, length}] of Object.entries(data.valid)) {
+    let start = offset / 2;
+    let end = start + length;
+    assertEquals(str, instance.exports.new_wtf16(start, end));
+  }
+})();
