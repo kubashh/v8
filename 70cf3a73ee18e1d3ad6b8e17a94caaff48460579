@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00a5e423_c64e8164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-29T12:46:10Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7aff96f_66480f66",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3afb1a4_eab4de95",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-29T12:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7aff96f_66480f66",
+      "range": {
+        "startLine": 2397,
+        "startChar": 19,
+        "endLine": 2397,
+        "endChar": 21
+      },
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "474aa222_16f896fe",
@@ -54,6 +95,30 @@
       "writtenOn": "2022-06-28T01:55:13Z",
       "side": 1,
       "message": "Ditto on the 2-space nit in this file.",
+      "range": {
+        "startLine": 4511,
+        "startChar": 19,
+        "endLine": 4511,
+        "endChar": 21
+      },
+      "revId": "70cf3a73ee18e1d3ad6b8e17a94caaff48460579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60153ac5_cb315817",
+        "filename": "test/mjsunit/typedarray-resizablearraybuffer.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 4511,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-06-29T12:46:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "474aa222_16f896fe",
       "range": {
         "startLine": 4511,
         "startChar": 19,
