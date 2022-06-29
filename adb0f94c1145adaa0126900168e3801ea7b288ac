@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad21c841_3bf7ff53",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-06-29T13:07:47Z",
+      "side": 1,
+      "message": "Alternately we could `AllocateSeqTwoByteString` as ExperimentalWasmConvertArrayToString does.",
+      "revId": "adb0f94c1145adaa0126900168e3801ea7b288ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
