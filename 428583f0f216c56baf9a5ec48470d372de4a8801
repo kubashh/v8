@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc066d15_9fbde72c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2022-06-29T17:00:04Z",
+      "side": 1,
+      "message": "at least in node, we consider native code to be trusted, as it already has full access to the system and such. That being said I\u0027m not a huge fan of the two fields anyway, maybe `TypedArray\u003cuint8_t\u003e* wasm_memory` would be acceptable? nullptr for JS calls and another stack slot for Wasm calls.",
+      "parentUuid": "c1735d25_32813e4a",
+      "revId": "428583f0f216c56baf9a5ec48470d372de4a8801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16ba5586_4e0492c7",
@@ -89,6 +107,30 @@
       "writtenOn": "2022-06-28T14:47:06Z",
       "side": 1,
       "message": "Is it established to store like this to C++ objects? Wouldn\u0027t it be best to define a V8 object, and keep a handle to it in C++ world?",
+      "range": {
+        "startLine": 5190,
+        "startChar": 17,
+        "endLine": 5191,
+        "endChar": 76
+      },
+      "revId": "428583f0f216c56baf9a5ec48470d372de4a8801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ad37c1_f8528aed",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5191,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2022-06-29T17:00:04Z",
+      "side": 1,
+      "message": "yeah we\u0027re already doing this in `compiler/fast-api-calls.cc`",
+      "parentUuid": "41db1223_9f7f4129",
       "range": {
         "startLine": 5190,
         "startChar": 17,
