@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9ab6211_4bd73a5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-29T13:57:24Z",
+      "side": 1,
+      "message": "What is the semantics of the `TryTruncateFloat64To*` operators? Do they fail on out-of-bounds or also on non-integer numbers? From reading the code, I got the impression that `TryTruncateFloat64ToInt32` fails on fractional numbers while `TryTruncateFloat64ToUint32` only fails on out-of-bounds?",
+      "range": {
+        "startLine": 11,
+        "startChar": 31,
+        "endLine": 11,
+        "endChar": 56
+      },
+      "revId": "b2d35c922760ad70989c66eff99e1b90a44d000d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e5bb62a_be68e50e",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-06-29T13:57:24Z",
+      "side": 1,
+      "message": "How about doing this: First unconditionally subtract the floating-point value 2^31, then convert to signed int32, then add 2^31? This should generate less branches and less instructions.",
+      "range": {
+        "startLine": 1194,
+        "startChar": 5,
+        "endLine": 1194,
+        "endChar": 25
+      },
+      "revId": "b2d35c922760ad70989c66eff99e1b90a44d000d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
