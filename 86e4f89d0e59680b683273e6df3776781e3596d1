@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "792f7ad7_cdb16040",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Bug: v8:13023",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "08a879c4_f4c759f5",
@@ -32,6 +49,251 @@
       "side": 1,
       "message": "We found this feature can reduce compilation time in sparkplug, there is 30% for speedometer2, 10% for Web Tooling.(We did the test by parsing the log of \u0027--log-function-events\u0027, and get the sum of all baseline compiler compilation time cost)",
       "parentUuid": "08a879c4_f4c759f5",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93465190_0779984e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "First round of comments.\nPlease consider spliting this CL in two parts: a) moving the PKU machinery from Wasm to platform, b) use it for V8 heap.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b58c0cc1_9319f0ea",
+        "filename": "src/base/build_config.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "I think it\u0027s better to split availability of the feature from our choice of using it. Please define V8_HAS_PKU_JIT_WRITE_PROTECT here based on OS and arch and define V8_HEAP_USE_PKU_JIT_WRITE_PROTECT in globals.h.\n\nNote that Wasm might still want to use PKU machinery even when external code space is not enabled.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56cc91c4_0daaf71c",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "V8_HAS_PKU_JIT_WRITE_PROTECT",
+      "range": {
+        "startLine": 209,
+        "startChar": 4,
+        "endLine": 209,
+        "endChar": 36
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "876383f6_82b6d186",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Why is this necessary?",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db00bb2_287428c6",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Here and everywhere: just base::OS::...",
+      "range": {
+        "startLine": 59,
+        "startChar": 9,
+        "endLine": 59,
+        "endChar": 21
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87daeff6_32607d53",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "How expensive is this check? Does it make sense to compute it only once in the constructor?",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5257b51d_8bcc1e1f",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "This include should probably be added in the -inl.h file.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27de5f46_28a875bb",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Nit: ||",
+      "range": {
+        "startLine": 99,
+        "startChar": 44,
+        "endLine": 99,
+        "endChar": 45
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "711844be_8507d7e8",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "If it\u0027s allowed to reconfigure RWX pages\u0027 permissions then it\u0027s better to take the else part and configure code page headers as RW and the executable part as RWX.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fe0d04e_bc1d6842",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5701,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "While you are here... \nI think we should remove this CHECK to avoid confusion. I discovered later that even when on M1 it returns true it might still be not allowed to call RwxMemoryWriteScope::SetWritable()/SetExecutable() if signed binary doesn\u0027t have \"com.apple.security.cs.allow-jit\" entitlement.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb41671_040c6c52",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Given that this check is dynamic I think this code should rather be moved to an initialization of the write_protect_code_memory_ field.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3105f6e_0a67bada",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2673,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Does PKU machinery disallow reconfiguring RWX pages to RW and vice versa? If yes, then please update the comment above.\nIf no, then we can configure code page headers as RW and thus the CodePageHeaderModificationScope should be NopRwxMemoryWriteScope.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c5b5f63_fb1c4492",
+        "filename": "test/cctest/test-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:18:22Z",
+      "side": 1,
+      "message": "Here and below: why are these changes necessary given that we are allocating a code that\u0027s going to be executed?\n\nPlease consider using \n  AssemblerBufferWriteScope rw_scope(*buffer);\ninstead.",
+      "range": {
+        "startLine": 79,
+        "startChar": 39,
+        "endLine": 79,
+        "endChar": 60
+      },
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
