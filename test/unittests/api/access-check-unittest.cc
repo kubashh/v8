@@ -618,4 +618,371 @@ TEST_F(AccessCheckTest, NewRemoteInstance) {
   CheckCrossContextAccess(context, obj);
 }
 
+namespace {
+bool private_field_failed_access_check_called = false;
+bool failed_access_check_should_throw = false;
+const char* failed_access_check_message = "failed access check callback";
+void PrivateFieldAccessCheckCallback(v8::Local<v8::Object> target,
+                                     v8::AccessType type,
+                                     v8::Local<v8::Value> data) {
+  private_field_failed_access_check_called = true;
+  if (failed_access_check_should_throw) {
+    v8::Isolate::GetCurrent()->ThrowException(
+        v8_str(failed_access_check_message));
+  }
+}
+
+bool access_check_should_pass = false;
+bool private_field_access_check_called = false;
+bool PrivateFieldAccessCallback(v8::Local<v8::Context> accessing_context,
+                                v8::Local<v8::Object> accessed_object,
+                                v8::Local<v8::Value> data) {
+  private_field_access_check_called = true;
+  return access_check_should_pass;
+}
+
+const char* classes = R"(
+class A {
+  constructor(arg) {
+    return arg;
+  }
+}
+
+class B extends A {
+  #b = 1;  // ACCESS_CHECK -> DATA
+  constructor(arg) {
+    super(arg);
+  }
+  static setField(obj) {
+    obj.#b = 'b';  // KeyedStoreIC
+  }
+  static getField(obj) {
+    return obj.#b;
+  }
+  static hasField(obj) {
+    return #b in obj;
+  }
+}
+
+class C extends A {
+  #c;  // DefineKeyedOwnIC: ACCESS_CHECK -> NOT_FOUND
+  constructor(arg) {
+    super(arg);
+  }
+  static setField(obj) {
+    obj.#c = 'c';  // KeyedStoreIC
+  }
+  static getField(obj) {
+    return obj.#c;
+  }
+  static hasField(obj) {
+    return #c in obj;
+  }
+}
+
+let d = 0;
+class D extends A {
+  get #d() { return d; }
+  set #d(val) { d = val;}
+  constructor(arg) {
+    super(arg);  // KeyedStoreIC for private brand
+  }
+  static setAccessor(obj) {
+    obj.#d = 'd';  // KeyedLoadIC for private brand
+  }
+  static getAccessor(obj) {
+    return obj.#d;  // KeyedLoadIC for private brand
+  }
+}
+
+class E extends A {
+  #e() { return 0; }
+  constructor(arg) {
+    super(arg);  // KeyedStoreIC for private brand
+  }
+  static setMethod(obj) {
+    obj.#e = 'e';  // KeyedLoadIC for private brand
+  }
+  static getMethod(obj) {
+    return obj.#e;  // KeyedLoadIC for private brand
+  }
+}
+)";
+
+}  // namespace
+
+TEST_F(AccessCheckTest, AccessCheckWithPrivateField) {
+  v8::Isolate* iso = isolate();
+  iso->SetFailedAccessCheckCallbackFunction(PrivateFieldAccessCheckCallback);
+
+  v8::HandleScope scope(iso);
+
+  v8::Local<v8::ObjectTemplate> templ = v8::ObjectTemplate::New(iso);
+  templ->SetAccessCheckCallbackAndHandler(
+      PrivateFieldAccessCallback,
+      // If any of these are called with a private name a DCHECK should fail.
+      v8::NamedPropertyHandlerConfiguration(
+          NamedGetter, NamedSetter, NamedQuery, NamedDeleter, NamedEnumerator),
+      v8::IndexedPropertyHandlerConfiguration(IndexedGetter, IndexedSetter,
+                                              IndexedQuery, IndexedDeleter,
+                                              IndexedEnumerator));
+
+  v8::Local<v8::Context> context0 = v8::Context::New(iso, nullptr, templ);
+
+  {
+    v8::Context::Scope context_scope(context0);
+
+    CompileRun(iso, classes);
+
+    auto throws = [&](const char* code, const char* expected = nullptr) {
+      private_field_access_check_called = false;
+      private_field_failed_access_check_called = false;
+      v8::TryCatch try_catch(iso);
+      printf("[THROWS] '%s' %s, %s\n", code,
+             access_check_should_pass ? "has access" : "doesn't have access",
+             failed_access_check_should_throw ? "callback throws"
+                                              : "callback doesn't throw");
+      CompileRun(iso, code);
+      CHECK(private_field_access_check_called);
+      CHECK(try_catch.HasCaught());
+      if (expected != nullptr) {
+        v8::Local<v8::String> message =
+            v8::Exception::CreateMessage(iso, try_catch.Exception())->Get();
+        v8::String::Utf8Value utf8(iso, message);
+        CHECK_EQ(std::string(expected), std::string(*utf8));
+      }
+      CHECK_EQ(!access_check_should_pass,
+               private_field_failed_access_check_called);
+    };
+
+    auto pass = [&](const char* code,
+                    v8::Local<v8::Value> expected = v8::Local<v8::Value>()) {
+      private_field_access_check_called = false;
+      private_field_failed_access_check_called = false;
+      v8::TryCatch try_catch(iso);
+      printf("[PASS] '%s' %s, %s\n", code,
+             access_check_should_pass ? "has access" : "doesn't have access",
+             failed_access_check_should_throw ? "callback throws"
+                                              : "callback doesn't throw");
+      v8::Local<v8::Value> value = CompileRun(iso, code).ToLocalChecked();
+      CHECK(private_field_access_check_called);
+      CHECK(!try_catch.HasCaught());
+      if (!expected.IsEmpty()) {
+        if (expected->IsString()) {
+          CHECK(value->IsString());
+          v8::String::Utf8Value expected_utf8(iso, expected.As<v8::String>());
+          v8::String::Utf8Value actual_utf8(iso, value.As<v8::String>());
+          CHECK_EQ(std::string(*expected_utf8), std::string(*actual_utf8));
+        } else if (expected->IsInt32()) {
+          CHECK(value->IsInt32());
+          CHECK_EQ(expected.As<v8::Int32>()->Value(),
+                   value.As<v8::Int32>()->Value());
+        } else {
+          CHECK(value->StrictEquals(expected));
+        }
+      }
+      CHECK_EQ(!access_check_should_pass,
+               private_field_failed_access_check_called);
+      return value;
+    };
+
+    std::string failed_message =
+        std::string("Uncaught ") + failed_access_check_message;
+    const char* failed_message_str = failed_message.c_str();
+
+    {
+      v8::Local<v8::Context> context1 = v8::Context::New(iso, nullptr, templ);
+      context0->Global()
+          ->Set(context0, v8_str("global1"), context1->Global())
+          .FromJust();
+      access_check_should_pass = false;
+      failed_access_check_should_throw = true;
+      throws("new B(global1)", failed_message_str);
+      throws("new C(global1)", failed_message_str);
+      throws("new D(global1)", failed_message_str);
+      throws("new E(global1)", failed_message_str);
+      throws("B.setField(global1)", failed_message_str);
+      throws("C.setField(global1)", failed_message_str);
+      throws("B.hasField(global1)", failed_message_str);
+      throws("C.hasField(global1)", failed_message_str);
+      throws("B.getField(global1)", failed_message_str);
+      throws("C.getField(global1)", failed_message_str);
+      throws("D.setAccessor(global1)", failed_message_str);
+      throws("E.setMethod(global1)", failed_message_str);
+      throws("D.getAccessor(global1)", failed_message_str);
+      throws("E.getMethod(global1)", failed_message_str);
+    }
+
+    {
+      v8::Local<v8::Context> context2 = v8::Context::New(iso, nullptr, templ);
+      context0->Global()
+          ->Set(context0, v8_str("global2"), context2->Global())
+          .FromJust();
+      access_check_should_pass = false;
+      failed_access_check_should_throw = false;
+      // The failed access callback is supposed to throw.
+      // If it doesn't, behaviors are undefined. The tests
+      // here just document the current behavior and make sure
+      // that it doesn't crash.
+      pass("new B(global2)");
+      pass("new C(global2)");
+      pass("new D(global2)");
+      pass("new E(global2)");
+      pass("B.setField(global2)");
+      pass("C.setField(global2)");
+      pass("B.hasField(global2)", v8::False(iso));
+      pass("C.hasField(global2)", v8::False(iso));
+      pass("B.getField(global2)", v8::Undefined(iso));
+      pass("C.getField(global2)", v8::Undefined(iso));
+      pass("D.setAccessor(global2)");
+      throws("E.setMethod(global2)");
+      pass("D.getAccessor(global2)", v8_str("d"));
+      pass("E.getMethod(global2)()", v8::Integer::New(iso, 0));
+    }
+
+    {
+      v8::Local<v8::Context> context3 = v8::Context::New(iso, nullptr, templ);
+      context0->Global()
+          ->Set(context0, v8_str("global3"), context3->Global())
+          .FromJust();
+      access_check_should_pass = true;
+      failed_access_check_should_throw = true;
+
+      throws("B.setField(global3)");
+      throws("C.setField(global3)");
+      throws("B.getField(global3)");
+      throws("C.getField(global3)");
+
+      pass("B.hasField(global3)", v8::False(iso));
+      pass("C.hasField(global3)", v8::False(iso));
+      throws("D.setAccessor(global3)");
+      throws("E.setMethod(global3)");
+      throws("D.getAccessor(global3)");
+      throws("E.getMethod(global3)");
+
+      pass("new B(global3)");
+      pass("new C(global3)");
+      pass("new D(global3)");
+      pass("new E(global3)");
+
+      pass("B.getField(global3)", v8::Integer::New(iso, 1));
+      pass("B.setField(global3)");
+      pass("B.getField(global3)", v8_str("b"));
+      pass("B.getField(global3)", v8_str("b"));  // fast case
+      pass("B.hasField(global3)", v8::True(iso));
+      pass("B.hasField(global3)", v8::True(iso));  // fast case
+      throws("new B(global3)");
+
+      pass("C.getField(global3)", v8::Undefined(iso));
+      pass("C.setField(global3)");
+      pass("C.getField(global3)", v8_str("c"));
+      pass("C.getField(global3)", v8_str("c"));  // fast case
+      pass("C.hasField(global3)", v8::True(iso));
+      pass("C.hasField(global3)", v8::True(iso));  // fast case
+      throws("new C(global3)");
+
+      CompileRun(iso, "d = 0;");
+      pass("D.getAccessor(global3)", v8::Integer::New(iso, 0));
+      pass("D.setAccessor(global3)");
+      pass("D.getAccessor(global3)", v8_str("d"));
+      pass("D.getAccessor(global3)", v8_str("d"));  // fast case
+      throws("new D(global3)");
+
+      pass("E.getMethod(global3)()", v8::Integer::New(iso, 0));
+      throws("E.setMethod(global3)");
+      pass("E.getMethod(global3)()", v8::Integer::New(iso, 0));  // fast case
+      throws("new E(global3)");
+
+      access_check_should_pass = false;
+      throws("new B(global3)", failed_message_str);
+      throws("new C(global3)", failed_message_str);
+      throws("new D(global3)", failed_message_str);
+      throws("new E(global3)", failed_message_str);
+      throws("B.setField(global3)", failed_message_str);
+      throws("C.setField(global3)", failed_message_str);
+      throws("B.getField(global3)", failed_message_str);
+      throws("C.getField(global3)", failed_message_str);
+      throws("B.hasField(global3)", failed_message_str);
+      throws("C.hasField(global3)", failed_message_str);
+      throws("D.setAccessor(global3)", failed_message_str);
+      throws("E.setMethod(global3)", failed_message_str);
+      throws("D.getAccessor(global3)", failed_message_str);
+      throws("E.getMethod(global3)", failed_message_str);
+    }
+
+    {
+      v8::Local<v8::Context> context4 = v8::Context::New(iso, nullptr, templ);
+      context0->Global()
+          ->Set(context0, v8_str("global4"), context4->Global())
+          .FromJust();
+      access_check_should_pass = true;
+      failed_access_check_should_throw = false;
+
+      throws("B.setField(global4)");
+      throws("C.setField(global4)");
+      pass("B.hasField(global4)", v8::False(iso));
+      pass("C.hasField(global4)", v8::False(iso));
+      throws("B.getField(global4)");
+      throws("C.getField(global4)");
+      throws("D.setAccessor(global4)");
+      throws("E.setMethod(global4)");
+      throws("D.getAccessor(global4)");
+      throws("E.getMethod(global4)");
+
+      pass("new B(global4)");
+      pass("new C(global4)");
+      pass("new D(global4)");
+      pass("new E(global4)");
+
+      pass("B.getField(global4)", v8::Integer::New(iso, 1));
+      pass("B.setField(global4)");
+      pass("B.getField(global4)", v8_str("b"));
+      pass("B.getField(global4)", v8_str("b"));  // fast case
+      pass("B.hasField(global4)", v8::True(iso));
+      pass("B.hasField(global4)", v8::True(iso));  // fast case
+      throws("new B(global4)");
+
+      pass("C.getField(global4)", v8::Undefined(iso));
+      pass("C.setField(global4)");
+      pass("C.getField(global4)", v8_str("c"));
+      pass("C.getField(global4)", v8_str("c"));  // fast case
+      pass("C.hasField(global4)", v8::True(iso));
+      pass("C.hasField(global4)", v8::True(iso));  // fast case
+      throws("new C(global4)");
+
+      CompileRun(iso, "d = 0;");
+      pass("D.getAccessor(global4)", v8::Integer::New(iso, 0));
+      pass("D.setAccessor(global4)");
+      pass("D.getAccessor(global4)", v8_str("d"));
+      pass("D.getAccessor(global4)", v8_str("d"));  // fast case
+      throws("new D(global4)");
+
+      pass("E.getMethod(global4)()", v8::Integer::New(iso, 0));
+      throws("E.setMethod(global4)");
+      pass("E.getMethod(global4)()", v8::Integer::New(iso, 0));  // fast case
+      throws("new E(global4)");
+
+      access_check_should_pass = false;
+      // The failed access callback is supposed to throw.
+      // If it doesn't, behaviors are undefined. The tests
+      // here just document the current behavior and make
+      // sure that it doesn't crash.
+      pass("new B(global4)");
+      pass("new C(global4)");
+      pass("new D(global4)");
+      pass("new E(global4)");
+      pass("B.setField(global4)");
+      pass("C.setField(global4)");
+      pass("B.getField(global4)", v8::Undefined(iso));
+      pass("C.getField(global4)", v8::Undefined(iso));
+      pass("B.hasField(global4)", v8::False(iso));
+      pass("C.hasField(global4)", v8::False(iso));
+      pass("D.setAccessor(global4)");
+      throws("E.setMethod(global4)");
+      pass("D.getAccessor(global2)", v8_str("d"));
+      pass("E.getMethod(global2)()", v8::Integer::New(iso, 0));
+    }
+  }
+}
+
 }  // namespace v8
