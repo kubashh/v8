@@ -187,14 +187,13 @@ Maybe<bool> JSReceiver::HasInPrototypeChain(Isolate* isolate,
 }
 
 // static
-bool JSReceiver::CheckPrivateNameStore(LookupIterator* it, bool is_define) {
+Maybe<bool> JSReceiver::CheckPrivateNameStore(LookupIterator* it,
+                                              bool is_define) {
   DCHECK(it->GetName()->IsPrivateName());
   Isolate* isolate = it->isolate();
   Handle<String> name_string(
       String::cast(Handle<Symbol>::cast(it->GetName())->description()),
       isolate);
-  bool should_throw = GetShouldThrow(isolate, Nothing<ShouldThrow>()) ==
-                      ShouldThrow::kThrowOnError;
   for (; it->IsFound(); it->Next()) {
     switch (it->state()) {
       case LookupIterator::TRANSITION:
@@ -208,31 +207,30 @@ bool JSReceiver::CheckPrivateNameStore(LookupIterator* it, bool is_define) {
         if (!it->HasAccess()) {
           isolate->ReportFailedAccessCheck(
               Handle<JSObject>::cast(it->GetReceiver()));
-          RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, false);
-          return false;
+          RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
+          return Just(false);
         }
         break;
       case LookupIterator::DATA:
-        if (is_define && should_throw) {
+        if (is_define) {
           MessageTemplate message =
               it->GetName()->IsPrivateBrand()
                   ? MessageTemplate::kInvalidPrivateBrandReinitialization
                   : MessageTemplate::kInvalidPrivateFieldReinitialization;
-          isolate->Throw(*(isolate->factory()->NewTypeError(
-              message, name_string, it->GetReceiver())));
-          return false;
+          RETURN_FAILURE(isolate,
+                         GetShouldThrow(isolate, Nothing<ShouldThrow>()),
+                         NewTypeError(message, name_string, it->GetReceiver()));
         }
-        return true;
+        return Just(true);
     }
   }
   DCHECK(!it->IsFound());
-  if (!is_define && should_throw) {
-    isolate->Throw(*(isolate->factory()->NewTypeError(
-        MessageTemplate::kInvalidPrivateMemberWrite, name_string,
-        it->GetReceiver())));
-    return false;
+  if (!is_define) {
+    RETURN_FAILURE(isolate, GetShouldThrow(isolate, Nothing<ShouldThrow>()),
+                   NewTypeError(MessageTemplate::kInvalidPrivateMemberWrite,
+                                name_string, it->GetReceiver()));
   }
-  return true;
+  return Just(true);
 }
 
 // static
@@ -1197,7 +1195,8 @@ MaybeHandle<Object> GetPropertyWithInterceptorInternal(
   // interceptor calls.
   AssertNoContextChange ncc(isolate);
 
-  if (interceptor->getter().IsUndefined(isolate)) {
+  if (interceptor->getter().IsUndefined(isolate) ||
+      it->GetName()->IsPrivateName()) {
     return isolate->factory()->undefined_value();
   }
 
@@ -1234,6 +1233,9 @@ Maybe<PropertyAttributes> GetPropertyAttributesWithInterceptorInternal(
   AssertNoContextChange ncc(isolate);
   HandleScope scope(isolate);
 
+  if (it->GetName()->IsPrivateName()) {
+    return Just(ABSENT);
+  }
   Handle<JSObject> holder = it->GetHolder<JSObject>();
   DCHECK_IMPLIES(!it->IsElement(*holder) && it->name()->IsSymbol(),
                  interceptor->can_intercept_symbols());
@@ -1290,7 +1292,9 @@ Maybe<bool> SetPropertyWithInterceptorInternal(
   // interceptor calls.
   AssertNoContextChange ncc(isolate);
 
-  if (interceptor->setter().IsUndefined(isolate)) return Just(false);
+  if (interceptor->setter().IsUndefined(isolate) ||
+      it->GetName()->IsPrivateName())
+    return Just(false);
 
   Handle<JSObject> holder = it->GetHolder<JSObject>();
   bool result;
@@ -1748,7 +1752,7 @@ Maybe<bool> JSReceiver::AddPrivateField(LookupIterator* it,
       if (!it->HasAccess()) {
         it->isolate()->ReportFailedAccessCheck(it->GetHolder<JSObject>());
         RETURN_VALUE_IF_SCHEDULED_EXCEPTION(it->isolate(), Nothing<bool>());
-        return Just(true);
+        return Just(false);
       }
       break;
     }
