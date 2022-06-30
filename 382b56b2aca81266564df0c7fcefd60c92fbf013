@@ -211,6 +211,24 @@
       "parentUuid": "f5b25b49_bb70b83a",
       "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681cd82a_6b02b5cd",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-06-30T02:39:32Z",
+      "side": 1,
+      "message": "some precondition will throw for some values and make it hard for me to create a test to hit the limit here. I change this code to not use int64_t now.",
+      "parentUuid": "958cd18e_0cfa3147",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
