@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb483eca_054b1aac",
+        "filename": "src/compiler/memory-optimizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-30T16:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eae8019_21e783fc",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "dbaaa70e78ecc8af4aa25b00dbd3cb62cdf946d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "937de6dc_e4763e12",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-30T11:54:28Z",
       "side": 1,
       "message": "nit: Please move to the end of the switch together with the other unchecked operators.",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 258,
+        "endChar": 12
+      },
+      "revId": "dbaaa70e78ecc8af4aa25b00dbd3cb62cdf946d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e65df4b_081805ed",
+        "filename": "src/compiler/verifier.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-06-30T16:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "937de6dc_e4763e12",
       "range": {
         "startLine": 257,
         "startChar": 4,
