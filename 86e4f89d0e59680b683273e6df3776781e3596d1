@@ -226,6 +226,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a827cec4_977b05fe",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:43:07Z",
+      "side": 1,
+      "message": "(continuation of the comment from the class definition) \n\n... and here have something like\n\n  } else {\n#if V8_HEAP_USE_PKU_JIT_WRITE_PROTECT\n    rwx_write_scope_.emplace(\"A part of CodeSpaceMemoryModificationScope\");\n#endif\n  }\n\nSuch a modification will allow us to remove the \n  if (!IsAllowed()) return;\nchecks from RwxMemoryWriteScope::SetExecutable()/SetWritable() because heap_-\u003ewrite_protect_code_memory() already takes availability of the PKU feature into account.\n\nMichael, WDYT?",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9fe0d04e_bc1d6842",
         "filename": "src/heap/heap.cc",
         "patchSetId": 7
@@ -260,6 +277,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e86ee81b_43307c20",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2625,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:43:07Z",
+      "side": 1,
+      "message": "On M1 it\u0027s known statically that the feature is available but on Linux x64 we have to check the availability of the feature dynamically.\nI think for the PKU case it\u0027s better to define this field as\n  base::Optional\u003cRwxMemoryWriteScope\u003e rwx_write_scope_;\nand ... (see the comment in the constructor body).\n\nMichael, WDYT?",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1517ccce_4d00ce53",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2640,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:43:07Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3105f6e_0a67bada",
         "filename": "src/heap/heap.h",
         "patchSetId": 7
@@ -271,6 +322,23 @@
       "writtenOn": "2022-06-30T12:18:22Z",
       "side": 1,
       "message": "Does PKU machinery disallow reconfiguring RWX pages to RW and vice versa? If yes, then please update the comment above.\nIf no, then we can configure code page headers as RW and thus the CodePageHeaderModificationScope should be NopRwxMemoryWriteScope.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a4d7c26_19ee74cd",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2707,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-06-30T12:43:07Z",
+      "side": 1,
+      "message": "Same here.",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
