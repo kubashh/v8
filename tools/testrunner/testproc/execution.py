@@ -39,8 +39,8 @@ class ExecutionProc(base.TestProc):
     assert False, \
         'ExecutionProc cannot be connected to anything' # pragma: no cover
 
-  def run(self, requirement):
-    for pool_result in self.ctx.pool.results(requirement):
+  def run(self):
+    for pool_result in self.ctx.pool.results(self._prev_requirement):
       self._unpack_result(pool_result)
 
   def next_test(self, test):

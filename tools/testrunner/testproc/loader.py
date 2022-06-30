@@ -16,7 +16,6 @@ class LoadProc(base.TestProc):
 
 
   def load_initial_tests(self):
-    """Send an initial batch of tests down to executor"""
     if not self.initial_batch_size:
       return
     to_load = self.initial_batch_size

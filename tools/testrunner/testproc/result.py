@@ -107,5 +107,3 @@ class RerunResult(Result):
   def is_rerun(self):
     return True
 
-  def status(self):
-    return ' '.join(r.status() for r in self.results)

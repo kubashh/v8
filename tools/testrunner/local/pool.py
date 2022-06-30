@@ -322,31 +322,3 @@ class Pool():
       except Empty:
         return MaybeResult.create_heartbeat()
 
-
-# Global function for multiprocessing, because pickling a static method doesn't
-# work on Windows.
-def run_job(job, process_context):
-  return job.run(process_context)
-
-
-ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
-
-
-class DefaultExecutionPool():
-
-  def init(self, jobs, notify_fun):
-    self._pool = Pool(jobs, notify_fun=notify_fun)
-
-  def add_jobs(self, jobs):
-    self._pool.add(jobs)
-
-  def results(self, requirement):
-    return self._pool.imap_unordered(
-        fn=run_job,
-        gen=[],
-        process_context_fn=ProcessContext,
-        process_context_args=[requirement],
-    )
-
-  def abort(self):
-    self._pool.abort()

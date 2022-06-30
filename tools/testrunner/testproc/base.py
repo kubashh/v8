@@ -38,15 +38,25 @@ DROP_PASS_STDOUT = 3
 
 class TestProc(object):
   def __init__(self):
-    self._prev_proc = None
-    self._next_proc = None
+    self._prev_proc = NullTestProc()
+    self._next_proc = NullTestProc()
     self._stopped = False
     self._requirement = DROP_RESULT
+    self._prev_requirement = None
 
   def connect_to(self, next_proc):
     """Puts `next_proc` after itself in the chain."""
     next_proc._prev_proc = self
     self._next_proc = next_proc
+
+  def setup(self, requirement=DROP_RESULT):
+    """
+    Method called by previous processor or processor pipeline creator to let
+    the processors know what part of the result can be ignored.
+    """
+    self._prev_requirement = requirement
+    self._next_proc.setup(max(requirement, self._requirement))
+
   def next_test(self, test):
     """
     Method called by previous processor whenever it produces new test.
@@ -64,16 +74,13 @@ class TestProc(object):
     raise NotImplementedError()
 
   def heartbeat(self):
-    if self._prev_proc:
-      self._prev_proc.heartbeat()
+    self._prev_proc.heartbeat()
 
   def stop(self):
     if not self._stopped:
       self._stopped = True
-      if self._prev_proc:
-        self._prev_proc.stop()
-      if self._next_proc:
-        self._next_proc.stop()
+      self._prev_proc.stop()
+      self._next_proc.stop()
 
   @property
   def is_stopped(self):
@@ -83,8 +90,7 @@ class TestProc(object):
 
   def notify_previous(self, event):
     self._on_event(event)
-    if self._prev_proc:
-      self._prev_proc.notify_previous(event)
+    self._prev_proc.notify_previous(event)
 
   def _on_event(self, event):
     """Called when processors to the right signal events, e.g. termination.
@@ -100,7 +106,38 @@ class TestProc(object):
 
   def _send_result(self, test, result):
     """Helper method for sending result to the previous processor."""
+    if not test.keep_output:
+      # Since we're not winning anything by droping part of the result we are
+      # dropping the whole result or pass it as it is. The real reduction happens
+      # during result creation (in the output processor), so the result is
+      # immutable.
+      if (self._prev_requirement and
+          self._prev_requirement < self._requirement and
+          self._prev_requirement == DROP_RESULT):
+        result = None
     self._prev_proc.result_for(test, result)
+
+
+class NullTestProc(TestProc):
+  """Null processor with nop behaviour that sits at both ends
+  of the processor chain"""
+
+  def __init__(self):
+    super(TestProc, self).__init__()
+
+  def stop(self):
+    pass
+
+  def heartbeat(self):
+    pass
+
+  def notify_previous(self, _):
+    pass
+
+  def setup(self, _):
+    pass
+
+
 class TestProcObserver(TestProc):
   """Processor used for observing the data."""
   def __init__(self):
