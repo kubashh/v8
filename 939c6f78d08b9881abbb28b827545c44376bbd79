@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68ef3477_6d0a4153",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2022-07-01T13:08:23Z",
+      "side": 1,
+      "message": "Can you add a link referencing where Chrome is going to use the new API?\n\u003d\u003e https://chromium-review.googlesource.com/c/chromium/src/+/3738183",
+      "revId": "939c6f78d08b9881abbb28b827545c44376bbd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
