@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed697b9_6d93ee21",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "This is extracted from below (around old line 3468) to make it reusable.",
+      "range": {
+        "startLine": 63,
+        "startChar": 26,
+        "endLine": 63,
+        "endChar": 37
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa69f76_fa102af8",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "See `class ImmediatesPrinter` in wasm-disassembler.cc for a non-empty immediates observer :-)",
+      "range": {
+        "startLine": 1726,
+        "startChar": 8,
+        "endLine": 1726,
+        "endChar": 30
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b98a9600_8f2a4e2d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "The compiler is smart enough to emit zero instructions for this when instantiated with `EmptyImmediateObserver`.",
+      "range": {
+        "startLine": 1790,
+        "startChar": 8,
+        "endLine": 1790,
+        "endChar": 35
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3dad00e_7d762068",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "Self-review: add a comment stating the unit of the result (it\u0027s the encoding used by .wasm binary modules: log2 of the access/alignment size, e.g. \"4\" below means 2\u003c\u003c4 \u003d 16-byte alignment.",
+      "range": {
+        "startLine": 20,
+        "startChar": 9,
+        "endLine": 20,
+        "endChar": 28
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cfdda3e_3d0f5e09",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "self-review: drop `explicit`.",
+      "range": {
+        "startLine": 255,
+        "startChar": 2,
+        "endLine": 255,
+        "endChar": 10
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1206603_4acb0ddd",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:01:35Z",
+      "side": 1,
+      "message": "For spec compliance.",
+      "range": {
+        "startLine": 180,
+        "startChar": 29,
+        "endLine": 180,
+        "endChar": 33
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
