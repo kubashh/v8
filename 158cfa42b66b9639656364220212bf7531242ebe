@@ -93,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dfe4039_79de8efd",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T10:02:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3dad00e_7d762068",
+      "range": {
+        "startLine": 20,
+        "startChar": 9,
+        "endLine": 20,
+        "endChar": 28
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6cfdda3e_3d0f5e09",
@@ -106,6 +130,30 @@
       "writtenOn": "2022-07-01T09:01:35Z",
       "side": 1,
       "message": "self-review: drop `explicit`.",
+      "range": {
+        "startLine": 255,
+        "startChar": 2,
+        "endLine": 255,
+        "endChar": 10
+      },
+      "revId": "158cfa42b66b9639656364220212bf7531242ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac74f889_ce75a9d1",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T10:02:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cfdda3e_3d0f5e09",
       "range": {
         "startLine": 255,
         "startChar": 2,
