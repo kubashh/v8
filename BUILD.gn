@@ -1496,6 +1496,7 @@ config("toolchain") {
       # Disable gcc warnings for using enum constant in boolean context.
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97266
       "-Wno-int-in-bool-context",
+      
     ]
   }
 
