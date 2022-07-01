@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ffd180_81014036",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T17:29:12Z",
+      "side": 1,
+      "message": "LGTM.\n\nMy only question would be whether there really is a requirement to store a different error message for each `Context`; otherwise you could also store a single `std::string` somewhere off-heap (e.g. on the `Isolate`), which would make things easier.\nBut for consistency with `ErrorMessageForCodeGenerationFromStrings` alone this is OK as-is.",
+      "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
