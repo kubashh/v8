@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ef43668_0e428df8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-01T09:26:56Z",
+      "side": 1,
+      "message": "PTAL.\nYou really only need to review a few lines here (file beginning and end), the big chunk was literally moved by cut-and-paste.\nOne exception, on the insistence of `git cl presubmit`: I had to drop the anonymous namespaces, as they\u0027re disallowed in .h files.",
+      "revId": "ce5f45a2883094afffdb7dfb789246796bdb07ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
