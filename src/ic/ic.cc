@@ -1852,8 +1852,12 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   if (name->IsPrivate()) {
     if (name->IsPrivateName()) {
       DCHECK(!IsDefineNamedOwnIC());
-      if (!JSReceiver::CheckPrivateNameStore(&it, IsDefineKeyedOwnIC())) {
-        return MaybeHandle<Object>();
+      Maybe<bool> can_store =
+          JSReceiver::CheckPrivateNameStore(&it, IsDefineKeyedOwnIC());
+      MAYBE_RETURN_NULL(can_store);
+      if (!can_store.FromJust()) {
+        return handle(ReadOnlyRoots(it.isolate()).undefined_value(),
+                      it.isolate());
       }
     }
 
@@ -1877,8 +1881,10 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       !Handle<JSObject>::cast(object)->HasNamedInterceptor()) {
     Maybe<bool> can_define = JSReceiver::CheckIfCanDefine(
         isolate(), &it, value, Nothing<ShouldThrow>());
-    if (can_define.IsNothing() || !can_define.FromJust()) {
-      return MaybeHandle<Object>();
+    MAYBE_RETURN_NULL(can_define);
+    if (!can_define.FromJust()) {
+      return handle(ReadOnlyRoots(it.isolate()).undefined_value(),
+                    it.isolate());
     }
   }
 
