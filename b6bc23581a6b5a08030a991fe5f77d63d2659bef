@@ -16,6 +16,23 @@
       "message": "Could you take a look please?",
       "revId": "b6bc23581a6b5a08030a991fe5f77d63d2659bef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ff81a7_6c87f262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2022-07-01T12:00:10Z",
+      "side": 1,
+      "message": "lgtm. But should there be a test case other than rebaselining bytecode goldens?",
+      "revId": "b6bc23581a6b5a08030a991fe5f77d63d2659bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
