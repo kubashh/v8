@@ -76,6 +76,7 @@
   'cpu-profiler/coverage': [SKIP],
   'cpu-profiler/coverage-block': [SKIP],
   'regress/regress-crbug-1233401': [SKIP],
+  'debugger/value-unavailable-scopes': [SKIP],
 }], # variant == jitless
 
 ##############################################################################
