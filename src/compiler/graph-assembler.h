@@ -327,6 +327,8 @@ class V8_EXPORT_PRIVATE GraphAssembler {
   Node* Retain(Node* buffer);
   Node* IntPtrAdd(Node* a, Node* b);
 
+  Node* Deoptimize(DeoptimizeReason reason, FeedbackSource const& feedback,
+                   Node* frame_state);
   Node* DeoptimizeIf(DeoptimizeReason reason, FeedbackSource const& feedback,
                      Node* condition, Node* frame_state);
   Node* DeoptimizeIfNot(DeoptimizeReason reason, FeedbackSource const& feedback,

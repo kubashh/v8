@@ -509,6 +509,22 @@ Node* GraphAssembler::BitcastMaybeObjectToWord(Node* value) {
                                   effect(), control()));
 }
 
+Node* GraphAssembler::Deoptimize(DeoptimizeReason reason,
+                                 FeedbackSource const& feedback,
+                                 Node* frame_state) {
+  Node* deoptimize =
+      AddNode(graph()->NewNode(common()->Deoptimize(reason, feedback),
+                               frame_state, effect(), control()));
+  // Deoptimize terminates a block. To keep it alive, it must be connected to
+  // End.
+  NodeProperties::MergeControlToEnd(graph(), common(), deoptimize);
+
+  // Setting effect, control to nullptr effectively terminates the current block
+  // by disallowing the addition of new nodes until a new label has been bound.
+  InitializeEffectControl(nullptr, nullptr);
+  return deoptimize;
+}
+
 Node* GraphAssembler::DeoptimizeIf(DeoptimizeReason reason,
                                    FeedbackSource const& feedback,
                                    Node* condition, Node* frame_state) {
