@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3a95238_786f288b",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-07-01T08:56:24Z",
+      "side": 1,
+      "message": "This is buggy because allocating the string can cause this interior pointer to become invalid.  See https://bugs.chromium.org/p/v8/issues/detail?id\u003d13028.",
+      "revId": "bd149e9fabf277e99e0d564b413d2722082d1a07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
