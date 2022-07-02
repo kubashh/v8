@@ -38,11 +38,6 @@ namespace internal {
         JSTemporal##T::NowISO(isolate, args.atOrUndefined(isolate, 1))); \
   }
 
-/* Temporal #sec-temporal.plaindate.prototype.until */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeUntil)
-/* Temporal #sec-temporal.plaindate.prototype.since */
-TO_BE_IMPLEMENTED(TemporalPlainDatePrototypeSince)
-
 /* Temporal.PlaneTime */
 /* Temporal #sec-temporal.plaintime.prototype.until */
 TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeUntil)
@@ -302,6 +297,8 @@ TEMPORAL_PROTOTYPE_METHOD2(PlainDate, Subtract, subtract)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, WithCalendar, withCalendar)
 TEMPORAL_PROTOTYPE_METHOD2(PlainDate, With, with)
 TEMPORAL_PROTOTYPE_METHOD0(PlainDate, GetISOFields, getISOFields)
+TEMPORAL_PROTOTYPE_METHOD2(PlainDate, Since, since)
+TEMPORAL_PROTOTYPE_METHOD2(PlainDate, Until, until)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, ToPlainDateTime, toPlainDateTime)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, ToZonedDateTime, toZonedDateTime)
 TEMPORAL_PROTOTYPE_METHOD1(PlainDate, Equals, equals)
