@@ -362,6 +362,16 @@ class JSTemporalPlainDate
       Isolate* isolate, Handle<JSTemporalPlainDate> plain_date,
       Handle<Object> temporal_duration_like, Handle<Object> options);
 
+  // #sec-temporal.plaindate.prototype.until
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Until(
+      Isolate* isolate, Handle<JSTemporalPlainDate> plain_date,
+      Handle<Object> other, Handle<Object> options);
+
+  // #sec-temporal.plaindate.prototype.since
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Since(
+      Isolate* isolate, Handle<JSTemporalPlainDate> plain_date,
+      Handle<Object> other, Handle<Object> options);
+
   // #sec-temporal.plaindate.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
       Isolate* isolate, Handle<JSTemporalPlainDate> plain_date);
@@ -624,6 +634,16 @@ class JSTemporalPlainTime
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainTime> Subtract(
       Isolate* isolate, Handle<JSTemporalPlainTime> plain_time,
       Handle<Object> temporal_duration_like);
+
+  // #sec-temporal.plaintime.prototype.until
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Until(
+      Isolate* isolate, Handle<JSTemporalPlainTime> plain_time,
+      Handle<Object> other, Handle<Object> options);
+
+  // #sec-temporal.plaintime.prototype.since
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Since(
+      Isolate* isolate, Handle<JSTemporalPlainTime> plain_time,
+      Handle<Object> other, Handle<Object> options);
 
   // #sec-temporal.plaintime.prototype.round
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainTime> Round(
