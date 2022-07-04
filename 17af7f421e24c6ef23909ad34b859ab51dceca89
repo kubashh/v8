@@ -34,6 +34,24 @@
       "parentUuid": "f5ffd180_81014036",
       "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5404ae_fc6039ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-04T13:26:14Z",
+      "side": 1,
+      "message": "I am actually surprised that `wasm` implementation for CSP checking is different than the JS implementation. It seems that ultimately, the `wasm` part is making a call to `CSP` every time it needs to make the check, whereas the JS implementation ultimately stores a boolean dynamically.\n\nWhat this means is that it seems that we\u0027re eventually paying the cost you\u0027re mentioning not only when code generation is not allowed, but every time we need to know whether it is or not. I am not sure how much performance matters here, but I am wondering if we\u0027d better unify the implementations here?",
+      "parentUuid": "c79708b9_ddd9b547",
+      "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
