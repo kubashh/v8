@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d3f5a04_686575ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:14:13Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "dee2ad093aec6cd6e9a17066dc9605fa8ab85226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5137b720_da8216de",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:14:13Z",
+      "side": 1,
+      "message": "huh, I\u0027m surprised that this compiles without an `#elif` that makes the switch exhaustive...",
+      "range": {
+        "startLine": 781,
+        "startChar": 1,
+        "endLine": 781,
+        "endChar": 6
+      },
+      "revId": "dee2ad093aec6cd6e9a17066dc9605fa8ab85226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daf952e_2a48e87d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:14:13Z",
+      "side": 1,
+      "message": "shorter: `ElementAddress(0)`",
+      "range": {
+        "startLine": 810,
+        "startChar": 15,
+        "endLine": 810,
+        "endChar": 62
+      },
+      "revId": "dee2ad093aec6cd6e9a17066dc9605fa8ab85226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "809fd886_1a206046",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:14:13Z",
+      "side": 1,
+      "message": "nit: this is what the node bot complains about",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "dee2ad093aec6cd6e9a17066dc9605fa8ab85226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782644d7_951afbdf",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:14:13Z",
+      "side": 1,
+      "message": "nit: we have a more concise helper for this:\n```\n  RETURN_RESULT_OR_FAILURE(\n      isolate,\n      isolate-\u003efactory()-\u003eNewStringFromUtf8(bytes, utf8_variant));\n```\nAgain below.",
+      "range": {
+        "startLine": 900,
+        "startChar": 2,
+        "endLine": 904,
+        "endChar": 17
+      },
+      "revId": "dee2ad093aec6cd6e9a17066dc9605fa8ab85226",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
