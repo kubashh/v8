@@ -6,18 +6,12 @@
 
 #include "src/base/iterator.h"
 #include "src/base/vector.h"
-#include "src/codegen/assembler-inl.h"
-#include "src/codegen/code-factory.h"
 #include "src/compiler/wasm-compiler.h"
-#include "src/debug/debug-interface.h"
+#include "src/debug/debug.h"
 #include "src/logging/counters.h"
-#include "src/objects/debug-objects-inl.h"
 #include "src/objects/managed-inl.h"
-#include "src/objects/object-macros.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/shared-function-info.h"
-#include "src/objects/struct-inl.h"
-#include "src/trap-handler/trap-handler.h"
 #include "src/utils/utils.h"
 #include "src/wasm/code-space-access.h"
 #include "src/wasm/jump-table-assembler.h"
@@ -32,6 +26,9 @@
 #include "src/wasm/wasm-objects-inl.h"
 #include "src/wasm/wasm-subtyping.h"
 #include "src/wasm/wasm-value.h"
+
+// Needs to be last so macros do not get undefined.
+#include "src/objects/object-macros.h"
 
 #define TRACE_IFT(...)              \
   do {                              \
@@ -2443,4 +2440,5 @@ bool TypecheckJSObject(Isolate* isolate, const WasmModule* module,
 }  // namespace internal
 }  // namespace v8
 
+#include "src/objects/object-macros-undef.h"
 #undef TRACE_IFT
