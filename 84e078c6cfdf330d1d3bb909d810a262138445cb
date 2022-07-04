@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed96c7c4_fd32b218",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-07-04T16:28:17Z",
+      "side": 1,
+      "message": "Hi Maya,\n\nAs we only support V8 on Node.js on PPC/s390 and not Web browsers (or web IDL), I just wanted to confirm this CL does not need a port and tests can remain skipped for us?",
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
