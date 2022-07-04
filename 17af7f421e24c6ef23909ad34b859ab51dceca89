@@ -52,6 +52,24 @@
       "parentUuid": "c79708b9_ddd9b547",
       "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65564ca3_58cddb26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-04T13:30:47Z",
+      "side": 1,
+      "message": "The performance of checking for JS iirc was crucial due to eval-heavy benchmarks (looking at you, sunspider). I\u0027m not sure we have the same problem with wasm. But unifying sounds good to me.\n\nThe initial cost of computing the string isn\u0027t measured by those benchmarks though, but imposes a small cost on context startup. If you\u0027re going to look into doing all of this a little better, it would be nice if we could avoid that.",
+      "parentUuid": "aa5404ae_fc6039ff",
+      "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
