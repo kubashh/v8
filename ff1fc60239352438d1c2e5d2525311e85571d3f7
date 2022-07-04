@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47ddc329_a61d2d19",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-04T12:30:58Z",
+      "side": 1,
+      "message": "I think you can use `xzr` here, then there is no need for a temp register.",
+      "range": {
+        "startLine": 1756,
+        "startChar": 38,
+        "endLine": 1756,
+        "endChar": 46
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "858c6ea5_26f7a986",
+        "filename": "test/mjsunit/compiler/fast-api-annotations.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-04T12:30:58Z",
+      "side": 1,
+      "message": "nit: There are `assertFalse` and `assertTrue` in `mjsunit.js`.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 12
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8929f0_9738718f",
+        "filename": "test/mjsunit/compiler/fast-api-annotations.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-04T12:30:58Z",
+      "side": 1,
+      "message": "Could you test 2**31 - 1, which should be in range, but I suspect that the current code doesn\u0027t actually work.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 50
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
