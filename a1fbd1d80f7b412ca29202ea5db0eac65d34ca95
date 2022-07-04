@@ -34,6 +34,24 @@
       "parentUuid": "975f5aeb_e102769a",
       "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbba4d0c_8bb7d016",
+        "filename": "test/mjsunit/regress/regress-crbug-1339722-7.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-07-04T14:33:01Z",
+      "side": 1,
+      "message": "Not exactly, -7.js tests that the access works before the realm is navigated away and that it stops working after, just to make sure that the cached handlers aren\u0027t used anymore when the realm is navigated away. -5.js tests that realms without cross-context access just fail from the start.",
+      "parentUuid": "edc53a7e_622118a0",
+      "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

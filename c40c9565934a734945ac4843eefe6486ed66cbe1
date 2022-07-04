@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2353648c_811241de",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-07-04T14:33:01Z",
+      "side": 1,
+      "message": "They can be reached from the `JSObject::*WithFailedAccessCheck()` methods which are generally called from the runtime methods to handle `LookupIterator::ACCESS_CHECK` states when the access check fails, these methods just call `it-\u003eGetInterceptorForFailedAccessCheck()` instead of using `it-\u003eNext()` to get the interceptors so they do not skip interceptors for private names.\n\nOn a second thought though I wonder if it would be better to just modify `GetInterceptorForFailedAccessCheck()` to return null for private names (I am not 100% sure about what the `if (interceptor.is_null())` branches in `JSObject::*WithFailedAccessCheck()` are doing, but it seems these would all be skipped for private names because `AllCanRead()/AllCanWrite()` should always return false for private names?).",
+      "parentUuid": "593d419a_b43e1ee1",
+      "revId": "c40c9565934a734945ac4843eefe6486ed66cbe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "587fc211_bb291fcb",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 5
