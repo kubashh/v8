@@ -16,6 +16,23 @@
       "message": "Toon, PTAL.",
       "revId": "ab08c4ec2c4273ec1dc395e8d74ec3d076cf9de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41a38add_628ac844",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-04T11:42:19Z",
+      "side": 1,
+      "message": "Thibaud: FYI, I am removing the DCHECK since it fails for some of builds for this CL. We should introduce protected atomic loads as discussed.",
+      "revId": "ab08c4ec2c4273ec1dc395e8d74ec3d076cf9de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
