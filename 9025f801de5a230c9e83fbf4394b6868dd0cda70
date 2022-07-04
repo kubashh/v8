@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd0a83b6_18be1259",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T19:29:07Z",
+      "side": 1,
+      "message": "I agree with the intuition: templatizing the WasmFullDecoder was indeed the first approach I started implementing, but it turns out there are several reasons why that\u0027s not a good fit:\n(1) The primary difference between WasmDecoder and WasmFullDecoder is that the latter updates and validates the value stack, which a disassembler has no interest in.\n(2) There\u0027s a non-1:1 mapping between opcodes and the \"Interface\" functions that the WasmFullDecoder calls, because we perform some number of simple optimizations this early in the pipeline, and because we try to reuse interface functions where possible. See `case kExprBrOnCastStatic` for a particularly impressive example. The only interface function that would be useful for a disassembler would be \"NextInstruction\", and even that is only called for reachable code.\n(3) A high-fidelity disassembler must reproduce all immediates exactly, but the WasmFullDecoder \"swallows\" many of them (i.e. consumes them and only passes on what\u0027s relevant to the existing interfaces). (The `NextInstruction` interface call doesn\u0027t even carry *any* immediates.)\n\nI suppose one way to describe the situation, and reconcile the intuition, is: `OpcodeLength` is the key building block for iterating over bytecode, and that\u0027s exactly what a disassembler needs to do.\n\nFWIW, the existing limited disassembler we have in function-body-decoder.cc arrived at the same conclusion and also relies on `OpcodeLength`. (That one doesn\u0027t disassemble any immediates though, it only prints them as raw bytes. I\u0027d like to try to merge it into the new disassembler infrastructure eventually.)",
+      "parentUuid": "5fd49498_3d130303",
+      "revId": "9025f801de5a230c9e83fbf4394b6868dd0cda70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb7d8904_ddd976a8",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-07-04T11:55:59Z",
       "side": 1,
       "message": "The name {write} is a bit misleading, because what you are actually doing is reserving the space, not writing into the space.",
+      "range": {
+        "startLine": 41,
+        "startChar": 5,
+        "endLine": 41,
+        "endChar": 10
+      },
+      "revId": "9025f801de5a230c9e83fbf4394b6868dd0cda70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35e89a03_b0e74eaa",
+        "filename": "src/wasm/string-builder-multiline.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T19:29:07Z",
+      "side": 1,
+      "message": "Done: renamed to \"allocate\" (which is the closer equivalent in memory interfaces that distinguish between \"reservation\" and \"allocation\").",
+      "parentUuid": "cb7d8904_ddd976a8",
       "range": {
         "startLine": 41,
         "startChar": 5,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a17319_47ae2d02",
+        "filename": "src/wasm/string-builder-multiline.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T19:29:07Z",
+      "side": 1,
+      "message": "Because we want to get `block $label`, not `block$label`.\n\nAdded examples to the comment.",
+      "parentUuid": "1288998b_ecf51f3b",
+      "range": {
+        "startLine": 69,
+        "startChar": 55,
+        "endLine": 69,
+        "endChar": 72
+      },
+      "revId": "9025f801de5a230c9e83fbf4394b6868dd0cda70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2fa8b11_d2026a34",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-07-04T11:55:59Z",
       "side": 1,
       "message": "Why is this space not part of the original string? I guess there is already a space on the other side of the label.",
+      "revId": "9025f801de5a230c9e83fbf4394b6868dd0cda70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0991ea5b_9da438ae",
+        "filename": "src/wasm/string-builder-multiline.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T19:29:07Z",
+      "side": 1,
+      "message": "See comment above. The original string might just be `\"block\"`, or it might be `\"block i32\"` (or some other type). The label position we record is right after `\"block\"` in both cases, so inserting `\" $label\"` gives the correct result. A possible `\" i32\"` suffix of the line is taken care of by the third `memcpy` (line 103).",
+      "parentUuid": "f2fa8b11_d2026a34",
       "revId": "9025f801de5a230c9e83fbf4394b6868dd0cda70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
