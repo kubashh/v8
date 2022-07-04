@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7358e103_fa2843db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T15:18:13Z",
+      "side": 1,
+      "message": "nit: could you provide some example in the commit message? Also, what are the implications? E.g. it seems that the slow callback is never called with Wasm memory and JS never gets access to Wasm memory - let\u0027s document both.",
+      "range": {
+        "startLine": 10,
+        "startChar": 42,
+        "endLine": 10,
+        "endChar": 66
+      },
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9a50319f_f7044ce2",
@@ -14,6 +37,46 @@
       "writtenOn": "2022-07-04T09:22:11Z",
       "side": 1,
       "message": "LGTM, thanks!",
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33075180_f97b715f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T15:18:13Z",
+      "side": 1,
+      "message": "LGTM, thanks! Please address a few comments.\n@Toon could you PTAL at include/ and d8/ changes?",
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e3cdf0_343e6b3d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7291,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T15:18:13Z",
+      "side": 1,
+      "message": "nit: let\u0027s also use offsetof(..., data) similar to below.",
+      "range": {
+        "startLine": 7291,
+        "startChar": 35,
+        "endLine": 7291,
+        "endChar": 49
+      },
       "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
