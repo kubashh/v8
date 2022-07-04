@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dbe0d1a_4ea331e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "According to Igor\u0027s suggestion, I split this CL into two parts, here is the first CL for moving PKU implements from WASM to OS lib. PTAL, thanks!",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "750cb219_eda86892",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "PKU was initialized at here, is it a suitable place to initialize it? PTAL, thanks!",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

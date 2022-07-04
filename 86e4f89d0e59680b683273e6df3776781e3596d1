@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "79d09299_f78c1106",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "792f7ad7_cdb16040",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "08a879c4_f4c759f5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -128,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6aec0d_e72697b1",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56cc91c4_0daaf71c",
+      "range": {
+        "startLine": 209,
+        "startChar": 4,
+        "endLine": 209,
+        "endChar": 36
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "876383f6_82b6d186",
@@ -147,6 +189,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0212e7fa_031c3bba",
+        "filename": "src/base/platform/platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "We used OS::DiscardSystemPages when we set noaccess to a memory chunk in PKU::SetPermissionsAndMemoryProtectionKey.",
+      "parentUuid": "876383f6_82b6d186",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0db00bb2_287428c6",
         "filename": "src/common/code-memory-access-inl.h",
         "patchSetId": 7
@@ -158,6 +218,30 @@
       "writtenOn": "2022-06-30T12:18:22Z",
       "side": 1,
       "message": "Here and everywhere: just base::OS::...",
+      "range": {
+        "startLine": 59,
+        "startChar": 9,
+        "endLine": 59,
+        "endChar": 21
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87cde7ba_b0b0907b",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0db00bb2_287428c6",
       "range": {
         "startLine": 59,
         "startChar": 9,
@@ -187,6 +271,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42d24a26_af836736",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "I added a field(is_support_pku_ ) in PKU singleton, which will be set when we initialize PKU, hence we can access this field instead of dynamically checking.",
+      "parentUuid": "87daeff6_32607d53",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5257b51d_8bcc1e1f",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 7
@@ -198,6 +300,24 @@
       "writtenOn": "2022-06-30T12:18:22Z",
       "side": 1,
       "message": "This include should probably be added in the -inl.h file.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaabf41a_1799566c",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5257b51d_8bcc1e1f",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -215,6 +335,30 @@
       "writtenOn": "2022-06-30T12:18:22Z",
       "side": 1,
       "message": "Nit: ||",
+      "range": {
+        "startLine": 99,
+        "startChar": 44,
+        "endLine": 99,
+        "endChar": 45
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c40cbf9_35a8b1a0",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27de5f46_28a875bb",
       "range": {
         "startLine": 99,
         "startChar": 44,
@@ -272,6 +416,24 @@
       "writtenOn": "2022-06-30T12:18:22Z",
       "side": 1,
       "message": "While you are here... \nI think we should remove this CHECK to avoid confusion. I discovered later that even when on M1 it returns true it might still be not allowed to call RwxMemoryWriteScope::SetWritable()/SetExecutable() if signed binary doesn\u0027t have \"com.apple.security.cs.allow-jit\" entitlement.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "874acc02_fd729708",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5701,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-04T05:07:57Z",
+      "side": 1,
+      "message": "If this check will also failed in some M1 scenarios, may I remove this check directly?",
+      "parentUuid": "9fe0d04e_bc1d6842",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
