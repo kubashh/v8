@@ -16,6 +16,24 @@
       "message": "The macro also has a DCHECK in it. Should we keep it? Or maybe keep the macro and add the necessary include?",
       "revId": "7a4a6cc6a85650ee91344d0dbd2c53a8fa8dce04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "954f5214_2a64552c",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-04T15:03:36Z",
+      "side": 0,
+      "message": "This macro gets undefined in some header. Including the defining header again after all includes.",
+      "parentUuid": "64576559_dcdfda23",
+      "revId": "7a4a6cc6a85650ee91344d0dbd2c53a8fa8dce04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc86424_72026616",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-04T15:03:36Z",
+      "side": 1,
+      "message": "I uploaded a proper fix as a separate CL instead.",
+      "parentUuid": "1348e6a6_4130e539",
+      "revId": "ab08c4ec2c4273ec1dc395e8d74ec3d076cf9de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "040036a6_d627b7b8",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-07-04T12:40:45Z",
       "side": 1,
       "message": "typo?",
+      "range": {
+        "startLine": 494,
+        "startChar": 31,
+        "endLine": 494,
+        "endChar": 34
+      },
+      "revId": "ab08c4ec2c4273ec1dc395e8d74ec3d076cf9de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c521be_25161220",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-04T15:03:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "040036a6_d627b7b8",
       "range": {
         "startLine": 494,
         "startChar": 31,
