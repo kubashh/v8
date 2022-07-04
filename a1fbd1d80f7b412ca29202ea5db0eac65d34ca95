@@ -52,6 +52,24 @@
       "parentUuid": "edc53a7e_622118a0",
       "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00bd3899_c9ecdf7c",
+        "filename": "test/mjsunit/regress/regress-crbug-1339722-7.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-04T14:59:32Z",
+      "side": 1,
+      "message": "Right, sure, but I mean otherwise it behaves the same? I mean: your comment wasn\u0027t about this specific file but just the overall behaviour when you don\u0027t have access, I presume, so would apply to both tests (they behave the same for most lines)?",
+      "parentUuid": "bbba4d0c_8bb7d016",
+      "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
