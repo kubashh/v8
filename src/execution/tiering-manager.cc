@@ -226,6 +226,47 @@ bool ShouldOptimizeAsSmallFunction(int bytecode_size, bool any_ic_changed) {
          bytecode_size < FLAG_max_bytecode_size_for_early_opt;
 }
 
+// Whether the current offset is contained by the outermost loop containing the
+// osr'd loop. For example:
+//
+//  for (;;) {
+//    for (;;) {
+//    }  // OSR is triggered on this backedge.
+//  }  // This is the outermost loop containing the osr'd loop.
+bool IsInOsredLoop(Isolate* isolate, JSFunction function) {
+  DisallowGarbageCollection no_gc;
+  Handle<BytecodeArray> bytecode_array(
+      function.shared().GetBytecodeArray(isolate), isolate);
+  UnoptimizedFrame* frame =
+      static_cast<UnoptimizedFrame*>(JavaScriptFrameIterator(isolate).frame());
+  const int current_offset = frame->GetBytecodeOffset();
+  interpreter::BytecodeArrayIterator it(bytecode_array, current_offset);
+  bool is_in_loop = false;
+
+  for (; !it.done(); it.Advance()) {
+    const int it_offset = it.current_offset();
+    // We're only interested in loop ranges.
+    if (it.current_bytecode() != interpreter::Bytecode::kJumpLoop) continue;
+    // Is the deopt exit contained in the current loop?
+    if (base::IsInRange(current_offset, it.GetJumpTargetOffset(), it_offset)) {
+      is_in_loop = true;
+    }
+    if (is_in_loop) {
+      base::Optional<CodeT> maybe_code =
+          function.feedback_vector().GetOptimizedOsrCode(isolate,
+                                                         it.GetSlotOperand(2));
+      if (maybe_code.has_value()) {
+        return true;
+      }
+    }
+    // We've reached nesting level 0, i.e. the current JumpLoop concludes a
+    // top-level loop.
+    const int loop_nesting_level = it.GetImmediateOperand(1);
+    if (loop_nesting_level == 0) return false;
+  }
+  return false;
+}
+
 }  // namespace
 
 void TieringManager::RequestOsrAtNextOpportunity(JSFunction function) {
@@ -265,8 +306,11 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
       (static_cast<uint32_t>(tiering_state) & kNoneOrInProgressMask) != 0;
   if (is_marked_for_any_optimization || function.HasAvailableOptimizedCode()) {
     // OSR kicks in only once we've previously decided to tier up, but we are
-    // still in the unoptimized frame (this implies a long-running loop).
-    if (SmallEnoughForOSR(isolate_, function)) {
+    // still in the unoptimized frame (this implies a long-running loop). Once
+    // having OSR code, we retry OSR only after out of the osr'd loop.
+    if ((!function.feedback_vector().maybe_has_optimized_osr_code() ||
+         !IsInOsredLoop(isolate_, function)) &&
+        SmallEnoughForOSR(isolate_, function)) {
       TryIncrementOsrUrgency(isolate_, function);
     }
 
