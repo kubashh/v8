@@ -286,7 +286,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate,
   DCHECK(!wasm::CodeSpaceWriteScope::IsInScope());
   // If we have PKU support for Wasm, ensure that code is currently write
   // protected for this thread.
-  DCHECK_IMPLIES(wasm::GetWasmCodeManager()->HasMemoryProtectionKeySupport(),
+  DCHECK_IMPLIES(base::OS::HasMemoryProtectionKeySupport(),
                  !wasm::GetWasmCodeManager()->MemoryProtectionKeyWritable());
 #endif  // V8_ENABLE_WEBASSEMBLY
 

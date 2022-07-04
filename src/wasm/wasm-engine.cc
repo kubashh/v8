@@ -21,7 +21,6 @@
 #include "src/strings/string-hasher-inl.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/function-compiler.h"
-#include "src/wasm/memory-protection-key.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/module-instantiate.h"
@@ -1178,7 +1177,7 @@ std::shared_ptr<NativeModule> WasmEngine::NewNativeModule(
     isolate_info->pku_support_sampled = true;
     auto* histogram =
         isolate->counters()->wasm_memory_protection_keys_support();
-    bool has_mpk = GetWasmCodeManager()->HasMemoryProtectionKeySupport();
+    bool has_mpk = base::OS::HasMemoryProtectionKeySupport();
     histogram->AddSample(has_mpk ? 1 : 0);
   }
 
@@ -1616,7 +1615,6 @@ GlobalWasmState* global_wasm_state = nullptr;
 
 // static
 void WasmEngine::InitializeOncePerProcess() {
-  InitializeMemoryProtectionKeySupport();
   DCHECK_NULL(global_wasm_state);
   global_wasm_state = new GlobalWasmState();
 }
