@@ -2188,6 +2188,7 @@ bool Compiler::CompileBaseline(Isolate* isolate, Handle<JSFunction> function,
   if (!CompileSharedWithBaseline(isolate, shared, flag, is_compiled_scope)) {
     return false;
   }
+  shared->set_sparkplug_compiled(true);
 
   // Baseline code needs a feedback vector.
   JSFunction::EnsureFeedbackVector(isolate, function, is_compiled_scope);

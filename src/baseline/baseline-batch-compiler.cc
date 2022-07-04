@@ -309,9 +309,51 @@ void BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
   }
 }
 
+void BaselineBatchCompiler::EnqueueSFI(SharedFunctionInfo shared) {
+  if (!FLAG_concurrent_sparkplug || !is_enabled()) return;
+  // Early return if the function is compiled with baseline already or it is not
+  // suitable for baseline compilation.
+  if (shared.HasBaselineCode()) return;
+  // If we're already compiling this function, return.
+  if (shared.is_sparkplug_compiling()) return;
+  if (!CanCompileWithBaseline(isolate_, shared)) return;
+
+  int estimated_size;
+  {
+    DisallowHeapAllocation no_gc;
+    estimated_size = BaselineCompiler::EstimateInstructionSize(
+        shared.GetBytecodeArray(isolate_));
+  }
+  estimated_instruction_size_ += estimated_size;
+  if (FLAG_trace_baseline_batch_compilation) {
+    CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+    PrintF(trace_scope.file(), "[Baseline batch compilation] Enqueued SFI %s",
+           shared.DebugNameCStr().get());
+    PrintF(trace_scope.file(),
+           " with estimated size %d (current budget: %d/%d)\n", estimated_size,
+           estimated_instruction_size_,
+           FLAG_baseline_batch_compilation_threshold.value());
+  }
+  if (ShouldCompileBatch()) {
+    if (FLAG_trace_baseline_batch_compilation) {
+      CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+      PrintF(trace_scope.file(),
+             "[Baseline batch compilation] Compiling current batch of %d "
+             "functions\n",
+             (last_index_ + 1));
+    }
+    Enqueue(Handle<SharedFunctionInfo>(shared, isolate_));
+    concurrent_compiler_->CompileBatch(compilation_queue_, last_index_);
+    ClearBatch();
+  } else {
+    Enqueue(Handle<SharedFunctionInfo>(shared, isolate_));
+  }
+}
+
 void BaselineBatchCompiler::Enqueue(Handle<SharedFunctionInfo> shared) {
   EnsureQueueCapacity();
   compilation_queue_->Set(last_index_++, HeapObjectReference::Weak(*shared));
+  shared->set_sparkplug_compiled(true);
 }
 
 void BaselineBatchCompiler::InstallBatch() {

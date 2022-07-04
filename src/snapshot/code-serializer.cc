@@ -9,6 +9,7 @@
 #include "src/base/logging.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/base/platform/platform.h"
+#include "src/baseline/baseline-batch-compiler.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/common/globals.h"
 #include "src/debug/debug.h"
@@ -462,6 +463,16 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::Deserialize(
     int length = cached_data->length();
     PrintF("[Deserializing from %d bytes took %0.3f ms]\n", length, ms);
   }
+  if (FLAG_concurrent_sparkplug && FLAG_baseline_batch_compilation) {
+    Handle<Script> script(Script::cast(result->script()), isolate);
+    SharedFunctionInfo::ScriptIterator iter(isolate, *script);
+    for (SharedFunctionInfo info = iter.Next(); !info.is_null();
+         info = iter.Next()) {
+      if (info.sparkplug_compiled() && CanCompileWithBaseline(isolate, info)) {
+        isolate->baseline_batch_compiler()->EnqueueSFI(info);
+      }
+    }
+  }
 
   FinalizeDeserialization(isolate, result, timer);
 
@@ -558,6 +569,17 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::FinishOffThreadDeserialize(
   // Fix up the script list to include the newly deserialized script.
   Handle<WeakArrayList> list = isolate->factory()->script_list();
   for (Handle<Script> script : data.scripts) {
+    if (FLAG_concurrent_sparkplug && FLAG_baseline_batch_compilation) {
+      Handle<Script> script(Script::cast(result->script()), isolate);
+      SharedFunctionInfo::ScriptIterator iter(isolate, *script);
+      for (SharedFunctionInfo info = iter.Next(); !info.is_null();
+           info = iter.Next()) {
+        if (info.sparkplug_compiled() &&
+            CanCompileWithBaseline(isolate, info)) {
+          isolate->baseline_batch_compiler()->EnqueueSFI(info);
+        }
+      }
+    }
     DCHECK(data.persistent_handles->Contains(script.location()));
     list =
         WeakArrayList::AddToEnd(isolate, list, MaybeObjectHandle::Weak(script));

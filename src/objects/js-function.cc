@@ -607,13 +607,23 @@ void JSFunction::InitializeFeedbackCell(
       // We also need a feedback vector for certain log events, collecting type
       // profile and more precise code coverage.
       FLAG_log_function_events || !isolate->is_best_effort_code_coverage() ||
-      isolate->is_collecting_type_profile();
+      isolate->is_collecting_type_profile() ||
+      function->shared().sparkplug_compiled();
 
   if (needs_feedback_vector) {
     CreateAndAttachFeedbackVector(isolate, function, is_compiled_scope);
   } else {
     EnsureClosureFeedbackCellArray(function,
                                    reset_budget_for_feedback_allocation);
+  }
+  if ((!FLAG_concurrent_sparkplug || !FLAG_baseline_batch_compilation) &&
+      function->shared().sparkplug_compiled() &&
+      CanCompileWithBaseline(isolate, function->shared()) &&
+      !function->ActiveTierIsBaseline()) {
+    IsCompiledScope is_compiled_scope(
+        function->shared().is_compiled_scope(isolate));
+    Compiler::CompileBaseline(isolate, function, Compiler::CLEAR_EXCEPTION,
+                              &is_compiled_scope);
   }
 }
 
