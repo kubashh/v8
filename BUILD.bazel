@@ -2495,8 +2495,6 @@ filegroup(
             "src/wasm/leb-helper.h",
             "src/wasm/local-decl-encoder.cc",
             "src/wasm/local-decl-encoder.h",
-            "src/wasm/memory-protection-key.cc",
-            "src/wasm/memory-protection-key.h",
             "src/wasm/memory-tracing.cc",
             "src/wasm/memory-tracing.h",
             "src/wasm/module-compiler.cc",
