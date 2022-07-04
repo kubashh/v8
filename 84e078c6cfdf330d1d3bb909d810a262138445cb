@@ -16,6 +16,69 @@
       "message": "Hi Maya,\n\nAs we only support V8 on Node.js on PPC/s390 and not Web browsers (or web IDL), I just wanted to confirm this CL does not need a port and tests can remain skipped for us?",
       "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9370b305_17dd7689",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:00:43Z",
+      "side": 1,
+      "message": "DBC, didn\u0027t look at the rest.",
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf175c59_7f029efc",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:00:43Z",
+      "side": 1,
+      "message": "To make UBSan happy, you\u0027ll have to explicitly say what should happen for out-of-range values, something like:\n```\n  if (real_arg \u003e std::numeric_limits\u003cIntegerT\u003e::max() ||\n      real_arg \u003c std::numeric_limits\u003cIntegerT\u003e::min()) {\n    real_int \u003d 0;  // or something?\n  } else {\n    real_int \u003d static_cast\u003cIntegerT\u003e(real_arg);\n  }\n```",
+      "range": {
+        "startLine": 680,
+        "startChar": 6,
+        "endLine": 680,
+        "endChar": 49
+      },
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f2ab7e_21f6162f",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T18:00:43Z",
+      "side": 1,
+      "message": "nit: superfluous cast, `real_int` already has type `IntegerT`",
+      "range": {
+        "startLine": 689,
+        "startChar": 15,
+        "endLine": 689,
+        "endChar": 36
+      },
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
