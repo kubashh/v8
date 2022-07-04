@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64576559_dcdfda23",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1616,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-04T12:40:45Z",
+      "side": 0,
+      "message": "The macro also has a DCHECK in it. Should we keep it? Or maybe keep the macro and add the necessary include?",
+      "revId": "7a4a6cc6a85650ee91344d0dbd2c53a8fa8dce04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
