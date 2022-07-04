@@ -502,11 +502,13 @@ void InstructionSelector::VisitLoad(Node* node, Node* value,
   AddressingMode mode =
       g.GetEffectiveAddressMemoryOperand(value, inputs, &input_count, reg_kind);
   InstructionCode code = opcode | AddressingModeField::encode(mode);
+#if V8_ENABLE_WEBASSEMBLY
   if (node->opcode() == IrOpcode::kProtectedLoad ||
       node->opcode() == IrOpcode::kWord32AtomicLoad ||
       node->opcode() == IrOpcode::kWord64AtomicLoad) {
     code |= AccessModeField::encode(kMemoryAccessProtected);
   }
+#endif
   Emit(code, 1, outputs, input_count, inputs, temp_count, temps);
 }
 
