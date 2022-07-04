@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19625cbd_1ad1e853",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-04T06:35:18Z",
+      "side": 1,
+      "message": "PTAL. \n(The test262 failures on ToT are unrelated and should disappear on the next CQ retry.)",
+      "revId": "3a11b1877a41ed96bc2f355551061937af3970d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
