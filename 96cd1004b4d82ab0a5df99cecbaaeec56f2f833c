@@ -96,6 +96,30 @@
       },
       "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efef6386_b4066b02",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7291,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2022-07-04T17:13:59Z",
+      "side": 1,
+      "message": "unfortunately offsetof() does not work on c++ derived structures, so we have to calculate it manually 😞",
+      "parentUuid": "f1e3cdf0_343e6b3d",
+      "range": {
+        "startLine": 7291,
+        "startChar": 35,
+        "endLine": 7291,
+        "endChar": 49
+      },
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
