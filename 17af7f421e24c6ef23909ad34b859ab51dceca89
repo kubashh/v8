@@ -70,6 +70,24 @@
       "parentUuid": "aa5404ae_fc6039ff",
       "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40e1660d_5b3c1b86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-04T13:47:10Z",
+      "side": 1,
+      "message": "Thanks for the explanation here!\n\nI think that, given the initial bug, I am not sure it is worth making this change in this PR, but I will wait for reviews and decision on https://chromium-review.googlesource.com/c/chromium/src/+/3738183 to know what we want to go for. If the solution implies modifying the API, a change here would be needed anyways, so in that case I\u0027ll go for that.",
+      "parentUuid": "65564ca3_58cddb26",
+      "revId": "17af7f421e24c6ef23909ad34b859ab51dceca89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
