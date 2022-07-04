@@ -7,6 +7,9 @@
 
 #include "src/common/code-memory-access.h"
 #include "src/flags/flags.h"
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+#include "src/base/platform/platform.h"
+#endif
 
 namespace v8 {
 namespace internal {
@@ -52,7 +55,32 @@ void RwxMemoryWriteScope::SetExecutable() {
 }
 #pragma clang diagnostic pop
 
-#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#elif V8_HAS_PKU_JIT_WRITE_PROTECT
+
+// static
+bool RwxMemoryWriteScope::IsAllowed() {
+  return base::OS::HasMemoryProtectionKeySupport();
+}
+
+// static
+void RwxMemoryWriteScope::SetWritable() {
+  if (!IsAllowed()) return;
+  if (code_space_write_nesting_level_ == 0) {
+    base::OS::SetWriteableForMemoryProtectionKey(true);
+  }
+  code_space_write_nesting_level_++;
+}
+
+// static
+void RwxMemoryWriteScope::SetExecutable() {
+  if (!IsAllowed()) return;
+  code_space_write_nesting_level_--;
+  if (code_space_write_nesting_level_ == 0) {
+    base::OS::SetWriteableForMemoryProtectionKey(false);
+  }
+}
+
+#else  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT && !V8_TRY_USE_PKU_JIT_WRITE_PROTECT
 
 // static
 bool RwxMemoryWriteScope::IsAllowed() { return true; }
