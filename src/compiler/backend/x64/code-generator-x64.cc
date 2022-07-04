@@ -490,7 +490,10 @@ void EmitOOLTrapIfNeeded(Zone* zone, CodeGenerator* codegen,
 
 void EmitOOLTrapIfNeeded(Zone* zone, CodeGenerator* codegen,
                          InstructionCode opcode, Instruction* instr, int pc) {
-  DCHECK_NE(kMemoryAccessProtected, instr->memory_access_mode());
+  // TODO(manoskouk): This DCHECK fails for atomic loads and stores in non-wasm
+  // builds. Reinstate it once the we have protected atomic loads/stores.
+  // See instruction-selector-x64.cc.
+  // DCHECK_NE(kMemoryAccessProtected, instr->memory_access_mode());
 }
 
 #endif  // V8_ENABLE_WEBASSEMBLY

@@ -502,6 +502,8 @@ void InstructionSelector::VisitLoad(Node* node, Node* value,
   AddressingMode mode =
       g.GetEffectiveAddressMemoryOperand(value, inputs, &input_count, reg_kind);
   InstructionCode code = opcode | AddressingModeField::encode(mode);
+  // TODO(wasm): We should introduce protected atomic loads and only set the
+  // mode to protected for them.
   if (node->opcode() == IrOpcode::kProtectedLoad ||
       node->opcode() == IrOpcode::kWord32AtomicLoad ||
       node->opcode() == IrOpcode::kWord64AtomicLoad) {
