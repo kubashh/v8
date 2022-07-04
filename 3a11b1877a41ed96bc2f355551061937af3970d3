@@ -16,6 +16,23 @@
       "message": "PTAL. \n(The test262 failures on ToT are unrelated and should disappear on the next CQ retry.)",
       "revId": "3a11b1877a41ed96bc2f355551061937af3970d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e662553_7feb3808",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-04T09:35:43Z",
+      "side": 1,
+      "message": "LGTM, thanks! A rebase should fix the build errors.",
+      "revId": "3a11b1877a41ed96bc2f355551061937af3970d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
