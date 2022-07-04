@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975f5aeb_e102769a",
+        "filename": "test/mjsunit/regress/regress-crbug-1339722-7.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-07-04T04:35:19Z",
+      "side": 1,
+      "message": "I am not sure if this is right, though this is also how normal keyed property access are currently handled (gets return undefined and sets are noops). The private accessor and methods are quirkier in that the loads from context slots still work if the private brand checks don\u0027t throw. Perhaps it would be better to make them noops too, or enforce a \"no access\" error when the callback doesn\u0027t throw? (I see that there is a TODO comment suggesting this in JSObject::SetAccessor()).",
+      "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

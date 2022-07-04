@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11c83627_3d61cf51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-07-04T04:35:19Z",
+      "side": 1,
+      "message": "PTAL, my understanding is that the failed access callback is supposed to throw, but in certain cases chromium doesn\u0027t throw in its callback (see the chromium bug referenced in the CL description). My initial thought is that V8 could return (and sort of make the operation a noop) in this case, because that\u0027s also how normal property accesses are handled. Though it might also make sense to enforce a throw to avoid spreading the quirky behaviors to private properties.",
+      "revId": "c40c9565934a734945ac4843eefe6486ed66cbe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
