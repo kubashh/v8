@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b257cc78_cd416eb4",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T13:02:07Z",
+      "side": 1,
+      "message": "Great idea, thanks! Done.",
+      "parentUuid": "47ddc329_a61d2d19",
+      "range": {
+        "startLine": 1756,
+        "startChar": 38,
+        "endLine": 1756,
+        "endChar": 46
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "858c6ea5_26f7a986",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "697fe037_1a6bc4db",
+        "filename": "test/mjsunit/compiler/fast-api-annotations.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T13:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "858c6ea5_26f7a986",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 12
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa8929f0_9738718f",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-07-04T12:30:58Z",
       "side": 1,
       "message": "Could you test 2**31 - 1, which should be in range, but I suspect that the current code doesn\u0027t actually work.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 50
+      },
+      "revId": "ff1fc60239352438d1c2e5d2525311e85571d3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54955182_6fe01e1c",
+        "filename": "test/mjsunit/compiler/fast-api-annotations.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-04T13:02:07Z",
+      "side": 1,
+      "message": "Good point. I added a test and I fixed this case too.",
+      "parentUuid": "fa8929f0_9738718f",
       "range": {
         "startLine": 60,
         "startChar": 0,
