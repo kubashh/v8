@@ -144,6 +144,30 @@
       },
       "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49adfa19_422ac7f9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7291,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2022-07-05T16:20:50Z",
+      "side": 1,
+      "message": "these stores are for the FastApiTypedArray itself (length_ and data_) which uses inheritance. the callback is the one below.",
+      "parentUuid": "1c35fa4c_87fa624d",
+      "range": {
+        "startLine": 7291,
+        "startChar": 35,
+        "endLine": 7291,
+        "endChar": 49
+      },
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
