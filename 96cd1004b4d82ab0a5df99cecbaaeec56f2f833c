@@ -120,6 +120,30 @@
       },
       "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c35fa4c_87fa624d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7291,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-05T08:51:04Z",
+      "side": 1,
+      "message": "Ack, it\u0027s not too important. But that would still be the same v8::FastApiCallbackOptions struct, which is not inherited? I initially thought there might be something special about the union, but a simple struct with a similar layout looks good: https://godbolt.org/z/nhTPEaoGc",
+      "parentUuid": "efef6386_b4066b02",
+      "range": {
+        "startLine": 7291,
+        "startChar": 35,
+        "endLine": 7291,
+        "endChar": 49
+      },
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
