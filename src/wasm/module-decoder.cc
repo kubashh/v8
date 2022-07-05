@@ -311,8 +311,8 @@ void DecodeFunctionNames(const byte* module_start, const byte* module_end,
 
       for (; decoder.ok() && functions_count > 0; --functions_count) {
         uint32_t function_index = decoder.consume_u32v("function index");
-        WireBytesRef name =
-            consume_string(&decoder, StringValidation::kNone, "function name");
+        WireBytesRef name = consume_string(
+            &decoder, unibrow::Utf8Variant::kLossyUtf8, "function name");
 
         // Be lenient with errors in the name section: Ignore non-UTF8 names.
         // You can even assign to the same function multiple times (last valid
@@ -333,7 +333,7 @@ void DecodeNameMap(NameMap& target, Decoder& decoder) {
   for (uint32_t i = 0; i < count; i++) {
     uint32_t index = decoder.consume_u32v("index");
     WireBytesRef name =
-        consume_string(&decoder, StringValidation::kNone, "name");
+        consume_string(&decoder, unibrow::Utf8Variant::kLossyUtf8, "name");
     if (!decoder.ok()) break;
     if (index > kMaxInt) continue;
     if (name.is_empty()) continue;  // Empty names are useless.
@@ -353,7 +353,7 @@ void DecodeIndirectNameMap(IndirectNameMap& target, Decoder& decoder) {
     for (uint32_t k = 0; k < inner_count; ++k) {
       uint32_t inner_index = decoder.consume_u32v("inner index");
       WireBytesRef name =
-          consume_string(&decoder, StringValidation::kNone, "name");
+          consume_string(&decoder, unibrow::Utf8Variant::kLossyUtf8, "name");
       if (!decoder.ok()) break;
       if (inner_index > kMaxInt) continue;
       if (name.is_empty()) continue;  // Empty names are useless.
