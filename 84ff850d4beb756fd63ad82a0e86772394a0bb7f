@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6192458_44ba3853",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-05T16:56:57Z",
+      "side": 1,
+      "message": "All things considered, I think this is not worth it having the burden of introducing a whole new API just for this bug. Furthermore, it seems that there were some plan for a new one according to the comment here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-module.cc;l\u003d242?q\u003dIsWasmCodegenAllowed\u0026ss\u003dchromium.\n\nI think It\u0027d be worth rethinking about this when the new API is introduced, so that we can incorporate the error message in there.",
+      "revId": "84ff850d4beb756fd63ad82a0e86772394a0bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
