@@ -20,6 +20,91 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33640cff_fad09a69",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Please use DEFINE_LAZY_LEAKY_OBJECT_GETTER machinery to be on the thread safe side.\nSee GetPlatformPageAllocator() implementation for example.",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e65623f_b9b0ecc3",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "DCHECK_EQ(0, reinterpret_cast\u003cuintptr_t\u003e(address) % CommitPageSize());\n  DCHECK_EQ(0, size % CommitPageSize());",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceff6db5_5a28ce79",
+        "filename": "src/base/platform/platform-posix.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Please put the public section before private.",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e5703e_f7d24ca8",
+        "filename": "src/base/platform/platform-posix.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Please move method declarations before fields.",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fffdcc9_be64d9e8",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "750cb219_eda86892",
         "filename": "src/libplatform/default-platform.cc",
         "patchSetId": 14
@@ -37,6 +122,40 @@
         "endLine": 51,
         "endChar": 46
       },
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5fa9f08_1b0c2e6e",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "I think you can simplify the code if you move the \n  #if V8_HAS_PKU_JIT_WRITE_PROTECT\ninside if() since MemoryProtectionKeysEnabled() implies V8_HAS_PKU_JIT_WRITE_PROTECT.\nThen the \"#else\" part will be merged with the \"else\" block.",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d6fb8e0_bf7d7550",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Maybe it\u0027s better to cache the result of this computation in a boolean field to avoid calling the OS function since both the predicate and the flag value are not supposed to be changed at runtime.\n\nClemens, WDYT?",
       "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

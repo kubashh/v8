@@ -289,6 +289,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15fa8249_9d600384",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "It seems that this could be just a \n  DCHECK(IsAllowed())\nas we are not supposed to call this if the MAP_JIT/PKU are not enabled/supported (see CodeSpaceWriteScope::SetWritable()).",
+      "parentUuid": "42d24a26_af836736",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5257b51d_8bcc1e1f",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 7
@@ -434,6 +452,24 @@
       "side": 1,
       "message": "If this check will also failed in some M1 scenarios, may I remove this check directly?",
       "parentUuid": "9fe0d04e_bc1d6842",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4177f645_44e79853",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5701,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-05T11:26:56Z",
+      "side": 1,
+      "message": "Yes. Thanks!",
+      "parentUuid": "874acc02_fd729708",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
