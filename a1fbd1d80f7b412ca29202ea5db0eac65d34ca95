@@ -70,6 +70,24 @@
       "parentUuid": "bbba4d0c_8bb7d016",
       "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce504bd_3801ec6d",
+        "filename": "test/mjsunit/regress/regress-crbug-1339722-7.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2022-07-05T16:32:31Z",
+      "side": 1,
+      "message": "Ah, I see what you meant. I\u0027ve moved these into a common function.",
+      "parentUuid": "00bd3899_c9ecdf7c",
+      "revId": "a1fbd1d80f7b412ca29202ea5db0eac65d34ca95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
