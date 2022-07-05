@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8bf4152c_b94aa67c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-07-05T14:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f09b2acf_43535ae8",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "cbf2570b75ee3b39a4015fa8ad152db4c3d76663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ab60583b_b94108d2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-05T12:44:32Z",
       "side": 1,
       "message": "This will likely need manual-but-trivial rebasing as this function was just moved around in the same file as part of a crash fix.",
+      "range": {
+        "startLine": 315,
+        "startChar": 22,
+        "endLine": 315,
+        "endChar": 54
+      },
+      "revId": "cbf2570b75ee3b39a4015fa8ad152db4c3d76663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "511a7e68_2569ba23",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-07-05T14:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b193f6e_ee7320b9",
       "range": {
         "startLine": 315,
         "startChar": 22,
