@@ -35,6 +35,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5bde7e9_53102123",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-05T08:19:14Z",
+      "side": 1,
+      "message": "What does DBC mean? (I assume it\u0027s not \"dubious commit\" :))",
+      "parentUuid": "9370b305_17dd7689",
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa1eb72_e4b182da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-05T08:19:14Z",
+      "side": 1,
+      "message": "Hi Milad, the fast API is generally experimented with in Node.js, but this particular feature is only about WebIDL\u0027s annotations, so it shouldn\u0027t be relevant to Node.js. I think it\u0027s fine if the tests stay skipped and your change with `UNIMPLEMENTED` is good.",
+      "parentUuid": "ed96c7c4_fd32b218",
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf175c59_7f029efc",
@@ -60,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d34accb1_6bd12028",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-05T08:19:14Z",
+      "side": 1,
+      "message": "I moved the cast to the \"in_range\" case, that should be enough, wdyt?",
+      "parentUuid": "bf175c59_7f029efc",
+      "range": {
+        "startLine": 680,
+        "startChar": 6,
+        "endLine": 680,
+        "endChar": 49
+      },
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83f2ab7e_21f6162f",
         "filename": "src/d8/d8-test.cc",
         "patchSetId": 18
@@ -71,6 +131,30 @@
       "writtenOn": "2022-07-04T18:00:43Z",
       "side": 1,
       "message": "nit: superfluous cast, `real_int` already has type `IntegerT`",
+      "range": {
+        "startLine": 689,
+        "startChar": 15,
+        "endLine": 689,
+        "endChar": 36
+      },
+      "revId": "84e078c6cfdf330d1d3bb909d810a262138445cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a90a5e_278ef6a9",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-05T08:19:14Z",
+      "side": 1,
+      "message": "Good point, I reworked the tests in the reland.",
+      "parentUuid": "83f2ab7e_21f6162f",
       "range": {
         "startLine": 689,
         "startChar": 15,
