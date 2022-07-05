@@ -848,7 +848,8 @@ MaybeHandle<WasmModuleObject> DeserializeNativeModule(
     Isolate* isolate, base::Vector<const byte> data,
     base::Vector<const byte> wire_bytes_vec,
     base::Vector<const char> source_url) {
-  if (!IsWasmCodegenAllowed(isolate, isolate->native_context())) return {};
+  if (!IsWasmCodegenAllowed(isolate, isolate->native_context(), nullptr))
+    return {};
   if (!IsSupportedVersion(data)) return {};
 
   // Make the copy of the wire bytes early, so we use the same memory for

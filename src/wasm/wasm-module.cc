@@ -238,16 +238,25 @@ std::ostream& operator<<(std::ostream& os, const WasmFunctionName& name) {
 WasmModule::WasmModule(std::unique_ptr<Zone> signature_zone)
     : signature_zone(std::move(signature_zone)) {}
 
-bool IsWasmCodegenAllowed(Isolate* isolate, Handle<Context> context) {
+bool IsWasmCodegenAllowed(Isolate* isolate, Handle<Context> context,
+                          Handle<String>* error_message) {
   // TODO(wasm): Once wasm has its own CSP policy, we should introduce a
   // separate callback that includes information about the module about to be
   // compiled. For the time being, pass an empty string as placeholder for the
   // sources.
   if (auto wasm_codegen_callback = isolate->allow_wasm_code_gen_callback()) {
-    return wasm_codegen_callback(
+    AllowWasmCodeGenerationCallbackResult result = wasm_codegen_callback(
         v8::Utils::ToLocal(context),
         v8::Utils::ToLocal(isolate->factory()->empty_string()));
+    if (error_message && !result.codegen_allowed &&
+        !result.error_message.IsEmpty())
+      *error_message =
+          Utils::OpenHandle(*result.error_message.ToLocalChecked(), false);
+    return result.codegen_allowed;
   }
+  if (error_message)
+    *error_message = isolate->factory()->NewStringFromStaticChars(
+        "Wasm code generation disallowed by embedder");
   auto codegen_callback = isolate->allow_code_gen_callback();
   return codegen_callback == nullptr ||
          codegen_callback(

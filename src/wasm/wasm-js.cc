@@ -535,8 +535,10 @@ void WebAssemblyCompile(const v8::FunctionCallbackInfo<v8::Value>& args) {
   HandleScope scope(isolate);
   ScheduledErrorThrower thrower(i_isolate, kAPIMethodName);
 
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
-    thrower.CompileError("Wasm code generation disallowed by embedder");
+  i::Handle<i::String> error;
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     &error)) {
+    thrower.CompileError("%s", error->ToCString().get());
   }
 
   Local<Context> context = isolate->GetCurrentContext();
@@ -612,8 +614,10 @@ void WebAssemblyCompileStreaming(
   auto resolver = std::make_shared<AsyncCompilationResolver>(isolate, context,
                                                              promise_resolver);
 
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
-    thrower.CompileError("Wasm code generation disallowed by embedder");
+  i::Handle<i::String> error;
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     &error)) {
+    thrower.CompileError("%s", error->ToCString().get());
     resolver->OnCompilationFailed(thrower.Reify());
     return;
   }
@@ -721,8 +725,11 @@ void WebAssemblyModule(const v8::FunctionCallbackInfo<v8::Value>& args) {
     thrower.TypeError("WebAssembly.Module must be invoked with 'new'");
     return;
   }
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
-    thrower.CompileError("Wasm code generation disallowed by embedder");
+
+  i::Handle<i::String> error;
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     &error)) {
+    thrower.CompileError("%s", error->ToCString().get());
     return;
   }
 
@@ -905,8 +912,10 @@ void WebAssemblyInstantiateStreaming(
   std::unique_ptr<i::wasm::InstantiationResultResolver> resolver(
       new InstantiateModuleResultResolver(isolate, context, result_resolver));
 
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
-    thrower.CompileError("Wasm code generation disallowed by embedder");
+  i::Handle<i::String> error;
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     &error)) {
+    thrower.CompileError("%s", error->ToCString().get());
     resolver->OnInstantiationFailed(thrower.Reify());
     return;
   }
@@ -1030,8 +1039,10 @@ void WebAssemblyInstantiate(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   // The first parameter is a buffer source, we have to check if we are allowed
   // to compile it.
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
-    thrower.CompileError("Wasm code generation disallowed by embedder");
+  i::Handle<i::String> error;
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     &error)) {
+    thrower.CompileError("%s", error->ToCString().get());
     compilation_resolver->OnCompilationFailed(thrower.Reify());
     return;
   }

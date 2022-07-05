@@ -7879,7 +7879,8 @@ MaybeLocal<WasmModuleObject> WasmModuleObject::Compile(
   const uint8_t* start = wire_bytes.data();
   size_t length = wire_bytes.size();
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context())) {
+  if (!i::wasm::IsWasmCodegenAllowed(i_isolate, i_isolate->native_context(),
+                                     nullptr)) {
     return MaybeLocal<WasmModuleObject>();
   }
   i::MaybeHandle<i::JSObject> maybe_compiled;
