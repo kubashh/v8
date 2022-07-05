@@ -48,10 +48,24 @@ bool TrueCallback(Local<v8::Context>, Local<v8::String>) { return true; }
 
 bool FalseCallback(Local<v8::Context>, Local<v8::String>) { return false; }
 
+AllowWasmCodeGenerationCallbackResult WasmTrueCallback(Local<v8::Context>,
+                                                       Local<v8::String>) {
+  return {true, v8::MaybeLocal<v8::String>()};
+}
+
+AllowWasmCodeGenerationCallbackResult WasmFalseCallback(Local<v8::Context>,
+                                                        Local<v8::String>) {
+  return {false, v8::MaybeLocal<v8::String>()};
+}
+
 using CallbackFn = bool (*)(Local<v8::Context>, Local<v8::String>);
+using WasmCallbackFn = AllowWasmCodeGenerationCallbackResult (*)(
+    Local<v8::Context>, Local<v8::String>);
 
 // Defines the Callback to use for the corresponding TestValue.
 CallbackFn Callback[kNumTestValues] = {nullptr, FalseCallback, TrueCallback};
+WasmCallbackFn WasmCallback[kNumTestValues] = {nullptr, WasmFalseCallback,
+                                               WasmTrueCallback};
 
 void BuildTrivialModule(Zone* zone, ZoneBuffer* buffer) {
   WasmModuleBuilder* builder = zone->New<WasmModuleBuilder>(zone);
@@ -109,7 +123,7 @@ TEST(PropertiesOfCodegenCallbacks) {
       fprintf(stderr, "Test codegen = %s, wasm_codegen = %s\n",
               TestValueName[codegen], TestValueName[wasm_codegen]);
       isolate->set_allow_code_gen_callback(Callback[codegen]);
-      isolate->set_allow_wasm_code_gen_callback(Callback[wasm_codegen]);
+      isolate->set_allow_wasm_code_gen_callback(WasmCallback[wasm_codegen]);
       bool found = TestModule(isolate, wire_bytes);
       bool expected = ExpectedResults[codegen][wasm_codegen];
       CHECK_EQ(expected, found);

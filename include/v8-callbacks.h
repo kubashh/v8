@@ -283,6 +283,13 @@ enum AccessType {
   ACCESS_KEYS
 };
 
+struct AllowWasmCodeGenerationCallbackResult {
+  // If true, proceed with the code generation. Otherwise, dont'.
+  bool codegen_allowed = false;
+  // Might contain an error message in case code generation is not allowed.
+  MaybeLocal<String> error_message;
+};
+
 // --- Failed Access Check Callback ---
 
 using FailedAccessCheckCallback = void (*)(Local<Object> target,
@@ -303,8 +310,9 @@ using ModifyCodeGenerationFromStringsCallback2 =
 // --- WebAssembly compilation callbacks ---
 using ExtensionCallback = bool (*)(const FunctionCallbackInfo<Value>&);
 
-using AllowWasmCodeGenerationCallback = bool (*)(Local<Context> context,
-                                                 Local<String> source);
+using AllowWasmCodeGenerationCallback =
+    AllowWasmCodeGenerationCallbackResult (*)(Local<Context> context,
+                                              Local<String> source);
 
 // --- Callback for APIs defined on v8-supported objects, but implemented
 // by the embedder. Example: WebAssembly.{compile|instantiate}Streaming ---

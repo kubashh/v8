@@ -243,8 +243,9 @@ TEST(DeserializeWireBytesAndSerializedDataInvalid) {
   test.CollectGarbage();
 }
 
-bool False(v8::Local<v8::Context> context, v8::Local<v8::String> source) {
-  return false;
+AllowWasmCodeGenerationCallbackResult False(v8::Local<v8::Context> context,
+                                            v8::Local<v8::String> source) {
+  return {false, v8::MaybeLocal<v8::String>()};
 }
 
 TEST(BlockWasmCodeGenAtDeserialization) {

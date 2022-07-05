@@ -705,7 +705,8 @@ struct WasmFunctionName {
 std::ostream& operator<<(std::ostream& os, const WasmFunctionName& name);
 
 V8_EXPORT_PRIVATE bool IsWasmCodegenAllowed(Isolate* isolate,
-                                            Handle<Context> context);
+                                            Handle<Context> context,
+                                            Handle<String>* error_message);
 
 Handle<JSObject> GetTypeForFunction(Isolate* isolate, const FunctionSig* sig,
                                     bool for_exception = false);

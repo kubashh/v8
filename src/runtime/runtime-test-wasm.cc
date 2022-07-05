@@ -247,9 +247,10 @@ RUNTIME_FUNCTION(Runtime_IsAsmWasmCode) {
 
 namespace {
 
-bool DisallowWasmCodegenFromStringsCallback(v8::Local<v8::Context> context,
-                                            v8::Local<v8::String> source) {
-  return false;
+v8::AllowWasmCodeGenerationCallbackResult
+DisallowWasmCodegenFromStringsCallback(v8::Local<v8::Context> context,
+                                       v8::Local<v8::String> source) {
+  return {false, v8::MaybeLocal<v8::String>()};
 }
 
 }  // namespace
