@@ -230,35 +230,18 @@ in_category(
 
 in_category(
     "RISC-V",
-    multibranch_builder(
-        name = "V8 Linux - riscv32 - sim - builder",
-        triggered_by_gitiles = True,
-        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.ports"},
-        use_goma = GOMA.DEFAULT,
-        close_tree = False,
-        first_branch_version = "10.5",
-    ),
-    multibranch_builder(
+    multibranch_builder_pair(
         name = "V8 Linux - riscv32 - sim",
-        parent_builder = "V8 Linux - riscv32 - sim - builder",
         execution_timeout = 19800,
+        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8.ports"},
         close_tree = False,
         first_branch_version = "10.5",
     ),
-    multibranch_builder(
-        name = "V8 Linux - riscv64 - sim - builder",
-        triggered_by_gitiles = True,
-        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
-        properties = {"builder_group": "client.v8.ports"},
-        use_goma = GOMA.DEFAULT,
-        close_tree = False,
-    ),
-    multibranch_builder(
+    multibranch_builder_pair(
         name = "V8 Linux - riscv64 - sim",
-        parent_builder = "V8 Linux - riscv64 - sim - builder",
         execution_timeout = 19800,
+        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8.ports"},
         close_tree = False,
     ),
