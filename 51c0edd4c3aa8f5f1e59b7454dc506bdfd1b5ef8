@@ -16,6 +16,23 @@
       "message": "We will eventually go for the solution we mentioned about getting the error message while checking for CSP.",
       "revId": "51c0edd4c3aa8f5f1e59b7454dc506bdfd1b5ef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da915c1_a039a582",
+        "filename": "include/v8-callbacks.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-05T16:09:39Z",
+      "side": 1,
+      "message": "Is it ok to make this change? I guess it would break other projects using `SetAllowWasmCodeGenerationCallback`. Should I introduce another method ? verwaest@",
+      "revId": "51c0edd4c3aa8f5f1e59b7454dc506bdfd1b5ef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
