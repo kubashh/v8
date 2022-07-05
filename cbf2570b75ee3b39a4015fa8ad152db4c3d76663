@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09b2acf_43535ae8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-05T12:44:32Z",
+      "side": 1,
+      "message": "nit: you can put several bugs on one line, like so:\n\n  Bug: v8:12868, v8:13028, v8:13036",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "cbf2570b75ee3b39a4015fa8ad152db4c3d76663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab60583b_b94108d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-05T12:44:32Z",
+      "side": 1,
+      "message": "Still LGTM.",
+      "revId": "cbf2570b75ee3b39a4015fa8ad152db4c3d76663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b193f6e_ee7320b9",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-05T12:44:32Z",
+      "side": 1,
+      "message": "This will likely need manual-but-trivial rebasing as this function was just moved around in the same file as part of a crash fix.",
+      "range": {
+        "startLine": 315,
+        "startChar": 22,
+        "endLine": 315,
+        "endChar": 54
+      },
+      "revId": "cbf2570b75ee3b39a4015fa8ad152db4c3d76663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
