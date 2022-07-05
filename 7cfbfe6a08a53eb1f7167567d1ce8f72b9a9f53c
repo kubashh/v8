@@ -16,6 +16,80 @@
       "message": "Thanks for the review! Comments addressed, PTAL.",
       "revId": "7cfbfe6a08a53eb1f7167567d1ce8f72b9a9f53c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f36b342_1bdbad56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-07-05T12:30:36Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "7cfbfe6a08a53eb1f7167567d1ce8f72b9a9f53c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "992b9a91_f56aa9e7",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-07-05T12:30:36Z",
+      "side": 1,
+      "message": "Comments should be in a separate line, shouldn\u0027t they?",
+      "revId": "7cfbfe6a08a53eb1f7167567d1ce8f72b9a9f53c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e7d06d_7f0a488a",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-07-05T12:30:36Z",
+      "side": 1,
+      "message": "Could you do newlines between functions?",
+      "revId": "7cfbfe6a08a53eb1f7167567d1ce8f72b9a9f53c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f6edfec_e4f81ee5",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-07-05T12:30:36Z",
+      "side": 1,
+      "message": "Here the code is hard to understand because of the name \"OpcodeLength\"... I\u0027m not sure how to fix it, maybe just a comment would be enough?",
+      "range": {
+        "startLine": 506,
+        "startChar": 22,
+        "endLine": 506,
+        "endChar": 34
+      },
+      "revId": "7cfbfe6a08a53eb1f7167567d1ce8f72b9a9f53c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
