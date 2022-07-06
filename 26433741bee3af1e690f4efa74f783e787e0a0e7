@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc0b273_94f629f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-06T13:53:16Z",
+      "side": 1,
+      "message": "We already got another merge conflict :/\nCan you rebase again? I\u0027ll try to land ASAP then to avoid further conflicts.",
+      "revId": "26433741bee3af1e690f4efa74f783e787e0a0e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
