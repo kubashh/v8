@@ -168,6 +168,30 @@
       },
       "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f58e011_20f00317",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7291,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-07-06T09:56:21Z",
+      "side": 1,
+      "message": "Good point, I misread what the stack slot is used for.",
+      "parentUuid": "49adfa19_422ac7f9",
+      "range": {
+        "startLine": 7291,
+        "startChar": 35,
+        "endLine": 7291,
+        "endChar": 49
+      },
+      "revId": "96cd1004b4d82ab0a5df99cecbaaeec56f2f833c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
