@@ -229,6 +229,24 @@
       "parentUuid": "958cd18e_0cfa3147",
       "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a115b6f6_3a51571b",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6896,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-06T16:45:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "681cd82a_6b02b5cd",
+      "revId": "382b56b2aca81266564df0c7fcefd60c92fbf013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
