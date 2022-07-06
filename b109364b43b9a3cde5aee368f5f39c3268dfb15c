@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d026289_be0a43a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-06T07:20:41Z",
+      "side": 1,
+      "message": "Thanks for Igor\u0027s comments, I did some change on this patchset, PTAL, thanks!",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
