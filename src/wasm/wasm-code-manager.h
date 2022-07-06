@@ -19,13 +19,13 @@
 #include "src/base/address-region.h"
 #include "src/base/bit-field.h"
 #include "src/base/macros.h"
+#include "src/base/optional.h"
 #include "src/base/vector.h"
 #include "src/builtins/builtins.h"
 #include "src/handles/handles.h"
 #include "src/tasks/operations-barrier.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/wasm/compilation-environment.h"
-#include "src/wasm/memory-protection-key.h"
 #include "src/wasm/wasm-features.h"
 #include "src/wasm/wasm-limits.h"
 #include "src/wasm/wasm-module-sourcemap.h"
@@ -1051,18 +1051,6 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   // generated code. This data still be stored on the C++ heap.
   static size_t EstimateNativeModuleMetaDataSize(const WasmModule* module);
 
-  // Set this thread's permission of all owned code space to read-write or
-  // read-only (if {writable} is false). Can only be called if
-  // {HasMemoryProtectionKeySupport()} is {true}.
-  // Since the permission is thread-local, there is no requirement to hold any
-  // lock when calling this method.
-  void SetThreadWritable(bool writable);
-
-  // Returns true if there is hardware support for PKU. Use
-  // {MemoryProtectionKeysEnabled} to also check if PKU usage is enabled via
-  // flags.
-  bool HasMemoryProtectionKeySupport() const;
-
   // Returns true if PKU should be used.
   bool MemoryProtectionKeysEnabled() const;
 
@@ -1107,8 +1095,6 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   // currently committed space plus 50% of the available code space on creation
   // and updated after each GC.
   std::atomic<size_t> critical_committed_code_space_;
-
-  int memory_protection_key_;
 
   mutable base::Mutex native_modules_mutex_;
 

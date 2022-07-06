@@ -30,7 +30,6 @@
 #include "src/wasm/compilation-environment.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/jump-table-assembler.h"
-#include "src/wasm/memory-protection-key.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/names-provider.h"
 #include "src/wasm/wasm-debug.h"
@@ -1882,18 +1881,16 @@ NativeModule::~NativeModule() {
 
 WasmCodeManager::WasmCodeManager()
     : max_committed_code_space_(FLAG_wasm_max_code_space * MB),
-      critical_committed_code_space_(max_committed_code_space_ / 2),
-      memory_protection_key_(AllocateMemoryProtectionKey()) {
+      critical_committed_code_space_(max_committed_code_space_ / 2) {
   // Ensure that RwxMemoryWriteScope and other dependent scopes (in particular,
   // wasm::CodeSpaceWriteScope) are allowed to be used.
-  CHECK(RwxMemoryWriteScope::IsAllowed());
+  CHECK_IMPLIES(MemoryProtectionKeysEnabled(),
+                RwxMemoryWriteScope::IsAllowed());
 }
 
 WasmCodeManager::~WasmCodeManager() {
   // No more committed code space.
   DCHECK_EQ(0, total_committed_code_space_.load());
-
-  FreeMemoryProtectionKey(memory_protection_key_);
 }
 
 #if defined(V8_OS_WIN64)
@@ -1945,12 +1942,17 @@ void WasmCodeManager::Commit(base::AddressRegion region) {
 
   bool success;
   if (MemoryProtectionKeysEnabled()) {
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
     TRACE_HEAP(
         "Setting rwx permissions and memory protection key %d for 0x%" PRIxPTR
         ":0x%" PRIxPTR "\n",
-        memory_protection_key_, region.begin(), region.end());
-    success = SetPermissionsAndMemoryProtectionKey(
-        GetPlatformPageAllocator(), region, permission, memory_protection_key_);
+        base::OS::GetPermissionsProtectionKey(), region.begin(), region.end());
+    success = base::OS::SetPermissionsAndMemoryProtectionKey(
+        reinterpret_cast<void*>(region.begin()), region.size(),
+        static_cast<base::OS::MemoryPermission>(permission));
+#else
+    UNREACHABLE();
+#endif
   } else {
     TRACE_HEAP("Setting rwx permissions for 0x%" PRIxPTR ":0x%" PRIxPTR "\n",
                region.begin(), region.end());
@@ -2004,6 +2006,13 @@ VirtualMemory WasmCodeManager::TryAllocate(size_t size, void* hint) {
   VirtualMemory mem(page_allocator, size, hint, allocate_page_size,
                     JitPermission::kMapAsJittable);
   if (!mem.IsReserved()) return {};
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  if (MemoryProtectionKeysEnabled()) {
+    CHECK(base::OS::SetPermissionsAndMemoryProtectionKey(
+        reinterpret_cast<void*>(mem.address()), mem.size(),
+        base::OS::MemoryPermission::kReadWriteExecute));
+  }
+#endif
   TRACE_HEAP("VMem alloc: 0x%" PRIxPTR ":0x%" PRIxPTR " (%zu)\n", mem.address(),
              mem.end(), mem.size());
 
@@ -2149,49 +2158,40 @@ size_t WasmCodeManager::EstimateNativeModuleMetaDataSize(
          far_jump_table_size;
 }
 
-void WasmCodeManager::SetThreadWritable(bool writable) {
-  DCHECK(MemoryProtectionKeysEnabled());
-
-  MemoryProtectionKeyPermission permissions =
-      writable ? kNoRestrictions : kDisableWrite;
-
-  // When switching to writable we should not already be writable. Otherwise
-  // this points at a problem with counting writers, or with wrong
-  // initialization (globally or per thread).
-  DCHECK_IMPLIES(writable, !MemoryProtectionKeyWritable());
-
-  TRACE_HEAP("Setting memory protection key %d to writable: %d.\n",
-             memory_protection_key_, writable);
-  SetPermissionsForMemoryProtectionKey(memory_protection_key_, permissions);
-}
-
-bool WasmCodeManager::HasMemoryProtectionKeySupport() const {
-  return memory_protection_key_ != kNoMemoryProtectionKey;
-}
-
 bool WasmCodeManager::MemoryProtectionKeysEnabled() const {
-  return HasMemoryProtectionKeySupport() && FLAG_wasm_memory_protection_keys;
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  return base::OS::HasMemoryProtectionKeySupport() &&
+         FLAG_wasm_memory_protection_keys;
+#else
+  return false;
+#endif
 }
 
 bool WasmCodeManager::MemoryProtectionKeyWritable() const {
-  return GetMemoryProtectionKeyPermission(memory_protection_key_) ==
-         MemoryProtectionKeyPermission::kNoRestrictions;
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  return base::OS::GetMemoryProtectionKeyPermission() ==
+         base::OS::kNoRestrictions;
+#else
+  UNREACHABLE();
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 }
 
 void WasmCodeManager::InitializeMemoryProtectionKeyPermissionsIfSupported()
     const {
-  if (!HasMemoryProtectionKeySupport()) return;
-  // The default permission is {kDisableAccess}. Switch from that to
-  // {kDisableWrite}. Leave other permissions untouched, as the thread did
-  // already use the memory protection key in that case.
-  if (GetMemoryProtectionKeyPermission(memory_protection_key_) ==
-      kDisableAccess) {
-    SetPermissionsForMemoryProtectionKey(memory_protection_key_, kDisableWrite);
+  if (!MemoryProtectionKeysEnabled()) return;
+    // The default permission is {kDisableAccess}. Switch from that to
+    // {kDisableWrite}. Leave other permissions untouched, as the thread did
+    // already use the memory protection key in that case.
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  if (base::OS::GetMemoryProtectionKeyPermission() ==
+      base::OS::kDisableAccess) {
+    base::OS::SetWriteableForMemoryProtectionKey(false);
   }
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 }
 
 base::AddressRegion WasmCodeManager::AllocateAssemblerBufferSpace(int size) {
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   if (MemoryProtectionKeysEnabled()) {
     auto* page_allocator = GetPlatformPageAllocator();
     size_t page_size = page_allocator->AllocatePageSize();
@@ -2209,25 +2209,25 @@ base::AddressRegion WasmCodeManager::AllocateAssemblerBufferSpace(int size) {
     }
     auto region =
         base::AddressRegionOf(reinterpret_cast<uint8_t*>(mapped), size);
-    CHECK(SetPermissionsAndMemoryProtectionKey(page_allocator, region,
-                                               PageAllocator::kReadWrite,
-                                               memory_protection_key_));
+    CHECK(base::OS::SetPermissionsAndMemoryProtectionKey(
+        reinterpret_cast<void*>(region.begin()), region.size(),
+        base::OS::MemoryPermission::kReadWrite));
     return region;
   }
-#endif  // defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
   DCHECK(!MemoryProtectionKeysEnabled());
   return base::AddressRegionOf(new uint8_t[size], size);
 }
 
 void WasmCodeManager::FreeAssemblerBufferSpace(base::AddressRegion region) {
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   if (MemoryProtectionKeysEnabled()) {
     auto* page_allocator = GetPlatformPageAllocator();
     FreePages(page_allocator, reinterpret_cast<void*>(region.begin()),
               region.size());
     return;
   }
-#endif  // defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
   DCHECK(!MemoryProtectionKeysEnabled());
   delete[] reinterpret_cast<uint8_t*>(region.begin());
 }
