@@ -202,6 +202,13 @@ v8_executable("unittests") {
     "../..:internal_config_base",
     "../..:v8_tracing_config",
   ]
+
+  if (!is_clang && !is_win) {
+    cflags += [
+      # Turn off warnings due to false positives in googletest.
+      "-Wno-error",
+    ]
+  }
 }
 
 v8_source_set("unittests_sources") {
