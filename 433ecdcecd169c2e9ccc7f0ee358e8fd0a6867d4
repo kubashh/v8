@@ -33,6 +33,24 @@
       "message": "I don\u0027t understand this heuristic, can you explain it (ideally in the commit message) in more detail, and in particular how it interacts with concurrent OSR?",
       "revId": "433ecdcecd169c2e9ccc7f0ee358e8fd0a6867d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c277f3b3_b378c786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-06T10:12:10Z",
+      "side": 1,
+      "message": "Thanks for your review!\nI added some detail to commit message, could you please have a look?",
+      "parentUuid": "c4d65717_7f5b1233",
+      "revId": "433ecdcecd169c2e9ccc7f0ee358e8fd0a6867d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
