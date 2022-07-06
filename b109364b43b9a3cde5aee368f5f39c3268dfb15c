@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f7db5ba_0a29ff46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Please split this comment into lines not longer than 72 chars.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9d026289_be0a43a0",
@@ -14,6 +31,148 @@
       "writtenOn": "2022-07-06T07:20:41Z",
       "side": 1,
       "message": "Thanks for Igor\u0027s comments, I did some change on this patchset, PTAL, thanks!",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39a485f5_4776edcf",
+        "filename": "src/base/platform/platform-posix.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I think we went in a wrong direction with adding the PKU class and dropping the memory-protection-key.h/.cc files.\nLet me think more and get back to you with suggestions.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fec8980_5f1eaeb2",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "V8_HAS_PKU_JIT_WRITE_PROTECT",
+      "range": {
+        "startLine": 83,
+        "startChar": 48,
+        "endLine": 83,
+        "endChar": 80
+      },
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a29822b_f3a5f785",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9c75760_244c6c48",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Please try to fix the issues on the tests side.\nIf that\u0027s too complicated then you can just add an\n  if (IsAllowed()) \nand please add a short comment why do we need this.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844ffea4_499200f9",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "104398e3_7e8816fc",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Just #if because both are defined to 0 or 1.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a408f12_56619444",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "202be8de_6d72d7de",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-06T18:38:28Z",
+      "side": 1,
+      "message": "Why wasn\u0027t this necessary before?",
       "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
