@@ -503,6 +503,10 @@ def ci_pair_factory(func):
                 notified_by = [builder_name, tester_name],
             )
 
+        tester_execution_timeout = 0
+        if "tester_execution_timeout" in kwargs:
+            tester_execution_timeout = kwargs.pop("tester_execution_timeout")
+
         builder_kwargs = dict(kwargs)
         builder_kwargs["name"] = builder_name
 
@@ -520,6 +524,9 @@ def ci_pair_factory(func):
         ]
 
         tester_kwargs = {}
+        if tester_execution_timeout:
+            tester_kwargs["execution_timeout"] = tester_execution_timeout
+
         for k, v in kwargs.items():
             if k in tester_included_args:
                 tester_kwargs[k] = dict(v) if type(v) == "dict" else v
