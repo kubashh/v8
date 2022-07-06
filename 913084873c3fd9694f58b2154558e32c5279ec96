@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48f085b9_4c67834e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-06T08:51:35Z",
+      "side": 1,
+      "message": "I went back to the accepted version, with the minor change that I modified the error message to avoid redundancy. If the CQ passes, I\u0027ll go ahead with this change.",
+      "revId": "913084873c3fd9694f58b2154558e32c5279ec96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

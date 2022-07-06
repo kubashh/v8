@@ -33,6 +33,24 @@
       "message": "Is it ok to make this change? I guess it would break other projects using `SetAllowWasmCodeGenerationCallback`. Should I introduce another method ? verwaest@",
       "revId": "51c0edd4c3aa8f5f1e59b7454dc506bdfd1b5ef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adfd6cb2_ceec18ad",
+        "filename": "include/v8-callbacks.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1547432
+      },
+      "writtenOn": "2022-07-06T08:51:35Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "5da915c1_a039a582",
+      "revId": "51c0edd4c3aa8f5f1e59b7454dc506bdfd1b5ef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
