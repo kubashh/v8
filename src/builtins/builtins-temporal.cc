@@ -54,10 +54,6 @@ TO_BE_IMPLEMENTED(TemporalPlainTimePrototypeSince)
 TO_BE_IMPLEMENTED(TemporalPlainDateTimePrototypeRound)
 
 /* Temporal.ZonedDateTime */
-/* Temporal #sec-temporal.zoneddatetime.prototype.until */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeUntil)
-/* Temporal #sec-temporal.zoneddatetime.prototype.since */
-TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeSince)
 /* Temporal #sec-temporal.zoneddatetime.prototype.round */
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeRound)
 
@@ -547,6 +543,8 @@ TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, ToPlainYearMonth, toPlainYearMonth)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, ToPlainMonthDay, toPlainMonthDay)
 TEMPORAL_PROTOTYPE_METHOD2(ZonedDateTime, Add, add)
 TEMPORAL_PROTOTYPE_METHOD2(ZonedDateTime, Subtract, subtract)
+TEMPORAL_PROTOTYPE_METHOD2(ZonedDateTime, Since, since)
+TEMPORAL_PROTOTYPE_METHOD2(ZonedDateTime, Until, until)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, GetISOFields, getISOFields)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, OffsetNanoseconds, offsetNanoseconds)
 TEMPORAL_PROTOTYPE_METHOD0(ZonedDateTime, Offset, offset)

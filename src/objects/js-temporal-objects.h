@@ -887,10 +887,21 @@ class JSTemporalZonedDateTime
   V8_WARN_UNUSED_RESULT static MaybeHandle<Smi> HoursInDay(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time);
 
+  // #sec-temporal.zoneddatetime.prototype.until
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Until(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> date_time,
+      Handle<Object> other, Handle<Object> options);
+
+  // #sec-temporal.zoneddatetime.prototype.since
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Since(
+      Isolate* isolate, Handle<JSTemporalZonedDateTime> date_time,
+      Handle<Object> other, Handle<Object> options);
+
   // #sec-temporal.zoneddatetime.prototype.add
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalZonedDateTime> Add(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time,
       Handle<Object> temporal_duration_like, Handle<Object> options);
+
   // #sec-temporal.zoneddatetime.prototype.subtract
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalZonedDateTime> Subtract(
       Isolate* isolate, Handle<JSTemporalZonedDateTime> zoned_date_time,
