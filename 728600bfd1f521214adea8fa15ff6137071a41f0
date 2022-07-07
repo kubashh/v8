@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76aba24e_822c9d3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-07T22:59:04Z",
+      "side": 1,
+      "message": "Tests missing, but let\u0027s see if you like the general idea.",
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
