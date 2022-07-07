@@ -493,7 +493,6 @@ def ci_pair_factory(func):
     def pair_func(**kwargs):
         tester_name = kwargs["name"]
         builder_name = tester_name + ("" if is_ci_debug(tester_name) else " -") + " builder"
-        tester_close = kwargs.pop("tester_close", None)
 
         to_notify = kwargs.pop("to_notify", None)
         if to_notify:
@@ -502,6 +501,14 @@ def ci_pair_factory(func):
                 notify_emails = to_notify,
                 notified_by = [builder_name, tester_name],
             )
+
+        tester_kwargs = {}
+
+        # for tester specific properties, please add "tester_"
+        # prefix to the property name
+        for k, v in kwargs.items():
+            if k.startswith("tester_"):
+                tester_kwargs[k[7:]] = kwargs.pop(k)
 
         builder_kwargs = dict(kwargs)
         builder_kwargs["name"] = builder_name
@@ -519,18 +526,14 @@ def ci_pair_factory(func):
             "binary_size_tracking",
         ]
 
-        tester_kwargs = {}
         for k, v in kwargs.items():
-            if k in tester_included_args:
+            if k in tester_included_args and k not in tester_kwargs:
                 tester_kwargs[k] = dict(v) if type(v) == "dict" else v
 
         tester_kwargs["parent_builder"] = builder_name
         if "properties" in tester_kwargs:
             for prop in tester_excluded_properties:
                 tester_kwargs["properties"].pop(prop, None)
-
-        if not type(tester_close) == "NoneType":
-            tester_kwargs["close_tree"] = tester_close
 
         description = kwargs.pop("description", None)
         if description:
