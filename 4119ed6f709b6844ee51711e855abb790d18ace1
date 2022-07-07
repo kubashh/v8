@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a161d0_d3af9645",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-07T19:33:03Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4119ed6f709b6844ee51711e855abb790d18ace1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba0e1c80_95d2d386",
@@ -14,6 +31,24 @@
       "writtenOn": "2022-07-07T15:28:55Z",
       "side": 1,
       "message": "I don\u0027t have a good feeling when I need to SetAndTypeNode.  WDYT Jakob?",
+      "revId": "4119ed6f709b6844ee51711e855abb790d18ace1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ff904a_fc6c0697",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-07T19:33:03Z",
+      "side": 1,
+      "message": "Totally fine, this is how you\u0027re supposed to do it. Eventually we should add `SetAndTypeNode` to all the string-related instructions.",
+      "parentUuid": "ba0e1c80_95d2d386",
       "revId": "4119ed6f709b6844ee51711e855abb790d18ace1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
