@@ -14363,7 +14363,109 @@ Maybe<DurationRecord> DifferenceZonedDateTime(
     Isolate* isolate, Handle<BigInt> ns1, Handle<BigInt> ns2,
     Handle<JSReceiver> time_zone, Handle<JSReceiver> calendar,
     Unit largest_unit, Handle<JSReceiver> options, const char* method_name) {
-  UNIMPLEMENTED();
+  // 1. If ns1 is ns2, then
+  if (BigInt::CompareToBigInt(ns1, ns2) == ComparisonResult::kEqual) {
+    // a. Return ! CreateDurationRecord(0, 0, 0, 0, 0, 0, 0, 0, 0, 0).
+    return CreateDurationRecord(isolate, {0, 0, 0, {0, 0, 0, 0, 0, 0, 0}});
+  }
+  // 2. Let startInstant be ! CreateTemporalInstant(ns1).
+  Handle<JSTemporalInstant> start_instant =
+      temporal::CreateTemporalInstant(isolate, ns1).ToHandleChecked();
+  // 3. Let startDateTime be ? BuiltinTimeZoneGetPlainDateTimeFor(timeZone,
+  // startInstant, calendar).
+  Handle<JSTemporalPlainDateTime> start_date_time;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, start_date_time,
+      temporal::BuiltinTimeZoneGetPlainDateTimeFor(
+          isolate, time_zone, start_instant, calendar, method_name),
+      Nothing<DurationRecord>());
+  // 4. Let endInstant be ! CreateTemporalInstant(ns2).
+  Handle<JSTemporalInstant> end_instant =
+      temporal::CreateTemporalInstant(isolate, ns2).ToHandleChecked();
+  // 5. Let endDateTime be ? BuiltinTimeZoneGetPlainDateTimeFor(timeZone,
+  // endInstant, calendar).
+  Handle<JSTemporalPlainDateTime> end_date_time;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, end_date_time,
+      temporal::BuiltinTimeZoneGetPlainDateTimeFor(
+          isolate, time_zone, end_instant, calendar, method_name),
+      Nothing<DurationRecord>());
+  // 6. Let dateDifference be ? DifferenceISODateTime(startDateTime.[[ISOYear]],
+  // startDateTime.[[ISOMonth]], startDateTime.[[ISODay]],
+  // startDateTime.[[ISOHour]], startDateTime.[[ISOMinute]],
+  // startDateTime.[[ISOSecond]], startDateTime.[[ISOMillisecond]],
+  // startDateTime.[[ISOMicrosecond]], startDateTime.[[ISONanosecond]],
+  // endDateTime.[[ISOYear]], endDateTime.[[ISOMonth]], endDateTime.[[ISODay]],
+  // endDateTime.[[ISOHour]], endDateTime.[[ISOMinute]],
+  // endDateTime.[[ISOSecond]], endDateTime.[[ISOMillisecond]],
+  // endDateTime.[[ISOMicrosecond]], endDateTime.[[ISONanosecond]], calendar,
+  // largestUnit, options).
+  DurationRecord date_difference;
+  MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, date_difference,
+      DifferenceISODateTime(
+          isolate,
+          {{start_date_time->iso_year(), start_date_time->iso_month(),
+            start_date_time->iso_day()},
+           {start_date_time->iso_hour(), start_date_time->iso_minute(),
+            start_date_time->iso_second(), start_date_time->iso_millisecond(),
+            start_date_time->iso_microsecond(),
+            start_date_time->iso_nanosecond()}},
+          {{end_date_time->iso_year(), end_date_time->iso_month(),
+            end_date_time->iso_day()},
+           {end_date_time->iso_hour(), end_date_time->iso_minute(),
+            end_date_time->iso_second(), end_date_time->iso_millisecond(),
+            end_date_time->iso_microsecond(), end_date_time->iso_nanosecond()}},
+          calendar, largest_unit, options, method_name),
+      Nothing<DurationRecord>());
+  // 7. Let intermediateNs be ? AddZonedDateTime(ns1, timeZone, calendar,
+  // dateDifference.[[Years]], dateDifference.[[Months]],
+  // dateDifference.[[Weeks]], 0, 0, 0, 0, 0, 0, 0).
+  Handle<BigInt> intermediate_ns;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, intermediate_ns,
+      AddZonedDateTime(isolate, ns1, time_zone, calendar,
+                       {date_difference.years,
+                        date_difference.months,
+                        date_difference.weeks,
+                        {0, 0, 0, 0, 0, 0, 0}},
+                       method_name),
+      Nothing<DurationRecord>());
+  // 8. Let timeRemainderNs be ns2 - intermediateNs.
+  Handle<BigInt> time_remainder_ns;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, time_remainder_ns,
+      BigInt::Subtract(isolate, ns2, intermediate_ns),
+      Nothing<DurationRecord>());
+  // 9. Let intermediate be ! CreateTemporalZonedDateTime(intermediateNs,
+  // timeZone, calendar).
+  Handle<JSTemporalZonedDateTime> intermediate =
+      CreateTemporalZonedDateTime(isolate, intermediate_ns, time_zone, calendar)
+          .ToHandleChecked();
+  // 10. Let result be ? NanosecondsToDays(ℝ(timeRemainderNs), intermediate).
+  NanosecondsToDaysResult result;
+  MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, result,
+      NanosecondsToDays(isolate, time_remainder_ns, intermediate, method_name),
+      Nothing<DurationRecord>());
+  // 11. Let timeDifference be ! BalanceDuration(0, 0, 0, 0, 0, 0,
+  // result.[[Nanoseconds]], "hour").
+  TimeDurationRecord time_difference;
+  MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, time_difference,
+      BalanceDuration(isolate, Unit::kHour,
+                      {0, 0, 0, 0, 0, 0, result.nanoseconds}, method_name),
+      Nothing<DurationRecord>());
+  // 12. Return ! CreateDurationRecord(dateDifference.[[Years]],
+  // dateDifference.[[Months]], dateDifference.[[Weeks]], result.[[Days]],
+  // timeDifference.[[Hours]], timeDifference.[[Minutes]],
+  // timeDifference.[[Seconds]], timeDifference.[[Milliseconds]],
+  // timeDifference.[[Microseconds]], timeDifference.[[Nanoseconds]]).
+  time_difference.days = result.days;
+  return Just(CreateDurationRecord(
+                  isolate, {date_difference.years, date_difference.months,
+                            date_difference.weeks, time_difference})
+                  .ToChecked());
 }
 
 Handle<BigInt> DifferenceInstant(Isolate* isolate, Handle<BigInt> ns1,
