@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "546572f8_d1220373",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-07T14:54:12Z",
+      "side": 1,
+      "message": "Please add v8:12797 for a record.",
+      "revId": "9df1f827aec1294abcbc0bfcc2e8d6c73b6499f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "770d6a39_3784d910",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-07-07T14:52:11Z",
       "side": 1,
       "message": "Igor ptal, Dominik fyi",
+      "revId": "9df1f827aec1294abcbc0bfcc2e8d6c73b6499f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db9ce1b_e16df45c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-07T14:54:12Z",
+      "side": 1,
+      "message": "lgtm",
       "revId": "9df1f827aec1294abcbc0bfcc2e8d6c73b6499f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
