@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39f94c3_101c7f9f",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-07T13:19:53Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "2a561a23_4f894914",
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a238791b_b4cd502e",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-07-07T12:07:53Z",
       "side": 1,
       "message": "nit: Where would be a good place to document such behavior? If it\u0027s not documented, it\u0027d be really hard for a future engineer to discover this. Only by randomly finding existing examples...",
+      "range": {
+        "startLine": 507,
+        "startChar": 8,
+        "endLine": 509,
+        "endChar": 52
+      },
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49aff17b_89b4030c",
+        "filename": "lib/lib.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-07T13:19:53Z",
+      "side": 1,
+      "message": "I have added a comment, is that enough?",
+      "parentUuid": "a238791b_b4cd502e",
       "range": {
         "startLine": 507,
         "startChar": 8,
