@@ -64,6 +64,8 @@ const char* SectionName(SectionCode code) {
       return kDebugInfoString;
     case kExternalDebugInfoSectionCode:
       return kExternalDebugInfoString;
+    case kInstTraceSectionCode:
+      return kInstTraceString;
     case kCompilationHintsSectionCode:
       return kCompilationHintsString;
     case kBranchHintsSectionCode:
