@@ -716,9 +716,8 @@ void V8::SetFlagsFromString(const char* str, size_t length) {
 }
 
 void V8::SetFlagsFromCommandLine(int* argc, char** argv, bool remove_flags) {
-  using HelpOptions = i::FlagList::HelpOptions;
   i::FlagList::SetFlagsFromCommandLine(argc, argv, remove_flags,
-                                       HelpOptions(HelpOptions::kDontExit));
+                                       {i::FlagList::HelpOptions::kDontExit});
 }
 
 RegisteredExtension* RegisteredExtension::first_extension_ = nullptr;

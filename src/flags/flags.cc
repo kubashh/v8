@@ -483,7 +483,10 @@ std::ostream& operator<<(std::ostream& os, const Flag& flag) {
 
 namespace {
 
-static std::atomic<uint32_t> flag_hash{0};
+// Cached hash of all flags; initialized after all flags have been set (on the
+// main thread).
+static uint32_t flag_hash = 0;
+
 static std::atomic<bool> flags_frozen{false};
 
 uint32_t ComputeFlagListHash() {
@@ -499,7 +502,7 @@ uint32_t ComputeFlagListHash() {
     if (flag.PointsTo(&FLAG_random_seed)) continue;
     modified_args_as_string << flag;
   }
-  std::string args(modified_args_as_string.str());
+  std::string args = modified_args_as_string.str();
   // Generate a hash that is not 0.
   uint32_t hash = static_cast<uint32_t>(base::hash_range(
                       args.c_str(), args.c_str() + args.length())) |
@@ -900,11 +903,17 @@ void FlagList::EnforceFlagImplications() {
 }
 
 // static
+void FlagList::ComputeHash() {
+  // This should only be called once.
+  CHECK_EQ(0, flag_hash);
+  flag_hash = ComputeFlagListHash();
+}
+
+// static
 uint32_t FlagList::Hash() {
-  if (uint32_t hash = flag_hash.load(std::memory_order_relaxed)) return hash;
-  uint32_t hash = ComputeFlagListHash();
-  flag_hash.store(hash, std::memory_order_relaxed);
-  return hash;
+  // {FlagList::ComputeHash} must have been called before.
+  CHECK_NE(0, flag_hash);
+  return flag_hash;
 }
 
 #undef FLAG_MODE_DEFINE
