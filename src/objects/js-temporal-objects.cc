@@ -4747,7 +4747,7 @@ MaybeHandle<Object> ToIntegerThrowOnInfinity(Isolate* isolate,
 }
 
 // #sec-temporal-largeroftwotemporalunits
-Unit LargerOfTwoTemporalUnits(Isolate* isolate, Unit u1, Unit u2) {
+Unit LargerOfTwoTemporalUnits(Unit u1, Unit u2) {
   // 1. If either u1 or u2 is "year", return "year".
   if (u1 == Unit::kYear || u2 == Unit::kYear) return Unit::kYear;
   // 2. If either u1 or u2 is "month", return "month".
@@ -5497,8 +5497,7 @@ Maybe<DurationRecord> DifferenceISODateTime(
       isolate, date2, CreateTemporalDate(isolate, date_time2.date, calendar),
       Nothing<DurationRecord>());
   // 10. Let dateLargestUnit be ! LargerOfTwoTemporalUnits("day", largestUnit).
-  Unit date_largest_unit =
-      LargerOfTwoTemporalUnits(isolate, Unit::kDay, largest_unit);
+  Unit date_largest_unit = LargerOfTwoTemporalUnits(Unit::kDay, largest_unit);
 
   // 11. Let untilOptions be ? MergeLargestUnitOption(options, dateLargestUnit).
   Handle<JSObject> until_options;
@@ -14222,13 +14221,240 @@ MaybeHandle<JSTemporalZonedDateTime> JSTemporalZonedDateTime::Subtract(
 
 namespace {
 
+// Also in https://chromium-review.googlesource.com/c/v8/v8/+/3699301
+// #sec-temporal-defaulttemporallargestunit
+Unit DefaultTemporalLargestUnit(const DurationRecord& dur) {
+  // 1. If years is not zero, return "year".
+  if (dur.years != 0) return Unit::kYear;
+  // 2. If months is not zero, return "month".
+  if (dur.months != 0) return Unit::kMonth;
+  // 3. If weeks is not zero, return "week".
+  if (dur.weeks != 0) return Unit::kWeek;
+  // 4. If days is not zero, return "day".
+  if (dur.time_duration.days != 0) return Unit::kDay;
+  // 5dur.. If hours is not zero, return "hour".
+  if (dur.time_duration.hours != 0) return Unit::kHour;
+  // 6. If minutes is not zero, return "minute".
+  if (dur.time_duration.minutes != 0) return Unit::kMinute;
+  // 7. If seconds is not zero, return "second".
+  if (dur.time_duration.seconds != 0) return Unit::kSecond;
+  // 8. If milliseconds is not zero, return "millisecond".
+  if (dur.time_duration.milliseconds != 0) return Unit::kMillisecond;
+  // 9. If microseconds is not zero, return "microsecond".
+  if (dur.time_duration.microseconds != 0) return Unit::kMicrosecond;
+  // 10. Return "nanosecond".
+  return Unit::kNanosecond;
+}
+
+Handle<BigInt> DifferenceInstant(Isolate* isolate, Handle<BigInt> ns1,
+                                 Handle<BigInt> ns2, double rounding_increment,
+                                 Unit smallest_unit,
+                                 RoundingMode rounding_mode);
+
+Maybe<DurationRecord> DifferenceZonedDateTime(
+    Isolate* isolate, Handle<BigInt> ns1, Handle<BigInt> ns2,
+    Handle<JSReceiver> time_zone, Handle<JSReceiver> calendar,
+    Unit largest_unit, Handle<JSReceiver> options, const char* method_name);
+
+// Also in https://chromium-review.googlesource.com/c/v8/v8/+/3699301
 // #sec-temporal-addduration
-Maybe<DurationRecord> AddDuration(Isolate* isolate,
-                                  const DurationRecord& duration1,
-                                  const DurationRecord& duration2,
+Maybe<DurationRecord> AddDuration(Isolate* isolate, const DurationRecord& dur1,
+                                  const DurationRecord& dur2,
                                   Handle<Object> relative_to_obj,
                                   const char* method_name) {
-  UNIMPLEMENTED();
+  TEMPORAL_ENTER_FUNC();
+
+  Factory* factory = isolate->factory();
+  DurationRecord result;
+  // 1. Let largestUnit1 be ! DefaultTemporalLargestUnit(y1, mon1, w1, d1, h1,
+  // min1, s1, ms1, mus1).
+  Unit largest_unit1 = DefaultTemporalLargestUnit(dur1);
+  // 2. Let largestUnit2 be ! DefaultTemporalLargestUnit(y2, mon2, w2, d2, h2,
+  // min2, s2, ms2, mus2).
+  Unit largest_unit2 = DefaultTemporalLargestUnit(dur2);
+  // 3. Let largestUnit be ! LargerOfTwoTemporalUnits(largestUnit1,
+  // largestUnit2).
+  Unit largest_unit = LargerOfTwoTemporalUnits(largest_unit1, largest_unit2);
+
+  // 5. If relativeTo is undefined, then
+  if (relative_to_obj->IsUndefined()) {
+    // a. If largestUnit is one of "year", "month", or "week", then
+    if (largest_unit == Unit::kYear || largest_unit == Unit::kMonth ||
+        largest_unit == Unit::kWeek) {
+      // i. Throw a RangeError exception.
+      THROW_NEW_ERROR_RETURN_VALUE(isolate,
+                                   NEW_TEMPORAL_INVALID_ARG_RANGE_ERROR(),
+                                   Nothing<DurationRecord>());
+    }
+    // b. Let result be ! BalanceDuration(d1 + d2, h1 + h2, min1 + min2, s1 +
+    // s2, ms1 + ms2, mus1 + mus2, ns1 + ns2, largestUnit).
+    result.time_duration =
+        BalanceDuration(
+            isolate, largest_unit,
+            {dur1.time_duration.days + dur2.time_duration.days,
+             dur1.time_duration.hours + dur2.time_duration.hours,
+             dur1.time_duration.minutes + dur2.time_duration.minutes,
+             dur1.time_duration.seconds + dur2.time_duration.seconds,
+             dur1.time_duration.milliseconds + dur2.time_duration.milliseconds,
+             dur1.time_duration.microseconds + dur2.time_duration.microseconds,
+             dur1.time_duration.nanoseconds + dur2.time_duration.nanoseconds},
+            method_name)
+            .ToChecked();
+    // c. Return ! CreateDurationRecord(0, 0, 0, result.[[Days]],
+    // result.[[Hours]], result.[[Minutes]], result.[[Seconds]],
+    // result.[[Milliseconds]], result.[[Microseconds]],
+    // result.[[Nanoseconds]]).
+    return Just(CreateDurationRecord(isolate, {0, 0, 0, result.time_duration})
+                    .ToChecked());
+    // 5. If relativeTo has an [[InitializedTemporalDate]] internal slot, then
+  } else if (relative_to_obj->IsJSTemporalPlainDate()) {
+    // a. Let calendar be relativeTo.[[Calendar]].
+    Handle<JSTemporalPlainDate> relative_to =
+        Handle<JSTemporalPlainDate>::cast(relative_to_obj);
+    Handle<JSReceiver> calendar(relative_to->calendar(), isolate);
+    // b. Let dateDuration1 be ? CreateTemporalDuration(y1, mon1, w1, d1, 0, 0,
+    // 0, 0, 0, 0).
+    Handle<JSTemporalDuration> date_duration1;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, date_duration1,
+        CreateTemporalDuration(isolate,
+                               {dur1.years,
+                                dur1.months,
+                                dur1.weeks,
+                                {dur1.time_duration.days, 0, 0, 0, 0, 0, 0}}),
+        Nothing<DurationRecord>());
+    // c. Let dateDuration2 be ? CreateTemporalDuration(y2, mon2, w2, d2, 0, 0,
+    // 0, 0, 0, 0).
+    Handle<JSTemporalDuration> date_duration2;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, date_duration2,
+        CreateTemporalDuration(isolate,
+                               {dur2.years,
+                                dur2.months,
+                                dur2.weeks,
+                                {dur2.time_duration.days, 0, 0, 0, 0, 0, 0}}),
+        Nothing<DurationRecord>());
+    // d. Let dateAdd be ? GetMethod(calendar, "dateAdd").
+    Handle<Object> date_add;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, date_add,
+        Object::GetMethod(calendar, factory->dateAdd_string()),
+        Nothing<DurationRecord>());
+    // e. Let intermediate be ? CalendarDateAdd(calendar, relativeTo,
+    // dateDuration1, undefined, dateAdd).
+    Handle<JSTemporalPlainDate> intermediate;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, intermediate,
+        CalendarDateAdd(isolate, calendar, relative_to, date_duration1,
+                        factory->undefined_value(), date_add),
+        Nothing<DurationRecord>());
+    // f. Let end be ? CalendarDateAdd(calendar, intermediate, dateDuration2,
+    // undefined, dateAdd).
+    Handle<JSTemporalPlainDate> end;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, end,
+        CalendarDateAdd(isolate, calendar, intermediate, date_duration2,
+                        factory->undefined_value(), date_add),
+        Nothing<DurationRecord>());
+    // g. Let dateLargestUnit be ! LargerOfTwoTemporalUnits("day", largestUnit).
+    Unit date_largest_unit = LargerOfTwoTemporalUnits(Unit::kDay, largest_unit);
+    // h. Let differenceOptions be ! OrdinaryObjectCreate(null).
+    Handle<JSObject> difference_options = factory->NewJSObjectWithNullProto();
+    // i. Perform ! CreateDataPropertyOrThrow(differenceOptions, "largestUnit",
+    // dateLargestUnit).
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, difference_options, factory->largestUnit_string(),
+              UnitToString(isolate, date_largest_unit), Just(kThrowOnError))
+              .FromJust());
+
+    // j. Let dateDifference be ? CalendarDateUntil(calendar, relativeTo, end,
+    // differenceOptions).
+    Handle<JSTemporalDuration> date_difference;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, date_difference,
+        CalendarDateUntil(isolate, calendar, relative_to, end,
+                          difference_options),
+        Nothing<DurationRecord>());
+    // n. Let result be ! BalanceDuration(dateDifference.[[Days]], h1 + h2, min1
+    // + min2, s1 + s2, ms1 + ms2, mus1 + mus2, ns1 + ns2, largestUnit).
+    result.time_duration =
+        BalanceDuration(
+            isolate, largest_unit,
+            {date_difference->days().Number(),
+             dur1.time_duration.hours + dur2.time_duration.hours,
+             dur1.time_duration.minutes + dur2.time_duration.minutes,
+             dur1.time_duration.seconds + dur2.time_duration.seconds,
+             dur1.time_duration.milliseconds + dur2.time_duration.milliseconds,
+             dur1.time_duration.microseconds + dur2.time_duration.microseconds,
+             dur1.time_duration.nanoseconds + dur2.time_duration.nanoseconds},
+            method_name)
+            .ToChecked();
+    // l. Return ! CreateDurationRecord(dateDifference.[[Years]],
+    // dateDifference.[[Months]], dateDifference.[[Weeks]], result.[[Days]],
+    // result.[[Hours]], result.[[Minutes]], result.[[Seconds]],
+    // result.[[Milliseconds]], result.[[Microseconds]],
+    // result.[[Nanoseconds]]).
+    return Just(
+        CreateDurationRecord(
+            isolate, {date_difference->years().Number(),
+                      date_difference->months().Number(),
+                      date_difference->weeks().Number(), result.time_duration})
+            .ToChecked());
+  }
+  // 6. Assert: relativeTo has an [[InitializedTemporalZonedDateTime]]
+  // internal slot.
+  DCHECK(relative_to_obj->IsJSTemporalZonedDateTime());
+  Handle<JSTemporalZonedDateTime> relative_to =
+      Handle<JSTemporalZonedDateTime>::cast(relative_to_obj);
+  // 7. Let timeZone be relativeTo.[[TimeZone]].
+  Handle<JSReceiver> time_zone(relative_to->time_zone(), isolate);
+  // 8. Let calendar be relativeTo.[[Calendar]].
+  Handle<JSReceiver> calendar(relative_to->calendar(), isolate);
+  // 9. Let intermediateNs be ? AddZonedDateTime(relativeTo.[[Nanoseconds]],
+  // timeZone, calendar, y1, mon1, w1, d1, h1, min1, s1, ms1, mus1, ns1).
+  Handle<BigInt> intermediate_ns;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, intermediate_ns,
+      AddZonedDateTime(isolate, handle(relative_to->nanoseconds(), isolate),
+                       time_zone, calendar, dur1, method_name),
+      Nothing<DurationRecord>());
+  // 10. Let endNs be ? AddZonedDateTime(intermediateNs, timeZone, calendar,
+  // y2, mon2, w2, d2, h2, min2, s2, ms2, mus2, ns2).
+  Handle<BigInt> end_ns;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, end_ns,
+      AddZonedDateTime(isolate, intermediate_ns, time_zone, calendar, dur2,
+                       method_name),
+      Nothing<DurationRecord>());
+  // 11. If largestUnit is not one of "year", "month", "week", or "day", then
+  if (!(largest_unit == Unit::kYear || largest_unit == Unit::kMonth ||
+        largest_unit == Unit::kWeek || largest_unit == Unit::kDay)) {
+    // i. Let diffNs be ! DifferenceInstant(relativeTo.[[Nanoseconds]], endNs,
+    // 1, "nanosecond", "halfExpand").
+    Handle<BigInt> diff_ns = DifferenceInstant(
+        isolate, handle(relative_to->nanoseconds(), isolate), end_ns, 1,
+        Unit::kNanosecond, RoundingMode::kHalfExpand);
+    // ii. Let result be ! BalanceDuration(0, 0, 0, 0, 0, 0, diffNs,
+    // largestUnit).
+    result.time_duration =
+        BalanceDuration(
+            isolate, largest_unit,
+            {0, 0, 0, 0, 0, 0, BigInt::ToNumber(isolate, diff_ns)->Number()},
+            method_name)
+            .ToChecked();
+    // d. Return ! CreateDurationRecord(0, 0, 0, 0, result.[[Hours]],
+    // result.[[Minutes]], result.[[Seconds]], result.[[Milliseconds]],
+    // result.[[Microseconds]], result.[[Nanoseconds]]).
+    result.time_duration.days = 0;
+    return Just(CreateDurationRecord(isolate, {0, 0, 0, result.time_duration})
+                    .ToChecked());
+  }
+  // 12. Return ? DifferenceZonedDateTime(relativeTo.[[Nanoseconds]], endNs,
+  // timeZone, calendar, largestUnit, OrdinaryObjectCreate(null)).
+  return DifferenceZonedDateTime(
+      isolate, handle(relative_to->nanoseconds(), isolate), end_ns, time_zone,
+      calendar, largest_unit, isolate->factory()->NewJSObjectWithNullProto(),
+      method_name);
 }
 
 // #sec-temporal-adjustroundeddurationdays
@@ -14467,11 +14693,6 @@ Maybe<DurationRecord> DifferenceZonedDateTime(
                             date_difference.weeks, time_difference})
                   .ToChecked());
 }
-
-Handle<BigInt> DifferenceInstant(Isolate* isolate, Handle<BigInt> ns1,
-                                 Handle<BigInt> ns2, double rounding_increment,
-                                 Unit smallest_unit,
-                                 RoundingMode rounding_mode);
 
 // #sec-temporal-differencetemporalzoneddatetime
 MaybeHandle<JSTemporalDuration> DifferenceTemporalZonedDateTime(
@@ -15795,7 +16016,7 @@ Maybe<DifferenceSettings> GetDifferenceSettings(
   // 4. Let defaultLargestUnit be !
   // LargerOfTwoTemporalUnits(smallestLargestDefaultUnit, smallestUnit).
   Unit default_largest_unit = LargerOfTwoTemporalUnits(
-      isolate, smallest_largest_default_unit, record.smallest_unit);
+      smallest_largest_default_unit, record.smallest_unit);
   // 5. Let largestUnit be ? GetTemporalUnit(options, "largestUnit", unitGroup,
   // "auto").
   MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(
@@ -15828,8 +16049,8 @@ Maybe<DifferenceSettings> GetDifferenceSettings(
   }
   // 8. If LargerOfTwoTemporalUnits(largestUnit, smallestUnit) is not
   // largestUnit, throw a RangeError exception.
-  if (LargerOfTwoTemporalUnits(isolate, record.largest_unit,
-                               record.smallest_unit) != record.largest_unit) {
+  if (LargerOfTwoTemporalUnits(record.largest_unit, record.smallest_unit) !=
+      record.largest_unit) {
     THROW_NEW_ERROR_RETURN_VALUE(
         isolate,
         NewRangeError(MessageTemplate::kInvalidArgumentForTemporal,
