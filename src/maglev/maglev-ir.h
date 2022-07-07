@@ -280,6 +280,9 @@ class OpProperties {
   constexpr bool is_conversion() const {
     return kIsConversionBit::decode(bitfield_);
   }
+  constexpr bool needs_register_snapshot() const {
+    return kNeedsRegisterSnapshotBit::decode(bitfield_);
+  }
   constexpr bool is_pure() const {
     return (bitfield_ | kPureMask) == kPureValue;
   }
@@ -325,11 +328,20 @@ class OpProperties {
   static constexpr OpProperties ConversionNode() {
     return OpProperties(kIsConversionBit::encode(true));
   }
+  static constexpr OpProperties NeedsRegisterSnapshot() {
+    return OpProperties(kNeedsRegisterSnapshotBit::encode(true));
+  }
   static constexpr OpProperties JSCall() {
     return Call() | NonMemorySideEffects() | LazyDeopt();
   }
   static constexpr OpProperties AnySideEffects() {
     return Reading() | Writing() | NonMemorySideEffects();
+  }
+  static constexpr OpProperties DeferredCall() {
+    // Operations with a deferred call need a snapshot of register state,
+    // because they need to be able to push registers to save them, and annotate
+    // the safepoint with information about which registers are tagged.
+    return NeedsRegisterSnapshot();
   }
 
   constexpr explicit OpProperties(uint32_t bitfield) : bitfield_(bitfield) {}
@@ -345,6 +357,7 @@ class OpProperties {
   using kValueRepresentationBits =
       kNonMemorySideEffectsBit::Next<ValueRepresentation, 2>;
   using kIsConversionBit = kValueRepresentationBits::Next<bool, 1>;
+  using kNeedsRegisterSnapshotBit = kIsConversionBit::Next<bool, 1>;
 
   static const uint32_t kPureMask = kCanReadBit::kMask | kCanWriteBit::kMask |
                                     kNonMemorySideEffectsBit::kMask;
@@ -355,7 +368,7 @@ class OpProperties {
   const uint32_t bitfield_;
 
  public:
-  static const size_t kSize = kIsConversionBit::kLastUsedBit + 1;
+  static const size_t kSize = kNeedsRegisterSnapshotBit::kLastUsedBit + 1;
 };
 
 class ValueLocation {
@@ -449,6 +462,12 @@ class DeoptInfo {
   InputLocation* input_locations = nullptr;
   Label deopt_entry_label;
   int translation_index = -1;
+};
+
+struct RegisterSnapshot {
+  RegList live_registers;
+  RegList live_tagged_registers;
+  DoubleRegList live_double_registers;
 };
 
 class EagerDeoptInfo : public DeoptInfo {
@@ -644,6 +663,27 @@ class NodeBase : public ZoneObject {
             1);
   }
 
+  const RegisterSnapshot& register_snapshot() const {
+    DCHECK(properties().needs_register_snapshot());
+    DCHECK(!properties().can_lazy_deopt());
+
+    if (properties().can_eager_deopt()) {
+      return *(reinterpret_cast<const RegisterSnapshot*>(
+                   reinterpret_cast<const EagerDeoptInfo*>(
+                       input_address(input_count() - 1)) -
+                   1) -
+               1);
+    } else {
+      return *(reinterpret_cast<const RegisterSnapshot*>(
+                   input_address(input_count() - 1)) -
+               1);
+    }
+  }
+
+  void set_register_snapshot(RegisterSnapshot snapshot) {
+    *register_snapshot_address() = snapshot;
+  }
+
  protected:
   explicit NodeBase(uint64_t bitfield) : bitfield_(bitfield) {}
 
@@ -698,6 +738,20 @@ class NodeBase : public ZoneObject {
            1;
   }
 
+  RegisterSnapshot* register_snapshot_address() {
+    DCHECK(properties().needs_register_snapshot());
+    DCHECK(!properties().can_lazy_deopt());
+
+    if (properties().can_eager_deopt()) {
+      return reinterpret_cast<RegisterSnapshot*>(eager_deopt_info_address()) -
+             1;
+    } else {
+      return reinterpret_cast<RegisterSnapshot*>(
+                 input_address(input_count() - 1)) -
+             1;
+    }
+  }
+
  private:
   template <class Derived, typename... Args>
   static Derived* Allocate(Zone* zone, size_t input_count, Args&&... args) {
@@ -708,10 +762,18 @@ class NodeBase : public ZoneObject {
         "that we cannot have both lazy and eager deopts on a node. If we ever "
         "need this, we have to update accessors to check node->properties() "
         "for which deopts are active.");
-    const size_t size_before_node =
-        input_count * sizeof(Input) +
+    constexpr size_t size_before_inputs = RoundUp<alignof(Input)>(
+        (Derived::kProperties.needs_register_snapshot()
+             ? sizeof(RegisterSnapshot)
+             : 0) +
         (Derived::kProperties.can_eager_deopt() ? sizeof(EagerDeoptInfo) : 0) +
-        (Derived::kProperties.can_lazy_deopt() ? sizeof(LazyDeoptInfo) : 0);
+        (Derived::kProperties.can_lazy_deopt() ? sizeof(LazyDeoptInfo) : 0));
+
+    static_assert(IsAligned(size_before_inputs, alignof(Input)));
+    const size_t size_before_node =
+        size_before_inputs + input_count * sizeof(Input);
+
+    DCHECK(IsAligned(size_before_inputs, alignof(Derived)));
     const size_t size = size_before_node + sizeof(Derived);
     intptr_t raw_buffer =
         reinterpret_cast<intptr_t>(zone->Allocate<NodeWithInlineInputs>(size));
@@ -1726,7 +1788,7 @@ class CheckMapsWithMigration
   // mark that to generate stack maps. Mark as call so we at least clear the
   // registers since we currently don't properly spill either.
   static constexpr OpProperties kProperties =
-      OpProperties::EagerDeopt() | OpProperties::Call();
+      OpProperties::EagerDeopt() | OpProperties::DeferredCall();
 
   compiler::MapRef map() const { return map_; }
 
@@ -2141,6 +2203,8 @@ class ReduceInterruptBudget : public FixedInputNodeT<0, ReduceInterruptBudget> {
       : Base(bitfield), amount_(amount) {
     DCHECK_GT(amount, 0);
   }
+
+  static constexpr OpProperties kProperties = OpProperties::DeferredCall();
 
   int amount() const { return amount_; }
 

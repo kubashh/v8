@@ -165,6 +165,8 @@ class StraightForwardRegisterAllocator {
   void SpillAndClearRegisters(RegisterFrameState<RegisterT>& registers);
   void SpillAndClearRegisters();
 
+  void SaveRegisterSnapshot(NodeBase* node);
+
   void FreeRegistersUsedBy(ValueNode* node);
   template <typename RegisterT>
   RegisterT FreeSomeRegister(RegisterFrameState<RegisterT>& registers,
