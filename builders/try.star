@@ -87,9 +87,9 @@ try_builder(
 try_builder(
     name = "v8_linux64_gcc_compile_dbg",
     bucket = "try",
-    cq_properties = CQ.EXP_5_PERCENT,
+    cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-20.04", "cpu": "x86-64"},
-    execution_timeout = 3600,
+    execution_timeout = 5400,
     use_goma = GOMA.NO,
 )
 
@@ -98,7 +98,16 @@ try_builder(
     bucket = "try",
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-20.04", "cpu": "x86-64"},
-    execution_timeout = 3600,
+    execution_timeout = 5400,
+    use_goma = GOMA.NO,
+)
+
+try_builder(
+    name = "v8_linux64_gcc_light_compile_dbg",
+    bucket = "try",
+    cq_properties = CQ.EXP_5_PERCENT,
+    dimensions = {"os": "Ubuntu-20.04", "cpu": "x86-64"},
+    properties = {"default_targets": ["v8_gcc_light"]},
     use_goma = GOMA.NO,
 )
 
