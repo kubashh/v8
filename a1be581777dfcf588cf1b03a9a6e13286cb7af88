@@ -51,6 +51,24 @@
       "message": "We get compile errors because this function is only defined on x64. Either define it (as empty) on other platforms, or only call it on x64.",
       "revId": "a1be581777dfcf588cf1b03a9a6e13286cb7af88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a1e8711_caa525b7",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-07-07T15:58:25Z",
+      "side": 1,
+      "message": "Added ifdef to only define for x64. Is this the preferred way?",
+      "parentUuid": "5294579a_1273624c",
+      "revId": "a1be581777dfcf588cf1b03a9a6e13286cb7af88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
