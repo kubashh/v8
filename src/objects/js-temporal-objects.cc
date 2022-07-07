@@ -10365,7 +10365,7 @@ DateTimeRecordCommon RoundISODateTime(Isolate* isolate,
 }
 
 }  // namespace
-   //
+
 // #sec-temporal.plaindatetime.prototype.tostring
 MaybeHandle<String> JSTemporalPlainDateTime::ToString(
     Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time,
@@ -14853,7 +14853,7 @@ MaybeHandle<JSTemporalDuration> DifferenceTemporalZonedDateTime(
 }
 
 }  // namespace
-   //
+
 // #sec-temporal.zoneddatetime.prototype.until
 MaybeHandle<JSTemporalDuration> JSTemporalZonedDateTime::Until(
     Isolate* isolate, Handle<JSTemporalZonedDateTime> handle,
