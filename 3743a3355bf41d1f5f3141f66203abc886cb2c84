@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "3743a3355bf41d1f5f3141f66203abc886cb2c84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c43f2987_c395d6ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-07-07T19:03:07Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "3743a3355bf41d1f5f3141f66203abc886cb2c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc62d88f_68c173b8",
+        "filename": "test/mjsunit/typedarray-growablesharedarraybuffer.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 3492,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-07-07T19:03:07Z",
+      "side": 1,
+      "message": "Gotta love it!",
+      "revId": "3743a3355bf41d1f5f3141f66203abc886cb2c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
