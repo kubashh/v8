@@ -490,6 +490,16 @@ class JSTemporalPlainDateTime
       Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time,
       Handle<Object> options);
 
+  // #sec-temporal.plaindatetime.prototype.until
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Until(
+      Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time,
+      Handle<Object> other, Handle<Object> options);
+
+  // #sec-temporal.plaindatetime.prototype.since
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Since(
+      Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time,
+      Handle<Object> other, Handle<Object> options);
+
   // #sec-temporal.plaindatetime.prototype.add
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainDateTime> Add(
       Isolate* isolate, Handle<JSTemporalPlainDateTime> date_time,
