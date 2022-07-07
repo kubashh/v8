@@ -688,37 +688,51 @@ void StraightForwardRegisterAllocator::AllocateControlNode(ControlNode* node,
                                                            BasicBlock* block) {
   current_node_ = node;
 
-  // We first allocate fixed inputs (including fixed temporaries), then inject
-  // phis (because these may be fixed too), and finally arbitrary inputs and
-  // temporaries.
-
-  for (Input& input : *node) AssignFixedInput(input);
-  AssignFixedTemporaries(node);
+  // Control nodes can't lazy deopt at the moment.
 
   if (node->Is<JumpToInlined>()) {
     // Do nothing.
-    // TODO(leszeks): DCHECK any useful invariants here.
+    DCHECK(node->temporaries().is_empty());
+    DCHECK_EQ(node->num_temporaries_needed(), 0);
+    DCHECK_EQ(node->input_count(), 0);
+    DCHECK_EQ(node->properties(), OpProperties(0));
+  } else if (node->Is<Deopt>()) {
+    // No fixed temporaries.
+    DCHECK(node->temporaries().is_empty());
+    DCHECK_EQ(node->num_temporaries_needed(), 0);
+    DCHECK_EQ(node->input_count(), 0);
+    DCHECK_EQ(node->properties(), OpProperties::EagerDeopt());
+
+    UpdateUse(*node->eager_deopt_info());
   } else if (auto unconditional = node->TryCast<UnconditionalControlNode>()) {
+    // No fixed temporaries.
+    DCHECK(node->temporaries().is_empty());
+    DCHECK_EQ(node->num_temporaries_needed(), 0);
+    DCHECK_EQ(node->input_count(), 0);
+    DCHECK(!node->properties().can_eager_deopt());
+    DCHECK(!node->properties().can_lazy_deopt());
+
     // Initialize phis before assigning inputs, in case one of the inputs
     // conflicts with a fixed phi.
     InitializeBranchTargetPhis(block->predecessor_id(),
                                unconditional->target());
+
+    DCHECK(!node->properties().is_call());
+  } else {
+    DCHECK(node->Is<ConditionalControlNode>() || node->Is<Return>());
+    AssignInputs(node);
+    VerifyInputs(node);
+
+    DCHECK(!node->properties().can_eager_deopt());
+    for (Input& input : *node) UpdateUse(&input);
+    DCHECK(!node->properties().can_lazy_deopt());
+
+    if (node->properties().is_call()) SpillAndClearRegisters();
+
+    DCHECK_EQ(general_registers_.free() | node->temporaries(),
+              general_registers_.free());
   }
 
-  for (Input& input : *node) AssignArbitraryRegisterInput(input);
-  AssignArbitraryTemporaries(node);
-
-  VerifyInputs(node);
-
-  if (node->properties().can_eager_deopt()) {
-    UpdateUse(*node->eager_deopt_info());
-  }
-  for (Input& input : *node) UpdateUse(&input);
-
-  if (node->properties().is_call()) SpillAndClearRegisters();
-
-  DCHECK_EQ(general_registers_.free() | node->temporaries(),
-            general_registers_.free());
   general_registers_.clear_blocked();
   double_registers_.clear_blocked();
   VerifyRegisterState();
@@ -914,7 +928,7 @@ void StraightForwardRegisterAllocator::AssignArbitraryRegisterInput(
   }
 }
 
-void StraightForwardRegisterAllocator::AssignInputs(Node* node) {
+void StraightForwardRegisterAllocator::AssignInputs(NodeBase* node) {
   // We allocate arbitrary register inputs after fixed inputs, since the fixed
   // inputs may clobber the arbitrarily chosen ones.
   for (Input& input : *node) AssignFixedInput(input);
