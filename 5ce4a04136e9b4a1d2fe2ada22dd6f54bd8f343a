@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a561a23_4f894914",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 8
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-07T12:07:53Z",
+      "side": 1,
+      "message": "Please check the changes in this file. Ideally a refactoring has no generated code changes. The builder/tester order in milo is ok, but these notification changes are real logic changes. Are they improving things?",
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a238791b_b4cd502e",
+        "filename": "lib/lib.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-07T12:07:53Z",
+      "side": 1,
+      "message": "nit: Where would be a good place to document such behavior? If it\u0027s not documented, it\u0027d be really hard for a future engineer to discover this. Only by randomly finding existing examples...",
+      "range": {
+        "startLine": 507,
+        "startChar": 8,
+        "endLine": 509,
+        "endChar": 52
+      },
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
