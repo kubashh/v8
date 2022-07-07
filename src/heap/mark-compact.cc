@@ -2065,79 +2065,21 @@ void MarkCompactCollector::MarkRoots(RootVisitor* root_visitor,
 
 #ifdef V8_ENABLE_INNER_POINTER_RESOLUTION_MB
 Address MarkCompactCollector::FindBasePtrForMarking(Address maybe_inner_ptr) {
-  // TODO(v8:12851): If this implementation is kept:
-  // 1. This function will have to be refactored. Most of the bit hacking
-  // belongs to some reverse-iterator abstraction for bitmaps.
-  // 2. Unit tests will have to be added.
+  // TODO(v8:12851): Unit tests will have to be added.
   const Page* page = Page::FromAddress(maybe_inner_ptr);
-  Bitmap* bitmap = page->marking_bitmap<AccessMode::NON_ATOMIC>();
-  MarkBit::CellType* cells = bitmap->cells();
-  uint32_t index = page->AddressToMarkbitIndex(maybe_inner_ptr);
-  unsigned int cell_index = Bitmap::IndexToCell(index);
-  MarkBit::CellType mask = 1u << Bitmap::IndexInCell(index);
-  MarkBit::CellType cell = cells[cell_index];
+  auto* bitmap = page->marking_bitmap<AccessMode::NON_ATOMIC>();
+  Address previous_marked_object =
+      bitmap->FindPreviousMarkedObject(page, maybe_inner_ptr);
   // If the markbit is set, then we have an object that does not need be marked.
-  if ((cell & mask) != 0) return kNullAddress;
-  // Clear the bits corresponding to higher addresses in the cell.
-  cell &= ((~static_cast<MarkBit::CellType>(0)) >>
-           (Bitmap::kBitsPerCell - Bitmap::IndexInCell(index) - 1));
-  // Find the start of a valid object by traversing the bitmap backwards, until
-  // we find a markbit that is set and whose previous markbit (if it exists) is
-  // unset.
-  uint32_t object_index;
-  // Iterate backwards to find a cell with any set markbit.
-  while (cell == 0 && cell_index > 0) cell = cells[--cell_index];
-  if (cell == 0) {
-    // There is no cell with a set markbit, we reached the start of the page.
-    object_index = 0;
-  } else {
-    uint32_t leading_zeros = base::bits::CountLeadingZeros(cell);
-    uint32_t leftmost_ones =
-        base::bits::CountLeadingZeros(~(cell << leading_zeros));
-    uint32_t index_of_last_leftmost_one =
-        Bitmap::kBitsPerCell - leading_zeros - leftmost_ones;
-    if (index_of_last_leftmost_one > 0) {
-      // The leftmost contiguous sequence of set bits does not reach the start
-      // of the cell.
-      object_index =
-          cell_index * Bitmap::kBitsPerCell + index_of_last_leftmost_one;
-    } else {
-      // The leftmost contiguous sequence of set bits reaches the start of the
-      // cell. We must keep traversing backwards until we find the first unset
-      // markbit.
-      if (cell_index == 0) {
-        object_index = 0;
-      } else {
-        // Iterate backwards to find a cell with any unset markbit.
-        do {
-          cell = cells[--cell_index];
-        } while (~cell == 0 && cell_index > 0);
-        if (~cell == 0) {
-          // There is no cell with a clear markbit, we reached the start of the
-          // page.
-          object_index = 0;
-        } else {
-          uint32_t leading_ones = base::bits::CountLeadingZeros(~cell);
-          uint32_t index_of_last_leading_one =
-              Bitmap::kBitsPerCell - leading_ones;
-          DCHECK_LT(0, index_of_last_leading_one);
-          object_index =
-              cell_index * Bitmap::kBitsPerCell + index_of_last_leading_one;
-        }
-      }
-    }
-  }
+  if (previous_marked_object == kNullAddress) return kNullAddress;
   // Iterate through the objects in the page forwards, until we find the object
   // containing maybe_inner_pointer.
-  Address base_ptr = page->MarkbitIndexToAddress(object_index);
-  const Address limit = page->area_end();
   PtrComprCageBase cage_base{page->heap()->isolate()};
-  while (base_ptr < limit) {
-    if (maybe_inner_ptr < base_ptr) break;
-    const int size = HeapObject::FromAddress(base_ptr).Size(cage_base);
-    if (maybe_inner_ptr < base_ptr + size) return base_ptr;
-    base_ptr += size;
-    DCHECK_LE(base_ptr, limit);
+  for (auto fwd = page->begin(previous_marked_object); fwd != page->end();
+       ++fwd) {
+    if (maybe_inner_ptr < fwd->address()) break;
+    if (maybe_inner_ptr < fwd->address() + fwd->Size(cage_base))
+      return fwd->address();
   }
   return kNullAddress;
 }

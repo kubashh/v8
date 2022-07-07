@@ -4,6 +4,8 @@
 
 #include "src/heap/marking.h"
 
+#include "src/heap/memory-chunk.h"
+
 namespace v8 {
 namespace internal {
 
@@ -135,6 +137,68 @@ bool ConcurrentBitmap<AccessMode::NON_ATOMIC>::IsClean() {
     }
   }
   return true;
+}
+
+template <>
+Address ConcurrentBitmap<AccessMode::NON_ATOMIC>::FindPreviousMarkedObject(
+    const MemoryChunk* chunk, Address maybe_inner_ptr) const {
+  const MarkBit::CellType* cells = this->cells();
+  uint32_t index = chunk->AddressToMarkbitIndex(maybe_inner_ptr);
+  unsigned int cell_index = Bitmap::IndexToCell(index);
+  MarkBit::CellType mask = 1u << Bitmap::IndexInCell(index);
+  MarkBit::CellType cell = cells[cell_index];
+  // If the markbit is already set, bail out.
+  if ((cell & mask) != 0) return kNullAddress;
+  // Clear the bits corresponding to higher addresses in the cell.
+  cell &= ((~static_cast<MarkBit::CellType>(0)) >>
+           (Bitmap::kBitsPerCell - Bitmap::IndexInCell(index) - 1));
+  // Find the start of a valid object by traversing the bitmap backwards, until
+  // we find a markbit that is set and whose previous markbit (if it exists) is
+  // unset.
+  uint32_t object_index;
+  // Iterate backwards to find a cell with any set markbit.
+  while (cell == 0 && cell_index > 0) cell = cells[--cell_index];
+  if (cell == 0) {
+    // There is no cell with a set markbit, we reached the start of the page.
+    object_index = 0;
+  } else {
+    uint32_t leading_zeros = base::bits::CountLeadingZeros(cell);
+    uint32_t leftmost_ones =
+        base::bits::CountLeadingZeros(~(cell << leading_zeros));
+    uint32_t index_of_last_leftmost_one =
+        Bitmap::kBitsPerCell - leading_zeros - leftmost_ones;
+    if (index_of_last_leftmost_one > 0) {
+      // The leftmost contiguous sequence of set bits does not reach the start
+      // of the cell.
+      object_index =
+          cell_index * Bitmap::kBitsPerCell + index_of_last_leftmost_one;
+    } else {
+      // The leftmost contiguous sequence of set bits reaches the start of the
+      // cell. We must keep traversing backwards until we find the first unset
+      // markbit.
+      if (cell_index == 0) {
+        object_index = 0;
+      } else {
+        // Iterate backwards to find a cell with any unset markbit.
+        do {
+          cell = cells[--cell_index];
+        } while (~cell == 0 && cell_index > 0);
+        if (~cell == 0) {
+          // There is no cell with a clear markbit, we reached the start of the
+          // page.
+          object_index = 0;
+        } else {
+          uint32_t leading_ones = base::bits::CountLeadingZeros(~cell);
+          uint32_t index_of_last_leading_one =
+              Bitmap::kBitsPerCell - leading_ones;
+          DCHECK_LT(0, index_of_last_leading_one);
+          object_index =
+              cell_index * Bitmap::kBitsPerCell + index_of_last_leading_one;
+        }
+      }
+    }
+  }
+  return chunk->MarkbitIndexToAddress(object_index);
 }
 
 }  // namespace internal
