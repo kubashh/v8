@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba0e1c80_95d2d386",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2022-07-07T15:28:55Z",
+      "side": 1,
+      "message": "I don\u0027t have a good feeling when I need to SetAndTypeNode.  WDYT Jakob?",
+      "revId": "4119ed6f709b6844ee51711e855abb790d18ace1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
