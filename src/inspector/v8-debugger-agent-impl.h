@@ -98,6 +98,16 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
       Maybe<protocol::Runtime::StackTraceId>* asyncStackTraceId) override;
   Response getScriptSource(const String16& scriptId, String16* scriptSource,
                            Maybe<protocol::Binary>* bytecode) override;
+  Response disassembleWasmModule(
+      const String16& in_scriptId, Maybe<String16>* out_streamId,
+      int* out_totalNumberOfLines,
+      std::unique_ptr<protocol::Array<int>>* out_functionBodyOffsets,
+      std::unique_ptr<protocol::Array<String16>>* out_lines,
+      std::unique_ptr<protocol::Array<int>>* out_bytecodeOffsets) override;
+  Response nextWasmDissassemblyChunk(
+      const String16& in_streamId,
+      std::unique_ptr<protocol::Array<String16>>* out_lines,
+      std::unique_ptr<protocol::Array<int>>* out_bytecodeOffsets) override;
   Response getWasmBytecode(const String16& scriptId,
                            protocol::Binary* bytecode) override;
   Response pause() override;
