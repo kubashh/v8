@@ -677,7 +677,8 @@ void MarkerBase::MarkNotFullyConstructedObjects() {
       heap().stats_collector(),
       StatsCollector::kMarkVisitNotFullyConstructedObjects);
   std::unordered_set<HeapObjectHeader*> objects =
-      mutator_marking_state_.not_fully_constructed_worklist().Extract();
+      mutator_marking_state_.not_fully_constructed_worklist()
+          .Extract<AccessMode::kAtomic>();
   for (HeapObjectHeader* object : objects) {
     DCHECK(object);
     // TraceConservativelyIfNeeded delegates to either in-construction or
