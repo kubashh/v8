@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6808d21_7b4241d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-07T09:23:34Z",
+      "side": 1,
+      "message": "Thanks for Igor\u0027s comments, I fix some problems, there is some problems may be pending other reviewers\u0027 comments.",
+      "revId": "446279bc2b9b42cce23d3210b813a7608650092f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

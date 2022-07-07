@@ -278,6 +278,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50481175_66b872e6",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-07T09:23:34Z",
+      "side": 1,
+      "message": "It seems like OS::Initialize() will be invoked after created thread, we have to initialize PKU before creating any child thread.\nBecasue child thread will copy permisson from parent thread, if we don\u0027t initialized PKU, the permission in parent thread may be non access, in that scenario, we create child thread firstly then initialize PKU, the child thread may not have read access for any memory which was bound to PKU (We will not add read permission to a chunck of memory specially), which may cause a segment fault.\nIs the child threads initialization dependent on how embedder invoke v8?",
+      "parentUuid": "ce224b27_9138cde2",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5fa9f08_1b0c2e6e",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 14
