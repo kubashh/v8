@@ -81,6 +81,30 @@
       },
       "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37d806f2_95bd0861",
+        "filename": "lib/lib.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-07T13:56:34Z",
+      "side": 1,
+      "message": "That\u0027s slightly better than just reading the code. But a user of this code might not get to that point. Maybe add a doc string for this method at the method definition?",
+      "parentUuid": "49aff17b_89b4030c",
+      "range": {
+        "startLine": 507,
+        "startChar": 8,
+        "endLine": 509,
+        "endChar": 52
+      },
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

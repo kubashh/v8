@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "27008d1baf1bf9fa7e94f038dc2a65707d1b582a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631fb0fb_b34f094f",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-07T13:56:34Z",
+      "side": 1,
+      "message": "I still don\u0027t fully understand this setup.\n1. Only testers run tests, hence the notification for flakes should be for the testers everywhere, also the bots above. Are they configured wrongly?\n2. Why do we still also need the line below? Wouldn\u0027t that add the same notify to the builder?\n\nI\u0027m fine to submit the refactoring as it now doesn\u0027t have a state change. But the state might just be wrong and might need a correction in a follow up.",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 47
+      },
+      "revId": "27008d1baf1bf9fa7e94f038dc2a65707d1b582a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
