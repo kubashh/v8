@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5711dcd_bd1fcfae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-08T12:17:43Z",
+      "side": 1,
+      "message": "Still lgtm, thanks.",
+      "revId": "cef45694cc7b815a38b00978e5a49ba2c6ac66fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c05401_209aee30",
+        "filename": "lib/lib.star",
+        "patchSetId": 15
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-08T12:17:43Z",
+      "side": 1,
+      "message": "nit: We usually don\u0027t use 1st, 2nd person in comments. Prefer passive phrasing.",
+      "range": {
+        "startLine": 495,
+        "startChar": 63,
+        "endLine": 495,
+        "endChar": 75
+      },
+      "revId": "cef45694cc7b815a38b00978e5a49ba2c6ac66fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
