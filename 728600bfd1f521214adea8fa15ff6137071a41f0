@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7214c799_d80f225b",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:45:45Z",
+      "side": 1,
+      "message": "nit: Also, since we assume chunk is a normal page, shouldn\u0027t we just use Page instead of MemoryChunk?",
+      "parentUuid": "e05d0ec3_76b022ca",
+      "range": {
+        "startLine": 144,
+        "startChar": 23,
+        "endLine": 144,
+        "endChar": 28
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9aa01004_7103e7e1",
         "filename": "src/heap/marking.cc",
         "patchSetId": 1
