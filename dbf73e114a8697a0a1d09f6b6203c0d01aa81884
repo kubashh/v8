@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c5c3b02_4d5c7f0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T09:04:27Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627219ba_ab510f4c",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T09:04:27Z",
+      "side": 1,
+      "message": "Can\u0027t you call this in `~SaveRegisterStateForCall`?",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db8c0c9_28d3f20c",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T09:04:27Z",
+      "side": 1,
+      "message": "Perhaps SaveRegisterStateForCall should be passed a temp register for the result (e.g., `SaveRegisterStateForCall (..., map_temp)`)? Otherwise we\u0027ll likely have to duplicate this code in multiple places.\n\nI\u0027d suggest making it decide where to put it, and then use `Register return_val \u003d save_register_state.return_register()` so it can still choose `kReturnRegister0` if no other temp is needed.",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aef52c04_8df4c61c",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T09:04:27Z",
+      "side": 1,
+      "message": "It would be nice to have a nicer API to read an object type before a current address :)",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
