@@ -1236,7 +1236,6 @@
   'built-ins/Temporal/PlainDateTime/prototype/until/weeks-months-mutually-exclusive': [FAIL],
   'built-ins/Temporal/PlainDateTime/prototype/weekOfYear/basic': [FAIL],
 
-  'built-ins/Temporal/Duration/compare/options-wrong-type': [FAIL],
   'built-ins/Temporal/Duration/prototype/add/options-wrong-type': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/options-wrong-type': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/roundto-invalid-string': [FAIL],

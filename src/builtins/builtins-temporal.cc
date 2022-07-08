@@ -66,8 +66,6 @@ TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeSince)
 TO_BE_IMPLEMENTED(TemporalZonedDateTimePrototypeRound)
 
 /* Temporal.Duration */
-/* Temporal #sec-temporal.duration.compare */
-TO_BE_IMPLEMENTED(TemporalDurationCompare)
 /* Temporal #sec-temporal.duration.prototype.add */
 TO_BE_IMPLEMENTED(TemporalDurationPrototypeAdd)
 /* Temporal #sec-temporal.duration.prototype.subtract */
@@ -578,6 +576,14 @@ BUILTIN(TemporalDurationConstructor) {
                    args.atOrUndefined(isolate, 8),     // milliseconds
                    args.atOrUndefined(isolate, 9),     // microseconds
                    args.atOrUndefined(isolate, 10)));  // nanoseconds
+}
+
+BUILTIN(TemporalDurationCompare) {
+  HandleScope scope(isolate);
+  RETURN_RESULT_OR_FAILURE(isolate, JSTemporalDuration::Compare(
+                                        isolate, args.atOrUndefined(isolate, 1),
+                                        args.atOrUndefined(isolate, 2),
+                                        args.atOrUndefined(isolate, 3)));
 }
 TEMPORAL_METHOD1(Duration, From)
 TEMPORAL_GET(Duration, Years, years)

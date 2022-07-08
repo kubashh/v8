@@ -173,6 +173,12 @@ class JSTemporalDuration
       Handle<Object> milliseconds, Handle<Object> microseconds,
       Handle<Object> nanoseconds);
 
+  // #sec-temporal.duration.compare
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Smi> Compare(Isolate* isolate,
+                                                        Handle<Object> one,
+                                                        Handle<Object> two,
+                                                        Handle<Object> options);
+
   // #sec-temporal.duration.from
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> From(
       Isolate* isolate, Handle<Object> item);
