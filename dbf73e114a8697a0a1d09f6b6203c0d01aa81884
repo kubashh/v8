@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c60b534_79b64be3",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T13:49:56Z",
+      "side": 1,
+      "message": "When is that not the case, beyond the example where .return_register() could avoid code after it?",
+      "parentUuid": "d9c0cb63_ce3626b1",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6db8c0c9_28d3f20c",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "`Register return_val \u003d save_register_state.return_register()` will be tricky with scoping, since SaveRegisterStateForCall is inside the scope but we want the return register outside the scope. I\u0027d prefer to punt on figuring out how to share this code until we actually need to share it.",
       "parentUuid": "6db8c0c9_28d3f20c",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b0ac8d_4736f326",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-08T13:49:56Z",
+      "side": 1,
+      "message": "Well sure, that was just pseudo-code, the Register should obviously be declared outside.\n\nBut punting for now is ok too.",
+      "parentUuid": "e3c0de75_85d5d924",
       "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
