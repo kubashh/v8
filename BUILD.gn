@@ -1525,6 +1525,7 @@ config("v8_gcov_coverage_cflags") {
   cflags = [
     "-fprofile-arcs",
     "-ftest-coverage",
+
     # We already block on gcc warnings on other bots. Let's not block here to
     # always generate coverage reports.
     "-Wno-error",
@@ -3631,6 +3632,7 @@ v8_header_set("v8_internal_headers") {
       "src/wasm/wasm-code-manager.h",
       "src/wasm/wasm-debug.h",
       "src/wasm/wasm-disassembler-impl.h",
+      "src/wasm/wasm-disassembler.h",
       "src/wasm/wasm-engine.h",
       "src/wasm/wasm-external-refs.h",
       "src/wasm/wasm-feature-flags.h",
@@ -6205,9 +6207,7 @@ group("v8_clusterfuzz") {
 group("v8_gcc_light") {
   testonly = true
 
-  deps = [
-    ":d8",
-  ]
+  deps = [ ":d8" ]
 }
 
 group("v8_archive") {
