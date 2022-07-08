@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c0cb63_ce3626b1",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-08T10:16:55Z",
+      "side": 1,
+      "message": "Only if the call is the end of the scope",
+      "parentUuid": "627219ba_ab510f4c",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6db8c0c9_28d3f20c",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c0de75_85d5d924",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-08T10:16:55Z",
+      "side": 1,
+      "message": "`Register return_val \u003d save_register_state.return_register()` will be tricky with scoping, since SaveRegisterStateForCall is inside the scope but we want the return register outside the scope. I\u0027d prefer to punt on figuring out how to share this code until we actually need to share it.",
+      "parentUuid": "6db8c0c9_28d3f20c",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aef52c04_8df4c61c",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-07-08T09:04:27Z",
       "side": 1,
       "message": "It would be nice to have a nicer API to read an object type before a current address :)",
+      "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd7b018c_9f4093b0",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-08T10:16:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aef52c04_8df4c61c",
       "revId": "dbf73e114a8697a0a1d09f6b6203c0d01aa81884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
