@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff30e8cc_102ef9e6",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "In a different direction, `chunk` is only used to convert from addresses to markbit indices and back, and `maybe_inner_ptr` is only used to calculate the starting markbit index. How about we change this method take a markbit index as a parameter and return a markbit index?",
+      "parentUuid": "7214c799_d80f225b",
+      "range": {
+        "startLine": 144,
+        "startChar": 23,
+        "endLine": 144,
+        "endChar": 28
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9aa01004_7103e7e1",
         "filename": "src/heap/marking.cc",
         "patchSetId": 1
@@ -95,6 +119,30 @@
       "writtenOn": "2022-07-08T08:44:48Z",
       "side": 1,
       "message": "I understand why we return null here in terms of how we use this, but it doesn\u0027t match the method name. Specifically, if the object is marked, I\u0027d expect FindPreviousMarkedObject to return it.\nSince the implementation is closely tied to how we plan to use it, maybe it should live as a method of the bitmap but instead go back to be a helper of the using method?",
+      "range": {
+        "startLine": 151,
+        "startChar": 33,
+        "endLine": 151,
+        "endChar": 45
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "160855b9_924e37e3",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "I agree, we can return the same pointer or index.",
+      "parentUuid": "9aa01004_7103e7e1",
       "range": {
         "startLine": 151,
         "startChar": 33,
@@ -128,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b87309d_b2caeaf0",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "Done. `cell_index` is unsigned, and we\u0027re out of the `while` loop, so it\u0027s certain that it\u0027s equal to zero, that\u0027s why I had no `DCHECK`.",
+      "parentUuid": "70a2c45a_3470429b",
+      "range": {
+        "startLine": 162,
+        "startChar": 44,
+        "endLine": 162,
+        "endChar": 77
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f01a6982_7a61b46e",
@@ -141,6 +213,30 @@
       "writtenOn": "2022-07-08T08:44:48Z",
       "side": 1,
       "message": "nit: You can return in the if branch above instead of having an else here.",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 8
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf4a0fed_91bdba4f",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "Done. I refactored all the if/else below and removed `object_index` entirely.",
+      "parentUuid": "f01a6982_7a61b46e",
       "range": {
         "startLine": 164,
         "startChar": 4,
@@ -174,6 +270,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4be5f02_264f9b08",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "According to the C++ spec, forward iterators need to be default constructible.\nOther than that, it\u0027s used in line 37 of:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/3749207/1/src/heap/paged-spaces.cc",
+      "parentUuid": "c60a356e_4fa7025d",
+      "range": {
+        "startLine": 47,
+        "startChar": 23,
+        "endLine": 47,
+        "endChar": 31
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01b6cb4c_6fb56b2e",
@@ -187,6 +307,30 @@
       "writtenOn": "2022-07-08T08:44:48Z",
       "side": 1,
       "message": "Do we need some guarantee that ptr is the start of an object?\nWe could take a HeapObject instead of an address (which probably means that FindPreviousMarkedObject should also return an object instead of an address).",
+      "range": {
+        "startLine": 56,
+        "startChar": 66,
+        "endLine": 56,
+        "endChar": 69
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ea76796_738a486e",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "This is meant to be a low-level iterator so I thought it\u0027s OK to work with addresses. If we combine it with Michael\u0027s idea, we\u0027ll have a low-level PageObjectIterator to be used only when we know it\u0027s safe. This could again take an address as parameter. It could also take a HeapObject, but each conversion adds a pointer tagging/detagging.",
+      "parentUuid": "01b6cb4c_6fb56b2e",
       "range": {
         "startLine": 56,
         "startChar": 66,
@@ -293,6 +437,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4efcd28_6598e894",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "Yes, calculating the cage base is the only reason why we\u0027re passing the chunk pointer. Depending on how we proceed with Michael\u0027s idea, we can do that.",
+      "parentUuid": "54fd0b96_c8068213",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2982000a_bf2ae7f2",
         "filename": "src/heap/memory-chunk.h",
         "patchSetId": 1
@@ -304,6 +472,30 @@
       "writtenOn": "2022-07-08T08:44:44Z",
       "side": 1,
       "message": "Suggestion: Since the iteration doesn\u0027t necessarily always work, I\u0027d move this out of the class and just have something like\n\n```\nclass PageObjectIterator {\n class iterator {};\n void iterator begin();\n void iterator end();\n};\n```\n\nThe usage would then be\n```\nfor (auto obj : PageObjectIterator(page)) {}\n```",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 223,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c527c68_6940facc",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-08T09:54:12Z",
+      "side": 1,
+      "message": "Yes, I like this. The new class would state the conditions under which it can be used.\n\nI\u0027m not sure however if this should be tied to a `Page`, as it could be used for all containers of heap objects. E.g., ReadOnlyHeapObjectIterator and ReadOnlySpaceObjectIterator use the same pattern for traversing read-only pages, which are under `BasicMemoryChunk`.",
+      "parentUuid": "2982000a_bf2ae7f2",
       "range": {
         "startLine": 223,
         "startChar": 8,
