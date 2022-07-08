@@ -39,6 +39,30 @@
       },
       "revId": "27008d1baf1bf9fa7e94f038dc2a65707d1b582a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4b3b22_7cd61f28",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-08T09:50:23Z",
+      "side": 1,
+      "message": "The `ci_pair_factory` was taking the `to_notify` arg and using that for notification. Now I have added `notifies` to `tester_included_args` it will add notification for the testers as well as the builder. Please note that this refactoring will add notifications for some builders now.",
+      "parentUuid": "631fb0fb_b34f094f",
+      "range": {
+        "startLine": 164,
+        "startChar": 8,
+        "endLine": 164,
+        "endChar": 47
+      },
+      "revId": "27008d1baf1bf9fa7e94f038dc2a65707d1b582a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

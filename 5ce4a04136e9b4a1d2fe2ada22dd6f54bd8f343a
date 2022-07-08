@@ -105,6 +105,30 @@
       },
       "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0839b6a0_97ec5e99",
+        "filename": "lib/lib.star",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-08T09:50:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37d806f2_95bd0861",
+      "range": {
+        "startLine": 507,
+        "startChar": 8,
+        "endLine": 509,
+        "endChar": 52
+      },
+      "revId": "5ce4a04136e9b4a1d2fe2ada22dd6f54bd8f343a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
