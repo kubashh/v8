@@ -44,6 +44,51 @@ AllocationSpace MemoryChunk::owner_identity() const {
   return owner()->identity();
 }
 
+MemoryChunk::iterator::iterator()
+    : heap_object_()
+#if V8_COMPRESS_POINTERS
+      ,
+      cage_base_(kNullAddress)
+#endif  // V8_COMPRESS_POINTERS
+{
+}
+
+MemoryChunk::iterator::iterator(const MemoryChunk* chunk, Address ptr)
+    : heap_object_(HeapObject::FromAddress(ptr))
+#if V8_COMPRESS_POINTERS
+      ,
+      cage_base_(chunk->heap()->isolate())
+#endif  // V8_COMPRESS_POINTERS
+{
+  DCHECK_LE(chunk->area_start(), ptr);
+  DCHECK_GE(chunk->area_end(), ptr);
+}
+
+MemoryChunk::iterator& MemoryChunk::iterator::operator++() {
+  const int size = heap_object_.Size(cage_base());
+  const Address next_ptr = heap_object_.address() + size;
+  heap_object_ = HeapObject::FromAddress(next_ptr);
+  return *this;
+}
+
+MemoryChunk::iterator MemoryChunk::iterator::operator++(int) {
+  iterator temp(*this);
+  ++(*this);
+  return temp;
+}
+
+MemoryChunk::iterator MemoryChunk::begin() const {
+  return iterator(this, area_start());
+}
+
+MemoryChunk::iterator MemoryChunk::begin(Address ptr) const {
+  return iterator(this, ptr);
+}
+
+MemoryChunk::iterator MemoryChunk::end() const {
+  return iterator(this, area_end());
+}
+
 }  // namespace internal
 }  // namespace v8
 

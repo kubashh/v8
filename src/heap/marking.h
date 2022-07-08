@@ -129,6 +129,10 @@ class V8_EXPORT_PRIVATE Bitmap {
     return reinterpret_cast<MarkBit::CellType*>(this);
   }
 
+  V8_INLINE const MarkBit::CellType* cells() const {
+    return reinterpret_cast<const MarkBit::CellType*>(this);
+  }
+
   V8_INLINE static Bitmap* FromAddress(Address addr) {
     return reinterpret_cast<Bitmap*>(addr);
   }
@@ -177,6 +181,9 @@ class ConcurrentBitmap : public Bitmap {
   void Print();
 
   bool IsClean();
+
+  Address FindPreviousMarkedObject(const MemoryChunk* chunk,
+                                   Address maybe_inner_ptr) const;
 
  private:
   // Clear all bits in the cell range [start_cell_index, end_cell_index). If the

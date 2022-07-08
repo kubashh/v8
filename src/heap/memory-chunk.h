@@ -220,6 +220,46 @@ class MemoryChunk : public BasicMemoryChunk {
   }
 #endif  // V8_ENABLE_INNER_POINTER_RESOLUTION_OSB
 
+  class iterator : base::iterator<std::forward_iterator_tag, HeapObject> {
+   public:
+    inline iterator();
+
+    HeapObject operator*() const { return heap_object_; }
+    const HeapObject* operator->() const { return &heap_object_; }
+
+    bool operator==(iterator other) const {
+      return heap_object_ == other.heap_object_;
+    }
+    bool operator!=(iterator other) const { return !(*this == other); }
+
+    inline iterator& operator++();
+    inline iterator operator++(int);
+
+    Address base() const { return heap_object_.address(); }
+
+   private:
+    inline iterator(const MemoryChunk* chunk, Address ptr);
+
+    PtrComprCageBase cage_base() const {
+#if V8_COMPRESS_POINTERS
+      return cage_base_;
+#else
+      return PtrComprCageBase{};
+#endif  // V8_COMPRESS_POINTERS
+    }
+
+    HeapObject heap_object_;
+#if V8_COMPRESS_POINTERS
+    PtrComprCageBase cage_base_;
+#endif  // V8_COMPRESS_POINTERS
+
+    friend class MemoryChunk;
+  };
+
+  inline iterator begin() const;
+  inline iterator begin(Address ptr) const;
+  inline iterator end() const;
+
  protected:
   // Release all memory allocated by the chunk. Should be called when memory
   // chunk is about to be freed.
