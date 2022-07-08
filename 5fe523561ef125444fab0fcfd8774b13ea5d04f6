@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a83529_3db5ee25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-08T13:18:17Z",
+      "side": 1,
+      "message": "Awesome, thanks! Just one nit.",
+      "revId": "5fe523561ef125444fab0fcfd8774b13ea5d04f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa007c7_d2836b9e",
+        "filename": "src/wasm/string-builder-multiline.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-08T13:18:17Z",
+      "side": 1,
+      "message": "nit: Should this maybe be in `wasm-disassembler.h`?",
+      "range": {
+        "startLine": 115,
+        "startChar": 7,
+        "endLine": 115,
+        "endChar": 29
+      },
+      "revId": "5fe523561ef125444fab0fcfd8774b13ea5d04f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
