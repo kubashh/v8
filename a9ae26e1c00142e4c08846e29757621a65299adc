@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b76fd66d_2a4ba9bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-08T12:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d99d92ab_1424224b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "a9ae26e1c00142e4c08846e29757621a65299adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7fbecbd7_4a77ea0c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 12
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-08T11:29:49Z",
       "side": 1,
       "message": "Could you move making these changes to an extra CL please? Let\u0027s keep this a refactoring. Those changes let me thing that the current code was actually wrong.\n\n@Liviu, please also have a look. E.g. here it seems like the  notify_blamelist {} was never on on the tester?",
+      "range": {
+        "startLine": 1678,
+        "startChar": 0,
+        "endLine": 1691,
+        "endChar": 3
+      },
+      "revId": "a9ae26e1c00142e4c08846e29757621a65299adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f53176eb_5f3391ec",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 12
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-08T12:02:41Z",
+      "side": 1,
+      "message": "Done from my side, here is the follow up cl: https://chromium-review.googlesource.com/c/v8/v8/+/3749580",
+      "parentUuid": "163e6025_2ac3044a",
       "range": {
         "startLine": 1678,
         "startChar": 0,
