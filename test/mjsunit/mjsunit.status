@@ -42,7 +42,7 @@
   # All tests in the bug directory are expected to fail.
   'bugs/*': [FAIL],
 
-  ##############################################################################
+  #############################################################################
   # Temporal tests to be implemented
   # https://crbug.com/v8/11544
   'temporal/calendar-week-of-year': [FAIL],
@@ -82,9 +82,9 @@
   'serialize-deserialize-now': [SKIP],
 
   # BUG(v8:9506): slow tests.
-  'wasm/shared-memory-worker-explicit-gc-stress': [PASS, SLOW],
-  'wasm/shared-memory-worker-gc-stress': [PASS, SLOW],
-
+  'wasm/shared-memory-worker-explicit-gc-stress': [SKIP],
+  'wasm/shared-memory-worker-gc-stress': [SKIP],
+  'wasm/shared-memory-worker-gc': [SKIP],
   # https://crbug.com/1129854
   'tools/log': ['arch == arm or arch == arm64', SKIP],
 
