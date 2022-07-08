@@ -79,6 +79,30 @@
       },
       "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3c6a855_8591bb58",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-08T08:35:04Z",
+      "side": 1,
+      "message": "AFAICT the cage_base is used only for reading the map (via HeapObject::Size()), so using the main cage is correct and works for both external code space and other spaces.\n\nRe DCHECK, it doesn\u0027t seem necessary in this case but it would look like this:\n  DCHECK_IMPLIES(V8_EXTERNAL_CODE_SPACE_BOOL, !chunk-\u003eInCodeSpace());",
+      "parentUuid": "23269baf_9c7a4226",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
