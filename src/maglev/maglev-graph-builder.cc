@@ -854,6 +854,55 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
 MAGLEV_UNIMPLEMENTED_BYTECODE(LdaModuleVariable)
 MAGLEV_UNIMPLEMENTED_BYTECODE(StaModuleVariable)
 
+bool MaglevGraphBuilder::TryBuildMonomorphicStoreFromSmiHandler(
+    ValueNode* object, const compiler::MapRef& map, int32_t handler) {
+  StoreHandler::Kind kind = StoreHandler::KindBits::decode(handler);
+  Representation::Kind representation =
+      StoreHandler::RepresentationBits::decode(handler);
+  if (kind != StoreHandler::Kind::kField) return false;
+  if (representation == Representation::kDouble) return false;
+
+  BuildMapCheck(object, map);
+
+  ValueNode* store_target;
+  if (StoreHandler::IsInobjectBits::decode(handler)) {
+    store_target = object;
+  } else {
+    // The field is in the property array, first Store it from there.
+    store_target = AddNewNode<LoadTaggedField>(
+        {object}, JSReceiver::kPropertiesOrHashOffset);
+  }
+
+  ValueNode* value = GetAccumulatorTagged();
+  if (representation == Representation::kSmi) {
+    AddNewNode<CheckSmi>({value});
+  } else if (representation == Representation::kHeapObject) {
+    AddNewNode<CheckHeapObject>({value});
+  }
+
+  int field_index = StoreHandler::FieldIndexBits::decode(handler);
+
+  // TODO(leszeks): Avoid write barrier for Smi stores.
+  AddNewNode<StoreTaggedField>({store_target, value},
+                               field_index * kTaggedSize);
+  return true;
+}
+
+bool MaglevGraphBuilder::TryBuildMonomorphicStore(ValueNode* object,
+                                                  const compiler::MapRef& map,
+                                                  MaybeObjectHandle handler) {
+  if (handler.is_null()) return false;
+
+  if (handler->IsSmi()) {
+    return TryBuildMonomorphicStoreFromSmiHandler(object, map,
+                                                  handler->ToSmi().value());
+  }
+  // TODO(leszeks): If we add non-Smi paths here, make sure to differentiate
+  // between Define and Set.
+
+  return false;
+}
+
 void MaglevGraphBuilder::VisitSetNamedProperty() {
   // SetNamedProperty <object> <name_index> <slot>
   ValueNode* object = LoadRegisterTagged(0);
@@ -873,31 +922,15 @@ void MaglevGraphBuilder::VisitSetNamedProperty() {
     case compiler::ProcessedFeedback::kNamedAccess: {
       const compiler::NamedAccessFeedback& named_feedback =
           processed_feedback.AsNamedAccess();
-      if (named_feedback.maps().size() == 1) {
-        // Monomorphic store, check the handler.
-        // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
-        MaybeObjectHandle handler =
-            FeedbackNexusForSlot(slot).FindHandlerForMap(
-                named_feedback.maps()[0].object());
-        if (!handler.is_null() && handler->IsSmi()) {
-          int smi_handler = handler->ToSmi().value();
-          StoreHandler::Kind kind = StoreHandler::KindBits::decode(smi_handler);
-          Representation::Kind representation =
-              StoreHandler::RepresentationBits::decode(smi_handler);
-          if (kind == StoreHandler::Kind::kField &&
-              representation != Representation::kDouble) {
-            BuildMapCheck(object, named_feedback.maps()[0]);
-            ValueNode* value = GetAccumulatorTagged();
-            if (representation == Representation::kSmi) {
-              AddNewNode<CheckSmi>({value});
-            } else if (representation == Representation::kHeapObject) {
-              AddNewNode<CheckHeapObject>({value});
-            }
-            AddNewNode<StoreField>({object, value}, smi_handler);
-            return;
-          }
-        }
-      }
+      if (named_feedback.maps().size() != 1) break;
+      compiler::MapRef map = named_feedback.maps()[0];
+
+      // Monomorphic store, check the handler.
+      // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
+      MaybeObjectHandle handler =
+          FeedbackNexusForSlot(slot).FindHandlerForMap(map.object());
+
+      if (TryBuildMonomorphicStore(object, map, handler)) return;
     } break;
 
     default:
@@ -930,26 +963,15 @@ void MaglevGraphBuilder::VisitDefineNamedOwnProperty() {
     case compiler::ProcessedFeedback::kNamedAccess: {
       const compiler::NamedAccessFeedback& named_feedback =
           processed_feedback.AsNamedAccess();
-      if (named_feedback.maps().size() == 1) {
-        // Monomorphic store, check the handler.
-        // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
-        MaybeObjectHandle handler =
-            FeedbackNexusForSlot(slot).FindHandlerForMap(
-                named_feedback.maps()[0].object());
-        if (!handler.is_null() && handler->IsSmi()) {
-          int smi_handler = handler->ToSmi().value();
-          StoreHandler::Kind kind = StoreHandler::KindBits::decode(smi_handler);
-          Representation::Kind representation =
-              StoreHandler::RepresentationBits::decode(smi_handler);
-          if (kind == StoreHandler::Kind::kField &&
-              representation == Representation::kTagged) {
-            BuildMapCheck(object, named_feedback.maps()[0]);
-            ValueNode* value = GetAccumulatorTagged();
-            AddNewNode<StoreField>({object, value}, smi_handler);
-            return;
-          }
-        }
-      }
+      if (named_feedback.maps().size() != 1) break;
+      compiler::MapRef map = named_feedback.maps()[0];
+
+      // Monomorphic store, check the handler.
+      // TODO(leszeks): Make GetFeedbackForPropertyAccess read the handler.
+      MaybeObjectHandle handler =
+          FeedbackNexusForSlot(slot).FindHandlerForMap(map.object());
+
+      if (TryBuildMonomorphicStore(object, map, handler)) return;
     } break;
 
     default:
@@ -1385,7 +1407,7 @@ void MaglevGraphBuilder::VisitJumpLoop() {
   int target = iterator_.GetJumpTargetOffset();
 
   if (relative_jump_bytecode_offset > 0) {
-    AddNewNode<ReduceInterruptBudget>({}, relative_jump_bytecode_offset);
+    // AddNewNode<ReduceInterruptBudget>({}, relative_jump_bytecode_offset);
   }
   BasicBlock* block =
       target == iterator_.current_offset()
@@ -1403,7 +1425,7 @@ void MaglevGraphBuilder::VisitJump() {
   const uint32_t relative_jump_bytecode_offset =
       iterator_.GetUnsignedImmediateOperand(0);
   if (relative_jump_bytecode_offset > 0) {
-    AddNewNode<IncreaseInterruptBudget>({}, relative_jump_bytecode_offset);
+    // AddNewNode<IncreaseInterruptBudget>({}, relative_jump_bytecode_offset);
   }
   BasicBlock* block = FinishBlock<Jump>(
       next_offset(), {}, &jump_targets_[iterator_.GetJumpTargetOffset()]);
@@ -1548,7 +1570,7 @@ void MaglevGraphBuilder::VisitReturn() {
   // See also: InterpreterAssembler::UpdateInterruptBudgetOnReturn.
   const uint32_t relative_jump_bytecode_offset = iterator_.current_offset();
   if (relative_jump_bytecode_offset > 0) {
-    AddNewNode<ReduceInterruptBudget>({}, relative_jump_bytecode_offset);
+    // AddNewNode<ReduceInterruptBudget>({}, relative_jump_bytecode_offset);
   }
 
   if (!is_inline()) {
