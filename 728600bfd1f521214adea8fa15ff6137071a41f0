@@ -16,6 +16,69 @@
       "message": "Tests missing, but let\u0027s see if you like the general idea.",
       "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9202070_05eca78f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-08T07:20:30Z",
+      "side": 1,
+      "message": "+Igor for external code space question",
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c60a356e_4fa7025d",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-08T07:20:30Z",
+      "side": 1,
+      "message": "Where do we need this ctor?",
+      "range": {
+        "startLine": 47,
+        "startChar": 23,
+        "endLine": 47,
+        "endChar": 31
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23269baf_9c7a4226",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-08T07:20:30Z",
+      "side": 1,
+      "message": "This won\u0027t work if the page is part of external code space.\n\nI guess we should at least DCHECK that we never use it there but really this is what I meant with providing something that looks general but doesn\u0027t cover all our cases.\n\nIgor, can we DCHECK that we are not in external code space somehow?",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
