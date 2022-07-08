@@ -103,6 +103,53 @@
       },
       "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "282a0edf_cf82ae98",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-08T08:44:44Z",
+      "side": 1,
+      "message": "Great!",
+      "parentUuid": "f3c6a855_8591bb58",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2982000a_bf2ae7f2",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-08T08:44:44Z",
+      "side": 1,
+      "message": "Suggestion: Since the iteration doesn\u0027t necessarily always work, I\u0027d move this out of the class and just have something like\n\n```\nclass PageObjectIterator {\n class iterator {};\n void iterator begin();\n void iterator end();\n};\n```\n\nThe usage would then be\n```\nfor (auto obj : PageObjectIterator(page)) {}\n```",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 223,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
