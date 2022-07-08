@@ -37,6 +37,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e05d0ec3_76b022ca",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "nit: Can we get the chunk from maybe_inner_ptr since we anyway assume chunk is not a large page?",
+      "range": {
+        "startLine": 144,
+        "startChar": 23,
+        "endLine": 144,
+        "endChar": 28
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa01004_7103e7e1",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "I understand why we return null here in terms of how we use this, but it doesn\u0027t match the method name. Specifically, if the object is marked, I\u0027d expect FindPreviousMarkedObject to return it.\nSince the implementation is closely tied to how we plan to use it, maybe it should live as a method of the bitmap but instead go back to be a helper of the using method?",
+      "range": {
+        "startLine": 151,
+        "startChar": 33,
+        "endLine": 151,
+        "endChar": 45
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70a2c45a_3470429b",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "DCHECK_EQ(0, cell_index)?\n(and below)",
+      "range": {
+        "startLine": 162,
+        "startChar": 44,
+        "endLine": 162,
+        "endChar": 77
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f01a6982_7a61b46e",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "nit: You can return in the if branch above instead of having an else here.",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 164,
+        "endChar": 8
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c60a356e_4fa7025d",
         "filename": "src/heap/memory-chunk-inl.h",
         "patchSetId": 1
@@ -53,6 +145,29 @@
         "startChar": 23,
         "endLine": 47,
         "endChar": 31
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01b6cb4c_6fb56b2e",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "Do we need some guarantee that ptr is the start of an object?\nWe could take a HeapObject instead of an address (which probably means that FindPreviousMarkedObject should also return an object instead of an address).",
+      "range": {
+        "startLine": 56,
+        "startChar": 66,
+        "endLine": 56,
+        "endChar": 69
       },
       "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -124,6 +239,29 @@
         "startChar": 17,
         "endLine": 60,
         "endChar": 41
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54fd0b96_c8068213",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-08T08:44:48Z",
+      "side": 1,
+      "message": "Would it makes to just always get the cage_bage_ as a parameter to the ctor?",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 16
       },
       "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
