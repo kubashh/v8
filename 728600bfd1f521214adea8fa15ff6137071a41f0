@@ -461,6 +461,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e92d5894_6295a289",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-08T10:16:39Z",
+      "side": 1,
+      "message": "It\u0027s a good idea because MemoryChunk::heap_ field is nullptr for read only space pages.",
+      "parentUuid": "b4efcd28_6598e894",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2982000a_bf2ae7f2",
         "filename": "src/heap/memory-chunk.h",
         "patchSetId": 1
