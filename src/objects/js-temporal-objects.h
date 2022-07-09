@@ -173,6 +173,12 @@ class JSTemporalDuration
       Handle<Object> milliseconds, Handle<Object> microseconds,
       Handle<Object> nanoseconds);
 
+  // #sec-temporal.duration.compare
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Smi> Compare(Isolate* isolate,
+                                                        Handle<Object> one,
+                                                        Handle<Object> two,
+                                                        Handle<Object> options);
+
   // #sec-temporal.duration.from
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> From(
       Isolate* isolate, Handle<Object> item);
@@ -192,6 +198,16 @@ class JSTemporalDuration
   // #sec-temporal.duration.prototype.abs
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Abs(
       Isolate* isolate, Handle<JSTemporalDuration> duration);
+
+  // #sec-temporal.duration.prototype.round
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalDuration> Round(
+      Isolate* isolate, Handle<JSTemporalDuration> duration,
+      Handle<Object> round_to_obj);
+
+  // #sec-temporal.duration.prototype.total
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> Total(
+      Isolate* isolate, Handle<JSTemporalDuration> duration,
+      Handle<Object> total_of);
 
   // #sec-temporal.duration.prototype.tojson
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToJSON(
@@ -248,7 +264,7 @@ class JSTemporalInstant
   // #sec-temporal.instant.prototype.round
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> Round(
       Isolate* isolate, Handle<JSTemporalInstant> instant,
-      Handle<Object> options);
+      Handle<Object> round_to_obj);
 
   // #sec-temporal.instant.from
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalInstant> From(
@@ -628,7 +644,7 @@ class JSTemporalPlainTime
   // #sec-temporal.plaintime.prototype.round
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSTemporalPlainTime> Round(
       Isolate* isolate, Handle<JSTemporalPlainTime> plain_time,
-      Handle<Object> options);
+      Handle<Object> round_to_obj);
 
   // #sec-temporal.plaintime.prototype.getisofields
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> GetISOFields(
