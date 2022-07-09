@@ -2,13 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import { SourceResolver } from "../source-resolver";
 import { TextView } from "./text-view";
 import { SchedulePhase } from "../phases/schedule-phase";
+import { SelectionStorage } from "../selection/selection-storage";
 
 export class ScheduleView extends TextView {
   schedule: SchedulePhase;
-  sourceResolver: SourceResolver;
 
   createViewElement() {
     const pane = document.createElement('div');
@@ -35,14 +34,14 @@ export class ScheduleView extends TextView {
 
   detachSelection() {
     this.blockSelection.clear();
-    return this.selection.detachSelection();
+    return new SelectionStorage(this.selection.detachSelection());
   }
 
-  initializeContent(data, rememberedSelection) {
+  initializeContent(data, rememberedSelection: SelectionStorage) {
     this.divNode.innerHTML = '';
     this.schedule = data.schedule;
     this.addBlocks(data.schedule.blocks);
-    this.attachSelection(rememberedSelection);
+    this.attachSelection(rememberedSelection?.nodes);
     this.show();
   }
 
@@ -187,5 +186,9 @@ export class ScheduleView extends TextView {
       }
     }
     this.selectionHandler.select(select, true);
+  }
+
+  adaptSelection(selection: SelectionStorage): SelectionStorage {
+    return undefined;
   }
 }
