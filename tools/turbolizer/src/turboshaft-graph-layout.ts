@@ -5,11 +5,11 @@
 import * as C from "./common/constants";
 import { TurboshaftGraph } from "./turboshaft-graph";
 import { GraphStateType } from "./phases/phase";
+import { LayoutOccupation } from "./layout-occupation";
 import {
   TurboshaftGraphBlock,
   TurboshaftGraphBlockType
 } from "./phases/turboshaft-graph-phase/turboshaft-graph-block";
-import { LayoutOccupation } from "./layout-occupation";
 
 export class TurboshaftGraphLayout {
   graph: TurboshaftGraph;
@@ -67,6 +67,7 @@ export class TurboshaftGraphLayout {
     // basis for bottom-down DFS to determine rank and block placement.
     const blocksHasNoInputs = new Array<boolean>();
     for (const block of this.graph.blocks()) {
+      block.collapsed = false;
       blocksHasNoInputs[block.id] = true;
     }
     for (const edge of this.graph.blocksEdges()) {
@@ -166,7 +167,7 @@ export class TurboshaftGraphLayout {
     const rankMaxBlockHeight = new Array<number>();
     for (const block of this.graph.blocks()) {
       rankMaxBlockHeight[block.rank] = Math.max(rankMaxBlockHeight[block.rank] ?? 0,
-        block.getHeight(showProperties));
+        block.getHeight(showProperties, this.graph.graphPhase.layoutType));
     }
 
     const rankSets = new Array<Array<TurboshaftGraphBlock>>();
