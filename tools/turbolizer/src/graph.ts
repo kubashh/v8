@@ -45,7 +45,6 @@ export class Graph extends MovableContainer<GraphPhase> {
   public redetermineGraphBoundingBox(showTypes: boolean): [[number, number], [number, number]] {
     this.minGraphX = 0;
     this.maxGraphNodeX = 1;
-    this.maxGraphX = undefined;  // see below
     this.minGraphY = 0;
     this.maxGraphY = 1;
 

@@ -46,9 +46,7 @@ export class SourceResolver {
     this.phases = new Array<GenericPhase>();
     // Maps phase names to phaseIds.
     this.phaseNames = new Map<string, number>();
-    this.instructionsPhase = new InstructionsPhase("");
-    // The disassembly phase is stored separately.
-    this.disassemblyPhase = undefined;
+    this.instructionsPhase = new InstructionsPhase();
     // Maps line numbers to source positions
     this.linePositionMap = new Map<string, Array<GenericPosition>>();
   }
@@ -136,15 +134,13 @@ export class SourceResolver {
         case PhaseType.Disassembly:
           const castedDisassembly = genericPhase as DisassemblyPhase;
           const disassemblyPhase = new DisassemblyPhase(castedDisassembly.name,
-            castedDisassembly.data);
-          disassemblyPhase.parseBlockIdToOffsetFromJSON(castedDisassembly?.blockIdToOffset);
+            castedDisassembly.data, castedDisassembly?.blockIdToOffset);
           this.disassemblyPhase = disassemblyPhase;
           break;
         case PhaseType.Schedule:
           const castedSchedule = genericPhase as SchedulePhase;
           const schedulePhase = new SchedulePhase(castedSchedule.name, castedSchedule.data);
           this.phaseNames.set(schedulePhase.name, this.phases.length);
-          schedulePhase.parseScheduleFromJSON(castedSchedule.data);
           this.phases.push(schedulePhase);
           break;
         case PhaseType.Sequence:
@@ -172,17 +168,14 @@ export class SourceResolver {
           break;
         case PhaseType.Graph:
           const castedGraph = genericPhase as GraphPhase;
-          const graphPhase = new GraphPhase(castedGraph.name, 0);
-          graphPhase.parseDataFromJSON(castedGraph.data, nodeLabelMap);
-          graphPhase.nodeLabelMap = nodeLabelMap.slice();
+          const graphPhase = new GraphPhase(castedGraph.name, 0, castedGraph.data, nodeLabelMap);
           this.recordOrigins(graphPhase);
           this.phaseNames.set(graphPhase.name, this.phases.length);
           this.phases.push(graphPhase);
           break;
         case PhaseType.TurboshaftGraph:
           const castedTurboshaftGraph = genericPhase as TurboshaftGraphPhase;
-          const turboshaftGraphPhase = new TurboshaftGraphPhase(castedTurboshaftGraph.name, 0);
-          turboshaftGraphPhase.parseDataFromJSON(castedTurboshaftGraph.data);
+          const turboshaftGraphPhase = new TurboshaftGraphPhase(castedTurboshaftGraph.name, castedTurboshaftGraph.data);
           this.phaseNames.set(turboshaftGraphPhase.name, this.phases.length);
           this.phases.push(turboshaftGraphPhase);
           break;

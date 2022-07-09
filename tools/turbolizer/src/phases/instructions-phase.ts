@@ -19,14 +19,10 @@ export class InstructionsPhase extends Phase {
   pcOffsetToInstructions: Map<number, Array<number>>;
   pcOffsets: Array<number>;
 
-  constructor(name: string, nodeIdToInstructionRange?: Array<[number, number]>,
-              blockIdToInstructionRange?: Array<[number, number]>,
-              codeOffsetsInfo?: CodeOffsetsInfo) {
+  constructor(name: string = "") {
     super(name, PhaseType.Instructions);
-    this.nodeIdToInstructionRange = nodeIdToInstructionRange ?? new Array<[number, number]>();
-    this.blockIdToInstructionRange = blockIdToInstructionRange ?? new Array<[number, number]>();
-    this.codeOffsetsInfo = codeOffsetsInfo;
-
+    this.nodeIdToInstructionRange = new Array<[number, number]>();
+    this.blockIdToInstructionRange = new Array<[number, number]>();
     this.instructionToPCOffset = new Array<TurbolizerInstructionStartInfo>();
     this.pcOffsetToInstructions = new Map<number, Array<number>>();
     this.pcOffsets = new Array<number>();
