@@ -6,7 +6,7 @@ import { Source } from "../source";
 import { GenericPosition, SourceResolver } from "../source-resolver";
 import { SelectionBroker } from "../selection/selection-broker";
 import { View } from "./view";
-import { SelectionMap } from "../selection/selection";
+import { SelectionMap } from "../selection/selection-map";
 import { ViewElements } from "../common/view-elements";
 import { SelectionHandler } from "../selection/selection-handler";
 

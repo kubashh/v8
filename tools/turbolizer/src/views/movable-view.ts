@@ -7,7 +7,7 @@ import * as d3 from "d3";
 import { storageGetItem, storageSetItem } from "../common/util";
 import { PhaseView } from "./view";
 import { SelectionBroker } from "../selection/selection-broker";
-import { SelectionMap } from "../selection/selection";
+import { SelectionMap } from "../selection/selection-map";
 import { ClearableHandler, NodeSelectionHandler } from "../selection/selection-handler";
 import { GraphStateType } from "../phases/graph-phase/graph-phase";
 import { Edge } from "../edge";
@@ -19,11 +19,11 @@ import { TurboshaftLayoutType } from "../phases/turboshaft-graph-phase/turboshaf
 export abstract class MovableView<GraphType extends Graph | TurboshaftGraph> extends PhaseView {
   phaseName: string;
   graph: GraphType;
-  showPhaseByName: (name: string, selection: Set<any>) => void;
   broker: SelectionBroker;
+  showPhaseByName: (name: string, selection: Set<any>) => void;
   toolbox: HTMLElement;
   state: MovableViewState;
-  nodesSelectionHandler: NodeSelectionHandler & ClearableHandler;
+  nodeSelectionHandler: NodeSelectionHandler & ClearableHandler;
   divElement: d3.Selection<any, any, any, any>;
   graphElement: d3.Selection<any, any, any, any>;
   svg: d3.Selection<any, any, any, any>;
@@ -85,10 +85,6 @@ export abstract class MovableView<GraphType extends Graph | TurboshaftGraph> ext
     return pane;
   }
 
-  public detachSelection(): Map<string, any> {
-    return this.state.selection.detachSelection();
-  }
-
   public onresize() {
     const trans = d3.zoomTransform(this.svg.node());
     const ctrans = this.panZoom.constrain()(trans, this.getSvgExtent(),
@@ -98,14 +94,24 @@ export abstract class MovableView<GraphType extends Graph | TurboshaftGraph> ext
 
   public hide(): void {
     if (this.state.cacheLayout) {
-      const matrix = this.graphElement.node().transform.baseVal.consolidate().matrix;
-      this.graph.graphPhase.transform = { scale: matrix.a, x: matrix.e, y: matrix.f };
+      this.graph.graphPhase.transform = this.getTransformMatrix();
     } else {
       this.graph.graphPhase.transform = null;
     }
-    this.broker.deleteNodeHandler(this.nodesSelectionHandler);
+    this.broker.deleteNodeHandler(this.nodeSelectionHandler);
     super.hide();
     this.deleteContent();
+  }
+
+  protected getTransformMatrix(): { scale: number, x: number, y: number } {
+    const matrix = this.graphElement.node().transform.baseVal.consolidate().matrix;
+    return  { scale: matrix.a, x: matrix.e, y: matrix.f };
+  }
+
+  protected viewTransformMatrix(matrix: { scale: number, x: number, y: number }): void {
+    this.svg.call(this.panZoom.transform, d3.zoomIdentity
+      .translate(matrix.x, matrix.y)
+      .scale(matrix.scale));
   }
 
   protected focusOnSvg(): void {
@@ -140,10 +146,10 @@ export abstract class MovableView<GraphType extends Graph | TurboshaftGraph> ext
     this.toolbox.appendChild(input);
   }
 
-  protected minScale(graphWidth: number, graphHeight: number): number {
+  protected minScale(): number {
     const [clientWith, clientHeight] = this.getSvgViewDimensions();
-    const minXScale = clientWith / (2 * graphWidth);
-    const minYScale = clientHeight / (2 * graphHeight);
+    const minXScale = clientWith / (2 * this.graph.width);
+    const minYScale = clientHeight / (2 * this.graph.height);
     const minScale = Math.min(minXScale, minYScale);
     this.panZoom.scaleExtent([minScale, 40]);
     return minScale;
@@ -202,8 +208,8 @@ export abstract class MovableView<GraphType extends Graph | TurboshaftGraph> ext
     return frontier;
   }
 
-  protected connectVisibleSelectedElements(): void {
-    for (const element of this.state.selection) {
+  protected connectVisibleSelectedElements(selection: SelectionMap): void {
+    for (const element of selection) {
       element.inputs.forEach((edge: Edge<any>) => {
         if (edge.source.visible && edge.target.visible) {
           edge.visible = true;
@@ -306,7 +312,7 @@ export class MovableViewState {
     storageSetItem("toggle-cache-layout", value);
   }
 
-  public get turboshaftLayoutType() {
+  public get turboshaftLayoutType(): TurboshaftLayoutType {
     return storageGetItem("turboshaft-layout-type", TurboshaftLayoutType.Inline);
   }
 
