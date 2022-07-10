@@ -8,6 +8,7 @@ import { TurboshaftGraphPhase } from "./phases/turboshaft-graph-phase/turboshaft
 import { TurboshaftGraphNode } from "./phases/turboshaft-graph-phase/turboshaft-graph-node";
 import { TurboshaftGraphBlock } from "./phases/turboshaft-graph-phase/turboshaft-graph-block";
 import { TurboshaftGraphEdge } from "./phases/turboshaft-graph-phase/turboshaft-graph-edge";
+import { LayoutType } from "./phases/phase";
 
 export class TurboshaftGraph extends MovableContainer<TurboshaftGraphPhase> {
   blockMap: Array<TurboshaftGraphBlock>;
@@ -53,7 +54,7 @@ export class TurboshaftGraph extends MovableContainer<TurboshaftGraphPhase> {
     }
   }
 
-  public redetermineGraphBoundingBox(showProperties: boolean):
+  public redetermineGraphBoundingBox(showProperties: boolean, layoutType: LayoutType):
     [[number, number], [number, number]] {
     this.minGraphX = 0;
     this.maxGraphNodeX = 1;
@@ -67,8 +68,8 @@ export class TurboshaftGraph extends MovableContainer<TurboshaftGraphPhase> {
       this.maxGraphNodeX = Math.max(this.maxGraphNodeX, block.x + block.getWidth());
 
       this.minGraphY = Math.min(this.minGraphY, block.y - C.NODE_INPUT_WIDTH);
-      this.maxGraphY = Math.max(this.maxGraphY, block.y + block.getHeight(showProperties)
-        + C.NODE_INPUT_WIDTH);
+      this.maxGraphY = Math.max(this.maxGraphY, block.y
+        + block.getHeight(showProperties, layoutType) + C.NODE_INPUT_WIDTH);
     }
 
     this.maxGraphX = this.maxGraphNodeX + this.maxBackEdgeNumber * C.MINIMUM_EDGE_SEPARATION;
@@ -80,5 +81,16 @@ export class TurboshaftGraph extends MovableContainer<TurboshaftGraphPhase> {
       [this.minGraphX - this.width / 2, this.minGraphY - this.height / 2],
       [this.maxGraphX + this.width / 2, this.maxGraphY + this.height / 2]
     ];
+  }
+
+  public getRanksMaxBlockHeight(showProperties: boolean, layoutType: LayoutType): Array<number> {
+    const ranksMaxBlockHeight = new Array<number>();
+
+    for (const block of this.blocks()) {
+      ranksMaxBlockHeight[block.rank] = Math.max(ranksMaxBlockHeight[block.rank] ?? 0,
+        block.getHeight(showProperties, layoutType));
+    }
+
+    return ranksMaxBlockHeight;
   }
 }
