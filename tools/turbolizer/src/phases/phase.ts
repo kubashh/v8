@@ -30,3 +30,8 @@ export enum GraphStateType {
   NeedToFullRebuild,
   Cached
 }
+
+export enum LayoutType {
+  Inline,
+  Movable
+}
