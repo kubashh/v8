@@ -1131,6 +1131,64 @@ Response V8DebuggerAgentImpl::getScriptSource(
 #endif  // V8_ENABLE_WEBASSEMBLY
   return Response::Success();
 }
+
+struct DisassemblyChunk {
+  std::vector<String16> lines;
+  std::vector<int> lineOffsets;
+
+  void Reserve(size_t size) {
+    lines.reserve(size);
+    lineOffsets.reserve(size);
+  }
+};
+
+class DisassemblyCollectorImpl final : public v8::debug::DisassemblyCollector {
+ public:
+  DisassemblyCollectorImpl() = default;
+
+  void ReserveLineCount(size_t count) override {
+    if (count == 0) return;
+    size_t num_chunks = (count + kLinesPerChunk - 1) / kLinesPerChunk;
+    chunks_.resize(num_chunks);
+    for (size_t i = 0; i < num_chunks - 1; i++) {
+      chunks_[i].Reserve(kLinesPerChunk);
+    }
+    size_t last = num_chunks - 1;
+    size_t last_size = count % kLinesPerChunk;
+    if (last_size == 0) last_size = kLinesPerChunk;
+    chunks_[last].Reserve(last_size);
+  }
+
+  void AddLine(const char* src, size_t length,
+               uint32_t bytecode_offset) override {
+    chunks_[writing_chunk_index_].lines.emplace_back(src, length);
+    chunks_[writing_chunk_index_].lineOffsets.emplace_back(
+        static_cast<int>(bytecode_offset));
+    if (chunks_[writing_chunk_index_].lines.size() == kLinesPerChunk) {
+      writing_chunk_index_++;
+    }
+    total_number_of_lines_++;
+  }
+
+  size_t total_number_of_lines() { return total_number_of_lines_; }
+
+  bool HasNextChunk() { return reading_chunk_index_ < chunks_.size(); }
+  DisassemblyChunk&& NextChunk() {
+    return std::move(chunks_[reading_chunk_index_++]);
+  }
+
+ private:
+  // For a large Ritz module, the average is about 50 chars per line,
+  // so (with 2-byte String16 chars) this should give approximately 20 MB
+  // per chunk.
+  static constexpr size_t kLinesPerChunk = 200'000;
+
+  size_t writing_chunk_index_ = 0;
+  size_t reading_chunk_index_ = 0;
+  size_t total_number_of_lines_ = 0;
+  std::vector<DisassemblyChunk> chunks_;
+};
+
 Response V8DebuggerAgentImpl::disassembleWasmModule(
     const String16& in_scriptId, Maybe<String16>* out_streamId,
     int* out_totalNumberOfLines,
@@ -1138,13 +1196,38 @@ Response V8DebuggerAgentImpl::disassembleWasmModule(
     std::unique_ptr<protocol::Array<String16>>* out_lines,
     std::unique_ptr<protocol::Array<int>>* out_bytecodeOffsets) {
 #if V8_ENABLE_WEBASSEMBLY
-  std::vector<String16> lines{{"a", "b", "c"}};
-  std::vector<int> lineOffsets{{0, 4, 8}};
-  *out_functionBodyOffsets = std::make_unique<protocol::Array<int>>();
-  *out_lines = std::make_unique<protocol::Array<String16>>(std::move(lines));
-  *out_totalNumberOfLines = 3;
-  *out_bytecodeOffsets =
-      std::make_unique<protocol::Array<int>>(std::move(lineOffsets));
+  if (!enabled()) return Response::ServerError(kDebuggerNotEnabled);
+  ScriptsMap::iterator it = m_scripts.find(in_scriptId);
+  if (it == m_scripts.end())
+    return Response::ServerError("No script for id: " + in_scriptId.utf8());
+  V8DebuggerScript* script = it->second.get();
+  if (script->getLanguage() != V8DebuggerScript::Language::WebAssembly)
+    return Response::ServerError("Script with id " + in_scriptId.utf8() +
+                                 " is not WebAssembly");
+  std::unique_ptr<DisassemblyCollectorImpl> collector =
+      std::make_unique<DisassemblyCollectorImpl>();
+  script->Disassemble(collector.get());
+  *out_totalNumberOfLines =
+      static_cast<int>(collector->total_number_of_lines());
+  std::vector<int> functionBodyOffsets;
+  script->GetAllFunctionStarts(functionBodyOffsets);
+  *out_functionBodyOffsets =
+      std::make_unique<protocol::Array<int>>(std::move(functionBodyOffsets));
+  if (collector->HasNextChunk()) {
+    DisassemblyChunk chunk(collector->NextChunk());
+    *out_lines =
+        std::make_unique<protocol::Array<String16>>(std::move(chunk.lines));
+    *out_bytecodeOffsets =
+        std::make_unique<protocol::Array<int>>(std::move(chunk.lineOffsets));
+    if (collector->HasNextChunk()) {
+      String16 streamId =
+          String16::fromInteger(m_nextWasmDisassemblyStreamId++);
+      *out_streamId = streamId;
+      m_wasmDisassemblies[streamId] = std::move(collector);
+    } else {
+      *out_streamId = "";
+    }
+  }
   return Response::Success();
 #else
   return Response::ServerError("WebAssembly is disabled");
@@ -1155,8 +1238,20 @@ Response V8DebuggerAgentImpl::nextWasmDissassemblyChunk(
     std::unique_ptr<protocol::Array<String16>>* out_lines,
     std::unique_ptr<protocol::Array<int>>* out_bytecodeOffsets) {
 #if V8_ENABLE_WEBASSEMBLY
-  *out_lines = std::make_unique<protocol::Array<String16>>();
-  *out_bytecodeOffsets = std::make_unique<protocol::Array<int>>();
+  if (!enabled()) return Response::ServerError(kDebuggerNotEnabled);
+  auto it = m_wasmDisassemblies.find(in_streamId);
+  if (it == m_wasmDisassemblies.end() || !it->second->HasNextChunk()) {
+    return Response::ServerError("No chunks available for stream " +
+                                 in_streamId.utf8());
+  }
+  DisassemblyChunk chunk(it->second->NextChunk());
+  *out_lines =
+      std::make_unique<protocol::Array<String16>>(std::move(chunk.lines));
+  *out_bytecodeOffsets =
+      std::make_unique<protocol::Array<int>>(std::move(chunk.lineOffsets));
+  if (!it->second->HasNextChunk()) {
+    m_wasmDisassemblies.erase(it);
+  }
   return Response::Success();
 #else
   return Response::ServerError("WebAssembly is disabled");

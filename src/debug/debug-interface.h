@@ -234,6 +234,13 @@ class V8_EXPORT_PRIVATE Script {
   bool SetInstrumentationBreakpoint(BreakpointId* id) const;
 };
 
+class DisassemblyCollector {
+ public:
+  virtual void ReserveLineCount(size_t count) = 0;
+  virtual void AddLine(const char* src, size_t length,
+                       uint32_t bytecode_offset) = 0;
+};
+
 #if V8_ENABLE_WEBASSEMBLY
 // Specialization for wasm Scripts.
 class WasmScript : public Script {
@@ -248,6 +255,11 @@ class WasmScript : public Script {
 
   std::pair<int, int> GetFunctionRange(int function_index) const;
   int GetContainingFunction(int byte_offset) const;
+  // For N functions, {starts} will have N+1 entries: the last is the end of
+  // the N-th function.
+  void GetAllFunctionStarts(std::vector<int>& starts) const;
+
+  void Disassemble(DisassemblyCollector* collector);
 
   uint32_t GetFunctionHash(int function_index);
 
