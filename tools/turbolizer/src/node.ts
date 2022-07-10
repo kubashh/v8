@@ -8,6 +8,7 @@ import { GraphEdge } from "./phases/graph-phase/graph-edge";
 import { TurboshaftGraphEdge } from "./phases/turboshaft-graph-phase/turboshaft-graph-edge";
 import { TurboshaftGraphNode } from "./phases/turboshaft-graph-phase/turboshaft-graph-node";
 import { TurboshaftGraphBlock } from "./phases/turboshaft-graph-phase/turboshaft-graph-block";
+import { LayoutType } from "./phases/phase";
 
 export abstract class Node<EdgeType extends GraphEdge | TurboshaftGraphEdge<TurboshaftGraphNode
   | TurboshaftGraphBlock>> {
@@ -23,7 +24,7 @@ export abstract class Node<EdgeType extends GraphEdge | TurboshaftGraphEdge<Turb
   y: number;
   labelBox: { width: number, height: number };
 
-  public abstract getHeight(extendHeight: boolean): number;
+  public abstract getHeight(extendHeight: boolean, layoutType?: LayoutType): number;
   public abstract getWidth(): number;
 
   constructor(id: number, displayLabel?: string) {
@@ -92,8 +93,8 @@ export abstract class Node<EdgeType extends GraphEdge | TurboshaftGraphEdge<Turb
       (index % 4) * C.MINIMUM_EDGE_SEPARATION - C.DEFAULT_NODE_BUBBLE_RADIUS;
   }
 
-  public getOutputApproach(showTypes: boolean): number {
-    return this.y + this.outputApproach + this.getHeight(showTypes) +
+  public getOutputApproach(extendHeight: boolean): number {
+    return this.y + this.outputApproach + this.getHeight(extendHeight) +
       + C.DEFAULT_NODE_BUBBLE_RADIUS;
   }
 
