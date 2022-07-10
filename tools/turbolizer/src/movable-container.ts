@@ -4,6 +4,7 @@
 
 import { GraphPhase } from "./phases/graph-phase/graph-phase";
 import { TurboshaftGraphPhase } from "./phases/turboshaft-graph-phase/turboshaft-graph-phase";
+import { LayoutType } from "./phases/phase";
 
 export abstract class MovableContainer<GraphPhaseType extends GraphPhase | TurboshaftGraphPhase> {
   graphPhase: GraphPhaseType;
@@ -16,7 +17,7 @@ export abstract class MovableContainer<GraphPhaseType extends GraphPhase | Turbo
   width: number;
   height: number;
 
-  public abstract redetermineGraphBoundingBox(extendHeight: boolean):
+  public abstract redetermineGraphBoundingBox(extendHeight: boolean, layoutType?: LayoutType):
     [[number, number], [number, number]];
 
   constructor(graphPhase: GraphPhaseType) {
