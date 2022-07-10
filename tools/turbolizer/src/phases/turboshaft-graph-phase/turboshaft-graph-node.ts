@@ -7,6 +7,7 @@ import { measureText } from "../../common/util";
 import { TurboshaftGraphEdge } from "./turboshaft-graph-edge";
 import { TurboshaftGraphBlock } from "./turboshaft-graph-block";
 import { Node } from "../../node";
+import { LayoutType } from "../phase";
 
 export class TurboshaftGraphNode extends Node<TurboshaftGraphEdge<TurboshaftGraphNode>> {
   title: string;
@@ -26,15 +27,16 @@ export class TurboshaftGraphNode extends Node<TurboshaftGraphEdge<TurboshaftGrap
     this.visible = true;
   }
 
-  public getHeight(showProperties: boolean): number {
-    if (this.properties && showProperties) {
+  public getHeight(showProperties: boolean, layoutType: LayoutType): number {
+    if (this.properties && showProperties && layoutType != LayoutType.Movable) {
       return this.labelBox.height + this.propertiesBox.height;
     }
     return this.labelBox.height;
   }
 
   public getWidth(): number {
-    return Math.max(this.inputs.length * C.NODE_INPUT_WIDTH, this.labelBox.width);
+    return Math.max(this.inputs.length * C.NODE_INPUT_WIDTH, this.labelBox.width)
+      + 2 * C.TURBOSHAFT_NODE_CONTENT_INDENT;
   }
 
   public initDisplayLabel() {
@@ -51,7 +53,7 @@ export class TurboshaftGraphNode extends Node<TurboshaftGraphEdge<TurboshaftGrap
       title += `\nOutputs: ${this.outputs.map(i => i.target.id).join(", ")}`;
     }
     const opPropertiesStr = this.properties.length > 0 ? this.properties : "No op properties";
-    return title + `\n${opPropertiesStr}`;
+    return `${title}\n${opPropertiesStr}`;
   }
 
   public getInlineLabel(): string {
