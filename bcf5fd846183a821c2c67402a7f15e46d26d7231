@@ -16,6 +16,120 @@
       "message": "PTAL",
       "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "307ccfd8_b0eddf8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "lgtm with nits and suggestions",
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "160dc581_c200e09d",
+        "filename": "src/builtins/array-to-spliced.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "I think we can skip initializing FixedDoubleArrays because GC will not look at the raw data anyway.",
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "add7c6c0_f99e2da1",
+        "filename": "src/builtins/array-to-spliced.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "As an alternative approach, please consider allocating the JSArray later once all the elements are initialized.",
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6701e487_b6ad08b7",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4758,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "This could just be a\n  TNode\u003cIntPtrT\u003e start\nwhich you could pass as IntPtrConstant(0) when start is not available...",
+      "range": {
+        "startLine": 4758,
+        "startChar": 4,
+        "endLine": 4758,
+        "endChar": 40
+      },
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5c9e5df_c882a51a",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "... because the offset computation is able to benefit from constant parameters.",
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "481bffde_877da5ca",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4788,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-10T12:06:50Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 4788,
+        "startChar": 35,
+        "endLine": 4788,
+        "endChar": 71
+      },
+      "revId": "bcf5fd846183a821c2c67402a7f15e46d26d7231",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
