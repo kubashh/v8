@@ -3943,6 +3943,7 @@ void Shell::RunShell(Isolate* isolate) {
   while (true) {
     HandleScope inner_scope(isolate);
     printf("d8> ");
+    fflush(stdout);
     Local<String> input = Shell::ReadFromStdin(isolate);
     if (input.IsEmpty()) break;
     ExecuteString(isolate, input, name, kPrintResult, kReportExceptions,
