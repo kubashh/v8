@@ -52,6 +52,7 @@ struct DecompressionAnalyzer : AnalyzerBase {
     return NeedsDecompression(graph.Index(op));
   }
   bool MarkAsNeedsDecompression(OpIndex op) {
+    
     return needs_decompression[op] = true;
   }
 
