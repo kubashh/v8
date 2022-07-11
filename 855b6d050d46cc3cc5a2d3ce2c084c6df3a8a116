@@ -16,6 +16,69 @@
       "message": "Refactored as suggested. Two things missing if we like this idea:\n1. Comment introducing ChunkObjectRange\n2. Tests",
       "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825a26ce_9e1ac8ef",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-11T15:35:36Z",
+      "side": 1,
+      "message": "Not for this CL: We have more iterators (`SpaceIterator`, `PagedSpaceIterator`, `HeapObjectIterator`, ...). \n\nMaybe those can move to a comon place in e.g. heap/iterators.h.",
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf5f281f_3e5716c5",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-11T15:35:36Z",
+      "side": 1,
+      "message": "`BasicMemorychunkObjectRange` or why not just `ObjectRange`? The ctor tells us how it is initialized.",
+      "range": {
+        "startLine": 381,
+        "startChar": 6,
+        "endLine": 381,
+        "endChar": 22
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea25d9df_52bbe111",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-11T15:35:36Z",
+      "side": 1,
+      "message": "`\u003d kNullAddress` and you can default the first ctor.",
+      "range": {
+        "startLine": 413,
+        "startChar": 31,
+        "endLine": 413,
+        "endChar": 32
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
