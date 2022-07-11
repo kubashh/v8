@@ -1127,6 +1127,10 @@ class Heap {
     return incremental_marking_.get();
   }
 
+  IncrementalMarking* minor_incremental_marking() const {
+    return minor_incremental_marking_.get();
+  }
+
   MarkingBarrier* marking_barrier() const { return marking_barrier_.get(); }
 
   // ===========================================================================
@@ -1135,6 +1139,10 @@ class Heap {
 
   ConcurrentMarking* concurrent_marking() const {
     return concurrent_marking_.get();
+  }
+
+  ConcurrentMarking* minor_concurrent_marking() const {
+    return minor_concurrent_marking_.get();
   }
 
   // The runtime uses this function to notify potentially unsafe object layout
@@ -2327,7 +2335,9 @@ class Heap {
 
   std::unique_ptr<MemoryAllocator> memory_allocator_;
   std::unique_ptr<IncrementalMarking> incremental_marking_;
+  std::unique_ptr<IncrementalMarking> minor_incremental_marking_;
   std::unique_ptr<ConcurrentMarking> concurrent_marking_;
+  std::unique_ptr<ConcurrentMarking> minor_concurrent_marking_;
   std::unique_ptr<GCIdleTimeHandler> gc_idle_time_handler_;
   std::unique_ptr<MemoryMeasurement> memory_measurement_;
   std::unique_ptr<MemoryReducer> memory_reducer_;
