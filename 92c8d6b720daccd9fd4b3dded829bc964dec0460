@@ -16,6 +16,57 @@
       "message": "Toon, could you PTAL? Thanks!",
       "revId": "92c8d6b720daccd9fd4b3dded829bc964dec0460",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76ca10a_2576df32",
+        "filename": "include/v8-date.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-07-11T10:48:02Z",
+      "side": 1,
+      "message": "Nit: Add a comment explaining that this matches the toISOString() method on the Date.prototype.",
+      "revId": "92c8d6b720daccd9fd4b3dded829bc964dec0460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7717695d_72deb7ac",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 7277,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-07-11T10:48:02Z",
+      "side": 1,
+      "message": "The scope shouldn\u0027t be the `SymbolObject` I guess, and also not method `New`.",
+      "revId": "92c8d6b720daccd9fd4b3dded829bc964dec0460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b085eedd_e6e2b5c7",
+        "filename": "src/date/date.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-07-11T10:48:02Z",
+      "side": 1,
+      "message": "For consistency, let\u0027s call this `kISODateAndTime`.",
+      "revId": "92c8d6b720daccd9fd4b3dded829bc964dec0460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
