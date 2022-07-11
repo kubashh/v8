@@ -285,8 +285,6 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
   V(harmony_weak_refs_with_cleanup_some,                                       \
     "harmony weak references with FinalizationRegistry.prototype.cleanupSome") \
   V(harmony_import_assertions, "harmony import assertions")                    \
-  V(harmony_rab_gsab,                                                          \
-    "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer")                \
   V(harmony_temporal, "Temporal")                                              \
   V(harmony_shadow_realm, "harmony ShadowRealm")                               \
   V(harmony_struct, "harmony structs, shared structs, and shared arrays")      \
@@ -313,12 +311,15 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
+// --harmony-rab-gsab is enabled temporarily for fuzzing.
 #define HARMONY_SHIPPING_BASE(V)                                      \
   V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")           \
   V(harmony_atomics, "harmony atomics")                               \
   V(harmony_object_has_own, "harmony Object.hasOwn")                  \
   V(harmony_class_static_blocks, "harmony static initializer blocks") \
-  V(harmony_array_find_last, "harmony array find last helpers")
+  V(harmony_array_find_last, "harmony array find last helpers")       \
+  V(harmony_rab_gsab,                                                 \
+    "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
