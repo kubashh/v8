@@ -77,7 +77,6 @@ class V8_EXPORT_PRIVATE MarkingWorklists {
   static const Address kOtherContext = 8;
 
   MarkingWorklists() = default;
-  ~MarkingWorklists();
 
   // Calls the specified callback on each element of the deques and replaces
   // the element with the result of the callback. If the callback returns
@@ -150,7 +149,6 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
   Local(
       MarkingWorklists* global,
       std::unique_ptr<CppMarkingState> cpp_marking_state = kNoCppMarkingState);
-  ~Local();
 
   inline void Push(HeapObject object);
   inline bool Pop(HeapObject* object);
@@ -200,7 +198,7 @@ class V8_EXPORT_PRIVATE MarkingWorklists::Local {
   MarkingWorklist::Local active_;
   Address active_context_;
   MarkingWorklist::Local* active_owner_;
-  bool is_per_context_mode_;
+  bool is_per_context_mode_ = false;
   std::unordered_map<Address, std::unique_ptr<MarkingWorklist::Local>>
       worklist_by_context_;
 
