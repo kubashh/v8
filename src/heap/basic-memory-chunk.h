@@ -378,6 +378,57 @@ DEFINE_OPERATORS_FOR_FLAGS(BasicMemoryChunk::MainThreadFlags)
 
 static_assert(std::is_standard_layout<BasicMemoryChunk>::value);
 
+class ChunkObjectRange {
+ public:
+  class iterator : base::iterator<std::forward_iterator_tag, HeapObject> {
+   public:
+    inline iterator();
+
+    HeapObject operator*() const { return heap_object_; }
+    const HeapObject* operator->() const { return &heap_object_; }
+
+    bool operator==(iterator other) const {
+      return heap_object_ == other.heap_object_;
+    }
+    bool operator!=(iterator other) const { return !(*this == other); }
+
+    inline iterator& operator++();
+    inline iterator operator++(int);
+
+    Address base() const { return heap_object_.address(); }
+
+   private:
+    inline iterator(PtrComprCageBase cage_base, Address ptr);
+
+    PtrComprCageBase cage_base() const {
+#if V8_COMPRESS_POINTERS
+      return cage_base_;
+#else
+      return PtrComprCageBase{};
+#endif  // V8_COMPRESS_POINTERS
+    }
+
+    HeapObject heap_object_;
+#if V8_COMPRESS_POINTERS
+    PtrComprCageBase cage_base_;
+#endif  // V8_COMPRESS_POINTERS
+
+    friend class ChunkObjectRange;
+  };
+
+  inline ChunkObjectRange(PtrComprCageBase cage_base,
+                          const BasicMemoryChunk* chunk);
+  inline ChunkObjectRange(PtrComprCageBase cage_base,
+                          const BasicMemoryChunk* chunk, Address ptr);
+
+  inline iterator begin() const { return begin_; }
+  inline iterator end() const { return end_; }
+
+ private:
+  const iterator begin_;
+  const iterator end_;
+};
+
 }  // namespace internal
 }  // namespace v8
 

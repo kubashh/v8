@@ -21,7 +21,7 @@
 #include "src/execution/vm-state-inl.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/array-buffer-sweeper.h"
-#include "src/heap/basic-memory-chunk.h"
+#include "src/heap/basic-memory-chunk-inl.h"
 #include "src/heap/code-object-registry.h"
 #include "src/heap/concurrent-allocator.h"
 #include "src/heap/evacuation-allocator-inl.h"
@@ -2064,80 +2064,87 @@ void MarkCompactCollector::MarkRoots(RootVisitor* root_visitor,
 }
 
 #ifdef V8_ENABLE_INNER_POINTER_RESOLUTION_MB
-Address MarkCompactCollector::FindBasePtrForMarking(Address maybe_inner_ptr) {
-  // TODO(v8:12851): If this implementation is kept:
-  // 1. This function will have to be refactored. Most of the bit hacking
-  // belongs to some reverse-iterator abstraction for bitmaps.
-  // 2. Unit tests will have to be added.
-  const Page* page = Page::FromAddress(maybe_inner_ptr);
-  Bitmap* bitmap = page->marking_bitmap<AccessMode::NON_ATOMIC>();
-  MarkBit::CellType* cells = bitmap->cells();
-  uint32_t index = page->AddressToMarkbitIndex(maybe_inner_ptr);
+namespace {
+
+// This utility function returns the highest address in the chunk that is lower
+// than maybe_inner_ptr, has its markbit set, and whose previous address (if it
+// exists) does not have its markbit set. This address is guaranteed to be the
+// start of a valid object in the chunk. In case the markbit corresponding to
+// maybe_inner_ptr is set, the function bails out and returns kNullAddress.
+Address FindPreviousMarkedAddress(const MemoryChunk* chunk,
+                                  Address maybe_inner_ptr) {
+  auto* bitmap = chunk->marking_bitmap<AccessMode::NON_ATOMIC>();
+  const MarkBit::CellType* cells = bitmap->cells();
+  uint32_t index = chunk->AddressToMarkbitIndex(maybe_inner_ptr);
   unsigned int cell_index = Bitmap::IndexToCell(index);
   MarkBit::CellType mask = 1u << Bitmap::IndexInCell(index);
   MarkBit::CellType cell = cells[cell_index];
-  // If the markbit is set, then we have an object that does not need be marked.
+  // If the markbit is already set, bail out.
   if ((cell & mask) != 0) return kNullAddress;
   // Clear the bits corresponding to higher addresses in the cell.
   cell &= ((~static_cast<MarkBit::CellType>(0)) >>
            (Bitmap::kBitsPerCell - Bitmap::IndexInCell(index) - 1));
-  // Find the start of a valid object by traversing the bitmap backwards, until
-  // we find a markbit that is set and whose previous markbit (if it exists) is
-  // unset.
-  uint32_t object_index;
-  // Iterate backwards to find a cell with any set markbit.
+  // Traverse the bitmap backwards, until we find a markbit that is set and
+  // whose previous markbit (if it exists) is unset.
+  // First, iterate backwards to find a cell with any set markbit.
   while (cell == 0 && cell_index > 0) cell = cells[--cell_index];
   if (cell == 0) {
-    // There is no cell with a set markbit, we reached the start of the page.
-    object_index = 0;
-  } else {
-    uint32_t leading_zeros = base::bits::CountLeadingZeros(cell);
-    uint32_t leftmost_ones =
-        base::bits::CountLeadingZeros(~(cell << leading_zeros));
-    uint32_t index_of_last_leftmost_one =
-        Bitmap::kBitsPerCell - leading_zeros - leftmost_ones;
-    if (index_of_last_leftmost_one > 0) {
-      // The leftmost contiguous sequence of set bits does not reach the start
-      // of the cell.
-      object_index =
-          cell_index * Bitmap::kBitsPerCell + index_of_last_leftmost_one;
-    } else {
-      // The leftmost contiguous sequence of set bits reaches the start of the
-      // cell. We must keep traversing backwards until we find the first unset
-      // markbit.
-      if (cell_index == 0) {
-        object_index = 0;
-      } else {
-        // Iterate backwards to find a cell with any unset markbit.
-        do {
-          cell = cells[--cell_index];
-        } while (~cell == 0 && cell_index > 0);
-        if (~cell == 0) {
-          // There is no cell with a clear markbit, we reached the start of the
-          // page.
-          object_index = 0;
-        } else {
-          uint32_t leading_ones = base::bits::CountLeadingZeros(~cell);
-          uint32_t index_of_last_leading_one =
-              Bitmap::kBitsPerCell - leading_ones;
-          DCHECK_LT(0, index_of_last_leading_one);
-          object_index =
-              cell_index * Bitmap::kBitsPerCell + index_of_last_leading_one;
-        }
-      }
-    }
+    DCHECK_EQ(0, cell_index);
+    // We have reached the start of the chunk.
+    return chunk->MarkbitIndexToAddress(0);
   }
+  // We have found such a cell.
+  uint32_t leading_zeros = base::bits::CountLeadingZeros(cell);
+  uint32_t leftmost_ones =
+      base::bits::CountLeadingZeros(~(cell << leading_zeros));
+  uint32_t index_of_last_leftmost_one =
+      Bitmap::kBitsPerCell - leading_zeros - leftmost_ones;
+  // If the leftmost contiguous sequence of set bits does not reach the start
+  // of the cell, we found it.
+  if (index_of_last_leftmost_one > 0) {
+    return chunk->MarkbitIndexToAddress(cell_index * Bitmap::kBitsPerCell +
+                                        index_of_last_leftmost_one);
+  }
+  // The leftmost contiguous sequence of set bits reaches the start of the
+  // cell. We must keep traversing backwards until we find the first unset
+  // markbit.
+  if (cell_index == 0) {
+    // We have reached the start of the chunk.
+    return chunk->MarkbitIndexToAddress(0);
+  }
+  // Iterate backwards to find a cell with any unset markbit.
+  do {
+    cell = cells[--cell_index];
+  } while (~cell == 0 && cell_index > 0);
+  if (~cell == 0) {
+    DCHECK_EQ(0, cell_index);
+    // We have reached the start of the chunk.
+    return chunk->MarkbitIndexToAddress(0);
+  }
+  // We have found such a cell.
+  uint32_t leading_ones = base::bits::CountLeadingZeros(~cell);
+  uint32_t index_of_last_leading_one = Bitmap::kBitsPerCell - leading_ones;
+  DCHECK_LT(0, index_of_last_leading_one);
+  return chunk->MarkbitIndexToAddress(cell_index * Bitmap::kBitsPerCell +
+                                      index_of_last_leading_one);
+}
+
+}  // namespace
+
+Address MarkCompactCollector::FindBasePtrForMarking(Address maybe_inner_ptr) {
+  // TODO(v8:12851): Unit tests will have to be added.
+  const Page* page = Page::FromAddress(maybe_inner_ptr);
+  Address previous_marked_object =
+      FindPreviousMarkedAddress(page, maybe_inner_ptr);
+  // If the markbit is set, then we have an object that does not need be marked.
+  if (previous_marked_object == kNullAddress) return kNullAddress;
   // Iterate through the objects in the page forwards, until we find the object
   // containing maybe_inner_pointer.
-  Address base_ptr = page->MarkbitIndexToAddress(object_index);
-  const Address limit = page->area_end();
   PtrComprCageBase cage_base{page->heap()->isolate()};
-  while (base_ptr < limit) {
-    if (maybe_inner_ptr < base_ptr) break;
-    const int size = HeapObject::FromAddress(base_ptr).Size(cage_base);
-    if (maybe_inner_ptr < base_ptr + size) return base_ptr;
-    base_ptr += size;
-    DCHECK_LE(base_ptr, limit);
+  for (auto obj : ChunkObjectRange(cage_base, page, previous_marked_object)) {
+    if (maybe_inner_ptr < obj.address()) break;
+    if (maybe_inner_ptr < obj.address() + obj.Size(cage_base))
+      return obj.address();
   }
   return kNullAddress;
 }
