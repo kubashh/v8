@@ -8,14 +8,15 @@
 
 #include "src/base/optional.h"
 #include "src/base/platform/mutex.h"
+#include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/execution/vm-state-inl.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/array-buffer-sweeper.h"
+#include "src/heap/basic-memory-chunk-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/incremental-marking.h"
 #include "src/heap/memory-allocator.h"
-#include "src/heap/memory-chunk-inl.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/paged-spaces-inl.h"
 #include "src/heap/read-only-heap.h"
@@ -33,8 +34,8 @@ namespace internal {
 
 PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
                                                    const PagedSpaceBase* space)
-    : cur_addr_(kNullAddress),
-      cur_end_(kNullAddress),
+    : cur_page_iter_(),
+      cur_page_end_(),
       space_(space),
       page_range_(space->first_page(), nullptr),
       current_page_(page_range_.begin())
@@ -50,8 +51,8 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
 PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
                                                    const PagedSpaceBase* space,
                                                    const Page* page)
-    : cur_addr_(kNullAddress),
-      cur_end_(kNullAddress),
+    : cur_page_iter_(),
+      cur_page_end_(),
       space_(space),
       page_range_(page),
       current_page_(page_range_.begin())
@@ -63,37 +64,16 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
   heap->MakeHeapIterable();
 }
 
-PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
-                                                   const PagedSpace* space,
-                                                   const Page* page,
-                                                   Address start_address)
-    : cur_addr_(start_address),
-      cur_end_(page->area_end()),
-      space_(space),
-      page_range_(page, page),
-      current_page_(page_range_.begin())
-#if V8_COMPRESS_POINTERS
-      ,
-      cage_base_(heap->isolate())
-#endif  // V8_COMPRESS_POINTERS
-{
-  heap->MakeHeapIterable();
-  DCHECK_IMPLIES(space->IsInlineAllocationEnabled(),
-                 !page->Contains(space->top()));
-  DCHECK(page->Contains(start_address));
-  DCHECK(page->SweepingDone());
-}
-
 // We have hit the end of the page and should advance to the next block of
 // objects.  This happens at the end of the page.
 bool PagedSpaceObjectIterator::AdvanceToNextPage() {
-  DCHECK_EQ(cur_addr_, cur_end_);
+  DCHECK_EQ(cur_page_iter_, cur_page_end_);
   if (current_page_ == page_range_.end()) return false;
   const Page* cur_page = *(current_page_++);
-
-  cur_addr_ = cur_page->area_start();
-  cur_end_ = cur_page->area_end();
   DCHECK(cur_page->SweepingDone());
+  ChunkObjectRange cur_range(cage_base(), cur_page);
+  cur_page_iter_ = cur_range.begin();
+  cur_page_end_ = cur_range.end();
   return true;
 }
 
