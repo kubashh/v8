@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a4a8c4_5b4487d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "Refactored as suggested. Two things missing if we like this idea:\n1. Comment introducing ChunkObjectRange\n2. Tests",
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -154,6 +154,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c03fc5_068ef7c6",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "Ack. This is now a utility function.",
+      "parentUuid": "79a4125f_8c703df2",
+      "range": {
+        "startLine": 144,
+        "startChar": 23,
+        "endLine": 144,
+        "endChar": 28
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9aa01004_7103e7e1",
@@ -215,6 +239,30 @@
       "side": 1,
       "message": "If you later try to convert the pointer to a HeapObject, then returning the same pointer or index wouldn\u0027t work since it might be an inner pointer within a black allocation area.\nI think it would be better to keep this method coupled to the usage and not generalize it.",
       "parentUuid": "160855b9_924e37e3",
+      "range": {
+        "startLine": 151,
+        "startChar": 33,
+        "endLine": 151,
+        "endChar": 45
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f814b2_7eae6e24",
+        "filename": "src/heap/marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "It\u0027s now a utility function in `mark-compact.cc`, renamed to `FindPreviousMarkedAddress` and preceded by a comment explaining that it bails out if the given address is already marked.",
+      "parentUuid": "1022e619_3bcae052",
       "range": {
         "startLine": 151,
         "startChar": 33,
@@ -403,6 +451,30 @@
       "side": 1,
       "message": "This is meant to be a low-level iterator so I thought it\u0027s OK to work with addresses. If we combine it with Michael\u0027s idea, we\u0027ll have a low-level PageObjectIterator to be used only when we know it\u0027s safe. This could again take an address as parameter. It could also take a HeapObject, but each conversion adds a pointer tagging/detagging.",
       "parentUuid": "01b6cb4c_6fb56b2e",
+      "range": {
+        "startLine": 56,
+        "startChar": 66,
+        "endLine": 56,
+        "endChar": 69
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1451fcb4_3b1c64d7",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "I\u0027m leaving this open, to remember to add a comment to `ChunkObjectRange`, once the interface is finalized.",
+      "parentUuid": "3ea76796_738a486e",
       "range": {
         "startLine": 56,
         "startChar": 66,
@@ -605,6 +677,54 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d23780ea_54378c6b",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this is relevant anymore. The cage base is explicitly passed as a parameter from the call site using the iterator. I\u0027m opening this comment again, in case you think this `DCHECK` should be introduced there.",
+      "parentUuid": "282a0edf_cf82ae98",
+      "range": {
+        "startLine": 60,
+        "startChar": 17,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "645a8b55_092f2b6a",
+        "filename": "src/heap/memory-chunk-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f110b5bf_ed85e1fe",
+      "range": {
+        "startLine": 60,
+        "startChar": 6,
+        "endLine": 60,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2982000a_bf2ae7f2",
         "filename": "src/heap/memory-chunk.h",
         "patchSetId": 1
@@ -664,6 +784,30 @@
       "side": 1,
       "message": "Yeah, let\u0027s use whatever intermediate class fits.",
       "parentUuid": "6c527c68_6940facc",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 223,
+        "endChar": 16
+      },
+      "revId": "728600bfd1f521214adea8fa15ff6137071a41f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b3484d3_ae25dc9c",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-11T14:54:31Z",
+      "side": 1,
+      "message": "Done. There\u0027s a `ChunkObjectRange` in `basic-memory-chunk.h`.",
+      "parentUuid": "e20dd560_7596cf27",
       "range": {
         "startLine": 223,
         "startChar": 8,
