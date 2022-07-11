@@ -110,6 +110,30 @@
       },
       "revId": "a9ae26e1c00142e4c08846e29757621a65299adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e2a2f8_275e79df",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 12
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-07-11T08:52:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f53176eb_5f3391ec",
+      "range": {
+        "startLine": 1678,
+        "startChar": 0,
+        "endLine": 1691,
+        "endChar": 3
+      },
+      "revId": "a9ae26e1c00142e4c08846e29757621a65299adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
