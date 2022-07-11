@@ -280,12 +280,12 @@ class MainMarkingVisitor final
   MainMarkingVisitor(MarkingState* marking_state,
                      MarkingWorklists::Local* local_marking_worklists,
                      WeakObjects::Local* local_weak_objects, Heap* heap,
-                     unsigned mark_compact_epoch,
+                     CollectorBase* collector, unsigned mark_compact_epoch,
                      base::EnumSet<CodeFlushMode> code_flush_mode,
                      bool embedder_tracing_enabled,
                      bool should_keep_ages_unchanged)
       : MarkingVisitorBase<MainMarkingVisitor<MarkingState>, MarkingState>(
-            local_marking_worklists, local_weak_objects, heap,
+            local_marking_worklists, local_weak_objects, heap, collector,
             mark_compact_epoch, code_flush_mode, embedder_tracing_enabled,
             should_keep_ages_unchanged),
         marking_state_(marking_state),
@@ -398,6 +398,8 @@ class CollectorBase {
   }
 
   virtual void Finish() = 0;
+
+  bool IsMajorMC();
 
  private:
   virtual void MarkLiveObjects() = 0;
