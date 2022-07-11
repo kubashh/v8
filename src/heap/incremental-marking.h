@@ -85,7 +85,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
 
   V8_INLINE void RestartIfNotMarking();
 
-  IncrementalMarking(Heap* heap, WeakObjects* weak_objects);
+  IncrementalMarking(Heap* heap, WeakObjects* weak_objects,
+                     CollectorBase* collector);
 
   MarkingState* marking_state() { return &marking_state_; }
   AtomicMarkingState* atomic_marking_state() { return &atomic_marking_state_; }
@@ -103,6 +104,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   bool CollectionRequested() const { return collection_requested_; }
 
   bool CanBeStarted() const;
+
+  base::EnumSet<SkipRoot> GetEnumSet();
 
   void Start(GarbageCollectionReason gc_reason);
   // Returns true if incremental marking was running and false otherwise.
@@ -234,7 +237,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   double CurrentTimeToMarkingTask() const;
 
   Heap* const heap_;
-  MarkCompactCollector* const collector_;
+  CollectorBase* const collector_;
   WeakObjects* weak_objects_;
 
   double start_time_ms_ = 0.0;
