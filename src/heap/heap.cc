@@ -5716,15 +5716,28 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
   promote_young_generation_gc_.reset(new PromoteYoungGenerationGC(this));
   minor_mark_compact_collector_.reset(new MinorMarkCompactCollector(this));
 
-  incremental_marking_.reset(
-      new IncrementalMarking(this, mark_compact_collector_->weak_objects()));
+  incremental_marking_.reset(new IncrementalMarking(
+      this, mark_compact_collector_->weak_objects(), mark_compact_collector()));
+
+  minor_incremental_marking_.reset(
+      new IncrementalMarking(this, mark_compact_collector_->weak_objects(),
+                             minor_mark_compact_collector()));
 
   if (FLAG_concurrent_marking || FLAG_parallel_marking) {
     concurrent_marking_.reset(new ConcurrentMarking(
         this, mark_compact_collector_->marking_worklists(),
-        mark_compact_collector_->weak_objects()));
+        mark_compact_collector_->weak_objects(), mark_compact_collector()));
+
+    minor_concurrent_marking_.reset(new ConcurrentMarking(
+        this, minor_mark_compact_collector_->marking_worklists(),
+        minor_mark_compact_collector_->weak_objects(),
+        minor_mark_compact_collector()));
   } else {
-    concurrent_marking_.reset(new ConcurrentMarking(this, nullptr, nullptr));
+    concurrent_marking_.reset(
+        new ConcurrentMarking(this, nullptr, nullptr, nullptr));
+
+    minor_concurrent_marking_.reset(
+        new ConcurrentMarking(this, nullptr, nullptr, nullptr));
   }
 
   marking_barrier_.reset(new MarkingBarrier(this));

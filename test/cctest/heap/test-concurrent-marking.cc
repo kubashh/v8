@@ -41,7 +41,7 @@ TEST(ConcurrentMarking) {
   MarkingWorklists marking_worklists;
   WeakObjects weak_objects;
   ConcurrentMarking* concurrent_marking =
-      new ConcurrentMarking(heap, &marking_worklists, &weak_objects);
+      new ConcurrentMarking(heap, &marking_worklists, &weak_objects, collector);
   PublishSegment(marking_worklists.shared(),
                  ReadOnlyRoots(heap).undefined_value());
   concurrent_marking->ScheduleJob();
@@ -64,7 +64,7 @@ TEST(ConcurrentMarkingReschedule) {
   MarkingWorklists marking_worklists;
   WeakObjects weak_objects;
   ConcurrentMarking* concurrent_marking =
-      new ConcurrentMarking(heap, &marking_worklists, &weak_objects);
+      new ConcurrentMarking(heap, &marking_worklists, &weak_objects, collector);
   PublishSegment(marking_worklists.shared(),
                  ReadOnlyRoots(heap).undefined_value());
   concurrent_marking->ScheduleJob();
@@ -91,7 +91,7 @@ TEST(ConcurrentMarkingPreemptAndReschedule) {
   MarkingWorklists marking_worklists;
   WeakObjects weak_objects;
   ConcurrentMarking* concurrent_marking =
-      new ConcurrentMarking(heap, &marking_worklists, &weak_objects);
+      new ConcurrentMarking(heap, &marking_worklists, &weak_objects, collector);
   for (int i = 0; i < 5000; i++)
     PublishSegment(marking_worklists.shared(),
                    ReadOnlyRoots(heap).undefined_value());
