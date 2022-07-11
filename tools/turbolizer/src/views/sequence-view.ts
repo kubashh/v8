@@ -6,6 +6,7 @@ import { createElement } from "../common/util";
 import { TextView } from "./text-view";
 import { RangeView } from "./range-view";
 import { SequencePhase } from "../phases/sequence-phase";
+import { SelectionStorage } from "../selection/selection-storage";
 
 export class SequenceView extends TextView {
   sequence: SequencePhase;
@@ -47,9 +48,9 @@ export class SequenceView extends TextView {
     view.selectionHandler.select(selected, true);
   }
 
-  detachSelection() {
+  detachSelection(): SelectionStorage {
     this.blockSelection.clear();
-    return this.selection.detachSelection();
+    return new SelectionStorage(this.selection.detachSelection());
   }
 
   show() {
@@ -80,7 +81,7 @@ export class SequenceView extends TextView {
     if (this.showRangeView) this.rangeView.onresize();
   }
 
-  initializeContent(sequence, rememberedSelection) {
+  initializeContent(sequence, rememberedSelection: SelectionStorage) {
     this.divNode.innerHTML = '';
     this.sequence = sequence;
     this.searchInfo = [];
@@ -97,7 +98,7 @@ export class SequenceView extends TextView {
     const lastBlock = this.sequence.blocks[this.sequence.blocks.length - 1];
     this.numInstructions = lastBlock.instructions[lastBlock.instructions.length - 1].id + 1;
     this.addRangeView();
-    this.attachSelection(rememberedSelection);
+    this.attachSelection(rememberedSelection?.nodes);
     this.show();
   }
 
@@ -371,5 +372,9 @@ export class SequenceView extends TextView {
       }
     }
     this.selectionHandler.select(select, true);
+  }
+
+  public adaptSelection(selection: SelectionStorage): SelectionStorage {
+    return selection;
   }
 }
