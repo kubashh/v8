@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ab12be_8f76e48a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-11T11:42:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34639859_acfd11a4",
+      "range": {
+        "startLine": 10,
+        "startChar": 30,
+        "endLine": 11,
+        "endChar": 7
+      },
+      "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a91f3417_81bc20d5",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-11T10:28:07Z",
       "side": 1,
       "message": "Stores to const properties are not supported in this code - the code should deopt if it tries to store different value to a const property.\n\nSee \"Do constant value check if necessary\" block in AccessorAssembler::HandleStoreFieldAndReturn().",
+      "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c112545b_2f375819",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-11T11:42:23Z",
+      "side": 1,
+      "message": "Good call, we should at least bail out of this optimisation if the field is const.",
+      "parentUuid": "a91f3417_81bc20d5",
       "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc7af0a9_9726e401",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-11T11:42:23Z",
+      "side": 1,
+      "message": "ah yeah, true, good catch.",
+      "parentUuid": "fcc92574_2600b67c",
+      "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3f93ab9_b95606fb",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-07-11T10:28:07Z",
       "side": 1,
       "message": "Here and below: spurious changes?",
+      "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19953aa7_41c8c40c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-11T11:42:23Z",
+      "side": 1,
+      "message": "Yup, thanks.",
+      "parentUuid": "c3f93ab9_b95606fb",
       "revId": "2a7cebfcddf998400d2fd8e6b6bc9a51d4d2da16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
