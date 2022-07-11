@@ -16,6 +16,24 @@
       "message": "Hi, thanks for the fix!\n\nThis looks harmless, so, lgtm.\n\nHowever, you\u0027ll need to sign the CLA (if you haven\u0027t yet) and add yourself to the AUTHORS file (you can add that change with this CL). See https://v8.dev/docs/contribute .\n\nIf you are already under some corporate CLA, you\u0027ll need to upload the CL with the corresponding corporate e-mail address. (Not sure if it\u0027s enough to change the author of this one, or if you need to create a new one.)",
       "revId": "f71fa290cef3c95dabc30710d163b2b7c444aa91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2482a0f5_381c75d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1548834
+      },
+      "writtenOn": "2022-07-11T09:44:01Z",
+      "side": 1,
+      "message": "Ah! I skipped the AUTHORS file because I thought my change was trivial enough ;) Won\u0027t do in the future! Fixed in the latest set",
+      "parentUuid": "3c237c71_b410a7a2",
+      "revId": "f71fa290cef3c95dabc30710d163b2b7c444aa91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
