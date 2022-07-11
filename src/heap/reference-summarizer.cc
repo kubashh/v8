@@ -104,9 +104,9 @@ ReferenceSummary ReferenceSummary::SummarizeReferencesFrom(Heap* heap,
 
   MainMarkingVisitor<ReferenceSummarizerMarkingState> visitor(
       &marking_state, marking_state.local_marking_worklists(),
-      marking_state.local_weak_objects(), heap, 0 /*mark_compact_epoch*/,
-      {} /*code_flush_mode*/, false /*embedder_tracing_enabled*/,
-      true /*should_keep_ages_unchanged*/);
+      marking_state.local_weak_objects(), heap, heap->mark_compact_collector(),
+      0 /*mark_compact_epoch*/, {} /*code_flush_mode*/,
+      false /*embedder_tracing_enabled*/, true /*should_keep_ages_unchanged*/);
   visitor.Visit(obj.map(heap->isolate()), obj);
 
   return marking_state.DestructivelyRetrieveReferences();
