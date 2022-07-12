@@ -488,6 +488,10 @@ CollectorBase::CollectorBase(
       non_atomic_marking_state_(heap->isolate()),
       sweeping_type_(sweeping_type) {}
 
+bool CollectorBase::IsMajorMC() {
+  return !heap_->IsYoungGenerationCollector(garbage_collector_);
+}
+
 void CollectorBase::VisitObject(HeapObject obj) {
   marking_visitor_->Visit(obj.map(), obj);
 }
@@ -629,7 +633,7 @@ void MarkCompactCollector::StartMarking() {
   local_weak_objects_ = std::make_unique<WeakObjects::Local>(weak_objects());
   marking_visitor_ = std::make_unique<MarkingVisitor>(
       marking_state(), local_marking_worklists(), local_weak_objects_.get(),
-      heap_, epoch(), code_flush_mode(),
+      heap_, this, epoch(), code_flush_mode(),
       heap_->local_embedder_heap_tracer()->InUse(),
       heap_->ShouldCurrentGCKeepAgesUnchanged());
 // Marking bits are cleared by the sweeper.

@@ -83,13 +83,22 @@ MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitPointersImpl(
     typename TSlot::TObject object =
         slot.Relaxed_Load(ObjectVisitorWithCageBases::cage_base());
     HeapObject heap_object;
-    if (object.GetHeapObjectIfStrong(&heap_object)) {
-      // If the reference changes concurrently from strong to weak, the write
-      // barrier will treat the weak reference as strong, so we won't miss the
-      // weak reference.
-      ProcessStrongHeapObject(host, THeapObjectSlot(slot), heap_object);
-    } else if (TSlot::kCanBeWeak && object.GetHeapObjectIfWeak(&heap_object)) {
-      ProcessWeakHeapObject(host, THeapObjectSlot(slot), heap_object);
+    if (collector_->IsMajorMC()) {
+      if (object.GetHeapObjectIfStrong(&heap_object)) {
+        // If the reference changes concurrently from strong to weak, the write
+        // barrier will treat the weak reference as strong, so we won't miss the
+        // weak reference.
+        ProcessStrongHeapObject(host, THeapObjectSlot(slot), heap_object);
+      } else if (TSlot::kCanBeWeak &&
+                 object.GetHeapObjectIfWeak(&heap_object)) {
+        ProcessWeakHeapObject(host, THeapObjectSlot(slot), heap_object);
+      }
+    } else {
+      // In MinorMC, we treat all weak references as strong.
+      if (Heap::InYoungGeneration(object)) {
+        object.GetHeapObject(&heap_object);
+        ProcessStrongHeapObject(host, THeapObjectSlot(slot), heap_object);
+      }
     }
   }
 }
@@ -102,11 +111,19 @@ MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitCodePointerImpl(
   Object object =
       slot.Relaxed_Load(ObjectVisitorWithCageBases::code_cage_base());
   HeapObject heap_object;
-  if (object.GetHeapObjectIfStrong(&heap_object)) {
-    // If the reference changes concurrently from strong to weak, the write
-    // barrier will treat the weak reference as strong, so we won't miss the
-    // weak reference.
-    ProcessStrongHeapObject(host, HeapObjectSlot(slot), heap_object);
+  if (collector_->IsMajorMC()) {
+    if (object.GetHeapObjectIfStrong(&heap_object)) {
+      // If the reference changes concurrently from strong to weak, the write
+      // barrier will treat the weak reference as strong, so we won't miss the
+      // weak reference.
+      ProcessStrongHeapObject(host, HeapObjectSlot(slot), heap_object);
+    }
+  } else {
+    // In MinorMC, we treat all weak references as strong.
+    if (Heap::InYoungGeneration(object)) {
+      object.GetHeapObject(&heap_object);
+      ProcessStrongHeapObject(host, HeapObjectSlot(slot), heap_object);
+    }
   }
 }
 
@@ -182,8 +199,8 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitJSFunction(
     local_weak_objects_->baseline_flushing_candidates_local.Push(js_function);
   } else {
     VisitPointer(js_function, js_function.RawField(JSFunction::kCodeOffset));
-    // TODO(mythria): Consider updating the check for ShouldFlushBaselineCode to
-    // also include cases where there is old bytecode even when there is no
+    // TODO(mythria): Consider updating the check for ShouldFlushBaselineCode
+    // to also include cases where there is old bytecode even when there is no
     // baseline code and remove this check here.
     if (IsByteCodeFlushingEnabled(code_flush_mode_) &&
         js_function.NeedsResetDueToFlushedBytecode()) {
@@ -554,9 +571,9 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitMap(Map meta_map,
   int size = Map::BodyDescriptor::SizeOf(meta_map, map);
   size += VisitDescriptorsForMap(map);
 
-  // Mark the pointer fields of the Map. If there is a transitions array, it has
-  // been marked already, so it is fine that one of these fields contains a
-  // pointer to it.
+  // Mark the pointer fields of the Map. If there is a transitions array, it
+  // has been marked already, so it is fine that one of these fields contains
+  // a pointer to it.
   Map::BodyDescriptor::IterateBody(meta_map, map, size, this);
   return size;
 }

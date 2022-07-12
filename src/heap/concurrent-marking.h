@@ -24,6 +24,7 @@
 namespace v8 {
 namespace internal {
 
+class CollecorBase;
 class Heap;
 class Isolate;
 class NonAtomicMarkingState;
@@ -59,7 +60,10 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   static constexpr int kMaxTasks = 7;
 
   ConcurrentMarking(Heap* heap, MarkingWorklists* marking_worklists,
-                    WeakObjects* weak_objects);
+                    CollectorBase* collector);
+
+  ConcurrentMarking(Heap* heap, MarkingWorklists* marking_worklists,
+                    WeakObjects* weak_objects, CollectorBase* collector);
 
   // Schedules asynchronous job to perform concurrent marking at |priority|.
   // Objects in the heap should not be moved while these are active (can be
@@ -112,6 +116,7 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
 
   std::unique_ptr<JobHandle> job_handle_;
   Heap* const heap_;
+  CollectorBase* const collector_;
   MarkingWorklists* const marking_worklists_;
   WeakObjects* const weak_objects_;
   TaskState task_state_[kMaxTasks + 1];
