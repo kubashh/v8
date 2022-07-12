@@ -67,7 +67,7 @@ class CageBaseGlobal final {
 
 class CompressedPointer final {
  public:
-  using Storage = uint32_t;
+  using IntegralType = uint32_t;
 
   V8_INLINE CompressedPointer() : value_(0u) {}
   V8_INLINE explicit CompressedPointer(const void* ptr)
@@ -79,24 +79,26 @@ class CompressedPointer final {
   V8_INLINE const void* Load() const { return Decompress(value_); }
   V8_INLINE const void* LoadAtomic() const {
     return Decompress(
-        reinterpret_cast<const std::atomic<Storage>&>(value_).load(
+        reinterpret_cast<const std::atomic<IntegralType>&>(value_).load(
             std::memory_order_relaxed));
   }
 
   V8_INLINE void Store(const void* ptr) { value_ = Compress(ptr); }
   V8_INLINE void StoreAtomic(const void* value) {
-    reinterpret_cast<std::atomic<Storage>&>(value_).store(
+    reinterpret_cast<std::atomic<IntegralType>&>(value_).store(
         Compress(value), std::memory_order_relaxed);
   }
 
   V8_INLINE void Clear() { value_ = 0u; }
   V8_INLINE bool IsCleared() const { return !value_; }
 
+  V8_INLINE uint32_t GetAsInteger() const { return value_; }
+
   V8_INLINE friend bool operator==(CompressedPointer a, CompressedPointer b) {
     return a.value_ == b.value_;
   }
 
-  static V8_INLINE Storage Compress(const void* ptr) {
+  static V8_INLINE IntegralType Compress(const void* ptr) {
     static_assert(
         SentinelPointer::kSentinelValue == 0b10,
         "The compression scheme relies on the sentinel encoded as 0b10");
@@ -111,14 +113,14 @@ class CompressedPointer final {
 
     const auto uptr = reinterpret_cast<uintptr_t>(ptr);
     // Shift the pointer by one and truncate.
-    auto compressed = static_cast<Storage>(uptr >> 1);
+    auto compressed = static_cast<IntegralType>(uptr >> 1);
     // Normal compressed pointers must have the MSB set.
     CPPGC_DCHECK((!compressed || compressed == kCompressedSentinel) ||
                  (compressed & 0x80000000));
     return compressed;
   }
 
-  static V8_INLINE void* Decompress(Storage ptr) {
+  static V8_INLINE void* Decompress(IntegralType ptr) {
     CPPGC_DCHECK(CageBaseGlobal::IsSet());
     const uintptr_t base = CageBaseGlobal::Get();
     // Treat compressed pointer as signed and cast it to uint64_t, which will
@@ -129,19 +131,19 @@ class CompressedPointer final {
   }
 
  private:
-  static constexpr Storage kCompressedSentinel =
+  static constexpr IntegralType kCompressedSentinel =
       SentinelPointer::kSentinelValue >> 1;
   // All constructors initialize `value_`. Do not add a default value here as it
   // results in a non-atomic write on some builds, even when the atomic version
   // of the constructor is used.
-  Storage value_;
+  IntegralType value_;
 };
 
 #endif  // defined(CPPGC_POINTER_COMPRESSION)
 
 class RawPointer final {
  public:
-  using Storage = uintptr_t;
+  using IntegralType = uintptr_t;
 
   V8_INLINE RawPointer() : ptr_(nullptr) {}
   V8_INLINE explicit RawPointer(const void* ptr) : ptr_(ptr) {}
@@ -161,6 +163,10 @@ class RawPointer final {
   V8_INLINE void Clear() { ptr_ = nullptr; }
   V8_INLINE bool IsCleared() const { return !ptr_; }
 
+  V8_INLINE uintptr_t GetAsInteger() const {
+    return reinterpret_cast<uintptr_t>(ptr_);
+  }
+
   V8_INLINE friend bool operator==(RawPointer a, RawPointer b) {
     return a.ptr_ == b.ptr_;
   }
@@ -175,13 +181,13 @@ class RawPointer final {
 // MemberBase always refers to the object as const object and defers to
 // BasicMember on casting to the right type as needed.
 class MemberBase {
- protected:
+ public:
 #if defined(CPPGC_POINTER_COMPRESSION)
   using RawStorage = CompressedPointer;
 #else   // !defined(CPPGC_POINTER_COMPRESSION)
   using RawStorage = RawPointer;
 #endif  // !defined(CPPGC_POINTER_COMPRESSION)
-
+ protected:
   struct AtomicInitializerTag {};
 
   V8_INLINE MemberBase() = default;
@@ -385,6 +391,10 @@ class BasicMember final : private MemberBase, private CheckingPolicy {
     return reinterpret_cast<const T**>(GetRawSlot());
   }
 
+  V8_INLINE RawStorage GetRawStorage() const {
+    return MemberBase::GetRawStorage();
+  }
+
  private:
   V8_INLINE explicit BasicMember(RawStorage raw) : MemberBase(raw) {
     InitializingWriteBarrier();
@@ -419,14 +429,6 @@ class BasicMember final : private MemberBase, private CheckingPolicy {
   template <typename T1, typename WeaknessTag1, typename WriteBarrierPolicy1,
             typename CheckingPolicy1>
   friend class BasicMember;
-  template <typename T1, typename WeaknessTag1, typename WriteBarrierPolicy1,
-            typename CheckingPolicy1, typename T2, typename WeaknessTag2,
-            typename WriteBarrierPolicy2, typename CheckingPolicy2>
-  friend bool operator==(
-      const BasicMember<T1, WeaknessTag1, WriteBarrierPolicy1, CheckingPolicy1>&
-          member1,
-      const BasicMember<T2, WeaknessTag2, WriteBarrierPolicy2, CheckingPolicy2>&
-          member2);
 };
 
 template <typename T1, typename WeaknessTag1, typename WriteBarrierPolicy1,
@@ -449,6 +451,39 @@ V8_INLINE bool operator!=(
     const BasicMember<T2, WeaknessTag2, WriteBarrierPolicy2, CheckingPolicy2>&
         member2) {
   return !(member1 == member2);
+}
+
+template <typename T, typename WeaknessTag, typename WriteBarrierPolicy,
+          typename CheckingPolicy, typename U>
+V8_INLINE bool operator==(const BasicMember<T, WeaknessTag, WriteBarrierPolicy,
+                                            CheckingPolicy>& member,
+                          U* raw) {
+  // Check compressed pointers.
+  return member.GetRawStorage() == MemberBase::RawStorage(raw);
+}
+
+template <typename T, typename WeaknessTag, typename WriteBarrierPolicy,
+          typename CheckingPolicy, typename U>
+V8_INLINE bool operator!=(const BasicMember<T, WeaknessTag, WriteBarrierPolicy,
+                                            CheckingPolicy>& member,
+                          U* raw) {
+  return !(member == raw);
+}
+
+template <typename T, typename U, typename WeaknessTag,
+          typename WriteBarrierPolicy, typename CheckingPolicy>
+V8_INLINE bool operator==(T* raw,
+                          const BasicMember<U, WeaknessTag, WriteBarrierPolicy,
+                                            CheckingPolicy>& member) {
+  return member == raw;
+}
+
+template <typename T, typename U, typename WeaknessTag,
+          typename WriteBarrierPolicy, typename CheckingPolicy>
+V8_INLINE bool operator!=(T* raw,
+                          const BasicMember<U, WeaknessTag, WriteBarrierPolicy,
+                                            CheckingPolicy>& member) {
+  return !(raw == member);
 }
 
 template <typename T, typename WriteBarrierPolicy, typename CheckingPolicy>
