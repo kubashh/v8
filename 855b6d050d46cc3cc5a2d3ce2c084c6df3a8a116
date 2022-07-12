@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa572358_af642cd1",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "825a26ce_9e1ac8ef",
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf5f281f_3e5716c5",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-07-11T15:35:36Z",
       "side": 1,
       "message": "`BasicMemorychunkObjectRange` or why not just `ObjectRange`? The ctor tells us how it is initialized.",
+      "range": {
+        "startLine": 381,
+        "startChar": 6,
+        "endLine": 381,
+        "endChar": 22
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c933f9_02ae6f59",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf5f281f_3e5716c5",
       "range": {
         "startLine": 381,
         "startChar": 6,
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c31bc7_a47a4e33",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "See related comment in https://crrev.com/c/3749207.\nIt is used there.",
+      "parentUuid": "f6dc1a7f_e29ff8ff",
+      "range": {
+        "startLine": 385,
+        "startChar": 4,
+        "endLine": 385,
+        "endChar": 22
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea25d9df_52bbe111",
@@ -111,6 +177,30 @@
       "writtenOn": "2022-07-11T15:35:36Z",
       "side": 1,
       "message": "`\u003d kNullAddress` and you can default the first ctor.",
+      "range": {
+        "startLine": 413,
+        "startChar": 31,
+        "endLine": 413,
+        "endChar": 32
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a58e13_59086f9c",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea25d9df_52bbe111",
       "range": {
         "startLine": 413,
         "startChar": 31,
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93ca6514_27f86676",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68fab890_d0c18ccf",
+      "range": {
+        "startLine": 2074,
+        "startChar": 8,
+        "endLine": 2074,
+        "endChar": 33
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "571c8a81_8b87def8",
@@ -167,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "060c9481_de0cea8f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "571c8a81_8b87def8",
+      "range": {
+        "startLine": 2076,
+        "startChar": 24,
+        "endLine": 2076,
+        "endChar": 38
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa8d5ce5_962de627",
@@ -180,6 +318,30 @@
       "writtenOn": "2022-07-12T07:36:24Z",
       "side": 1,
       "message": "nit: I find the \"contiguous sequence of set bits\" phrasing is confusing, but I couldn\u0027t come up with a better one.",
+      "range": {
+        "startLine": 2102,
+        "startChar": 21,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e284a12_4f62e271",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T14:47:01Z",
+      "side": 1,
+      "message": "We can simplify it by removing \"contiguous\", it doesn\u0027t add much to the meaning.",
+      "parentUuid": "aa8d5ce5_962de627",
       "range": {
         "startLine": 2102,
         "startChar": 21,
