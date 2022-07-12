@@ -22,6 +22,30 @@
       },
       "revId": "33bef6265425118a3a66601c8ef8ae21814ae099",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b1a213_c3ca10c4",
+        "filename": "src/heap/paged-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-12T11:21:07Z",
+      "side": 1,
+      "message": "This will just initialize `cur_page_iter_` and `cur_page_end_` so that they are equal. (In fact, following the STL spec, the only reason why a forward iterator is default constructible is so that it compares equal to any other default-constructed iterator.)\n\nThen, `PagedSpaceObjectIterator::Next` will invoke `PagedSpaceObjectIterator::AdvanceToNextPage`, \nbecause of line 29 in `PagedSpaceObjectIterator::FromCurrentPage`, and this will set `cur_page_iter_` and `cur_page_end_` to the boundaries of the next page, using the correct cage base (line 74).",
+      "parentUuid": "dfd5134a_3df22dd7",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 22
+      },
+      "revId": "33bef6265425118a3a66601c8ef8ae21814ae099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
