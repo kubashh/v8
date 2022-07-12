@@ -621,7 +621,7 @@ void MarkCompactCollector::StartMarking() {
   local_weak_objects_ = std::make_unique<WeakObjects::Local>(weak_objects());
   marking_visitor_ = std::make_unique<MarkingVisitor>(
       marking_state(), local_marking_worklists(), local_weak_objects_.get(),
-      heap_, epoch(), code_flush_mode(),
+      heap_, this, epoch(), code_flush_mode(),
       heap_->local_embedder_heap_tracer()->InUse(),
       heap_->ShouldCurrentGCKeepAgesUnchanged());
 // Marking bits are cleared by the sweeper.
@@ -2177,31 +2177,30 @@ void MarkCompactCollector::MarkObjectsFromClientHeaps() {
 
   SharedHeapObjectVisitor visitor(this);
 
-  isolate()->global_safepoint()->IterateClientIsolates(
-      [&visitor](Isolate* client) {
-        Heap* heap = client->heap();
-        HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
-        PtrComprCageBase cage_base(client);
-        for (HeapObject obj = iterator.Next(); !obj.is_null();
-             obj = iterator.Next()) {
-          obj.IterateFast(cage_base, &visitor);
-        }
+  isolate()->global_safepoint()->IterateClientIsolates([&visitor](
+                                                           Isolate* client) {
+    Heap* heap = client->heap();
+    HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
+    PtrComprCageBase cage_base(client);
+    for (HeapObject obj = iterator.Next(); !obj.is_null();
+         obj = iterator.Next()) {
+      obj.IterateFast(cage_base, &visitor);
+    }
 
 #ifdef V8_ENABLE_SANDBOX
-        if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
-          // Custom marking for the external pointer table entry used to hold
-          // client Isolates' WaiterQueueNode, which is used by JS mutexes and
-          // condition variables.
-          DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
-          ExternalPointerHandle waiter_queue_ext;
-          if (client->GetWaiterQueueNodeExternalPointer().To(
-                  &waiter_queue_ext)) {
-            uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
-            client->shared_external_pointer_table().Mark(index);
-          }
-        }
+    if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
+      // Custom marking for the external pointer table entry used to hold
+      // client Isolates' WaiterQueueNode, which is used by JS mutexes and
+      // condition variables.
+      DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
+      ExternalPointerHandle waiter_queue_ext;
+      if (client->GetWaiterQueueNodeExternalPointer().To(&waiter_queue_ext)) {
+        uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
+        client->shared_external_pointer_table().Mark(index);
+      }
+    }
 #endif  // V8_ENABLE_SANDBOX
-      });
+  });
 }
 
 void MarkCompactCollector::VisitObject(HeapObject obj) {
@@ -5578,6 +5577,8 @@ class MinorMarkCompactCollector::RootMarkingVisitor : public RootVisitor {
 };
 
 void MinorMarkCompactCollector::Prepare() {
+  DCHECK(!sweeping_in_progress());
+
   // Probably requires more.
   StartMarking();
 }

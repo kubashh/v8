@@ -16,6 +16,8 @@
 namespace v8 {
 namespace internal {
 
+class CollectorBase;
+
 struct EphemeronMarking {
   std::vector<HeapObject> newly_discovered;
   bool newly_discovered_overflowed;
@@ -141,7 +143,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
  public:
   MarkingVisitorBase(MarkingWorklists::Local* local_marking_worklists,
                      WeakObjects::Local* local_weak_objects, Heap* heap,
-                     unsigned mark_compact_epoch,
+                     CollectorBase* collector, unsigned mark_compact_epoch,
                      base::EnumSet<CodeFlushMode> code_flush_mode,
                      bool is_embedder_tracing_enabled,
                      bool should_keep_ages_unchanged)
@@ -149,6 +151,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
         local_marking_worklists_(local_marking_worklists),
         local_weak_objects_(local_weak_objects),
         heap_(heap),
+        collector_(collector),
         mark_compact_epoch_(mark_compact_epoch),
         code_flush_mode_(code_flush_mode),
         is_embedder_tracing_enabled_(is_embedder_tracing_enabled),
@@ -282,6 +285,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   MarkingWorklists::Local* const local_marking_worklists_;
   WeakObjects::Local* const local_weak_objects_;
   Heap* const heap_;
+  CollectorBase* collector_;
   const unsigned mark_compact_epoch_;
   const base::EnumSet<CodeFlushMode> code_flush_mode_;
   const bool is_embedder_tracing_enabled_;
