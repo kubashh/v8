@@ -3029,6 +3029,7 @@ v8_header_set("v8_internal_headers") {
     "src/heap/allocation-stats.h",
     "src/heap/array-buffer-sweeper.h",
     "src/heap/base-space.h",
+    "src/heap/basic-memory-chunk-inl.h",
     "src/heap/basic-memory-chunk.h",
     "src/heap/code-object-registry.h",
     "src/heap/code-range.h",
