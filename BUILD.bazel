@@ -1397,6 +1397,7 @@ filegroup(
         "src/heap/array-buffer-sweeper.h",
         "src/heap/base-space.cc",
         "src/heap/base-space.h",
+        "src/heap/basic-memory-chunk-inl.h",
         "src/heap/basic-memory-chunk.cc",
         "src/heap/basic-memory-chunk.h",
         "src/heap/code-object-registry.cc",
