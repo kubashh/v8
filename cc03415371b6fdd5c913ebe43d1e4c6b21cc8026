@@ -16,6 +16,24 @@
       "message": "Now we get segmentation faults. Can you run the tests locally to reproduce, and then fix? All necessary information (gn args, variants that were tested etc) are contained in the bot output. Let me know if you need help.",
       "revId": "cc03415371b6fdd5c913ebe43d1e4c6b21cc8026",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2175c7e_d10ea36b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528943
+      },
+      "writtenOn": "2022-07-12T22:39:54Z",
+      "side": 1,
+      "message": "Should be fixed now. Seg fault was occurring when tests were run because module was null in the function body decoder.",
+      "parentUuid": "6facf66b_785e337e",
+      "revId": "cc03415371b6fdd5c913ebe43d1e4c6b21cc8026",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
