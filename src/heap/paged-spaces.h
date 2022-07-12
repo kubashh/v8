@@ -71,8 +71,8 @@ class V8_EXPORT_PRIVATE PagedSpaceObjectIterator : public ObjectIterator {
   // iteration has ended.
   bool AdvanceToNextPage();
 
-  Address cur_addr_;  // Current iteration point.
-  Address cur_end_;   // End iteration point.
+  ObjectRange::iterator cur_page_iter_;  // Current iteration point.
+  ObjectRange::iterator cur_page_end_;   // End iteration point.
   const PagedSpaceBase* const space_;
   ConstPageRange page_range_;
   ConstPageRange::iterator current_page_;
