@@ -488,6 +488,10 @@ CollectorBase::CollectorBase(
       non_atomic_marking_state_(heap->isolate()),
       sweeping_type_(sweeping_type) {}
 
+bool CollectorBase::IsMajorMC() {
+  return !heap_->IsYoungGenerationCollector(garbage_collector_);
+}
+
 void CollectorBase::VisitObject(HeapObject obj) {
   marking_visitor_->Visit(obj.map(), obj);
 }
@@ -629,7 +633,7 @@ void MarkCompactCollector::StartMarking() {
   local_weak_objects_ = std::make_unique<WeakObjects::Local>(weak_objects());
   marking_visitor_ = std::make_unique<MarkingVisitor>(
       marking_state(), local_marking_worklists(), local_weak_objects_.get(),
-      heap_, epoch(), code_flush_mode(),
+      heap_, this, epoch(), code_flush_mode(),
       heap_->local_embedder_heap_tracer()->InUse(),
       heap_->ShouldCurrentGCKeepAgesUnchanged());
 // Marking bits are cleared by the sweeper.
@@ -2185,31 +2189,30 @@ void MarkCompactCollector::MarkObjectsFromClientHeaps() {
 
   SharedHeapObjectVisitor visitor(this);
 
-  isolate()->global_safepoint()->IterateClientIsolates(
-      [&visitor](Isolate* client) {
-        Heap* heap = client->heap();
-        HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
-        PtrComprCageBase cage_base(client);
-        for (HeapObject obj = iterator.Next(); !obj.is_null();
-             obj = iterator.Next()) {
-          obj.IterateFast(cage_base, &visitor);
-        }
+  isolate()->global_safepoint()->IterateClientIsolates([&visitor](
+                                                           Isolate* client) {
+    Heap* heap = client->heap();
+    HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
+    PtrComprCageBase cage_base(client);
+    for (HeapObject obj = iterator.Next(); !obj.is_null();
+         obj = iterator.Next()) {
+      obj.IterateFast(cage_base, &visitor);
+    }
 
 #ifdef V8_ENABLE_SANDBOX
-        if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
-          // Custom marking for the external pointer table entry used to hold
-          // client Isolates' WaiterQueueNode, which is used by JS mutexes and
-          // condition variables.
-          DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
-          ExternalPointerHandle waiter_queue_ext;
-          if (client->GetWaiterQueueNodeExternalPointer().To(
-                  &waiter_queue_ext)) {
-            uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
-            client->shared_external_pointer_table().Mark(index);
-          }
-        }
+    if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
+      // Custom marking for the external pointer table entry used to hold
+      // client Isolates' WaiterQueueNode, which is used by JS mutexes and
+      // condition variables.
+      DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
+      ExternalPointerHandle waiter_queue_ext;
+      if (client->GetWaiterQueueNodeExternalPointer().To(&waiter_queue_ext)) {
+        uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
+        client->shared_external_pointer_table().Mark(index);
+      }
+    }
 #endif  // V8_ENABLE_SANDBOX
-      });
+  });
 }
 
 bool MarkCompactCollector::MarkTransitiveClosureUntilFixpoint() {
@@ -2442,7 +2445,6 @@ std::pair<size_t, size_t> CollectorBase::ProcessMarkingWorklist(
     }
     Map map = object.map(cage_base);
     if (is_per_context_mode) {
-      // cast here?
       MarkCompactCollector* mc_collector = MarkCompactCollector::From(this);
       Address context;
       if (mc_collector->native_context_inferrer_.Infer(isolate, map, object,
@@ -2450,7 +2452,10 @@ std::pair<size_t, size_t> CollectorBase::ProcessMarkingWorklist(
         local_marking_worklists()->SwitchToContext(context);
       }
     }
-    size_t visited_size = marking_visitor_->Visit(map, object);
+    size_t visited_size = marking_visitor_->Visit(
+        map, object);  // TODO(v8:13012): currently this  doesn't make sense for
+                       // MinorMC. marking_visitor_ and main_marking_visitor_
+                       // need to be merged
     if (is_per_context_mode) {
       MarkCompactCollector* mc_collector = MarkCompactCollector::From(this);
       mc_collector->native_context_stats_.IncrementSize(
@@ -5621,6 +5626,8 @@ class MinorMarkCompactCollector::RootMarkingVisitor : public RootVisitor {
 };
 
 void MinorMarkCompactCollector::Prepare() {
+  DCHECK(!sweeping_in_progress());
+
   // Probably requires more.
   StartMarking();
 }

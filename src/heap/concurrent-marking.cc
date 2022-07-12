@@ -89,13 +89,14 @@ class ConcurrentMarkingVisitor final
   ConcurrentMarkingVisitor(int task_id,
                            MarkingWorklists::Local* local_marking_worklists,
                            WeakObjects::Local* local_weak_objects, Heap* heap,
+                           CollectorBase* collector,
                            unsigned mark_compact_epoch,
                            base::EnumSet<CodeFlushMode> code_flush_mode,
                            bool embedder_tracing_enabled,
                            bool should_keep_ages_unchanged,
                            MemoryChunkDataMap* memory_chunk_data)
       : MarkingVisitorBase(local_marking_worklists, local_weak_objects, heap,
-                           mark_compact_epoch, code_flush_mode,
+                           collector, mark_compact_epoch, code_flush_mode,
                            embedder_tracing_enabled,
                            should_keep_ages_unchanged),
         marking_state_(heap->isolate(), memory_chunk_data),
@@ -433,8 +434,15 @@ class ConcurrentMarking::JobTask : public v8::JobTask {
 
 ConcurrentMarking::ConcurrentMarking(Heap* heap,
                                      MarkingWorklists* marking_worklists,
-                                     WeakObjects* weak_objects)
+                                     CollectorBase* collector)
+    : ConcurrentMarking(heap, marking_worklists, nullptr, collector) {}
+
+ConcurrentMarking::ConcurrentMarking(Heap* heap,
+                                     MarkingWorklists* marking_worklists,
+                                     WeakObjects* weak_objects,
+                                     CollectorBase* collector)
     : heap_(heap),
+      collector_(collector),
       marking_worklists_(marking_worklists),
       weak_objects_(weak_objects) {
 #ifndef V8_ATOMIC_OBJECT_FIELD_WRITES
@@ -451,6 +459,9 @@ void ConcurrentMarking::Run(JobDelegate* delegate,
   int kObjectsUntilInterruptCheck = 1000;
   uint8_t task_id = delegate->GetTaskId() + 1;
   TaskState* task_state = &task_state_[task_id];
+  if (collector_->IsMajorMC()) {
+    // TODO(v8:13012): Put cpp_heap, local_weak_objects/... here
+  }
   auto* cpp_heap = CppHeap::From(heap_->cpp_heap());
   MarkingWorklists::Local local_marking_worklists(
       marking_worklists_, cpp_heap
@@ -458,7 +469,7 @@ void ConcurrentMarking::Run(JobDelegate* delegate,
                               : MarkingWorklists::Local::kNoCppMarkingState);
   WeakObjects::Local local_weak_objects(weak_objects_);
   ConcurrentMarkingVisitor visitor(
-      task_id, &local_marking_worklists, &local_weak_objects, heap_,
+      task_id, &local_marking_worklists, &local_weak_objects, heap_, collector_,
       mark_compact_epoch, code_flush_mode,
       heap_->local_embedder_heap_tracer()->InUse(), should_keep_ages_unchanged,
       &task_state->memory_chunk_data);
