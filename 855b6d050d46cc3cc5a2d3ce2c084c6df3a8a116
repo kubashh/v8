@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b1a342_39ff3719",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-12T07:36:24Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "825a26ce_9e1ac8ef",
@@ -60,6 +77,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6dc1a7f_e29ff8ff",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-12T07:36:24Z",
+      "side": 1,
+      "message": "I don\u0027t think this iterator ctor should ever be used. We would always expect users to pass a cage base. Using this ctor would even be incorrect imo. I think you should drop it (regardless of what the C++ spec says).",
+      "range": {
+        "startLine": 385,
+        "startChar": 4,
+        "endLine": 385,
+        "endChar": 22
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea25d9df_52bbe111",
         "filename": "src/heap/basic-memory-chunk.h",
         "patchSetId": 3
@@ -76,6 +116,75 @@
         "startChar": 31,
         "endLine": 413,
         "endChar": 32
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68fab890_d0c18ccf",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-12T07:36:24Z",
+      "side": 1,
+      "message": "nit: FindPreviousObjectForConservativeMarking?",
+      "range": {
+        "startLine": 2074,
+        "startChar": 8,
+        "endLine": 2074,
+        "endChar": 33
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571c8a81_8b87def8",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-12T07:36:24Z",
+      "side": 1,
+      "message": "Not for this CL: I\u0027m not convinced the marking bitmap needs to leave in MemoryChunk. Afaict we only really need it for Pages, so I think it should move to Page.",
+      "range": {
+        "startLine": 2076,
+        "startChar": 24,
+        "endLine": 2076,
+        "endChar": 38
+      },
+      "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa8d5ce5_962de627",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-12T07:36:24Z",
+      "side": 1,
+      "message": "nit: I find the \"contiguous sequence of set bits\" phrasing is confusing, but I couldn\u0027t come up with a better one.",
+      "range": {
+        "startLine": 2102,
+        "startChar": 21,
+        "endLine": 2102,
+        "endChar": 53
       },
       "revId": "855b6d050d46cc3cc5a2d3ce2c084c6df3a8a116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
