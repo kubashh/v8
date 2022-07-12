@@ -6,8 +6,7 @@
 #define V8_HEAP_PAGED_SPACES_INL_H_
 
 #include "src/common/globals.h"
-#include "src/heap/heap-inl.h"
-#include "src/heap/incremental-marking.h"
+#include "src/heap/basic-memory-chunk-inl.h"
 #include "src/heap/paged-spaces.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
@@ -27,17 +26,15 @@ HeapObject PagedSpaceObjectIterator::Next() {
 }
 
 HeapObject PagedSpaceObjectIterator::FromCurrentPage() {
-  while (cur_addr_ != cur_end_) {
-    HeapObject obj = HeapObject::FromAddress(cur_addr_);
-    const int obj_size = obj.Size(cage_base());
-    cur_addr_ += obj_size;
-    DCHECK_LE(cur_addr_, cur_end_);
+  while (cur_page_iter_ != cur_page_end_) {
+    HeapObject obj(*cur_page_iter_++);
+    DCHECK_LE(cur_page_iter_.base(), cur_page_end_.base());
     if (!obj.IsFreeSpaceOrFiller(cage_base())) {
       if (obj.IsCode(cage_base())) {
         DCHECK_EQ(space_->identity(), CODE_SPACE);
-        DCHECK_CODEOBJECT_SIZE(obj_size, space_);
+        DCHECK_CODEOBJECT_SIZE(obj.Size(cage_base()), space_);
       } else {
-        DCHECK_OBJECT_SIZE(obj_size);
+        DCHECK_OBJECT_SIZE(obj.Size(cage_base()));
       }
       return obj;
     }
