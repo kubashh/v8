@@ -33,6 +33,23 @@
       "message": "Note this requires an mb_config.pyl change that you could add to the main branch CL.",
       "revId": "c889aa4dd1cac67aa34519c41d45c394e6c26546",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8137db2c_df5f1b1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2022-07-12T00:36:06Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c889aa4dd1cac67aa34519c41d45c394e6c26546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
