@@ -302,6 +302,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba62b716_4741e8e3",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Indeed, OS::Initialize() might be a bit too late. Currently, I\u0027m thinking about PageAllocatorInitializer and this change should be a part of my CL.",
+      "parentUuid": "50481175_66b872e6",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5fa9f08_1b0c2e6e",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 14

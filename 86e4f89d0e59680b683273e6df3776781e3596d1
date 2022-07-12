@@ -361,6 +361,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c8caa7c_b0063254",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack. See the comment in RwxMemoryWriteScopeForTesting().",
+      "parentUuid": "7ef00651_97ad662a",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5257b51d_8bcc1e1f",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 7

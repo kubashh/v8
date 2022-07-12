@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "87fce6ba_0c6fd388",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "eff39331_3ba1d57c",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9d026289_be0a43a0",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 18
@@ -90,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90de192f_a68f6531",
+        "filename": "src/base/platform/platform-posix.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Let\u0027s not remove the memory-protection-key.h/.cc files but move them to the plaftorm with minimal changes (I\u0027ll do that).\nThen you\u0027ll rebase your CL on top of mine, the PKU class is not going to be necessary, it will be enough to have just one\n  int g_executable_memory_pku_;\ndefined presumably in src/utils/allocation.cc that will be used for protection of all code pages in V8.",
+      "parentUuid": "bfec9ad8_9c2a687e",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fec8980_5f1eaeb2",
         "filename": "src/common/code-memory-access-inl.h",
         "patchSetId": 18
@@ -135,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd4c9ef_0d70e9bb",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2825f655_e2be4ed3",
+      "range": {
+        "startLine": 83,
+        "startChar": 48,
+        "endLine": 83,
+        "endChar": 80
+      },
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a29822b_f3a5f785",
@@ -166,6 +226,24 @@
       "side": 1,
       "message": "Done.",
       "parentUuid": "5a29822b_f3a5f785",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8628f3e3_30f9d3d7",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2864c01a_a6d94ea4",
       "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -257,6 +335,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e37c8af0_5723cd8a",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8c1c2099_8cd4b7e7",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a408f12_56619444",
@@ -292,6 +388,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ffc6dc6_2cb6c2ba",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fffe751d_2b618ccf",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "202be8de_6d72d7de",
@@ -323,6 +437,24 @@
       "side": 1,
       "message": "I understand that you mean there is not this SetPermissionsAndMemoryProtectionKey() in WASM in previous patchset(for porting PKU to OS lib, and enable it for JS), right? \nIt\u0027s because in previous patchset, when Allocate() in platform-posix.cc was invoked, and this allocated memory is WRX permission, I will call SetPermissionsAndMemoryProtectionKey(), so it means we will use PKU for both JS and WASM, but now we just want to port PKU to OS lib, and just enable it for WASM only, so we have to use this method in WASM.",
       "parentUuid": "202be8de_6d72d7de",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5e9b262_369dd848",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-12T13:23:31Z",
+      "side": 1,
+      "message": "You are mostly moving things around in your CL, so I meant that there should be a similar call somewhere in the old state of the code for Wasm but I didn\u0027t manage to find it.",
+      "parentUuid": "3b198a80_87dde8c2",
       "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
