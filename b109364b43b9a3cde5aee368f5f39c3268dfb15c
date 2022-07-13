@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a60e790b_e2cd33cd",
+        "filename": "src/base/platform/platform-posix.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-13T07:48:15Z",
+      "side": 1,
+      "message": "Thanks for your reply! I will follow up this after your CL.",
+      "parentUuid": "90de192f_a68f6531",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fec8980_5f1eaeb2",
         "filename": "src/common/code-memory-access-inl.h",
         "patchSetId": 18
@@ -455,6 +473,24 @@
       "side": 1,
       "message": "You are mostly moving things around in your CL, so I meant that there should be a similar call somewhere in the old state of the code for Wasm but I didn\u0027t manage to find it.",
       "parentUuid": "3b198a80_87dde8c2",
+      "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15616965_8c8c65e0",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-13T07:48:15Z",
+      "side": 1,
+      "message": "Thanks for your reminder! I\u0027m sorry for that, it may be a redundant function call, WASM will bind PKU to memory in Commit() later in this function.",
+      "parentUuid": "a5e9b262_369dd848",
       "revId": "b109364b43b9a3cde5aee368f5f39c3268dfb15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
