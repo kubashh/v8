@@ -712,6 +712,17 @@
       {'name': 'v8testing', 'shards': 2},
     ],
   },
+  'v8_win32_ng_triggered': {
+    'swarming_dimensions': {
+      'cpu': 'x86-64',
+      'os': 'Windows-7-SP1',
+    },
+    'tests': [
+      {'name': 'mozilla'},
+      {'name': 'test262', 'variant': 'default'},
+      {'name': 'v8testing'},
+    ],
+  },
   ##############################################################################
   # Win64
   'v8_win64_asan_rel_ng_triggered': {
