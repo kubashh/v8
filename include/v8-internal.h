@@ -350,8 +350,8 @@ constexpr uint64_t kExternalPointerTagShift = 48;
 // New entries should be added with state "sandboxed".
 #define SHARED_EXTERNAL_POINTER_TAGS(V)                              \
   V(kWaiterQueueNodeTag,            unsandboxed, 0b1100000000111111) \
-  V(kExternalStringResourceTag,     unsandboxed, 0b1100000001011111) \
-  V(kExternalStringResourceDataTag, unsandboxed, 0b1100000001101111)
+  V(kExternalStringResourceTag,     sandboxed,   0b1100000001011111) \
+  V(kExternalStringResourceDataTag, sandboxed,   0b1100000001101111)
 
 constexpr uint64_t kSharedExternalObjectMask = MAKE_TAG(0b1100000000000000);
 constexpr uint64_t kSharedExternalObjectTag  = MAKE_TAG(0b1100000000000000);
