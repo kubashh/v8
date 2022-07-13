@@ -33,7 +33,7 @@ class MigrationObserver;
 class ReadOnlySpace;
 class RecordMigratedSlotVisitor;
 class UpdatingItem;
-class YoungGenerationMarkingVisitor;
+class YoungGenerationMarkingVisitor2;
 
 class MarkBitCellIterator {
  public:
@@ -257,7 +257,7 @@ class NonAtomicMarkingState final
 // This visitor is used for marking on the main thread. It is cheaper than
 // the concurrent marking visitor because it does not snapshot JSObjects.
 template <typename MarkingState>
-class MainMarkingVisitor final
+class MainMarkingVisitor
     : public MarkingVisitorBase<MainMarkingVisitor<MarkingState>,
                                 MarkingState> {
  public:
@@ -297,6 +297,9 @@ class MainMarkingVisitor final
            V8_UNLIKELY(revisiting_object_);
   }
 
+ protected:
+  MarkingState* const marking_state_;
+
  private:
   // Functions required by MarkingVisitorBase.
 
@@ -318,9 +321,6 @@ class MainMarkingVisitor final
                ? TraceRetainingPathMode::kEnabled
                : TraceRetainingPathMode::kDisabled;
   }
-
-  MarkingState* const marking_state_;
-
   friend class MarkingVisitorBase<MainMarkingVisitor<MarkingState>,
                                   MarkingState>;
   bool revisiting_object_;
@@ -815,7 +815,7 @@ class MinorMarkCompactCollector final : public CollectorBase {
     return static_cast<MinorMarkCompactCollector*>(collector);
   }
 
-  std::unique_ptr<YoungGenerationMarkingVisitor> main_marking_visitor_;
+  std::unique_ptr<YoungGenerationMarkingVisitor2> main_marking_visitor_;
 
   explicit MinorMarkCompactCollector(Heap* heap);
   ~MinorMarkCompactCollector() final;
@@ -874,7 +874,7 @@ class MinorMarkCompactCollector final : public CollectorBase {
 
   friend class YoungGenerationMarkingTask;
   friend class YoungGenerationMarkingJob;
-  friend class YoungGenerationMarkingVisitor;
+  friend class YoungGenerationMarkingVisitor2;
 };
 
 }  // namespace internal

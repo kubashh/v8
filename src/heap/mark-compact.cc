@@ -2177,31 +2177,30 @@ void MarkCompactCollector::MarkObjectsFromClientHeaps() {
 
   SharedHeapObjectVisitor visitor(this);
 
-  isolate()->global_safepoint()->IterateClientIsolates(
-      [&visitor](Isolate* client) {
-        Heap* heap = client->heap();
-        HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
-        PtrComprCageBase cage_base(client);
-        for (HeapObject obj = iterator.Next(); !obj.is_null();
-             obj = iterator.Next()) {
-          obj.IterateFast(cage_base, &visitor);
-        }
+  isolate()->global_safepoint()->IterateClientIsolates([&visitor](
+                                                           Isolate* client) {
+    Heap* heap = client->heap();
+    HeapObjectIterator iterator(heap, HeapObjectIterator::kNoFiltering);
+    PtrComprCageBase cage_base(client);
+    for (HeapObject obj = iterator.Next(); !obj.is_null();
+         obj = iterator.Next()) {
+      obj.IterateFast(cage_base, &visitor);
+    }
 
 #ifdef V8_ENABLE_SANDBOX
-        if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
-          // Custom marking for the external pointer table entry used to hold
-          // client Isolates' WaiterQueueNode, which is used by JS mutexes and
-          // condition variables.
-          DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
-          ExternalPointerHandle waiter_queue_ext;
-          if (client->GetWaiterQueueNodeExternalPointer().To(
-                  &waiter_queue_ext)) {
-            uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
-            client->shared_external_pointer_table().Mark(index);
-          }
-        }
+    if (IsSandboxedExternalPointerType(kWaiterQueueNodeTag)) {
+      // Custom marking for the external pointer table entry used to hold
+      // client Isolates' WaiterQueueNode, which is used by JS mutexes and
+      // condition variables.
+      DCHECK(IsSharedExternalPointerType(kWaiterQueueNodeTag));
+      ExternalPointerHandle waiter_queue_ext;
+      if (client->GetWaiterQueueNodeExternalPointer().To(&waiter_queue_ext)) {
+        uint32_t index = waiter_queue_ext >> kExternalPointerIndexShift;
+        client->shared_external_pointer_table().Mark(index);
+      }
+    }
 #endif  // V8_ENABLE_SANDBOX
-      });
+  });
 }
 
 void MarkCompactCollector::VisitObject(HeapObject obj) {
@@ -5293,6 +5292,118 @@ bool IsUnmarkedObjectForYoungGeneration(Heap* heap, FullObjectSlot p) {
 
 }  // namespace
 
+class YoungGenerationMarkingVisitor2 final
+    : public MainMarkingVisitor<MarkingState> {
+ public:
+  // Pass on args and give dummy values for unused variables
+  YoungGenerationMarkingVisitor2(
+      Heap* heap, Isolate* isolate, MarkingState* marking_state,
+      MarkingWorklists::Local* local_marking_worklists)
+      : MainMarkingVisitor(marking_state, local_marking_worklists, nullptr,
+                           heap, 0, base::EnumSet<CodeFlushMode>(), false,
+                           true) {}
+
+  // [1] NewSpaceVisitor members
+  V8_INLINE bool ShouldVisitMapPointer() { return false; }
+
+  // Special cases for young generation.
+
+  V8_INLINE int VisitNativeContext(Map map, NativeContext object) {
+    int size = NativeContext::BodyDescriptor::SizeOf(map, object);
+    NativeContext::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
+
+  V8_INLINE int VisitJSApiObject(Map map, JSObject object) {
+    return this->VisitJSObject(map, object);
+  }
+
+  int VisitBytecodeArray(Map map, BytecodeArray object) {
+    // UNREACHABLE();
+    return 0;
+  }
+
+  int VisitSharedFunctionInfo(Map map, SharedFunctionInfo object) {
+    // UNREACHABLE();
+    return 0;
+  }
+  int VisitWeakCell(Map map, WeakCell weak_cell) {
+    // UNREACHABLE();
+    return 0;
+  }
+
+  // [2] YoungGenerationMarkingVisitor members
+
+  V8_INLINE void VisitPointers(HeapObject host, ObjectSlot start,
+                               ObjectSlot end) final {
+    VisitPointersImpl(host, start, end);
+  }
+
+  V8_INLINE void VisitPointers(HeapObject host, MaybeObjectSlot start,
+                               MaybeObjectSlot end) final {
+    VisitPointersImpl(host, start, end);
+  }
+
+  V8_INLINE void VisitCodePointer(HeapObject host,
+                                  CodeObjectSlot slot) override {
+    CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+    // Code slots never appear in new space because CodeDataContainers, the
+    // only object that can contain code pointers, are always allocated in
+    // the old space.
+    UNREACHABLE();
+  }
+
+  V8_INLINE void VisitPointer(HeapObject host, ObjectSlot slot) final {
+    VisitPointerImpl(host, slot);
+  }
+
+  V8_INLINE void VisitPointer(HeapObject host, MaybeObjectSlot slot) final {
+    VisitPointerImpl(host, slot);
+  }
+
+  V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final {
+    // Code objects are not expected in new space.
+    UNREACHABLE();
+  }
+
+  V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final {
+    // Code objects are not expected in new space.
+    UNREACHABLE();
+  }
+
+  V8_INLINE int VisitJSArrayBuffer(Map map, JSArrayBuffer object) {
+    object.YoungMarkExtension();
+    int size = JSArrayBuffer::BodyDescriptor::SizeOf(map, object);
+    JSArrayBuffer::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
+
+ private:
+  template <typename TSlot>
+  V8_INLINE void VisitPointersImpl(HeapObject host, TSlot start, TSlot end) {
+    for (TSlot slot = start; slot < end; ++slot) {
+      VisitPointer(host, slot);
+    }
+  }
+
+  template <typename TSlot>
+  V8_INLINE void VisitPointerImpl(HeapObject host, TSlot slot) {
+    typename TSlot::TObject target = *slot;
+    if (Heap::InYoungGeneration(target)) {
+      // Treat weak references as strong.
+      // TODO(marja): Proper weakness handling for minor-mcs.
+      HeapObject target_object = target.GetHeapObject();
+      MarkObjectViaMarkingWorklist(target_object);
+    }
+  }
+
+  inline void MarkObjectViaMarkingWorklist(HeapObject object) {
+    if (marking_state_->WhiteToBlack(object)) {
+      local_marking_worklists_->Push(object);
+    }
+  }
+};
+
 class YoungGenerationMarkingVisitor final
     : public NewSpaceVisitor<YoungGenerationMarkingVisitor> {
  public:
@@ -5585,8 +5696,9 @@ void MinorMarkCompactCollector::Prepare() {
 void MinorMarkCompactCollector::StartMarking() {
   local_marking_worklists_ =
       std::make_unique<MarkingWorklists::Local>(&marking_worklists_);
-  main_marking_visitor_ = std::make_unique<YoungGenerationMarkingVisitor>(
-      heap()->isolate(), marking_state(), local_marking_worklists());
+  main_marking_visitor_ = std::make_unique<YoungGenerationMarkingVisitor2>(
+      heap(), heap()->isolate(), marking_state(),
+      local_marking_worklists());  // not sure about heap()
 
   // Note: I think it makes sense to use YoungGenerationMarkingVisitor
   // here for MinorMC, and MarkingVisitor for MajorMC, as they're quite
@@ -5824,7 +5936,9 @@ class YoungGenerationMarkingTask {
       : marking_worklists_local_(
             std::make_unique<MarkingWorklists::Local>(global_worklists)),
         marking_state_(collector->marking_state()),
-        visitor_(isolate, marking_state_, marking_worklists_local()) {}
+        visitor_(isolate->heap(), isolate, marking_state_,
+                 marking_worklists_local()) {
+  }  // not sure about isolate->heap()
 
   void MarkObject(Object object) {
     if (!Heap::InYoungGeneration(object)) return;
@@ -5848,7 +5962,7 @@ class YoungGenerationMarkingTask {
  private:
   std::unique_ptr<MarkingWorklists::Local> marking_worklists_local_;
   MarkingState* marking_state_;
-  YoungGenerationMarkingVisitor visitor_;
+  YoungGenerationMarkingVisitor2 visitor_;
 };
 
 class PageMarkingItem : public ParallelWorkItem {

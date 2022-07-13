@@ -185,25 +185,25 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
     MarkObject(host, map);
     concrete_visitor()->RecordSlot(host, host.map_slot(), map);
   }
-  V8_INLINE void VisitPointer(HeapObject host, ObjectSlot p) final {
+  V8_INLINE void VisitPointer(HeapObject host, ObjectSlot p) {
     VisitPointersImpl(host, p, p + 1);
   }
-  V8_INLINE void VisitPointer(HeapObject host, MaybeObjectSlot p) final {
+  V8_INLINE void VisitPointer(HeapObject host, MaybeObjectSlot p) {
     VisitPointersImpl(host, p, p + 1);
   }
   V8_INLINE void VisitPointers(HeapObject host, ObjectSlot start,
-                               ObjectSlot end) final {
+                               ObjectSlot end) {
     VisitPointersImpl(host, start, end);
   }
   V8_INLINE void VisitPointers(HeapObject host, MaybeObjectSlot start,
-                               MaybeObjectSlot end) final {
+                               MaybeObjectSlot end) {
     VisitPointersImpl(host, start, end);
   }
-  V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
+  V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) {
     VisitCodePointerImpl(host, slot);
   }
-  V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final;
-  V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final;
+  V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo);
+  V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo);
   void VisitCustomWeakPointers(HeapObject host, ObjectSlot start,
                                ObjectSlot end) final {
     // Weak list pointers should be ignored during marking. The lists are
