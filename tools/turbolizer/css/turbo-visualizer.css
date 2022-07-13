@@ -234,7 +234,7 @@ g.input rect {
   fill: #CFE2F3;
 }
 
-g.selected rect {
+g.selected > rect {
   fill: #FFFF33;
 }
 
