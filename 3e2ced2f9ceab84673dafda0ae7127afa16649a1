@@ -33,6 +33,23 @@
       "message": "Thanks for Igor\u0027s suggestions and reminders! If you finish your CL, I will follow up to modify the PKU patch.",
       "revId": "3e2ced2f9ceab84673dafda0ae7127afa16649a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6323465a_03f0441e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-14T17:40:48Z",
+      "side": 1,
+      "message": "I prepared the refactoring CL: https://chromium-review.googlesource.com/c/v8/v8/+/3762584\n\nPlease add the following fields and methods to RwxMemoryWriteScope class for V8_HAS_PKU_JIT_WRITE_PROTECT case:\n  static int memory_protection_key_;\n  \n  static int memory_protection_key() { return memory_protection_key_; }\n  static InitializeMemoryProtectionKey();\n  \nThe InitializeMemoryProtectionKeySupport() and RwxMemoryWriteScope::InitializeMemoryProtectionKey() can be called from V8::Initialize(), and memory_protection_key() can be used for protecting memory region with this key (base::MemoryProtectionKey::SetPermissionsAndKey()).\n\nThere is an issue found in the wasm code manager (see https://chromium-review.googlesource.com/c/v8/v8/+/3762579 for details), please keep that DCHECK after your refactoring to be able to catch such failures in the future.",
+      "revId": "3e2ced2f9ceab84673dafda0ae7127afa16649a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

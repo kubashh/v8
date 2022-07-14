@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1b819c_4258e208",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-14T17:40:48Z",
+      "side": 1,
+      "message": "My comment is not relevant anymore.",
+      "parentUuid": "894f68b2_8c8e99fa",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceff6db5_5a28ce79",
@@ -314,6 +332,30 @@
       "side": 1,
       "message": "Indeed, OS::Initialize() might be a bit too late. Currently, I\u0027m thinking about PageAllocatorInitializer and this change should be a part of my CL.",
       "parentUuid": "50481175_66b872e6",
+      "range": {
+        "startLine": 51,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 46
+      },
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed7efb04_9cda4e7b",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-14T17:40:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba62b716_4741e8e3",
       "range": {
         "startLine": 51,
         "startChar": 2,
