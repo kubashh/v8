@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c85d74a7_fba40535",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "nit: forbid copy, make it move-only?",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97856af8_fd444152",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "nit: prefer push_back() (https://abseil.io/tips/112)",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e9fd298_0112a4c4",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "Just `DisassemblyChunk`, please (i.e. no explicit rvalue reference,  https://google.github.io/styleguide/cppguide.html#Rvalue_references)",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0381acaf_120564b6",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "Response::InvalidParams()",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952ac45c_4c2e9125",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "ditto (and {} around the body, please)",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53f44444_694b455d",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "Should we also clear this upon `disable()`?",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efdde530_d9c27316",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "That\u0027s optional already, and I guess it makes sense not to set it altogether if no stream is provided.",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da4b6720_ce50e517",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "These two look like different errors to me, and I think the second is not quite what the PDL comment suggests (\" If disassembly is complete, an empty array is returned\"). Also note we should eventually do `m_wasmDisassemblies.erase(it);` in the latter case, which you don\u0027t do here. However, considering L1252, the second clause could perhaps be a DCHECK() in current implementation.\nI think the right thing would be to keep the stream with no next chunk until the next call, which would return empty array (as documented) and then erase the stream.",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d9f595_391843d2",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "This would mean that the next call would be an error, rather than \"If disassembly is complete, an empty array is returned\".",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "388a3e16_9e61b946",
+        "filename": "src/inspector/v8-debugger-script.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-14T22:44:34Z",
+      "side": 1,
+      "message": "Can this be a DCHECK()?",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
