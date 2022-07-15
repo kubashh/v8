@@ -318,6 +318,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9b75919_e5be52db",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "I don\u0027t think returning error is a good contract in this case, I would much rather prefer either the old logic of returning an empty chunk, or an explicit flag to indicate the EOF condition. This is not an error per se, so you don\u0027t want your generic error handling kick in on the client side, and then we don\u0027t have a good way to tell this condition from a genuine error, because there\u0027s no dedicated error code for this. A client would literally have to prefix-match the English error text you return in L1251 to tell the totally normal EOF condition from an error that should be handled as error. I went to check your test to see how you got around this, but the test does not have logic to cover this :-(",
+      "parentUuid": "fc0c3ed5_2ef00d7d",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "388a3e16_9e61b946",
         "filename": "src/inspector/v8-debugger-script.cc",
         "patchSetId": 4

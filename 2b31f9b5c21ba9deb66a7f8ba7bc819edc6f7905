@@ -33,6 +33,125 @@
       "message": "`end` here means the offset of the first byte after the last function, right?",
       "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4396c55_0c87a9d2",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "`const session \u003d trackSctips()`? You\u0027re never appending to this array.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b2195b0_32de2131",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "s/var/const/ throughout the file?",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dc7450f_bd9fcdae",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "this is unused as far as I can tell.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f1a31dd_1d7f13b1",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "There\u0027s just one session, so this can probably be simplified accordingly.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73f5d828_7780222c",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "can we just extract this to the top level? You need this elsewhere, and it doesn\u0027t look like it has anything to do with tracking scripts per se.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80e17ad8_eb3b43d2",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "There\u0027s just one script, isn\u0027t there? Why don\u0027t we make that explicit? This could be something like\n\n    const sctiptPromise \u003d new Promise(resolve \u003d\u003e {\n      Protocol.Debugger.onScriptParsed(event \u003d\u003e {\n        if (event.params.url.startsWith(\"wasm://\"))\n          resolve(params);\n        });\n    }).then(params \u003d\u003e loadScript(params));\n\n(NB: blink-side CDP test framework actually allows you to supply event matchers to `onceEventName()` calls [1], so that this kind of logic is even easier to write, e.g. [2]).\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/web_tests/http/tests/inspector-protocol/resources/inspector-protocol-test.js;drc\u003dfee782ca9ada1fe69307930867ce772d0a9c2d31;l\u003d435\n\n[2] https://source.chromium.org/search?q\u003df:inspector-protocol%20once%5Ba-z%5D*%5C(event%5C%20%3D%3E\u0026ss\u003dchromium",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51afc788_89662587",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-07-15T21:59:38Z",
+      "side": 1,
+      "message": "That would be on the global object, did you mean `const bytes \u003d []?`",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
