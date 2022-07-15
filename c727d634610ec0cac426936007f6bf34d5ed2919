@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10347b65_6420a1a7",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c85d74a7_fba40535",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97856af8_fd444152",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-14T22:44:34Z",
       "side": 1,
       "message": "nit: prefer push_back() (https://abseil.io/tips/112)",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d81774e1_7bd5a80d",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97856af8_fd444152",
       "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d1aaf6e_9e0ef75c",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e9fd298_0112a4c4",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0381acaf_120564b6",
@@ -65,6 +119,24 @@
       "writtenOn": "2022-07-14T22:44:34Z",
       "side": 1,
       "message": "Response::InvalidParams()",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08817534_5c426f96",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0381acaf_120564b6",
       "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "babec863_cdfb7636",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "952ac45c_4c2e9125",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53f44444_694b455d",
@@ -99,6 +189,24 @@
       "writtenOn": "2022-07-14T22:44:34Z",
       "side": 1,
       "message": "Should we also clear this upon `disable()`?",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c08e31ac_c761eb1e",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53f44444_694b455d",
       "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2feb5a9a_62f13710",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1228,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efdde530_d9c27316",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da4b6720_ce50e517",
@@ -133,6 +259,24 @@
       "writtenOn": "2022-07-14T22:44:34Z",
       "side": 1,
       "message": "These two look like different errors to me, and I think the second is not quite what the PDL comment suggests (\" If disassembly is complete, an empty array is returned\"). Also note we should eventually do `m_wasmDisassemblies.erase(it);` in the latter case, which you don\u0027t do here. However, considering L1252, the second clause could perhaps be a DCHECK() in current implementation.\nI think the right thing would be to keep the stream with no next chunk until the next call, which would return empty array (as documented) and then erase the stream.",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c8952f9_da6573ce",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done. (The \"DCHECK\" part; see comment below about the behavior change.)",
+      "parentUuid": "da4b6720_ce50e517",
       "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +298,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc0c3ed5_2ef00d7d",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Good catch. After talking to Philip offline, we decided to change the documentation instead: we\u0027ll now officially return an error when there are no more chunks for that stream.",
+      "parentUuid": "18d9f595_391843d2",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "388a3e16_9e61b946",
@@ -167,6 +329,24 @@
       "writtenOn": "2022-07-14T22:44:34Z",
       "side": 1,
       "message": "Can this be a DCHECK()?",
+      "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4bf0dd_9e339db2",
+        "filename": "src/inspector/v8-debugger-script.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-15T12:29:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "388a3e16_9e61b946",
       "revId": "c727d634610ec0cac426936007f6bf34d5ed2919",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
