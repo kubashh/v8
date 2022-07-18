@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13aba0d_2c82779b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T15:32:45Z",
+      "side": 1,
+      "message": "All comments addressed and updated the breakpoints test.\nPlease take a look at the new diff. 😊",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a087ae8_73ae20bf",
@@ -66,6 +83,30 @@
       "writtenOn": "2022-07-18T15:08:22Z",
       "side": 1,
       "message": "Accidental leftover.\n\n(Bonus points if you can explain why the test isn\u0027t failing 😊)",
+      "range": {
+        "startLine": 25,
+        "startChar": 27,
+        "endLine": 25,
+        "endChar": 32
+      },
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f4e402_ebb8eb99",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T15:32:45Z",
+      "side": 1,
+      "message": "Done. Hitting the nop instruction is an unlucky accident. 😊",
+      "parentUuid": "9a087ae8_73ae20bf",
       "range": {
         "startLine": 25,
         "startChar": 27,
@@ -111,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45507b98_8fe185e6",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T15:32:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fac17886_e03b87ce",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e34b7dd7_e3a72a78",
@@ -124,6 +183,30 @@
       "writtenOn": "2022-07-18T15:08:22Z",
       "side": 1,
       "message": "AFAICS this is identical to the previous two lines (1148/1149)?",
+      "range": {
+        "startLine": 1150,
+        "startChar": 2,
+        "endLine": 1151,
+        "endChar": 56
+      },
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12278af8_2ae8bb3a",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T15:32:45Z",
+      "side": 1,
+      "message": "Yes, I missed it. Removed.",
+      "parentUuid": "e34b7dd7_e3a72a78",
       "range": {
         "startLine": 1150,
         "startChar": 2,
