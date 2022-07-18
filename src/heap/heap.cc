@@ -24,6 +24,7 @@
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/common/assert-scope.h"
+#include "src/common/code-memory-access.h"
 #include "src/common/globals.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/debug/debug.h"
@@ -5666,11 +5667,6 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
       reinterpret_cast<uintptr_t>(v8::internal::GetRandomMmapAddr()) &
       ~kMmapRegionMask;
 
-  // Ensure that RwxMemoryWriteScope and other dependent scopes (in particular,
-  // CodePage*ModificationScope and CodeSpaceMemoryModificationScope)
-  // are allowed to be used when jitless mode is not enabled.
-  CHECK_IMPLIES(!FLAG_jitless, RwxMemoryWriteScope::IsAllowed());
-
   v8::PageAllocator* code_page_allocator;
   if (isolate_->RequiresCodeRange() || code_range_size_ != 0) {
     const size_t requested_size =
@@ -5858,6 +5854,15 @@ void Heap::SetUpSpaces(LinearAllocationArea* new_allocation_info,
   }
 
   write_protect_code_memory_ = FLAG_write_protect_code_memory;
+
+#if V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
+  if (RwxMemoryWriteScope::memory_protection_key() !=
+      base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    // If PKU is support in this platform, so we use PKU to do permission switch
+    // instead of conventional mprotect.
+    write_protect_code_memory_ = false;
+  }
+#endif  // V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
 
   if (isolate()->shared_isolate()) {
     Heap* shared_heap = isolate()->shared_isolate()->heap();

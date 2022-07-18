@@ -1887,7 +1887,9 @@ WasmCodeManager::WasmCodeManager()
       memory_protection_key_(base::MemoryProtectionKey::AllocateKey()) {
   // Ensure that RwxMemoryWriteScope and other dependent scopes (in particular,
   // wasm::CodeSpaceWriteScope) are allowed to be used.
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
   CHECK(RwxMemoryWriteScope::IsAllowed());
+#endif
 }
 
 WasmCodeManager::~WasmCodeManager() {
@@ -2193,7 +2195,7 @@ void WasmCodeManager::InitializeMemoryProtectionKeyPermissionsIfSupported()
 }
 
 base::AddressRegion WasmCodeManager::AllocateAssemblerBufferSpace(int size) {
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   if (MemoryProtectionKeysEnabled()) {
     auto* page_allocator = GetPlatformPageAllocator();
     size_t page_size = page_allocator->AllocatePageSize();
@@ -2216,20 +2218,20 @@ base::AddressRegion WasmCodeManager::AllocateAssemblerBufferSpace(int size) {
         memory_protection_key_));
     return region;
   }
-#endif  // defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
   DCHECK(!MemoryProtectionKeysEnabled());
   return base::AddressRegionOf(new uint8_t[size], size);
 }
 
 void WasmCodeManager::FreeAssemblerBufferSpace(base::AddressRegion region) {
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   if (MemoryProtectionKeysEnabled()) {
     auto* page_allocator = GetPlatformPageAllocator();
     FreePages(page_allocator, reinterpret_cast<void*>(region.begin()),
               region.size());
     return;
   }
-#endif  // defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
   DCHECK(!MemoryProtectionKeysEnabled());
   delete[] reinterpret_cast<uint8_t*>(region.begin());
 }
