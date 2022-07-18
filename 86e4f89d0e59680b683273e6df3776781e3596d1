@@ -395,6 +395,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3dd024_b5608ea3",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "d3a13ad3_1b5bd9eb",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5257b51d_8bcc1e1f",
@@ -511,6 +529,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3493c6d_af708a09",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Now the RwxMemoryWriteScope::IsSupported() is cheap, so this suggestion is not relevant anymore.",
+      "parentUuid": "a827cec4_977b05fe",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fe0d04e_bc1d6842",
@@ -581,6 +617,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "535775cf_8dc94ea5",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "bdb41671_040c6c52",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e86ee81b_43307c20",
@@ -594,6 +648,24 @@
       "writtenOn": "2022-06-30T12:43:07Z",
       "side": 1,
       "message": "On M1 it\u0027s known statically that the feature is available but on Linux x64 we have to check the availability of the feature dynamically.\nI think for the PKU case it\u0027s better to define this field as\n  base::Optional\u003cRwxMemoryWriteScope\u003e rwx_write_scope_;\nand ... (see the comment in the constructor body).\n\nMichael, WDYT?",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "891c530e_dc5c7da8",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2625,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Now the RwxMemoryWriteScope::IsSupported() is cheap, so this comment is not relevant anymore.",
+      "parentUuid": "e86ee81b_43307c20",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -615,6 +687,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b862c04_ffb6a7c4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2640,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "1517ccce_4d00ce53",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3105f6e_0a67bada",
@@ -632,6 +722,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81ded510_9b0a91b6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2673,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "a3105f6e_0a67bada",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a4d7c26_19ee74cd",
@@ -645,6 +753,24 @@
       "writtenOn": "2022-06-30T12:43:07Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4987117_33388497",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2707,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "7a4d7c26_19ee74cd",
       "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

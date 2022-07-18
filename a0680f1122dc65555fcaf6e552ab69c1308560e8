@@ -247,6 +247,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e50eaf_eba4567d",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9fffdcc9_be64d9e8",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe79f77_f981bd85",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "9fffdcc9_be64d9e8",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "750cb219_eda86892",
@@ -432,6 +468,24 @@
       "writtenOn": "2022-07-05T11:26:56Z",
       "side": 1,
       "message": "Maybe it\u0027s better to cache the result of this computation in a boolean field to avoid calling the OS function since both the predicate and the flag value are not supposed to be changed at runtime.\n\nClemens, WDYT?",
+      "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e38729fd_67b72793",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Not relevant anymore.",
+      "parentUuid": "9d6fb8e0_bf7d7550",
       "revId": "a0680f1122dc65555fcaf6e552ab69c1308560e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

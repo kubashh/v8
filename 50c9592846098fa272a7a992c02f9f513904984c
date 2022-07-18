@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c9a90d_fbc5d1e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "[pku][wasm] Refactor PKU usage in Wasm\n\nRwxMemoryWriteScope becomes the bottleneck for both MAP_JIT and PKU\nmachinery.\nWasm and V8 code space will use the same memory protection key.\n\nThis is a next step towards adding PKU support for V8 code space.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bd1396ca_b273d4da",
@@ -14,6 +37,217 @@
       "writtenOn": "2022-07-18T05:07:02Z",
       "side": 1,
       "message": "I modify this patch to enable PKU for JS based on Igor\u0027s patch, PTAL, thanks!",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e476fe45_2c5d54d3",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "IsSupported() and according to the new meaning it should return false.",
+      "range": {
+        "startLine": 86,
+        "startChar": 26,
+        "endLine": 86,
+        "endChar": 35
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e1546c8_da2ba440",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "While you are here, instead of calling SetWritable/SetExecutable manually, please inherit this class from RwxMemoryWriteScope and define ctor/dtor as:\n\nRwxMemoryWriteScopeForTesting::RwxMemoryWriteScopeForTesting() \u003d default;\nRwxMemoryWriteScopeForTesting::~RwxMemoryWriteScopeForTesting() \u003d default;",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e539bef3_0ad64b09",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please update the comment above to\n\n// This scope is a wrapper for APRR/MAP_JIT machinery on MacOS on ARM64\n// (\"Apple M1\"/Apple Silicon) or Intel PKU (aka. memory protection keys)\n// with respective low-level semantics.\n//\n// The semantics on MacOS on ARM64 is the following:\n// The scope switches permissions between writable and executable for all the\n// pages allocated with RWX permissions. Only current thread is affected.\n// This achieves \"real\" W^X and it\u0027s fast (see pthread_jit_write_protect_np()\n// for details).\n// By default it is assumed that the state is executable.\n// It\u0027s also assumed that the process has the \"com.apple.security.cs.allow-jit\"\n// entitlement.\n//\n// The semantics on Intel with PKU support is the following:\n// When Intel PKU is available, the scope switches the protection keys\u0027\n// permission between writable and not writable. The executable permission\n// cannot be retracted with PKU. That is, this \"only\" achieves write\n// protection, but is similarly thread-local and fast.\n//\n// On other platforms the scope is a no-op and thus it\u0027s allowed to be used.\n//\n// The scope is reentrant and thread safe.",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee87eb4f_b70ef3c1",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "The IsAllowed() approach does not work even for M1 (that\u0027s why I asked you to remove the respective CHECK from heap.cc), so please change the comment to:\n\n  // Returns true if current configuration supports fast write-protection of\n  // executable pages.\n  \nAnd please rename the method to IsSupported().",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d2562a2_80b244af",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "I think you can leave the friend class declaration as before without #ifdefs and a comment.",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d585d0f0_803db280",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please rename it to is_PKU_supported_.",
+      "range": {
+        "startLine": 83,
+        "startChar": 14,
+        "endLine": 83,
+        "endChar": 29
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f77ac67_ead1f331",
+        "filename": "src/common/globals.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please leave the V8_HEAP_USE_PKU_JIT_WRITE_PROTECT related changes for the follow-up CL where you\u0027ll be adding PKU support for V8 heap.\nIn this CL please refactor Wasm to use RwxMemoryWriteScope::memory_protection_key().",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b0deb5c_cff32d5e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 5860,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "This change is for the follow-up CL, but you can just use RwxMemoryWriteScope::IsSupported() here.",
+      "range": {
+        "startLine": 5859,
+        "startChar": 6,
+        "endLine": 5860,
+        "endChar": 55
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b42c5bf4_a225fdb0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 5862,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "// If PKU machinery is available then use it instead of conventional mprotect.",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85fb43a4_6082dcb2",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please leave only V8_HAS_PKU_JIT_WRITE_PROTECT here.",
+      "range": {
+        "startLine": 268,
+        "startChar": 33,
+        "endLine": 268,
+        "endChar": 57
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db02088_623489a5",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "I think we can remove this comment.",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -43,6 +277,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0bf8e71b_cbdb85da",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please also call RwxMemoryWriteScope::InitializeMemoryProtectionKey(); from here.",
+      "parentUuid": "6f9fd144_9ffabd13",
+      "range": {
+        "startLine": 270,
+        "startChar": 29,
+        "endLine": 270,
+        "endChar": 65
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ff99d5d_33f5ba53",
         "filename": "src/init/v8.cc",
         "patchSetId": 26
@@ -54,6 +312,41 @@
       "writtenOn": "2022-07-18T05:07:02Z",
       "side": 1,
       "message": "We initialize PKU for v8 heap here.\nI find that in Igor\u0027s patch directly use base::MemoryProtectionKey APIs in WASM instead of using RwxMemoryWriteScope APIs, and save the PKU key in WASM code manager, so I suppose Igor may would like to use two different PKU keys for WASM and v8 heap.\nIf my understand is wrong, I would like to modify this, or submit another CL in the future to do this is better?",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348092e8_f24e366f",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "I\u0027m sorry that I confused you. I just moved the header files to src/base and updated function names and comments. But now you are doing the actual refactoring for Wasm.\nIt\u0027s totally fine to use the same protection key for both Wasm and V8.\nPlease update the Wasm code to use the RwxMemoryWriteScope::memory_protection_key().",
+      "parentUuid": "9ff99d5d_33f5ba53",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69bac015_83582109",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-18T11:50:16Z",
+      "side": 1,
+      "message": "Please remove the CHECK and the comment (for the same reasons I asked you to remove the CHECK_IMPLIES from heap.cc).",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
