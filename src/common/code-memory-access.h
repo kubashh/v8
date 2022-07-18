@@ -44,18 +44,28 @@ class V8_NODISCARD RwxMemoryWriteScope final {
   RwxMemoryWriteScope(const RwxMemoryWriteScope&) = delete;
   RwxMemoryWriteScope& operator=(const RwxMemoryWriteScope&) = delete;
 
-  // Returns true if the configuration of the binary allows using of MAP_JIT
-  // machinery.
-  // This method is intended to be used for checking that the state of --jitless
-  // flag does not contradict the allowance of the MAP_JIT feature.
+  // Returns true if the configuration of the binary allows using of MAP_JIT or
+  // PKU machinery. This method is intended to be used for checking that the
+  // state of --jitless flag does not contradict the allowance of the MAP_JIT
+  // feature.
   V8_INLINE static bool IsAllowed();
+
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  static int memory_protection_key() { return memory_protection_key_; }
+
+  static void InitializeMemoryProtectionKey();
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 
  private:
   friend class CodePageCollectionMemoryModificationScope;
   friend class CodePageMemoryModificationScope;
   friend class CodeSpaceMemoryModificationScope;
   friend class RwxMemoryWriteScopeForTesting;
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+  // In apple silicon, we will expose RwxMemoryWriteScope API to WASM, in other
+  // platforms we don't have to do this.
   friend class wasm::CodeSpaceWriteScope;
+#endif
 
   // {SetWritable} and {SetExecutable} implicitly enters/exits the scope.
   // These methods are exposed only for the purpose of implementing other
@@ -63,10 +73,15 @@ class V8_NODISCARD RwxMemoryWriteScope final {
   V8_INLINE static void SetWritable();
   V8_INLINE static void SetExecutable();
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
   // This counter is used for supporting scope reentrance.
   static thread_local int code_space_write_nesting_level_;
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
+
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+  static int memory_protection_key_;
+  static bool is_support_PKU_;
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 };
 
 // This class is a no-op version of the RwxMemoryWriteScope class above.
@@ -84,14 +99,14 @@ class V8_NODISCARD NopRwxMemoryWriteScope final {
 // a thread_local value can't be properly exported.
 class V8_NODISCARD RwxMemoryWriteScopeForTesting final {
  public:
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
   V8_EXPORT_PRIVATE RwxMemoryWriteScopeForTesting();
   V8_EXPORT_PRIVATE ~RwxMemoryWriteScopeForTesting();
 #else
   V8_INLINE RwxMemoryWriteScopeForTesting() {
     // Define a constructor to avoid unused variable warnings.
   }
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 
   // Disable copy constructor and copy-assignment operator, since this manages
   // a resource and implicit copying of the scope can yield surprising errors.
