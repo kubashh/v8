@@ -34,7 +34,8 @@ export class TurboshaftGraphNode extends Node<TurboshaftGraphEdge<TurboshaftGrap
   }
 
   public getWidth(): number {
-    return Math.max(this.inputs.length * C.NODE_INPUT_WIDTH, this.labelBox.width);
+    return Math.max(this.inputs.length * C.NODE_INPUT_WIDTH, this.labelBox.width)
+      + 2 * C.TURBOSHAFT_NODE_CONTENT_INDENT;
   }
 
   public initDisplayLabel() {
@@ -51,7 +52,7 @@ export class TurboshaftGraphNode extends Node<TurboshaftGraphEdge<TurboshaftGrap
       title += `\nOutputs: ${this.outputs.map(i => i.target.id).join(", ")}`;
     }
     const opPropertiesStr = this.properties.length > 0 ? this.properties : "No op properties";
-    return title + `\n${opPropertiesStr}`;
+    return `${title}\n${opPropertiesStr}`;
   }
 
   public getInlineLabel(): string {
