@@ -328,6 +328,30 @@
       },
       "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00153cc8_972d017f",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-18T17:42:44Z",
+      "side": 1,
+      "message": "nvm. I was assuming it may be -1,.",
+      "parentUuid": "9497791b_77165275",
+      "range": {
+        "startLine": 1592,
+        "startChar": 27,
+        "endLine": 1592,
+        "endChar": 47
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
