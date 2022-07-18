@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3638d94_94c786ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-18T15:28:19Z",
+      "side": 1,
+      "message": "I think that we should compile concurrent OSR code objects in a way that they have multiple entries for the different nested loops. This would be better than to re-try optimization with different entries. And normally, it shouldn\u0027t increase code-size much, multiple loops in sequence as in the example are almost for free. In some cases, we might have to peel a bit more to make things reducible, but compared to re-triggering optimization, it should still be better and more reliable.",
+      "parentUuid": "a2f9c94f_536a71d9",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "624155bb_fb9a2a5d",
@@ -37,6 +61,29 @@
       "writtenOn": "2022-07-06T13:29:34Z",
       "side": 1,
       "message": "Can you have a look, Tobias?",
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a1ee7df_ffbd5a05",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-18T15:28:19Z",
+      "side": 1,
+      "message": "This is an expensive check, therefore I think we should flip the two sides of the `\u0026\u0026` operator.",
+      "range": {
+        "startLine": 324,
+        "startChar": 10,
+        "endLine": 324,
+        "endChar": 21
+      },
       "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
