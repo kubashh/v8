@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "424c9c17_9f557b4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-18T14:00:35Z",
+      "side": 1,
+      "message": "Toon, PTAL. I think this isn\u0027t actually currently necessary, because all our pushed-register safepoints are in deferred code, so we could simply emit a no-pushed-register safepoint between the normal and deferred code, but this approach feels cleaner.",
+      "revId": "edd497fceaf00378bee2aa1d2599270b99bbc7f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
