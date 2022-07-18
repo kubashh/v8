@@ -7,9 +7,22 @@
 namespace v8 {
 namespace internal {
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 
 thread_local int RwxMemoryWriteScope::code_space_write_nesting_level_ = 0;
+
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+int RwxMemoryWriteScope::memory_protection_key_ =
+    base::MemoryProtectionKey::kNoMemoryProtectionKey;
+
+bool RwxMemoryWriteScope::is_support_PKU_ = false;
+
+void RwxMemoryWriteScope::InitializeMemoryProtectionKey() {
+  memory_protection_key_ = base::MemoryProtectionKey::AllocateKey();
+  is_support_PKU_ = memory_protection_key_ !=
+                    base::MemoryProtectionKey::kNoMemoryProtectionKey;
+}
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 
 RwxMemoryWriteScopeForTesting::RwxMemoryWriteScopeForTesting() {
   RwxMemoryWriteScope::SetWritable();
@@ -19,7 +32,7 @@ RwxMemoryWriteScopeForTesting::~RwxMemoryWriteScopeForTesting() {
   RwxMemoryWriteScope::SetExecutable();
 }
 
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 
 }  // namespace internal
 }  // namespace v8

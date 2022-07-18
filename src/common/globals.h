@@ -193,6 +193,15 @@ using CodeT = Code;
 #define V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT false
 #endif
 
+// We would like to import PKU which is a similar technoly like MAP_JIT on some
+// x64 platforms for v8 heap.
+#if V8_HAS_PKU_JIT_WRITE_PROTECT && \
+    !(defined(V8_COMPRESS_POINTERS) && !defined(V8_EXTERNAL_CODE_SPACE))
+#define V8_HEAP_USE_PKU_JIT_WRITE_PROTECT true
+#else
+#define V8_HEAP_USE_PKU_JIT_WRITE_PROTECT false
+#endif
+
 // Determine whether tagged pointers are 8 bytes (used in Torque layouts for
 // choosing where to insert padding).
 #if V8_TARGET_ARCH_64_BIT && !defined(V8_COMPRESS_POINTERS)
