@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6105e93_3a1fa645",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T14:11:45Z",
+      "side": 0,
+      "message": "These diffs are somewhat harder to review: Some of the test cases had to be removed as they only differed from another one in the presence or non-presence of an WASM_RTT_CANON instruction.",
+      "range": {
+        "startLine": 1137,
+        "startChar": 0,
+        "endLine": 1166,
+        "endChar": 71
+      },
+      "revId": "01ba15e0a3824f091e13545aa8eba9d6173a01c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

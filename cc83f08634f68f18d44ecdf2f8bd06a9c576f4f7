@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3798bda_7826368f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T14:11:45Z",
+      "side": 1,
+      "message": "There is only one test I\u0027m aware of that still uses new with explicit rtt: wasm-gc-breakpoints.js. However, I\u0027m struggling with changing that. Updating the byte code resulted in the test hanging and then hitting timeouts. I also updated the offset used for the breakpoint to the best of my knowledge, still it didn\u0027t fix the issue.",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0822274_be2c65e5",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-18T14:11:45Z",
+      "side": 1,
+      "message": "I\u0027m a bit unsure if we should remove these lines. I\u0027m not a fan of commented out code, on the other hand these opcodes are somewhat still there / reserved on a binary level I guess.\nHow do you feel about it?",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
