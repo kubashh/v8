@@ -36,6 +36,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d7c36c_a87cb494",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T15:08:22Z",
+      "side": 1,
+      "message": "LGTM with comments. (Happy to take another look for the upcoming changes you mentioned.)",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a087ae8_73ae20bf",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T15:08:22Z",
+      "side": 1,
+      "message": "Accidental leftover.\n\n(Bonus points if you can explain why the test isn\u0027t failing 😊)",
+      "range": {
+        "startLine": 25,
+        "startChar": 27,
+        "endLine": 25,
+        "endChar": 32
+      },
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0822274_be2c65e5",
@@ -49,6 +89,47 @@
       "writtenOn": "2022-07-18T14:11:45Z",
       "side": 1,
       "message": "I\u0027m a bit unsure if we should remove these lines. I\u0027m not a fan of commented out code, on the other hand these opcodes are somewhat still there / reserved on a binary level I guess.\nHow do you feel about it?",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fac17886_e03b87ce",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T15:08:22Z",
+      "side": 1,
+      "message": "Drop them. Reasoning: we don\u0027t want to use them any more, and we expect to remove them entirely from the set of opcodes that V8 understands. (Whether and when and in what shape they\u0027ll be resurrected post-MVP remains to be seen; we certainly don\u0027t need to keep commented-out code around until then.)",
+      "parentUuid": "a0822274_be2c65e5",
+      "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e34b7dd7_e3a72a78",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T15:08:22Z",
+      "side": 1,
+      "message": "AFAICS this is identical to the previous two lines (1148/1149)?",
+      "range": {
+        "startLine": 1150,
+        "startChar": 2,
+        "endLine": 1151,
+        "endChar": 56
+      },
       "revId": "cc83f08634f68f18d44ecdf2f8bd06a9c576f4f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
