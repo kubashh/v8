@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b1138e7c_4c9e6af9",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-18T09:11:46Z",
+      "side": 0,
+      "message": "nit: Keep as `DCHECK_LE`?",
+      "range": {
+        "startLine": 1395,
+        "startChar": 2,
+        "endLine": 1395,
+        "endChar": 11
+      },
+      "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "696035ed_daf23337",
         "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
         "patchSetId": 1
@@ -14,6 +37,24 @@
       "writtenOn": "2022-07-18T08:35:37Z",
       "side": 0,
       "message": "The tests in this file are behind `CPPGC_IS_STANDALONE`.\nI am not sure how to run them. Omer, PTAL.",
+      "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f64a2af_6e3c5074",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-18T09:11:46Z",
+      "side": 0,
+      "message": "You need to add `cppgc_is_standalone \u003d true` to your gn args",
+      "parentUuid": "696035ed_daf23337",
       "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
