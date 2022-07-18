@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "600be8e7_afb86ae9",
+        "filename": "src/debug/debug-interface.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "24f99e9c_4d9ab6ef",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4396c55_0c87a9d2",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-15T21:59:38Z",
       "side": 1,
       "message": "`const session \u003d trackSctips()`? You\u0027re never appending to this array.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f50811_88d545a2",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4396c55_0c87a9d2",
       "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2bff05_c7fb9804",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b2195b0_32de2131",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7dc7450f_bd9fcdae",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-07-15T21:59:38Z",
       "side": 1,
       "message": "this is unused as far as I can tell.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb20b427_65469b81",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dc7450f_bd9fcdae",
       "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f2fc4f_ac77269a",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f1a31dd_1d7f13b1",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73f5d828_7780222c",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-07-15T21:59:38Z",
       "side": 1,
       "message": "can we just extract this to the top level? You need this elsewhere, and it doesn\u0027t look like it has anything to do with tracking scripts per se.",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1bbc0ad_cdd1b54a",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73f5d828_7780222c",
       "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0daade57_3ebc7191",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80e17ad8_eb3b43d2",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51afc788_89662587",
@@ -150,6 +276,24 @@
       "writtenOn": "2022-07-15T21:59:38Z",
       "side": 1,
       "message": "That would be on the global object, did you mean `const bytes \u003d []?`",
+      "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99bf1d45_03f302f5",
+        "filename": "test/inspector/debugger/wasm-scripts-disassembly.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-18T17:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51afc788_89662587",
       "revId": "2b31f9b5c21ba9deb66a7f8ba7bc819edc6f7905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
