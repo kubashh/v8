@@ -316,6 +316,7 @@ void BaselineCompiler::GenerateCode() {
       AddPosition();
     }
   }
+  shared_function_info_->set_sparkplug_compiled(true);
 }
 
 MaybeHandle<Code> BaselineCompiler::Build(LocalIsolate* local_isolate) {

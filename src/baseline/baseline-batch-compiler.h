@@ -25,6 +25,7 @@ class BaselineBatchCompiler {
   ~BaselineBatchCompiler();
   // Enqueues SharedFunctionInfo of |function| for compilation.
   void EnqueueFunction(Handle<JSFunction> function);
+  void EnqueueSFI(SharedFunctionInfo shared);
 
   void set_enabled(bool enabled) { enabled_ = enabled; }
   bool is_enabled() { return enabled_; }
