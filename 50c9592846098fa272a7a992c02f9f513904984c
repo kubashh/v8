@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1396ca_b273d4da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-18T05:07:02Z",
+      "side": 1,
+      "message": "I modify this patch to enable PKU for JS based on Igor\u0027s patch, PTAL, thanks!",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f9fd144_9ffabd13",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-18T05:07:02Z",
+      "side": 1,
+      "message": "Move PKU API initialization from WASM to here, beacuse we may initialize PKU for v8 heap later.",
+      "range": {
+        "startLine": 270,
+        "startChar": 29,
+        "endLine": 270,
+        "endChar": 65
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff99d5d_33f5ba53",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-18T05:07:02Z",
+      "side": 1,
+      "message": "We initialize PKU for v8 heap here.\nI find that in Igor\u0027s patch directly use base::MemoryProtectionKey APIs in WASM instead of using RwxMemoryWriteScope APIs, and save the PKU key in WASM code manager, so I suppose Igor may would like to use two different PKU keys for WASM and v8 heap.\nIf my understand is wrong, I would like to modify this, or submit another CL in the future to do this is better?",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

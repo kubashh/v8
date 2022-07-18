@@ -379,6 +379,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3a13ad3_1b5bd9eb",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-18T05:07:02Z",
+      "side": 1,
+      "message": "Now if we enable PKU for v8 heap in all x64 linux platform, we have to check if the platform really support PKU, so we add a field \u0027is_support_PKU_\u0027 to check in SetWritable/SetExecutable functions.",
+      "parentUuid": "4c8caa7c_b0063254",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5257b51d_8bcc1e1f",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 7
