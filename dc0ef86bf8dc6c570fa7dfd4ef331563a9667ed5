@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5588c559_c2112a66",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "b1138e7c_4c9e6af9",
+      "range": {
+        "startLine": 1395,
+        "startChar": 2,
+        "endLine": 1395,
+        "endChar": 11
+      },
+      "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "696035ed_daf23337",
@@ -55,6 +79,24 @@
       "side": 0,
       "message": "You need to add `cppgc_is_standalone \u003d true` to your gn args",
       "parentUuid": "696035ed_daf23337",
+      "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d6eee1_96f613bd",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 0,
+      "message": "Done. I fixed a test and now the standalone unittests pass. Thanks!",
+      "parentUuid": "2f64a2af_6e3c5074",
       "revId": "dc0ef86bf8dc6c570fa7dfd4ef331563a9667ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

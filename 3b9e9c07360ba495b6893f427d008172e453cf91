@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe24261_15007ccf",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "I have added those to line 255, in `StatsCollector::NotifySweepingCompleted`.\nIt\u0027s better there, because they are checked even if there\u0027s no metric recorder.",
+      "parentUuid": "14a07270_ae1cd5ad",
+      "range": {
+        "startLine": 189,
+        "startChar": 6,
+        "endLine": 189,
+        "endChar": 18
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e7cd858_2477a29f",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-18T09:11:46Z",
       "side": 1,
       "message": "You shouldn\u0027t be adding if this is -1",
+      "range": {
+        "startLine": 202,
+        "startChar": 50,
+        "endLine": 202,
+        "endChar": 69
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b28676ec_ddf274bb",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "This contains the value of `previous_.scope_data[kIncrementalMark].InMicroseconds()` (line 266 below). It\u0027s never -1. What may be -1 is `event.main_thread_incremental.mark_duration_us` (line 188 above) and that\u0027s why I changed this line.",
+      "parentUuid": "5e7cd858_2477a29f",
       "range": {
         "startLine": 202,
         "startChar": 50,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa62aa2_9f69abbd",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "206bbb9c_066a422e",
+      "range": {
+        "startLine": 250,
+        "startChar": 58,
+        "endLine": 250,
+        "endChar": 71
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c84abd9_d99f655f",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-07-18T09:11:46Z",
       "side": 1,
       "message": "nit: Let\u0027s use kAtomic as default.",
+      "range": {
+        "startLine": 112,
+        "startChar": 44,
+        "endLine": 112,
+        "endChar": 56
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe2cd0b_aa9dff38",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c84abd9_d99f655f",
       "range": {
         "startLine": 112,
         "startChar": 44,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f43393f7_68e08796",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "This will be a bit tricky. If I move the marking type parameter to `NotifyMarkingCompleted`, this will need to go to line 297 below, and by then `config_.marking_type` does not have the correct value anymore.\nWe discussed it offline and decided it\u0027s simpler to leave it as is.",
+      "parentUuid": "f6c6845f_e42ea0b8",
+      "range": {
+        "startLine": 276,
+        "startChar": 44,
+        "endLine": 276,
+        "endChar": 55
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e9bcdca_13ddf0a9",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bae8cec2_5a68ddd3",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e9bcdca_13ddf0a9",
+      "range": {
+        "startLine": 1399,
+        "startChar": 10,
+        "endLine": 1399,
+        "endChar": 41
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7be61497_5a369ad3",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-07-18T09:11:46Z",
       "side": 1,
       "message": "nit: `DCHECK_LE(0, incremental_sweeping)`",
+      "range": {
+        "startLine": 1592,
+        "startChar": 27,
+        "endLine": 1592,
+        "endChar": 47
+      },
+      "revId": "3b9e9c07360ba495b6893f427d008172e453cf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9497791b_77165275",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-18T16:41:59Z",
+      "side": 1,
+      "message": "It cannot be negative, as it comes from the event\u0027s scope (line 1521 above). I wouldn\u0027t mind adding it, but we don\u0027t have such `DCHECK`s for any other scope counters.\n\nUnless you meant adding a `DCHECK_EQ(0, incremental_sweeping)`, as we now know it\u0027s going to be zero.",
+      "parentUuid": "7be61497_5a369ad3",
       "range": {
         "startLine": 1592,
         "startChar": 27,
