@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d759308_592af9b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1167225
+      },
+      "writtenOn": "2022-07-19T10:13:42Z",
+      "side": 1,
+      "message": "The problem we are trying to solve here is that with concurrent OSR, we don\u0027t know in which part of the code we will be when the OSR compilation is finished. At the moment, we try to solve this by triggering multiple OSR compilations from different start points, which takes a long time and causes multiple compilations. Your CL reduces the number of triggered compilations, but doesn\u0027t solve the issue that the loop for which we compiled OSR might take very long to be reached. I\u0027m suggesting to solve the problem by changing the way we produce OSR code: produce a single code object that is valid for multiple bytecode positions / loop backedges. The code object starts with a switch on the bytecode position and based on this starting execution from different positions in the nested loops. \nThis would have better latency than the current approach, since the first OSR result has more opportunities to be switched to. And it reduces the total number of OSR compilations, as a single compilation is enough.",
+      "parentUuid": "78697752_b8449929",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "624155bb_fb9a2a5d",
