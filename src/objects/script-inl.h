@@ -125,7 +125,9 @@ bool Script::has_wasm_breakpoint_infos() const {
 }
 
 wasm::NativeModule* Script::wasm_native_module() const {
-  return Managed<wasm::NativeModule>::cast(wasm_managed_native_module()).raw();
+  return Managed<wasm::NativeModule, kWasmNativeModuleManagedTag>::cast(
+             wasm_managed_native_module())
+      .raw();
 }
 
 bool Script::break_on_entry() const { return BreakOnEntryBit::decode(flags()); }

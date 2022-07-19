@@ -2467,14 +2467,14 @@ Maybe<Intl::ResolvedLocale> Intl::ResolveLocale(
       Intl::ResolvedLocale{canonicalized_locale, icu_locale, extensions});
 }
 
-Handle<Managed<icu::UnicodeString>> Intl::SetTextToBreakIterator(
+Handle<ManagedUnicodeString> Intl::SetTextToBreakIterator(
     Isolate* isolate, Handle<String> text, icu::BreakIterator* break_iterator) {
   text = String::Flatten(isolate, text);
   icu::UnicodeString* u_text = static_cast<icu::UnicodeString*>(
       Intl::ToICUUnicodeString(isolate, text).clone());
 
-  Handle<Managed<icu::UnicodeString>> new_u_text =
-      Managed<icu::UnicodeString>::FromRawPtr(isolate, 0, u_text);
+  Handle<ManagedUnicodeString> new_u_text =
+      ManagedUnicodeString::FromRawPtr(isolate, 0, u_text);
 
   break_iterator->setText(*u_text);
   return new_u_text;

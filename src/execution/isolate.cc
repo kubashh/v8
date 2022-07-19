@@ -799,7 +799,7 @@ class CallSiteBuilder {
       }
     }
 
-    auto code = Managed<wasm::GlobalWasmCodeRef>::Allocate(
+    auto code = wasm::ManagedGlobalWasmCodeRef::Allocate(
         isolate_, 0, summary.code(),
         instance->module_object().shared_native_module());
     AppendFrame(instance,
@@ -1521,7 +1521,8 @@ bool Isolate::MayAccess(Handle<Context> accessing_context,
     AccessCheckInfo access_check_info = AccessCheckInfo::Get(this, receiver);
     if (access_check_info.is_null()) return false;
     Object fun_obj = access_check_info.callback();
-    callback = v8::ToCData<v8::AccessCheckCallback>(fun_obj);
+    callback =
+        v8::ToCData<kAccessCheckCallbackTag, v8::AccessCheckCallback>(fun_obj);
     data = handle(access_check_info.data(), this);
   }
 
@@ -1924,14 +1925,18 @@ Object Isolate::UnwindAndFindHandler() {
       // We reached the end of the current stack segment. Follow the linked-list
       // of stacks to find the next frame, and perform the implicit stack
       // switch.
-      auto stack = Managed<wasm::StackMemory>::cast(current_stack.stack());
+      auto stack = Managed<wasm::StackMemory, kWasmStackMemoryManagedTag>::cast(
+          current_stack.stack());
       // Mark this stack as empty.
       stack.get()->jmpbuf()->sp = 0x0;
       HeapObject parent = current_stack.parent();
       DCHECK(!parent.IsUndefined());
       current_stack = WasmContinuationObject::cast(parent);
       wasm::StackMemory* parent_stack =
-          Managed<wasm::StackMemory>::cast(current_stack.stack()).get().get();
+          Managed<wasm::StackMemory, kWasmStackMemoryManagedTag>::cast(
+              current_stack.stack())
+              .get()
+              .get();
       iter.Reset(thread_local_top(), parent_stack);
 
       // Update the continuation and suspender state.

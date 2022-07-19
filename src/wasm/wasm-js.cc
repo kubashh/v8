@@ -163,7 +163,8 @@ std::shared_ptr<WasmStreaming> WasmStreaming::Unpack(Isolate* isolate,
   TRACE_EVENT0("v8.wasm", "wasm.WasmStreaming.Unpack");
   i::HandleScope scope(reinterpret_cast<i::Isolate*>(isolate));
   auto managed =
-      i::Handle<i::Managed<WasmStreaming>>::cast(Utils::OpenHandle(*value));
+      i::Handle<i::Managed<WasmStreaming, i::kWasmStreamingTag>>::cast(
+          Utils::OpenHandle(*value));
   return managed->get();
 }
 
@@ -615,8 +616,8 @@ void WebAssemblyCompileStreaming(
 
   // Allocate the streaming decoder in a Managed so we can pass it to the
   // embedder.
-  i::Handle<i::Managed<WasmStreaming>> data =
-      i::Managed<WasmStreaming>::Allocate(
+  i::Handle<i::Managed<WasmStreaming, i::kWasmStreamingTag>> data =
+      i::Managed<WasmStreaming, i::kWasmStreamingTag>::Allocate(
           i_isolate, 0,
           std::make_unique<WasmStreaming::WasmStreamingImpl>(
               isolate, kAPIMethodName, resolver));
@@ -931,8 +932,8 @@ void WebAssemblyInstantiateStreaming(
 
   // Allocate the streaming decoder in a Managed so we can pass it to the
   // embedder.
-  i::Handle<i::Managed<WasmStreaming>> data =
-      i::Managed<WasmStreaming>::Allocate(
+  i::Handle<i::Managed<WasmStreaming, i::kWasmStreamingTag>> data =
+      i::Managed<WasmStreaming, i::kWasmStreamingTag>::Allocate(
           i_isolate, 0,
           std::make_unique<WasmStreaming::WasmStreamingImpl>(
               isolate, kAPIMethodName, compilation_resolver));

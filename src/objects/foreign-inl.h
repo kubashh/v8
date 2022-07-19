@@ -21,26 +21,24 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(Foreign)
 
-// static
-bool Foreign::IsNormalized(Object value) {
-  if (value == Smi::zero()) return true;
-  return Foreign::cast(value).foreign_address() != kNullAddress;
-}
-
-DEF_GETTER(Foreign, foreign_address, Address) {
+template <ExternalPointerTag tag>
+Address Foreign::foreign_address() {
+  static_assert(IsSubTag(tag, kAnyForeignTag));
+  // TODO(saelo) the caller should pass in the Isolate instead.
   Isolate* isolate = GetIsolateForSandbox(*this);
-  return ReadExternalPointerField<kForeignForeignAddressTag>(
-      kForeignAddressOffset, isolate);
+  return ReadExternalPointerField<tag>(kForeignAddressOffset, isolate);
 }
 
-void Foreign::AllocateExternalPointerEntries(Isolate* isolate) {
-  InitExternalPointerField<kForeignForeignAddressTag>(kForeignAddressOffset,
-                                                      isolate);
+template <ExternalPointerTag tag>
+void Foreign::AllocateExternalPointerEntry(Isolate* isolate) {
+  static_assert(IsSubTag(tag, kAnyForeignTag));
+  InitExternalPointerField<tag>(kForeignAddressOffset, isolate);
 }
 
+template <ExternalPointerTag tag>
 void Foreign::set_foreign_address(Isolate* isolate, Address value) {
-  WriteExternalPointerField<kForeignForeignAddressTag>(kForeignAddressOffset,
-                                                       isolate, value);
+  static_assert(IsSubTag(tag, kAnyForeignTag));
+  WriteExternalPointerField<tag>(kForeignAddressOffset, isolate, value);
 }
 
 }  // namespace internal

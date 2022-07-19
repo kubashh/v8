@@ -1258,7 +1258,7 @@ icu::UnicodeString SkeletonFromDateFormat(
 
 icu::DateIntervalFormat* LazyCreateDateIntervalFormat(
     Isolate* isolate, Handle<JSDateTimeFormat> date_time_format) {
-  Managed<icu::DateIntervalFormat> managed_format =
+  ManagedDateIntervalFormat managed_format =
       date_time_format->icu_date_interval_format();
   if (managed_format.get()) {
     return managed_format.raw();
@@ -1282,9 +1282,9 @@ icu::DateIntervalFormat* LazyCreateDateIntervalFormat(
     return nullptr;
   }
   date_interval_format->setTimeZone(icu_simple_date_format->getTimeZone());
-  Handle<Managed<icu::DateIntervalFormat>> managed_interval_format =
-      Managed<icu::DateIntervalFormat>::FromUniquePtr(
-          isolate, 0, std::move(date_interval_format));
+  Handle<ManagedDateIntervalFormat> managed_interval_format =
+      ManagedDateIntervalFormat::FromUniquePtr(isolate, 0,
+                                               std::move(date_interval_format));
   date_time_format->set_icu_date_interval_format(*managed_interval_format);
   return (*managed_interval_format).raw();
 }
@@ -1912,15 +1912,15 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::New(
   Handle<String> locale_str = isolate->factory()->NewStringFromAsciiChecked(
       maybe_locale_str.FromJust().c_str());
 
-  Handle<Managed<icu::Locale>> managed_locale =
-      Managed<icu::Locale>::FromRawPtr(isolate, 0, icu_locale.clone());
+  Handle<ManagedLocale> managed_locale =
+      ManagedLocale::FromRawPtr(isolate, 0, icu_locale.clone());
 
-  Handle<Managed<icu::SimpleDateFormat>> managed_format =
-      Managed<icu::SimpleDateFormat>::FromUniquePtr(isolate, 0,
-                                                    std::move(icu_date_format));
+  Handle<ManagedSimpleDateFormat> managed_format =
+      ManagedSimpleDateFormat::FromUniquePtr(isolate, 0,
+                                             std::move(icu_date_format));
 
-  Handle<Managed<icu::DateIntervalFormat>> managed_interval_format =
-      Managed<icu::DateIntervalFormat>::FromRawPtr(isolate, 0, nullptr);
+  Handle<ManagedDateIntervalFormat> managed_interval_format =
+      ManagedDateIntervalFormat::FromRawPtr(isolate, 0, nullptr);
 
   // Now all properties are ready, so we can allocate the result object.
   Handle<JSDateTimeFormat> date_time_format = Handle<JSDateTimeFormat>::cast(

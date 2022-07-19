@@ -27,6 +27,10 @@
 
 namespace v8 {
 namespace internal {
+
+template <class CppType, ExternalPointerTag tag>
+class Managed;
+
 namespace wasm {
 class InterpretedFrame;
 class NativeModule;
@@ -35,8 +39,15 @@ struct WasmFunction;
 struct WasmGlobal;
 struct WasmModule;
 struct WasmTag;
+class GlobalWasmCodeRef;
 class WasmValue;
+class StackMemory;
 class WireBytesRef;
+
+using ManagedNativeModule = Managed<NativeModule, kWasmNativeModuleManagedTag>;
+using ManagedGlobalWasmCodeRef =
+    Managed<GlobalWasmCodeRef, kWasmGlobalWasmCodeRefManagedTag>;
+using ManagedStackMemory = Managed<StackMemory, kWasmStackMemoryManagedTag>;
 }  // namespace wasm
 
 class BreakPoint;
@@ -52,9 +63,6 @@ class WasmJSFunction;
 class WasmModuleObject;
 
 enum class SharedFlag : uint8_t;
-
-template <class CppType>
-class Managed;
 
 #include "torque-generated/src/wasm/wasm-objects-tq.inc"
 

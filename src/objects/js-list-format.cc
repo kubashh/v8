@@ -125,8 +125,8 @@ MaybeHandle<JSListFormat> JSListFormat::New(Isolate* isolate, Handle<Map> map,
                     JSListFormat);
   }
 
-  Handle<Managed<icu::ListFormatter>> managed_formatter =
-      Managed<icu::ListFormatter>::FromRawPtr(isolate, 0, formatter);
+  Handle<ManagedListFormatter> managed_formatter =
+      ManagedListFormatter::FromRawPtr(isolate, 0, formatter);
 
   // Now all properties are ready, so we can allocate the result object.
   Handle<JSListFormat> list_format = Handle<JSListFormat>::cast(

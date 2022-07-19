@@ -202,6 +202,18 @@ void ExternalPointerSlot::store(Isolate* isolate, Address value,
   WriteMaybeUnalignedValue<Address>(address(), value);
 }
 
+ExternalPointerTag ExternalPointerSlot::load_tag(const Isolate* isolate,
+                                                 ExternalPointerTag group_tag) {
+#ifdef V8_ENABLE_SANDBOX
+  if (IsSandboxedExternalPointerType(group_tag)) {
+    const ExternalPointerTable& table =
+        GetExternalPointerTableForTag(isolate, group_tag);
+    return table.GetTag(load_handle());
+  }
+#endif
+  return group_tag;
+}
+
 #ifdef V8_ENABLE_SANDBOX
 const ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
     const Isolate* isolate, ExternalPointerTag tag) {

@@ -43,13 +43,13 @@ MaybeHandle<JSSegmentIterator> JSSegmentIterator::Create(
 
   // 5. Set iterator.[[IteratedStringNextSegmentCodeUnitIndex]] to 0.
   break_iterator->first();
-  Handle<Managed<icu::BreakIterator>> managed_break_iterator =
-      Managed<icu::BreakIterator>::FromRawPtr(isolate, 0, break_iterator);
+  Handle<ManagedBreakIterator> managed_break_iterator =
+      ManagedBreakIterator::FromRawPtr(isolate, 0, break_iterator);
 
   icu::UnicodeString* string = new icu::UnicodeString();
   break_iterator->getText().getText(*string);
-  Handle<Managed<icu::UnicodeString>> unicode_string =
-      Managed<icu::UnicodeString>::FromRawPtr(isolate, 0, string);
+  Handle<ManagedUnicodeString> unicode_string =
+      ManagedUnicodeString::FromRawPtr(isolate, 0, string);
 
   break_iterator->setText(*string);
 

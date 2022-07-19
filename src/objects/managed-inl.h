@@ -12,34 +12,32 @@ namespace v8 {
 namespace internal {
 
 // static
-template <class CppType>
+template <class CppType, ExternalPointerTag tag>
 template <typename... Args>
-Handle<Managed<CppType>> Managed<CppType>::Allocate(Isolate* isolate,
-                                                    size_t estimated_size,
-                                                    Args&&... args) {
+Handle<Managed<CppType, tag>> Managed<CppType, tag>::Allocate(
+    Isolate* isolate, size_t estimated_size, Args&&... args) {
   return FromSharedPtr(isolate, estimated_size,
                        std::make_shared<CppType>(std::forward<Args>(args)...));
 }
 
 // static
-template <class CppType>
-Handle<Managed<CppType>> Managed<CppType>::FromRawPtr(Isolate* isolate,
-                                                      size_t estimated_size,
-                                                      CppType* ptr) {
+template <class CppType, ExternalPointerTag tag>
+Handle<Managed<CppType, tag>> Managed<CppType, tag>::FromRawPtr(
+    Isolate* isolate, size_t estimated_size, CppType* ptr) {
   return FromSharedPtr(isolate, estimated_size, std::shared_ptr<CppType>{ptr});
 }
 
 // static
-template <class CppType>
-Handle<Managed<CppType>> Managed<CppType>::FromUniquePtr(
+template <class CppType, ExternalPointerTag tag>
+Handle<Managed<CppType, tag>> Managed<CppType, tag>::FromUniquePtr(
     Isolate* isolate, size_t estimated_size,
     std::unique_ptr<CppType> unique_ptr) {
   return FromSharedPtr(isolate, estimated_size, std::move(unique_ptr));
 }
 
 // static
-template <class CppType>
-Handle<Managed<CppType>> Managed<CppType>::FromSharedPtr(
+template <class CppType, ExternalPointerTag tag>
+Handle<Managed<CppType, tag>> Managed<CppType, tag>::FromSharedPtr(
     Isolate* isolate, size_t estimated_size,
     std::shared_ptr<CppType> shared_ptr) {
   reinterpret_cast<v8::Isolate*>(isolate)
@@ -47,8 +45,9 @@ Handle<Managed<CppType>> Managed<CppType>::FromSharedPtr(
   auto destructor = new ManagedPtrDestructor(
       estimated_size, new std::shared_ptr<CppType>{std::move(shared_ptr)},
       Destructor);
-  Handle<Managed<CppType>> handle = Handle<Managed<CppType>>::cast(
-      isolate->factory()->NewForeign(reinterpret_cast<Address>(destructor)));
+  Handle<Managed<CppType, tag>> handle =
+      Handle<Managed<CppType, tag>>::cast(isolate->factory()->NewForeign<tag>(
+          reinterpret_cast<Address>(destructor)));
   Handle<Object> global_handle = isolate->global_handles()->Create(*handle);
   destructor->global_handle_location_ = global_handle.location();
   GlobalHandles::MakeWeak(destructor->global_handle_location_, destructor,

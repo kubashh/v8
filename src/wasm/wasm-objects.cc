@@ -46,7 +46,7 @@ namespace {
 
 // Manages the natively-allocated memory for a WasmInstanceObject. Since
 // an instance finalizer is not guaranteed to run upon isolate shutdown,
-// we must use a Managed<WasmInstanceNativeAllocations> to guarantee
+// we must use a ManagedWasmInstanceNativeAllocations to guarantee
 // it is freed.
 class WasmInstanceNativeAllocations {
  public:
@@ -74,6 +74,9 @@ class WasmInstanceNativeAllocations {
   const std::unique_ptr<uint32_t[]> data_segment_sizes_;
   const std::unique_ptr<uint8_t[]> dropped_elem_segments_;
 };
+
+using ManagedWasmInstanceNativeAllocations =
+    Managed<WasmInstanceNativeAllocations, kWasmInstanceNativeAllocationsTag>;
 
 size_t EstimateNativeAllocationsSize(const WasmModule* module) {
   size_t estimate =
@@ -106,17 +109,17 @@ Handle<WasmModuleObject> WasmModuleObject::New(
 Handle<WasmModuleObject> WasmModuleObject::New(
     Isolate* isolate, std::shared_ptr<wasm::NativeModule> native_module,
     Handle<Script> script, Handle<FixedArray> export_wrappers) {
-  Handle<Managed<wasm::NativeModule>> managed_native_module;
+  Handle<wasm::ManagedNativeModule> managed_native_module;
   if (script->type() == Script::TYPE_WASM) {
     managed_native_module = handle(
-        Managed<wasm::NativeModule>::cast(script->wasm_managed_native_module()),
+        wasm::ManagedNativeModule::cast(script->wasm_managed_native_module()),
         isolate);
   } else {
     const WasmModule* module = native_module->module();
     size_t memory_estimate =
         native_module->committed_code_space() +
         wasm::WasmCodeManager::EstimateNativeModuleMetaDataSize(module);
-    managed_native_module = Managed<wasm::NativeModule>::FromSharedPtr(
+    managed_native_module = wasm::ManagedNativeModule::FromSharedPtr(
         isolate, memory_estimate, std::move(native_module));
   }
   Handle<WasmModuleObject> module_object = Handle<WasmModuleObject>::cast(
@@ -692,6 +695,10 @@ void WasmTableObject::GetFunctionTableEntry(
 }
 
 namespace {
+class IftNativeAllocations;
+using ManagedIftNativeAllocations =
+    Managed<IftNativeAllocations, kWasmIftNativeAllocationsTag>;
+
 class IftNativeAllocations {
  public:
   IftNativeAllocations(Handle<WasmIndirectFunctionTable> table, uint32_t size)
@@ -706,7 +713,7 @@ class IftNativeAllocations {
 
   void resize(Handle<WasmIndirectFunctionTable> table, uint32_t new_size) {
     DCHECK_GE(new_size, sig_ids_.size());
-    DCHECK_EQ(this, Managed<IftNativeAllocations>::cast(
+    DCHECK_EQ(this, ManagedIftNativeAllocations::cast(
                         table->managed_native_allocations())
                         .raw());
     sig_ids_.resize(new_size);
@@ -728,7 +735,7 @@ Handle<WasmIndirectFunctionTable> WasmIndirectFunctionTable::New(
       isolate->factory()->NewStruct(WASM_INDIRECT_FUNCTION_TABLE_TYPE));
   table->set_size(size);
   table->set_refs(*refs);
-  auto native_allocations = Managed<IftNativeAllocations>::Allocate(
+  auto native_allocations = ManagedIftNativeAllocations::Allocate(
       isolate, IftNativeAllocations::SizeInMemory(size), table, size);
   table->set_managed_native_allocations(*native_allocations);
   for (uint32_t i = 0; i < size; ++i) {
@@ -769,7 +776,7 @@ void WasmIndirectFunctionTable::Resize(Isolate* isolate,
   if (new_size <= old_capacity) return;
   uint32_t new_capacity = std::max(2 * old_capacity, new_size);
 
-  Managed<IftNativeAllocations>::cast(table->managed_native_allocations())
+  ManagedIftNativeAllocations::cast(table->managed_native_allocations())
       .raw()
       ->resize(table, new_capacity);
 
@@ -1178,7 +1185,7 @@ Handle<WasmInstanceObject> WasmInstanceObject::New(
   auto num_imported_mutable_globals = module->num_imported_mutable_globals;
   auto num_data_segments = module->num_declared_data_segments;
   size_t native_allocations_size = EstimateNativeAllocationsSize(module);
-  auto native_allocations = Managed<WasmInstanceNativeAllocations>::Allocate(
+  auto native_allocations = ManagedWasmInstanceNativeAllocations::Allocate(
       isolate, native_allocations_size, instance, num_imported_functions,
       num_imported_mutable_globals, num_data_segments,
       module->elem_segments.size());
@@ -1764,10 +1771,11 @@ Handle<WasmContinuationObject> WasmContinuationObject::New(
   stack->jmpbuf()->fp = kNullAddress;
   wasm::JumpBuffer* jmpbuf = stack->jmpbuf();
   size_t external_size = stack->owned_size();
-  Handle<Foreign> managed_stack = Managed<wasm::StackMemory>::FromUniquePtr(
+  Handle<Foreign> managed_stack = wasm::ManagedStackMemory::FromUniquePtr(
       isolate, external_size, std::move(stack));
   Handle<Foreign> foreign_jmpbuf =
-      isolate->factory()->NewForeign(reinterpret_cast<Address>(jmpbuf));
+      isolate->factory()->NewForeign<kWasmContinuationObjectJmpbufForeignTag>(
+          reinterpret_cast<Address>(jmpbuf));
   Handle<WasmContinuationObject> result = Handle<WasmContinuationObject>::cast(
       isolate->factory()->NewStruct(WASM_CONTINUATION_OBJECT_TYPE));
   result->set_jmpbuf(*foreign_jmpbuf);
@@ -2240,9 +2248,9 @@ Handle<AsmWasmData> AsmWasmData::New(
       wasm::WasmCodeManager::EstimateNativeModuleCodeSize(
           module, kUsesLiftoff, wasm::kNoDynamicTiering) +
       wasm::WasmCodeManager::EstimateNativeModuleMetaDataSize(module);
-  Handle<Managed<wasm::NativeModule>> managed_native_module =
-      Managed<wasm::NativeModule>::FromSharedPtr(isolate, memory_estimate,
-                                                 std::move(native_module));
+  Handle<wasm::ManagedNativeModule> managed_native_module =
+      wasm::ManagedNativeModule::FromSharedPtr(isolate, memory_estimate,
+                                               std::move(native_module));
   Handle<AsmWasmData> result = Handle<AsmWasmData>::cast(
       isolate->factory()->NewStruct(ASM_WASM_DATA_TYPE, AllocationType::kOld));
   result->set_managed_native_module(*managed_native_module);

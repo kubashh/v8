@@ -23,7 +23,7 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSLocale)
 
-ACCESSORS(JSLocale, icu_locale, Managed<icu::Locale>, kIcuLocaleOffset)
+ACCESSORS(JSLocale, icu_locale, ManagedLocale, kIcuLocaleOffset)
 
 }  // namespace internal
 }  // namespace v8

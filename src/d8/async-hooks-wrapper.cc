@@ -31,7 +31,9 @@ std::shared_ptr<AsyncHooksWrap> UnwrapHook(
   }
 
   i::Handle<i::Object> handle = Utils::OpenHandle(*hook->GetInternalField(0));
-  return i::Handle<i::Managed<AsyncHooksWrap>>::cast(handle)->get();
+  return i::Handle<i::Managed<AsyncHooksWrap,
+                              internal::kGenericManagedTag>>::cast(handle)
+      ->get();
 }
 
 void EnableHook(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -151,8 +153,9 @@ Local<Object> AsyncHooks::CreateHook(
   Local<Object> obj = async_hooks_templ.Get(isolate)
                           ->NewInstance(currentContext)
                           .ToLocalChecked();
-  i::Handle<i::Object> managed = i::Managed<AsyncHooksWrap>::FromSharedPtr(
-      reinterpret_cast<i::Isolate*>(isolate), sizeof(AsyncHooksWrap), wrap);
+  i::Handle<i::Object> managed =
+      i::Managed<AsyncHooksWrap, internal::kGenericManagedTag>::FromSharedPtr(
+          reinterpret_cast<i::Isolate*>(isolate), sizeof(AsyncHooksWrap), wrap);
   obj->SetInternalField(0, Utils::ToLocal(managed));
 
   {

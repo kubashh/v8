@@ -7,7 +7,7 @@ type PodArrayOfWasmValueType extends ByteArray
     constexpr 'PodArray<wasm::ValueType>';
 @useParentTypeChecker
 type ManagedWasmNativeModule extends Foreign
-    constexpr 'Managed<wasm::NativeModule>';
+    constexpr 'wasm::ManagedNativeModule';
 
 extern class WasmInstanceObject extends JSObject;
 
@@ -45,6 +45,9 @@ extern class WasmInternalFunction extends Foreign {
   @if(V8_EXTERNAL_CODE_SPACE) code: CodeDataContainer;
   @ifnot(V8_EXTERNAL_CODE_SPACE) code: Code;
 }
+
+extern operator '.foreign_address_ptr' macro
+LoadWasmInternalFunctionForeignAddressPtr(WasmInternalFunction): RawPtr;
 
 extern class WasmFunctionData extends HeapObject {
   // The wasm-internal representation of this function object.
@@ -189,6 +192,9 @@ extern class WasmTypeInfo extends Foreign {
   const supertypes_length: Smi;
   supertypes[supertypes_length]: Object;
 }
+
+extern operator '.foreign_address_ptr' macro LoadWasmTypeInfoForeignAddressPtr(
+    WasmTypeInfo): RawPtr;
 
 // WasmObject corresponds to data ref types which are WasmStruct and WasmArray.
 @abstract

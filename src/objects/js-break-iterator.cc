@@ -102,11 +102,11 @@ MaybeHandle<JSV8BreakIterator> JSV8BreakIterator::New(
   isolate->CountUsage(v8::Isolate::UseCounterFeature::kBreakIterator);
 
   // Construct managed objects from pointers
-  Handle<Managed<icu::BreakIterator>> managed_break_iterator =
-      Managed<icu::BreakIterator>::FromUniquePtr(isolate, 0,
-                                                 std::move(break_iterator));
-  Handle<Managed<icu::UnicodeString>> managed_unicode_string =
-      Managed<icu::UnicodeString>::FromRawPtr(isolate, 0, nullptr);
+  Handle<ManagedBreakIterator> managed_break_iterator =
+      ManagedBreakIterator::FromUniquePtr(isolate, 0,
+                                          std::move(break_iterator));
+  Handle<ManagedUnicodeString> managed_unicode_string =
+      ManagedUnicodeString::FromRawPtr(isolate, 0, nullptr);
 
   Handle<String> locale_str =
       isolate->factory()->NewStringFromAsciiChecked(r.locale.c_str());
@@ -195,7 +195,7 @@ void JSV8BreakIterator::AdoptText(
   icu::BreakIterator* break_iterator =
       break_iterator_holder->break_iterator().raw();
   DCHECK_NOT_NULL(break_iterator);
-  Handle<Managed<icu::UnicodeString>> unicode_string =
+  Handle<ManagedUnicodeString> unicode_string =
       Intl::SetTextToBreakIterator(isolate, text, break_iterator);
   break_iterator_holder->set_unicode_string(*unicode_string);
 }

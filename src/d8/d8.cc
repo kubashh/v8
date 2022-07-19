@@ -367,7 +367,8 @@ std::shared_ptr<Worker> GetWorkerFromInternalField(Isolate* isolate,
     isolate->ThrowError("Worker is defunct because main thread is terminating");
     return nullptr;
   }
-  auto managed = i::Handle<i::Managed<Worker>>::cast(handle);
+  auto managed =
+      i::Handle<i::Managed<Worker, i::kGenericManagedTag>>::cast(handle);
   return managed->get();
 }
 
@@ -733,9 +734,10 @@ std::shared_ptr<ModuleEmbedderData> InitializeModuleEmbedderData(
     Local<Context> context) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
   const size_t kModuleEmbedderDataEstimate = 4 * 1024;  // module map.
-  i::Handle<i::Managed<ModuleEmbedderData>> module_data_managed =
-      i::Managed<ModuleEmbedderData>::Allocate(
-          i_isolate, kModuleEmbedderDataEstimate, context->GetIsolate());
+  i::Handle<i::Managed<ModuleEmbedderData, i::kGenericManagedTag>>
+      module_data_managed =
+          i::Managed<ModuleEmbedderData, i::kGenericManagedTag>::Allocate(
+              i_isolate, kModuleEmbedderDataEstimate, context->GetIsolate());
   v8::Local<v8::Value> module_data = Utils::ToLocal(module_data_managed);
   context->SetEmbedderData(kModuleEmbedderDataIndex, module_data);
   return module_data_managed->get();
@@ -745,9 +747,10 @@ std::shared_ptr<ModuleEmbedderData> GetModuleDataFromContext(
     Local<Context> context) {
   v8::Local<v8::Value> module_data =
       context->GetEmbedderData(kModuleEmbedderDataIndex);
-  i::Handle<i::Managed<ModuleEmbedderData>> module_data_managed =
-      i::Handle<i::Managed<ModuleEmbedderData>>::cast(
-          Utils::OpenHandle<Value, i::Object>(module_data));
+  i::Handle<i::Managed<ModuleEmbedderData, i::kGenericManagedTag>>
+      module_data_managed =
+          i::Handle<i::Managed<ModuleEmbedderData, i::kGenericManagedTag>>::
+              cast(Utils::OpenHandle<Value, i::Object>(module_data));
   return module_data_managed->get();
 }
 
@@ -2074,7 +2077,7 @@ void Shell::RealmTakeWebSnapshot(
   // signature checks.
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
   i::Handle<i::Object> snapshot_data_managed =
-      i::Managed<i::WebSnapshotData>::FromSharedPtr(
+      i::Managed<i::WebSnapshotData, i::kGenericManagedTag>::FromSharedPtr(
           i_isolate, snapshot_data_shared->buffer_size, snapshot_data_shared);
   v8::Local<v8::Value> shapshot_data = Utils::ToLocal(snapshot_data_managed);
   Local<ObjectTemplate> snapshot_template =
@@ -2108,7 +2111,8 @@ void Shell::RealmUseWebSnapshot(
   v8::Local<v8::Value> snapshot_data = snapshot_instance->GetInternalField(0);
   i::Handle<i::Object> snapshot_data_handle = Utils::OpenHandle(*snapshot_data);
   auto snapshot_data_managed =
-      i::Handle<i::Managed<i::WebSnapshotData>>::cast(snapshot_data_handle);
+      i::Handle<i::Managed<i::WebSnapshotData, i::kGenericManagedTag>>::cast(
+          snapshot_data_handle);
   std::shared_ptr<i::WebSnapshotData> snapshot_data_shared =
       snapshot_data_managed->get();
   // Deserialize the snapshot in the specified Realm.
@@ -2688,8 +2692,9 @@ void Shell::WorkerNew(const v8::FunctionCallbackInfo<v8::Value>& args) {
     auto worker = std::make_shared<Worker>(*script);
     i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
     const size_t kWorkerSizeEstimate = 4 * 1024 * 1024;  // stack + heap.
-    i::Handle<i::Object> managed = i::Managed<Worker>::FromSharedPtr(
-        i_isolate, kWorkerSizeEstimate, worker);
+    i::Handle<i::Object> managed =
+        i::Managed<Worker, i::kGenericManagedTag>::FromSharedPtr(
+            i_isolate, kWorkerSizeEstimate, worker);
     args.Holder()->SetInternalField(0, Utils::ToLocal(managed));
     if (!Worker::StartWorkerThread(isolate, std::move(worker))) {
       isolate->ThrowError("Can't start thread");

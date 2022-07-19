@@ -508,7 +508,7 @@ MaybeHandle<AsmWasmData> WasmEngine::SyncCompileTranslatedAsmJs(
   result.value()->asm_js_offset_information =
       std::make_unique<AsmJsOffsetInformation>(asm_js_offset_table_bytes);
 
-  // Transfer ownership of the WasmModule to the {Managed<WasmModule>} generated
+  // Transfer ownership of the WasmModule to the {ManagedWasmModule} generated
   // in {CompileToNativeModule}.
   Handle<FixedArray> export_wrappers;
   std::shared_ptr<NativeModule> native_module = CompileToNativeModule(
@@ -548,7 +548,7 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
     return {};
   }
 
-  // Transfer ownership of the WasmModule to the {Managed<WasmModule>} generated
+  // Transfer ownership of the WasmModule to the {ManagedWasmModule} generated
   // in {CompileToNativeModule}.
   Handle<FixedArray> export_wrappers;
   std::shared_ptr<NativeModule> native_module = CompileToNativeModule(
@@ -845,9 +845,9 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
   size_t memory_estimate =
       code_size_estimate +
       wasm::WasmCodeManager::EstimateNativeModuleMetaDataSize(module);
-  Handle<Managed<wasm::NativeModule>> managed_native_module =
-      Managed<wasm::NativeModule>::FromSharedPtr(isolate, memory_estimate,
-                                                 std::move(native_module));
+  Handle<ManagedNativeModule> managed_native_module =
+      ManagedNativeModule::FromSharedPtr(isolate, memory_estimate,
+                                         std::move(native_module));
   script->set_wasm_managed_native_module(*managed_native_module);
   script->set_wasm_breakpoint_infos(ReadOnlyRoots(isolate).empty_fixed_array());
   script->set_wasm_weak_instance_list(

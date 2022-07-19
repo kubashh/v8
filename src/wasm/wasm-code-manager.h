@@ -38,6 +38,9 @@ class Code;
 class CodeDesc;
 class Isolate;
 
+template <class CppType, ExternalPointerTag tag>
+class Managed;
+
 namespace wasm {
 
 class DebugInfo;

@@ -103,8 +103,7 @@ class JSNumberFormat
 
   DECL_PRINTER(JSNumberFormat)
 
-  DECL_ACCESSORS(icu_number_formatter,
-                 Managed<icu::number::LocalizedNumberFormatter>)
+  DECL_ACCESSORS(icu_number_formatter, ManagedLocalizedNumberFormatter)
 
   TQ_OBJECT_CONSTRUCTORS(JSNumberFormat)
 };
