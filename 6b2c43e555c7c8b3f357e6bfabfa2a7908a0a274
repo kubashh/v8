@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcefe2d9_38b81d04",
+        "filename": "src/heap/cppgc/stats-collector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-19T10:51:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2367dbc8_039936f4",
+      "range": {
+        "startLine": 257,
+        "startChar": 72,
+        "endLine": 257,
+        "endChar": 77
+      },
+      "revId": "6b2c43e555c7c8b3f357e6bfabfa2a7908a0a274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c95863c7_0df2d6b3",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-18T19:05:07Z",
       "side": 1,
       "message": "Why is incremental sweeping deprecated?\n\nWe still sweep on the main thread incrementally on allocation. We may not properly report the numbers here but we have that logic.",
+      "range": {
+        "startLine": 1593,
+        "startChar": 61,
+        "endLine": 1594,
+        "endChar": 41
+      },
+      "revId": "6b2c43e555c7c8b3f357e6bfabfa2a7908a0a274",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2120d2e1_186928e7",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-19T10:51:52Z",
+      "side": 1,
+      "message": "What I meant is that after https://crrev.com/c/3716487, `GCTracer::Scope::MC_INCREMENTAL_SWEEPING` is not used anymore and its value is now zero. I\u0027ll change the comment, to document that we always report its value here.",
+      "parentUuid": "c95863c7_0df2d6b3",
       "range": {
         "startLine": 1593,
         "startChar": 61,
