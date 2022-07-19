@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a5c2e5_dcff996f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T12:19:18Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "2824067d1a064ff143fe2af9bdccaed12487c296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a43728_76b5aa2d",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T12:19:18Z",
+      "side": 1,
+      "message": "The `nop` strikes again? (Even in the old version.)",
+      "range": {
+        "startLine": 1158,
+        "startChar": 45,
+        "endLine": 1158,
+        "endChar": 57
+      },
+      "revId": "2824067d1a064ff143fe2af9bdccaed12487c296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "699ab913_c07a5887",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4279,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T12:19:18Z",
+      "side": 1,
+      "message": "nit: Let\u0027s rename this to `cast_reps`, and the FunctionSig below to `cast_sig`.",
+      "range": {
+        "startLine": 4279,
+        "startChar": 14,
+        "endLine": 4279,
+        "endChar": 34
+      },
+      "revId": "2824067d1a064ff143fe2af9bdccaed12487c296",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
