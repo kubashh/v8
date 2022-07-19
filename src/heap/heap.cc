@@ -24,6 +24,7 @@
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/common/assert-scope.h"
+#include "src/common/code-memory-access.h"
 #include "src/common/globals.h"
 #include "src/compiler-dispatcher/optimizing-compile-dispatcher.h"
 #include "src/debug/debug.h"
@@ -5673,11 +5674,6 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
   mmap_region_base_ =
       reinterpret_cast<uintptr_t>(v8::internal::GetRandomMmapAddr()) &
       ~kMmapRegionMask;
-
-  // Ensure that RwxMemoryWriteScope and other dependent scopes (in particular,
-  // CodePage*ModificationScope and CodeSpaceMemoryModificationScope)
-  // are allowed to be used when jitless mode is not enabled.
-  CHECK_IMPLIES(!FLAG_jitless, RwxMemoryWriteScope::IsAllowed());
 
   v8::PageAllocator* code_page_allocator;
   if (isolate_->RequiresCodeRange() || code_range_size_ != 0) {
