@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "09416bb3_6d2eba6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-19T08:36:15Z",
+      "side": 1,
+      "message": "Thanks for your comments and discussion!\nHi Tobias, I don\u0027t understand your opinion, could you please describe it more detail or give an example.\nHi Leszek, OSR will have been bad if there is an actually long running loop in the same nested loop with OSR\u0027d loop.\nWhat do you think of adding a threshold before re-triggering OSR? Like\n  int ticks_for_reosr \u003d function\u0027s bytecode length dependent experimental value, e.g. a JS function osr state machine, trigger OSR after m ticks, concurrent OSR finish at m + n ticks, ticks_for_reosr \u003d m + n + o; \n  if (SmallEnoughForOSR() \u0026\u0026 (!function.feedback_vector().maybe_has_optimized_osr_code() || !IsInOsrLoop() || ticks \u003e\u003d ticks_for_reosr) {\n   TryIncrementOsrUrgency();\n  }",
+      "parentUuid": "b3638d94_94c786ce",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "624155bb_fb9a2a5d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -78,6 +102,30 @@
       "writtenOn": "2022-07-18T15:28:19Z",
       "side": 1,
       "message": "This is an expensive check, therefore I think we should flip the two sides of the `\u0026\u0026` operator.",
+      "range": {
+        "startLine": 324,
+        "startChar": 10,
+        "endLine": 324,
+        "endChar": 21
+      },
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2e86bc_a735a543",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-19T08:36:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a1ee7df_ffbd5a05",
       "range": {
         "startLine": 324,
         "startChar": 10,
