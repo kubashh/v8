@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "191abf09_f98e3fef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T12:40:33Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f682817_b3a00cb5",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T12:40:33Z",
+      "side": 1,
+      "message": "Drive-by micro optimization: rely on the flag instead of the computed value.",
+      "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa40dfea_f07d5ff8",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T12:40:33Z",
+      "side": 1,
+      "message": "The fix.",
+      "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
