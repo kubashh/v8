@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52380b2f_ba1111ed",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T13:09:21Z",
+      "side": 1,
+      "message": "This happens only during mksnapshot for Code objects. Currently, the only Code objects we put into the snapshot are the off-heap trampolines.\n\nThe crash happens here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/snapshot/serializer.cc;l\u003d1274?q\u003dfile:serializer.cc\u0026ss\u003dchromium\nThe iterator calls Code::constant_pool() on an mallocced copy of the Code object, we end up here and call OffHeapConstantPoolAddress() which crashes here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/code.cc;l\u003d45?q\u003dfile:code.cc\u0026ss\u003dchromium%2Fchromium%2Fsrc when it tries to read an Isolate pointer from the page header while the object is actually mallocced.",
+      "parentUuid": "5109b29a_5721c18a",
+      "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8e85817_3b9d5466",
@@ -118,6 +136,24 @@
       "writtenOn": "2022-07-19T12:51:37Z",
       "side": 1,
       "message": "You mentioned in the commit message, that this only happened with disabled external code space, so I assume this here is safe?",
+      "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e88fc00_ba6ced66",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T13:09:21Z",
+      "side": 1,
+      "message": "Ah. Good point. This is safe because we don\u0027t call this method from mallocced CodeDataContainer objects but we can short-cut here too.",
+      "parentUuid": "c8e85817_3b9d5466",
       "revId": "f51a086338b93ce5f1c9750a607c3b97eab976ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
