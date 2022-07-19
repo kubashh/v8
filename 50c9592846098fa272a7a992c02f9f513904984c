@@ -231,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fbb416bb_e472345a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 5862,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-19T11:49:35Z",
+      "side": 1,
+      "message": "I will do this and above comments in follow up CL for enable PKU for v8 heap.",
+      "parentUuid": "b42c5bf4_a225fdb0",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85fb43a4_6082dcb2",
         "filename": "src/init/v8.cc",
         "patchSetId": 26
@@ -347,6 +365,24 @@
       "side": 1,
       "message": "I\u0027m sorry that I confused you. I just moved the header files to src/base and updated function names and comments. But now you are doing the actual refactoring for Wasm.\nIt\u0027s totally fine to use the same protection key for both Wasm and V8.\nPlease update the Wasm code to use the RwxMemoryWriteScope::memory_protection_key().",
       "parentUuid": "9ff99d5d_33f5ba53",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "500a579a_6451b798",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-19T11:49:35Z",
+      "side": 1,
+      "message": "Thanks for your clarify.\nI understand that you would like me to refactor WASM to use APIs which was in RwxMemoryWriteScope instead of directly using base/platform APIs in your previous CL, and submit anoter CL to enable PKU for v8 heap. Is it correct?",
+      "parentUuid": "348092e8_f24e366f",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
