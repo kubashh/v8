@@ -531,9 +531,8 @@ MaybeHandle<JSCollator> JSCollator::New(Isolate* isolate, Handle<Map> map,
     DCHECK(U_SUCCESS(status));
   }
 
-  Handle<Managed<icu::Collator>> managed_collator =
-      Managed<icu::Collator>::FromUniquePtr(isolate, 0,
-                                            std::move(icu_collator));
+  Handle<ManagedCollator> managed_collator =
+      ManagedCollator::FromUniquePtr(isolate, 0, std::move(icu_collator));
 
   // We only need to do so if it is different from the collator would return.
   Handle<String> locale_str = isolate->factory()->NewStringFromAsciiChecked(

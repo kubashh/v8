@@ -190,7 +190,7 @@ ZoneVector<Address> GetCFunctions(FixedArray function_overloads, Zone* zone) {
                   FunctionTemplateInfo::kFunctionOverloadEntrySize;
   ZoneVector<Address> c_functions = ZoneVector<Address>(len, zone);
   for (int i = 0; i < len; i++) {
-    c_functions[i] = v8::ToCData<Address>(function_overloads.get(
+    c_functions[i] = v8::ToCData<kCFunctionForeignTag>(function_overloads.get(
         FunctionTemplateInfo::kFunctionOverloadEntrySize * i));
   }
   return c_functions;
@@ -203,8 +203,10 @@ ZoneVector<const CFunctionInfo*> GetCSignatures(FixedArray function_overloads,
   ZoneVector<const CFunctionInfo*> c_signatures =
       ZoneVector<const CFunctionInfo*>(len, zone);
   for (int i = 0; i < len; i++) {
-    c_signatures[i] = v8::ToCData<const CFunctionInfo*>(function_overloads.get(
-        FunctionTemplateInfo::kFunctionOverloadEntrySize * i + 1));
+    c_signatures[i] =
+        v8::ToCData<kCFunctionInfoForeignTag, const CFunctionInfo*>(
+            function_overloads.get(
+                FunctionTemplateInfo::kFunctionOverloadEntrySize * i + 1));
   }
   return c_signatures;
 }

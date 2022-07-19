@@ -1650,10 +1650,9 @@ MaybeHandle<JSNumberFormat> JSNumberFormat::New(Isolate* isolate,
   //
   icu::number::LocalizedNumberFormatter fmt = settings.locale(icu_locale);
 
-  Handle<Managed<icu::number::LocalizedNumberFormatter>>
-      managed_number_formatter =
-          Managed<icu::number::LocalizedNumberFormatter>::FromRawPtr(
-              isolate, 0, new icu::number::LocalizedNumberFormatter(fmt));
+  Handle<ManagedLocalizedNumberFormatter> managed_number_formatter =
+      ManagedLocalizedNumberFormatter::FromRawPtr(
+          isolate, 0, new icu::number::LocalizedNumberFormatter(fmt));
 
   // Now all properties are ready, so we can allocate the result object.
   Handle<JSNumberFormat> number_format = Handle<JSNumberFormat>::cast(

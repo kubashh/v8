@@ -1758,7 +1758,8 @@ void CodeDataContainer::CodeDataContainerPrint(std::ostream& os) {
 
 void Foreign::ForeignPrint(std::ostream& os) {
   PrintHeader(os, "Foreign");
-  os << "\n - foreign address : " << reinterpret_cast<void*>(foreign_address());
+  os << "\n - foreign address : "
+     << reinterpret_cast<void*>(foreign_address<kAnyForeignTag>());
   os << "\n";
 }
 
@@ -1847,7 +1848,8 @@ void AsmWasmData::AsmWasmDataPrint(std::ostream& os) {
 
 void WasmTypeInfo::WasmTypeInfoPrint(std::ostream& os) {
   PrintHeader(os, "WasmTypeInfo");
-  os << "\n - type address: " << reinterpret_cast<void*>(foreign_address());
+  os << "\n - type address: "
+     << reinterpret_cast<void*>(foreign_address<kWasmTypeInfoForeignTag>());
   // TODO(manoskouk): Print supertype info.
   os << "\n - supertypes: ";
   for (int i = 0; i < supertypes_length(); i++) {
@@ -2070,7 +2072,9 @@ void WasmApiFunctionRef::WasmApiFunctionRefPrint(std::ostream& os) {
 
 void WasmInternalFunction::WasmInternalFunctionPrint(std::ostream& os) {
   PrintHeader(os, "WasmInternalFunction");
-  os << "\n - call target: " << reinterpret_cast<void*>(foreign_address());
+  os << "\n - call target: "
+     << reinterpret_cast<void*>(
+            foreign_address<kWasmInternalFunctionForeignTag>());
   os << "\n - ref: " << Brief(ref());
   os << "\n - external: " << Brief(external());
   os << "\n - code: " << Brief(code());

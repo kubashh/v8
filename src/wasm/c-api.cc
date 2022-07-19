@@ -440,8 +440,9 @@ void StoreImpl::SetHostInfo(i::Handle<i::Object> object, void* info,
   // but all we get from the embedder is a {void*}, so our best estimate
   // is the size of the metadata.
   size_t estimated_size = sizeof(ManagedData);
-  i::Handle<i::Object> wrapper = i::Managed<ManagedData>::FromRawPtr(
-      i_isolate(), estimated_size, new ManagedData(info, finalizer));
+  i::Handle<i::Object> wrapper =
+      i::Managed<ManagedData, i::kGenericManagedTag>::FromRawPtr(
+          i_isolate(), estimated_size, new ManagedData(info, finalizer));
   int32_t hash = object->GetOrCreateHash(i_isolate()).value();
   i::JSWeakCollection::Set(host_info_map_, object, wrapper, hash);
 }
@@ -450,7 +451,7 @@ void* StoreImpl::GetHostInfo(i::Handle<i::Object> key) {
   i::Object raw =
       i::EphemeronHashTable::cast(host_info_map_->table()).Lookup(key);
   if (raw.IsTheHole(i_isolate())) return nullptr;
-  return i::Managed<ManagedData>::cast(raw).raw()->info;
+  return i::Managed<ManagedData, i::kGenericManagedTag>::cast(raw).raw()->info;
 }
 
 template <>
@@ -1443,8 +1444,9 @@ auto make_func(Store* store_abs, FuncData* data) -> own<Func> {
   i::Isolate* isolate = store->i_isolate();
   i::HandleScope handle_scope(isolate);
   CheckAndHandleInterrupts(isolate);
-  i::Handle<i::Managed<FuncData>> embedder_data =
-      i::Managed<FuncData>::FromRawPtr(isolate, sizeof(FuncData), data);
+  i::Handle<i::Managed<FuncData, i::kGenericManagedTag>> embedder_data =
+      i::Managed<FuncData, i::kGenericManagedTag>::FromRawPtr(
+          isolate, sizeof(FuncData), data);
   i::Handle<i::WasmCapiFunction> function = i::WasmCapiFunction::New(
       isolate, reinterpret_cast<i::Address>(&FuncData::v8_callback),
       embedder_data, SignatureHelper::Serialize(isolate, data->type.get()));
@@ -1617,7 +1619,9 @@ void PopArgs(const i::wasm::FunctionSig* sig, Val results[],
 
 own<Trap> CallWasmCapiFunction(i::WasmCapiFunctionData data, const Val args[],
                                Val results[]) {
-  FuncData* func_data = i::Managed<FuncData>::cast(data.embedder_data()).raw();
+  FuncData* func_data =
+      i::Managed<FuncData, i::kGenericManagedTag>::cast(data.embedder_data())
+          .raw();
   if (func_data->kind == FuncData::kCallback) {
     return (func_data->callback)(args, results);
   }
@@ -1670,7 +1674,9 @@ auto Func::call(const Val args[], Val results[]) const -> own<Trap> {
       instance->module()->functions[function_index].sig;
   PrepareFunctionData(isolate, function_data, sig, instance->module());
   i::Handle<i::CodeT> wrapper_code(function_data->c_wrapper_code(), isolate);
-  i::Address call_target = function_data->internal().foreign_address();
+  i::Address call_target =
+      function_data->internal()
+          .foreign_address<i::kWasmInternalFunctionForeignTag>();
 
   i::wasm::CWasmArgumentsPacker packer(function_data->packed_args_size());
   PushArgs(sig, args, &packer, store);
@@ -1714,8 +1720,9 @@ auto Func::call(const Val args[], Val results[]) const -> own<Trap> {
 
 i::Address FuncData::v8_callback(i::Address host_data_foreign,
                                  i::Address argv) {
-  FuncData* self =
-      i::Managed<FuncData>::cast(i::Object(host_data_foreign)).raw();
+  FuncData* self = i::Managed<FuncData, i::kGenericManagedTag>::cast(
+                       i::Object(host_data_foreign))
+                       .raw();
   StoreImpl* store = impl(self->store);
   i::Isolate* isolate = store->i_isolate();
   i::HandleScope scope(isolate);

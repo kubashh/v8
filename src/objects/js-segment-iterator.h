@@ -44,8 +44,8 @@ class JSSegmentIterator
   Handle<String> GranularityAsString(Isolate* isolate) const;
 
   // SegmentIterator accessors.
-  DECL_ACCESSORS(icu_break_iterator, Managed<icu::BreakIterator>)
-  DECL_ACCESSORS(unicode_string, Managed<icu::UnicodeString>)
+  DECL_ACCESSORS(icu_break_iterator, ManagedBreakIterator)
+  DECL_ACCESSORS(unicode_string, ManagedUnicodeString)
 
   DECL_PRINTER(JSSegmentIterator)
 

@@ -22,8 +22,7 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSNumberFormat)
 
-ACCESSORS(JSNumberFormat, icu_number_formatter,
-          Managed<icu::number::LocalizedNumberFormatter>,
+ACCESSORS(JSNumberFormat, icu_number_formatter, ManagedLocalizedNumberFormatter,
           kIcuNumberFormatterOffset)
 
 }  // namespace internal
