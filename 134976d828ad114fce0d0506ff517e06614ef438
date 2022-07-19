@@ -16,6 +16,91 @@
       "message": "Thanks for Igor\u0027s comments, Now I try to refactor the PKU for WASM, PTAL, thanks!\n\nThere is another problem this CL failed in v8_linux64_shared_compile_rel bot, it was failed in link cctest, but I found it was passed in other bot with cctest, I don\u0027t know why it failed, I am really appreciated if you could give me any insights.",
       "revId": "134976d828ad114fce0d0506ff517e06614ef438",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb70f7d1_29b6f9ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Thank you! The CL mostly looks good to me modulo nits and the issue with ResetPKUPermissionsForThreadSpawning.\n\nPlease address my comments and then let\u0027s pull Clemens into the discussion re Wasm changes.",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e1a28e_b56e53c0",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Please move definitions of these methods back to .cc file. The goal is to avoid inlining implementations of the RwxMemoryWriteScope\u0027s ctor/dtor to other components. See the comment above.",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e3bbec_ac1d04a1",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "There might be an issue here. The RwxMemoryWriteScope::SetExecutable() counts how many times was RwxMemoryWriteScope created and if there will be more than one RwxMemoryWriteScope active on the stack then this call will just decrease the counter but not actually modify the permissions.\n\nWe might want to call base::MemoryProtectionKey::SetPermissionsForKey() from here directly. We could have exposed this specific call from RwxMemoryWriteScope but I don\u0027t think it makes sense.\n\nClemens, WDYT?",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295ea8a7_b4074419",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "#else\n  UNREACHABLE();",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7716de1_24ae2496",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "This and below predicates can also be made static.\n\nClemens, WDYT?",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

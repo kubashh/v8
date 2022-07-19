@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66264c91_1dac377d",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 0,
+      "message": "I\u0027ll defer this to Wasm owners but I think we might want to keep this method for tracing reasons.\nIf we decide to keep it, we can make it static.\n\nClemens, WDYT?",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7abf6bb9_d6f59e7e",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 0,
+      "message": "Another reason is this DCHECK here which let us catch the issue with PKU vs. spawning a new thread.",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b5055fee_2f518795",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70c9a90d_fbc5d1e1",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bd1396ca_b273d4da",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 26
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "226de90e_7d368c29",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e476fe45_2c5d54d3",
+      "range": {
+        "startLine": 86,
+        "startChar": 26,
+        "endLine": 86,
+        "endChar": 35
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e1546c8_da2ba440",
@@ -115,6 +163,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0bbf6b_c949bb6e",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e539bef3_0ad64b09",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee87eb4f_b70ef3c1",
@@ -128,6 +194,24 @@
       "writtenOn": "2022-07-18T11:50:16Z",
       "side": 1,
       "message": "The IsAllowed() approach does not work even for M1 (that\u0027s why I asked you to remove the respective CHECK from heap.cc), so please change the comment to:\n\n  // Returns true if current configuration supports fast write-protection of\n  // executable pages.\n  \nAnd please rename the method to IsSupported().",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0f4468_d22f70c2",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ee87eb4f_b70ef3c1",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +233,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a1357b_139dc92b",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d2562a2_80b244af",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d585d0f0_803db280",
@@ -162,6 +264,30 @@
       "writtenOn": "2022-07-18T11:50:16Z",
       "side": 1,
       "message": "Please rename it to is_PKU_supported_.",
+      "range": {
+        "startLine": 83,
+        "startChar": 14,
+        "endLine": 83,
+        "endChar": 29
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcc99d9d_e290a06c",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d585d0f0_803db280",
       "range": {
         "startLine": 83,
         "startChar": 14,
@@ -212,6 +338,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc031aac_25b3efb8",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 5860,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b0deb5c_cff32d5e",
+      "range": {
+        "startLine": 5859,
+        "startChar": 6,
+        "endLine": 5860,
+        "endChar": 55
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b42c5bf4_a225fdb0",
@@ -247,6 +397,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0d732b_6ff76c57",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 5862,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fbb416bb_e472345a",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85fb43a4_6082dcb2",
@@ -270,6 +438,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc67855c_61675792",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "85fb43a4_6082dcb2",
+      "range": {
+        "startLine": 268,
+        "startChar": 33,
+        "endLine": 268,
+        "endChar": 57
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3db02088_623489a5",
@@ -283,6 +475,24 @@
       "writtenOn": "2022-07-18T11:50:16Z",
       "side": 1,
       "message": "I think we can remove this comment.",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d76c283_64447ea8",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3db02088_623489a5",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -324,6 +534,30 @@
       "side": 1,
       "message": "Please also call RwxMemoryWriteScope::InitializeMemoryProtectionKey(); from here.",
       "parentUuid": "6f9fd144_9ffabd13",
+      "range": {
+        "startLine": 270,
+        "startChar": 29,
+        "endLine": 270,
+        "endChar": 65
+      },
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e59e561_3c09300c",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0bf8e71b_cbdb85da",
       "range": {
         "startLine": 270,
         "startChar": 29,
@@ -387,6 +621,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d703a54f_a8be20e1",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Yes, exactly. \nI did that first CL because I realized that I\u0027d have to add too many comments and explanations about how the end result should look like, so it was easier to do the very first CL myself.",
+      "parentUuid": "500a579a_6451b798",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69bac015_83582109",
@@ -400,6 +652,24 @@
       "writtenOn": "2022-07-18T11:50:16Z",
       "side": 1,
       "message": "Please remove the CHECK and the comment (for the same reasons I asked you to remove the CHECK_IMPLIES from heap.cc).",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98b4b8d5_84579c39",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-19T14:22:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "69bac015_83582109",
       "revId": "50c9592846098fa272a7a992c02f9f513904984c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
