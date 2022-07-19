@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc003974_4f915d66",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-19T14:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1bf48bf_c15d21c7",
+      "range": {
+        "startLine": 2043,
+        "startChar": 8,
+        "endLine": 2043,
+        "endChar": 12
+      },
+      "revId": "cfb5de49a6ca947a3de926ff64e957efe33a8361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "833e70c2_33635a7a",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-19T14:12:54Z",
       "side": 1,
       "message": "Could you not use parameters() here instead of all()?",
+      "range": {
+        "startLine": 2182,
+        "startChar": 41,
+        "endLine": 2182,
+        "endChar": 44
+      },
+      "revId": "cfb5de49a6ca947a3de926ff64e957efe33a8361",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031bb138_37703376",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-19T14:19:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "833e70c2_33635a7a",
       "range": {
         "startLine": 2182,
         "startChar": 41,
