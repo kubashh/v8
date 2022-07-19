@@ -7,19 +7,27 @@
 namespace v8 {
 namespace internal {
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
-
+#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 thread_local int RwxMemoryWriteScope::code_space_write_nesting_level_ = 0;
+#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 
-RwxMemoryWriteScopeForTesting::RwxMemoryWriteScopeForTesting() {
-  RwxMemoryWriteScope::SetWritable();
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
+int RwxMemoryWriteScope::memory_protection_key_ =
+    base::MemoryProtectionKey::kNoMemoryProtectionKey;
+
+bool RwxMemoryWriteScope::is_PKU_supported_ = false;
+
+void RwxMemoryWriteScope::InitializeMemoryProtectionKey() {
+  memory_protection_key_ = base::MemoryProtectionKey::AllocateKey();
+  is_PKU_supported_ = memory_protection_key_ !=
+                      base::MemoryProtectionKey::kNoMemoryProtectionKey;
 }
 
-RwxMemoryWriteScopeForTesting::~RwxMemoryWriteScopeForTesting() {
-  RwxMemoryWriteScope::SetExecutable();
+bool RwxMemoryWriteScope::IsPKUWritable() {
+  return base::MemoryProtectionKey::GetKeyPermission(memory_protection_key_) ==
+         base::MemoryProtectionKey::kNoRestrictions;
 }
-
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT
+#endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 
 }  // namespace internal
 }  // namespace v8
