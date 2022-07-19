@@ -1086,6 +1086,10 @@ void Serializer::ObjectSerializer::VisitExternalPointer(
       InstanceTypeChecker::IsCallHandlerInfo(instance_type)) {
     // Output raw data payload, if any.
     OutputRawData(slot.address());
+    // For serialization of external pointers we cannot always use the provided
+    // tag as it might be a group tag (e.g. kAnyForeign for all Foreigns).
+    // Instead, we need to extract the concrete tag from the pointer table.
+    tag = slot.load_tag(isolate(), tag);
     Address value = slot.load(isolate(), tag);
     const bool sandboxify =
         V8_ENABLE_SANDBOX_BOOL && tag != kExternalPointerNullTag;

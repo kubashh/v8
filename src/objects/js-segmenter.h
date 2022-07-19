@@ -14,6 +14,7 @@
 #include "src/base/bit-field.h"
 #include "src/execution/isolate.h"
 #include "src/heap/factory.h"
+#include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
 #include "unicode/uversion.h"
@@ -46,7 +47,7 @@ class JSSegmenter : public TorqueGeneratedJSSegmenter<JSSegmenter, JSObject> {
   Handle<String> GranularityAsString(Isolate* isolate) const;
 
   // Segmenter accessors.
-  DECL_ACCESSORS(icu_break_iterator, Managed<icu::BreakIterator>)
+  DECL_ACCESSORS(icu_break_iterator, ManagedIcuBreakIterator)
 
   // Granularity: identifying the segmenter used.
   //

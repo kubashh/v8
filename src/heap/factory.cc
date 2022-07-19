@@ -1578,18 +1578,6 @@ Handle<PromiseResolveThenableJobTask> Factory::NewPromiseResolveThenableJobTask(
   return handle(microtask, isolate());
 }
 
-Handle<Foreign> Factory::NewForeign(Address addr) {
-  // Statically ensure that it is safe to allocate foreigns in paged spaces.
-  static_assert(Foreign::kSize <= kMaxRegularHeapObjectSize);
-  Map map = *foreign_map();
-  Foreign foreign = Foreign::cast(AllocateRawWithImmortalMap(
-      map.instance_size(), AllocationType::kYoung, map));
-  DisallowGarbageCollection no_gc;
-  foreign.AllocateExternalPointerEntries(isolate());
-  foreign.set_foreign_address(isolate(), addr);
-  return handle(foreign, isolate());
-}
-
 #if V8_ENABLE_WEBASSEMBLY
 Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
     Address type_address, Handle<Map> opt_parent, int instance_size_bytes,
@@ -1630,8 +1618,8 @@ Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
   for (size_t i = 0; i < supertypes.size(); i++) {
     result.set_supertypes(static_cast<int>(i), *supertypes[i]);
   }
-  result.AllocateExternalPointerEntries(isolate());
-  result.set_foreign_address(isolate(), type_address);
+  result.AllocateExternalPointerEntry<kWasmTypeInfoTag>(isolate());
+  result.set_foreign_address<kWasmTypeInfoTag>(isolate(), type_address);
   result.set_instance(*instance);
   return handle(result, isolate());
 }
@@ -1665,8 +1653,9 @@ Handle<WasmInternalFunction> Factory::NewWasmInternalFunction(
   raw.set_map_after_allocation(*rtt);
   WasmInternalFunction result = WasmInternalFunction::cast(raw);
   DisallowGarbageCollection no_gc;
-  result.AllocateExternalPointerEntries(isolate());
-  result.set_foreign_address(isolate(), opt_call_target);
+  result.AllocateExternalPointerEntry<kWasmInternalFunctionTag>(isolate());
+  result.set_foreign_address<kWasmInternalFunctionTag>(isolate(),
+                                                       opt_call_target);
   result.set_ref(*ref);
   // Default values, will be overwritten by the caller.
   result.set_code(*BUILTIN_CODE(isolate(), Abort));
@@ -1711,7 +1700,8 @@ Handle<WasmExportedFunctionData> Factory::NewWasmExportedFunctionData(
     Address call_target, Handle<Object> ref, int func_index,
     Address sig_address, int wrapper_budget, Handle<Map> rtt,
     wasm::Suspend suspend) {
-  Handle<Foreign> sig_foreign = NewForeign(sig_address);
+  Handle<Foreign> sig_foreign =
+      NewForeign<kWasmExportedFunctionDataSigTag>(sig_address);
   Handle<WasmInternalFunction> internal =
       NewWasmInternalFunction(call_target, Handle<HeapObject>::cast(ref), rtt);
   Map map = *wasm_exported_function_data_map();
@@ -1816,9 +1806,10 @@ Handle<WasmArray> Factory::NewWasmArrayFromElements(
 Handle<WasmArray> Factory::NewWasmArrayFromMemory(uint32_t length,
                                                   Handle<Map> map,
                                                   Address source) {
-  wasm::ValueType element_type = reinterpret_cast<wasm::ArrayType*>(
-                                     map->wasm_type_info().foreign_address())
-                                     ->element_type();
+  wasm::ValueType element_type =
+      reinterpret_cast<wasm::ArrayType*>(
+          map->wasm_type_info().foreign_address<kWasmTypeInfoTag>())
+          ->element_type();
   DCHECK(element_type.is_numeric());
   HeapObject raw =
       AllocateRaw(WasmArray::SizeFor(*map, length), AllocationType::kYoung);
@@ -2991,7 +2982,8 @@ Handle<SyntheticModule> Factory::NewSyntheticModule(
   Handle<ObjectHashTable> exports =
       ObjectHashTable::New(isolate(), static_cast<int>(export_names->length()));
   Handle<Foreign> evaluation_steps_foreign =
-      NewForeign(reinterpret_cast<i::Address>(evaluation_steps));
+      NewForeign<kSyntheticModuleEvaluationStepsTag>(
+          reinterpret_cast<i::Address>(evaluation_steps));
 
   SyntheticModule module =
       SyntheticModule::cast(New(synthetic_module_map(), AllocationType::kOld));

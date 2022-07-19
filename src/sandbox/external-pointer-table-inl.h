@@ -66,8 +66,20 @@ Address ExternalPointerTable::Get(ExternalPointerHandle handle,
 
   Address entry = load_atomic(index);
   DCHECK(!is_free(entry));
+  DCHECK_EQ(entry & kExternalPointerTagMask, entry & tag);
 
   return entry & ~tag;
+}
+
+ExternalPointerTag ExternalPointerTable::GetTag(
+    ExternalPointerHandle handle) const {
+  uint32_t index = handle >> kExternalPointerIndexShift;
+  DCHECK_LT(index, capacity_);
+
+  Address entry = load_atomic(index) | kExternalPointerMarkBit;
+  DCHECK(!is_free(entry));
+
+  return static_cast<ExternalPointerTag>(entry & kExternalPointerTagMask);
 }
 
 void ExternalPointerTable::Set(ExternalPointerHandle handle, Address value,
@@ -93,6 +105,7 @@ Address ExternalPointerTable::Exchange(ExternalPointerHandle handle,
 
   Address entry = exchange_atomic(index, value | tag);
   DCHECK(!is_free(entry));
+  DCHECK_EQ(entry & kExternalPointerTagMask, entry & tag);
   return entry & ~tag;
 }
 
