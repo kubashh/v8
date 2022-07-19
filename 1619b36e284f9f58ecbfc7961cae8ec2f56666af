@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c3a633_3521561f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T10:20:38Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "1619b36e284f9f58ecbfc7961cae8ec2f56666af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86f1dd01_b24fe4ae",
+        "filename": "src/wasm/string-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T10:20:38Z",
+      "side": 1,
+      "message": "Fix 1: This should take `required \u003d used+requested` instead of just `used` into account.",
+      "range": {
+        "startLine": 77,
+        "startChar": 19,
+        "endLine": 77,
+        "endChar": 68
+      },
+      "revId": "1619b36e284f9f58ecbfc7961cae8ec2f56666af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca713d6b_3e078441",
+        "filename": "src/wasm/string-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T10:20:38Z",
+      "side": 1,
+      "message": "Optimization: For (non-subclassed) single-chunk StringBuilder usage, `required * 2` will usually be smaller than `kChunkSize`, so this means we\u0027re growing less aggressively than before.",
+      "range": {
+        "startLine": 81,
+        "startChar": 19,
+        "endLine": 81,
+        "endChar": 31
+      },
+      "revId": "1619b36e284f9f58ecbfc7961cae8ec2f56666af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1238f45_511f6216",
+        "filename": "src/wasm/string-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-19T10:20:38Z",
+      "side": 1,
+      "message": "Fix 2: Prefer not to leak memory 😊",
+      "range": {
+        "startLine": 89,
+        "startChar": 6,
+        "endLine": 89,
+        "endChar": 21
+      },
+      "revId": "1619b36e284f9f58ecbfc7961cae8ec2f56666af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
