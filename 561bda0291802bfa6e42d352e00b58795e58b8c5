@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "935af29d_5f40dd0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-07-19T10:56:44Z",
+      "side": 1,
+      "message": "This CL basically introduces a whole bunch of new external pointer tags and forces the callers of Foreign.foreign_address() (and the equivalent Managed method) to supply the tag as template parameter.",
+      "revId": "561bda0291802bfa6e42d352e00b58795e58b8c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
