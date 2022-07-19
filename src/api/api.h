@@ -53,19 +53,15 @@ class Consts {
   enum TemplateType { FUNCTION_TEMPLATE = 0, OBJECT_TEMPLATE = 1 };
 };
 
-template <typename T>
+template <internal::ExternalPointerTag tag, typename T>
 inline T ToCData(v8::internal::Object obj);
 
-template <>
+template <internal::ExternalPointerTag tag>
 inline v8::internal::Address ToCData(v8::internal::Object obj);
 
-template <typename T>
+template <internal::ExternalPointerTag tag, typename T>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
     v8::internal::Isolate* isolate, T obj);
-
-template <>
-inline v8::internal::Handle<v8::internal::Object> FromCData(
-    v8::internal::Isolate* isolate, v8::internal::Address obj);
 
 class ApiFunction {
  public:

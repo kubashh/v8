@@ -2995,7 +2995,7 @@ void SaveState(MacroAssembler* masm, Register active_continuation, Register tmp,
   Register jmpbuf = foreign_jmpbuf;
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, kScratchRegister);
+      kWasmContinuationObjectJmpbufForeignTag, kScratchRegister);
   FillJumpBuffer(masm, jmpbuf, suspend);
 }
 
@@ -3027,7 +3027,7 @@ void LoadTargetJumpBuffer(MacroAssembler* masm, Register target_continuation) {
   __ LoadExternalPointerField(
       target_jmpbuf,
       FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, kScratchRegister);
+      kWasmContinuationObjectJmpbufForeignTag, kScratchRegister);
   MemOperand GCScanSlotPlace =
       MemOperand(rbp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
   __ Move(GCScanSlotPlace, 0);
@@ -3050,7 +3050,7 @@ void ReloadParentContinuation(MacroAssembler* masm, Register wasm_instance,
   Register jmpbuf = foreign_jmpbuf;
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, tmp2);
+      kWasmContinuationObjectJmpbufForeignTag, tmp2);
   __ movq(Operand(jmpbuf, wasm::kJmpBufSpOffset), Immediate(kNullAddress));
 
   Register parent = tmp2;
@@ -3067,7 +3067,7 @@ void ReloadParentContinuation(MacroAssembler* masm, Register wasm_instance,
   jmpbuf = foreign_jmpbuf;
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(foreign_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, tmp2);
+      kWasmContinuationObjectJmpbufForeignTag, tmp2);
 
   // Switch stack!
   LoadJumpBuffer(masm, jmpbuf, false);
@@ -3147,7 +3147,7 @@ void LoadValueTypesArray(MacroAssembler* masm, Register function_data,
   __ LoadExternalPointerField(
       signature,
       FieldOperand(foreign_signature, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, kScratchRegister);
+      kWasmExportedFunctionDataSigForeignTag, kScratchRegister);
   foreign_signature = no_reg;
   __ movq(return_count,
           MemOperand(signature, wasm::FunctionSig::kReturnCountOffset));
@@ -3704,7 +3704,7 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ LoadExternalPointerField(
       function_entry,
       FieldOperand(function_entry, WasmInternalFunction::kForeignAddressOffset),
-      kForeignForeignAddressTag, scratch);
+      kWasmInternalFunctionForeignTag, scratch);
   function_data = no_reg;
   scratch = no_reg;
 
@@ -4048,7 +4048,7 @@ void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
       FieldOperand(continuation, WasmContinuationObject::kJmpbufOffset));
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, r8);
+      kWasmContinuationObjectJmpbufForeignTag, r8);
   FillJumpBuffer(masm, jmpbuf, &resume);
   __ StoreTaggedSignedField(
       FieldOperand(suspender, WasmSuspenderObject::kStateOffset),
@@ -4107,7 +4107,7 @@ void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   caller = no_reg;
   __ LoadExternalPointerField(
       jmpbuf, FieldOperand(jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, r8);
+      kWasmContinuationObjectJmpbufForeignTag, r8);
   __ movq(kReturnRegister0, promise);
   __ Move(GCScanSlotPlace, 0);
   LoadJumpBuffer(masm, jmpbuf, true);
@@ -4185,7 +4185,7 @@ void Generate_WasmResumeHelper(MacroAssembler* masm, wasm::OnResume on_resume) {
   __ LoadExternalPointerField(
       current_jmpbuf,
       FieldOperand(current_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, rdx);
+      kWasmContinuationObjectJmpbufForeignTag, rdx);
   FillJumpBuffer(masm, current_jmpbuf, &suspend);
   current_jmpbuf = no_reg;
 
@@ -4240,7 +4240,7 @@ void Generate_WasmResumeHelper(MacroAssembler* masm, wasm::OnResume on_resume) {
   __ LoadExternalPointerField(
       target_jmpbuf,
       FieldOperand(target_jmpbuf, Foreign::kForeignAddressOffset),
-      kForeignForeignAddressTag, rax);
+      kWasmContinuationObjectJmpbufForeignTag, rax);
   // Move resolved value to return register.
   __ movq(kReturnRegister0, Operand(rbp, 3 * kSystemPointerSize));
   __ Move(GCScanSlotPlace, 0);

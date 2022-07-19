@@ -25,15 +25,44 @@
 
 namespace U_ICU_NAMESPACE {
 class BreakIterator;
+class Locale;
+class ListFormatter;
+class RelativeDateTimeFormatter;
+class SimpleDateFormat;
+class DateIntervalFormat;
+class PluralRules;
 class Collator;
 class FormattedValue;
 class StringEnumeration;
 class TimeZone;
 class UnicodeString;
+namespace number {
+class LocalizedNumberFormatter;
+}  //  namespace number
 }  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
 namespace internal {
+
+using ManagedUnicodeString =
+    Managed<icu::UnicodeString, kIcuUnicodeStringManagedTag>;
+using ManagedBreakIterator =
+    Managed<icu::BreakIterator, kIcuBreakIteratorManagedTag>;
+using ManagedLocale = Managed<icu::Locale, kIcuLocaleManagedTag>;
+using ManagedSimpleDateFormat =
+    Managed<icu::SimpleDateFormat, kIcuSimpleDateFormatManagedTag>;
+using ManagedDateIntervalFormat =
+    Managed<icu::DateIntervalFormat, kIcuDateIntervalFormatManagedTag>;
+using ManagedRelativeDateTimeFormatter =
+    Managed<icu::RelativeDateTimeFormatter,
+            kIcuRelativeDateTimeFormatterManagedTag>;
+using ManagedListFormatter =
+    Managed<icu::ListFormatter, kIcuListFormatterManagedTag>;
+using ManagedCollator = Managed<icu::Collator, kIcuCollatorManagedTag>;
+using ManagedLocalizedNumberFormatter =
+    Managed<icu::number::LocalizedNumberFormatter,
+            kIcuLocalizedNumberFormatterManagedTag>;
+using ManagedPluralRules = Managed<icu::PluralRules, kIcuPluralRulesManagedTag>;
 
 struct NumberFormatSpan {
   int32_t field_id;
@@ -308,7 +337,7 @@ class Intl {
   };
 
   // Utility function to set text to BreakIterator.
-  static Handle<Managed<icu::UnicodeString>> SetTextToBreakIterator(
+  static Handle<ManagedUnicodeString> SetTextToBreakIterator(
       Isolate* isolate, Handle<String> text,
       icu::BreakIterator* break_iterator);
 

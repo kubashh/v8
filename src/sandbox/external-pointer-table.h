@@ -79,6 +79,11 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   inline Address Get(ExternalPointerHandle handle,
                      ExternalPointerTag tag) const;
 
+  // Retrieves the current tag of the entry referenced by the given handle.
+  //
+  // This method is atomic and can be called from background threads.
+  inline ExternalPointerTag GetTag(ExternalPointerHandle handle) const;
+
   // Sets the entry referenced by the given handle.
   //
   // This method is atomic and can be called from background threads.

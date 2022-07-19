@@ -35,7 +35,8 @@ TEST_F(ManagedTest, GCCausesDestruction) {
   DeleteCounter* d2 = new DeleteCounter(&deleted2);
   {
     HandleScope scope(isolate());
-    auto handle = Managed<DeleteCounter>::FromRawPtr(isolate(), 0, d1);
+    auto handle = Managed<DeleteCounter, kGenericManagedTag>::FromRawPtr(
+        isolate(), 0, d1);
     USE(handle);
   }
 
@@ -58,7 +59,8 @@ TEST_F(ManagedTest, DisposeCausesDestruction1) {
   DeleteCounter* d1 = new DeleteCounter(&deleted1);
   {
     HandleScope scope(i_isolate);
-    auto handle = Managed<DeleteCounter>::FromRawPtr(i_isolate, 0, d1);
+    auto handle = Managed<DeleteCounter, kGenericManagedTag>::FromRawPtr(
+        i_isolate, 0, d1);
     USE(handle);
   }
   isolate->Exit();
@@ -79,7 +81,8 @@ TEST_F(ManagedTest, DisposeCausesDestruction2) {
   DeleteCounter* d2 = new DeleteCounter(&deleted2);
   {
     HandleScope scope(i_isolate);
-    auto handle = Managed<DeleteCounter>::FromRawPtr(i_isolate, 0, d1);
+    auto handle = Managed<DeleteCounter, kGenericManagedTag>::FromRawPtr(
+        i_isolate, 0, d1);
     USE(handle);
   }
   ManagedPtrDestructor* destructor =
@@ -105,8 +108,8 @@ TEST_F(ManagedTest, DisposeWithAnotherSharedPtr) {
     std::shared_ptr<DeleteCounter> shared1(d1);
     {
       HandleScope scope(i_isolate);
-      auto handle =
-          Managed<DeleteCounter>::FromSharedPtr(i_isolate, 0, shared1);
+      auto handle = Managed<DeleteCounter, kGenericManagedTag>::FromSharedPtr(
+          i_isolate, 0, shared1);
       USE(handle);
     }
     isolate->Exit();
@@ -129,16 +132,16 @@ TEST_F(ManagedTest, DisposeAcrossIsolates) {
   isolate1->Enter();
   {
     HandleScope scope1(i_isolate1);
-    auto handle1 =
-        Managed<DeleteCounter>::FromRawPtr(i_isolate1, 0, delete_counter);
+    auto handle1 = Managed<DeleteCounter, kGenericManagedTag>::FromRawPtr(
+        i_isolate1, 0, delete_counter);
 
     v8::Isolate* isolate2 = v8::Isolate::New(create_params);
     Isolate* i_isolate2 = reinterpret_cast<i::Isolate*>(isolate2);
     isolate2->Enter();
     {
       HandleScope scope(i_isolate2);
-      auto handle2 =
-          Managed<DeleteCounter>::FromSharedPtr(i_isolate2, 0, handle1->get());
+      auto handle2 = Managed<DeleteCounter, kGenericManagedTag>::FromSharedPtr(
+          i_isolate2, 0, handle1->get());
       USE(handle2);
     }
     isolate2->Exit();
@@ -163,16 +166,16 @@ TEST_F(ManagedTest, CollectAcrossIsolates) {
   isolate1->Enter();
   {
     HandleScope scope1(i_isolate1);
-    auto handle1 =
-        Managed<DeleteCounter>::FromRawPtr(i_isolate1, 0, delete_counter);
+    auto handle1 = Managed<DeleteCounter, kGenericManagedTag>::FromRawPtr(
+        i_isolate1, 0, delete_counter);
 
     v8::Isolate* isolate2 = v8::Isolate::New(create_params);
     Isolate* i_isolate2 = reinterpret_cast<i::Isolate*>(isolate2);
     isolate2->Enter();
     {
       HandleScope scope(i_isolate2);
-      auto handle2 =
-          Managed<DeleteCounter>::FromSharedPtr(i_isolate2, 0, handle1->get());
+      auto handle2 = Managed<DeleteCounter, kGenericManagedTag>::FromSharedPtr(
+          i_isolate2, 0, handle1->get());
       USE(handle2);
     }
     i_isolate2->heap()->CollectAllAvailableGarbage(

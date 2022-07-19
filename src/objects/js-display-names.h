@@ -87,7 +87,9 @@ class JSDisplayNames
   static_assert(LanguageDisplay::kDialect <= LanguageDisplayBit::kMax);
   static_assert(LanguageDisplay::kStandard <= LanguageDisplayBit::kMax);
 
-  DECL_ACCESSORS(internal, Managed<DisplayNamesInternal>)
+  using ManagedDisplayNamesInternal =
+      Managed<DisplayNamesInternal, kDisplayNamesInternalManagedTag>;
+  DECL_ACCESSORS(internal, ManagedDisplayNamesInternal)
 
   DECL_PRINTER(JSDisplayNames)
 

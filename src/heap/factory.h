@@ -454,6 +454,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       Handle<JSReceiver> then, Handle<Context> context);
 
   // Foreign objects are pretenured when allocated by the bootstrapper.
+  template <ExternalPointerTag tag>
   Handle<Foreign> NewForeign(Address addr);
 
   Handle<Cell> NewCell(Handle<Object> value);

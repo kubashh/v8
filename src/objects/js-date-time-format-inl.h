@@ -22,11 +22,11 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSDateTimeFormat)
 
-ACCESSORS(JSDateTimeFormat, icu_locale, Managed<icu::Locale>, kIcuLocaleOffset)
-ACCESSORS(JSDateTimeFormat, icu_simple_date_format,
-          Managed<icu::SimpleDateFormat>, kIcuSimpleDateFormatOffset)
-ACCESSORS(JSDateTimeFormat, icu_date_interval_format,
-          Managed<icu::DateIntervalFormat>, kIcuDateIntervalFormatOffset)
+ACCESSORS(JSDateTimeFormat, icu_locale, ManagedLocale, kIcuLocaleOffset)
+ACCESSORS(JSDateTimeFormat, icu_simple_date_format, ManagedSimpleDateFormat,
+          kIcuSimpleDateFormatOffset)
+ACCESSORS(JSDateTimeFormat, icu_date_interval_format, ManagedDateIntervalFormat,
+          kIcuDateIntervalFormatOffset)
 
 BOOL_ACCESSORS(JSDateTimeFormat, flags, alt_calendar, AltCalendarBit::kShift)
 

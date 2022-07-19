@@ -306,6 +306,11 @@ class ExternalPointerSlot
   inline Address load(const Isolate* isolate, ExternalPointerTag tag);
   inline void store(Isolate* isolate, Address value, ExternalPointerTag tag);
 
+  // This method can be used in cases where only the group tag of the external
+  // pointer is known (e.g. kAnyForeignTag) but the actual tag is needed.
+  inline ExternalPointerTag load_tag(const Isolate* isolate,
+                                     ExternalPointerTag group_tag);
+
  private:
 #ifdef V8_ENABLE_SANDBOX
   inline const ExternalPointerTable& GetExternalPointerTableForTag(
