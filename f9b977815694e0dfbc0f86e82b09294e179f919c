@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fded2c34_3d68aa4e",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-19T12:02:18Z",
+      "side": 0,
+      "message": "Still there (see lines 517-534 in the new file).\nReplacing the rtt variant with the static one result in duplicate test cases kTestSuccessful and kTestFailed which were removed.",
+      "range": {
+        "startLine": 519,
+        "startChar": 2,
+        "endLine": 537,
+        "endChar": 43
+      },
+      "revId": "f9b977815694e0dfbc0f86e82b09294e179f919c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cc2f36c_16fe02b8",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1548737
+      },
+      "writtenOn": "2022-07-19T12:02:18Z",
+      "side": 0,
+      "message": "Static variant already tested in the same way in RefTrivialCastsStatic below.",
+      "revId": "f9b977815694e0dfbc0f86e82b09294e179f919c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
