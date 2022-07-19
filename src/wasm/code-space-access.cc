@@ -73,7 +73,7 @@ bool CodeSpaceWriteScope::SwitchingPerNativeModule() { return false; }
 void CodeSpaceWriteScope::SetWritable() {
   auto* code_manager = GetWasmCodeManager();
   if (code_manager->MemoryProtectionKeysEnabled()) {
-    code_manager->SetThreadWritable(true);
+    RwxMemoryWriteScope::SetWritable();
   } else if (FLAG_wasm_write_protect_code_memory) {
     current_native_module_->AddWriter();
   }
@@ -84,7 +84,7 @@ void CodeSpaceWriteScope::SetExecutable() {
   auto* code_manager = GetWasmCodeManager();
   if (code_manager->MemoryProtectionKeysEnabled()) {
     DCHECK(FLAG_wasm_memory_protection_keys);
-    code_manager->SetThreadWritable(false);
+    RwxMemoryWriteScope::SetExecutable();
   } else if (FLAG_wasm_write_protect_code_memory) {
     current_native_module_->RemoveWriter();
   }
@@ -100,11 +100,11 @@ ResetPKUPermissionsForThreadSpawning::ResetPKUPermissionsForThreadSpawning() {
   auto* code_manager = GetWasmCodeManager();
   was_writable_ = code_manager->MemoryProtectionKeysEnabled() &&
                   code_manager->MemoryProtectionKeyWritable();
-  if (was_writable_) code_manager->SetThreadWritable(false);
+  if (was_writable_) RwxMemoryWriteScope::SetExecutable();
 }
 
 ResetPKUPermissionsForThreadSpawning::~ResetPKUPermissionsForThreadSpawning() {
-  if (was_writable_) GetWasmCodeManager()->SetThreadWritable(true);
+  if (was_writable_) RwxMemoryWriteScope::SetWritable();
 }
 
 #endif  // !V8_HAS_PTHREAD_JIT_WRITE_PROTECT

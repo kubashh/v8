@@ -5,7 +5,6 @@
 #include "src/wasm/wasm-engine.h"
 
 #include "src/base/functional.h"
-#include "src/base/platform/memory-protection-key.h"
 #include "src/base/platform/time.h"
 #include "src/common/globals.h"
 #include "src/debug/debug.h"
@@ -1620,7 +1619,6 @@ GlobalWasmState* global_wasm_state = nullptr;
 
 // static
 void WasmEngine::InitializeOncePerProcess() {
-  base::MemoryProtectionKey::InitializeMemoryProtectionKeySupport();
   DCHECK_NULL(global_wasm_state);
   global_wasm_state = new GlobalWasmState();
 }
