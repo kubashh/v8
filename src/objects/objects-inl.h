@@ -224,7 +224,7 @@ DEF_GETTER(HeapObject, IsCallableApiObject, bool) {
 
 DEF_GETTER(HeapObject, IsNonNullForeign, bool) {
   return IsForeign(cage_base) &&
-         Foreign::cast(*this).foreign_address() != kNullAddress;
+         Foreign::cast(*this).foreign_address_unchecked() != kNullAddress;
 }
 
 DEF_GETTER(HeapObject, IsConstructor, bool) {

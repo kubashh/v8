@@ -22,9 +22,9 @@ namespace internal {
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSSegmentIterator)
 
 // Base segment iterator accessors.
-ACCESSORS(JSSegmentIterator, icu_break_iterator, Managed<icu::BreakIterator>,
+ACCESSORS(JSSegmentIterator, icu_break_iterator, ManagedIcuBreakIterator,
           kIcuBreakIteratorOffset)
-ACCESSORS(JSSegmentIterator, unicode_string, Managed<icu::UnicodeString>,
+ACCESSORS(JSSegmentIterator, unicode_string, ManagedIcuUnicodeString,
           kUnicodeStringOffset)
 
 inline void JSSegmentIterator::set_granularity(

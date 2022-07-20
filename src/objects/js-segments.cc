@@ -33,10 +33,10 @@ MaybeHandle<JSSegments> JSSegments::Create(Isolate* isolate,
       segmenter->icu_break_iterator().raw()->clone();
   DCHECK_NOT_NULL(break_iterator);
 
-  Handle<Managed<icu::UnicodeString>> unicode_string =
+  Handle<ManagedIcuUnicodeString> unicode_string =
       Intl::SetTextToBreakIterator(isolate, string, break_iterator);
-  Handle<Managed<icu::BreakIterator>> managed_break_iterator =
-      Managed<icu::BreakIterator>::FromRawPtr(isolate, 0, break_iterator);
+  Handle<ManagedIcuBreakIterator> managed_break_iterator =
+      ManagedIcuBreakIterator::FromRawPtr(isolate, 0, break_iterator);
 
   // 1. Let internalSlotsList be « [[SegmentsSegmenter]], [[SegmentsString]] ».
   // 2. Let segments be ! ObjectCreate(%Segments.prototype%, internalSlotsList).

@@ -95,7 +95,8 @@ inline JSReceiver FunctionCallbackArguments::holder() {
     RCS_SCOPE(isolate, RuntimeCallCounterId::kNamed##FUNCTION##Callback);   \
     Handle<Object> receiver_check_unsupported;                              \
     GenericNamedProperty##FUNCTION##Callback f =                            \
-        ToCData<GenericNamedProperty##FUNCTION##Callback>(                  \
+        ToCData<kInterceptorInfoGenericCallbackTag,                         \
+                GenericNamedProperty##FUNCTION##Callback>(                  \
             interceptor->TYPE());                                           \
     PREPARE_CALLBACK_INFO(isolate, f, Handle<RETURN_TYPE>, API_RETURN_TYPE, \
                           INFO_FOR_SIDE_EFFECT, receiver_check_unsupported, \
@@ -116,7 +117,8 @@ FOR_EACH_CALLBACK(CREATE_NAMED_CALLBACK)
     RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexed##FUNCTION##Callback);   \
     Handle<Object> receiver_check_unsupported;                                \
     IndexedProperty##FUNCTION##Callback f =                                   \
-        ToCData<IndexedProperty##FUNCTION##Callback>(interceptor->TYPE());    \
+        ToCData<kInterceptorInfoGenericCallbackTag,                           \
+                IndexedProperty##FUNCTION##Callback>(interceptor->TYPE());    \
     PREPARE_CALLBACK_INFO(isolate, f, Handle<RETURN_TYPE>, API_RETURN_TYPE,   \
                           INFO_FOR_SIDE_EFFECT, receiver_check_unsupported,   \
                           NotAccessor);                                       \
@@ -177,7 +179,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedGetter(
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedGetterCallback);
   GenericNamedPropertyGetterCallback f =
-      ToCData<GenericNamedPropertyGetterCallback>(interceptor->getter());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              GenericNamedPropertyGetterCallback>(interceptor->getter());
   return BasicCallNamedGetterCallback(f, name, interceptor);
 }
 
@@ -186,7 +189,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedDescriptor(
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedDescriptorCallback);
   GenericNamedPropertyDescriptorCallback f =
-      ToCData<GenericNamedPropertyDescriptorCallback>(
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              GenericNamedPropertyDescriptorCallback>(
           interceptor->descriptor());
   return BasicCallNamedGetterCallback(f, name, interceptor);
 }
@@ -207,7 +211,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedSetter(
     Handle<Object> value) {
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   GenericNamedPropertySetterCallback f =
-      ToCData<GenericNamedPropertySetterCallback>(interceptor->setter());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              GenericNamedPropertySetterCallback>(interceptor->setter());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedSetterCallback);
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
@@ -223,7 +228,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedDefiner(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedDefinerCallback);
   GenericNamedPropertyDefinerCallback f =
-      ToCData<GenericNamedPropertyDefinerCallback>(interceptor->definer());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              GenericNamedPropertyDefinerCallback>(interceptor->definer());
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(v8::Utils::ToLocal(name), desc, callback_info);
@@ -236,7 +242,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedSetter(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedSetterCallback);
   IndexedPropertySetterCallback f =
-      ToCData<IndexedPropertySetterCallback>(interceptor->setter());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              IndexedPropertySetterCallback>(interceptor->setter());
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(index, v8::Utils::ToLocal(value), callback_info);
@@ -250,7 +257,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDefiner(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDefinerCallback);
   IndexedPropertyDefinerCallback f =
-      ToCData<IndexedPropertyDefinerCallback>(interceptor->definer());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              IndexedPropertyDefinerCallback>(interceptor->definer());
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(index, desc, callback_info);
@@ -262,7 +270,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedGetter(
   DCHECK(!interceptor->is_named());
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedGetterCallback);
   IndexedPropertyGetterCallback f =
-      ToCData<IndexedPropertyGetterCallback>(interceptor->getter());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              IndexedPropertyGetterCallback>(interceptor->getter());
   return BasicCallIndexedGetterCallback(f, index, interceptor);
 }
 
@@ -271,7 +280,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDescriptor(
   DCHECK(!interceptor->is_named());
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kIndexedDescriptorCallback);
   IndexedPropertyDescriptorCallback f =
-      ToCData<IndexedPropertyDescriptorCallback>(interceptor->descriptor());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              IndexedPropertyDescriptorCallback>(interceptor->descriptor());
   return BasicCallIndexedGetterCallback(f, index, interceptor);
 }
 
@@ -289,7 +299,8 @@ Handle<JSObject> PropertyCallbackArguments::CallPropertyEnumerator(
     Handle<InterceptorInfo> interceptor) {
   // For now there is a single enumerator for indexed and named properties.
   IndexedPropertyEnumeratorCallback f =
-      v8::ToCData<IndexedPropertyEnumeratorCallback>(interceptor->enumerator());
+      ToCData<kInterceptorInfoGenericCallbackTag,
+              IndexedPropertyEnumeratorCallback>(interceptor->enumerator());
   // TODO(cbruni): assert same type for indexed and named callback.
   Isolate* isolate = this->isolate();
   Handle<Object> receiver_check_unsupported;

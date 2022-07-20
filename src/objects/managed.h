@@ -45,7 +45,7 @@ V8_EXPORT_PRIVATE void ManagedObjectFinalizer(
 // contains {Managed<T>} is torn down), the {Managed<T>} deletes its underlying
 // {std::shared_ptr<T>}, thereby decrementing its internal reference count,
 // which will delete the C++ object when the reference count drops to 0.
-template <class CppType>
+template <class CppType, ExternalPointerTag tag>
 class Managed : public Foreign {
  public:
   Managed() : Foreign() {}
@@ -64,25 +64,25 @@ class Managed : public Foreign {
 
   // Allocate a new {CppType} and wrap it in a {Managed<CppType>}.
   template <typename... Args>
-  static Handle<Managed<CppType>> Allocate(Isolate* isolate,
-                                           size_t estimated_size,
-                                           Args&&... args);
+  static Handle<Managed<CppType, tag>> Allocate(Isolate* isolate,
+                                                size_t estimated_size,
+                                                Args&&... args);
 
   // Create a {Managed<CppType>} from an existing raw {CppType*}. The returned
   // object will now own the memory pointed to by {CppType}.
-  static Handle<Managed<CppType>> FromRawPtr(Isolate* isolate,
-                                             size_t estimated_size,
-                                             CppType* ptr);
+  static Handle<Managed<CppType, tag>> FromRawPtr(Isolate* isolate,
+                                                  size_t estimated_size,
+                                                  CppType* ptr);
 
   // Create a {Managed<CppType>} from an existing {std::unique_ptr<CppType>}.
   // The returned object will now own the memory pointed to by {CppType}, and
   // the unique pointer will be released.
-  static Handle<Managed<CppType>> FromUniquePtr(
+  static Handle<Managed<CppType, tag>> FromUniquePtr(
       Isolate* isolate, size_t estimated_size,
       std::unique_ptr<CppType> unique_ptr);
 
   // Create a {Managed<CppType>} from an existing {std::shared_ptr<CppType>}.
-  static Handle<Managed<CppType>> FromSharedPtr(
+  static Handle<Managed<CppType, tag>> FromSharedPtr(
       Isolate* isolate, size_t estimated_size,
       std::shared_ptr<CppType> shared_ptr);
 
@@ -91,7 +91,7 @@ class Managed : public Foreign {
   // std::shared_ptr<CppType>.
   std::shared_ptr<CppType>* GetSharedPtrPtr() {
     auto destructor =
-        reinterpret_cast<ManagedPtrDestructor*>(foreign_address());
+        reinterpret_cast<ManagedPtrDestructor*>(foreign_address<tag>());
     return reinterpret_cast<std::shared_ptr<CppType>*>(
         destructor->shared_ptr_ptr_);
   }
