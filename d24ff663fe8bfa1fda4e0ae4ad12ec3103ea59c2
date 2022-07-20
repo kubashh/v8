@@ -122,6 +122,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cc1502dd_a459ff30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-20T08:11:16Z",
+      "side": 1,
+      "message": "Hi Leszek, thanks! I gave up another OSR thresholding heuristic solution, I\u0027ll consider more reasonable solution.\nHi Tobias, thanks for your repeated detail description! I got your idea. It\u0027s an ideal solution, but it may take a long time. Is there on-going work or plan related to this solution? We will be very happy if we can make some contribution to this solution.",
+      "parentUuid": "0d759308_592af9b4",
+      "range": {
+        "startLine": 16,
+        "startChar": 3,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "d24ff663fe8bfa1fda4e0ae4ad12ec3103ea59c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "624155bb_fb9a2a5d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
