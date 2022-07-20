@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f5e9d962_1769cea3",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-20T04:43:22Z",
+      "side": 0,
+      "message": "If we keep this method, I suppose you mean we will invoke it in  \nCodeSpaceWriteScope::SetWritable() and others instead of using RwxMemoryWriteScope APIs. Is my understand correct?",
+      "parentUuid": "66264c91_1dac377d",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7abf6bb9_d6f59e7e",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 35
