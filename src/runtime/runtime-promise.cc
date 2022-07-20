@@ -91,8 +91,9 @@ RUNTIME_FUNCTION(Runtime_RunMicrotaskCallback) {
   DCHECK_EQ(2, args.length());
   Object microtask_callback = args[0];
   Object microtask_data = args[1];
-  MicrotaskCallback callback = ToCData<MicrotaskCallback>(microtask_callback);
-  void* data = ToCData<void*>(microtask_data);
+  MicrotaskCallback callback =
+      ToCData<kMicrotaskCallbackTag, MicrotaskCallback>(microtask_callback);
+  void* data = ToCData<kMicrotaskCallbackDataTag, void*>(microtask_data);
   callback(data);
   RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
   return ReadOnlyRoots(isolate).undefined_value();

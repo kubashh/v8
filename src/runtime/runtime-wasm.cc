@@ -732,7 +732,7 @@ RUNTIME_FUNCTION(Runtime_WasmArrayNewSegment) {
   Handle<Map> rtt(Map::cast(args[4]), isolate);
 
   wasm::ArrayType* type = reinterpret_cast<wasm::ArrayType*>(
-      rtt->wasm_type_info().foreign_address());
+      rtt->wasm_type_info().foreign_address<kWasmTypeInfoTag>());
 
   uint32_t element_size = type->element_type().value_kind_size();
   // This check also implies no overflow.
@@ -788,7 +788,9 @@ void SyncStackLimit(Isolate* isolate) {
   DisallowGarbageCollection no_gc;
   auto continuation = WasmContinuationObject::cast(
       isolate->root(RootIndex::kActiveContinuation));
-  auto stack = Managed<wasm::StackMemory>::cast(continuation.stack()).get();
+  auto stack = Managed<wasm::StackMemory, kWasmStackMemoryTag>::cast(
+                   continuation.stack())
+                   .get();
   if (FLAG_trace_wasm_stack_switching) {
     PrintF("Switch to stack #%d\n", stack->id());
   }
@@ -820,7 +822,9 @@ RUNTIME_FUNCTION(Runtime_WasmAllocateContinuation) {
   Handle<WasmContinuationObject> target =
       WasmContinuationObject::New(isolate, parent);
   auto target_stack =
-      Managed<wasm::StackMemory>::cast(target->stack()).get().get();
+      Managed<wasm::StackMemory, kWasmStackMemoryTag>::cast(target->stack())
+          .get()
+          .get();
   isolate->wasm_stacks()->Add(target_stack);
   isolate->roots_table().slot(RootIndex::kActiveContinuation).store(*target);
 

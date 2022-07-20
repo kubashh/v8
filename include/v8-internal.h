@@ -276,6 +276,7 @@ using ExternalPointer_t = Address;
 // pointer is written into the table, the tag is ORed into the top bits. When
 // that pointer is later loaded from the table, it is ANDed with the inverse of
 // the expected tag.
+//
 // The tags are constructed such that (T1 & ~T2) is never zero for two
 // different tags. In practice, this is achieved by generating tags that all
 // have the same number of zeroes (8) and ones (7 + the MSB mark bit), but
@@ -290,6 +291,20 @@ using ExternalPointer_t = Address;
 // mark bit set, as the entry is not alive. This construction allows performing
 // the type check and removing GC marking bits (the MSB) from the pointer in
 // one efficient operation (bitwise AND).
+//
+// This construction ensures that every access to an external pointer field
+// will result in a valid pointer of the expected type even in the presence of
+// an attacker able to corrupt memory inside the sandbox. However, if any data
+// related to the external object is stored inside the sandbox it may still be
+// corrupted and so must be validated before use or moved into the external
+// object. Further, an attacker will always be able to substitute different
+// external pointers of the same type for each other. Therefore, code using
+// external pointers must be written in a "substitution-safe" way, i.e. it must
+// always be possible to substitute external pointers of the same type without
+// causing memory corruption outside of the sandbox. Generally this is achieved
+// by referencing any group of related external objects through a single
+// external pointer.
+//
 // Note: this scheme assumes a 48-bit address space and will likely break if
 // more virtual address bits are used.
 constexpr uint64_t kExternalPointerTagMask = 0xffff000000000000;
@@ -297,20 +312,63 @@ constexpr uint64_t kExternalPointerTagShift = 48;
 #define MAKE_TAG(v) (static_cast<uint64_t>(v) << kExternalPointerTagShift)
 
 // clang-format off
-// These tags must have 8 zeros and 8 ones, see comment above.
+// External pointer tag definitions.
+//
+// These tags must have 8 zeros and 8 ones. Further, code using external
+// pointers must be "substitution-safe", i.e. still operate safely if external
+// pointers of the same type are swapped by an attacker. See comment above for
+// more details.
 // New entries should be added with state "sandboxed".
-#define EXTERNAL_POINTER_TAGS(V)                                      \
-  V(kForeignForeignAddressTag,       unsandboxed, 0b1000000001111111) \
-  V(kNativeContextMicrotaskQueueTag, unsandboxed, 0b1000000010111111) \
-  V(kEmbedderDataSlotPayloadTag,     unsandboxed, 0b1000000011011111) \
-  V(kCodeEntryPointTag,              unsandboxed, 0b1000000011110111) \
-  V(kExternalObjectValueTag,         unsandboxed, 0b1000000011111011) \
-  V(kCallHandlerInfoCallbackTag,     unsandboxed, 0b1000000011111101) \
-  V(kCallHandlerInfoJsCallbackTag,   unsandboxed, 0b1000000011111110) \
-  V(kAccessorInfoGetterTag,          unsandboxed, 0b1000000100111111) \
-  V(kAccessorInfoJsGetterTag,        unsandboxed, 0b1000000101011111) \
-  V(kAccessorInfoSetterTag,          unsandboxed, 0b1000000101101111)
+#define EXTERNAL_POINTER_TAGS(V)                                              \
+  /* Foreigns */                                                              \
+  /* For now, all Foreigns use the same tag, and the kAnyForeignTag can be */ \
+  /* used when the concrete tag is unknown.                                */ \
+  V(kAnyForeignTag,                          unsandboxed, 0b1000000001111111) \
+  V(kGenericForeignTag,                      unsandboxed, 0b1000000001111111) \
+  V(kWasmTypeInfoTag,                        unsandboxed, 0b1000000001111111) \
+  V(kWasmExportedFunctionDataSigTag,         unsandboxed, 0b1000000001111111) \
+  V(kWasmInternalFunctionTag,                unsandboxed, 0b1000000001111111) \
+  V(kWasmContinuationObjectJmpbufTag,        unsandboxed, 0b1000000001111111) \
+  V(kSyntheticModuleEvaluationStepsTag,      unsandboxed, 0b1000000001111111) \
+  V(kInterceptorInfoGenericCallbackTag,      unsandboxed, 0b1000000001111111) \
+  V(kCFunctionTag,                           unsandboxed, 0b1000000001111111) \
+  V(kCFunctionInfoTag,                       unsandboxed, 0b1000000001111111) \
+  V(kApiMessageCallbackTag,                  unsandboxed, 0b1000000001111111) \
+  V(kMicrotaskCallbackTag,                   unsandboxed, 0b1000000001111111) \
+  V(kMicrotaskCallbackDataTag,               unsandboxed, 0b1000000001111111) \
+  V(kAccessCheckCallbackTag,                 unsandboxed, 0b1000000001111111) \
+  V(kAbortScriptExecutionCallbackTag,        unsandboxed, 0b1000000001111111) \
+  /* Managed */                                                               \
+  V(kGenericManagedTag,                      unsandboxed, 0b1000000001111111) \
+  V(kIcuBreakIteratorTag,                    unsandboxed, 0b1000000001111111) \
+  V(kIcuUnicodeStringTag,                    unsandboxed, 0b1000000001111111) \
+  V(kIcuListFormatterTag,                    unsandboxed, 0b1000000001111111) \
+  V(kIcuLocaleTag,                           unsandboxed, 0b1000000001111111) \
+  V(kIcuSimpleDateFormatTag,                 unsandboxed, 0b1000000001111111) \
+  V(kIcuDateIntervalFormatTag,               unsandboxed, 0b1000000001111111) \
+  V(kIcuRelativeDateTimeFormatterTag,        unsandboxed, 0b1000000001111111) \
+  V(kIcuLocalizedNumberFormatterTag,         unsandboxed, 0b1000000001111111) \
+  V(kIcuPluralRulesTag,                      unsandboxed, 0b1000000001111111) \
+  V(kIcuCollatorTag,                         unsandboxed, 0b1000000001111111) \
+  V(kDisplayNamesInternalTag,                unsandboxed, 0b1000000001111111) \
+  V(kWasmNativeModuleTag,                    unsandboxed, 0b1000000001111111) \
+  V(kWasmGlobalWasmCodeRefTag,               unsandboxed, 0b1000000001111111) \
+  V(kWasmStackMemoryTag,                     unsandboxed, 0b1000000001111111) \
+  V(kWasmStreamingTag,                       unsandboxed, 0b1000000001111111) \
+  V(kWasmIftNativeAllocationsTag,            unsandboxed, 0b1000000001111111) \
+  V(kWasmInstanceNativeAllocationsTag,       unsandboxed, 0b1000000001111111) \
+  /* Everything else */                                                       \
+  V(kNativeContextMicrotaskQueueTag,         unsandboxed, 0b1000000010111111) \
+  V(kEmbedderDataSlotPayloadTag,             unsandboxed, 0b1000000011011111) \
+  V(kCodeEntryPointTag,                      unsandboxed, 0b1000000011101111) \
+  V(kExternalObjectValueTag,                 unsandboxed, 0b1000000011110111) \
+  V(kCallHandlerInfoCallbackTag,             unsandboxed, 0b1000000011111011) \
+  V(kCallHandlerInfoJsCallbackTag,           unsandboxed, 0b1000000011111101) \
+  V(kAccessorInfoGetterTag,                  unsandboxed, 0b1000000011111110) \
+  V(kAccessorInfoJsGetterTag,                unsandboxed, 0b1000000100111111) \
+  V(kAccessorInfoSetterTag,                  unsandboxed, 0b1000000101011111)
 
+// External pointer tags for shared external pointers.
 // Shared external pointers are owned by the shared Isolate and stored in the
 // shared external pointer table associated with that Isolate, where they can
 // be accessed from multiple threads at the same time. The objects referenced
@@ -345,6 +403,7 @@ constexpr uint64_t kSharedExternalObjectTag  = MAKE_TAG(0b1100000000000000);
 #endif
 
 enum ExternalPointerTag : uint64_t {
+  kAnyExternalPointerTag =          MAKE_TAG(0b1111111111111111),
   kExternalPointerNullTag =         MAKE_TAG(0b0000000000000000),
   kUnsandboxedExternalPointerTag =  MAKE_TAG(0b0000000000000000),
   kExternalPointerFreeEntryTag =    MAKE_TAG(0b0011111110000000),

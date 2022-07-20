@@ -1126,9 +1126,20 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                     TNode<RawPtrT> pointer,
                                     ExternalPointerTag tag);
 
-  TNode<RawPtrT> LoadForeignForeignAddressPtr(TNode<Foreign> object) {
+  TNode<RawPtrT> LoadForeignForeignAddressPtr(TNode<Foreign> object,
+                                              ExternalPointerTag tag) {
     return LoadExternalPointerFromObject(object, Foreign::kForeignAddressOffset,
-                                         kForeignForeignAddressTag);
+                                         tag);
+  }
+
+  // Foreign address fields accessed from Torque.
+  TNode<RawPtrT> LoadWasmInternalFunctionForeignAddressPtr(
+      TNode<Foreign> object) {
+    return LoadForeignForeignAddressPtr(object, kWasmInternalFunctionTag);
+  }
+
+  TNode<RawPtrT> LoadWasmTypeInfoForeignAddressPtr(TNode<Foreign> object) {
+    return LoadForeignForeignAddressPtr(object, kWasmTypeInfoTag);
   }
 
   TNode<RawPtrT> LoadCallHandlerInfoJsCallbackPtr(

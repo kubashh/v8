@@ -12,6 +12,7 @@
 #include "src/execution/isolate.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/factory.h"
+#include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
 
@@ -79,7 +80,7 @@ class JSLocale : public TorqueGeneratedJSLocale<JSLocale, JSObject> {
   // Help function to check well-formed "3alpha"
   static bool Is3Alpha(const std::string& value);
 
-  DECL_ACCESSORS(icu_locale, Managed<icu::Locale>)
+  DECL_ACCESSORS(icu_locale, ManagedIcuLocale)
 
   DECL_PRINTER(JSLocale)
 

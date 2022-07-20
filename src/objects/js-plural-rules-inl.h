@@ -23,11 +23,10 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSPluralRules)
 
-ACCESSORS(JSPluralRules, icu_plural_rules, Managed<icu::PluralRules>,
+ACCESSORS(JSPluralRules, icu_plural_rules, ManagedIcuPluralRules,
           kIcuPluralRulesOffset)
 ACCESSORS(JSPluralRules, icu_number_formatter,
-          Managed<icu::number::LocalizedNumberFormatter>,
-          kIcuNumberFormatterOffset)
+          ManagedIcuLocalizedNumberFormatter, kIcuNumberFormatterOffset)
 
 inline void JSPluralRules::set_type(Type type) {
   DCHECK_LE(type, TypeBit::kMax);

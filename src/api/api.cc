@@ -1450,10 +1450,10 @@ Local<Signature> Signature::New(Isolate* v8_isolate,
   return Utils::SignatureToLocal(Utils::OpenHandle(*receiver));
 }
 
-#define SET_FIELD_WRAPPED(i_isolate, obj, setter, cdata)        \
-  do {                                                          \
-    i::Handle<i::Object> foreign = FromCData(i_isolate, cdata); \
-    (obj)->setter(*foreign);                                    \
+#define SET_FIELD_WRAPPED(i_isolate, obj, setter, tag, cdata)        \
+  do {                                                               \
+    i::Handle<i::Object> foreign = FromCData<tag>(i_isolate, cdata); \
+    (obj)->setter(*foreign);                                         \
   } while (false)
 
 void FunctionTemplate::SetCallHandler(
@@ -1484,11 +1484,11 @@ void FunctionTemplate::SetCallHandler(
     for (int i = 0; i < function_count; i++) {
       const CFunction& c_function = c_function_overloads.data()[i];
       i::Handle<i::Object> address =
-          FromCData(i_isolate, c_function.GetAddress());
+          FromCData<i::kCFunctionTag>(i_isolate, c_function.GetAddress());
       function_overloads->set(
           i::FunctionTemplateInfo::kFunctionOverloadEntrySize * i, *address);
       i::Handle<i::Object> signature =
-          FromCData(i_isolate, c_function.GetTypeInfo());
+          FromCData<i::kCFunctionInfoTag>(i_isolate, c_function.GetTypeInfo());
       function_overloads->set(
           i::FunctionTemplateInfo::kFunctionOverloadEntrySize * i + 1,
           *signature);
@@ -1744,17 +1744,27 @@ i::Handle<i::InterceptorInfo> CreateInterceptorInfo(
           i::INTERCEPTOR_INFO_TYPE, i::AllocationType::kOld));
   obj->set_flags(0);
 
-  if (getter != nullptr) SET_FIELD_WRAPPED(i_isolate, obj, set_getter, getter);
-  if (setter != nullptr) SET_FIELD_WRAPPED(i_isolate, obj, set_setter, setter);
-  if (query != nullptr) SET_FIELD_WRAPPED(i_isolate, obj, set_query, query);
+  if (getter != nullptr)
+    SET_FIELD_WRAPPED(i_isolate, obj, set_getter,
+                      i::kInterceptorInfoGenericCallbackTag, getter);
+  if (setter != nullptr)
+    SET_FIELD_WRAPPED(i_isolate, obj, set_setter,
+                      i::kInterceptorInfoGenericCallbackTag, setter);
+  if (query != nullptr)
+    SET_FIELD_WRAPPED(i_isolate, obj, set_query,
+                      i::kInterceptorInfoGenericCallbackTag, query);
   if (descriptor != nullptr)
-    SET_FIELD_WRAPPED(i_isolate, obj, set_descriptor, descriptor);
+    SET_FIELD_WRAPPED(i_isolate, obj, set_descriptor,
+                      i::kInterceptorInfoGenericCallbackTag, descriptor);
   if (remover != nullptr)
-    SET_FIELD_WRAPPED(i_isolate, obj, set_deleter, remover);
+    SET_FIELD_WRAPPED(i_isolate, obj, set_deleter,
+                      i::kInterceptorInfoGenericCallbackTag, remover);
   if (enumerator != nullptr)
-    SET_FIELD_WRAPPED(i_isolate, obj, set_enumerator, enumerator);
+    SET_FIELD_WRAPPED(i_isolate, obj, set_enumerator,
+                      i::kInterceptorInfoGenericCallbackTag, enumerator);
   if (definer != nullptr)
-    SET_FIELD_WRAPPED(i_isolate, obj, set_definer, definer);
+    SET_FIELD_WRAPPED(i_isolate, obj, set_definer,
+                      i::kInterceptorInfoGenericCallbackTag, definer);
   obj->set_can_intercept_symbols(
       !(static_cast<int>(flags) &
         static_cast<int>(PropertyHandlerFlags::kOnlyInterceptStrings)));
@@ -1847,7 +1857,8 @@ void ObjectTemplate::SetAccessCheckCallback(AccessCheckCallback callback,
   i::Handle<i::AccessCheckInfo> info =
       i::Handle<i::AccessCheckInfo>::cast(struct_info);
 
-  SET_FIELD_WRAPPED(i_isolate, info, set_callback, callback);
+  SET_FIELD_WRAPPED(i_isolate, info, set_callback, i::kAccessCheckCallbackTag,
+                    callback);
   info->set_named_interceptor(i::Object());
   info->set_indexed_interceptor(i::Object());
 
@@ -1877,7 +1888,8 @@ void ObjectTemplate::SetAccessCheckCallbackAndHandler(
   i::Handle<i::AccessCheckInfo> info =
       i::Handle<i::AccessCheckInfo>::cast(struct_info);
 
-  SET_FIELD_WRAPPED(i_isolate, info, set_callback, callback);
+  SET_FIELD_WRAPPED(i_isolate, info, set_callback, i::kAccessCheckCallbackTag,
+                    callback);
   auto named_interceptor = CreateNamedInterceptorInfo(
       i_isolate, named_handler.getter, named_handler.setter,
       named_handler.query, named_handler.descriptor, named_handler.deleter,
@@ -6606,7 +6618,7 @@ void Context::SetAbortScriptExecution(
         i::ReadOnlyRoots(i_isolate).undefined_value());
   } else {
     SET_FIELD_WRAPPED(i_isolate, context, set_script_execution_callback,
-                      callback);
+                      i::kAbortScriptExecutionCallbackTag, callback);
   }
 }
 
@@ -9526,7 +9538,8 @@ bool Isolate::AddMessageListenerWithErrorLevel(MessageCallback that,
   i::Handle<i::TemplateList> list = i_isolate->factory()->message_listeners();
   i::Handle<i::FixedArray> listener = i_isolate->factory()->NewFixedArray(3);
   i::Handle<i::Foreign> foreign =
-      i_isolate->factory()->NewForeign(FUNCTION_ADDR(that));
+      i_isolate->factory()->NewForeign<internal::kApiMessageCallbackTag>(
+          FUNCTION_ADDR(that));
   listener->set(0, *foreign);
   listener->set(1, data.IsEmpty()
                        ? i::ReadOnlyRoots(i_isolate).undefined_value()
@@ -9547,7 +9560,8 @@ void Isolate::RemoveMessageListeners(MessageCallback that) {
     if (listeners.get(i).IsUndefined(i_isolate)) continue;  // skip deleted ones
     i::FixedArray listener = i::FixedArray::cast(listeners.get(i));
     i::Foreign callback_obj = i::Foreign::cast(listener.get(0));
-    if (callback_obj.foreign_address() == FUNCTION_ADDR(that)) {
+    if (callback_obj.foreign_address<internal::kApiMessageCallbackTag>() ==
+        FUNCTION_ADDR(that)) {
       listeners.set(i, i::ReadOnlyRoots(i_isolate).undefined_value());
     }
   }

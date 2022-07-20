@@ -147,15 +147,14 @@ MaybeHandle<JSPluralRules> JSPluralRules::New(Isolate* isolate, Handle<Map> map,
   icu::number::LocalizedNumberFormatter icu_number_formatter =
       settings.locale(icu_locale);
 
-  Handle<Managed<icu::PluralRules>> managed_plural_rules =
-      Managed<icu::PluralRules>::FromUniquePtr(isolate, 0,
-                                               std::move(icu_plural_rules));
+  Handle<ManagedIcuPluralRules> managed_plural_rules =
+      ManagedIcuPluralRules::FromUniquePtr(isolate, 0,
+                                           std::move(icu_plural_rules));
 
-  Handle<Managed<icu::number::LocalizedNumberFormatter>>
-      managed_number_formatter =
-          Managed<icu::number::LocalizedNumberFormatter>::FromRawPtr(
-              isolate, 0,
-              new icu::number::LocalizedNumberFormatter(icu_number_formatter));
+  Handle<ManagedIcuLocalizedNumberFormatter> managed_number_formatter =
+      ManagedIcuLocalizedNumberFormatter::FromRawPtr(
+          isolate, 0,
+          new icu::number::LocalizedNumberFormatter(icu_number_formatter));
 
   // Now all properties are ready, so we can allocate the result object.
   Handle<JSPluralRules> plural_rules = Handle<JSPluralRules>::cast(

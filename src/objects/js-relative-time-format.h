@@ -15,6 +15,7 @@
 #include "src/base/bit-field.h"
 #include "src/execution/isolate.h"
 #include "src/heap/factory.h"
+#include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
 #include "unicode/uversion.h"
@@ -59,7 +60,7 @@ class JSRelativeTimeFormat
   V8_EXPORT_PRIVATE static const std::set<std::string>& GetAvailableLocales();
 
   // RelativeTimeFormat accessors.
-  DECL_ACCESSORS(icu_formatter, Managed<icu::RelativeDateTimeFormatter>)
+  DECL_ACCESSORS(icu_formatter, ManagedIcuRelativeDateTimeFormatter)
 
   // Numeric: identifying whether numerical descriptions are always used, or
   // used only when no more specific version is available (e.g., "1 day ago" vs

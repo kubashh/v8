@@ -214,9 +214,9 @@ MaybeHandle<JSRelativeTimeFormat> JSRelativeTimeFormat::New(
       isolate->factory()->NewStringFromAsciiChecked(
           Intl::GetNumberingSystem(icu_locale).c_str());
 
-  Handle<Managed<icu::RelativeDateTimeFormatter>> managed_formatter =
-      Managed<icu::RelativeDateTimeFormatter>::FromRawPtr(isolate, 0,
-                                                          icu_formatter);
+  Handle<ManagedIcuRelativeDateTimeFormatter> managed_formatter =
+      ManagedIcuRelativeDateTimeFormatter::FromRawPtr(isolate, 0,
+                                                      icu_formatter);
 
   Handle<JSRelativeTimeFormat> relative_time_format_holder =
       Handle<JSRelativeTimeFormat>::cast(

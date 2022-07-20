@@ -526,8 +526,8 @@ MaybeHandle<JSDisplayNames> JSDisplayNames::New(Isolate* isolate,
                     JSDisplayNames);
   }
 
-  Handle<Managed<DisplayNamesInternal>> managed_internal =
-      Managed<DisplayNamesInternal>::FromRawPtr(isolate, 0, internal);
+  Handle<ManagedDisplayNamesInternal> managed_internal =
+      ManagedDisplayNamesInternal::FromRawPtr(isolate, 0, internal);
 
   Handle<JSDisplayNames> display_names =
       Handle<JSDisplayNames>::cast(factory->NewFastOrSlowJSObjectFromMap(map));
