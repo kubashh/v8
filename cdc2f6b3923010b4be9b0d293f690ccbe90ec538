@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a52602_da369ffd",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-21T10:51:01Z",
+      "side": 1,
+      "message": "could you also fix this?",
+      "range": {
+        "startLine": 80,
+        "startChar": 47,
+        "endLine": 80,
+        "endChar": 58
+      },
+      "revId": "cdc2f6b3923010b4be9b0d293f690ccbe90ec538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "590203fc_3a514476",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-21T10:51:01Z",
+      "side": 1,
+      "message": "64?",
+      "range": {
+        "startLine": 538,
+        "startChar": 14,
+        "endLine": 538,
+        "endChar": 16
+      },
+      "revId": "cdc2f6b3923010b4be9b0d293f690ccbe90ec538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
