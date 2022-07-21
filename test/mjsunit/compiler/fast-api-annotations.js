@@ -40,10 +40,20 @@ assertEquals(limits_result, add_all_annotate_enforce_range(limits_params));
 %OptimizeFunctionOnNextCall(add_all_annotate_enforce_range);
 assertEquals(limits_result, add_all_annotate_enforce_range(limits_params));
 
+const min_int32 = -(2 ** 31);
+const max_int32 = 2 ** 31 - 1;
+const min_uint32 = 0;
+const max_uint32 = 2 ** 32 - 1;
+const min_int64 = -(2 ** 63);
+const max_int64 = 2 ** 63 - 1;
+const min_uint64 = 0;
+const max_uint64 = 2 ** 63 - 1;
+
 // ----------- enforce_range_compare -----------
 // `enforce_range_compare` has the following signature:
-// double enforce_range_compare(bool /*should_fallback*/,
-//   double, int64_t)
+// bool enforce_range_compare(bool /*in_range*/,
+//   double, integer_type)
+// where integer_type = {int32_t, uint32_t, int64_t, uint64_t}
 
 // ----------- i32 -----------
 function compare_i32(in_range, arg) {
@@ -125,3 +135,87 @@ assertThrows(() => compare_u64(false, -1));
 assertThrows(() => compare_u64(false, -1.5));
 assertThrows(() => compare_u64(false, Number.MIN_SAFE_INTEGER));
 assertThrows(() => compare_u64(false, 2 ** 64 + 3.15));
+
+// ----------- clamp_compare -----------
+// `clamp_compare` has the following signature:
+// void clamp_compare(bool /*in_range*/,
+//   double, integer_type)
+// where integer_type = {int32_t, uint32_t, int64_t, uint64_t}
+
+// ----------- i32 -----------
+function is_in_range_i32(in_range, arg, expected) {
+  print('checking for ', arg);
+  let result = fast_c_api.clamp_compare_i32(in_range, arg, arg);
+
+  assertEquals(expected, result);
+}
+
+%PrepareFunctionForOptimization(is_in_range_i32);
+is_in_range_i32(true, 123, 123);
+%OptimizeFunctionOnNextCall(is_in_range_i32);
+is_in_range_i32(true, 123, 123);
+is_in_range_i32(true, -0.5, 0);
+is_in_range_i32(true, 0.5, 0);
+is_in_range_i32(true, 1.5, 2);
+is_in_range_i32(true, min_int32, min_int32);
+is_in_range_i32(true, max_int32, max_int32);
+is_in_range_i32(false, -(2 ** 32), min_int32);
+is_in_range_i32(false, -(2 ** 32 + 1), min_int32);
+is_in_range_i32(false, 2 ** 32, max_int32);
+is_in_range_i32(false, 2 ** 32 + 3.15, max_int32);
+is_in_range_i32(false, Number.MIN_SAFE_INTEGER, min_int32);
+is_in_range_i32(false, Number.MAX_SAFE_INTEGER, max_int32);
+
+print('---- u32 -----');
+// ----------- u32 -----------
+function is_in_range_u32(in_range, arg, expected) {
+  print('checking for ', arg);
+  let result = fast_c_api.clamp_compare_u32(in_range, arg, arg);
+
+  assertEquals(expected, result);
+}
+
+%PrepareFunctionForOptimization(is_in_range_u32);
+is_in_range_u32(true, 123, 123);
+%OptimizeFunctionOnNextCall(is_in_range_u32);
+is_in_range_u32(true, 123, 123);
+is_in_range_u32(true, 0, 0);
+is_in_range_u32(true, -0.5, 0);
+is_in_range_u32(true, 0.5, 0);
+is_in_range_u32(true, 2 ** 32 - 1, max_uint32);
+is_in_range_u32(false, -(2 ** 31), min_uint32);
+is_in_range_u32(false, 2 ** 32, max_uint32);
+is_in_range_u32(false, -1, min_uint32);
+is_in_range_u32(false, -1.5, min_uint32);
+is_in_range_u32(false, Number.MIN_SAFE_INTEGER, min_uint32);
+is_in_range_u32(false, Number.MAX_SAFE_INTEGER, max_uint32);
+
+// ----------- i64 -----------
+// function is_in_range_i64(in_range, arg, expected) {
+//   print('checking for ', arg);
+//   let result = fast_c_api.clamp_compare_i64(in_range, arg, arg);
+
+//   // TODO(mslekova): Make the slow path return clamped value too.
+//   if (!result) return;
+
+//   if (in_range) {
+//     assertEquals(result, arg);
+//   } else {
+//     assertEquals(result, expected);
+//   }
+// }
+
+// %PrepareFunctionForOptimization(is_in_range_i64);
+// assertFalse(is_in_range_i64(true, 123));
+// %OptimizeFunctionOnNextCall(is_in_range_i64);
+// assertTrue(is_in_range_i64(true, 123));
+// assertTrue(is_in_range_i64(true, -0.5));
+// assertTrue(is_in_range_i64(true, 0.5));
+// assertTrue(is_in_range_i64(true, 1.5));
+// assertTrue(is_in_range_i64(true, -(2 ** 63)));
+// assertTrue(is_in_range_i64(true, Number.MIN_SAFE_INTEGER));
+// assertTrue(is_in_range_i64(true, Number.MAX_SAFE_INTEGER));
+// assertThrows(() => is_in_range_i64(false, -(2 ** 64)));
+// assertThrows(() => is_in_range_i64(false, -(2 ** 64 + 1)));
+// assertThrows(() => is_in_range_i64(false, 2 ** 64));
+// assertThrows(() => is_in_range_i64(false, 2 ** 64 + 3.15));
