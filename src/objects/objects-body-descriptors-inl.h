@@ -697,7 +697,7 @@ class Foreign::BodyDescriptor final : public BodyDescriptorBase {
                                  ObjectVisitor* v) {
     v->VisitExternalPointer(obj,
                             obj.RawExternalPointerField(kForeignAddressOffset),
-                            kForeignForeignAddressTag);
+                            kAnyForeignTag);
   }
 
   static inline int SizeOf(Map map, HeapObject object) { return kSize; }

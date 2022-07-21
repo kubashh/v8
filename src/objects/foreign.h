@@ -19,9 +19,12 @@ namespace internal {
 class Foreign : public TorqueGeneratedForeign<Foreign, HeapObject> {
  public:
   // [address]: field containing the address.
-  DECL_GETTER(foreign_address, Address)
+  template <ExternalPointerTag tag>
+  Address foreign_address() const;
 
-  static inline bool IsNormalized(Object object);
+  // Load the address without performing a type check. Only use this when the
+  // returned pointer will not be dereferenced.
+  inline Address foreign_address_unchecked() const;
 
   // Dispatched behavior.
   DECL_PRINTER(Foreign)
@@ -44,9 +47,11 @@ class Foreign : public TorqueGeneratedForeign<Foreign, HeapObject> {
   friend class StartupSerializer;
   friend class WasmTypeInfo;
 
-  inline void AllocateExternalPointerEntries(Isolate* isolate);
+  template <ExternalPointerTag tag>
+  void AllocateExternalPointerEntry(Isolate* isolate);
 
-  inline void set_foreign_address(Isolate* isolate, Address value);
+  template <ExternalPointerTag tag>
+  void set_foreign_address(Isolate* isolate, Address value);
 
   TQ_OBJECT_CONSTRUCTORS(Foreign)
 };

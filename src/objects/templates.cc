@@ -150,15 +150,18 @@ int FunctionTemplateInfo::GetCFunctionsCount() const {
 
 Address FunctionTemplateInfo::GetCFunction(int index) const {
   i::DisallowHeapAllocation no_gc;
-  return v8::ToCData<Address>(FixedArray::cast(GetCFunctionOverloads())
-                                  .get(index * kFunctionOverloadEntrySize));
+  return v8::ToCData<external::CFunction>(
+             FixedArray::cast(GetCFunctionOverloads())
+                 .get(index * kFunctionOverloadEntrySize))
+      .address();
 }
 
 const CFunctionInfo* FunctionTemplateInfo::GetCSignature(int index) const {
   i::DisallowHeapAllocation no_gc;
-  return v8::ToCData<CFunctionInfo*>(
-      FixedArray::cast(GetCFunctionOverloads())
-          .get(index * kFunctionOverloadEntrySize + 1));
+  return v8::ToCData<external::CFunctionInfo>(
+             FixedArray::cast(GetCFunctionOverloads())
+                 .get(index * kFunctionOverloadEntrySize + 1))
+      .get();
 }
 
 }  // namespace internal

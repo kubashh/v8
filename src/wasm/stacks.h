@@ -70,7 +70,7 @@ class StackMemory {
 
   StackMemory* next() { return next_; }
 
-  // Track external memory usage for Managed<StackMemory> objects.
+  // Track external memory usage for ManagedStackMemory objects.
   size_t owned_size() { return sizeof(StackMemory) + (owned_ ? size_ : 0); }
   bool IsActive() {
     byte* sp = reinterpret_cast<byte*>(GetCurrentStackPosition());

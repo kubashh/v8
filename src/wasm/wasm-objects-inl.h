@@ -290,7 +290,8 @@ CAST_ACCESSOR(WasmExportedFunction)
 ACCESSORS(WasmFunctionData, internal, WasmInternalFunction, kInternalOffset)
 
 wasm::FunctionSig* WasmExportedFunctionData::sig() const {
-  return reinterpret_cast<wasm::FunctionSig*>(signature().foreign_address());
+  return reinterpret_cast<wasm::FunctionSig*>(
+      signature().foreign_address<kWasmExportedFunctionDataSigTag>());
 }
 
 // WasmJSFunction
@@ -497,7 +498,8 @@ void WasmObject::WriteValueAt(Isolate* isolate, Handle<HeapObject> obj,
 
 wasm::StructType* WasmStruct::type(Map map) {
   WasmTypeInfo type_info = map.wasm_type_info();
-  return reinterpret_cast<wasm::StructType*>(type_info.foreign_address());
+  return reinterpret_cast<wasm::StructType*>(
+      type_info.foreign_address<kWasmTypeInfoTag>());
 }
 
 wasm::StructType* WasmStruct::GcSafeType(Map map) {
@@ -507,7 +509,8 @@ wasm::StructType* WasmStruct::GcSafeType(Map map) {
   // can't read its map for a checked cast. But we can rely on its payload
   // being intact in the old location.
   Foreign foreign = Foreign::unchecked_cast(raw);
-  return reinterpret_cast<wasm::StructType*>(foreign.foreign_address());
+  return reinterpret_cast<wasm::StructType*>(
+      foreign.foreign_address<kWasmTypeInfoTag>());
 }
 
 int WasmStruct::Size(const wasm::StructType* type) {
@@ -573,7 +576,8 @@ void WasmStruct::SetField(Isolate* isolate, Handle<WasmStruct> obj,
 wasm::ArrayType* WasmArray::type(Map map) {
   DCHECK_EQ(WASM_ARRAY_TYPE, map.instance_type());
   WasmTypeInfo type_info = map.wasm_type_info();
-  return reinterpret_cast<wasm::ArrayType*>(type_info.foreign_address());
+  return reinterpret_cast<wasm::ArrayType*>(
+      type_info.foreign_address<kWasmTypeInfoTag>());
 }
 
 wasm::ArrayType* WasmArray::GcSafeType(Map map) {
@@ -583,7 +587,8 @@ wasm::ArrayType* WasmArray::GcSafeType(Map map) {
   // can't read its map for a checked cast. But we can rely on its payload
   // being intact in the old location.
   Foreign foreign = Foreign::unchecked_cast(raw);
-  return reinterpret_cast<wasm::ArrayType*>(foreign.foreign_address());
+  return reinterpret_cast<wasm::ArrayType*>(
+      foreign.foreign_address<kWasmTypeInfoTag>());
 }
 
 wasm::ArrayType* WasmArray::type() const { return type(map()); }

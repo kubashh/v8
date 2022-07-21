@@ -22,9 +22,9 @@ namespace internal {
 
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSV8BreakIterator)
 
-ACCESSORS(JSV8BreakIterator, break_iterator, Managed<icu::BreakIterator>,
+ACCESSORS(JSV8BreakIterator, break_iterator, ManagedIcuBreakIterator,
           kBreakIteratorOffset)
-ACCESSORS(JSV8BreakIterator, unicode_string, Managed<icu::UnicodeString>,
+ACCESSORS(JSV8BreakIterator, unicode_string, ManagedIcuUnicodeString,
           kUnicodeStringOffset)
 
 }  // namespace internal

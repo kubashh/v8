@@ -66,6 +66,7 @@ Address ExternalPointerTable::Get(ExternalPointerHandle handle,
 
   Address entry = load_atomic(index);
   DCHECK(!is_free(entry));
+  DCHECK_EQ(entry & kExternalPointerTagMask, entry & tag);
 
   return entry & ~tag;
 }
@@ -93,6 +94,7 @@ Address ExternalPointerTable::Exchange(ExternalPointerHandle handle,
 
   Address entry = exchange_atomic(index, value | tag);
   DCHECK(!is_free(entry));
+  DCHECK_EQ(entry & kExternalPointerTagMask, entry & tag);
   return entry & ~tag;
 }
 

@@ -10,6 +10,7 @@
 #include "include/v8-container.h"
 #include "include/v8-external.h"
 #include "include/v8-proxy.h"
+#include "include/v8-template.h"
 #include "include/v8-typed-array.h"
 #include "include/v8-wasm.h"
 #include "src/execution/isolate.h"
@@ -53,19 +54,45 @@ class Consts {
   enum TemplateType { FUNCTION_TEMPLATE = 0, OBJECT_TEMPLATE = 1 };
 };
 
-template <typename T>
-inline T ToCData(v8::internal::Object obj);
+// An external_ptr combines a pointer to an (external) object of a specific C++
+// type with an external pointer tag which identifies this type at runtime.
+// Wrapping pointers into an external_ptr allows the external pointer accessor
+// routines to automatically infer the ExternalPointerTag.
+template <typename T, internal::ExternalPointerTag tag>
+class external_ptr {
+  using Ptr = typename std::conditional<std::is_pointer<T>::value, T, T*>::type;
 
-template <>
-inline v8::internal::Address ToCData(v8::internal::Object obj);
+ public:
+  static constexpr internal::ExternalPointerTag Tag = tag;
 
-template <typename T>
+  external_ptr() : ptr_(nullptr) {}
+
+  explicit external_ptr(Ptr p) : ptr_(p) {}
+
+  explicit external_ptr(internal::Address addr)
+      : ptr_(reinterpret_cast<Ptr>(addr)) {}
+
+  Ptr get() { return ptr_; }
+  const Ptr get() const { return ptr_; }
+
+  Ptr operator->() { return ptr_; }
+
+  operator bool() const { return ptr_ != nullptr; }
+
+  internal::Address address() const {
+    return reinterpret_cast<internal::Address>(ptr_);
+  }
+
+ private:
+  Ptr ptr_;
+};
+
+template <typename EP>
+inline EP ToCData(v8::internal::Object obj);
+
+template <typename EP>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
-    v8::internal::Isolate* isolate, T obj);
-
-template <>
-inline v8::internal::Handle<v8::internal::Object> FromCData(
-    v8::internal::Isolate* isolate, v8::internal::Address obj);
+    v8::internal::Isolate* isolate, EP external_pointer);
 
 class ApiFunction {
  public:

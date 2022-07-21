@@ -95,8 +95,9 @@ inline JSReceiver FunctionCallbackArguments::holder() {
     RCS_SCOPE(isolate, RuntimeCallCounterId::kNamed##FUNCTION##Callback);   \
     Handle<Object> receiver_check_unsupported;                              \
     GenericNamedProperty##FUNCTION##Callback f =                            \
-        ToCData<GenericNamedProperty##FUNCTION##Callback>(                  \
-            interceptor->TYPE());                                           \
+        ToCData<external::GenericNamedProperty##FUNCTION##Callback>(        \
+            interceptor->TYPE())                                            \
+            .get();                                                         \
     PREPARE_CALLBACK_INFO(isolate, f, Handle<RETURN_TYPE>, API_RETURN_TYPE, \
                           INFO_FOR_SIDE_EFFECT, receiver_check_unsupported, \
                           NotAccessor);                                     \
@@ -116,7 +117,9 @@ FOR_EACH_CALLBACK(CREATE_NAMED_CALLBACK)
     RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexed##FUNCTION##Callback);   \
     Handle<Object> receiver_check_unsupported;                                \
     IndexedProperty##FUNCTION##Callback f =                                   \
-        ToCData<IndexedProperty##FUNCTION##Callback>(interceptor->TYPE());    \
+        ToCData<external::IndexedProperty##FUNCTION##Callback>(               \
+            interceptor->TYPE())                                              \
+            .get();                                                           \
     PREPARE_CALLBACK_INFO(isolate, f, Handle<RETURN_TYPE>, API_RETURN_TYPE,   \
                           INFO_FOR_SIDE_EFFECT, receiver_check_unsupported,   \
                           NotAccessor);                                       \
@@ -177,7 +180,9 @@ Handle<Object> PropertyCallbackArguments::CallNamedGetter(
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedGetterCallback);
   GenericNamedPropertyGetterCallback f =
-      ToCData<GenericNamedPropertyGetterCallback>(interceptor->getter());
+      ToCData<external::GenericNamedPropertyGetterCallback>(
+          interceptor->getter())
+          .get();
   return BasicCallNamedGetterCallback(f, name, interceptor);
 }
 
@@ -186,8 +191,9 @@ Handle<Object> PropertyCallbackArguments::CallNamedDescriptor(
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedDescriptorCallback);
   GenericNamedPropertyDescriptorCallback f =
-      ToCData<GenericNamedPropertyDescriptorCallback>(
-          interceptor->descriptor());
+      ToCData<external::GenericNamedPropertyDescriptorCallback>(
+          interceptor->descriptor())
+          .get();
   return BasicCallNamedGetterCallback(f, name, interceptor);
 }
 
@@ -207,7 +213,9 @@ Handle<Object> PropertyCallbackArguments::CallNamedSetter(
     Handle<Object> value) {
   DCHECK_NAME_COMPATIBLE(interceptor, name);
   GenericNamedPropertySetterCallback f =
-      ToCData<GenericNamedPropertySetterCallback>(interceptor->setter());
+      ToCData<external::GenericNamedPropertySetterCallback>(
+          interceptor->setter())
+          .get();
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedSetterCallback);
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
@@ -223,7 +231,9 @@ Handle<Object> PropertyCallbackArguments::CallNamedDefiner(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedDefinerCallback);
   GenericNamedPropertyDefinerCallback f =
-      ToCData<GenericNamedPropertyDefinerCallback>(interceptor->definer());
+      ToCData<external::GenericNamedPropertyDefinerCallback>(
+          interceptor->definer())
+          .get();
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(v8::Utils::ToLocal(name), desc, callback_info);
@@ -236,7 +246,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedSetter(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedSetterCallback);
   IndexedPropertySetterCallback f =
-      ToCData<IndexedPropertySetterCallback>(interceptor->setter());
+      ToCData<external::IndexedPropertySetterCallback>(interceptor->setter())
+          .get();
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(index, v8::Utils::ToLocal(value), callback_info);
@@ -250,7 +261,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDefiner(
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDefinerCallback);
   IndexedPropertyDefinerCallback f =
-      ToCData<IndexedPropertyDefinerCallback>(interceptor->definer());
+      ToCData<external::IndexedPropertyDefinerCallback>(interceptor->definer())
+          .get();
   PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(isolate, f, Handle<Object>,
                                                v8::Value);
   f(index, desc, callback_info);
@@ -262,7 +274,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedGetter(
   DCHECK(!interceptor->is_named());
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kNamedGetterCallback);
   IndexedPropertyGetterCallback f =
-      ToCData<IndexedPropertyGetterCallback>(interceptor->getter());
+      ToCData<external::IndexedPropertyGetterCallback>(interceptor->getter())
+          .get();
   return BasicCallIndexedGetterCallback(f, index, interceptor);
 }
 
@@ -271,7 +284,9 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDescriptor(
   DCHECK(!interceptor->is_named());
   RCS_SCOPE(isolate(), RuntimeCallCounterId::kIndexedDescriptorCallback);
   IndexedPropertyDescriptorCallback f =
-      ToCData<IndexedPropertyDescriptorCallback>(interceptor->descriptor());
+      ToCData<external::IndexedPropertyDescriptorCallback>(
+          interceptor->descriptor())
+          .get();
   return BasicCallIndexedGetterCallback(f, index, interceptor);
 }
 
@@ -289,7 +304,9 @@ Handle<JSObject> PropertyCallbackArguments::CallPropertyEnumerator(
     Handle<InterceptorInfo> interceptor) {
   // For now there is a single enumerator for indexed and named properties.
   IndexedPropertyEnumeratorCallback f =
-      v8::ToCData<IndexedPropertyEnumeratorCallback>(interceptor->enumerator());
+      ToCData<external::IndexedPropertyEnumeratorCallback>(
+          interceptor->enumerator())
+          .get();
   // TODO(cbruni): assert same type for indexed and named callback.
   Isolate* isolate = this->isolate();
   Handle<Object> receiver_check_unsupported;

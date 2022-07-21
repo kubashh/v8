@@ -433,7 +433,7 @@ Maybe<MemorySpan<const uint8_t>> ScriptSource::WasmBytecode() const {
   i::Handle<i::HeapObject> source = Utils::OpenHandle(this);
   if (!source->IsForeign()) return Nothing<MemorySpan<const uint8_t>>();
   base::Vector<const uint8_t> wire_bytes =
-      i::Managed<i::wasm::NativeModule>::cast(*source).raw()->wire_bytes();
+      i::wasm::ManagedNativeModule::cast(*source).raw()->wire_bytes();
   return Just(MemorySpan<const uint8_t>{wire_bytes.begin(), wire_bytes.size()});
 }
 #endif  // V8_ENABLE_WEBASSEMBLY

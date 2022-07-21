@@ -15,6 +15,7 @@
 #include "src/base/bit-field.h"
 #include "src/execution/isolate.h"
 #include "src/heap/factory.h"
+#include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
 #include "unicode/uversion.h"
@@ -59,7 +60,7 @@ class JSListFormat
   Handle<String> TypeAsString() const;
 
   // ListFormat accessors.
-  DECL_ACCESSORS(icu_formatter, Managed<icu::ListFormatter>)
+  DECL_ACCESSORS(icu_formatter, ManagedIcuListFormatter)
 
   // Style: identifying the relative time format style used.
   //

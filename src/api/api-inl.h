@@ -16,37 +16,64 @@
 
 namespace v8 {
 
-template <typename T>
-inline T ToCData(v8::internal::Object obj) {
-  static_assert(sizeof(T) == sizeof(v8::internal::Address));
-  if (obj == v8::internal::Smi::zero()) return nullptr;
-  return reinterpret_cast<T>(
-      v8::internal::Foreign::cast(obj).foreign_address());
+template <typename EP>
+inline EP ToCData(v8::internal::Object obj) {
+  if (obj == internal::Smi::zero()) return EP();
+  return EP(internal::Foreign::cast(obj).foreign_address<EP::Tag>());
 }
 
-template <>
-inline v8::internal::Address ToCData(v8::internal::Object obj) {
-  if (obj == v8::internal::Smi::zero()) return v8::internal::kNullAddress;
-  return v8::internal::Foreign::cast(obj).foreign_address();
-}
-
-template <typename T>
+template <typename EP>
 inline v8::internal::Handle<v8::internal::Object> FromCData(
-    v8::internal::Isolate* isolate, T obj) {
-  static_assert(sizeof(T) == sizeof(v8::internal::Address));
-  if (obj == nullptr) return handle(v8::internal::Smi::zero(), isolate);
-  return isolate->factory()->NewForeign(
-      reinterpret_cast<v8::internal::Address>(obj));
+    v8::internal::Isolate* isolate, EP external_ptr) {
+  if (!external_ptr) return handle(v8::internal::Smi::zero(), isolate);
+  return isolate->factory()->NewForeign<EP::Tag>(external_ptr.address());
 }
 
-template <>
-inline v8::internal::Handle<v8::internal::Object> FromCData(
-    v8::internal::Isolate* isolate, v8::internal::Address obj) {
-  if (obj == v8::internal::kNullAddress) {
-    return handle(v8::internal::Smi::zero(), isolate);
-  }
-  return isolate->factory()->NewForeign(obj);
-}
+// external_ptr types for API-defined external objects.
+namespace external {
+#define MAKE_EXTERNAL_POINTER(PointerType, Tag) \
+  using PointerType = external_ptr<v8::PointerType, Tag>;
+
+#define MAKE_EXTERNAL_POINTER2(Name, PointerType, Tag) \
+  using Name = external_ptr<PointerType, Tag>;
+
+MAKE_EXTERNAL_POINTER(AccessCheckCallback, internal::kAccessCheckCallbackTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertyGetterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertySetterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertyDefinerCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertyDescriptorCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertyDeleterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(GenericNamedPropertyQueryCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyGetterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertySetterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyDefinerCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyDescriptorCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyDeleterCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyQueryCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(IndexedPropertyEnumeratorCallback,
+                      internal::kInterceptorInfoTag);
+MAKE_EXTERNAL_POINTER(MicrotaskCallback, internal::kMicrotaskCallbackTag);
+MAKE_EXTERNAL_POINTER2(CFunctionInfo, const CFunctionInfo*,
+                       internal::kCFunctionInfoTag);
+MAKE_EXTERNAL_POINTER2(CFunction, const void*, internal::kCFunctionTag);
+MAKE_EXTERNAL_POINTER2(AbortScriptExecutionCallback,
+                       Context::AbortScriptExecutionCallback,
+                       internal::kAbortScriptExecutionCallbackTag);
+MAKE_EXTERNAL_POINTER2(MicrotaskCallbackData, void*,
+                       internal::kMicrotaskCallbackDataTag);
+}  // namespace external
 
 template <class From, class To>
 inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
