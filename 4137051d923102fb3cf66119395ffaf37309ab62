@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe339f2_a76468d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-07-21T07:32:31Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "4137051d923102fb3cf66119395ffaf37309ab62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0933b2bc_f86593c3",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-07-21T07:32:31Z",
+      "side": 1,
+      "message": "nit: anonymous namespace instead of `static`",
+      "revId": "4137051d923102fb3cf66119395ffaf37309ab62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbf7d9b7_b8e3d2eb",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-07-21T07:32:31Z",
+      "side": 1,
+      "message": "nit: Doubling the `v` before the `ed` kinda feels odd, but I am not sure about the exact rules when you double the constant before adding `ed`.\nMaybe @Leszek can clarify what is correct?",
+      "revId": "4137051d923102fb3cf66119395ffaf37309ab62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
