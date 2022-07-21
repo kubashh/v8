@@ -50,6 +50,24 @@
       "message": "nit: Doubling the `v` before the `ed` kinda feels odd, but I am not sure about the exact rules when you double the constant before adding `ed`.\nMaybe @Leszek can clarify what is correct?",
       "revId": "4137051d923102fb3cf66119395ffaf37309ab62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5846b022_7a840e6d",
+        "filename": "src/objects/code.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-21T08:42:00Z",
+      "side": 1,
+      "message": "we\u0027ve been using maglevved elsewhere so this is consistent -- it\u0027s a bit awkward but we followed the pattern of \"improv\" (like improvised comedy) \u003d\u003e \"improvved\" as opposed to \"improved\" which is another word with different syllable stress.",
+      "parentUuid": "bbf7d9b7_b8e3d2eb",
+      "revId": "4137051d923102fb3cf66119395ffaf37309ab62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
