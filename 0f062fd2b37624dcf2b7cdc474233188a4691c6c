@@ -22,6 +22,30 @@
       },
       "revId": "0f062fd2b37624dcf2b7cdc474233188a4691c6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c036f68a_fcac437a",
+        "filename": "builders/experiments.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-07-21T12:13:31Z",
+      "side": 1,
+      "message": "abdelaal@ is still involved overall but I\u0027ll check if it\u0027s better for me to be notified instead.",
+      "parentUuid": "e09389e0_253f2b36",
+      "range": {
+        "startLine": 343,
+        "startChar": 26,
+        "endLine": 343,
+        "endChar": 45
+      },
+      "revId": "0f062fd2b37624dcf2b7cdc474233188a4691c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
