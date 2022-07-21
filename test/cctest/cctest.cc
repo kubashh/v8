@@ -467,10 +467,6 @@ v8::PageAllocator* TestPlatform::GetPageAllocator() {
   return CcTest::default_platform()->GetPageAllocator();
 }
 
-void TestPlatform::OnCriticalMemoryPressure() {
-  CcTest::default_platform()->OnCriticalMemoryPressure();
-}
-
 bool TestPlatform::OnCriticalMemoryPressure(size_t length) {
   return CcTest::default_platform()->OnCriticalMemoryPressure(length);
 }

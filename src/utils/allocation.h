@@ -24,6 +24,11 @@ class Isolate;
 // allocation fails, these functions call back into the embedder, then attempt
 // the allocation a second time. The embedder callback must not reenter V8.
 
+// Function that may release reserved memory regions to allow failed allocations
+// to succeed. |length| is the amount of memory needed. Returns |true| if memory
+// could be released, false otherwise.
+V8_EXPORT_PRIVATE bool OnCriticalMemoryPressure(size_t length);
+
 // Superclass for classes managed with new & delete.
 class V8_EXPORT_PRIVATE Malloced {
  public:
@@ -35,7 +40,7 @@ template <typename T>
 T* NewArray(size_t size) {
   T* result = new (std::nothrow) T[size];
   if (result == nullptr) {
-    V8::GetCurrentPlatform()->OnCriticalMemoryPressure();
+    OnCriticalMemoryPressure(size * sizeof(T));
     result = new (std::nothrow) T[size];
     if (result == nullptr) V8::FatalProcessOutOfMemory(nullptr, "NewArray");
   }
@@ -171,11 +176,6 @@ inline bool SetPermissions(v8::PageAllocator* page_allocator, Address address,
   return SetPermissions(page_allocator, reinterpret_cast<void*>(address), size,
                         access);
 }
-
-// Function that may release reserved memory regions to allow failed allocations
-// to succeed. |length| is the amount of memory needed. Returns |true| if memory
-// could be released, false otherwise.
-V8_EXPORT_PRIVATE bool OnCriticalMemoryPressure(size_t length);
 
 // Defines whether the address space reservation is going to be used for
 // allocating executable pages.

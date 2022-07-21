@@ -34,8 +34,6 @@ class AllocationPlatform : public TestPlatform {
  public:
   AllocationPlatform() { current_platform = this; }
 
-  void OnCriticalMemoryPressure() override { oom_callback_called = true; }
-
   bool OnCriticalMemoryPressure(size_t length) override {
     oom_callback_called = true;
     return true;

@@ -32,10 +32,6 @@ class PredictablePlatform final : public Platform {
     return platform_->GetPageAllocator();
   }
 
-  void OnCriticalMemoryPressure() override {
-    platform_->OnCriticalMemoryPressure();
-  }
-
   bool OnCriticalMemoryPressure(size_t length) override {
     return platform_->OnCriticalMemoryPressure(length);
   }
@@ -145,10 +141,6 @@ class DelayedTasksPlatform final : public Platform {
 
   PageAllocator* GetPageAllocator() override {
     return platform_->GetPageAllocator();
-  }
-
-  void OnCriticalMemoryPressure() override {
-    platform_->OnCriticalMemoryPressure();
   }
 
   bool OnCriticalMemoryPressure(size_t length) override {

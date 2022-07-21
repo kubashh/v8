@@ -223,12 +223,7 @@ bool SetPermissions(v8::PageAllocator* page_allocator, void* address,
 }
 
 bool OnCriticalMemoryPressure(size_t length) {
-  // TODO(bbudge) Rework retry logic once embedders implement the more
-  // informative overload.
-  if (!V8::GetCurrentPlatform()->OnCriticalMemoryPressure(length)) {
-    V8::GetCurrentPlatform()->OnCriticalMemoryPressure();
-  }
-  return true;
+  return V8::GetCurrentPlatform()->OnCriticalMemoryPressure(length);
 }
 
 VirtualMemory::VirtualMemory() = default;
