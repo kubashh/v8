@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa8ca375_e15ab430",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-07-21T12:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9a52602_da369ffd",
+      "range": {
+        "startLine": 80,
+        "startChar": 47,
+        "endLine": 80,
+        "endChar": 58
+      },
+      "revId": "cdc2f6b3923010b4be9b0d293f690ccbe90ec538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "590203fc_3a514476",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-21T10:51:01Z",
       "side": 1,
       "message": "64?",
+      "range": {
+        "startLine": 538,
+        "startChar": 14,
+        "endLine": 538,
+        "endChar": 16
+      },
+      "revId": "cdc2f6b3923010b4be9b0d293f690ccbe90ec538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa86165_99a52b4c",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-07-21T12:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "590203fc_3a514476",
       "range": {
         "startLine": 538,
         "startChar": 14,
