@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from contextlib import contextmanager
+import collections
 import os
 import re
 import signal
@@ -11,13 +12,18 @@ import sys
 import threading
 import time
 
+from .fuchsia.presence import getFuchsiaContextClass
 from ..local.android import (Driver, CommandFailedException, TimeoutException)
 from ..objects import output
-from ..local.pool import DefaultExecutionPool, AbortException,\
-  taskkill_windows
+from testrunner.local import pool
+
+from queue import SimpleQueue
+from testrunner.local.pool import MaybeResult, taskkill_windows, AbortException
 
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
+
+
 
 SEM_INVALID_VALUE = -1
 SEM_NOGPFAULTERRORBOX = 0x0002  # Microsoft Platform SDK WinBase.h
@@ -306,12 +312,64 @@ class AndroidCommand(BaseCommand):
 
 Command = None
 
+"""===POOLS==="""
+
+
+# Global function for multiprocessing, because pickling a static method doesn't
+# work on Windows.
+def run_job(job, process_context):
+  return job.run(process_context)
+
+
+ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
+
+
+class DefaultExecutionPool():
+
+  def init(self, jobs, notify_fun):
+    self._pool = pool.Pool(jobs, notify_fun=notify_fun)
+
+  def add_jobs(self, jobs):
+    self._pool.add(jobs)
+
+  def results(self, requirement):
+    return self._pool.imap_unordered(
+        fn=run_job,
+        gen=[],
+        process_context_fn=ProcessContext,
+        process_context_args=[requirement],
+    )
+
+  def abort(self):
+    self._pool.abort()
+
+
+class SingleThreadedExecutionPool():
+
+  def init(self, jobs, notify_fun):
+    self.work_queue = []
+
+  def add_jobs(self, jobs):
+    for j in jobs:
+      self.work_queue.append(j)
+
+  def results(self, requirement):
+    while self.work_queue:
+      job = self.work_queue.pop()
+      yield MaybeResult.create_result(job.run(ProcessContext(requirement)))
+
+  def abort(self):
+    pass
+
 
 class DefaultOSContext():
 
   def __init__(self, command, pool=None):
     self.command = command
     self.pool = pool or DefaultExecutionPool()
+
+  def on_load(self):
+    pass
 
   @contextmanager
   def context(self, options):
@@ -332,26 +390,7 @@ class AndroidOSContext(DefaultOSContext):
       AndroidCommand.driver.tear_down()
 
 
-# TODO(liviurau): Add documentation with diagrams to describe how context and
-# its components gets initialized and eventually teared down and how does it
-# interact with both tests and underlying platform specific concerns.
-def find_os_context_factory(target_os):
-  registry = dict(
-      android=AndroidOSContext,
-      windows=lambda: DefaultOSContext(WindowsCommand))
-  default = lambda: DefaultOSContext(PosixCommand)
-  return registry.get(target_os, default)
-
-
-@contextmanager
-def os_context(target_os, options):
-  factory = find_os_context_factory(target_os)
-  context = factory()
-  with context.context(options):
-    yield context
-
-
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
@@ -364,7 +403,7 @@ def setup(target_os, device):
     Command = PosixCommand
 
 
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:
