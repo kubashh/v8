@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cef2385_5c7de0a2",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-21T11:38:54Z",
+      "side": 1,
+      "message": "This should be just a return true.\nI speculatively added this `pthread_jit_write_protect_supported_np()` call in a hope that it will return false when the binary does not have the JIT entitlement, but when I managed to reproduce the issue later I realized that this call seems to always return true regardless of whether there is the entitlement or not.",
+      "parentUuid": "61210061_f574efa7",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2acd0167_6df4348d",
         "filename": "src/common/code-memory-access.cc",
         "patchSetId": 37
@@ -65,6 +83,24 @@
       "writtenOn": "2022-07-21T11:01:07Z",
       "side": 1,
       "message": "Since `is_pku_supported_` will always equal `memory_protection_key_ !\u003d base::MemoryProtectionKey::kNoMemoryProtectionKey`, we could just remove this second global and check the value of `memory_protection_key_` in `IsSupported()`.",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a50b56a8_7227ff8b",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-21T11:38:54Z",
+      "side": 1,
+      "message": "I had the same idea but then I realized that checking boolean flag might be cheaper code-size wise than comparing a value with -1.",
+      "parentUuid": "4e0701e9_6911083a",
       "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
