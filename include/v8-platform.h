@@ -944,7 +944,7 @@ class Platform {
    * error.
    * Embedder overrides of this function must NOT call back into V8.
    */
-  V8_DEPRECATE_SOON("Use the version which receives an informative parameter")
+  V8_DEPRECATE("Use the version which receives an informative parameter")
   virtual void OnCriticalMemoryPressure() {
     // TODO(bbudge) Remove this when embedders override the following method.
     // See crbug.com/634547.
