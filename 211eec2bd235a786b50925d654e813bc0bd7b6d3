@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6a49f8_c58fa959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "Thanks, this looks good generally. Just a few minor comments.\n+Jakob for the one question about CHECKs. I guess they were there to fail early if we can\u0027t use MAP_JIT on arm64 Mac?",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61210061_f574efa7",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "Now that we removed a few CHECKs for `RwxMemoryWriteScope::IsAllowed()`, I wonder if this should be a `CHECK`, followed by `return true`.\nJakob, would that make sense for arm64 Macs?",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2acd0167_6df4348d",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "In order to ensure that this method is called correctly, we could add a debug-only global and check it as a few places, similar to `pkey_initialized` in `memory-protection-key.cc`.",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e0701e9_6911083a",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "Since `is_pku_supported_` will always equal `memory_protection_key_ !\u003d base::MemoryProtectionKey::kNoMemoryProtectionKey`, we could just remove this second global and check the value of `memory_protection_key_` in `IsSupported()`.",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4835ef7a_e4fb8b7a",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "nit: \"key\u0027s\" (as it\u0027s only one)",
+      "range": {
+        "startLine": 37,
+        "startChar": 66,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab27c10_be958cee",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "Please make this completely lower case: `is_pku_supported_`.",
+      "range": {
+        "startLine": 90,
+        "startChar": 14,
+        "endLine": 90,
+        "endChar": 31
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

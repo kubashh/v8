@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b6b1e38_d11aed8b",
+        "filename": "src/wasm/code-space-access.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T11:01:07Z",
+      "side": 1,
+      "message": "Yes, this is valid concern. I think we should move The `ResetPKUPermissionsForThreadSpawning` class to `src/common/code-memory-access.h` and implement it without using the `RwxMemoryWriteScope` methods.",
+      "parentUuid": "44e3bbec_ac1d04a1",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295ea8a7_b4074419",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 35
