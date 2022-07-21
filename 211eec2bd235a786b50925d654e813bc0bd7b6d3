@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "156ce9ff_bacb0ef4",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-21T12:42:25Z",
+      "side": 1,
+      "message": "I would have thought that that one more instruction does not make a difference. If we care about it that much, we could check for `memory_protection_key_ \u003c 0`, which is just as cheap as checking a boolean (when used for a dynamic branch).\nWe should then have a DCHECK that the key is either positive or `kNoMemoryProtectionKey`.",
+      "parentUuid": "a50b56a8_7227ff8b",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4835ef7a_e4fb8b7a",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 37
