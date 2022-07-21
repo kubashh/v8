@@ -13,11 +13,15 @@ import time
 
 from ..local.android import (Driver, CommandFailedException, TimeoutException)
 from ..objects import output
-from ..local.pool import DefaultExecutionPool, AbortException,\
-  taskkill_windows
+
+from queue import SimpleQueue
+from testrunner.local.pool import taskkill_windows, AbortException,\
+  DefaultExecutionPool
 
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
+
+
 
 SEM_INVALID_VALUE = -1
 SEM_NOGPFAULTERRORBOX = 0x0002  # Microsoft Platform SDK WinBase.h
@@ -306,12 +310,17 @@ class AndroidCommand(BaseCommand):
 
 Command = None
 
+"""===POOLS==="""
+
 
 class DefaultOSContext():
 
   def __init__(self, command, pool=None):
     self.command = command
     self.pool = pool or DefaultExecutionPool()
+
+  def on_load(self):
+    pass
 
   @contextmanager
   def context(self, options):
@@ -332,26 +341,7 @@ class AndroidOSContext(DefaultOSContext):
       AndroidCommand.driver.tear_down()
 
 
-# TODO(liviurau): Add documentation with diagrams to describe how context and
-# its components gets initialized and eventually teared down and how does it
-# interact with both tests and underlying platform specific concerns.
-def find_os_context_factory(target_os):
-  registry = dict(
-      android=AndroidOSContext,
-      windows=lambda: DefaultOSContext(WindowsCommand))
-  default = lambda: DefaultOSContext(PosixCommand)
-  return registry.get(target_os, default)
-
-
-@contextmanager
-def os_context(target_os, options):
-  factory = find_os_context_factory(target_os)
-  context = factory()
-  with context.context(options):
-    yield context
-
-
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
@@ -364,7 +354,7 @@ def setup(target_os, device):
     Command = PosixCommand
 
 
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:

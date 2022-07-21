@@ -13,6 +13,7 @@ from contextlib import contextmanager
 from multiprocessing import Process, Queue
 from queue import Empty
 from . import utils
+import sys
 
 
 def setup_testing():
@@ -350,3 +351,21 @@ class DefaultExecutionPool():
 
   def abort(self):
     self._pool.abort()
+
+
+class SingleThreadedExecutionPool():
+
+  def init(self, jobs, notify_fun):
+    self.work_queue = []
+
+  def add_jobs(self, jobs):
+    for j in jobs:
+      self.work_queue.append(j)
+
+  def results(self, requirement):
+    while self.work_queue:
+      job = self.work_queue.pop()
+      yield MaybeResult.create_result(job.run(ProcessContext(requirement)))
+
+  def abort(self):
+    pass
