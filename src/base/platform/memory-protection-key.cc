@@ -4,7 +4,7 @@
 
 #include "src/base/platform/memory-protection-key.h"
 
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
 #include <sys/mman.h>     // For {mprotect()} protection macros.
 #include <sys/utsname.h>  // For {uname()}.
 #undef MAP_TYPE  // Conflicts with MAP_TYPE in Torque-generated instance-types.h
@@ -34,7 +34,7 @@
 // TODO(dlehmann): Move this import and freestanding functions below to
 // base/platform/platform.h {OS} (lower-level functions) and
 // {base::PageAllocator} (exported API).
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
 #include <dlfcn.h>
 #endif
 
@@ -59,7 +59,7 @@ bool pkey_initialized = false;
 #endif
 
 int GetProtectionFromMemoryPermission(PageAllocator::Permission permission) {
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   // Mappings for PKU are either RWX (for code), no access (for uncommitted
   // memory), or RW (for assembler buffers).
   switch (permission) {
@@ -82,7 +82,7 @@ int GetProtectionFromMemoryPermission(PageAllocator::Permission permission) {
 void MemoryProtectionKey::InitializeMemoryProtectionKeySupport() {
   // Flip {pkey_initialized} (in debug mode) and check the new value.
   DCHECK_EQ(true, pkey_initialized = !pkey_initialized);
-#if defined(V8_OS_LINUX) && defined(V8_HOST_ARCH_X64)
+#if V8_HAS_PKU_JIT_WRITE_PROTECT
   // PKU was broken on Linux kernels before 5.13 (see
   // https://lore.kernel.org/all/20210623121456.399107624@linutronix.de/).
   // A fix is also included in the 5.4.182 and 5.10.103 versions ("x86/fpu:
