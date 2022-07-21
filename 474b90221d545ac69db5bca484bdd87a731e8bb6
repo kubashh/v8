@@ -57,6 +57,30 @@
       },
       "revId": "474b90221d545ac69db5bca484bdd87a731e8bb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc0bce5_70ca9e30",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-21T14:27:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "824b63e6_b74842fa",
+      "range": {
+        "startLine": 34,
+        "startChar": 26,
+        "endLine": 34,
+        "endChar": 33
+      },
+      "revId": "474b90221d545ac69db5bca484bdd87a731e8bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
