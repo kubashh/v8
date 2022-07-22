@@ -1890,7 +1890,13 @@ void MaglevGraphBuilder::VisitJumpIfNotUndefined() {
   BuildBranchIfUndefined(GetAccumulatorTagged(), next_offset(),
                          iterator_.GetJumpTargetOffset());
 }
-MAGLEV_UNIMPLEMENTED_BYTECODE(JumpIfUndefinedOrNull)
+void MaglevGraphBuilder::VisitJumpIfUndefinedOrNull() {
+  BuildBranchIfUndefined(GetAccumulatorTagged(), next_offset(),
+                         iterator_.GetJumpTargetOffset());
+  BuildBranchIfNull(GetAccumulatorTagged(), next_offset(),
+                    iterator_.GetJumpTargetOffset());
+}
+
 MAGLEV_UNIMPLEMENTED_BYTECODE(JumpIfJSReceiver)
 MAGLEV_UNIMPLEMENTED_BYTECODE(SwitchOnSmiNoFeedback)
 MAGLEV_UNIMPLEMENTED_BYTECODE(ForInEnumerate)
