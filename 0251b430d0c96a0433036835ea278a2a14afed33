@@ -46,6 +46,30 @@
       },
       "revId": "0251b430d0c96a0433036835ea278a2a14afed33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77d7699e_6f09ae99",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-22T18:13:07Z",
+      "side": 1,
+      "message": "I can confirm that the first key that the operating system will hand out is `1`. It probably uses `0` for \"no key\" (the default key assigned to all mappings). As that\u0027s not documented though, we should not rely on this, and also allow `0`.",
+      "parentUuid": "7318fc54_c82a4154",
+      "range": {
+        "startLine": 67,
+        "startChar": 32,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "0251b430d0c96a0433036835ea278a2a14afed33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
