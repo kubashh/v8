@@ -33,6 +33,24 @@
       "message": "What would happen in HeapHashTables weakness handling?\nWhen we compact them we remove deleted entries which would have sentinel as the key. I suspect that\u0027s why LivenessBroker was treating them as dead.",
       "revId": "d8b9fe334e8097827950314469a6877cf1c61179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6204ef92_c6eeb896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-22T20:54:58Z",
+      "side": 1,
+      "message": "We never reach `LivenessBroker` for sentinel keys, as we filter out dead buckets before: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/wtf/hash_table.h;l\u003d2168?q\u003dhash_table.h\u0026ss\u003dchromium\n\nI think this also makes sense: The sentinel pointer is something set by the embedder which we just preserve throughout the GC.",
+      "parentUuid": "f5577690_5d748e63",
+      "revId": "d8b9fe334e8097827950314469a6877cf1c61179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
