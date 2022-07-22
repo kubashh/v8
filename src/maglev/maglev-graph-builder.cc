@@ -27,6 +27,7 @@
 #include "src/objects/property-cell.h"
 #include "src/objects/property-details.h"
 #include "src/objects/slots-inl.h"
+#include "src/roots/roots.h"
 
 namespace v8 {
 namespace internal {
@@ -1890,7 +1891,14 @@ void MaglevGraphBuilder::VisitJumpIfNotUndefined() {
   BuildBranchIfUndefined(GetAccumulatorTagged(), next_offset(),
                          iterator_.GetJumpTargetOffset());
 }
-MAGLEV_UNIMPLEMENTED_BYTECODE(JumpIfUndefinedOrNull)
+void MaglevGraphBuilder::VisitJumpIfUndefinedOrNull() {
+  BasicBlock* block = FinishBlock<BranchIfUndefinedOrNull>(
+      next_offset(), {GetAccumulatorTagged()},
+      &jump_targets_[iterator_.GetJumpTargetOffset()],
+      &jump_targets_[next_offset()]);
+  MergeIntoFrameState(block, iterator_.GetJumpTargetOffset());
+}
+
 MAGLEV_UNIMPLEMENTED_BYTECODE(JumpIfJSReceiver)
 MAGLEV_UNIMPLEMENTED_BYTECODE(SwitchOnSmiNoFeedback)
 MAGLEV_UNIMPLEMENTED_BYTECODE(ForInEnumerate)

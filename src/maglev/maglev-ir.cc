@@ -2354,6 +2354,17 @@ void BranchIfRootConstant::GenerateCode(MaglevCodeGenState* code_gen_state,
   }
 }
 
+void BranchIfUndefinedOrNull::AllocateVreg(
+    MaglevVregAllocationState* vreg_state) {
+  UseRegister(condition_input());
+}
+void BranchIfUndefinedOrNull::GenerateCode(MaglevCodeGenState* code_gen_state,
+                                           const ProcessingState& state) {
+  Register value = ToRegister(condition_input());
+  __ JumpIfRoot(value, RootIndex::kUndefinedValue, if_true()->label());
+  __ JumpIfRoot(value, RootIndex::kNullValue, if_true()->label());
+}
+
 void BranchIfInt32Compare::AllocateVreg(MaglevVregAllocationState* vreg_state) {
   UseRegister(left_input());
   UseRegister(right_input());
