@@ -22,6 +22,30 @@
       },
       "revId": "0251b430d0c96a0433036835ea278a2a14afed33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7318fc54_c82a4154",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T15:40:57Z",
+      "side": 1,
+      "message": "I add the static_assert, but I found in the manual from Linux it was said `On  success,  pkey_alloc()  returns  a  positive  protection  key  value.` I\u0027m not very clear about whether it will return 0 in some case.",
+      "parentUuid": "79c8a80e_d634ac9d",
+      "range": {
+        "startLine": 67,
+        "startChar": 32,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "0251b430d0c96a0433036835ea278a2a14afed33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -530,6 +530,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d89051e_4477833d",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T15:40:57Z",
+      "side": 1,
+      "message": "Follow up in next patch.",
+      "parentUuid": "fa92e428_99fd9bb3",
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a827cec4_977b05fe",
@@ -830,6 +848,30 @@
       "side": 1,
       "message": "I will fix this in follow up CL to enable PKU for v8 heap.",
       "parentUuid": "6c5b5f63_fb1c4492",
+      "range": {
+        "startLine": 79,
+        "startChar": 39,
+        "endLine": 79,
+        "endChar": 60
+      },
+      "revId": "86e4f89d0e59680b683273e6df3776781e3596d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fa044e_1349c7f6",
+        "filename": "test/cctest/test-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T15:40:57Z",
+      "side": 1,
+      "message": "Follow up in next patch.",
+      "parentUuid": "cff511e1_71d4b91f",
       "range": {
         "startLine": 79,
         "startChar": 39,

@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b9b09ec_6b07c018",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T15:40:57Z",
+      "side": 1,
+      "message": "That\u0027s ok, so I suppose we would directly return true from `IsSupported()` in Apple silicon.",
+      "parentUuid": "a80a3990_2e79a8a0",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2acd0167_6df4348d",
@@ -310,6 +328,30 @@
       "side": 1,
       "message": "Please mark resolved comments by checking the \"Resolved\" checkbox.",
       "parentUuid": "3a978bca_3ed14430",
+      "range": {
+        "startLine": 37,
+        "startChar": 66,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "364938fa_955a2468",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T15:40:57Z",
+      "side": 1,
+      "message": "Thanks for reminder, I will mark them.",
+      "parentUuid": "1edd6fa1_272ba2cc",
       "range": {
         "startLine": 37,
         "startChar": 66,
