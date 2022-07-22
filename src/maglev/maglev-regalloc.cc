@@ -728,6 +728,18 @@ void StraightForwardRegisterAllocator::AllocateControlNode(ControlNode* node,
     InitializeBranchTargetPhis(block->predecessor_id(),
                                unconditional->target());
 
+    // For JumpLoops, now update the uses of any node used in, but not defined
+    // in the loop. This makes sure that such nodes' lifetimes are extended to
+    // the entire body of the loop. This must be after phi initialisation so
+    // that value dropping in the phi initialisation doesn't think these
+    // extended lifetime nodes are dead.
+    if (auto jump_loop = node->TryCast<JumpLoop>()) {
+      for (Input& input : jump_loop->used_nodes()) {
+        DCHECK(input.node()->has_register() || input.node()->is_loadable());
+        UpdateUse(&input);
+      }
+    }
+
     DCHECK(!node->properties().is_call());
 
     general_registers_.clear_blocked();
