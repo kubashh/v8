@@ -16,6 +16,23 @@
       "message": "ptal, I\u0027d like to see if we can actually make this consistent",
       "revId": "d8b9fe334e8097827950314469a6877cf1c61179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5577690_5d748e63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-22T13:30:04Z",
+      "side": 1,
+      "message": "What would happen in HeapHashTables weakness handling?\nWhen we compact them we remove deleted entries which would have sentinel as the key. I suspect that\u0027s why LivenessBroker was treating them as dead.",
+      "revId": "d8b9fe334e8097827950314469a6877cf1c61179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
