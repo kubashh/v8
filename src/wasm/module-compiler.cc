@@ -3404,7 +3404,7 @@ void CompilationStateImpl::CommitCompilationUnits(
     compilation_unit_queues_.AddUnits(baseline_units, top_tier_units,
                                       native_module_->module());
   }
-  ResetPKUPermissionsForThreadSpawning pku_reset_scope;
+  internal::ResetPKUPermissionsForThreadSpawning pku_reset_scope;
   compile_job_->NotifyConcurrencyIncrease();
 }
 
