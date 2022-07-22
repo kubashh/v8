@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f2001a_aab7568e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "Thanks for all comments from Clemens and Igor, I moved `ResetPKUPermissionsForThreadSpawning` to `src/common/code-memory-access.h`, and modify `IsSupported()` API by deleting `is_pku_supported_` field in this patch set, PTAL, thanks.",
+      "revId": "cdd1af1d3b96d96848978241f156312ac4829ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

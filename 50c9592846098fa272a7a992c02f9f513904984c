@@ -353,6 +353,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "347008a2_c34ea51f",
+        "filename": "src/common/globals.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "I will fix this in follow up CL to enable PKU for v8 heap.",
+      "parentUuid": "7f77ac67_ead1f331",
+      "revId": "50c9592846098fa272a7a992c02f9f513904984c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8b0deb5c_cff32d5e",
         "filename": "src/heap/heap.cc",
         "patchSetId": 26

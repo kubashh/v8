@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8931c861_0135a4f7",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "May I modify this as\n```\nDCHEKC(pthread_jit_write_protect_supported_np());\nreturn true;\n```\nIs it suitable?",
+      "parentUuid": "7cef2385_5c7de0a2",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2acd0167_6df4348d",
         "filename": "src/common/code-memory-access.cc",
         "patchSetId": 37
@@ -66,6 +84,24 @@
       "writtenOn": "2022-07-21T11:01:07Z",
       "side": 1,
       "message": "In order to ensure that this method is called correctly, we could add a debug-only global and check it as a few places, similar to `pkey_initialized` in `memory-protection-key.cc`.",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2e02dd3_a6f018a1",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "I renamed `pkey_initialized` in `memory-protection-key.cc` as `pkey_api_initialized`, because I suppose it was initialization of APIs there.\n\nI used `pkey_initialized` in `src/common/code-memory-access-inl.h` to track is pku intialization works in DEBUG mode, PTAL, thanks.",
+      "parentUuid": "2acd0167_6df4348d",
       "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac675f3c_a6e65436",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "I removed `is_pku_supported_` and modify `IsSupported()` API, PTAL, thanks!",
+      "parentUuid": "fb9e456f_7c441639",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4835ef7a_e4fb8b7a",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 37
@@ -166,6 +220,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a978bca_3ed14430",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4835ef7a_e4fb8b7a",
+      "range": {
+        "startLine": 37,
+        "startChar": 66,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ab27c10_be958cee",
         "filename": "src/common/code-memory-access.h",
         "patchSetId": 37
@@ -177,6 +255,30 @@
       "writtenOn": "2022-07-21T11:01:07Z",
       "side": 1,
       "message": "Please make this completely lower case: `is_pku_supported_`.",
+      "range": {
+        "startLine": 90,
+        "startChar": 14,
+        "endLine": 90,
+        "endChar": 31
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6059b598_497d26a8",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-22T07:14:36Z",
+      "side": 1,
+      "message": "I remove this field, and modify `IsSupported()`, please see details in above comment.",
+      "parentUuid": "5ab27c10_be958cee",
       "range": {
         "startLine": 90,
         "startChar": 14,
