@@ -18,11 +18,13 @@
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/linkage.h"
+#include "src/compiler/machine-operator.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-origin-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
 #include "src/compiler/schedule.h"
+#include "src/compiler/string-builder-optimizer.h"
 #include "src/heap/factory-inl.h"
 #include "src/objects/heap-number.h"
 #include "src/objects/oddball.h"
@@ -42,7 +44,8 @@ class EffectControlLinearizer {
                           SourcePositionTable* source_positions,
                           NodeOriginTable* node_origins,
                           MaintainSchedule maintain_schedule,
-                          JSHeapBroker* broker)
+                          JSHeapBroker* broker,
+                          StringBuilderOptimizer* string_builder_optimizer)
       : js_graph_(js_graph),
         schedule_(schedule),
         temp_zone_(temp_zone),
@@ -51,6 +54,7 @@ class EffectControlLinearizer {
         node_origins_(node_origins),
         broker_(broker),
         graph_assembler_(graph_assembler),
+        string_builder_optimizer_(string_builder_optimizer),
         frame_state_zapper_(nullptr) {}
 
   void Run();
@@ -299,6 +303,9 @@ class EffectControlLinearizer {
   Node* SmiMaxValueConstant();
   Node* SmiShiftBitsConstant();
 
+  Node* AllocateSeqString(Node* size);
+  void CopyString(Node* src, Node* dst, Node* start, Node* len);
+
   // Pass {bitfield} = {digit} = nullptr to construct the canoncial 0n BigInt.
   Node* BuildAllocateBigInt(Node* bitfield, Node* digit);
 
@@ -343,6 +350,7 @@ class EffectControlLinearizer {
   NodeOriginTable* node_origins_;
   JSHeapBroker* broker_;
   JSGraphAssembler* graph_assembler_;
+  StringBuilderOptimizer* string_builder_optimizer_;
   Node* frame_state_zapper_;  // For tracking down compiler::Node::New crashes.
 };
 
@@ -2072,21 +2080,219 @@ void EffectControlLinearizer::LowerCheckIf(Node* node, Node* frame_state) {
   __ DeoptimizeIfNot(p.reason(), p.feedback(), value, frame_state);
 }
 
+namespace {
+
+int GetLiteralStringLen(Node* node, JSHeapBroker* broker) {
+  // TODO(dm): handle 2-byte strings
+  if (node->opcode() == IrOpcode::kStringFromSingleCharCode) {
+    return 1;
+  }
+  HeapObjectMatcher m(node);
+  DCHECK(m.HasResolvedValue() && m.Ref(broker).IsString());
+  StringRef string = m.Ref(broker).AsString();
+  DCHECK(string.length().has_value());
+  return string.length().value();
+}
+
+const uint8_t* GetLiteralString(Node* node, JSHeapBroker* broker) {
+  DCHECK_EQ(node->opcode(), IrOpcode::kHeapConstant);
+  HeapObjectMatcher m(node);
+  DCHECK(m.HasResolvedValue() && m.Ref(broker).IsString());
+  StringRef string = m.Ref(broker).AsString();
+  DisallowGarbageCollection no_gc;
+  SharedStringAccessGuardIfNeeded access_guard(broker->isolate());
+  const uint8_t* str = string.object()->template GetChars<uint8_t>(
+      broker->isolate(), no_gc, access_guard);
+  return str;
+}
+
+}  // namespace
+
+Node* EffectControlLinearizer::AllocateSeqString(Node* size) {
+  Node* seq_string =
+      __ Allocate(AllocationType::kYoung,
+                  __ Int32Add(size, __ Int32Constant(String::kHeaderSize)));
+  __ StoreField(AccessBuilder::ForMap(), seq_string,
+                __ HeapConstant(factory()->one_byte_string_map()));
+  __ StoreField(AccessBuilder::ForNameRawHashField(), seq_string,
+                __ Int32Constant(Name::kEmptyHashField));
+  __ StoreField(AccessBuilder::ForStringLength(), seq_string, size);
+
+  return seq_string;
+}
+
+// Copies the string in src[0:len] to dst[start:start+len].
+void EffectControlLinearizer::CopyString(Node* src, Node* dst, Node* start,
+                                         Node* len) {
+  // TODO(dm): handle 2-byte strings
+  auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
+  auto done = __ MakeLabel();
+  __ Goto(&loop, __ Int32Constant(0));
+
+  __ Bind(&loop);
+  Node* index = loop.PhiAt(0);
+  __ GotoIf(__ Word32Equal(index, len), &done);
+  __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(), dst,
+                  __ Int32Add(start, index),
+                  __ LoadElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                                 src, index));
+  index = __ Int32Add(index, __ Int32Constant(1));
+  __ Goto(&loop, index);
+
+  __ Bind(&done);
+}
+
 Node* EffectControlLinearizer::LowerStringConcat(Node* node) {
-  Node* lhs = node->InputAt(1);
-  Node* rhs = node->InputAt(2);
+  if (string_builder_optimizer_->CanOptimizeConcat(node) &&
+      string_builder_optimizer_->IsFirstConcatInGroup(node)) {
+    // TODO(dm): handle 2-byte strings
+    PrintF("This concat is the 1st in the group:\n");
+    node->Print();
 
-  Callable const callable =
-      CodeFactory::StringAdd(isolate(), STRING_ADD_CHECK_NONE);
-  auto call_descriptor = Linkage::GetStubCallDescriptor(
-      graph()->zone(), callable.descriptor(),
-      callable.descriptor().GetStackParameterCount(), CallDescriptor::kNoFlags,
-      Operator::kNoDeopt | Operator::kNoWrite | Operator::kNoThrow);
+    int left_len = GetLiteralStringLen(node->InputAt(1), broker());
+    int right_len = GetLiteralStringLen(node->InputAt(2), broker());
 
-  Node* value = __ Call(call_descriptor, __ HeapConstant(callable.code()), lhs,
-                        rhs, __ NoContextConstant());
+    int initial_size = left_len + right_len;
+    int backing_store_initial_size = initial_size * 4;
 
-  return value;
+    Node* size = __ Int32Constant(initial_size);
+    Node* backing_store_size = __ Int32Constant(backing_store_initial_size);
+    Node* backing_store = AllocateSeqString(backing_store_size);
+
+    // Storing first two strings into the backing store
+    // TODO(dm): handle StringFromCharCode
+    if (left_len != 0) {
+      if (node->InputAt(1)->opcode() == IrOpcode::kHeapConstant) {
+        const uint8_t* left = GetLiteralString(node->InputAt(1), broker());
+        for (int i = 0; i < left_len; i++) {
+          __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                          backing_store, __ Int32Constant(i),
+                          __ Int32Constant(left[i]));
+        }
+      } else {
+        DCHECK_EQ(node->InputAt(1)->opcode(),
+                  IrOpcode::kStringFromSingleCharCode);
+        Node* c = __ Word32And(node->InputAt(1)->InputAt(0),
+                               __ Uint32Constant(0xFFFF));
+        __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                        backing_store, __ Int32Constant(0), c);
+      }
+    }
+    if (right_len != 0) {
+      if (node->InputAt(2)->opcode() == IrOpcode::kHeapConstant) {
+        const uint8_t* right = GetLiteralString(node->InputAt(2), broker());
+        for (int i = 0; i < right_len; i++) {
+          __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                          backing_store, __ Int32Constant(left_len + i),
+                          __ Int32Constant(right[i]));
+        }
+      } else {
+        DCHECK_EQ(node->InputAt(2)->opcode(),
+                  IrOpcode::kStringFromSingleCharCode);
+        Node* c = __ Word32And(node->InputAt(2)->InputAt(0),
+                               __ Uint32Constant(0xFFFF));
+        __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                        backing_store, __ Int32Constant(left_len + 0), c);
+      }
+    }
+
+    // Creating sliced string view into the seqstring
+    Node* sliced_string =
+        __ Allocate(AllocationType::kYoung,
+                    __ Int32Constant(jsgraph()
+                                         ->factory()
+                                         ->sliced_one_byte_string_map()
+                                         ->instance_size()));
+    __ StoreField(AccessBuilder::ForMap(), sliced_string,
+                  __ HeapConstant(factory()->sliced_one_byte_string_map()));
+    __ StoreField(AccessBuilder::ForNameRawHashField(), sliced_string,
+                  __ Int32Constant(Name::kEmptyHashField));
+    __ StoreField(AccessBuilder::ForSlicedStringParent(), sliced_string,
+                  backing_store);
+    __ StoreField(AccessBuilder::ForSlicedStringOffset(), sliced_string,
+                  __ Int32Constant(0));
+    __ StoreField(AccessBuilder::ForStringLength(), sliced_string, size);
+
+    return sliced_string;
+  } else if (string_builder_optimizer_->CanOptimizeConcat(node)) {
+    PrintF("On this concat: ");
+    node->Print();
+
+    int literal_len = GetLiteralStringLen(node->InputAt(2), broker());
+
+    Node* sliced_string = node->InputAt(1);
+    Node* current_size =
+        __ LoadField(AccessBuilder::ForStringLength(), sliced_string);
+    Node* backing_store =
+        __ LoadField(AccessBuilder::ForSlicedStringParent(), sliced_string);
+    Node* max_size =
+        __ LoadField(AccessBuilder::ForStringLength(), backing_store);
+    Node* new_size = __ Int32Add(current_size, __ Int32Constant(literal_len));
+
+    auto needs_realloc = __ MakeLabel();
+    auto add_to_backing_store =
+        __ MakeLabel(MachineType::PointerRepresentation());
+
+    Node* realloc_cond = __ Int32LessThan(max_size, new_size);
+
+    __ GotoIf(realloc_cond, &needs_realloc);
+    __ Goto(&add_to_backing_store, backing_store);
+
+    __ Bind(&needs_realloc);
+    {
+      // TODO(dm): realloc multiple times if needed.
+      Node* new_backing_store_size =
+          __ Word32Shl(max_size, __ Int32Constant(1));
+      Node* new_backing_store = AllocateSeqString(new_backing_store_size);
+
+      CopyString(backing_store, new_backing_store, __ Int32Constant(0),
+                 current_size);
+      __ StoreField(AccessBuilder::ForSlicedStringParent(), sliced_string,
+                    new_backing_store);
+      __ Goto(&add_to_backing_store, new_backing_store);
+    }
+
+    __ Bind(&add_to_backing_store);
+    {
+      Node* real_backing_store = add_to_backing_store.PhiAt(0);
+      if (node->InputAt(2)->opcode() == IrOpcode::kHeapConstant) {
+        for (int i = 0; i < literal_len; i++) {
+          const uint8_t* string_content =
+              GetLiteralString(node->InputAt(2), broker());
+          __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                          real_backing_store,
+                          __ Int32Add(current_size, __ Int32Constant(i)),
+                          __ Int32Constant(string_content[i]));
+        }
+      } else {
+        DCHECK_EQ(node->InputAt(2)->opcode(),
+                  IrOpcode::kStringFromSingleCharCode);
+        Node* c = __ Word32And(node->InputAt(2)->InputAt(0),
+                               __ Uint32Constant(0xFFFF));
+        __ StoreElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                        real_backing_store, current_size, c);
+      }
+      __ StoreField(AccessBuilder::ForStringLength(), sliced_string, new_size);
+    }
+
+    return sliced_string;
+  } else {
+    Node* lhs = node->InputAt(1);
+    Node* rhs = node->InputAt(2);
+
+    Callable const callable =
+        CodeFactory::StringAdd(isolate(), STRING_ADD_CHECK_NONE);
+    auto call_descriptor = Linkage::GetStubCallDescriptor(
+        graph()->zone(), callable.descriptor(),
+        callable.descriptor().GetStackParameterCount(),
+        CallDescriptor::kNoFlags,
+        Operator::kNoDeopt | Operator::kNoWrite | Operator::kNoThrow);
+
+    Node* value = __ Call(call_descriptor, __ HeapConstant(callable.code()),
+                          lhs, rhs, __ NoContextConstant());
+
+    return value;
+  }
 }
 
 Node* EffectControlLinearizer::LowerCheckedInt32Add(Node* node,
@@ -4033,6 +4239,9 @@ Node* EffectControlLinearizer::LoadFromSeqString(Node* receiver, Node* position,
 }
 
 Node* EffectControlLinearizer::LowerStringFromSingleCharCode(Node* node) {
+  if (string_builder_optimizer_->IsOptimizableConcatInput(node)) {
+    return node;
+  }
   Node* value = node->InputAt(0);
   Node* code = __ Word32And(value, __ Uint32Constant(0xFFFF));
 
@@ -6569,12 +6778,13 @@ Node* EffectControlLinearizer::BuildAllocateBigInt(Node* bitfield,
 
 void LinearizeEffectControl(JSGraph* graph, Schedule* schedule, Zone* temp_zone,
                             SourcePositionTable* source_positions,
-                            NodeOriginTable* node_origins,
-                            JSHeapBroker* broker) {
+                            NodeOriginTable* node_origins, JSHeapBroker* broker,
+                            StringBuilderOptimizer* string_builder_optimizer) {
   JSGraphAssembler graph_assembler_(graph, temp_zone);
   EffectControlLinearizer linearizer(graph, schedule, &graph_assembler_,
                                      temp_zone, source_positions, node_origins,
-                                     MaintainSchedule::kDiscard, broker);
+                                     MaintainSchedule::kDiscard, broker,
+                                     string_builder_optimizer);
   linearizer.Run();
 }
 
