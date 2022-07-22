@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a77732_4b4e4263",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-22T07:30:08Z",
+      "side": 1,
+      "message": "Ack, thanks.",
+      "parentUuid": "e2e02dd3_a6f018a1",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e0701e9_6911083a",
@@ -195,6 +213,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "488e703a_0d580da5",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-22T07:30:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac675f3c_a6e65436",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4835ef7a_e4fb8b7a",
@@ -279,6 +315,30 @@
       "side": 1,
       "message": "I remove this field, and modify `IsSupported()`, please see details in above comment.",
       "parentUuid": "5ab27c10_be958cee",
+      "range": {
+        "startLine": 90,
+        "startChar": 14,
+        "endLine": 90,
+        "endChar": 31
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "892d2cdf_5b0b5d90",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-22T07:30:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6059b598_497d26a8",
       "range": {
         "startLine": 90,
         "startChar": 14,
