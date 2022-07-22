@@ -15,7 +15,7 @@ import traceback
 
 from os.path import dirname as up
 
-from testrunner.local import command
+from testrunner.local import context
 from testrunner.local import testsuite
 from testrunner.local import utils
 from testrunner.test_config import TestConfig
@@ -175,7 +175,7 @@ class BaseTestRunner(object):
 
       args = self._parse_test_args(args)
 
-      with command.os_context(self.target_os, self.options) as ctx:
+      with context.os_context(self.target_os, self.options) as ctx:
         names = self._args_to_suite_names(args)
         tests = self._load_testsuite_generators(ctx, names)
         self._setup_env()
@@ -336,6 +336,8 @@ class BaseTestRunner(object):
     # Android, which is determined by build output.
     if self.build_config.is_android:
       self.target_os = 'android'
+    if self.build_config.is_fuchsia:
+      self.target_os = 'fuchsia'
     else:
       self.target_os = utils.GuessOS()
 

@@ -152,7 +152,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     execproc = ExecutionProc(ctx, self.options.j)
     sigproc = self._create_signal_proc()
     progress = ProgressProc(self.options, self.framework_name,
-                            tests.test_count_estimate)
+                            tests.test_count_estimate, os_context=ctx)
     procs = [
         loader,
         NameFilterProc(args) if args else None,

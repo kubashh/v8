@@ -15,6 +15,7 @@ from testrunner.testproc.rerun import RerunProc
 from testrunner.testproc.timeout import TimeoutProc
 from testrunner.testproc.progress import ResultsTracker, ProgressProc
 from testrunner.testproc.shard import ShardProc
+from testrunner.local.context import os_context
 
 # Adds testrunner to the path hence it has to be imported at the beggining.
 TOOLS_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -295,7 +296,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     execproc = ExecutionProc(ctx, jobs, outproc_factory)
     sigproc = self._create_signal_proc()
     progress = ProgressProc(self.options, self.framework_name,
-                            tests.test_count_estimate)
+                            tests.test_count_estimate, os_context=ctx)
     procs = [
         loader,
         NameFilterProc(args) if args else None,

@@ -12,7 +12,7 @@ import traceback
 from contextlib import contextmanager
 from multiprocessing import Process, Queue
 from queue import Empty
-from . import utils
+import sys
 
 
 def setup_testing():
@@ -30,22 +30,6 @@ def setup_testing():
   # Monkeypatch os.kill and add fake pid property on Thread.
   os.kill = lambda *args: None
   Process.pid = property(lambda self: None)
-
-
-def taskkill_windows(process, verbose=False, force=True):
-  force_flag = ' /F' if force else ''
-  tk = subprocess.Popen(
-      'taskkill /T%s /PID %d' % (force_flag, process.pid),
-      stdout=subprocess.PIPE,
-      stderr=subprocess.PIPE,
-  )
-  stdout, stderr = tk.communicate()
-  if verbose:
-    print('Taskkill results for %d' % process.pid)
-    print(stdout)
-    print(stderr)
-    print('Return code: %d' % tk.returncode)
-    sys.stdout.flush()
 
 
 class AbortException(Exception):
@@ -115,8 +99,30 @@ def without_sig():
     signal.signal(signal.SIGINT, int_handler)
     signal.signal(signal.SIGTERM, term_handler)
 
+class ContextPool():
+  def init(self, num_workers, heartbeat_timeout=1, notify_fun=None):
+    """
+    Delayed initialization. At context creation time we have no access to the
+    below described parameters.
+    Args:
+      num_workers: Number of worker processes to run in parallel.
+      heartbeat_timeout: Timeout in seconds for waiting for results. Each time
+          the timeout is reached, a heartbeat is signalled and timeout is reset.
+      notify_fun: Callable called to signale some events like termination. The
+          event name is passed as string.
+    """
+    pass
 
-class Pool():
+  def add_jobs(self, jobs):
+    pass
+
+  def results(self, requirement):
+    pass
+  
+  def abort(self):
+    pass
+
+class DefaultExecutionPool(ContextPool):
   """Distributes tasks to a number of worker processes.
   New tasks can be added dynamically even after the workers have been started.
   Requirement: Tasks can only be added from the parent process, e.g. while
@@ -126,16 +132,7 @@ class Pool():
   # Necessary to not overflow the queue's pipe if a keyboard interrupt happens.
   BUFFER_FACTOR = 4
 
-  def __init__(self, num_workers, heartbeat_timeout=1, notify_fun=None):
-    """
-    Args:
-      num_workers: Number of worker processes to run in parallel.
-      heartbeat_timeout: Timeout in seconds for waiting for results. Each time
-          the timeout is reached, a heartbeat is signalled and timeout is reset.
-      notify_fun: Callable called to signale some events like termination. The
-          event name is passed as string.
-    """
-    self.num_workers = num_workers
+  def __init__(self):
     self.processes = []
     self.terminated = False
     self.abort_now = False
@@ -148,14 +145,38 @@ class Pool():
     # allowed to remove items from the done_queue and to add items to the
     # work_queue.
     self.processing_count = 0
-    self.heartbeat_timeout = heartbeat_timeout
-    self.notify = notify_fun or (lambda x: x)
 
     # Disable sigint and sigterm to prevent subprocesses from capturing the
     # signals.
     with without_sig():
       self.work_queue = Queue()
       self.done_queue = Queue()
+
+  def init(self, num_workers, heartbeat_timeout=1, notify_fun=None):
+    """
+    Delayed initialization. At context creation time we have no access to the
+    below described parameters.
+    Args:
+      num_workers: Number of worker processes to run in parallel.
+      heartbeat_timeout: Timeout in seconds for waiting for results. Each time
+          the timeout is reached, a heartbeat is signalled and timeout is reset.
+      notify_fun: Callable called to signale some events like termination. The
+          event name is passed as string.
+    """
+    self.num_workers = num_workers
+    self.notify = notify_fun or (lambda x: x)
+    self.heartbeat_timeout = heartbeat_timeout
+
+  def add_jobs(self, jobs):
+    self.add(jobs)
+
+  def results(self, requirement):
+    return self.imap_unordered(
+        fn=run_job,
+        gen=[],
+        process_context_fn=ProcessContext,
+        process_context_args=[requirement],
+    )
 
   def imap_unordered(self, fn, gen,
                      process_context_fn=None, process_context_args=None):
@@ -256,10 +277,7 @@ class Pool():
 
   def _terminate_processes(self):
     for p in self.processes:
-      if utils.IsWindows():
-        taskkill_windows(p, verbose=True, force=False)
-      else:
-        os.kill(p.pid, signal.SIGTERM)
+      self.os_context.terminate_process(p)
 
   def _terminate(self):
     """Terminates execution and cleans up the queues.
@@ -332,21 +350,19 @@ def run_job(job, process_context):
 ProcessContext = collections.namedtuple('ProcessContext', ['result_reduction'])
 
 
-class DefaultExecutionPool():
+class SingleThreadedExecutionPool(ContextPool):
 
   def init(self, jobs, notify_fun):
-    self._pool = Pool(jobs, notify_fun=notify_fun)
+    self.work_queue = []
 
   def add_jobs(self, jobs):
-    self._pool.add(jobs)
+    for j in jobs:
+      self.work_queue.append(j)
 
   def results(self, requirement):
-    return self._pool.imap_unordered(
-        fn=run_job,
-        gen=[],
-        process_context_fn=ProcessContext,
-        process_context_args=[requirement],
-    )
+    while self.work_queue:
+      job = self.work_queue.pop()
+      yield MaybeResult.create_result(job.run(ProcessContext(requirement)))
 
   def abort(self):
-    self._pool.abort()
+    pass

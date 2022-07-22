@@ -13,11 +13,15 @@ import time
 
 from ..local.android import (Driver, CommandFailedException, TimeoutException)
 from ..objects import output
-from ..local.pool import DefaultExecutionPool, AbortException,\
-  taskkill_windows
+
+from queue import SimpleQueue
+from testrunner.local.pool import AbortException, DefaultExecutionPool
+from testrunner.testproc.util import list_processes_linux
 
 BASE_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..' , '..', '..'))
+
+
 
 SEM_INVALID_VALUE = -1
 SEM_NOGPFAULTERRORBOX = 0x0002  # Microsoft Platform SDK WinBase.h
@@ -202,6 +206,20 @@ class PosixCommand(BaseCommand):
     # Kill the whole process group (PID == GPID after setsid).
     os.killpg(process.pid, signal.SIGKILL)
 
+def taskkill_windows(process, verbose=False, force=True):
+  force_flag = ' /F' if force else ''
+  tk = subprocess.Popen(
+      'taskkill /T%s /PID %d' % (force_flag, process.pid),
+      stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE,
+  )
+  stdout, stderr = tk.communicate()
+  if verbose:
+    print('Taskkill results for %d' % process.pid)
+    print(stdout)
+    print(stderr)
+    print('Return code: %d' % tk.returncode)
+    sys.stdout.flush()
 
 class WindowsCommand(BaseCommand):
   def _start_process(self, **kwargs):
@@ -306,17 +324,38 @@ class AndroidCommand(BaseCommand):
 
 Command = None
 
+"""===POOLS==="""
+
 
 class DefaultOSContext():
 
   def __init__(self, command, pool=None):
     self.command = command
     self.pool = pool or DefaultExecutionPool()
+    self.pool.os_context = self
+
+  def on_load(self):
+    pass
 
   @contextmanager
   def context(self, options):
     yield
 
+  def terminate_process(self, process):
+    os.kill(process.pid, signal.SIGTERM)
+
+  def list_processes(self):
+    list_processes_linux()
+
+class WindowsOSContext(DefaultOSContext):
+  def __init__(self):
+    super(WindowsOSContext, self).__init__(WindowsCommand)
+    
+  def terminate_process(self, process):
+    taskkill_windows(process, verbose=True, force=False)
+
+  def list_processes(self):
+    return [(-1, 'Listing processes not available on Windows')]
 
 class AndroidOSContext(DefaultOSContext):
 
@@ -332,26 +371,7 @@ class AndroidOSContext(DefaultOSContext):
       AndroidCommand.driver.tear_down()
 
 
-# TODO(liviurau): Add documentation with diagrams to describe how context and
-# its components gets initialized and eventually teared down and how does it
-# interact with both tests and underlying platform specific concerns.
-def find_os_context_factory(target_os):
-  registry = dict(
-      android=AndroidOSContext,
-      windows=lambda: DefaultOSContext(WindowsCommand))
-  default = lambda: DefaultOSContext(PosixCommand)
-  return registry.get(target_os, default)
-
-
-@contextmanager
-def os_context(target_os, options):
-  factory = find_os_context_factory(target_os)
-  context = factory()
-  with context.context(options):
-    yield context
-
-
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def setup(target_os, device):
   """Set the Command class to the OS-specific version."""
   global Command
@@ -364,7 +384,7 @@ def setup(target_os, device):
     Command = PosixCommand
 
 
-# Deprecated : use os_context
+# Deprecated : use .context.os_context
 def tear_down():
   """Clean up after using commands."""
   if Command == AndroidCommand:

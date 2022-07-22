@@ -18,8 +18,6 @@ def list_processes_linux():
   """Returns list of tuples (pid, command) of processes running in the same out
   directory as this checkout.
   """
-  if platform.system() != 'Linux':
-    return []
   try:
     cmd = 'pgrep -fa %s' % OUT_DIR
     output = subprocess.check_output(cmd, shell=True) or ''
@@ -30,7 +28,7 @@ def list_processes_linux():
     # Filter strange process with name as out dir.
     return [p for p in processes if p[1] != OUT_DIR]
   except:
-    return []
+    return [(-1, 'Exception encountered while listing processes')]
 
 
 def kill_processes_linux():
