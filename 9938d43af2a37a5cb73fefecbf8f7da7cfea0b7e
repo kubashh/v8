@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a94d6e04_be2a9ec1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-22T13:14:45Z",
+      "side": 1,
+      "message": "Hi Dominik, PTAL. The \"single generation\" bot failed after I added this test. I don\u0027t know what this mode means exactly, but this seems to be expected since this is a port of a test that is already disabled (mjsunit/wasm/generic-wrapper). The problem seems to be the %SimulateNewspaceFull() call?",
+      "revId": "9938d43af2a37a5cb73fefecbf8f7da7cfea0b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
