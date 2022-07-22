@@ -596,7 +596,7 @@ class DeserializeCodeTask : public JobTask {
         deserializer_->CopyAndRelocate(unit);
       }
       publish_queue_.Add(std::move(batch));
-      ResetPKUPermissionsForThreadSpawning pku_reset_scope;
+      internal::ResetPKUPermissionsForThreadSpawning pku_reset_scope;
       delegate->NotifyConcurrencyIncrease();
     }
   }
@@ -679,7 +679,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
       reloc_queue.Add(std::move(batch));
       DCHECK(batch.empty());
       batch_size = 0;
-      ResetPKUPermissionsForThreadSpawning pku_reset_scope;
+      internal::ResetPKUPermissionsForThreadSpawning pku_reset_scope;
       job_handle->NotifyConcurrencyIncrease();
     }
   }
@@ -691,7 +691,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
 
   if (!batch.empty()) {
     reloc_queue.Add(std::move(batch));
-    ResetPKUPermissionsForThreadSpawning pku_reset_scope;
+    internal::ResetPKUPermissionsForThreadSpawning pku_reset_scope;
     job_handle->NotifyConcurrencyIncrease();
   }
 
