@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a80a3990_2e79a8a0",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-22T08:52:16Z",
+      "side": 1,
+      "message": "The pthread_jit_write_protect_supported_np() doesn\u0027t do what we need, so we don\u0027t need this DCHECK. The right way of checking the support would be fetching the current process entitlement and checking if JIT is there (we have similar code in Chrome) but I don\u0027t think it\u0027s necessary for V8.",
+      "parentUuid": "8931c861_0135a4f7",
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2acd0167_6df4348d",
         "filename": "src/common/code-memory-access.cc",
         "patchSetId": 37
@@ -268,6 +286,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "4835ef7a_e4fb8b7a",
+      "range": {
+        "startLine": 37,
+        "startChar": 66,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "211eec2bd235a786b50925d654e813bc0bd7b6d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1edd6fa1_272ba2cc",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-22T08:52:16Z",
+      "side": 1,
+      "message": "Please mark resolved comments by checking the \"Resolved\" checkbox.",
+      "parentUuid": "3a978bca_3ed14430",
       "range": {
         "startLine": 37,
         "startChar": 66,

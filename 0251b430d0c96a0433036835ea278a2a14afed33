@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c8a80e_d634ac9d",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-22T08:52:16Z",
+      "side": 1,
+      "message": "\u003e\u003d\nAnd please add\n  static_assert(base::MemoryProtectionKey::kNoMemoryProtectionKey \u003d\u003d -1);",
+      "range": {
+        "startLine": 67,
+        "startChar": 32,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "0251b430d0c96a0433036835ea278a2a14afed33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
