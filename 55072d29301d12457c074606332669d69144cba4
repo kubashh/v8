@@ -33,6 +33,23 @@
       "message": "rubberstamp lgtm",
       "revId": "55072d29301d12457c074606332669d69144cba4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7c8d51_0e61b32f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-22T15:20:43Z",
+      "side": 1,
+      "message": "rubberstamp LGTM",
+      "revId": "55072d29301d12457c074606332669d69144cba4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
