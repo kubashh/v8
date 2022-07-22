@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f3fb34_698ed86b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-22T14:15:27Z",
+      "side": 1,
+      "message": "Re-landing without changes, please rubber-stamp. The fix already landed here: https://chromium-review.googlesource.com/c/v8/v8/+/3782801\nAdding the failing bot to make sure.",
+      "revId": "55072d29301d12457c074606332669d69144cba4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
