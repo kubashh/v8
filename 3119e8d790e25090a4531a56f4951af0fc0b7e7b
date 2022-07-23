@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f5521e_3018c8d9",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4603,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e8b4726_e90c1ecd",
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8124e0a9_17ade18e",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-21T22:45:19Z",
       "side": 1,
       "message": "I don\u0027t understand this comment, and since all the other comments in this function are spec text it makes those harder to parse. Is there something important that this is trying to get across to the reader? If not I\u0027d suggest removing this line.",
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f35d6732_a7cbbb4b",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 6626,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "sorry, The spec text used to say \n\"a. If any of years, months, and **days** are not zero, then\" \nand that comment line was from my earlier note about that spec mistake and I somehow forget to remove it. The spec text was corrected in \nhttps://github.com/tc39/proposal-temporal/pull/1780",
+      "parentUuid": "8124e0a9_17ade18e",
       "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce685d52_10fe7741",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7209,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3475dd52_66e841a7",
+      "range": {
+        "startLine": 7209,
+        "startChar": 6,
+        "endLine": 7209,
+        "endChar": 54
+      },
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ff080b6_de83e955",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-07-21T22:45:19Z",
       "side": 1,
       "message": "Not clear why this local is needed (and again asked multiple times below; I tend to do my reviews of these changes from the bottom up).",
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec9a9fee_cab64b35",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7311,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ff080b6_de83e955",
       "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10a7a707_81f1fc95",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 7415,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a4659bf_2241980e",
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdeaef73_f8e2b88b",
@@ -105,6 +201,24 @@
       "writtenOn": "2022-07-21T22:45:19Z",
       "side": 1,
       "message": "Why do you need this local now if you didn\u0027t before? I\u0027m probably missing something but MoveRelativeZonedDateTime doesn\u0027t seem to have changed in this CL.",
+      "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03c17637_18ab0711",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 8593,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-23T06:07:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdeaef73_f8e2b88b",
       "revId": "3119e8d790e25090a4531a56f4951af0fc0b7e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
