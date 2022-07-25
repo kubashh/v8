@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72cd69b_5523fd40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-25T14:02:56Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d785878_79183097",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "That\u0027s how it was before. I now separated them, so that both `CreateObjectsInPage` and `TestAll` just do what their name suggests. In this way, we can have objects created in more than one pages and test once in the end (see test `TwoPages` in line 467 below. We can also test multiple times, e.g., after freeing pages (see test `FreePages` in line 548 of https://crrev.com/c/3784986).",
       "parentUuid": "0d785878_79183097",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 2
+      },
+      "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad33276_e2bc9051",
+        "filename": "test/unittests/heap/marking-inner-pointer-resolution-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-25T14:02:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "293ef212_7a763827",
       "range": {
         "startLine": 239,
         "startChar": 0,
