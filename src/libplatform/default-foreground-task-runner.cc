@@ -32,28 +32,15 @@ void DefaultForegroundTaskRunner::Terminate() {
     terminated_ = true;
   }
   // Drain the task queues.
-  // We have to do this lock dance here to avoid a lock order inversion warning
-  // of TSAN: during initialization, the WasmEngine lock gets taken before the
-  // TaskRunner lock. The TaskRunner lock is taken during WasmEngine
-  // initialization when the ForegroundTaskRunner gets acquire. During shutdown,
-  // the TaskRunner lock gets taken before the WasmEngine lock. The WasmEngine
-  // lock gets taken in the destructor of the LogCode task.
-  // In the code below we pop one task at a time from the task queue while
-  // holding the TaskRunner lock, but delete the task only after releasing the
-  // TaskRunner lock. Thereby we avoid holding the TaskRunner lock when the
-  // destructor of the task may take other locks.
-  while (true) {
-    std::unique_ptr<Task> task;
-    {
-      base::MutexGuard guard(&lock_);
-      if (task_queue_.empty()) break;
-      task = std::move(task_queue_.front().second);
-      task_queue_.pop_front();
-    }
-    // Reset the unique_ptr just for readability, to show that the task gets
-    // deallocated here without holding the lock.
-    task.reset();
+  // We make sure to delete tasks outside the TaskRunner lock, to avoid
+  // potential deadlocks.
+  std::deque<TaskQueueEntry> obsolete_tasks;
+  {
+    base::MutexGuard guard(&lock_);
+    terminated_ = true;
+    task_queue_.swap(obsolete_tasks);
   }
+  while (!obsolete_tasks.empty()) obsolete_tasks.pop_front();
 
   // TODO(v8): If it ever becomes necessary, do the same lock dance for delayed
   // tasks and idle tasks as above.
