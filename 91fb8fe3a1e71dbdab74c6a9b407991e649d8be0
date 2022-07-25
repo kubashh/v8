@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16d86ac0_ec95cb12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-25T13:36:15Z",
+      "side": 1,
+      "message": "LGTM % nitpick",
+      "revId": "91fb8fe3a1e71dbdab74c6a9b407991e649d8be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e0d2242_daf2ce17",
+        "filename": "src/maglev/maglev-code-gen-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-25T13:36:15Z",
+      "side": 1,
+      "message": "Nice! Although this is never used. Do you have plans to use it later? Otherwise, it is better not to have.",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 1
+      },
+      "revId": "91fb8fe3a1e71dbdab74c6a9b407991e649d8be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07dc9332_e7a7ec8d",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-25T13:36:15Z",
+      "side": 1,
+      "message": "Nitpick: Can\u0027t we just do a static assert that `NodeT::kProperties.value_representation() \u003d\u003d ValueRepresentation::kFloat64` (or the negation in the other case), then do a `this-\u003eCast\u003cName\u003e()\u003eDoLoadToRegister(code_gen_state, reg);`\nWe don\u0027t really gain much with `LoadToRegisterHelper`.",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 73
+      },
+      "revId": "91fb8fe3a1e71dbdab74c6a9b407991e649d8be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
