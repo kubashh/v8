@@ -16,6 +16,46 @@
       "message": "This is required for testing the upcoming CL, https://crrev.com/c/3784986.",
       "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8c2f9f7_859f02ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-25T13:16:25Z",
+      "side": 1,
+      "message": "I appreciate splitting the testing infrastructure to a separate CL to make the next one simpler, but can we actually hold off on these changes until the next CL?\nThe revised mechanism in this CL feels much more complicated to me and I feel that the context of seeing it used would help me understand why we\u0027re doing it this way.",
+      "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d785878_79183097",
+        "filename": "test/unittests/heap/marking-inner-pointer-resolution-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-25T13:16:25Z",
+      "side": 1,
+      "message": "Can `CreateObjectsInPage` be called from `TestAll`? Having the 2 calls here feels a bit like boilerplate.",
+      "range": {
+        "startLine": 239,
+        "startChar": 0,
+        "endLine": 239,
+        "endChar": 2
+      },
+      "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
