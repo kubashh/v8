@@ -297,6 +297,14 @@ BaselineCompiler::BaselineCompiler(
 void BaselineCompiler::GenerateCode() {
   {
     RCS_BASELINE_SCOPE(PreVisit);
+
+    // Mark exception handlers as valid jump targets. This is required when CFI
+    // is enabled, to allow indirect jumps into baseline code.
+    HandlerTable table(*bytecode_);
+    for (int i = 0; i < table.NumberOfRangeEntries(); ++i) {
+      EnsureLabels(table.GetRangeHandler(i))->MarkAsJumpTarget();
+    }
+
     for (; !iterator_.done(); iterator_.Advance()) {
       PreVisitSingleBytecode();
     }
@@ -436,7 +444,9 @@ void BaselineCompiler::AddPosition() {
 void BaselineCompiler::PreVisitSingleBytecode() {
   switch (iterator().current_bytecode()) {
     case interpreter::Bytecode::kJumpLoop:
-      EnsureLabels(iterator().GetJumpTargetOffset());
+      // We mark loop headers as valid jump targets, to allow interpreted code
+      // to OSR into baseline code when CFI is enabled.
+      EnsureLabels(iterator().GetJumpTargetOffset())->MarkAsJumpTarget();
       break;
 
     // TODO(leszeks): Update the max_call_args as part of the main bytecode
@@ -468,6 +478,9 @@ void BaselineCompiler::PreVisitSingleBytecode() {
 
 void BaselineCompiler::VisitSingleBytecode() {
   int offset = iterator().current_offset();
+  // Mark position as valid jump target unconditionnaly when the deoptimizer can
+  // jump to baseline code. This is required when CFI is enabled.
+  bool needs_jump_target = FLAG_deopt_to_baseline;
   if (labels_[offset]) {
     // Bind labels for this offset that have already been linked to a
     // jump (i.e. forward jumps, excluding jump tables).
@@ -478,11 +491,14 @@ void BaselineCompiler::VisitSingleBytecode() {
     labels_[offset]->linked.Clear();
 #endif
     __ Bind(&labels_[offset]->unlinked);
+    if (labels_[offset]->jump_target) {
+      needs_jump_target = true;
+    }
   }
 
-  // Mark position as valid jump target. This is required for the deoptimizer
-  // and exception handling, when CFI is enabled.
-  __ JumpTarget();
+  if (needs_jump_target) {
+    __ JumpTarget();
+  }
 
 #ifdef V8_CODE_COMMENTS
   std::ostringstream str;
