@@ -155,7 +155,7 @@ export class TurboshaftGraphView extends MovableView<TurboshaftGraph> {
         }
         break;
       case 85: // 'u'
-        this.collapseUnusedBlocks();
+        this.collapseUnusedBlocks(d3.event.shiftKey);
         break;
       default:
         eventHandled = false;
@@ -735,17 +735,25 @@ export class TurboshaftGraphView extends MovableView<TurboshaftGraph> {
     this.updateGraphVisibility();
   }
 
-  private collapseUnusedBlocks(): void {
-    const node = this.graph.nodeMap[this.hoveredNodeIdentifier];
-    if (!node) return;
+  private collapseUnusedBlocks(shiftKey: boolean): void {
+    const usedBlocks = new Set<TurboshaftGraphBlock>();
+    const selectedNodes = shiftKey
+      ? [this.graph.nodeMap[this.hoveredNodeIdentifier]]
+      : this.state.selection.selection.values();
 
-    const usedBlocks = new Set<TurboshaftGraphBlock>([node.block]);
-    for (const input of node.inputs) {
-      usedBlocks.add(input.source.block);
+    for (const node of selectedNodes) {
+      usedBlocks.add(node.block);
+
+      for (const input of node.inputs) {
+        usedBlocks.add(input.source.block);
+      }
+
+      for (const output of node.outputs) {
+        usedBlocks.add(output.target.block);
+      }
     }
-    for (const output of node.outputs) {
-      usedBlocks.add(output.target.block);
-    }
+
+    if (!usedBlocks.size) return;
 
     for (const block of this.graph.blockMap) {
       block.collapsed = !usedBlocks.has(block);
