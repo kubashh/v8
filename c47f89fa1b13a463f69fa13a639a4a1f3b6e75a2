@@ -16,6 +16,52 @@
       "message": "Could you please help to review this patch?",
       "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78c2b67d_c9a9176e",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-25T14:20:34Z",
+      "side": 1,
+      "message": "can you deduplicate the code between this and EnqueueFunction?",
+      "range": {
+        "startLine": 312,
+        "startChar": 28,
+        "endLine": 312,
+        "endChar": 38
+      },
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dc20baf_e36d13e9",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-25T14:20:34Z",
+      "side": 1,
+      "message": "please share code between here and `CodeSerializer::Deserialize`",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 5
+      },
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
