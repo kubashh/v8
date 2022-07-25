@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "432b0ad4_68a6f2be",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-25T13:45:21Z",
+      "side": 1,
+      "message": "Sorry, DCHECK_NE(..., kNoRestrictions).",
+      "parentUuid": "4e365932_71523fdc",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 10
+      },
+      "revId": "9f2af2e7ff41214d12fec59a1900a538109db99f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "076dc4cd_df2a5a2d",
         "filename": "src/common/code-memory-access-inl.h",
         "patchSetId": 46
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-25T13:42:55Z",
       "side": 1,
       "message": "DCHECK_EQ",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 10
+      },
+      "revId": "9f2af2e7ff41214d12fec59a1900a538109db99f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3e6b1d_57229b90",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 46
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-25T13:45:21Z",
+      "side": 1,
+      "message": "DCHECK_EQ(..., kNoRestrictions) because we don\u0027t expect kDisableAccess here.",
+      "parentUuid": "076dc4cd_df2a5a2d",
       "range": {
         "startLine": 84,
         "startChar": 4,
