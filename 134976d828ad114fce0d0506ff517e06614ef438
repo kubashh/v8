@@ -245,6 +245,24 @@
       "message": "This and below predicates can also be made static.\n\nClemens, WDYT?",
       "revId": "134976d828ad114fce0d0506ff517e06614ef438",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab566ca7_0a1c3baf",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-25T10:36:06Z",
+      "side": 1,
+      "message": "Sure, why not!",
+      "parentUuid": "e7716de1_24ae2496",
+      "revId": "134976d828ad114fce0d0506ff517e06614ef438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

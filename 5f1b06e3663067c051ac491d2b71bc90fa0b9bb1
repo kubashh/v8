@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "761fe6c6_aaeac51d",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-25T10:36:06Z",
+      "side": 0,
+      "message": "I don\u0027t mind the tracing too much, so I think removing this is OK. But we should try to keep the DCHECK, see below.",
+      "parentUuid": "f5e9d962_1769cea3",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7abf6bb9_d6f59e7e",
@@ -49,6 +67,24 @@
       "writtenOn": "2022-07-19T14:22:22Z",
       "side": 0,
       "message": "Another reason is this DCHECK here which let us catch the issue with PKU vs. spawning a new thread.",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "249d494b_6d203b4c",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-25T10:36:06Z",
+      "side": 0,
+      "message": "Ack, this caught a real-world problem (keeping memory writable for arbitrary threads). Can we add this DCHECK to RwxMemoryWriteScope::SetWritable(), i.e. ensuring that code is not writable before we are switching to writable?\nAfter adding that DCHECK, please double-check on PKU-enabled hardware that nothing breaks :)",
+      "parentUuid": "7abf6bb9_d6f59e7e",
       "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
