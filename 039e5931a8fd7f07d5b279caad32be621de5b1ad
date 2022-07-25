@@ -16,6 +16,69 @@
       "message": "Hey Nico, the code for adding the benchmark for bigint multiply is ready for review.",
       "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92ddf64c_4b3c4fe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-07-25T15:31:08Z",
+      "side": 1,
+      "message": "A few comments. There is also an issue on one bot. It seems that the tests crash there:\n\n2022-07-25 07:02:27,829 INFO      \u003e\u003e\u003e Stdout (#1):\nBigInt-Prevent-Inline-Dummy(Score): 251211000\nBigInt-Multiply-TypeError(Score): 3431\nBigInt-Multiply-Zero(Score): 4525\nBigInt-Multiply-32(Score): 1064\nBigInt-Multiply-64(Score): 213\nBigInt-Multiply-128(Score): 19.2\nBigInt-Multiply-256(Score): 5.96\nBigInt-Multiply-512(Score): 1.92\nBigInt-Multiply-1024(Score): 0.540\n\n2022-07-25 07:02:27,829 WARNING   \u003e\u003e\u003e Test crashed with exit code -9.\n\nIt seems that it cannot handle larger BigInts. The problem is that with multiplication, the size of the results grow much faster than with the addition and I assume they trigger a BigIntTooBig exception eventually. Let\u0027s think about how we can prevent that.\n\nOne other point: Check out the scores of the above tests. The last numbers get very small, which is not optimal because it\u0027s harder to notice differences and visualization of the results is much nicer if all values are on a similar scale. You can scale these scores by one of the arguments passed to the BenchmarkSuite (I think its the one where we pass 1000). Please try to change those numbers so that all the scores are somewhere in the ballpark of 100-10000",
+      "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95da4a23_9b7237e9",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-07-25T15:31:08Z",
+      "side": 1,
+      "message": "Let\u0027s use a different value here to make it more obvious that this is not about the zero special case.",
+      "range": {
+        "startLine": 56,
+        "startChar": 16,
+        "endLine": 56,
+        "endChar": 17
+      },
+      "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627c9b56_7485d7a6",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-07-25T15:31:08Z",
+      "side": 1,
+      "message": "I think it makes a bit more sense to have multiplication by 1n here as this keeps the product unchanged (1 as the neutral element for multiplication like 0 is for addition).",
+      "range": {
+        "startLine": 70,
+        "startChar": 9,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
