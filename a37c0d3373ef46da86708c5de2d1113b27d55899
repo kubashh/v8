@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ee8ecef_a93558c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-25T11:46:14Z",
+      "side": 1,
+      "message": "Ok, let\u0027s not merge this for now and Tao Pan + team can look into multi-entry OSR",
+      "revId": "a37c0d3373ef46da86708c5de2d1113b27d55899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
