@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f1400e7_61f39821",
+        "filename": "test/mjsunit/tools/tickprocessor-test-large.log",
+        "patchSetId": 38
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 0,
+      "message": "This file probably shouldn\u0027t be changed. If it blocks this, rather skip test on fuchsia for now.",
+      "range": {
+        "startLine": 1737,
+        "startChar": 1165,
+        "endLine": 1737,
+        "endChar": 1167
+      },
+      "revId": "4aa3dd83d96e44d0b9b6c06431931978bef047a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbce5ba8_dfc52711",
+        "filename": "tools/testrunner/local/pool.py",
+        "patchSetId": 38
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 0,
+      "message": "There are still a bunch of non-fuchsia related things in this change. Ideally try to pull them out and land as more refactoring CLs before this.",
+      "range": {
+        "startLine": 259,
+        "startChar": 6,
+        "endLine": 262,
+        "endChar": 38
+      },
+      "revId": "4aa3dd83d96e44d0b9b6c06431931978bef047a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca56f8b6_00eaa926",
+        "filename": "tools/testrunner/testproc/indicators.py",
+        "patchSetId": 38
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 0,
+      "message": "This does a bit too much. Now e.g. on windows we will see each time this is called:\n\nList of processes:\npid: -1 cmd: Listing processes not available on Windows\n\nOn mac, it has never been tested. Not sure if it works like on linux.",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 137,
+        "endChar": 36
+      },
+      "revId": "4aa3dd83d96e44d0b9b6c06431931978bef047a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4aa62e7_ff6cf5bd",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 38
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 1,
+      "message": "nit: I know it\u0027s not time for nits yet...\n\nMaybe move this to the existing is_fuchsia condition? Stuff in there might be replaceable now/soon.",
+      "range": {
+        "startLine": 695,
+        "startChar": 0,
+        "endLine": 695,
+        "endChar": 17
+      },
+      "revId": "97131eea29b39dd7bd41f4d7870be9d73c926584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5478a4_5405c312",
+        "filename": "tools/testrunner/local/fuchsia/context.py",
+        "patchSetId": 38
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 1,
+      "message": "nit: Please use the small copyright header. See newer files.",
+      "revId": "97131eea29b39dd7bd41f4d7870be9d73c926584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df8e7ac_a87e38df",
+        "filename": "tools/testrunner/local/fuchsia/run_test_package.py",
+        "patchSetId": 38
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T08:41:00Z",
+      "side": 1,
+      "message": "Since we still depend on build/fuchsia, wouldn\u0027t it be better to do either:\n1) Also carve out these dependencies and go down to the level of raw commands (via subprocess) to the sdk. E.g. manually build the commands run like this https://source.chromium.org/chromium/chromium/src/+/main:build/fuchsia/fvdl_target.py;l\u003d113?q\u003dfvdl_target - to start/shutdown/run/copy\n2) Make a change as originally suggested in fuchsia\u0027s run_test_package.py and depend on that. Like that we\u0027d have more maintenance support for our case by fuchsia maintainers.\n\nIdeally this choice (and others) should be reflected in the design doc and be reviewed by a fuchsia maintainer to get feedback.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 34
+      },
+      "revId": "97131eea29b39dd7bd41f4d7870be9d73c926584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
