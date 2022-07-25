@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c19d828_8efa0c1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-25T12:21:12Z",
+      "side": 1,
+      "message": "The deprecation made it into M105 (before the branch cut), so we can already move forward the deprecation here: https://chromiumdash.appspot.com/commit/eb4e0241d7fada6b59d158e6614bc907b898abd3",
+      "revId": "8ae3fcc61dcb75ba95a448338e3777fd5ae12091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
