@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90d90aa5_9e386a82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-07-25T13:02:16Z",
+      "side": 1,
+      "message": "This is required for testing the upcoming CL, https://crrev.com/c/3784986.",
+      "revId": "eeb12bd22f73c2162ad4bfa88ec7fc8a34df9f70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
