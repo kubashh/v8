@@ -275,10 +275,16 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
     return;
   }
 
-  DCHECK(!is_marked_for_any_optimization &&
-         !function.HasAvailableOptimizedCode());
-  OptimizationDecision d = ShouldOptimize(function, code_kind);
-  if (d.should_optimize()) Optimize(function, d);
+  if (FLAG_fast_osr && function.feedback_vector().invocation_count() <= 1 &&
+      function.shared().GetBytecodeArray(isolate_).length() < 600) {
+    Optimize(function, OptimizationDecision::TurbofanSmallFunction());
+    TryRequestOsrAtNextOpportunity(isolate_, function);
+  } else {
+    DCHECK(!is_marked_for_any_optimization &&
+           !function.HasAvailableOptimizedCode());
+    OptimizationDecision d = ShouldOptimize(function, code_kind);
+    if (d.should_optimize()) Optimize(function, d);
+  }
 }
 
 OptimizationDecision TieringManager::ShouldOptimize(JSFunction function,
