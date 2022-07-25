@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60f9d2f_3da1d302",
+        "filename": "src/maglev/maglev-code-gen-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-25T14:08:13Z",
+      "side": 1,
+      "message": "This is used already, in RecordGapMove; the `s/ToRegister/ToRegisterT/` might be a bit hard to notice among the other changes",
+      "parentUuid": "1e0d2242_daf2ce17",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 1
+      },
+      "revId": "91fb8fe3a1e71dbdab74c6a9b407991e649d8be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07dc9332_e7a7ec8d",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-25T13:36:15Z",
       "side": 1,
       "message": "Nitpick: Can\u0027t we just do a static assert that `NodeT::kProperties.value_representation() \u003d\u003d ValueRepresentation::kFloat64` (or the negation in the other case), then do a `this-\u003eCast\u003cName\u003e()\u003eDoLoadToRegister(code_gen_state, reg);`\nWe don\u0027t really gain much with `LoadToRegisterHelper`.",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 73
+      },
+      "revId": "91fb8fe3a1e71dbdab74c6a9b407991e649d8be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d4f655_efb820b1",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-25T14:08:13Z",
+      "side": 1,
+      "message": "Unfortunately not -- some nodes define `DoLoadToRegister(State, Register)` without defining a `DoLoadToRegister(State, DoubleRegister)`, which shadows the `DoLoadToRegister(State, DoubleRegister)` in ValueNode instead of adding to its overload set. This then breaks the compilation here, because the DoLoadToRegister isn\u0027t SFINAEd away. Inlining `if constexpr` here also doesn\u0027t help, because here it doesn\u0027t have a dependent name (like NodeT) in the condition.",
+      "parentUuid": "07dc9332_e7a7ec8d",
       "range": {
         "startLine": 570,
         "startChar": 0,
