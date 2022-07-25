@@ -213,6 +213,23 @@
       "message": "Maybe not super relevant right now, but the V8 sandbox currently effectively limits ArrayBuffer, TypedArray, etc. sizes to 32GB: https://docs.google.com/document/d/1PM4Zqmlt8ac5O8UNQfY7fOsem-6MhbsB-vjFI-9XK6w/edit#heading\u003dh.e68bw3kmgamy so maybe we should use that as the limit (when V8_ENABE_SANDBOX is active).",
       "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcb7c7e3_05027361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-25T10:29:16Z",
+      "side": 1,
+      "message": "Jakob made me aware of this CL (I hit the TA limit when testing 16GB wasm memories). Wasm memory64 is still experimental, but long-term it would surely be unexpected if we can get the 16GB AB but not create a TA from it.\n\nEqualizing all limits to the maximum you can allocate from V8 (JS or Wasm) sounds like a good path forward. That would be 16GB for now, and would maybe have to be raised by another small factor in a few years.",
+      "revId": "51e9f14968c04d153d9bbd8be6f5f9de2b22cdff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
