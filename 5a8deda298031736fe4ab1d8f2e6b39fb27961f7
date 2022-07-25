@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "5a8deda298031736fe4ab1d8f2e6b39fb27961f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "592e6289_fd6827ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-07-25T19:04:39Z",
+      "side": 1,
+      "message": "lgtm % typos in comment. Thanks for the comment on GetTemporalUnit, it helped me understand that function.",
+      "revId": "5a8deda298031736fe4ab1d8f2e6b39fb27961f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24edb523_d9ec10fe",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4612,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-07-25T19:04:39Z",
+      "side": 1,
+      "message": "Typo: extraValues",
+      "range": {
+        "startLine": 4612,
+        "startChar": 6,
+        "endLine": 4612,
+        "endChar": 18
+      },
+      "revId": "5a8deda298031736fe4ab1d8f2e6b39fb27961f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99c72440_652e6dcc",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-07-25T19:04:39Z",
+      "side": 1,
+      "message": "Same typo",
+      "range": {
+        "startLine": 4620,
+        "startChar": 13,
+        "endLine": 4620,
+        "endChar": 25
+      },
+      "revId": "5a8deda298031736fe4ab1d8f2e6b39fb27961f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
