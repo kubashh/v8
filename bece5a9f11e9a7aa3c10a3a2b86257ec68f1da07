@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f8d78b4_7cd2d76e",
+        "filename": "src/common/code-memory-access.cc",
+        "patchSetId": 45
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-25T10:42:20Z",
+      "side": 1,
+      "message": "Ah, we also use pkey value in the call... Please ignore my comment.",
+      "parentUuid": "f0a5b1f2_97a409ec",
+      "range": {
+        "startLine": 40,
+        "startChar": 18,
+        "endLine": 41,
+        "endChar": 60
+      },
+      "revId": "bece5a9f11e9a7aa3c10a3a2b86257ec68f1da07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9874a133_a3920575",
