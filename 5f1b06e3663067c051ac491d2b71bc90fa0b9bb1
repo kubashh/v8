@@ -87,6 +87,24 @@
       "parentUuid": "7abf6bb9_d6f59e7e",
       "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9984fc7_24282822",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-25T13:11:13Z",
+      "side": 0,
+      "message": "Thanks for your suggestion, I add this DCHECK, but I\u0027m not very clear about what does `double-check on PKU-enabled hardware that nothing breaks` mean.",
+      "parentUuid": "249d494b_6d203b4c",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
