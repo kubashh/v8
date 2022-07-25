@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77675036_00f17f51",
+        "filename": "test/unittests/unittests.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-25T12:10:20Z",
+      "side": 1,
+      "message": "nit: I guess you mean these skips.",
+      "range": {
+        "startLine": 113,
+        "startChar": 10,
+        "endLine": 113,
+        "endChar": 15
+      },
+      "revId": "c95edb3cdf8e679aa24294274b7b44b697359cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
