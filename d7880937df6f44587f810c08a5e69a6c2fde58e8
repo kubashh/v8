@@ -16,6 +16,23 @@
       "message": "Thanks, LGTM.\nI added two TSan bots (manually), please wait for them before landing, or add these lines to the CL description (footer):\nCq-Include-Trybots: luci.v8.try:v8_linux64_tsan_rel_ng\nCq-Include-Trybots: luci.v8.try:v8_linux64_tsan_isolates_rel_ng",
       "revId": "d7880937df6f44587f810c08a5e69a6c2fde58e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3c00478_4ca30657",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-25T12:41:29Z",
+      "side": 1,
+      "message": "lgtm, thanks Andreas and Clemens!",
+      "revId": "d7880937df6f44587f810c08a5e69a6c2fde58e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
