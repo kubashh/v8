@@ -652,12 +652,12 @@ DEFINE_INT(interrupt_budget_for_maglev, 40 * KB,
            "interrupt budget which should be used for the profiler counter")
 
 // Tiering: Turbofan.
-DEFINE_INT(interrupt_budget, 132 * KB,
+DEFINE_INT(interrupt_budget, 66 * KB,
            "interrupt budget which should be used for the profiler counter")
 DEFINE_INT(ticks_before_optimization, 3,
            "the number of times we have to go through the interrupt budget "
            "before considering this function for optimization")
-DEFINE_INT(bytecode_size_allowance_per_tick, 1100,
+DEFINE_INT(bytecode_size_allowance_per_tick, 550,
            "increases the number of ticks required for optimization by "
            "bytecode.length/X")
 DEFINE_INT(
@@ -910,6 +910,7 @@ DEFINE_BOOL(turbo_inline_array_builtins, true,
             "inline array builtins in TurboFan code")
 DEFINE_BOOL(use_osr, true, "use on-stack replacement")
 DEFINE_BOOL(concurrent_osr, true, "enable concurrent OSR")
+DEFINE_BOOL(fast_osr, false, "trigger on-stack replacement faster")
 DEFINE_WEAK_IMPLICATION(future, concurrent_osr)
 DEFINE_BOOL(trace_osr, false, "trace on-stack replacement")
 DEFINE_BOOL(analyze_environment_liveness, true,
