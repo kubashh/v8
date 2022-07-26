@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a445e9fd_fb2a627f",
+        "filename": "test/cctest/wasm/test-run-wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-26T10:13:55Z",
+      "side": 0,
+      "message": "This failed for reasons that I did not manage to figure out. I am almost certain that the issue is not at the main code but rather at the test setup. Therefore I moved it to mjsunit/, where it succeeds. If you think this is too dangerous, or you have a better understanding of the problem, please let me know.",
+      "range": {
+        "startLine": 119,
+        "startChar": 24,
+        "endLine": 119,
+        "endChar": 50
+      },
+      "revId": "18751c5b4669ec5c754786419790e24207953a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd215214_41e932c6",
+        "filename": "test/cctest/wasm/test-run-wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-26T10:13:55Z",
+      "side": 0,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 564,
+        "startChar": 24,
+        "endLine": 564,
+        "endChar": 62
+      },
+      "revId": "18751c5b4669ec5c754786419790e24207953a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

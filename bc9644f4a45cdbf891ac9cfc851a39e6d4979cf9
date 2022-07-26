@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c484bc2_6b03203f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-26T10:13:55Z",
+      "side": 1,
+      "message": "This in set for testing purposes. We could use it in production now, or wait until we decide to land wasm-gc. WDYT?",
+      "range": {
+        "startLine": 1130,
+        "startChar": 40,
+        "endLine": 1130,
+        "endChar": 44
+      },
+      "revId": "bc9644f4a45cdbf891ac9cfc851a39e6d4979cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
