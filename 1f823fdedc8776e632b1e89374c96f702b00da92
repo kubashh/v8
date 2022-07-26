@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8825d6a_2bd84cd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-26T09:46:40Z",
+      "side": 1,
+      "message": "I\u0027m sorry for some mistake in `WasmCodeManager::HasMemoryProtectionKeySupport()`, I did\u0027t use macro `V8_HAS_PKU_JIT_WRITE_PROTECT` here, so it will also return `true` in Apple silicon.\nI suppose it\u0027s the root cause of failed in the try job, I fixed this bug, and it passed the try bot `v8_mac_arm64_rel_ng`and `v8_mac_arm64_dbg_ng` now, PTAL, thanks.",
+      "revId": "1f823fdedc8776e632b1e89374c96f702b00da92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
