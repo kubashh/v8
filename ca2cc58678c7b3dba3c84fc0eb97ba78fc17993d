@@ -34,6 +34,24 @@
       "parentUuid": "35b8ce63_214afa81",
       "revId": "ca2cc58678c7b3dba3c84fc0eb97ba78fc17993d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e41281_41020cd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-07-26T09:26:36Z",
+      "side": 1,
+      "message": "I think this come from some suboptimal CSA codes. For example in AddSmiHandler, there is a check of whether rhs is Smi:\n\n    // Check if the {rhs} is a smi, and exit the string and bigint check early\n    // if it is.\n    GotoIf(TaggedIsSmi(rhs), \u0026call_with_any_feedback);\n\nHowever, for AddSmiHandler, the rhs is known to be a Smi and it is specified by parameter rhs_known_smi. The Int32Add(x, x) operation is coming from converting a int (which is a bytecode\u0027s operand) to a smi.",
+      "parentUuid": "c5e79c91_5939e74e",
+      "revId": "ca2cc58678c7b3dba3c84fc0eb97ba78fc17993d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
