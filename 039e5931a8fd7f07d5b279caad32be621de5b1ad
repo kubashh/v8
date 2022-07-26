@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb95a870_8447f75a",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-07-26T11:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95da4a23_9b7237e9",
+      "range": {
+        "startLine": 56,
+        "startChar": 16,
+        "endLine": 56,
+        "endChar": 17
+      },
+      "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "627c9b56_7485d7a6",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-25T15:31:08Z",
       "side": 1,
       "message": "I think it makes a bit more sense to have multiplication by 1n here as this keeps the product unchanged (1 as the neutral element for multiplication like 0 is for addition).",
+      "range": {
+        "startLine": 70,
+        "startChar": 9,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "039e5931a8fd7f07d5b279caad32be621de5b1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1b682dd_bd386441",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-07-26T11:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "627c9b56_7485d7a6",
       "range": {
         "startLine": 70,
         "startChar": 9,
