@@ -35,8 +35,8 @@ void ExpectName(const char* expected, const ::wasm::Name& name) {
 TEST_F(WasmCapiTest, Reflect) {
   // Create a module exporting a function, a global, a table, and a memory.
   byte code[] = {WASM_UNREACHABLE};
-  ValueType types[] = {kWasmI32, kWasmAnyRef, kWasmI32,
-                       kWasmI64, kWasmF32,    kWasmF64};
+  ValueType types[] = {kWasmI32, kWasmExternRef, kWasmI32,
+                       kWasmI64, kWasmF32,       kWasmF64};
   FunctionSig sig(2, 4, types);
   AddExportedFunction(base::CStrVector(kFuncName), code, sizeof(code), &sig);
 
@@ -71,7 +71,7 @@ TEST_F(WasmCapiTest, Reflect) {
       const ownvec<ValType>& results = type->results();
       EXPECT_EQ(2u, results.size());
       EXPECT_EQ(::wasm::I32, results[0]->kind());
-      EXPECT_EQ(::wasm::ANYREF, results[1]->kind());
+      EXPECT_EQ(::wasm::EXTERNREF, results[1]->kind());
 
       const Func* func = exports[i]->func();
       EXPECT_EQ(4u, func->param_arity());
