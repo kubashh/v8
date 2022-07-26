@@ -16,6 +16,52 @@
       "message": "Hi!\n\nHere\u0027s a patch that removes most BTI instructions from baseline code, but only when we disable deopting to baseline code. When looking at the sum of all generated baseline code (using --log-code), I measured a reduction of ~18% when running speedometer2! We did have *many* jump targets.\n\nI also did a pinpoint run, hopefully I set it up correctly, I hadn\u0027t used it before :-) https://pinpoint-dot-chromeperf.appspot.com/job/168b7e6daa0000 \n\nThe results look pretty good, although it\u0027s not that many runs (just 30) so I\u0027m unsure about them. Locally, I benchmarked on a more recent phone with 1xCortex-X1/3xCortex-A78/4xCortex-A55, and saw an overall improvement around 0.4-0.5%.\n\nThis CL doesn\u0027t change the current default however, I thought I\u0027d be conservative. However if the result look good, it\u0027d be great to turn it on, or even make it the default at compile-time.\n\nWDYT?\n\nThanks,\nPierre",
       "revId": "33253666b3fd8f198e6b5bfb645cf3cbedc480a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9eb8f81_3bb0397d",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-26T10:58:02Z",
+      "side": 1,
+      "message": "Isn\u0027t this too late? We\u0027ve already generated the code for the loop header.",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 73
+      },
+      "revId": "33253666b3fd8f198e6b5bfb645cf3cbedc480a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbfa8b4f_6e64281d",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-26T10:58:02Z",
+      "side": 1,
+      "message": "maybe \"indirect_jump_target\", to distinguish from jump targets that don\u0027t need the (sigh) JumpTarget function call? Or some sort of similar name disambiguation.",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 20
+      },
+      "revId": "33253666b3fd8f198e6b5bfb645cf3cbedc480a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
