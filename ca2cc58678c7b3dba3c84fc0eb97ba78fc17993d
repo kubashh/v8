@@ -16,6 +16,24 @@
       "message": "This seems like a very rare pattern. Have you encountered that in a few occasions? I\u0027m curious to lern where and why we even generate that.",
       "revId": "ca2cc58678c7b3dba3c84fc0eb97ba78fc17993d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5e79c91_5939e74e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-07-26T08:38:11Z",
+      "side": 1,
+      "message": "~30 Builtins encounter this pattern. The codes in commit message is picked from Builtin_RegExpReplace Block 80. I\u0027ll check how this happens.",
+      "parentUuid": "35b8ce63_214afa81",
+      "revId": "ca2cc58678c7b3dba3c84fc0eb97ba78fc17993d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
