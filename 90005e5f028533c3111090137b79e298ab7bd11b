@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65ce650_f659e4a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-07-26T12:16:47Z",
+      "side": 1,
+      "message": "In the end I had to fix something in the re-land. Andreas, can you PTAL at the one-line fix in patch set 2?",
+      "revId": "90005e5f028533c3111090137b79e298ab7bd11b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
