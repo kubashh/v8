@@ -230,11 +230,11 @@ struct Limits {
 
 enum ValKind : uint8_t {
   I32, I64, F32, F64,
-  ANYREF = 128, FUNCREF,
+  EXTERNREF = 128, FUNCREF,
 };
 
-inline bool is_num(ValKind k) { return k < ANYREF; }
-inline bool is_ref(ValKind k) { return k >= ANYREF; }
+inline bool is_num(ValKind k) { return k < EXTERNREF; }
+inline bool is_ref(ValKind k) { return k >= EXTERNREF; }
 
 
 class ValType {
@@ -418,12 +418,12 @@ class Val {
   Val(ValKind kind, impl impl) : kind_(kind), impl_(impl) {}
 
 public:
-  Val() : kind_(ANYREF) { impl_.ref = nullptr; }
+  Val() : kind_(EXTERNREF) { impl_.ref = nullptr; }
   Val(int32_t i) : kind_(I32) { impl_.i32 = i; }
   Val(int64_t i) : kind_(I64) { impl_.i64 = i; }
   Val(float32_t z) : kind_(F32) { impl_.f32 = z; }
   Val(float64_t z) : kind_(F64) { impl_.f64 = z; }
-  Val(own<Ref>&& r) : kind_(ANYREF) { impl_.ref = r.release(); }
+  Val(own<Ref>&& r) : kind_(EXTERNREF) { impl_.ref = r.release(); }
 
   Val(Val&& that) : kind_(that.kind_), impl_(that.impl_) {
     if (is_ref()) that.impl_.ref = nullptr;

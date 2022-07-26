@@ -84,8 +84,8 @@ ValKind V8ValueTypeToWasm(i::wasm::ValueType v8_valtype) {
       switch (v8_valtype.heap_representation()) {
         case i::wasm::HeapType::kFunc:
           return FUNCREF;
-        case i::wasm::HeapType::kAny:
-          return ANYREF;
+        case i::wasm::HeapType::kExtern:
+          return EXTERNREF;
         default:
           // TODO(wasm+): support new value types
           UNREACHABLE();
@@ -108,8 +108,8 @@ i::wasm::ValueType WasmValKindToV8(ValKind kind) {
       return i::wasm::kWasmF64;
     case FUNCREF:
       return i::wasm::kWasmFuncRef;
-    case ANYREF:
-      return i::wasm::kWasmAnyRef;
+    case EXTERNREF:
+      return i::wasm::kWasmExternRef;
     default:
       // TODO(wasm+): support new value types
       UNREACHABLE();
@@ -526,7 +526,7 @@ ValTypeImpl* valtype_i32 = new ValTypeImpl(I32);
 ValTypeImpl* valtype_i64 = new ValTypeImpl(I64);
 ValTypeImpl* valtype_f32 = new ValTypeImpl(F32);
 ValTypeImpl* valtype_f64 = new ValTypeImpl(F64);
-ValTypeImpl* valtype_externref = new ValTypeImpl(ANYREF);
+ValTypeImpl* valtype_externref = new ValTypeImpl(EXTERNREF);
 ValTypeImpl* valtype_funcref = new ValTypeImpl(FUNCREF);
 
 ValType::~ValType() = default;
@@ -548,7 +548,7 @@ own<ValType> ValType::make(ValKind k) {
     case F64:
       valtype = valtype_f64;
       break;
-    case ANYREF:
+    case EXTERNREF:
       valtype = valtype_externref;
       break;
     case FUNCREF:
@@ -1747,7 +1747,7 @@ i::Address FuncData::v8_callback(i::Address host_data_foreign,
         params[i] = Val(v8::base::ReadUnalignedValue<float64_t>(p));
         p += 8;
         break;
-      case ANYREF:
+      case EXTERNREF:
       case FUNCREF: {
         i::Address raw = v8::base::ReadUnalignedValue<i::Address>(p);
         p += sizeof(raw);
@@ -1791,7 +1791,7 @@ i::Address FuncData::v8_callback(i::Address host_data_foreign,
         v8::base::WriteUnalignedValue(p, results[i].f64());
         p += 8;
         break;
-      case ANYREF:
+      case EXTERNREF:
       case FUNCREF: {
         v8::base::WriteUnalignedValue(
             p, WasmRefToV8(isolate, results[i].ref())->ptr());
@@ -1887,7 +1887,7 @@ void Global::set(const Val& val) {
       return v8_global->SetF32(val.f32());
     case F64:
       return v8_global->SetF64(val.f64());
-    case ANYREF:
+    case EXTERNREF:
       return v8_global->SetExternRef(
           WasmRefToV8(impl(this)->store()->i_isolate(), val.ref()));
     case FUNCREF: {
@@ -1928,9 +1928,9 @@ auto Table::make(Store* store_abs, const TableType* type, const Ref* ref)
     case FUNCREF:
       i_type = i::wasm::kWasmFuncRef;
       break;
-    case ANYREF:
+    case EXTERNREF:
       // See Engine::make().
-      i_type = i::wasm::kWasmAnyRef;
+      i_type = i::wasm::kWasmExternRef;
       break;
     default:
       UNREACHABLE();
@@ -1976,8 +1976,8 @@ auto Table::type() const -> own<TableType> {
     case i::wasm::HeapType::kFunc:
       kind = FUNCREF;
       break;
-    case i::wasm::HeapType::kAny:
-      kind = ANYREF;
+    case i::wasm::HeapType::kExtern:
+      kind = EXTERNREF;
       break;
     default:
       UNREACHABLE();
@@ -2796,7 +2796,7 @@ inline auto hide_val(wasm::Val v) -> wasm_val_t {
     case wasm::F64:
       v2.of.f64 = v.f64();
       break;
-    case wasm::ANYREF:
+    case wasm::EXTERNREF:
     case wasm::FUNCREF:
       v2.of.ref = hide_ref(v.ref());
       break;
@@ -2821,7 +2821,7 @@ inline auto release_val(wasm::Val v) -> wasm_val_t {
     case wasm::F64:
       v2.of.f64 = v.f64();
       break;
-    case wasm::ANYREF:
+    case wasm::EXTERNREF:
     case wasm::FUNCREF:
       v2.of.ref = release_ref(v.release_ref());
       break;
@@ -2841,7 +2841,7 @@ inline auto adopt_val(wasm_val_t v) -> wasm::Val {
       return wasm::Val(v.of.f32);
     case wasm::F64:
       return wasm::Val(v.of.f64);
-    case wasm::ANYREF:
+    case wasm::EXTERNREF:
     case wasm::FUNCREF:
       return wasm::Val(adopt_ref(v.of.ref));
     default:
@@ -2873,7 +2873,7 @@ inline auto borrow_val(const wasm_val_t* v) -> borrowed_val {
     case wasm::F64:
       v2 = wasm::Val(v->of.f64);
       break;
-    case wasm::ANYREF:
+    case wasm::EXTERNREF:
     case wasm::FUNCREF:
       v2 = wasm::Val(adopt_ref(v->of.ref));
       break;

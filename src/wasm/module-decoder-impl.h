@@ -908,8 +908,8 @@ class ModuleDecoderTemplate : public Decoder {
       ValueType table_type = consume_reference_type();
       if (!WasmTable::IsValidTableType(table_type, module_.get())) {
         error(type_position,
-              "Currently, only externref and function references are allowed "
-              "as table types");
+              "Currently, only anyref, externref and function references are "
+              "allowed as table types");
         continue;
       }
       table->type = table_type;

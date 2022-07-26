@@ -6,6 +6,7 @@
 
 d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
 
+
 (function TestArrayNewElemStatic() {
   print(arguments.callee.name);
   let builder = new WasmModuleBuilder();

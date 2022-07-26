@@ -23,9 +23,9 @@ own<Trap> IdentityCallback(const Val args[], Val results[]) {
 }  // namespace
 
 TEST_F(WasmCapiTest, HostRef) {
-  ValueType rr_reps[] = {kWasmAnyRef, kWasmAnyRef};
-  ValueType ri_reps[] = {kWasmAnyRef, kWasmI32};
-  ValueType ir_reps[] = {kWasmI32, kWasmAnyRef};
+  ValueType rr_reps[] = {kWasmExternRef, kWasmExternRef};
+  ValueType ri_reps[] = {kWasmExternRef, kWasmI32};
+  ValueType ir_reps[] = {kWasmI32, kWasmExternRef};
   // Naming convention: result_params_sig.
   FunctionSig r_r_sig(1, 1, rr_reps);
   FunctionSig v_r_sig(0, 1, rr_reps);
@@ -35,9 +35,9 @@ TEST_F(WasmCapiTest, HostRef) {
   uint32_t func_index = builder()->AddImport(base::CStrVector("f"), &r_r_sig);
   const bool kMutable = true;
   uint32_t global_index = builder()->AddExportedGlobal(
-      kWasmAnyRef, kMutable, WasmInitExpr::RefNullConst(HeapType::kAny),
+      kWasmExternRef, kMutable, WasmInitExpr::RefNullConst(HeapType::kExtern),
       base::CStrVector("global"));
-  uint32_t table_index = builder()->AddTable(kWasmAnyRef, 10);
+  uint32_t table_index = builder()->AddTable(kWasmExternRef, 10);
   builder()->AddExport(base::CStrVector("table"), kExternalTable, table_index);
   byte global_set_code[] = {WASM_GLOBAL_SET(global_index, WASM_LOCAL_GET(0))};
   AddExportedFunction(base::CStrVector("global.set"), global_set_code,
@@ -57,8 +57,8 @@ TEST_F(WasmCapiTest, HostRef) {
                       sizeof(func_call_code), &r_r_sig);
 
   own<FuncType> func_type =
-      FuncType::make(ownvec<ValType>::make(ValType::make(::wasm::ANYREF)),
-                     ownvec<ValType>::make(ValType::make(::wasm::ANYREF)));
+      FuncType::make(ownvec<ValType>::make(ValType::make(::wasm::EXTERNREF)),
+                     ownvec<ValType>::make(ValType::make(::wasm::EXTERNREF)));
   own<Func> callback = Func::make(store(), func_type.get(), IdentityCallback);
   Extern* imports[] = {callback.get()};
   Instantiate(imports);
