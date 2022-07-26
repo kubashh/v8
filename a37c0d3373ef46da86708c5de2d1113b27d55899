@@ -16,6 +16,24 @@
       "message": "Ok, let\u0027s not merge this for now and Tao Pan + team can look into multi-entry OSR",
       "revId": "a37c0d3373ef46da86708c5de2d1113b27d55899",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b90258_d7efb701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-26T03:44:55Z",
+      "side": 1,
+      "message": "Thanks for your summary!\nWe will investigate multi-entry OSR (long term solution) and consider more mature tier up solution (short term solution).\nLet\u0027s abandon this for now.",
+      "parentUuid": "6ee8ecef_a93558c4",
+      "revId": "a37c0d3373ef46da86708c5de2d1113b27d55899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
