@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20ae36db_7252a37a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-07-26T16:09:56Z",
+      "side": 1,
+      "message": "thanks, LTGM with nit",
+      "revId": "0c03df756fb47de7f6eda641deb8fb23ba999b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b8e27a_41cc6331",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5448,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-07-26T16:09:56Z",
+      "side": 1,
+      "message": "performance nit: `isolate-\u003eraw_native_context().RunPromiseHook(...)`",
+      "range": {
+        "startLine": 5448,
+        "startChar": 13,
+        "endLine": 5448,
+        "endChar": 31
+      },
+      "revId": "0c03df756fb47de7f6eda641deb8fb23ba999b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
