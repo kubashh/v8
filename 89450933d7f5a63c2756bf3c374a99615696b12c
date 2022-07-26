@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a9aa6c_e7045b18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "Work in progress as there are a decent amount of commented out tests.",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2953e4a4_0c621766",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "What is the C++ api used for? Is it the regular V8 interface? (It doesn\u0027t really seem so, as there were functions which just dropped the error messages and returned nullptr.)\n\nDo we need a new `ANYREF` here?",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93c558f_36ecbb20",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "Do I need the same for \"anyref\" here?",
+      "range": {
+        "startLine": 1191,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 37
+      },
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8ec2a5f_51a04d9a",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "Enabling table types with any would be the next step. I\u0027d try adding any here and see if this fixes all the failing table type tests that I had to exclude.",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "607f8bb9_f87dc8ed",
+        "filename": "src/wasm/wasm-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "It\u0027s called `SetExternRef`, so probably it shouldn\u0027t allow `any`, still in wasm-js.cc:1559 I have to handle `any` and I think it should pretty much do the same as extern ref.\nShould I duplicate this function and add a `setAnyRef` with the same implementation? (Similar as it is done above for `SetF32` and `SetF64` which are equivalent.)",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d779de_4a18db2c",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2210,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-26T08:45:16Z",
+      "side": 1,
+      "message": "If this fails, the lines below will crash, so we shouldn\u0027t continue test execution.",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
