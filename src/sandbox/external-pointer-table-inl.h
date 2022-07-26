@@ -76,6 +76,14 @@ void ExternalPointerTable::Set(ExternalPointerHandle handle, Address value,
   DCHECK_EQ(0, value & kExternalPointerTagMask);
   DCHECK(is_marked(tag));
 
+#if defined(LEAK_SANITIZER)
+  // Due to the pointer tags, Lsan will be unable to follow the pointers stored
+  // in an external pointer table when scanning for memory leaks. Due to that
+  // we are currently ignoring every object referenced from an external pointer
+  // table for leak detection purposes.
+  __lsan_ignore_object(reinterpret_cast<void*>(value));
+#endif
+
   uint32_t index = handle >> kExternalPointerIndexShift;
   DCHECK_LT(index, capacity_);
 
@@ -87,6 +95,10 @@ Address ExternalPointerTable::Exchange(ExternalPointerHandle handle,
   DCHECK_NE(kNullExternalPointerHandle, handle);
   DCHECK_EQ(0, value & kExternalPointerTagMask);
   DCHECK(is_marked(tag));
+
+#if defined(LEAK_SANITIZER)
+  __lsan_ignore_object(reinterpret_cast<void*>(value));
+#endif
 
   uint32_t index = handle >> kExternalPointerIndexShift;
   DCHECK_LT(index, capacity_);
