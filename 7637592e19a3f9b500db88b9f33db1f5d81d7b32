@@ -1,0 +1,458 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df4a5035_1be77814",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "I think we should use `kExtern` instead of `kAny` here (compared to the old code), i.e. drop this part.\n\nAnd while you\u0027re here, please add a `// TODO(12868): Support stringrefs.`.",
+      "range": {
+        "startLine": 918,
+        "startChar": 70,
+        "endLine": 919,
+        "endChar": 67
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1988c9c3_e558c44d",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "I\u0027m not sure we want to add `anyref` tables at this time. Should probably implement them along with struct/array/eq/data/i31 tables.",
+      "range": {
+        "startLine": 911,
+        "startChar": 31,
+        "endLine": 911,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f49b490_e47d97b0",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "nit: outdated (just drop it)",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 68
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2810362c_6fc07f53",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Please move `any` to the `UNIMPLEMENTED` section below.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 36
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c19349_2d2a7d88",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "This conversion should not be performed for `kExtern` tables. You can add a `table_object-\u003etype !\u003d i::wasm::kWasmExternRef \u0026\u0026` condition right away; it\u0027s probably also a good idea to add a `// TODO(7748): Make sure `externref` tables don\u0027t convert any values.` because there\u0027s more we\u0027ll have to do here.",
+      "range": {
+        "startLine": 2227,
+        "startChar": 21,
+        "endLine": 2227,
+        "endChar": 58
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f6b2dbe_cf11e2fa",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2559,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Here, too, please make `any` `UNIMPLEMENTED` for now (around line 2584).",
+      "range": {
+        "startLine": 2559,
+        "startChar": 8,
+        "endLine": 2559,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa4f2909_7bac5065",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2665,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 2665,
+        "startChar": 8,
+        "endLine": 2665,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e2e1ef1_893b76d7",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Let\u0027s postpone `anyref` tables.",
+      "range": {
+        "startLine": 610,
+        "startChar": 43,
+        "endLine": 610,
+        "endChar": 73
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b8dd655_9d7f50db",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Please move this to the eq/data/... group below.",
+      "range": {
+        "startLine": 382,
+        "startChar": 4,
+        "endLine": 382,
+        "endChar": 30
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d1f65d7_a23583ad",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 429,
+        "endChar": 30
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e42428_ae4ff781",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Once again `kAny` should be handled the same as `kData` for now.",
+      "range": {
+        "startLine": 2306,
+        "startChar": 8,
+        "endLine": 2306,
+        "endChar": 28
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7de3614_b99678c4",
+        "filename": "test/mjsunit/wasm/array-init-from-segment.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "stray edit?",
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa9d7dc1_421a99c5",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3731,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Here it would make sense to test both `extern` and `any`.",
+      "range": {
+        "startLine": 3730,
+        "startChar": 36,
+        "endLine": 3731,
+        "endChar": 70
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff599af5_6bc4aaa3",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3765,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 3765,
+        "startChar": 37,
+        "endLine": 3765,
+        "endChar": 44
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab004ddc_450d26fe",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3803,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 3803,
+        "startChar": 16,
+        "endLine": 3803,
+        "endChar": 23
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef7bfccb_c3e2b9dd",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 3830,
+        "startChar": 37,
+        "endLine": 3830,
+        "endChar": 44
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c629dfe_4b901d85",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4263,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "here too. `kAny, array_heap, false` would be a good test case.",
+      "range": {
+        "startLine": 4263,
+        "startChar": 33,
+        "endLine": 4263,
+        "endChar": 40
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce1c5247_7290c004",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "This list looks like it\u0027s in urgent need of an update, it should cover ~all ValueTypes. Sounds like a good case for a `TODO` and a follow-up CL (in case it flushes out any issues).",
+      "range": {
+        "startLine": 186,
+        "startChar": 2,
+        "endLine": 186,
+        "endChar": 13
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9a8c3fa_4d92a8cc",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "This will change as a consequence of changes to production code",
+      "range": {
+        "startLine": 2099,
+        "startChar": 35,
+        "endLine": 2099,
+        "endChar": 41
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d379dfe8_dc5d5a7e",
+        "filename": "third_party/wasm-api/wasm.hh",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-26T14:04:58Z",
+      "side": 1,
+      "message": "Please don\u0027t make any changes to this file. It\u0027s imported from https://github.com/WebAssembly/wasm-c-api/blob/master/include/wasm.hh and should stay in sync with upstream.",
+      "range": {
+        "startLine": 233,
+        "startChar": 2,
+        "endLine": 233,
+        "endChar": 11
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
