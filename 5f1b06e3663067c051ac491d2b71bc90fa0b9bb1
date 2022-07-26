@@ -123,6 +123,24 @@
       "parentUuid": "d9984fc7_24282822",
       "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5dccdc9_f9f15a37",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-26T05:29:20Z",
+      "side": 0,
+      "message": "I tested this patch on a PKU supported machine, it passed all test.",
+      "parentUuid": "fa289280_6d9f5121",
+      "revId": "5f1b06e3663067c051ac491d2b71bc90fa0b9bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
