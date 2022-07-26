@@ -16,6 +16,24 @@
       "message": "Jakob: PTAL.\nClemens: FYI. Do you think we should enable this in production?",
       "revId": "20de1f41f4682e223d5f816d35a7e7a51a864d51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c74ffc9f_75baceed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-26T10:59:33Z",
+      "side": 1,
+      "message": "Yes, I think we should enable type canonicalization everywhere. We should do it in a separate CL though to get isolated regression reports. And then we should get rid of the flag ASAP (maybe after the next branch cut), because the old configuration won\u0027t get any test coverage any more.",
+      "parentUuid": "3fd26737_16153903",
+      "revId": "20de1f41f4682e223d5f816d35a7e7a51a864d51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

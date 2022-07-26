@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e124150_77eb91c3",
+        "filename": "test/cctest/wasm/test-run-wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-26T10:59:33Z",
+      "side": 0,
+      "message": "WASM_COMPILED_EXEC_TESTs automatically run in Liftoff-only and TurboFan-only mode without specifying any additional variants in the test runner, and are often easier to debug because they call the generated code more directly. It would be better to figure out what actually broke, in order to not leave a broken test infrastructure behind.",
+      "parentUuid": "a445e9fd_fb2a627f",
+      "range": {
+        "startLine": 119,
+        "startChar": 24,
+        "endLine": 119,
+        "endChar": 50
+      },
+      "revId": "18751c5b4669ec5c754786419790e24207953a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd215214_41e932c6",
         "filename": "test/cctest/wasm/test-run-wasm-js.cc",
         "patchSetId": 5
