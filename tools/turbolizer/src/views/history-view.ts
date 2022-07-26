@@ -60,8 +60,11 @@ export class HistoryView extends View {
       .style("visibility", "hidden");
 
     const dragHandler = d3.drag().on("drag", () => {
-      this.x += d3.event.dx;
-      this.y += d3.event.dy;
+      const rect = document.body.getBoundingClientRect();
+      const x = this.x + d3.event.dx;
+      this.x = d3.event.dx > 0 ? Math.min(x, rect.width - this.getWidth()) : Math.max(x, 0);
+      const y = this.y + d3.event.dy;
+      this.y = d3.event.dy > 0 ? Math.min(y, rect.height - this.getHeight()) : Math.max(y, 0);
       this.svg.attr("transform", _ => `translate(${this.x},${this.y})`);
     });
 
@@ -125,7 +128,9 @@ export class HistoryView extends View {
     let recordY = 0;
 
     for (const [phaseId, phaseHistory] of this.phaseIdToHistory.entries()) {
+      if (!phaseHistory.hasChanges()) continue;
       const phaseName = this.sourceResolver.getPhaseNameById(phaseId);
+
       this.historyList
         .append("text")
         .classed("history-item", true)
@@ -267,6 +272,7 @@ export class HistoryView extends View {
     const uniqueAncestors = new Set<string>();
     const coefficient = this.getCoefficient("history-item-tspan-font-size");
     let prevNode = null;
+    let first = true;
     for (let i = 0; i < this.sourceResolver.phases.length; i++) {
       const phase = this.sourceResolver.getPhase(i);
       if (!(phase instanceof GraphPhase)) continue;
@@ -303,6 +309,11 @@ export class HistoryView extends View {
 
       if (node.nodeLabel.inplaceUpdatePhase && node.nodeLabel.inplaceUpdatePhase == phase.name) {
         this.addToHistory(i, node, HistoryChange.InplaceUpdated);
+      }
+
+      if (first) {
+        this.addToHistory(i, node, HistoryChange.Emersioned);
+        first = false;
       }
 
       this.addToHistory(i, node, HistoryChange.Current);
@@ -395,18 +406,19 @@ export class HistoryView extends View {
   }
 
   private getHeight(): number {
-    const clientRect = document.body.getBoundingClientRect();
-    return clientRect.height * C.HISTORY_DEFAULT_HEIGHT_PERCENT;
+    return window.screen.availHeight * C.HISTORY_DEFAULT_HEIGHT_PERCENT;
   }
 
   private getHistoryChangeColor(historyChange: HistoryChange): string {
     switch (historyChange) {
       case HistoryChange.Current:
         return "rgb(255, 167, 0)";
+      case HistoryChange.Emersioned:
+        return "rgb(160, 83, 236)";
       case HistoryChange.Lowered:
         return "rgb(0, 255, 0)";
       case HistoryChange.InplaceUpdated:
-        return "rgb(0, 0, 255)";
+        return "rgb(57, 57, 208)";
       case HistoryChange.Removed:
         return "rgb(255, 0, 0)";
       case HistoryChange.Survived:
@@ -444,6 +456,13 @@ export class PhaseHistory {
     }
     this.nodeIdToRecord.get(key).addChange(change);
   }
+
+  public hasChanges(): boolean {
+    for (const record of this.nodeIdToRecord.values()) {
+      if (record.hasChanges()) return true;
+    }
+    return false;
+  }
 }
 
 export class HistoryRecord {
@@ -458,10 +477,15 @@ export class HistoryRecord {
   public addChange(change: HistoryChange): void {
     this.changes.add(change);
   }
+
+  public hasChanges(): boolean {
+    return this.changes.size > 1 || (this.changes.size == 1 && !this.changes.has(HistoryChange.Current));
+  }
 }
 
 export enum HistoryChange {
   Current,
+  Emersioned,
   Lowered,
   InplaceUpdated,
   Removed,
