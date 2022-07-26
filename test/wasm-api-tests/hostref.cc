@@ -13,6 +13,8 @@ namespace wasm {
 using ::wasm::Frame;
 using ::wasm::Message;
 
+// TODO(7748): Re-enable these tests once any ref tables are supported.
+#if 0
 namespace {
 
 own<Trap> IdentityCallback(const Val args[], Val results[]) {
@@ -172,6 +174,7 @@ TEST_F(WasmCapiTest, HostRef) {
   EXPECT_EQ(nullptr, trap);
   EXPECT_TRUE(results[0].release_ref()->same(host2.get()));
 }
+#endif
 
 }  // namespace wasm
 }  // namespace internal

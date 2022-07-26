@@ -6,6 +6,9 @@
 
 d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
 
+
+/* TODO(7748): Re-enable these tests once any ref tables are supported.
+
 (function TestArrayNewElemStatic() {
   print(arguments.callee.name);
   let builder = new WasmModuleBuilder();
@@ -158,6 +161,7 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertTraps(kTrapNullDereference, () => table_get(0, 2));
   assertTraps(kTrapArrayOutOfBounds, () => table_get(0, 3));
 })();
+*/
 
 (function TestArrayNewElemStaticMistypedSegment() {
   print(arguments.callee.name);
@@ -208,6 +212,7 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
                /invalid element segment index/);
 })();
 
+/* TODO(7748): Re-enable these tests once any ref tables are supported.
 (function TestArrayNewElemStaticConstantArrayTooLarge() {
   print(arguments.callee.name);
   let builder = new WasmModuleBuilder();
@@ -326,3 +331,4 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   // An active segment counts as having 0 length.
   assertTraps(kTrapElementSegmentOutOfBounds, () => instance.exports.init());
 })();
+*/

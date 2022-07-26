@@ -167,7 +167,9 @@ void WasmGlobalObject::SetF64(double value) {
 }
 
 void WasmGlobalObject::SetExternRef(Handle<Object> value) {
-  DCHECK(type().is_reference_to(wasm::HeapType::kAny));
+  // FIXME(mliedtke): How should any be handled for this?
+  DCHECK(type().is_reference_to(wasm::HeapType::kAny) ||
+         type().is_reference_to(wasm::HeapType::kExtern));
   tagged_buffer().set(offset(), *value);
 }
 

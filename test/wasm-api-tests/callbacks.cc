@@ -181,16 +181,16 @@ TEST_F(WasmCapiTest, DirectCallCapiFunction) {
       FuncType::make(ownvec<ValType>::make(
                          ValType::make(::wasm::I32), ValType::make(::wasm::I64),
                          ValType::make(::wasm::F32), ValType::make(::wasm::F64),
-                         ValType::make(::wasm::ANYREF)),
+                         ValType::make(::wasm::EXTERNREF)),
                      ownvec<ValType>::make(
                          ValType::make(::wasm::I32), ValType::make(::wasm::I64),
                          ValType::make(::wasm::F32), ValType::make(::wasm::F64),
-                         ValType::make(::wasm::ANYREF)));
+                         ValType::make(::wasm::EXTERNREF)));
   own<Func> func = Func::make(store(), cpp_sig.get(), PlusOne);
   Extern* imports[] = {func.get()};
-  ValueType wasm_types[] = {kWasmI32,    kWasmI64,   kWasmF32, kWasmF64,
-                            kWasmAnyRef, kWasmI32,   kWasmI64, kWasmF32,
-                            kWasmF64,    kWasmAnyRef};
+  ValueType wasm_types[] = {kWasmI32,       kWasmI64,      kWasmF32, kWasmF64,
+                            kWasmExternRef, kWasmI32,      kWasmI64, kWasmF32,
+                            kWasmF64,       kWasmExternRef};
   FunctionSig wasm_sig(5, 5, wasm_types);
   int func_index = builder()->AddImport(base::CStrVector("func"), &wasm_sig);
   builder()->ExportImportedFunction(base::CStrVector("func"), func_index);
