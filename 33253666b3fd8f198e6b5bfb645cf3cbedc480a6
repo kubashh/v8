@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95c36809_71294817",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2022-07-26T12:18:26Z",
+      "side": 1,
+      "message": "I might be missing something, but given this is done during PreVisit*() that\u0027s before code generation no? \n\nOh also, I wasn\u0027t sure how else to identify loop headers other than find the target of JumpLoop bytecodes, would there be a better way?",
+      "parentUuid": "a9eb8f81_3bb0397d",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 73
+      },
+      "revId": "33253666b3fd8f198e6b5bfb645cf3cbedc480a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbfa8b4f_6e64281d",
         "filename": "src/baseline/baseline-compiler.h",
         "patchSetId": 4
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-26T10:58:02Z",
       "side": 1,
       "message": "maybe \"indirect_jump_target\", to distinguish from jump targets that don\u0027t need the (sigh) JumpTarget function call? Or some sort of similar name disambiguation.",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 20
+      },
+      "revId": "33253666b3fd8f198e6b5bfb645cf3cbedc480a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06796149_e09c0348",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2022-07-26T12:18:26Z",
+      "side": 1,
+      "message": "Oh that\u0027s a good point, otherwise it\u0027s a bit confusing that a label could not be a jump target.",
+      "parentUuid": "dbfa8b4f_6e64281d",
       "range": {
         "startLine": 183,
         "startChar": 9,
