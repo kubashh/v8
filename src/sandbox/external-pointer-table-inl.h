@@ -21,8 +21,18 @@ void ExternalPointerTable::Init(Isolate* isolate) {
   VirtualAddressSpace* root_space = GetPlatformVirtualAddressSpace();
   DCHECK(IsAligned(kExternalPointerTableReservationSize,
                    root_space->allocation_granularity()));
+
+  size_t reservation_size = kExternalPointerTableReservationSize;
+#if defined(LEAK_SANITIZER)
+  // When LSan is active, we use a "shadow table" which contains the raw
+  // pointers stored in this external pointer table so that LSan can scan them.
+  // This is necessary to avoid false leak reports. The shadow table is located
+  // right after the real table in memory. See also lsan_record_ptr().
+  reservation_size *= 2;
+#endif  // LEAK_SANITIZER
+
   buffer_ = root_space->AllocatePages(
-      VirtualAddressSpace::kNoHint, kExternalPointerTableReservationSize,
+      VirtualAddressSpace::kNoHint, reservation_size,
       root_space->allocation_granularity(), PagePermissions::kNoAccess);
   if (!buffer_) {
     V8::FatalProcessOutOfMemory(
@@ -35,6 +45,13 @@ void ExternalPointerTable::Init(Isolate* isolate) {
     V8::FatalProcessOutOfMemory(
         isolate, "Failed to allocate mutex for ExternalPointerTable");
   }
+
+#if defined(LEAK_SANITIZER)
+  // Make the shadow table accessible.
+  CHECK(root_space->SetPagePermissions(
+      buffer_ + kExternalPointerTableReservationSize,
+      kExternalPointerTableReservationSize, PagePermissions::kReadWrite));
+#endif  // LEAK_SANITIZER
 
   // Allocate the initial block. Mutex must be held for that.
   base::MutexGuard guard(mutex_);
