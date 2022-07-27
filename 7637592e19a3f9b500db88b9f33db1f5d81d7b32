@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce2c637e_f9e26137",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "My strategy was just \"so if previously it worked for the one type, I\u0027ll probably try to make every code part work for both by default\".\nWhat\u0027s the reasoning for not allowing `any` here?",
+      "parentUuid": "df4a5035_1be77814",
+      "range": {
+        "startLine": 918,
+        "startChar": 70,
+        "endLine": 919,
+        "endChar": 67
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1988c9c3_e558c44d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "I\u0027m not sure we want to add `anyref` tables at this time. Should probably implement them along with struct/array/eq/data/i31 tables.",
+      "range": {
+        "startLine": 911,
+        "startChar": 31,
+        "endLine": 911,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a34111c_c005da36",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "I undid the table changes now.",
+      "parentUuid": "1988c9c3_e558c44d",
       "range": {
         "startLine": 911,
         "startChar": 31,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a833e57_33ead204",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f49b490_e47d97b0",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 68
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2810362c_6fc07f53",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "Please move `any` to the `UNIMPLEMENTED` section below.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 8,
+        "endLine": 1555,
+        "endChar": 36
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5b4f00_33d26311",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2810362c_6fc07f53",
       "range": {
         "startLine": 1555,
         "startChar": 8,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d96e34b2_a0778094",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6c19349_2d2a7d88",
+      "range": {
+        "startLine": 2227,
+        "startChar": 21,
+        "endLine": 2227,
+        "endChar": 58
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f6b2dbe_cf11e2fa",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "Here, too, please make `any` `UNIMPLEMENTED` for now (around line 2584).",
+      "range": {
+        "startLine": 2559,
+        "startChar": 8,
+        "endLine": 2559,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de6acedf_8e4af725",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2559,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f6b2dbe_cf11e2fa",
       "range": {
         "startLine": 2559,
         "startChar": 8,
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc306cc2_26381e71",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2665,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa4f2909_7bac5065",
+      "range": {
+        "startLine": 2665,
+        "startChar": 8,
+        "endLine": 2665,
+        "endChar": 37
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e2e1ef1_893b76d7",
@@ -175,6 +343,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "Let\u0027s postpone `anyref` tables.",
+      "range": {
+        "startLine": 610,
+        "startChar": 43,
+        "endLine": 610,
+        "endChar": 73
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6325b6dd_8e44cdb8",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e2e1ef1_893b76d7",
       "range": {
         "startLine": 610,
         "startChar": 43,
@@ -208,6 +400,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d87bb46d_643ad54f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b8dd655_9d7f50db",
+      "range": {
+        "startLine": 382,
+        "startChar": 4,
+        "endLine": 382,
+        "endChar": 30
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d1f65d7_a23583ad",
@@ -221,6 +437,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "here too",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 429,
+        "endChar": 30
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b1c97d6_d6646429",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d1f65d7_a23583ad",
       "range": {
         "startLine": 429,
         "startChar": 4,
@@ -254,6 +494,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1120ada9_e63d0ee5",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2306,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62e42428_ae4ff781",
+      "range": {
+        "startLine": 2306,
+        "startChar": 8,
+        "endLine": 2306,
+        "endChar": 28
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7de3614_b99678c4",
@@ -271,6 +535,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a3c432f_ff67d092",
+        "filename": "test/mjsunit/wasm/array-init-from-segment.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Yes, I had to comment out these test cases because they require Table\u003cany\u003e. I\u0027ll do that again. What shall we do with that? Basically we\u0027d have to rewrite these test cases to use extern but that might not be trivial at all.",
+      "parentUuid": "c7de3614_b99678c4",
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa9d7dc1_421a99c5",
@@ -284,6 +566,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "Here it would make sense to test both `extern` and `any`.",
+      "range": {
+        "startLine": 3730,
+        "startChar": 36,
+        "endLine": 3731,
+        "endChar": 70
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9acf7c9d_8fcd944a",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3731,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa9d7dc1_421a99c5",
       "range": {
         "startLine": 3730,
         "startChar": 36,
@@ -317,6 +623,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb90a4a_6f77636c",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3765,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff599af5_6bc4aaa3",
+      "range": {
+        "startLine": 3765,
+        "startChar": 37,
+        "endLine": 3765,
+        "endChar": 44
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab004ddc_450d26fe",
@@ -330,6 +660,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "and here",
+      "range": {
+        "startLine": 3803,
+        "startChar": 16,
+        "endLine": 3803,
+        "endChar": 23
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e73a55a_d9e4e4e5",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3803,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab004ddc_450d26fe",
       "range": {
         "startLine": 3803,
         "startChar": 16,
@@ -363,6 +717,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d18505_1f420843",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef7bfccb_c3e2b9dd",
+      "range": {
+        "startLine": 3830,
+        "startChar": 37,
+        "endLine": 3830,
+        "endChar": 44
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c629dfe_4b901d85",
@@ -376,6 +754,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "here too. `kAny, array_heap, false` would be a good test case.",
+      "range": {
+        "startLine": 4263,
+        "startChar": 33,
+        "endLine": 4263,
+        "endChar": 40
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b91fb4b4_8deb9bad",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4263,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c629dfe_4b901d85",
       "range": {
         "startLine": 4263,
         "startChar": 33,
@@ -411,6 +813,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1aa13884_c1351515",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Hm, are there any other ref types that are not simd proposal or gc proposal? I could add these types here but then I guess, we\u0027d have to put the corresponding feature flags in the test cases below. Should we do this or should the GC related types then be tested somewhere else?",
+      "parentUuid": "ce1c5247_7290c004",
+      "range": {
+        "startLine": 186,
+        "startChar": 2,
+        "endLine": 186,
+        "endChar": 13
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9a8c3fa_4d92a8cc",
         "filename": "test/unittests/wasm/module-decoder-unittest.cc",
         "patchSetId": 3
@@ -422,6 +848,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "This will change as a consequence of changes to production code",
+      "range": {
+        "startLine": 2099,
+        "startChar": 35,
+        "endLine": 2099,
+        "endChar": 41
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b37ea391_bd287d30",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9a8c3fa_4d92a8cc",
       "range": {
         "startLine": 2099,
         "startChar": 35,
@@ -445,6 +895,30 @@
       "writtenOn": "2022-07-26T14:04:58Z",
       "side": 1,
       "message": "Please don\u0027t make any changes to this file. It\u0027s imported from https://github.com/WebAssembly/wasm-c-api/blob/master/include/wasm.hh and should stay in sync with upstream.",
+      "range": {
+        "startLine": 233,
+        "startChar": 2,
+        "endLine": 233,
+        "endChar": 11
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef2122f_3a824a13",
+        "filename": "third_party/wasm-api/wasm.hh",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d379dfe8_dc5d5a7e",
       "range": {
         "startLine": 233,
         "startChar": 2,

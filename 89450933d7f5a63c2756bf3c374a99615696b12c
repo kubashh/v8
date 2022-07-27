@@ -100,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b08de67e_17c42d38",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "OK, will do so.",
+      "parentUuid": "94aa9636_f20cfc3d",
+      "range": {
+        "startLine": 1191,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 37
+      },
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8ec2a5f_51a04d9a",
@@ -166,6 +190,24 @@
       "side": 1,
       "message": "`any` shouldn\u0027t be allowed here, nor in wasm-js.cc:1559.\n\nWe\u0027ll eventually need a separate `SetAnyRef` method, which will have to do some more checks (depending on where exactly we use it and where exactly we decide to place the logic, those will either be runtime checks or DCHECKs).",
       "parentUuid": "607f8bb9_f87dc8ed",
+      "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c7222f_4849d379",
+        "filename": "src/wasm/wasm-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a57fbd26_0a7a9bc4",
       "revId": "89450933d7f5a63c2756bf3c374a99615696b12c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

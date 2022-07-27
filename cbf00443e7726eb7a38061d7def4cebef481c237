@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "068ae94a_49b1f3e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "Thanks a lot for the thorough review!",
+      "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e1f4524_fb7792b7",
+        "filename": "src/wasm/wasm-subtyping.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T08:57:33Z",
+      "side": 1,
+      "message": "If you struggle with naming a function, that\u0027s already a sign that it isn\u0027t ideal.\nAny proposal on how to handle the \"the two types don\u0027t share any common ancestor\" case properly? (Constructing a reference to bottom type is not allowed by the code and probably also not desired.)",
+      "range": {
+        "startLine": 405,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 73
+      },
+      "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
