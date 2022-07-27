@@ -4,6 +4,9 @@
 
 #include "src/compiler/effect-control-linearizer.h"
 
+#include <cstdint>
+#include <type_traits>
+
 #include "include/v8-fast-api-calls.h"
 #include "src/base/bits.h"
 #include "src/codegen/code-factory.h"
@@ -18,11 +21,13 @@
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/linkage.h"
+#include "src/compiler/machine-operator.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-origin-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/node.h"
 #include "src/compiler/schedule.h"
+#include "src/compiler/string-builder-optimizer.h"
 #include "src/heap/factory-inl.h"
 #include "src/objects/heap-number.h"
 #include "src/objects/oddball.h"
@@ -42,7 +47,8 @@ class EffectControlLinearizer {
                           SourcePositionTable* source_positions,
                           NodeOriginTable* node_origins,
                           MaintainSchedule maintain_schedule,
-                          JSHeapBroker* broker)
+                          JSHeapBroker* broker,
+                          StringBuilderOptimizer* string_builder_optimizer)
       : js_graph_(js_graph),
         schedule_(schedule),
         temp_zone_(temp_zone),
@@ -51,6 +57,7 @@ class EffectControlLinearizer {
         node_origins_(node_origins),
         broker_(broker),
         graph_assembler_(graph_assembler),
+        string_builder_optimizer_(string_builder_optimizer),
         frame_state_zapper_(nullptr) {}
 
   void Run();
@@ -299,6 +306,21 @@ class EffectControlLinearizer {
   Node* SmiMaxValueConstant();
   Node* SmiShiftBitsConstant();
 
+  Node* AllocateSeqString(Node* size, Node* one_byte);
+  Node* AllocateSeqString(Node* size, bool one_byte);
+  void CopyString(Node* src, Node* dst, Node* len, Node* is_one_byte);
+  Node* StringIsOneByte(Node* node);
+  Node* ConstStringIsOneByte(Node* node);
+  void StoreLiteralStringToBuffer(Node* buffer, Node* offset, Node* node,
+                                  Node* is_one_byte);
+  Node* ConvertOneByteStringToTwoByte(Node* orig, Node* total_len,
+                                      Node* initialized_len);
+  template <typename Char>
+  void StoreConstantLiteralStringToBuffer(Node* buffer, Node* offset,
+                                          Node* node, Node* is_one_byte);
+  void IfThenElse(Node* condition, std::function<void(void)> then_body,
+                  std::function<void(void)> else_body);
+
   // Pass {bitfield} = {digit} = nullptr to construct the canoncial 0n BigInt.
   Node* BuildAllocateBigInt(Node* bitfield, Node* digit);
 
@@ -343,6 +365,7 @@ class EffectControlLinearizer {
   NodeOriginTable* node_origins_;
   JSHeapBroker* broker_;
   JSGraphAssembler* graph_assembler_;
+  StringBuilderOptimizer* string_builder_optimizer_;
   Node* frame_state_zapper_;  // For tracking down compiler::Node::New crashes.
 };
 
@@ -2072,21 +2095,425 @@ void EffectControlLinearizer::LowerCheckIf(Node* node, Node* frame_state) {
   __ DeoptimizeIfNot(p.reason(), p.feedback(), value, frame_state);
 }
 
+namespace {
+
+int GetLiteralStringLen(Node* node, JSHeapBroker* broker) {
+  if (node->opcode() == IrOpcode::kStringFromSingleCharCode) {
+    return 1;
+  }
+  HeapObjectMatcher m(node);
+  DCHECK(m.HasResolvedValue() && m.Ref(broker).IsString());
+  StringRef string = m.Ref(broker).AsString();
+  DCHECK(string.length().has_value());
+  return string.length().value();
+}
+
+int IsTwoByteString(Node* node, JSHeapBroker* broker) {
+  HeapObjectMatcher m(node);
+  DCHECK(m.HasResolvedValue() && m.Ref(broker).IsString());
+  StringRef string = m.Ref(broker).AsString();
+  return string.object()->IsTwoByteRepresentation();
+}
+
+template <typename Char>
+const Char* GetLiteralString(Node* node, JSHeapBroker* broker) {
+  DCHECK_EQ(node->opcode(), IrOpcode::kHeapConstant);
+  HeapObjectMatcher m(node);
+  DCHECK(m.HasResolvedValue() && m.Ref(broker).IsString());
+  StringRef string = m.Ref(broker).AsString();
+  DisallowGarbageCollection no_gc;
+  SharedStringAccessGuardIfNeeded access_guard(broker->isolate());
+  const Char* str = string.object()->template GetChars<Char>(
+      broker->isolate(), no_gc, access_guard);
+  return str;
+}
+
+}  // namespace
+
+Node* EffectControlLinearizer::AllocateSeqString(Node* size, bool one_byte) {
+  if (!one_byte) {
+    size = __ Word32Shl(size, __ Int32Constant(1));
+  }
+  Node* seq_string =
+      __ Allocate(AllocationType::kYoung,
+                  __ Int32Add(size, __ Int32Constant(String::kHeaderSize)));
+  __ StoreField(AccessBuilder::ForMap(), seq_string,
+                __ HeapConstant(one_byte ? factory()->one_byte_string_map()
+                                         : factory()->string_map()));
+  __ StoreField(AccessBuilder::ForNameRawHashField(), seq_string,
+                __ Int32Constant(Name::kEmptyHashField));
+  __ StoreField(AccessBuilder::ForStringLength(), seq_string, size);
+
+  return seq_string;
+}
+
+Node* EffectControlLinearizer::AllocateSeqString(Node* size, Node* one_byte) {
+  Node* two_byte = __ Word32Equal(one_byte, __ Int32Constant(0));
+  Node* real_size = __ Word32Shl(size, two_byte);
+  Node* seq_string = __ Allocate(
+      AllocationType::kYoung,
+      __ Int32Add(real_size, __ Int32Constant(String::kHeaderSize)));
+  __ StoreField(AccessBuilder::ForNameRawHashField(), seq_string,
+                __ Int32Constant(Name::kEmptyHashField));
+  __ StoreField(AccessBuilder::ForStringLength(), seq_string, size);
+
+  auto one_byte_lbl = __ MakeLabel(), two_byte_lbl = __ MakeLabel(),
+       done = __ MakeLabel();
+
+  __ Branch(one_byte, &one_byte_lbl, &two_byte_lbl);
+  __ Bind(&one_byte_lbl);
+  __ StoreField(AccessBuilder::ForMap(), seq_string,
+                __ HeapConstant(factory()->one_byte_string_map()));
+  __ Goto(&done);
+  __ Bind(&two_byte_lbl);
+  __ StoreField(AccessBuilder::ForMap(), seq_string,
+                __ HeapConstant(factory()->string_map()));
+  __ Goto(&done);
+
+  __ Bind(&done);
+  return seq_string;
+}
+
+// Copies the string in {src} to {dst}.
+void EffectControlLinearizer::CopyString(Node* src, Node* dst, Node* len,
+                                         Node* is_one_byte) {
+  auto one_byte_lbl = __ MakeLabel(), two_byte_lbl = __ MakeLabel(),
+       done = __ MakeLabel();
+
+  auto copy_string_fun = [&](auto label, auto access) {
+    __ Bind(label);
+    auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
+    __ Goto(&loop, __ Int32Constant(0));
+
+    __ Bind(&loop);
+    Node* index = loop.PhiAt(0);
+    __ GotoIf(__ Word32Equal(index, len), &done);
+    __ StoreElement(access, dst, index, __ LoadElement(access, src, index));
+    index = __ Int32Add(index, __ Int32Constant(1));
+    __ Goto(&loop, index);
+  };
+
+  __ Branch(is_one_byte, &one_byte_lbl, &two_byte_lbl);
+  copy_string_fun(&one_byte_lbl, AccessBuilder::ForSeqOneByteStringCharacter());
+  copy_string_fun(&two_byte_lbl, AccessBuilder::ForSeqTwoByteStringCharacter());
+
+  __ Bind(&done);
+}
+
+Node* EffectControlLinearizer::StringIsOneByte(Node* node) {
+  Node* map = __ LoadField(AccessBuilder::ForMap(), node);
+  Node* instance_type = __ LoadField(AccessBuilder::ForMapInstanceType(), map);
+  Node* is_one_byte = __ Word32Equal(
+      __ Word32And(instance_type, __ Int32Constant(kStringEncodingMask)),
+      __ Int32Constant(kOneByteStringTag));
+  return is_one_byte;
+}
+
+Node* EffectControlLinearizer::ConstStringIsOneByte(Node* node) {
+  if (node->opcode() == IrOpcode::kHeapConstant) {
+    HeapObjectMatcher m(node);
+    DCHECK(m.HasResolvedValue() && m.Ref(broker()).IsString());
+    StringRef string = m.Ref(broker()).AsString();
+    return __ Int32Constant(string.object()->IsOneByteRepresentation());
+  } else {
+    DCHECK_EQ(node->opcode(), IrOpcode::kStringFromSingleCharCode);
+    Node* c = __ Word32And(node->InputAt(0), __ Uint32Constant(0xFFFF));
+    return __ Int32LessThan(c, __ Int32Constant(0xFF + 1));
+  }
+}
+
+Node* EffectControlLinearizer::ConvertOneByteStringToTwoByte(
+    Node* orig, Node* total_len, Node* initialized_len) {
+  Node* new_size = __ Word32Shl(total_len, __ Int32Constant(1));
+  Node* new_string = AllocateSeqString(new_size, false);
+  auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
+  auto done = __ MakeLabel();
+  __ Goto(&loop, __ Int32Constant(0));
+  __ Bind(&loop);
+
+  Node* index = loop.PhiAt(0);
+  __ GotoIf(__ Word32Equal(index, initialized_len), &done);
+  __ StoreElement(AccessBuilder::ForSeqTwoByteStringCharacter(), new_string,
+                  index,
+                  __ LoadElement(AccessBuilder::ForSeqOneByteStringCharacter(),
+                                 orig, index));
+  index = __ Int32Add(index, __ Int32Constant(1));
+  __ Goto(&loop, index);
+
+  __ Bind(&done);
+  return new_string;
+}
+
+void EffectControlLinearizer::IfThenElse(Node* condition,
+                                         std::function<void(void)> then_body,
+                                         std::function<void(void)> else_body) {
+  auto if_true = __ MakeLabel(), if_false = __ MakeLabel(),
+       done = __ MakeLabel();
+  __ Branch(condition, &if_true, &if_false);
+  __ Bind(&if_true);
+  then_body();
+  __ Goto(&done);
+  __ Bind(&if_false);
+  else_body();
+  __ Goto(&done);
+  __ Bind(&done);
+}
+
+template <typename Char>
+void EffectControlLinearizer::StoreConstantLiteralStringToBuffer(
+    Node* buffer, Node* offset, Node* node, Node* is_one_byte) {
+  const int kMaxUnrollSize = 6;
+  int len = GetLiteralStringLen(node, broker());
+  if (len < kMaxUnrollSize) {
+    // For {len} below 6, we unroll the loop and generate one Store per
+    // character.
+    auto copy_constant = [&](auto access) {
+      const Char* chars = GetLiteralString<Char>(node, broker());
+      for (int i = 0; i < len; i++) {
+        __ StoreElement(access, buffer,
+                        __ Int32Add(offset, __ Int32Constant(i)),
+                        __ Int32Constant(chars[i]));
+      }
+    };
+    if (std::is_same<Char, uint16_t>()) {
+      DCHECK(IsTwoByteString(node, broker()));
+      // If {node} is a literal 2-byte string, then we can just generate the
+      // 2-byte case (because it's guaranteed that {is_one_byte} is false).
+      copy_constant(AccessBuilder::ForSeqTwoByteStringCharacter());
+    } else {
+      // On the other hand, if {node} is 1-byte, then we can't infer anything,
+      // because {node} can be a 1-byte string that we need to add into a 2-byte
+      // string. Thus, we generate both 1-byte and 2-byte cases, and we'll
+      // decide dynamically which one to execute based on the value of
+      // {is_one_byte}.
+      IfThenElse(
+          is_one_byte,
+          [&]() {
+            copy_constant(AccessBuilder::ForSeqOneByteStringCharacter());
+          },
+          [&]() {
+            copy_constant(AccessBuilder::ForSeqTwoByteStringCharacter());
+          });
+    }
+  } else {
+    // For {len} above 6, we generate a proper loop, in order to keep code size
+    // not too high.
+    auto copy_constant = [&](auto buffer_access, auto constant_access) {
+      auto loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
+      auto done = __ MakeLabel();
+      __ Goto(&loop, __ Int32Constant(0));
+
+      __ Bind(&loop);
+      Node* index = loop.PhiAt(0);
+      __ GotoIf(__ Word32Equal(index, __ Int32Constant(len)), &done);
+      __ StoreElement(buffer_access, buffer, __ Int32Add(offset, index),
+                      __ LoadElement(constant_access, node, index));
+      __ Goto(&loop, __ Int32Add(index, __ Int32Constant(1)));
+      __ Bind(&done);
+    };
+    auto constant_access = IsTwoByteString(node, broker())
+                               ? AccessBuilder::ForSeqTwoByteStringCharacter()
+                               : AccessBuilder::ForSeqOneByteStringCharacter();
+    IfThenElse(
+        is_one_byte,
+        [&]() {
+          copy_constant(AccessBuilder::ForSeqOneByteStringCharacter(),
+                        constant_access);
+        },
+        [&]() {
+          copy_constant(AccessBuilder::ForSeqTwoByteStringCharacter(),
+                        constant_access);
+        });
+  }
+}
+
+void EffectControlLinearizer::StoreLiteralStringToBuffer(Node* buffer,
+                                                         Node* offset,
+                                                         Node* node,
+                                                         Node* is_one_byte) {
+  DCHECK(node->opcode() == IrOpcode::kHeapConstant ||
+         node->opcode() == IrOpcode::kStringFromSingleCharCode);
+  // TODO(dm): if {node} is a HeapConstant of more than XXX character, then
+  // insert a real loop rather than unrolling the initialization.
+
+  if (node->opcode() == IrOpcode::kHeapConstant) {
+    if (IsTwoByteString(node, broker())) {
+      StoreConstantLiteralStringToBuffer<uint16_t>(buffer, offset, node,
+                                                   is_one_byte);
+    } else {
+      StoreConstantLiteralStringToBuffer<uint8_t>(buffer, offset, node,
+                                                  is_one_byte);
+    }
+  } else {
+    IfThenElse(
+        is_one_byte,
+        [&]() {
+          __ StoreElement(
+              AccessBuilder::ForSeqOneByteStringCharacter(), buffer, offset,
+              __ Word32And(node->InputAt(0), __ Uint32Constant(0xFFFF)));
+        },
+        [&]() {
+          __ StoreElement(
+              AccessBuilder::ForSeqTwoByteStringCharacter(), buffer, offset,
+              __ Word32And(node->InputAt(0), __ Uint32Constant(0xFFFF)));
+        });
+  }
+}
+
 Node* EffectControlLinearizer::LowerStringConcat(Node* node) {
-  Node* lhs = node->InputAt(1);
-  Node* rhs = node->InputAt(2);
+  if (string_builder_optimizer_->CanOptimizeConcat(node) &&
+      string_builder_optimizer_->IsFirstConcatInGroup(node)) {
+    // TODO(dm): handle 2-byte strings in the initialization
+    PrintF("This concat is the 1st in the group:\n");
+    node->Print();
 
-  Callable const callable =
-      CodeFactory::StringAdd(isolate(), STRING_ADD_CHECK_NONE);
-  auto call_descriptor = Linkage::GetStubCallDescriptor(
-      graph()->zone(), callable.descriptor(),
-      callable.descriptor().GetStackParameterCount(), CallDescriptor::kNoFlags,
-      Operator::kNoDeopt | Operator::kNoWrite | Operator::kNoThrow);
+    int left_len = GetLiteralStringLen(node->InputAt(1), broker());
+    int right_len = GetLiteralStringLen(node->InputAt(2), broker());
 
-  Node* value = __ Call(call_descriptor, __ HeapConstant(callable.code()), lhs,
-                        rhs, __ NoContextConstant());
+    int initial_size = left_len + right_len;
+    int backing_store_initial_size = initial_size * 4;
 
-  return value;
+    Node* is_one_byte = __ Word32And(ConstStringIsOneByte(node->InputAt(1)),
+                                     ConstStringIsOneByte(node->InputAt(2)));
+
+    Node* size = __ Int32Constant(initial_size);
+    Node* backing_store_size = __ Int32Constant(backing_store_initial_size);
+    Node* backing_store = AllocateSeqString(backing_store_size, is_one_byte);
+
+    // Storing first two strings into the backing store
+    if (left_len != 0) {
+      StoreLiteralStringToBuffer(backing_store, __ Int32Constant(0),
+                                 node->InputAt(1), is_one_byte);
+    }
+    if (right_len != 0) {
+      StoreLiteralStringToBuffer(backing_store, __ Int32Constant(left_len),
+                                 node->InputAt(2), is_one_byte);
+    }
+
+    // Creating sliced string view into the seqstring
+    Node* sliced_string =
+        __ Allocate(AllocationType::kYoung,
+                    __ Int32Constant(jsgraph()
+                                         ->factory()
+                                         ->sliced_one_byte_string_map()
+                                         ->instance_size()));
+    __ StoreField(AccessBuilder::ForMap(), sliced_string,
+                  __ HeapConstant(factory()->sliced_one_byte_string_map()));
+    __ StoreField(AccessBuilder::ForNameRawHashField(), sliced_string,
+                  __ Int32Constant(Name::kEmptyHashField));
+    __ StoreField(AccessBuilder::ForSlicedStringParent(), sliced_string,
+                  backing_store);
+    __ StoreField(AccessBuilder::ForSlicedStringOffset(), sliced_string,
+                  __ Int32Constant(0));
+    __ StoreField(AccessBuilder::ForStringLength(), sliced_string, size);
+
+    return sliced_string;
+  } else if (string_builder_optimizer_->CanOptimizeConcat(node)) {
+    PrintF("On this concat: ");
+    node->Print();
+
+    int literal_len = GetLiteralStringLen(node->InputAt(2), broker());
+
+    Node* sliced_string = node->InputAt(1);
+    Node* current_size =
+        __ LoadField(AccessBuilder::ForStringLength(), sliced_string);
+    Node* init_backing_store =
+        __ LoadField(AccessBuilder::ForSlicedStringParent(), sliced_string);
+    Node* max_size =
+        __ LoadField(AccessBuilder::ForStringLength(), init_backing_store);
+
+    // Checking if we need to convert from 1-byte to 2-byte
+    Node* backing_store_is_onebyte = StringIsOneByte(init_backing_store);
+    Node* rhs_is_onebyte = ConstStringIsOneByte(node->InputAt(2));
+    Node* need_to_move_backing_store_to_2_bytes =
+        __ Word32And(backing_store_is_onebyte,
+                     __ Word32Equal(rhs_is_onebyte, __ Int32Constant(0)));
+    auto move_backing_store_to_2_bytes = __ MakeDeferredLabel();
+    auto correct_representation =
+        __ MakeLabel(MachineType::PointerRepresentation());
+    __ GotoIf(need_to_move_backing_store_to_2_bytes,
+              &move_backing_store_to_2_bytes);
+    __ Goto(&correct_representation, init_backing_store);
+
+    // Converting from 1-byte to 2-byte string.
+    __ Bind(&move_backing_store_to_2_bytes);
+    {
+      Node* new_size = __ Word32Shl(max_size, __ Int32Constant(1));
+      Node* new_backing_store = ConvertOneByteStringToTwoByte(
+          init_backing_store, new_size, current_size);
+      __ StoreField(AccessBuilder::ForSlicedStringParent(), sliced_string,
+                    new_backing_store);
+      __ StoreField(AccessBuilder::ForMap(), sliced_string,
+                    __ HeapConstant(factory()->sliced_string_map()));
+      __ Goto(&correct_representation, new_backing_store);
+    }
+
+    __ Bind(&correct_representation);
+    Node* backing_store = correct_representation.PhiAt(0);
+    Node* is_one_byte = __ Word32And(rhs_is_onebyte, backing_store_is_onebyte);
+
+    // Checking if reallocation is needed
+    Node* new_size = __ Int32Add(current_size, __ Int32Constant(literal_len));
+    auto needs_realloc = __ MakeLabel();
+    auto add_to_backing_store =
+        __ MakeLabel(MachineType::PointerRepresentation());
+    Node* realloc_cond = __ Int32LessThan(max_size, new_size);
+
+    __ GotoIf(realloc_cond, &needs_realloc);
+    __ Goto(&add_to_backing_store, backing_store);
+
+    // Reallocating backing store
+    __ Bind(&needs_realloc);
+    {
+      // Computing the new size
+      auto size_loop = __ MakeLoopLabel(MachineRepresentation::kWord32);
+      auto realloc_label = __ MakeLabel(MachineRepresentation::kWord32);
+      __ Goto(&size_loop, __ Word32Shl(max_size, __ Int32Constant(1)));
+      __ Bind(&size_loop);
+      Node* new_max_size = size_loop.PhiAt(0);
+      __ GotoIf(__ Int32LessThan(new_size, new_max_size), &realloc_label,
+                new_max_size);
+      new_max_size = __ Word32Shl(new_max_size, __ Int32Constant(1));
+      __ Goto(&size_loop, new_max_size);
+
+      // Actually reallocating the backing store.
+      __ Bind(&realloc_label);
+      Node* new_backing_store_size = realloc_label.PhiAt(0);
+      Node* new_backing_store =
+          AllocateSeqString(new_backing_store_size, is_one_byte);
+      CopyString(backing_store, new_backing_store, current_size, is_one_byte);
+      __ StoreField(AccessBuilder::ForSlicedStringParent(), sliced_string,
+                    new_backing_store);
+      __ Goto(&add_to_backing_store, new_backing_store);
+    }
+
+    // After reallocation, simply adding the rhs to the backing store.
+    __ Bind(&add_to_backing_store);
+    {
+      Node* real_backing_store = add_to_backing_store.PhiAt(0);
+      StoreLiteralStringToBuffer(real_backing_store, current_size,
+                                 node->InputAt(2), is_one_byte);
+      __ StoreField(AccessBuilder::ForStringLength(), sliced_string, new_size);
+    }
+
+    return sliced_string;
+  } else {
+    Node* lhs = node->InputAt(1);
+    Node* rhs = node->InputAt(2);
+
+    Callable const callable =
+        CodeFactory::StringAdd(isolate(), STRING_ADD_CHECK_NONE);
+    auto call_descriptor = Linkage::GetStubCallDescriptor(
+        graph()->zone(), callable.descriptor(),
+        callable.descriptor().GetStackParameterCount(),
+        CallDescriptor::kNoFlags,
+        Operator::kNoDeopt | Operator::kNoWrite | Operator::kNoThrow);
+
+    Node* value = __ Call(call_descriptor, __ HeapConstant(callable.code()),
+                          lhs, rhs, __ NoContextConstant());
+
+    return value;
+  }
 }
 
 Node* EffectControlLinearizer::LowerCheckedInt32Add(Node* node,
@@ -3703,6 +4130,9 @@ Node* EffectControlLinearizer::LowerNewArgumentsElements(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
+  if (string_builder_optimizer_->CanOptimizeConcat(node)) {
+    return LowerStringConcat(node);
+  }
   Node* length = node->InputAt(0);
   Node* first = node->InputAt(1);
   Node* second = node->InputAt(2);
@@ -4033,6 +4463,9 @@ Node* EffectControlLinearizer::LoadFromSeqString(Node* receiver, Node* position,
 }
 
 Node* EffectControlLinearizer::LowerStringFromSingleCharCode(Node* node) {
+  if (string_builder_optimizer_->IsOptimizableConcatInput(node)) {
+    return node;
+  }
   Node* value = node->InputAt(0);
   Node* code = __ Word32And(value, __ Uint32Constant(0xFFFF));
 
@@ -6569,12 +7002,13 @@ Node* EffectControlLinearizer::BuildAllocateBigInt(Node* bitfield,
 
 void LinearizeEffectControl(JSGraph* graph, Schedule* schedule, Zone* temp_zone,
                             SourcePositionTable* source_positions,
-                            NodeOriginTable* node_origins,
-                            JSHeapBroker* broker) {
+                            NodeOriginTable* node_origins, JSHeapBroker* broker,
+                            StringBuilderOptimizer* string_builder_optimizer) {
   JSGraphAssembler graph_assembler_(graph, temp_zone);
   EffectControlLinearizer linearizer(graph, schedule, &graph_assembler_,
                                      temp_zone, source_positions, node_origins,
-                                     MaintainSchedule::kDiscard, broker);
+                                     MaintainSchedule::kDiscard, broker,
+                                     string_builder_optimizer);
   linearizer.Run();
 }
 
