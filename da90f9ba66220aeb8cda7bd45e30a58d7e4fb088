@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51c46fed_2f17879b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T14:29:36Z",
+      "side": 1,
+      "message": "LGTM with a final comment.",
+      "revId": "da90f9ba66220aeb8cda7bd45e30a58d7e4fb088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a6c72de_d6d9ce50",
@@ -14,6 +31,47 @@
       "writtenOn": "2022-07-27T14:08:39Z",
       "side": 1,
       "message": "Do pre-commit checks add includes? I see a decent amount of includes being added when I touch files and I didn\u0027t write them. 😊",
+      "revId": "da90f9ba66220aeb8cda7bd45e30a58d7e4fb088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b73643_3d08716b",
+        "filename": "src/wasm/wasm-subtyping.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T14:29:36Z",
+      "side": 1,
+      "message": "Not presubmit, but clangd likes to do that.\n```\n  \"clangd.arguments\": [\n       \"-header-insertion\u003dnever\"  // More annoying than helpful\n   ],\n\n```\nin VSCode\u0027s settings.json fixes that.\n\nSee https://docs.google.com/document/d/1BpdCFecUGuJU5wN6xFkHQJEykyVSlGN8B9o3Kz2Oes8/edit# (linked from https://v8.dev/docs/ide-setup for easy finding) for more helpful hints.",
+      "parentUuid": "2a6c72de_d6d9ce50",
+      "revId": "da90f9ba66220aeb8cda7bd45e30a58d7e4fb088",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5ac012_b5e622cf",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T14:29:36Z",
+      "side": 1,
+      "message": "This condition will never be true, because `kWasmExternRef` is not in `ref_types`; and adding it will create the situation that we just agreed to make UNREACHABLE...\n\nHow about another `TODO` to sort out externref test coverage later?",
+      "range": {
+        "startLine": 217,
+        "startChar": 44,
+        "endLine": 217,
+        "endChar": 70
+      },
       "revId": "da90f9ba66220aeb8cda7bd45e30a58d7e4fb088",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
