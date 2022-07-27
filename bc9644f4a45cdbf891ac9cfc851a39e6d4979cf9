@@ -22,6 +22,30 @@
       },
       "revId": "bc9644f4a45cdbf891ac9cfc851a39e6d4979cf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bd646a_8d7238ea",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T13:25:01Z",
+      "side": 1,
+      "message": "I would definitely flip the flag as a separate CL, both to isolate any impact (on performance or stability), and to make it easy to revert if necessary.\n\nAs a secondary detail, instead of turning it on by default, we could define an implication from experimental_wasm_gc (or typed_funcref). I don\u0027t feel strongly about that.",
+      "parentUuid": "4c484bc2_6b03203f",
+      "range": {
+        "startLine": 1130,
+        "startChar": 40,
+        "endLine": 1130,
+        "endChar": 44
+      },
+      "revId": "bc9644f4a45cdbf891ac9cfc851a39e6d4979cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
