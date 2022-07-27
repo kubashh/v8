@@ -24,7 +24,7 @@ from testrunner.testproc.progress import ResultsTracker, ProgressProc
 from testrunner.testproc.shard import ShardProc
 
 
-DEFAULT_SUITES = ["mjsunit", "webkit", "benchmarks"]
+DEFAULT_SUITES = ["cctest"]
 
 
 class NumFuzzer(base_runner.BaseTestRunner):
