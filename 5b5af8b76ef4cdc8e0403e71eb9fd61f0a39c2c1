@@ -16,6 +16,23 @@
       "message": "Hi Nico, some inappropriate perf tests for BigInt multiply have been removed.",
       "revId": "5b5af8b76ef4cdc8e0403e71eb9fd61f0a39c2c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fbc8d69_0e3f8211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T14:12:07Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "5b5af8b76ef4cdc8e0403e71eb9fd61f0a39c2c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
