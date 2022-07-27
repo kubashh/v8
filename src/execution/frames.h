@@ -22,6 +22,8 @@
 //         - InterpretedFrame
 //         - BaselineFrame
 //       - OptimizedFrame
+//         - MaglevFrame
+//         - TurboFanFrame
 //     - TypedFrameWithJSLinkage
 //       - BuiltinFrame
 //       - JavaScriptBuiltinContinuationFrame
@@ -537,6 +539,7 @@ class CommonFrame : public StackFrame {
 
   // Used by OptimizedFrames and StubFrames.
   void IterateCompiledFrame(RootVisitor* v) const;
+  // void VisitSpillSlot(RootVisitor* v, FullObjectSlot spill_slot) const;
 
  private:
   friend class StackFrame;
@@ -936,6 +939,10 @@ class MaglevFrame : public OptimizedFrame {
     DCHECK(frame->is_maglev());
     return static_cast<MaglevFrame*>(frame);
   }
+
+  bool HasTaggedOutgoingParams(CodeLookupResult& code_lookup) const;
+
+  void Iterate(RootVisitor* v) const override;
 
  protected:
   inline explicit MaglevFrame(StackFrameIteratorBase* iterator);
