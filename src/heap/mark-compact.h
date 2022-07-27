@@ -331,8 +331,9 @@ class YoungGenerationMarkingVisitor final
   YoungGenerationMarkingVisitor(Isolate* isolate, MarkingState* marking_state,
                                 MarkingWorklists::Local* worklists_local);
 
- private:
   MarkingState* marking_state() { return marking_state_; }
+
+ private:
   MarkingState* const marking_state_;
 
   friend class YoungGenerationMarkingVisitorBase<YoungGenerationMarkingVisitor,
