@@ -6026,17 +6026,17 @@ void v8::Object::SetAlignedPointerInInternalField(int index, void* value) {
 
   // There's no need to invalidate slots as embedder fields are always
   // tagged.
-  obj->GetHeap()->NotifyObjectLayoutChange(*obj, no_gc,
-                                           i::InvalidateRecordedSlots::kNo);
+  auto* heap = obj->GetHeap();
+  heap->NotifyObjectLayoutChange(*obj, no_gc, i::InvalidateRecordedSlots::kNo);
 
   Utils::ApiCheck(i::EmbedderDataSlot(i::JSObject::cast(*obj), index)
                       .store_aligned_pointer(obj->GetIsolate(), value),
                   location, "Unaligned pointer");
   DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
-  internal::WriteBarrier::MarkingFromInternalFields(i::JSObject::cast(*obj));
-
+  heap->local_embedder_heap_tracer()->WriteBarrierForEmbedderField(
+      i::JSObject::cast(*obj), index, value);
 #ifdef VERIFY_HEAP
-  obj->GetHeap()->VerifyObjectLayoutChange(*obj, obj->map());
+  heap->VerifyObjectLayoutChange(*obj, obj->map());
 #endif  // VERIFY_HEAP
 }
 
@@ -6047,8 +6047,8 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
   i::DisallowGarbageCollection no_gc;
   // There's no need to invalidate slots as embedder fields are always
   // tagged.
-  obj->GetHeap()->NotifyObjectLayoutChange(*obj, no_gc,
-                                           i::InvalidateRecordedSlots::kNo);
+  auto* heap = obj->GetHeap();
+  heap->NotifyObjectLayoutChange(*obj, no_gc, i::InvalidateRecordedSlots::kNo);
 
   const char* location = "v8::Object::SetAlignedPointerInInternalFields()";
   i::JSObject js_obj = i::JSObject::cast(*obj);
@@ -6065,10 +6065,10 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
                     location, "Unaligned pointer");
     DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
   }
-  internal::WriteBarrier::MarkingFromInternalFields(js_obj);
-
+  heap->local_embedder_heap_tracer()->WriteBarrierForEmbedderFields(
+      js_obj, argc, indices, values);
 #ifdef VERIFY_HEAP
-  obj->GetHeap()->VerifyObjectLayoutChange(*obj, obj->map());
+  heap->VerifyObjectLayoutChange(*obj, obj->map());
 #endif  // VERIFY_HEAP
 }
 

@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "src/heap/cppgc-js/cpp-heap.h"
+#include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/marking-state.h"
 #include "src/heap/cppgc/marking-worklists.h"
 #include "src/objects/embedder-data-slot.h"
@@ -20,9 +21,7 @@ class EmbedderDataSlot;
 
 class CppMarkingState {
  public:
-  using EmbedderDataSnapshot =
-      std::pair<EmbedderDataSlot::EmbedderDataSlotSnapshot,
-                EmbedderDataSlot::EmbedderDataSlotSnapshot>;
+  using EmbedderDataSnapshot = void*;
 
   CppMarkingState(Isolate* isolate, const WrapperDescriptor& wrapper_descriptor,
                   cppgc::internal::MarkingStateBase& main_thread_marking_state)
@@ -46,8 +45,7 @@ class CppMarkingState {
   inline bool ExtractEmbedderDataSnapshot(Map, JSObject, EmbedderDataSnapshot&);
 
   inline void MarkAndPush(const EmbedderDataSnapshot&);
-  inline void MarkAndPush(const EmbedderDataSlot type_slot,
-                          const EmbedderDataSlot instance_slot);
+  inline void MarkAndPush(cppgc::internal::HeapObjectHeader&);
 
   bool IsLocalEmpty() {
     return marking_state_.marking_worklist().IsLocalEmpty();

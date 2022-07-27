@@ -159,7 +159,8 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
     return embedder_stack_state_;
   }
 
-  void EmbedderWriteBarrier(Heap*, JSObject);
+  void WriteBarrierForEmbedderField(JSObject, int, void*);
+  void WriteBarrierForEmbedderFields(JSObject, int, int[], void*[]);
 
  private:
   static constexpr size_t kEmbedderAllocatedThreshold = 128 * KB;
