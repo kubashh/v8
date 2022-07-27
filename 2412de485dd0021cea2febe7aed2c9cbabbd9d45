@@ -16,6 +16,23 @@
       "message": "Thanks for Igor\u0027s reminder. I modified the description.",
       "revId": "2412de485dd0021cea2febe7aed2c9cbabbd9d45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9b333c4_2b7b081a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-27T08:47:53Z",
+      "side": 1,
+      "message": "Hi All, I tried some tryjob with `v8_mac_arm64` prefix, but `v8_mac_arm64_full_dbg_ng_triggered` and `v8_mac_arm64_sim_dbg_ng_triggered` always failed, I also tried these two jobs in another CL, it was also failed.\n\nI suppose there may be some problems in these jobs? if it was tryjobs\u0027 problems, may I submit to CQ?",
+      "revId": "2412de485dd0021cea2febe7aed2c9cbabbd9d45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
