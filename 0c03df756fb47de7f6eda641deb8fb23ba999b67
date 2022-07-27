@@ -63,6 +63,30 @@
       },
       "revId": "0c03df756fb47de7f6eda641deb8fb23ba999b67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8084c4e5_e0c8f67d",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5448,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2022-07-27T11:04:34Z",
+      "side": 1,
+      "message": "Ah, I can change that. What exactly is the difference though? I\u0027d just like to understand why it should be different. 😊",
+      "parentUuid": "83b8e27a_41cc6331",
+      "range": {
+        "startLine": 5448,
+        "startChar": 13,
+        "endLine": 5448,
+        "endChar": 31
+      },
+      "revId": "0c03df756fb47de7f6eda641deb8fb23ba999b67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
