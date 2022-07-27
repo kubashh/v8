@@ -562,6 +562,7 @@ static_assert(NativeContext::kSize ==
 void NativeContext::RunPromiseHook(PromiseHookType type,
                                    Handle<JSPromise> promise,
                                    Handle<Object> parent) {
+#ifdef V8_ENABLE_JAVASCRIPT_PROMISE_HOOKS
   Isolate* isolate = promise->GetIsolate();
   DCHECK(isolate->HasContextPromiseHooks());
   int contextSlot;
@@ -613,6 +614,7 @@ void NativeContext::RunPromiseHook(PromiseHookType type,
 
     isolate->clear_pending_exception();
   }
+#endif
 }
 
 }  // namespace internal

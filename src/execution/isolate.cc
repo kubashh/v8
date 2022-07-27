@@ -5125,7 +5125,7 @@ void Isolate::RunPromiseHook(PromiseHookType type, Handle<JSPromise> promise,
 void Isolate::OnAsyncFunctionSuspended(Handle<JSPromise> promise,
                                        Handle<JSPromise> parent) {
   DCHECK_EQ(0, promise->async_task_id());
-  RunPromiseHook(PromiseHookType::kInit, promise, parent);
+  RunAllPromiseHooks(PromiseHookType::kInit, promise, parent);
   if (HasAsyncEventDelegate()) {
     DCHECK_NE(nullptr, async_event_delegate_);
     promise->set_async_task_id(++async_task_count_);
