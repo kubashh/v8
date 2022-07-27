@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cbfd541_f07b6654",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-07-27T08:00:45Z",
+      "side": 1,
+      "message": "could you deduplicate this part with the ClampCompare code?\n\n```\n  double result \u003d ClampCompareCompute(....);\n```\nand then\n\n```\n  static double ClampCompare(Local\u003cObject\u003e receiver, bool in_range,\n                             double real_arg, IntegerT checked_arg,\n                             FastApiCallbackOptions\u0026 options) {\n    FastCApiObject* self \u003d UnwrapObject(receiver);\n    CHECK_NOT_NULL(self);\n    self-\u003efast_call_count_++;\n    \n    return ClampCompareCompute();\n```",
+      "range": {
+        "startLine": 796,
+        "startChar": 4,
+        "endLine": 816,
+        "endChar": 5
+      },
+      "revId": "86b83320d864478483a9afbffb8694e9323dbbdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
