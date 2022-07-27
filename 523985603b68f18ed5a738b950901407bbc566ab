@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c022c6_811c8778",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2022-07-27T10:05:05Z",
+      "side": 1,
+      "message": "Hi,\n\nI renamed the field to clarify this is related to indirect jumps, PTAL!\n\nLooking at the results, they seem worthwhile so I\u0027d like to turn the flag on by default, at least for Arm64. I could try pinpoint with linux-perf to check that not deopting to baseline does not regress on other platforms. Or, if I turn it on by default, we can revert the patch if it\u0027s causing regressions, WDYT?\n\n",
+      "revId": "523985603b68f18ed5a738b950901407bbc566ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
