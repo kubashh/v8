@@ -32,7 +32,6 @@ class MigrationObserver;
 class ReadOnlySpace;
 class RecordMigratedSlotVisitor;
 class UpdatingItem;
-class YoungGenerationMarkingVisitor;
 
 class MarkBitCellIterator {
  public:
@@ -323,6 +322,22 @@ class MainMarkingVisitor final
   friend class MarkingVisitorBase<MainMarkingVisitor<MarkingState>,
                                   MarkingState>;
   bool revisiting_object_;
+};
+
+class YoungGenerationMarkingVisitor final
+    : public YoungGenerationMarkingVisitorBase<YoungGenerationMarkingVisitor,
+                                               MarkingState> {
+ public:
+  YoungGenerationMarkingVisitor(Isolate* isolate, MarkingState* marking_state,
+                                MarkingWorklists::Local* worklists_local);
+
+  MarkingState* marking_state() { return marking_state_; }
+
+ private:
+  MarkingState* const marking_state_;
+
+  friend class YoungGenerationMarkingVisitorBase<YoungGenerationMarkingVisitor,
+                                                 MarkingState>;
 };
 
 class CollectorBase {
