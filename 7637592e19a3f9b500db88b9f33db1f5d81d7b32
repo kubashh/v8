@@ -901,6 +901,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9188321f_fc53f39c",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-27T14:05:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59e12fb8_6f061cda",
+      "range": {
+        "startLine": 186,
+        "startChar": 2,
+        "endLine": 186,
+        "endChar": 13
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9a8c3fa_4d92a8cc",
