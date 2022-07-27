@@ -4,6 +4,7 @@
 
 #include "src/wasm/wasm-subtyping.h"
 
+#include "src/base/logging.h"
 #include "src/wasm/canonical-types.h"
 #include "src/wasm/wasm-module.h"
 
@@ -174,6 +175,8 @@ V8_NOINLINE V8_EXPORT_PRIVATE bool IsHeapSubtypeOfImpl(
       return sub_heap == super_heap || super_heap == HeapType::kAny;
     case HeapType::kAny:
       return super_heap == HeapType::kAny;
+    case HeapType::kExtern:
+      return super_heap == HeapType::kExtern;
     case HeapType::kI31:
     case HeapType::kData:
       return super_heap == sub_heap || super_heap == HeapType::kEq ||
@@ -213,6 +216,8 @@ V8_NOINLINE V8_EXPORT_PRIVATE bool IsHeapSubtypeOfImpl(
       return false;
     case HeapType::kAny:
       return true;
+    case HeapType::kExtern:
+      return false;
     case HeapType::kString:
     case HeapType::kStringViewWtf8:
     case HeapType::kStringViewWtf16:
@@ -340,6 +345,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          UNREACHABLE();
         default:
           return module2->has_signature(heap2.ref_index()) ? HeapType::kAny
                                                            : HeapType::kEq;
@@ -356,6 +363,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          UNREACHABLE();
         default:
           return module2->has_signature(heap2.ref_index()) ? HeapType::kAny
                                                            : HeapType::kData;
@@ -373,6 +382,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          UNREACHABLE();
         default:
           return module2->has_array(heap2.ref_index())    ? HeapType::kArray
                  : module2->has_struct(heap2.ref_index()) ? HeapType::kData

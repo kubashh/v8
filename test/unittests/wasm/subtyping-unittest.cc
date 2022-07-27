@@ -213,6 +213,8 @@ TEST_F(WasmSubtypingTest, Subtyping) {
       SUBTYPE(ref_type, kWasmAnyRef);
       // Only anyref is a subtype of anyref.
       SUBTYPE_IFF(kWasmAnyRef, ref_type, ref_type == kWasmAnyRef);
+      // Only externref is a subtype of externref.
+      SUBTYPE_IFF(kWasmExternRef, ref_type, ref_type == kWasmExternRef);
       // Each nullable reference type is a supertype of nullref.
       SUBTYPE_IFF(kWasmNullRef, ref_type, ref_type.is_nullable());
       // Only nullref is a subtype of nullref.
@@ -328,7 +330,7 @@ TEST_F(WasmSubtypingTest, Subtyping) {
       }
     }
 
-    // Reference type vs. itself and anyref.
+    // Reference type vs. itself and anyref, externref.
     for (ValueType type : ref_types) {
       UNION(type, type, type);
       INTERSECTION(type, type, type);
