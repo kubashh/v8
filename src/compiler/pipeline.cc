@@ -57,6 +57,7 @@
 #include "src/compiler/js-typed-lowering.h"
 #include "src/compiler/late-escape-analysis.h"
 #include "src/compiler/load-elimination.h"
+#include "src/compiler/load-store-folding.h"
 #include "src/compiler/loop-analysis.h"
 #include "src/compiler/loop-peeling.h"
 #include "src/compiler/loop-unrolling.h"
@@ -1946,6 +1947,24 @@ struct MemoryOptimizationPhase {
   }
 };
 
+struct LoadStoreFoldingPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(LoadStoreFolding)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    GraphTrimmer trimmer(temp_zone, data->graph());
+    NodeVector roots(temp_zone);
+    data->jsgraph()->GetCachedNodes(&roots);
+    trimmer.TrimGraph(roots.begin(), roots.end());
+
+    GraphReducer graph_reducer(
+        temp_zone, data->graph(), &data->info()->tick_counter(), data->broker(),
+        data->jsgraph()->Dead(), data->observe_node_manager());
+    LoadStoreFolding load_store_folding(data->jsgraph(), temp_zone,
+                                        &graph_reducer);
+    load_store_folding.Run();
+  }
+};
+
 struct LateOptimizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(LateOptimization)
 
@@ -2941,6 +2960,12 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
   Run<BranchConditionDuplicationPhase>();
   RunPrintAndVerify(BranchConditionDuplicationPhase::phase_name(), true);
 
+  if (FLAG_turbo_load_store_folding && !FLAG_turboshaft &&
+      data->machine()->SupportsLoadStorePairs()) {
+    Run<LoadStoreFoldingPhase>();
+    RunPrintAndVerify(LoadStoreFoldingPhase::phase_name(), true);
+  }
+
   data->source_positions()->RemoveDecorator();
   if (data->info()->trace_turbo_json()) {
     data->node_origins()->RemoveDecorator();
@@ -3096,6 +3121,11 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   pipeline.Run<BranchConditionDuplicationPhase>();
   pipeline.RunPrintAndVerify(BranchConditionDuplicationPhase::phase_name(),
                              true);
+
+  if (data.machine()->SupportsLoadStorePairs()) {
+    pipeline.Run<LoadStoreFoldingPhase>();
+    pipeline.RunPrintAndVerify(LoadStoreFoldingPhase::phase_name(), true);
+  }
 
   pipeline.Run<VerifyGraphPhase>(true);
 

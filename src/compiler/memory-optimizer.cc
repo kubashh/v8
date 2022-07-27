@@ -32,6 +32,7 @@ bool CanAllocate(const Node* node) {
     case IrOpcode::kEffectPhi:
     case IrOpcode::kIfException:
     case IrOpcode::kLoad:
+    case IrOpcode::kLoadPair:
     case IrOpcode::kLoadImmutable:
     case IrOpcode::kLoadElement:
     case IrOpcode::kLoadField:
@@ -49,6 +50,7 @@ bool CanAllocate(const Node* node) {
     //              We should introduce a special bump-pointer store node to
     //              differentiate that.
     case IrOpcode::kStore:
+    case IrOpcode::kStorePair:
     case IrOpcode::kStoreElement:
     case IrOpcode::kStoreField:
     case IrOpcode::kStoreLane:

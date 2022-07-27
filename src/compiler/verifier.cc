@@ -1666,9 +1666,11 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
     // -----------------------
     case IrOpcode::kLoad:
     case IrOpcode::kLoadImmutable:
+    case IrOpcode::kLoadPair:
     case IrOpcode::kProtectedLoad:
     case IrOpcode::kProtectedStore:
     case IrOpcode::kStore:
+    case IrOpcode::kStorePair:
     case IrOpcode::kStackSlot:
     case IrOpcode::kWord32And:
     case IrOpcode::kWord32Or:

@@ -613,6 +613,10 @@ void InstructionSelector::VisitProtectedLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  UNREACHABLE();
+}
+
 namespace {
 
 ArchOpcode GetStoreOpcode(MachineRepresentation rep) {
@@ -756,6 +760,8 @@ void InstructionSelector::VisitProtectedStore(Node* node) {
   // TODO(eholk)
   UNIMPLEMENTED();
 }
+
+void InstructionSelector::VisitStorePair(Node* node) { UNREACHABLE(); }
 
 void InstructionSelector::VisitStoreLane(Node* node) {
   IA32OperandGenerator g(this);

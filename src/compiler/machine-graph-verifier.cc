@@ -131,6 +131,7 @@ class MachineRepresentationInferrer {
                                           .representation());
             break;
           case IrOpcode::kLoad:
+          case IrOpcode::kLoadPair:
           case IrOpcode::kLoadImmutable:
           case IrOpcode::kProtectedLoad:
             representation_vector_[node->id()] = PromoteRepresentation(
@@ -194,6 +195,7 @@ class MachineRepresentationInferrer {
                 AtomicOpType(node->op()).representation());
             break;
           case IrOpcode::kStore:
+          case IrOpcode::kStorePair:
           case IrOpcode::kProtectedStore:
             representation_vector_[node->id()] = PromoteRepresentation(
                 StoreRepresentationOf(node->op()).representation());
@@ -551,6 +553,7 @@ class MachineRepresentationChecker {
             CheckValueInputIsTagged(node, 0);
             break;
           case IrOpcode::kLoad:
+          case IrOpcode::kLoadPair:
           case IrOpcode::kUnalignedLoad:
           case IrOpcode::kLoadImmutable:
           case IrOpcode::kWord32AtomicLoad:
@@ -571,6 +574,7 @@ class MachineRepresentationChecker {
                                             MachineRepresentation::kWord32);
             V8_FALLTHROUGH;
           case IrOpcode::kStore:
+          case IrOpcode::kStorePair:
           case IrOpcode::kUnalignedStore:
           case IrOpcode::kWord32AtomicStore:
           case IrOpcode::kWord32AtomicExchange:
@@ -594,7 +598,8 @@ class MachineRepresentationChecker {
               case MachineRepresentation::kTaggedPointer:
               case MachineRepresentation::kTaggedSigned:
                 if (COMPRESS_POINTERS_BOOL &&
-                    ((node->opcode() == IrOpcode::kStore &&
+                    (((node->opcode() == IrOpcode::kStore ||
+                       node->opcode() == IrOpcode::kStorePair) &&
                       IsAnyTagged(StoreRepresentationOf(node->op())
                                       .representation())) ||
                      (node->opcode() == IrOpcode::kWord32AtomicStore &&

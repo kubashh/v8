@@ -350,6 +350,7 @@ class RuntimeCallTimer final {
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, MidTierSpillSlotAllocator)       \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LateOptimization)                \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LoadElimination)                 \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LoadStoreFolding)                \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LocateSpillSlots)                \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LoopExitElimination)             \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, LoopPeeling)                     \

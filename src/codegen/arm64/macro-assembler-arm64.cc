@@ -3005,10 +3005,18 @@ void TurboAssembler::DecompressTaggedSigned(const Register& destination,
                                             const MemOperand& field_operand) {
   ASM_CODE_COMMENT(this);
   Ldr(destination.W(), field_operand);
+  DecompressTaggedSigned(destination, destination);
+}
+
+void TurboAssembler::DecompressTaggedSigned(const Register& destination,
+                                            const Register& field_operand) {
+  ASM_CODE_COMMENT(this);
   if (FLAG_debug_code) {
     // Corrupt the top 32 bits. Made up of 16 fixed bits and 16 pc offset bits.
-    Add(destination, destination,
+    Add(destination, field_operand,
         ((kDebugZapValue << 16) | (pc_offset() & 0xffff)) << 32);
+  } else {
+    CHECK_EQ(destination, field_operand);
   }
 }
 
@@ -3029,7 +3037,13 @@ void TurboAssembler::DecompressAnyTagged(const Register& destination,
                                          const MemOperand& field_operand) {
   ASM_CODE_COMMENT(this);
   Ldr(destination.W(), field_operand);
-  Add(destination, kPtrComprCageBaseRegister, destination);
+  DecompressAnyTagged(destination, destination);
+}
+
+void TurboAssembler::DecompressAnyTagged(const Register& destination,
+                                         const Register& source) {
+  ASM_CODE_COMMENT(this);
+  Add(destination, kPtrComprCageBaseRegister, source);
 }
 
 void TurboAssembler::AtomicDecompressTaggedSigned(const Register& destination,
