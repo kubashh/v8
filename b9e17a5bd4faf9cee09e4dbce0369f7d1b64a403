@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ac4637_78a0ff76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "Some drive-by comments.",
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0588f6f_cecf1e95",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "I suppose if you used `d` here (or `d * some_factor`), you could get rid of the SMALL/MEDIUM/BIG_BITS_CASES split and just use the existing combined `BITS_CASES` list?\n\n\n...or, in light of the other comments below, you won\u0027t need this at all any more.",
+      "range": {
+        "startLine": 36,
+        "startChar": 39,
+        "endLine": 36,
+        "endChar": 42
+      },
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3b83db_40862ea8",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "This should be an mjsunit correctness test, not a benchmark.",
+      "range": {
+        "startLine": 70,
+        "startChar": 9,
+        "endLine": 70,
+        "endChar": 30
+      },
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb38786_a0b72124",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "Having this test only makes sense if you\u0027re planning to optimize the \"multiply by 1\" case, which I thought we had agreed not to do?",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 24
+      },
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d950fd4_466138c3",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "I don\u0027t think this is a good benchmark for your purposes. It\u0027ll spend a huge amount of time in the hot C++ loop multiplying a comparatively small and a huge BigInt.\nIts overall cost will therefore be quadratic in the number of test iterations. I\u0027d just drop this test; I think `TestMultiplyRandom` below is a better idea.",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 26
+      },
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e00aa3a2_1ff8d089",
+        "filename": "test/js-perf-test/BigInt/multiply.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T10:06:04Z",
+      "side": 1,
+      "message": "To avoid growing to a super-large result (see reasoning above why that\u0027s not great), I\u0027d multiply pairs of inputs and sum up the results (to avoid dead code elimination), i.e:\n```\nlet sum \u003d 0n;\nfor (let i \u003d 0; i \u003c TEST_ITERATIONS - 1; i++) {\n  sum +\u003d random_bigints[i] * random_bigints[i + 1];\n}\nglobal_sum \u003d sum;\n```\n\nAnother test you could consider having is one that just stresses small multiplications:\n```\nlet sum \u003d 0n;\nfor (let i \u003d 0n; i \u003c TEST_ITERATIONS; i++) {\n  sum +\u003d i * (i + 1n);\n}\nglobal_sum \u003d sum;\n```\nThat should make the impact of TF optimizations very visible (at least once you get around to supporting not-explicitly-truncated cases, relying on type feedback).",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 42
+      },
+      "revId": "b9e17a5bd4faf9cee09e4dbce0369f7d1b64a403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
