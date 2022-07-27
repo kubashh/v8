@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a82f7b61_4fef2825",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-27T07:39:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5ba7ea4_ee99a68e",
+      "range": {
+        "startLine": 312,
+        "startChar": 28,
+        "endLine": 312,
+        "endChar": 38
+      },
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dc20baf_e36d13e9",
@@ -173,6 +197,30 @@
       "side": 1,
       "message": "OK, I\u0027ll shared the duplicated code",
       "parentUuid": "5dc20baf_e36d13e9",
+      "range": {
+        "startLine": 572,
+        "startChar": 0,
+        "endLine": 585,
+        "endChar": 5
+      },
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf20202_d1674eab",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-27T07:39:33Z",
+      "side": 1,
+      "message": "Thanks! Could you please further review?",
+      "parentUuid": "ddb27d03_b0247701",
       "range": {
         "startLine": 572,
         "startChar": 0,
