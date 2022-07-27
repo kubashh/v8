@@ -2660,6 +2660,7 @@ void Isolate::ReportPendingMessages() {
 }
 
 bool Isolate::OptionalRescheduleException(bool clear_exception) {
+  printf(":");
   DCHECK(has_pending_exception());
   PropagatePendingExceptionToExternalTryCatch(
       TopExceptionHandlerType(pending_exception()));
