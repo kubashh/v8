@@ -180,6 +180,11 @@ class BaselineCompiler {
   struct BaselineLabels {
     base::ThreadedList<ThreadedLabel> linked;
     Label unlinked;
+    bool indirect_jump_target = false;
+
+    // Mark label as a jump target reachable via indirect branches, required for
+    // CFI.
+    void MarkAsIndirectJumpTarget() { indirect_jump_target = true; }
   };
 
   BaselineLabels* EnsureLabels(int i) {
