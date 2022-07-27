@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc286c0_6bce035c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-07-27T01:33:19Z",
+      "side": 1,
+      "message": "Yes, help via the code cache.\nYes, I observed the code cache being used on a single Speedometer2 run. A single Speedometer2 run includes 10 iterations by default, this CL is for making 3rd~10th iterations of the first single Speedometer2 run faster and all iterations of subsequent Speedometer2 runs faster.",
+      "parentUuid": "1fdc863e_8ffdd807",
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78c2b67d_c9a9176e",
