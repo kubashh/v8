@@ -383,8 +383,8 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
   V(kEmbedderDataSlotPayloadTag,          unsandboxed, TAG(12)) \
   V(kCodeEntryPointTag,                   unsandboxed, TAG(13)) \
   V(kExternalObjectValueTag,                sandboxed, TAG(14)) \
-  V(kCallHandlerInfoCallbackTag,          unsandboxed, TAG(15)) \
-  V(kCallHandlerInfoJsCallbackTag,        unsandboxed, TAG(16)) \
+  V(kCallHandlerInfoCallbackTag,            sandboxed, TAG(15)) \
+  V(kCallHandlerInfoJsCallbackTag,          sandboxed, TAG(16)) \
   V(kAccessorInfoGetterTag,               unsandboxed, TAG(17)) \
   V(kAccessorInfoJsGetterTag,             unsandboxed, TAG(18)) \
   V(kAccessorInfoSetterTag,               unsandboxed, TAG(19)) \
