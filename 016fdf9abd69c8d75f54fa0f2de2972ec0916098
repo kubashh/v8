@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473ec8ff_ea0ca768",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-07-27T20:13:26Z",
+      "side": 1,
+      "message": "Still waiting for LGTM3 (got LGTM1 and LGTM2 already) from the 3rd API Owner.",
+      "revId": "016fdf9abd69c8d75f54fa0f2de2972ec0916098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
