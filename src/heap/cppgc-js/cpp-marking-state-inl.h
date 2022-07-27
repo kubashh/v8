@@ -5,9 +5,11 @@
 #ifndef V8_HEAP_CPPGC_JS_CPP_MARKING_STATE_INL_H_
 #define V8_HEAP_CPPGC_JS_CPP_MARKING_STATE_INL_H_
 
+#include "src/heap/cppgc-js/cpp-heap.h"
 #include "src/heap/cppgc-js/cpp-marking-state.h"
-#include "src/heap/embedder-tracing-inl.h"
-#include "src/objects/embedder-data-slot.h"
+#include "src/heap/cppgc/heap-object-header.h"
+#include "src/heap/cppgc/page-memory.h"
+#include "src/objects/embedder-data-slot-inl.h"
 #include "src/objects/js-objects.h"
 
 namespace v8 {
@@ -17,28 +19,32 @@ bool CppMarkingState::ExtractEmbedderDataSnapshot(
     Map map, JSObject object, EmbedderDataSnapshot& snapshot) {
   if (JSObject::GetEmbedderFieldCount(map) < 2) return false;
 
+  EmbedderDataSlot::EmbedderDataSlotSnapshot slot_snapshot;
   EmbedderDataSlot::PopulateEmbedderDataSnapshot(
-      map, object, wrapper_descriptor_.wrappable_type_index, snapshot.first);
-  EmbedderDataSlot::PopulateEmbedderDataSnapshot(
-      map, object, wrapper_descriptor_.wrappable_instance_index,
-      snapshot.second);
-  return true;
+      map, object, wrapper_descriptor_.wrappable_instance_index, slot_snapshot);
+  // Check whether snapshot is valid.
+  const EmbedderDataSlot instance_slot(slot_snapshot);
+  return instance_slot.ToAlignedPointer(isolate_, &snapshot);
 }
 
 void CppMarkingState::MarkAndPush(const EmbedderDataSnapshot& snapshot) {
-  const EmbedderDataSlot type_slot(snapshot.first);
-  const EmbedderDataSlot instance_slot(snapshot.second);
-  MarkAndPush(type_slot, instance_slot);
-}
+#if defined(CPPGC_CAGED_HEAP)
+  // Bail out if the address is not contained within the cage.
+  if (!cppgc::internal::CagedHeapBase::IsWithinCage(snapshot)) return;
+#endif  // defined(CPPGC_CAGED_HEAP)
 
-void CppMarkingState::MarkAndPush(const EmbedderDataSlot type_slot,
-                                  const EmbedderDataSlot instance_slot) {
-  LocalEmbedderHeapTracer::WrapperInfo info;
-  if (LocalEmbedderHeapTracer::ExtractWrappableInfo(
-          isolate_, wrapper_descriptor_, type_slot, instance_slot, &info)) {
-    marking_state_.MarkAndPush(
-        cppgc::internal::HeapObjectHeader::FromObject(info.second));
-  }
+  const cppgc::internal::BasePage* page =
+      reinterpret_cast<const cppgc::internal::BasePage*>(
+          CppHeap::From(isolate_->heap()->cpp_heap())
+              ->page_backend()
+              ->Lookup(const_cast<cppgc::internal::ConstAddress>(
+                  reinterpret_cast<cppgc::internal::Address>(snapshot))));
+  if (!page) return;
+
+  auto* header = page->TryObjectHeaderFromInnerAddress(snapshot);
+  if (!header) return;
+
+  marking_state_.MarkAndPush(*header);
 }
 
 }  // namespace internal

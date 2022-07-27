@@ -7,6 +7,8 @@
 #include "include/v8-cppgc.h"
 #include "src/base/logging.h"
 #include "src/handles/global-handles.h"
+#include "src/heap/cppgc/globals.h"
+#include "src/heap/cppgc/page-memory.h"
 #include "src/heap/embedder-tracing-inl.h"
 #include "src/heap/gc-tracer.h"
 #include "src/heap/marking-worklist-inl.h"
@@ -185,26 +187,6 @@ void LocalEmbedderHeapTracer::NotifyEmptyEmbedderStack() {
   isolate_->global_handles()->NotifyEmptyEmbedderStack();
 }
 
-void LocalEmbedderHeapTracer::EmbedderWriteBarrier(Heap* heap,
-                                                   JSObject js_object) {
-  DCHECK(InUse());
-  DCHECK(js_object.MayHaveEmbedderFields());
-  if (cpp_heap_) {
-    DCHECK_NOT_NULL(heap->mark_compact_collector());
-    const EmbedderDataSlot type_slot(js_object,
-                                     wrapper_descriptor_.wrappable_type_index);
-    const EmbedderDataSlot instance_slot(
-        js_object, wrapper_descriptor_.wrappable_instance_index);
-    heap->mark_compact_collector()
-        ->local_marking_worklists()
-        ->cpp_marking_state()
-        ->MarkAndPush(type_slot, instance_slot);
-    return;
-  }
-  LocalEmbedderHeapTracer::ProcessingScope scope(this);
-  scope.TracePossibleWrapper(js_object);
-}
-
 bool DefaultEmbedderRootsHandler::IsRoot(
     const v8::TracedReference<v8::Value>& handle) {
   return !tracer_ || tracer_->IsRootForNonTracingGC(handle);
@@ -216,6 +198,61 @@ void DefaultEmbedderRootsHandler::ResetRoot(
   // can only happen the EmbedderHeapTracer is set on API level.
   DCHECK(tracer_);
   tracer_->ResetHandleInNonTracingGC(handle);
+}
+
+void LocalEmbedderHeapTracer::WriteBarrierForEmbedderField(JSObject host,
+                                                           int index,
+                                                           void* value) {
+  if (!InUse()) return;
+
+  DCHECK(host.MayHaveEmbedderFields());
+
+  // If the index refers to an instance index, then we must also find the
+  // appropriate type information already present on the object. Retrieve the
+  // type information and invoke the more detailed barrier.
+  if (index == wrapper_descriptor_.wrappable_instance_index) {
+    int indices[] = {wrapper_descriptor_.wrappable_type_index,
+                     wrapper_descriptor_.wrappable_instance_index};
+    void* values[] = {nullptr, value};
+    const EmbedderDataSlot type_slot(host,
+                                     wrapper_descriptor_.wrappable_type_index);
+    if (type_slot.ToAlignedPointer(isolate_, &values[0])) {
+      LocalEmbedderHeapTracer::WriteBarrierForEmbedderFields(host, 2, indices,
+                                                             values);
+    }
+  }
+}
+
+void LocalEmbedderHeapTracer::WriteBarrierForEmbedderFields(JSObject host,
+                                                            int argc,
+                                                            int indices[],
+                                                            void* values[]) {
+  DCHECK(host.MayHaveEmbedderFields());
+  if (!InUse()) return;
+
+  auto* heap = isolate_->heap();
+  if (!heap->incremental_marking()->IsMarking()) return;
+
+  if (!cpp_heap_) {
+    // When running without CppHeap, we have to check on visiting each instance
+    // on the main thread in the GC.
+    LocalEmbedderHeapTracer::ProcessingScope scope(this);
+    scope.TracePossibleWrapper(host);
+    return;
+  }
+
+  void* instance = nullptr;
+  for (int i = 0; i < argc; i++) {
+    if (indices[i] == wrapper_descriptor_.wrappable_instance_index) {
+      instance = values[i];
+    }
+  }
+  if (instance) {
+    heap->mark_compact_collector()
+        ->local_marking_worklists()
+        ->cpp_marking_state()
+        ->MarkAndPush(instance);
+  }
 }
 
 }  // namespace internal
