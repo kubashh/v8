@@ -1189,8 +1189,7 @@ void WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
       // and anyfunc just becomes an alias for "funcref".
       type = i::wasm::kWasmFuncRef;
     } else if (string->StringEquals(v8_str(isolate, "externref"))) {
-      // externref is known as anyref as of wasm-gc.
-      type = i::wasm::kWasmAnyRef;
+      type = i::wasm::kWasmExternRef;
     } else if (enabled_features.has_stringref() &&
                string->StringEquals(v8_str(isolate, "stringref"))) {
       type = i::wasm::kWasmStringRef;
@@ -1383,7 +1382,7 @@ bool GetValueType(Isolate* isolate, MaybeLocal<Value> maybe,
   } else if (string->StringEquals(v8_str(isolate, "f64"))) {
     *type = i::wasm::kWasmF64;
   } else if (string->StringEquals(v8_str(isolate, "externref"))) {
-    *type = i::wasm::kWasmAnyRef;
+    *type = i::wasm::kWasmExternRef;
   } else if (enabled_features.has_type_reflection() &&
              string->StringEquals(v8_str(isolate, "funcref"))) {
     // The type reflection proposal renames "anyfunc" to "funcref", and makes
@@ -1398,6 +1397,9 @@ bool GetValueType(Isolate* isolate, MaybeLocal<Value> maybe,
   } else if (enabled_features.has_stringref() &&
              string->StringEquals(v8_str(isolate, "stringref"))) {
     *type = i::wasm::kWasmStringRef;
+  } else if (enabled_features.has_gc() &&
+             string->StringEquals(v8_str(isolate, "anyref"))) {
+    *type = i::wasm::kWasmAnyRef;
   } else {
     // Unrecognized type.
     *type = i::wasm::kWasmVoid;
@@ -1549,7 +1551,7 @@ void WebAssemblyGlobal(const v8::FunctionCallbackInfo<v8::Value>& args) {
     case i::wasm::kRef:
     case i::wasm::kRefNull: {
       switch (type.heap_representation()) {
-        case i::wasm::HeapType::kAny: {
+        case i::wasm::HeapType::kExtern: {
           if (args.Length() < 2) {
             // When no initial value is provided, we have to use the WebAssembly
             // default value 'null', and not the JS default value 'undefined'.
@@ -1597,6 +1599,7 @@ void WebAssemblyGlobal(const v8::FunctionCallbackInfo<v8::Value>& args) {
         case internal::wasm::HeapType::kI31:
         case internal::wasm::HeapType::kData:
         case internal::wasm::HeapType::kArray:
+        case internal::wasm::HeapType::kAny:
         case internal::wasm::HeapType::kStringViewWtf8:
         case internal::wasm::HeapType::kStringViewWtf16:
         case internal::wasm::HeapType::kStringViewIter:
@@ -1785,6 +1788,7 @@ void EncodeExceptionValues(v8::Isolate* isolate,
       case i::wasm::kRefNull:
         switch (type.heap_representation()) {
           case i::wasm::HeapType::kFunc:
+          case i::wasm::HeapType::kExtern:
           case i::wasm::HeapType::kAny:
           case i::wasm::HeapType::kEq:
           case i::wasm::HeapType::kI31:
@@ -2026,12 +2030,12 @@ void WebAssemblyFunctionType(const v8::FunctionCallbackInfo<v8::Value>& args) {
       // promise as an externref instead of the original return type.
       size_t param_count = sig->parameter_count();
       DCHECK_GE(param_count, 1);
-      DCHECK_EQ(sig->GetParam(0), i::wasm::kWasmAnyRef);
+      DCHECK_EQ(sig->GetParam(0), i::wasm::kWasmExternRef);
       i::wasm::FunctionSig::Builder builder(&zone, 1, param_count);
       for (size_t i = 0; i < param_count; ++i) {
         builder.AddParam(sig->GetParam(i));
       }
-      builder.AddReturn(i::wasm::kWasmAnyRef);
+      builder.AddReturn(i::wasm::kWasmExternRef);
       sig = builder.Build();
     }
   } else if (i::WasmJSFunction::IsWasmJSFunction(*arg0)) {
@@ -2043,13 +2047,13 @@ void WebAssemblyFunctionType(const v8::FunctionCallbackInfo<v8::Value>& args) {
       // parameter which will be consumed by the wasm-to-JS wrapper.
       size_t param_count = sig->parameter_count();
       i::wasm::FunctionSig::Builder builder(&zone, 1, param_count + 1);
-      builder.AddParam(internal::wasm::kWasmAnyRef);
+      builder.AddParam(internal::wasm::kWasmExternRef);
       for (size_t i = 0; i < param_count; ++i) {
         builder.AddParam(sig->GetParam(i));
       }
       DCHECK_EQ(1, sig->return_count());
-      DCHECK_EQ(i::wasm::kWasmAnyRef, sig->GetReturn(0));
-      builder.AddReturn(i::wasm::kWasmAnyRef);
+      DCHECK_EQ(i::wasm::kWasmExternRef, sig->GetReturn(0));
+      builder.AddReturn(i::wasm::kWasmExternRef);
       sig = builder.Build();
     }
   } else {
@@ -2220,7 +2224,9 @@ void WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   }
 
   i::Handle<i::Object> external_element;
-  bool is_external = i::WasmInternalFunction::FromExternal(element, i_isolate)
+  // TODO(7748): Make sure externref tables don't convert any values.
+  bool is_external = table_object->type() != i::wasm::kWasmExternRef &&
+                     i::WasmInternalFunction::FromExternal(element, i_isolate)
                          .ToHandle(&external_element);
 
   i::WasmTableObject::Set(i_isolate, table_object, index,
@@ -2405,6 +2411,7 @@ void WebAssemblyExceptionGetArg(
       case i::wasm::kRefNull:
         switch (signature.get(i).heap_representation()) {
           case i::wasm::HeapType::kFunc:
+          case i::wasm::HeapType::kExtern:
           case i::wasm::HeapType::kAny:
           case i::wasm::HeapType::kEq:
           case i::wasm::HeapType::kI31:
@@ -2467,6 +2474,7 @@ void WebAssemblyExceptionGetArg(
     case i::wasm::kRefNull:
       switch (signature.get(index).heap_representation()) {
         case i::wasm::HeapType::kFunc:
+        case i::wasm::HeapType::kExtern:
         case i::wasm::HeapType::kAny:
         case i::wasm::HeapType::kEq:
         case i::wasm::HeapType::kI31:
@@ -2549,7 +2557,7 @@ void WebAssemblyGlobalGetValueCommon(
     case i::wasm::kRef:
     case i::wasm::kRefNull:
       switch (receiver->type().heap_representation()) {
-        case i::wasm::HeapType::kAny:
+        case i::wasm::HeapType::kExtern:
         case i::wasm::HeapType::kString:
           return_value.Set(Utils::ToLocal(receiver->GetRef()));
           break;
@@ -2577,6 +2585,7 @@ void WebAssemblyGlobalGetValueCommon(
         case i::wasm::HeapType::kI31:
         case i::wasm::HeapType::kData:
         case i::wasm::HeapType::kArray:
+        case i::wasm::HeapType::kAny:
         case i::wasm::HeapType::kEq:
         default:
           // TODO(7748): Implement these.
@@ -2654,7 +2663,7 @@ void WebAssemblyGlobalSetValue(
     case i::wasm::kRef:
     case i::wasm::kRefNull:
       switch (receiver->type().heap_representation()) {
-        case i::wasm::HeapType::kAny:
+        case i::wasm::HeapType::kExtern:
           receiver->SetExternRef(Utils::OpenHandle(*args[0]));
           break;
         case i::wasm::HeapType::kFunc: {
@@ -2698,6 +2707,7 @@ void WebAssemblyGlobalSetValue(
         case i::wasm::HeapType::kI31:
         case i::wasm::HeapType::kData:
         case i::wasm::HeapType::kArray:
+        case i::wasm::HeapType::kAny:
         case i::wasm::HeapType::kEq:
         default:
           // TODO(7748): Implement these.
@@ -2754,9 +2764,9 @@ void WebAssemblyReturnPromiseOnSuspend(
         "Expected a WebAssembly.Function with exactly one return type");
   }
   if (data.sig()->parameter_count() == 0 ||
-      data.sig()->GetParam(0) != internal::wasm::kWasmAnyRef) {
+      data.sig()->GetParam(0) != internal::wasm::kWasmExternRef) {
     thrower.TypeError("Expected at least one parameter of type %s",
-                      i::wasm::kWasmAnyRef.name().c_str());
+                      i::wasm::kWasmExternRef.name().c_str());
   }
   if (thrower.error()) return;
   int index = data.function_index();
@@ -2797,9 +2807,10 @@ void WebAssemblySuspendOnReturnedPromise(
     return;
   }
   sig = i::Handle<i::WasmJSFunction>::cast(arg0)->GetSignature(&zone);
-  if (sig->return_count() != 1 || sig->GetReturn(0) != i::wasm::kWasmAnyRef) {
+  if (sig->return_count() != 1 ||
+      sig->GetReturn(0) != i::wasm::kWasmExternRef) {
     thrower.TypeError("Expected a WebAssembly.Function with return type %s",
-                      i::wasm::kWasmAnyRef.name().c_str());
+                      i::wasm::kWasmExternRef.name().c_str());
     return;
   }
 

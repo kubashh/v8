@@ -174,6 +174,8 @@ V8_NOINLINE V8_EXPORT_PRIVATE bool IsHeapSubtypeOfImpl(
       return sub_heap == super_heap || super_heap == HeapType::kAny;
     case HeapType::kAny:
       return super_heap == HeapType::kAny;
+    case HeapType::kExtern:
+      return super_heap == HeapType::kExtern;
     case HeapType::kI31:
     case HeapType::kData:
       return super_heap == sub_heap || super_heap == HeapType::kEq ||
@@ -213,6 +215,8 @@ V8_NOINLINE V8_EXPORT_PRIVATE bool IsHeapSubtypeOfImpl(
       return false;
     case HeapType::kAny:
       return true;
+    case HeapType::kExtern:
+      return false;
     case HeapType::kString:
     case HeapType::kStringViewWtf8:
     case HeapType::kStringViewWtf16:
@@ -340,6 +344,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          return HeapType::kBottom;
         default:
           return module2->has_signature(heap2.ref_index()) ? HeapType::kAny
                                                            : HeapType::kEq;
@@ -356,6 +362,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          return HeapType::kBottom;
         default:
           return module2->has_signature(heap2.ref_index()) ? HeapType::kAny
                                                            : HeapType::kData;
@@ -373,6 +381,8 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
         case HeapType::kAny:
         case HeapType::kFunc:
           return HeapType::kAny;
+        case HeapType::kExtern:
+          return HeapType::kBottom;
         default:
           return module2->has_array(heap2.ref_index())    ? HeapType::kArray
                  : module2->has_struct(heap2.ref_index()) ? HeapType::kData
@@ -380,6 +390,9 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
       }
     case HeapType::kAny:
       return HeapType::kAny;
+    case HeapType::kExtern:
+      return heap2.representation() == HeapType::kExtern ? HeapType::kExtern
+                                                         : HeapType::kBottom;
     case HeapType::kBottom:
       return HeapType::kBottom;
     case HeapType::kNone:
@@ -388,6 +401,18 @@ HeapType::Representation CommonAncestorWithGeneric(HeapType heap1,
       UNREACHABLE();
   }
 }
+
+ValueType CommonAncestorWithGenericToValueType(HeapType heap1, HeapType heap2,
+                                               const WasmModule* module2,
+                                               Nullability nullability) {
+  HeapType::Representation heap_type =
+      CommonAncestorWithGeneric(heap1, heap2, module2);
+  if (heap_type == HeapType::kBottom) {
+    return kWasmBottom;
+  }
+  return ValueType::RefMaybeNull(heap_type, nullability);
+}
+
 }  // namespace
 
 V8_EXPORT_PRIVATE TypeInModule Union(ValueType type1, ValueType type2,
@@ -406,12 +431,12 @@ V8_EXPORT_PRIVATE TypeInModule Union(ValueType type1, ValueType type2,
     return {ValueType::RefMaybeNull(heap1, nullability), module1};
   }
   if (heap1.is_generic()) {
-    return {ValueType::RefMaybeNull(
-                CommonAncestorWithGeneric(heap1, heap2, module2), nullability),
+    return {CommonAncestorWithGenericToValueType(heap1, heap2, module2,
+                                                 nullability),
             module1};
   } else if (heap2.is_generic()) {
-    return {ValueType::RefMaybeNull(
-                CommonAncestorWithGeneric(heap2, heap1, module1), nullability),
+    return {CommonAncestorWithGenericToValueType(heap2, heap1, module1,
+                                                 nullability),
             module1};
   } else {
     return {ValueType::RefMaybeNull(

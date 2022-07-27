@@ -213,6 +213,8 @@ TEST_F(WasmSubtypingTest, Subtyping) {
       SUBTYPE(ref_type, kWasmAnyRef);
       // Only anyref is a subtype of anyref.
       SUBTYPE_IFF(kWasmAnyRef, ref_type, ref_type == kWasmAnyRef);
+      // Only externref is a subtype of externref.
+      SUBTYPE_IFF(kWasmExternRef, ref_type, ref_type == kWasmExternRef);
       // Each nullable reference type is a supertype of nullref.
       SUBTYPE_IFF(kWasmNullRef, ref_type, ref_type.is_nullable());
       // Only nullref is a subtype of nullref.
@@ -328,7 +330,7 @@ TEST_F(WasmSubtypingTest, Subtyping) {
       }
     }
 
-    // Reference type vs. itself and anyref.
+    // Reference type vs. itself and anyref, externref.
     for (ValueType type : ref_types) {
       UNION(type, type, type);
       INTERSECTION(type, type, type);
@@ -338,6 +340,9 @@ TEST_F(WasmSubtypingTest, Subtyping) {
             type.is_nullable() ? kWasmAnyRef : kWasmAnyRef.AsNonNull());
       INTERSECTION(kWasmAnyRef.AsNonNull(), type,
                    type != kWasmNullRef ? type.AsNonNull() : kWasmBottom);
+      UNION(kWasmExternRef, type, kWasmBottom);
+      INTERSECTION(kWasmExternRef, type,
+                   type.is_nullable() ? kWasmNullRef : kWasmBottom);
     }
 
     // Abstract types vs abstract types.
@@ -356,6 +361,8 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     UNION(kWasmI31Ref, kWasmArrayRef, kWasmEqRef.AsNonNull());
     UNION(kWasmI31Ref, kWasmNullRef, kWasmI31Ref.AsNullable());
     UNION(kWasmArrayRef, kWasmNullRef, kWasmArrayRef.AsNullable());
+    UNION(kWasmAnyRef, kWasmAnyRef, kWasmAnyRef);
+    UNION(kWasmExternRef, kWasmExternRef, kWasmExternRef);
 
     INTERSECTION(kWasmFuncRef, kWasmEqRef, kWasmNullRef);
     INTERSECTION(kWasmFuncRef, kWasmDataRef, kWasmBottom);
@@ -373,6 +380,8 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     INTERSECTION(kWasmI31Ref, kWasmArrayRef, kWasmBottom);
     INTERSECTION(kWasmI31Ref, kWasmNullRef, kWasmBottom);
     INTERSECTION(kWasmArrayRef, kWasmNullRef, kWasmBottom);
+    INTERSECTION(kWasmAnyRef, kWasmAnyRef, kWasmAnyRef);
+    INTERSECTION(kWasmExternRef, kWasmExternRef, kWasmExternRef);
 
     ValueType struct_type = ref(0);
     ValueType array_type = ref(2);
