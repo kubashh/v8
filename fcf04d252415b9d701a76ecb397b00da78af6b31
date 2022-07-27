@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685f61c1_63872f11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-27T11:35:34Z",
+      "side": 1,
+      "message": "PTAL, this fixes the data race. It also should improve GC performance with the same read performance at the expense of more expensive writes (SetEmbedderField()).",
+      "revId": "fcf04d252415b9d701a76ecb397b00da78af6b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d2dbbd9_fb0f92f0",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-07-27T11:35:34Z",
+      "side": 1,
+      "message": "I kept a mix of CHECK and DCHECK. Ideally we would make all of this DCHECKs behind the marking flag even but I guess we should try to catch mistakes earlier.",
+      "range": {
+        "startLine": 258,
+        "startChar": 4,
+        "endLine": 258,
+        "endChar": 8
+      },
+      "revId": "fcf04d252415b9d701a76ecb397b00da78af6b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
