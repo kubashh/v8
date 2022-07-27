@@ -1880,6 +1880,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Ldr(i.OutputRegister(), i.MemoryOperand());
       break;
+    case kArm64DecompressTaggedSigned:
+      __ DecompressTaggedSigned(i.OutputRegister(), i.InputRegister(0));
+      break;
+    case kArm64DecompressAnyTagged:
+      __ DecompressAnyTagged(i.OutputRegister(), i.InputRegister(0));
+      break;
     case kArm64LdrDecompressTaggedSigned:
       __ DecompressTaggedSigned(i.OutputRegister(), i.MemoryOperand());
       break;
@@ -1904,9 +1910,28 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArm64LdrDecodeSandboxedPointer:
       __ LoadSandboxedPointerField(i.OutputRegister(), i.MemoryOperand());
       break;
+    case kArm64LdpW:
+      EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Ldp(i.OutputRegister(0).W(), i.OutputRegister(1).W(),
+             i.MemoryOperand());
+      break;
+    case kArm64Ldp:
+      EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Ldp(i.OutputRegister(0), i.OutputRegister(1), i.MemoryOperand());
+      break;
     case kArm64Str:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Str(i.InputOrZeroRegister64(0), i.MemoryOperand(1));
+      break;
+    case kArm64StpW:
+      EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Stp(i.InputOrZeroRegister64(0).W(), i.InputOrZeroRegister64(1).W(),
+             i.MemoryOperand(2));
+      break;
+    case kArm64Stp:
+      EmitOOLTrapIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Stp(i.InputOrZeroRegister64(0), i.InputOrZeroRegister64(1),
+             i.MemoryOperand(2));
       break;
     case kArm64StrCompressTagged:
       __ StoreTaggedField(i.InputOrZeroRegister64(0), i.MemoryOperand(1));

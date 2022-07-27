@@ -747,6 +747,7 @@ struct BaseWithIndexAndDisplacementMatcher {
       Node* from = use.from();
       switch (from->opcode()) {
         case IrOpcode::kLoad:
+        case IrOpcode::kLoadPair:
         case IrOpcode::kLoadImmutable:
         case IrOpcode::kProtectedLoad:
         case IrOpcode::kInt32Add:
@@ -764,6 +765,7 @@ struct BaseWithIndexAndDisplacementMatcher {
             return false;
           break;
         case IrOpcode::kStore:
+        case IrOpcode::kStorePair:
         case IrOpcode::kProtectedStore:
           // If the stored value is this node, it is not an addressing use.
           if (from->InputAt(2) == node) return false;

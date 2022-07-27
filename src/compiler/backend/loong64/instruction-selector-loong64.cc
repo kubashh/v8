@@ -483,6 +483,10 @@ void InstructionSelector::VisitProtectedLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  UNREACHABLE();
+}
+
 void InstructionSelector::VisitStore(Node* node) {
   Loong64OperandGenerator g(this);
   Node* base = node->InputAt(0);
@@ -588,6 +592,8 @@ void InstructionSelector::VisitProtectedStore(Node* node) {
   // TODO(eholk)
   UNIMPLEMENTED();
 }
+
+void InstructionSelector::VisitStorePair(Node* node) { UNREACHABLE(); }
 
 void InstructionSelector::VisitWord32And(Node* node) {
   Loong64OperandGenerator g(this);

@@ -267,6 +267,10 @@ void InstructionSelector::VisitProtectedLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  UNREACHABLE();
+}
+
 void VisitStoreCommon(InstructionSelector* selector, Node* node,
                       StoreRepresentation store_rep,
                       base::Optional<AtomicMemoryOrder> atomic_order) {
@@ -411,6 +415,8 @@ void InstructionSelector::VisitProtectedStore(Node* node) {
   // TODO(eholk)
   UNIMPLEMENTED();
 }
+
+void InstructionSelector::VisitStorePair(Node* node) { UNREACHABLE(); }
 
 // Architecture supports unaligned access, therefore VisitLoad is used instead
 void InstructionSelector::VisitUnalignedLoad(Node* node) { UNREACHABLE(); }

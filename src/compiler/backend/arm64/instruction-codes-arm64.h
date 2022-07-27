@@ -26,6 +26,8 @@ namespace compiler {
   V(Arm64LdrshW)                                           \
   V(Arm64Ldrsw)                                            \
   V(Arm64LdrW)                                             \
+  V(Arm64Ldp)                                              \
+  V(Arm64LdpW)                                             \
   V(Arm64LoadLane)                                         \
   V(Arm64LoadSplat)                                        \
   V(Arm64S128Load16x4S)                                    \
@@ -41,7 +43,9 @@ namespace compiler {
   V(Arm64Strh)                                             \
   V(Arm64StrQ)                                             \
   V(Arm64StrS)                                             \
-  V(Arm64StrW)
+  V(Arm64StrW)                                             \
+  V(Arm64Stp)                                              \
+  V(Arm64StpW)
 
 #define TARGET_ARCH_OPCODE_LIST(V)                   \
   TARGET_ARCH_OPCODE_WITH_MEMORY_ACCESS_MODE_LIST(V) \
@@ -193,6 +197,8 @@ namespace compiler {
   V(Arm64Float64InsertHighWord32)                    \
   V(Arm64Float64MoveU64)                             \
   V(Arm64U64MoveFloat64)                             \
+  V(Arm64DecompressTaggedSigned)                     \
+  V(Arm64DecompressAnyTagged)                        \
   V(Arm64LdrDecompressTaggedSigned)                  \
   V(Arm64LdrDecompressTaggedPointer)                 \
   V(Arm64LdrDecompressAnyTagged)                     \

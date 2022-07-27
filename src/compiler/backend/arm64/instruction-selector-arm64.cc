@@ -861,6 +861,77 @@ void InstructionSelector::VisitLoad(Node* node) {
 
 void InstructionSelector::VisitProtectedLoad(Node* node) { VisitLoad(node); }
 
+namespace {
+void EmitDecompressionForLoadPair(InstructionSelector* selector,
+                                  LoadRepresentation rep, Node* input,
+                                  InstructionOperand& output) {
+  Arm64OperandGenerator g(selector);
+  switch (rep.representation()) {
+#ifdef V8_COMPRESS_POINTERS
+    case MachineRepresentation::kTaggedSigned:
+      selector->Emit(kArm64DecompressTaggedSigned, g.DefineSameAsFirst(input),
+                     output);
+      break;
+    case MachineRepresentation::kTaggedPointer:
+    case MachineRepresentation::kTagged:
+      selector->Emit(kArm64DecompressAnyTagged, g.DefineSameAsFirst(input),
+                     output);
+      break;
+    case MachineRepresentation::kCompressedPointer:  // Fall through.
+    case MachineRepresentation::kCompressed:         // Fall through.
+#else
+    case MachineRepresentation::kTaggedSigned:   // Fall through.
+    case MachineRepresentation::kTaggedPointer:  // Fall through.
+    case MachineRepresentation::kTagged:         // Fall through.
+#endif
+    case MachineRepresentation::kWord32:
+    case MachineRepresentation::kWord64:
+      break;
+    default:
+      UNREACHABLE();
+  }
+}
+}  // namespace
+
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  InstructionCode opcode = kArchNop;
+  LoadPairRepresentation load_reps = LoadPairRepresentationOf(node->op());
+  DCHECK_EQ(ElementSizeLog2Of(load_reps.rep1.representation()),
+            ElementSizeLog2Of(load_reps.rep2.representation()));
+  switch (ElementSizeLog2Of(load_reps.rep1.representation())) {
+    case 2:
+      opcode = kArm64LdpW;
+      break;
+    case 3:
+      opcode = kArm64Ldp;
+      break;
+    default:
+      UNREACHABLE();
+  }
+  Arm64OperandGenerator g(this);
+  InstructionOperand inputs[2];
+  InstructionOperand outputs[2];
+
+#ifdef V8_COMPRESS_POINTERS
+  outputs[0] = load_reps.rep1.IsTagged() ? g.TempRegister()
+                                         : g.DefineAsRegister(projections[0]);
+  outputs[1] = load_reps.rep2.IsTagged() ? g.TempRegister()
+                                         : g.DefineAsRegister(projections[1]);
+#else
+  outputs[0] = g.DefineAsRegister(projections[0]);
+  outputs[1] = g.DefineAsRegister(projections[1]);
+#endif
+  inputs[0] = g.UseRegister(node->InputAt(0));
+  inputs[1] = g.UseImmediate(node->InputAt(1));
+  opcode |= AddressingModeField::encode(kMode_MRI);
+  this->Emit(opcode, 2, outputs, 2, inputs);
+
+  EmitDecompressionForLoadPair(this, load_reps.rep1, projections[0],
+                               outputs[0]);
+  EmitDecompressionForLoadPair(this, load_reps.rep2, projections[1],
+                               outputs[1]);
+}
+
 void InstructionSelector::VisitStore(Node* node) {
   Arm64OperandGenerator g(this);
   Node* base = node->InputAt(0);
@@ -1006,6 +1077,29 @@ void InstructionSelector::VisitStore(Node* node) {
 }
 
 void InstructionSelector::VisitProtectedStore(Node* node) { VisitStore(node); }
+
+void InstructionSelector::VisitStorePair(Node* node) {
+  InstructionCode opcode = kArchNop;
+  StoreRepresentation store_rep = StoreRepresentationOf(node->op());
+  switch (ElementSizeLog2Of(store_rep.representation())) {
+    case 2:
+      opcode = kArm64StpW;
+      break;
+    case 3:
+      opcode = kArm64Stp;
+      break;
+    default:
+      UNREACHABLE();
+  }
+  Arm64OperandGenerator g(this);
+  InstructionOperand inputs[4];
+  inputs[0] = g.UseRegisterOrImmediateZero(node->InputAt(2));
+  inputs[1] = g.UseRegisterOrImmediateZero(node->InputAt(3));
+  inputs[2] = g.UseRegister(node->InputAt(0));
+  inputs[3] = g.UseImmediate(node->InputAt(1));
+  opcode |= AddressingModeField::encode(kMode_MRI);
+  this->Emit(opcode, 0, nullptr, 4, inputs);
+}
 
 void InstructionSelector::VisitSimd128ReverseBytes(Node* node) {
   UNREACHABLE();
@@ -2030,6 +2124,26 @@ bool InstructionSelector::ZeroExtendsWord32ToWord64NoPhis(Node* node) {
         default:
           return false;
       }
+    }
+    case IrOpcode::kProjection: {
+      Node* input = node->InputAt(0);
+      if (input->opcode() == IrOpcode::kLoadPair) {
+        size_t index = ProjectionIndexOf(node->op());
+        DCHECK_LT(index, 2);
+        LoadPairRepresentation load_pair_rep =
+            LoadPairRepresentationOf(input->op());
+        LoadRepresentation load_rep =
+            index ? load_pair_rep.rep2 : load_pair_rep.rep1;
+        switch (load_rep.representation()) {
+          case MachineRepresentation::kWord8:
+          case MachineRepresentation::kWord16:
+          case MachineRepresentation::kWord32:
+            return true;
+          default:
+            return false;
+        }
+      }
+      return false;
     }
     default:
       return false;
@@ -4443,7 +4557,8 @@ InstructionSelector::SupportedMachineOperatorFlags() {
          MachineOperatorBuilder::kWord64ReverseBits |
          MachineOperatorBuilder::kSatConversionIsSafe |
          MachineOperatorBuilder::kFloat32Select |
-         MachineOperatorBuilder::kFloat64Select;
+         MachineOperatorBuilder::kFloat64Select |
+         MachineOperatorBuilder::kLoadStorePairs;
 }
 
 // static
