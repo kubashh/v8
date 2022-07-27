@@ -16,6 +16,23 @@
       "message": "still LGTM",
       "revId": "766ba42cd317e0faad22e7b400babc004c9a3d71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17eb0e25_40e95a8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-27T11:51:11Z",
+      "side": 1,
+      "message": "rumberstamping isolate.cc!",
+      "revId": "766ba42cd317e0faad22e7b400babc004c9a3d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
