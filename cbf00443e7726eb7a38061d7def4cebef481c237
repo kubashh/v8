@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c6b3076_92aeb283",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "LGTM with comments. Thanks for your patience.",
+      "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e1f4524_fb7792b7",
@@ -36,6 +53,53 @@
         "startChar": 0,
         "endLine": 407,
         "endChar": 73
+      },
+      "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14077134_86ad3193",
+        "filename": "src/wasm/wasm-subtyping.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "It seems that that case should never happen, so ideally we\u0027d DCHECK that it indeed doesn\u0027t happen (e.g. by making the relevant `case`s in the `switch` above `UNREACHABLE`). Do we have a test where it does happen, or can you think of a way to craft one (e.g. maybe by making Turbofan process dynamically-unreachable weirdly-typed code)?\n\nAs you can see from the call site, we use \"common ancestor\" as our implementation of \"union\"; returning kWasmBottom as the union of, say, `externref` and `dataref` would not be strictly correct. The correct answer would be some sort of \"top\" type that sits above all other types; such a type doesn\u0027t exist in the spec but if it can occur as a side effect of type computations then we might have to add it as an internal sentinel. That would surprise me though, after all we also never need a union of i32 and i64. That said, using `bottom` as a dummy return value for an unreachable case may work in practice.\n\nAside from this, the function and its name seem fine; I\u0027d probably call it ...AsValueType instead of ...To..., but that\u0027s a minor detail.",
+      "parentUuid": "5e1f4524_fb7792b7",
+      "range": {
+        "startLine": 405,
+        "startChar": 0,
+        "endLine": 407,
+        "endChar": 73
+      },
+      "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a58512_53cf7caf",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "This is not the kind of test I meant in my other comment 😊\nIf this is the only way to trigger that code, just drop this test and use DCHECKs/UNREACHABLEs.",
+      "range": {
+        "startLine": 343,
+        "startChar": 6,
+        "endLine": 343,
+        "endChar": 47
       },
       "revId": "cbf00443e7726eb7a38061d7def4cebef481c237",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

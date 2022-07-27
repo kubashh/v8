@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7480c3e5_ba68fc80",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "This is the place where we make arbitrary Wasm values inspectable by DevTools, which only understands JavaScript. So we have to return valid JavaScript objects in `v`. That\u0027s already being done for structs/arrays/funcrefs above; this `if`-branch right here is for objects that can simply pass through because they already _are_ valid JS objects. If we encounter any arbitrary anyrefs that aren\u0027t one of these explicitly supported cases, they should take the \"graceful failure\" `else`-case below.",
+      "parentUuid": "ce2c637e_f9e26137",
+      "range": {
+        "startLine": 918,
+        "startChar": 70,
+        "endLine": 919,
+        "endChar": 67
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1988c9c3_e558c44d",
@@ -553,6 +577,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e69419_97989b50",
+        "filename": "test/mjsunit/wasm/array-init-from-segment.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "You can keep them commented out for now, and support anyref tables in one of your next CLs 😊",
+      "parentUuid": "5a3c432f_ff67d092",
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa9d7dc1_421a99c5",
@@ -825,6 +867,30 @@
       "side": 1,
       "message": "Hm, are there any other ref types that are not simd proposal or gc proposal? I could add these types here but then I guess, we\u0027d have to put the corresponding feature flags in the test cases below. Should we do this or should the GC related types then be tested somewhere else?",
       "parentUuid": "ce1c5247_7290c004",
+      "range": {
+        "startLine": 186,
+        "startChar": 2,
+        "endLine": 186,
+        "endChar": 13
+      },
+      "revId": "7637592e19a3f9b500db88b9f33db1f5d81d7b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e12fb8_6f061cda",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-27T12:45:03Z",
+      "side": 1,
+      "message": "This is the Module Decoder Unittest, it should test decoding of modules. I don\u0027t mind whether the GC-specific tests are factored out to be separate, or all tests get the flag. At any rate, for this CL, a `// TODO` is enough.",
+      "parentUuid": "1aa13884_c1351515",
       "range": {
         "startLine": 186,
         "startChar": 2,
