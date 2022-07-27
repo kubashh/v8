@@ -2751,6 +2751,8 @@ filegroup(
         "src/compiler/linkage.h",
         "src/compiler/load-elimination.cc",
         "src/compiler/load-elimination.h",
+        "src/compiler/load-store-folding.cc",
+        "src/compiler/load-store-folding.h",
         "src/compiler/loop-analysis.cc",
         "src/compiler/loop-analysis.h",
         "src/compiler/loop-peeling.cc",

@@ -719,6 +719,10 @@ void InstructionSelector::VisitProtectedLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  UNREACHABLE();
+}
+
 static void VisitGeneralStore(
     InstructionSelector* selector, Node* node, MachineRepresentation rep,
     WriteBarrierKind write_barrier_kind = kNoWriteBarrier) {
@@ -837,6 +841,8 @@ void InstructionSelector::VisitProtectedStore(Node* node) {
   // TODO(eholk)
   UNIMPLEMENTED();
 }
+
+void InstructionSelector::VisitStorePair(Node* node) { UNREACHABLE(); }
 
 // Architecture supports unaligned access, therefore VisitLoad is used instead
 void InstructionSelector::VisitUnalignedLoad(Node* node) { UNREACHABLE(); }

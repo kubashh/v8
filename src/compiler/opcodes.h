@@ -700,6 +700,8 @@
   V(Load)                                \
   V(LoadImmutable)                       \
   V(Store)                               \
+  V(LoadPair)                            \
+  V(StorePair)                           \
   V(StackSlot)                           \
   V(Word32Popcnt)                        \
   V(Word64Popcnt)                        \

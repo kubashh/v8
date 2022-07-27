@@ -123,6 +123,17 @@ V8_EXPORT_PRIVATE bool operator==(LoadTransformParameters,
                                   LoadTransformParameters);
 bool operator!=(LoadTransformParameters, LoadTransformParameters);
 
+struct LoadPairRepresentation {
+  LoadRepresentation rep1;
+  LoadRepresentation rep2;
+};
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           LoadPairRepresentation);
+
+V8_EXPORT_PRIVATE LoadPairRepresentation const& LoadPairRepresentationOf(
+    Operator const*) V8_WARN_UNUSED_RESULT;
+
 struct LoadLaneParameters {
   MemoryAccessKind kind;
   LoadRepresentation rep;
@@ -329,6 +340,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
     kSatConversionIsSafe = 1u << 26,
     kWord32Select = 1u << 27,
     kWord64Select = 1u << 28,
+    kLoadStorePairs = 1u << 29,
     kAllOptionalOps =
         kFloat32RoundDown | kFloat64RoundDown | kFloat32RoundUp |
         kFloat64RoundUp | kFloat32RoundTruncate | kFloat64RoundTruncate |
@@ -337,7 +349,8 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
         kWord64Popcnt | kWord32ReverseBits | kWord64ReverseBits |
         kInt32AbsWithOverflow | kInt64AbsWithOverflow | kWord32Rol |
         kWord64Rol | kWord64RolLowerable | kSatConversionIsSafe |
-        kFloat32Select | kFloat64Select | kWord32Select | kWord64Select
+        kFloat32Select | kFloat64Select | kWord32Select | kWord64Select |
+        kLoadStorePairs
   };
   using Flags = base::Flags<Flag, unsigned>;
 
@@ -445,6 +458,10 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   // saturating conversion rounding towards 0. Otherwise, we have to manually
   // generate the correct value if a saturating conversion is requested.
   bool SatConversionIsSafe() const { return flags_ & kSatConversionIsSafe; }
+
+  // Return true if the target suppoerts performing a pair of loads/stores in
+  // a single operation.
+  bool SupportsLoadStorePairs() const { return flags_ & kLoadStorePairs; }
 
   const Operator* Word64And();
   const Operator* Word64Or();
@@ -930,6 +947,8 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   // load [base + index]
   const Operator* Load(LoadRepresentation rep);
+  const Operator* LoadPair(LoadRepresentation rep);
+  const Operator* LoadPair(LoadRepresentation rep1, LoadRepresentation rep2);
   const Operator* LoadImmutable(LoadRepresentation rep);
   const Operator* ProtectedLoad(LoadRepresentation rep);
 
@@ -942,6 +961,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   // store [base + index], value
   const Operator* Store(StoreRepresentation rep);
+  const Operator* StorePair(StoreRepresentation rep);
   const Operator* ProtectedStore(MachineRepresentation rep);
 
   // SIMD store: store a specified lane of value into [base + index].

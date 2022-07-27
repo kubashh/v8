@@ -1196,6 +1196,7 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
   for (Node* const node : *block) {
     SetEffectLevel(node, effect_level);
     if (node->opcode() == IrOpcode::kStore ||
+        node->opcode() == IrOpcode::kStorePair ||
         node->opcode() == IrOpcode::kUnalignedStore ||
         node->opcode() == IrOpcode::kCall ||
         node->opcode() == IrOpcode::kProtectedStore ||
@@ -1480,6 +1481,14 @@ void InstructionSelector::VisitNode(Node* node) {
       MarkAsRepresentation(type.representation(), node);
       return VisitLoad(node);
     }
+    case IrOpcode::kLoadPair: {
+      Node* projections[2] = {NodeProperties::FindProjection(node, 0),
+                              NodeProperties::FindProjection(node, 1)};
+      LoadPairRepresentation pair = LoadPairRepresentationOf(node->op());
+      MarkAsRepresentation(pair.rep1.representation(), projections[0]);
+      MarkAsRepresentation(pair.rep2.representation(), projections[1]);
+      return VisitLoadPair(node, projections);
+    }
     case IrOpcode::kLoadTransform: {
       MarkAsRepresentation(MachineRepresentation::kSimd128, node);
       return VisitLoadTransform(node);
@@ -1490,6 +1499,8 @@ void InstructionSelector::VisitNode(Node* node) {
     }
     case IrOpcode::kStore:
       return VisitStore(node);
+    case IrOpcode::kStorePair:
+      return VisitStorePair(node);
     case IrOpcode::kProtectedStore:
       return VisitProtectedStore(node);
     case IrOpcode::kStoreLane: {
@@ -2937,6 +2948,9 @@ void InstructionSelector::VisitProjection(Node* node) {
         DCHECK_EQ(1u, ProjectionIndexOf(node->op()));
         MarkAsUsed(value);
       }
+      break;
+    case IrOpcode::kLoadPair:
+      MarkAsUsed(value);
       break;
     default:
       break;
