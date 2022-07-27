@@ -516,6 +516,10 @@ void InstructionSelector::VisitLoad(Node* node) {
 
 void InstructionSelector::VisitProtectedLoad(Node* node) { VisitLoad(node); }
 
+void InstructionSelector::VisitLoadPair(Node* node, Node* projections[2]) {
+  UNREACHABLE();
+}
+
 namespace {
 
 // Shared routine for Word32/Word64 Atomic Exchange
@@ -663,6 +667,8 @@ void InstructionSelector::VisitProtectedStore(Node* node) {
   Emit(code, 0, static_cast<InstructionOperand*>(nullptr), input_count, inputs,
        temp_count, temps);
 }
+
+void InstructionSelector::VisitStorePair(Node* node) { UNREACHABLE(); }
 
 // Architecture supports unaligned access, therefore VisitLoad is used instead
 void InstructionSelector::VisitUnalignedLoad(Node* node) { UNREACHABLE(); }
