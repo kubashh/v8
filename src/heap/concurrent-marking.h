@@ -114,6 +114,115 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   std::atomic<bool> another_ephemeron_iteration_{false};
 };
 
+// Helper class for storing in-object slot addresses and values.
+class SlotSnapshot {
+ public:
+  SlotSnapshot() : number_of_slots_(0) {}
+  SlotSnapshot(const SlotSnapshot&) = delete;
+  SlotSnapshot& operator=(const SlotSnapshot&) = delete;
+  int number_of_slots() const { return number_of_slots_; }
+  ObjectSlot slot(int i) const { return snapshot_[i].first; }
+  Object value(int i) const { return snapshot_[i].second; }
+  void clear() { number_of_slots_ = 0; }
+  void add(ObjectSlot slot, Object value) {
+    snapshot_[number_of_slots_++] = {slot, value};
+  }
+
+ private:
+  static const int kMaxSnapshotSize = JSObject::kMaxInstanceSize / kTaggedSize;
+  int number_of_slots_;
+  std::pair<ObjectSlot, Object> snapshot_[kMaxSnapshotSize];
+};
+
+class ConcurrentMarkingState final
+    : public MarkingStateBase<ConcurrentMarkingState, AccessMode::ATOMIC> {
+ public:
+  ConcurrentMarkingState(PtrComprCageBase cage_base,
+                         MemoryChunkDataMap* memory_chunk_data)
+      : MarkingStateBase(cage_base), memory_chunk_data_(memory_chunk_data) {}
+
+  ConcurrentBitmap<AccessMode::ATOMIC>* bitmap(
+      const BasicMemoryChunk* chunk) const {
+    return chunk->marking_bitmap<AccessMode::ATOMIC>();
+  }
+
+  void IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
+    (*memory_chunk_data_)[chunk].live_bytes += by;
+  }
+
+  // The live_bytes and SetLiveBytes methods of the marking state are
+  // not used by the concurrent marker.
+
+ private:
+  MemoryChunkDataMap* memory_chunk_data_;
+};
+
+class YoungGenerationConcurrentMarkingVisitor final
+    : public YoungGenerationMarkingVisitorBase<
+          YoungGenerationConcurrentMarkingVisitor, ConcurrentMarkingState> {
+ public:
+  YoungGenerationConcurrentMarkingVisitor(
+      Heap* heap, MarkingWorklists::Local* worklists_local,
+      MemoryChunkDataMap* memory_chunk_data);
+
+  bool is_shared_heap();
+
+  void SynchronizePageAccess(HeapObject heap_object);
+
+  template <typename T>
+  static V8_INLINE T Cast(HeapObject object) {
+    return T::cast(object);
+  }
+
+  // Used by utility functions
+  void MarkObject(HeapObject host, HeapObject object);
+
+  // HeapVisitor overrides to implement the snapshotting protocol.
+
+  bool AllowDefaultJSObjectVisit();
+
+  int VisitJSObject(Map map, JSObject object);
+
+  int VisitJSObjectFast(Map map, JSObject object);
+
+  int VisitJSExternalObject(Map map, JSExternalObject object);
+
+#if V8_ENABLE_WEBASSEMBLY
+  int VisitWasmInstanceObject(Map map, WasmInstanceObject object);
+  int VisitWasmSuspenderObject(Map map, WasmSuspenderObject object);
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+  int VisitJSWeakCollection(Map map, JSWeakCollection object);
+
+  int VisitJSFinalizationRegistry(Map map, JSFinalizationRegistry object);
+
+  int VisitConsString(Map map, ConsString object);
+
+  int VisitSlicedString(Map map, SlicedString object);
+  int VisitThinString(Map map, ThinString object);
+
+  int VisitSeqOneByteString(Map map, SeqOneByteString object);
+  int VisitSeqTwoByteString(Map map, SeqTwoByteString object);
+  void VisitMapPointer(HeapObject host);
+  // HeapVisitor override.
+
+  bool ShouldVisit(HeapObject object);
+
+  bool ShouldVisitUnaccounted(HeapObject object);
+  template <typename TSlot>
+  void RecordSlot(HeapObject object, TSlot slot, HeapObject target);
+
+  SlotSnapshot* slot_snapshot();
+
+  ConcurrentMarkingState* marking_state();
+
+ private:
+  template <typename T>
+  int VisitLeftTrimmableArray(Map map, T object);
+  ConcurrentMarkingState marking_state_;
+  SlotSnapshot slot_snapshot_;
+};
+
 }  // namespace internal
 }  // namespace v8
 
