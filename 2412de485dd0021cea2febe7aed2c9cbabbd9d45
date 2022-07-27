@@ -33,6 +33,24 @@
       "message": "Hi All, I tried some tryjob with `v8_mac_arm64` prefix, but `v8_mac_arm64_full_dbg_ng_triggered` and `v8_mac_arm64_sim_dbg_ng_triggered` always failed, I also tried these two jobs in another CL, it was also failed.\n\nI suppose there may be some problems in these jobs? if it was tryjobs\u0027 problems, may I submit to CQ?",
       "revId": "2412de485dd0021cea2febe7aed2c9cbabbd9d45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515e89e2_ac7d32eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-07-27T09:15:32Z",
+      "side": 1,
+      "message": "These issues seems to be caused by timeouts which is \"ok\" for these bots.\n\nPlease go ahead and land the CL.",
+      "parentUuid": "c9b333c4_2b7b081a",
+      "revId": "2412de485dd0021cea2febe7aed2c9cbabbd9d45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
