@@ -652,7 +652,7 @@ DEFINE_INT(interrupt_budget_for_maglev, 40 * KB,
            "interrupt budget which should be used for the profiler counter")
 
 // Tiering: Turbofan.
-DEFINE_INT(interrupt_budget, 132 * KB,
+DEFINE_INT(interrupt_budget, 70 * KB,
            "interrupt budget which should be used for the profiler counter")
 DEFINE_INT(ticks_before_optimization, 3,
            "the number of times we have to go through the interrupt budget "
