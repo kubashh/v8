@@ -16,6 +16,98 @@
       "message": "PTAL! Next step would be to create a WasmFrame::Iterate and simplify TypedFrame::Iterate. Also refactor VisitSpillSlots into a separate function.",
       "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f641ac44_33949a8f",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-28T07:58:12Z",
+      "side": 1,
+      "message": "can this be true for typed frames? the current frame isn\u0027t JS after all.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 7,
+        "endLine": 1252,
+        "endChar": 36
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "914770eb_5c32f351",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-28T07:58:12Z",
+      "side": 1,
+      "message": "this has to be true now, right?",
+      "range": {
+        "startLine": 1266,
+        "startChar": 7,
+        "endLine": 1266,
+        "endChar": 18
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50ba15e0_9dc838f5",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-28T07:58:12Z",
+      "side": 1,
+      "message": "I\u0027m wondering whether we should rename these frames, since Wasm code can also be TF compiled?",
+      "range": {
+        "startLine": 1503,
+        "startChar": 5,
+        "endLine": 1503,
+        "endChar": 18
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "298de8aa_c7ec6781",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-28T07:58:12Z",
+      "side": 1,
+      "message": "remove?",
+      "range": {
+        "startLine": 818,
+        "startChar": 0,
+        "endLine": 819,
+        "endChar": 46
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
