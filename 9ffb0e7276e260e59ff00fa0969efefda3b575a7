@@ -160,6 +160,24 @@
       "parentUuid": "f382d6cc_f69b1a67",
       "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ccd86c_8bd79a71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-28T16:57:53Z",
+      "side": 1,
+      "message": "Yes, we\u0027ll keep the fix that already landed.\nThere\u0027s nothing more that needs to get done here for now, just please make sure to test PKU changes on a PKU machine before landing next time.",
+      "parentUuid": "ad656260_95a5f74d",
+      "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
