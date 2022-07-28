@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65886316_3186fdff",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T09:01:15Z",
+      "side": 1,
+      "message": "Talking to Jakob offline, this only seems to be possible in TF frames. In the next CL, I will simplify TypedFrames and remove this. I will add a TODO here.",
+      "parentUuid": "30ede732_aa8ba224",
+      "range": {
+        "startLine": 1252,
+        "startChar": 7,
+        "endLine": 1252,
+        "endChar": 36
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "914770eb_5c32f351",
@@ -173,6 +197,30 @@
       "side": 1,
       "message": "Or even simply TurboFanJSFrame",
       "parentUuid": "305ea574_6349893e",
+      "range": {
+        "startLine": 1503,
+        "startChar": 5,
+        "endLine": 1503,
+        "endChar": 18
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d1eca8a_2be92b69",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T09:01:15Z",
+      "side": 1,
+      "message": "Let\u0027s do it in a followup CL! 😊",
+      "parentUuid": "a68c8b9e_59ee5133",
       "range": {
         "startLine": 1503,
         "startChar": 5,
