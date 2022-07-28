@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d977a9a3_6d7e9e0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T13:34:31Z",
+      "side": 1,
+      "message": "PTAL! Sorry for the dumb mistake! 😞",
+      "revId": "57d664fe788871ad981b4465815854e2aecca5cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
