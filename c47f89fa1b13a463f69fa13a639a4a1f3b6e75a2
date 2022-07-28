@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad8485d0_a1aa7525",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-28T15:33:15Z",
+      "side": 1,
+      "message": "I recently did a code cache change that makes code survive quite likely until the next run of the benchmark. I\u0027m kinda confused why that already doesn\u0027t cover this case through the isolate cache. Perhaps there are some cases where we drop code anyway and get it back from the disk cache? It would be interesting to understand better why what\u0027s being compiled where.",
+      "parentUuid": "c288f46a_6d92a8cf",
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78c2b67d_c9a9176e",
         "filename": "src/baseline/baseline-batch-compiler.cc",
         "patchSetId": 6
