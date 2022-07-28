@@ -2213,49 +2213,25 @@
     'tests': [
       {
         'name': 'numfuzz',
-        'suffix': 'marking',
-        'test_args': ['--total-timeout-sec=900', '--stress-marking=1']
-      },
-      {
-        'name': 'numfuzz',
         'suffix': 'delay',
+        'shards': 8,
         'test_args': ['--total-timeout-sec=900', '--stress-delay-tasks=1']
       },
       {
         'name': 'numfuzz',
-        'suffix': 'interrupt',
-        'test_args': ['--total-timeout-sec=900', '--stress-interrupt-budget=1']
-      },
-      {
-        'name': 'numfuzz',
         'suffix': 'threads',
+        'shards': 8,
         'test_args': ['--total-timeout-sec=900', '--stress-thread-pool-size=1']
       },
       {
         'name': 'numfuzz',
-        'suffix': 'stack',
-        'test_args': ['--total-timeout-sec=900', '--stress-stack-size=1']
-      },
-      {
-        'name': 'numfuzz',
         'suffix': 'combined',
+        'shards': 8,
         'test_args': [
           '--total-timeout-sec=900',
-          '--stress-delay-tasks=4',
-          '--stress-deopt=2',
-          '--stress-compaction=2',
-          '--stress-gc=4',
-          '--stress-marking=4',
-          '--stress-scavenge=4',
-          '--stress-thread-pool-size=2',
-          '--stress-stack-size=1',
-          '--stress-interrupt-budget=1',
+          '--stress-delay-tasks=1',
+          '--stress-thread-pool-size=1',
         ],
-      },
-      {
-        'name': 'numfuzz',
-        'suffix': 'scavenge',
-        'test_args': ['--total-timeout-sec=900', '--stress-scavenge=1']
       },
     ],
   },

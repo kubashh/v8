@@ -150,6 +150,7 @@ group("v8_run_num_fuzzer") {
   testonly = true
 
   data_deps = [
+    "cctest:cctest",
     "benchmarks:v8_benchmarks",
     "mjsunit:v8_mjsunit",
     "webkit:v8_webkit",
