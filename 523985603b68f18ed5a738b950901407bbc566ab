@@ -50,6 +50,40 @@
       "message": "Hi Toon, could you take a look at the deoptimizer change?",
       "revId": "523985603b68f18ed5a738b950901407bbc566ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e19a86_46027ea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-28T14:20:04Z",
+      "side": 1,
+      "message": "lgtm with a comment\n\nOne additional comment: don\u0027t we dynamically know whether CFI is available? Even though bti is a nop when it\u0027s not available, it would still make sense to skip all of this stuff in that case (and e.g., deopt to baseline because there\u0027s no cost.)",
+      "revId": "523985603b68f18ed5a738b950901407bbc566ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "563c9d03_0d301d2e",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-28T14:20:04Z",
+      "side": 1,
+      "message": "I simplified BaselineLabels in https://chromium-review.googlesource.com/c/v8/v8/+/3790975 because it wasn\u0027t necessary to track forward references separately. You can update this CL by changing `Label** labels_` to `base::PointerWithPayload\u003cLabel, bool, 1\u003e* labels_` and storing your bool into that payload.",
+      "revId": "523985603b68f18ed5a738b950901407bbc566ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
