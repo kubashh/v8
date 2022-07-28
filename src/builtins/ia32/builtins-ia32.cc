@@ -2935,10 +2935,13 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     __ Push(kWasmInstanceRegister);
     // Push the function index as second argument.
     __ Push(kWasmCompileLazyFuncIndexRegister);
+    // Allocate a stack slot, where the runtime function can spill a pointer to
+    // the the NativeModule.
+    __ Push(esp);
     // Initialize the JavaScript context with 0. CEntry will use it to
     // set the current context on the isolate.
     __ Move(kContextRegister, Smi::zero());
-    __ CallRuntime(Runtime::kWasmCompileLazy, 2);
+    __ CallRuntime(Runtime::kWasmCompileLazy, 3);
     // The runtime function returns the jump table slot offset as a Smi. Use
     // that to compute the jump target in edi.
     __ SmiUntag(kReturnRegister0);

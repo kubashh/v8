@@ -2378,21 +2378,82 @@ void StackSwitchFrame::GetStateForJumpBuffer(wasm::JumpBuffer* jmpbuf,
   DCHECK_NE(*state->pc_address, kNullAddress);
 }
 
-WasmInstanceObject WasmCompileLazyFrame::wasm_instance() const {
-  return WasmInstanceObject::cast(*wasm_instance_slot());
+int WasmCompileLazyFrame::GetFunctionIndex() const {
+  Object function_index_slot(Memory<Address>(
+      sp() + WasmCompileLazyFrameConstants::kFunctionIndexOffset));
+  return Smi::ToInt(function_index_slot);
+}
+
+wasm::NativeModule* WasmCompileLazyFrame::GetNativeModule() const {
+  return reinterpret_cast<wasm::NativeModule*>(
+      sp() + WasmCompileLazyFrameConstants::kNativeModuleOffset);
 }
 
 FullObjectSlot WasmCompileLazyFrame::wasm_instance_slot() const {
   const int offset = WasmCompileLazyFrameConstants::kWasmInstanceOffset;
-  return FullObjectSlot(&Memory<Address>(fp() + offset));
+  return FullObjectSlot(&Memory<Address>(sp() + offset));
 }
 
 void WasmCompileLazyFrame::Iterate(RootVisitor* v) const {
-  const int header_size = WasmCompileLazyFrameConstants::kFixedFrameSizeFromFp;
-  FullObjectSlot base(&Memory<Address>(sp()));
-  FullObjectSlot limit(&Memory<Address>(fp() - header_size));
-  v->VisitRootPointers(Root::kStackRoots, nullptr, base, limit);
-  v->VisitRootPointer(Root::kStackRoots, nullptr, wasm_instance_slot());
+  FullObjectSlot second_instance(&Memory<Address>(
+      fp() + WasmCompileLazyFrameConstants::kInstanceSpillOffset));
+  v->VisitRootPointer(Root::kStackRoots, "spilled wasm instance",
+                      second_instance);
+  v->VisitRootPointer(Root::kStackRoots, "wasm instance parameter",
+                      wasm_instance_slot());
+
+  int func_index = GetFunctionIndex();
+  wasm::NativeModule* native_module = GetNativeModule();
+
+  // Scan the spill slots of the parameter registers. As value parameters get
+  // passed
+  uint32_t num_int_params = 0;
+  uint32_t num_ref_params = 0;
+  const wasm::FunctionSig* sig =
+      native_module->module()->functions[func_index].sig;
+  for (auto param : sig->parameters()) {
+    if (param == wasm::kWasmI32) {
+      num_int_params++;
+    } else if (param == wasm::kWasmI64) {
+      num_int_params += kSystemPointerSize == 8 ? 1 : 2;
+    } else if (param.is_reference()) {
+      num_ref_params++;
+    }
+  }
+
+  if (num_ref_params > 0 &&
+      num_int_params <
+          WasmCompileLazyFrameConstants::kNumberOfSavedGpParamRegs - 1) {
+    FullObjectSlot tagged_register_spills_limit(&Memory<Address>(
+        fp() + WasmCompileLazyFrameConstants::kInstanceSpillOffset -
+        (num_int_params * kSystemPointerSize)));
+
+    FullObjectSlot tagged_register_spills_base =
+        tagged_register_spills_limit - num_ref_params;
+
+    v->VisitRootPointers(Root::kStackRoots, "register ref params",
+                         tagged_register_spills_base,
+                         tagged_register_spills_limit);
+  }
+
+  // Next we scan the slots of stack parameters.
+  wasm::WasmCode* wasm_code = native_module->GetCode(func_index);
+  uint32_t first_tagged_stack_slot = wasm_code->first_tagged_parameter_slot();
+  uint32_t num_tagged_stack_slots = wasm_code->num_tagged_parameter_slots();
+
+  // Visit tagged parameters that have been passed to the function of this
+  // frame. Conceptionally these parameters belong to the parent frame. However,
+  // the exact count is only known by this frame (in the presence of tail calls,
+  // this information cannot be derived from the call site).
+  if (num_tagged_stack_slots > 0) {
+    FullObjectSlot tagged_parameter_base(&Memory<Address>(caller_sp()));
+    tagged_parameter_base += first_tagged_stack_slot;
+    FullObjectSlot tagged_parameter_limit =
+        tagged_parameter_base + num_tagged_stack_slots;
+
+    v->VisitRootPointers(Root::kStackRoots, "stack ref params",
+                         tagged_parameter_base, tagged_parameter_limit);
+  }
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 

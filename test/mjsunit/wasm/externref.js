@@ -13,15 +13,22 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
       .addBody([kExprLocalGet, 0])
       .exportFunc();
 
+  print(0);
   const instance = builder.instantiate();
 
   let obj = {'hello' : 'world'};
   assertEquals(obj, instance.exports.main(obj));
+  print(1);
   assertEquals(1234, instance.exports.main(1234));
+  print(2);
   assertEquals(123.4, instance.exports.main(123.4));
+  print(3);
   assertEquals(undefined, instance.exports.main(undefined));
+  print(4);
   assertEquals(null, instance.exports.main(null));
+  print(5);
   assertEquals(print, instance.exports.main(print));
+  print(6);
 })();
 
 (function testPassExternRefToImportedFunction() {

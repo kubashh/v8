@@ -82,7 +82,14 @@ class WasmCompileLazyFrameConstants : public TypedFrameConstants {
   // the first register pushed (highest register code in
   // {wasm::kGpParamRegisters}). Because of padding of the frame header, it is
   // actually one word further down the stack though (thus at position {1}).
-  static constexpr int kWasmInstanceOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kInstanceSpillOffset =
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+
+  // SP-relative.
+  static constexpr int kWasmInstanceOffset = 2 * kSystemPointerSize;
+  static constexpr int kFunctionIndexOffset = 1 * kSystemPointerSize;
+  static constexpr int kNativeModuleOffset = 0;
+  static constexpr int kWasmInstanceOffset = ;
   static constexpr int kFixedFrameSizeFromFp =
       // Header is padded to 16 byte (see {MacroAssembler::EnterFrame}).
       RoundUp<16>(TypedFrameConstants::kFixedFrameSizeFromFp) +

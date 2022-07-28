@@ -1135,7 +1135,7 @@ bool IsLazyModule(const WasmModule* module) {
 }  // namespace
 
 bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
-                 int func_index) {
+                 int func_index, NativeModule** out_native_module) {
   Handle<WasmModuleObject> module_object(instance->module_object(), isolate);
   NativeModule* native_module = module_object->native_module();
   const WasmModule* module = native_module->module();
@@ -1174,6 +1174,7 @@ bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
   WasmCompilationResult result = baseline_unit.ExecuteCompilation(
       &env, compilation_state->GetWireBytesStorage().get(), counters,
       assembler_buffer_cache, &detected_features);
+  *out_native_module = native_module;
   compilation_state->OnCompilationStopped(detected_features);
   if (!thread_ticks.IsNull()) {
     native_module->UpdateCPUDuration(
@@ -1194,6 +1195,8 @@ bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
     DCHECK(FLAG_wasm_speculative_inlining);
     Handle<FixedArray> vector = isolate->factory()->NewFixedArrayWithZeroes(
         result.feedback_vector_slots);
+    isolate->heap()->CollectAllGarbage(Heap::kNoGCFlags,
+                                       GarbageCollectionReason::kTesting);
     instance->feedback_vectors().set(
         declared_function_index(module, func_index), *vector);
   }

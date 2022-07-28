@@ -49,11 +49,17 @@ class WasmCompileLazyFrameConstants : public TypedFrameConstants {
   static constexpr int kNumberOfSavedFpParamRegs = 6;
 
   // FP-relative.
-  static constexpr int kWasmInstanceOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static constexpr int kFixedFrameSizeFromFp =
-      TypedFrameConstants::kFixedFrameSizeFromFp +
-      kNumberOfSavedGpParamRegs * kSystemPointerSize +
-      kNumberOfSavedFpParamRegs * kSimd128Size;
+  // The instance is pushed as part of the saved registers. Being in {r7}, it is
+  // the first register pushed (highest register code in
+  // {wasm::kGpParamRegisters}). Because of padding of the frame header, it is
+  // actually one word further down the stack though (thus at position {1}).
+  static constexpr int kInstanceSpillOffset =
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+
+  // SP-relative.
+  static constexpr int kWasmInstanceOffset = 2 * kSystemPointerSize;
+  static constexpr int kFunctionIndexOffset = 1 * kSystemPointerSize;
+  static constexpr int kNativeModuleOffset = 0;
 };
 
 // Frame constructed by the {WasmDebugBreak} builtin.
