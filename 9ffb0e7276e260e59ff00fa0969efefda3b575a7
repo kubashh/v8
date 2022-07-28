@@ -142,6 +142,24 @@
       "parentUuid": "29088da8_c0ffb01b",
       "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad656260_95a5f74d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-28T15:46:49Z",
+      "side": 1,
+      "message": "I\u0027m sorry that there is another point I didn\u0027t consider, there may be many test like this, if we add `ResetPKUPermissionsForThreadSpawning` to each test case, it may take much effort, so I suppose we can just fix this issue with https://crrev.com/c/3790960, how do you think of this?",
+      "parentUuid": "f382d6cc_f69b1a67",
+      "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
