@@ -56,6 +56,30 @@
       },
       "revId": "fd15d0e42be6245e8502841652ade41af5f859c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ace393_41b3eb2f",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5526,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-07-28T14:43:20Z",
+      "side": 1,
+      "message": "Correct, I\u0027ll mark this as UNREACHABLE to be more obvious.\nI\u0027ve added the explicit FATAL/UNREACHABLE here to make sure we never end up accidentally calling into this signal handler.",
+      "parentUuid": "1dabb12b_9ad58a2e",
+      "range": {
+        "startLine": 5524,
+        "startChar": 3,
+        "endLine": 5526,
+        "endChar": 3
+      },
+      "revId": "fd15d0e42be6245e8502841652ade41af5f859c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
