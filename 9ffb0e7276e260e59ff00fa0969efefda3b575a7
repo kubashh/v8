@@ -124,6 +124,24 @@
       "parentUuid": "faa58f3b_3042fbe2",
       "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f382d6cc_f69b1a67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-28T15:39:19Z",
+      "side": 1,
+      "message": "This Cl indeed do fix this problem, but I suppose if we would like to restore the code of test before that fix, we could add `ResetPKUPermissionsForThreadSpawning`, and I suppose it may be easy to understand, because we have to reset PKU permission before creating each thread.",
+      "parentUuid": "29088da8_c0ffb01b",
+      "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
