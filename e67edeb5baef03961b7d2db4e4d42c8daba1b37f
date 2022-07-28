@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd694fc5_3b5a0935",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-28T15:04:09Z",
+      "side": 1,
+      "message": "lgtm from my pov, please wait for Leszek\u0027s review.",
+      "revId": "e67edeb5baef03961b7d2db4e4d42c8daba1b37f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
