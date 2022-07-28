@@ -16,6 +16,24 @@
       "message": "Thanks for all your comments, I fix nits and test this patch on a machine with PKU support, it passed all tests.",
       "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a835011_28668987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-28T08:54:54Z",
+      "side": 1,
+      "message": "It\u0027s consistently failing for `cctest/test-jump-table-assembler/JumpTablePatchingStress` on my PKU-enabled machine, in both Debug and Optdebug modes. Did you perhaps test with a Release build without DCHECKs?",
+      "parentUuid": "00ac4635_82af87ac",
+      "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
