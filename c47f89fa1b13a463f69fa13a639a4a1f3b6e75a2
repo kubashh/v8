@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c288f46a_6d92a8cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-07-28T15:15:56Z",
+      "side": 1,
+      "message": "This is puzzling to me too, the code cache is created during the initial warm-up  of the benchmark (before timing) so either the sparkplug code is ready by then via normal tier up, or via this additional bit -- but either way, subsequent sparkplug compilation shouldn\u0027t affect the cache.\n\nNevertheless, I can\u0027t argue with pinpoint results, and this makes general sense, so lgtm.",
+      "parentUuid": "db698b1e_1e818dfc",
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78c2b67d_c9a9176e",
         "filename": "src/baseline/baseline-batch-compiler.cc",
         "patchSetId": 6
