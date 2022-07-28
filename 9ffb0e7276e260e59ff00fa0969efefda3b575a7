@@ -106,6 +106,24 @@
       "parentUuid": "5ed707ff_7b1cc5f2",
       "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29088da8_c0ffb01b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 47
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-28T15:30:34Z",
+      "side": 1,
+      "message": "Does https://crrev.com/c/3790960 not fix this sufficiently?",
+      "parentUuid": "faa58f3b_3042fbe2",
+      "revId": "9ffb0e7276e260e59ff00fa0969efefda3b575a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
