@@ -33,6 +33,29 @@
       "message": "machenbach@ PTAL tools/testunner",
       "revId": "fd15d0e42be6245e8502841652ade41af5f859c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dabb12b_9ad58a2e",
+        "filename": "src/d8/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5526,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-07-28T14:13:17Z",
+      "side": 1,
+      "message": "So IIUC this is supposed to be dead code, right? I.e. the sigaction below only installs a handler for SIGTERM. I just want to ensure that we don\u0027t intercept other signals and change the top stack message, as that might change stack traces on clusterfuzz...",
+      "range": {
+        "startLine": 5524,
+        "startChar": 3,
+        "endLine": 5526,
+        "endChar": 3
+      },
+      "revId": "fd15d0e42be6245e8502841652ade41af5f859c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
