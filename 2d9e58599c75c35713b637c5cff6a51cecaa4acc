@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30ede732_aa8ba224",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:12:45Z",
+      "side": 1,
+      "message": "Idk. Asking Jakob again...",
+      "parentUuid": "f641ac44_33949a8f",
+      "range": {
+        "startLine": 1252,
+        "startChar": 7,
+        "endLine": 1252,
+        "endChar": 36
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "914770eb_5c32f351",
         "filename": "src/execution/frames.cc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-28T07:58:12Z",
       "side": 1,
       "message": "this has to be true now, right?",
+      "range": {
+        "startLine": 1266,
+        "startChar": 7,
+        "endLine": 1266,
+        "endChar": 18
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acda8055_1a66782f",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:12:45Z",
+      "side": 1,
+      "message": "Yes, I am still working on it, because it is not true now! Somehow I get Stub and JsToWasm frames with context. See JsToWasm::Iterate and StackFrame::ComputeType! Things are quite messy!\nI am preparing a follow up where I simplify TypedFrame and hopefully remove this boolean.",
+      "parentUuid": "914770eb_5c32f351",
       "range": {
         "startLine": 1266,
         "startChar": 7,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "305ea574_6349893e",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:12:45Z",
+      "side": 1,
+      "message": "What do you suggest? JSFrameTurbofanned?",
+      "parentUuid": "50ba15e0_9dc838f5",
+      "range": {
+        "startLine": 1503,
+        "startChar": 5,
+        "endLine": 1503,
+        "endChar": 18
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "298de8aa_c7ec6781",
         "filename": "src/execution/frames.h",
         "patchSetId": 1
@@ -100,6 +172,30 @@
       "writtenOn": "2022-07-28T07:58:12Z",
       "side": 1,
       "message": "remove?",
+      "range": {
+        "startLine": 818,
+        "startChar": 0,
+        "endLine": 819,
+        "endChar": 46
+      },
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4596261_8b484433",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:12:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "298de8aa_c7ec6781",
       "range": {
         "startLine": 818,
         "startChar": 0,
