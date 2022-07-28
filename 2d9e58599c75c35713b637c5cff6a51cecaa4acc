@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9ab2397_15ba5700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T07:25:15Z",
+      "side": 1,
+      "message": "PTAL! Next step would be to create a WasmFrame::Iterate and simplify TypedFrame::Iterate. Also refactor VisitSpillSlots into a separate function.",
+      "revId": "2d9e58599c75c35713b637c5cff6a51cecaa4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
