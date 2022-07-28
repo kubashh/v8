@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3d1790_2f8f6482",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:26:43Z",
+      "side": 1,
+      "message": "Remove this, since Jakob seems to suggest that this is not possible.",
+      "parentUuid": "ca9f6b63_01263f0f",
+      "range": {
+        "startLine": 1340,
+        "startChar": 0,
+        "endLine": 1352,
+        "endChar": 1
+      },
+      "revId": "4ccb6f1d46c46df6ef339f4e71953534bfc72fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08f07366_0fae4d79",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-28T07:45:59Z",
       "side": 1,
       "message": "this is always true (you DCHECK it above)",
+      "range": {
+        "startLine": 1453,
+        "startChar": 0,
+        "endLine": 1455,
+        "endChar": 30
+      },
+      "revId": "4ccb6f1d46c46df6ef339f4e71953534bfc72fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "866a453d_7960b911",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-07-28T08:26:43Z",
+      "side": 1,
+      "message": "Of course! This is only for Wasm code!",
+      "parentUuid": "08f07366_0fae4d79",
       "range": {
         "startLine": 1453,
         "startChar": 0,
