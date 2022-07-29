@@ -339,12 +339,12 @@ class Decoder {
 
   // Converts the given value to a {Result}, copying the error if necessary.
   template <typename T>
-  Result<T> toResult(T&& val) {
+  Result<std::decay_t<T>> toResult(T&& val) {
     if (failed()) {
       TRACE("Result error: %s\n", error_.message().c_str());
-      return Result<T>(error_);
+      return Result<std::decay_t<T>>{error_};
     }
-    return Result<T>(std::move(val));
+    return Result<std::decay_t<T>>{std::forward<T>(val)};
   }
 
   // Resets the boundaries of this decoder.
