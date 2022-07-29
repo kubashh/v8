@@ -46,6 +46,30 @@
       },
       "revId": "4e935c7ffbeb91e46a6025866eba239d71f5a99d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79fc3ec4_cb1ed955",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-29T08:55:07Z",
+      "side": 1,
+      "message": "Thanks for your reply, but there is two steps: \n1) move PKU initialization and `int memory_protection_key_`. \n2) enable PKU for v8 heap.\n\nMay I upload the two parts in one CL?",
+      "parentUuid": "6a188736_51585563",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 258,
+        "endChar": 55
+      },
+      "revId": "4e935c7ffbeb91e46a6025866eba239d71f5a99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
