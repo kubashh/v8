@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5f1535d_02739d73",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "nit: Should we have this bailout in WriteBarrierForEmbedderField above as well? (to avoid reading any values)",
+      "range": {
+        "startLine": 228,
+        "startChar": 2,
+        "endLine": 228,
+        "endChar": 23
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f247a37_1a9b7cea",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "nit: `if(!instance) return;`",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 15
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a520a1f_5393d0a4",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "Since the cage is now shared and we could have multiple CppHeaps in the same cage, I think we need the page check even when we have a cage. Imo, this can be a bailout instead.",
+      "range": {
+        "startLine": 261,
+        "startChar": 50,
+        "endLine": 261,
+        "endChar": 62
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d68ab81c_202f6321",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "With a shared cage, in the current implementation of this method, I suspect page can be null.",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 12
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

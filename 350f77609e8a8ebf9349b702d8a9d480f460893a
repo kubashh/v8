@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce85654_02d0088f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6035,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "Would it make sense to move the write barrier into store_aligned_pointer so that it automatically happens whenever the slot is updated?",
+      "range": {
+        "startLine": 6035,
+        "startChar": 38,
+        "endLine": 6035,
+        "endChar": 66
+      },
+      "revId": "350f77609e8a8ebf9349b702d8a9d480f460893a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1db0a370_9316b2e9",
+        "filename": "src/heap/embedder-tracing-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "nit: Stale or needed?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 39
+      },
+      "revId": "350f77609e8a8ebf9349b702d8a9d480f460893a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3169eea_efec6dea",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-07-29T20:39:43Z",
+      "side": 1,
+      "message": "nit: Stale or needed?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 39
+      },
+      "revId": "350f77609e8a8ebf9349b702d8a9d480f460893a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
