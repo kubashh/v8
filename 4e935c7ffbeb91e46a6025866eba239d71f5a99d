@@ -94,6 +94,30 @@
       },
       "revId": "4e935c7ffbeb91e46a6025866eba239d71f5a99d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237d56f7_5911aac3",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-29T16:06:12Z",
+      "side": 1,
+      "message": "Hi Igor, Thanks for your advise, I submit a new CL:https://chromium-review.googlesource.com/c/v8/v8/+/3793944, it\u0027s still WIP(I will work on fix some test failed, like reseting PKU permission in singal handler).\nBut I still didn\u0027t find a good place to initialize PKU, I would be very appreciate if you could give me some insights(I add comments in the CL, you can just look at them with out other code, because they are still WIP).",
+      "parentUuid": "75ba72ee_45099eb6",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 258,
+        "endChar": 55
+      },
+      "revId": "4e935c7ffbeb91e46a6025866eba239d71f5a99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
