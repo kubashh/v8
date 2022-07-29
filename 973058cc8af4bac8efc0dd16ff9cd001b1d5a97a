@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d67fdaee_c1caac10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-29T12:40:56Z",
+      "side": 1,
+      "message": "PTAL; a little cleanup before adding another test for https://crbug.com/1348335.",
+      "revId": "973058cc8af4bac8efc0dd16ff9cd001b1d5a97a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
