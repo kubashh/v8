@@ -309,7 +309,7 @@ using MiscField = base::BitField<int, 22, 10>;
 // LaneSizeField and AccessModeField are helper types to encode/decode a lane
 // size, an access mode, or both inside the overlapping MiscField.
 using LaneSizeField = base::BitField<int, 22, 8>;
-using AccessModeField = base::BitField<MemoryAccessMode, 30, 2>;
+using AccessModeField = base::BitField<MemoryAccessMode, 30, 1>;
 // TODO(turbofan): {HasMemoryAccessMode} is currently only used to guard
 // decoding (in CodeGenerator and InstructionScheduler). Encoding (in
 // InstructionSelector) is not yet guarded. There are in fact instructions for
