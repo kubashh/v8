@@ -16,6 +16,23 @@
       "message": "Manos: PTAL.\n\nIgor, Shu: FYI.",
       "revId": "a498c742b278eb5717f1e53d1b52f379c1eb9ebf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a79ad77_15cf9ec8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T13:07:22Z",
+      "side": 1,
+      "message": "Thanks for the review; landing.",
+      "revId": "a498c742b278eb5717f1e53d1b52f379c1eb9ebf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
