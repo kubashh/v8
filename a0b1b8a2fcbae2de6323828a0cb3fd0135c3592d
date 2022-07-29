@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "787deaeb_337b7a24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-07-29T15:40:59Z",
+      "side": 1,
+      "message": "PTAL; this is a follow-up for a previous attempt to fix the issue: https://crrev.com/c/3793389",
+      "revId": "a0b1b8a2fcbae2de6323828a0cb3fd0135c3592d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
