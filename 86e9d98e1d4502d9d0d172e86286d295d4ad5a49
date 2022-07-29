@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e954c0d_cb907aa0",
+        "filename": "tools/turbolizer/src/views/history-view.ts",
+        "patchSetId": 15
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-29T15:43:10Z",
+      "side": 1,
+      "message": "Emerged?",
+      "range": {
+        "startLine": 497,
+        "startChar": 2,
+        "endLine": 497,
+        "endChar": 12
+      },
+      "revId": "86e9d98e1d4502d9d0d172e86286d295d4ad5a49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44f6b262_ebc727e3",
+        "filename": "tools/turbolizer/src/views/turboshaft-graph-view.ts",
+        "patchSetId": 15
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-07-29T15:43:10Z",
+      "side": 1,
+      "message": "nit: I think `usedBlocks.size \u003d\u003d 0` is more readable.",
+      "range": {
+        "startLine": 758,
+        "startChar": 8,
+        "endLine": 758,
+        "endChar": 24
+      },
+      "revId": "86e9d98e1d4502d9d0d172e86286d295d4ad5a49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
