@@ -64,6 +64,8 @@ class CageBaseGlobal final {
 class CompressedPointer final {
  public:
   using IntegralType = uint32_t;
+  static constexpr IntegralType kCompressedSentinel =
+      SentinelPointer::kSentinelValue >> 1;
 
   V8_INLINE CompressedPointer() : value_(0u) {}
   V8_INLINE explicit CompressedPointer(const void* ptr)
@@ -144,8 +146,6 @@ class CompressedPointer final {
   }
 
  private:
-  static constexpr IntegralType kCompressedSentinel =
-      SentinelPointer::kSentinelValue >> 1;
   // All constructors initialize `value_`. Do not add a default value here as it
   // results in a non-atomic write on some builds, even when the atomic version
   // of the constructor is used.
