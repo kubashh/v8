@@ -4,6 +4,8 @@
 #ifndef V8_HEAP_EMBEDDER_TRACING_INL_H_
 #define V8_HEAP_EMBEDDER_TRACING_INL_H_
 
+#include "src/base/logging.h"
+#include "src/heap/cppgc/page-memory.h"
 #include "src/heap/embedder-tracing.h"
 #include "src/objects/embedder-data-slot.h"
 #include "src/objects/js-objects-inl.h"
