@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "360de3d5_803883a2",
+        "filename": "test/cctest/wasm/test-run-wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-29T04:31:55Z",
+      "side": 0,
+      "message": "Restoring this test for now to land this.",
+      "parentUuid": "c44bcd9a_ccd71036",
+      "range": {
+        "startLine": 119,
+        "startChar": 24,
+        "endLine": 119,
+        "endChar": 50
+      },
+      "revId": "18751c5b4669ec5c754786419790e24207953a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd215214_41e932c6",
@@ -85,6 +109,30 @@
       "writtenOn": "2022-07-26T10:13:55Z",
       "side": 0,
       "message": "Same as above.",
+      "range": {
+        "startLine": 564,
+        "startChar": 24,
+        "endLine": 564,
+        "endChar": 62
+      },
+      "revId": "18751c5b4669ec5c754786419790e24207953a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4654e167_c132570b",
+        "filename": "test/cctest/wasm/test-run-wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-29T04:31:55Z",
+      "side": 0,
+      "message": "Same as above.",
+      "parentUuid": "cd215214_41e932c6",
       "range": {
         "startLine": 564,
         "startChar": 24,

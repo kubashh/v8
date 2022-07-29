@@ -46,6 +46,30 @@
       },
       "revId": "bc9644f4a45cdbf891ac9cfc851a39e6d4979cf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aff4e4f_eee30bce",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-07-29T04:31:55Z",
+      "side": 1,
+      "message": "There is already an implication from wasm-gc.\nI agree we should turn it on in a separate CL, and also after we implement the global wrapper storage, to have a complete implementation.",
+      "parentUuid": "e8bd646a_8d7238ea",
+      "range": {
+        "startLine": 1130,
+        "startChar": 40,
+        "endLine": 1130,
+        "endChar": 44
+      },
+      "revId": "bc9644f4a45cdbf891ac9cfc851a39e6d4979cf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
