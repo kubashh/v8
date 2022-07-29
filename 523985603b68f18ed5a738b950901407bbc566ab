@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44edcc08_c1b31c44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-07-29T08:27:04Z",
+      "side": 1,
+      "message": "Sgtm. Yeah limiting to deopting bytecodes likely doesn\u0027t help since almost all can deopt :)",
+      "parentUuid": "a393a653_aca7a87f",
+      "revId": "523985603b68f18ed5a738b950901407bbc566ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "563c9d03_0d301d2e",
