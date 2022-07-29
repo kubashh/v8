@@ -16,6 +16,138 @@
       "message": "PTAL",
       "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad9af2e_5b669acf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "Very nice! LGTM with nits.",
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab109e9_58103ee3",
+        "filename": "src/execution/arm/frame-constants-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "I\u0027d find it useful to preserve the gist of the old comment to explain where these indices are coming from. I\u0027ll give it a stab:\n```\n// On arm, spilled registers are implicitly sorted backwards by number.\n// We spill:\n//   r3: param0 \u003d instance\n//   r0, r2, r6: param1, param2, param3\n// in the following FP-relative order: [r6, r3, r2, r0].\n```\n(Or just leave the old comment if you find that a clearer description.)",
+      "range": {
+        "startLine": 68,
+        "startChar": 38,
+        "endLine": 68,
+        "endChar": 39
+      },
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0edebbd3_f8324a1e",
+        "filename": "src/execution/arm64/frame-constants-arm64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "Why 8? I would have expected 7. If this is not a typo, please add a comment with an explanation. (And if it *is* a typo, maybe add a test that covers this case?)",
+      "range": {
+        "startLine": 90,
+        "startChar": 38,
+        "endLine": 90,
+        "endChar": 39
+      },
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85ec801_7ac178c5",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "Naming nit: please don\u0027t call this `*_slot`; we use \"slot\" for addresses of memory slots, not for their contents. Just `function_index` would be fine.",
+      "range": {
+        "startLine": 2386,
+        "startChar": 9,
+        "endLine": 2386,
+        "endChar": 28
+      },
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b923c86_9b0f4c08",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2413,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "nit: incomplete sentence",
+      "range": {
+        "startLine": 2413,
+        "startChar": 5,
+        "endLine": 2413,
+        "endChar": 11
+      },
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e7ad8ee_6a03edeb",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-07-29T11:18:09Z",
+      "side": 1,
+      "message": "I think you can drop this comment, as this CL makes it obsolete.",
+      "range": {
+        "startLine": 225,
+        "startChar": 2,
+        "endLine": 227,
+        "endChar": 16
+      },
+      "revId": "9382645c76ec605b808eec2c9fc8547cacfbb96f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
