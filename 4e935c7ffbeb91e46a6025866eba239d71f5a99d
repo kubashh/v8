@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd06380_f1b53a0a",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-07-29T08:43:38Z",
+      "side": 1,
+      "message": "Hi All, I\u0027m working on enable PKU for v8 heap, but now I meet a problem in this initialization.\nIf we initialize PKU here, is was after we create worker threads(threads are created in `v8::platform::NewDefaultPlatform`), so the worker thread may get the `kNoAccess` permission, which will potentially cause segment fault.\nHence I suppose moving the initiazation into `v8::platform::NewDefaultPlatform`, which will also need we put `int memory_protection_key_` and some APIs in base:: layer.\nIs it suitable to do this?",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 258,
+        "endChar": 55
+      },
+      "revId": "4e935c7ffbeb91e46a6025866eba239d71f5a99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
