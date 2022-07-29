@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5dc2499_ba8d9557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-29T13:43:12Z",
+      "side": 1,
+      "message": "Thanks for reverting the broken change!\n\nSo this is the next try:\nPatchset 1 contains the revert of the revert (the original change).\nPatchset 2 is the SIMD fix.\nPlease take a look. I wasn\u0027t aware of WebAssembly SIMD types / instructions not being legal on hardware not supporting them natively. 👍",
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47ebc534_261daca3",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-29T13:43:12Z",
+      "side": 1,
+      "message": "Is there an easy way to cover this branch before submitting the change?",
+      "range": {
+        "startLine": 2361,
+        "startChar": 0,
+        "endLine": 2363,
+        "endChar": 62
+      },
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
