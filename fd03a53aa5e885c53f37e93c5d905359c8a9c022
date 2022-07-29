@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90c2b93f_d29f91f2",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-29T16:01:20Z",
+      "side": 1,
+      "message": "As discussed https://chromium-review.googlesource.com/c/v8/v8/+/3791046/comments/786ac07a_37c1b68c, we should verify this. I think, we either have to do `std::forward\u003cstd::decay_t\u003cT\u003e\u003e` or we need to adapt the Result constructor to something like `template \u003ctypename U\u003e Result(U\u0026\u0026)` decoupling the argument from the template class parameter.\nI think the latter is somewhat ugly and hard to read, so I dislike it but I\u0027m also not sure if the forward with the decayed type is correct in all cases...",
+      "revId": "fd03a53aa5e885c53f37e93c5d905359c8a9c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d26c2dc2_cb8ab3b4",
+        "filename": "src/wasm/wasm-result.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-07-29T16:01:20Z",
+      "side": 1,
+      "message": "At least as of now this isn\u0027t possible as line 105 renders invalid in that case. (In the error case we have an error but no value, so the reference would have to be invalid which is not possible.)\nStill, the static_assert should be helpful.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 65
+      },
+      "revId": "fd03a53aa5e885c53f37e93c5d905359c8a9c022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
