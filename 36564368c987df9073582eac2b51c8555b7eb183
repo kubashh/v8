@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824b64b6_b303d3c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2022-07-30T17:03:29Z",
+      "side": 1,
+      "message": "Is this ok? (i.e. are all these values in-memory (or snapshot) only?)",
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
