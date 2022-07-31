@@ -419,8 +419,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
            &if_smiorobject, &if_double);
 
     BIND(&if_iterator_fn_not_callable);
-    message_id = SmiConstant(
-        static_cast<int>(MessageTemplate::kIteratorSymbolNonCallable)),
+    message_id = SmiConstant(static_cast<int>(MessageTemplate::kNotIterable)),
     Goto(&throw_spread_error);
 
     BIND(&if_iterator_is_null_or_undefined);
