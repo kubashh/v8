@@ -1,5 +1,5 @@
-*%(basename)s:5: TypeError: Found non-callable @@iterator
+*%(basename)s:5: TypeError: x is not iterable
 console.log(1, ...x);
                   ^
-TypeError: Found non-callable @@iterator
+TypeError: x is not iterable
     at *%(basename)s:5:9
