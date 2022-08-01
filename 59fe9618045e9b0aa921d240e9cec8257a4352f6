@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d21c58_fe18b6af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-01T12:47:14Z",
+      "side": 1,
+      "message": "dsanders11 reports at https://chromium.slack.com/archives/CGJDZJVG9/p1659111508517399 that this creates a hazard: since it changes the size of objects defined in V8 header files, trouble will ensue when V8 is compiled with `-DDEBUG` (e.g. because of `dcheck_always_on`) while its embedder is not, or vice versa. (In fact, I wonder why this hasn\u0027t caused problems for Chromium builds, where AFAIK `dcheck_always_on` implies `-DDEBUG` for V8 but not for the rest of Chrome.)\n\nOne possibility is to propagate `-DDEBUG` to Ninja targets depending on V8 (or more specifically, on these headers). I was wondering whether there\u0027s also a possibility to avoid the issue in the first place by making sure that the sizes of public objects don\u0027t change depending on preprocessor variables.",
+      "revId": "59fe9618045e9b0aa921d240e9cec8257a4352f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
