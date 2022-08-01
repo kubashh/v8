@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "ce9acea62f3b21b1c794d76e5ae4599907103d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4579ef3d_437fcc91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-01T15:59:53Z",
+      "side": 1,
+      "message": "Matthias, can you also check if this makes sense to you, and if it fixes your use case? (I tested locally, and it looked good.)",
+      "revId": "ce9acea62f3b21b1c794d76e5ae4599907103d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
