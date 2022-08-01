@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfcc1aa0_c4614af8",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6029,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T13:53:23Z",
+      "side": 1,
+      "message": "Done here: https://chromium-review.googlesource.com/c/v8/v8/+/3795378",
+      "parentUuid": "fc1d67be_b00f24b7",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd97afc4_a2bc6990",
@@ -66,6 +84,24 @@
       "writtenOn": "2022-08-01T07:08:54Z",
       "side": 1,
       "message": "Should we document here a bit why we are doing this (and why it works), e.g. that we can read low/high updates in any order and that cage check + low part !\u003d 0 handle that?",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a30eab_65f4610e",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd97afc4_a2bc6990",
       "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -177,6 +213,24 @@
       "writtenOn": "2022-08-01T07:08:54Z",
       "side": 1,
       "message": "Nit: Since there is `#ifdef !condition` as well, could we simplify this a bit with `if constexpr`? We already seem to use it in V8. Eg. finding page first and then setting on_cpp_heap.",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77b6bf0_d43ca941",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T13:53:23Z",
+      "side": 1,
+      "message": "Done: I did some reshuffling. As discussed offline, `if constexpr()` doesn\u0027t work here as `CagedHeap` is only conditionally available and this wouldn\u0027t compile.",
+      "parentUuid": "bb2a2ba4_8af8cb02",
       "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

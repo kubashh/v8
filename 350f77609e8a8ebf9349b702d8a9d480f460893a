@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70a2745b_ff6d9da5",
+        "filename": "src/api/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6035,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T13:53:23Z",
+      "side": 1,
+      "message": "Updating: This doesn\u0027t nicely work for the intersting case of setting 2 pointers at the same time (below).\n\nWe want the barrier to check type information (or at least some parts) which is not possible from `store_aligned_pointer()`.",
+      "parentUuid": "c4cff652_144b90fc",
+      "range": {
+        "startLine": 6035,
+        "startChar": 38,
+        "endLine": 6035,
+        "endChar": 66
+      },
+      "revId": "350f77609e8a8ebf9349b702d8a9d480f460893a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1db0a370_9316b2e9",
         "filename": "src/heap/embedder-tracing-inl.h",
         "patchSetId": 3
