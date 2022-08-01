@@ -63,7 +63,6 @@
 #include "src/handles/persistent-handles.h"
 #include "src/heap/embedder-tracing.h"
 #include "src/heap/heap-inl.h"
-#include "src/heap/heap-write-barrier.h"
 #include "src/heap/safepoint.h"
 #include "src/init/bootstrapper.h"
 #include "src/init/icu_util.h"
@@ -6036,11 +6035,13 @@ void v8::Object::SetAlignedPointerInInternalField(int index, void* value) {
   if (!InternalFieldOK(obj, index, location)) return;
 
   i::DisallowGarbageCollection no_gc;
+  auto* heap = obj->GetHeap();
   Utils::ApiCheck(i::EmbedderDataSlot(i::JSObject::cast(*obj), index)
                       .store_aligned_pointer(obj->GetIsolate(), value),
                   location, "Unaligned pointer");
   DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
-  internal::WriteBarrier::MarkingFromInternalFields(i::JSObject::cast(*obj));
+  heap->local_embedder_heap_tracer()->WriteBarrierForEmbedderField(
+      i::JSObject::cast(*obj), index, value);
 }
 
 void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
@@ -6048,6 +6049,7 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
 
   i::DisallowGarbageCollection no_gc;
+  auto* heap = obj->GetHeap();
   const char* location = "v8::Object::SetAlignedPointerInInternalFields()";
   i::JSObject js_obj = i::JSObject::cast(*obj);
   int nof_embedder_fields = js_obj.GetEmbedderFieldCount();
@@ -6063,7 +6065,8 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
                     location, "Unaligned pointer");
     DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
   }
-  internal::WriteBarrier::MarkingFromInternalFields(js_obj);
+  heap->local_embedder_heap_tracer()->WriteBarrierForEmbedderFields(
+      js_obj, argc, indices, values);
 }
 
 // --- E n v i r o n m e n t ---
