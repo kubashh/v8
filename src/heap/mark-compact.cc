@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "include/v8-platform.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/utils/random-number-generator.h"
@@ -24,6 +25,7 @@
 #include "src/heap/basic-memory-chunk.h"
 #include "src/heap/code-object-registry.h"
 #include "src/heap/concurrent-allocator.h"
+#include "src/heap/concurrent-marking.h"
 #include "src/heap/evacuation-allocator-inl.h"
 #include "src/heap/gc-tracer-inl.h"
 #include "src/heap/gc-tracer.h"
@@ -620,6 +622,8 @@ void MarkCompactCollector::StartMarking() {
 }
 
 void MarkCompactCollector::CollectGarbage() {
+  fprintf(stderr, "MajorMC::CollectGarbage()\n");
+
   // Make sure that Prepare() has been called. The individual steps below will
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
@@ -646,6 +650,21 @@ void MarkCompactCollector::VerifyMarkbitsAreDirty(ReadOnlySpace* space) {
 
 void MarkCompactCollector::VerifyMarkbitsAreClean(PagedSpace* space) {
   for (Page* p : *space) {
+    if (!non_atomic_marking_state()->bitmap(p)->IsClean()) {
+      fprintf(stderr,
+              "(PagedSpace) Bitmap for this page (%.8lx) not clean, live "
+              "bytes: %ld\n",
+              p->area_start(), non_atomic_marking_state()->live_bytes(p));
+      fprintf(stderr, "InOldSpace(): %d\n", p->InOldSpace());
+      fprintf(stderr, "InNewSpace(): %d\n", p->InNewSpace());
+      fprintf(stderr, "InNewLargeObjectSpace(): %d\n",
+              p->InNewLargeObjectSpace());
+      fprintf(stderr, "InYoungGeneration(): %d\n", p->InYoungGeneration());
+      fprintf(stderr, "IsFromPage(): %d\n", p->IsFromPage());
+      fprintf(stderr, "IsToPage(): %d\n", p->IsToPage());
+
+      non_atomic_marking_state()->bitmap(p)->Print();
+    }
     CHECK(non_atomic_marking_state()->bitmap(p)->IsClean());
     CHECK_EQ(0, non_atomic_marking_state()->live_bytes(p));
   }
@@ -654,6 +673,12 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(PagedSpace* space) {
 void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
   if (!space) return;
   for (Page* p : PageRange(space->first_allocatable_address(), space->top())) {
+    if (!non_atomic_marking_state()->bitmap(p)->IsClean()) {
+      fprintf(stderr,
+              "(NewSpace) Bitmap for this page not clean, live bytes: %ld\n",
+              non_atomic_marking_state()->live_bytes(p));
+      non_atomic_marking_state()->bitmap(p)->Print();
+    }
     CHECK(non_atomic_marking_state()->bitmap(p)->IsClean());
     CHECK_EQ(0, non_atomic_marking_state()->live_bytes(p));
   }
@@ -670,7 +695,8 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(LargeObjectSpace* space) {
 }
 
 void MarkCompactCollector::VerifyMarkbitsAreClean() {
-  VerifyMarkbitsAreClean(heap_->old_space());
+  VerifyMarkbitsAreClean(
+      heap_->old_space());  // <--- this one caused errors, now fixed
   VerifyMarkbitsAreClean(heap_->code_space());
   if (heap_->map_space()) {
     VerifyMarkbitsAreClean(heap_->map_space());
@@ -5408,9 +5434,10 @@ MinorMarkCompactCollector::MinorMarkCompactCollector(Heap* heap)
 
 std::pair<size_t, size_t> MinorMarkCompactCollector::ProcessMarkingWorklist(
     size_t bytes_to_process) {
+  UNREACHABLE();
   // TODO(v8:13012): Implement this later. It should be similar to
   // MinorMarkCompactCollector::DrainMarkingWorklist.
-  return std::pair<size_t, size_t>(0, 0);
+  // return std::pair<size_t, size_t>(0, 0);
 }
 
 void MinorMarkCompactCollector::CleanupPromotedPages() {
@@ -5624,6 +5651,7 @@ void MinorMarkCompactCollector::Finish() {
 }
 
 void MinorMarkCompactCollector::CollectGarbage() {
+  fprintf(stderr, "MinorMC::CollectGarbage()\n");
   DCHECK(!heap()->mark_compact_collector()->in_use());
 #ifdef VERIFY_HEAP
   for (Page* page : *heap()->new_space()) {
@@ -5836,41 +5864,64 @@ MinorMarkCompactCollector::CreateRememberedSetUpdatingItem(
 
 class PageMarkingItem;
 class RootMarkingItem;
-class YoungGenerationMarkingTask;
 
 class YoungGenerationMarkingTask {
  public:
   YoungGenerationMarkingTask(Isolate* isolate,
                              MinorMarkCompactCollector* collector,
-                             MarkingWorklists* global_worklists)
-      : marking_worklists_local_(
+                             MarkingWorklists* global_worklists, bool main)
+      : main_(main),
+        marking_worklists_local_(
             std::make_unique<MarkingWorklists::Local>(global_worklists)),
-        marking_state_(collector->marking_state()),
-        visitor_(isolate, marking_state_, marking_worklists_local()) {}
+        main_visitor_(
+            YoungGenerationMarkingVisitor(isolate, collector->marking_state(),
+                                          marking_worklists_local_.get())),
+        concurrent_visitor_(YoungGenerationConcurrentMarkingVisitor(
+            isolate->heap(), marking_worklists_local_.get(),
+            &memory_chunk_data_)) {}
+  // Initializing both visitors for simplicity.
 
   void MarkObject(Object object) {
     if (!Heap::InYoungGeneration(object)) return;
     HeapObject heap_object = HeapObject::cast(object);
-    if (marking_state_->WhiteToBlack(heap_object)) {
-      visitor_.Visit(heap_object);
+    if (main_) {
+      if (main_visitor_.marking_state()->WhiteToBlack(heap_object)) {
+        main_visitor_.Visit(heap_object);
+      }
+    } else {
+      if (concurrent_visitor_.marking_state()->WhiteToBlack(heap_object)) {
+        concurrent_visitor_.Visit(heap_object);
+      }
     }
   }
 
   void EmptyMarkingWorklist() {
     HeapObject object;
-    while (marking_worklists_local_->Pop(&object)) {
-      visitor_.Visit(object);
+    if (main_) {
+      while (marking_worklists_local()->Pop(&object) ||
+             marking_worklists_local()->PopOnHold(&object)) {  // upstream
+        main_visitor_.Visit(object);
+      }
+    } else {
+      while (marking_worklists_local()->Pop(&object)) {
+        concurrent_visitor_.Visit(object);
+      }
     }
+    // marking_worklists_local()->Publish(); // test
   }
 
   MarkingWorklists::Local* marking_worklists_local() {
     return marking_worklists_local_.get();
   }
 
+  MemoryChunkDataMap* memory_chunk_data() { return &memory_chunk_data_; }
+
  private:
+  bool main_;
   std::unique_ptr<MarkingWorklists::Local> marking_worklists_local_;
-  MarkingState* marking_state_;
-  YoungGenerationMarkingVisitor visitor_;
+  YoungGenerationMarkingVisitor main_visitor_;
+  YoungGenerationConcurrentMarkingVisitor concurrent_visitor_;
+  MemoryChunkDataMap memory_chunk_data_;
 };
 
 class PageMarkingItem : public ParallelWorkItem {
@@ -5953,12 +6004,12 @@ class YoungGenerationMarkingJob : public v8::JobTask {
     if (delegate->IsJoiningThread()) {
       TRACE_GC(collector_->heap()->tracer(),
                GCTracer::Scope::MINOR_MC_MARK_PARALLEL);
-      ProcessItems(delegate);
+      ProcessItems(delegate, true);
     } else {
       TRACE_GC_EPOCH(collector_->heap()->tracer(),
                      GCTracer::Scope::MINOR_MC_BACKGROUND_MARKING,
                      ThreadKind::kBackground);
-      ProcessItems(delegate);
+      ProcessItems(delegate, false);  // !
     }
   }
 
@@ -5967,12 +6018,8 @@ class YoungGenerationMarkingJob : public v8::JobTask {
     // the amount of marking that is required.
     const int kPagesPerTask = 2;
     size_t items = remaining_marking_items_.load(std::memory_order_relaxed);
-    size_t num_tasks = std::max(
-        (items + 1) / kPagesPerTask,
-        global_worklists_->shared()->Size() +
-            global_worklists_->on_hold()
-                ->Size());  // TODO(v8:13012): If this is used with concurrent
-                            // marking, we need to remove on_hold() here.
+    size_t num_tasks = std::max((items + 1) / kPagesPerTask,
+                                global_worklists_->shared()->Size());
     if (!FLAG_parallel_marking) {
       num_tasks = std::min<size_t>(1, num_tasks);
     }
@@ -5981,13 +6028,43 @@ class YoungGenerationMarkingJob : public v8::JobTask {
   }
 
  private:
-  void ProcessItems(JobDelegate* delegate) {
+  void FlushMemoryChunkData(MemoryChunkDataMap* memory_chunk_data) {
+    // NonAtomicMarkingState* marking_state =
+    // collector_->non_atomic_marking_state();
+    MarkingState* marking_state = collector_->marking_state();
+    for (auto& pair : *memory_chunk_data) {
+      // ClearLiveness sets the live bytes to zero.
+      // Pages with zero live bytes might be already unmapped.
+      MemoryChunk* memory_chunk = pair.first;
+      MemoryChunkData& data = pair.second;
+      if (data.live_bytes) {
+        marking_state->IncrementLiveBytes(memory_chunk, data.live_bytes);
+      }
+      // if (data.typed_slots) {
+      // RememberedSet<OLD_TO_OLD>::MergeTyped(memory_chunk,
+      //                                       std::move(data.typed_slots));
+      //}
+    }
+    memory_chunk_data->clear();
+  }
+
+  void ProcessItems(JobDelegate* delegate, bool main) {
     double marking_time = 0.0;
     {
       TimedScope scope(&marking_time);
-      YoungGenerationMarkingTask task(isolate_, collector_, global_worklists_);
+      YoungGenerationMarkingTask task(isolate_, collector_, global_worklists_,
+                                      main);
       ProcessMarkingItems(&task);
       task.EmptyMarkingWorklist();
+      if (!main) {
+        FlushMemoryChunkData(task.memory_chunk_data());
+      }
+
+#ifdef VERIFY_HEAP
+      for (Page* page : *collector_->heap()->old_space()) {
+        CHECK(page->marking_bitmap<AccessMode::NON_ATOMIC>()->IsClean());
+      }
+#endif  // VERIFY_HEAP
     }
     if (FLAG_trace_minor_mc_parallel_marking) {
       PrintIsolate(collector_->isolate(), "marking[%p]: time=%f\n",
@@ -6292,8 +6369,16 @@ void MinorMarkCompactCollector::EvacuatePagesInParallel() {
   intptr_t live_bytes = 0;
 
   for (Page* page : new_space_evacuation_pages_) {
+    fprintf(stderr, "EvacuatePagesInParallel - Page Start: %.8lx\n",
+            page->area_start());
     intptr_t live_bytes_on_page = non_atomic_marking_state()->live_bytes(page);
-    if (live_bytes_on_page == 0) continue;
+    if (live_bytes_on_page == 0) {
+      fprintf(stderr,
+              "Not evacuating the following page because live_bytes==0.\n");
+      non_atomic_marking_state()->bitmap(page)->Print();
+      continue;
+    }
+
     live_bytes += live_bytes_on_page;
     if (ShouldMovePage(page, live_bytes_on_page, AlwaysPromoteYoung::kNo)) {
       if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK)) {
@@ -6311,6 +6396,8 @@ void MinorMarkCompactCollector::EvacuatePagesInParallel() {
     LargePage* current = *it;
     it++;
     HeapObject object = current->GetObject();
+    fprintf(stderr, "EvacuatePagesInParallel - Large Page Start: %.8lx\n",
+            current->area_start());
     if (non_atomic_marking_state_.IsBlack(object)) {
       heap_->lo_space()->PromoteNewLargeObject(current);
       current->SetFlag(Page::PAGE_NEW_OLD_PROMOTION);

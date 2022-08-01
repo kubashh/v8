@@ -1160,6 +1160,12 @@ MaybeHandle<JSTemporalTimeZone> CreateTemporalTimeZone(
     DCHECK(isolate->has_pending_exception());
     isolate->clear_pending_exception();
     // a. Assert: ! CanonicalizeTimeZoneName(identifier) is identifier.
+    if (!String::Equals(isolate, identifier,
+                        CanonicalizeTimeZoneName(isolate, identifier))) {
+      std::cerr << "DEBUG" << std::endl;
+      std::cerr << identifier << std::endl;
+      std::cerr << CanonicalizeTimeZoneName(isolate, identifier) << std::endl;
+    }
     DCHECK(String::Equals(isolate, identifier,
                           CanonicalizeTimeZoneName(isolate, identifier)));
 
