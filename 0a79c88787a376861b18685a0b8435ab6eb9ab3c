@@ -16,6 +16,23 @@
       "message": "PTAL; let me know if you see other candidates we should test proactively.",
       "revId": "0a79c88787a376861b18685a0b8435ab6eb9ab3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ddd0b55_41fe4a0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T12:39:06Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0a79c88787a376861b18685a0b8435ab6eb9ab3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
