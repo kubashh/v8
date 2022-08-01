@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37b79783_d767ec9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-08-01T04:22:54Z",
+      "side": 1,
+      "message": "Thanks for your reviewing and discussion!\nWe will understand and investigate how baseline code to be cached in isolate cache.\n\nHi Leszek,\n\nPlease allow me double confirm, what\u0027s the pinpoint results in your last comment?\n\"This CL can improve Speedometer2 by +2%\" in commit message is result of our local test.  \nI did pinpoint test based on the first version (early sparkplug compilation if turbofan compiled), almost no performance impact, because I could see performance improvement (~0.8%) in our local test, I doubled pinpoint may clear disk cache, so I committed a hack version to test performance impact in pinpoint, then the pinpoint test result is align with our local test result.\nThen I reverted the hack version and updated the patch according to your review comments, I could see more performance improvement (+2%) in our local test, but I didn\u0027t do pinpoint test.",
+      "parentUuid": "ad8485d0_a1aa7525",
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78c2b67d_c9a9176e",
