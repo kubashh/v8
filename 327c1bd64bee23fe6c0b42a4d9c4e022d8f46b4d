@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8b4889f_d66582fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-01T14:29:55Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "327c1bd64bee23fe6c0b42a4d9c4e022d8f46b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaade389_b4007a0f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6038,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-01T14:29:55Z",
+      "side": 1,
+      "message": "nit nit: Here and below, `heap` is only used once so you can inline it.",
+      "range": {
+        "startLine": 6038,
+        "startChar": 8,
+        "endLine": 6038,
+        "endChar": 12
+      },
+      "revId": "327c1bd64bee23fe6c0b42a4d9c4e022d8f46b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

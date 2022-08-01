@@ -282,6 +282,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "def49a8d_bc7b489c",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-01T14:29:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "928a017a_6a2a3016",
+      "range": {
+        "startLine": 261,
+        "startChar": 50,
+        "endLine": 261,
+        "endChar": 62
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d68ab81c_202f6321",
@@ -319,6 +343,30 @@
       "side": 1,
       "message": "Why? If the pointer points into the CppHeap, it better points to an object start.\n\nWhat we don\u0027t catch right now is cross-heap references which would be broken. (They are already on TOT though.)",
       "parentUuid": "d68ab81c_202f6321",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 12
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf593fcf_f9fe0a1a",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-01T14:29:55Z",
+      "side": 1,
+      "message": "Ack.\nAnd if it doesn\u0027t point to the right heap we will crash here with a null dereference. It\u0027s a bit implicit but good enough.",
+      "parentUuid": "5d7b7f01_30b7d287",
       "range": {
         "startLine": 281,
         "startChar": 8,

@@ -39,6 +39,30 @@
       },
       "revId": "fcf04d252415b9d701a76ecb397b00da78af6b31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1b93c07_1d980c00",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-01T14:29:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1d2dbbd9_fb0f92f0",
+      "range": {
+        "startLine": 258,
+        "startChar": 4,
+        "endLine": 258,
+        "endChar": 8
+      },
+      "revId": "fcf04d252415b9d701a76ecb397b00da78af6b31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
