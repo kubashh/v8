@@ -39,49 +39,6 @@
 namespace v8 {
 namespace internal {
 
-class ConcurrentMarkingState final
-    : public MarkingStateBase<ConcurrentMarkingState, AccessMode::ATOMIC> {
- public:
-  ConcurrentMarkingState(PtrComprCageBase cage_base,
-                         MemoryChunkDataMap* memory_chunk_data)
-      : MarkingStateBase(cage_base), memory_chunk_data_(memory_chunk_data) {}
-
-  ConcurrentBitmap<AccessMode::ATOMIC>* bitmap(
-      const BasicMemoryChunk* chunk) const {
-    return chunk->marking_bitmap<AccessMode::ATOMIC>();
-  }
-
-  void IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
-    (*memory_chunk_data_)[chunk].live_bytes += by;
-  }
-
-  // The live_bytes and SetLiveBytes methods of the marking state are
-  // not used by the concurrent marker.
-
- private:
-  MemoryChunkDataMap* memory_chunk_data_;
-};
-
-// Helper class for storing in-object slot addresses and values.
-class SlotSnapshot {
- public:
-  SlotSnapshot() : number_of_slots_(0) {}
-  SlotSnapshot(const SlotSnapshot&) = delete;
-  SlotSnapshot& operator=(const SlotSnapshot&) = delete;
-  int number_of_slots() const { return number_of_slots_; }
-  ObjectSlot slot(int i) const { return snapshot_[i].first; }
-  Object value(int i) const { return snapshot_[i].second; }
-  void clear() { number_of_slots_ = 0; }
-  void add(ObjectSlot slot, Object value) {
-    snapshot_[number_of_slots_++] = {slot, value};
-  }
-
- private:
-  static const int kMaxSnapshotSize = JSObject::kMaxInstanceSize / kTaggedSize;
-  int number_of_slots_;
-  std::pair<ObjectSlot, Object> snapshot_[kMaxSnapshotSize];
-};
-
 class ConcurrentMarkingVisitorUtility {
  public:
   template <typename Visitor, typename T,
@@ -204,150 +161,239 @@ class ConcurrentMarkingVisitorUtility {
   };
 };
 
-class YoungGenerationConcurrentMarkingVisitor final
-    : public YoungGenerationMarkingVisitorBase<
-          YoungGenerationConcurrentMarkingVisitor, ConcurrentMarkingState> {
- public:
-  YoungGenerationConcurrentMarkingVisitor(
-      Heap* heap, MarkingWorklists::Local* worklists_local,
-      MemoryChunkDataMap* memory_chunk_data)
-      : YoungGenerationMarkingVisitorBase<
-            YoungGenerationConcurrentMarkingVisitor, ConcurrentMarkingState>(
-            heap->isolate(), worklists_local),
-        marking_state_(heap->isolate(), memory_chunk_data) {}
+YoungGenerationConcurrentMarkingVisitor::
+    YoungGenerationConcurrentMarkingVisitor(
+        Heap* heap, MarkingWorklists::Local* worklists_local,
+        MemoryChunkDataMap* memory_chunk_data)
+    : YoungGenerationMarkingVisitorBase<YoungGenerationConcurrentMarkingVisitor,
+                                        ConcurrentMarkingState>(
+          heap->isolate(), worklists_local),
+      marking_state_(heap->isolate(), memory_chunk_data),
+      heap_(heap) {}  // can removed heap_, was for printing
 
-  bool is_shared_heap() { return false; }
+bool YoungGenerationConcurrentMarkingVisitor::is_shared_heap() { return false; }
 
-  void SynchronizePageAccess(HeapObject heap_object) {
+void YoungGenerationConcurrentMarkingVisitor::SynchronizePageAccess(
+    HeapObject heap_object) {
 #ifdef THREAD_SANITIZER
-    // This is needed because TSAN does not process the memory fence
-    // emitted after page initialization.
-    BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
+  // This is needed because TSAN does not process the memory fence
+  // emitted after page initialization.
+  BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
 #endif
-  }
+}
 
-  template <typename T>
-  static V8_INLINE T Cast(HeapObject object) {
-    return T::cast(object);
-  }
-
-  // Used by utility functions
-  void MarkObject(HeapObject host, HeapObject object) {
+// Used by utility functions
+void YoungGenerationConcurrentMarkingVisitor::MarkObject(HeapObject host,
+                                                         HeapObject object) {
+  if (Heap::InYoungGeneration(
+          object)) {  // Required! c.f. YGCMB::VisitPointerImpl
     SynchronizePageAccess(object);
-    MarkObjectViaMarkingWorklist(object);
+    MarkObjectViaMarkingWorklist(object);  // <-- dirty's old space marking
+                                           // bitmap if check above missing.
   }
+}
 
-  // HeapVisitor overrides to implement the snapshotting protocol.
+// HeapVisitor overrides to implement the snapshotting protocol.
 
-  bool AllowDefaultJSObjectVisit() { return false; }
+bool YoungGenerationConcurrentMarkingVisitor::AllowDefaultJSObjectVisit() {
+  return false;
+}
 
-  int VisitJSObject(Map map, JSObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSObject(Map map,
+                                                           JSObject object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
-  int VisitJSObjectFast(Map map, JSObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclassFast(this, map,
-                                                                      object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSObjectFast(
+    Map map, JSObject object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclassFast(this, map,
+                                                                    object);
+}
 
-  int VisitJSExternalObject(Map map, JSExternalObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSExternalObject(
+    Map map, JSExternalObject object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
 #if V8_ENABLE_WEBASSEMBLY
-  int VisitWasmInstanceObject(Map map, WasmInstanceObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
-  int VisitWasmSuspenderObject(Map map, WasmSuspenderObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitWasmInstanceObject(
+    Map map, WasmInstanceObject object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
+int YoungGenerationConcurrentMarkingVisitor::VisitWasmSuspenderObject(
+    Map map, WasmSuspenderObject object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-  int VisitJSWeakCollection(Map map, JSWeakCollection object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSWeakCollection(
+    Map map, JSWeakCollection object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
-  int VisitJSFinalizationRegistry(Map map, JSFinalizationRegistry object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSFinalizationRegistry(
+    Map map, JSFinalizationRegistry object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
-  int VisitConsString(Map map, ConsString object) {
-    return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
-                                                                   object);
-  }
+// int YoungGenerationConcurrentMarkingVisitor::VisitBytecodeArray(Map map,
+// BytecodeArray object) {
+//   return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+//   object);
+// }
 
-  int VisitSlicedString(Map map, SlicedString object) {
-    return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
-                                                                   object);
-  }
+// int YoungGenerationConcurrentMarkingVisitor::VisitDescriptorArray(Map map,
+// DescriptorArray object) {
+//   return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+//   object);
+// }
 
-  int VisitThinString(Map map, ThinString object) {
-    return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
-                                                                   object);
-  }
+/*
+int YoungGenerationConcurrentMarkingVisitor::VisitFixedArray(Map map, FixedArray
+object) { return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this,
+map, object);
+}
 
-  int VisitSeqOneByteString(Map map, SeqOneByteString object) {
-    if (!ShouldVisit(object)) return 0;
-    return SeqOneByteString::SizeFor(object.length(kAcquireLoad));
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitFixedDoubleArray(Map map,
+FixedDoubleArray object) { return
+ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map, object);
+}
 
-  int VisitSeqTwoByteString(Map map, SeqTwoByteString object) {
-    if (!ShouldVisit(object)) return 0;
-    return SeqTwoByteString::SizeFor(object.length(kAcquireLoad));
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSApiObject(Map map, JSObject
+object) { return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this,
+map, object);
+}
 
-  void VisitMapPointer(HeapObject host) {
-    // ShouldVisitMapPointer(): Implemented by NewSpaceVisitor (return false).
-    // VisitMapPointer(): Should never be called, because HeapVisitor bails out
-    // if !ShouldVisitMapPointer().
-    UNREACHABLE();
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSArrayBuffer(Map map,
+JSArrayBuffer object) { return
+ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map, object);
+}
+*/
+int YoungGenerationConcurrentMarkingVisitor::VisitJSDataView(
+    Map map, JSDataView object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
-  // HeapVisitor override.
+int YoungGenerationConcurrentMarkingVisitor::VisitJSFunction(
+    Map map, JSFunction object) {  //
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
 
-  bool ShouldVisit(HeapObject object) {
-    return marking_state_.GreyToBlack(object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitJSTypedArray(
+    Map map, JSTypedArray object) {
+  return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
+                                                                object);
+}
+/*
 
-  bool ShouldVisitUnaccounted(HeapObject object) {
-    return marking_state_.GreyToBlackUnaccounted(object);
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitSharedFunctionInfo(Map map,
+SharedFunctionInfo object) { return
+ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map, object);
+}
 
-  template <typename TSlot>
-  void RecordSlot(HeapObject object, TSlot slot, HeapObject target) {}
+int YoungGenerationConcurrentMarkingVisitor::VisitTransitionArray(Map map,
+TransitionArray object) { return
+ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map, object);
+}
+*/
 
-  SlotSnapshot* slot_snapshot() { return &slot_snapshot_; }
+/////////////////new//////////// (ConcurrentMarkingVisitor also has it)
+// removed due to
+// https://chromium-review.googlesource.com/c/v8/v8/+/3780524/comments/dc66a774_22d24519
+// called by base class
+template <typename T, typename TBodyDescriptor>
+int YoungGenerationConcurrentMarkingVisitor::VisitJSObjectSubclass(Map map,
+                                                                   T object) {
+  UNREACHABLE();
+}
 
-  ConcurrentMarkingState* marking_state() { return &marking_state_; }
+int YoungGenerationConcurrentMarkingVisitor::VisitConsString(
+    Map map, ConsString object) {
+  return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
+                                                                 object);
+}
 
- private:
-  template <typename T>
-  int VisitLeftTrimmableArray(Map map, T object) {
-    // The length() function checks that the length is a Smi.
-    // This is not necessarily the case if the array is being left-trimmed.
-    Object length = object.unchecked_length(kAcquireLoad);
-    // No accounting here to avoid re-reading the length which could already
-    // contain a non-SMI value when left-trimming happens concurrently.
-    if (!ShouldVisitUnaccounted(object)) return 0;
-    // The cached length must be the actual length as the array is not black.
-    // Left trimming marks the array black before over-writing the length.
-    DCHECK(length.IsSmi());
-    int size = T::SizeFor(Smi::ToInt(length));
-    marking_state_.IncrementLiveBytes(MemoryChunk::FromHeapObject(object),
-                                      size);
-    T::BodyDescriptor::IterateBody(map, object, size, this);
-    return size;
-  }
+int YoungGenerationConcurrentMarkingVisitor::VisitSlicedString(
+    Map map, SlicedString object) {
+  return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
+                                                                 object);
+}
 
-  ConcurrentMarkingState marking_state_;
-  SlotSnapshot slot_snapshot_;
-};
+int YoungGenerationConcurrentMarkingVisitor::VisitThinString(
+    Map map, ThinString object) {
+  return ConcurrentMarkingVisitorUtility::VisitFullyWithSnapshot(this, map,
+                                                                 object);
+}
+
+int YoungGenerationConcurrentMarkingVisitor::VisitSeqOneByteString(
+    Map map, SeqOneByteString object) {
+  if (!ShouldVisit(object)) return 0;
+  return SeqOneByteString::SizeFor(object.length(kAcquireLoad));
+}
+
+int YoungGenerationConcurrentMarkingVisitor::VisitSeqTwoByteString(
+    Map map, SeqTwoByteString object) {
+  if (!ShouldVisit(object)) return 0;
+  return SeqTwoByteString::SizeFor(object.length(kAcquireLoad));
+}
+
+void YoungGenerationConcurrentMarkingVisitor::VisitMapPointer(HeapObject host) {
+  // ShouldVisitMapPointer(): Implemented by NewSpaceVisitor (return false).
+  // VisitMapPointer(): Should never be called, because HeapVisitor bails out
+  // if !ShouldVisitMapPointer().
+  // Should be empty, not unreachable.
+}
+
+// HeapVisitor override.
+
+bool YoungGenerationConcurrentMarkingVisitor::ShouldVisit(HeapObject object) {
+  return true;
+}
+
+bool YoungGenerationConcurrentMarkingVisitor::ShouldVisitUnaccounted(
+    HeapObject object) {
+  return true;
+}
+
+template <typename TSlot>
+void YoungGenerationConcurrentMarkingVisitor::RecordSlot(HeapObject object,
+                                                         TSlot slot,
+                                                         HeapObject target) {}
+
+SlotSnapshot* YoungGenerationConcurrentMarkingVisitor::slot_snapshot() {
+  return &slot_snapshot_;
+}
+
+ConcurrentMarkingState*
+YoungGenerationConcurrentMarkingVisitor::marking_state() {
+  return &marking_state_;
+}
+
+template <typename T>
+int YoungGenerationConcurrentMarkingVisitor::VisitLeftTrimmableArray(Map map,
+                                                                     T object) {
+  // The length() function checks that the length is a Smi.
+  // This is not necessarily the case if the array is being left-trimmed.
+  Object length = object.unchecked_length(kAcquireLoad);
+  // No accounting here to avoid re-reading the length which could already
+  // contain a non-SMI value when left-trimming happens concurrently.
+  if (!ShouldVisitUnaccounted(object)) return 0;
+  // The cached length must be the actual length as the array is not black.
+  // Left trimming marks the array black before over-writing the length.
+  DCHECK(length.IsSmi());
+  int size = T::SizeFor(Smi::ToInt(length));
+  marking_state_.IncrementLiveBytes(MemoryChunk::FromHeapObject(object), size);
+  T::BodyDescriptor::IterateBody(map, object, size, this);
+  return size;
+}
 
 class ConcurrentMarkingVisitor final
     : public MarkingVisitorBase<ConcurrentMarkingVisitor,

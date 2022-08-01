@@ -100,11 +100,12 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
   // A callback for visiting the map pointer in the object header.
   V8_INLINE void VisitMapPointer(HeapObject host);
 
- protected:
   // A guard predicate for visiting the object.
   // If it returns false then the default implementations of the Visit*
   // functions bailout from iterating the object pointers.
   V8_INLINE bool ShouldVisit(HeapObject object) { return true; }
+
+ protected:
   // Guard predicate for visiting the objects map pointer separately.
   V8_INLINE bool ShouldVisitMapPointer() { return true; }
   // If this predicate returns false, then the heap visitor will fail
