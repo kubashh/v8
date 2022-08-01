@@ -1,6 +1,57 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26b9f3e_a16226dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-01T07:08:54Z",
+      "side": 1,
+      "message": "LGTM with comments",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c171dbc5_3b717ee9",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6029,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-01T07:08:54Z",
+      "side": 1,
+      "message": "I think we can get rid of this NotifyObjectLayoutChange() invocation here (+ the VerifyObjectLayoutChange() below). We already don\u0027t invalidate any slots here, which only leaves the \"map update\" verification check. But since we don\u0027t update the map as well, I think it\u0027s not needed anymore.",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd97afc4_a2bc6990",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-01T07:08:54Z",
+      "side": 1,
+      "message": "Should we document here a bit why we are doing this (and why it works), e.g. that we can read low/high updates in any order and that cage check + low part !\u003d 0 handle that?",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5f1535d_02739d73",
@@ -43,6 +94,23 @@
         "endLine": 257,
         "endChar": 15
       },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb2a2ba4_8af8cb02",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-01T07:08:54Z",
+      "side": 1,
+      "message": "Nit: Since there is `#ifdef !condition` as well, could we simplify this a bit with `if constexpr`? We already seem to use it in V8. Eg. finding page first and then setting on_cpp_heap.",
       "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
