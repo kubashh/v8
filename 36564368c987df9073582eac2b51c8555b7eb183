@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70314e9c_3c2d9306",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-08-01T12:41:01Z",
+      "side": 1,
+      "message": "Thanks Nico!",
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24260c1e_b134667f",
@@ -152,6 +169,30 @@
       "writtenOn": "2022-08-01T10:43:55Z",
       "side": 1,
       "message": "nice find 😊",
+      "range": {
+        "startLine": 313,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 23
+      },
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "801b3cf3_0a9ec4ad",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-08-01T12:41:01Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "211ac7f9_2fb29872",
       "range": {
         "startLine": 313,
         "startChar": 22,
