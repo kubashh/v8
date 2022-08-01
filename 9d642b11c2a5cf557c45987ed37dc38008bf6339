@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5c060b9_07e204ca",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-01T17:53:58Z",
+      "side": 1,
+      "message": "The use of rvalue references (including for perfect forwarding) is described in the style guide: https://google.github.io/styleguide/cppguide.html#Rvalue_references\n\nRegarding storing a reference in a potentially long-lived object: If the reference points to a temporary object, you can easily get UAF. That\u0027s why references are often used for parameters, but storing them should (very generally) only be done with caution.\n\nI added a static assertion now to make it harder to get this wrong in the future: https://chromium-review.googlesource.com/c/v8/v8/+/3792115/4/src/wasm/wasm-result.h",
+      "parentUuid": "fd92d3e0_9102491a",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11cac933_1e1d44e8",
