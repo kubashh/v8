@@ -16,6 +16,23 @@
       "message": "Thanks a lot, let\u0027s see how long this CL will accompany me :) ",
       "revId": "7e70d794debb291a2c0cf9bfab82cacd2101de76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "256a299f_269c81b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T16:24:04Z",
+      "side": 1,
+      "message": "+Igor, ptal at v8.cc",
+      "revId": "7e70d794debb291a2c0cf9bfab82cacd2101de76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
