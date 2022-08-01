@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd92d3e0_9102491a",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-01T17:15:29Z",
+      "side": 1,
+      "message": "Do we have these reasons documented somewhere, e.g. in a comment?",
+      "parentUuid": "30c90366_0c9d2a13",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11cac933_1e1d44e8",
         "filename": "src/wasm/wasm-result.h",
         "patchSetId": 5
