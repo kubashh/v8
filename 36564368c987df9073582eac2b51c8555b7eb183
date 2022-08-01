@@ -50,6 +50,75 @@
       "message": "(...assuming it looks good, of course)",
       "revId": "36564368c987df9073582eac2b51c8555b7eb183",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24260c1e_b134667f",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-01T10:43:55Z",
+      "side": 1,
+      "message": "this should be fine, there\u0027s a static assert that makes sure it matches `GlobalHandels::Node::NodeState` (I assume that\u0027s how you found it).",
+      "range": {
+        "startLine": 577,
+        "startChar": 38,
+        "endLine": 577,
+        "endChar": 39
+      },
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ec55200_2fc430c5",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-01T10:43:55Z",
+      "side": 1,
+      "message": "nit: while you\u0027re here, can you make this `KindField::Next`?",
+      "range": {
+        "startLine": 594,
+        "startChar": 28,
+        "endLine": 594,
+        "endChar": 44
+      },
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "211ac7f9_2fb29872",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-01T10:43:55Z",
+      "side": 1,
+      "message": "nice find 😊",
+      "range": {
+        "startLine": 313,
+        "startChar": 22,
+        "endLine": 313,
+        "endChar": 23
+      },
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
