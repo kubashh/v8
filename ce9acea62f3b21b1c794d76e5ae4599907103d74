@@ -33,6 +33,24 @@
       "message": "Matthias, can you also check if this makes sense to you, and if it fixes your use case? (I tested locally, and it looked good.)",
       "revId": "ce9acea62f3b21b1c794d76e5ae4599907103d74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3f3a84_9d34ffda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-01T16:09:13Z",
+      "side": 1,
+      "message": "I tested it now as well. I rebased my CL on top of this one but it seems I can\u0027t change the upstream of an existing CL, so I can\u0027t upload my updated CL.\nI\u0027ll just cherry-pick your changes and then rebase once your change has landed. Thanks for the fix!",
+      "parentUuid": "4579ef3d_437fcc91",
+      "revId": "ce9acea62f3b21b1c794d76e5ae4599907103d74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
