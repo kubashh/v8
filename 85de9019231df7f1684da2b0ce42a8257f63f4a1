@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc1d67be_b00f24b7",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6029,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T11:09:43Z",
+      "side": 1,
+      "message": "Let\u0027s do that separately.",
+      "parentUuid": "c171dbc5_3b717ee9",
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd97afc4_a2bc6990",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c5c1636_c2f5674c",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T11:09:43Z",
+      "side": 1,
+      "message": "Done. I think it would work but a bailout is faster. Then again, Blink only uses the setter for 2 fields right now...",
+      "parentUuid": "f5f1535d_02739d73",
+      "range": {
+        "startLine": 228,
+        "startChar": 2,
+        "endLine": 228,
+        "endChar": 23
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f247a37_1a9b7cea",
@@ -88,6 +130,30 @@
       "writtenOn": "2022-07-29T20:39:43Z",
       "side": 1,
       "message": "nit: `if(!instance) return;`",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 15
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e157621_31af3f5c",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T11:09:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f247a37_1a9b7cea",
       "range": {
         "startLine": 257,
         "startChar": 2,
@@ -140,6 +206,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "928a017a_6a2a3016",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T11:09:43Z",
+      "side": 1,
+      "message": "The assumption is that if it points into the cage, we better have a traced type. We don\u0027t care to which heap it points. In release builds we just assume it points to an object if it points into the heap and has the right type.",
+      "parentUuid": "1a520a1f_5393d0a4",
+      "range": {
+        "startLine": 261,
+        "startChar": 50,
+        "endLine": 261,
+        "endChar": 62
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d68ab81c_202f6321",
         "filename": "src/heap/embedder-tracing.cc",
         "patchSetId": 8
@@ -151,6 +241,30 @@
       "writtenOn": "2022-07-29T20:39:43Z",
       "side": 1,
       "message": "With a shared cage, in the current implementation of this method, I suspect page can be null.",
+      "range": {
+        "startLine": 281,
+        "startChar": 8,
+        "endLine": 281,
+        "endChar": 12
+      },
+      "revId": "85de9019231df7f1684da2b0ce42a8257f63f4a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d7b7f01_30b7d287",
+        "filename": "src/heap/embedder-tracing.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-01T11:09:43Z",
+      "side": 1,
+      "message": "Why? If the pointer points into the CppHeap, it better points to an object start.\n\nWhat we don\u0027t catch right now is cross-heap references which would be broken. (They are already on TOT though.)",
+      "parentUuid": "d68ab81c_202f6321",
       "range": {
         "startLine": 281,
         "startChar": 8,
