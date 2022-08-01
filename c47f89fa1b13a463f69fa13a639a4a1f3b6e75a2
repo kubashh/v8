@@ -179,6 +179,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa3d079e_c10a96e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-01T10:24:49Z",
+      "side": 1,
+      "message": "What do you mean by \"pinpoint clears the disk cache\"? It certainly doesn\u0027t clear it between iterations of Speedometer -- unless you\u0027re talking about the pinpoint iterations? Those are all independent of each other.",
+      "parentUuid": "37b79783_d767ec9e",
+      "revId": "c47f89fa1b13a463f69fa13a639a4a1f3b6e75a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78c2b67d_c9a9176e",
