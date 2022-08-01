@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d66e87b4_374ad995",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2022-08-01T11:23:56Z",
+      "side": 1,
+      "message": "thanks! still need owners for a bunch of files.",
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24260c1e_b134667f",
@@ -88,6 +105,30 @@
       "writtenOn": "2022-08-01T10:43:55Z",
       "side": 1,
       "message": "nit: while you\u0027re here, can you make this `KindField::Next`?",
+      "range": {
+        "startLine": 594,
+        "startChar": 28,
+        "endLine": 594,
+        "endChar": 44
+      },
+      "revId": "36564368c987df9073582eac2b51c8555b7eb183",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf2c4ac9_1fcbd77e",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2022-08-01T11:23:56Z",
+      "side": 1,
+      "message": "will do in follow-up across the file",
+      "parentUuid": "9ec55200_2fc430c5",
       "range": {
         "startLine": 594,
         "startChar": 28,
