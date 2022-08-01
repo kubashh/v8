@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473fc456_091020cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-01T15:51:57Z",
+      "side": 1,
+      "message": "Sorry that I didn\u0027t see this CL earlier. It seems to break a few use cases. I uploaded https://crrev.com/c/3792115 to fix them.",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30c90366_0c9d2a13",
+        "filename": "src/wasm/decoder.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-01T15:51:57Z",
+      "side": 1,
+      "message": "This `std::move` is not correct; it needs to be `std::forward` to preserve perfect forwarding.\nAlso, the `std::remove_reference` was there for a reason: We don\u0027t want to store a reference (potentially to a temporary value) in the `Result` object.\n\nSee the discussion on https://crrev.com/c/3791046, where Matthias stumbled over this.",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11cac933_1e1d44e8",
+        "filename": "src/wasm/wasm-result.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-01T15:51:57Z",
+      "side": 1,
+      "message": "Similar here: Before, this was a constructor for perfect forwarding (accepting a universal reference). Now it\u0027s accepting an r-value reference, which does not seem to make a lot of sense. Also, the `std::forward` lost any meaning AFAICT.",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
