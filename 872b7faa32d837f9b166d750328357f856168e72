@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c497c477_cff4e9e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2022-08-02T15:28:51Z",
+      "side": 1,
+      "message": "I don\u0027t see how this could be related to that revert. Any ideas?",
+      "revId": "872b7faa32d837f9b166d750328357f856168e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
