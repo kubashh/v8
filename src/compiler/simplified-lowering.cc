@@ -4115,6 +4115,14 @@ class RepresentationSelector {
         }
         return;
       }
+      case IrOpcode::kCheckedDoubleArrayMax: {
+        return VisitUnop<T>(node, UseInfo::AnyTagged(),
+                            MachineRepresentation::kTagged);
+      }
+      case IrOpcode::kCheckedDoubleArrayMin: {
+        return VisitUnop<T>(node, UseInfo::AnyTagged(),
+                            MachineRepresentation::kTagged);
+      }
 
       default:
         FATAL(

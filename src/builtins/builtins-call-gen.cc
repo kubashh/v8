@@ -113,8 +113,14 @@ TF_BUILTIN(Call_ReceiverIsNullOrUndefined_WithFeedback,
   auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  // This will only be used when the target is func.prototype.apply.
+  LazyNode<Object> maybe_arguments_list = [=] {
+    CodeStubArguments args(this, argc);
+    return args.GetOptionalArgumentValue(1);
+  };
   CollectCallFeedback(
-      target, [=] { return receiver; }, context, feedback_vector, slot);
+      target, [=] { return receiver; }, maybe_arguments_list, context,
+      feedback_vector, slot);
   TailCallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined, context, target,
                   argc);
 }
@@ -127,8 +133,13 @@ TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_WithFeedback,
   auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  LazyNode<Object> maybe_arguments_list = [=] {
+    CodeStubArguments args(this, argc);
+    return args.GetOptionalArgumentValue(1);
+  };
   CollectCallFeedback(
-      target, [=] { return receiver; }, context, feedback_vector, slot);
+      target, [=] { return receiver; }, maybe_arguments_list, context,
+      feedback_vector, slot);
   TailCallBuiltin(Builtin::kCall_ReceiverIsNotNullOrUndefined, context, target,
                   argc);
 }
@@ -140,8 +151,13 @@ TF_BUILTIN(Call_ReceiverIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  LazyNode<Object> maybe_arguments_list = [=] {
+    CodeStubArguments args(this, argc);
+    return args.GetOptionalArgumentValue(1);
+  };
   CollectCallFeedback(
-      target, [=] { return receiver; }, context, feedback_vector, slot);
+      target, [=] { return receiver; }, maybe_arguments_list, context,
+      feedback_vector, slot);
   TailCallBuiltin(Builtin::kCall_ReceiverIsAny, context, target, argc);
 }
 
@@ -495,8 +511,13 @@ void CallOrConstructBuiltinsAssembler::CallReceiver(
       return args.GetReceiver();
     }
   };
+  LazyNode<Object> maybe_arguments_list = [=] {
+    CodeStubArguments args(this, argc);
+    return args.GetOptionalArgumentValue(1);
+  };
 
-  CollectCallFeedback(target, receiver, context, feedback_vector, slot);
+  CollectCallFeedback(target, receiver, maybe_arguments_list, context,
+                      feedback_vector, slot);
   TailCallBuiltin(id, context, target, argc);
 }
 
@@ -517,7 +538,8 @@ TF_BUILTIN(CallWithArrayLike_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
-      target, [=] { return receiver; }, context, feedback_vector, slot);
+      target, [=] { return receiver; }, [=] { return arguments_list; }, context,
+      feedback_vector, slot);
   CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
 }
 
@@ -539,9 +561,10 @@ TF_BUILTIN(CallWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
   auto feedback_vector = LoadFeedbackVectorFromBaseline();
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   CodeStubArguments args(this, args_count);
+  LazyNode<Object> arguments_list = [=] { return UndefinedConstant(); };
   CollectCallFeedback(
-      target, [=] { return args.GetReceiver(); }, context, feedback_vector,
-      slot);
+      target, [=] { return args.GetReceiver(); }, arguments_list, context,
+      feedback_vector, slot);
   CallOrConstructWithSpread(target, new_target, spread, args_count, context);
 }
 
@@ -554,8 +577,12 @@ TF_BUILTIN(CallWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  CodeStubArguments args(this, args_count);
+
+  LazyNode<Object> arguments_list = [=] { return UndefinedConstant(); };
   CollectCallFeedback(
-      target, [=] { return receiver; }, context, feedback_vector, slot);
+      target, [=] { return receiver; }, arguments_list, context,
+      feedback_vector, slot);
   CallOrConstructWithSpread(target, new_target, spread, args_count, context);
 }
 

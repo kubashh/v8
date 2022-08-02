@@ -5063,6 +5063,64 @@ Reduction JSCallReducer::ReduceJSCallWithArrayLike(Node* node) {
   if (TargetIsClassConstructor(node, broker())) {
     return NoChange();
   }
+
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return NoChange();
+  }
+
+  Node* target = n.target();
+  Effect effect = n.effect();
+  Control control = n.control();
+  HeapObjectMatcher m(target);
+  if (FLAG_turbo_optimize_math_minmax && !m.HasResolvedValue() &&
+      ShouldUseCallICFeedback(target) &&
+      p.feedback_relation() == CallFeedbackRelation::kTarget &&
+      p.feedback().IsValid()) {
+    ProcessedFeedback const& feedback =
+        broker()->GetFeedbackForCall(p.feedback());
+    if (feedback.IsInsufficient()) {
+      return ReduceCallOrConstructWithArrayLikeOrSpread(
+          node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
+          p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
+          n.effect(), n.control());
+    }
+    base::Optional<HeapObjectRef> feedback_target;
+    feedback_target = feedback.AsCall().target();
+    ArgumentsListType arguments_list_type =
+        feedback.AsCall().arguments_list_type();
+    if (feedback_target.has_value() && feedback_target->map().is_callable()) {
+      Node* target_function = jsgraph()->Constant(*feedback_target);
+      HeapObjectMatcher m(target_function);
+      ObjectRef target_ref = m.Ref(broker());
+      if (!target_ref.IsJSFunction()) {
+        return ReduceCallOrConstructWithArrayLikeOrSpread(
+            node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
+            p.feedback(), p.speculation_mode(), p.feedback_relation(),
+            n.target(), n.effect(), n.control());
+      }
+      JSFunctionRef function = target_ref.AsJSFunction();
+      SharedFunctionInfoRef shared = function.shared();
+      Builtin builtin =
+          shared.HasBuiltinId() ? shared.builtin_id() : Builtin::kNoBuiltinId;
+      if ((builtin == Builtin::kMathMax || builtin == Builtin::kMathMin) &&
+          arguments_list_type == ArgumentsListType::kDoubleArray) {
+        // Check that the {target} is still the {target_function}.
+        Node* check = graph()->NewNode(simplified()->ReferenceEqual(), target,
+                                       target_function);
+        effect = graph()->NewNode(
+            simplified()->CheckIf(DeoptimizeReason::kWrongCallTarget), check,
+            effect, control);
+
+        NodeProperties::ReplaceValueInput(node, target_function,
+                                          n.TargetIndex());
+        NodeProperties::ReplaceEffectInput(node, effect);
+        // Try to further reduce the Call MathMin/Max with double array.
+        return Changed(node).FollowedBy(ReduceJSCallMathMinMaxWithArrayLike(
+            node, builtin == Builtin::kMathMax));
+      }
+    }
+  }
+
   return ReduceCallOrConstructWithArrayLikeOrSpread(
       node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
       p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
@@ -5078,6 +5136,7 @@ Reduction JSCallReducer::ReduceJSCallWithSpread(Node* node) {
   if (TargetIsClassConstructor(node, broker())) {
     return NoChange();
   }
+
   return ReduceCallOrConstructWithArrayLikeOrSpread(
       node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
       p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
@@ -8385,6 +8444,27 @@ Reduction JSCallReducer::ReduceBigIntAsN(Node* node, Builtin builtin) {
   }
 
   return NoChange();
+}
+
+Reduction JSCallReducer::ReduceJSCallMathMinMaxWithArrayLike(Node* node,
+                                                             bool is_math_max) {
+  JSCallWithArrayLikeNode n(node);
+  CallParameters const& p = n.Parameters();
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return NoChange();
+  }
+  if (n.ArgumentCount() != 1) {
+    return NoChange();
+  }
+
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* value = effect = control =
+      graph()->NewNode(is_math_max ? simplified()->CheckedDoubleArrayMax()
+                                   : simplified()->CheckedDoubleArrayMin(),
+                       n.Argument(0), effect, control);
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(value);
 }
 
 CompilationDependencies* JSCallReducer::dependencies() const {

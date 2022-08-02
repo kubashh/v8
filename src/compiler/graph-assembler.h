@@ -68,6 +68,8 @@ class Reducer;
   V(Float64LessThanOrEqual)               \
   V(Float64Mod)                           \
   V(Float64Sub)                           \
+  V(Float64Min)                           \
+  V(Float64Max)                           \
   V(Int32Add)                             \
   V(Int32LessThan)                        \
   V(Int32LessThanOrEqual)                 \

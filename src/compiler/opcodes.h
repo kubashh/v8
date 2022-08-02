@@ -495,7 +495,9 @@
   V(TransitionElementsKind)             \
   V(TypeOf)                             \
   V(Unsigned32Divide)                   \
-  V(VerifyType)
+  V(VerifyType)                         \
+  V(CheckedDoubleArrayMax)              \
+  V(CheckedDoubleArrayMin)
 
 #define SIMPLIFIED_SPECULATIVE_BIGINT_BINOP_LIST(V) \
   V(SpeculativeBigIntAdd)                           \

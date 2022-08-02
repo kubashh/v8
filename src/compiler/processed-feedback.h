@@ -186,23 +186,27 @@ class CallFeedback : public ProcessedFeedback {
  public:
   CallFeedback(base::Optional<HeapObjectRef> target, float frequency,
                SpeculationMode mode, CallFeedbackContent call_feedback_content,
+               ArgumentsListType arguments_list_type,
                FeedbackSlotKind slot_kind)
       : ProcessedFeedback(kCall, slot_kind),
         target_(target),
         frequency_(frequency),
         mode_(mode),
-        content_(call_feedback_content) {}
+        content_(call_feedback_content),
+        arguments_list_type_(arguments_list_type) {}
 
   base::Optional<HeapObjectRef> target() const { return target_; }
   float frequency() const { return frequency_; }
   SpeculationMode speculation_mode() const { return mode_; }
   CallFeedbackContent call_feedback_content() const { return content_; }
+  ArgumentsListType arguments_list_type() const { return arguments_list_type_; }
 
  private:
   base::Optional<HeapObjectRef> const target_;
   float const frequency_;
   SpeculationMode const mode_;
   CallFeedbackContent const content_;
+  ArgumentsListType const arguments_list_type_;
 };
 
 template <class T, ProcessedFeedback::Kind K>

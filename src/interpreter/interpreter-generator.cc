@@ -1369,9 +1369,20 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
     TNode<Context> context = GetContext();
 
+    LazyNode<Object> arguments_list = [=] {
+      TNode<Word32T> args_count = args.reg_count();
+      Label done(this);
+      TVARIABLE(Object, arguments_list, UndefinedConstant());
+      GotoIf(Word32Equal(args_count, Int32Constant(2)), &done);
+      arguments_list = LoadRegisterFromRegisterList(args, 1);
+      Goto(&done);
+      BIND(&done);
+      return arguments_list.value();
+    };
+
     // Collect the {function} feedback.
-    CollectCallFeedback(function, receiver, context, maybe_feedback_vector,
-                        slot_id);
+    CollectCallFeedback(function, receiver, arguments_list, context,
+                        maybe_feedback_vector, slot_id);
 
     // Call the function and dispatch to the next handler.
     CallJSAndDispatch(function, context, args, receiver_mode);
@@ -1398,9 +1409,16 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
     TNode<Context> context = GetContext();
 
+    LazyNode<Object> arguments_list = [=] {
+      return arg_count <= 1
+                 ? UndefinedConstant()
+                 : LoadRegisterAtOperandIndex(kFirstArgumentOperandIndex +
+                                              kReceiverOperandCount + 1);
+    };
+
     // Collect the {function} feedback.
-    CollectCallFeedback(function, receiver, context, maybe_feedback_vector,
-                        slot_id);
+    CollectCallFeedback(function, receiver, arguments_list, context,
+                        maybe_feedback_vector, slot_id);
 
     switch (kReceiverAndArgOperandCount) {
       case 0:

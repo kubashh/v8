@@ -839,6 +839,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   void SetSpeculationMode(SpeculationMode mode);
   SpeculationMode GetSpeculationMode();
   CallFeedbackContent GetCallFeedbackContent();
+  ArgumentsListType GetArgumentsListType();
 
   // Compute the call frequency based on the call count and the invocation
   // count (taken from the type feedback vector).
@@ -846,7 +847,8 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
 
   using SpeculationModeField = base::BitField<SpeculationMode, 0, 1>;
   using CallFeedbackContentField = base::BitField<CallFeedbackContent, 1, 1>;
-  using CallCountField = base::BitField<uint32_t, 2, 30>;
+  using ArgumentsListTypeField = base::BitField<ArgumentsListType, 2, 1>;
+  using CallCountField = base::BitField<uint32_t, 3, 29>;
 
   // For InstanceOf ICs.
   MaybeHandle<JSObject> GetConstructorFeedback() const;

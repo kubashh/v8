@@ -230,6 +230,8 @@ class EffectControlLinearizer {
   Node* LowerFoldConstant(Node* node);
   Node* LowerConvertReceiver(Node* node);
   Node* LowerDateNow(Node* node);
+  Node* LowerCheckedDoubleArrayMinMax(Node* node, Node* framestate,
+                                      bool is_max);
 
   // Lowering of optional operators.
   Maybe<Node*> LowerFloat64RoundUp(Node* node);
@@ -1379,6 +1381,12 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kFoldConstant:
       result = LowerFoldConstant(node);
+      break;
+    case IrOpcode::kCheckedDoubleArrayMax:
+      result = LowerCheckedDoubleArrayMinMax(node, frame_state, true);
+      break;
+    case IrOpcode::kCheckedDoubleArrayMin:
+      result = LowerCheckedDoubleArrayMinMax(node, frame_state, false);
       break;
     default:
       return false;
@@ -5882,6 +5890,78 @@ Node* EffectControlLinearizer::LowerFoldConstant(Node* node) {
   CallBuiltin(Builtin::kCheckSameObject, node->op()->properties(), original,
               constant);
   return constant;
+}
+
+Node* EffectControlLinearizer::LowerCheckedDoubleArrayMinMax(Node* node,
+                                                             Node* frame_state,
+                                                             bool is_max) {
+  DCHECK(node->opcode() == IrOpcode::kCheckedDoubleArrayMin ||
+         node->opcode() == IrOpcode::kCheckedDoubleArrayMax);
+
+  Node* arguments_list = node->InputAt(0);
+
+  // Check arguments_list is JSArray with packed double elements, otherwise
+  // deoptimize.
+  Node* arguments_list_is_smi = ObjectIsSmi(arguments_list);
+  __ DeoptimizeIf(DeoptimizeReason::kSmi, FeedbackSource(),
+                  arguments_list_is_smi, frame_state);
+
+  Node* arguments_list_map =
+      __ LoadField(AccessBuilder::ForMap(), arguments_list);
+  Node* arguments_list_map_instance_type =
+      __ LoadField(AccessBuilder::ForMapInstanceType(), arguments_list_map);
+  Node* arguments_list_is_js_array = __ Word32Equal(
+      arguments_list_map_instance_type, __ Int32Constant(JS_ARRAY_TYPE));
+  __ DeoptimizeIfNot(DeoptimizeReason::kWrongMap, FeedbackSource(),
+                     arguments_list_is_js_array, frame_state);
+
+  Node* kind;
+  {
+    Node* bit_field2 =
+        __ LoadField(AccessBuilder::ForMapBitField2(), arguments_list_map);
+    Node* mask = __ Int32Constant(Map::Bits2::ElementsKindBits::kMask);
+    Node* andit = __ Word32And(bit_field2, mask);
+    Node* shift = __ Int32Constant(Map::Bits2::ElementsKindBits::kShift);
+    kind = __ Word32Shr(andit, shift);
+  }
+
+  Node* value_is_expected_elements_kind = __ Word32Equal(
+      kind, __ Int32Constant(ElementsKind::PACKED_DOUBLE_ELEMENTS));
+  __ DeoptimizeIfNot(DeoptimizeReason::kWrongMap, FeedbackSource(),
+                     value_is_expected_elements_kind, frame_state);
+
+  // Iterate the elements and find the result.
+  Node* empty_value = is_max ? __ Float64Constant(-V8_INFINITY)
+                             : __ Float64Constant(V8_INFINITY);
+  Node* array_length = __ LoadField(
+      AccessBuilder::ForJSArrayLength(ElementsKind::PACKED_DOUBLE_ELEMENTS),
+      arguments_list);
+  array_length = ChangeSmiToIntPtr(array_length);
+  Node* elements =
+      __ LoadField(AccessBuilder::ForJSObjectElements(), arguments_list);
+
+  auto loop = __ MakeLoopLabel(MachineType::PointerRepresentation(),
+                               MachineRepresentation::kFloat64);
+  auto done = __ MakeLabel(MachineRepresentation::kFloat64);
+
+  __ Goto(&loop, __ IntPtrConstant(0), empty_value);
+  __ Bind(&loop);
+  {
+    Node* index = loop.PhiAt(0);
+    Node* accumulator = loop.PhiAt(1);
+
+    Node* check = __ UintLessThan(index, array_length);
+    __ GotoIfNot(check, &done, accumulator);
+
+    Node* element = __ LoadElement(AccessBuilder::ForFixedDoubleArrayElement(),
+                                   elements, index);
+    __ Goto(&loop, __ IntAdd(index, __ IntPtrConstant(1)),
+            is_max ? __ Float64Max(accumulator, element)
+                   : __ Float64Min(accumulator, element));
+  }
+  __ Bind(&done);
+  return ChangeFloat64ToTagged(done.PhiAt(0),
+                               CheckForMinusZeroMode::kCheckForMinusZero);
 }
 
 Node* EffectControlLinearizer::LowerConvertReceiver(Node* node) {

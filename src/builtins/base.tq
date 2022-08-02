@@ -272,6 +272,8 @@ extern operator '==' macro UpdateFeedbackModeEqual(
 
 extern enum CallFeedbackContent extends int32 { kTarget, kReceiver }
 
+extern enum ArgumentsListType extends int32 { kOthers, kDoubleArray }
+
 extern enum UnicodeEncoding { UTF16, UTF32 }
 
 // Promise constants
@@ -847,6 +849,7 @@ extern macro IsSlowAliasedArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsSloppyArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsStrictArgumentsMap(implicit context: Context)(Map): bool;
 extern macro IsTuple2Map(Map): bool;
+extern macro IsJSArrayMap(Map): bool;
 
 extern macro SmiAbove(Smi, Smi): bool;
 

@@ -781,8 +781,10 @@ void InterpreterAssembler::CallJSWithSpreadAndDispatch(
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), ConvertReceiverMode::kAny);
   LazyNode<Object> receiver = [=] { return LoadRegisterAtOperandIndex(1); };
-  CollectCallFeedback(function, receiver, context, maybe_feedback_vector,
-                      slot_id);
+
+  LazyNode<Object> arguments_list = [=] { return UndefinedConstant(); };
+  CollectCallFeedback(function, receiver, arguments_list, context,
+                      maybe_feedback_vector, slot_id);
   Comment("call using CallWithSpread builtin");
   Callable callable = CodeFactory::InterpreterPushArgsThenCall(
       isolate(), ConvertReceiverMode::kAny,

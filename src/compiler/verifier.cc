@@ -1524,7 +1524,11 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
     case IrOpcode::kAssertType:
     case IrOpcode::kVerifyType:
       break;
-
+    case IrOpcode::kCheckedDoubleArrayMin:
+    case IrOpcode::kCheckedDoubleArrayMax:
+      CheckValueInputIs(node, 0, Type::Array());
+      CheckTypeIs(node, Type::Number());
+      break;
     case IrOpcode::kCheckFloat64Hole:
       CheckValueInputIs(node, 0, Type::NumberOrHole());
       CheckTypeIs(node, Type::NumberOrUndefined());

@@ -1357,6 +1357,18 @@ const Operator* SimplifiedOperatorBuilder::VerifyType() {
                                "VerifyType", 1, 0, 0, 1, 0, 0);
 }
 
+const Operator* SimplifiedOperatorBuilder::CheckedDoubleArrayMin() {
+  return zone()->New<Operator>(IrOpcode::kCheckedDoubleArrayMin,
+                               Operator::kNoProperties, "CheckedDoubleArrayMin",
+                               1, 1, 1, 1, 1, 1);
+}
+
+const Operator* SimplifiedOperatorBuilder::CheckedDoubleArrayMax() {
+  return zone()->New<Operator>(IrOpcode::kCheckedDoubleArrayMax,
+                               Operator::kNoProperties, "CheckedDoubleArrayMax",
+                               1, 1, 1, 1, 1, 1);
+}
+
 #if V8_ENABLE_WEBASSEMBLY
 const Operator* SimplifiedOperatorBuilder::WasmTypeCheck(
     WasmTypeCheckConfig config) {

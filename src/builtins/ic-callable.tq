@@ -10,6 +10,10 @@ const kCallFeedbackContentFieldMask: constexpr int32
     generates 'FeedbackNexus::CallFeedbackContentField::kMask';
 const kCallFeedbackContentFieldShift: constexpr uint32
     generates 'FeedbackNexus::CallFeedbackContentField::kShift';
+const kArgumentsListTypeFieldMask: constexpr int32
+    generates 'FeedbackNexus::ArgumentsListTypeField::kMask';
+const kArgumentsListTypeFieldShift: constexpr uint32
+    generates 'FeedbackNexus::ArgumentsListTypeField::kShift';
 
 macro IsMonomorphic(feedback: MaybeObject, target: JSAny): bool {
   return IsWeakReferenceToObject(feedback, target);
@@ -67,6 +71,14 @@ macro FeedbackValueIsReceiver(implicit context: Context)(
       IntPtrConstant(0);
 }
 
+macro ArgumentsListTypeIsJSDoubleArray(implicit context: Context)(
+    feedbackVector: FeedbackVector, slotId: uintptr): bool {
+  const callCount: intptr = SmiUntag(Cast<Smi>(LoadFeedbackVectorSlot(
+      feedbackVector, slotId, kTaggedSize)) otherwise return false);
+  return (callCount & IntPtrConstant(kArgumentsListTypeFieldMask)) !=
+      IntPtrConstant(0);
+}
+
 macro SetCallFeedbackContent(implicit context: Context)(
     feedbackVector: FeedbackVector, slotId: uintptr,
     callFeedbackContent: constexpr CallFeedbackContent): void {
@@ -88,8 +100,40 @@ macro SetCallFeedbackContent(implicit context: Context)(
   ReportFeedbackUpdate(feedbackVector, slotId, 'Call:SetCallFeedbackContent');
 }
 
+macro SetArgumentsListType(implicit context: Context)(
+    feedbackVector: FeedbackVector, slotId: uintptr,
+    argumentsListType: constexpr ArgumentsListType): void {
+  // Load the call count field from the feecback vector.
+  const callCount: intptr = SmiUntag(Cast<Smi>(LoadFeedbackVectorSlot(
+      feedbackVector, slotId, kTaggedSize)) otherwise return);
+  // The third lowest bits of the call count is used to state whether the
+  // second argument is a double array or not. Change that bit based on the
+  // argumentsListType input.
+  const argumentsListTypeFieldMask: intptr =
+      ~IntPtrConstant(kArgumentsListTypeFieldMask);
+  const newCount: intptr = (callCount & argumentsListTypeFieldMask) |
+      Convert<intptr>(Signed(
+          %RawConstexprCast<constexpr uint32>(argumentsListType)
+          << kArgumentsListTypeFieldShift));
+  StoreFeedbackVectorSlot(
+      feedbackVector, slotId, SmiTag(newCount), SKIP_WRITE_BARRIER,
+      kTaggedSize);
+  ReportFeedbackUpdate(feedbackVector, slotId, 'Call:SetArgumentsListType');
+}
+
+macro ArgumentsListIsDoubleArray(implicit context: Context)(
+    argumentsList: JSAny): bool {
+  if (TaggedIsSmi(argumentsList)) return false;
+  const map: Map = (Cast<HeapObject>(argumentsList) otherwise return false).map;
+  if (!IsJSArrayMap(map)) return false;
+  const elementsKind: ElementsKind = LoadMapElementsKind(map);
+  if (elementsKind == ElementsKind::PACKED_DOUBLE_ELEMENTS) return true;
+  return false;
+}
+
 macro CollectCallFeedback(
-    maybeTarget: JSAny, maybeReceiver: Lazy<JSAny>, context: Context,
+    maybeTarget: JSAny, maybeReceiver: Lazy<JSAny>,
+    maybeArgumentsList: Lazy<JSAny>, context: Context,
     maybeFeedbackVector: Undefined|FeedbackVector, slotId: uintptr): void {
   // TODO(v8:9891): Remove this dcheck once all callers are ported to Torque.
   // This dcheck ensures correctness of maybeFeedbackVector's type which can
@@ -118,11 +162,24 @@ macro CollectCallFeedback(
       // Function.prototype.apply, check whether we can stay monomorphic based
       // on the receiver.
       if (IsMonomorphic(feedback, RunLazy(maybeReceiver))) {
+        // If the second argument is double array and feedback is set, return.
+        if (ArgumentsListIsDoubleArray(RunLazy(maybeArgumentsList)) &&
+            ArgumentsListTypeIsJSDoubleArray(feedbackVector, slotId)) {
+          return;
+        } else if (ArgumentsListTypeIsJSDoubleArray(feedbackVector, slotId)) {
+          // for all other situations, feedback shoud be
+          // ArgumentsListType::kOthers
+          SetArgumentsListType(
+              feedbackVector, slotId, ArgumentsListType::kOthers);
+          return;
+        }
         return;
       } else {
         // If not, reinitialize the feedback with target.
         SetCallFeedbackContent(
             feedbackVector, slotId, CallFeedbackContent::kTarget);
+        SetArgumentsListType(
+            feedbackVector, slotId, ArgumentsListType::kOthers);
         TryInitializeAsMonomorphic(maybeTarget, feedbackVector, slotId)
             otherwise TransitionToMegamorphic;
         return;
@@ -150,6 +207,7 @@ macro CollectCallFeedback(
   } label TryReinitializeAsMonomorphic {
     SetCallFeedbackContent(
         feedbackVector, slotId, CallFeedbackContent::kTarget);
+    SetArgumentsListType(feedbackVector, slotId, ArgumentsListType::kOthers);
     goto TryInitializeAsMonomorphic;
   } label TryInitializeAsMonomorphic {
     let recordedFunction = maybeTarget;
@@ -157,8 +215,15 @@ macro CollectCallFeedback(
       recordedFunction = RunLazy(maybeReceiver);
       SetCallFeedbackContent(
           feedbackVector, slotId, CallFeedbackContent::kReceiver);
+      if (ArgumentsListIsDoubleArray(RunLazy(maybeArgumentsList))) {
+        SetArgumentsListType(
+            feedbackVector, slotId, ArgumentsListType::kDoubleArray);
+      } else {
+        dcheck(!ArgumentsListTypeIsJSDoubleArray(feedbackVector, slotId));
+      }
     } else {
       dcheck(!FeedbackValueIsReceiver(feedbackVector, slotId));
+      dcheck(!ArgumentsListTypeIsJSDoubleArray(feedbackVector, slotId));
     }
     TryInitializeAsMonomorphic(recordedFunction, feedbackVector, slotId)
         otherwise TransitionToMegamorphic;

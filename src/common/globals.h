@@ -1731,6 +1731,7 @@ inline std::ostream& operator<<(std::ostream& os, TieringState marker) {
 
 enum class SpeculationMode { kAllowSpeculation, kDisallowSpeculation };
 enum class CallFeedbackContent { kTarget, kReceiver };
+enum class ArgumentsListType { kOthers, kDoubleArray };
 
 inline std::ostream& operator<<(std::ostream& os,
                                 SpeculationMode speculation_mode) {
