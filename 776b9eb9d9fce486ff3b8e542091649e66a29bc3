@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "934e3da3_5eb76a44",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-02T10:54:11Z",
+      "side": 0,
+      "message": "I think the less misleading message gives Safari. Please change the message text to\n  Spread syntax requires ...iterable[Symbol.iterator] to be a function\ninstead of using a different message ID in this particular place.",
+      "revId": "776b9eb9d9fce486ff3b8e542091649e66a29bc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

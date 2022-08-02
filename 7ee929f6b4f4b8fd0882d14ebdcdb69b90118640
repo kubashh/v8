@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3636e9d1_f8d6844c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-02T10:54:11Z",
+      "side": 1,
+      "message": "[builtins] Improve kIteratorSymbolNonCallable error message",
+      "revId": "7ee929f6b4f4b8fd0882d14ebdcdb69b90118640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
