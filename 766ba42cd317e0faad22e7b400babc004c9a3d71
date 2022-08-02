@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "098fe461_01301699",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2022-08-02T09:14:01Z",
+      "side": 1,
+      "message": "Included it here anyway as it was trivial to do alongside the other changes to the guards for that.",
+      "parentUuid": "fdfa94f8_8a7d3208",
+      "range": {
+        "startLine": 565,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 41
+      },
+      "revId": "766ba42cd317e0faad22e7b400babc004c9a3d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "819b9359_c7261410",
@@ -105,6 +129,24 @@
       "writtenOn": "2022-08-02T08:02:12Z",
       "side": 1,
       "message": "another nit: Can you ifdef this behind V8_ENABLE_JAVASCRIPT_PROMISE_HOOKS as well?",
+      "revId": "766ba42cd317e0faad22e7b400babc004c9a3d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5983657f_a246e644",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5447,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2022-08-02T09:14:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "819b9359_c7261410",
       "revId": "766ba42cd317e0faad22e7b400babc004c9a3d71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
