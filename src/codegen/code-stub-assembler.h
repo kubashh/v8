@@ -1651,7 +1651,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                     TNode<NativeContext> native_context);
 
   TNode<BoolT> IsJSFunctionWithPrototypeSlot(TNode<HeapObject> object);
+  TNode<Uint32T> LoadFunctionKind(TNode<JSFunction> function);
   TNode<BoolT> IsGeneratorFunction(TNode<JSFunction> function);
+  TNode<BoolT> IsDefaultConstructor(TNode<JSFunction> function);
   void BranchIfHasPrototypeProperty(TNode<JSFunction> function,
                                     TNode<Int32T> function_map_bit_field,
                                     Label* if_true, Label* if_false);

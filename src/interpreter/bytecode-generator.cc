@@ -5623,13 +5623,19 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
     // First generate the array containing all arguments.
     BuildCreateArrayLiteral(args, nullptr);
 
+    RegisterList construct_args = register_allocator()->NewRegisterList(3);
+    builder()->StoreAccumulatorInRegister(construct_args[1]);
+
     // Check if the constructor is in fact a constructor.
     builder()->ThrowIfNotSuperConstructor(constructor);
 
-    // Now pass that array to %reflect_construct.
-    RegisterList construct_args = register_allocator()->NewRegisterList(3);
-    builder()->StoreAccumulatorInRegister(construct_args[1]);
+    if (IsDerivedConstructor(info()->literal()->kind())) {
+      builder()->LoadAccumulatorWithRegister(constructor);
+      builder()->FindNonDefaultConstructor(constructor);
+    }
     builder()->MoveRegister(constructor, construct_args[0]);
+
+    // Now pass that array to %reflect_construct.
     VisitForRegisterValue(super->new_target_var(), construct_args[2]);
     builder()->CallJSRuntime(Context::REFLECT_CONSTRUCT_INDEX, construct_args);
   } else {
@@ -5638,6 +5644,11 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
 
     // Check if the constructor is in fact a constructor.
     builder()->ThrowIfNotSuperConstructor(constructor);
+
+    if (IsDerivedConstructor(info()->literal()->kind())) {
+      builder()->LoadAccumulatorWithRegister(constructor);
+      builder()->FindNonDefaultConstructor(constructor);
+    }
 
     // The new target is loaded into the accumulator from the
     // {new.target} variable.
