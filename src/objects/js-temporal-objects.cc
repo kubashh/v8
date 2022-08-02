@@ -2123,17 +2123,6 @@ Maybe<ShowOverflow> ToTemporalOverflow(Isolate* isolate, Handle<Object> options,
       ShowOverflow::kConstrain);
 }
 
-// TODO(adamk): Remove this and replace with direct usage of
-// MAYBE_RETURN_ON_EXCEPTION_VALUE().
-Maybe<bool> ToTemporalOverflowForSideEffects(Isolate* isolate,
-                                             Handle<Object> options,
-                                             const char* method_name) {
-  MAYBE_RETURN_ON_EXCEPTION_VALUE(
-      isolate, ToTemporalOverflow(isolate, options, method_name),
-      Nothing<bool>());
-  return Just(true);
-}
-
 // #sec-temporal-totemporaloffset
 Maybe<Offset> ToTemporalOffset(Isolate* isolate, Handle<Object> options,
                                Offset fallback, const char* method_name) {
@@ -2447,8 +2436,9 @@ MaybeHandle<JSTemporalPlainDate> ToTemporalDate(Isolate* isolate,
     return DateFromFields(isolate, calendar, fields, options);
   }
   // 4. Perform ? ToTemporalOverflow(options).
-  MAYBE_RETURN(ToTemporalOverflowForSideEffects(isolate, options, method_name),
-               Handle<JSTemporalPlainDate>());
+  MAYBE_RETURN_ON_EXCEPTION_VALUE(
+      isolate, ToTemporalOverflow(isolate, options, method_name),
+      Handle<JSTemporalPlainDate>());
 
   // 5. Let string be ? ToString(item).
   Handle<String> string;
@@ -11824,8 +11814,8 @@ MaybeHandle<JSTemporalPlainDate> JSTemporalPlainDate::From(
   // internal slot, then
   if (item->IsJSTemporalPlainDate()) {
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalPlainDate>());
     // b. Return ? CreateTemporalDate(item.[[ISOYear]], item.[[ISOMonth]],
     // item.[[ISODay]], item.[[Calendar]]).
@@ -12138,8 +12128,8 @@ MaybeHandle<JSTemporalPlainDateTime> ToTemporalDateTime(
   } else {
     // 3. Else,
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalPlainDateTime>());
 
     // b. Let string be ? ToString(item).
@@ -12194,8 +12184,8 @@ MaybeHandle<JSTemporalPlainDateTime> JSTemporalPlainDateTime::From(
   // internal slot, then
   if (item->IsJSTemporalPlainDateTime()) {
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalPlainDateTime>());
     // b. Return ? CreateTemporalDateTime(item.[[ISYear]], item.[[ISOMonth]],
     // item.[[ISODay]], item.[[ISOHour]], item.[[ISOMinute]],
@@ -13663,8 +13653,9 @@ MaybeHandle<JSTemporalPlainYearMonth> ToTemporalYearMonth(
     return YearMonthFromFields(isolate, calendar, fields, options);
   }
   // 4. Perform ? ToTemporalOverflow(options).
-  MAYBE_RETURN(ToTemporalOverflowForSideEffects(isolate, options, method_name),
-               Handle<JSTemporalPlainYearMonth>());
+  MAYBE_RETURN_ON_EXCEPTION_VALUE(
+      isolate, ToTemporalOverflow(isolate, options, method_name),
+      Handle<JSTemporalPlainYearMonth>());
   // 5. Let string be ? ToString(item).
   Handle<String> string;
   ASSIGN_RETURN_ON_EXCEPTION(isolate, string,
@@ -13726,8 +13717,8 @@ MaybeHandle<JSTemporalPlainYearMonth> JSTemporalPlainYearMonth::From(
   // internal slot, then
   if (item->IsJSTemporalPlainYearMonth()) {
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalPlainYearMonth>());
     // b. Return ? CreateTemporalYearMonth(item.[[ISOYear]], item.[[ISOMonth]],
     // item.[[Calendar]], item.[[ISODay]]).
@@ -15665,8 +15656,8 @@ MaybeHandle<JSTemporalZonedDateTime> ToTemporalZonedDateTime(
     // 5. Else,
   } else {
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalZonedDateTime>());
     // b. Let string be ? ToString(item).
     Handle<String> string;
@@ -15792,8 +15783,8 @@ MaybeHandle<JSTemporalZonedDateTime> JSTemporalZonedDateTime::From(
   // [[InitializedTemporalZonedDateTime]] internal slot, then
   if (item->IsJSTemporalZonedDateTime()) {
     // a. Perform ? ToTemporalOverflow(options).
-    MAYBE_RETURN(
-        ToTemporalOverflowForSideEffects(isolate, options, method_name),
+    MAYBE_RETURN_ON_EXCEPTION_VALUE(
+        isolate, ToTemporalOverflow(isolate, options, method_name),
         Handle<JSTemporalZonedDateTime>());
 
     // b. Perform ? ToTemporalDisambiguation(options).
