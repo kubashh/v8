@@ -5,12 +5,16 @@
 #ifndef V8_HEAP_SCAVENGER_INL_H_
 #define V8_HEAP_SCAVENGER_INL_H_
 
+#include "src/base/platform/mutex.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/common/globals.h"
 #include "src/heap/evacuation-allocator-inl.h"
 #include "src/heap/incremental-marking-inl.h"
+#include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/new-spaces.h"
 #include "src/heap/objects-visiting-inl.h"
+#include "src/heap/remembered-set-inl.h"
 #include "src/heap/scavenger.h"
 #include "src/objects/map.h"
 #include "src/objects/objects-body-descriptors-inl.h"
@@ -464,6 +468,35 @@ SlotCallbackResult Scavenger::CheckAndScavengeObject(Heap* heap, TSlot slot) {
   // Slots can point to "to" space if the slot has been recorded multiple
   // times in the remembered set. We remove the redundant slot now.
   return REMOVE_SLOT;
+}
+
+template <typename TSlot>
+void Scavenger::CheckOldToNewSlotForSharedUntyped(MemoryChunk* chunk,
+                                                  TSlot slot) {
+  MaybeObject object = *slot;
+  HeapObject heap_object;
+
+  if (object.GetHeapObject(&heap_object) &&
+      heap_object.InSharedWritableHeap()) {
+    RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(chunk,
+                                                             slot.address());
+  }
+}
+
+void Scavenger::CheckOldToNewSlotForSharedTyped(MemoryChunk* chunk,
+                                                SlotType slot_type,
+                                                Address slot_address) {
+  HeapObject heap_object = UpdateTypedSlotHelper::GetTargetObject(
+      chunk->heap(), slot_type, slot_address);
+
+  if (heap_object.InSharedWritableHeap()) {
+    const uintptr_t offset = slot_address - chunk->address();
+    DCHECK_LT(offset, static_cast<uintptr_t>(TypedSlotSet::kMaxOffset));
+
+    base::MutexGuard guard(chunk->mutex());
+    RememberedSet<OLD_TO_SHARED>::InsertTyped(chunk, slot_type,
+                                              static_cast<uint32_t>(offset));
+  }
 }
 
 void ScavengeVisitor::VisitPointers(HeapObject host, ObjectSlot start,

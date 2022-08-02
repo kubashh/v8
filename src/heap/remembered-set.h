@@ -299,6 +299,9 @@ class UpdateTypedSlotHelper {
   static SlotCallbackResult UpdateTypedSlot(Heap* heap, SlotType slot_type,
                                             Address addr, Callback callback);
 
+  inline static HeapObject GetTargetObject(Heap* heap, SlotType slot_type,
+                                           Address addr);
+
  private:
   // Updates a code entry slot using an untyped slot callback.
   // The callback accepts FullMaybeObjectSlot and returns SlotCallbackResult.
