@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a60841d_ad2914b3",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2362,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T10:50:00Z",
+      "side": 1,
+      "message": "I don\u0027t know how `AssertionResult` is supposed to be used, but wouldn\u0027t this need to be wrapped in an `EXPECT_TRUE`, or `EXPECT_THAT`, or anything like that?",
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "47ebc534_261daca3",
         "filename": "test/unittests/wasm/module-decoder-unittest.cc",
         "patchSetId": 2

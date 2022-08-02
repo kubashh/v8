@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "410eff7c_2ccb0aa5",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T10:50:00Z",
+      "side": 1,
+      "message": "nit: This could be a single line again, right?",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b3c9c42ce9ea47b193456bcf9951f4b03bef0f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
