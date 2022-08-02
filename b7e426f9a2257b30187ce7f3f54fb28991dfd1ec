@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ad6010_c22257d4",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2022-08-02T16:46:33Z",
+      "side": 1,
+      "message": "WDYT of returning max_concurrency form this function? \nmax_concurrency \u003d\u003d 0 means Join() should return (job completed), otherwise max_concurrency can be used to compute num_tasks_to_post.",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 19
+      },
+      "revId": "b7e426f9a2257b30187ce7f3f54fb28991dfd1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ecc1e8_f87a6280",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2022-08-02T16:46:33Z",
+      "side": 1,
+      "message": "I think active_workers_ can be \u003e max_concurrency (if we recently completed work but workers haven\u0027t returned yet).\nWe should check if (max_concurrency \u003e active_workers_ + pending_tasks_) to avoid underflow.",
+      "range": {
+        "startLine": 126,
+        "startChar": 27,
+        "endLine": 126,
+        "endChar": 61
+      },
+      "revId": "b7e426f9a2257b30187ce7f3f54fb28991dfd1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
