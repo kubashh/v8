@@ -39,6 +39,30 @@
       },
       "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6acce047_71ed3bd4",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-02T10:48:28Z",
+      "side": 1,
+      "message": "`--noenable-sse3` should do the trick.",
+      "parentUuid": "47ebc534_261daca3",
+      "range": {
+        "startLine": 2361,
+        "startChar": 0,
+        "endLine": 2363,
+        "endChar": 62
+      },
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
