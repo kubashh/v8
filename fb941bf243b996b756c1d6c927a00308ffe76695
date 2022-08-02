@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7f4df74_1c12aa4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T11:55:14Z",
+      "side": 1,
+      "message": "Michael and Etienne, can you both take a look please? If we get something wrong, we probably do not get crashes but only bad performance, so we better get this right on the first try :) ",
+      "revId": "fb941bf243b996b756c1d6c927a00308ffe76695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b09fe18_0962cb66",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T11:55:14Z",
+      "side": 1,
+      "message": "I am not sure about this line (copied from previous code). Should this actually just be `++num_worker_threads_`?",
+      "revId": "fb941bf243b996b756c1d6c927a00308ffe76695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
