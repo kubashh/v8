@@ -48,7 +48,7 @@ void DefaultJobState::NotifyConcurrencyIncrease() {
     base::MutexGuard guard(&mutex_);
     const size_t max_concurrency = CappedMaxConcurrency(active_workers_);
     // Consider |pending_tasks_| to avoid posting too many tasks.
-    if (max_concurrency > (active_workers_ + pending_tasks_)) {
+    if (max_concurrency > active_workers_ + pending_tasks_) {
       num_tasks_to_post = max_concurrency - active_workers_ - pending_tasks_;
       pending_tasks_ += num_tasks_to_post;
     }
@@ -93,22 +93,46 @@ void DefaultJobState::ReleaseTaskId(uint8_t task_id) {
 }
 
 void DefaultJobState::Join() {
-  bool can_run = false;
-  {
-    base::MutexGuard guard(&mutex_);
-    priority_ = TaskPriority::kUserBlocking;
-    // Reserve a worker for the joining thread. GetMaxConcurrency() is ignored
-    // here, but WaitForParticipationOpportunityLockRequired() waits for
-    // workers to return if necessary so we don't exceed GetMaxConcurrency().
-    num_worker_threads_ = platform_->NumberOfWorkerThreads() + 1;
-    ++active_workers_;
-    can_run = WaitForParticipationOpportunityLockRequired();
-  }
   DefaultJobState::JobDelegate delegate(this, true);
-  while (can_run) {
+  for (bool first_iteration = true;; first_iteration = false) {
+    size_t num_tasks_to_post = 0;
+    {
+      base::MutexGuard guard(&mutex_);
+      if (first_iteration) {
+        priority_ = TaskPriority::kUserBlocking;
+        // Reserve a worker for the joining thread. GetMaxConcurrency() is
+        // ignored here, but if necessary we wait below for workers to return so
+        // we don't exceed GetMaxConcurrency().
+        num_worker_threads_ = platform_->NumberOfWorkerThreads() + 1;
+        ++active_workers_;
+      }
+      size_t max_concurrency = CappedMaxConcurrency(active_workers_ - 1);
+      // Wait until we can participate in the job.
+      while (active_workers_ > max_concurrency && active_workers_ > 1) {
+        worker_released_condition_.Wait(&mutex_);
+        max_concurrency = CappedMaxConcurrency(active_workers_ - 1);
+      }
+      // The job is done once max_concurrency drops to zero.
+      if (max_concurrency == 0) {
+        DCHECK_EQ(1, active_workers_);
+        active_workers_ = 0;
+        is_canceled_.store(true, std::memory_order_relaxed);
+        return;
+      }
+      // Compute the number of additional worker tasks to spawn.
+      size_t missing_tasks = max_concurrency - active_workers_;
+      num_tasks_to_post =
+          pending_tasks_ >= missing_tasks ? 0 : missing_tasks - pending_tasks_;
+      pending_tasks_ += num_tasks_to_post;
+    }
+    // Spawn more worker tasks if needed.
+    for (size_t i = 0; i < num_tasks_to_post; ++i) {
+      CallOnWorkerThread(TaskPriority::kUserBlocking,
+                         std::make_unique<DefaultJobWorker>(shared_from_this(),
+                                                            job_task_.get()));
+    }
+    // Participate in job execution, as one active worker.
     job_task_->Run(&delegate);
-    base::MutexGuard guard(&mutex_);
-    can_run = WaitForParticipationOpportunityLockRequired();
   }
 }
 
@@ -136,10 +160,7 @@ bool DefaultJobState::CanRunFirstTask() {
   base::MutexGuard guard(&mutex_);
   --pending_tasks_;
   if (is_canceled_.load(std::memory_order_relaxed)) return false;
-  if (active_workers_ >= std::min(job_task_->GetMaxConcurrency(active_workers_),
-                                  num_worker_threads_)) {
-    return false;
-  }
+  if (active_workers_ >= CappedMaxConcurrency(active_workers_)) return false;
   // Acquire current worker.
   ++active_workers_;
   return true;
@@ -175,20 +196,6 @@ bool DefaultJobState::DidRunTask() {
                                      shared_from_this(), job_task_.get()));
   }
   return true;
-}
-
-bool DefaultJobState::WaitForParticipationOpportunityLockRequired() {
-  size_t max_concurrency = CappedMaxConcurrency(active_workers_ - 1);
-  while (active_workers_ > max_concurrency && active_workers_ > 1) {
-    worker_released_condition_.Wait(&mutex_);
-    max_concurrency = CappedMaxConcurrency(active_workers_ - 1);
-  }
-  if (active_workers_ <= max_concurrency) return true;
-  DCHECK_EQ(1U, active_workers_);
-  DCHECK_EQ(0U, max_concurrency);
-  active_workers_ = 0;
-  is_canceled_.store(true, std::memory_order_relaxed);
-  return false;
 }
 
 size_t DefaultJobState::CappedMaxConcurrency(size_t worker_count) const {
