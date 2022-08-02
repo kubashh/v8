@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8690ace8_a61a1fd3",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T16:27:04Z",
+      "side": 1,
+      "message": "Thanks, I changed it to `++num_worker_threads_`.",
+      "parentUuid": "1c5b043d_4f425706",
+      "revId": "fb941bf243b996b756c1d6c927a00308ffe76695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb7d9c22_2992ba59",
@@ -76,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "778d6c34_7ee94438",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T16:27:04Z",
+      "side": 1,
+      "message": "Ack, I reintroduced a (local) WaitForParticipationOpportunity.",
+      "parentUuid": "cb7d9c22_2992ba59",
+      "range": {
+        "startLine": 109,
+        "startChar": 6,
+        "endLine": 123,
+        "endChar": 7
+      },
+      "revId": "fb941bf243b996b756c1d6c927a00308ffe76695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a52817f_36b5570d",
@@ -89,6 +131,30 @@
       "writtenOn": "2022-08-02T15:51:11Z",
       "side": 1,
       "message": "We only need to post tasks on the first iteration; later on DidRunTask() takes care of maintaining enough workers. \nI think the main steps are:\n\nnum_worker_threads_ \u003d platform_-\u003eNumberOfWorkerThreads() + 1;\n++active_workers_;\nCompute num_tasks_to_post, or if zero call WaitForParticipationOpportunityLockRequired\n\nPost num_tasks_to_post outside of lock\n\ncall Run and WaitForParticipationOpportunityLockRequired in a loop",
+      "range": {
+        "startLine": 132,
+        "startChar": 27,
+        "endLine": 132,
+        "endChar": 44
+      },
+      "revId": "fb941bf243b996b756c1d6c927a00308ffe76695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "256c752d_6d5f796d",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-02T16:27:04Z",
+      "side": 1,
+      "message": "Ah, right. I changed that. And instead of doing everything in one loop, it\u0027s split again into initialization, and a tigher loop later. It\u0027s not shorter, but probably easier to read.",
+      "parentUuid": "7a52817f_36b5570d",
       "range": {
         "startLine": 132,
         "startChar": 27,
