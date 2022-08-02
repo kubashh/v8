@@ -5,12 +5,16 @@
 #ifndef V8_HEAP_SCAVENGER_INL_H_
 #define V8_HEAP_SCAVENGER_INL_H_
 
+#include "src/base/platform/mutex.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/common/globals.h"
 #include "src/heap/evacuation-allocator-inl.h"
 #include "src/heap/incremental-marking-inl.h"
+#include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-chunk.h"
 #include "src/heap/new-spaces.h"
 #include "src/heap/objects-visiting-inl.h"
+#include "src/heap/remembered-set-inl.h"
 #include "src/heap/scavenger.h"
 #include "src/objects/map.h"
 #include "src/objects/objects-body-descriptors-inl.h"
