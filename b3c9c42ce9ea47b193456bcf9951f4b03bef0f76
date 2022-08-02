@@ -22,6 +22,30 @@
       },
       "revId": "b3c9c42ce9ea47b193456bcf9951f4b03bef0f76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b150e572_3ab454dc",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-02T12:03:56Z",
+      "side": 1,
+      "message": "Yes, although the whole `Result` discussion started on these two lines as I used the variable here for debugging purposes.\nBut there isn\u0027t a need for it, so I can drop it.",
+      "parentUuid": "410eff7c_2ccb0aa5",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 31
+      },
+      "revId": "b3c9c42ce9ea47b193456bcf9951f4b03bef0f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

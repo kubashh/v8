@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e54997c7_3784073f",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2362,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-02T12:03:56Z",
+      "side": 1,
+      "message": "Yes, that\u0027s my bad. I marked the function as `nodiscard` as well to make this more likely to be discovered by the compiler. Still unfortunate that gtest doesn\u0027t mandate that all `AssertionResult`s are used in some check. (Maybe there are use cases for dropping an `AssertionResult` but it feels rather rare).",
+      "parentUuid": "4a60841d_ad2914b3",
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47ebc534_261daca3",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "`--noenable-sse3` should do the trick.",
       "parentUuid": "47ebc534_261daca3",
+      "range": {
+        "startLine": 2361,
+        "startChar": 0,
+        "endLine": 2363,
+        "endChar": 62
+      },
+      "revId": "63d946b9708ca5b5d7df97a5915b24d811bdc7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b2f3252_10bd7445",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2363,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-02T12:03:56Z",
+      "side": 1,
+      "message": "It does, thanks!",
+      "parentUuid": "6acce047_71ed3bd4",
       "range": {
         "startLine": 2361,
         "startChar": 0,
