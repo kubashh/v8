@@ -884,50 +884,55 @@ void InstructionSelector::VisitStackPointerGreaterThan(
 
 namespace {
 
-void TryMergeTruncateInt64ToInt32IntoLoad(InstructionSelector* selector,
+bool TryMergeTruncateInt64ToInt32IntoLoad(InstructionSelector* selector,
                                           Node* node, Node* load) {
-  LoadRepresentation load_rep = LoadRepresentationOf(load->op());
-  MachineRepresentation rep = load_rep.representation();
-  InstructionCode opcode;
-  switch (rep) {
-    case MachineRepresentation::kBit:  // Fall through.
-    case MachineRepresentation::kWord8:
-      opcode = load_rep.IsSigned() ? kX64Movsxbl : kX64Movzxbl;
-      break;
-    case MachineRepresentation::kWord16:
-      opcode = load_rep.IsSigned() ? kX64Movsxwl : kX64Movzxwl;
-      break;
-    case MachineRepresentation::kWord32:
-    case MachineRepresentation::kWord64:
-    case MachineRepresentation::kTaggedSigned:
-    case MachineRepresentation::kTagged:
-    case MachineRepresentation::kCompressed:  // Fall through.
-      opcode = kX64Movl;
-      break;
-    default:
-      UNREACHABLE();
-  }
-  X64OperandGenerator g(selector);
+  if ((load->opcode() == IrOpcode::kLoad ||
+       load->opcode() == IrOpcode::kLoadImmutable) &&
+      selector->CanCover(node, load)) {
+    LoadRepresentation load_rep = LoadRepresentationOf(load->op());
+    MachineRepresentation rep = load_rep.representation();
+    InstructionCode opcode;
+    switch (rep) {
+      case MachineRepresentation::kBit:  // Fall through.
+      case MachineRepresentation::kWord8:
+        opcode = load_rep.IsSigned() ? kX64Movsxbl : kX64Movzxbl;
+        break;
+      case MachineRepresentation::kWord16:
+        opcode = load_rep.IsSigned() ? kX64Movsxwl : kX64Movzxwl;
+        break;
+      case MachineRepresentation::kWord32:
+      case MachineRepresentation::kWord64:
+      case MachineRepresentation::kTaggedSigned:
+      case MachineRepresentation::kTagged:
+      case MachineRepresentation::kCompressed:  // Fall through.
+        opcode = kX64Movl;
+        break;
+      default:
+        UNREACHABLE();
+    }
+    X64OperandGenerator g(selector);
 #ifdef V8_IS_TSAN
-  // On TSAN builds we require one scratch register. Because of this we also
-  // have to modify the inputs to take into account possible aliasing and use
-  // UseUniqueRegister which is not required for non-TSAN builds.
-  InstructionOperand temps[] = {g.TempRegister()};
-  size_t temp_count = arraysize(temps);
-  auto reg_kind = OperandGenerator::RegisterUseKind::kUseUniqueRegister;
+    // On TSAN builds we require one scratch register. Because of this we also
+    // have to modify the inputs to take into account possible aliasing and use
+    // UseUniqueRegister which is not required for non-TSAN builds.
+    InstructionOperand temps[] = {g.TempRegister()};
+    size_t temp_count = arraysize(temps);
+    auto reg_kind = OperandGenerator::RegisterUseKind::kUseUniqueRegister;
 #else
-  InstructionOperand* temps = nullptr;
-  size_t temp_count = 0;
-  auto reg_kind = OperandGenerator::RegisterUseKind::kUseRegister;
+    InstructionOperand* temps = nullptr;
+    size_t temp_count = 0;
+    auto reg_kind = OperandGenerator::RegisterUseKind::kUseRegister;
 #endif  // V8_IS_TSAN
-  InstructionOperand outputs[] = {g.DefineAsRegister(node)};
-  size_t input_count = 0;
-  InstructionOperand inputs[3];
-  AddressingMode mode =
-      g.GetEffectiveAddressMemoryOperand(load, inputs, &input_count, reg_kind);
-  opcode |= AddressingModeField::encode(mode);
-
-  selector->Emit(opcode, 1, outputs, input_count, inputs, temp_count, temps);
+    InstructionOperand outputs[] = {g.DefineAsRegister(node)};
+    size_t input_count = 0;
+    InstructionOperand inputs[3];
+    AddressingMode mode = g.GetEffectiveAddressMemoryOperand(
+        node->InputAt(0), inputs, &input_count, reg_kind);
+    opcode |= AddressingModeField::encode(mode);
+    selector->Emit(opcode, 1, outputs, input_count, inputs, temp_count, temps);
+    return true;
+  }
+  return false;
 }
 
 // Shared routine for multiple 32-bit shift operations.
@@ -1886,14 +1891,7 @@ void InstructionSelector::VisitTruncateInt64ToInt32(Node* node) {
   // have to satisfy that condition.
   X64OperandGenerator g(this);
   Node* value = node->InputAt(0);
-  bool can_cover = false;
-  if (value->opcode() == IrOpcode::kBitcastTaggedToWordForTagAndSmiBits) {
-    can_cover = CanCover(node, value) && CanCover(value, value->InputAt(0));
-    value = value->InputAt(0);
-  } else {
-    can_cover = CanCover(node, value);
-  }
-  if (can_cover) {
+  if (CanCover(node, value)) {
     switch (value->opcode()) {
       case IrOpcode::kWord64Sar:
       case IrOpcode::kWord64Shr: {
@@ -1911,8 +1909,10 @@ void InstructionSelector::VisitTruncateInt64ToInt32(Node* node) {
       }
       case IrOpcode::kLoad:
       case IrOpcode::kLoadImmutable: {
-        TryMergeTruncateInt64ToInt32IntoLoad(this, node, value);
-        return;
+        if (TryMergeTruncateInt64ToInt32IntoLoad(this, node, value)) {
+          return;
+        }
+        break;
       }
       default:
         break;
