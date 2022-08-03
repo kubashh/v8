@@ -414,6 +414,22 @@ RUNTIME_FUNCTION(Runtime_CompileOptimizedOSR) {
   BytecodeOffset osr_offset = BytecodeOffset(frame->GetBytecodeOffset());
   DCHECK(!osr_offset.IsNone());
 
+  Handle<JSFunction> function(frame->function(), isolate);
+  if (function->feedback_vector().invocation_count() <= 1 &&
+      !IsNone(function->tiering_state()) &&
+      !IsInProgress(function->tiering_state())) {
+    // With lazy feedback allocation we may not have feedback for the
+    // initial part of the function that was executed before we allocated a
+    // feedback vector. Reset any tiering states for such functions.
+    //
+    // TODO(mythria): Instead of resetting the tiering state here we
+    // should only mark a function for optimization if it has sufficient
+    // feedback. We cannot do this currently since we OSR only after we mark
+    // a function for optimization. We should instead change it to be based
+    // based on number of ticks.
+    function->reset_tiering_state();
+  }
+
   const ConcurrencyMode mode =
       V8_LIKELY(isolate->concurrent_recompilation_enabled() &&
                 FLAG_concurrent_osr)
@@ -421,7 +437,6 @@ RUNTIME_FUNCTION(Runtime_CompileOptimizedOSR) {
           : ConcurrencyMode::kSynchronous;
 
   Handle<CodeT> result;
-  Handle<JSFunction> function(frame->function(), isolate);
   if (!Compiler::CompileOptimizedOSR(isolate, function, osr_offset, frame, mode)
            .ToHandle(&result)) {
     // An empty result can mean one of two things:
@@ -445,21 +460,6 @@ RUNTIME_FUNCTION(Runtime_CompileOptimizedOSR) {
   DCHECK_EQ(BytecodeOffset(data.OsrBytecodeOffset().value()), osr_offset);
   DCHECK_GE(data.OsrPcOffset().value(), 0);
 #endif  // DEBUG
-
-  if (function->feedback_vector().invocation_count() <= 1 &&
-      !IsNone(function->tiering_state()) &&
-      !IsInProgress(function->tiering_state())) {
-    // With lazy feedback allocation we may not have feedback for the
-    // initial part of the function that was executed before we allocated a
-    // feedback vector. Reset any tiering states for such functions.
-    //
-    // TODO(mythria): Instead of resetting the tiering state here we
-    // should only mark a function for optimization if it has sufficient
-    // feedback. We cannot do this currently since we OSR only after we mark
-    // a function for optimization. We should instead change it to be based
-    // based on number of ticks.
-    function->reset_tiering_state();
-  }
 
   return *result;
 }

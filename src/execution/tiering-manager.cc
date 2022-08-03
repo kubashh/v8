@@ -298,8 +298,18 @@ OptimizationDecision TieringManager::ShouldOptimize(JSFunction function,
     return OptimizationDecision::DoNotOptimize();
   }
 
+  // With lazy feedback allocation we may not have feedback for the
+  // initial part of the function that was executed before we allocated a
+  // feedback vector. Don't optimize function in the first invocation.
+  // Optimization marker is precondition of OSR, abort trying to set
+  // optimization marker only after OSR compilation.
+  FeedbackVector vector = function.feedback_vector();
+  if (vector.maybe_has_optimized_osr_code() && vector.invocation_count() == 1) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
   BytecodeArray bytecode = function.shared().GetBytecodeArray(isolate_);
-  const int ticks = function.feedback_vector().profiler_ticks();
+  const int ticks = vector.profiler_ticks();
   const int ticks_for_optimization =
       FLAG_ticks_before_optimization +
       (bytecode.length() / FLAG_bytecode_size_allowance_per_tick);
