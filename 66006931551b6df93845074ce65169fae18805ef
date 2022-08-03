@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1fd9f7_cb011cd7",
+        "filename": "test/mjsunit/temporal/instant-from-epoch-milliseconds.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-08-03T21:02:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a93d422e_5711f225",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "66006931551b6df93845074ce65169fae18805ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2789a345_a090855a",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-08-03T20:47:19Z",
       "side": 1,
       "message": "Same note here, and below, as in the other test.",
+      "revId": "66006931551b6df93845074ce65169fae18805ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4637420_158cb9d8",
+        "filename": "test/mjsunit/temporal/instant-from-epoch-seconds.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-08-03T21:02:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2789a345_a090855a",
       "revId": "66006931551b6df93845074ce65169fae18805ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
