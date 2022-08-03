@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1bb08e6_37695c19",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-03T14:04:00Z",
+      "side": 1,
+      "message": "Sure, why not. You didn\u0027t like the \"side effect\" of updating max_concurrency?",
+      "parentUuid": "d1ad6010_c22257d4",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 19
+      },
+      "revId": "b7e426f9a2257b30187ce7f3f54fb28991dfd1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0ecc1e8_f87a6280",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-02T16:46:33Z",
       "side": 1,
       "message": "I think active_workers_ can be \u003e max_concurrency (if we recently completed work but workers haven\u0027t returned yet).\nWe should check if (max_concurrency \u003e active_workers_ + pending_tasks_) to avoid underflow.",
+      "range": {
+        "startLine": 126,
+        "startChar": 27,
+        "endLine": 126,
+        "endChar": 61
+      },
+      "revId": "b7e426f9a2257b30187ce7f3f54fb28991dfd1ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f5bc30b_8799ad9a",
+        "filename": "src/libplatform/default-job.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-03T14:04:00Z",
+      "side": 1,
+      "message": "WaitForParticipationOpportunity only returns once `active_workers_ \u003c\u003d max_concurrency`. It does not check for `pending_tasks_`, that\u0027s why we have the ternary statement below.\n\nI rewrote it anyway to be robust against that, but I think the previous version is equivalent in all scenarios.",
+      "parentUuid": "b0ecc1e8_f87a6280",
       "range": {
         "startLine": 126,
         "startChar": 27,
