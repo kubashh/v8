@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f9793a9_966a35f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-08-03T20:47:19Z",
+      "side": 1,
+      "message": "lgtm with a couple of style nits that I think make the tests easier to read by getting rid of unneeded syntax.",
+      "revId": "66006931551b6df93845074ce65169fae18805ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a93d422e_5711f225",
+        "filename": "test/mjsunit/temporal/instant-from-epoch-milliseconds.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-08-03T20:47:19Z",
+      "side": 1,
+      "message": "This can be further simplified by removing the let declaration (which no longer serves a purpose) and then also the curly braces.\n\n```\nassertThrows(() \u003d\u003e Temporal.Instant.fromEpochMilliseconds(bigint_milli),\n             TypeError);\n```\n\nSame below.",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "66006931551b6df93845074ce65169fae18805ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2789a345_a090855a",
+        "filename": "test/mjsunit/temporal/instant-from-epoch-seconds.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-08-03T20:47:19Z",
+      "side": 1,
+      "message": "Same note here, and below, as in the other test.",
+      "revId": "66006931551b6df93845074ce65169fae18805ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
