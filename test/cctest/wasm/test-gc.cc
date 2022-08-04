@@ -6,6 +6,7 @@
 
 #include "src/base/vector.h"
 #include "src/codegen/signature.h"
+#include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/struct-types.h"
 #include "src/wasm/wasm-arguments.h"
@@ -244,6 +245,11 @@ class WasmGCTester {
     WasmCodeRefScope code_ref_scope;
     NativeModule* native_module = instance_->module_object().native_module();
     WasmCode* code = native_module->GetCode(function_index);
+    if (!code) {
+      NativeModule* tmp;
+      CompileLazy(isolate_, instance_, function_index, &tmp);
+      code = native_module->GetCode(function_index);
+    }
     Address wasm_call_target = code->instruction_start();
     Handle<Object> object_ref = instance_;
     Handle<CodeT> c_wasm_entry =
