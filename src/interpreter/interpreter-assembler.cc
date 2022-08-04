@@ -802,6 +802,7 @@ TNode<Object> InterpreterAssembler::Construct(
     TNode<Object> target, TNode<Context> context, TNode<Object> new_target,
     const RegListNodePair& args, TNode<UintPtrT> slot_id,
     TNode<HeapObject> maybe_feedback_vector) {
+  Print("InterpreterAssembler::Construct");
   DCHECK(Bytecodes::MakesCallAlongCriticalPath(bytecode_));
   TVARIABLE(Object, var_result);
   TVARIABLE(AllocationSite, var_site);
@@ -815,6 +816,7 @@ TNode<Object> InterpreterAssembler::Construct(
 
   BIND(&construct_generic);
   {
+    Print("InterpreterAssembler::Construct / construct_generic");
     // TODO(bmeurer): Remove the generic type_info parameter from the Construct.
     Comment("call using Construct builtin");
     Callable callable = CodeFactory::InterpreterPushArgsThenConstruct(
@@ -839,9 +841,12 @@ TNode<Object> InterpreterAssembler::Construct(
   }
 
   BIND(&return_result);
+  Comment("InterpreterAssembler::construct returning");
+  Print(var_result.value());
   return var_result.value();
 }
 
+// FIXME: maybe relevant
 TNode<Object> InterpreterAssembler::ConstructWithSpread(
     TNode<Object> target, TNode<Context> context, TNode<Object> new_target,
     const RegListNodePair& args, TNode<UintPtrT> slot_id,

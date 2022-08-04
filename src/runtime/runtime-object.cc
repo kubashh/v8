@@ -1036,6 +1036,7 @@ RUNTIME_FUNCTION(Runtime_AllocateHeapNumber) {
 }
 
 RUNTIME_FUNCTION(Runtime_NewObject) {
+  printf("Runtime::NewObject\n");
   HandleScope scope(isolate);
   DCHECK_EQ(2, args.length());
   Handle<JSFunction> target = args.at<JSFunction>(0);

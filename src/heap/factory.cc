@@ -2726,6 +2726,7 @@ void Factory::InitializeJSObjectBody(JSObject obj, Map map, int start_offset) {
 Handle<JSObject> Factory::NewJSObjectFromMap(
     Handle<Map> map, AllocationType allocation,
     Handle<AllocationSite> allocation_site) {
+  printf("NewJSObjectFromMap\n");
   // JSFunctions should be allocated using AllocateFunction to be
   // properly initialized.
   DCHECK(!InstanceTypeChecker::IsJSFunction((map->instance_type())));

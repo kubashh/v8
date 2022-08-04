@@ -2781,6 +2781,37 @@ IGNITION_HANDLER(ThrowIfNotSuperConstructor, InterpreterAssembler) {
   }
 }
 
+IGNITION_HANDLER(FindNonDefaultConstructor, InterpreterAssembler) {
+  TVARIABLE(Object, constructor);
+
+  Label loop(this, &constructor), done(this, &constructor);
+  constructor = LoadRegisterAtOperandIndex(0);
+  Goto(&loop);
+
+  BIND(&loop);
+  {
+    Print("FindNonDefaultConstructor looping");
+    Print(constructor.value());
+    // If the kind is not DefaultBaseConstructor or DefaultDerivedConstructor,
+    // we've found it.
+    GotoIfNot(IsDefaultDerivedConstructor(CAST(constructor.value())), &done);
+
+    // FIXME: If it has the class fields symbol, call it...
+
+    constructor = GetSuperConstructor(CAST(constructor.value()));
+    // FIXME: we need the "throw if not super ctor" for all levels; add a test.
+
+    Goto(&loop);
+  }
+  BIND(&done);
+  Print("Found it");
+  Print(constructor.value());
+  SetAccumulator(SelectBooleanConstant(
+      IsDefaultBaseConstructor(CAST(constructor.value()))));
+  StoreRegisterAtOperandIndex(constructor.value(), 0);
+  Dispatch();
+}
+
 // Debugger
 //
 // Call runtime to handle debugger statement.

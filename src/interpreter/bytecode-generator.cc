@@ -5619,6 +5619,33 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       ->LoadAccumulatorWithRegister(this_function)
       .GetSuperConstructor(constructor);
 
+  // Check if the constructor is in fact a constructor.
+  builder()->ThrowIfNotSuperConstructor(constructor);
+
+  BytecodeLabel call_super_ctor, super_ctor_call_done;
+  bool omit_super_ctor = FLAG_omit_default_ctors &&
+                         IsDerivedConstructor(info()->literal()->kind());
+  // omit_super_ctor = false;
+  if (omit_super_ctor) {
+    // FIXME: now we don't "throwifnotsuperconstructor" above this -> fix the finder func to do it
+    builder()->FindNonDefaultConstructor(constructor);
+    builder()->JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &call_super_ctor);
+    // We have a default base class ctor; don't call it. But... what to do??
+    // FIXME: is this necessary?
+    // Do we need some kind of a Construct empty stub which doesn't call the
+    // ctor? But who creates the actual object??
+    // FIXME: FastNewObject!
+    RegisterList args = register_allocator()->NewRegisterList(2);
+    builder()
+      ->MoveRegister(constructor, args[0])
+      .MoveRegister(constructor, args[1]); // fixme: new target...
+
+    builder()->CallRuntime(Runtime::kNewObject, args);
+    // Where's the return value?
+    builder()->Jump(&super_ctor_call_done);
+  }
+
+  builder()->Bind(&call_super_ctor);
   if (spread_position == Call::kHasNonFinalSpread) {
     // First generate the array containing all arguments.
     BuildCreateArrayLiteral(args, nullptr);
@@ -5661,6 +5688,7 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       builder()->Construct(constructor, args_regs, feedback_slot_index);
     }
   }
+  builder()->Bind(&super_ctor_call_done);
 
   // Explicit calls to the super constructor using super() perform an
   // implicit binding assignment to the 'this' variable.
@@ -5672,6 +5700,7 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
     BuildVariableAssignment(var, Token::INIT, HoleCheckMode::kRequired);
   }
 
+  // Maybe this goes wrong? Where do we get the instance from?
   Register instance = register_allocator()->NewRegister();
   builder()->StoreAccumulatorInRegister(instance);
 
