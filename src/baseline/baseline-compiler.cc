@@ -1132,6 +1132,10 @@ void BaselineCompiler::VisitGetSuperConstructor() {
   StoreRegister(0, prototype);
 }
 
+void BaselineCompiler::VisitFindNonDefaultConstructor() {
+  CHECK(false);
+}
+
 namespace {
 constexpr Builtin ConvertReceiverModeToCompactBuiltin(
     ConvertReceiverMode mode) {

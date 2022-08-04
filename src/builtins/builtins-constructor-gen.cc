@@ -88,6 +88,7 @@ TF_BUILTIN(ConstructWithArrayLike, CallOrConstructBuiltinsAssembler) {
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto arguments_list = Parameter<Object>(Descriptor::kArgumentsList);
   auto context = Parameter<Context>(Descriptor::kContext);
+  Print("ConstructWithArrayLike");
   CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
 }
 

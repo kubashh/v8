@@ -2831,7 +2831,7 @@ TNode<Map> CodeStubAssembler::LoadJSArrayElementsMap(
       LoadContextElement(native_context, Context::ArrayMapIndex(kind)));
 }
 
-TNode<BoolT> CodeStubAssembler::IsGeneratorFunction(
+TNode<Uint32T> CodeStubAssembler::LoadFunctionKind(
     TNode<JSFunction> function) {
   const TNode<SharedFunctionInfo> shared_function_info =
       LoadObjectField<SharedFunctionInfo>(
@@ -2841,12 +2841,36 @@ TNode<BoolT> CodeStubAssembler::IsGeneratorFunction(
       DecodeWord32<SharedFunctionInfo::FunctionKindBits>(
           LoadObjectField<Uint32T>(shared_function_info,
                                    SharedFunctionInfo::kFlagsOffset));
+  return function_kind;
+}
+
+TNode<BoolT> CodeStubAssembler::IsGeneratorFunction(
+    TNode<JSFunction> function) {
+  const TNode<Uint32T> function_kind = LoadFunctionKind(function);
 
   // See IsGeneratorFunction(FunctionKind kind).
   return IsInRange(
       function_kind,
       static_cast<uint32_t>(FunctionKind::kAsyncConciseGeneratorMethod),
       static_cast<uint32_t>(FunctionKind::kConciseGeneratorMethod));
+}
+
+TNode<BoolT> CodeStubAssembler::IsDefaultBaseConstructor(
+    TNode<JSFunction> function) {
+  const TNode<Uint32T> function_kind = LoadFunctionKind(function);
+  // See IsDefaultConstructor(FunctionKind kind).
+  return Word32Equal(
+      function_kind,
+      static_cast<uint32_t>(FunctionKind::kDefaultBaseConstructor));
+}
+
+TNode<BoolT> CodeStubAssembler::IsDefaultDerivedConstructor(
+    TNode<JSFunction> function) {
+  const TNode<Uint32T> function_kind = LoadFunctionKind(function);
+  // See IsDefaultConstructor(FunctionKind kind).
+  return Word32Equal(
+      function_kind,
+      static_cast<uint32_t>(FunctionKind::kDefaultDerivedConstructor));
 }
 
 TNode<BoolT> CodeStubAssembler::IsJSFunctionWithPrototypeSlot(
