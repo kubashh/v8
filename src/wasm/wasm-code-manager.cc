@@ -1718,6 +1718,16 @@ void NativeModule::UpdateCPUDuration(size_t cpu_duration, ExecutionTier tier) {
   }
 }
 
+void NativeModule::AddLazyCompilationTimeSample(int64_t sample) {
+  num_lazy_compilations_.fetch_add(1);
+  sum_lazy_compilation_time_.fetch_add(sample);
+  int64_t max = max_lazy_compilation_time_.load();
+  if (sample < max) return;
+  while (!max_lazy_compilation_time_.compare_exchange_weak(max, sample)) {
+    if (sample < max) return;
+  }
+}
+
 void NativeModule::TransferNewOwnedCodeLocked() const {
   allocation_mutex_.AssertHeld();
   DCHECK(!new_owned_code_.empty());

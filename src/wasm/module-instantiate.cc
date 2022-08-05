@@ -378,6 +378,48 @@ class InstanceBuilder {
   void InitializeTags(Handle<WasmInstanceObject> instance);
 };
 
+namespace {
+class ReportLazyCompilationTimesTask : public CancelableTask {
+ public:
+  ReportLazyCompilationTimesTask(Isolate* isolate,
+                                 std::shared_ptr<NativeModule> native_module,
+                                 int delay_in_seconds)
+      : CancelableTask(isolate),
+        counters_(isolate->counters()),
+        native_module_(native_module),
+        delay_in_seconds_(delay_in_seconds) {}
+
+  void RunInternal() final {
+    std::shared_ptr<NativeModule> native_module = native_module_.lock();
+    if (!native_module) return;
+    if (delay_in_seconds_ == 5) {
+      counters_->wasm_num_lazy_compilation_time_5sec()->AddSample(
+          static_cast<int>(native_module->num_lazy_compilations()));
+      counters_->wasm_sum_lazy_compilation_time_5sec()->AddSample(
+          static_cast<int>(native_module->sum_lazy_compilation_time()));
+      counters_->wasm_max_lazy_compilation_time_5sec()->AddSample(
+          static_cast<int>(native_module->max_lazy_compilation_time()));
+      return;
+    }
+    if (delay_in_seconds_ == 20) {
+      counters_->wasm_num_lazy_compilation_time_20sec()->AddSample(
+          static_cast<int>(native_module->num_lazy_compilations()));
+      counters_->wasm_sum_lazy_compilation_time_20sec()->AddSample(
+          static_cast<int>(native_module->sum_lazy_compilation_time()));
+      counters_->wasm_max_lazy_compilation_time_20sec()->AddSample(
+          static_cast<int>(native_module->max_lazy_compilation_time()));
+      return;
+    }
+    UNREACHABLE();
+  }
+
+ private:
+  Counters* counters_;
+  std::weak_ptr<NativeModule> native_module_;
+  int delay_in_seconds_;
+};
+}  // namespace
+
 MaybeHandle<WasmInstanceObject> InstantiateToInstanceObject(
     Isolate* isolate, ErrorThrower* thrower,
     Handle<WasmModuleObject> module_object, MaybeHandle<JSReceiver> imports,
@@ -387,8 +429,21 @@ MaybeHandle<WasmInstanceObject> InstantiateToInstanceObject(
   InstanceBuilder builder(isolate, context_id, thrower, module_object, imports,
                           memory_buffer);
   auto instance = builder.Build();
-  if (!instance.is_null() && builder.ExecuteStartFunction()) {
-    return instance;
+  if (!instance.is_null()) {
+    // Post tasks for lazy compilation metrics before we call the start function
+    if (FLAG_wasm_lazy_compilation) {
+      V8::GetCurrentPlatform()->CallDelayedOnWorkerThread(
+          std::make_unique<ReportLazyCompilationTimesTask>(
+              isolate, module_object->shared_native_module(), 5),
+          5.0);
+      V8::GetCurrentPlatform()->CallDelayedOnWorkerThread(
+          std::make_unique<ReportLazyCompilationTimesTask>(
+              isolate, module_object->shared_native_module(), 20),
+          20.0);
+    }
+    if (builder.ExecuteStartFunction()) {
+      return instance;
+    }
   }
   DCHECK(isolate->has_pending_exception() || thrower->error());
   return {};

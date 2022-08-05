@@ -1142,6 +1142,8 @@ bool IsLazyModule(const WasmModule* module) {
 
 bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
                  int func_index, NativeModule** out_native_module) {
+  base::ElapsedTimer compile_lazy_timer;
+  compile_lazy_timer.Start();
   Handle<WasmModuleObject> module_object(instance->module_object(), isolate);
   NativeModule* native_module = module_object->native_module();
   const WasmModule* module = native_module->module();
@@ -1234,6 +1236,9 @@ bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
     instance->feedback_vectors().set(
         declared_function_index(module, func_index), *vector);
   }
+
+  native_module->AddLazyCompilationTimeSample(
+      compile_lazy_timer.Elapsed().InMilliseconds());
   return true;
 }
 
