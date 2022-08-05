@@ -900,7 +900,7 @@ class ValueNode : public Node {
   void LoadToRegister(MaglevCodeGenState*, DoubleRegister);
   void DoLoadToRegister(MaglevCodeGenState*, Register);
   void DoLoadToRegister(MaglevCodeGenState*, DoubleRegister);
-  Handle<Object> Reify(Isolate* isolate);
+  Handle<Object> Reify(LocalIsolate* isolate);
 
   void Spill(compiler::AllocatedOperand operand) {
 #ifdef DEBUG
@@ -1501,7 +1501,7 @@ class Int32Constant : public FixedInputValueNodeT<0, Int32Constant> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
   void DoLoadToRegister(MaglevCodeGenState*, OutputRegister);
-  Handle<Object> DoReify(Isolate* isolate);
+  Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
   const int32_t value_;
@@ -1529,7 +1529,7 @@ class Float64Constant : public FixedInputValueNodeT<0, Float64Constant> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
   void DoLoadToRegister(MaglevCodeGenState*, OutputRegister);
-  Handle<Object> DoReify(Isolate* isolate);
+  Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
   const double value_;
@@ -1899,7 +1899,7 @@ class SmiConstant : public FixedInputValueNodeT<0, SmiConstant> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
   void DoLoadToRegister(MaglevCodeGenState*, OutputRegister);
-  Handle<Object> DoReify(Isolate* isolate);
+  Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
   const Smi value_;
@@ -1925,7 +1925,7 @@ class Constant : public FixedInputValueNodeT<0, Constant> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
   void DoLoadToRegister(MaglevCodeGenState*, OutputRegister);
-  Handle<Object> DoReify(Isolate* isolate);
+  Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
   const compiler::HeapObjectRef object_;
@@ -1949,7 +1949,7 @@ class RootConstant : public FixedInputValueNodeT<0, RootConstant> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
   void DoLoadToRegister(MaglevCodeGenState*, OutputRegister);
-  Handle<Object> DoReify(Isolate* isolate);
+  Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
   const RootIndex index_;
