@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3620c93_92e8ebd0",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "066cdd85_df317f5e",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 20
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "086bacfe_8e05a234",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "These two should better have the same bucket configuration, so we can compare them better.",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 46
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba15a89_e55c7afb",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "086bacfe_8e05a234",
       "range": {
         "startLine": 116,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af64977b_bd08e027",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28fd2766_ffbf2d23",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 66
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "251855ac_13e6c6d9",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "See this comment; the same should apply to the new counter. Also, to avoid unnecessary overhead, we should have one timer which is used for all histograms.\n`TimedHistogramScope` does not much more than calling `histogram_-\u003eAddTimedSample(timer_.Elapsed())` in its destructor.\n\nMaybe we should have a little helper class or struct here, which calls `native_module-\u003eAddLazyCompilationTimeSample` in the destructor, and then we also update `wasm_lazy_compile_time` in there?\n\nAlternatively, put the timing in the runtime function where we don\u0027t have that scoping issue (that objects get destructed after stopping the timer, and that might add significant cost).",
+      "range": {
+        "startLine": 1153,
+        "startChar": 0,
+        "endLine": 1155,
+        "endChar": 51
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e38c0d_514a33e8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "251855ac_13e6c6d9",
       "range": {
         "startLine": 1153,
         "startChar": 0,
@@ -144,6 +240,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6ae7e62_9206d2e5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb3ef902_8611d759",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb4b3e99_5e8fd854",
@@ -157,6 +271,24 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "The `CancelableTask` construct seems unnecessary (and difficult to figure out if it works correctly in all cases). A simper solution would be to receive a `std::weak_ptr\u003cCounters\u003e` in the constructor (get it via `Isolate::async_counters`), and store it as a weak pointer in this task.\nThis also avoids having to pass the isolate pointer to a background tasks, which always rings alarm bells :)",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c323480e_f9fe392a",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb4b3e99_5e8fd854",
       "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -178,6 +310,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecfb34e_ffa9d62b",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0975766_f48ff685",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d5456b7_84d80bf0",
@@ -191,6 +341,30 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "I think this could be a bit simpler and with less repetition:\n    while (sample \u003e max \u0026\u0026 !...compare_exchange_weak...) {\n      // retry with updated {max}.\n    }",
+      "range": {
+        "startLine": 1725,
+        "startChar": 0,
+        "endLine": 1728,
+        "endChar": 3
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a4aab85_2232210c",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d5456b7_84d80bf0",
       "range": {
         "startLine": 1725,
         "startChar": 0,
@@ -224,6 +398,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99672938_84813e04",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23755d28_343fd4ac",
+      "range": {
+        "startLine": 784,
+        "startChar": 44,
+        "endLine": 784,
+        "endChar": 50
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ce5f3a8_4fa1e0cc",
@@ -237,6 +435,24 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "All these atomic accesses should use std::memory_order_relaxed.",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d37e5b4d_27541e8f",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ce5f3a8_4fa1e0cc",
       "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -258,6 +474,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54136119_555465c3",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "457737e3_ed4287d1",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15e30691_8a505edb",
@@ -271,6 +505,30 @@
       "writtenOn": "2022-08-05T12:18:57Z",
       "side": 1,
       "message": "Please add a unit, either as comment or in the name.",
+      "range": {
+        "startLine": 1038,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 53
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6e31bf_b1489718",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-05T13:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15e30691_8a505edb",
       "range": {
         "startLine": 1038,
         "startChar": 0,
