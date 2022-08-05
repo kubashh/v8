@@ -16,6 +16,29 @@
       "message": "PTAL!\n\nThanks,\nPierre",
       "revId": "c6f4d2e169cd848600d4ad08d6b4dfdd399bace6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad962573_12370551",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-05T11:31:23Z",
+      "side": 1,
+      "message": "can you make these operate on `BaselineLabelPointer\u0026` to avoid the multiple `labels_[i]` lookups? Maybe `EnsureLabel` should return a BaselineLabelPointer to help with this.",
+      "range": {
+        "startLine": 186,
+        "startChar": 7,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "c6f4d2e169cd848600d4ad08d6b4dfdd399bace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
