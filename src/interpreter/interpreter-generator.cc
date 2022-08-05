@@ -2781,6 +2781,59 @@ IGNITION_HANDLER(ThrowIfNotSuperConstructor, InterpreterAssembler) {
   }
 }
 
+IGNITION_HANDLER(FindNonDefaultConstructor, InterpreterAssembler) {
+  TNode<Context> context = GetContext();
+  TVARIABLE(Object, constructor);
+  Label loop(this, &constructor), loop_done(this, &constructor);
+
+  // FIXME: should we transmit it in the accumulator?
+  constructor = LoadRegisterAtOperandIndex(0);
+  TNode<Object> new_target = LoadRegisterAtOperandIndex(1);
+  Goto(&loop);
+
+  BIND(&loop);
+  {
+    // Print("FindNonDefaultConstructor looping");
+    // Print(constructor.value());
+    // If the kind is not DefaultBaseConstructor or DefaultDerivedConstructor,
+    // we've found it.
+    GotoIfNot(IsDefaultDerivedConstructor(CAST(constructor.value())), &loop_done);
+
+    // FIXME: If it has the class fields symbol, call it...
+
+    constructor = GetSuperConstructor(CAST(constructor.value()));
+    // FIXME: we need the "throw if not super ctor" for all levels; add a test.
+
+    Goto(&loop);
+  }
+  BIND(&loop_done);
+  //Print("Found it");
+  //Print(constructor.value());
+
+  // If we hit the base constructor, we don't need to call it, but we do need to create the object.
+  Label is_base_ctor(this), done(this);
+
+  // FIXME: we can avoid reading the function type twice!
+  GotoIf(IsDefaultBaseConstructor(CAST(constructor.value())), &is_base_ctor);
+
+  // Not a base ctor.
+  StoreRegisterAtOperandIndex(constructor.value(), 2);
+  SetAccumulator(FalseConstant());
+
+  Goto(&done); // FIXME: Or just dispatch?
+
+  BIND(&is_base_ctor);
+
+  TNode<Object> instance =
+    CallBuiltin(Builtin::kFastNewObject, context, constructor.value(), new_target);
+  StoreRegisterAtOperandIndex(instance, 2);
+  SetAccumulator(TrueConstant());
+  Goto(&done);
+
+  BIND(&done);
+  Dispatch();
+}
+
 // Debugger
 //
 // Call runtime to handle debugger statement.

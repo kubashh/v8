@@ -189,11 +189,12 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
 
   // Preserve the incoming parameters on the stack.
   __ SmiTag(rcx, rax);
-  __ Push(rsi);
-  __ Push(rcx);
-  __ Push(rdi);
-  __ PushRoot(RootIndex::kTheHoleValue);
-  __ Push(rdx);
+  __ Push(rsi);  // context
+  __ Push(rcx);  // arg count
+  __ Push(rdi);  // constructor
+  __ PushRoot(
+      RootIndex::kTheHoleValue);  // FIXME: who is supposed to overwrite this?
+  __ Push(rdx);                   // new target
 
   // ----------- S t a t e -------------
   //  --         sp[0*kSystemPointerSize]: new target
@@ -215,6 +216,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
       static_cast<uint32_t>(FunctionKind::kDerivedConstructor),
       &not_create_implicit_receiver, Label::kNear);
 
+  // Here it is! This part creates the object!
   // If not derived class constructor: Allocate the new receiver object.
   __ Call(BUILTIN_CODE(masm->isolate(), FastNewObject), RelocInfo::CODE_TARGET);
   __ jmp(&post_instantiation_deopt_entry, Label::kNear);
@@ -241,6 +243,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
 
   // Push the allocated receiver to the stack.
   __ Push(rax);
+  // __ int3();
 
   // We need two copies because we may have to return the original one
   // and the calling conventions dictate that the called function pops the
@@ -276,6 +279,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ Push(r8);
 
   // Call the function.
+  //__ int3();
   __ InvokeFunction(rdi, rdx, rax, InvokeType::kCall);
 
   // ----------- S t a t e -------------
@@ -299,13 +303,16 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // If the result is undefined, we'll use the implicit receiver. Otherwise we
   // do a smi check and fall through to check if the return value is a valid
   // receiver.
+  // __ int3();
   __ JumpIfNotRoot(rax, RootIndex::kUndefinedValue, &check_result,
                    Label::kNear);
 
   // Throw away the result of the constructor invocation and use the
   // on-stack receiver as the result.
+  // FIXME: why does it go wrong then?
   __ bind(&use_receiver);
   __ movq(rax, Operand(rsp, 0 * kSystemPointerSize));
+  // Q: why is this the hole now?? Who puts it there?
   __ JumpIfRoot(rax, RootIndex::kTheHoleValue, &do_throw, Label::kNear);
 
   __ bind(&leave_and_return);
@@ -331,6 +338,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ bind(&do_throw);
   // Restore context from the frame.
   __ movq(rsi, Operand(rbp, ConstructFrameConstants::kContextOffset));
+  // FIXME: we end up here
   __ CallRuntime(Runtime::kThrowConstructorReturnedNonObject);
   // We don't return here.
   __ int3();
@@ -1477,6 +1485,7 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   }
 }
 
+// FIXME: maybe relevant?
 // static
 void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
     MacroAssembler* masm, InterpreterPushArgsMode mode) {
