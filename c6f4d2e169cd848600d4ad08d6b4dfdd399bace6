@@ -39,6 +39,30 @@
       },
       "revId": "c6f4d2e169cd848600d4ad08d6b4dfdd399bace6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3087cd9_23b0799b",
+        "filename": "src/baseline/baseline-compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2022-08-05T16:40:19Z",
+      "side": 1,
+      "message": "At the time I assumed the multiple `labels_[i]` would be optimized to a single lookup when we do:\n\n```\nEnsureLabel(iterator().GetJumpTargetOffset());\nMarkAsIndirectJumpTarget(iterator().GetJumpTargetOffset());\n```\n\nHowever checking the generated assembly it doesn\u0027t appear to be optimized indeed (at least on Arm64).\n\nStill, I thought it was nice to decouple the boolean payload from the label, given in theory they\u0027re separate things, one can have an indirect jump target without a label (for example a catch handler). So I\u0027m not sure we want `EnsureLabel()` to return a `BaselineLabelPointer`.\n\nHow about passing an option to `EnsureLabel()` to also mark the label as an indirect jump target (off by default) for when we both want to create a label and set a jump target:\n\n```\nEnsureLabel(iterator().GetJumpTargetOffset(), IndirectJumpTarget::kYes);\n```\n\nAnd when we want to handle the label and boolean payload separately, we can do as such for example:\n\n```\n  BaselineLabelPointer label \u003d labels_[offset];\n  if (label.GetPointer()) __ Bind(label.GetPointer());\n  // Mark position as valid jump target unconditionnaly when the deoptimizer can\n  // jump to baseline code. This is required when CFI is enabled.\n  if (FLAG_deopt_to_baseline || label.IsIndirectJumpTarget()) {\n    __ JumpTarget();\n  }\n```\n\n(I was just thinking of turning `BaselineLabelPointer` into a class).",
+      "parentUuid": "ad962573_12370551",
+      "range": {
+        "startLine": 186,
+        "startChar": 7,
+        "endLine": 186,
+        "endChar": 31
+      },
+      "revId": "c6f4d2e169cd848600d4ad08d6b4dfdd399bace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
