@@ -11,6 +11,7 @@
 #if ENABLE_SPARKPLUG
 
 #include "src/base/logging.h"
+#include "src/base/pointer-with-payload.h"
 #include "src/base/threaded-list.h"
 #include "src/base/vlq.h"
 #include "src/baseline/baseline-assembler.h"
@@ -171,14 +172,21 @@ class BaselineCompiler {
 
   int max_call_args_ = 0;
 
+  using BaselineLabelPointer = base::PointerWithPayload<Label, bool, 1>;
+
   Label* EnsureLabel(int i) {
-    if (labels_[i] == nullptr) {
-      labels_[i] = zone_.New<Label>();
+    if (labels_[i].GetPointer() == nullptr) {
+      labels_[i].SetPointer(zone_.New<Label>());
     }
-    return labels_[i];
+    return labels_[i].GetPointer();
   }
 
-  Label** labels_;
+  // Mark location as a jump target reachable via indirect branches, required
+  // for CFI.
+  void MarkAsIndirectJumpTarget(int i) const { labels_[i].SetPayload(true); }
+  bool IsIndirectJumpTarget(int i) const { return labels_[i].GetPayload(); }
+
+  BaselineLabelPointer* labels_;
 };
 
 }  // namespace baseline
