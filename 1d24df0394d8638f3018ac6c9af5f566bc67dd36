@@ -16,6 +16,269 @@
       "message": "PTAL",
       "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25787503_e2c96b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Thanks for adding these counters! The general design looks good; just a few issues to be fixed.",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "066cdd85_df317f5e",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the \"time_\" / \"Time\" part be removed from these names? It\u0027s the number of lazy compilations happening.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 20
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "086bacfe_8e05a234",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "These two should better have the same bucket configuration, so we can compare them better.",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 46
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28fd2766_ffbf2d23",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Same here. Since the sum of compilation time is expected to be bigger than the maximum time for one function, we can maybe chose 20s here, and e.g. 5s for the maximum.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 66
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251855ac_13e6c6d9",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "See this comment; the same should apply to the new counter. Also, to avoid unnecessary overhead, we should have one timer which is used for all histograms.\n`TimedHistogramScope` does not much more than calling `histogram_-\u003eAddTimedSample(timer_.Elapsed())` in its destructor.\n\nMaybe we should have a little helper class or struct here, which calls `native_module-\u003eAddLazyCompilationTimeSample` in the destructor, and then we also update `wasm_lazy_compile_time` in there?\n\nAlternatively, put the timing in the runtime function where we don\u0027t have that scoping issue (that objects get destructed after stopping the timer, and that might add significant cost).",
+      "range": {
+        "startLine": 1153,
+        "startChar": 0,
+        "endLine": 1155,
+        "endChar": 51
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb3ef902_8611d759",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1241,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Rounding to milliseconds will drop all compilation times that are \u003c0.5ms (roughly 70% of functions currently). We should use microseconds instead. The histograms in the end can still report milliseconds, but for building the sum we need more resolution.",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb4b3e99_5e8fd854",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "The `CancelableTask` construct seems unnecessary (and difficult to figure out if it works correctly in all cases). A simper solution would be to receive a `std::weak_ptr\u003cCounters\u003e` in the constructor (get it via `Isolate::async_counters`), and store it as a weak pointer in this task.\nThis also avoids having to pass the isolate pointer to a background tasks, which always rings alarm bells :)",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0975766_f48ff685",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Same here: Use relaxed semantics (for all accesses).",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5456b7_84d80bf0",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "I think this could be a bit simpler and with less repetition:\n    while (sample \u003e max \u0026\u0026 !...compare_exchange_weak...) {\n      // retry with updated {max}.\n    }",
+      "range": {
+        "startLine": 1725,
+        "startChar": 0,
+        "endLine": 1728,
+        "endChar": 3
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23755d28_343fd4ac",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Please rename to contain a unit, e.g. \"sample_ms\" or just \"ms\".",
+      "range": {
+        "startLine": 784,
+        "startChar": 44,
+        "endLine": 784,
+        "endChar": 50
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ce5f3a8_4fa1e0cc",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "All these atomic accesses should use std::memory_order_relaxed.",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "457737e3_ed4287d1",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Please add a comment that we do this in order to only record statistics for the first instance.",
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15e30691_8a505edb",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T12:18:57Z",
+      "side": 1,
+      "message": "Please add a unit, either as comment or in the name.",
+      "range": {
+        "startLine": 1038,
+        "startChar": 0,
+        "endLine": 1039,
+        "endChar": 53
+      },
+      "revId": "1d24df0394d8638f3018ac6c9af5f566bc67dd36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
