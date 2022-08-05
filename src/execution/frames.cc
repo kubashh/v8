@@ -2085,6 +2085,26 @@ void OptimizedFrame::Summarize(std::vector<FrameSummary>* frames) const {
   int deopt_index = SafepointEntry::kNoDeoptIndex;
   DeoptimizationData const data = GetDeoptimizationData(&deopt_index);
   if (deopt_index == SafepointEntry::kNoDeoptIndex) {
+    // Hack: For maglevved function entry, we don't emit lazy deopt information,
+    // so create an extra special summary here.
+    //
+    // TODO(leszeks): Remove this hack, by having a maglev-specific frame
+    // summary which is a bit more aware of maglev behaviour and can e.g. handle
+    // more compact safepointed frame information for both function entry and
+    // loop stack checks.
+    if (code.is_maglevved()) {
+      DCHECK(frames->empty());
+      Handle<AbstractCode> abstract_code(
+          AbstractCode::cast(function().shared().GetBytecodeArray(isolate())),
+          isolate());
+      Handle<FixedArray> params = GetParameters();
+      FrameSummary::JavaScriptFrameSummary summary(
+          isolate(), receiver(), function(), *abstract_code,
+          kFunctionEntryBytecodeOffset, IsConstructor(), *params);
+      frames->push_back(summary);
+      return;
+    }
+
     CHECK(data.is_null());
     FATAL("Missing deoptimization information for OptimizedFrame::Summarize.");
   }
