@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d2c13d_b3addbf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T14:08:17Z",
+      "side": 1,
+      "message": "Thanks, this looks great! The comment about buckets still applies, but I think I was not clear enough what I meant last time.\nPlus two nits.",
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550dfc9d_0db750db",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T14:08:17Z",
+      "side": 1,
+      "message": "Thanks, this fits much better here. But again, in order to compare the 5sec vs the 20sec histogram it would be good if the buckets match, i.e. they use the same maximum.\n\nMaybe 5000 for the first two and 20000 for the last two? Or just 20000 for all of them.",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 72
+      },
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ec7272_4f370824",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T14:08:17Z",
+      "side": 1,
+      "message": "nit: Receiving `counters` and `native_module` as a `std::weak_ptr` directly, and `std::move`ing them into the fields saves you one atomic increment and decrement of the shared counter.",
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c74e9eb_ab01d3aa",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T14:08:17Z",
+      "side": 1,
+      "message": "nit: another candidate for `std::memory_order_relaxed`; actually, more above in old code, but that\u0027s not necessarily your business.",
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
