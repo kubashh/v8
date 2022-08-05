@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61efb145_31635ec8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-05T11:44:00Z",
+      "side": 1,
+      "message": "The underlying issue seems to be fixed (see https://crbug.com/1344641#c17). Should we try reverting this workaround?",
+      "revId": "884226c1d0dd5903d286e15115831a79a1ed982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
