@@ -32,6 +32,8 @@ class TranslationArrayIterator {
 
   int32_t Next();
 
+  uint32_t NextUnsigned();
+
   bool HasNext() const;
 
   void Skip(int n) {
@@ -100,11 +102,14 @@ class TranslationArrayBuilder {
   void StoreFloatStackSlot(int index);
   void StoreDoubleStackSlot(int index);
   void StoreLiteral(int literal_id);
+  void StoreOptimizedOut();
   void StoreJSFrameFunction();
 
  private:
   void Add(int32_t value);
-  void Add(TranslationOpcode opcode) { Add(static_cast<int32_t>(opcode)); }
+  void Add(TranslationOpcode opcode);
+  void Add(Register reg);
+  void Add(DoubleRegister reg);
 
   int Size() const {
     return V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)

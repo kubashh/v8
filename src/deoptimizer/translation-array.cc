@@ -56,6 +56,17 @@ int32_t TranslationArrayIterator::Next() {
   }
 }
 
+uint32_t TranslationArrayIterator::NextUnsigned() {
+  if (V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)) {
+    return uncompressed_contents_[index_++];
+  } else {
+    uint32_t value =
+        base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(), &index_);
+    DCHECK_LE(index_, buffer_.length());
+    return value;
+  }
+}
+
 bool TranslationArrayIterator::HasNext() const {
   if (V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)) {
     return index_ < static_cast<int>(uncompressed_contents_.size());
@@ -69,6 +80,33 @@ void TranslationArrayBuilder::Add(int32_t value) {
     contents_for_compression_.push_back(value);
   } else {
     base::VLQEncode(&contents_, value);
+  }
+}
+
+void TranslationArrayBuilder::Add(TranslationOpcode opcode) {
+  static_assert(kNumTranslationOpcodes - 1 <= base::kDataMask);
+  if (V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)) {
+    contents_for_compression_.push_back(static_cast<byte>(opcode));
+  } else {
+    contents_.push_back(static_cast<byte>(opcode));
+  }
+}
+
+void TranslationArrayBuilder::Add(Register reg) {
+  static_assert(Register::kNumRegisters - 1 <= base::kDataMask);
+  if (V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)) {
+    contents_for_compression_.push_back(static_cast<byte>(reg.code()));
+  } else {
+    contents_.push_back(static_cast<byte>(reg.code()));
+  }
+}
+
+void TranslationArrayBuilder::Add(DoubleRegister reg) {
+  static_assert(DoubleRegister::kNumRegisters - 1 <= base::kDataMask);
+  if (V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)) {
+    contents_for_compression_.push_back(static_cast<byte>(reg.code()));
+  } else {
+    contents_.push_back(static_cast<byte>(reg.code()));
   }
 }
 
@@ -213,46 +251,46 @@ void TranslationArrayBuilder::DuplicateObject(int object_index) {
 void TranslationArrayBuilder::StoreRegister(Register reg) {
   auto opcode = TranslationOpcode::REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
 }
 
 void TranslationArrayBuilder::StoreInt32Register(Register reg) {
   auto opcode = TranslationOpcode::INT32_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
   DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 1);
 }
 
 void TranslationArrayBuilder::StoreInt64Register(Register reg) {
   auto opcode = TranslationOpcode::INT64_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
   DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 1);
 }
 
 void TranslationArrayBuilder::StoreUint32Register(Register reg) {
   auto opcode = TranslationOpcode::UINT32_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
 }
 
 void TranslationArrayBuilder::StoreBoolRegister(Register reg) {
   auto opcode = TranslationOpcode::BOOL_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
   DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 1);
 }
 
 void TranslationArrayBuilder::StoreFloatRegister(FloatRegister reg) {
   auto opcode = TranslationOpcode::FLOAT_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
 }
 
 void TranslationArrayBuilder::StoreDoubleRegister(DoubleRegister reg) {
   auto opcode = TranslationOpcode::DOUBLE_REGISTER;
   Add(opcode);
-  Add(reg.code());
+  Add(reg);
   DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 1);
 }
 
@@ -310,6 +348,12 @@ void TranslationArrayBuilder::StoreLiteral(int literal_id) {
   Add(opcode);
   Add(literal_id);
   DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 1);
+}
+
+void TranslationArrayBuilder::StoreOptimizedOut() {
+  auto opcode = TranslationOpcode::OPTIMIZED_OUT;
+  Add(opcode);
+  DCHECK_EQ(TranslationOpcodeOperandCount(opcode), 0);
 }
 
 void TranslationArrayBuilder::AddUpdateFeedback(int vector_literal, int slot) {
