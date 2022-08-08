@@ -469,6 +469,11 @@ static inline uint16_t* AsciiToTwoByteString(const char* source) {
   return converted;
 }
 
+static inline void EmptyMessageQueues(v8::Isolate* isolate) {
+  while (v8::platform::PumpMessageLoop(CcTest::default_platform(), isolate)) {
+  }
+}
+
 class TestTransitionsAccessor : public TransitionsAccessor {
  public:
   TestTransitionsAccessor(Isolate* isolate, Map map)
