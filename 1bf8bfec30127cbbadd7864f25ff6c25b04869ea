@@ -16,6 +16,24 @@
       "message": "Instead of explicitly triggering lazy compilation, you can just call the jump table address, which will automatically trigger lazy compilation on the first call.\nYou can use WasmInstanceObject::GetCallTarget for that.\n\nThat would test the actual code path in production better.",
       "revId": "1bf8bfec30127cbbadd7864f25ff6c25b04869ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9b14a3f_c67866a9",
+        "filename": "test/cctest/wasm/test-gc.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-08T14:16:14Z",
+      "side": 1,
+      "message": "Great suggestion, thanks!",
+      "parentUuid": "f26c2d9d_862c142d",
+      "revId": "1bf8bfec30127cbbadd7864f25ff6c25b04869ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
