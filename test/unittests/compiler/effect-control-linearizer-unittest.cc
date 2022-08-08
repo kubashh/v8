@@ -86,7 +86,7 @@ TEST_F(EffectControlLinearizerTest, SimpleLoad) {
 
   // Run the state effect introducer.
   LinearizeEffectControl(jsgraph(), &schedule, zone(), source_positions(),
-                         node_origins(), broker());
+                         node_origins(), broker(), nullptr);
 
   EXPECT_THAT(load,
               IsLoadField(AccessBuilder::ForHeapNumberValue(), heap_number,
@@ -147,7 +147,7 @@ TEST_F(EffectControlLinearizerTest, DiamondLoad) {
 
   // Run the state effect introducer.
   LinearizeEffectControl(jsgraph(), &schedule, zone(), source_positions(),
-                         node_origins(), broker());
+                         node_origins(), broker(), nullptr);
 
   // The effect input to the return should be an effect phi with the
   // newly introduced effectful change operators.
@@ -213,7 +213,7 @@ TEST_F(EffectControlLinearizerTest, LoopLoad) {
 
   // Run the state effect introducer.
   LinearizeEffectControl(jsgraph(), &schedule, zone(), source_positions(),
-                         node_origins(), broker());
+                         node_origins(), broker(), nullptr);
 
   ASSERT_THAT(ret, IsReturn(load, load, if_true));
   EXPECT_THAT(load, IsLoadField(AccessBuilder::ForHeapNumberValue(),
@@ -275,7 +275,7 @@ TEST_F(EffectControlLinearizerTest, CloneBranch) {
   schedule.AddNode(mblock, graph()->end());
 
   LinearizeEffectControl(jsgraph(), &schedule, zone(), source_positions(),
-                         node_origins(), broker());
+                         node_origins(), broker(), nullptr);
 
   Capture<Node *> branch1_capture, branch2_capture;
   EXPECT_THAT(
