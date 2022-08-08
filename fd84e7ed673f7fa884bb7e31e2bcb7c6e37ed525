@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b17ad76_84c03429",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-08T08:10:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550dfc9d_0db750db",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 72
+      },
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67ec7272_4f370824",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9be61110_b67a15a6",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-08T08:10:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ec7272_4f370824",
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c74e9eb_ab01d3aa",
@@ -71,6 +113,24 @@
       "writtenOn": "2022-08-05T14:08:17Z",
       "side": 1,
       "message": "nit: another candidate for `std::memory_order_relaxed`; actually, more above in old code, but that\u0027s not necessarily your business.",
+      "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb16f5f_a8c9d090",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-08T08:10:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c74e9eb_ab01d3aa",
       "revId": "fd84e7ed673f7fa884bb7e31e2bcb7c6e37ed525",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
