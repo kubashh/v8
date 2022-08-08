@@ -118,6 +118,29 @@ bool BytecodeRegisterOptimizer::RegisterInfo::IsOnlyMemberOfEquivalenceSet()
   return this->next_ == this;
 }
 
+void BytecodeRegisterOptimizer::SetVariableInEquivalenceSetOfAccumulator(
+    Variable* var) {
+  int equivalence_set = accumulator_info_->equivalence_id();
+  var->SetEquivalenceSet(equivalence_set);
+  variable_in_acc_ = var;
+}
+
+Variable*
+BytecodeRegisterOptimizer::GetVariableInEquivalenceSetOfAccumulator() {
+  return variable_in_acc_;
+}
+
+bool BytecodeRegisterOptimizer::IsAccumulatorInEquivalenceSetOfVariable(
+    Variable* var) {
+  DCHECK(var);
+  // if(var == nullptr) return false;
+  uint32_t var_set = (uint32_t)var->GetEquivalenceSet();
+  if (var_set < 0) return false;
+  DCHECK(GetMaterializedEquivalent(accumulator_info_));
+  uint32_t register_set = accumulator_info_->equivalence_id();
+  return variable_in_acc_ == var && var_set == register_set;
+}
+
 bool BytecodeRegisterOptimizer::RegisterInfo::
     IsOnlyMaterializedMemberOfEquivalenceSet() const {
   DCHECK(materialized());
@@ -224,6 +247,7 @@ BytecodeRegisterOptimizer::BytecodeRegisterOptimizer(
       register_info_table_(zone),
       registers_needing_flushed_(zone),
       equivalence_id_(0),
+      variable_in_acc_(nullptr),
       bytecode_writer_(bytecode_writer),
       flush_required_(false),
       zone_(zone) {
@@ -272,6 +296,7 @@ bool BytecodeRegisterOptimizer::EnsureAllRegistersAreFlushed() const {
 }
 
 void BytecodeRegisterOptimizer::Flush() {
+  variable_in_acc_ = nullptr;
   if (!flush_required_) {
     return;
   }
@@ -396,6 +421,11 @@ void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
 
   // Add |output_info| to new equivalence set.
   if (!in_same_equivalence_set) {
+    if (output_info->register_value() == Register::virtual_accumulator() &&
+        output_info->IsOnlyMaterializedMemberOfEquivalenceSet()) {
+      Variable* output_var = GetVariableInEquivalenceSetOfAccumulator();
+      if (output_var) output_var->SetEquivalenceSet(kInvalidEquivalenceId);
+    }
     AddToEquivalenceSet(input_info, output_info);
   }
 
