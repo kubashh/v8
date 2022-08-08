@@ -253,6 +253,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
                              const AstRawString* name);
   void BuildStoreGlobal(Variable* variable);
 
+  bool IsAccumulatorInEquivalenceSetOfVariable(Variable* var);
+
   void BuildVariableLoad(Variable* variable, HoleCheckMode hole_check_mode,
                          TypeofMode typeof_mode = TypeofMode::kNotInside);
   void BuildVariableLoadForAccumulatorValue(

@@ -19,6 +19,7 @@ namespace internal {
 // after binding and variable allocation.
 class Variable final : public ZoneObject {
  public:
+  const uint32_t kInvalidEquivalenceId = kMaxUInt32;
   Variable(Scope* scope, const AstRawString* name, VariableMode mode,
            VariableKind kind, InitializationFlag initialization_flag,
            MaybeAssignedFlag maybe_assigned_flag = kNotAssigned,
@@ -29,6 +30,7 @@ class Variable final : public ZoneObject {
         next_(nullptr),
         index_(-1),
         initializer_position_(kNoSourcePosition),
+        in_equivalence_set_(kInvalidEquivalenceId),
         bit_field_(MaybeAssignedFlagField::encode(maybe_assigned_flag) |
                    InitializationFlagField::encode(initialization_flag) |
                    VariableModeField::encode(mode) |
@@ -245,6 +247,10 @@ class Variable final : public ZoneObject {
   // Rewrites the VariableLocation of repl script scope 'lets' to REPL_GLOBAL.
   void RewriteLocationForRepl();
 
+  int GetEquivalenceSet() { return in_equivalence_set_; }
+
+  void SetEquivalenceSet(int set) { in_equivalence_set_ = set; }
+
   using List = base::ThreadedList<Variable>;
 
  private:
@@ -259,6 +265,7 @@ class Variable final : public ZoneObject {
   Variable* next_;
   int index_;
   int initializer_position_;
+  int in_equivalence_set_;
   uint16_t bit_field_;
 
   void set_maybe_assigned() {
