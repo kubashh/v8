@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "089fc9a3_b4caa566",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-08T11:14:52Z",
+      "side": 1,
+      "message": "Hi Leszek,\nWe found there are some load redundant bytecodes in some case, now we add a  mechanism to build a map relation between accumulator and Variale , which can help us to identify whether there is a really requirements to load a variable in accumulator and allocate a new register for it.\nIn Web Tooling, I found there is about 400 funtions have this pattern in this CL, and I add a JS code case in previous comment, PTAL, thanks!",
+      "revId": "ffb798a6dcdb9ac450896af5a398a7014ce0e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
