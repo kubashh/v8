@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d712b4c5_890e58fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-08T10:24:18Z",
+      "side": 1,
+      "message": "This is a JS code case:\n```\nvar a \u003d {b : 2, c : {cc: 3}};\nfunction foo() {\n    a.b \u003d a.c.cc;\n}\nvar start \u003d performance.now();\nfor(i \u003d 0; i \u003c 10000000; i ++){\n    foo();\n}\nvar end \u003d performance.now();\nconsole.log(end - start);\n```\nBefore this CL, the bytecode array for `foo()` is\n```\n 0 : 21 00 00          LdaGlobal [0], [0]\n 3 : c4                Star0 \n 4 : 21 00 00          LdaGlobal [0], [0]\n 7 : c3                Star1 \n 8 : 2d f9 01 02       GetNamedProperty r1, [1], [2]\n12 : c3                Star1 \n13 : 2d f9 02 04       GetNamedProperty r1, [2], [4]\n17 : 32 fa 03 06       SetNamedProperty r0, [3], [6]\n21 : 0e                LdaUndefined \n22 : a9                Return\n```\n\nAfter this CL, we could get a better bytecode array for `foo()` as\n```\n 0 : 21 00 00          LdaGlobal [0], [0]\n 3 : c4                Star0 \n 4 : 2d fa 01 02       GetNamedProperty r0, [1], [2]\n 8 : c3                Star1 \n 9 : 2d f9 02 04       GetNamedProperty r1, [2], [4]\n13 : 32 fa 03 06       SetNamedProperty r0, [3], [6]\n17 : 0e                LdaUndefined \n18 : a9                Return\n```\n\nIn my local test, with `--no-opt` flag, this CL can bring `3%` benefits for this case.",
+      "revId": "1415fcdbf6c829473f02564490cf9acd0033166f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
