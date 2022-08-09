@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f078e169_48fcd8e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T20:24:43Z",
+      "side": 1,
+      "message": "Shu, PTAL as interpreter owner since I\u0027m OOO for a bit",
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "726a8dd2_8351987b",
