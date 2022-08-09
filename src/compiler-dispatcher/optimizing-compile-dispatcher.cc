@@ -11,6 +11,7 @@
 #include "src/execution/local-isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/local-heap.h"
+#include "src/heap/parked-scope.h"
 #include "src/init/v8.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -154,7 +155,11 @@ void OptimizingCompileDispatcher::FlushQueues(
   FlushInputQueue();
   if (blocking_behavior == BlockingBehavior::kBlock) {
     base::MutexGuard lock_guard(&ref_count_mutex_);
-    while (ref_count_ > 0) ref_count_zero_.Wait(&ref_count_mutex_);
+    while (ref_count_ > 0) {
+      DCHECK(!isolate_->main_thread_local_heap()->IsParked());
+      ParkedScope parked_scope(isolate_->main_thread_local_heap());
+      ref_count_zero_.Wait(&ref_count_mutex_);
+    }
   }
   FlushOutputQueue(restore_function_code);
 }
