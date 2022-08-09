@@ -92,14 +92,6 @@ void ResetTieringState(JSFunction function, BytecodeOffset osr_offset) {
   }
 }
 
-void ResetProfilerTicks(JSFunction function, BytecodeOffset osr_offset) {
-  if (!IsOSR(osr_offset)) {
-    // Reset profiler ticks, the function is no longer considered hot.
-    // TODO(v8:7700): Update for Maglev tiering.
-    function.feedback_vector().set_profiler_ticks(0);
-  }
-}
-
 class CompilerTracer : public AllStatic {
  public:
   static void TracePrepareJob(Isolate* isolate, OptimizedCompilationInfo* info,
@@ -1266,7 +1258,7 @@ MaybeHandle<CodeT> GetOrCompileOptimized(
 
   DCHECK(shared->is_compiled());
 
-  ResetProfilerTicks(*function, osr_offset);
+  function->feedback_vector().set_profiler_ticks(0);
 
   if (code_kind == CodeKind::TURBOFAN) {
     return CompileTurbofan(isolate, function, shared, mode, osr_offset,
@@ -3922,9 +3914,7 @@ bool Compiler::FinalizeTurbofanCompilationJob(TurbofanCompilationJob* job,
   const bool use_result = !compilation_info->discard_result_for_testing();
   const BytecodeOffset osr_offset = compilation_info->osr_offset();
 
-  if (V8_LIKELY(use_result)) {
-    ResetProfilerTicks(*function, osr_offset);
-  }
+  function->feedback_vector().set_profiler_ticks(0);
 
   DCHECK(!shared->HasBreakInfo());
 
