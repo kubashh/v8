@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4683493a_a0c2cf10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T09:17:15Z",
+      "side": 1,
+      "message": "Or worse, a global property with side-effects, like:\n\n```\nObject.defineProperty(globalThis, \u0027foo\u0027, {\n  get() {\n    console.log(\u0027get foo()\u0027)\n    return 5;\n  }\n});\n\n(function bar() {\n  foo;\n  foo;\n})();\n```",
+      "parentUuid": "4b9e1a5e_d7ce8406",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 53
+      },
+      "revId": "ffb798a6dcdb9ac450896af5a398a7014ce0e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "089fc9a3_b4caa566",
