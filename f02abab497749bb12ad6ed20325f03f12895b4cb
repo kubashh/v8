@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "726a8dd2_8351987b",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T11:52:39Z",
+      "side": 1,
+      "message": "I\u0027d prefer it if we could avoid encoding equivalence set information in the AST, it\u0027s a layering violation.",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 64
+      },
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30f1b8a4_58ea6fb3",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T11:52:39Z",
+      "side": 1,
+      "message": "If you\u0027re checking whether the variable matches the known value in the accumulator, why this extra logic around equivalence sets?",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 33
+      },
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
