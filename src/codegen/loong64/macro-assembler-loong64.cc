@@ -229,10 +229,7 @@ void TurboAssembler::CallRecordWriteStub(Register object, Register slot_address,
     if (options().inline_offheap_trampolines) {
       // Inline the trampoline.
       RecordCommentForOffHeapTrampoline(builtin);
-      UseScratchRegisterScope temps(this);
-      Register scratch = temps.Acquire();
-      li(scratch, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
-      Call(scratch);
+      CallBuiltin(builtin);
       RecordComment("]");
     } else {
       Handle<Code> code_target = isolate()->builtins()->code_handle(builtin);
@@ -2576,24 +2573,22 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
     b(code_target_index);
     bind(&skip);
     return;
-  } else if (root_array_available_ && options().isolate_independent_code) {
-    UNREACHABLE();
-    /*int offset = code->builtin_index() * kSystemPointerSize +
-                 IsolateData::builtin_entry_table_offset();
-    Ld_d(t7, MemOperand(kRootRegister, offset));
-    Jump(t7, cc_always, rj, rk);
-    bind(&skip);
-    return;*/
-  } else if (options().inline_offheap_trampolines &&
+  } else if ((options().inline_offheap_trampolines ||
+              options().builtin_calls_as_table_load) &&
              target_is_isolate_independent_builtin) {
     // Inline the trampoline.
-    RecordCommentForOffHeapTrampoline(builtin);
-    li(t7, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    if (options().builtin_calls_as_table_load) {
+      LoadEntryFromBuiltin(builtin, t7);
+    } else {
+      li(t7, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    }
     Jump(t7, cc_always, rj, rk);
     bind(&skip);
-    RecordComment("]");
     return;
   }
+
+  DCHECK(RelocInfo::IsCodeTarget(rmode));
+  DCHECK(!options().builtin_calls_as_table_load);
 
   Jump(static_cast<intptr_t>(code.address()), rmode, cc_always, rj, rk);
   bind(&skip);
@@ -2670,34 +2665,28 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
   if (target_is_isolate_independent_builtin &&
       options().use_pc_relative_calls_and_jumps) {
     int32_t code_target_index = AddCodeTarget(code);
-    RecordCommentForOffHeapTrampoline(builtin);
     RecordRelocInfo(RelocInfo::RELATIVE_CODE_TARGET);
     bl(code_target_index);
     set_pc_for_safepoint();
     bind(&skip);
-    RecordComment("]");
     return;
-  } else if (root_array_available_ && options().isolate_independent_code) {
-    UNREACHABLE();
-    /*int offset = code->builtin_index() * kSystemPointerSize +
-                 IsolateData::builtin_entry_table_offset();
-    LoadRootRelative(t7, offset);
-    Call(t7, cond, rj, rk);
-    bind(&skip);
-    return;*/
-  } else if (options().inline_offheap_trampolines &&
+  } else if ((options().inline_offheap_trampolines ||
+              options().builtin_calls_as_table_load) &&
              target_is_isolate_independent_builtin) {
     // Inline the trampoline.
-    RecordCommentForOffHeapTrampoline(builtin);
-    li(t7, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    if (options().builtin_calls_as_table_load) {
+      LoadEntryFromBuiltin(builtin, t7);
+    } else {
+      li(t7, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+    }
     Call(t7, cond, rj, rk);
     bind(&skip);
-    RecordComment("]");
     return;
   }
 
   DCHECK(RelocInfo::IsCodeTarget(rmode));
   DCHECK(code->IsExecutable());
+  DCHECK(!options().builtin_calls_as_table_load);
   Call(code.address(), rmode, cc_always, rj, rk);
   bind(&skip);
 }
@@ -2733,7 +2722,12 @@ void TurboAssembler::CallBuiltinByIndex(Register builtin_index) {
 }
 void TurboAssembler::CallBuiltin(Builtin builtin) {
   RecordCommentForOffHeapTrampoline(builtin);
-  Call(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET);
+  if (options().builtin_calls_as_table_load) {
+    LoadEntryFromBuiltin(builtin, t7);
+  } else {
+    li(t7, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+  }
+  Call(t7);
   RecordComment("]");
 }
 
@@ -3429,15 +3423,22 @@ void TurboAssembler::Abort(AbortReason reason) {
 
   Move(a0, Smi::FromInt(static_cast<int>(reason)));
 
-  // Disable stub call restrictions to always allow calls to abort.
-  if (!has_frame()) {
+  {
     // We don't actually want to generate a pile of code for this, so just
     // claim there is a stack frame, without generating one.
     FrameScope scope(this, StackFrame::NO_FRAME_TYPE);
-    Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
-  } else {
-    Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+    if (root_array_available()) {
+      // Generate an indirect call via builtins entry table here in order to
+      // ensure that the interpreter_entry_return_pc_offset is the same for
+      // InterpreterEntryTrampoline and InterpreterEntryTrampolineForProfiling
+      // when FLAG_debug_code is enabled.
+      LoadEntryFromBuiltin(Builtin::kAbort, t7);
+      Call(t7);
+    } else {
+      Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+    }
   }
+
   // Will not return here.
   if (is_trampoline_pool_blocked()) {
     // If the calling code cares about the exact number of
