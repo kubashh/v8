@@ -45,6 +45,30 @@
       },
       "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c221ce8_ce9b5186",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T11:53:35Z",
+      "side": 1,
+      "message": "Also, doing this prevents you from having multiple variables in different equivalence sets.",
+      "parentUuid": "30f1b8a4_58ea6fb3",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 33
+      },
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
