@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d374676_0940e3bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-09T16:23:27Z",
+      "side": 1,
+      "message": "The issue seems to be that the global safepoint wasn\u0027t requesting interrupt on the stack guard, and one of the threads has a spin loop waiting on a condition in JS, thus causing an intermittent deadlock while waiting for the global safepoint depending on GC timing.\n\nThis will be fixed in a separate CL and landed first.",
+      "revId": "59b2fae901a264d680b8cff7d7135f57d2cc31fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
