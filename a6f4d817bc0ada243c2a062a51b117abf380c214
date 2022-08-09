@@ -33,6 +33,24 @@
       "message": "I suspect the implicit full match capture should also be accounted here: `(kMaxRegister / 2) - 1`.",
       "revId": "a6f4d817bc0ada243c2a062a51b117abf380c214",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15af650f_f0c5f13d",
+        "filename": "src/regexp/regexp-macro-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2022-08-09T17:45:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84832a76_ba9a1b77",
+      "revId": "a6f4d817bc0ada243c2a062a51b117abf380c214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
