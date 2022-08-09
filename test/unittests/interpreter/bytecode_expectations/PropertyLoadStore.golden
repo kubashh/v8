@@ -21,7 +21,7 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 63
+bytecode array length: 59
 bytecodes: [
   /*    7 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
   /*    9 E> */ B(StaGlobal), U8(1), U8(1),
@@ -40,9 +40,7 @@ bytecodes: [
   /*  103 E> */ B(SetNamedProperty), R(1), U8(3), U8(12),
   /*  114 S> */ B(LdaGlobal), U8(1), U8(4),
                 B(Star1),
-  /*  124 E> */ B(LdaGlobal), U8(1), U8(4),
-                B(Star2),
-  /*  125 E> */ B(GetNamedProperty), R(2), U8(3), U8(8),
+  /*  125 E> */ B(GetNamedProperty), R(1), U8(3), U8(8),
                 B(Star2),
   /*  122 E> */ B(SetNamedProperty), R(1), U8(2), U8(14),
                 B(Mov), R(2), R(0),

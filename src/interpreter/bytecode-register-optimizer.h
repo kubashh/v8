@@ -5,6 +5,7 @@
 #ifndef V8_INTERPRETER_BYTECODE_REGISTER_OPTIMIZER_H_
 #define V8_INTERPRETER_BYTECODE_REGISTER_OPTIMIZER_H_
 
+#include "src/ast/variables.h"
 #include "src/base/compiler-specific.h"
 #include "src/common/globals.h"
 #include "src/interpreter/bytecode-register-allocator.h"
@@ -111,6 +112,16 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   // operand.
   RegisterList GetInputRegisterList(RegisterList reg_list);
 
+  // Maintatin the Variable in the accumulator now.
+  void SetVariableInEquivalenceSetOfAccumulator(Variable* var);
+
+  // Get the variable which was stored in accumulator now.
+  Variable* GetVariableInEquivalenceSetOfAccumulator();
+
+  // Return true if the var is the variable which was stored in the accumulator
+  // now.
+  bool IsAccumulatorInEquivalenceSetOfVariable(Variable* var);
+
   int maxiumum_register_index() const { return max_register_index_; }
 
  private:
@@ -201,6 +212,7 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
 
   // Counter for equivalence sets identifiers.
   uint32_t equivalence_id_;
+  Variable* variable_in_acc_;
 
   BytecodeWriter* bytecode_writer_;
   bool flush_required_;
