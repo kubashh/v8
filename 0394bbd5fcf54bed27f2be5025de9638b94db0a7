@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e97ea2de_f8eb769c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-08-09T12:18:52Z",
+      "side": 1,
+      "message": "Fixed thread dancing in `thread-termination-unittest.cc` in another CL. This CL got rebased onto that one and passed the previously flaky tests on windows. Nothing is changed except the function called in the termination unit test.",
+      "revId": "0394bbd5fcf54bed27f2be5025de9638b94db0a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
