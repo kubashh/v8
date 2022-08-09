@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af22c6ef_ace7c1fe",
+        "filename": "src/ast/variables.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-09T12:29:17Z",
+      "side": 1,
+      "message": "Yes, I plan to use an vector or hash table in `BytecodeRegisterOptimizer` to maintain a map between equivalence set id and Variable* in a deeper future potential optimization.\nIf you think maintain this data structure in `BytecodeRegisterOptimizer` is a good solution, I\u0027m happy to do that.",
+      "parentUuid": "726a8dd2_8351987b",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 64
+      },
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30f1b8a4_58ea6fb3",
         "filename": "src/interpreter/bytecode-register-optimizer.cc",
         "patchSetId": 7
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Also, doing this prevents you from having multiple variables in different equivalence sets.",
       "parentUuid": "30f1b8a4_58ea6fb3",
+      "range": {
+        "startLine": 140,
+        "startChar": 9,
+        "endLine": 140,
+        "endChar": 33
+      },
+      "revId": "f02abab497749bb12ad6ed20325f03f12895b4cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6ae548_51912a4c",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-09T12:29:17Z",
+      "side": 1,
+      "message": "I suppose there are two cases:\n1) We didn\u0027t track all place which will modify the accumulator, `variable_in_acc_ \u003d\u003d var` may be true in some case when we didn\u0027t update `variable_in_acc_ ` immeidiately, so I use the equivalence id checking to avoid this case.\n2) The `var_set` of Variable* didn\u0027t be flushed after a function compilation, so there may be some conner cases, which has same equivalence id between two functions, in this case `variable_in_acc_ \u003d\u003d var` could avoid.\n\nThe reason I didn\u0027t track all place and flush equivalence id of each Variable is that I suppose it may bring more overhead, if you think maintain a data sturcture in `BytecodeRegisterOptimizer` is suitable, I suppose we could avoid this redundant checking with it.",
+      "parentUuid": "8c221ce8_ce9b5186",
       "range": {
         "startLine": 140,
         "startChar": 9,
