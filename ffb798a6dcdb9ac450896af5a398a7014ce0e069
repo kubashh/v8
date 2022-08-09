@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b213a88_bd13f922",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-09T11:08:33Z",
+      "side": 1,
+      "message": "Thanks for your reminder! You are exactly right, in that case we can\u0027t elide this LdaGlobal, but I suppose we could limit this optimization just for context load, like `LdaImmutableCurrentContextSlot`, they may not bring side effect, is it correct?",
+      "parentUuid": "4683493a_a0c2cf10",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 53
+      },
+      "revId": "ffb798a6dcdb9ac450896af5a398a7014ce0e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "089fc9a3_b4caa566",
