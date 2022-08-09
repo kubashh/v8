@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908ff48a_928d4193",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-09T10:11:44Z",
+      "side": 1,
+      "message": "For posterity, can you add why this allows us to remove the shift so that we also can find this easily in some possible detective work later on.",
+      "revId": "6ea2a7f9fa0479ab44c7b17dd6636cc5e7cf5456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ef1e8f5_99985164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-09T10:11:44Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6ea2a7f9fa0479ab44c7b17dd6636cc5e7cf5456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
