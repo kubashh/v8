@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8407a7_f10b413e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-09T11:14:56Z",
+      "side": 1,
+      "message": "I believe this is correct, yes, context loads can\u0027t have side effects and immutable context slots can\u0027t be mutated by side effects.",
+      "parentUuid": "1b213a88_bd13f922",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 53
+      },
+      "revId": "ffb798a6dcdb9ac450896af5a398a7014ce0e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "089fc9a3_b4caa566",
