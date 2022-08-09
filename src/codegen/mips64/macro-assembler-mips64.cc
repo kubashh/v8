@@ -250,8 +250,7 @@ void TurboAssembler::CallRecordWriteStub(Register object, Register slot_address,
     if (options().inline_offheap_trampolines) {
       // Inline the trampoline.
       RecordCommentForOffHeapTrampoline(builtin);
-      li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
-      Call(t9);
+      CallBuiltin(builtin);
       RecordComment("]");
     } else {
       Handle<Code> code_target = isolate()->builtins()->code_handle(builtin);
@@ -4296,19 +4295,26 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
     Daddu(t9, t9, Operand(Code::kHeaderSize - kHeapObjectTag));
     Jump(t9, cond, rs, rt, bd);
     return;
-  } else if (options().inline_offheap_trampolines) {
+  } else if (options().inline_offheap_trampolines ||
+             options().builtin_calls_as_table_load) {
     Builtin builtin = Builtin::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code, &builtin) &&
         Builtins::IsIsolateIndependent(builtin)) {
       // Inline the trampoline.
       RecordCommentForOffHeapTrampoline(builtin);
-      li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+      if (options().builtin_calls_as_table_load) {
+        LoadEntryFromBuiltin(builtin, t9);
+      } else {
+        li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+      }
       Jump(t9, cond, rs, rt, bd);
       RecordComment("]");
       return;
     }
+    DCHECK(!options().builtin_calls_as_table_load);
   }
 
+  DCHECK(RelocInfo::IsCodeTarget(rmode));
   Jump(static_cast<intptr_t>(code.address()), rmode, cond, rs, rt, bd);
 }
 
@@ -4374,17 +4380,23 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
     Daddu(t9, t9, Operand(Code::kHeaderSize - kHeapObjectTag));
     Call(t9, cond, rs, rt, bd);
     return;
-  } else if (options().inline_offheap_trampolines) {
+  } else if (options().inline_offheap_trampolines ||
+             options().builtin_calls_as_table_load) {
     Builtin builtin = Builtin::kNoBuiltinId;
     if (isolate()->builtins()->IsBuiltinHandle(code, &builtin) &&
         Builtins::IsIsolateIndependent(builtin)) {
       // Inline the trampoline.
       RecordCommentForOffHeapTrampoline(builtin);
-      li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+      if (options().builtin_calls_as_table_load) {
+        LoadEntryFromBuiltin(builtin, t9);
+      } else {
+        li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+      }
       Call(t9, cond, rs, rt, bd);
       RecordComment("]");
       return;
     }
+    DCHECK(!options().builtin_calls_as_table_load);
   }
 
   DCHECK(RelocInfo::IsCodeTarget(rmode));
@@ -4421,7 +4433,12 @@ void TurboAssembler::CallBuiltinByIndex(Register builtin_index) {
 }
 void TurboAssembler::CallBuiltin(Builtin builtin) {
   RecordCommentForOffHeapTrampoline(builtin);
-  Call(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET);
+  if (options().builtin_calls_as_table_load) {
+    LoadEntryFromBuiltin(builtin, t9);
+  } else {
+    li(t9, Operand(BuiltinEntry(builtin), RelocInfo::OFF_HEAP_TARGET));
+  }
+  Call(t9);
   RecordComment("]");
 }
 
@@ -5304,14 +5321,20 @@ void TurboAssembler::Abort(AbortReason reason) {
 
   Move(a0, Smi::FromInt(static_cast<int>(reason)));
 
-  // Disable stub call restrictions to always allow calls to abort.
-  if (!has_frame()) {
+  {
     // We don't actually want to generate a pile of code for this, so just
     // claim there is a stack frame, without generating one.
     FrameScope scope(this, StackFrame::NO_FRAME_TYPE);
-    Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
-  } else {
-    Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+    if (root_array_available()) {
+      // Generate an indirect call via builtins entry table here in order to
+      // ensure that the interpreter_entry_return_pc_offset is the same for
+      // InterpreterEntryTrampoline and InterpreterEntryTrampolineForProfiling
+      // when FLAG_debug_code is enabled.
+      LoadEntryFromBuiltin(Builtin::kAbort, t9);
+      Call(t9);
+    } else {
+      Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+    }
   }
   // Will not return here.
   if (is_trampoline_pool_blocked()) {
