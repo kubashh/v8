@@ -283,7 +283,19 @@ void TurboAssembler::PushTaggedAnyField(Operand field_operand,
 }
 
 void TurboAssembler::SmiUntagField(Register dst, Operand src) {
-  SmiUntag(dst, src);
+  if (SmiValuesAre32Bits()) {
+    // Sign extend to 64-bit.
+    movsxlq(dst, Operand(src, kSmiShift / kBitsPerByte));
+  } else {
+    DCHECK(SmiValuesAre31Bits());
+    if (COMPRESS_POINTERS_BOOL) {
+      movsxlq(dst, src);
+      sarl(dst, Immediate(kSmiShift));
+    } else {
+      movq(dst, src);
+      sarq(dst, Immediate(kSmiShift));
+    }
+  }
 }
 
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
@@ -1312,7 +1324,8 @@ void TurboAssembler::SmiTag(Register reg) {
   static_assert(kSmiTag == 0);
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
   if (COMPRESS_POINTERS_BOOL) {
-    shll(reg, Immediate(kSmiShift));
+    DCHECK_EQ(kSmiShift, 1);
+    addl(reg, reg);
   } else {
     shlq(reg, Immediate(kSmiShift));
   }
@@ -1335,37 +1348,49 @@ void TurboAssembler::SmiUntag(Register reg) {
   // compression is enabled?
   if (COMPRESS_POINTERS_BOOL) {
     movsxlq(reg, reg);
+    sarl(reg, Immediate(kSmiShift));
+  } else {
+    sarq(reg, Immediate(kSmiShift));
   }
-  sarq(reg, Immediate(kSmiShift));
+}
+
+void TurboAssembler::SmiUntag(TaggedRegister reg) {
+  static_assert(kSmiTag == 0);
+  DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
+  if (COMPRESS_POINTERS_BOOL) {
+    sarl(reg.reg(), Immediate(kSmiShift));
+  } else {
+    sarq(reg.reg(), Immediate(kSmiShift));
+  }
 }
 
 void TurboAssembler::SmiUntag(Register dst, Register src) {
   DCHECK(dst != src);
   if (COMPRESS_POINTERS_BOOL) {
     movsxlq(dst, src);
+    sarl(dst, Immediate(kSmiShift));
   } else {
     movq(dst, src);
+    sarq(dst, Immediate(kSmiShift));
   }
   // TODO(v8:7703): Call SmiUntag(reg) if we can find a way to avoid the extra
   // mov when pointer compression is enabled.
   static_assert(kSmiTag == 0);
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
-  sarq(dst, Immediate(kSmiShift));
 }
 
-void TurboAssembler::SmiUntag(Register dst, Operand src) {
+void TurboAssembler::SmiUntagStack(Register dst, Operand src) {
   if (SmiValuesAre32Bits()) {
-    movl(dst, Operand(src, kSmiShift / kBitsPerByte));
     // Sign extend to 64-bit.
-    movsxlq(dst, dst);
+    movsxlq(dst, Operand(src, kSmiShift / kBitsPerByte));
   } else {
     DCHECK(SmiValuesAre31Bits());
+    movq(dst, src);
     if (COMPRESS_POINTERS_BOOL) {
-      movsxlq(dst, src);
+      sarl(dst, Immediate(kSmiShift));
     } else {
-      movq(dst, src);
+      sarq(dst, Immediate(kSmiShift));
     }
-    sarq(dst, Immediate(kSmiShift));
   }
 }
 
