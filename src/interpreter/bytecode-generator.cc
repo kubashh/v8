@@ -23,6 +23,7 @@
 #include "src/interpreter/bytecode-jump-table.h"
 #include "src/interpreter/bytecode-label.h"
 #include "src/interpreter/bytecode-register-allocator.h"
+#include "src/interpreter/bytecode-register-optimizer.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/control-flow-builders.h"
 #include "src/logging/local-logger.h"
@@ -3526,6 +3527,12 @@ void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
 }
 
+bool BytecodeGenerator::IsAccumulatorInEquivalenceSetOfVariable(Variable* var) {
+  BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+  if (optimizer) return optimizer->IsAccumulatorInEquivalenceSetOfVariable(var);
+  return false;
+}
+
 void BytecodeGenerator::BuildVariableLoad(Variable* variable,
                                           HoleCheckMode hole_check_mode,
                                           TypeofMode typeof_mode) {
@@ -3561,6 +3568,7 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
       // The global identifier "undefined" is immutable. Everything
       // else could be reassigned. For performance, we do a pointer comparison
       // rather than checking if the raw_name is really "undefined".
+      if (IsAccumulatorInEquivalenceSetOfVariable(variable)) return;
       if (variable->raw_name() == ast_string_constants()->undefined_string()) {
         builder()->LoadUndefined();
       } else {
@@ -3568,9 +3576,13 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
         builder()->LoadGlobal(variable->raw_name(), feedback_index(slot),
                               typeof_mode);
       }
+      BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+      if (optimizer)
+        optimizer->SetVariableInEquivalenceSetOfAccumulator(variable);
       break;
     }
     case VariableLocation::CONTEXT: {
+      if (IsAccumulatorInEquivalenceSetOfVariable(variable)) return;
       int depth = execution_context()->ContextChainDepth(variable->scope());
       ContextScope* context = execution_context()->Previous(depth);
       Register context_reg;
@@ -3591,6 +3603,9 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
       if (hole_check_mode == HoleCheckMode::kRequired) {
         BuildThrowIfHole(variable);
       }
+      BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+      if (optimizer)
+        optimizer->SetVariableInEquivalenceSetOfAccumulator(variable);
       break;
     }
     case VariableLocation::LOOKUP: {

@@ -18,9 +18,9 @@ snippet: "
         })();
   
 "
-frame size: 3
+frame size: 2
 parameter count: 1
-bytecode array length: 37
+bytecode array length: 33
 bytecodes: [
   /*   16 E> */ B(CreateMappedArguments),
                 B(Star0),
@@ -32,9 +32,7 @@ bytecodes: [
   /*   49 E> */ B(SetNamedProperty), R(1), U8(1), U8(4),
   /*   62 S> */ B(LdaGlobal), U8(0), U8(2),
                 B(Star1),
-  /*   68 E> */ B(LdaGlobal), U8(0), U8(2),
-                B(Star2),
-  /*   70 E> */ B(GetNamedProperty), R(2), U8(1), U8(6),
+  /*   70 E> */ B(GetNamedProperty), R(1), U8(1), U8(6),
   /*   66 E> */ B(SetNamedProperty), R(1), U8(2), U8(8),
   /*   98 S> */ B(GetNamedProperty), R(0), U8(3), U8(10),
   /*  105 S> */ B(Return),
@@ -65,9 +63,9 @@ snippet: "
         })();
   
 "
-frame size: 3
+frame size: 2
 parameter count: 1
-bytecode array length: 58
+bytecode array length: 54
 bytecodes: [
   /*   16 E> */ B(CreateMappedArguments),
                 B(Star0),
@@ -84,12 +82,10 @@ bytecodes: [
                 B(Star1),
                 B(LdaSmi), I8(3),
   /*  122 E> */ B(SetNamedProperty), R(1), U8(2), U8(8),
-                B(Jump), U8(18),
+                B(Jump), U8(14),
   /*  154 S> */ B(LdaGlobal), U8(1), U8(3),
                 B(Star1),
-  /*  160 E> */ B(LdaGlobal), U8(1), U8(3),
-                B(Star2),
-  /*  162 E> */ B(GetNamedProperty), R(2), U8(3), U8(10),
+  /*  162 E> */ B(GetNamedProperty), R(1), U8(3), U8(10),
   /*  158 E> */ B(SetNamedProperty), R(1), U8(2), U8(8),
   /*  200 S> */ B(GetNamedProperty), R(0), U8(4), U8(12),
   /*  207 S> */ B(Return),
