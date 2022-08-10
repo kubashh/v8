@@ -59,6 +59,7 @@ AssemblerOptions BuiltinAssemblerOptions(Isolate* isolate, Builtin builtin) {
     // builtin in the code space if the FLAG_interpreted_frames_native_stack is
     // enabled.
     options.short_builtin_calls = false;
+    options.use_pc_relative_calls_and_jumps = false;
     options.builtin_calls_as_table_load = true;
   }
 
