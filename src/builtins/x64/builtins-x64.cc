@@ -1675,7 +1675,9 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
     int code = config->GetAllocatableGeneralCode(i);
     __ popq(Register::from_code(code));
     if (java_script_builtin && code == kJavaScriptCallArgCountRegister.code()) {
-      __ SmiUntag(Register::from_code(code));
+      // If smi on stack frame is guranteed to be sign-extended, we can use
+      // TaggedRegister.
+      __ SmiToInt32(Register::from_code(code));
     }
   }
   if (with_result && java_script_builtin) {
@@ -2233,7 +2235,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
         __ movq(rcx, rax);
         __ Pop(rdi);
         __ Pop(rax);
-        __ SmiUntag(rax);
+        __ SmiToInt32(rax);
       }
       __ LoadTaggedPointerField(
           rdx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
@@ -2266,9 +2268,12 @@ void Generate_PushBoundArguments(MacroAssembler* masm) {
 
   // Load [[BoundArguments]] into rcx and length of that into rbx.
   Label no_bound_arguments;
+  TaggedRegister bound_arguments(rcx);
   __ LoadTaggedPointerField(
-      rcx, FieldOperand(rdi, JSBoundFunction::kBoundArgumentsOffset));
-  __ SmiUntagField(rbx, FieldOperand(rcx, FixedArray::kLengthOffset));
+      bound_arguments,
+      FieldOperand(rdi, JSBoundFunction::kBoundArgumentsOffset));
+  __ SmiUntagField(rbx,
+                   FieldOperand(bound_arguments, FixedArray::kLengthOffset));
   __ testl(rbx, rbx);
   __ j(zero, &no_bound_arguments);
   {
@@ -2702,7 +2707,7 @@ void Builtins::Generate_WasmCompileLazy(MacroAssembler* masm) {
     __ CallRuntime(Runtime::kWasmCompileLazy, 3);
     // The runtime function returns the jump table slot offset as a Smi. Use
     // that to compute the jump target in r15.
-    __ SmiUntag(kReturnRegister0);
+    __ SmiToInt32(kReturnRegister0);
     __ movq(r15, kReturnRegister0);
 
     // Restore registers.
@@ -3311,7 +3316,7 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ j(not_equal, &convert_param);
   __ JumpIfNotSmi(param, &convert_param);
   // Change the param from Smi to int32.
-  __ SmiUntag(param);
+  __ SmiToInt32(param);
   // Zero extend.
   __ movl(param, param);
   // Place the param into the proper slot in Integer section.
