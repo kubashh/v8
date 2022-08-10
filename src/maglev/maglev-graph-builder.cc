@@ -7,6 +7,7 @@
 #include "src/base/optional.h"
 #include "src/base/v8-fallthrough.h"
 #include "src/builtins/builtins-constructor.h"
+#include "src/codegen/bailout-reason.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/common/globals.h"
 #include "src/compiler/compilation-dependencies.h"
@@ -22,12 +23,14 @@
 #include "src/maglev/maglev-compilation-unit.h"
 #include "src/maglev/maglev-interpreter-frame-state.h"
 #include "src/maglev/maglev-ir.h"
+#include "src/objects/contexts.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/name-inl.h"
 #include "src/objects/property-cell.h"
 #include "src/objects/property-details.h"
 #include "src/objects/slots-inl.h"
+#include "src/objects/source-text-module.h"
 
 namespace v8 {
 namespace internal {
@@ -1118,7 +1121,31 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
 }
 
 MAGLEV_UNIMPLEMENTED_BYTECODE(LdaModuleVariable)
-MAGLEV_UNIMPLEMENTED_BYTECODE(StaModuleVariable)
+
+void MaglevGraphBuilder::VisitStaModuleVariable() {
+  int cell_index = iterator_.GetImmediateOperand(0);
+  if (V8_UNLIKELY(cell_index < 0)) {
+    BuildCallRuntime(Runtime::kAbort,
+                     {GetSmiConstant(static_cast<int>(
+                         AbortReason::kUnsupportedModuleOperation))});
+    return;
+  }
+  ValueNode* context = GetContext();
+  int depth = iterator_.GetUnsignedImmediateOperand(1);
+  for (int i = 0; i < depth; i++) {
+    context = AddNewNode<LoadTaggedField>(
+        {context}, Context::OffsetOfElementAt(Context::PREVIOUS_INDEX));
+  }
+  ValueNode* module = AddNewNode<LoadTaggedField>(
+      {context}, Context::OffsetOfElementAt(Context::EXTENSION_INDEX));
+  ValueNode* exports = AddNewNode<LoadTaggedField>(
+      {module}, SourceTextModule::kRegularExportsOffset);
+  // The actual array index is (cell_index - 1).
+  cell_index -= 1;
+  ValueNode* cell = LoadFixedArrayElement(exports, cell_index);
+  AddNewNode<StoreTaggedFieldWithWriteBarrier>({cell, GetAccumulatorTagged()},
+                                               Cell::kValueOffset);
+}
 
 bool MaglevGraphBuilder::TryBuildMonomorphicStoreFromSmiHandler(
     ValueNode* object, const compiler::MapRef& map, int32_t handler) {
