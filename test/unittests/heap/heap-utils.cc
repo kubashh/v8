@@ -153,5 +153,10 @@ std::vector<Handle<FixedArray>> HeapInternalsBase::CreatePadding(
   return handles;
 }
 
+bool InCorrectGeneration(HeapObject object) {
+  return FLAG_single_generation ? !i::Heap::InYoungGeneration(object)
+                                : i::Heap::InYoungGeneration(object);
+}
+
 }  // namespace internal
 }  // namespace v8

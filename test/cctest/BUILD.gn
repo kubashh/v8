@@ -184,7 +184,6 @@ v8_source_set("cctest_sources") {
     "test-feedback-vector.h",
     "test-field-type-tracking.cc",
     "test-func-name-inference.cc",
-    "test-global-handles.cc",
     "test-heap-profiler.cc",
     "test-icache.cc",
     "test-ignition-statistics-extension.cc",
