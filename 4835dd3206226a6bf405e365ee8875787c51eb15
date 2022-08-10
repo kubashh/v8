@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fbdf6eb_8cb2e5eb",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-10T08:56:47Z",
+      "side": 1,
+      "message": "I\u0027m renaming the flag in this CL: https://chromium-review.googlesource.com/c/v8/v8/+/3820063\nPlease don\u0027t add this change for now, you\u0027ll have to rebase on top of the refactoring CL anyway to make it compile.",
+      "revId": "4835dd3206226a6bf405e365ee8875787c51eb15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
