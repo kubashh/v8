@@ -9,11 +9,14 @@
 #include <iomanip>
 #include <map>
 #include <type_traits>
+#include <utility>
 
 #include "src/base/logging.h"
 #include "src/base/optional.h"
+#include "src/common/globals.h"
 #include "src/compiler/bytecode-analysis.h"
 #include "src/compiler/bytecode-liveness-map.h"
+#include "src/compiler/feedback-source.h"
 #include "src/compiler/heap-refs.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/deoptimizer/deoptimize-reason.h"
@@ -323,6 +326,30 @@ class MaglevGraphBuilder {
     DCHECK_EQ(vector_index, Descriptor::kVector);
 #endif  // DEBUG
     return call_builtin;
+  }
+
+  void BuildLoadGlobal(compiler::NameRef name,
+                       compiler::FeedbackSource& feedback_source,
+                       TypeofMode typeof_mode) {
+    const compiler::ProcessedFeedback& access_feedback =
+        broker()->GetFeedbackForGlobalAccess(feedback_source);
+
+    if (access_feedback.IsInsufficient()) {
+      EmitUnconditionalDeopt(
+          DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
+      return;
+    }
+
+    const compiler::GlobalAccessFeedback& global_access_feedback =
+        access_feedback.AsGlobalAccess();
+
+    if (TryBuildPropertyCellAccess(global_access_feedback)) return;
+
+    // TODO(leszeks): Handle the IsScriptContextSlot case.
+
+    ValueNode* context = GetContext();
+    SetAccumulator(
+        AddNewNode<LoadGlobal>({context}, name, feedback_source, typeof_mode));
   }
 
   CallRuntime* BuildCallRuntime(Runtime::FunctionId function_id,

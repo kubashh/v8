@@ -786,27 +786,20 @@ void MaglevGraphBuilder::VisitLdaGlobal() {
   compiler::NameRef name = GetRefOperand<Name>(kNameOperandIndex);
   FeedbackSlot slot = GetSlotOperand(kSlotOperandIndex);
   compiler::FeedbackSource feedback_source{feedback(), slot};
-
-  const compiler::ProcessedFeedback& access_feedback =
-      broker()->GetFeedbackForGlobalAccess(feedback_source);
-
-  if (access_feedback.IsInsufficient()) {
-    EmitUnconditionalDeopt(
-        DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
-    return;
-  }
-
-  const compiler::GlobalAccessFeedback& global_access_feedback =
-      access_feedback.AsGlobalAccess();
-
-  if (TryBuildPropertyCellAccess(global_access_feedback)) return;
-
-  // TODO(leszeks): Handle the IsScriptContextSlot case.
-
-  ValueNode* context = GetContext();
-  SetAccumulator(AddNewNode<LoadGlobal>({context}, name, feedback_source));
+  BuildLoadGlobal(name, feedback_source, TypeofMode::kNotInside);
 }
-MAGLEV_UNIMPLEMENTED_BYTECODE(LdaGlobalInsideTypeof)
+
+void MaglevGraphBuilder::VisitLdaGlobalInsideTypeof() {
+  // LdaGlobalInsideTypeof <name_index> <slot>
+
+  static const int kNameOperandIndex = 0;
+  static const int kSlotOperandIndex = 1;
+
+  compiler::NameRef name = GetRefOperand<Name>(kNameOperandIndex);
+  FeedbackSlot slot = GetSlotOperand(kSlotOperandIndex);
+  compiler::FeedbackSource feedback_source{feedback(), slot};
+  BuildLoadGlobal(name, feedback_source, TypeofMode::kInside);
+}
 
 void MaglevGraphBuilder::VisitStaGlobal() {
   // StaGlobal <name_index> <slot>
