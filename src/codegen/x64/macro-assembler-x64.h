@@ -358,9 +358,11 @@ class V8_EXPORT_PRIVATE TurboAssembler
 
   // Convert smi to word-size sign-extended value.
   void SmiUntag(Register reg);
+  void SmiUntagUnsigned(Register reg);
   // Requires dst != src
   void SmiUntag(Register dst, Register src);
   void SmiUntag(Register dst, Operand src);
+  void SmiUntagUnsigned(Register dst, Operand src);
 
   // Convert smi to 32-bit value.
   void SmiToInt32(Register reg);
@@ -605,6 +607,7 @@ class V8_EXPORT_PRIVATE TurboAssembler
 
   // Loads a field containing smi value and untags it.
   void SmiUntagField(Register dst, Operand src);
+  void SmiUntagFieldUnsigned(Register dst, Operand src);
 
   // Compresses tagged value if necessary and stores it to given on-heap
   // location.
