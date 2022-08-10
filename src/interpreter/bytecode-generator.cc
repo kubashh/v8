@@ -5619,6 +5619,32 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       ->LoadAccumulatorWithRegister(this_function)
       .GetSuperConstructor(constructor);
 
+  // FIXME: this is in the wrong place, need to evaluate args first, no?
+  // FIXME: add a test that the args are evaluated first.
+  // FIXME: add a test where evaluating the args changes the class hierarchy.
+
+  Register instance = register_allocator()->NewRegister();
+
+  // FIXME: if this is a default ctor, and we find a default base ctor, then we
+  // don't need to construct the rest parameter and stuff.
+  BytecodeLabel super_ctor_call_done;
+  bool omit_super_ctor = FLAG_omit_default_ctors &&
+                         IsDerivedConstructor(info()->literal()->kind());
+  if (omit_super_ctor) {
+    Register new_target = register_allocator()->NewRegister();
+
+    // FIXME: don't do this twice
+    VisitForRegisterValue(super->new_target_var(), new_target);
+
+    // The 3rd register will contain the constructor or the instance (if it was
+    // already created). Pass the instance register, so that it will already
+    // contain the right value in the case where the accumulator is 'true'.
+    builder()->FindNonDefaultConstructor(constructor, new_target, instance);
+    builder()->MoveRegister(instance, constructor);
+    builder()->JumpIfTrue(ToBooleanMode::kAlreadyBoolean,
+                          &super_ctor_call_done);
+  }
+
   if (spread_position == Call::kHasNonFinalSpread) {
     // First generate the array containing all arguments.
     BuildCreateArrayLiteral(args, nullptr);
@@ -5661,6 +5687,8 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       builder()->Construct(constructor, args_regs, feedback_slot_index);
     }
   }
+  builder()->StoreAccumulatorInRegister(instance);
+  builder()->Bind(&super_ctor_call_done);
 
   // Explicit calls to the super constructor using super() perform an
   // implicit binding assignment to the 'this' variable.
@@ -5669,11 +5697,9 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   // 'this' isn't accessed in default constructors.
   if (!IsDefaultConstructor(info()->literal()->kind())) {
     Variable* var = closure_scope()->GetReceiverScope()->receiver();
+    builder()->LoadAccumulatorWithRegister(instance);
     BuildVariableAssignment(var, Token::INIT, HoleCheckMode::kRequired);
   }
-
-  Register instance = register_allocator()->NewRegister();
-  builder()->StoreAccumulatorInRegister(instance);
 
   // The constructor scope always needs ScopeInfo, so we are certain that
   // the first constructor scope found in the outer scope chain is the

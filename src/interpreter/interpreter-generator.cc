@@ -2781,6 +2781,71 @@ IGNITION_HANDLER(ThrowIfNotSuperConstructor, InterpreterAssembler) {
   }
 }
 
+IGNITION_HANDLER(FindNonDefaultConstructor, InterpreterAssembler) {
+  TNode<Context> context = GetContext();
+  TVARIABLE(Object, constructor);
+  Label protector_invalid(this, &constructor), loop(this, &constructor),
+      found_default_base_ctor(this, &constructor),
+      found_something_else(this, &constructor);
+
+  // FIXME: should we transmit the constructor in the accumulator?
+  constructor = LoadRegisterAtOperandIndex(0);
+  GotoIf(IsArrayIteratorProtectorCellInvalid(), &protector_invalid);
+
+  TNode<Object> new_target = LoadRegisterAtOperandIndex(1);
+  Goto(&loop);
+
+  BIND(&loop);
+  {
+    const TNode<Uint32T> function_kind =
+        LoadFunctionKind(CAST(constructor.value()));
+    GotoIf(Word32Equal(
+               function_kind,
+               static_cast<uint32_t>(FunctionKind::kDefaultBaseConstructor)),
+           &found_default_base_ctor);
+    GotoIfNot(Word32Equal(function_kind,
+                          static_cast<uint32_t>(
+                              FunctionKind::kDefaultDerivedConstructor)),
+              &found_something_else);
+
+    // FIXME: If it has the class fields symbol, call it
+
+    constructor = GetSuperConstructor(CAST(constructor.value()));
+    // We don't need to check whether 'constructor' is a super constructor. If
+    // it's not, it's also not a default base ctor or a default derived ctor
+    // and we'll exit the loop via the found_something_else branch. Then
+    // we'll do the ThrowIfNotSuperConstructor check it before calling it.
+    Goto(&loop);
+  }
+  // We don't need to re-check the proctector, since the loop cannot call into
+  // user code. Even if GetSuperConstructor returns a Proxy, we will throw since
+  // it's not a constructor, and not invoke [[GetPrototypeOf]] on it.
+
+  BIND(&found_default_base_ctor);
+  {
+    TNode<Object> instance = CallBuiltin(Builtin::kFastNewObject, context,
+                                         constructor.value(), new_target);
+    StoreRegisterAtOperandIndex(instance, 2);
+    SetAccumulator(TrueConstant());
+    Dispatch();
+  }
+
+  BIND(&found_something_else);
+  {
+    // Not a base ctor.
+    StoreRegisterAtOperandIndex(constructor.value(), 2);
+    SetAccumulator(FalseConstant());
+    Dispatch();
+  }
+
+  BIND(&protector_invalid);
+  {
+    StoreRegisterAtOperandIndex(constructor.value(), 2);
+    SetAccumulator(FalseConstant());
+    Dispatch();
+  }
+}
+
 // Debugger
 //
 // Call runtime to handle debugger statement.
