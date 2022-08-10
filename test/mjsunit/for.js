@@ -26,7 +26,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Test missing condition in for loop.
+
+let result = 0.01;
 for (var i = 0; ; i++) {
-  if (i > 100) break;
+  result = Math.sin(result);
 }
 assertEquals(101, i);
