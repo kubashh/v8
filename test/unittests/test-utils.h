@@ -211,6 +211,12 @@ class WithIsolateScopeMixin : public TMixin {
     return v8::String::NewFromUtf8(this->v8_isolate(), string).ToLocalChecked();
   }
 
+  void EmptyMessageQueues() {
+    while (v8::platform::PumpMessageLoop(internal::V8::GetCurrentPlatform(),
+                                         this->v8_isolate())) {
+    }
+  }
+
  private:
   Local<Value> RunJS(Local<String> source) {
     return TryRunJS(source).ToLocalChecked();
@@ -467,6 +473,10 @@ static inline uint16_t* AsciiToTwoByteString(const char* source) {
   uint16_t* converted = NewArray<uint16_t>(array_length);
   for (size_t i = 0; i < array_length; i++) converted[i] = source[i];
   return converted;
+}
+
+static inline v8::Local<v8::Value> v8_num(double x) {
+  return v8::Number::New(v8::Isolate::GetCurrent(), x);
 }
 
 class TestTransitionsAccessor : public TransitionsAccessor {
