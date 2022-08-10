@@ -1675,6 +1675,8 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
     int code = config->GetAllocatableGeneralCode(i);
     __ popq(Register::from_code(code));
     if (java_script_builtin && code == kJavaScriptCallArgCountRegister.code()) {
+      // If smi on stack frame is guranteed to be sign-extended, we can use
+      // TaggedRegister.
       __ SmiUntag(Register::from_code(code));
     }
   }
@@ -3311,7 +3313,7 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ j(not_equal, &convert_param);
   __ JumpIfNotSmi(param, &convert_param);
   // Change the param from Smi to int32.
-  __ SmiUntag(param);
+  __ SmiToInt32(param);
   // Zero extend.
   __ movl(param, param);
   // Place the param into the proper slot in Integer section.
