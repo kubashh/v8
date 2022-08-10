@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c92e433_8f0be9d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-08-10T12:21:33Z",
+      "side": 1,
+      "message": "LGTM % nit",
+      "revId": "f490c941374b5699a9e2d63884ac7a61835f936b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4836ccff_b4218867",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-08-10T12:21:33Z",
+      "side": 1,
+      "message": "Nit: This will probably get bigger later, once we add more optimizations.\nCould we move the implementation to the .cc file instead?",
+      "range": {
+        "startLine": 328,
+        "startChar": 7,
+        "endLine": 328,
+        "endChar": 22
+      },
+      "revId": "f490c941374b5699a9e2d63884ac7a61835f936b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
