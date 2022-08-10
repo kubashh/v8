@@ -325,6 +325,30 @@ class MaglevGraphBuilder {
     return call_builtin;
   }
 
+  void BuildLoadGlobal(compiler::NameRef name,
+                       compiler::FeedbackSource& feedback_source,
+                       TypeofMode typeof_mode) {
+    const compiler::ProcessedFeedback& access_feedback =
+        broker()->GetFeedbackForGlobalAccess(feedback_source);
+
+    if (access_feedback.IsInsufficient()) {
+      EmitUnconditionalDeopt(
+          DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
+      return;
+    }
+
+    const compiler::GlobalAccessFeedback& global_access_feedback =
+        access_feedback.AsGlobalAccess();
+
+    if (TryBuildPropertyCellAccess(global_access_feedback)) return;
+
+    // TODO(leszeks): Handle the IsScriptContextSlot case.
+
+    ValueNode* context = GetContext();
+    SetAccumulator(
+        AddNewNode<LoadGlobal>({context}, name, feedback_source, typeof_mode));
+  }
+
   CallRuntime* BuildCallRuntime(Runtime::FunctionId function_id,
                                 std::initializer_list<ValueNode*> inputs) {
     CallRuntime* call_runtime = CreateNewNode<CallRuntime>(
