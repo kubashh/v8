@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50d9c8a_b6690a94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-08-10T11:18:50Z",
+      "side": 1,
+      "message": "Thanks! LGTM % nit.",
+      "revId": "2618c79305eec4c1f3dc942d05d6d90866eab253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d0a68f9_e9a279d2",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-08-10T11:18:50Z",
+      "side": 1,
+      "message": "Nit: use FixedArray::OffsetOfElementAt",
+      "range": {
+        "startLine": 609,
+        "startChar": 16,
+        "endLine": 609,
+        "endChar": 61
+      },
+      "revId": "2618c79305eec4c1f3dc942d05d6d90866eab253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
