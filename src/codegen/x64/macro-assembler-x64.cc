@@ -288,6 +288,10 @@ void TurboAssembler::SmiUntagField(Register dst, Operand src) {
   SmiUntag(dst, src);
 }
 
+void TurboAssembler::SmiUntagFieldUnsigned(Register dst, Operand src) {
+  SmiUntagUnsigned(dst, src);
+}
+
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Immediate value) {
   if (COMPRESS_POINTERS_BOOL) {
@@ -906,7 +910,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
 
     // Restore target function, new target and actual argument count.
     Pop(kJavaScriptCallArgCountRegister);
-    SmiUntag(kJavaScriptCallArgCountRegister);
+    SmiUntagUnsigned(kJavaScriptCallArgCountRegister);
     Pop(kJavaScriptCallNewTargetRegister);
     Pop(kJavaScriptCallTargetRegister);
   }
@@ -1496,7 +1500,8 @@ void TurboAssembler::SmiTag(Register reg) {
   static_assert(kSmiTag == 0);
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
   if (COMPRESS_POINTERS_BOOL) {
-    shll(reg, Immediate(kSmiShift));
+    DCHECK_EQ(kSmiShift, 1);
+    addl(reg, reg);
   } else {
     shlq(reg, Immediate(kSmiShift));
   }
@@ -1523,6 +1528,17 @@ void TurboAssembler::SmiUntag(Register reg) {
   sarq(reg, Immediate(kSmiShift));
 }
 
+void TurboAssembler::SmiUntagUnsigned(Register reg) {
+  static_assert(kSmiTag == 0);
+  DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
+  if (COMPRESS_POINTERS_BOOL) {
+    AssertSignedBitOfSmiIsZero(reg);
+    sarl(reg, Immediate(kSmiShift));
+  } else {
+    shrq(reg, Immediate(kSmiShift));
+  }
+}
+
 void TurboAssembler::SmiUntag(Register dst, Register src) {
   DCHECK(dst != src);
   if (COMPRESS_POINTERS_BOOL) {
@@ -1530,18 +1546,17 @@ void TurboAssembler::SmiUntag(Register dst, Register src) {
   } else {
     movq(dst, src);
   }
+  sarq(dst, Immediate(kSmiShift));
   // TODO(v8:7703): Call SmiUntag(reg) if we can find a way to avoid the extra
   // mov when pointer compression is enabled.
   static_assert(kSmiTag == 0);
   DCHECK(SmiValuesAre32Bits() || SmiValuesAre31Bits());
-  sarq(dst, Immediate(kSmiShift));
 }
 
 void TurboAssembler::SmiUntag(Register dst, Operand src) {
   if (SmiValuesAre32Bits()) {
-    movl(dst, Operand(src, kSmiShift / kBitsPerByte));
     // Sign extend to 64-bit.
-    movsxlq(dst, dst);
+    movsxlq(dst, Operand(src, kSmiShift / kBitsPerByte));
   } else {
     DCHECK(SmiValuesAre31Bits());
     if (COMPRESS_POINTERS_BOOL) {
@@ -1550,6 +1565,23 @@ void TurboAssembler::SmiUntag(Register dst, Operand src) {
       movq(dst, src);
     }
     sarq(dst, Immediate(kSmiShift));
+  }
+}
+
+void TurboAssembler::SmiUntagUnsigned(Register dst, Operand src) {
+  if (SmiValuesAre32Bits()) {
+    // Sign extend to 64-bit.
+    movsxlq(dst, Operand(src, kSmiShift / kBitsPerByte));
+  } else {
+    DCHECK(SmiValuesAre31Bits());
+    if (COMPRESS_POINTERS_BOOL) {
+      movl(dst, src);
+      AssertSignedBitOfSmiIsZero(dst);
+      sarl(dst, Immediate(kSmiShift));
+    } else {
+      movq(dst, src);
+      sarq(dst, Immediate(kSmiShift));
+    }
   }
 }
 
@@ -2184,7 +2216,7 @@ Operand TurboAssembler::EntryFromBuiltinAsOperand(Builtin builtin) {
 Operand TurboAssembler::EntryFromBuiltinIndexAsOperand(Register builtin_index) {
   if (SmiValuesAre32Bits()) {
     // The builtin_index register contains the builtin index as a Smi.
-    SmiUntag(builtin_index);
+    SmiUntagUnsigned(builtin_index);
     return Operand(kRootRegister, builtin_index, times_system_pointer_size,
                    IsolateData::builtin_entry_table_offset());
   } else {
@@ -2680,6 +2712,16 @@ void TurboAssembler::AssertZeroExtended(Register int32_register) {
   movq(kScratchRegister, int64_t{0x0000000100000000});
   cmpq(kScratchRegister, int32_register);
   Check(above, AbortReason::k32BitValueInRegisterIsNotZeroExtended);
+}
+
+void TurboAssembler::AssertSignedBitOfSmiIsZero(Register smi_register) {
+  if (!FLAG_debug_code) return;
+  ASM_CODE_COMMENT(this);
+  DCHECK(COMPRESS_POINTERS_BOOL);
+  DCHECK_NE(smi_register, kScratchRegister);
+  movq(kScratchRegister, int64_t{0x0000000010000000});
+  testq(kScratchRegister, smi_register);
+  Check(zero, AbortReason::kSignedBitOfSmiIsNotZero);
 }
 
 void MacroAssembler::AssertCodeT(Register object) {
