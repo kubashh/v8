@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b863bd_0423f0f8",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7d335b0_b70e42e1",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75853b61_01a9ce12",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-11T09:14:52Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ee3946_79ff93a1",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75853b61_01a9ce12",
       "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "308425c6_8f500e48",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4403,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36ca3fdd_866f790a",
+      "range": {
+        "startLine": 4403,
+        "startChar": 9,
+        "endLine": 4403,
+        "endChar": 44
+      },
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c811c32a_e74af6ff",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-08-11T09:14:52Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eedc530_ccc26153",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4410,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c811c32a_e74af6ff",
       "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b135a8df_8698856f",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92e253a6_9af30ba8",
+      "range": {
+        "startLine": 4427,
+        "startChar": 9,
+        "endLine": 4427,
+        "endChar": 44
+      },
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb2c2616_6dd79299",
@@ -111,6 +213,24 @@
       "writtenOn": "2022-08-11T09:14:52Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6938005e_22089405",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2022-08-11T12:41:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb2c2616_6dd79299",
       "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
