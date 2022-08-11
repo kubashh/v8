@@ -118,6 +118,25 @@ bool BytecodeRegisterOptimizer::RegisterInfo::IsOnlyMemberOfEquivalenceSet()
   return this->next_ == this;
 }
 
+void BytecodeRegisterOptimizer::SetVariableInEquivalenceSetOfRegister(
+    Variable* var, Register reg) {
+  uint32_t equivalence_set = GetRegisterInfo(reg)->equivalence_id();
+  variable_equivalence_set_map_[equivalence_set] = var;
+}
+
+Variable* BytecodeRegisterOptimizer::GetVariableInEquivalenceSetOfRegister(
+    Register reg) {
+  uint32_t equivalence_set = GetRegisterInfo(reg)->equivalence_id();
+  return variable_equivalence_set_map_[equivalence_set];
+}
+
+bool BytecodeRegisterOptimizer::IsRegisterInEquivalenceSetOfVariable(
+    Variable* var, Register reg) {
+  DCHECK(var);
+  uint32_t equivalence_set = GetRegisterInfo(reg)->equivalence_id();
+  return variable_equivalence_set_map_[equivalence_set] == var;
+}
+
 bool BytecodeRegisterOptimizer::RegisterInfo::
     IsOnlyMaterializedMemberOfEquivalenceSet() const {
   DCHECK(materialized());
@@ -224,6 +243,7 @@ BytecodeRegisterOptimizer::BytecodeRegisterOptimizer(
       register_info_table_(zone),
       registers_needing_flushed_(zone),
       equivalence_id_(0),
+      variable_equivalence_set_map_(zone),
       bytecode_writer_(bytecode_writer),
       flush_required_(false),
       zone_(zone) {
@@ -272,6 +292,7 @@ bool BytecodeRegisterOptimizer::EnsureAllRegistersAreFlushed() const {
 }
 
 void BytecodeRegisterOptimizer::Flush() {
+  variable_equivalence_set_map_.assign(equivalence_id_ + 1, nullptr);
   if (!flush_required_) {
     return;
   }
