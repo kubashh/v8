@@ -498,23 +498,6 @@ void ConstructJSApiObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
   EXPECT_FALSE(global->IsEmpty());
 }
 
-namespace {
-
-bool InCorrectGeneration(HeapObject object) {
-  return FLAG_single_generation ? !i::Heap::InYoungGeneration(object)
-                                : i::Heap::InYoungGeneration(object);
-}
-
-template <typename GlobalOrPersistent>
-bool InCorrectGeneration(v8::Isolate* isolate,
-                         const GlobalOrPersistent& global) {
-  v8::HandleScope scope(isolate);
-  auto tmp = global.Get(isolate);
-  return InCorrectGeneration(*v8::Utils::OpenHandle(*tmp));
-}
-
-}  // namespace
-
 enum class SurvivalMode { kSurvives, kDies };
 
 template <typename ModifierFunction, typename ConstructTracedReferenceFunction,
