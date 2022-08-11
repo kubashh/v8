@@ -488,6 +488,11 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
   // Type Information for DevTools is turned on.
   scorecard[Bytecodes::ToByte(Bytecode::kCollectTypeProfile)] = 1;
 
+  if (!FLAG_omit_default_ctors) {
+    // This bytecode is only emitted when the flag is on.
+    scorecard[Bytecodes::ToByte(Bytecode::kFindNonDefaultConstructor)] = 1;
+  }
+
   // Check return occurs at the end and only once in the BytecodeArray.
   CHECK_EQ(final_bytecode, Bytecode::kReturn);
   CHECK_EQ(scorecard[Bytecodes::ToByte(final_bytecode)], 1);
