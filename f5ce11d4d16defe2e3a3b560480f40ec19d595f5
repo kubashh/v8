@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7d335b0_b70e42e1",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2695,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "Please remove default case. Not having it will allow us to find places that require updating if we add another value to the enum.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75853b61_01a9ce12",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ca3fdd_866f790a",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4403,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "This case should probably be generated as RelocInfo::CODE_TARGET as before.",
+      "range": {
+        "startLine": 4403,
+        "startChar": 9,
+        "endLine": 4403,
+        "endChar": 44
+      },
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c811c32a_e74af6ff",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4410,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e253a6_9af30ba8",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 4427,
+        "startChar": 9,
+        "endLine": 4427,
+        "endChar": 44
+      },
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb2c2616_6dd79299",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-11T09:14:52Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "f5ce11d4d16defe2e3a3b560480f40ec19d595f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
