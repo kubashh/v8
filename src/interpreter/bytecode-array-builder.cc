@@ -526,6 +526,12 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::GetSuperConstructor(Register out) {
   return *this;
 }
 
+BytecodeArrayBuilder& BytecodeArrayBuilder::FindNonDefaultConstructor(
+    Register constructor, Register new_target, Register found_constructor) {
+  OutputFindNonDefaultConstructor(constructor, new_target, found_constructor);
+  return *this;
+}
+
 BytecodeArrayBuilder& BytecodeArrayBuilder::CompareOperation(
     Token::Value op, Register reg, int feedback_slot) {
   switch (op) {
