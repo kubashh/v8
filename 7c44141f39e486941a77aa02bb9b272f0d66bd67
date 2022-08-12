@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1b0c97d_78bf14ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-12T17:49:33Z",
+      "side": 1,
+      "message": "Deepti, PTAL, thanks! Also +adamk for some OWNER stamps.",
+      "revId": "7c44141f39e486941a77aa02bb9b272f0d66bd67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
