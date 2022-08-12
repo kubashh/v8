@@ -132,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3cb5294_5ee926c3",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-12T08:13:00Z",
+      "side": 1,
+      "message": "I guess, my main point is that `v8::Isolate::GetCurrent()` is not ideal. However, you should be able to use `info-\u003eGetIsolate()` instead.",
+      "parentUuid": "5b0a3709_46710d90",
+      "range": {
+        "startLine": 478,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "632f6b95_d29c79ed",
         "filename": "test/unittests/test-utils.h",
         "patchSetId": 15
@@ -167,6 +191,30 @@
       "side": 1,
       "message": "Those methods are used in callback(`ForceScavenge2` and `ForceMarkSweep2`) of `SetWeak`. so I cannot use methods in WithIsolateScopeMixin",
       "parentUuid": "632f6b95_d29c79ed",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 493,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58525a8f_de30cf04",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-12T08:13:00Z",
+      "side": 1,
+      "message": "Ups, missed that. How about moving these helpers into heap-utils?",
+      "parentUuid": "b85ce363_18343b8e",
       "range": {
         "startLine": 481,
         "startChar": 0,
