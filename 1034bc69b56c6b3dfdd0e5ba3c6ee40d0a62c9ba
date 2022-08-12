@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "465f2d2b_723a00bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-12T20:22:38Z",
+      "side": 1,
+      "message": "Oops, didn\u0027t see Deepti was OOO. Redirecting to Tobias.",
+      "revId": "1034bc69b56c6b3dfdd0e5ba3c6ee40d0a62c9ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
