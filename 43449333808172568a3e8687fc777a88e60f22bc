@@ -178,6 +178,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78388610_42ed7e09",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-12T09:02:37Z",
+      "side": 1,
+      "message": "In most cases we do have explicit access to the current isolate. This is typically faster than `v8::Isolate::GetCurrent()` which involves a few more checks,",
+      "parentUuid": "ce985025_3794d47e",
+      "range": {
+        "startLine": 478,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "632f6b95_d29c79ed",

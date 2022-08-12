@@ -46,6 +46,29 @@
       },
       "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86d46bd_369b2452",
+        "filename": "test/unittests/heap/global-handles-unittest.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-12T09:02:37Z",
+      "side": 0,
+      "message": "nit: here and below, let\u0027s keep these scopes",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 26
+      },
+      "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
