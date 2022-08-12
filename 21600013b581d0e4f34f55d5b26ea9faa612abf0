@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f9a600b_827f3e6e",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2185,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-12T07:18:52Z",
+      "side": 1,
+      "message": "Before:\n\n    [LoadTaggedAnyField\n      movl rcx, [...]\n      addq rcx, r14\n    ]\n    ...\n    [SmiUntag\n      movsxlq rcx, rcx\n      sarq rcx, 1\n    ]\n  \nAfter:\n\n    [LoadTaggedSignedFieldAndUntag\n      movsxlq rcx, [...]\n      sarq rcx, 1\n    ]",
+      "revId": "21600013b581d0e4f34f55d5b26ea9faa612abf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

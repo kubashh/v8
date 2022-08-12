@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b202113_d515ee75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-12T07:18:52Z",
+      "side": 1,
+      "message": "PTAL, thanks!",
+      "revId": "d1affd5156414272a6832ea678acf6070ed3264c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5f8b4a5_66932ee0",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-12T07:18:52Z",
+      "side": 1,
+      "message": "Yes if we untaged unsigned smi, where sarl zero-extend higher 32-bit automatically.",
+      "revId": "d1affd5156414272a6832ea678acf6070ed3264c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
