@@ -110,6 +110,23 @@
       "message": "If I don\u0027t remove this locker, then the test will fail with the following message, do you know what is the problem is?\n\n```\n[ RUN      ] GlobalHandlesTest.GCFromWeakCallbacks\n#\n# Fatal error in ../../src/api/api.h, line 406\n# Debug check failed: blocks_.empty().\n#\n#\n#\n#FailureMessage Object: 0x7ff7b95ed5a0\n\u003d\u003d\u003d\u003d C stack trace \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n    0   libv8_libbase.dylib                 0x000000010caf6a1e v8::base::debug::StackTrace::StackTrace() + 30\n    1   libv8_libbase.dylib                 0x000000010caf6a55 v8::base::debug::StackTrace::StackTrace() + 21\n    2   libv8_libplatform.dylib             0x000000010cd5020b v8::platform::(anonymous namespace)::PrintStackTrace() + 59\n    3   libv8_libbase.dylib                 0x000000010cac148f V8_Fatal(char const*, int, char const*, ...) + 367\n    4   libv8_libbase.dylib                 0x000000010cac0d3c v8::base::(anonymous namespace)::DefaultDcheckHandler(char const*, int, char const*) + 44\n    5   libv8_libbase.dylib                 0x000000010cac1507 V8_Dcheck(char const*, int, char const*) + 39\n    6   libv8_for_testing.dylib             0x000000011d0506bc v8::internal::HandleScopeImplementer::Free() + 76\n    7   libv8_for_testing.dylib             0x000000011d050665 v8::internal::HandleScopeImplementer::FreeThreadResources() + 21\n    8   libv8_for_testing.dylib             0x000000011d63fb65 v8::internal::ThreadManager::FreeThreadResources() + 245\n    9   libv8_for_testing.dylib             0x000000011d63fa39 v8::Locker::~Locker() + 137\n    10  libv8_for_testing.dylib             0x000000011d63ff65 v8::Locker::~Locker() + 21\n    11  unittests                           0x0000000106f8ad53 v8::internal::GlobalHandlesTest_GCFromWeakCallbacks_Test::TestBody() + 1363\n    12  unittests                           0x0000000107ae9c4f void testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::Test, void\u003e(testing::Test*, void (testing::Test::*)(), char const*) + 191\n    13  unittests                           0x0000000107ae9b41 testing::Test::Run() + 209\n    14  unittests                           0x0000000107aea693 testing::TestInfo::Run() + 355\n    15  unittests                           0x0000000107aeb51b testing::TestSuite::Run() + 379\n    16  unittests                           0x0000000107af7628 testing::internal::UnitTestImpl::RunAllTests() + 1096\n    17  unittests                           0x0000000107af71c4 bool testing::internal::HandleExceptionsInMethodIfSupported\u003ctesting::internal::UnitTestImpl, bool\u003e(testing::internal::UnitTestImpl*, bool (testing::internal::UnitTestImpl::*)(), char const*) + 196\n    18  unittests                           0x0000000107af704f testing::UnitTest::Run() + 223\n    19  unittests                           0x00000001073c92a1 RUN_ALL_TESTS() + 17\n    20  unittests                           0x00000001073c9210 main + 160\n    21  dyld                                0x000000010e7cd4fe start + 462\nCommand: out/x64.debug/unittests --random-seed\u003d-1846006136 --nohard-abort --enable-slow-asserts --verify-heap --testing-d8-test-runner --gtest_filter\u003dGlobalHandlesTest.GCFromWeakCallbacks --gtest_random_seed\u003d-1846006136 --gtest_print_time\u003d0\n--- FAILED ---\n```",
       "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43923dd3_f92668d3",
+        "filename": "test/unittests/heap/global-handles-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T10:09:54Z",
+      "side": 0,
+      "message": "But if I change the base test class to `TestWithIsolate` just like `thread-termination-unittest.cc`, then the problem will be gone. But because I need to test with context, so I cannot replace the base class with `TestWithIsolate`.",
+      "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
