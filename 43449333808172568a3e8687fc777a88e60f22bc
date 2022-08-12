@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56fb0c4_cf42d705",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:08:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da856644_3d8c9329",
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "076dadae_0d188017",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-08-12T07:08:42Z",
       "side": 1,
       "message": "Here and below. `InCorrectGeneration` is a bit a confusing name (especially with HeapObject), maybe let\u0027s update this to  `IsNewObjectInCorrectGeneration`",
+      "range": {
+        "startLine": 116,
+        "startChar": 5,
+        "endLine": 116,
+        "endChar": 24
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "755bea93_06026315",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:08:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "076dadae_0d188017",
       "range": {
         "startLine": 116,
         "startChar": 5,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b0a3709_46710d90",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:08:39Z",
+      "side": 1,
+      "message": "I want to use `NewNumber` in `SimpleCallback` which is not a member method, so if we move this in WithIsolateScopeMixin then this method is not available in `SimpleCallback`. WDYT?",
+      "parentUuid": "55dfb9ca_ed006589",
+      "range": {
+        "startLine": 478,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "632f6b95_d29c79ed",
         "filename": "test/unittests/test-utils.h",
         "patchSetId": 15
@@ -77,6 +143,30 @@
       "writtenOn": "2022-08-12T07:08:42Z",
       "side": 1,
       "message": "Let\u0027s drop these methods in favour of the existing ones on WithIsolateScopeMixin",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 493,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85ce363_18343b8e",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:08:39Z",
+      "side": 1,
+      "message": "Those methods are used in callback(`ForceScavenge2` and `ForceMarkSweep2`) of `SetWeak`. so I cannot use methods in WithIsolateScopeMixin",
+      "parentUuid": "632f6b95_d29c79ed",
       "range": {
         "startLine": 481,
         "startChar": 0,
