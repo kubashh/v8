@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcd517e3_5ca14815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-12T14:49:40Z",
+      "side": 1,
+      "message": "LGTM with design questions",
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa48516d_01b522ff",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-12T14:49:40Z",
+      "side": 1,
+      "message": "If we remove the compilation hints implementation, or adjust it, we could get rid of the second compilation tier, could we not? That would probably also make everything easier. If we ever enable compilation hints, there would either not be such a two step approach, or it would be lazy + something, and lazy+something could get implemented differently, without the pair here.",
+      "range": {
+        "startLine": 948,
+        "startChar": 32,
+        "endLine": 948,
+        "endChar": 54
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a5d9e47_bf3b1542",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-12T14:49:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make more sense if this was `ExecutionTier::kNone`, when actually there shouldn\u0027t any compilation be happening?",
+      "range": {
+        "startLine": 960,
+        "startChar": 49,
+        "endLine": 960,
+        "endChar": 62
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d0103ef_807393d4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-12T14:49:40Z",
+      "side": 1,
+      "message": "If we get rid of eager compilation, would we even still need the compilation progress?",
+      "range": {
+        "startLine": 3150,
+        "startChar": 16,
+        "endLine": 3150,
+        "endChar": 32
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
