@@ -154,6 +154,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce985025_3794d47e",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:41:23Z",
+      "side": 1,
+      "message": "I inline `NewNumber` method into `SimpleCallback`, so this method is no longer needed.\n\nBTW, Could you help me understand why `v8::Isolate::GetCurrent()` is not ideal?",
+      "parentUuid": "f3cb5294_5ee926c3",
+      "range": {
+        "startLine": 478,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "632f6b95_d29c79ed",
@@ -215,6 +239,30 @@
       "side": 1,
       "message": "Ups, missed that. How about moving these helpers into heap-utils?",
       "parentUuid": "b85ce363_18343b8e",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 493,
+        "endChar": 1
+      },
+      "revId": "43449333808172568a3e8687fc777a88e60f22bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61f7ff7_52d41cc9",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-12T08:41:23Z",
+      "side": 1,
+      "message": "Thank you very much. I found that I could use `FullGC` and `YoungGC` methods instead in `heap-utils`. So I removed those new methods.",
+      "parentUuid": "58525a8f_de30cf04",
       "range": {
         "startLine": 481,
         "startChar": 0,
