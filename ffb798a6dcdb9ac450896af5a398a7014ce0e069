@@ -168,6 +168,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6776fe9_5ce2cc6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "I believe `LdaImmutableCurrentContextSlot` loads can be elided because immutable slots are never assigned to, and thus immutable. Why are mutable context loads correct to elide?\n\nHow do you know a side effect hasn\u0027t mutated the value of a mutable context slot? Is it because anything that would assign to a context slot would clobber the equivalence id of the accumulator?",
+      "parentUuid": "33e6ccf9_6e2daa67",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 53
+      },
+      "revId": "ffb798a6dcdb9ac450896af5a398a7014ce0e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "089fc9a3_b4caa566",

@@ -16,6 +16,91 @@
       "message": "Hi Shuyu, I add a vector to maintain the map between equivalence set and variable in `BytecodeRegisterOptimizer`, which could remove redundant checking in previous patchset, and may be used for potential future optimization, PTAL, thanks!",
       "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0124f89e_a75802e4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3533,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "Nit: please put `{ }` around multi-line conditionals.",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea633249_7ff3a26a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "Ditto about `{ }`.",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b45086_52fb07da",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "Typo: Maintain.",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c63ff9_234a77db",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "Typo: from.",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a2de35f_cbd66e3d",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-13T01:08:31Z",
+      "side": 1,
+      "message": "I\u0027m concerned about having a vector that maps equivalence_ids, which are monotonically increasing, to `Variables*`, especially with the resize logic.\n\nIs it possible to track variable equivalences in `RegisterInfo` in `register_info_table_`?",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
