@@ -127,6 +127,24 @@
       "message": "But if I change the base test class to `TestWithIsolate` just like `thread-termination-unittest.cc`, then the problem will be gone. But because I need to test with context, so I cannot replace the base class with `TestWithIsolate`.",
       "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67c6de13_927d2a0c",
+        "filename": "test/unittests/heap/global-handles-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-15T15:23:07Z",
+      "side": 0,
+      "message": "I see a `0x248100202149: [NativeContext] in OldSpace` still being in the v8::internal::HandleScopeImplementer data.",
+      "parentUuid": "64e21378_a6551a1f",
+      "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
