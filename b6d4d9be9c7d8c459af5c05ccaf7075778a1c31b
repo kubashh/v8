@@ -145,6 +145,24 @@
       "parentUuid": "64e21378_a6551a1f",
       "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2b10e18_01c72833",
+        "filename": "test/unittests/heap/global-handles-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-15T15:32:01Z",
+      "side": 0,
+      "message": "The `v8::Locker` is a bit weird. Unless you actually have multiple threads running in parallel we should not use it.\nThe top-level v8::Locker assumes it can tear-down all thread-resources, which includes handle-scopes.\n\nHowever, with the current tests mixin hierarchy we have a HandleScope active in `WithIsolateScopeMixin`.\n\nSo, I think this should be fine to omit in this case.\nThe only solution to have this working is to add a new `WithLockerMixin` that is injected before `WithIsolateScopeMixin`.\n\nI hope this helps.",
+      "parentUuid": "67c6de13_927d2a0c",
+      "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
