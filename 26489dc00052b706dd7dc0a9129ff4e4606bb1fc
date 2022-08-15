@@ -16,6 +16,29 @@
       "message": "`src/builtins` LGTM, adding Camillo for the rest where I\u0027m not an OWNER.",
       "revId": "26489dc00052b706dd7dc0a9129ff4e4606bb1fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f02b173_bb991024",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-15T09:36:09Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with the internals: is SAR faster than SHR ?\nIf that\u0027s the case, we could use SAR also in the case of 31-bit Smis, no?",
+      "range": {
+        "startLine": 1536,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 36
+      },
+      "revId": "26489dc00052b706dd7dc0a9129ff4e4606bb1fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
