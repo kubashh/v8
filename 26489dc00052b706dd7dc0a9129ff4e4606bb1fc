@@ -39,6 +39,30 @@
       },
       "revId": "26489dc00052b706dd7dc0a9129ff4e4606bb1fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64b267a6_a44d0daa",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-15T13:28:07Z",
+      "side": 1,
+      "message": "I think SHR is better, I will update the code here. Thanks!",
+      "parentUuid": "5f02b173_bb991024",
+      "range": {
+        "startLine": 1536,
+        "startChar": 0,
+        "endLine": 1536,
+        "endChar": 36
+      },
+      "revId": "26489dc00052b706dd7dc0a9129ff4e4606bb1fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
