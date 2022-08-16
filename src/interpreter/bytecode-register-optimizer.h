@@ -5,6 +5,7 @@
 #ifndef V8_INTERPRETER_BYTECODE_REGISTER_OPTIMIZER_H_
 #define V8_INTERPRETER_BYTECODE_REGISTER_OPTIMIZER_H_
 
+#include "src/ast/variables.h"
 #include "src/base/compiler-specific.h"
 #include "src/common/globals.h"
 #include "src/interpreter/bytecode-register-allocator.h"
@@ -110,6 +111,15 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   // Returns an equivalent register list to |reg_list| to be used as an input
   // operand.
   RegisterList GetInputRegisterList(RegisterList reg_list);
+
+  // Maintain the map between Variable and equivalence set.
+  void SetVariableInEquivalenceSetOfRegister(Variable* var, Register reg);
+
+  // Get the variable from the equivalence set of reg.
+  Variable* GetVariableInEquivalenceSetOfRegister(Register reg);
+
+  // Return true if the var is in the equivalence set of reg.
+  bool IsRegisterInEquivalenceSetOfVariable(Variable* var, Register reg);
 
   int maxiumum_register_index() const { return max_register_index_; }
 

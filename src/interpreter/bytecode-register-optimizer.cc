@@ -22,6 +22,7 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
         materialized_(materialized),
         allocated_(allocated),
         needs_flush_(false),
+        var_in_reg_(nullptr),
         next_(this),
         prev_(this) {}
   RegisterInfo(const RegisterInfo&) = delete;
@@ -76,6 +77,8 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   // Indicates if a register should be processed when calling Flush().
   bool needs_flush() const { return needs_flush_; }
   void set_needs_flush(bool needs_flush) { needs_flush_ = needs_flush; }
+  Variable* var_in_reg() const { return var_in_reg_; }
+  void set_var_in_reg(Variable* var) { var_in_reg_ = var; }
 
  private:
   Register register_;
@@ -83,6 +86,7 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   bool materialized_;
   bool allocated_;
   bool needs_flush_;
+  Variable* var_in_reg_;
 
   // Equivalence set pointers.
   RegisterInfo* next_;
@@ -116,6 +120,26 @@ void BytecodeRegisterOptimizer::RegisterInfo::MoveToNewEquivalenceSet(
 bool BytecodeRegisterOptimizer::RegisterInfo::IsOnlyMemberOfEquivalenceSet()
     const {
   return this->next_ == this;
+}
+
+void BytecodeRegisterOptimizer::SetVariableInEquivalenceSetOfRegister(
+    Variable* var, Register reg) {
+  RegisterInfo* info = GetRegisterInfo(reg);
+  PushToRegistersNeedingFlush(info);
+  info->set_var_in_reg(var);
+}
+
+Variable* BytecodeRegisterOptimizer::GetVariableInEquivalenceSetOfRegister(
+    Register reg) {
+  RegisterInfo* info = GetRegisterInfo(reg);
+  return info->var_in_reg();
+}
+
+bool BytecodeRegisterOptimizer::IsRegisterInEquivalenceSetOfVariable(
+    Variable* var, Register reg) {
+  DCHECK(var);
+  RegisterInfo* info = GetRegisterInfo(reg);
+  return info->var_in_reg() == var;
 }
 
 bool BytecodeRegisterOptimizer::RegisterInfo::
@@ -252,6 +276,10 @@ BytecodeRegisterOptimizer::BytecodeRegisterOptimizer(
 }
 
 void BytecodeRegisterOptimizer::PushToRegistersNeedingFlush(RegisterInfo* reg) {
+  // Now we will flush in two case:
+  // 1) Two or more register in an equivalence set.
+  // 2) Bind a variable to a register.
+  flush_required_ = true;
   if (!reg->needs_flush()) {
     reg->set_needs_flush(true);
     registers_needing_flushed_.push_back(reg);
@@ -280,6 +308,7 @@ void BytecodeRegisterOptimizer::Flush() {
   for (RegisterInfo* reg_info : registers_needing_flushed_) {
     if (!reg_info->needs_flush()) continue;
     reg_info->set_needs_flush(false);
+    reg_info->set_var_in_reg(nullptr);
 
     RegisterInfo* materialized = reg_info->materialized()
                                      ? reg_info
@@ -372,9 +401,6 @@ void BytecodeRegisterOptimizer::AddToEquivalenceSet(
   // Equivalence class is now of size >= 2, so we make sure it will be flushed.
   PushToRegistersNeedingFlush(non_set_member);
   non_set_member->AddToEquivalenceSetOf(set_member);
-  // Flushing is only required when two or more registers are placed
-  // in the same equivalence set.
-  flush_required_ = true;
 }
 
 void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
@@ -396,6 +422,7 @@ void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
 
   // Add |output_info| to new equivalence set.
   if (!in_same_equivalence_set) {
+    output_info->set_var_in_reg(input_info->var_in_reg());
     AddToEquivalenceSet(input_info, output_info);
   }
 
@@ -420,6 +447,7 @@ void BytecodeRegisterOptimizer::PrepareOutputRegister(Register reg) {
     CreateMaterializedEquivalent(reg_info);
   }
   reg_info->MoveToNewEquivalenceSet(NextEquivalenceId(), true);
+  reg_info->set_var_in_reg(nullptr);
   max_register_index_ =
       std::max(max_register_index_, reg_info->register_value().index());
 }
