@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd8346b_a93b7348",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-16T16:02:25Z",
+      "side": 1,
+      "message": "Right, in the final configuration where we are probably heading, and after removing other code paths, this could be simplified.",
+      "parentUuid": "aa48516d_01b522ff",
+      "range": {
+        "startLine": 948,
+        "startChar": 32,
+        "endLine": 948,
+        "endChar": 54
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a5d9e47_bf3b1542",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-12T14:49:40Z",
       "side": 1,
       "message": "Wouldn\u0027t it make more sense if this was `ExecutionTier::kNone`, when actually there shouldn\u0027t any compilation be happening?",
+      "range": {
+        "startLine": 960,
+        "startChar": 49,
+        "endLine": 960,
+        "endChar": 62
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6335ffa6_f2d448bb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-16T16:02:25Z",
+      "side": 1,
+      "message": "I am not sure. Saying that the top tier is the same as the baseline tier also makes sense, no?",
+      "parentUuid": "1a5d9e47_bf3b1542",
       "range": {
         "startLine": 960,
         "startChar": 49,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f051cddf_b38afc0c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-16T16:02:25Z",
+      "side": 1,
+      "message": "We need it whenever we run any eager compilation, not necessarily for the whole module. So also after deserialization or in the future with PGO. It\u0027s used to trigger the right events.",
+      "parentUuid": "0d0103ef_807393d4",
+      "range": {
+        "startLine": 3150,
+        "startChar": 16,
+        "endLine": 3150,
+        "endChar": 32
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da7df8a1_521648dc",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-08-16T10:42:34Z",
       "side": 1,
       "message": "I don\u0027t think `hint` can ever be `nullptr` (per the line above, it\u0027s the address of an element of a `std::vector`, and it\u0027s guaranteed to be in range of that vector\u0027s length).",
+      "range": {
+        "startLine": 3166,
+        "startChar": 6,
+        "endLine": 3166,
+        "endChar": 15
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd32354_d5e08f88",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-16T16:02:25Z",
+      "side": 1,
+      "message": "Good point. Fixed.",
+      "parentUuid": "da7df8a1_521648dc",
       "range": {
         "startLine": 3166,
         "startChar": 6,
