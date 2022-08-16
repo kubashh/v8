@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c0c174_60ee0737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "Hi Shu, I submit a new patch set according to your comments, PTAL, thanks!",
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

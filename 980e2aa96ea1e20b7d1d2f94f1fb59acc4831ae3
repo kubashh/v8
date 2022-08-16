@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb8c223_a34d0891",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3533,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0124f89e_a75802e4",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea633249_7ff3a26a",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-08-13T01:08:31Z",
       "side": 1,
       "message": "Ditto about `{ }`.",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08cc66c2_03c7286a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea633249_7ff3a26a",
       "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbcb8e22_c8567426",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b45086_52fb07da",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25c63ff9_234a77db",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "924e353c_3355e7ed",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25c63ff9_234a77db",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a2de35f_cbd66e3d",
@@ -99,6 +171,24 @@
       "writtenOn": "2022-08-13T01:08:31Z",
       "side": 1,
       "message": "I\u0027m concerned about having a vector that maps equivalence_ids, which are monotonically increasing, to `Variables*`, especially with the resize logic.\n\nIs it possible to track variable equivalences in `RegisterInfo` in `register_info_table_`?",
+      "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1564057_5c5b3cc3",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-16T16:02:54Z",
+      "side": 1,
+      "message": "I have add a field called `var_in_reg_` in `RegisterInfo` to track the map between `Variable*` and `Register`, is it a better way?",
+      "parentUuid": "6a2de35f_cbd66e3d",
       "revId": "980e2aa96ea1e20b7d1d2f94f1fb59acc4831ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
