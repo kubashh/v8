@@ -16,6 +16,29 @@
       "message": "PTAL! Main context: we would like to remove zlib in Google3. zlib differences in chromium/google3 makes it harder to maintain in V8 side.",
       "revId": "4ad4f440e9d287c06d61114908b0054b60bc863d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aae828f_cc0423ac",
+        "filename": "src/deoptimizer/translation-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-16T13:13:06Z",
+      "side": 1,
+      "message": "let\u0027s make FLAG_turbo_compress_translation_arrays readonly if we don\u0027t have ZLIB support",
+      "range": {
+        "startLine": 55,
+        "startChar": 18,
+        "endLine": 55,
+        "endChar": 56
+      },
+      "revId": "4ad4f440e9d287c06d61114908b0054b60bc863d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
