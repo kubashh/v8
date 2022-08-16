@@ -86,6 +86,30 @@
       },
       "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ea8e14_d2065764",
+        "filename": "test/unittests/assembler/assembler-x64-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-16T16:04:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bda526d_c3dc3a58",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 38
+      },
+      "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
