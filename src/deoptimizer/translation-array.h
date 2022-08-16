@@ -26,6 +26,14 @@ class Factory;
 // TODO(jgruber): Consider a real type instead of this type alias.
 using TranslationArray = ByteArray;
 
+static bool inline translation_arrays_compression_enabled() {
+#ifdef V8_USE_ZLIB
+  return FLAG_turbo_compress_translation_arrays;
+#else
+  return false;
+#endif  // V8_USE_ZLIB
+}
+
 class TranslationArrayIterator {
  public:
   TranslationArrayIterator(TranslationArray buffer, int index);
@@ -113,12 +121,12 @@ class TranslationArrayBuilder {
   void AddDoubleRegister(DoubleRegister reg);
 
   int Size() const {
-    return V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)
+    return V8_UNLIKELY(translation_arrays_compression_enabled())
                ? static_cast<int>(contents_for_compression_.size())
                : static_cast<int>(contents_.size());
   }
   int SizeInBytes() const {
-    return V8_UNLIKELY(FLAG_turbo_compress_translation_arrays)
+    return V8_UNLIKELY(translation_arrays_compression_enabled())
                ? Size() * kInt32Size
                : Size();
   }
