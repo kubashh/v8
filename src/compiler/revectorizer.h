@@ -75,6 +75,9 @@ class SLPTree : public NON_EXPORTED_BASE(ZoneObject) {
 
   void Print(const char* info);
 
+  template <typename FunctionType>
+  void ForEach(FunctionType callback);
+
   Node* GetEarlySchedulePosition(Node* node) {
     return scheduler_->GetEarlySchedulePosition(node);
   }
@@ -149,6 +152,13 @@ class V8_EXPORT_PRIVATE Revectorizer final
   PackNode* GetPackNode(Node* node) const {
     return slp_tree_->GetPackNode(node);
   }
+
+  bool DecideVectorize();
+
+  void SetEffectInput(PackNode* pnode, int index, Node*& nput);
+  void SetMemoryOpInputs(base::SmallVector<Node*, 2>& inputs, PackNode* pnode,
+                         int index);
+  Node* VectorizeTree(PackNode* pnode);
 
   Zone* const zone_;
   Graph* const graph_;
