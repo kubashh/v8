@@ -16,6 +16,52 @@
       "message": "Hello, Camillo. Could you help to review this change?",
       "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "845a8c3e_6573d838",
+        "filename": "test/unittests/assembler/assembler-x64-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-16T11:46:10Z",
+      "side": 1,
+      "message": "nit: How about adding a `GenerateCode(byte* buffer)` helper on `AssemblerX64Test` ?",
+      "range": {
+        "startLine": 90,
+        "startChar": 11,
+        "endLine": 90,
+        "endChar": 53
+      },
+      "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bda526d_c3dc3a58",
+        "filename": "test/unittests/assembler/assembler-x64-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-16T11:46:10Z",
+      "side": 1,
+      "message": "nit: You can drop all `HandleScope` since `WithIsolateScopeMixin` already opens one.",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 38
+      },
+      "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
