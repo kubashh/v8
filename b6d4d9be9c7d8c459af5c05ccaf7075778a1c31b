@@ -181,6 +181,24 @@
       "parentUuid": "d2b10e18_01c72833",
       "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abdc5a58_caaa7e53",
+        "filename": "test/unittests/heap/global-handles-unittest.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-16T05:46:09Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "43923dd3_f92668d3",
+      "revId": "b6d4d9be9c7d8c459af5c05ccaf7075778a1c31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
