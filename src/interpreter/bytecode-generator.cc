@@ -23,6 +23,7 @@
 #include "src/interpreter/bytecode-jump-table.h"
 #include "src/interpreter/bytecode-label.h"
 #include "src/interpreter/bytecode-register-allocator.h"
+#include "src/interpreter/bytecode-register-optimizer.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/control-flow-builders.h"
 #include "src/logging/local-logger.h"
@@ -3526,6 +3527,15 @@ void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
 }
 
+bool BytecodeGenerator::IsRegisterInEquivalenceSetOfVariable(Variable* var,
+                                                             Register reg) {
+  BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+  if (optimizer) {
+    return optimizer->IsRegisterInEquivalenceSetOfVariable(var, reg);
+  }
+  return false;
+}
+
 void BytecodeGenerator::BuildVariableLoad(Variable* variable,
                                           HoleCheckMode hole_check_mode,
                                           TypeofMode typeof_mode) {
@@ -3585,11 +3595,20 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
           (variable->maybe_assigned() == kNotAssigned)
               ? BytecodeArrayBuilder::kImmutableSlot
               : BytecodeArrayBuilder::kMutableSlot;
+      Register acc = Register::virtual_accumulator();
+      if (immutable == BytecodeArrayBuilder::kImmutableSlot &&
+          IsRegisterInEquivalenceSetOfVariable(variable, acc)) {
+        return;
+      }
 
       builder()->LoadContextSlot(context_reg, variable->index(), depth,
                                  immutable);
       if (hole_check_mode == HoleCheckMode::kRequired) {
         BuildThrowIfHole(variable);
+      }
+      BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+      if (optimizer && immutable == BytecodeArrayBuilder::kImmutableSlot) {
+        optimizer->SetVariableInEquivalenceSetOfRegister(variable, acc);
       }
       break;
     }
