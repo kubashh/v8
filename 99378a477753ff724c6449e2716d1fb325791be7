@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4bcf9c8_54057d9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-16T11:55:56Z",
+      "side": 1,
+      "message": "This really looks like that triggered_by, use_goma and the builder_group property should get some default value refactoring... probably the same as the multi branch builders? There I think we don\u0027t need to specify all these values...",
+      "revId": "99378a477753ff724c6449e2716d1fb325791be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
