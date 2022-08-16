@@ -16,6 +16,23 @@
       "message": "Thanks Camillo!",
       "revId": "a3bea076b79d16e800e70bc3043e766e9f3922a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0826dca7_dbf5a3f5",
+        "filename": "src/deoptimizer/translation-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-16T14:07:50Z",
+      "side": 1,
+      "message": "nit: turn into DCHECK",
+      "revId": "a3bea076b79d16e800e70bc3043e766e9f3922a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
