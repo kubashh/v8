@@ -16,6 +16,63 @@
       "message": "Hi Shu, I submit a new patch set according to your comments, PTAL, thanks!",
       "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e7224b3_aad3f9a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-16T20:19:59Z",
+      "side": 1,
+      "message": "Thanks for the new iteration, the approach seems workable to me now. Could you please add a new `BytecodeGeneratorTest` [1] testing when this optimization should/should not apply?\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/test/unittests/interpreter/bytecode-generator-unittest.cc",
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d9ee9a1_76594957",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-16T20:19:59Z",
+      "side": 1,
+      "message": "I don\u0027t think depending on `Flush()` is sufficient. Equivalence classes are also broken at the other call sites of `MoveToNewEquivalenceSet`, and those should be clearing out the var as well.",
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ef5bc98_5f19c7af",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-16T20:19:59Z",
+      "side": 1,
+      "message": "ISTM `var_in_reg_` should always be re-set when moving a `RegisterInfo` to a new equivalence set. Let\u0027s make `MoveToNewEquivalenceSet` take a `Variable*` as the 3rd parameter.",
+      "range": {
+        "startLine": 326,
+        "startChar": 20,
+        "endLine": 326,
+        "endChar": 43
+      },
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
