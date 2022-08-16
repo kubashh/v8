@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e58bab_da66c6f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-16T10:42:34Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa48516d_01b522ff",
@@ -82,6 +99,29 @@
         "startChar": 16,
         "endLine": 3150,
         "endChar": 32
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da7df8a1_521648dc",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-16T10:42:34Z",
+      "side": 1,
+      "message": "I don\u0027t think `hint` can ever be `nullptr` (per the line above, it\u0027s the address of an element of a `std::vector`, and it\u0027s guaranteed to be in range of that vector\u0027s length).",
+      "range": {
+        "startLine": 3166,
+        "startChar": 6,
+        "endLine": 3166,
+        "endChar": 15
       },
       "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
