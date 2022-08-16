@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a96fec9f_bce16c85",
+        "filename": "test/unittests/assembler/assembler-x64-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-16T16:03:50Z",
+      "side": 1,
+      "message": "I think you mean wrapping this line into a helper function in AssemblerX64Test?\n\n```\nGenerateCode(byte* buffer) {\n  return GeneratedCode\u003cF2\u003e::FromBuffer(i_isolate(), buffer-\u003estart());\n}\n```\n\nIf it is, I don\u0027t understand why it is worth it because those two are all one line code. Could you help me understand your point?",
+      "parentUuid": "845a8c3e_6573d838",
+      "range": {
+        "startLine": 90,
+        "startChar": 11,
+        "endLine": 90,
+        "endChar": 53
+      },
+      "revId": "56d3e0e7bff5150b5a07d28328719f8682b140b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6bda526d_c3dc3a58",
         "filename": "test/unittests/assembler/assembler-x64-unittest.cc",
         "patchSetId": 4
