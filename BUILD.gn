@@ -538,6 +538,10 @@ if (v8_enable_sandbox_future) {
   v8_enable_sandbox = true
 }
 
+if (v8_enable_webassembly && !target_is_simulator && v8_current_cpu == "x64") {
+  v8_enable_wasm_simd256_revec = true
+}
+
 assert(!v8_disable_write_barriers || v8_enable_single_generation,
        "Disabling write barriers works only with single generation")
 
@@ -1071,6 +1075,9 @@ config("features") {
   }
   if (v8_enable_pointer_compression_8gb) {
     defines += [ "V8_COMPRESS_POINTERS_8GB" ]
+  }
+  if (v8_enable_wasm_simd256_revec) {
+    defines += [ "V8_ENABLE_WASM_SIMD256_REVEC" ]
   }
 }
 
@@ -3710,7 +3717,10 @@ v8_header_set("v8_internal_headers") {
   }
 
   if (v8_enable_wasm_simd256_revec) {
-    sources += [ "src/compiler/linear-scheduler.h" ]
+    sources += [
+      "src/compiler/linear-scheduler.h",
+      "src/compiler/revectorizer.h",
+    ]
   }
 
   if (!v8_enable_third_party_heap) {
@@ -4223,7 +4233,10 @@ if (v8_enable_webassembly) {
 }
 
 if (v8_enable_wasm_simd256_revec) {
-  v8_compiler_sources += [ "src/compiler/linear-scheduler.cc" ]
+  v8_compiler_sources += [
+    "src/compiler/linear-scheduler.cc",
+    "src/compiler/revectorizer.cc",
+  ]
 }
 
 # The src/compiler files with optimizations.
