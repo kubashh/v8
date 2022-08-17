@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6780510b_8e91d06e",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-17T08:49:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d9ee9a1_76594957",
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ef5bc98_5f19c7af",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-08-16T20:19:59Z",
       "side": 1,
       "message": "ISTM `var_in_reg_` should always be re-set when moving a `RegisterInfo` to a new equivalence set. Let\u0027s make `MoveToNewEquivalenceSet` take a `Variable*` as the 3rd parameter.",
+      "range": {
+        "startLine": 326,
+        "startChar": 20,
+        "endLine": 326,
+        "endChar": 43
+      },
+      "revId": "5926a376b588a21b177d5e09512a0a67850c9480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631bf8a2_d81b33d9",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-08-17T08:49:52Z",
+      "side": 1,
+      "message": "That\u0027s a good idea! I also moved the logic of transferring `Variable` between two `Register` in `AddToEquivalenceSetOf`.",
+      "parentUuid": "2ef5bc98_5f19c7af",
       "range": {
         "startLine": 326,
         "startChar": 20,
