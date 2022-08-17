@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "002d8f23_1736c734",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-08-17T11:20:27Z",
+      "side": 1,
+      "message": "Sorry, yes. This would lead to a bikeshedding discussion, which is just a waste of our time. LGTM",
+      "parentUuid": "db8db933_0e4bb995",
+      "range": {
+        "startLine": 960,
+        "startChar": 49,
+        "endLine": 960,
+        "endChar": 62
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d0103ef_807393d4",
