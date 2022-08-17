@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8db933_0e4bb995",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-17T11:12:17Z",
+      "side": 1,
+      "message": "Closing this, hoping the question is answered sufficiently.",
+      "parentUuid": "6335ffa6_f2d448bb",
+      "range": {
+        "startLine": 960,
+        "startChar": 49,
+        "endLine": 960,
+        "endChar": 62
+      },
+      "revId": "f9fa3cb0f343c074b651eaa89e549d974a097e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d0103ef_807393d4",
