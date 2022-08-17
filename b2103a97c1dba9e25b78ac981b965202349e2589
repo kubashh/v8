@@ -33,6 +33,24 @@
       "message": "V8_USE_ZLIB? Also below.",
       "revId": "b2103a97c1dba9e25b78ac981b965202349e2589",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c6379e_d6dde7bc",
+        "filename": "src/snapshot/snapshot-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-08-17T07:36:21Z",
+      "side": 1,
+      "message": "Thanks for seeing this!",
+      "parentUuid": "800ca1dc_f24304c5",
+      "revId": "b2103a97c1dba9e25b78ac981b965202349e2589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
