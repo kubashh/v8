@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288691cb_ac75f252",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-08-17T07:31:43Z",
+      "side": 1,
+      "message": "lgtm once addressed",
+      "revId": "b2103a97c1dba9e25b78ac981b965202349e2589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800ca1dc_f24304c5",
+        "filename": "src/snapshot/snapshot-utils.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-08-17T07:31:43Z",
+      "side": 1,
+      "message": "V8_USE_ZLIB? Also below.",
+      "revId": "b2103a97c1dba9e25b78ac981b965202349e2589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
