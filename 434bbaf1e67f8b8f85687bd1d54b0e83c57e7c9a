@@ -34,6 +34,24 @@
       "parentUuid": "5670ca41_609dc210",
       "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "902dabb3_6aadd03b",
+        "filename": ".gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-18T14:34:21Z",
+      "side": 1,
+      "message": "FYI. I create a CL in chromium: https://chromium-review.googlesource.com/c/chromium/src/+/3838776",
+      "parentUuid": "85be54b8_a1b009ea",
+      "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
