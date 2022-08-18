@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "243d7dc5_3be4def8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-18T14:42:14Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17df960_6d31b266",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4739,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-18T14:42:14Z",
+      "side": 1,
+      "message": "This all looks good. I wonder though whether it\u0027s not faster to use vector+sort+binary_search for our use case here.",
+      "range": {
+        "startLine": 4739,
+        "startChar": 4,
+        "endLine": 4739,
+        "endChar": 12
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c63ee2_8033f401",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-18T14:42:14Z",
+      "side": 1,
+      "message": "`DCHECK(InShared(object))`?",
+      "range": {
+        "startLine": 1378,
+        "startChar": 6,
+        "endLine": 1378,
+        "endChar": 11
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
