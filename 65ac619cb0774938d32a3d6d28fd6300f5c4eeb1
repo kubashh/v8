@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1019bbb_479f6583",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-18T16:29:09Z",
+      "side": 1,
+      "message": "Jakob, PTAL at PS1..PS2.",
+      "revId": "65ac619cb0774938d32a3d6d28fd6300f5c4eeb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
