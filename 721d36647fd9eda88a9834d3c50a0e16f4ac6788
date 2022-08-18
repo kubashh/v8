@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "34c416dc_038f77b7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4739,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-18T15:36:32Z",
+      "side": 1,
+      "message": "I was thinking about using an unordered_set instead here. The other thing here is that we build up that data structure for each object on a page from scratch...\n\nI would address the first part in a separate CL though, wdyt?",
+      "parentUuid": "b17df960_6d31b266",
+      "range": {
+        "startLine": 4739,
+        "startChar": 4,
+        "endLine": 4739,
+        "endChar": 12
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2c63ee2_8033f401",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 9
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-18T14:42:14Z",
       "side": 1,
       "message": "`DCHECK(InShared(object))`?",
+      "range": {
+        "startLine": 1378,
+        "startChar": 6,
+        "endLine": 1378,
+        "endChar": 11
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627877cc_6fb69ad5",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-18T15:36:32Z",
+      "side": 1,
+      "message": "Do you mean `DCHECK(InShared(heap_object))` here? That should already be the case because we bail out otherwise.\n\nIf you mean the CHECK here, I would like to keep that for now until I am more confident that the remembered set is correct.",
+      "parentUuid": "f2c63ee2_8033f401",
       "range": {
         "startLine": 1378,
         "startChar": 6,
