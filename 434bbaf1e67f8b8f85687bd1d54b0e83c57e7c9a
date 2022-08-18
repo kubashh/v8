@@ -52,6 +52,24 @@
       "parentUuid": "85be54b8_a1b009ea",
       "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d76d86c5_d669686e",
+        "filename": ".gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-18T15:09:05Z",
+      "side": 1,
+      "message": "There\u0027s a \"Choose Trybots\" button here in gerrit somewhere in the middle. There you can select. Not sure if you have those permissions, I triggered linux-rel now.",
+      "parentUuid": "902dabb3_6aadd03b",
+      "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
