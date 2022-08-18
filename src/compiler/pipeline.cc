@@ -1066,13 +1066,14 @@ PipelineStatistics* CreatePipelineStatistics(Handle<Script> script,
 #if V8_ENABLE_WEBASSEMBLY
 PipelineStatistics* CreatePipelineStatistics(
     wasm::FunctionBody function_body, const wasm::WasmModule* wasm_module,
-    OptimizedCompilationInfo* info, ZoneStats* zone_stats) {
+    OptimizedCompilationInfo* info, ZoneStats* zone_stats,
+    bool collect = true) {
   PipelineStatistics* pipeline_statistics = nullptr;
 
   bool tracing_enabled;
   TRACE_EVENT_CATEGORY_GROUP_ENABLED(
       TRACE_DISABLED_BY_DEFAULT("v8.wasm.turbofan"), &tracing_enabled);
-  if (tracing_enabled || FLAG_turbo_stats_wasm) {
+  if (collect && (tracing_enabled || FLAG_turbo_stats_wasm)) {
     pipeline_statistics = new PipelineStatistics(
         info, wasm::GetWasmEngine()->GetOrCreateTurboStatistics(), zone_stats);
     pipeline_statistics->BeginPhaseKind("V8.WasmInitializing");
