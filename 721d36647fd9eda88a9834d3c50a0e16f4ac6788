@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1c2c9b7_31f24eae",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4739,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-18T17:18:54Z",
+      "side": 1,
+      "message": "Let\u0027s just follow what we already have here and address in a follow up.",
+      "parentUuid": "34c416dc_038f77b7",
+      "range": {
+        "startLine": 4739,
+        "startChar": 4,
+        "endLine": 4739,
+        "endChar": 12
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2c63ee2_8033f401",
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "Do you mean `DCHECK(InShared(heap_object))` here? That should already be the case because we bail out otherwise.\n\nIf you mean the CHECK here, I would like to keep that for now until I am more confident that the remembered set is correct.",
       "parentUuid": "f2c63ee2_8033f401",
+      "range": {
+        "startLine": 1378,
+        "startChar": 6,
+        "endLine": 1378,
+        "endChar": 11
+      },
+      "revId": "721d36647fd9eda88a9834d3c50a0e16f4ac6788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f97887d_d1922c7e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-18T17:18:54Z",
+      "side": 1,
+      "message": "\u003e Do you mean `DCHECK(InShared(heap_object))` here? That should already be the case because we bail out otherwise.\n\u003e \n\nIt should be the case but it\u0027s hard to see in this spot for someone who is not working on the barrier every day. The DCHECK would serve as a comment.",
+      "parentUuid": "627877cc_6fb69ad5",
       "range": {
         "startLine": 1378,
         "startChar": 6,
