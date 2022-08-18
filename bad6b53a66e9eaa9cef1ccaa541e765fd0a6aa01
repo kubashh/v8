@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6acca1e7_f4afc30c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-08-18T10:51:37Z",
+      "side": 1,
+      "message": "The crashes still appeared after the revert (e.g. https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Win64/47990/overview) so should be unrelated to this change.",
+      "revId": "bad6b53a66e9eaa9cef1ccaa541e765fd0a6aa01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
