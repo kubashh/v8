@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32697577_af717843",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-08-18T12:33:43Z",
+      "side": 1,
+      "message": "Hi Deepti and Tobias,\n\nThis is a related patch to #3411357 (Add RevectorizePhase), which implements the decision and transformation of 256-bit AVX as described in the design doc. PTAL. Thanks!\n\nI\u0027ve added more tests to check the results after transformation. But seems we cannot run the test-run-* cases through trybot as revec is disabled by default. We may try temporarily enable it for the test. The trybot is currently blocked by a merge conflict with Jie\u0027s patch. I will rerun them later.\n\nBesides, we still have other patches on register allocator support, instruction selection and code generation for 256-bit operators. We will submit them in the following weeks. ",
+      "revId": "86c5a40ce0d5cc9f36be1da5b155239c6db9e5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
