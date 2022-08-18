@@ -88,6 +88,24 @@
       "parentUuid": "d76d86c5_d669686e",
       "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29af6e52_8b607a24",
+        "filename": ".gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-18T15:36:51Z",
+      "side": 1,
+      "message": "Thinking twice about this, I\u0027m not that happy that we now gn-check-ignore the unittests again. A lot of effort went into making them gn-check clean. By ignoring them again due to one added violation, we might invite other violations in the future.\n\nThe clean-up bug for this is https://crbug.com/v8/7330 and the previous owner delphick@chromium.org left the team. There\u0027s currently no effort for cleaning up what remains...\n\nWould it be possible to create a separate target for only the inspector unittests and include them? And only gn-check-ignore that?",
+      "parentUuid": "b235be89_a1ef69a3",
+      "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
