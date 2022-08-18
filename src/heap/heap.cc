@@ -7267,6 +7267,7 @@ void Heap::CombinedGenerationalAndSharedBarrierSlow(HeapObject object,
   MemoryChunk* value_chunk = MemoryChunk::FromHeapObject(value);
 
   if (value_chunk->InYoungGeneration()) {
+    DCHECK_NULL(LocalHeap::Current());
     Heap::GenerationalBarrierSlow(object, slot, value);
 
   } else {
