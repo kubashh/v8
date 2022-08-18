@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5670ca41_609dc210",
+        "filename": ".gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-18T08:58:09Z",
+      "side": 1,
+      "message": "Note chromium has its own skip list:\nhttps://chromium.googlesource.com/chromium/src/+/3c68de0c034b9b3110d147201a4e8a6d883d1aff/.gn#76\n\nI think you need to land a CL in chromium first and prepare this.\n\nWhy the chromium trybot doesn\u0027t fail right away on this CL but on subsequent CLs, is a mystery to me though...\n\nOtherwise, in principle, LGTM...\n\nCan you manually add some other chromium trybots, e.g. linux-rel?",
+      "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
