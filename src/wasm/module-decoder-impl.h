@@ -1669,7 +1669,7 @@ class ModuleDecoderTemplate : public Decoder {
 
     WasmSectionIterator section_iter(&decoder, tracer_);
 
-    while (ok()) {
+    while (section_iter.more()) {
       // Shift the offset by the section header length
       offset += section_iter.payload_start() - section_iter.section_start();
       if (section_iter.section_code() != SectionCode::kUnknownSectionCode) {
@@ -1677,8 +1677,8 @@ class ModuleDecoderTemplate : public Decoder {
                       offset, verify_functions);
       }
       // Shift the offset by the remaining section payload
+      if (!ok()) break;
       offset += section_iter.payload_length();
-      if (!section_iter.more() || !ok()) break;
       section_iter.advance(true);
     }
 
