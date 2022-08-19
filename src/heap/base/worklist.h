@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_BASE_WORKLIST_H_
 #define V8_HEAP_BASE_WORKLIST_H_
 
+#include <atomic>
 #include <cstddef>
 #include <utility>
 
@@ -58,6 +59,9 @@ class Worklist final {
   Worklist(const Worklist&) = delete;
   Worklist& operator=(const Worklist&) = delete;
 
+  Worklist(Worklist&&) V8_NOEXCEPT;
+  Worklist& operator=(Worklist&&) V8_NOEXCEPT;
+
   // Returns true if the global worklist is empty and false otherwise. May be
   // read concurrently for an approximation.
   bool IsEmpty() const;
@@ -67,9 +71,6 @@ class Worklist final {
 
   // Moves the segments from `other` into this worklist.
   void Merge(Worklist<EntryType, MinSegmentSize>* other);
-
-  // Swaps the segments with `other`.
-  void Swap(Worklist<EntryType, MinSegmentSize>* other);
 
   // Removes all segments from the worklist.
   void Clear();
@@ -88,10 +89,44 @@ class Worklist final {
   void Push(Segment* segment);
   bool Pop(Segment** segment);
 
+  friend void swap(Worklist& a, Worklist& b) {
+    Worklist tmp(std::move(a));
+    a = std::move(b);
+    b = std::move(tmp);
+  }
+
   mutable v8::base::Mutex lock_;
   Segment* top_ = nullptr;
   std::atomic<size_t> size_{0};
 };
+
+template <typename EntryType, uint16_t MinSegmentSize>
+Worklist<EntryType, MinSegmentSize>::Worklist(Worklist&& other) V8_NOEXCEPT {
+  *this = other;
+}
+
+template <typename EntryType, uint16_t MinSegmentSize>
+Worklist<EntryType, MinSegmentSize>&
+Worklist<EntryType, MinSegmentSize>::operator=(Worklist&& other) V8_NOEXCEPT {
+  Segment* other_top;
+  size_t other_size;
+  {
+    v8::base::MutexGuard guard(&other.lock_);
+    other_top = other.top_;
+    other.top_ = nullptr;
+    other_size = other->size_.exchange(0, std::memory_order_relaxed);
+    DCHECK(other.IsEmpty());
+  }
+  Clear();
+  {
+    v8::base::MutexGuard guard(&lock_);
+    top_ = other_top;
+    const size_t old_size =
+        size_.exchange(other_size, std::memory_order_relaxed);
+    USE(old_size);
+    CHECK_EQ(0, old_size);
+  }
+}
 
 template <typename EntryType, uint16_t MinSegmentSize>
 void Worklist<EntryType, MinSegmentSize>::Push(Segment* segment) {
@@ -179,41 +214,22 @@ void Worklist<EntryType, MinSegmentSize>::Iterate(Callback callback) const {
 template <typename EntryType, uint16_t MinSegmentSize>
 void Worklist<EntryType, MinSegmentSize>::Merge(
     Worklist<EntryType, MinSegmentSize>* other) {
-  Segment* top = nullptr;
-  size_t other_size = 0;
-  {
-    v8::base::MutexGuard guard(&other->lock_);
-    if (!other->top_) return;
-    top = other->top_;
-    other_size = other->size_.load(std::memory_order_relaxed);
-    other->size_.store(0, std::memory_order_relaxed);
-    other->top_ = nullptr;
-  }
-
+  Worklist tmp(std::move(*other));
   // It's safe to iterate through these segments because the top was
   // extracted from |other|.
-  Segment* end = top;
+  Segment* end = tmp.top_;
   while (end->next()) end = end->next();
 
   {
     v8::base::MutexGuard guard(&lock_);
-    size_.fetch_add(other_size, std::memory_order_relaxed);
+    size_.fetch_add(tmp.size_.load(std::memory_order_relaxed),
+                    std::memory_order_relaxed);
     end->set_next(top_);
-    top_ = top;
+    top_ = tmp.top_;
   }
-}
-
-template <typename EntryType, uint16_t MinSegmentSize>
-void Worklist<EntryType, MinSegmentSize>::Swap(
-    Worklist<EntryType, MinSegmentSize>* other) {
-  v8::base::MutexGuard guard1(&lock_);
-  v8::base::MutexGuard guard2(&other->lock_);
-  Segment* top = top_;
-  top_ = other->top_;
-  other->top_ = top;
-  size_t other_size = other->size_.exchange(
-      size_.load(std::memory_order_relaxed), std::memory_order_relaxed);
-  size_.store(other_size, std::memory_order_relaxed);
+  // Clear as the destructor checks for consistency.
+  tmp.top_ = nullptr;
+  tmp.size_.store(0, std::memory_order_relaxed);
 }
 
 template <typename EntryType, uint16_t MinSegmentSize>
