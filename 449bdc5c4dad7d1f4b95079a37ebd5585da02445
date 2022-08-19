@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b12ce8a_7fda24c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-19T16:31:38Z",
+      "side": 1,
+      "message": "The commit message should be updated now to better reflect the CL and when it actually elides these redundant loads.",
+      "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "10e5f685_151a79c1",
@@ -14,6 +31,80 @@
       "writtenOn": "2022-08-17T08:49:52Z",
       "side": 1,
       "message": "Hi Shu, I updated the patchset and rename some function names, there is always one bot failed, but I suppose it may not be cause by this CL, it looks like almost all \ntests on this bot failed recently, PTAL, thank!",
+      "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6512f600_1a557f82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-19T16:31:38Z",
+      "side": 1,
+      "message": "lgtm modulo nits addressed below. Thanks for the patch!",
+      "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9413fcd4_912d1b82",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3610,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-19T16:31:38Z",
+      "side": 1,
+      "message": "Use the `IsVariableInRegister` helper here as well.",
+      "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6db0477_cc2c0387",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-19T16:31:38Z",
+      "side": 1,
+      "message": "Nit: `DCHECK_NOT_NULL`",
+      "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c6c083d_af03e76b",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-19T16:31:38Z",
+      "side": 1,
+      "message": "Grammar/spelling nits:\n\n```\nFlushing is required in two cases:\n1) Two or more registers in the same equivalence set.\n2) Binding a variable to a register.\n```",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 38
+      },
       "revId": "449bdc5c4dad7d1f4b95079a37ebd5585da02445",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
