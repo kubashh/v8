@@ -110,6 +110,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "640a0e5b_6f0673f4",
+        "filename": ".gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-19T09:07:06Z",
+      "side": 1,
+      "message": "Thanks for review. I created a `inspector_unittests_sources` target for only the inspector unittests. PTAL.",
+      "parentUuid": "29af6e52_8b607a24",
+      "revId": "434bbaf1e67f8b8f85687bd1d54b0e83c57e7c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ee1ade91_5256524d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
