@@ -77,6 +77,7 @@
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/store-store-elimination.h"
+#include "src/compiler/string-builder-optimizer.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/decompression-optimization.h"
 #include "src/compiler/turboshaft/graph-builder.h"
@@ -361,6 +362,7 @@ class PipelineData {
   NodeOriginTable* node_origins() const { return node_origins_; }
   MachineOperatorBuilder* machine() const { return machine_; }
   CommonOperatorBuilder* common() const { return common_; }
+  SimplifiedOperatorBuilder* simplified() const { return simplified_; }
   JSOperatorBuilder* javascript() const { return javascript_; }
   JSGraph* jsgraph() const { return jsgraph_; }
   MachineGraph* mcgraph() const { return mcgraph_; }
@@ -1830,6 +1832,15 @@ struct EffectControlLinearizationPhase {
       TraceScheduleAndVerify(data->info(), data, schedule,
                              "effect linearization schedule");
 
+      // StringBuilderOptimizer accesses the heap (and LinearizeEffectControl as
+      // well later, to apply the optimization after StringBuilderOptimizer's
+      // optimization).
+      UnparkedScopeIfNeeded scope(data->broker());
+
+      StringBuilderOptimizer string_builder_optimizer(
+          data->jsgraph(), schedule, temp_zone, data->broker());
+      string_builder_optimizer.Run();
+
       // Post-pass for wiring the control/effects
       // - connect allocating representation changes into the control&effect
       //   chains and lower them,
@@ -1837,7 +1848,7 @@ struct EffectControlLinearizationPhase {
       // - introduce effect phis and rewire effects to get SSA again.
       LinearizeEffectControl(data->jsgraph(), schedule, temp_zone,
                              data->source_positions(), data->node_origins(),
-                             data->broker());
+                             data->broker(), &string_builder_optimizer);
     }
     {
       // The {EffectControlLinearizer} might leave {Dead} nodes behind, so we
