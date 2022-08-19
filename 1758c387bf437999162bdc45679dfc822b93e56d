@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d68a75_ee63ae68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-19T16:43:36Z",
+      "side": 1,
+      "message": "The profiles collected for the V8 branch 10.6.\nPTAL",
+      "revId": "1758c387bf437999162bdc45679dfc822b93e56d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
