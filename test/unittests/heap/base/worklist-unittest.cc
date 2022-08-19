@@ -339,7 +339,7 @@ TEST(WorkListTest, SwapGlobalPool) {
   TestWorklist worklist2;
   EXPECT_FALSE(worklist1.IsEmpty());
   EXPECT_TRUE(worklist2.IsEmpty());
-  worklist1.Swap(&worklist2);
+  swap(worklist1, worklist2);
   EXPECT_TRUE(worklist1.IsEmpty());
   EXPECT_FALSE(worklist2.IsEmpty());
   TestWorklist::Local worklist_local2(&worklist2);
