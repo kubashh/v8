@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e9d3535_0ffafcc8",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-19T18:28:21Z",
+      "side": 0,
+      "message": "This is deadlockish. I suspect it never fired because we didn\u0027t have `a.Swap(b)` and `b.Swap(a)` in the code. It would nevertheless be better to use some deadlock-avoidance algorithm (similar to std::lock).",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 45
+      },
+      "revId": "9661da60af37db17d4f508665808bda98e6cdc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

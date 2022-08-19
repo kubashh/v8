@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aca881f_9bb5dd8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-19T18:28:21Z",
+      "side": 1,
+      "message": "Now after a thought, I don\u0027t think swap through move is a good idea for a concurrent data structure (see comments below).\n\nIt\u0027d also be great to fix the possibility of a deadlock in existing Swap().",
+      "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e56ad573_e842eaf3",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-19T18:28:21Z",
+      "side": 1,
+      "message": "I don\u0027t think that non-atomic swap is good, since other threads may observe the inconsistent (cleared) state.\n\nAs another example, consider T1 calling `swap(a, b)` and T2 calling `swap(b, a)`. The caller could reasonably assume that in the end both variables must differ, independent of the order of execution. However, with non-atomic swap it\u0027s possible that one of them is empty.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 23
+      },
+      "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0157028_1b97056e",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-19T18:28:21Z",
+      "side": 1,
+      "message": "nit: other_top \u003d std::exchange(other.top_, nullptr);",
+      "range": {
+        "startLine": 115,
+        "startChar": 3,
+        "endLine": 116,
+        "endChar": 25
+      },
+      "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea37e555_f6397fc0",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-19T18:28:21Z",
+      "side": 1,
+      "message": "I don\u0027t think that non-atomic clearing + setting is good, since this allows other threads to see the inconsistent (cleared) state.",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
