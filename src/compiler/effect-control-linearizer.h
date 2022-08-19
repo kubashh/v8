@@ -19,11 +19,12 @@ class NodeOriginTable;
 class Schedule;
 class SourcePositionTable;
 class JSHeapBroker;
+class StringBuilderOptimizer;
 
 V8_EXPORT_PRIVATE void LinearizeEffectControl(
     JSGraph* graph, Schedule* schedule, Zone* temp_zone,
     SourcePositionTable* source_positions, NodeOriginTable* node_origins,
-    JSHeapBroker* broker);
+    JSHeapBroker* broker, StringBuilderOptimizer* string_builder_optimizer);
 
 }  // namespace compiler
 }  // namespace internal
