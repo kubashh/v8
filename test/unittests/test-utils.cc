@@ -112,6 +112,11 @@ ManualGCScope::ManualGCScope(i::Isolate* isolate) {
   // Parallel marking has a dependency on concurrent marking.
   i::FLAG_parallel_marking = false;
   i::FLAG_detect_ineffective_gcs_near_heap_limit = false;
+
+  if (isolate) {
+    // Make sure there is no concurrent sweeping running in the background.
+    isolate->heap()->CompleteSweepingFull();
+  }
 }
 
 }  // namespace internal
