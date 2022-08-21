@@ -1729,7 +1729,7 @@ void Heap::ReportExternalMemoryPressure() {
     // Incremental marking is turned on and has already been started.
     current_gc_callback_flags_ = static_cast<GCCallbackFlags>(
         current_gc_callback_flags_ | kGCCallbackFlagsForExternalMemory);
-    incremental_marking()->AdvanceOnAllocation();
+    incremental_marking()->AdvanceFromTask();
   }
 }
 
