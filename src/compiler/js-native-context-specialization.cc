@@ -1,39 +1,13 @@
-// Copyright 2015 the V8 project authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+0// Copyright 2015 the V8 project authors. All rights reserved.
+// Use of this source code ude "/base/logging.h"
+# "/base/optional.h"
+# "/builtins/accessors.h"
+# "/codegen/code-factory.h"
+# "/common/globals.h"
+# "/compiler/access-builder.h"
+# "/compiler/accesnamespace compiler {
 
-#include "src/compiler/js-native-context-specialization.h"
 
-#include "src/base/logging.h"
-#include "src/base/optional.h"
-#include "src/builtins/accessors.h"
-#include "src/codegen/code-factory.h"
-#include "src/common/globals.h"
-#include "src/compiler/access-builder.h"
-#include "src/compiler/access-info.h"
-#include "src/compiler/allocation-builder-inl.h"
-#include "src/compiler/allocation-builder.h"
-#include "src/compiler/compilation-dependencies.h"
-#include "src/compiler/js-graph.h"
-#include "src/compiler/js-heap-broker.h"
-#include "src/compiler/js-operator.h"
-#include "src/compiler/linkage.h"
-#include "src/compiler/map-inference.h"
-#include "src/compiler/node-matchers.h"
-#include "src/compiler/property-access-builder.h"
-#include "src/compiler/simplified-operator.h"
-#include "src/compiler/type-cache.h"
-#include "src/handles/handles.h"
-#include "src/heap/factory.h"
-#include "src/objects/feedback-vector.h"
-#include "src/objects/heap-number.h"
-#include "src/objects/string.h"
-
-namespace v8 {
-namespace internal {
-namespace compiler {
-
-namespace {
 
 bool HasNumberMaps(JSHeapBroker* broker, ZoneVector<MapRef> const& maps) {
   for (MapRef map : maps) {
@@ -638,7 +612,7 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
       // We don't need to protect the full chain if we found the prototype, we
       // can stop at {prototype}.  In fact we could stop at the one before
       // {prototype} but since we're dealing with multiple receiver maps this
-      // might be a different object each time, so it's much simpler to include
+      // might be a different object each time, so it's much simpler to 
       // {prototype}. That does, however, mean that we must check {prototype}'s
       // map stability.
       if (!prototype.map().is_stable()) return kMayBeInPrototypeChain;
@@ -2263,7 +2237,7 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadPropertyWithEnumeratedKey(
   //   }
   //
   // If the for..in is in fast-mode, we know that the {receiver} has {name}
-  // as own property, otherwise the enumeration wouldn't include it. The graph
+  // as own property, otherwise the enumeration wouldn't  it. The graph
   // constructed by the BytecodeGraphBuilder in this case looks like this:
 
   // receiver
