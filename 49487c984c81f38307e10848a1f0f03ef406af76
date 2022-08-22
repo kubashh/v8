@@ -16,6 +16,24 @@
       "message": "Sorry for the delay in circling back to this; I\u0027ve been on PTO.\n\nIt looks like all the failures are on win64, and the same tests passed on linux64. Is there something specific about win64 that would affect this testcase? Maybe the stack size is bigger, so we don\u0027t throw an exception and hit the assertUnreachable?\n\nNot sure what the best fix is here. Maybe just remove the `assertUnreachable`?",
       "revId": "49487c984c81f38307e10848a1f0f03ef406af76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e73ebfe_7281b5ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-08-22T07:10:16Z",
+      "side": 1,
+      "message": "The assertUnreachable would print something meaningful (see https://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/mjsunit.js;l\u003d608;drc\u003d76379e9fb5dea073e8f836bc8eebfdb3ebc58748), so it\u0027s not that.\n\n\nMy guess is we are now seeing a real stack overflow on win64 that is not caught by the parser. Due to the test change (30k parentheses instead of 50k), we now pass this check: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/regexp/regexp.cc;l\u003d874;drc\u003d91e23cd891fa63eca6d32c16a30a977a87c9f587 and then try to compile. We must be getting unlucky with stack check timing there.\n\nCould you keep the test at 50k parens?",
+      "parentUuid": "64dda453_a16cc649",
+      "revId": "49487c984c81f38307e10848a1f0f03ef406af76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
