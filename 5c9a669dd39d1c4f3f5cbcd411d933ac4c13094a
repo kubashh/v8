@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a1ac07_1fdcd47c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-22T16:13:17Z",
+      "side": 1,
+      "message": "The wasm part of the big flags refactoring; PTAL. This was mostly automated via ag and sed.",
+      "revId": "5c9a669dd39d1c4f3f5cbcd411d933ac4c13094a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
