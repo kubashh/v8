@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1b1e837_91e6246f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-22T18:07:44Z",
+      "side": 1,
+      "message": "Nit: commit message seems to be too long",
+      "revId": "4ee8cf298f457962c45299254160e57fef37d3cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b2f1ecbe_c0614ec0",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-08-22T18:01:31Z",
       "side": 1,
       "message": "Dominik, PTAL.",
+      "revId": "4ee8cf298f457962c45299254160e57fef37d3cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f338f24_d906f6d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-08-22T18:07:44Z",
+      "side": 1,
+      "message": "Thanks for the quick fix! LGTM with one nit",
       "revId": "4ee8cf298f457962c45299254160e57fef37d3cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
