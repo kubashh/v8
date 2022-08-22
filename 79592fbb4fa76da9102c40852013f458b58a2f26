@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15eda8d_e0a6f7b6",
+        "filename": ".gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-22T19:11:59Z",
+      "side": 1,
+      "message": "As commented also on https://chromium-review.googlesource.com/c/chromium/src/+/3838776 - please check if cctest is now error free, and if yes, remove this line.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "79592fbb4fa76da9102c40852013f458b58a2f26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "51b1bb01_c1655b96",
