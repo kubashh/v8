@@ -237,6 +237,9 @@ class V8_EXPORT_PRIVATE ObjectRef {
   HEAP_BROKER_OBJECT_LIST(HEAP_AS_METHOD_DECL)
 #undef HEAP_AS_METHOD_DECL
 
+  bool IsCodeTRef() const;
+  CodeTRef AsCodeTRef() const;
+
   bool IsNull() const;
   bool IsNullOrUndefined() const;
   bool IsTheHole() const;
