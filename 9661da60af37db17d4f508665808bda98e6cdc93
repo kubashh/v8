@@ -22,6 +22,30 @@
       },
       "revId": "9661da60af37db17d4f508665808bda98e6cdc93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86cfe944_067dcb7b",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-22T08:57:58Z",
+      "side": 0,
+      "message": "Here and for most other comments: We don\u0027t need a generic `swap()` but something that works for the one use case we have which is always the same direction.\n\nThe arguments around interleaved state from a different thread don\u0027t apply because  that\u0027s not the use case. _It must only always be used from the main thread and preserve the direction (a-\u003eb and not vice versa)._\n\nIn that sense, it\u0027s a single-threaded swap that\u0027s safe to use when `Local` views are still active.\n\nI guess it\u0027s better to have explicit calls here then.",
+      "parentUuid": "0e9d3535_0ffafcc8",
+      "range": {
+        "startLine": 209,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 45
+      },
+      "revId": "9661da60af37db17d4f508665808bda98e6cdc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

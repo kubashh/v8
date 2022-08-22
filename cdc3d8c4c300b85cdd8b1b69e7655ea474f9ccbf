@@ -85,6 +85,30 @@
       },
       "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb855782_a69e6b3e",
+        "filename": "src/heap/base/worklist.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-22T08:57:58Z",
+      "side": 1,
+      "message": "(Not sure it\u0027s a problem with our use case; not addressing because the API change is likely not a good fit, see below.)",
+      "parentUuid": "ea37e555_f6397fc0",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "cdc3d8c4c300b85cdd8b1b69e7655ea474f9ccbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
