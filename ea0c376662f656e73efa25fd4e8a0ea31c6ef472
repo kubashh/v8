@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b811a368_3444160d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-08-22T07:20:50Z",
+      "side": 1,
+      "message": "Thanks. Added the export. lgtm seems to be reset.",
+      "parentUuid": "dd4dba0f_65ca3e7d",
+      "revId": "ea0c376662f656e73efa25fd4e8a0ea31c6ef472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10dffeda_d9e8ffa2",
