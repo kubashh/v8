@@ -26,7 +26,7 @@ ExecutionTier WasmCompilationUnit::GetBaselineExecutionTier(
   // Liftoff does not support the special asm.js opcodes, thus always compile
   // asm.js modules with TurboFan.
   if (is_asmjs_module(module)) return ExecutionTier::kTurbofan;
-  return FLAG_liftoff ? ExecutionTier::kLiftoff : ExecutionTier::kTurbofan;
+  return v8_flags.liftoff ? ExecutionTier::kLiftoff : ExecutionTier::kTurbofan;
 }
 
 WasmCompilationResult WasmCompilationUnit::ExecuteCompilation(
@@ -91,7 +91,7 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
     wasm_compile_function_time_scope.emplace(timed_histogram);
   }
 
-  if (FLAG_trace_wasm_compiler) {
+  if (v8_flags.trace_wasm_compiler) {
     PrintF("Compiling wasm function %d with %s\n", func_index_,
            ExecutionTierToString(tier_));
   }
@@ -106,16 +106,17 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
       // The --wasm-tier-mask-for-testing flag can force functions to be
       // compiled with TurboFan, and the --wasm-debug-mask-for-testing can force
       // them to be compiled for debugging, see documentation.
-      if (V8_LIKELY(FLAG_wasm_tier_mask_for_testing == 0) ||
+      if (V8_LIKELY(v8_flags.wasm_tier_mask_for_testing == 0) ||
           func_index_ >= 32 ||
-          ((FLAG_wasm_tier_mask_for_testing & (1 << func_index_)) == 0) ||
-          FLAG_liftoff_only) {
+          ((v8_flags.wasm_tier_mask_for_testing & (1 << func_index_)) == 0) ||
+          v8_flags.liftoff_only) {
         // We do not use the debug side table, we only (optionally) pass it to
         // cover different code paths in Liftoff for testing.
         std::unique_ptr<DebugSideTable> unused_debug_sidetable;
         std::unique_ptr<DebugSideTable>* debug_sidetable_ptr = nullptr;
-        if (V8_UNLIKELY(func_index_ < 32 && (FLAG_wasm_debug_mask_for_testing &
-                                             (1 << func_index_)) != 0)) {
+        if (V8_UNLIKELY(func_index_ < 32 &&
+                        (v8_flags.wasm_debug_mask_for_testing &
+                         (1 << func_index_)) != 0)) {
           debug_sidetable_ptr = &unused_debug_sidetable;
         }
         result = ExecuteLiftoffCompilation(
@@ -132,7 +133,7 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
 
       // If --liftoff-only, do not fall back to turbofan, even if compilation
       // failed.
-      if (FLAG_liftoff_only) break;
+      if (v8_flags.liftoff_only) break;
 
       // If Liftoff failed, fall back to TurboFan.
       // TODO(wasm): We could actually stop or remove the tiering unit for this
@@ -201,7 +202,7 @@ bool UseGenericWrapper(const FunctionSig* sig) {
       return false;
     }
   }
-  return FLAG_wasm_generic_wrapper;
+  return v8_flags.wasm_generic_wrapper;
 #else
   return false;
 #endif
