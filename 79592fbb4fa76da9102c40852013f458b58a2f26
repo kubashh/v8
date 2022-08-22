@@ -16,6 +16,23 @@
       "message": "+1 for the test contents, assuming they\u0027re unchanged.",
       "revId": "79592fbb4fa76da9102c40852013f458b58a2f26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6667926f_12bde6b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-22T18:58:55Z",
+      "side": 1,
+      "message": "Thanks for the extra target. Still lgtm, please land first after the chromium CL has landed.",
+      "revId": "79592fbb4fa76da9102c40852013f458b58a2f26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
