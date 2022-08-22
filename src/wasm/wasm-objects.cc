@@ -260,9 +260,9 @@ int WasmTableObject::Grow(Isolate* isolate, Handle<WasmTableObject> table,
   // Check if growing by {count} is valid.
   uint32_t max_size;
   if (!table->maximum_length().ToUint32(&max_size)) {
-    max_size = FLAG_wasm_max_table_size;
+    max_size = v8_flags.wasm_max_table_size;
   }
-  max_size = std::min(max_size, FLAG_wasm_max_table_size.value());
+  max_size = std::min(max_size, v8_flags.wasm_max_table_size.value());
   DCHECK_LE(old_size, max_size);
   if (max_size - old_size < count) return -1;
 
@@ -513,7 +513,7 @@ void WasmTableObject::UpdateDispatchTables(Isolate* isolate,
         dispatch_tables.get(i + kDispatchTableInstanceOffset));
     const WasmModule* module = instance.module();
     int sig_id;
-    if (FLAG_wasm_type_canonicalization) {
+    if (v8_flags.wasm_type_canonicalization) {
       sig_id = target_instance.module()
                    ->isorecursive_canonical_type_ids[original_sig_id];
     } else {
@@ -614,8 +614,8 @@ void WasmTableObject::UpdateDispatchTables(
     }
     // Note that {SignatureMap::Find} may return {-1} if the signature is
     // not found; it will simply never match any check.
-    // It is safe to use this even when FLAG_wasm_type_canonicalization, as the
-    // C API cannot refer to user-defined types.
+    // It is safe to use this even when v8_flags.wasm_type_canonicalization, as
+    // the C API cannot refer to user-defined types.
     auto sig_id = instance->module()->signature_map.Find(sig);
     instance->GetIndirectFunctionTable(isolate, table_index)
         ->Set(entry_index, sig_id, wasm_code->instruction_start(),
@@ -806,7 +806,7 @@ void SetInstanceMemory(Handle<WasmInstanceObject> instance,
   instance->SetRawMemory(reinterpret_cast<byte*>(buffer->backing_store()),
                          buffer->byte_length());
 #if DEBUG
-  if (!FLAG_mock_arraybuffer_allocator) {
+  if (!v8_flags.mock_arraybuffer_allocator) {
     // To flush out bugs earlier, in DEBUG mode, check that all pages of the
     // memory are accessible by reading and writing one byte on each page.
     // Don't do this if the mock ArrayBuffer allocator is enabled.
@@ -967,7 +967,7 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
     if (!result_inplace.has_value()) {
       // There are different limits per platform, thus crash if the correctness
       // fuzzer is running.
-      if (FLAG_correctness_fuzzer_suppressions) {
+      if (v8_flags.correctness_fuzzer_suppressions) {
         FATAL("could not grow wasm memory");
       }
       return -1;
@@ -1027,7 +1027,7 @@ int32_t WasmMemoryObject::Grow(Isolate* isolate,
                                         : WasmMemoryFlag::kWasmMemory32);
   if (!new_backing_store) {
     // Crash on out-of-memory if the correctness fuzzer is running.
-    if (FLAG_correctness_fuzzer_suppressions) {
+    if (v8_flags.correctness_fuzzer_suppressions) {
       FATAL("could not grow wasm memory");
     }
     return -1;
@@ -1466,8 +1466,8 @@ void WasmInstanceObject::ImportWasmJSFunctionIntoTable(
   Zone zone(isolate->allocator(), ZONE_NAME);
   const wasm::FunctionSig* sig = js_function->GetSignature(&zone);
   // It is safe to look up the signature this way even if
-  // FLAG_wasm_type_canonicalization: Signatures created in the JS API cannot
-  // contain user-defined (module-dependent) types.
+  // v8_flags.wasm_type_canonicalization: Signatures created in the JS API
+  // cannot contain user-defined (module-dependent) types.
   auto sig_id = instance->module()->signature_map.Find(*sig);
 
   // Compile a wrapper for the target callable.
@@ -1517,7 +1517,7 @@ void WasmInstanceObject::ImportWasmJSFunctionIntoTable(
   Handle<WasmApiFunctionRef> ref =
       isolate->factory()->NewWasmApiFunctionRef(callable, suspend, instance);
   uint32_t canonicalized_sig_id =
-      FLAG_wasm_type_canonicalization && sig_id >= 0
+      v8_flags.wasm_type_canonicalization && sig_id >= 0
           ? instance->module()->isorecursive_canonical_type_ids[sig_id]
           : sig_id;
 
@@ -2322,7 +2322,7 @@ bool TypecheckJSObject(Isolate* isolate, const WasmModule* module,
         case HeapType::kI31: {
           // TODO(7748): Change this when we have a decision on the JS API for
           // structs/arrays.
-          if (!FLAG_wasm_gc_js_interop) {
+          if (!v8_flags.wasm_gc_js_interop) {
             if (!TryUnpackObjectWrapper(isolate, value)) {
               *error_message =
                   "eqref/dataref/i31ref object must be null (if nullable) or "
