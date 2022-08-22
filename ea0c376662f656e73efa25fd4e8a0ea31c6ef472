@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd4dba0f_65ca3e7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-22T07:07:51Z",
+      "side": 1,
+      "message": "lgtm, export is missing though",
+      "revId": "ea0c376662f656e73efa25fd4e8a0ea31c6ef472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10dffeda_d9e8ffa2",
@@ -48,6 +65,30 @@
       "writtenOn": "2022-08-21T21:02:14Z",
       "side": 1,
       "message": "We could still get races with concurrent sweeping unless we force finish here.",
+      "range": {
+        "startLine": 107,
+        "startChar": 21,
+        "endLine": 107,
+        "endChar": 41
+      },
+      "revId": "ea0c376662f656e73efa25fd4e8a0ea31c6ef472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32a4b5d_9d24adf1",
+        "filename": "test/unittests/test-utils.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-22T07:07:51Z",
+      "side": 1,
+      "message": "Ack (I remember adding similar code somewhere... too many \"bottlenecks\")",
+      "parentUuid": "10dffeda_d9e8ffa2",
       "range": {
         "startLine": 107,
         "startChar": 21,
