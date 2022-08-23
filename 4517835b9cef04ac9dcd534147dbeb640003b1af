@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba39f42_14baa2d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1399096
+      },
+      "writtenOn": "2022-08-23T19:31:18Z",
+      "side": 1,
+      "message": "Wait, scratch that. Still failing locally at 40000. The problem is that anything above 32K will cause a syntax error in the parser (\"Too many captures\"). When regexp syntax was checked lazily, this would throw an error and get caught by the catch block, but with early errors it\u0027s uncatchable.\n\n25K is still enough to trigger a stack overflow while compiling/running on my machine. Maybe it will also work for the win64 build.",
+      "revId": "4517835b9cef04ac9dcd534147dbeb640003b1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
