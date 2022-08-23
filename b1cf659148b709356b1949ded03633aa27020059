@@ -16,6 +16,23 @@
       "message": "Hi Shu, I update this patchset for fixing nits, PTAL, thanks!",
       "revId": "b1cf659148b709356b1949ded03633aa27020059",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594c0fae_15caeb34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-23T01:01:50Z",
+      "side": 1,
+      "message": "Still lgtm, thanks!",
+      "revId": "b1cf659148b709356b1949ded03633aa27020059",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
