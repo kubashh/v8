@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "77501fab_52240ef9",
+        "filename": ".gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-23T08:25:25Z",
+      "side": 1,
+      "message": "We cannot move `cctest_sources` out of `no_check_targets` because https://chromium-review.googlesource.com/c/v8/v8/+/3699405 introduce more errors on `cctest_sources`. This CL removed \"../..:v8_for_testing\", \"../../tools/debug_helper:v8_debug_helper\" from `cctest_sources`\u0027s public_deps. If I add \"../..:v8_for_testing\", \"../../tools/debug_helper:v8_debug_helper\" to cctest_sources\u0027s public_deps, then we could remove cctest_sources from no_check_targets.\n\ndo you have any suggestions?",
+      "parentUuid": "b15eda8d_e0a6f7b6",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "79592fbb4fa76da9102c40852013f458b58a2f26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "51b1bb01_c1655b96",
