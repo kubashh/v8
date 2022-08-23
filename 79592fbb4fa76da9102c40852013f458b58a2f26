@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "73dfc2fb_d688ae16",
+        "filename": ".gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-23T10:11:34Z",
+      "side": 1,
+      "message": "Maybe you can pursue on that as an optional stretch goal after this... I don\u0027t have the cycles right now to check if there are better ways to do this.",
+      "parentUuid": "77501fab_52240ef9",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "79592fbb4fa76da9102c40852013f458b58a2f26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "51b1bb01_c1655b96",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
