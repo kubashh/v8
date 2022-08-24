@@ -277,6 +277,17 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitFixedDoubleArray(
   return concrete_visitor()->VisitLeftTrimmableArray(map, object);
 }
 
+template <typename ConcreteVisitor, typename MarkingState>
+template <typename T>
+int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitJSObjectSubclass(
+    Map map, T object) {
+  if (!concrete_visitor()->ShouldVisit(object)) return 0;
+  this->VisitMapPointer(object);
+  int size = T::BodyDescriptor::SizeOf(map, object);
+  T::BodyDescriptor::IterateBody(map, object, size, this);
+  return size;
+}
+
 // ===========================================================================
 // Objects participating in embedder tracing =================================
 // ===========================================================================

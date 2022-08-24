@@ -89,16 +89,6 @@ void MarkCompactCollector::AddTransitionArray(TransitionArray array) {
 }
 
 template <typename MarkingState>
-template <typename T, typename TBodyDescriptor>
-int MainMarkingVisitor<MarkingState>::VisitJSObjectSubclass(Map map, T object) {
-  if (!this->ShouldVisit(object)) return 0;
-  this->VisitMapPointer(object);
-  int size = TBodyDescriptor::SizeOf(map, object);
-  TBodyDescriptor::IterateBody(map, object, size, this);
-  return size;
-}
-
-template <typename MarkingState>
 template <typename T>
 int MainMarkingVisitor<MarkingState>::VisitLeftTrimmableArray(Map map,
                                                               T object) {

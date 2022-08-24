@@ -392,8 +392,7 @@ class ConcurrentMarkingVisitor final
   bool AllowDefaultJSObjectVisit() { return false; }
 
   int VisitJSObject(Map map, JSObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 
   int VisitJSObjectFast(Map map, JSObject object) {
@@ -402,35 +401,29 @@ class ConcurrentMarkingVisitor final
   }
 
   int VisitJSExternalObject(Map map, JSExternalObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 
 #if V8_ENABLE_WEBASSEMBLY
   int VisitWasmInstanceObject(Map map, WasmInstanceObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
   int VisitWasmSuspenderObject(Map map, WasmSuspenderObject object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   int VisitJSWeakCollection(Map map, JSWeakCollection object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 
   int VisitJSFinalizationRegistry(Map map, JSFinalizationRegistry object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 
   int VisitJSSynchronizationPrimitive(Map map,
                                       JSSynchronizationPrimitive object) {
-    return ConcurrentMarkingVisitorUtility::VisitJSObjectSubclass(this, map,
-                                                                  object);
+    return VisitJSObjectSubclass(map, object);
   }
 
   int VisitConsString(Map map, ConsString object) {

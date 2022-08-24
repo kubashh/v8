@@ -130,7 +130,6 @@ class MarkingStateBase {
 // - ConcreteVisitor::retaining_path_mode method,
 // - ConcreteVisitor::RecordSlot method,
 // - ConcreteVisitor::RecordRelocSlot method,
-// - ConcreteVisitor::VisitJSObjectSubclass method,
 // - ConcreteVisitor::VisitLeftTrimmableArray method.
 // These methods capture the difference between the concurrent and main thread
 // marking visitors. For example, the concurrent visitor has to use the
@@ -281,6 +280,9 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   constexpr bool CanUpdateValuesInHeap() {
     return !MarkingState::kCollectRetainers;
   }
+
+  template <typename T>
+  int VisitJSObjectSubclass(Map map, T object);
 
   MarkingWorklists::Local* const local_marking_worklists_;
   WeakObjects::Local* const local_weak_objects_;
