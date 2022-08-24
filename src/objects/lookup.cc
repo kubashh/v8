@@ -1589,9 +1589,9 @@ ConcurrentLookupIterator::TryGetOwnConstantElement(
 ConcurrentLookupIterator::Result ConcurrentLookupIterator::TryGetOwnChar(
     String* result_out, Isolate* isolate, LocalIsolate* local_isolate,
     String string, size_t index) {
+  SharedStringAccessGuardIfNeeded access_guard(local_isolate);
   DisallowGarbageCollection no_gc;
-  // The access guard below protects string accesses related to internalized
-  // strings.
+  // The access guard protects string accesses related to internalized strings.
   // TODO(jgruber): Support other string kinds.
   Map string_map = string.map(isolate, kAcquireLoad);
   InstanceType type = string_map.instance_type();
@@ -1603,12 +1603,8 @@ ConcurrentLookupIterator::Result ConcurrentLookupIterator::TryGetOwnChar(
   const uint32_t length = static_cast<uint32_t>(string.length());
   if (index >= length) return kGaveUp;
 
-  uint16_t charcode;
-  {
-    SharedStringAccessGuardIfNeeded access_guard(local_isolate);
-    charcode = string.Get(static_cast<int>(index), PtrComprCageBase(isolate),
-                          access_guard);
-  }
+  uint16_t charcode = string.Get(static_cast<int>(index),
+                                 PtrComprCageBase(isolate), access_guard);
 
   if (charcode > unibrow::Latin1::kMaxChar) return kGaveUp;
 

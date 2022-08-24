@@ -2815,13 +2815,14 @@ void ClassScope::FinalizeReparsedClassScope(
   DCHECK_EQ(scope_info->StartPosition(), start_position_);
 
   int context_header_length = scope_info->ContextHeaderLength();
-  DisallowGarbageCollection no_gc;
   for (auto it : ScopeInfo::IterateLocalNames(scope_info)) {
     int slot_index = context_header_length + it->index();
     DCHECK_LT(slot_index, scope_info->ContextLength());
 
-    const AstRawString* string = ast_value_factory->GetString(
-        it->name(), SharedStringAccessGuardIfNeeded(isolate));
+    SharedStringAccessGuardIfNeeded access_guard(isolate);
+    DisallowGarbageCollection no_gc;
+    const AstRawString* string =
+        ast_value_factory->GetString(it->name(), access_guard);
     Variable* var = string->IsPrivateName() ? LookupLocalPrivateName(string)
                                             : LookupLocal(string);
     DCHECK_NOT_NULL(var);
