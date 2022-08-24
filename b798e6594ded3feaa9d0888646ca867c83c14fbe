@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "236e9e65_e3e6f3e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-24T17:13:40Z",
+      "side": 1,
+      "message": "Thanks for the review!\n\nTurns out the failing CHECK wasn\u0027t updated yet to handle map compaction, so I\u0027ve fixed that.\n\nLanding.",
+      "revId": "b798e6594ded3feaa9d0888646ca867c83c14fbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
