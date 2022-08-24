@@ -307,6 +307,7 @@ void IncrementalMarking::StartMarkingMajor() {
   }
 
   major_collector_->StartMarking();
+  major_collector_->SetIsMarkingIncrementally();
   current_local_marking_worklists = major_collector_->local_marking_worklists();
 
   is_marking_ = true;
@@ -354,6 +355,7 @@ void IncrementalMarking::StartMarkingMinor() {
   }
 
   minor_collector_->StartMarking();
+  minor_collector_->SetIsMarkingIncrementally();
   current_local_marking_worklists = minor_collector_->local_marking_worklists();
 
   is_marking_ = true;
