@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "79fd8436_2de0ff05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-24T15:37:49Z",
+      "side": 1,
+      "message": "[ptr-compr]",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "50bae1d190ea4b9ebf4742e56e8ad8276eb94d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "12d3a428_b7906064",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-08-24T14:22:37Z",
       "side": 1,
       "message": "As discussed. PTAL.",
+      "revId": "50bae1d190ea4b9ebf4742e56e8ad8276eb94d3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e710c8d_ec60a76a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-24T15:37:49Z",
+      "side": 1,
+      "message": "lgtm modulo redness",
       "revId": "50bae1d190ea4b9ebf4742e56e8ad8276eb94d3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
