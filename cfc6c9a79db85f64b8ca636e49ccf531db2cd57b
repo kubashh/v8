@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6d1cd00_0e7fd021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Thanks, this looks like a very nice refactoring / cleanup. We should have done this a long time ago, instead of keeping adding more complexity with modifiable registers and different scaling factors.\n\nLeft a few comments, being well aware that this is WIP. Just thought if I see it I can also already leave the comment :) ",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e93f49_c8e5bcf9",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "We only scale the `offset_reg`, not `offset_imm`, right? Can we somehow express this in the name?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae116c71_ce3c416a",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Can we add parenthesis around the inner ternary? Or refactor to make it \"less nested\":\n   !scale ? 0 : COMPRESS_POINTERS_BOOL ? 2 : 3",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442bce17_6d1b8097",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Isn\u0027t this the same as `type.size_log_2()`?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a074c0b2_f7430c5d",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Maybe `offset_reg_is_index`, or `offset_reg_needs_shift`?",
+      "range": {
+        "startLine": 546,
+        "startChar": 33,
+        "endLine": 546,
+        "endChar": 41
+      },
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da1f8fc2_20db7f43",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "If I read the code correctly, the immediate is not scaled, right?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c37adb7_9f01b38f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7083,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "This comment can be removed now.",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "474548f3_6d9cc851",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Same here: `offset_reg_scale_factor`?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b56fa685_4c83188b",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-24T17:04:17Z",
+      "side": 1,
+      "message": "Same as for arm64 :)",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
