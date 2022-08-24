@@ -3971,6 +3971,9 @@ TEST(IncrementalMarkingStepMakesBigProgressWithLargeObjects) {
     CcTest::heap()->StartIncrementalMarking(
         i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting);
   }
+
+  SetupConcurrentMarking(marking);
+
   heap::SimulateIncrementalMarking(CcTest::heap());
   CHECK(marking->IsMarkingComplete());
 }
@@ -5769,6 +5772,8 @@ TEST(Regress598319) {
     HeapObject arr_value = HeapObject::cast(arr.get().get(i));
     CHECK(marking_state->IsWhite(arr_value));
   }
+
+  SetupConcurrentMarking(marking);
 
   // Now we search for a state where we are in incremental marking and have
   // only partially marked the large object.

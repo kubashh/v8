@@ -53,13 +53,13 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
     const bool resume_on_exit_;
   };
 
-  ConcurrentMarking(Heap* heap, MarkingWorklists* marking_worklists,
-                    WeakObjects* weak_objects);
+  ConcurrentMarking(Heap* heap, WeakObjects* weak_objects);
 
   // Schedules asynchronous job to perform concurrent marking at |priority|.
   // Objects in the heap should not be moved while these are active (can be
   // stopped safely via Stop() or PauseScope).
-  void ScheduleJob(TaskPriority priority = TaskPriority::kUserVisible);
+  void ScheduleJob(GarbageCollector garbage_collector,
+                   TaskPriority priority = TaskPriority::kUserVisible);
 
   // Waits for scheduled job to complete.
   void Join();
@@ -91,6 +91,8 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   bool another_ephemeron_iteration() {
     return another_ephemeron_iteration_.load();
   }
+  GarbageCollector garbage_collector() const { return garbage_collector_; }
+  void SetUp(GarbageCollector garbage_collector);
 
  private:
   struct TaskState {
@@ -107,7 +109,13 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
 
   std::unique_ptr<JobHandle> job_handle_;
   Heap* const heap_;
-  MarkingWorklists* const marking_worklists_;
+  GarbageCollector garbage_collector_{GarbageCollector::MARK_COMPACTOR};
+  // marking_worklists_ points to MinorMC's or MajorMC's worklists depending on
+  // garbage_collector_. It is usually set up in ScheduleJob. There are two
+  // places where RescheduleJobIfNeeded can be called without calling
+  // ScheduleJob before. At these places, we explicitly set up
+  // marking_worklists_ and garbage_collector_ by calling SetUp.
+  MarkingWorklists* marking_worklists_;
   WeakObjects* const weak_objects_;
   std::vector<std::unique_ptr<TaskState>> task_state_;
   std::atomic<size_t> total_marked_bytes_{0};

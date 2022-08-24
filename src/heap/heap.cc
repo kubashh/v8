@@ -5750,11 +5750,10 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
       new IncrementalMarking(this, mark_compact_collector_->weak_objects()));
 
   if (FLAG_concurrent_marking || FLAG_parallel_marking) {
-    concurrent_marking_.reset(new ConcurrentMarking(
-        this, mark_compact_collector_->marking_worklists(),
-        mark_compact_collector_->weak_objects()));
+    concurrent_marking_.reset(
+        new ConcurrentMarking(this, mark_compact_collector_->weak_objects()));
   } else {
-    concurrent_marking_.reset(new ConcurrentMarking(this, nullptr, nullptr));
+    concurrent_marking_.reset(new ConcurrentMarking(this, nullptr));
   }
 
   for (int i = FIRST_SPACE; i <= LAST_SPACE; i++) {

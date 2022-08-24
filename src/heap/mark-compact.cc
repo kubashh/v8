@@ -2513,9 +2513,14 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
   PtrComprCageBase cage_base(isolate);
   CodePageHeaderModificationScope rwx_write_scope(
       "Marking of Code objects require write access to Code page headers");
-  if (parallel_marking_)
+  if (parallel_marking_) {
+    // At this point, ConcurrentMarking has already been set up. We do not need
+    // another call to SetUp. In fact, this would race with GetMaxConcurrency as
+    // reported by TSAN.
     heap_->concurrent_marking()->RescheduleJobIfNeeded(
         TaskPriority::kUserBlocking);
+  }
+
   while (local_marking_worklists()->Pop(&object) ||
          local_marking_worklists()->PopOnHold(&object)) {
     // Left trimming may result in grey or black filler objects on the marking
@@ -2758,6 +2763,7 @@ void MarkCompactCollector::MarkLiveObjects() {
   if (FLAG_parallel_marking) {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_FULL_CLOSURE_PARALLEL);
     parallel_marking_ = true;
+    heap_->concurrent_marking()->SetUp(GarbageCollector::MARK_COMPACTOR);
     heap_->concurrent_marking()->RescheduleJobIfNeeded(
         TaskPriority::kUserBlocking);
     MarkTransitiveClosure();

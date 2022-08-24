@@ -16,6 +16,7 @@ namespace internal {
 
 class HeapInternalsBase {
  protected:
+  void SetupConcurrentMarking(Heap* heap, IncrementalMarking* marking);
   void SimulateIncrementalMarking(Heap* heap, bool force_completion);
   void SimulateFullSpace(
       v8::internal::NewSpace* space,
@@ -61,6 +62,10 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
   }
 
   Heap* heap() const { return this->i_isolate()->heap(); }
+
+  void SetupConcurrentMarking(Heap* heap, IncrementalMarking* marking) {
+    return HeapInternalsBase::SetupConcurrentMarking(heap, marking);
+  }
 
   void SimulateIncrementalMarking(bool force_completion = true) {
     return HeapInternalsBase::SimulateIncrementalMarking(heap(),
