@@ -681,8 +681,6 @@ Address StringTable::Data::TryStringToIndexOrLookupExisting(Isolate* isolate,
   // Ideally it would be a free function in an anonymous namespace, but that
   // causes issues around method and class visibility.
 
-  DisallowGarbageCollection no_gc;
-
   int length = string.length();
   // The source hash is usable if it is not from a sliced string.
   // For sliced strings we need to recalculate the hash from the given offset
@@ -705,6 +703,7 @@ Address StringTable::Data::TryStringToIndexOrLookupExisting(Isolate* isolate,
   const Char* chars;
 
   SharedStringAccessGuardIfNeeded access_guard(isolate);
+  DisallowGarbageCollection no_gc;
   if (source.IsConsString(isolate)) {
     DCHECK(!source.IsFlat(isolate));
     buffer.reset(new Char[length]);

@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_STRING_INL_H_
 #define V8_OBJECTS_STRING_INL_H_
 
+#include "src/base/platform/yield-processor.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate-utils.h"
@@ -30,15 +31,16 @@ namespace internal {
 
 class V8_NODISCARD SharedStringAccessGuardIfNeeded {
  public:
-  // Creates no SharedMutexGuard<kShared> for the string access since it was
-  // called from the main thread.
+  // Takes no SharedMutex for the string access since it was called from the
+  // main thread.
   explicit SharedStringAccessGuardIfNeeded(Isolate* isolate) {}
 
-  // Creates a SharedMutexGuard<kShared> for the string access if it was called
-  // from a background thread.
+  // Takes a SharedMutex for the string access if it was called from a
+  // background thread.
   explicit SharedStringAccessGuardIfNeeded(LocalIsolate* local_isolate) {
     if (IsNeeded(local_isolate)) {
-      mutex_guard.emplace(local_isolate->internalized_string_access());
+      local_isolate_ = local_isolate;
+      TakeLock();
     }
   }
 
@@ -46,12 +48,19 @@ class V8_NODISCARD SharedStringAccessGuardIfNeeded {
   explicit SharedStringAccessGuardIfNeeded(String str) {
     Isolate* isolate = GetIsolateIfNeeded(str);
     if (isolate != nullptr) {
-      mutex_guard.emplace(isolate->internalized_string_access());
+      local_isolate_ = isolate->AsLocalIsolate();
+      TakeLock();
     }
   }
 
   static SharedStringAccessGuardIfNeeded NotNeeded() {
     return SharedStringAccessGuardIfNeeded();
+  }
+
+  ~SharedStringAccessGuardIfNeeded() {
+    if (local_isolate_.has_value()) {
+      (*local_isolate_)->internalized_string_access()->UnlockShared();
+    }
   }
 
   static bool IsNeeded(String str, LocalIsolate* local_isolate) {
@@ -86,7 +95,28 @@ class V8_NODISCARD SharedStringAccessGuardIfNeeded {
   constexpr SharedStringAccessGuardIfNeeded() = default;
   constexpr SharedStringAccessGuardIfNeeded(SharedStringAccessGuardIfNeeded&&)
       V8_NOEXCEPT {
-    DCHECK(!mutex_guard.has_value());
+    DCHECK(!local_isolate_.has_value());
+  }
+
+  void TakeLock() {
+    DCHECK(local_isolate_.has_value());
+#ifdef V8_OS_DARWIN
+    // We currently cannot use shared mutexes on Mac OS X (see
+    // https://crbug.com/v8/12037). While waiting for the string access mutex
+    // to be availbale, we call Safepoint to avoid a dead lock (since a
+    // thread with the string access mutex could itself be blocked in a
+    // Safepoint; see https://crbug.com/1355917 for a concrete example).
+    // TODO(v8:12037): remove this #ifdef entirely once shared mutexes are fixed
+    // on Mac OS X, and simply use LockShared() or SharedMutexGuard.
+    DCHECK(AllowSafepoints::IsAllowed());
+    base::SharedMutex* mutex = (*local_isolate_)->internalized_string_access();
+    while (!mutex->TryLockShared()) {
+      (*local_isolate_)->heap()->Safepoint();
+      YIELD_PROCESSOR;
+    }
+#else
+    (*local_isolate_)->internalized_string_access()->LockShared();
+#endif
   }
 
   // Returns the Isolate from the String if we need it for the lock.
@@ -102,7 +132,10 @@ class V8_NODISCARD SharedStringAccessGuardIfNeeded {
     return isolate;
   }
 
-  base::Optional<base::SharedMutexGuard<base::kShared>> mutex_guard;
+  // If {local_isolate_} is base::nullopt, then this instance didn't take the
+  // string access lock. Otherwise, it did (and the lock needs to be releases
+  // when destructing this class).
+  base::Optional<LocalIsolate*> local_isolate_ = base::nullopt;
 };
 
 int String::length(AcquireLoadTag) const {

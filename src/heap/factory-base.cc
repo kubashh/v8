@@ -759,8 +759,8 @@ MaybeHandle<String> FactoryBase<Impl>::NewConsString(
     if (is_one_byte) {
       Handle<SeqOneByteString> result =
           NewRawOneByteString(length, allocation).ToHandleChecked();
-      DisallowGarbageCollection no_gc;
       SharedStringAccessGuardIfNeeded access_guard(isolate());
+      DisallowGarbageCollection no_gc;
       uint8_t* dest = result->GetChars(no_gc, access_guard);
       // Copy left part.
       {
@@ -780,8 +780,8 @@ MaybeHandle<String> FactoryBase<Impl>::NewConsString(
     Handle<SeqTwoByteString> result =
         NewRawTwoByteString(length, allocation).ToHandleChecked();
 
-    DisallowGarbageCollection no_gc;
     SharedStringAccessGuardIfNeeded access_guard(isolate());
+    DisallowGarbageCollection no_gc;
     base::uc16* sink = result->GetChars(no_gc, access_guard);
     String::WriteToFlat(*left, sink, 0, left->length(), isolate(),
                         access_guard);

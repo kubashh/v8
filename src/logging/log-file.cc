@@ -110,9 +110,9 @@ void LogFile::MessageBuilder::AppendString(String str,
                                            base::Optional<int> length_limit) {
   if (str.is_null()) return;
 
-  DisallowGarbageCollection no_gc;  // Ensure string stays valid.
   PtrComprCageBase cage_base = GetPtrComprCageBase(str);
   SharedStringAccessGuardIfNeeded access_guard(str);
+  DisallowGarbageCollection no_gc;  // Ensure string stays valid.
   int length = str.length();
   if (length_limit) length = std::min(length, *length_limit);
   for (int i = 0; i < length; i++) {
