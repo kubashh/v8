@@ -390,6 +390,7 @@ TEST_F(HeapTest, Regress978156) {
         "collector cctest", GCTracer::MarkingType::kIncremental);
     marking->Start(GarbageCollector::MARK_COMPACTOR,
                    i::GarbageCollectionReason::kTesting);
+    SetupConcurrentMarking(heap, marking);
   }
   MarkingState* marking_state = marking->marking_state();
   // 6. Mark the filler black to access its two markbits. This triggers

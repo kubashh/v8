@@ -49,6 +49,8 @@ bool FillCurrentPageButNBytes(
     v8::internal::NewSpace* space, int extra_bytes,
     std::vector<Handle<FixedArray>>* out_handles = nullptr);
 
+void SetupConcurrentMarking(IncrementalMarking* marking);
+
 // Helper function that simulates many incremental marking steps until
 // marking is completed.
 void SimulateIncrementalMarking(i::Heap* heap, bool force_completion = true);

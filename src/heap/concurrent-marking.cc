@@ -625,12 +625,8 @@ class ConcurrentMarking::JobTask : public v8::JobTask {
   const bool should_keep_ages_unchanged_;
 };
 
-ConcurrentMarking::ConcurrentMarking(Heap* heap,
-                                     MarkingWorklists* marking_worklists,
-                                     WeakObjects* weak_objects)
-    : heap_(heap),
-      marking_worklists_(marking_worklists),
-      weak_objects_(weak_objects) {
+ConcurrentMarking::ConcurrentMarking(Heap* heap, WeakObjects* weak_objects)
+    : heap_(heap), weak_objects_(weak_objects) {
 #ifndef V8_ATOMIC_OBJECT_FIELD_WRITES
   // Concurrent marking requires atomic object field writes.
   CHECK(!FLAG_concurrent_marking);
@@ -790,10 +786,21 @@ size_t ConcurrentMarking::GetMaxConcurrency(size_t worker_count) {
                             weak_objects_->current_ephemerons.Size()}));
 }
 
-void ConcurrentMarking::ScheduleJob(TaskPriority priority) {
+void ConcurrentMarking::SetUp(GarbageCollector garbage_collector) {
+  if (IsStopped()) {
+    garbage_collector_ = garbage_collector;
+    // TODO(v8:13012): Set marking_worklists_ based on GarbageCollector later.
+    marking_worklists_ = heap_->mark_compact_collector()->marking_worklists();
+  }
+}
+
+void ConcurrentMarking::ScheduleJob(GarbageCollector garbage_collector,
+                                    TaskPriority priority) {
   DCHECK(FLAG_parallel_marking || FLAG_concurrent_marking);
   DCHECK(!heap_->IsTearingDown());
   DCHECK(!job_handle_ || !job_handle_->IsValid());
+
+  SetUp(garbage_collector);
 
   job_handle_ = V8::GetCurrentPlatform()->PostJob(
       priority, std::make_unique<JobTask>(
@@ -813,7 +820,7 @@ void ConcurrentMarking::RescheduleJobIfNeeded(TaskPriority priority) {
     return;
   }
   if (!job_handle_ || !job_handle_->IsValid()) {
-    ScheduleJob(priority);
+    ScheduleJob(garbage_collector_, priority);
   } else {
     if (priority != TaskPriority::kUserVisible)
       job_handle_->UpdatePriority(priority);

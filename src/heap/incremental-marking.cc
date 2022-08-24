@@ -326,7 +326,7 @@ void IncrementalMarking::StartMarkingMajor() {
   }
 
   if (FLAG_concurrent_marking && !heap_->IsTearingDown()) {
-    heap_->concurrent_marking()->ScheduleJob();
+    heap_->concurrent_marking()->ScheduleJob(GarbageCollector::MARK_COMPACTOR);
   }
 
   // Ready to start incremental marking.

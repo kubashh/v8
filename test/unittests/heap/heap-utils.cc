@@ -11,6 +11,21 @@
 namespace v8 {
 namespace internal {
 
+void HeapInternalsBase::SetupConcurrentMarking(Heap* heap,
+                                               IncrementalMarking* marking) {
+  // This function is used because ManualGCScope temporarily disables
+  // FLAG_concurrent_marking, which makes StartIncrementalMarking bail out on
+  // calling ConcurrentMarking::ScheduleJob. Later, e.g. in a Job, the
+  // ManualGCScope is no longer active, so it can call RescheduleJobIfNeeded
+  // without calling ScheduleJob before (i.e. ConcurrentMarking would not be set
+  // up). This issue only occurs in tests.
+  CHECK(marking->IsMinorMarking() || marking->IsMajorMarking());
+  GarbageCollector garbage_collector =
+      marking->IsMinorMarking() ? GarbageCollector::MINOR_MARK_COMPACTOR
+                                : GarbageCollector::MARK_COMPACTOR;
+  heap->concurrent_marking()->SetUp(garbage_collector);
+}
+
 void HeapInternalsBase::SimulateIncrementalMarking(Heap* heap,
                                                    bool force_completion) {
   constexpr double kStepSizeInMs = 100;

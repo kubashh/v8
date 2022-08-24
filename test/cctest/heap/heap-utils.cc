@@ -167,6 +167,20 @@ bool FillCurrentPageButNBytes(v8::internal::NewSpace* space, int extra_bytes,
   return true;
 }
 
+void SetupConcurrentMarking(IncrementalMarking* marking) {
+  // This function is used because ManualGCScope temporarily disables
+  // FLAG_concurrent_marking, which makes StartIncrementalMarking bail out on
+  // calling ConcurrentMarking::ScheduleJob. Later, e.g. in a Job, the
+  // ManualGCScope is no longer active, so it can call RescheduleJobIfNeeded
+  // without calling ScheduleJob before (i.e. ConcurrentMarking would not be set
+  // up). This issue only occurs in tests.
+  CHECK(marking->IsMinorMarking() || marking->IsMajorMarking());
+  GarbageCollector garbage_collector =
+      marking->IsMinorMarking() ? GarbageCollector::MINOR_MARK_COMPACTOR
+                                : GarbageCollector::MARK_COMPACTOR;
+  CcTest::heap()->concurrent_marking()->SetUp(garbage_collector);
+}
+
 void SimulateIncrementalMarking(i::Heap* heap, bool force_completion) {
   const double kStepSizeInMs = 100;
   CHECK(FLAG_incremental_marking);
@@ -192,6 +206,8 @@ void SimulateIncrementalMarking(i::Heap* heap, bool force_completion) {
   }
   CHECK(marking->IsMarking());
   if (!force_completion) return;
+
+  SetupConcurrentMarking(marking);
 
   SafepointScope scope(heap);
   MarkingBarrier::PublishAll(heap);
