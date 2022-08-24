@@ -774,7 +774,8 @@ class LiftoffAssembler : public TurboAssembler {
   inline void SpillInstance(Register instance);
   inline void ResetOSRTarget();
   inline void LoadTaggedPointer(Register dst, Register src_addr,
-                                Register offset_reg, int32_t offset_imm);
+                                Register offset_reg, int32_t offset_imm,
+                                bool as_index = false);
   inline void LoadFullPointer(Register dst, Register src_addr,
                               int32_t offset_imm);
   enum SkipWriteBarrier : bool {
@@ -805,10 +806,12 @@ class LiftoffAssembler : public TurboAssembler {
   }
   // Warning: may clobber {dst} on some architectures!
   inline void IncrementSmi(LiftoffRegister dst, int offset);
+  // Set {as_index} to true to scale the offset by the size of the load type.
   inline void Load(LiftoffRegister dst, Register src_addr, Register offset_reg,
                    uintptr_t offset_imm, LoadType type,
                    uint32_t* protected_load_pc = nullptr,
-                   bool is_load_mem = false, bool i64_offset = false);
+                   bool is_load_mem = false, bool i64_offset = false,
+                   bool as_index = false);
   inline void Store(Register dst_addr, Register offset_reg,
                     uintptr_t offset_imm, LiftoffRegister src, StoreType type,
                     LiftoffRegList pinned,
