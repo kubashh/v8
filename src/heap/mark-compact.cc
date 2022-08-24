@@ -2726,13 +2726,10 @@ void MarkCompactCollector::MarkLiveObjects() {
   // with the C stack limit check.
   PostponeInterruptsScope postpone(isolate());
 
-  bool was_marked_incrementally = false;
-  {
+  if (is_marking_incrementally_) {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_FINISH_INCREMENTAL);
-    if (heap_->incremental_marking()->Stop()) {
-      MarkingBarrier::PublishAll(heap());
-      was_marked_incrementally = true;
-    }
+    heap_->incremental_marking()->Stop();
+    MarkingBarrier::PublishAll(heap());
   }
 
 #ifdef DEBUG
@@ -2795,7 +2792,8 @@ void MarkCompactCollector::MarkLiveObjects() {
     VerifyEphemeronMarking();
   }
 
-  if (was_marked_incrementally) {
+  if (is_marking_incrementally_) {
+    is_marking_incrementally_ = false;
     // Disable the marking barrier after concurrent/parallel marking has
     // finished as it will reset page flags that share the same bitmap as
     // the evacuation candidate bit.
@@ -6242,13 +6240,10 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
   PostponeInterruptsScope postpone(isolate());
 
-  bool was_marked_incrementally = false;
-  {
+  if (is_marking_incrementally_) {
     // TODO(v8:13012): TRACE_GC with MINOR_MC_MARK_FINISH_INCREMENTAL.
-    if (heap_->incremental_marking()->Stop()) {
-      MarkingBarrier::PublishAll(heap());
-      was_marked_incrementally = true;
-    }
+    heap_->incremental_marking()->Stop();
+    MarkingBarrier::PublishAll(heap());
   }
 
   RootMarkingVisitor root_visitor(this);
@@ -6272,7 +6267,8 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
     TraceFragmentation();
   }
 
-  if (was_marked_incrementally) {
+  if (is_marking_incrementally_) {
+    is_marking_incrementally_ = false;
     MarkingBarrier::DeactivateAll(heap());
     GlobalHandles::DisableMarkingBarrier(heap()->isolate());
   }

@@ -363,6 +363,7 @@ class CollectorBase {
   virtual void Finish() = 0;
 
   bool IsMajorMC();
+  void SetIsMarkingIncrementally() { is_marking_incrementally_ = true; }
 
  private:
   std::vector<Page*> new_space_evacuation_pages_;
@@ -377,6 +378,8 @@ class CollectorBase {
 
   MarkingState marking_state_;
   NonAtomicMarkingState non_atomic_marking_state_;
+
+  bool is_marking_incrementally_{false};
 
   explicit CollectorBase(Heap* heap, GarbageCollector collector);
   virtual ~CollectorBase() = default;
