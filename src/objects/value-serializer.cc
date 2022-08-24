@@ -1323,7 +1323,7 @@ Maybe<T> ValueDeserializer::ReadVarintLoop() {
       value |= static_cast<T>(byte & 0x7F) << shift;
       shift += 7;
     } else {
-      DCHECK(!has_another_byte);
+      DCHECK_IMPLIES(!FLAG_fuzzing, !has_another_byte);
     }
     position_++;
   } while (has_another_byte);
