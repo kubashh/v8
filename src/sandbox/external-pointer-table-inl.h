@@ -94,6 +94,7 @@ ExternalPointerHandle ExternalPointerTable::AllocateAndInitializeEntry(
 ExternalPointerHandle ExternalPointerTable::AllocateEvacuationEntry(
     uint32_t start_of_evacuation_area) {
   DCHECK(is_initialized());
+  DCHECK_LT(start_of_evacuation_area, capacity());
 
   uint32_t index;
   bool success = false;

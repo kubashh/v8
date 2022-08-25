@@ -34,6 +34,14 @@ template <ExternalPointerTag tag>
 V8_INLINE void WriteExternalPointerField(Address field_address,
                                          Isolate* isolate, Address value);
 
+#ifdef V8_ENABLE_SANDBOX
+// Checks whether a lazily-initialized ExternalPointerField (one which will
+// initially contain the kNullExternalPointerHandle) is already properly
+// initialized (i.e. contains a non-null external pointer handle).
+V8_INLINE bool IsLazilyInitializedExternalPointerFieldInitialized(
+    Address field_address);
+#endif  // V8_ENABLE_SANDBOX
+
 }  // namespace internal
 }  // namespace v8
 

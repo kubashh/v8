@@ -105,6 +105,11 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   // Allocates a new entry in the external pointer table. The caller must
   // provide the initial value and tag.
   //
+  // An external pointer slot should never be initialized twice (i.e. change
+  // it's ExternalPointerHandle). See the compaction algorithm below for an
+  // explanation of why that is required. Lazy initialization, where the slot
+  // initially contains the null handle, is permitted however.
+  //
   // This method is atomic and can be called from background threads.
   inline ExternalPointerHandle AllocateAndInitializeEntry(
       Address initial_value, ExternalPointerTag tag);
@@ -177,6 +182,16 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   // new entry while object A's handle is now dangling. If shared entries ever
   // become necessary, setting external pointer handles would have to be
   // guarded by write barriers to avoid this scenario.
+  //
+  // To run optimally, this algorithm further assumes that ExternalPointerSlots
+  // are only initialized once and never change their Handle afterwards.
+  // Otherwise, the algorithm may (very rarely) end up moving an entry after
+  // its current position (if the new entry for the object is allocated just
+  // before the evacuation entry for the old entry is created).
+  // Re-initialization of ExternalPointerSlots is therefore forbidden. However,
+  // lazy initialization of ExternalPointerSlots, where the slot initially
+  // contains the null handle, is allowed, as this will not confuse the
+  // compaction algorithm.
 
   // Use heuristics to determine if table compaction is needed and if so start
   // the compaction. This is expected to be called at the start of the GC
