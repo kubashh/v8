@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9637b69f_3607e944",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "This is how it works in assembly too, e.g. when you can specify both a register offset and an immediate offset, the scale only applies to the register. I think specifying it in the name would be unnecessarily verbose.",
+      "parentUuid": "e9e93f49_c8e5bcf9",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae116c71_ce3c416a",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c71a120_e3068c6f",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae116c71_ce3c416a",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "442bce17_6d1b8097",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-08-24T17:04:17Z",
       "side": 1,
       "message": "Isn\u0027t this the same as `type.size_log_2()`?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0e9e71_da60f95c",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "442bce17_6d1b8097",
       "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cbacea3_735c6a18",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "I think \"offset_reg_\" is redundant (see other comment), but the needs_shift part sgtm.",
+      "parentUuid": "a074c0b2_f7430c5d",
+      "range": {
+        "startLine": 546,
+        "startChar": 33,
+        "endLine": 546,
+        "endChar": 41
+      },
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da1f8fc2_20db7f43",
@@ -105,6 +183,24 @@
       "writtenOn": "2022-08-24T17:04:17Z",
       "side": 1,
       "message": "If I read the code correctly, the immediate is not scaled, right?",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd902ae_afb30f71",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "See other comment, but I think the param name is more obvious now so I removed the comment.",
+      "parentUuid": "da1f8fc2_20db7f43",
       "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +222,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "135120c5_bd9b8126",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7083,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c37adb7_9f01b38f",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "474548f3_6d9cc851",
@@ -143,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6210348_6114a998",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "See other comment",
+      "parentUuid": "474548f3_6d9cc851",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b56fa685_4c83188b",
@@ -156,6 +288,24 @@
       "writtenOn": "2022-08-24T17:04:17Z",
       "side": 1,
       "message": "Same as for arm64 :)",
+      "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c369fba6_b7e271c3",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b56fa685_4c83188b",
       "revId": "cfc6c9a79db85f64b8ca636e49ccf531db2cd57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
