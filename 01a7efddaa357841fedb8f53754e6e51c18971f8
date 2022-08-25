@@ -16,6 +16,24 @@
       "message": "The CallIC is rather performance critical, adding additional code there to improve a very rare code-path seems like a bad tradeoff.\nHow about doing this optimization without additional feedback, by emitting a branch in the optimized code?",
       "revId": "01a7efddaa357841fedb8f53754e6e51c18971f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c70b6c_ec593a11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-08-25T08:05:32Z",
+      "side": 1,
+      "message": "Thanks Tobias for the comments! Sorry for the late response as I miss the mail notification from this change. \n\nThe optimization is initially implemented this way in order to not introduce regression to normal cases, mainly for some situation when arguments list is not an array of double. But if all cases are not common, there seems to be no reason to not emit checks on the type of arguments list and handle both paths in optimized code. \n\nAnd for the concern on CallIC, the additional checks and updates on CallFeedback will only be performed when the target is func.prototype.apply. The overhead is measured on micro-bench (attached in the doc https://docs.google.com/document/d/10UeXbCQ7tBKosVDQLEXtIc10DiePY2TL4QsL1MM3R3w/edit?usp\u003dsharing) and JetStream2 with –max-opt\u003d1. For the special case in micro-bench, the execution time at interpreter/baseline tier increased for ~3.17%; for JetStream2, ~–0.11%(which should be variance). The additional code introduced to the feedback update doesn\u0027t seem to be too expensive according to the execution time. But it may make the CollectCallFeedback more complicated without much benefit (if math.{min/max}.apply(this, arguments_list) is rare).\n\nWe can change this optimization to branching on two paths in optimized code, builtlin or inlined loop, if that\u0027s the right trade-off.",
+      "parentUuid": "0b026114_ce8c07d1",
+      "revId": "01a7efddaa357841fedb8f53754e6e51c18971f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
