@@ -80,6 +80,15 @@ V8_INLINE void WriteExternalPointerField(Address field_address,
   WriteMaybeUnalignedValue<Address>(field_address, value);
 }
 
+#ifdef V8_ENABLE_SANDBOX
+V8_INLINE bool IsLazilyInitializedExternalPointerFieldInitialized(
+    Address field_address) {
+  auto location = reinterpret_cast<ExternalPointerHandle*>(field_address);
+  ExternalPointerHandle handle = base::AsAtomic32::Relaxed_Load(location);
+  return handle != kNullExternalPointerHandle;
+}
+#endif  // V8_ENABLE_SANDBOX
+
 }  // namespace internal
 }  // namespace v8
 
