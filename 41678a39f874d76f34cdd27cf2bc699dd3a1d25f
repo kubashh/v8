@@ -16,6 +16,23 @@
       "message": "Thanks for the initial review. :)\nI ported it to other archs, updated one affected test and addressed your comments, PTAL.",
       "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963f53d5_251a1caa",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-25T13:39:27Z",
+      "side": 1,
+      "message": "BTW, your arm64 suggestion should also work here with a cast:\n\n    static_cast\u003cScaleFactor\u003e(type.size_log_2())\n  \nIt should be safe because the ScaleFactor enum values are explicitly assigned to the expected numeric values. I\u0027ll add that change before landing if that sgty.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
