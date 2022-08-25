@@ -1,7 +1,8 @@
 Tests how wasm scripts are reported with name
 Check that the inspector gets four wasm scripts at module creation time.
-Session #1: Script #0 parsed. URL: wasm://wasm/a4d4331e.
-Session #1: Script #1 parsed. URL: wasm://wasm/moduleName-d7525102.
-Session #1: Source for wasm://wasm/a4d4331e:
+Session #1: Script #0 parsed. URL: wasm://wasm/5cd8fc86.
+Session #1: Script #1 parsed. URL: wasm://wasm/moduleName-06ec9624.
+Session #1: Source for wasm://wasm/5cd8fc86:
 
-Session #1: Source for wasm://wasm/moduleName-d7525102:
+Session #1: Source for wasm://wasm/moduleName-06ec9624:
+

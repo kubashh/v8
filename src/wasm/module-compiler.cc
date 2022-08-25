@@ -2802,7 +2802,7 @@ bool AsyncStreamingProcessor::ProcessModuleHeader(
     FinishAsyncCompileJobWithError(decoder_.FinishDecoding(false).error());
     return false;
   }
-  prefix_hash_ = NativeModuleCache::WireBytesHash(bytes);
+  prefix_hash_ = GetWireBytesHash(bytes);
   return true;
 }
 
@@ -2819,8 +2819,7 @@ bool AsyncStreamingProcessor::ProcessSection(SectionCode section_code,
   }
   if (before_code_section_) {
     // Combine section hashes until code section.
-    prefix_hash_ = base::hash_combine(prefix_hash_,
-                                      NativeModuleCache::WireBytesHash(bytes));
+    prefix_hash_ = base::hash_combine(prefix_hash_, GetWireBytesHash(bytes));
   }
   if (section_code == SectionCode::kUnknownSectionCode) {
     size_t bytes_consumed = ModuleDecoder::IdentifyUnknownSection(

@@ -12,11 +12,11 @@ Module instantiated.
     scriptId : <scriptId>
 }
 Paused:
-Script wasm://wasm/f6eebe1a byte offset 61: Wasm opcode 0x01 (kExprNop)
+Script wasm://wasm/eca2fa46 byte offset 61: Wasm opcode 0x01 (kExprNop)
 Scope:
 at $main (0:61):
  - scope (wasm-expression-stack):
-   stack:
+   stack: 
  - scope (local):
    $anyref_local: Struct (anyref)
    $anyref_local2: Array (anyref)

@@ -682,4 +682,8 @@ int JumpTableOffset(const WasmModule* module, int func_index) {
       declared_function_index(module, func_index));
 }
 
+size_t GetWireBytesHash(base::Vector<const uint8_t> wire_bytes) {
+  return base::hash_range(wire_bytes.begin(), wire_bytes.end());
+}
+
 }  // namespace v8::internal::wasm
