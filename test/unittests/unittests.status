@@ -11,6 +11,11 @@
   # This tests only the type system, no point in running several variants.
   'TypesTest.*': [PASS, NO_VARIANTS],
 
+  # This tests only that the preparser and parser agree, so there is no point in
+  # running several variants. Note that this still takes ages, because there
+  # are actually 13 * 38 * 5 * 128 = 316160 individual tests hidden here.
+  'ParsingTest.ParserSync': [PASS, NO_VARIANTS],
+
   # https://crbug.com/v8/8919
   'PlatformTest.StackAlignment': [PASS, ['not is_clang', SKIP]],
 
@@ -20,6 +25,9 @@
 
   'IntlTest.StringLocaleCompareFastPath': [['mode != release', SKIP], SLOW, NO_VARIANTS],
   'WeakSetsTest.WeakSet_Shrinking': [FAIL],
+
+  # Slow tests.
+  'ParsingTest.ObjectRestNegativeTestSlow': [PASS, ['mode == debug', SKIP]],
 }],  # ALWAYS
 
 ##############################################################################
@@ -89,6 +97,12 @@
   # https://crbug.com/v8/8766
   'BytecodeGeneratorTest.WideRegisters': [SKIP],
 }],  # arch == ppc64
+
+##############################################################################
+['arch == mips', {
+  # TODO(mips-team): Currently fails on mips board.
+  'ParsingTest.TooManyArguments': [SKIP],
+}],  # 'arch == mips'
 
 ##############################################################################
 ['system == windows and asan', {
@@ -284,6 +298,7 @@
   'BignumDtoaTest.*': [SKIP],
   'DtoaTest.*': [SKIP],
   'DeclsTest.*': [SKIP],
+  'ParsingTest/*': [SKIP],
 }],  # variant == no_wasm_traps
 
 ##############################################################################
