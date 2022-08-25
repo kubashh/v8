@@ -16,6 +16,24 @@
       "message": "https://chromium-review.googlesource.com/c/chromium/src/+/3838776 has landed in chromium, this CL is ready to merge. Please help to trigger a dry run job. Thank you.",
       "revId": "826003f5ab0942ba3b21cb5cfbe1d4fef29c6a51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9aaf787_12408bea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-25T11:43:55Z",
+      "side": 1,
+      "message": "Triggered a dry run and also manually added linux-rel, which previously failed. Will trigger CQ if it passes now.\n\nAlso added f3n67u@gmail.com to V8 try-job access list, since you seem to have enough changes already. So you should be able to trigger dry-runs in V8 from now on.",
+      "parentUuid": "18a86d25_9e549446",
+      "revId": "826003f5ab0942ba3b21cb5cfbe1d4fef29c6a51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
