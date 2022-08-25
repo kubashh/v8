@@ -30,11 +30,36 @@ ExternalPointerTable& GetExternalPointerTable(Isolate* isolate) {
 }
 #endif  // V8_ENABLE_SANDBOX
 
+namespace {
+V8_INLINE constexpr bool IsInitializedExternalPointerHandle(
+    ExternalPointerHandle handle) {
+  uint32_t index = handle >> kExternalPointerIndexShift;
+  return index != 0 && index < kMaxExternalPointers &&
+         (index >> kExternalPointerIndexShift) == handle;
+}
+
+// In debug builds, an uninitialized/lazily-initialized ExternalPointerSlot will
+// contain one of these two values.
+static_assert(!IsInitializedExternalPointerHandle(kZapValue));
+static_assert(!IsInitializedExternalPointerHandle(0));
+
+V8_INLINE bool ContainsInitializedExternalPointerHandle(Address field_address) {
+  auto location = reinterpret_cast<ExternalPointerHandle*>(field_address);
+  ExternalPointerHandle handle = base::AsAtomic32::Relaxed_Load(location);
+  return IsInitializedExternalPointerHandle(handle);
+}
+}  // namespace
+
 template <ExternalPointerTag tag>
 V8_INLINE void InitExternalPointerField(Address field_address, Isolate* isolate,
                                         Address value) {
 #ifdef V8_ENABLE_SANDBOX
   if (IsSandboxedExternalPointerType(tag)) {
+    // Re-initialization of external pointer slots is forbidden as it would
+    // interfere with table compaction. See the explanation of the table
+    // compaction algorithm in external-poiner-table.h.
+    DCHECK(!ContainsInitializedExternalPointerHandle(field_address));
+
     ExternalPointerTable& table = GetExternalPointerTable<tag>(isolate);
     ExternalPointerHandle handle = table.AllocateAndInitializeEntry(value, tag);
     // Use a Release_Store to ensure that the store of the pointer into the
@@ -79,6 +104,15 @@ V8_INLINE void WriteExternalPointerField(Address field_address,
 #endif  // V8_ENABLE_SANDBOX
   WriteMaybeUnalignedValue<Address>(field_address, value);
 }
+
+#ifdef V8_ENABLE_SANDBOX
+V8_INLINE bool IsLazilyInitializedExternalPointerFieldInitialized(
+    Address field_address) {
+  auto location = reinterpret_cast<ExternalPointerHandle*>(field_address);
+  ExternalPointerHandle handle = base::AsAtomic32::Relaxed_Load(location);
+  return handle != kNullExternalPointerHandle;
+}
+#endif  // V8_ENABLE_SANDBOX
 
 }  // namespace internal
 }  // namespace v8
