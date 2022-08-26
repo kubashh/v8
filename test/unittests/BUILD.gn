@@ -4,6 +4,16 @@
 
 import("../../gni/v8.gni")
 
+# Specifies if the target build is a simulator build. Comparing target cpu
+# with v8 target cpu to not affect simulator builds for making cross-compile
+# snapshots.
+target_is_simulator = (target_cpu != v8_target_cpu && !v8_multi_arch_build) ||
+                      (current_cpu != v8_current_cpu && v8_multi_arch_build)
+
+if (v8_enable_webassembly && !target_is_simulator && v8_current_cpu == "x64") {
+  v8_enable_wasm_simd256_revec = true
+}
+
 if (is_fuchsia) {
   import("//build/config/fuchsia/rules.gni")
 
@@ -560,7 +570,10 @@ v8_source_set("unittests_sources") {
   }
 
   if (v8_enable_wasm_simd256_revec) {
-    sources += [ "compiler/linear-scheduler-unittest.cc" ]
+    sources += [
+      "compiler/linear-scheduler-unittest.cc",
+      "compiler/revec-unittest.cc",
+    ]
   }
 
   if (v8_enable_wasm_gdb_remote_debugging) {
