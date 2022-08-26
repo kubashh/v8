@@ -404,7 +404,12 @@ int Map::UsedInstanceSize() const {
 }
 
 void Map::SetInObjectUnusedPropertyFields(int value) {
+#ifdef V8_COMPRESS_POINTERS_8GB
+  static_assert(JSObject::kFieldsAdded ==
+                JSObject::kHeaderSize / kTaggedSize - 1);
+#else
   static_assert(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
+#endif
   if (!IsJSObjectMap()) {
     CHECK_EQ(0, value);
     set_used_or_unused_instance_size_in_words(0);
@@ -420,7 +425,12 @@ void Map::SetInObjectUnusedPropertyFields(int value) {
 }
 
 void Map::SetOutOfObjectUnusedPropertyFields(int value) {
+#ifdef V8_COMPRESS_POINTERS_8GB
+  static_assert(JSObject::kFieldsAdded ==
+                JSObject::kHeaderSize / kTaggedSize - 1);
+#else
   static_assert(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
+#endif
   CHECK_LT(static_cast<unsigned>(value), JSObject::kFieldsAdded);
   // For out of object properties "used_instance_size_in_words" byte encodes
   // the slack in the property array.
@@ -447,7 +457,12 @@ void Map::CopyUnusedPropertyFieldsAdjustedForInstanceSize(Map map) {
 
 void Map::AccountAddedPropertyField() {
   // Update used instance size and unused property fields number.
+#ifdef V8_COMPRESS_POINTERS_8GB
+  static_assert(JSObject::kFieldsAdded ==
+                JSObject::kHeaderSize / kTaggedSize - 1);
+#else
   static_assert(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
+#endif
 #ifdef DEBUG
   int new_unused = UnusedPropertyFields() - 1;
   if (new_unused < 0) new_unused += JSObject::kFieldsAdded;

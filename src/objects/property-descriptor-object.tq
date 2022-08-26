@@ -21,4 +21,6 @@ extern class PropertyDescriptorObject extends Struct {
   value: JSAny|TheHole;
   get: JSAny|TheHole;
   set: JSAny|TheHole;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

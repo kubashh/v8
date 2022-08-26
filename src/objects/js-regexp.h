@@ -292,7 +292,8 @@ class JSRegExpResultWithIndices
       JSRegExpResult::kInObjectPropertyCount == 6,
       "JSRegExpResultWithIndices must be a subclass of JSRegExpResult");
   static constexpr int kIndicesIndex = 6;
-  static constexpr int kInObjectPropertyCount = 7;
+  static constexpr int kInObjectPropertyCount =
+      V8_COMPRESS_POINTERS_8GB_BOOL ? 8 : 7;
 
   TQ_OBJECT_CONSTRUCTORS(JSRegExpResultWithIndices)
 };
@@ -313,7 +314,8 @@ class JSRegExpResultIndices
 
   // Indices of in-object properties.
   static constexpr int kGroupsIndex = 0;
-  static constexpr int kInObjectPropertyCount = 1;
+  static constexpr int kInObjectPropertyCount =
+      V8_COMPRESS_POINTERS_8GB_BOOL ? 2 : 1;
 
   // Descriptor index of groups.
   static constexpr int kGroupsDescriptorIndex = 1;

@@ -5,6 +5,8 @@
 extern class BreakPoint extends Struct {
   id: Smi;
   condition: String;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern class BreakPointInfo extends Struct {
@@ -12,6 +14,8 @@ extern class BreakPointInfo extends Struct {
   source_position: Smi;
   // List of related JavaScript break points.
   break_points: FixedArray|BreakPoint|Undefined;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 bitfield struct DebugInfoFlags extends uint31 {
@@ -51,6 +55,8 @@ extern class DebugInfo extends Struct {
   // A bitfield that lists uses of the current instance.
   @cppRelaxedLoad @cppRelaxedStore flags: SmiTagged<DebugInfoFlags>;
   coverage_info: CoverageInfo|Undefined;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @export
@@ -126,9 +132,13 @@ extern class ErrorStackData extends Struct {
   // negative specifies the (negated) limit for the inspector
   // stack traces.
   limit_or_stack_frame_infos: Smi|FixedArray;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern class PromiseOnStack extends Struct {
   prev: PromiseOnStack|Zero;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
   promise: Weak<JSObject>;
 }

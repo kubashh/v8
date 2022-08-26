@@ -307,13 +307,25 @@ macro NewPromiseResolveThenableJobTask(implicit context: Context)(
   // 1. Let job be a new Job abstract closure with no parameters that
   //    captures promiseToResolve, thenable, and then...
   // 5. Return { [[Job]]: job, [[Realm]]: thenRealm }.
-  return new PromiseResolveThenableJobTask{
-    map: PromiseResolveThenableJobTaskMapConstant(),
-    context: nativeContext,
-    promise_to_resolve: promiseToResolve,
-    thenable,
-    then
-  };
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new PromiseResolveThenableJobTask{
+      map: PromiseResolveThenableJobTaskMapConstant(),
+      context: nativeContext,
+      promise_to_resolve: promiseToResolve,
+      thenable,
+      then,
+      optional_padding: 0
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new PromiseResolveThenableJobTask{
+      map: PromiseResolveThenableJobTaskMapConstant(),
+      context: nativeContext,
+      promise_to_resolve: promiseToResolve,
+      thenable,
+      then
+    };
+  }
 }
 
 struct InvokeThenOneArgFunctor {

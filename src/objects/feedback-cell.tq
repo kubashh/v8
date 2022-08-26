@@ -5,4 +5,6 @@
 extern class FeedbackCell extends Struct {
   value: Undefined|FeedbackVector|FixedArray;
   interrupt_budget: int32;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

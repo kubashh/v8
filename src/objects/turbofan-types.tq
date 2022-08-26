@@ -60,18 +60,24 @@ bitfield struct TurbofanTypeHighBits extends uint32 {
 class TurbofanBitsetType extends TurbofanType {
   bitset_low: TurbofanTypeLowBits;
   bitset_high: TurbofanTypeHighBits;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @export
 class TurbofanUnionType extends TurbofanType {
   type1: TurbofanType;
   type2: TurbofanType;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @export
 class TurbofanRangeType extends TurbofanType {
   min: float64;
   max: float64;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @export
@@ -82,6 +88,8 @@ class TurbofanHeapConstantType extends TurbofanType {
 @export
 class TurbofanOtherNumberConstantType extends TurbofanType {
   constant: float64;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 macro IsMinusZero(x: float64): bool {

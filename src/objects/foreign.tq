@@ -5,6 +5,9 @@
 @apiExposedInstanceTypeValue(0xcc)
 extern class Foreign extends HeapObject {
   foreign_address: ExternalPointer;
+  // TODO(teodutu): Create another flag if ExternalPointer is aligned.
+  @ if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern operator '.foreign_address_ptr' macro LoadForeignForeignAddressPtr(

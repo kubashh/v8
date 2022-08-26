@@ -1171,10 +1171,11 @@ void Genesis::CreateJSProxyMaps() {
   native_context()->set_proxy_constructor_map(*proxy_constructor_map);
 
   {
+    int inobject_properties = V8_COMPRESS_POINTERS_8GB_BOOL ? 3 : 2;
     Handle<Map> map =
         factory()->NewMap(JS_OBJECT_TYPE, JSProxyRevocableResult::kSize,
-                          TERMINAL_FAST_ELEMENTS_KIND, 2);
-    Map::EnsureDescriptorSlack(isolate_, map, 2);
+                          TERMINAL_FAST_ELEMENTS_KIND, inobject_properties);
+    Map::EnsureDescriptorSlack(isolate_, map, inobject_properties);
 
     {  // proxy
       Descriptor d = Descriptor::DataField(isolate(), factory()->proxy_string(),
@@ -1342,11 +1343,14 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
 
   if (js_global_object_template.is_null()) {
     Handle<String> name = factory()->empty_string();
+    int instance_size = OBJECT_POINTER_ALIGN(JSGlobalObject::kHeaderSize);
+    int inobject_properties = V8_COMPRESS_POINTERS_8GB_BOOL ? 1 : 0;
+
     Handle<JSObject> prototype =
         factory()->NewFunctionPrototype(isolate()->object_function());
     js_global_object_function = CreateFunctionForBuiltinWithPrototype(
         isolate(), name, Builtin::kIllegal, prototype, JS_GLOBAL_OBJECT_TYPE,
-        JSGlobalObject::kHeaderSize, 0, MUTABLE);
+        instance_size, inobject_properties, MUTABLE);
 #ifdef DEBUG
     LookupIterator it(isolate(), prototype, factory()->constructor_string(),
                       LookupIterator::OWN_SKIP_INTERCEPTOR);
@@ -3946,15 +3950,16 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
   }
 
   {  // --- sloppy arguments map
+    int inobject_properties = V8_COMPRESS_POINTERS_8GB_BOOL ? 3 : 2;
     Handle<String> arguments_string = factory->Arguments_string();
     Handle<JSFunction> function = CreateFunctionForBuiltinWithPrototype(
         isolate(), arguments_string, Builtin::kIllegal,
         isolate()->initial_object_prototype(), JS_ARGUMENTS_OBJECT_TYPE,
-        JSSloppyArgumentsObject::kSize, 2, MUTABLE);
+        JSSloppyArgumentsObject::kSize, inobject_properties, MUTABLE);
     Handle<Map> map(function->initial_map(), isolate());
 
     // Create the descriptor array for the arguments object.
-    Map::EnsureDescriptorSlack(isolate_, map, 2);
+    Map::EnsureDescriptorSlack(isolate_, map, inobject_properties);
 
     {  // length
       Descriptor d =
@@ -3982,12 +3987,13 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     Handle<Map> map = isolate_->sloppy_arguments_map();
     map = Map::Copy(isolate_, map, "FastAliasedArguments");
     map->set_elements_kind(FAST_SLOPPY_ARGUMENTS_ELEMENTS);
-    DCHECK_EQ(2, map->GetInObjectProperties());
+    int inobject_properties = V8_COMPRESS_POINTERS_8GB_BOOL ? 3 : 2;
+    DCHECK_EQ(inobject_properties, map->GetInObjectProperties());
     native_context()->set_fast_aliased_arguments_map(*map);
 
     map = Map::Copy(isolate_, map, "SlowAliasedArguments");
     map->set_elements_kind(SLOW_SLOPPY_ARGUMENTS_ELEMENTS);
-    DCHECK_EQ(2, map->GetInObjectProperties());
+    DCHECK_EQ(inobject_properties, map->GetInObjectProperties());
     native_context()->set_slow_aliased_arguments_map(*map);
   }
 

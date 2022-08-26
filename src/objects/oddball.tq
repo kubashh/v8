@@ -11,4 +11,6 @@ extern class Oddball extends PrimitiveHeapObject {
   to_number: Number;
   type_of: String;
   kind: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

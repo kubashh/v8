@@ -66,4 +66,6 @@ extern class PromiseResolveThenableJobTask extends Microtask {
   promise_to_resolve: JSPromise;
   thenable: JSReceiver;
   then: JSReceiver;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

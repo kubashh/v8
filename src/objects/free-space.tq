@@ -4,5 +4,7 @@
 
 extern class FreeSpace extends HeapObject {
   size: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
   next: FreeSpace|Uninitialized;
 }

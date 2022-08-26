@@ -5,6 +5,8 @@
 #ifndef V8_HEAP_COMBINED_HEAP_H_
 #define V8_HEAP_COMBINED_HEAP_H_
 
+#include "src/base/logging.h"
+#include "src/common/globals.h"
 #include "src/heap/heap.h"
 #include "src/heap/read-only-heap.h"
 #include "src/heap/safepoint.h"
@@ -33,6 +35,8 @@ class V8_EXPORT_PRIVATE CombinedHeapObjectIterator final {
 
 V8_WARN_UNUSED_RESULT inline bool IsValidHeapObject(Heap* heap,
                                                     HeapObject object) {
+  CHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
+                IsAligned(object.address(), kObjectAlignment8GbHeap));
   if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
     return third_party_heap::Heap::IsValidHeapObject(object);
   }

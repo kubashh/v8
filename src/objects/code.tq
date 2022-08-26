@@ -24,6 +24,11 @@ extern class BytecodeArray extends FixedArrayBase {
   incoming_new_target_or_generator_register: int32;
   // TODO(jgruber): Only 3 bits are in use; if bits are needed, steal here.
   bytecode_age: uint16;
+  // TODO(teodutu): Get back to this.
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding1: uint16;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding2: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding1: void;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding2: void;
 }
 
 extern class CodeDataContainer extends HeapObject;

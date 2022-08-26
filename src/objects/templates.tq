@@ -66,6 +66,8 @@ extern class FunctionTemplateInfo extends TemplateInfo {
   // This will be set as the instance type of the objects that are created from
   // this FunctionTemplateInfo.
   instance_type: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 bitfield struct ObjectTemplateInfoFlags extends uint31 {

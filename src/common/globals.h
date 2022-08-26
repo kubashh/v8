@@ -657,14 +657,6 @@ constexpr intptr_t kObjectAlignmentMask = kObjectAlignment - 1;
 constexpr intptr_t kObjectAlignment8GbHeap = 8;
 constexpr intptr_t kObjectAlignment8GbHeapMask = kObjectAlignment8GbHeap - 1;
 
-#ifdef V8_COMPRESS_POINTERS_8GB
-static_assert(
-    kObjectAlignment8GbHeap == 2 * kTaggedSize,
-    "When the 8GB heap is enabled, all allocations should be aligned to twice "
-    "the size of a tagged value. This enables aligning allocations by just "
-    "adding kTaggedSize to an unaligned address.");
-#endif
-
 // Desired alignment for system pointers.
 constexpr intptr_t kPointerAlignment = (1 << kSystemPointerSizeLog2);
 constexpr intptr_t kPointerAlignmentMask = kPointerAlignment - 1;
@@ -1143,8 +1135,11 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
     ::i::kWeakHeapObjectTag))
 
 // OBJECT_POINTER_ALIGN returns the value aligned as a HeapObject pointer
-#define OBJECT_POINTER_ALIGN(value) \
-  (((value) + ::i::kObjectAlignmentMask) & ~::i::kObjectAlignmentMask)
+#define OBJECT_POINTER_ALIGN(value)                      \
+  (V8_COMPRESS_POINTERS_8GB_BOOL                         \
+       ? (((value) + ::i::kObjectAlignment8GbHeapMask) & \
+          ~::i::kObjectAlignment8GbHeapMask)             \
+       : (((value) + ::i::kObjectAlignmentMask) & ~::i::kObjectAlignmentMask))
 
 // OBJECT_POINTER_PADDING returns the padding size required to align value
 // as a HeapObject pointer

@@ -53,10 +53,18 @@ extern shape JSRegExpResult extends JSArray {
 
 extern shape JSRegExpResultWithIndices extends JSRegExpResult {
   indices: JSAny;
+  @ if (V8_COMPRESS_POINTERS_8GB)
+  optional_padding_8gb_heap_JSRegExpResultWithIndices: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB)
+  optional_padding_8gb_heap_JSRegExpResultWithIndices: void;
 }
 
 extern shape JSRegExpResultIndices extends JSArray {
   // In-object properties:
   // The groups field is externally exposed.
   groups: JSAny;
+  @ if (V8_COMPRESS_POINTERS_8GB)
+  optional_padding_8gb_heap_JSRegExpResultIndices: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB)
+  optional_padding_8gb_heap_JSRegExpResultIndices: void;
 }

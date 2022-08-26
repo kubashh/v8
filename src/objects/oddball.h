@@ -56,7 +56,10 @@ class Oddball : public PrimitiveHeapObject {
   DECL_FIELD_OFFSET_TQ(ToNumber, kToStringOffset + kTaggedSize, "Number")
   DECL_FIELD_OFFSET_TQ(TypeOf, kToNumberOffset + kTaggedSize, "String")
   DECL_FIELD_OFFSET_TQ(Kind, kTypeOfOffset + kTaggedSize, "Smi")
-  static const int kSize = kKindOffset + kTaggedSize;
+  DECL_FIELD_OFFSET_TQ(OptionalPadding, kKindOffset + kTaggedSize, "Object")
+  static const int kSize =
+      (V8_COMPRESS_POINTERS_8GB_BOOL ? kOptionalPaddingOffset : kKindOffset) +
+      kTaggedSize;
 
   static const byte kFalse = 0;
   static const byte kTrue = 1;

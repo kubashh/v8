@@ -8,6 +8,7 @@
 
 #include "src/ast/scopes.h"
 #include "src/ast/variables.h"
+#include "src/common/globals.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/objects-inl.h"
@@ -531,6 +532,8 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
   int index = kVariablePartIndex;
 
   // Here we add info for context-allocated "this".
+  // if (V8_COMPRESS_POINTERS_8GB_BOOL) DCHECK_EQ(index,
+  // scope_info->ContextLocalNamesIndex()); else
   DCHECK_EQ(index, scope_info->ContextLocalNamesIndex());
   if (context_local_count) {
     scope_info->set(index++, ReadOnlyRoots(isolate).this_string());
@@ -560,7 +563,10 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
   scope_info->set(index++, Smi::zero());
   scope_info->set(index++, Smi::zero());
   DCHECK_EQ(index, scope_info->OuterScopeInfoIndex());
-  DCHECK_EQ(index, scope_info->length());
+  if (V8_COMPRESS_POINTERS_8GB_BOOL)
+    DCHECK_LE(scope_info->length() - index, 1);
+  else
+    DCHECK_EQ(index, scope_info->length());
   DCHECK_EQ(scope_info->ParameterCount(), parameter_count);
   if (is_empty_function || is_native_context) {
     DCHECK_EQ(scope_info->ContextLength(), 0);

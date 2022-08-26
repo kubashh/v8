@@ -83,6 +83,7 @@ class SnapshotByteSource final {
     // This way of decoding variable-length encoded integers does not
     // suffer from branch mispredictions.
     DCHECK(position_ + 3 < length_);
+    printf("GetInt() --- pos = %d\n", position_);
     uint32_t answer = data_[position_];
     answer |= data_[position_ + 1] << 8;
     answer |= data_[position_ + 2] << 16;

@@ -764,10 +764,12 @@ class InternalClass extends HeapObject {
   }
   a: Smi;
   b: Number;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 macro NewInternalClass(x: Smi): InternalClass {
-  return new InternalClass{a: x, b: x + 1};
+  return new InternalClass{a: x, b: x + 1, optional_padding: Null};
 }
 
 @export
@@ -828,6 +830,8 @@ class SmiPair extends HeapObject {
   }
   a: Smi;
   b: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 macro Swap<T: type>(a:&T, b:&T): void {
@@ -838,7 +842,7 @@ macro Swap<T: type>(a:&T, b:&T): void {
 
 @export
 macro TestReferences(): void {
-  const array = new SmiPair{a: 7, b: 2};
+  const array = new SmiPair{a: 7, b: 2, optional_padding: Null};
   const ref:&Smi = &array.a;
   *ref = 3 + *ref;
   -- *ref;
@@ -926,10 +930,12 @@ macro TestStaticAssert(): void {
 class SmiBox extends HeapObject {
   value: Smi;
   unrelated: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 builtin NewSmiBox(implicit context: Context)(value: Smi): SmiBox {
-  return new SmiBox{value, unrelated: 0};
+  return new SmiBox{value, unrelated: 0, optional_padding: Null};
 }
 
 @export
@@ -1172,16 +1178,22 @@ class ExportedSubClass extends ExportedSubClassBase {
   c_field: int32;
   d_field: int32;
   e_field: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding2: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding2: void;
 }
 
 @export
 class ExportedSubClassBase extends HeapObject {
   a: HeapObject;
   b: HeapObject;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @abstract
 class AbstractInternalClass extends HeapObject {
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 class AbstractInternalClassSubclass1 extends AbstractInternalClass {}
@@ -1275,8 +1287,21 @@ macro TestFullyGeneratedClassWithElements(): void {
 
 @export
 macro TestFullyGeneratedClassFromCpp(): ExportedSubClass {
-  return new
-  ExportedSubClass{a: Null, b: Null, c_field: 7, d_field: 8, e_field: 9};
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new ExportedSubClass{
+      a: Null,
+      b: Null,
+      optional_padding: Null,
+      c_field: 7,
+      d_field: 8,
+      e_field: 9,
+      optional_padding2: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new
+    ExportedSubClass{a: Null, b: Null, c_field: 7, d_field: 8, e_field: 9};
+  }
 }
 
 @export
@@ -1284,15 +1309,43 @@ class ExportedSubClass2 extends ExportedSubClassBase {
   x_field: int32;
   y_field: int32;
   z_field: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding2: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding2: void;
 }
 
 @export
 macro TestGeneratedCastOperators(implicit context: Context)(): void {
-  const a = new
-  ExportedSubClass{a: Null, b: Null, c_field: 3, d_field: 4, e_field: 5};
-  const b = new ExportedSubClassBase{a: Undefined, b: Null};
-  const c = new
-  ExportedSubClass2{a: Null, b: Null, x_field: 3, y_field: 4, z_field: 5};
+  let a: ExportedSubClass;
+  let b: ExportedSubClassBase;
+  let c: ExportedSubClass2;
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    a = new ExportedSubClass{
+      a: Null,
+      b: Null,
+      optional_padding: Null,
+      c_field: 3,
+      d_field: 4,
+      e_field: 5,
+      optional_padding2: Null
+    };
+    b = new ExportedSubClassBase{a: Undefined, b: Null, optional_padding: Null};
+    c = new ExportedSubClass2{
+      a: Null,
+      b: Null,
+      optional_padding: Null,
+      x_field: 3,
+      y_field: 4,
+      z_field: 5,
+      optional_padding2: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    a = new
+    ExportedSubClass{a: Null, b: Null, c_field: 3, d_field: 4, e_field: 5};
+    b = new ExportedSubClassBase{a: Undefined, b: Null};
+    c = new
+    ExportedSubClass2{a: Null, b: Null, x_field: 3, y_field: 4, z_field: 5};
+  }
   const aO: Object = a;
   const bO: Object = b;
   const cO: Object = c;
@@ -1322,7 +1375,14 @@ extern runtime InYoungGeneration(implicit context: Context)(HeapObject):
 
 @export
 macro TestNewPretenured(implicit context: Context)(): void {
-  const obj = new (Pretenured) ExportedSubClassBase{a: Undefined, b: Null};
+  let obj: ExportedSubClassBase;
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    obj = new (Pretenured)
+    ExportedSubClassBase{a: Undefined, b: Null, optional_padding: Null};
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    obj = new (Pretenured) ExportedSubClassBase{a: Undefined, b: Null};
+  }
   dcheck(Is<ExportedSubClassBase>(obj));
   dcheck(InYoungGeneration(obj) == False);
 }

@@ -49,6 +49,8 @@ extern class ConsString extends String {
 
   first: String;
   second: String;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @abstract
@@ -57,6 +59,8 @@ extern class ExternalString extends String {
   resource: ExternalPointer;
   // WARNING: This field is missing for uncached external strings.
   resource_data: ExternalPointer;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern operator '.resource_ptr' macro LoadExternalStringResourcePtr(
@@ -97,6 +101,8 @@ extern class ExternalTwoByteString extends ExternalString {
 
 @doNotGenerateCast
 extern class InternalizedString extends String {
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @abstract
@@ -119,6 +125,8 @@ extern class SeqTwoByteString extends SeqString {
 extern class SlicedString extends String {
   parent: String;
   offset: Smi;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @generateBodyDescriptor

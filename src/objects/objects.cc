@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <memory>
 #include <sstream>
 #include <vector>
@@ -4436,8 +4437,8 @@ void DescriptorArray::Initialize(EnumCache empty_enum_cache,
   set_raw_number_of_marked_descriptors(0);
   set_filler16bits(0);
   set_enum_cache(empty_enum_cache, SKIP_WRITE_BARRIER);
-  MemsetTagged(GetDescriptorSlot(0), undefined_value,
-               number_of_all_descriptors() * kEntrySize);
+  size_t counter = (Size() - kOptionalPaddingOffset) / kTaggedSize;
+  MemsetTagged(RawField(kOptionalPaddingOffset), undefined_value, counter);
 }
 
 void DescriptorArray::ClearEnumCache() {

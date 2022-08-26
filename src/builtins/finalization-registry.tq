@@ -166,17 +166,34 @@ FinalizationRegistryRegister(
   // Allocate the WeakCell object in the old space, because 1) WeakCell weakness
   // handling is only implemented in the old space 2) they're supposedly
   // long-living. TODO(marja, gsathya): Support WeakCells in Scavenger.
-  const cell = new (Pretenured) WeakCell{
-    map: GetWeakCellMap(),
-    finalization_registry: finalizationRegistry,
-    target: target,
-    unregister_token: unregisterToken,
-    holdings: heldValue,
-    prev: Undefined,
-    next: Undefined,
-    key_list_prev: Undefined,
-    key_list_next: Undefined
-  };
+  let cell: WeakCell;
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    cell = new (Pretenured) WeakCell{
+      map: GetWeakCellMap(),
+      finalization_registry: finalizationRegistry,
+      target: target,
+      unregister_token: unregisterToken,
+      holdings: heldValue,
+      prev: Undefined,
+      next: Undefined,
+      key_list_prev: Undefined,
+      key_list_next: Undefined,
+      optional_padding: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    cell = new (Pretenured) WeakCell{
+      map: GetWeakCellMap(),
+      finalization_registry: finalizationRegistry,
+      target: target,
+      unregister_token: unregisterToken,
+      holdings: heldValue,
+      prev: Undefined,
+      next: Undefined,
+      key_list_prev: Undefined,
+      key_list_next: Undefined
+    };
+  }
   // 7. Append cell to finalizationRegistry.[[Cells]].
   PushCell(finalizationRegistry, cell);
   if (unregisterToken != Undefined) {

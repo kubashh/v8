@@ -9,14 +9,20 @@ extern class Struct extends HeapObject {
 extern class Tuple2 extends Struct {
   value1: Object;
   value2: Object;
+  @ if(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: void;
 }
 
 extern class ClassPositions extends Struct {
   start: Smi;
   end: Smi;
+  @ if(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: void;
 }
 
 extern class AccessorPair extends Struct {
   getter: Object;
   setter: Object;
+  @ if(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding_8gb_heap: void;
 }

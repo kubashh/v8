@@ -5,6 +5,8 @@
 #include "src/heap/new-spaces.h"
 
 #include "paged-spaces.h"
+#include "src/base/logging.h"
+#include "src/base/macros.h"
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/array-buffer-sweeper.h"
@@ -520,6 +522,8 @@ void NewSpace::VerifyImpl(Isolate* isolate, const Page* current_page,
 
       // All the interior pointers should be contained in the heap.
       int size = object.Size(cage_base);
+      CHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
+                    IsAligned(size, kObjectAlignment8GbHeap));
       object.IterateBody(map, size, &visitor);
 
       if (object.IsExternalString(cage_base)) {

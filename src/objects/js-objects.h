@@ -838,7 +838,8 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
 
   // This constant applies only to the initial map of "global.Object" and
   // not to arbitrary other JSObject maps.
-  static const int kInitialGlobalObjectUnusedPropertiesCount = 4;
+  static const int kInitialGlobalObjectUnusedPropertiesCount =
+      V8_COMPRESS_POINTERS_8GB_BOOL ? 5 : 4;
 
   static const int kMaxInstanceSize = 255 * kTaggedSize;
 
@@ -847,7 +848,7 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
   // When extending the backing storage for property values, we increase
   // its size by more than the 1 entry necessary, so sequentially adding fields
   // to the same object requires fewer allocations and copies.
-  static const int kFieldsAdded = 3;
+  static const int kFieldsAdded = V8_COMPRESS_POINTERS_8GB_BOOL ? 2 : 3;
   static_assert(kMaxNumberOfDescriptors + kFieldsAdded <=
                 PropertyArray::kMaxLength);
 

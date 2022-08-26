@@ -11,7 +11,6 @@
 
 #include "src/ast/ast-source-ranges.h"
 #include "src/base/bits.h"
-#include "src/base/macros.h"
 #include "src/builtins/accessors.h"
 #include "src/builtins/constants-table-builder.h"
 #include "src/codegen/compilation-cache.h"
@@ -1961,6 +1960,7 @@ Handle<PropertyCell> Factory::NewPropertyCell(Handle<Name> name,
   cell.set_name(*name, mode);
   cell.set_value(*value, mode);
   cell.set_property_details_raw(details.AsSmi(), SKIP_WRITE_BARRIER);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) cell.clear_padding();
   return handle(cell, isolate());
 }
 
@@ -2108,9 +2108,6 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
   if (!site.is_null()) {
     DCHECK(V8_ALLOCATION_SITE_TRACKING_BOOL);
     adjusted_object_size += AllocationMemento::kSize;
-    if (V8_COMPRESS_POINTERS_8GB_BOOL &&
-        !IsAligned(object_size, kObjectAlignment8GbHeap))
-      adjusted_object_size += kObjectAlignment8GbHeap - kTaggedSize;
   }
   HeapObject raw_clone =
       allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
@@ -2129,14 +2126,8 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
     isolate()->heap()->WriteBarrierForRange(raw_clone, start, end);
   }
   if (!site.is_null()) {
-    if (V8_COMPRESS_POINTERS_8GB_BOOL &&
-        !IsAligned(object_size, kObjectAlignment8GbHeap)) {
-      isolate()->heap()->CreateFillerObjectAt(
-          raw_clone.address() + object_size,
-          kObjectAlignment8GbHeap - kTaggedSize);
-    }
-    AllocationMemento alloc_memento = AllocationMemento::unchecked_cast(Object(
-        raw_clone.ptr() + adjusted_object_size - AllocationMemento::kSize));
+    AllocationMemento alloc_memento = AllocationMemento::unchecked_cast(
+        Object(raw_clone.ptr() + object_size));
     InitializeAllocationMemento(alloc_memento, *site);
   }
 
@@ -2224,6 +2215,7 @@ Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
   new_object.set_map_after_allocation(src->map(), SKIP_WRITE_BARRIER);
   T result = T::cast(new_object);
   initialize_length(result, new_len);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) result.clear_padding();
   // Copy the content.
   WriteBarrierMode mode = result.GetWriteBarrierMode(no_gc);
   result.CopyElements(isolate(), 0, *src, 0, old_len, mode);
@@ -2584,10 +2576,12 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
   // require us to change property values to PropertyCells.
   DCHECK_EQ(map->NextFreePropertyIndex(), 0);
 
+  // TODO(teodutu): Change these comments. Make sure they're not important.
   // Make sure we don't have a ton of pre-allocated slots in the
   // global objects. They will be unused once we normalize the object.
-  DCHECK_EQ(map->UnusedPropertyFields(), 0);
-  DCHECK_EQ(map->GetInObjectProperties(), 0);
+  int inobject_properties = V8_COMPRESS_POINTERS_8GB_BOOL ? 1 : 0;
+  DCHECK_EQ(map->UnusedPropertyFields(), inobject_properties);
+  DCHECK_EQ(map->GetInObjectProperties(), inobject_properties);
 
   // Initial size of the backing store to avoid resize of the storage during
   // bootstrapping. The size differs between the JS global object ad the
@@ -3661,15 +3655,18 @@ Handle<Map> Factory::CreateSloppyFunctionMap(
   int inobject_properties_count = 0;
   if (IsFunctionModeWithName(function_mode)) ++inobject_properties_count;
 
-  Handle<Map> map = NewMap(
-      JS_FUNCTION_TYPE, header_size + inobject_properties_count * kTaggedSize,
-      TERMINAL_FAST_ELEMENTS_KIND, inobject_properties_count);
+  int instance_size = OBJECT_POINTER_ALIGN(
+      header_size + inobject_properties_count * kTaggedSize);
+  Handle<Map> map =
+      NewMap(JS_FUNCTION_TYPE, instance_size, TERMINAL_FAST_ELEMENTS_KIND,
+             inobject_properties_count);
   {
     DisallowGarbageCollection no_gc;
     Map raw_map = *map;
     raw_map.set_has_prototype_slot(has_prototype);
     raw_map.set_is_constructor(has_prototype);
     raw_map.set_is_callable(true);
+    raw_map.clear_padding();
   }
   Handle<JSFunction> empty_function;
   if (maybe_empty_function.ToHandle(&empty_function)) {
@@ -3753,15 +3750,18 @@ Handle<Map> Factory::CreateStrictFunctionMap(
   }
   descriptors_count += inobject_properties_count;
 
-  Handle<Map> map = NewMap(
-      JS_FUNCTION_TYPE, header_size + inobject_properties_count * kTaggedSize,
-      TERMINAL_FAST_ELEMENTS_KIND, inobject_properties_count);
+  int instance_size = OBJECT_POINTER_ALIGN(
+      header_size + inobject_properties_count * kTaggedSize);
+  Handle<Map> map =
+      NewMap(JS_FUNCTION_TYPE, instance_size, TERMINAL_FAST_ELEMENTS_KIND,
+             inobject_properties_count);
   {
     DisallowGarbageCollection no_gc;
     Map raw_map = *map;
     raw_map.set_has_prototype_slot(has_prototype);
     raw_map.set_is_constructor(has_prototype);
     raw_map.set_is_callable(true);
+    raw_map.clear_padding();
   }
   Map::SetPrototype(isolate(), map, empty_function);
 

@@ -279,7 +279,8 @@ class ScopeInfo : public TorqueGeneratedScopeInfo<ScopeInfo, HeapObject> {
 #define FOR_EACH_SCOPE_INFO_NUMERIC_FIELD(V) \
   V(Flags)                                   \
   V(ParameterCount)                          \
-  V(ContextLocalCount)
+  V(ContextLocalCount)                       \
+  V(OptionalPadding)
 
 #define FIELD_ACCESSORS(name)       \
   inline int name() const;
@@ -299,7 +300,9 @@ class ScopeInfo : public TorqueGeneratedScopeInfo<ScopeInfo, HeapObject> {
   bool IsEmpty() const;
 
   // Returns the size in bytes for a ScopeInfo with |length| slots.
-  static constexpr int SizeFor(int length) { return OffsetOfElementAt(length); }
+  static constexpr int SizeFor(int length) {
+    return OBJECT_POINTER_ALIGN(OffsetOfElementAt(length));
+  }
 
   // Gives access to raw memory which stores the ScopeInfo's data.
   inline ObjectSlot data_start();

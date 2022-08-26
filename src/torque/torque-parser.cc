@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <unordered_map>
 
+#include "src/common/globals.h"
 #include "src/flags/flags.h"
 #include "src/torque/ast.h"
 #include "src/torque/constants.h"
@@ -71,6 +72,16 @@ class BuildFlags : public ContextualClass<BuildFlags> {
     build_flags_["V8_SANDBOXED_EXTERNAL_POINTERS"] =
         V8_SANDBOXED_EXTERNAL_POINTERS_BOOL;
     build_flags_["DEBUG"] = DEBUG_BOOL;
+    build_flags_["V8_COMPRESS_POINTERS_8GB"] = V8_COMPRESS_POINTERS_8GB_BOOL;
+    build_flags_["V8_ALIGN_OBJECT_SIZES_8_BYTES"] =
+        V8_COMPRESS_POINTERS_8GB_BOOL || TAGGED_SIZE_8_BYTES;
+    build_flags_["V8_COMPRESS_POINTERS_8GB_AND_TAGGED_SIZE_8_BYTES"] =
+        V8_COMPRESS_POINTERS_8GB_BOOL && TAGGED_SIZE_8_BYTES;
+    build_flags_["V8_COMPRESS_POINTERS_8GB_OR_SCRIPTORMODULE_LEGACY_LIFETIME"] =
+        V8_COMPRESS_POINTERS_8GB_BOOL &&
+        !build_flags_["V8_SCRIPTORMODULE_LEGACY_LIFETIME"];
+    build_flags_["V8_COMPRESS_POINTERS_8GB_AND_NOT_SFI_HAS_UNIQUE_ID"] =
+        V8_COMPRESS_POINTERS_8GB_BOOL && !V8_SFI_HAS_UNIQUE_ID;
   }
   static bool GetFlag(const std::string& name, const char* production) {
     auto it = Get().build_flags_.find(name);

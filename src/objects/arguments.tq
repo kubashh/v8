@@ -17,6 +17,8 @@ macro IsJSArgumentsObjectWithLength(implicit context: Context)(o: Object):
 extern shape JSSloppyArgumentsObject extends JSArgumentsObject {
   length: JSAny;
   callee: JSAny;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 // Just a starting shape for JSObject; properties can move after initialization.
@@ -109,13 +111,25 @@ macro NewJSStrictArgumentsObject(implicit context: Context)(
 macro NewJSSloppyArgumentsObject(implicit context: Context)(
     elements: FixedArrayBase, callee: JSFunction): JSSloppyArgumentsObject {
   const map = GetSloppyArgumentsMap();
-  return new JSSloppyArgumentsObject{
-    map,
-    properties_or_hash: kEmptyFixedArray,
-    elements,
-    length: elements.length,
-    callee
-  };
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new JSSloppyArgumentsObject{
+      map,
+      properties_or_hash: kEmptyFixedArray,
+      elements,
+      length: elements.length,
+      callee,
+      optional_padding: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new JSSloppyArgumentsObject{
+      map,
+      properties_or_hash: kEmptyFixedArray,
+      elements,
+      length: elements.length,
+      callee
+    };
+  }
 }
 
 macro NewJSFastAliasedArgumentsObject(implicit context: Context)(
@@ -123,13 +137,25 @@ macro NewJSFastAliasedArgumentsObject(implicit context: Context)(
     callee: JSFunction): JSSloppyArgumentsObject {
   // TODO(danno): FastAliasedArguments should really be a type for itself
   const map = GetFastAliasedArgumentsMap();
-  return new JSSloppyArgumentsObject{
-    map,
-    properties_or_hash: kEmptyFixedArray,
-    elements,
-    length,
-    callee
-  };
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new JSSloppyArgumentsObject{
+      map,
+      properties_or_hash: kEmptyFixedArray,
+      elements,
+      length,
+      callee,
+      optional_padding: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new JSSloppyArgumentsObject{
+      map,
+      properties_or_hash: kEmptyFixedArray,
+      elements,
+      length,
+      callee
+    };
+  }
 }
 
 struct ParameterMapIterator {

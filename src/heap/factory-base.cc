@@ -7,6 +7,7 @@
 #include "src/ast/ast-source-ranges.h"
 #include "src/ast/ast.h"
 #include "src/common/assert-scope.h"
+#include "src/common/globals.h"
 #include "src/execution/local-isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory.h"
@@ -140,6 +141,7 @@ Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithFiller(
   result.set_map_after_allocation(*map, SKIP_WRITE_BARRIER);
   FixedArray array = FixedArray::cast(result);
   array.set_length(length);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) array.clear_padding();
   MemsetTagged(array.data_start(), *filler, length);
   return handle(array, isolate());
 }
@@ -382,7 +384,7 @@ FactoryBase<Impl>::NewUncompiledDataWithPreparseData(
     Handle<PreparseData> preparse_data) {
   return TorqueGeneratedFactory<Impl>::NewUncompiledDataWithPreparseData(
       inferred_name, start_position, end_position, preparse_data,
-      AllocationType::kOld);
+      Handle<PreparseData>::null(), AllocationType::kOld);
 }
 
 template <typename Impl>
@@ -404,8 +406,8 @@ FactoryBase<Impl>::NewUncompiledDataWithPreparseDataAndJob(
     Handle<String> inferred_name, int32_t start_position, int32_t end_position,
     Handle<PreparseData> preparse_data) {
   return TorqueGeneratedFactory<Impl>::NewUncompiledDataWithPreparseDataAndJob(
-      inferred_name, start_position, end_position, preparse_data, kNullAddress,
-      AllocationType::kOld);
+      inferred_name, start_position, end_position, preparse_data,
+      Handle<PreparseData>::null(), kNullAddress, AllocationType::kOld);
 }
 
 template <typename Impl>
@@ -816,6 +818,7 @@ Handle<String> FactoryBase<Impl>::NewConsString(Handle<String> left,
   result.set_length(length);
   result.set_first(*left, mode);
   result.set_second(*right, mode);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) result.clear_padding();
   return handle(result, isolate());
 }
 
@@ -981,7 +984,7 @@ Handle<ScopeInfo> FactoryBase<Impl>::NewScopeInfo(int length,
       size, type, read_only_roots().scope_info_map());
   ScopeInfo scope_info = ScopeInfo::cast(obj);
   MemsetTagged(scope_info.data_start(), read_only_roots().undefined_value(),
-               length);
+               (size - HeapObject::kHeaderSize) / kTaggedSize);
   return handle(scope_info, isolate());
 }
 
@@ -1059,6 +1062,7 @@ FactoryBase<Impl>::AllocateRawOneByteInternalizedString(
   DisallowGarbageCollection no_gc;
   answer.set_length(length);
   answer.set_raw_hash_field(raw_hash_field);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) answer.clear_padding();
   DCHECK_EQ(size, answer.Size());
   return handle(answer, isolate());
 }

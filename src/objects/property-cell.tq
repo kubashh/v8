@@ -7,4 +7,6 @@ extern class PropertyCell extends HeapObject {
   property_details_raw: Smi;
   value: Object;
   dependent_code: DependentCode;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

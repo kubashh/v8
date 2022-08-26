@@ -25,6 +25,8 @@ extern class WasmApiFunctionRef extends HeapObject {
   // to load memory start/size fields.
   instance: WasmInstanceObject|Undefined;
   suspend: Smi;  // Boolean.
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 // This is the representation that is used internally by wasm to represent
@@ -78,6 +80,8 @@ extern class WasmJSFunctionData extends WasmFunctionData {
   serialized_return_count: Smi;
   serialized_parameter_count: Smi;
   serialized_signature: PodArrayOfWasmValueType;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern class WasmCapiFunctionData extends WasmFunctionData {
@@ -88,6 +92,8 @@ extern class WasmCapiFunctionData extends WasmFunctionData {
 extern class WasmResumeData extends HeapObject {
   suspender: WasmSuspenderObject;
   on_resume: Smi;  // See wasm::OnResume enum.
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern class WasmIndirectFunctionTable extends Struct {
@@ -103,6 +109,8 @@ extern class WasmIndirectFunctionTable extends Struct {
 extern class WasmContinuationObject extends HeapObject {
   stack: Foreign;
   parent: WasmContinuationObject|Undefined;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
   jmpbuf: ExternalPointer;  // Direct access to the stack's jump buffer.
 }
 
@@ -206,11 +214,13 @@ extern class WasmStruct extends WasmObject {
 extern class WasmArray extends WasmObject {
   length: uint32;
 
-  @if(TAGGED_SIZE_8_BYTES) optional_padding: uint32;
-  @ifnot(TAGGED_SIZE_8_BYTES) optional_padding: void;
+  @if(V8_ALIGN_OBJECT_SIZES_8_BYTES) optional_padding: uint32;
+  @ifnot(V8_ALIGN_OBJECT_SIZES_8_BYTES) optional_padding: void;
 }
 
 class WasmStringViewIter extends HeapObject {
   string: String;
   offset: uint32;  // Index into string.
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: uint32;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

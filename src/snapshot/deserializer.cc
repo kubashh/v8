@@ -572,7 +572,10 @@ AllocationType SpaceToAllocation(SnapshotSpace space) {
 template <typename IsolateT>
 Handle<HeapObject> Deserializer<IsolateT>::ReadObject(SnapshotSpace space) {
   const int size_in_tagged = source_.GetInt();
-  const int size_in_bytes = size_in_tagged * kTaggedSize;
+  // TODO(teodutu): Fix makesnapshot so this is no longer needed.
+  const int size_in_bytes = OBJECT_POINTER_ALIGN(size_in_tagged * kTaggedSize);
+  printf("Deserializer<IsolateT>::ReadObject --- size_in_bytes = %d\n",
+         size_in_bytes);
 
   // The map can't be a forward ref. If you want the map to be a forward ref,
   // then you're probably serializing the meta-map, in which case you want to

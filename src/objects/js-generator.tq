@@ -42,4 +42,6 @@ extern class AsyncGeneratorRequest extends Struct {
   resume_mode: Smi;
   value: Object;
   promise: JSPromise;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

@@ -4,8 +4,10 @@
 
 #include "src/objects/js-function.h"
 
+#include "src/base/logging.h"
 #include "src/baseline/baseline-batch-compiler.h"
 #include "src/codegen/compiler.h"
+#include "src/common/globals.h"
 #include "src/diagnostics/code-tracer.h"
 #include "src/execution/isolate.h"
 #include "src/execution/tiering-manager.h"
@@ -1341,9 +1343,14 @@ void JSFunction::CalculateInstanceSizeHelper(InstanceType instance_type,
            static_cast<unsigned>(max_nof_fields));
   *in_object_properties = std::min(requested_in_object_properties,
                                    max_nof_fields - requested_embedder_fields);
-  *instance_size =
+  int unaligned_instance_size =
       header_size +
       ((requested_embedder_fields + *in_object_properties) << kTaggedSizeLog2);
+  *instance_size = OBJECT_POINTER_ALIGN(unaligned_instance_size);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL &&
+      unaligned_instance_size != *instance_size) {
+    ++*in_object_properties;
+  }
   CHECK_EQ(*in_object_properties,
            ((*instance_size - header_size) >> kTaggedSizeLog2) -
                requested_embedder_fields);

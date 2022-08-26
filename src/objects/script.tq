@@ -68,4 +68,9 @@ extern class Script extends Struct {
   // [source_hash]: Calculated once per file if the source text is available,
   // represents the SHA-256 of the content
   source_hash: String|Undefined;
+
+  @ if(V8_COMPRESS_POINTERS_8GB_OR_SCRIPTORMODULE_LEGACY_LIFETIME)
+  optional_padding_Script: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB_OR_SCRIPTORMODULE_LEGACY_LIFETIME)
+  optional_padding_Script: void;
 }

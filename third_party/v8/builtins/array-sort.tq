@@ -96,6 +96,9 @@ class SortState extends HeapObject {
   // The number of undefined that need to be inserted after sorting
   // when the elements are copied back from the workArray to the receiver.
   numberOfUndefined: Smi;
+
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 type FastSmiElements extends ElementsKind;
@@ -182,24 +185,47 @@ transitioning macro NewSortState(implicit context: Context)(
   const workArrayLength =
       CalculateWorkArrayLength(receiver, initialReceiverLength);
 
-  return new SortState{
-    receiver,
-    initialReceiverMap: map,
-    initialReceiverLength,
-    userCmpFn: comparefn,
-    sortComparePtr,
-    loadFn,
-    storeFn,
-    deleteFn,
-    canUseSameAccessorFn,
-    minGallop: kMinGallopWins,
-    pendingRunsSize: 0,
-    pendingRuns: AllocateZeroedFixedArray(Convert<intptr>(kMaxMergePending)),
-    workArray: AllocateZeroedFixedArray(workArrayLength),
-    tempArray: kEmptyFixedArray,
-    sortLength: 0,
-    numberOfUndefined: 0
-  };
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new SortState{
+      receiver,
+      initialReceiverMap: map,
+      initialReceiverLength,
+      userCmpFn: comparefn,
+      sortComparePtr,
+      loadFn,
+      storeFn,
+      deleteFn,
+      canUseSameAccessorFn,
+      minGallop: kMinGallopWins,
+      pendingRunsSize: 0,
+      pendingRuns: AllocateZeroedFixedArray(Convert<intptr>(kMaxMergePending)),
+      workArray: AllocateZeroedFixedArray(workArrayLength),
+      tempArray: kEmptyFixedArray,
+      sortLength: 0,
+      numberOfUndefined: 0,
+      optional_padding: Null
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new SortState{
+      receiver,
+      initialReceiverMap: map,
+      initialReceiverLength,
+      userCmpFn: comparefn,
+      sortComparePtr,
+      loadFn,
+      storeFn,
+      deleteFn,
+      canUseSameAccessorFn,
+      minGallop: kMinGallopWins,
+      pendingRunsSize: 0,
+      pendingRuns: AllocateZeroedFixedArray(Convert<intptr>(kMaxMergePending)),
+      workArray: AllocateZeroedFixedArray(workArrayLength),
+      tempArray: kEmptyFixedArray,
+      sortLength: 0,
+      numberOfUndefined: 0
+    };
+  }
 }
 
 const kSuccess: Smi = 0;

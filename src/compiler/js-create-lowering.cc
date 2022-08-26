@@ -176,7 +176,11 @@ Reduction JSCreateLowering::ReduceJSCreateArguments(Node* node) {
                 : native_context().sloppy_arguments_map());
         // Actually allocate and initialize the arguments object.
         AllocationBuilder a(jsgraph(), effect, control);
+#ifdef V8_COMPRESS_POINTERS_8GB
+        static_assert(JSSloppyArgumentsObject::kSize == 6 * kTaggedSize);
+#else
         static_assert(JSSloppyArgumentsObject::kSize == 5 * kTaggedSize);
+#endif
         a.Allocate(JSSloppyArgumentsObject::kSize);
         a.Store(AccessBuilder::ForMap(), arguments_map);
         a.Store(AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer(),
@@ -279,7 +283,11 @@ Reduction JSCreateLowering::ReduceJSCreateArguments(Node* node) {
                                 : native_context().sloppy_arguments_map());
       // Actually allocate and initialize the arguments object.
       AllocationBuilder a(jsgraph(), effect, control);
+#ifdef V8_COMPRESS_POINTERS_8GB
+      static_assert(JSSloppyArgumentsObject::kSize == 6 * kTaggedSize);
+#else
       static_assert(JSSloppyArgumentsObject::kSize == 5 * kTaggedSize);
+#endif
       a.Allocate(JSSloppyArgumentsObject::kSize);
       a.Store(AccessBuilder::ForMap(), arguments_map);
       a.Store(AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer(),

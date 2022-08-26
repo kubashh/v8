@@ -9,9 +9,13 @@ extern class Microtask extends Struct {
 extern class CallbackTask extends Microtask {
   callback: Foreign;
   data: Foreign;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 extern class CallableTask extends Microtask {
   callable: JSReceiver;
   context: Context;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }

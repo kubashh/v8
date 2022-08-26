@@ -3968,6 +3968,13 @@ class ClassFieldOffsetGenerator : public FieldOffsetsGenerator {
   void WriteMarker(const std::string& marker) override {
     hdr_ << "  static constexpr int " << marker << " = " << previous_field_end_
          << ";\n";
+    // TODO(teodutu): Move this higher up the call stack. Find a replacement for
+    // hdr_.
+    if (V8_COMPRESS_POINTERS_8GB_BOOL && marker == "kSize") {
+      hdr_ << "  static_assert(IsAligned(kSize, kObjectAlignment8GbHeap), \""
+           << type_->name() << ": "
+           << std::to_string(type_->size().SingleValue().value()) << "\");\n";
+    }
   }
 
  private:
@@ -4188,7 +4195,8 @@ void CppClassGenerator::GenerateClass() {
                  << std::get<0>(field.GetFieldSizeInformation()) << ";\n";
         }
       }
-      if (type_->size().Alignment() < TargetArchitecture::TaggedSize()) {
+      if (V8_COMPRESS_POINTERS_8GB_BOOL ||
+          type_->size().Alignment() < TargetArchitecture::TaggedSize()) {
         stream << "    size = OBJECT_POINTER_ALIGN(size);\n";
       }
       stream << "    return size;\n";
@@ -4209,6 +4217,33 @@ void CppClassGenerator::GenerateClass() {
         }
         stream << ");\n";
       });
+    }
+
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+      cpp::Function allocated_size_f =
+          cpp::Function::DefaultGetter("void", &c, "clear_padding");
+      allocated_size_f.SetFlag(cpp::Function::kV8Inline);
+      // TODO(teodutu): find a cleaner approach. Look at AllocatedSize. IDK why
+      // that works.
+      const std::string type_name = type_->name();
+      if (type_name.find("String") == std::string::npos &&
+          (type_->HasField("capacity") || type_->HasField("length") ||
+           type_->HasField("slot_count"))) {
+        std::string size_field = type_->HasField("capacity") ? "capacity"
+                                 : type_->HasField("length") ? "length"
+                                                             : "slot_count";
+        allocated_size_f.PrintInlineDefinition(hdr_, [&](std::ostream& stream) {
+          stream << "    int data_size = this->" << size_field
+                 << "() + kHeaderSize;\n"
+                 << "    memset(reinterpret_cast<void*>(this->address() + "
+                    "data_size), 0, AllocatedSize() - data_size);\n";
+        });
+      } else {
+        allocated_size_f.PrintInlineDefinition(hdr_, [&](std::ostream& stream) {
+          stream << "    memset(reinterpret_cast<void*>(this->address() + "
+                    "kHeaderSize), 0, AllocatedSize() - kHeaderSize);\n";
+        });
+      }
     }
   }
 
@@ -4692,7 +4727,8 @@ void GenerateStructLayoutDescription(std::ostream& header,
            << CamelifyString(field.name_and_type.name)
            << "Offset = " << *field.offset << ";\n";
   }
-  header << "  static constexpr int kSize = " << type->PackedSize() << ";\n";
+  header << "  static constexpr int kSize = OBJECT_POINTER_ALIGN("
+         << type->PackedSize() << ");\n";
   header << "};\n\n";
 }
 

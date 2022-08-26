@@ -118,6 +118,9 @@ extern class ScopeInfo extends HeapObject {
   // context.
   const context_local_count: Smi;
 
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
+
   // Contains the names of inlined local variables and parameters that are
   // allocated in the context. They are stored in increasing order of the
   // context slot index starting with Context::MIN_CONTEXT_SLOTS.

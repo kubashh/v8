@@ -25,6 +25,9 @@ extern class PrototypeInfo extends Struct {
 
   bit_field: SmiTagged<PrototypeInfoFlags>;
 
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
+
   // [object_create_map]: A field caching the map for Object.create(prototype).
   object_create_map: Weak<Map>|Undefined;
 }

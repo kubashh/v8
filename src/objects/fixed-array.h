@@ -191,13 +191,14 @@ class FixedArray
 
   // Garbage collection support.
   static constexpr int SizeFor(int length) {
-    return kHeaderSize + length * kTaggedSize;
+    int size = kHeaderSize + length * kTaggedSize;
+    return V8_COMPRESS_POINTERS_8GB_BOOL ? OBJECT_POINTER_ALIGN(size) : size;
   }
 
   // Code Generation support.
   static constexpr int OffsetOfElementAt(int index) {
     static_assert(kObjectsOffset == SizeFor(0));
-    return SizeFor(index);
+    return kHeaderSize + index * kTaggedSize;
   }
 
   // Garbage collection support.
@@ -259,7 +260,8 @@ class FixedDoubleArray
 
   // Garbage collection support.
   inline static int SizeFor(int length) {
-    return kHeaderSize + length * kDoubleSize;
+    int size = kHeaderSize + length * kDoubleSize;
+    return V8_COMPRESS_POINTERS_8GB_BOOL ? OBJECT_POINTER_ALIGN(size) : size;
   }
 
   inline void MoveElements(Isolate* isolate, int dst_index, int src_index,
@@ -268,7 +270,9 @@ class FixedDoubleArray
   inline void FillWithHoles(int from, int to);
 
   // Code Generation support.
-  static int OffsetOfElementAt(int index) { return SizeFor(index); }
+  static int OffsetOfElementAt(int index) {
+    return kHeaderSize + index * kTaggedSize;
+  }
 
   // Start offset of elements.
   static constexpr int kFloatsOffset = kHeaderSize;
@@ -330,7 +334,7 @@ class WeakFixedArray
 
   static int OffsetOfElementAt(int index) {
     static_assert(kObjectsOffset == SizeFor(0));
-    return SizeFor(index);
+    return kHeaderSize + index * kTaggedSize;
   }
 
  private:

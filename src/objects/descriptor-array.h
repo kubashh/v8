@@ -172,7 +172,8 @@ class DescriptorArray
                                           int16_t number_of_marked_descriptors);
 
   static constexpr int SizeFor(int number_of_all_descriptors) {
-    return OffsetOfDescriptorAt(number_of_all_descriptors);
+    return OBJECT_POINTER_ALIGN(
+        OffsetOfDescriptorAt(number_of_all_descriptors));
   }
   static constexpr int OffsetOfDescriptorAt(int descriptor) {
     return kDescriptorsOffset + descriptor * kEntrySize * kTaggedSize;

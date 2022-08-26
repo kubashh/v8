@@ -5,6 +5,8 @@
 extern class EnumCache extends Struct {
   keys: FixedArray;
   indices: FixedArray;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 @export
@@ -22,6 +24,11 @@ extern class DescriptorArray extends HeapObject {
   raw_number_of_marked_descriptors: uint16;
   filler16_bits: uint16;
   enum_cache: EnumCache;
+  // TODO(teodutu): Move padding before enum_cache, as a uint32.
+  @ if(V8_COMPRESS_POINTERS_8GB) optional_padding: Object;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
+  // TOOD(teodutu): Workaround: make sure number_of_all_descriptors is always
+  // odd for alignment.
   descriptors[number_of_all_descriptors]: DescriptorEntry;
 }
 

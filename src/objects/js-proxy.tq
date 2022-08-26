@@ -10,15 +10,29 @@ extern class JSProxy extends JSReceiver {
 extern shape JSProxyRevocableResult extends JSObject {
   proxy: JSAny;
   revoke: JSAny;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 macro NewJSProxyRevocableResult(implicit context: Context)(
     proxy: JSProxy, revoke: JSFunction): JSProxyRevocableResult {
-  return new JSProxyRevocableResult{
-    map: GetProxyRevocableResultMap(),
-    properties_or_hash: kEmptyFixedArray,
-    elements: kEmptyFixedArray,
-    proxy,
-    revoke
-  };
+  @if(V8_COMPRESS_POINTERS_8GB) {
+    return new JSProxyRevocableResult{
+      map: GetProxyRevocableResultMap(),
+      properties_or_hash: kEmptyFixedArray,
+      elements: kEmptyFixedArray,
+      proxy,
+      revoke,
+      optional_padding: 0
+    };
+  }
+  @ifnot(V8_COMPRESS_POINTERS_8GB) {
+    return new JSProxyRevocableResult{
+      map: GetProxyRevocableResultMap(),
+      properties_or_hash: kEmptyFixedArray,
+      elements: kEmptyFixedArray,
+      proxy,
+      revoke
+    };
+  }
 }

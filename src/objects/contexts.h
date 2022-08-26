@@ -505,6 +505,7 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
   V8_INLINE static constexpr int SizeFor(int length) {
     // TODO(v8:9287): This is a workaround for GCMole build failures.
     int result = kElementsOffset + length * kTaggedSize;
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) result = OBJECT_POINTER_ALIGN(result);
     DCHECK_EQ(TorqueGeneratedContext::SizeFor(length), result);
     return result;
   }
@@ -512,7 +513,8 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
   // Code Generation support.
   // Offset of the element from the beginning of object.
   V8_INLINE static constexpr int OffsetOfElementAt(int index) {
-    return SizeFor(index);
+    if (!V8_COMPRESS_POINTERS_8GB_BOOL) return SizeFor(index);
+    return kElementsOffset + index * kTaggedSize;
   }
   // Offset of the element from the heap object pointer.
   V8_INLINE static constexpr int SlotOffset(int index) {

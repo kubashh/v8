@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_FACTORY_BASE_INL_H_
 #define V8_HEAP_FACTORY_BASE_INL_H_
 
+#include "src/common/globals.h"
 #include "src/heap/factory-base.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/heap-number.h"

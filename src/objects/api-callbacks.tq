@@ -35,6 +35,8 @@ extern class AccessCheckInfo extends Struct {
   named_interceptor: InterceptorInfo|Zero|Undefined;
   indexed_interceptor: InterceptorInfo|Zero|Undefined;
   data: Object;
+  @if(V8_COMPRESS_POINTERS_8GB) optional_padding: Smi;
+  @ifnot(V8_COMPRESS_POINTERS_8GB) optional_padding: void;
 }
 
 type SideEffectType extends int32 constexpr 'SideEffectType';

@@ -1196,14 +1196,15 @@ Handle<TurbofanType> Type::AllocateOnHeap(Factory* factory) {
     const bitset bits = AsBitset();
     uint32_t low = bits & 0xffffffff;
     uint32_t high = (bits >> 32) & 0xffffffff;
-    return factory->NewTurbofanBitsetType(low, high, AllocationType::kYoung);
+    return factory->NewTurbofanBitsetType(
+        low, high, Handle<TurbofanType>::null(), AllocationType::kYoung);
   } else if (IsUnion()) {
     const UnionType* union_type = AsUnion();
     Handle<TurbofanType> result = union_type->Get(0).AllocateOnHeap(factory);
     for (int i = 1; i < union_type->Length(); ++i) {
       result = factory->NewTurbofanUnionType(
           result, union_type->Get(i).AllocateOnHeap(factory),
-          AllocationType::kYoung);
+          Handle<TurbofanType>::null(), AllocationType::kYoung);
     }
     return result;
   } else if (IsHeapConstant()) {
@@ -1211,9 +1212,9 @@ Handle<TurbofanType> Type::AllocateOnHeap(Factory* factory) {
                                                 AllocationType::kYoung);
   } else if (IsOtherNumberConstant()) {
     return factory->NewTurbofanOtherNumberConstantType(
-        AsOtherNumberConstant()->Value(), AllocationType::kYoung);
+        AsOtherNumberConstant()->Value(), 0, AllocationType::kYoung);
   } else if (IsRange()) {
-    return factory->NewTurbofanRangeType(AsRange()->Min(), AsRange()->Max(),
+    return factory->NewTurbofanRangeType(AsRange()->Min(), AsRange()->Max(), 0,
                                          AllocationType::kYoung);
   } else {
     // Other types are not supported for type assertions.

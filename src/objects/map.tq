@@ -66,7 +66,11 @@ extern class Map extends HeapObject {
   bit_field3: MapBitFields3;
 
   @if(TAGGED_SIZE_8_BYTES) optional_padding: uint32;
+  @if(V8_COMPRESS_POINTERS_8GB_AND_TAGGED_SIZE_8_BYTES)
+  optional_padding_8gb_heap: uint32;
   @ifnot(TAGGED_SIZE_8_BYTES) optional_padding: void;
+  @ifnot(V8_COMPRESS_POINTERS_8GB_AND_TAGGED_SIZE_8_BYTES)
+  optional_padding_8gb_heap: void;
 
   prototype: JSReceiver|Null;
   constructor_or_back_pointer_or_native_context: Object;

@@ -424,6 +424,7 @@ void JSObject::JSObjectVerify(Isolate* isolate) {
     int actual_unused_property_fields = map().GetInObjectProperties() +
                                         property_array().length() -
                                         map().NextFreePropertyIndex();
+    // TODO(teodutu): Understand this better and fix it
     if (map().UnusedPropertyFields() != actual_unused_property_fields) {
       // There are two reasons why this can happen:
       // - in the middle of StoreTransitionStub when the new extended backing

@@ -149,6 +149,7 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
 
   result.set_map_after_allocation(ReadOnlyRoots(this).meta_map(),
                                   SKIP_WRITE_BARRIER);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL && is_js_object) ++inobject_properties;
   Map map = isolate()->factory()->InitializeMap(
       Map::cast(result), instance_type, instance_size, elements_kind,
       inobject_properties, this);
@@ -184,6 +185,7 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   DCHECK(!map.is_in_retained_map_list());
   map.clear_padding();
   map.set_elements_kind(TERMINAL_FAST_ELEMENTS_KIND);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) map.clear_padding();
   return AllocationResult::FromObject(map);
 }
 
@@ -277,6 +279,7 @@ bool Heap::CreateInitialMaps() {
                                  SKIP_WRITE_BARRIER);
     WeakArrayList::cast(obj).set_capacity(0);
     WeakArrayList::cast(obj).set_length(0);
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) WeakArrayList::cast(obj).clear_padding();
   }
   set_empty_weak_array_list(WeakArrayList::cast(obj));
 
@@ -324,6 +327,8 @@ bool Heap::CreateInitialMaps() {
   set_empty_enum_cache(EnumCache::cast(obj));
   EnumCache::cast(obj).set_keys(roots.empty_fixed_array());
   EnumCache::cast(obj).set_indices(roots.empty_fixed_array());
+  EnumCache::cast(obj).set_optional_padding(0);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) EnumCache::cast(obj).clear_padding();
 
   // Allocate the empty descriptor array.
   {
@@ -542,6 +547,7 @@ bool Heap::CreateInitialMaps() {
     obj.set_map_after_allocation(roots.array_list_map(), SKIP_WRITE_BARRIER);
     ArrayList::cast(obj).set_length(ArrayList::kFirstIndex);
     ArrayList::cast(obj).SetLength(0);
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) ArrayList::cast(obj).clear_padding();
   }
   set_empty_array_list(ArrayList::cast(obj));
 
@@ -560,6 +566,9 @@ bool Heap::CreateInitialMaps() {
     ScopeInfo::cast(obj).set_flags(flags);
     ScopeInfo::cast(obj).set_context_local_count(0);
     ScopeInfo::cast(obj).set_parameter_count(0);
+    ScopeInfo::cast(obj).Size();
+    if (V8_COMPRESS_POINTERS_8GB_BOOL)
+      ScopeInfo::cast(obj).set_optional_padding(0);
   }
   set_empty_scope_info(ScopeInfo::cast(obj));
 
@@ -574,6 +583,7 @@ bool Heap::CreateInitialMaps() {
     FixedArray::cast(obj).set_length(1);
     FixedArray::cast(obj).set(ObjectBoilerplateDescription::kLiteralTypeOffset,
                               Smi::zero());
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) FixedArray::cast(obj).clear_padding();
   }
   set_empty_object_boilerplate_description(
       ObjectBoilerplateDescription::cast(obj));
@@ -589,6 +599,10 @@ bool Heap::CreateInitialMaps() {
         roots.empty_fixed_array());
     ArrayBoilerplateDescription::cast(obj).set_elements_kind(
         ElementsKind::PACKED_SMI_ELEMENTS);
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+      ArrayBoilerplateDescription::cast(obj).set_optional_padding(0);
+      ArrayBoilerplateDescription::cast(obj).clear_padding();
+    }
   }
   set_empty_array_boilerplate_description(
       ArrayBoilerplateDescription::cast(obj));
