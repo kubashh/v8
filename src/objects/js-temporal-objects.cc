@@ -863,26 +863,34 @@ MaybeHandle<JSTemporalPlainMonthDay> CreateTemporalMonthDay(
   // 1. Assert: isoMonth, isoDay, and referenceISOYear are integers.
   // 2. Assert: Type(calendar) is Object.
   // 3. If ! IsValidISODate(referenceISOYear, isoMonth, isoDay) is false, throw
-  // a RangeError exception.
   if (!IsValidISODate(isolate, {reference_iso_year, iso_month, iso_day})) {
+    // a RangeError exception.
     THROW_INVALID_RANGE(JSTemporalPlainMonthDay);
   }
-  // 4. If newTarget is not present, set it to %Temporal.PlainMonthDay%.
-  // 5. Let object be ? OrdinaryCreateFromConstructor(newTarget,
+  // 4. If ISODateTimeWithinLimits(referenceISOYear, isoMonth, isoDay, 12, 0, 0,
+  // 0, 0, 0) is false, throw a RangeError exception.
+  if (!ISODateTimeWithinLimits(
+          isolate,
+          {{reference_iso_year, iso_month, iso_day}, {12, 0, 0, 0, 0, 0}})) {
+    THROW_INVALID_RANGE(JSTemporalPlainMonthDay);
+  }
+
+  // 5. If newTarget is not present, set it to %Temporal.PlainMonthDay%.
+  // 6. Let object be ? OrdinaryCreateFromConstructor(newTarget,
   // "%Temporal.PlainMonthDay.prototype%", « [[InitializedTemporalMonthDay]],
   // [[ISOMonth]], [[ISODay]], [[ISOYear]], [[Calendar]] »).
   ORDINARY_CREATE_FROM_CONSTRUCTOR(object, target, new_target,
                                    JSTemporalPlainMonthDay)
   object->set_year_month_day(0);
-  // 6. Set object.[[ISOMonth]] to isoMonth.
+  // 7. Set object.[[ISOMonth]] to isoMonth.
   object->set_iso_month(iso_month);
-  // 7. Set object.[[ISODay]] to isoDay.
+  // 8. Set object.[[ISODay]] to isoDay.
   object->set_iso_day(iso_day);
-  // 8. Set object.[[Calendar]] to calendar.
+  // 9. Set object.[[Calendar]] to calendar.
   object->set_calendar(*calendar);
-  // 9. Set object.[[ISOYear]] to referenceISOYear.
+  // 10. Set object.[[ISOYear]] to referenceISOYear.
   object->set_iso_year(reference_iso_year);
-  // 10. Return object.
+  // 11. Return object.
   return object;
 }
 
@@ -5039,8 +5047,9 @@ Maybe<DateTimeRecordCommon> AddDateTime(Isolate* isolate,
                                         Handle<Object> options) {
   TEMPORAL_ENTER_FUNC();
 
-  // 1. Assert: year, month, day, hour, minute, second, millisecond,
-  // microsecond, and nanosecond are integers.
+  // 1. Assert: ISODateTimeWithinLimits(year, month, day, hour, minute, second,
+  // millisecond, microsecond, nanosecond) is true.
+  DCHECK(ISODateTimeWithinLimits(isolate, date_time));
   // 2. Let timeResult be ! AddTime(hour, minute, second, millisecond,
   // microsecond, nanosecond, hours, minutes, seconds, milliseconds,
   // microseconds, nanoseconds).
@@ -5741,6 +5750,12 @@ Maybe<DurationRecord> DifferenceISODateTime(
     const DateTimeRecordCommon& date_time2, Handle<JSReceiver> calendar,
     Unit largest_unit, Handle<Object> options, const char* method_name) {
   TEMPORAL_ENTER_FUNC();
+  // 1. Assert: ISODateTimeWithinLimits(y1, mon1, d1, h1, min1, s1, ms1, mus1,
+  // ns1) is true.
+  DCHECK(ISODateTimeWithinLimits(isolate, date_time1));
+  // 2. Assert: ISODateTimeWithinLimits(y2, mon2, d2, h2, min2, s2, ms2, mus2,
+  // ns2) is true.
+  DCHECK(ISODateTimeWithinLimits(isolate, date_time2));
   DurationRecord result;
   // 2. Assert: Type(options) is Object or Undefined.
   DCHECK(options->IsJSReceiver() || options->IsUndefined());
@@ -12897,6 +12912,9 @@ DateTimeRecordCommon RoundISODateTime(Isolate* isolate,
                                       RoundingMode rounding_mode,
                                       double day_length_ns = 8.64e13) {
   TEMPORAL_ENTER_FUNC();
+  // 1. Assert: ISODateTimeWithinLimits(year, month, day, hour, minute, second,
+  // millisecond, microsecond, nanosecond) is true.
+  DCHECK(ISODateTimeWithinLimits(isolate, date_time));
 
   // 3. Let roundedTime be ! RoundTime(hour, minute, second, millisecond,
   // microsecond, nanosecond, increment, unit, roundingMode, dayLength).
