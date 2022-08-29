@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92de5f56_3e7c8c7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-29T23:48:40Z",
+      "side": 1,
+      "message": "lgtm % spec step nits",
+      "revId": "e7d07ec8b86b3a69913b06f3b96a1b1887f16ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfe23e56_008c62c3",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5758,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-29T23:48:40Z",
+      "side": 1,
+      "message": "Nit: Need to shift the rest of the step numbers.",
+      "revId": "e7d07ec8b86b3a69913b06f3b96a1b1887f16ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5ac1a2f_0aee0288",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 12917,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-29T23:48:40Z",
+      "side": 1,
+      "message": "I see this Assert as step 2 in the spec.",
+      "revId": "e7d07ec8b86b3a69913b06f3b96a1b1887f16ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58cad536_93f1d2ec",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 12919,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-29T23:48:40Z",
+      "side": 1,
+      "message": "This is step 4 in the spec.",
+      "revId": "e7d07ec8b86b3a69913b06f3b96a1b1887f16ad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
