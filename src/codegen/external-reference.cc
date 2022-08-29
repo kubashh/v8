@@ -41,7 +41,6 @@
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 #ifdef V8_INTL_SUPPORT
-#include "src/base/platform/wrappers.h"
 #include "src/base/strings.h"
 #include "src/objects/intl-objects.h"
 #endif  // V8_INTL_SUPPORT
@@ -1050,6 +1049,9 @@ FUNCTION_REFERENCE(mutable_big_int_absolute_sub_and_canonicalize_function,
 
 FUNCTION_REFERENCE(mutable_big_int_absolute_mul_and_canonicalize_function,
                    MutableBigInt_AbsoluteMulAndCanonicalize)
+
+FUNCTION_REFERENCE(mutable_big_int_absolute_div_and_canonicalize_function,
+                   MutableBigInt_AbsoluteDivAndCanonicalize)
 
 FUNCTION_REFERENCE(mutable_big_int_bitwise_and_pp_and_canonicalize_function,
                    MutableBigInt_BitwiseAndPosPosAndCanonicalize)

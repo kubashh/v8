@@ -146,7 +146,6 @@ class MutableBigInt : public FreshlyAllocatedBigInt {
 OBJECT_CONSTRUCTORS_IMPL(MutableBigInt, FreshlyAllocatedBigInt)
 NEVER_READ_ONLY_SPACE_IMPL(MutableBigInt)
 
-#include "src/base/platform/wrappers.h"
 #include "src/objects/object-macros-undef.h"
 
 bigint::Digits GetDigits(BigIntBase bigint) {
@@ -1638,6 +1637,30 @@ bool MutableBigInt_AbsoluteMulAndCanonicalize(Address result_addr,
   }
 
   bigint::Status status = isolate->bigint_processor()->Multiply(
+      GetRWDigits(result), GetDigits(x), GetDigits(y));
+  if (status == bigint::Status::kInterrupted) {
+    return false;
+  }
+
+  MutableBigInt::Canonicalize(result);
+  return true;
+}
+
+bool MutableBigInt_AbsoluteDivAndCanonicalize(Address result_addr,
+                                              Address x_addr, Address y_addr) {
+  BigInt x = BigInt::cast(Object(x_addr));
+  BigInt y = BigInt::cast(Object(y_addr));
+  MutableBigInt result = MutableBigInt::cast(Object(result_addr));
+  DCHECK_GE(result.length(),
+            bigint::DivideResultLength(GetDigits(x), GetDigits(y)));
+
+  Isolate* isolate;
+  if (!GetIsolateFromHeapObject(x, &isolate)) {
+    // We should always get the isolate from the BigInt.
+    UNREACHABLE();
+  }
+
+  bigint::Status status = isolate->bigint_processor()->Divide(
       GetRWDigits(result), GetDigits(x), GetDigits(y));
   if (status == bigint::Status::kInterrupted) {
     return false;
