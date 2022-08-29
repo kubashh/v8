@@ -69,7 +69,7 @@ TNode<MaybeObject> AccessorAssembler::LoadHandlerDataField(
   return LoadMaybeWeakObjectField(handler, offset);
 }
 
-TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
+TNode<HeapObjectReference> AccessorAssembler::TryMonomorphicCase(
     TNode<TaggedIndex> slot, TNode<FeedbackVector> vector,
     TNode<Map> lookup_start_object_map, Label* if_handler,
     TVariable<MaybeObject>* var_handler, Label* if_miss) {
@@ -98,7 +98,7 @@ TNode<MaybeObject> AccessorAssembler::TryMonomorphicCase(
 
   *var_handler = handler;
   Goto(if_handler);
-  return feedback;
+  return ReinterpretCast<HeapObjectReference>(feedback);
 }
 
 void AccessorAssembler::HandlePolymorphicCase(
@@ -1370,7 +1370,8 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 
   BIND(&if_nonsmi_handler);
   {
-    GotoIf(IsWeakOrCleared(handler), &store_transition_or_global);
+    GotoIf(IsWeakOrCleared(ReinterpretCast<HeapObjectReference>(handler)),
+           &store_transition_or_global);
     TNode<HeapObject> strong_handler = CAST(handler);
     TNode<Map> handler_map = LoadMap(strong_handler);
     Branch(IsCodeTMap(handler_map), &call_handler, &if_proto_handler);
@@ -3034,7 +3035,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LazyLoadICParameters* p,
     TVARIABLE(MaybeObject, var_handler);
     Label try_polymorphic(this), if_handler(this, &var_handler);
 
-    TNode<MaybeObject> feedback = TryMonomorphicCase(
+    TNode<HeapObjectReference> feedback = TryMonomorphicCase(
         p->slot(), CAST(p->vector()), lookup_start_object_map, &if_handler,
         &var_handler, &try_polymorphic);
 
@@ -3100,7 +3101,7 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
   GotoIf(IsUndefined(p->vector()), &no_feedback);
 
   // Check monomorphic case.
-  TNode<MaybeObject> feedback =
+  TNode<HeapObjectReference> feedback =
       TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
                          &if_handler, &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -3157,7 +3158,7 @@ void AccessorAssembler::LoadSuperIC(const LoadICParameters* p) {
   TNode<Map> lookup_start_object_map = LoadMap(CAST(p->lookup_start_object()));
   GotoIf(IsDeprecatedMap(lookup_start_object_map), &miss);
 
-  TNode<MaybeObject> feedback =
+  TNode<HeapObjectReference> feedback =
       TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
                          &if_handler, &var_handler, &try_polymorphic);
 
@@ -3469,7 +3470,7 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p,
   GotoIf(IsUndefined(p->vector()), &generic);
 
   // Check monomorphic case.
-  TNode<MaybeObject> feedback =
+  TNode<HeapObjectReference> feedback =
       TryMonomorphicCase(p->slot(), CAST(p->vector()), lookup_start_object_map,
                          &if_handler, &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -3722,7 +3723,7 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   GotoIf(IsUndefined(p->vector()), &no_feedback);
 
   // Check monomorphic case.
-  TNode<MaybeObject> feedback =
+  TNode<HeapObjectReference> feedback =
       TryMonomorphicCase(p->slot(), CAST(p->vector()), receiver_map,
                          &if_handler, &var_handler, &try_polymorphic);
   BIND(&if_handler);
@@ -3920,7 +3921,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     GotoIf(IsUndefined(p->vector()), &no_feedback);
 
     // Check monomorphic case.
-    TNode<MaybeObject> feedback =
+    TNode<HeapObjectReference> feedback =
         TryMonomorphicCase(p->slot(), CAST(p->vector()), receiver_map,
                            &if_handler, &var_handler, &try_polymorphic);
     BIND(&if_handler);
@@ -3994,7 +3995,7 @@ void AccessorAssembler::DefineKeyedOwnIC(const StoreICParameters* p) {
     GotoIf(IsUndefined(p->vector()), &no_feedback);
 
     // Check monomorphic case.
-    TNode<MaybeObject> feedback =
+    TNode<HeapObjectReference> feedback =
         TryMonomorphicCase(p->slot(), CAST(p->vector()), receiver_map,
                            &if_handler, &var_handler, &try_polymorphic);
     BIND(&if_handler);
@@ -4065,7 +4066,7 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
 
     GotoIf(IsUndefined(p->vector()), &no_feedback);
 
-    TNode<MaybeObject> feedback =
+    TNode<HeapObjectReference> feedback =
         TryMonomorphicCase(p->slot(), CAST(p->vector()), array_map, &if_handler,
                            &var_handler, &try_polymorphic);
 
@@ -4839,7 +4840,7 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
   GotoIf(IsUndefined(maybe_vector), &slow);
 
-  TNode<MaybeObject> feedback =
+  TNode<HeapObjectReference> feedback =
       TryMonomorphicCase(slot, CAST(maybe_vector), source_map, &if_handler,
                          &var_handler, &try_polymorphic);
 
