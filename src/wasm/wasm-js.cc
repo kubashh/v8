@@ -1137,7 +1137,12 @@ i::Handle<i::Object> DefaultReferenceValue(i::Isolate* isolate,
     return isolate->factory()->null_value();
   }
   if (type.is_reference()) {
-    return isolate->factory()->undefined_value();
+    // Use undefined for JS type (externref) but null for wasm types as wasm
+    // does not know undefined.
+    if (type.heap_representation() == i::wasm::HeapType::kExtern) {
+      return isolate->factory()->undefined_value();
+    }
+    return isolate->factory()->null_value();
   }
   UNREACHABLE();
 }

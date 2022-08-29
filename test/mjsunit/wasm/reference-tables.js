@@ -204,3 +204,67 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   assertEquals(10, instance.exports.struct_getter());
   assertEquals(1, instance.exports.null_getter());
 })();
+
+(function TestAnyRefTableNotNull() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+
+  let array_type = builder.addArray(kWasmI32);
+  let struct_type = builder.addStruct([makeField(kWasmI32, false)]);
+
+  let table = builder.addTable(wasmRefType(kWasmAnyRef), 3, 6,
+      [...wasmI32Const(111), ...wasmI32Const(222),
+       kGCPrefix, kExprArrayNewFixed, array_type, 2]);
+  builder.addActiveElementSegment(
+    table, wasmI32Const(0),
+    [[...wasmI32Const(111), ...wasmI32Const(222),
+      kGCPrefix, kExprArrayNewFixed, array_type, 2],
+     [...wasmI32Const(-31), kGCPrefix, kExprI31New],
+     [...wasmI32Const(10), kGCPrefix, kExprStructNew, struct_type]],
+     wasmRefType(kWasmAnyRef));
+
+  builder.addFunction("array_getter", kSig_ii_i)
+    .addLocals(wasmRefNullType(array_type), 1)
+    .addBody([
+      kExprI32Const, 0, kExprTableGet, 0,
+      kGCPrefix, kExprRefAsArray,
+      kGCPrefix, kExprRefCastStatic, array_type,
+      kExprLocalSet, 1,
+      kExprLocalGet, 1,
+      ...wasmI32Const(0), kGCPrefix, kExprArrayGet, array_type,
+      kExprLocalGet, 1,
+      ...wasmI32Const(1), kGCPrefix, kExprArrayGet, array_type])
+    .exportFunc();
+
+  builder.addFunction("i31_getter", kSig_i_v)
+   .addBody([
+     kExprI32Const, 1, kExprTableGet, 0,
+     kGCPrefix, kExprRefAsI31,
+     kGCPrefix, kExprI31GetS])
+   .exportFunc();
+
+  builder.addFunction("struct_getter", kSig_i_i)
+    .addBody([
+      kExprLocalGet, 0, kExprTableGet, 0,
+      kGCPrefix, kExprRefAsData, kGCPrefix, kExprRefCastStatic, struct_type,
+      kGCPrefix, kExprStructGet, struct_type, 0])
+    .exportFunc();
+
+  builder.addFunction("grow_table", kSig_v_v)
+    .addBody([
+      ...wasmI32Const(20), kGCPrefix, kExprStructNew, struct_type,
+      kExprI32Const, 1,
+      kNumericPrefix, kExprTableGrow, 0,
+      kExprDrop,
+    ])
+    .exportFunc();
+
+  let instance = builder.instantiate({});
+
+  assertEquals([111, 222], instance.exports.array_getter(42));
+  assertEquals(-31, instance.exports.i31_getter(12, 19));
+  assertEquals(10, instance.exports.struct_getter(2));
+  assertTraps(kTrapTableOutOfBounds, () => instance.exports.struct_getter(3));
+  instance.exports.grow_table();
+  assertEquals(20, instance.exports.struct_getter(3));
+})();
