@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efdea9d2_e107d3ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2022-08-29T22:50:44Z",
+      "side": 1,
+      "message": "Changing to someone who owns the whole CL now that I widened it.\n\nI fixed the compile error (I think), but I don\u0027t know if the fix is correct.",
+      "revId": "eae1c3652d00f2e3ac705eec50e3f619ae0598b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
