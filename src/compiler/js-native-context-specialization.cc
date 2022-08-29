@@ -135,6 +135,7 @@ base::Optional<size_t> JSNativeContextSpecialization::GetMaxStringLength(
   HeapObjectMatcher matcher(node);
   if (matcher.HasResolvedValue() && matcher.Ref(broker).IsString()) {
     StringRef input = matcher.Ref(broker).AsString();
+    if (!input.IsContentAccessible()) return base::nullopt;
     return input.length();
   }
 
@@ -330,6 +331,8 @@ namespace {
 // need to replace ConsStrings by ThinStrings.
 Handle<String> Concatenate(Handle<String> left, Handle<String> right,
                            JSHeapBroker* broker) {
+  DCHECK(left->IsInternalizedString() || left->IsThinString());
+  DCHECK(right->IsInternalizedString() || right->IsThinString());
   if (left->length() == 0) return right;
   if (right->length() == 0) return left;
 
