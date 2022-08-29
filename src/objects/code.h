@@ -1096,8 +1096,12 @@ class AbstractCode : public HeapObject {
   // AbstractCode might be represented by both Code and non-Code objects and
   // thus regular comparison of tagged values might not be correct when
   // V8_EXTERNAL_CODE_SPACE is enabled. SafeEquals() must be used instead.
-  constexpr bool operator==(Object other) const { return SafeEquals(other); }
-  constexpr bool operator!=(Object other) const { return !SafeEquals(other); }
+  constexpr bool operator==(const AbstractCode& other) const {
+    return SafeEquals(other);
+  }
+  constexpr bool operator!=(const AbstractCode& other) const {
+    return !SafeEquals(other);
+  }
 
  private:
   inline ByteArray SourcePositionTableInternal(PtrComprCageBase cage_base);
