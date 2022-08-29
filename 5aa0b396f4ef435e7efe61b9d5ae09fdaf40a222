@@ -33,6 +33,24 @@
       "message": "Is this field guaranteed to be a non-smi? If it is, we can do optimization as this CL.\n\nI\u0027m also wandering whether we ca do this optimization for JIT. I saw function like `BuildIsStrongReference` in `EffectControlLinearizer`, is this the correct position to do so?",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aeb77c1_76580916",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-29T16:55:10Z",
+      "side": 1,
+      "message": "It seems that it can be a Smi in some rare cases, but we can change the encoding if it\u0027s worth it. \nPlease add `CSA_ASSERT(this, IsSmi(feedback));` here and and a similar DCHECKs in FeedbackNexus::Get/SetFeedback().\n\nRe `BuildIsStrongReference` - it seems to be unused in TurboFan.",
+      "parentUuid": "00bacc50_c9bff9fe",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
