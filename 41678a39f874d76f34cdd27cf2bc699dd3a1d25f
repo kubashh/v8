@@ -18,6 +18,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52822e51_5ab44695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-29T12:14:09Z",
+      "side": 1,
+      "message": "Very nice! LGTM with last comments.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5cdd830_06c43889",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-29T12:14:09Z",
+      "side": 1,
+      "message": "needs_shift is a boolean, so either check that for false, or use shift_amount.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "754e7e13_49b2b3e9",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-29T12:14:09Z",
+      "side": 1,
+      "message": "I like the static cast. We could add a `static_assert` that times_4 \u003d\u003d 2, which should cover the most important case.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "963f53d5_251a1caa",
@@ -31,6 +82,24 @@
       "writtenOn": "2022-08-25T13:39:27Z",
       "side": 1,
       "message": "BTW, your arm64 suggestion should also work here with a cast:\n\n    static_cast\u003cScaleFactor\u003e(type.size_log_2())\n  \nIt should be safe because the ScaleFactor enum values are explicitly assigned to the expected numeric values. I\u0027ll add that change before landing if that sgty.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9d13439_7c95dcf5",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-08-29T12:14:09Z",
+      "side": 1,
+      "message": "Sure, why not. Maybe with another `static_assert` to document why this works and protect against (highly unlikely) changes.",
+      "parentUuid": "963f53d5_251a1caa",
       "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
