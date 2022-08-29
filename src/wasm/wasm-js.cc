@@ -2054,7 +2054,7 @@ void WebAssemblyFunction(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   i::wasm::Suspend suspend = i::wasm::kNoSuspend;
   i::wasm::Promise promise = i::wasm::kNoPromise;
-  if (i::FLAG_experimental_wasm_stack_switching) {
+  if (i::v8_flags.experimental_wasm_stack_switching) {
     // Optional third argument for JS Promise Integration.
     if (!args[2]->IsNullOrUndefined() && !args[2]->IsObject()) {
       thrower.TypeError(
@@ -3009,7 +3009,7 @@ void WasmJs::Install(Isolate* isolate, bool exposed_on_global_object) {
 
   // TODO(tebbi): Put this behind its own flag once --wasm-gc-js-interop gets
   // closer to shipping.
-  if (FLAG_wasm_gc_js_interop) {
+  if (v8_flags.wasm_gc_js_interop) {
     SimpleInstallFunction(
         isolate, webassembly, "experimentalConvertArrayToString",
         Builtin::kExperimentalWasmConvertArrayToString, 0, true);
@@ -3018,7 +3018,7 @@ void WasmJs::Install(Isolate* isolate, bool exposed_on_global_object) {
         Builtin::kExperimentalWasmConvertStringToArray, 0, true);
   }
 
-  if (FLAG_wasm_test_streaming) {
+  if (v8_flags.wasm_test_streaming) {
     isolate->set_wasm_streaming_callback(WasmStreamingCallbackForTesting);
   }
 
