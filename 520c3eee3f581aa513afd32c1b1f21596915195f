@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fe4a41f_2e963c3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-29T12:26:42Z",
+      "side": 1,
+      "message": "I\u0027ll review this (soon) (but I can\u0027t remove Manos from reviewers)",
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
