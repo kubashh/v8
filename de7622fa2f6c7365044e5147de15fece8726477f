@@ -33,6 +33,23 @@
       "message": "Oh no, naughty roller!",
       "revId": "de7622fa2f6c7365044e5147de15fece8726477f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e72db239_a3b7d54b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-29T08:44:59Z",
+      "side": 1,
+      "message": "(I triggered another manual roll btw... thought that this was further already. Will stop the new roll).",
+      "revId": "de7622fa2f6c7365044e5147de15fece8726477f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
