@@ -875,6 +875,7 @@ TNode<Object> InterpreterAssembler::ConstructWithSpread(
     GotoIf(is_megamorphic, &construct);
 
     Comment("check if weak reference");
+    // Is this expected?
     GotoIfNot(IsWeakOrCleared(feedback), &check_initialized);
 
     // If the weak reference is cleared, we have a new chance to become
