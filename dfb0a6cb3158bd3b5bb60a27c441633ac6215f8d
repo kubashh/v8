@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "921a6376_b02cd096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-08-29T13:17:06Z",
+      "side": 1,
+      "message": "Michi, shall it be refs/branch-heads/10.6 or refs/branch-heads/10.6-lkgr?",
+      "revId": "dfb0a6cb3158bd3b5bb60a27c441633ac6215f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
