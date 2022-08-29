@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1859efe5_3769f069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-29T19:39:20Z",
+      "side": 1,
+      "message": "ptal. Since all top-level OWNERS are OOO I am not sure this is feasible now :) Let\u0027s see...",
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

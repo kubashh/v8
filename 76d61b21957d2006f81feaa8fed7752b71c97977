@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2fc3d09_885845b2",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-29T19:39:20Z",
+      "side": 0,
+      "message": "Removing this include here and fixing the caller is the main change :)",
+      "range": {
+        "startLine": 14,
+        "startChar": 28,
+        "endLine": 14,
+        "endChar": 34
+      },
+      "revId": "76d61b21957d2006f81feaa8fed7752b71c97977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
