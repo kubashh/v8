@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c286c69_bbedd807",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-29T23:41:06Z",
+      "side": 1,
+      "message": "D\u0027oh, thanks for the fix.\n\nA quick audit shows TA#slice, TA#with, and the constructors are still fine with only checking the source buffer, since either the target buffers are newly created TAs that haven\u0027t escaped to other threads yet.",
+      "revId": "af57cd738c692db1f02801aa3fa9464427fb2179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
