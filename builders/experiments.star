@@ -19,6 +19,7 @@ RECLIENT = struct(
         "metrics_project": "chromium-reclient-metrics",
         "compare": True,
     },
+    NO = {"use_remoteexec": False},
 )
 
 def experiment_builder(**kwargs):
@@ -129,6 +130,7 @@ in_category(
         triggered_by = ["v8-trigger"],
         dimensions = {"os": "Ubuntu-20.04", "cpu": "x86-64"},
         use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.NO,
         notifies = ["sheriffs on new failure", "blamelist"],
     ),
     experiment_builder(
@@ -136,6 +138,7 @@ in_category(
         triggered_by = ["v8-trigger"],
         dimensions = {"os": "Ubuntu-20.04", "cpu": "x86-64"},
         use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.NO,
         notifies = ["sheriffs on new failure", "blamelist"],
     ),
     experiment_builder(
@@ -144,6 +147,7 @@ in_category(
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"enable_swarming": False, "clobber": True, "coverage": "gcov"},
         use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.NO,
         execution_timeout = 10800,
         notifies = ["sheriffs on new failure", "blamelist"],
     ),
@@ -152,7 +156,8 @@ in_category(
         triggered_by = ["v8-trigger"],
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"enable_swarming": False, "gclient_vars": {"checkout_clang_coverage_tools": "True"}},
-        use_goma = GOMA.DEFAULT,
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
         execution_timeout = 7200,
         notify_owners = ["machenbach@chromium.org"],
         # https://crbug.com/1265931
@@ -162,7 +167,8 @@ in_category(
         name = "V8 Linux64 - minor mc - debug",
         parent_builder = "V8 Linux64 - debug builder",
         dimensions = {"host_class": "multibot"},
-        use_goma = GOMA.DEFAULT,
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
         notify_owners = ["omerkatz@chromium.org"],
     ),
     experiment_builder_pair(
@@ -179,7 +185,8 @@ in_category(
         triggered_by = ["v8-trigger"],
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
         properties = {"builder_group": "client.v8"},
-        use_goma = GOMA.DEFAULT,
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
         notifies = ["sheriffs on new failure", "blamelist"],
     ),
 )
