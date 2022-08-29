@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6ef02d6_adce4de0",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-29T13:04:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5cdd830_06c43889",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "754e7e13_49b2b3e9",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-08-29T12:14:09Z",
       "side": 1,
       "message": "I like the static cast. We could add a `static_assert` that times_4 \u003d\u003d 2, which should cover the most important case.",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bad1dfd_77fde25e",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-29T13:04:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "754e7e13_49b2b3e9",
       "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +136,24 @@
       "side": 1,
       "message": "Sure, why not. Maybe with another `static_assert` to document why this works and protect against (highly unlikely) changes.",
       "parentUuid": "963f53d5_251a1caa",
+      "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd13ac4_2646e8b8",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-08-29T13:04:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9d13439_7c95dcf5",
       "revId": "41678a39f874d76f34cdd27cf2bc699dd3a1d25f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
