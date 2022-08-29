@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76adbf7a_b083718f",
+        "filename": "builders/experiments.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-08-29T07:54:17Z",
+      "side": 1,
+      "message": "FYI, this is probably technical debt. This builder does not compile... it should not need any of those configs. In other star files this differentiation is better.",
+      "range": {
+        "startLine": 165,
+        "startChar": 48,
+        "endLine": 167,
+        "endChar": 42
+      },
+      "revId": "1693117a2061e8c262b364ddb2260500aae421aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "783af026_934cb9cc",
         "filename": "generated/project.cfg",
         "patchSetId": 6
