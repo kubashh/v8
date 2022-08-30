@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd24a7fd_ff1f2db5",
+        "filename": "test/mjsunit/wasm/reference-table-js-interop.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-30T10:56:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9863f134_77d3f92c",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 38
+      },
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36f56de8_cebfcd75",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-30T10:25:36Z",
       "side": 1,
       "message": "Do these arguments (and `42` in the previous line) serve a purpose? If so, a brief comment would be nice.",
+      "range": {
+        "startLine": 265,
+        "startChar": 48,
+        "endLine": 265,
+        "endChar": 54
+      },
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c6baf6d_a4bf7c1e",
+        "filename": "test/mjsunit/wasm/reference-tables.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-30T10:56:18Z",
+      "side": 1,
+      "message": "Removed. Probably some copy-paste-inconsistency.",
+      "parentUuid": "36f56de8_cebfcd75",
       "range": {
         "startLine": 265,
         "startChar": 48,
@@ -112,6 +160,24 @@
       "side": 1,
       "message": "Non-nullable ref types don\u0027t have a default value. I think we have no choice but to throw a `TypeError` in these cases.",
       "parentUuid": "d8000c65_3bcdea04",
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2746ff74_fa339002",
+        "filename": "test/mjsunit/wasm/reference-tables.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-30T10:56:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59c8da98_61781783",
       "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
