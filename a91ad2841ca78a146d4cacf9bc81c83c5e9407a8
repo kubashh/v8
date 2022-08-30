@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11e67976_77266f97",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-30T10:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50e68216_5fd3d7bf",
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a1ff5cc_09727deb",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-08-30T10:02:06Z",
       "side": 1,
       "message": "Nit: Personally, I\u0027m not sure it\u0027s worth adding these comments for one-line bodies.",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 27
+      },
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a6f3b2_8c13e1db",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-30T10:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a1ff5cc_09727deb",
       "range": {
         "startLine": 22,
         "startChar": 8,
