@@ -16,6 +16,63 @@
       "message": "ptal. Since all top-level OWNERS are OOO I am not sure this is feasible now :) Let\u0027s see...",
       "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f446df8_96088b8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T10:02:06Z",
+      "side": 1,
+      "message": "lgtm with nits and suggestions",
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50e68216_5fd3d7bf",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T10:02:06Z",
+      "side": 1,
+      "message": "Here and below: `#if V8_OS_STARBOARD` (we discussed this in the previous CL).",
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1ff5cc_09727deb",
+        "filename": "src/base/platform/wrappers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T10:02:06Z",
+      "side": 1,
+      "message": "Nit: Personally, I\u0027m not sure it\u0027s worth adding these comments for one-line bodies.",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 27
+      },
+      "revId": "a91ad2841ca78a146d4cacf9bc81c83c5e9407a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
