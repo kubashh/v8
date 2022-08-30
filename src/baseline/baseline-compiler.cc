@@ -1154,6 +1154,11 @@ void BaselineCompiler::VisitGetSuperConstructor() {
   StoreRegister(0, prototype);
 }
 
+void BaselineCompiler::VisitFindNonDefaultConstructor() {
+  // TODO(v8:13091): Implement.
+  CHECK(false);
+}
+
 namespace {
 constexpr Builtin ConvertReceiverModeToCompactBuiltin(
     ConvertReceiverMode mode) {
