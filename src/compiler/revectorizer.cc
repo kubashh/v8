@@ -107,8 +107,9 @@ static bool AllSameAddr(const std::vector<Node*>& nodes) {
 }
 
 // returns True if all of the values in node_group are identical.
-static bool IsSplat(const std::vector<Node*>& node_group) {
-  for (std::vector<Node*>::size_type i = 1, e = node_group.size(); i < e; ++i)
+template <typename T>
+static bool IsSplat(const T& node_group) {
+  for (typename T::size_type i = 1, e = node_group.size(); i < e; ++i)
     if (node_group[i] != node_group[0]) return false;
   return true;
 }
@@ -489,17 +490,240 @@ void SLPTree::DeleteTree() {
 void SLPTree::Print(const char* info) {
   TRACE("%s, Packed node:\n", info);
   if (!FLAG_trace_wasm_revectorize) return;
+
+  ForEach([](PackNode const* pnode) { pnode->Print(); });
+}
+
+template <typename FunctionType>
+void SLPTree::ForEach(FunctionType callback) {
   std::unordered_set<PackNode const*> visited;
 
   for (auto& entry : node_to_packnode_) {
     PackNode const* pnode = entry.second;
-    if (!pnode || visited.find(pnode) != visited.end()) continue;
-    pnode->Print();
+    if (visited.find(pnode) != visited.end()) continue;
     visited.insert(pnode);
+
+    callback(pnode);
   }
 }
 
 //////////////////////////////////////////////////////
+bool Revectorizer::DecideVectorize() {
+  TRACE("Enter %s\n", __func__);
+
+  int save = 0, cost = 0;
+  slp_tree_->ForEach([&](PackNode const* pnode) {
+    const ZoneVector<Node*>& nodes = pnode->Nodes();
+    IrOpcode::Value op = nodes[0]->opcode();
+
+    if (op == IrOpcode::kLoopExitValue) return;
+    if (op != IrOpcode::kLoadTransform && op != IrOpcode::kI8x16Shuffle &&
+        !IsSplat(nodes))
+      save++;
+    if (op == IrOpcode::kExtractF128) return;
+
+    for (size_t i = 0; i < nodes.size(); i++) {
+      if (i > 0 && nodes[i] == nodes[0]) continue;
+      for (auto edge : nodes[i]->use_edges()) {
+        if (NodeProperties::IsValueEdge(edge)) {
+          Node* useNode = edge.from();
+          if (!GetPackNode(useNode) && !(useNode->uses().empty()) &&
+              useNode->opcode() != IrOpcode::kLoopExitValue) {
+            TRACE("External use edge: (%d:%s) -> (%d:%s)\n", useNode->id(),
+                  useNode->op()->mnemonic(), nodes[i]->id(),
+                  nodes[i]->op()->mnemonic());
+            cost++;
+
+            // We only need one Extract node and all other uses can share.
+            break;
+          }
+        }
+      }
+    }
+  });
+
+  TRACE("Save: %d, cost: %d\n", save, cost);
+  return save > cost;
+}
+
+void Revectorizer::SetEffectInput(PackNode* pnode, int index, Node*& input) {
+  const ZoneVector<Node*>& nodes = pnode->Nodes();
+
+  // We assumed there's no effect edge to the 3rd node inbetween.
+  DCHECK(nodes[0] == nodes[1] ||
+         NodeProperties::GetEffectInput(nodes[0]) == nodes[1] ||
+         NodeProperties::GetEffectInput(nodes[1]) == nodes[0]);
+
+  // Scanning till find the other effect outside pnode.
+  for (size_t i = 0; i < nodes.size(); i++) {
+    Node* node128 = nodes[i];
+    PackNode* effect = GetPackNode(node128->InputAt(index));
+    if (effect == pnode) continue;
+    if (effect)
+      pnode->SetOperand(index, effect);
+    else
+      input = node128->InputAt(index);
+    break;
+  }
+}
+
+void Revectorizer::SetMemoryOpInputs(base::SmallVector<Node*, 2>& inputs,
+                                     PackNode* pnode, int effect_index) {
+  Node* node = pnode->Nodes()[0];
+  // Keep addressing inputs
+  inputs[0] = node->InputAt(0);
+  inputs[1] = node->InputAt(1);
+  // value input is default dead.
+  SetEffectInput(pnode, effect_index, inputs[effect_index]);
+  // control input
+  inputs[effect_index + 1] = node->InputAt(effect_index + 1);
+}
+
+Node* Revectorizer::VectorizeTree(PackNode* pnode) {
+  TRACE("Enter %s with PackNode\n", __func__);
+
+  Node* node0 = pnode->Nodes()[0];
+  if (pnode->RevectorizedNode()) {
+    TRACE("Diamond merged for #%d:%s\n", node0->id(), node0->op()->mnemonic());
+    return pnode->RevectorizedNode();
+  }
+
+  int count = node0->InputCount();
+  TRACE("Vectorize #%d:%s, input count: %d\n", node0->id(),
+        node0->op()->mnemonic(), count);
+
+  IrOpcode::Value op = node0->opcode();
+  const Operator* NewOp = nullptr;
+  Node* dead = mcgraph()->Dead();
+  base::SmallVector<Node*, 2> inputs(count);
+  for (int i = 0; i < count; i++) inputs[i] = dead;
+
+  switch (op) {
+    case IrOpcode::kPhi: {
+      DCHECK_EQ(PhiRepresentationOf(node0->op()),
+                MachineRepresentation::kSimd128);
+      NewOp =
+          mcgraph_->common()->Phi(MachineRepresentation::kSimd256, count - 1);
+      inputs[count - 1] = NodeProperties::GetControlInput(node0);
+      break;
+    }
+    case IrOpcode::kLoopExitValue: {
+      DCHECK_EQ(LoopExitValueRepresentationOf(node0->op()),
+                MachineRepresentation::kSimd128);
+      NewOp =
+          mcgraph_->common()->LoopExitValue(MachineRepresentation::kSimd256);
+      inputs[count - 1] = NodeProperties::GetControlInput(node0);
+      break;
+    }
+    case IrOpcode::kF32x4Add:
+      NewOp = mcgraph_->machine()->F32x8Add();
+      break;
+    case IrOpcode::kF32x4Mul:
+      NewOp = mcgraph_->machine()->F32x8Mul();
+      break;
+    case IrOpcode::kProtectedLoad: {
+      DCHECK_EQ(LoadRepresentationOf(node0->op()).representation(),
+                MachineRepresentation::kSimd128);
+      NewOp = mcgraph_->machine()->ProtectedLoad(MachineType::Simd256());
+      SetMemoryOpInputs(inputs, pnode, 2);
+      break;
+    }
+    case IrOpcode::kLoad: {
+      DCHECK_EQ(LoadRepresentationOf(node0->op()).representation(),
+                MachineRepresentation::kSimd128);
+      NewOp = mcgraph_->machine()->Load(MachineType::Simd256());
+      SetMemoryOpInputs(inputs, pnode, 2);
+      break;
+    }
+    case IrOpcode::kProtectedStore: {
+      DCHECK_EQ(StoreRepresentationOf(node0->op()).representation(),
+                MachineRepresentation::kSimd128);
+      NewOp =
+          mcgraph_->machine()->ProtectedStore(MachineRepresentation::kSimd256);
+      SetMemoryOpInputs(inputs, pnode, 3);
+      break;
+    }
+    case IrOpcode::kStore: {
+      DCHECK_EQ(StoreRepresentationOf(node0->op()).representation(),
+                MachineRepresentation::kSimd128);
+      WriteBarrierKind write_barrier_kind =
+          StoreRepresentationOf(node0->op()).write_barrier_kind();
+      NewOp = mcgraph_->machine()->Store(StoreRepresentation(
+          MachineRepresentation::kSimd256, write_barrier_kind));
+      SetMemoryOpInputs(inputs, pnode, 3);
+      break;
+    }
+    case IrOpcode::kLoadTransform: {
+      LoadTransformParameters params = LoadTransformParametersOf(node0->op());
+      if (params.transformation == LoadTransformation::kS128Load32Splat) {
+        NewOp = mcgraph_->machine()->LoadTransform(
+            params.kind, LoadTransformation::kS256Load32Splat);
+        SetMemoryOpInputs(inputs, pnode, 2);
+      } else if (params.transformation ==
+                 LoadTransformation::kS128Load64Splat) {
+        NewOp = mcgraph_->machine()->LoadTransform(
+            params.kind, LoadTransformation::kS256Load64Splat);
+        SetMemoryOpInputs(inputs, pnode, 2);
+      } else {
+        TRACE("Unsupported #%d:%s!\n", node0->id(), node0->op()->mnemonic());
+      }
+      break;
+    }
+    case IrOpcode::kExtractF128: {
+      pnode->SetRevectorizedNode(node0->InputAt(0));
+      // The extract uses other than its parent don't need to change.
+      break;
+    }
+    default:
+      UNREACHABLE();
+  }
+
+  DCHECK(pnode->RevectorizedNode() || NewOp);
+  if (NewOp != nullptr) {
+    Node* new_node = graph()->NewNode(NewOp, count, inputs.begin(), true);
+    pnode->SetRevectorizedNode(new_node);
+    for (int i = 0; i < count; i++) {
+      if (inputs[i] == dead)
+        new_node->ReplaceInput(i, VectorizeTree(pnode->GetOperand(i)));
+    }
+
+    // Extract Uses
+    const ZoneVector<Node*>& nodes = pnode->Nodes();
+    for (size_t i = 0; i < nodes.size(); i++) {
+      if (i > 0 && nodes[i] == nodes[i - 1]) continue;
+      Node* input_128 = nullptr;
+      for (auto edge : nodes[i]->use_edges()) {
+        Node* useNode = edge.from();
+        if (!GetPackNode(useNode)) {
+          if (NodeProperties::IsValueEdge(edge)) {
+            // Extract use
+            TRACE("Replace Value Edge from %d:%s, to %d:%s\n", useNode->id(),
+                  useNode->op()->mnemonic(), edge.to()->id(),
+                  edge.to()->op()->mnemonic());
+
+            if (!input_128) {
+              TRACE("Create ExtractF128(%lu) node from #%d\n", i,
+                    new_node->id());
+              input_128 = graph()->NewNode(
+                  mcgraph()->machine()->ExtractF128(int32_t(i)), new_node);
+            }
+            edge.UpdateTo(input_128);
+          } else if (NodeProperties::IsEffectEdge(edge)) {
+            TRACE("Replace Effect Edge from %d:%s, to %d:%s\n", useNode->id(),
+                  useNode->op()->mnemonic(), edge.to()->id(),
+                  edge.to()->op()->mnemonic());
+
+            edge.UpdateTo(new_node);
+          }
+        }
+      }
+      if (nodes[i]->uses().empty()) nodes[i]->Kill();
+    }
+  }
+
+  return pnode->RevectorizedNode();
+}
+
 void Revectorizer::DetectCPUFeatures() {
   base::CPU cpu;
   if (cpu.has_avx() && cpu.has_osxsave()) {
@@ -607,6 +831,12 @@ bool Revectorizer::ReduceStoreChain(const std::vector<Node*>& Stores) {
   }
 
   slp_tree_->Print("After build tree");
+
+  if (DecideVectorize()) {
+    VectorizeTree(root);
+    slp_tree_->Print("After vectorize tree");
+  }
+
   TRACE("\n");
   return true;
 }

@@ -30,16 +30,19 @@ using StoreNodeSet = ZoneSet<Node*, StoreOffsetComparer>;
 
 class PackNode final : public NON_EXPORTED_BASE(ZoneObject) {
  public:
-  explicit PackNode(Zone* zone, const std::vector<Node*>& node_group)
-      : nodes_(zone), operands_(zone), revectorized_node_(nullptr) {}
-
+  PackNode(Zone* zone, const std::vector<Node*>& node_group)
+      : nodes_(node_group.cbegin(), node_group.cend(), zone),
+        operands_(zone),
+        revectorized_node_(nullptr) {}
+  const ZoneVector<Node*>& Nodes() const { return nodes_; }
   bool IsSame(const std::vector<Node*>& node_group) const {
     if (node_group.size() == nodes_.size()) {
       return std::equal(node_group.begin(), node_group.end(), nodes_.begin());
     }
     return false;
   }
-  const Node* RevectorizedNode() const { return revectorized_node_; }
+  Node* RevectorizedNode() { return revectorized_node_; }
+  void SetRevectorizedNode(Node* node) { revectorized_node_ = node; }
   // returns the index operand of this PackNode.
   PackNode* GetOperand(unsigned index) {
     DCHECK_LT(index, operands_.size());
@@ -84,6 +87,9 @@ class SLPTree : public NON_EXPORTED_BASE(ZoneObject) {
   enum { RecursionMaxDepth = 1000, SLPCostThreshold = 2000 };
 
   void Print(const char* info);
+
+  template <typename FunctionType>
+  void ForEach(FunctionType callback);
 
   Node* GetEarlySchedulePosition(Node* node) {
     return scheduler_->GetEarlySchedulePosition(node);
@@ -159,6 +165,13 @@ class V8_EXPORT_PRIVATE Revectorizer final
   PackNode* GetPackNode(Node* node) const {
     return slp_tree_->GetPackNode(node);
   }
+
+  bool DecideVectorize();
+
+  void SetEffectInput(PackNode* pnode, int index, Node*& nput);
+  void SetMemoryOpInputs(base::SmallVector<Node*, 2>& inputs, PackNode* pnode,
+                         int index);
+  Node* VectorizeTree(PackNode* pnode);
 
   Zone* const zone_;
   Graph* const graph_;
