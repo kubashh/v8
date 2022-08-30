@@ -86,6 +86,24 @@
       "message": "Similar here: Before, this was a constructor for perfect forwarding (accepting a universal reference). Now it\u0027s accepting an r-value reference, which does not seem to make a lot of sense. Also, the `std::forward` lost any meaning AFAICT.",
       "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10245a6d_f6e17dea",
+        "filename": "src/wasm/wasm-result.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-08-30T07:54:01Z",
+      "side": 1,
+      "message": "Thanks for fixing this!",
+      "parentUuid": "11cac933_1e1d44e8",
+      "revId": "9d642b11c2a5cf557c45987ed37dc38008bf6339",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
