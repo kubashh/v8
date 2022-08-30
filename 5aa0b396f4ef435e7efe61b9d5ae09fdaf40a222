@@ -51,6 +51,24 @@
       "parentUuid": "00bacc50_c9bff9fe",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f319ab5_6815c17d",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-30T09:25:44Z",
+      "side": 1,
+      "message": "I\u0027ve added some DCHECK, PTAL.\n\nIt seems that it passes all the trybot tests. So in which cases this filed can be set to a Smi? Do we need to add a test case for it?",
+      "parentUuid": "5aeb77c1_76580916",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
