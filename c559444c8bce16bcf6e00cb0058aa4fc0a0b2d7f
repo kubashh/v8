@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "339f085a_50a901a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T09:54:25Z",
+      "side": 1,
+      "message": "Please mention how does your CL affect arm64 code. Does it save instructions there as well?",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b93e2ce3_89b85dcb",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T09:54:25Z",
+      "side": 1,
+      "message": "Let\u0027s make it more robust. Could you please make the CAST machinery work for converting TNode\u003cMaybeObject\u003e to TNode\u003cHeapObjectReference\u003e and use them instead of ReinterpretCasts?",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbd9a213_a06d4cb3",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T09:54:25Z",
+      "side": 1,
+      "message": "This approach seems fragile to me. It doesn\u0027t help to avoid misusing of TryMonomorphicCase for something else later. If we go this direction I think it should be just `!IsSmi()`.",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3c4a319_8cd2fd7b",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T09:54:25Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -69,6 +69,24 @@
       "parentUuid": "5aeb77c1_76580916",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd3dde4a_d9a65fa4",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T09:54:25Z",
+      "side": 1,
+      "message": "At least, `FeedbackNexus::ConfigureLexicalVarMode` and `FeedbackNexus::Clear()` set it to Smi. \nThe former is about accessing `let` and `const` variables declared on a script level.",
+      "parentUuid": "3f319ab5_6815c17d",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
