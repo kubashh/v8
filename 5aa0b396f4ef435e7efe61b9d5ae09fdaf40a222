@@ -87,6 +87,24 @@
       "parentUuid": "3f319ab5_6815c17d",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b50bcdda_a364195c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-30T11:50:15Z",
+      "side": 1,
+      "message": "I just checked the use side of `TryMonomorphicCase` and they are:\n\n    LoadIC_BytecodeHandler\n    LoadIC\n    LoadSuperIC\n    KeyedLoadIC\n    StoreIC\n    KeyedStoreIC\n    DefineKeyedOwnIC\n    StoreInArrayLiteralIC\n    GenerateCloneObjectIC\n    \nFor `FeedbackNexus::ConfigureLexicalVarMode`, the slot should be GlobalIC, and the slot kinds are listed below, and it seems that they are not affected by this CL.\n\n    FeedbackSlotKind::kLoadGlobalNotInsideTypeof \n    FeedbackSlotKind::kLoadGlobalInsideTypeof\n    FeedbackSlotKind::kStoreGlobalSloppy\n    FeedbackSlotKind::kStoreGlobalStrict\n    \nFor \u0027FeedbackNexus::Clear()\u0027, they are uninitialized to `UninitializedSentinel` (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/feedback-vector.cc;l\u003d588;drc\u003d7267e612666ee78e5809dcc48253af2857989a47), which is also not a smi.\n\nDoes this means it happens that this CL only affects slots that are not set to a Smi? Otherwise it should fails the CSA_DCHECK.",
+      "parentUuid": "dd3dde4a_d9a65fa4",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
