@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49f7d157_9960f211",
+        "filename": "test/unittests/parser/parsing-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-30T16:07:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f4b4f82_73dd1f15",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 71
+      },
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd30e156_30735f39",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da022aee_dc459813",
+        "filename": "test/unittests/parser/parsing-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-30T16:07:22Z",
+      "side": 1,
+      "message": "\u003e Nit: Here it\u0027s a bit unnecessary have this as a separate variable, since it\u0027s only used once.\n\nDONE.\n\nFYI. There are 2 usages of `isolate` variable in this test. But I think it is fine to inline this variable given it only have 2 usages.",
+      "parentUuid": "cd30e156_30735f39",
+      "range": {
+        "startLine": 1951,
+        "startChar": 2,
+        "endLine": 1951,
+        "endChar": 38
+      },
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff4e7c8_63cce1f8",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-08-30T09:59:15Z",
       "side": 1,
       "message": "Are these still needed? Will this be formatted wrong otherwise? How?",
+      "range": {
+        "startLine": 2187,
+        "startChar": 0,
+        "endLine": 2187,
+        "endChar": 19
+      },
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4d10c7_af44bc76",
+        "filename": "test/unittests/parser/parsing-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-30T16:07:22Z",
+      "side": 1,
+      "message": "If I remove those, the formatted code will like below(not readable):\n```\n#define FUTURE_STRICT_RESERVED_STATEMENTS(NAME)                             \\\n  \"var \" #NAME \";\", \"var foo, \" #NAME \";\", \"try { } catch (\" #NAME \") { }\", \\\n      \"function \" #NAME \"() { }\", \"(function \" #NAME \"() { })\",             \\\n      \"function foo(\" #NAME \") { }\", \"function foo(bar, \" #NAME \") { }\",    \\\n      #NAME \" \u003d 1;\", #NAME \" +\u003d 1;\", \"var foo \u003d \" #NAME \" \u003d 1;\",            \\\n      \"++\" #NAME \";\", #NAME \" ++;\",\n\n#define FUTURE_STRICT_RESERVED_LEX_BINDINGS(NAME)                            \\\n  \"let \" #NAME \";\", \"for (let \" #NAME \"; false; ) {}\",                       \\\n      \"for (let \" #NAME \" in {}) {}\", \"for (let \" #NAME \" of []) {}\",        \\\n      \"const \" #NAME \" \u003d null;\", \"for (const \" #NAME \" \u003d null; false; ) {}\", \\\n      \"for (const \" #NAME \" in {}) {}\", \"for (const \" #NAME \" of []) {}\",\n```",
+      "parentUuid": "aff4e7c8_63cce1f8",
       "range": {
         "startLine": 2187,
         "startChar": 0,
