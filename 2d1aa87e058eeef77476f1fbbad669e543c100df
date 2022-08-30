@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "53eea12b_d31e6a69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-30T10:25:36Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a0147e1b_cd101f4b",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 4
@@ -20,6 +37,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9863f134_77d3f92c",
+        "filename": "test/mjsunit/wasm/reference-table-js-interop.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-30T10:25:36Z",
+      "side": 1,
+      "message": "nit: indentation",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 38
+      },
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36f56de8_cebfcd75",
+        "filename": "test/mjsunit/wasm/reference-tables.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-30T10:25:36Z",
+      "side": 1,
+      "message": "Do these arguments (and `42` in the previous line) serve a purpose? If so, a brief comment would be nice.",
+      "range": {
+        "startLine": 265,
+        "startChar": 48,
+        "endLine": 265,
+        "endChar": 54
+      },
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8000c65_3bcdea04",
         "filename": "test/mjsunit/wasm/reference-tables.js",
         "patchSetId": 4
@@ -31,6 +94,24 @@
       "writtenOn": "2022-08-30T09:53:24Z",
       "side": 1,
       "message": "OK, for non-null types we still run into a DCHECK for `table.grow(1)` called by JavaScript as it still maps to `null` which is not a valid value.\nSo I\u0027ll need to reiterate here.\nGiven the quote above from the proposal: Would the default value for a non-ref struct/array type be a thing? I know that we have `struct.new_default` and `array.new_default` but at least for the array we\u0027re missing the size, so that isn\u0027t really viable either.",
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59c8da98_61781783",
+        "filename": "test/mjsunit/wasm/reference-tables.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-08-30T10:25:36Z",
+      "side": 1,
+      "message": "Non-nullable ref types don\u0027t have a default value. I think we have no choice but to throw a `TypeError` in these cases.",
+      "parentUuid": "d8000c65_3bcdea04",
       "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
