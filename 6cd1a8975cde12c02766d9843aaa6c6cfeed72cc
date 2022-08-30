@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c756c298_531a5bdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-08-30T18:27:32Z",
+      "side": 1,
+      "message": "mkgrokdump reset the +1. 😞 PTAL again, Victor, thanks!",
+      "revId": "6cd1a8975cde12c02766d9843aaa6c6cfeed72cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
