@@ -3780,15 +3780,19 @@ void WasmGraphBuilder::StoreMem(MachineRepresentation mem_rep, Node* index,
       gasm_->StoreUnaligned(UnalignedStoreRepresentation{mem_rep},
                             MemBuffer(capped_offset), index, val);
       break;
-    case MemoryAccessKind::kProtected:
-      SetSourcePosition(
-          gasm_->ProtectedStore(mem_rep, MemBuffer(capped_offset), index, val),
-          position);
+    case MemoryAccessKind::kProtected: {
+      Node* store =
+          gasm_->ProtectedStore(mem_rep, MemBuffer(capped_offset), index, val);
+      SetSourcePosition(store, position);
+      graph()->RecordStore(store);
       break;
-    case MemoryAccessKind::kNormal:
-      gasm_->Store(StoreRepresentation{mem_rep, kNoWriteBarrier},
-                   MemBuffer(capped_offset), index, val);
+    }
+    case MemoryAccessKind::kNormal: {
+      Node* store = gasm_->Store(StoreRepresentation{mem_rep, kNoWriteBarrier},
+                                 MemBuffer(capped_offset), index, val);
+      graph()->RecordStore(store);
       break;
+    }
   }
 
   if (FLAG_trace_wasm_memory) {
@@ -8352,6 +8356,11 @@ bool BuildGraphForWasmFunction(wasm::CompilationEnv* env,
   auto sig = CreateMachineSignature(mcgraph->zone(), func_body.sig,
                                     WasmGraphBuilder::kCalledFromWasm);
   builder.LowerInt64(sig);
+
+  if (builder.has_simd()) {
+    mcgraph->graph()->SetSimd(true);
+    // PrintF("wasm function#%d has simd\n", func_index);
+  }
 
   return true;
 }
