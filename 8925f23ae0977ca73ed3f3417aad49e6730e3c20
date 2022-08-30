@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "8925f23ae0977ca73ed3f3417aad49e6730e3c20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6d6889d_af2a976d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-08-30T06:48:11Z",
+      "side": 1,
+      "message": "I don\u0027t think we can measure anything for this on UMA as it was created for a corner case.",
+      "revId": "8925f23ae0977ca73ed3f3417aad49e6730e3c20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
