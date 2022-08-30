@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "852f5a8d_ab282594",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T12:30:54Z",
+      "side": 1,
+      "message": "Ok, your CL might help arm64 too.",
+      "parentUuid": "253ff3ef_eeb149b7",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93e2ce3_89b85dcb",
@@ -88,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e7ab65_a4bfe01a",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T12:30:54Z",
+      "side": 1,
+      "message": "Ah. Right. \nNo, let\u0027s keep the name as is.",
+      "parentUuid": "18b4c6bc_1467ccc7",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3c4a319_8cd2fd7b",
@@ -101,6 +137,24 @@
       "writtenOn": "2022-08-30T09:54:25Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee34b436_23781d09",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T12:30:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3c4a319_8cd2fd7b",
       "revId": "c559444c8bce16bcf6e00cb0058aa4fc0a0b2d7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

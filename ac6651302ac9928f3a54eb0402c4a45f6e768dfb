@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd293897_23370be5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T12:30:54Z",
+      "side": 1,
+      "message": "Ok, I think your approach will work.\nPlease integrate HeapObjectReference into our type checking machinery (CASTs) in order to avoid unchecked ReinterpretCast\u003cHeapObjectReference\u003e().",
+      "revId": "ac6651302ac9928f3a54eb0402c4a45f6e768dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

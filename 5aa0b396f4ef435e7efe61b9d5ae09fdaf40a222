@@ -105,6 +105,24 @@
       "parentUuid": "dd3dde4a_d9a65fa4",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b3a6a0_50d8ae9c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-30T12:30:54Z",
+      "side": 1,
+      "message": "I was worried about this one: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/feedback-vector.cc;l\u003d626;drc\u003d7267e612666ee78e5809dcc48253af2857989a47",
+      "parentUuid": "b50bcdda_a364195c",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
