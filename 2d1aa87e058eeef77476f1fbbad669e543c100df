@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0147e1b_cd101f4b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-30T09:53:24Z",
+      "side": 1,
+      "message": "For nullable this seems to be spec compliant, see https://github.com/WebAssembly/reference-types/blob/master/proposals/reference-types/Overview.md#language-extensions:\n\u003e optional for backwards compatibility, defaults to default value of respective type",
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8000c65_3bcdea04",
+        "filename": "test/mjsunit/wasm/reference-tables.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-08-30T09:53:24Z",
+      "side": 1,
+      "message": "OK, for non-null types we still run into a DCHECK for `table.grow(1)` called by JavaScript as it still maps to `null` which is not a valid value.\nSo I\u0027ll need to reiterate here.\nGiven the quote above from the proposal: Would the default value for a non-ref struct/array type be a thing? I know that we have `struct.new_default` and `array.new_default` but at least for the array we\u0027re missing the size, so that isn\u0027t really viable either.",
+      "revId": "2d1aa87e058eeef77476f1fbbad669e543c100df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
