@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0b78093_03bbbd00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-30T13:31:21Z",
+      "side": 1,
+      "message": "leszeks, ptal\n\nThis CL implements only the Ignition parts, I\u0027m leaving other compilers out of this initial CL to keep this more minimal.",
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
