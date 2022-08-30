@@ -33,6 +33,24 @@
       "message": "OMG. I clicked the submit CQ button wrongly and don\u0027t find a button to cancel it.",
       "revId": "1ed85f85a387c6551ed9c9388e2c3a5a56850170",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b134e3d_2c2c9138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1529417
+      },
+      "writtenOn": "2022-08-30T16:12:57Z",
+      "side": 1,
+      "message": "Given your comment are all non-blocking comments and I resolved most of your concerns. I think it is ok to submit it.\n\nFeel free to comment if you have more concerns. Or if you know how to cancel the submit operation, feel free to cancel it if needed.",
+      "parentUuid": "93ebd698_6e54b09d",
+      "revId": "1ed85f85a387c6551ed9c9388e2c3a5a56850170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
