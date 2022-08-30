@@ -435,6 +435,7 @@ MaybeObjectHandle FeedbackNexus::ToHandle(MaybeObject value) const {
 
 MaybeObject FeedbackNexus::GetFeedback() const {
   auto pair = GetFeedbackPair();
+  DCHECK_IMPLIES(IsICSlotKind(kind()), !pair.first.IsSmi());
   return pair.first;
 }
 
@@ -484,6 +485,7 @@ void FeedbackNexus::SetFeedback(FeedbackType feedback, WriteBarrierMode mode,
   static_assert(IsValidFeedbackType<FeedbackExtraType>(),
                 "feedbacks need to be Smi, Object or MaybeObject");
   MaybeObject fmo = MaybeObject::Create(feedback);
+  DCHECK_IMPLIES(IsICSlotKind(kind()), !fmo.IsSmi());
   MaybeObject fmo_extra = MaybeObject::Create(feedback_extra);
   config()->SetFeedbackPair(vector(), slot(), fmo, mode, fmo_extra, mode_extra);
 }
