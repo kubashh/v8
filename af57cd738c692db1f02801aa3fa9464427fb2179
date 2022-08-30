@@ -16,6 +16,24 @@
       "message": "D\u0027oh, thanks for the fix.\n\nA quick audit shows TA#slice, TA#with, and the constructors are still fine with only checking the source buffer, since either the target buffers are newly created TAs that haven\u0027t escaped to other threads yet.",
       "revId": "af57cd738c692db1f02801aa3fa9464427fb2179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3f1568b_d58fd298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-08-30T09:51:12Z",
+      "side": 1,
+      "message": "Thanks for double-checking, I didn\u0027t immediately find any other use-cases of this pattern either.",
+      "parentUuid": "4c286c69_bbedd807",
+      "revId": "af57cd738c692db1f02801aa3fa9464427fb2179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
