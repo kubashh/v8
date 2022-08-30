@@ -875,7 +875,8 @@ TNode<Object> InterpreterAssembler::ConstructWithSpread(
     GotoIf(is_megamorphic, &construct);
 
     Comment("check if weak reference");
-    GotoIfNot(IsWeakOrCleared(feedback), &check_initialized);
+    GotoIfNot(IsWeakOrCleared(ReinterpretCast<HeapObjectReference>(feedback)),
+              &check_initialized);
 
     // If the weak reference is cleared, we have a new chance to become
     // monomorphic.

@@ -759,6 +759,22 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   FeedbackSlot slot() const { return slot_; }
   FeedbackSlotKind kind() const { return kind_; }
 
+#ifdef DEBUG
+  bool IsICSlotKind(FeedbackSlotKind kind) const {
+    return kind == FeedbackSlotKind::kSetNamedSloppy ||
+           kind == FeedbackSlotKind::kSetNamedStrict ||
+           kind == FeedbackSlotKind::kSetKeyedSloppy ||
+           kind == FeedbackSlotKind::kSetKeyedStrict ||
+           kind == FeedbackSlotKind::kStoreInArrayLiteral ||
+           kind == FeedbackSlotKind::kDefineNamedOwn ||
+           kind == FeedbackSlotKind::kDefineKeyedOwn ||
+           kind == FeedbackSlotKind::kLoadProperty ||
+           kind == FeedbackSlotKind::kLoadKeyed ||
+           kind == FeedbackSlotKind::kHasKeyed ||
+           kind == FeedbackSlotKind::kDefineKeyedOwnPropertyInLiteral;
+  }
+#endif
+
   inline LanguageMode GetLanguageMode() const {
     return vector().GetLanguageMode(slot());
   }
