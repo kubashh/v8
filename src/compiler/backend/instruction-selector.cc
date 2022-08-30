@@ -2844,11 +2844,13 @@ void InstructionSelector::VisitI16x8RelaxedQ15MulRS(Node* node) {
 #endif  // !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_ARM !V8_TARGET_ARCH_X64 &&
         // !V8_TARGET_ARCH_IA32
 
-#if !V8_TARGET_ARCH_ARM64
+#if !V8_TARGET_ARCH_ARM64 && !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_IA32
 void InstructionSelector::VisitI16x8DotI8x16I7x16S(Node* node) {
   UNIMPLEMENTED();
 }
+#endif  // !V8_TARGET_ARCH_ARM6 && !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_IA32
 
+#if !V8_TARGET_ARCH_ARM64
 void InstructionSelector::VisitI32x4DotI8x16I7x16AddS(Node* node) {
   UNIMPLEMENTED();
 }

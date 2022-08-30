@@ -4318,6 +4318,13 @@ void InstructionSelector::VisitF64x2PromoteLowF32x4(Node* node) {
   VisitRR(this, node, code);
 }
 
+void InstructionSelector::VisitI16x8DotI8x16I7x16S(Node* node) {
+  X64OperandGenerator g(this);
+  Emit(kX64I16x8DotI8x16I7x16S, g.DefineAsRegister(node),
+       g.UseUniqueRegister(node->InputAt(0)),
+       g.UseUniqueRegister(node->InputAt(1)));
+}
+
 void InstructionSelector::AddOutputToSelectContinuation(OperandGenerator* g,
                                                         int first_input_index,
                                                         Node* node) {
