@@ -1576,6 +1576,8 @@ void MaglevGraphBuilder::VisitGetSuperConstructor() {
   StoreRegister(iterator_.GetRegisterOperand(0), map_proto);
 }
 
+void MaglevGraphBuilder::VisitFindNonDefaultConstructor() { CHECK(false); }
+
 void MaglevGraphBuilder::InlineCallFromRegisters(
     int argc_count, ConvertReceiverMode receiver_mode,
     compiler::JSFunctionRef function) {

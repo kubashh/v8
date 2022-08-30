@@ -3235,6 +3235,8 @@ void BytecodeGraphBuilder::VisitGetSuperConstructor() {
                               Environment::kAttachFrameState);
 }
 
+void BytecodeGraphBuilder::VisitFindNonDefaultConstructor() { CHECK(false); }
+
 void BytecodeGraphBuilder::BuildCompareOp(const Operator* op) {
   DCHECK(JSOperator::IsBinaryWithFeedback(op->opcode()));
   PrepareEagerCheckpoint();
