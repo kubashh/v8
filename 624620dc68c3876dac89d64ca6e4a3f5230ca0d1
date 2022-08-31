@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3051f59_8d2fbdad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T14:32:45Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "624620dc68c3876dac89d64ca6e4a3f5230ca0d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e39d7c_5fe2c5c1",
@@ -48,6 +65,30 @@
       "writtenOn": "2022-08-31T13:47:33Z",
       "side": 1,
       "message": "I was thinking about this, I don\u0027t think the lifetime of `constructor` and `instance` actually overlap, right? So you could have `FindNonDefaultConstructor` write to a single `constructor_or_instance` register, and make this here also `constructor_or_instance`.",
+      "range": {
+        "startLine": 5649,
+        "startChar": 11,
+        "endLine": 5649,
+        "endChar": 19
+      },
+      "revId": "624620dc68c3876dac89d64ca6e4a3f5230ca0d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d05fe65e_a8fedd86",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 5649,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T14:32:45Z",
+      "side": 1,
+      "message": "In the (spread_position \u003d\u003d Call::kHasNonFinalSpread), it cannot be done without extra moves: the ctor has to go to construct_args[0] but the instance cannot go (or, stay) there, so something has to be moved.\n\nIt can however be done in the else branch, so I made \u0027constructor\u0027 and \u0027instance\u0027 be the same register.\n\nStill passing them as separate params.",
+      "parentUuid": "64e39d7c_5fe2c5c1",
       "range": {
         "startLine": 5649,
         "startChar": 11,
