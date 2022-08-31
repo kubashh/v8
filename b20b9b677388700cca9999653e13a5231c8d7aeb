@@ -16,6 +16,98 @@
       "message": "leszeks, ptal\n\nThis CL implements only the Ignition parts, I\u0027m leaving other compilers out of this initial CL to keep this more minimal.",
       "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e940270a_e09effb3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 5669,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-31T08:59:24Z",
+      "side": 1,
+      "message": "Does `GetSuperConstructor` have observable side effects? If not, could it be postponed to after args visiting, and merged with `FindNonDefaultConstructor` in the `omit_super_ctor` case?",
+      "range": {
+        "startLine": 5669,
+        "startChar": 6,
+        "endLine": 5669,
+        "endChar": 32
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85560da_43461f30",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 5777,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-31T08:59:24Z",
+      "side": 1,
+      "message": "maybe we could elide this move if there was a way for `constructor` to be both an input and an output parameter to FindNonDefaultConstructor?",
+      "range": {
+        "startLine": 5777,
+        "startChar": 13,
+        "endLine": 5777,
+        "endChar": 25
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f04335e5_c7c2f297",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-31T08:59:24Z",
+      "side": 1,
+      "message": "According to, https://tc39.es/ecma262/#sec-runtime-semantics-classdefinitionevaluation, when talking about the default constructor, it says\n\n\u003e This branch behaves similarly to `constructor(...args) { super(...args); }`. The most notable distinction is that while the aforementioned ECMAScript source text observably calls the @@iterator method on `%Array.prototype%`, this function does not.\n\nSo I don\u0027t think this is actually necessary.",
+      "range": {
+        "startLine": 2804,
+        "startChar": 0,
+        "endLine": 2806,
+        "endChar": 58
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e02b51f0_94635e7c",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2865,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-08-31T08:59:24Z",
+      "side": 1,
+      "message": "why distinguish this from `bailout`?",
+      "range": {
+        "startLine": 2865,
+        "startChar": 8,
+        "endLine": 2865,
+        "endChar": 28
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
