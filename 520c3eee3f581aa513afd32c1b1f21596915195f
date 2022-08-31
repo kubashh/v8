@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a191b1cd_bdb19ac0",
+        "filename": "test/unittests/parser/parsing-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T07:48:20Z",
+      "side": 1,
+      "message": "Oops, I was off by one apparently :)",
+      "parentUuid": "da022aee_dc459813",
+      "range": {
+        "startLine": 1951,
+        "startChar": 2,
+        "endLine": 1951,
+        "endChar": 38
+      },
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aff4e7c8_63cce1f8",
@@ -166,6 +190,30 @@
       "side": 1,
       "message": "If I remove those, the formatted code will like below(not readable):\n```\n#define FUTURE_STRICT_RESERVED_STATEMENTS(NAME)                             \\\n  \"var \" #NAME \";\", \"var foo, \" #NAME \";\", \"try { } catch (\" #NAME \") { }\", \\\n      \"function \" #NAME \"() { }\", \"(function \" #NAME \"() { })\",             \\\n      \"function foo(\" #NAME \") { }\", \"function foo(bar, \" #NAME \") { }\",    \\\n      #NAME \" \u003d 1;\", #NAME \" +\u003d 1;\", \"var foo \u003d \" #NAME \" \u003d 1;\",            \\\n      \"++\" #NAME \";\", #NAME \" ++;\",\n\n#define FUTURE_STRICT_RESERVED_LEX_BINDINGS(NAME)                            \\\n  \"let \" #NAME \";\", \"for (let \" #NAME \"; false; ) {}\",                       \\\n      \"for (let \" #NAME \" in {}) {}\", \"for (let \" #NAME \" of []) {}\",        \\\n      \"const \" #NAME \" \u003d null;\", \"for (const \" #NAME \" \u003d null; false; ) {}\", \\\n      \"for (const \" #NAME \" in {}) {}\", \"for (const \" #NAME \" of []) {}\",\n```",
       "parentUuid": "aff4e7c8_63cce1f8",
+      "range": {
+        "startLine": 2187,
+        "startChar": 0,
+        "endLine": 2187,
+        "endChar": 19
+      },
+      "revId": "520c3eee3f581aa513afd32c1b1f21596915195f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78f12aa7_d3e06922",
+        "filename": "test/unittests/parser/parsing-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T07:48:20Z",
+      "side": 1,
+      "message": "Ah, interesting, thanks. Def better with formatting off.",
+      "parentUuid": "aa4d10c7_af44bc76",
       "range": {
         "startLine": 2187,
         "startChar": 0,
