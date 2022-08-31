@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f8ae59c_dcaa8adc",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 5669,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T13:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e940270a_e09effb3",
+      "range": {
+        "startLine": 5669,
+        "startChar": 6,
+        "endLine": 5669,
+        "endChar": 32
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b85560da_43461f30",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-08-31T08:59:24Z",
       "side": 1,
       "message": "maybe we could elide this move if there was a way for `constructor` to be both an input and an output parameter to FindNonDefaultConstructor?",
+      "range": {
+        "startLine": 5777,
+        "startChar": 13,
+        "endLine": 5777,
+        "endChar": 25
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77f34380_044f52f1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 5777,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T13:01:40Z",
+      "side": 1,
+      "message": "This move is now gone.\n\n\"constructor\" is no longer an in parameter here; I need to pass this_function instead now that I inlined GetSuperConstructor into this.\n\nAnd I decided to pass two registers, \"constructor\" and \"instance\" and the bytecode handler then puts the result in the right one, depending on what it is.\n\nI\u0027m not sure why I didn\u0027t do that before. You cannot explain that.",
+      "parentUuid": "b85560da_43461f30",
       "range": {
         "startLine": 5777,
         "startChar": 13,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91ed619d_ad177380",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T13:01:40Z",
+      "side": 1,
+      "message": "Filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d13249 for the spec violation and added a comment here.\n\nI\u0027d still keep this here to make sure --omit-default-ctors is not observable, and once we decide what to do what that bug, this can be modified too. Ok?",
+      "parentUuid": "f04335e5_c7c2f297",
+      "range": {
+        "startLine": 2804,
+        "startChar": 0,
+        "endLine": 2806,
+        "endChar": 58
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e02b51f0_94635e7c",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 22
@@ -100,6 +172,30 @@
       "writtenOn": "2022-08-31T08:59:24Z",
       "side": 1,
       "message": "why distinguish this from `bailout`?",
+      "range": {
+        "startLine": 2865,
+        "startChar": 8,
+        "endLine": 2865,
+        "endChar": 28
+      },
+      "revId": "b20b9b677388700cca9999653e13a5231c8d7aeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "664d9808_dc073241",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2865,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-08-31T13:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e02b51f0_94635e7c",
       "range": {
         "startLine": 2865,
         "startChar": 8,
