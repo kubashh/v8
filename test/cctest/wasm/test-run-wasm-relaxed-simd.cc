@@ -464,9 +464,7 @@ WASM_RELAXED_SIMD_TEST(I16x8DotI8x16I7x16S) {
     }
   }
 }
-#endif  // V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_IA32
 
-#if V8_TARGET_ARCH_ARM64
 WASM_RELAXED_SIMD_TEST(I32x4DotI8x16I7x16AddS) {
   WasmRunner<int32_t, int8_t, int8_t, int32_t> r(execution_tier);
   int32_t* g = r.builder().template AddGlobal<int32_t>(kWasmS128);
@@ -496,7 +494,7 @@ WASM_RELAXED_SIMD_TEST(I32x4DotI8x16I7x16AddS) {
     }
   }
 }
-#endif  // V8_TARGET_ARCH_ARM64
+#endif  // V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_IA32
 
 #undef WASM_RELAXED_SIMD_TEST
 }  // namespace test_run_wasm_relaxed_simd
