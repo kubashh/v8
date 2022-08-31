@@ -16,6 +16,24 @@
       "message": "Ok, I think your approach will work.\nPlease integrate HeapObjectReference into our type checking machinery (CASTs) in order to avoid unchecked ReinterpretCast\u003cHeapObjectReference\u003e().",
       "revId": "ac6651302ac9928f3a54eb0402c4a45f6e768dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4734c923_7a64263f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-08-31T02:24:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure whether we need to make the conversion to `HeapObjectReference` explicit, because `CAST` need the \"to type\" to be convertible to `TNode\u003cObject\u003e` https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/code-assembler.h;l\u003d428 We might also want to use this CAST only when the \"from type\" is MaybeObject.\n\nIf not, I think a possible solution is to make the conversion from MaybeObject to HeapObjectReference a special case in CAST, and do not let it go through original checks but add some new ones. What do you think?",
+      "parentUuid": "cd293897_23370be5",
+      "revId": "ac6651302ac9928f3a54eb0402c4a45f6e768dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
