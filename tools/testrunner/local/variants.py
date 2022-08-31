@@ -78,14 +78,14 @@ INCOMPATIBLE_FLAGS_PER_VARIANT = {
         "--liftoff-only", "--wasm-speculative-inlining",
         "--wasm-dynamic-tiering"
     ],
-    "sparkplug": ["--jitless"],
+    "sparkplug": ["--jitless", "--no-sparkplug"],
     "concurrent_sparkplug": ["--jitless"],
     # TODO(v8:v8:7700): Support concurrent compilation and remove incompatible flags.
     "maglev": [
         "--jitless", "--concurrent-recompilation",
         "--stress-concurrent-inlining"
     ],
-    "always_sparkplug": ["--jitless"],
+    "always_sparkplug": ["--jitless", "--no-sparkplug"],
     "code_serializer": [
         "--cache=after-execute", "--cache=full-code-cache", "--cache=none"
     ],
