@@ -3399,6 +3399,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ASSEMBLE_SIMD_BINOP(pmaddwd);
       break;
     }
+    case kX64I32x4DotI8x16I7x16AddS: {
+      __ I32x4DotI8x16I7x16AddS(i.OutputSimd128Register(),
+                                i.InputSimd128Register(0),
+                                i.InputSimd128Register(1), kScratchDoubleReg,
+                                i.TempSimd128Register(0));
+      break;
+    }
     case kX64I32x4ExtAddPairwiseI16x8S: {
       __ I32x4ExtAddPairwiseI16x8S(i.OutputSimd128Register(),
                                    i.InputSimd128Register(0), kScratchRegister);
