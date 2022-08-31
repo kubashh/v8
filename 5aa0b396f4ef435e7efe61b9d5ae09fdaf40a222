@@ -141,6 +141,24 @@
       "parentUuid": "99b3a6a0_50d8ae9c",
       "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2df04181_ee07b1e9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-08-31T09:10:09Z",
+      "side": 1,
+      "message": "Ok. Once we have CAST support for HeapObjectReference we should be on the safe side.",
+      "parentUuid": "9384dff9_74a7ac6c",
+      "revId": "5aa0b396f4ef435e7efe61b9d5ae09fdaf40a222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
