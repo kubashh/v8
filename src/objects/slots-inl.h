@@ -246,14 +246,18 @@ const ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
     const Isolate* isolate, ExternalPointerTag tag) {
   return IsSharedExternalPointerType(tag)
              ? isolate->shared_external_pointer_table()
-             : isolate->external_pointer_table();
+             : (tag == kEmbedderDataSlotPayloadTag
+                    ? isolate->embedder_external_pointer_table()
+                    : isolate->external_pointer_table());
 }
 
 ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
     Isolate* isolate, ExternalPointerTag tag) {
   return IsSharedExternalPointerType(tag)
              ? isolate->shared_external_pointer_table()
-             : isolate->external_pointer_table();
+             : (tag == kEmbedderDataSlotPayloadTag
+                    ? isolate->embedder_external_pointer_table()
+                    : isolate->external_pointer_table());
 }
 #endif  // V8_ENABLE_SANDBOX
 

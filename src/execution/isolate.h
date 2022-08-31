@@ -1951,6 +1951,14 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return isolate_data_.external_pointer_table_;
   }
 
+  ExternalPointerTable& embedder_external_pointer_table() {
+    return isolate_data_.embedder_external_pointer_table_;
+  }
+
+  const ExternalPointerTable& embedder_external_pointer_table() const {
+    return isolate_data_.embedder_external_pointer_table_;
+  }
+
   Address external_pointer_table_address() {
     return reinterpret_cast<Address>(&isolate_data_.external_pointer_table_);
   }

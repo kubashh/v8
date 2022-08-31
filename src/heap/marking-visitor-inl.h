@@ -149,7 +149,9 @@ void MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitExternalPointer(
     ExternalPointerHandle handle = slot.Relaxed_LoadHandle();
     ExternalPointerTable* table = IsSharedExternalPointerType(tag)
                                       ? shared_external_pointer_table_
-                                      : external_pointer_table_;
+                                      : (tag == kEmbedderDataSlotPayloadTag
+                                             ? embedder_external_pointer_table_
+                                             : external_pointer_table_);
     table->Mark(handle, slot.address());
   }
 #endif  // V8_ENABLE_SANDBOX

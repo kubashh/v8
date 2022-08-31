@@ -559,8 +559,10 @@ class Internals {
 #ifdef V8_COMPRESS_POINTERS
   static const int kIsolateExternalPointerTableOffset =
       kIsolateLongTaskStatsCounterOffset + kApiSizetSize;
-  static const int kIsolateSharedExternalPointerTableAddressOffset =
+  static const int kIsolateEmbedderExternalPointerTableOffset =
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
+  static const int kIsolateSharedExternalPointerTableAddressOffset =
+      kIsolateEmbedderExternalPointerTableOffset + kExternalPointerTableSize;
   static const int kIsolateRootsOffset =
       kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
 #else
@@ -720,7 +722,7 @@ class Internals {
   V8_INLINE static internal::Address* GetExternalPointerTableBase(
       v8::Isolate* isolate) {
     internal::Address addr = reinterpret_cast<internal::Address>(isolate) +
-                             kIsolateExternalPointerTableOffset +
+                             kIsolateEmbedderExternalPointerTableOffset +
                              kExternalPointerTableBufferOffset;
     return *reinterpret_cast<internal::Address**>(addr);
   }
