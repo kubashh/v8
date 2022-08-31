@@ -2381,6 +2381,10 @@ Type Typer::Visitor::TypeVerifyType(Node* node) {
   return TypeOrNone(node->InputAt(0));
 }
 
+Type Typer::Visitor::TypeDoubleArrayMin(Node* node) { return Type::Number(); }
+
+Type Typer::Visitor::TypeDoubleArrayMax(Node* node) { return Type::Number(); }
+
 // Heap constants.
 
 Type Typer::Visitor::TypeConstant(Handle<Object> value) {

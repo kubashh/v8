@@ -1068,6 +1068,9 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // SimplifiedLowering.
   const Operator* VerifyType();
 
+  const Operator* DoubleArrayMin();
+  const Operator* DoubleArrayMax();
+
 #if V8_ENABLE_WEBASSEMBLY
   const Operator* AssertNotNull();
   const Operator* IsNull();

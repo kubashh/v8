@@ -5064,6 +5064,65 @@ Reduction JSCallReducer::ReduceJSCallWithArrayLike(Node* node) {
   if (TargetIsClassConstructor(node, broker())) {
     return NoChange();
   }
+
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return ReduceCallOrConstructWithArrayLikeOrSpread(
+        node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
+        p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
+        n.effect(), n.control());
+  }
+
+  Node* target = n.target();
+  Effect effect = n.effect();
+  Control control = n.control();
+  HeapObjectMatcher m(target);
+  if (FLAG_turbo_optimize_math_minmax && !m.HasResolvedValue() &&
+      ShouldUseCallICFeedback(target) &&
+      p.feedback_relation() == CallFeedbackRelation::kTarget &&
+      p.feedback().IsValid()) {
+    ProcessedFeedback const& feedback =
+        broker()->GetFeedbackForCall(p.feedback());
+    if (feedback.IsInsufficient()) {
+      return ReduceCallOrConstructWithArrayLikeOrSpread(
+          node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
+          p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
+          n.effect(), n.control());
+    }
+    base::Optional<HeapObjectRef> feedback_target;
+    feedback_target = feedback.AsCall().target();
+    if (feedback_target.has_value() && feedback_target->map().is_callable()) {
+      Node* target_function = jsgraph()->Constant(*feedback_target);
+      HeapObjectMatcher m(target_function);
+      ObjectRef target_ref = m.Ref(broker());
+      if (!target_ref.IsJSFunction()) {
+        return ReduceCallOrConstructWithArrayLikeOrSpread(
+            node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
+            p.feedback(), p.speculation_mode(), p.feedback_relation(),
+            n.target(), n.effect(), n.control());
+      }
+      JSFunctionRef function = target_ref.AsJSFunction();
+      SharedFunctionInfoRef shared = function.shared();
+      Builtin builtin =
+          shared.HasBuiltinId() ? shared.builtin_id() : Builtin::kNoBuiltinId;
+      if (builtin == Builtin::kMathMax || builtin == Builtin::kMathMin) {
+        // Check that the {target} is still the {target_function}.
+        Node* check = graph()->NewNode(simplified()->ReferenceEqual(), target,
+                                       target_function);
+        effect = graph()->NewNode(
+            simplified()->CheckIf(DeoptimizeReason::kWrongCallTarget), check,
+            effect, control);
+
+        // Specialize the JSCallWithArrayLike node to the {target_function}.
+        NodeProperties::ReplaceValueInput(node, target_function,
+                                          n.TargetIndex());
+        NodeProperties::ReplaceEffectInput(node, effect);
+        // Try to further reduce the Call MathMin/Max with double array.
+        return Changed(node).FollowedBy(ReduceJSCallMathMinMaxWithArrayLike(
+            node, builtin == Builtin::kMathMax));
+      }
+    }
+  }
+
   return ReduceCallOrConstructWithArrayLikeOrSpread(
       node, n.ArgumentCount(), n.LastArgumentIndex(), p.frequency(),
       p.feedback(), p.speculation_mode(), p.feedback_relation(), n.target(),
@@ -8384,6 +8443,78 @@ Reduction JSCallReducer::ReduceBigIntAsN(Node* node, Builtin builtin) {
   }
 
   return NoChange();
+}
+
+Reduction JSCallReducer::ReduceJSCallMathMinMaxWithArrayLike(Node* node,
+                                                             bool is_math_max) {
+  JSCallWithArrayLikeNode n(node);
+  CallParameters const& p = n.Parameters();
+  if (p.speculation_mode() == SpeculationMode::kDisallowSpeculation) {
+    return NoChange();
+  }
+  if (n.ArgumentCount() != 1) {
+    return NoChange();
+  }
+
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  Node* arguments_list = n.Argument(0);
+
+  if (arguments_list->opcode() == IrOpcode::kJSCreateArguments) {
+    return NoChange();
+  }
+
+  // Check whether {arguments_list} has PACKED_DOUBLE_ELEMENTS.
+  Node* arguments_list_map = effect =
+      graph()->NewNode(simplified()->LoadField(AccessBuilder::ForMap()),
+                       arguments_list, effect, control);
+
+  Node* arguments_list_bit_field2 = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForMapBitField2()),
+      arguments_list_map, effect, control);
+
+  Node* arguments_list_elements_kind = graph()->NewNode(
+      simplified()->NumberShiftRightLogical(),
+      graph()->NewNode(
+          simplified()->NumberBitwiseAnd(), arguments_list_bit_field2,
+          jsgraph()->Constant(Map::Bits2::ElementsKindBits::kMask)),
+      jsgraph()->Constant(Map::Bits2::ElementsKindBits::kShift));
+
+  Node* check_elements_kind = graph()->NewNode(
+      simplified()->NumberEqual(), arguments_list_elements_kind,
+      jsgraph()->Constant(ElementsKind::PACKED_DOUBLE_ELEMENTS));
+  control = graph()->NewNode(common()->Branch(), check_elements_kind, control);
+
+  Node* is_slow_path = graph()->NewNode(common()->IfFalse(), control);
+  control = graph()->NewNode(common()->IfTrue(), control);
+
+  // Lower to DoubleArrayMin/Max if arguments_list has PACKED_DOUBLE_ELEMENTS.
+  Node* effect0 = effect;
+  Node* control0 = control;
+  Node* value0 = effect0 = control0 =
+      graph()->NewNode(is_math_max ? simplified()->DoubleArrayMax()
+                                   : simplified()->DoubleArrayMin(),
+                       arguments_list, effect0, control0);
+
+  // if arguments_list doesn't have PACKED_DOUBLE_ELEMENTS, continue on the
+  // regular path.
+  Node* effect1 = effect;
+  Node* control1 = is_slow_path;
+  Node* copy = graph()->CloneNode(node);
+  NodeProperties::ReplaceEffectInput(copy, effect1);
+  NodeProperties::ReplaceControlInput(copy, control1);
+
+  Node* value1 = effect1 = control1 = copy;
+
+  // Join control paths.
+  control = graph()->NewNode(common()->Merge(2), control0, control1);
+  effect = graph()->NewNode(common()->EffectPhi(2), effect0, effect1, control);
+  Node* value =
+      graph()->NewNode(common()->Phi(MachineRepresentation::kTagged, 2), value0,
+                       value1, control);
+
+  ReplaceWithValue(node, value, effect, control);
+  return Replace(value);
 }
 
 CompilationDependencies* JSCallReducer::dependencies() const {
