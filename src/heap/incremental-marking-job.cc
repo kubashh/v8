@@ -69,6 +69,7 @@ void IncrementalMarkingJob::Task::RunInternal() {
   TRACE_EVENT_CALL_STATS_SCOPED(isolate(), "v8", "V8.Task");
 
   Heap* heap = isolate()->heap();
+  if (heap->incremental_marking()->IsMinorMarking()) return;
   EmbedderStackStateScope scope(
       heap, EmbedderStackStateScope::kImplicitThroughTask, stack_state_);
 
