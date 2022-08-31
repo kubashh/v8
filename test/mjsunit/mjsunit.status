@@ -1482,6 +1482,8 @@
   # Change this when maglev support all bytecodes.
   'interrupt-budget-override': [SKIP],
   'never-optimize': [SKIP],
+  # TODO(v8:13091): Add Maglev support.
+  'omit-default-ctors': [SKIP],
 }],  # variant == maglev
 
 ##############################################################################
@@ -1802,6 +1804,8 @@
 ['variant == always_sparkplug', {
   # Tests that rely on turbofan
   'wasm/bigint-opt': [SKIP],
+  # TODO(v8:13091): Add Sparkplug support.
+  'omit-default-ctors': [SKIP],
 }], # variant == always_sparkplug
 
 ]

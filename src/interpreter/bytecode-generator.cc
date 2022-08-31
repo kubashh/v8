@@ -5651,29 +5651,48 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       ->LoadAccumulatorWithRegister(this_function)
       .GetSuperConstructor(constructor);
 
+  Register instance = register_allocator()->NewRegister();
+
+  BytecodeLabel super_ctor_call_done;
+  bool omit_super_ctor = FLAG_omit_default_ctors &&
+                         IsDerivedConstructor(info()->literal()->kind());
+
   if (spread_position == Call::kHasNonFinalSpread) {
     // First generate the array containing all arguments.
     BuildCreateArrayLiteral(args, nullptr);
+    RegisterList construct_args = register_allocator()->NewRegisterList(3);
+    builder()->StoreAccumulatorInRegister(construct_args[1]);
+
+    VisitForRegisterValue(super->new_target_var(), construct_args[2]);
+
+    if (omit_super_ctor) {
+      BuildSuperCallOptimization(constructor, construct_args[2], instance,
+                                 &super_ctor_call_done);
+    }
 
     // Check if the constructor is in fact a constructor.
     builder()->ThrowIfNotSuperConstructor(constructor);
 
     // Now pass that array to %reflect_construct.
-    RegisterList construct_args = register_allocator()->NewRegisterList(3);
-    builder()->StoreAccumulatorInRegister(construct_args[1]);
     builder()->MoveRegister(constructor, construct_args[0]);
-    VisitForRegisterValue(super->new_target_var(), construct_args[2]);
     builder()->CallJSRuntime(Context::REFLECT_CONSTRUCT_INDEX, construct_args);
   } else {
     RegisterList args_regs = register_allocator()->NewGrowableRegisterList();
     VisitArguments(args, &args_regs);
 
+    // The new target is loaded into the new_target register from the
+    // {new.target} variable.
+    Register new_target = register_allocator()->NewRegister();
+    VisitForRegisterValue(super->new_target_var(), new_target);
+
+    if (omit_super_ctor) {
+      BuildSuperCallOptimization(constructor, new_target, instance,
+                                 &super_ctor_call_done);
+    }
+
     // Check if the constructor is in fact a constructor.
     builder()->ThrowIfNotSuperConstructor(constructor);
-
-    // The new target is loaded into the accumulator from the
-    // {new.target} variable.
-    VisitForAccumulatorValue(super->new_target_var());
+    builder()->LoadAccumulatorWithRegister(new_target);
     builder()->SetExpressionPosition(expr);
 
     int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
@@ -5693,6 +5712,8 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
       builder()->Construct(constructor, args_regs, feedback_slot_index);
     }
   }
+  builder()->StoreAccumulatorInRegister(instance);
+  builder()->Bind(&super_ctor_call_done);
 
   // Explicit calls to the super constructor using super() perform an
   // implicit binding assignment to the 'this' variable.
@@ -5701,11 +5722,9 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   // 'this' isn't accessed in default constructors.
   if (!IsDefaultConstructor(info()->literal()->kind())) {
     Variable* var = closure_scope()->GetReceiverScope()->receiver();
+    builder()->LoadAccumulatorWithRegister(instance);
     BuildVariableAssignment(var, Token::INIT, HoleCheckMode::kRequired);
   }
-
-  Register instance = register_allocator()->NewRegister();
-  builder()->StoreAccumulatorInRegister(instance);
 
   // The constructor scope always needs ScopeInfo, so we are certain that
   // the first constructor scope found in the outer scope chain is the
@@ -5744,6 +5763,19 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   }
 
   builder()->LoadAccumulatorWithRegister(instance);
+}
+
+void BytecodeGenerator::BuildSuperCallOptimization(
+    Register constructor, Register new_target, Register instance,
+    BytecodeLabel* super_ctor_call_done) {
+  DCHECK(FLAG_omit_default_ctors);
+
+  // The 3rd register will contain the constructor or the instance (if it was
+  // already created). Pass the instance register, so that it will already
+  // contain the right value in the case where the accumulator is 'true'.
+  builder()->FindNonDefaultConstructor(constructor, new_target, instance);
+  builder()->MoveRegister(instance, constructor);
+  builder()->JumpIfTrue(ToBooleanMode::kAlreadyBoolean, super_ctor_call_done);
 }
 
 void BytecodeGenerator::VisitCallNew(CallNew* expr) {

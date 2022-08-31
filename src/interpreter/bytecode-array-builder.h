@@ -386,6 +386,10 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   // throws a TypeError exception.
   BytecodeArrayBuilder& GetSuperConstructor(Register out);
 
+  BytecodeArrayBuilder& FindNonDefaultConstructor(Register constructor,
+                                                  Register new_target,
+                                                  Register result);
+
   // Deletes property from an object. This expects that accumulator contains
   // the key to be deleted and the register contains a reference to the object.
   BytecodeArrayBuilder& Delete(Register object, LanguageMode language_mode);
