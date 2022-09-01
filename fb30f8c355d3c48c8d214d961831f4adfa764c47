@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7e10e3_e447434e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-01T14:19:48Z",
+      "side": 1,
+      "message": "PTAL. The flag is supposed to be not crashy anymore for a long time already. Tested locally with a recent CF build.",
+      "revId": "fb30f8c355d3c48c8d214d961831f4adfa764c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
