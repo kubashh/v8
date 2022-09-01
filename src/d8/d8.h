@@ -138,6 +138,8 @@ class SerializationData {
   SerializationData(const SerializationData&) = delete;
   SerializationData& operator=(const SerializationData&) = delete;
 
+  ~SerializationData();
+
   uint8_t* data() { return data_.get(); }
   size_t size() { return size_; }
   const std::vector<std::shared_ptr<v8::BackingStore>>& backing_stores() {
@@ -148,6 +150,9 @@ class SerializationData {
   }
   const std::vector<CompiledWasmModule>& compiled_wasm_modules() {
     return compiled_wasm_modules_;
+  }
+  const base::Optional<uint32_t>& shared_value_conveyor_id() {
+    return shared_value_conveyor_id_;
   }
 
  private:
@@ -160,6 +165,7 @@ class SerializationData {
   std::vector<std::shared_ptr<v8::BackingStore>> backing_stores_;
   std::vector<std::shared_ptr<v8::BackingStore>> sab_backing_stores_;
   std::vector<CompiledWasmModule> compiled_wasm_modules_;
+  base::Optional<uint32_t> shared_value_conveyor_id_;
 
  private:
   friend class Serializer;
@@ -526,8 +532,7 @@ class Shell : public i::AllStatic {
   static void PostBlockingBackgroundTask(std::unique_ptr<Task> task);
 
   static std::unique_ptr<SerializationData> SerializeValue(
-      Isolate* isolate, Local<Value> value, Local<Value> transfer,
-      bool supports_shared_values);
+      Isolate* isolate, Local<Value> value, Local<Value> transfer);
   static MaybeLocal<Value> DeserializeValue(
       Isolate* isolate, std::unique_ptr<SerializationData> data);
   static int* LookupCounter(const char* name);

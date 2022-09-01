@@ -10,8 +10,14 @@ namespace v8 {
 namespace internal {
 
 SharedObjectConveyorHandles::SharedObjectConveyorHandles(Isolate* isolate,
-                                                         uint32_t id)
-    : id(id), persistent_handles_(isolate->NewPersistentHandles()) {}
+                                                         uint32_t id,
+                                                         uint64_t serial)
+    : id(id),
+#ifdef DEBUG
+      serial_for_debug(serial),
+#endif
+      persistent_handles_(isolate->NewPersistentHandles()) {
+}
 
 uint32_t SharedObjectConveyorHandles::Persist(HeapObject shared_object) {
   DCHECK(shared_object.IsShared());
@@ -44,7 +50,14 @@ SharedObjectConveyorHandles* SharedObjectConveyors::NewConveyor() {
     id = static_cast<uint32_t>(i);
   }
 
-  auto handles = std::make_unique<SharedObjectConveyorHandles>(isolate_, id);
+#ifdef DEBUG
+  uint64_t serial_for_debug = conveyor_serial_++;
+#else
+  constexpr uint64_t serial_for_debug = 0;
+#endif
+
+  auto handles = std::make_unique<SharedObjectConveyorHandles>(
+      isolate_, id, serial_for_debug);
   if (id < conveyors_.size()) {
     conveyors_[id] = std::move(handles);
   } else {

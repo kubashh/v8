@@ -3353,7 +3353,14 @@ Maybe<uint32_t> ValueSerializer::Delegate::GetWasmModuleTransferId(
   return Nothing<uint32_t>();
 }
 
-bool ValueSerializer::Delegate::SupportsSharedValues() const { return false; }
+bool ValueSerializer::Delegate::SetSharedValueConveyorId(Isolate* v8_isolate,
+                                                         uint32_t conveyor_id) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  i_isolate->ScheduleThrow(*i_isolate->factory()->NewError(
+      i_isolate->error_function(), i::MessageTemplate::kDataCloneError,
+      i_isolate->factory()->NewStringFromAsciiChecked("shared value")));
+  return false;
+}
 
 void* ValueSerializer::Delegate::ReallocateBufferMemory(void* old_buffer,
                                                         size_t size,
@@ -3547,6 +3554,13 @@ bool ValueDeserializer::ReadDouble(double* value) {
 
 bool ValueDeserializer::ReadRawBytes(size_t length, const void** data) {
   return private_->deserializer.ReadRawBytes(length, data);
+}
+
+// static
+void ValueDeserializer::DeleteSharedValueConveyor(Isolate* v8_isolate,
+                                                  uint32_t conveyor_id) {
+  i::ValueDeserializer::DeleteSharedValueConveyor(
+      reinterpret_cast<i::Isolate*>(v8_isolate), conveyor_id);
 }
 
 // --- D a t a ---

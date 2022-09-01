@@ -264,7 +264,6 @@ ValueSerializer::ValueSerializer(Isolate* isolate,
                                  v8::ValueSerializer::Delegate* delegate)
     : isolate_(isolate),
       delegate_(delegate),
-      supports_shared_values_(delegate && delegate->SupportsSharedValues()),
       zone_(isolate->allocator(), ZONE_NAME),
       id_map_(isolate->heap(), ZoneAllocationPolicy(&zone_)),
       array_buffer_transfer_map_(isolate->heap(),
@@ -472,11 +471,7 @@ Maybe<bool> ValueSerializer::WriteObject(Handle<Object> object) {
     }
     default:
       if (InstanceTypeChecker::IsString(instance_type)) {
-        auto string = Handle<String>::cast(object);
-        if (FLAG_shared_string_table && supports_shared_values_) {
-          return WriteSharedObject(String::Share(isolate_, string));
-        }
-        WriteString(string);
+        WriteString(Handle<String>::cast(object));
         return ThrowIfOutOfMemory();
       } else if (InstanceTypeChecker::IsJSReceiver(instance_type)) {
         return WriteJSReceiver(Handle<JSReceiver>::cast(object));
@@ -1103,7 +1098,7 @@ Maybe<bool> ValueSerializer::WriteWasmMemory(Handle<WasmMemoryObject> object) {
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 Maybe<bool> ValueSerializer::WriteSharedObject(Handle<HeapObject> object) {
-  if (!supports_shared_values_) {
+  if (!delegate_) {
     return ThrowDataCloneError(MessageTemplate::kDataCloneError, object);
   }
 
@@ -1116,8 +1111,19 @@ Maybe<bool> ValueSerializer::WriteSharedObject(Handle<HeapObject> object) {
   if (!shared_object_conveyor_) {
     shared_object_conveyor_ =
         isolate_->GetSharedObjectConveyors()->NewConveyor();
+    if (!delegate_->SetSharedValueConveyorId(
+            reinterpret_cast<v8::Isolate*>(isolate_),
+            shared_object_conveyor_->id)) {
+      shared_object_conveyor_->Delete();
+      shared_object_conveyor_ = nullptr;
+      RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate_, Nothing<bool>());
+      return Nothing<bool>();
+    }
     WriteTag(SerializationTag::kSharedObjectConveyor);
     WriteVarint(shared_object_conveyor_->id);
+#ifdef DEBUG
+    WriteVarint(shared_object_conveyor_->serial_for_debug);
+#endif
   }
 
   WriteTag(SerializationTag::kSharedObject);
@@ -1222,11 +1228,6 @@ ValueDeserializer::~ValueDeserializer() {
   Handle<Object> transfer_map_handle;
   if (array_buffer_transfer_map_.ToHandle(&transfer_map_handle)) {
     GlobalHandles::Destroy(transfer_map_handle.location());
-  }
-
-  if (shared_object_conveyor_) {
-    shared_object_conveyor_->Delete();
-    shared_object_conveyor_ = nullptr;
   }
 }
 
@@ -2286,6 +2287,16 @@ bool ValueDeserializer::ReadSharedObjectConveyor() {
   }
   shared_object_conveyor_ =
       isolate_->GetSharedObjectConveyors()->GetConveyor(conveyor_id);
+
+#ifdef DEBUG
+  uint64_t conveyor_serial;
+  if (!ReadVarint<uint64_t>().To(&conveyor_serial)) {
+    RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate_, false);
+    return false;
+  }
+  DCHECK_EQ(shared_object_conveyor_->serial_for_debug, conveyor_serial);
+#endif  // DEBUG
+
   return true;
 }
 
@@ -2629,6 +2640,12 @@ ValueDeserializer::ReadObjectUsingEntireBufferForLegacyFormat() {
     return MaybeHandle<Object>();
   }
   return scope.CloseAndEscape(stack[0]);
+}
+
+// static
+void ValueDeserializer::DeleteSharedValueConveyor(Isolate* isolate,
+                                                  uint32_t conveyor_id) {
+  isolate->GetSharedObjectConveyors()->DeleteConveyor(conveyor_id);
 }
 
 }  // namespace internal

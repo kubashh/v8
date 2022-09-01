@@ -69,9 +69,17 @@ class V8_EXPORT ValueSerializer {
         Isolate* isolate, Local<WasmModuleObject> module);
 
     /**
-     * Returns whether conveying shared values are supported.
+     * Called when the first shared value is serialized. All subsequent shared
+     * values will use the same conveyor.
+     *
+     * If the embedder supports serializing shared values, this method should
+     * return true. Otherwise the embedder should throw an exception and return
+     * false.
+     *
+     * This method is called at most once per serializer.
      */
-    virtual bool SupportsSharedValues() const;
+    virtual bool SetSharedValueConveyorId(Isolate* isolate,
+                                          uint32_t conveyor_id);
 
     /**
      * Allocates memory for the buffer of at least the size provided. The actual
@@ -241,6 +249,16 @@ class V8_EXPORT ValueDeserializer {
   V8_WARN_UNUSED_RESULT bool ReadUint64(uint64_t* value);
   V8_WARN_UNUSED_RESULT bool ReadDouble(double* value);
   V8_WARN_UNUSED_RESULT bool ReadRawBytes(size_t length, const void** data);
+
+  /**
+   * Deletes the shared value conveyor corresponding to the id passed previously
+   * to ValueSerializer::Delegate::SetSharedValueConveyorId.
+   *
+   * Must be called to avoid leaking memory when the serialized value is no
+   * longer needed (i.e. after deserialization is complete or if it will never
+   * be deserialized due to error).
+   */
+  static void DeleteSharedValueConveyor(Isolate* isolate, uint32_t conveyor_id);
 
   ValueDeserializer(const ValueDeserializer&) = delete;
   void operator=(const ValueDeserializer&) = delete;

@@ -31,7 +31,7 @@ class PersistentHandles;
 // the owner to the main isolate once the shared isolate is removed.
 class SharedObjectConveyorHandles {
  public:
-  SharedObjectConveyorHandles(Isolate* isolate, uint32_t id);
+  SharedObjectConveyorHandles(Isolate* isolate, uint32_t id, uint64_t serial);
 
   SharedObjectConveyorHandles(const SharedObjectConveyorHandles&) = delete;
   SharedObjectConveyorHandles& operator=(const SharedObjectConveyorHandles&) =
@@ -48,6 +48,12 @@ class SharedObjectConveyorHandles {
 
   const uint32_t id;
 
+#ifdef DEBUG
+  // If debug mode each conveyor is assigned a monotonically increasing serial
+  // number that's serialized and then verified during deserialization.
+  const uint64_t serial_for_debug;
+#endif
+
  private:
   std::unique_ptr<PersistentHandles> persistent_handles_;
   std::vector<Handle<HeapObject>> shared_objects_;
@@ -61,17 +67,20 @@ class SharedObjectConveyors {
 
   SharedObjectConveyorHandles* NewConveyor();
   SharedObjectConveyorHandles* GetConveyor(uint32_t conveyor_id);
+  void DeleteConveyor(uint32_t conveyor_id);
 
  private:
   friend class SharedObjectConveyorHandles;
-
-  void DeleteConveyor(uint32_t conveyor_id);
 
   void DcheckIsValidConveyorId(uint32_t conveyor_id);
 
   Isolate* isolate_;
   base::Mutex conveyors_mutex_;
   std::vector<std::unique_ptr<SharedObjectConveyorHandles>> conveyors_;
+
+#ifdef DEBUG
+  uint64_t conveyor_serial_ = 0;
+#endif
 };
 
 }  // namespace internal

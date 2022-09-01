@@ -174,7 +174,6 @@ class ValueSerializer {
   uint8_t* buffer_ = nullptr;
   size_t buffer_size_ = 0;
   size_t buffer_capacity_ = 0;
-  const bool supports_shared_values_;
   bool treat_array_buffer_views_as_host_objects_ = false;
   bool out_of_memory_ = false;
   Zone zone_;
@@ -248,6 +247,8 @@ class ValueDeserializer {
   bool ReadDouble(double* value) V8_WARN_UNUSED_RESULT;
   bool ReadRawBytes(size_t length, const void** data) V8_WARN_UNUSED_RESULT;
   bool ReadByte(uint8_t* value) V8_WARN_UNUSED_RESULT;
+
+  static void DeleteSharedValueConveyor(Isolate* isolate, uint32_t conveyor_id);
 
  private:
   friend class WebSnapshotDeserializer;
