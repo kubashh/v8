@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49ad201_b913609b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-09-01T10:02:12Z",
+      "side": 1,
+      "message": "FYI, this saves 1104kB of Liftoff code on Photoshop (\u003e0.5%).",
+      "revId": "c2d46fe966802eefb19e661ef71009d90b24cdd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
