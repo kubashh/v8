@@ -52,6 +52,24 @@
       "parentUuid": "4734c923_7a64263f",
       "revId": "ac6651302ac9928f3a54eb0402c4a45f6e768dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82ada540_97258439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-01T15:02:13Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. I\u0027ve tried in the latest patchset, please take a look.\n\nGiven that HeapObjectReference is convertible to MaybeObject and we can cast directly:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/3861310/10/src/compiler/code-assembler.h#436\nI only support CAST MaybeObject -\u003e HeapObjectReference. Does this make sense?",
+      "parentUuid": "221cf7cb_b51375e9",
+      "revId": "ac6651302ac9928f3a54eb0402c4a45f6e768dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
