@@ -3,6 +3,92 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "946eb384_80afdd07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-01T17:37:34Z",
+      "side": 1,
+      "message": "nit: stringrefs\n\nMight also make sense to include some reasoning in the description, maybe roughly:\n```\nThe intention is to be restrictive for now: modules should not\nstart to depend on this subtyping while the stringref type\nhierarchy question is being settled (see\nhttps://github.com/WebAssembly/stringref/issues/3 for details).\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "810b5a67_3ea46802",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-01T17:37:34Z",
+      "side": 1,
+      "message": "nit: 12868",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150d9b62_019303db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-01T17:37:34Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff95eb46_c362e405",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-01T17:37:34Z",
+      "side": 1,
+      "message": "nit: `is_string_view`",
+      "range": {
+        "startLine": 202,
+        "startChar": 17,
+        "endLine": 202,
+        "endChar": 36
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd44cf62_8d44fd41",
         "filename": "test/unittests/wasm/subtyping-unittest.cc",
         "patchSetId": 1
@@ -14,6 +100,30 @@
       "writtenOn": "2022-09-01T15:23:39Z",
       "side": 1,
       "message": "I guess, this is somewhat inconsistent, on the other hand I\u0027m not eager to add even more null types to the type system...\nThis would be something that the standard has to define.",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 365,
+        "endChar": 49
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61801f56_f9160c1c",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-01T17:37:34Z",
+      "side": 1,
+      "message": "Yes, as discussed offlines, this is perfectly fine for now. Long-term we\u0027ll likely settle for one of:\n• string views are subtypes of string\n• string views are subtypes of any\n• string views are \"standalone\" types (have neither sub nor super types; if they\u0027re still called \"reftypes\" in this state, they\u0027ll be non-nullable)\n\nSo for now we can keep the implementation as simple as possible, and will update once the stringref spec makes up its mind.",
+      "parentUuid": "dd44cf62_8d44fd41",
       "range": {
         "startLine": 364,
         "startChar": 0,
