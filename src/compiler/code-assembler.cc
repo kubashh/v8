@@ -247,6 +247,23 @@ void CodeAssembler::GenerateCheckMaybeObjectIsObject(TNode<MaybeObject> node,
   Unreachable();
   Bind(&ok);
 }
+
+void CodeAssembler::GenerateCheckMaybeObjectIsHeapObjectReference(
+    TNode<MaybeObject> node, const char* location) {
+  Label ok(this);
+  GotoIf(WordNotEqual(WordAnd(BitcastMaybeObjectToWord(node),
+                              IntPtrConstant(kSmiTagMask)),
+                      IntPtrConstant(kSmiTag)),
+         &ok);
+  base::EmbeddedVector<char, 1024> message;
+  SNPrintF(message, "no HeapObjectReference: %s", location);
+  TNode<String> message_node = StringConstant(message.begin());
+  // This somewhat misuses the AbortCSADcheck runtime function. This will print
+  // "abort: CSA_DCHECK failed: <message>", which is good enough.
+  AbortCSADcheck(message_node);
+  Unreachable();
+  Bind(&ok);
+}
 #endif
 
 TNode<Int32T> CodeAssembler::Int32Constant(int32_t value) {
