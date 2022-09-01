@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ea0a2e8_4ac30cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "Adding Tobias for src/compiler changes.",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fbed58e_454600ab",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "Just\n  GotoIf(TaggedIsNotSmi(node), \u0026ok)",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb3f194_09dcd9a0",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "While you are here, please make it\n#endif  // DEBUG",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff5a3077_7b71c62f",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "I think we can go with `std::is_convertible\u003cTNode\u003cA\u003e, TNode\u003cMaybeObject\u003e\u003e::value`",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7ed82af_d1a0c4c2",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "This check kinda supersedes the following call to `check_object_type` and thus the HeapObjectReference ObjectType is not necessary, ...",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20119be9_a9fad9a1",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "... at the same time we could have introduced the ObjectType for MaybeObject and moved this check inside the `check_object_type` and removed the `GenerateCheckMaybeObjectIsObject`.\n\nTobias, WDYT?",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd42d6aa_ac8f6301",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "This whole thing can be just\n  TNode\u003cHeapObjectReference\u003e feedback \u003d CAST(Load\u003cMaybeObject\u003e(vector, ...));",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8fc8f6c_970c4744",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "Please remove this check, the CAST will take care of it.",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25d52ae1_190ffd88",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-01T16:08:57Z",
+      "side": 1,
+      "message": "Please add \n  TNode\u003cHeapObjectReference\u003e ref_handler \u003d CAST(handler);",
+      "range": {
+        "startLine": 1378,
+        "startChar": 27,
+        "endLine": 1378,
+        "endChar": 72
+      },
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
