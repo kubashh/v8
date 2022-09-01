@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd44cf62_8d44fd41",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-01T15:23:39Z",
+      "side": 1,
+      "message": "I guess, this is somewhat inconsistent, on the other hand I\u0027m not eager to add even more null types to the type system...\nThis would be something that the standard has to define.",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 365,
+        "endChar": 49
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
