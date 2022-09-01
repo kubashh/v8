@@ -93,7 +93,7 @@ void IncrementalMarkingJob::Task::RunInternal() {
     job_->is_task_pending_ = false;
   }
 
-  if (incremental_marking->IsMarking()) {
+  if (incremental_marking->IsMajorMarking()) {
     // All objects are initialized at that point.
     heap->new_space()->MarkLabStartInitialized();
     heap->new_lo_space()->ResetPendingObject();
