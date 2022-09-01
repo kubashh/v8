@@ -766,6 +766,8 @@ experimental domain HeapProfiler
       # Average sample interval in bytes. Poisson distribution is used for the intervals. The
       # default value is 32768 bytes.
       optional number samplingInterval
+      optional boolean includeObjectsCollectedByMajorGC
+      optional boolean includeObjectsCollectedByMinorGC
 
   command startTrackingHeapObjects
     parameters
