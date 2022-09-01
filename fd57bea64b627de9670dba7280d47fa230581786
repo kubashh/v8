@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f4d9529a_76053975",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1547433
+      },
+      "writtenOn": "2022-09-01T10:04:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "957faa6d_e8b26305",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "fd57bea64b627de9670dba7280d47fa230581786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "319a5253_85be42e7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2022-08-31T22:07:47Z",
       "side": 1,
       "message": "This should be later in the method.\nWe\u0027ve discussed bailing out later so that the job can start a new incremental MajorGC is the limit is reached again (i.e. letting lines 81-88 run).\nI think we don\u0027t need to bailout before line 97.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 60
+      },
+      "revId": "fd57bea64b627de9670dba7280d47fa230581786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b92e7f_85aae199",
+        "filename": "src/heap/incremental-marking-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1547433
+      },
+      "writtenOn": "2022-09-01T10:04:15Z",
+      "side": 1,
+      "message": "That makes sense. Thank you.",
+      "parentUuid": "329137bf_a5a4ffa5",
       "range": {
         "startLine": 72,
         "startChar": 0,
