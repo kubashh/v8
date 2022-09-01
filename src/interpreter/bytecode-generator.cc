@@ -566,14 +566,17 @@ void BytecodeGenerator::ControlScope::PopContextToExpectedDepth() {
 
 class V8_NODISCARD BytecodeGenerator::RegisterAllocationScope final {
  public:
+  static const int kInvalidRegister = INT_MAX;
   explicit RegisterAllocationScope(BytecodeGenerator* generator)
       : generator_(generator),
         outer_next_register_index_(
             generator->register_allocator()->next_register_index()) {}
 
   ~RegisterAllocationScope() {
-    generator_->register_allocator()->ReleaseRegisters(
-        outer_next_register_index_);
+    int release_index = outer_next_register_index_;
+    if (reserved_index_ != kInvalidRegister)
+      release_index = std::max(outer_next_register_index_, reserved_index_);
+    generator_->register_allocator()->ReleaseRegisters(release_index);
   }
 
   RegisterAllocationScope(const RegisterAllocationScope&) = delete;
@@ -581,10 +584,28 @@ class V8_NODISCARD BytecodeGenerator::RegisterAllocationScope final {
 
   BytecodeGenerator* generator() const { return generator_; }
 
+  static void set_reserved_index(int index) { reserved_index_ = index; }
+  static int get_reserved_index() { return reserved_index_; }
+
+  class EnableCommonContextElidationScope {
+   public:
+    EnableCommonContextElidationScope() {
+      RegisterAllocationScope::reserved_index_ = -1;
+    }
+
+    ~EnableCommonContextElidationScope() {
+      RegisterAllocationScope::reserved_index_ = kInvalidRegister;
+    }
+  };
+
  private:
   BytecodeGenerator* generator_;
   int outer_next_register_index_;
+  thread_local static int reserved_index_;
 };
+
+thread_local int BytecodeGenerator::RegisterAllocationScope::reserved_index_ =
+    BytecodeGenerator::RegisterAllocationScope::kInvalidRegister;
 
 class V8_NODISCARD BytecodeGenerator::AccumulatorPreservingScope final {
  public:
@@ -3532,7 +3553,8 @@ void BytecodeGenerator::VisitArrayLiteral(ArrayLiteral* expr) {
 
 void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   builder()->SetExpressionPosition(proxy);
-  BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
+  BuildVariableLoad(proxy->var(), proxy->hole_check_mode(),
+                    TypeofMode::kNotInside, proxy->get_should_reserved());
 }
 
 bool BytecodeGenerator::IsVariableInRegister(Variable* var, Register reg) {
@@ -3552,7 +3574,8 @@ void BytecodeGenerator::SetVariableInRegister(Variable* var, Register reg) {
 
 void BytecodeGenerator::BuildVariableLoad(Variable* variable,
                                           HoleCheckMode hole_check_mode,
-                                          TypeofMode typeof_mode) {
+                                          TypeofMode typeof_mode,
+                                          bool should_reserved) {
   switch (variable->location()) {
     case VariableLocation::LOCAL: {
       Register source(builder()->Local(variable->index()));
@@ -3614,6 +3637,19 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
           IsVariableInRegister(variable, acc)) {
         return;
       }
+      if (register_allocator()->next_register_index() > 0) {
+        Register r0(0);
+        if (should_reserved &&
+            immutable == BytecodeArrayBuilder::kImmutableSlot &&
+            IsVariableInRegister(variable, r0)) {
+          BytecodeRegisterOptimizer* optimizer =
+              builder()->GetRegisterOptimizer();
+          if (optimizer) {
+            optimizer->RegisterTransfer(r0, acc);
+            return;
+          }
+        }
+      }
 
       builder()->LoadContextSlot(context_reg, variable->index(), depth,
                                  immutable);
@@ -3622,6 +3658,17 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
       }
       if (immutable == BytecodeArrayBuilder::kImmutableSlot) {
         SetVariableInRegister(variable, acc);
+        if (should_reserved &&
+            register_allocator()->next_register_index() == 0) {
+          // Only reserve r0 in this case
+          Register reserved_reg = register_allocator()->NewRegister();
+          RegisterAllocationScope::set_reserved_index(1);
+          BytecodeRegisterOptimizer* optimizer =
+              builder()->GetRegisterOptimizer();
+          if (optimizer) {
+            optimizer->RegisterTransfer(acc, reserved_reg);
+          }
+        }
       }
       break;
     }
@@ -4584,13 +4631,51 @@ void BytecodeGenerator::BuildAssignment(
   }
 }
 
+bool BytecodeGenerator::IsTwoExpressionWithCommonVariableProxy(
+    Expression* lhs, Expression* rhs) {
+  while (lhs->IsProperty()) {
+    lhs = lhs->AsProperty()->obj();
+  }
+  while (rhs->IsProperty()) {
+    rhs = rhs->AsProperty()->obj();
+  }
+  if (lhs->IsVariableProxy() && rhs->IsVariableProxy()) {
+    if (AstRawString::Compare(lhs->AsVariableProxy()->raw_name(),
+                              rhs->AsVariableProxy()->raw_name()) == 0) {
+      lhs->AsVariableProxy()->set_should_reserved(true);
+      rhs->AsVariableProxy()->set_should_reserved(true);
+      return true;
+    }
+    return false;
+  }
+  return false;
+}
+
+void BytecodeGenerator::ClearReservedFeildInTwoExpression(Expression* lhs,
+                                                          Expression* rhs) {
+  while (lhs->IsProperty()) {
+    lhs = lhs->AsProperty()->obj();
+  }
+  while (rhs->IsProperty()) {
+    rhs = rhs->AsProperty()->obj();
+  }
+  lhs->AsVariableProxy()->set_should_reserved(false);
+  rhs->AsVariableProxy()->set_should_reserved(false);
+}
+
 void BytecodeGenerator::VisitAssignment(Assignment* expr) {
+  RegisterAllocationScope::EnableCommonContextElidationScope
+      enable_common_context_elidation;
+  bool is_common_variable =
+      IsTwoExpressionWithCommonVariableProxy(expr->target(), expr->value());
   AssignmentLhsData lhs_data = PrepareAssignmentLhs(expr->target());
 
   VisitForAccumulatorValue(expr->value());
 
   builder()->SetExpressionPosition(expr);
   BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode());
+  if (is_common_variable)
+    ClearReservedFeildInTwoExpression(expr->target(), expr->value());
 }
 
 void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {

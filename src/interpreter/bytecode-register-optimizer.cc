@@ -405,6 +405,13 @@ void BytecodeRegisterOptimizer::AddToEquivalenceSet(
   non_set_member->AddToEquivalenceSetOf(set_member);
 }
 
+void BytecodeRegisterOptimizer::RegisterTransfer(Register input_reg,
+                                                 Register output_reg) {
+  RegisterInfo* input_info = GetRegisterInfo(input_reg);
+  RegisterInfo* output_info = GetRegisterInfo(output_reg);
+  RegisterTransfer(input_info, output_info);
+}
+
 void BytecodeRegisterOptimizer::RegisterTransfer(RegisterInfo* input_info,
                                                  RegisterInfo* output_info) {
   bool output_is_observable =
