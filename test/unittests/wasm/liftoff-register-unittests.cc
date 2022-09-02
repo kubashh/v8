@@ -50,6 +50,9 @@ TEST_F(WasmRegisterTest, SpreadSetBitsToAdjacentFpRegs) {
 #if V8_TARGET_ARCH_S390X || V8_TARGET_ARCH_PPC64
       LiftoffRegister::from_code(kGpReg, 4),
       LiftoffRegister::from_code(kGpReg, 7),
+#elif V8_TARGET_ARCH_RISCV32 || V8_TARGET_ARCH_RISCV64
+      LiftoffRegister::from_code(kGpReg, 10),
+      LiftoffRegister::from_code(kGpReg, 13),
 #else
       LiftoffRegister::from_code(kGpReg, 1),
       LiftoffRegister::from_code(kGpReg, 2),

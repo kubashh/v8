@@ -260,7 +260,7 @@ constexpr Register cp = s7;
 constexpr Register kScratchReg = s3;
 constexpr Register kScratchReg2 = s4;
 
-constexpr DoubleRegister kScratchDoubleReg = ft0;
+constexpr DoubleRegister kScratchDoubleReg = fs8;
 
 constexpr DoubleRegister kDoubleRegZero = fs9;
 constexpr DoubleRegister kSingleRegZero = fs10;
