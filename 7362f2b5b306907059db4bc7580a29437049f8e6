@@ -228,6 +228,30 @@
       },
       "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee93cb16_07bbbf8c",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-02T08:23:47Z",
+      "side": 1,
+      "message": "Yeah. I guess that\u0027ll change as part of the cast instructions refactoring.",
+      "parentUuid": "9401034a_8f076897",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 365,
+        "endChar": 49
+      },
+      "revId": "7362f2b5b306907059db4bc7580a29437049f8e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
