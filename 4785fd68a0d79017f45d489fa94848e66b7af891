@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a21b428_b65de5bd",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-02T11:13:16Z",
+      "side": 1,
+      "message": "`CodeStubAssembler` already inherits from `CodeAssembler`, you can just move the function into `CodeAssembler`.",
+      "parentUuid": "7849d0b2_fbff8b01",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fb3f194_09dcd9a0",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 10
@@ -171,6 +189,24 @@
       "writtenOn": "2022-09-01T16:08:57Z",
       "side": 1,
       "message": "... at the same time we could have introduced the ObjectType for MaybeObject and moved this check inside the `check_object_type` and removed the `GenerateCheckMaybeObjectIsObject`.\n\nTobias, WDYT?",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac2af00b_bad4679e",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-02T11:13:16Z",
+      "side": 1,
+      "message": "Good idea!",
+      "parentUuid": "20119be9_a9fad9a1",
       "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
