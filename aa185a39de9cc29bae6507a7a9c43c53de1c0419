@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9517956e_7564a524",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-02T01:20:54Z",
+      "side": 1,
+      "message": "PTAL (after reviewing the design doc, and if that approach lgtm)",
+      "revId": "aa185a39de9cc29bae6507a7a9c43c53de1c0419",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
