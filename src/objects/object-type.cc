@@ -19,6 +19,10 @@ Address CheckObjectType(Address raw_value, Address raw_type,
   String location = String::cast(Object(raw_location));
   const char* expected;
   switch (static_cast<ObjectType>(type.value())) {
+    case ObjectType::kHeapObjectReference:
+      if (!value.IsSmi()) return Smi::FromInt(0).ptr();
+      expected = "HeapObjectReference";
+      break;
 #define TYPE_CASE(Name)                                 \
   case ObjectType::k##Name:                             \
     if (value.Is##Name()) return Smi::FromInt(0).ptr(); \
