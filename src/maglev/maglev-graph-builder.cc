@@ -75,10 +75,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
   for (auto& offset_and_info : bytecode_analysis().GetLoopInfos()) {
     int offset = offset_and_info.first;
     const compiler::LoopInfo& loop_info = offset_and_info.second;
-
     const compiler::BytecodeLivenessState* liveness = GetInLivenessFor(offset);
-
-    merge_states_[offset] = zone()->New<MergePointInterpreterFrameState>(
+    merge_states_[offset] = MergePointInterpreterFrameState::NewForLoop(
         *compilation_unit_, offset, NumPredecessors(offset), liveness,
         &loop_info);
   }
@@ -90,7 +88,7 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
       const compiler::BytecodeLivenessState* liveness =
           GetInLivenessFor(offset);
       DCHECK_EQ(NumPredecessors(offset), 0);
-      merge_states_[offset] = zone()->New<MergePointInterpreterFrameState>(
+      merge_states_[offset] = MergePointInterpreterFrameState::NewForCatchBlock(
           *compilation_unit_, liveness, offset);
     }
   }
