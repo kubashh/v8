@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "502466c8_83fa26db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-02T13:13:14Z",
+      "side": 1,
+      "message": "Nit: We usually use [heap]",
+      "revId": "660b88ae6948c402f77b612347f882dca0ab2ab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fc103eac_447ce097",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-09-02T13:04:23Z",
       "side": 1,
       "message": "ptal",
+      "revId": "660b88ae6948c402f77b612347f882dca0ab2ab4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afdd52f1_c8e2bfe8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-02T13:13:14Z",
+      "side": 1,
+      "message": "Thanks for fixing! LGTM",
       "revId": "660b88ae6948c402f77b612347f882dca0ab2ab4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
