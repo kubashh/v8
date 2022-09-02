@@ -45,6 +45,30 @@
       },
       "revId": "0fbf2bf5bdaae11512f80024463d412179d83f7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6516d9a3_d017db2b",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-09-02T12:57:26Z",
+      "side": 1,
+      "message": "Yeah... I wasn\u0027t sure. How would you call it? `MergePointInterpreterFrameState::New`\nWe would need a new private constructor anyway, since it calls a different constructor for `CompactInterpreterFrameState`.\nWdyt? Status quo or put the constructor in private + `MergePointInterpreterFrameState::New`?\nI guess the latter is slightly better...",
+      "parentUuid": "96b35323_5fb73beb",
+      "range": {
+        "startLine": 432,
+        "startChar": 2,
+        "endLine": 432,
+        "endChar": 33
+      },
+      "revId": "0fbf2bf5bdaae11512f80024463d412179d83f7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
