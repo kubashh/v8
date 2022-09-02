@@ -228,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "594a221c_0b925a84",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T10:23:27Z",
+      "side": 1,
+      "message": "Oh, sorry that I didn\u0027t notice the change of `Load` in your comments (which is `Load()` in original codes). I\u0027ve update the CL to do this. Thanks!",
+      "parentUuid": "2a346339_8ab501c6",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8fc8f6c_970c4744",
