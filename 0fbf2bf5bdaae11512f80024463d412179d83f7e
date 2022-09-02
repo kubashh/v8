@@ -93,6 +93,30 @@
       },
       "revId": "0fbf2bf5bdaae11512f80024463d412179d83f7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ba6948e_4980ed1a",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-09-02T13:20:41Z",
+      "side": 1,
+      "message": "I like that, but we cannot get rid of the second constructor in CompactIFS, because of MaglevGraphBuilder::GetLatestCheckpointedState.\nBut in any case, I am using the first one in the MergeState.",
+      "parentUuid": "23df177c_19109a47",
+      "range": {
+        "startLine": 432,
+        "startChar": 2,
+        "endLine": 432,
+        "endChar": 33
+      },
+      "revId": "0fbf2bf5bdaae11512f80024463d412179d83f7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
