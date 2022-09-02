@@ -212,6 +212,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a346339_8ab501c6",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-02T10:08:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure about the presubmit check failure but IIUC the `Load\u003cMaybeObject\u003e()` already returns `TNode\u003cMaybeObject\u003e`, so there should be no CAST from Node* to TNode\u003cHeapObjectReference\u003e.\nNote that we already use `Load\u003cMaybeObject\u003e()` in other places.",
+      "parentUuid": "02dba400_4fdf25da",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8fc8f6c_970c4744",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 10
