@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7849d0b2_fbff8b01",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "TaggedIsNotSmi is from CodeStubAssembler, do we need to implement this function here (in CodeAssembler) and make the original one inherit from it?",
+      "parentUuid": "1fbed58e_454600ab",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fb3f194_09dcd9a0",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 10
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-01T16:08:57Z",
       "side": 1,
       "message": "While you are here, please make it\n#endif  // DEBUG",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd9e549_211def34",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fb3f194_09dcd9a0",
       "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a022dc7b_a5f16cec",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff5a3077_7b71c62f",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7ed82af_d1a0c4c2",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-09-01T16:08:57Z",
       "side": 1,
       "message": "This check kinda supersedes the following call to `check_object_type` and thus the HeapObjectReference ObjectType is not necessary, ...",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f5c9d8f_b056a7dd",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "Yes, I think so too. Basically they do the same thing. I will update the code here when below comment is addressed.",
+      "parentUuid": "a7ed82af_d1a0c4c2",
       "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -122,6 +194,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02dba400_4fdf25da",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "When I CAST Node* to TNode\u003cHeapObjectReference\u003e, I need also to make this assertion works: `types_have_common_values\u003cHeapObjectReference, Object\u003e::value` \n(https://chromium-review.googlesource.com/c/v8/v8/+/3861310/11/src/compiler/code-assembler.h#427)\n\nHowever, when I do so, this make the presubmit report the below warning:\n\n    Copy constructors, move constructors, copy assignment operators and move assignment operators should be marked V8_NOEXCEPT.\n    Please report false positives on https://crbug.com/v8/8616.\n      in src/codegen/tnode.h: TNode(const TNode\u0026 other) : node_(other) {LazyTemplateChecks(); }\n      \nIs this something we need to fix or wo should keep the `ReinterpretCast\u003cMaybeObject\u003e(Load())` ?",
+      "parentUuid": "fd42d6aa_ac8f6301",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8fc8f6c_970c4744",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 10
@@ -133,6 +223,24 @@
       "writtenOn": "2022-09-01T16:08:57Z",
       "side": 1,
       "message": "Please remove this check, the CAST will take care of it.",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfee6a25_270d6a19",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8fc8f6c_970c4744",
       "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -150,6 +258,30 @@
       "writtenOn": "2022-09-01T16:08:57Z",
       "side": 1,
       "message": "Please add \n  TNode\u003cHeapObjectReference\u003e ref_handler \u003d CAST(handler);",
+      "range": {
+        "startLine": 1378,
+        "startChar": 27,
+        "endLine": 1378,
+        "endChar": 72
+      },
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79723a8f_e6280e62",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-02T09:59:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25d52ae1_190ffd88",
       "range": {
         "startLine": 1378,
         "startChar": 27,
