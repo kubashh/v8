@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f1a08c2_4ab126fe",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-02T13:16:23Z",
+      "side": 1,
+      "message": "IIUC in the comment above you agreed with \"extend ObjectType with MaybeObject\" approach, in that case both GenerateCheckMaybeObjectIsXXX will not be necessary.",
+      "parentUuid": "4a21b428_b65de5bd",
+      "revId": "4785fd68a0d79017f45d489fa94848e66b7af891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fb3f194_09dcd9a0",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 10
