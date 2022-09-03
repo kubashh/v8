@@ -29,11 +29,13 @@ namespace v8 {
 
 class Extension;
 class Signature;
+class SharedValueConveyor;
 class Template;
 
 namespace internal {
 class JSArrayBufferView;
 class JSFinalizationRegistry;
+class SharedObjectConveyorHandles;
 }  // namespace internal
 
 namespace debug {
@@ -282,6 +284,12 @@ class Utils {
   static inline v8::internal::Handle<To> OpenHandle(v8::Local<From> handle) {
     return OpenHandle(*handle);
   }
+
+  static internal::SharedObjectConveyorHandles* OpenSharedValueConveyor(
+      SharedValueConveyor& conveyor);
+
+  static const internal::SharedObjectConveyorHandles* OpenSharedValueConveyor(
+      const SharedValueConveyor& conveyor);
 
  private:
   static void ReportApiFailure(const char* location, const char* message);
