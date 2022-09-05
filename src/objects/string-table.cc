@@ -349,7 +349,8 @@ class InternalizedStringKey final : public StringTableKey {
     // When sharing the string table, it's possible that another thread already
     // internalized the key, in which case StringTable::LookupKey will perform a
     // redundant lookup and return the already internalized copy.
-    DCHECK_IMPLIES(!FLAG_shared_string_table, !string->IsInternalizedString());
+    DCHECK_IMPLIES(!v8_flags.shared_string_table,
+                   !string->IsInternalizedString());
     DCHECK(string->IsFlat());
     DCHECK(String::IsHashFieldComputed(hash));
   }
@@ -373,7 +374,7 @@ class InternalizedStringKey final : public StringTableKey {
       case StringTransitionStrategy::kAlreadyTransitioned:
         // We can see already internalized strings here only when sharing the
         // string table and allowing concurrent internalization.
-        DCHECK(FLAG_shared_string_table);
+        DCHECK(v8_flags.shared_string_table);
         return;
     }
 
@@ -387,7 +388,7 @@ class InternalizedStringKey final : public StringTableKey {
     // resource), resulting in a string table hit returning the string we just
     // created that is not correctly initialized.
     const bool can_avoid_copy =
-        !FLAG_shared_string_table && !shape.IsUncachedExternal();
+        !v8_flags.shared_string_table && !shape.IsUncachedExternal();
     if (can_avoid_copy && shape.IsExternalOneByte()) {
       // Shared external strings are always in-place internalizable.
       // If this assumption is invalidated in the future, make sure that we
@@ -450,7 +451,7 @@ void SetInternalizedReference(Isolate* isolate, String string,
   DCHECK(!string.IsInternalizedString());
   DCHECK(internalized.IsInternalizedString());
   DCHECK(!internalized.HasInternalizedForwardingIndex(kAcquireLoad));
-  if (string.IsShared() || FLAG_always_use_string_forwarding_table) {
+  if (string.IsShared() || v8_flags.always_use_string_forwarding_table) {
     uint32_t field = string.raw_hash_field(kAcquireLoad);
     // Don't use the forwarding table for strings that have an integer index.
     // Using the hash field for the integer index is more beneficial than
@@ -591,7 +592,7 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
   if (entry.is_found()) {
     Handle<String> result(String::cast(current_data->Get(isolate, entry)),
                           isolate);
-    DCHECK_IMPLIES(FLAG_shared_string_table, result->InSharedHeap());
+    DCHECK_IMPLIES(v8_flags.shared_string_table, result->InSharedHeap());
     return result;
   }
 
@@ -611,7 +612,7 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
       // This entry is empty, so write it and register that we added an
       // element.
       Handle<String> new_string = key->GetHandleForInsertion();
-      DCHECK_IMPLIES(FLAG_shared_string_table, new_string->IsShared());
+      DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
       data->Set(entry, *new_string);
       data->ElementAdded();
       return new_string;
@@ -619,7 +620,7 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
       // This entry was deleted, so overwrite it and register that we
       // overwrote a deleted element.
       Handle<String> new_string = key->GetHandleForInsertion();
-      DCHECK_IMPLIES(FLAG_shared_string_table, new_string->IsShared());
+      DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
       data->Set(entry, *new_string);
       data->DeletedElementOverwritten();
       return new_string;
@@ -772,7 +773,7 @@ Address StringTable::Data::TryStringToIndexOrLookupExisting(Isolate* isolate,
   if (!string.IsInternalizedString()) {
     SetInternalizedReference(isolate, string, internalized);
   } else {
-    DCHECK(FLAG_shared_string_table);
+    DCHECK(v8_flags.shared_string_table);
   }
   return internalized.ptr();
 }
@@ -784,7 +785,7 @@ Address StringTable::TryStringToIndexOrLookupExisting(Isolate* isolate,
   if (string.IsInternalizedString()) {
     // string could be internalized, if the string table is shared and another
     // thread internalized it.
-    DCHECK(FLAG_shared_string_table);
+    DCHECK(v8_flags.shared_string_table);
     return raw_string;
   }
 
