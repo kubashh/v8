@@ -16,6 +16,24 @@
       "message": "This will not work for weak MaybeObjects and thus it has to be moved down into the else part. See my code snipped above.",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc4c0a3e_b2f6886f",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-05T13:15:46Z",
+      "side": 1,
+      "message": "In the \"if\" part we only use it in `Print()`, but it seems that there is no such member function defined in `MaybeObject`. The only `Print()` is defined in `Object` and it seems that it can handle weak reference:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/objects.cc;l\u003d1786\n\nDo we need to move this definition to TaggedImpl?",
+      "parentUuid": "e5a653a1_7cc45feb",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
