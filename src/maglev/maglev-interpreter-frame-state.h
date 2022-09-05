@@ -466,7 +466,8 @@ class MergePointInterpreterFrameState {
             entry = state->NewLoopPhi(info.zone(), reg, merge_offset);
           }
         });
-    frame_state.context(info) = nullptr;
+    frame_state.context(info) = state->NewLoopPhi(
+        info.zone(), interpreter::Register::current_context(), merge_offset);
     frame_state.ForEachLocal(
         info, [&](ValueNode*& entry, interpreter::Register reg) {
           entry = nullptr;
