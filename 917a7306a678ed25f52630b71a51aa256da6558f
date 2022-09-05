@@ -16,6 +16,24 @@
       "message": "Currently there are no CAST to MaybeObject or AnyTaggedT, do we need to throw error here or just pass the check?",
       "revId": "917a7306a678ed25f52630b71a51aa256da6558f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c69e4da2_eb321d9a",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-05T10:16:43Z",
+      "side": 1,
+      "message": "I think we don\u0027t have to pass the previous_type here because it\u0027s the value which should be checked against the expected type.\nI had in mind something like this:\n```\n  if (HAS_WEAK_HEAP_OBJECT_TAG(raw_value)) {\n    if (type \u003d\u003d ObjectType::kMaybeObject) return;\n    // The type check failed, prepare data for reporting an error.\n    // Casts of weak references are not allowed, one should use GetHeapObjectIfStrong / GetHeapObjectAssumeWeak first.\n    MaybeObject value(raw_value);\n    value.Print(value_description);\n    // Set \"expected\" string according to the expected type.\n    switch(type) {\n      ...\n      expected \u003d #Name;\n    }\n  } else {\n    Object value(raw_value);\n    switch(type) {\n      ...\n    }\n    value.Print(value_description);\n  }\n\n```",
+      "parentUuid": "20a4f4a9_e64484a1",
+      "revId": "917a7306a678ed25f52630b71a51aa256da6558f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
