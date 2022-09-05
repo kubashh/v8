@@ -1888,14 +1888,15 @@ void Global::set(const Val& val) {
     case F64:
       return v8_global->SetF64(val.f64());
     case ANYREF:
-      return v8_global->SetExternRef(
+      return v8_global->SetRef(
           WasmRefToV8(impl(this)->store()->i_isolate(), val.ref()));
     case FUNCREF: {
       i::Isolate* isolate = impl(this)->store()->i_isolate();
-      bool result =
-          v8_global->SetFuncRef(isolate, WasmRefToV8(isolate, val.ref()));
-      DCHECK(result);
-      USE(result);
+      i::Handle<i::WasmInternalFunction> v8_ref =
+          i::WasmInternalFunction::FromExternal(WasmRefToV8(isolate, val.ref()),
+                                                isolate)
+              .ToHandleChecked();
+      v8_global->SetRef(v8_ref);
       return;
     }
     default:
@@ -1990,8 +1991,12 @@ auto Table::get(size_t index) const -> own<Ref> {
   if (index >= static_cast<size_t>(table->current_length())) return own<Ref>();
   i::Isolate* isolate = table->GetIsolate();
   i::HandleScope handle_scope(isolate);
-  i::Handle<i::Object> result = i::WasmTableObject::Get(
-      isolate, table, static_cast<uint32_t>(index), i::WasmTableObject::kJS);
+  i::Handle<i::Object> result =
+      i::WasmTableObject::Get(isolate, table, static_cast<uint32_t>(index));
+  if (result->IsWasmInternalFunction()) {
+    result = handle(
+        i::Handle<i::WasmInternalFunction>::cast(result)->external(), isolate);
+  }
   DCHECK(result->IsNull(isolate) || result->IsJSReceiver());
   return V8RefValueToWasm(impl(this)->store(), result);
 }
@@ -2002,9 +2007,13 @@ auto Table::set(size_t index, const Ref* ref) -> bool {
   i::Isolate* isolate = table->GetIsolate();
   i::HandleScope handle_scope(isolate);
   i::Handle<i::Object> obj = WasmRefToV8(isolate, ref);
-  // TODO(12868): Enforce type restrictions for stringref tables.
-  i::WasmTableObject::Set(isolate, table, static_cast<uint32_t>(index), obj,
-                          i::WasmTableObject::kJS);
+  const char* error_message;
+  i::Handle<i::Object> obj_as_wasm =
+      i::wasm::JSToWasmObject(isolate, nullptr, obj, table->type(),
+                              &error_message)
+          .ToHandleChecked();
+  i::WasmTableObject::Set(isolate, table, static_cast<uint32_t>(index),
+                          obj_as_wasm);
   return true;
 }
 
@@ -2018,9 +2027,13 @@ auto Table::grow(size_t delta, const Ref* ref) -> bool {
   i::Isolate* isolate = table->GetIsolate();
   i::HandleScope scope(isolate);
   i::Handle<i::Object> obj = WasmRefToV8(isolate, ref);
-  int result =
-      i::WasmTableObject::Grow(isolate, table, static_cast<uint32_t>(delta),
-                               obj, i::WasmTableObject::kJS);
+  const char* error_message;
+  i::Handle<i::Object> obj_as_wasm =
+      i::wasm::JSToWasmObject(isolate, nullptr, obj, table->type(),
+                              &error_message)
+          .ToHandleChecked();
+  int result = i::WasmTableObject::Grow(
+      isolate, table, static_cast<uint32_t>(delta), obj_as_wasm);
   return result >= 0;
 }
 

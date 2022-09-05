@@ -117,7 +117,10 @@ Object ThrowWasmError(Isolate* isolate, MessageTemplate message,
 }
 }  // namespace
 
-RUNTIME_FUNCTION(Runtime_WasmIsValidRefValue) {
+// Takes a JS object and a wasm type as Smi. Type checks the object against the
+// type; if the check succeeds, returns the object in its wasm representation;
+// otherwise throws a type error.
+RUNTIME_FUNCTION(Runtime_WasmJSToWasmObject) {
   // This code is called from wrappers, so the "thread is wasm" flag is not set.
   DCHECK_IMPLIES(trap_handler::IsTrapHandlerEnabled(),
                  !trap_handler::IsThreadInWasm());
@@ -138,9 +141,13 @@ RUNTIME_FUNCTION(Runtime_WasmIsValidRefValue) {
   wasm::ValueType type = wasm::ValueType::FromRawBitField(raw_type);
   const char* error_message;
 
-  bool result = internal::wasm::TypecheckJSObject(isolate, module, value, type,
-                                                  &error_message);
-  return Smi::FromInt(result);
+  Handle<Object> result;
+  bool success = internal::wasm::JSToWasmObject(isolate, module, value, type,
+                                                &error_message)
+                     .ToHandle(&result);
+  if (success) return *result;
+  THROW_NEW_ERROR_RETURN_FAILURE(
+      isolate, NewTypeError(MessageTemplate::kWasmTrapJSTypeError));
 }
 
 RUNTIME_FUNCTION(Runtime_WasmMemoryGrow) {
@@ -451,8 +458,7 @@ RUNTIME_FUNCTION(Runtime_WasmFunctionTableGet) {
     return ThrowWasmError(isolate, MessageTemplate::kWasmTrapTableOutOfBounds);
   }
 
-  return *WasmTableObject::Get(isolate, table, entry_index,
-                               WasmTableObject::kWasm);
+  return *WasmTableObject::Get(isolate, table, entry_index);
 }
 
 RUNTIME_FUNCTION(Runtime_WasmFunctionTableSet) {
@@ -476,8 +482,7 @@ RUNTIME_FUNCTION(Runtime_WasmFunctionTableSet) {
   if (!WasmTableObject::IsInBounds(isolate, table, entry_index)) {
     return ThrowWasmError(isolate, MessageTemplate::kWasmTrapTableOutOfBounds);
   }
-  WasmTableObject::Set(isolate, table, entry_index, element,
-                       WasmTableObject::kWasm);
+  WasmTableObject::Set(isolate, table, entry_index, element);
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
@@ -541,8 +546,7 @@ RUNTIME_FUNCTION(Runtime_WasmTableGrow) {
 
   Handle<WasmTableObject> table(
       WasmTableObject::cast(instance.tables().get(table_index)), isolate);
-  int result = WasmTableObject::Grow(isolate, table, delta, value,
-                                     WasmTableObject::kWasm);
+  int result = WasmTableObject::Grow(isolate, table, delta, value);
 
   return Smi::FromInt(result);
 }
