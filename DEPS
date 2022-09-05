@@ -9,6 +9,11 @@ gclient_gn_args = [
 ]
 
 vars = {
+  # Fetch the prebuilt binaries for llvm-cov and llvm-profdata. Needed to
+  # process the raw profiles produced by instrumented targets (built with
+  # the gn arg 'use_clang_coverage').
+  'checkout_clang_coverage_tools': False,
+
   # Fetches only the SDK boot images which match at least one of the whitelist
   # entries in a comma-separated list.
   #
@@ -542,6 +547,13 @@ hooks = [
     # clang not supported on aix
     'condition': 'host_os != "aix"',
     'action': ['python3', 'tools/clang/scripts/update.py'],
+  },
+  {
+    'name': 'clang_coverage',
+    'pattern': '.',
+    'condition': 'checkout_clang_coverage_tools',
+    'action': ['python3', 'tools/clang/scripts/update.py',
+               '--package=coverage_tools'],
   },
   {
     'name': 'clang_tidy',
