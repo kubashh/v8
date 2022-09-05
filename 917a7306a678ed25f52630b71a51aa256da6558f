@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20a4f4a9_e64484a1",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-05T08:55:32Z",
+      "side": 1,
+      "message": "Currently there are no CAST to MaybeObject or AnyTaggedT, do we need to throw error here or just pass the check?",
+      "revId": "917a7306a678ed25f52630b71a51aa256da6558f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
