@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34818dd8_19b33c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-05T12:48:13Z",
+      "side": 1,
+      "message": "PTAL. Will land after I see a few green and fast builds.",
+      "revId": "04e558d1e0b3a4861cd844cedfb58e577112ebb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
