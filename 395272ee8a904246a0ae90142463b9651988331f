@@ -16,6 +16,23 @@
       "message": "PTAL -- it\u0027s not super pretty, but any attempt I made at code sharing got unmanageable because of the various special cases.",
       "revId": "395272ee8a904246a0ae90142463b9651988331f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d6a1da_9059b59d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-09-05T07:16:56Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "395272ee8a904246a0ae90142463b9651988331f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
