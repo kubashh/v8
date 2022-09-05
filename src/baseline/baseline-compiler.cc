@@ -1161,8 +1161,11 @@ void BaselineCompiler::VisitGetSuperConstructor() {
 }
 
 void BaselineCompiler::VisitFindNonDefaultConstructor() {
-  // TODO(v8:13091): Implement.
-  CHECK(false);
+  CallBuiltin<Builtin::kFindNonDefaultConstructor>(RegisterOperand(0),
+                                                   RegisterOperand(1));
+  __ Move(kInterpreterAccumulatorRegister, kReturnRegister0);
+  __ Move(RegisterOperand(2), kReturnRegister1);
+  __ Move(RegisterOperand(3), kReturnRegister2);
 }
 
 namespace {
