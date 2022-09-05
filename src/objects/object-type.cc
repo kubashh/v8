@@ -11,14 +11,35 @@
 namespace v8 {
 namespace internal {
 
-Address CheckObjectType(Address raw_value, Address raw_type,
-                        Address raw_location) {
+Address CheckObjectType(Address raw_value, Address raw_previous_type,
+                        Address raw_type, Address raw_location) {
 #ifdef DEBUG
   Object value(raw_value);
-  Smi type(raw_type);
+  ObjectType previous_type =
+      static_cast<ObjectType>(Smi(raw_previous_type).value());
+  ObjectType type = static_cast<ObjectType>(Smi(raw_type).value());
   String location = String::cast(Object(raw_location));
   const char* expected;
-  switch (static_cast<ObjectType>(type.value())) {
+  if (previous_type == ObjectType::kMaybeObject &&
+      type != ObjectType::kHeapObjectReference) {
+    if (!value.IsObject()) {
+      FATAL(
+          "Type cast failed in %s\n"
+          "  Expected strong reference but found weak or clear reference",
+          location.ToAsciiArray());
+    }
+  }
+  switch (type) {
+    case ObjectType::kMaybeObject:
+    case ObjectType::kAnyTaggedT:
+      FATAL(
+          "Type cast failed in %s\n"
+          "  CAST to MaybeObject and AnyTaggedT is not supported",
+          location.ToAsciiArray());
+    case ObjectType::kHeapObjectReference:
+      if (!value.IsSmi()) return Smi::FromInt(0).ptr();
+      expected = "HeapObjectReference";
+      break;
 #define TYPE_CASE(Name)                                 \
   case ObjectType::k##Name:                             \
     if (value.Is##Name()) return Smi::FromInt(0).ptr(); \

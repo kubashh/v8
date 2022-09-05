@@ -20,6 +20,9 @@ enum class ObjectType {
   ENUM_ELEMENT(Smi)                    //
   ENUM_ELEMENT(TaggedIndex)            //
   ENUM_ELEMENT(HeapObject)             //
+  ENUM_ELEMENT(MaybeObject)            //
+  ENUM_ELEMENT(HeapObjectReference)    //
+  ENUM_ELEMENT(AnyTaggedT)             //
   OBJECT_TYPE_LIST(ENUM_ELEMENT)       //
   HEAP_OBJECT_TYPE_LIST(ENUM_ELEMENT)  //
   STRUCT_LIST(ENUM_STRUCT_ELEMENT)     //
@@ -28,10 +31,12 @@ enum class ObjectType {
 #undef ENUM_STRUCT_ELEMENT
 
 // {raw_value} must be a tagged Object.
-// {raw_type} must be a tagged Smi.
+// {raw_previous_type}, {raw_type} must be tagged Smi.
 // {raw_location} must be a tagged String.
 // Returns a tagged Smi.
-V8_EXPORT_PRIVATE Address CheckObjectType(Address raw_value, Address raw_type,
+V8_EXPORT_PRIVATE Address CheckObjectType(Address raw_value,
+                                          Address raw_previous_type,
+                                          Address raw_type,
                                           Address raw_location);
 
 }  // namespace internal
