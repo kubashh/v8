@@ -52,6 +52,24 @@
       "parentUuid": "bc4c0a3e_b2f6886f",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f34f61fa_2c446d94",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-05T13:59:47Z",
+      "side": 1,
+      "message": "It seems that it only works with `#ifdef OBJECT_PRINT`\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/diagnostics/objects-printer.cc;l\u003d2602?q\u003dTaggedImpl%3CkRefType,%20StorageType%3E::Print\u0026ss\u003dchromium\n\nI tried this but there will be `error: undefined symbol` if I don\u0027t add GN flag `v8_enable_object_print`.",
+      "parentUuid": "927b3845_0a2853b1",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
