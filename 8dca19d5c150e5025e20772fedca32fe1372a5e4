@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd5b273_9f42a579",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4386,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-05T14:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f9953ec_5e5e477c",
+      "revId": "8dca19d5c150e5025e20772fedca32fe1372a5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e820485b_2936ac54",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-09-05T14:32:06Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "8dca19d5c150e5025e20772fedca32fe1372a5e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4de9ade1_a719c1cf",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4435,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-05T14:49:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e820485b_2936ac54",
       "revId": "8dca19d5c150e5025e20772fedca32fe1372a5e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
