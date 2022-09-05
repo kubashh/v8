@@ -70,6 +70,24 @@
       "parentUuid": "927b3845_0a2853b1",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa74e955_6b3fe8e4",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-05T14:05:27Z",
+      "side": 1,
+      "message": "There should be a fallback: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/tagged-impl.h;l\u003d220;drc\u003d8fb7fe37e209c5298794250f2217737aae1fd42e;bpv\u003d1;bpt\u003d1\n\nAre you building it in component mode? Maybe the issue is that the TaggedImpl::ShortPrint is not exported or maybe the ShortPrint is not instantiated for MaybeObject case?",
+      "parentUuid": "f34f61fa_2c446d94",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
