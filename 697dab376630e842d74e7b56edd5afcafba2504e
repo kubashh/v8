@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45154d3f_81f9a146",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-06T07:40:33Z",
+      "side": 1,
+      "message": "Hi Leszek and Shu, this CL is a follow-up CL for https://chromium-review.googlesource.com/c/v8/v8/+/3816221.\n\nIn the previous CL, we could elide redundant immutable context load in some case like: `a.b \u003d a.c`, but we can\u0027t optimize it in `a.b.bb \u003d a.c`, because the accumulator was changed between generating bytecodes for lhs and rhs.\n\nIn this CL, we could cover this case, PTAL, thanks!",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
