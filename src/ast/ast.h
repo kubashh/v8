@@ -1549,6 +1549,12 @@ class VariableProxy final : public Expression {
     static VariableProxy** next(VariableProxy* t) { return filter(t->next()); }
   };
 
+  void set_should_reserved(bool should_reserved) {
+    should_reserved_ = should_reserved;
+  }
+
+  bool get_should_reserved() { return should_reserved_; }
+
  private:
   friend class AstNodeFactory;
   friend Zone;
@@ -1559,7 +1565,8 @@ class VariableProxy final : public Expression {
                 int start_position)
       : Expression(start_position, kVariableProxy),
         raw_name_(name),
-        next_unresolved_(nullptr) {
+        next_unresolved_(nullptr),
+        should_reserved_(false) {
     DCHECK_NE(THIS_VARIABLE, variable_kind);
     bit_field_ |= IsAssignedField::encode(false) |
                   IsResolvedField::encode(false) |
@@ -1582,6 +1589,7 @@ class VariableProxy final : public Expression {
 
   V8_INLINE VariableProxy** next() { return &next_unresolved_; }
   VariableProxy* next_unresolved_;
+  bool should_reserved_;
 
   friend base::ThreadedListTraits<VariableProxy>;
 };
