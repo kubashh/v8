@@ -1360,6 +1360,7 @@ class MarkCompactCollector::SharedHeapObjectVisitor final
   void VisitCodeTarget(Code host, RelocInfo* rinfo) override {
     Code target = Code::GetCodeFromTargetAddress(rinfo->target_address());
     if (!target.InSharedWritableHeap()) return;
+    collector_->MarkRootObject(Root::kClientHeap, target);
     RecordRelocSlot(host, rinfo, target);
   }
 
@@ -1586,6 +1587,7 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
     // The target is always in old space, we don't have to record the slot in
     // the old-to-new remembered set.
     DCHECK(!Heap::InYoungGeneration(target));
+    DCHECK(!target.InSharedWritableHeap());
     collector_->RecordRelocSlot(host, rinfo, target);
   }
 
@@ -1594,6 +1596,7 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
     DCHECK(RelocInfo::IsEmbeddedObjectMode(rinfo->rmode()));
     HeapObject object = rinfo->target_object(cage_base());
     GenerationalBarrierForCode(host, rinfo, object);
+    WriteBarrier::Shared(host, rinfo, object);
     collector_->RecordRelocSlot(host, rinfo, object);
   }
 
