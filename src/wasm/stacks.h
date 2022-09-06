@@ -13,7 +13,9 @@
 #include "src/execution/isolate.h"
 #include "src/utils/allocation.h"
 
-namespace v8::internal::wasm {
+namespace v8 {
+namespace internal {
+namespace wasm {
 
 struct JumpBuffer {
   Address sp;
@@ -38,7 +40,7 @@ class StackMemory {
   static StackMemory* GetCurrentStackView(Isolate* isolate);
 
   ~StackMemory();
-  void* jslimit() const { return limit_ + kJSLimitOffsetKB; }
+  void* jslimit() const { return limit_ + kJSLimitOffsetKB * KB; }
   Address base() const { return reinterpret_cast<Address>(limit_ + size_); }
   JumpBuffer* jmpbuf() { return &jmpbuf_; }
   int id() { return id_; }
@@ -76,6 +78,8 @@ class StackMemory {
   StackMemory* prev_ = this;
 };
 
-}  // namespace v8::internal::wasm
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8
 
 #endif  // V8_WASM_STACKS_H_
