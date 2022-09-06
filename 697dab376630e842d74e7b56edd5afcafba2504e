@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "885fd31a_99ed48c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-06T21:49:30Z",
+      "side": 1,
+      "message": "Please also write an explanation of what the optimization tries to do and when it applies.",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "45154d3f_81f9a146",
@@ -31,6 +48,40 @@
       "writtenOn": "2022-09-06T15:11:40Z",
       "side": 1,
       "message": "Shu, can you review this since you reviewed the first CL?",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7563cec8_428d549a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-06T21:49:30Z",
+      "side": 1,
+      "message": "Thanks for the CL. Holding off on the nitpicky things since I\u0027m not yet clear on two bigger points:\n\n1. What benchmarks does this improve for Speedometer2?\n\n2. I don\u0027t understand why this optimization is safe because of the use of the static variable. Why is the reserved register static?",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0755413b_c06f5299",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-06T21:49:30Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this optimization is safe because the reserved register index is a static variable. Can\u0027t `VisitAssignment` be recursively called in `VisitForAccumulatorValue` above on L4679?",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
