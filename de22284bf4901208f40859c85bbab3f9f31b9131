@@ -88,6 +88,24 @@
       "parentUuid": "f34f61fa_2c446d94",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecf86246_109ecfdf",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-06T14:51:51Z",
+      "side": 1,
+      "message": "My build config is `is_debug \u003d true` and `is_component_build \u003d false` so it actually calls to the `TaggedImpl::Print()` in `object-printer.cc`:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/diagnostics/objects-printer.cc;l\u003d2580?q\u003dTaggedImpl%3CkRefType,%20StorageType%3E::Print\u0026ss\u003dchromium\n\nIt seems that `TaggedImpl::Print()` is not instantiated and result in the below error:\n\n    ld.lld: error: undefined symbol: v8::internal::TaggedImpl\u003c(v8::internal::HeapObjectReferenceType)0, unsigned long\u003e::Print(std::Cr::basic_ostream\u003cchar, std::Cr::char_traits\u003cchar\u003e\u003e\u0026)\n    \nHowever, `TaggedImpl::ShortPrint()` is instantiated and we can use this without build failed. Do we need to try to fix the `Print` issue or just use `ShortPrint` in this case?",
+      "parentUuid": "fa74e955_6b3fe8e4",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
