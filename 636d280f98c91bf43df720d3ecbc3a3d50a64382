@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "066a4702_a024e7f6",
+        "filename": "include/v8-value-serializer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-06T20:52:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1368c178_54ec765c",
+      "range": {
+        "startLine": 53,
+        "startChar": 8,
+        "endLine": 53,
+        "endChar": 16
+      },
+      "revId": "636d280f98c91bf43df720d3ecbc3a3d50a64382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d05ffea_ca5554dc",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-05T08:07:02Z",
       "side": 1,
       "message": "I guess we anyways cannot misuse this but maybe `SharedValueConveyor\u0026\u0026` is a little clearer.",
+      "range": {
+        "startLine": 3383,
+        "startChar": 25,
+        "endLine": 3383,
+        "endChar": 44
+      },
+      "revId": "636d280f98c91bf43df720d3ecbc3a3d50a64382",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec89406b_0ae6e5d8",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-06T20:52:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d05ffea_ca5554dc",
       "range": {
         "startLine": 3383,
         "startChar": 25,
