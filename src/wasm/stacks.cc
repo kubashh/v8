@@ -4,7 +4,9 @@
 
 #include "src/wasm/stacks.h"
 
-namespace v8::internal::wasm {
+namespace v8 {
+namespace internal {
+namespace wasm {
 
 // static
 StackMemory* StackMemory::GetCurrentStackView(Isolate* isolate) {
@@ -37,7 +39,7 @@ StackMemory::StackMemory(Isolate* isolate) : isolate_(isolate), owned_(true) {
   static std::atomic<int> next_id(1);
   id_ = next_id.fetch_add(1);
   PageAllocator* allocator = GetPlatformPageAllocator();
-  int kJsStackSizeKB = 4;
+  int kJsStackSizeKB = v8_flags.wasm_stack_switching_stack_size;
   size_ = (kJsStackSizeKB + kJSLimitOffsetKB) * KB;
   size_ = RoundUp(size_, allocator->AllocatePageSize());
   limit_ = static_cast<byte*>(
@@ -58,4 +60,6 @@ StackMemory::StackMemory(Isolate* isolate, byte* limit)
   id_ = 0;
 }
 
-}  // namespace v8::internal::wasm
+}  // namespace wasm
+}  // namespace internal
+}  // namespace v8
