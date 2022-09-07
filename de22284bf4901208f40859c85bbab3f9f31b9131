@@ -160,6 +160,24 @@
       "parentUuid": "19f5d859_3ac6c883",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5801ede2_45e859fe",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-07T10:56:53Z",
+      "side": 1,
+      "message": "@Leszek @Tobias Please help to review the changes in src/compiler and src/interpreter. Thanks!",
+      "parentUuid": "c7b6940e_a462884a",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
