@@ -257,8 +257,13 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void SetVariableInRegister(Variable* var, Register reg);
 
+  bool TransferRgisterIfReserved();
+
+  void ReserveAccumulatorInRegisterForReusing();
+
   void BuildVariableLoad(Variable* variable, HoleCheckMode hole_check_mode,
-                         TypeofMode typeof_mode = TypeofMode::kNotInside);
+                         TypeofMode typeof_mode = TypeofMode::kNotInside,
+                         bool should_reserved = false);
   void BuildVariableLoadForAccumulatorValue(
       Variable* variable, HoleCheckMode hole_check_mode,
       TypeofMode typeof_mode = TypeofMode::kNotInside);
@@ -450,6 +455,11 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   int GetCachedCreateClosureSlot(FunctionLiteral* literal);
 
   void AddToEagerLiteralsIfEager(FunctionLiteral* literal);
+
+  bool MarkTwoExpressionIfCommonImmutableVariable(Expression* lhs,
+                                                  Expression* rhs);
+
+  void ClearReservedFeildInTwoExpression(Expression* lhs, Expression* rhs);
 
   static constexpr ToBooleanMode ToBooleanModeFromTypeHint(TypeHint type_hint) {
     return type_hint == TypeHint::kBoolean ? ToBooleanMode::kAlreadyBoolean
