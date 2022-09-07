@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4534a2a0_54e74efe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-07T05:54:30Z",
+      "side": 1,
+      "message": "ptal again - rebased, and added the helper macros for maglev-ir interface declarations.",
+      "revId": "6b2e23a17477729cb9fec1e36421294bca3c2020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
