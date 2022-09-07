@@ -16,6 +16,24 @@
       "message": "This seems to break the fuzzilli build:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20Fuzzilli%20-%20builder/4835/overview",
       "revId": "9cf407e9980e8459766a8df8a30cf6d6e79e1c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f89aa665_40c850d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-07T17:05:02Z",
+      "side": 1,
+      "message": "Thanks, preparing a fix.",
+      "parentUuid": "4e13420c_ad04b586",
+      "revId": "9cf407e9980e8459766a8df8a30cf6d6e79e1c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
