@@ -3695,6 +3695,10 @@ void Isolate::Deinit() {
 
   ClearSerializerData();
 
+  if (OwnsStringTables()) {
+    string_forwarding_table()->TearDown();
+  }
+
 #ifdef V8_COMPRESS_POINTERS
   external_pointer_table().TearDown();
   if (owns_shareable_data()) {
