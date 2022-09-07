@@ -124,6 +124,24 @@
       "parentUuid": "ecf86246_109ecfdf",
       "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19f5d859_3ac6c883",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-07T09:26:58Z",
+      "side": 1,
+      "message": "This works, thanks!\nHowever, the trybot failed in the below checks:\nhttps://ci.chromium.org/ui/p/v8/builders/try.triggered/v8_linux64_dbg_ng_triggered/b8803695085348110337/overview\n\nI found that the failure are caused by TIMEOUT, and according to my local test, we can actually pass these checks after a couple minutes. I think one of the reason might be that we do more checks in `CheckObjectType`, so the consumed time is longer. What do you think?",
+      "parentUuid": "dfdd48bd_de0b8acb",
+      "revId": "de22284bf4901208f40859c85bbab3f9f31b9131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
