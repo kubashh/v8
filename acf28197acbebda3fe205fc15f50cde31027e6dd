@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0eeb002_bccc1f73",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-07T05:17:15Z",
+      "side": 1,
+      "message": "This is just the \u0027add an empty assembler\u0027 commit - actual logic movement will happen in followups.",
+      "parentUuid": "508b50d4_8501fd65",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 1
+      },
+      "revId": "acf28197acbebda3fe205fc15f50cde31027e6dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7579570_d141f69b",
         "filename": "src/maglev/maglev-ir.cc",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-06T13:39:15Z",
       "side": 1,
       "message": "I guess inlined helpers should be in MaglevAssembler as well?",
+      "range": {
+        "startLine": 385,
+        "startChar": 0,
+        "endLine": 387,
+        "endChar": 6
+      },
+      "revId": "acf28197acbebda3fe205fc15f50cde31027e6dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7eda2a6_d9d476d6",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-07T05:17:15Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "f7579570_d141f69b",
       "range": {
         "startLine": 385,
         "startChar": 0,
