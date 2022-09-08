@@ -620,6 +620,8 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
     return external_backing_store_bytes_[type];
   }
 
+  void AdvanceAllocationCounterForSweeping(size_t bytes);
+
 #ifdef VERIFY_HEAP
   void Verify(Isolate* isolate, ObjectVisitor* visitor) const final;
 #endif
@@ -778,6 +780,10 @@ class V8_EXPORT_PRIVATE PagedNewSpace final : public NewSpace {
 
   void MakeLinearAllocationAreaIterable() final {
     paged_space_.MakeLinearAllocationAreaIterable();
+  }
+
+  void AdvanceAllocationCounterForSweeping(size_t bytes) {
+    paged_space_.AdvanceAllocationCounterForSweeping(bytes);
   }
 
   PagedSpaceBase* paged_space() { return &paged_space_; }
