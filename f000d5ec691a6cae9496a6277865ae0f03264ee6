@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ce89a5_a3172b72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-09-08T16:30:04Z",
+      "side": 1,
+      "message": "Thanks for the quick reviews, Michael and Simon! Camillo, would you please review src/profiler?",
+      "revId": "f000d5ec691a6cae9496a6277865ae0f03264ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
