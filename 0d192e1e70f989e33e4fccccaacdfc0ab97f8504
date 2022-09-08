@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f983e3fb_766736a6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-08T09:32:54Z",
+      "side": 0,
+      "message": "These are not needed since since we assume no interleaved GCs.",
+      "range": {
+        "startLine": 2667,
+        "startChar": 2,
+        "endLine": 2667,
+        "endChar": 20
+      },
+      "revId": "0d192e1e70f989e33e4fccccaacdfc0ab97f8504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
