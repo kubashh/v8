@@ -33,6 +33,23 @@
       "message": "lgtm \u0026 thanks",
       "revId": "862c97f375b344b0a97874b2495b9591cb7270b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e20649_38314dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-09-08T13:51:50Z",
+      "side": 1,
+      "message": "Michael, could you restamp the change to BUILD.gn which got already stamped by Victor? ",
+      "revId": "862c97f375b344b0a97874b2495b9591cb7270b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
