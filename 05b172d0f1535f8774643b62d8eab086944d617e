@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "05b172d0f1535f8774643b62d8eab086944d617e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e525e1ab_d2a2f84b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-08T11:26:32Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "05b172d0f1535f8774643b62d8eab086944d617e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f1b03a1_8f914fbe",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-08T11:26:32Z",
+      "side": 1,
+      "message": "Please add that this is to fix the problem of separate phases requiring that we stick to a decision on which GC to use eventually.",
+      "range": {
+        "startLine": 2066,
+        "startChar": 56,
+        "endLine": 2066,
+        "endChar": 65
+      },
+      "revId": "05b172d0f1535f8774643b62d8eab086944d617e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
