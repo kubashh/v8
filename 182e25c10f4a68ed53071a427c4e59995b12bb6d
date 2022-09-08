@@ -16,6 +16,52 @@
       "message": "ptal - I didn\u0027t think about individual builtins too much, LMK if there are any that stick out to you.",
       "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "301fc2cb_d1553e9f",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-08T11:45:34Z",
+      "side": 1,
+      "message": "NonMemorySideEffects also seems like a reasonable one here.",
+      "range": {
+        "startLine": 516,
+        "startChar": 32,
+        "endLine": 516,
+        "endChar": 59
+      },
+      "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25147b4_9e820e59",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-08T11:45:34Z",
+      "side": 1,
+      "message": "why is this one weaker than \"CreateEmptyArrayLiteral\"?",
+      "range": {
+        "startLine": 2260,
+        "startChar": 32,
+        "endLine": 2260,
+        "endChar": 43
+      },
+      "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
