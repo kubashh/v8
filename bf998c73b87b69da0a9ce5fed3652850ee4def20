@@ -50,6 +50,24 @@
       "message": "src/compiler LGTM, I think the concept of `HeapObjectReference` is new, isn\u0027t it? Maybe a short comment about what that is would be good.",
       "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d223f5_d675c067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-08T07:55:35Z",
+      "side": 1,
+      "message": "I think it is already defined in `objects/maybe-object.cc` and there is already comment explain what it is.\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/maybe-object.h;l\u003d43\n\nHeapObjectReference can be a strong reference/weak reference/cleared weak reference to HeapObject.",
+      "parentUuid": "f125efd7_0a235109",
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
