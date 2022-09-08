@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8836139_50c0b915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178124
+      },
+      "writtenOn": "2022-09-08T11:38:12Z",
+      "side": 1,
+      "message": "hi victor. as i understand it, d8 isn\u0027t currently used. is that correct? is there any way to validate that this actually works, or is it okay if we land this in the interest of removing the .cmx and deal with breakages down the road if/when anyone cares to use it? thanks.\n\n(note that as far as i could tell, the old .cmx was overkill.)",
+      "revId": "71955339ce2fafaf79fb9f9b67b140291cfff58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
