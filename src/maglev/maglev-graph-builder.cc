@@ -2281,21 +2281,19 @@ void MaglevGraphBuilder::VisitCreateArrayLiteral() {
   int bytecode_flags = GetFlag8Operand(2);
   int literal_flags =
       interpreter::CreateArrayLiteralFlags::FlagsBits::decode(bytecode_flags);
-  ValueNode* result;
   if (interpreter::CreateArrayLiteralFlags::FastCloneSupportedBit::decode(
           bytecode_flags)) {
     // TODO(victorgomes): CreateShallowArrayLiteral should not need the
     // boilerplate descriptor. However the current builtin checks that the
     // feedback exists and fallsback to CreateArrayLiteral if it doesn't.
-    result = AddNewNode<CreateShallowArrayLiteral>(
+    SetAccumulator(AddNewNode<CreateShallowArrayLiteral>(
         {}, constant_elements, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   } else {
-    result = AddNewNode<CreateArrayLiteral>(
+    SetAccumulator(AddNewNode<CreateArrayLiteral>(
         {}, constant_elements, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   }
-  SetAccumulator(result);
 }
 
 void MaglevGraphBuilder::VisitCreateArrayFromIterable() {
