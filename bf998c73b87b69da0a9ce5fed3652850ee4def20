@@ -86,6 +86,40 @@
       "parentUuid": "a5d223f5_d675c067",
       "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeef1730_9837c819",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-08T10:40:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure why does `v8_linux64_dbg_ng` bot still timeout. I don\u0027t see how the extended CheckObjectType can result in such a regression. On the other hand, other CLs are not even close to the time limit when they run benchmarks on the `v8_linux64_dbg_ng` bot.\n\nLet\u0027s try to reverse this DCHECK, rebase on ToT and try again:\n`DCHECK_IMPLIES(pair.first.IsSmi(), !IsICSlotKind(kind()));`",
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28a1620f_8eee12f1",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-08T10:40:26Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
