@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "988f0928_d8d48feb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178124
+      },
+      "writtenOn": "2022-09-08T13:34:50Z",
+      "side": 1,
+      "message": "i missed changing the OWNERS file in the previous patch set. that\u0027s now fixed, which means i now need an LGTM from another owner. alexschulze@: would you do the honors? thanks.",
+      "revId": "862c97f375b344b0a97874b2495b9591cb7270b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
