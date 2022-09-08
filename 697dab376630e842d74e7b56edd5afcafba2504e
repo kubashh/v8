@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74348f7f_7b0e9762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-08T10:41:49Z",
+      "side": 1,
+      "message": "Thanks for your reply!\n\n1. There are some hot functions called `showEntries` and `updateElementCount` in `resources/todomvc/vanilla-examples/es2015-babel-webpack/src/view.js`, they have the pattern like `a.b.bb \u003d a.c`, in the previous CL we could elide redundant bytecode in cases like `a.b \u003d a.c`, this CL could do futher.\n\n2. Please see the clarify in another comment.",
+      "parentUuid": "7563cec8_428d549a",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0755413b_c06f5299",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 7
@@ -82,6 +100,24 @@
       "writtenOn": "2022-09-06T21:49:30Z",
       "side": 1,
       "message": "I don\u0027t understand why this optimization is safe because the reserved register index is a static variable. Can\u0027t `VisitAssignment` be recursively called in `VisitForAccumulatorValue` above on L4679?",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58b401d5_537915e4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-08T10:41:49Z",
+      "side": 1,
+      "message": "In this CL we just mark the two expression in some cases like: `a.b.bb \u003d a.c`, and we will clear the mark after visiting the `Assignment` expression.\nThe lhs and rhs would be some nested `Property` ast nodes and finally ends with `VariableProxy` ast node, there are leaf nodes which don\u0027t contain a `Assignment` inside, so I suppose there is no `VisitAssignment` will be invoked when we visit lhs and rhs expressions just like the above case.",
+      "parentUuid": "0755413b_c06f5299",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
