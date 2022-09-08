@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f9c31a9_43e23607",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-08T13:47:47Z",
+      "side": 1,
+      "message": "+1 was reset (despite no new files 😞). ptal again.",
+      "revId": "921e30ec530c7bc91a6d91999d4e8393c6d7a017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
