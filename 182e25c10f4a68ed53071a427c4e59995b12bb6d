@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "865421b1_f9105991",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-08T12:03:29Z",
+      "side": 1,
+      "message": "Hmm same as JSCall then; okay, I\u0027ll add it here but still keep the extra GenericRuntimeOrBuiltinCall OpProperties to distinguish from actual JS calls.. Wdyt?",
+      "parentUuid": "301fc2cb_d1553e9f",
+      "range": {
+        "startLine": 516,
+        "startChar": 32,
+        "endLine": 516,
+        "endChar": 59
+      },
+      "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c25147b4_9e820e59",
         "filename": "src/maglev/maglev-ir.h",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-08T11:45:34Z",
       "side": 1,
       "message": "why is this one weaker than \"CreateEmptyArrayLiteral\"?",
+      "range": {
+        "startLine": 2260,
+        "startChar": 32,
+        "endLine": 2260,
+        "endChar": 43
+      },
+      "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a8d493_10513b06",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-08T12:03:29Z",
+      "side": 1,
+      "message": "Because I briefly looked at the target builtin impl; but you\u0027re right, it doesn\u0027t make sense to randomly be more precise in this node - I\u0027ll make it consistent again.",
+      "parentUuid": "c25147b4_9e820e59",
       "range": {
         "startLine": 2260,
         "startChar": 32,
