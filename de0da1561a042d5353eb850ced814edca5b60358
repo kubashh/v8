@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4379a0_de5528f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1552659
+      },
+      "writtenOn": "2022-09-08T08:15:54Z",
+      "side": 1,
+      "message": "The testing command:\n\nqemu-riscv64 -cpu rv64,v\u003dtrue,vlen\u003d128 -L path/to/sysroot cctest test-assembler-riscv64/RISCV_UTEST_swlwu --random-seed\u003d-2097060020 --nohard-abort --testing-d8-test-runner\n\nThe CL is just a workaround as I don\u0027t have a better idea to fix this...",
+      "revId": "de0da1561a042d5353eb850ced814edca5b60358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
