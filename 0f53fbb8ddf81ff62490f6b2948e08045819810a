@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef582fb_a8d25271",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-08T13:10:33Z",
+      "side": 1,
+      "message": "It\u0027s set once based on initial capacity. Maybe it means that as new space grows the discrepancy between the next step and actual new space size shrinks.\n(Just mentioning, nothing actionable to do; I still agree that the smaller step makes more sense.)",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "0f53fbb8ddf81ff62490f6b2948e08045819810a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "84651e87_ece556b4",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-09-08T12:24:20Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "0f53fbb8ddf81ff62490f6b2948e08045819810a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daebdbaf_19dc2afe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-08T13:10:33Z",
+      "side": 1,
+      "message": "lgtm",
       "revId": "0f53fbb8ddf81ff62490f6b2948e08045819810a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
