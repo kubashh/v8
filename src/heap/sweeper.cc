@@ -623,6 +623,8 @@ void Sweeper::PrepareToBeSweptPage(AllocationSpace space, Page* page) {
   if (space == NEW_SPACE) {
     DCHECK(v8_flags.minor_mc);
     paged_space = heap_->paged_new_space()->paged_space();
+    heap_->paged_new_space()->AdvanceAllocationCounterForSweeping(
+        marking_state_->live_bytes(page));
   } else {
     paged_space = heap_->paged_space(space);
   }

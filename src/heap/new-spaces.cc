@@ -1019,6 +1019,10 @@ void PagedSpaceForNewSpace::FreeLinearAllocationArea() {
   PagedSpaceBase::FreeLinearAllocationArea();
 }
 
+void PagedSpaceForNewSpace::AdvanceAllocationCounterForSweeping(size_t bytes) {
+  allocation_counter_.AdvanceAllocationObservers(bytes);
+}
+
 #ifdef VERIFY_HEAP
 void PagedSpaceForNewSpace::Verify(Isolate* isolate,
                                    ObjectVisitor* visitor) const {
