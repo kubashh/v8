@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d64971_2db9a19b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-08T11:41:51Z",
+      "side": 1,
+      "message": "ptal - I didn\u0027t think about individual builtins too much, LMK if there are any that stick out to you.",
+      "revId": "182e25c10f4a68ed53071a427c4e59995b12bb6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
