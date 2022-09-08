@@ -50,6 +50,46 @@
       "message": "Simon, please take a look at the inspector changes here.",
       "revId": "2a81978d618252f9ea965aedb77aaf27a9d1687e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01581a18_468b3d5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-09-08T06:04:32Z",
+      "side": 1,
+      "message": "src/inspector lgtm",
+      "revId": "2a81978d618252f9ea965aedb77aaf27a9d1687e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2495adfd_2f75315e",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-09-08T06:04:32Z",
+      "side": 1,
+      "message": "nit: Can we add a description similar to the CL description here that explains how these flags work and what their purpose is?",
+      "range": {
+        "startLine": 769,
+        "startChar": 23,
+        "endLine": 769,
+        "endChar": 55
+      },
+      "revId": "2a81978d618252f9ea965aedb77aaf27a9d1687e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
