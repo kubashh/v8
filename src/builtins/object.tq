@@ -158,6 +158,13 @@ transitioning javascript builtin ObjectSetPrototypeOf(
     js-implicit context: NativeContext)(object: JSAny, proto: JSAny): JSAny {
   // 1. Set O to ? RequireObjectCoercible(O).
   RequireObjectCoercible(object, 'Object.setPrototypeOf');
+  typeswitch (object) {
+    case (WasmObject): {
+      ThrowTypeError(MessageTemplate::kWasmObjectsAreOpaque);
+    }
+    case (JSAny): {
+    }
+  }
 
   // 2. If Type(proto) is neither Object nor Null, throw a TypeError
   // exception.
