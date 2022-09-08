@@ -16,6 +16,41 @@
       "message": "hi victor. as i understand it, d8 isn\u0027t currently used. is that correct? is there any way to validate that this actually works, or is it okay if we land this in the interest of removing the .cmx and deal with breakages down the road if/when anyone cares to use it? thanks.\n\n(note that as far as i could tell, the old .cmx was overkill.)",
       "revId": "71955339ce2fafaf79fb9f9b67b140291cfff58f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c2b387_a877501e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-09-08T11:58:55Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "71955339ce2fafaf79fb9f9b67b140291cfff58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaf6c69f_9136ea80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-09-08T11:58:55Z",
+      "side": 1,
+      "message": "Yes, that\u0027s correct. AFAIK d8 on Fuchsia is not run by any bot, it is only used to build V8 on Fuchsia. Or for testing something locally.\nI am okay with removing the cmx and dealing with breakage down the road. It should be a subset of https://source.chromium.org/chromium/chromium/src/+/main:v8/test/unittests/v8_unittests.cml.",
+      "parentUuid": "a8836139_50c0b915",
+      "revId": "71955339ce2fafaf79fb9f9b67b140291cfff58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
