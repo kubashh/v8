@@ -33,7 +33,6 @@
 #include "src/compiler/pipeline.h"
 #include "src/compiler/wasm-compiler-definitions.h"
 #include "src/compiler/wasm-graph-assembler.h"
-#include "src/execution/simulator-base.h"
 #include "src/heap/factory.h"
 #include "src/logging/counters.h"
 #include "src/objects/heap-number.h"
