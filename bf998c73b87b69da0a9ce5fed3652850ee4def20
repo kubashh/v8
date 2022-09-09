@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "24d6192b_cfb4b160",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-09T05:26:50Z",
+      "side": 1,
+      "message": "I tried this in patchset 17 (https://chromium-review.googlesource.com/c/v8/v8/+/3861310/17) but it seems that we still encounter the TIMEOUT issue.\n\nAfter some investigations with `perf`, I found that the root cause is that we put the declaration of `std::stringstream` ahead (https://chromium-review.googlesource.com/c/v8/v8/+/3861310/17/src/objects/object-type.cc#20) so it has to be initialized every time this function is called. So in patchset 18 my solution is to move the declaration right before `FATAL`, in this case we only initialize it when `FATAL` is reached. This pass the tryjobs, PTAL.",
+      "parentUuid": "eeef1730_9837c819",
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28a1620f_8eee12f1",
         "filename": "src/objects/feedback-vector-inl.h",
         "patchSetId": 16
