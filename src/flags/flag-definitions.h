@@ -127,8 +127,7 @@
 #error ENABLE_SPARKPLUG must be defined at this point.
 #endif  // ENABLE_SPARKPLUG
 
-#if ENABLE_SPARKPLUG && !defined(ANDROID)
-// Enable Sparkplug by default on desktop-only.
+#if ENABLE_SPARKPLUG
 #define ENABLE_SPARKPLUG_BY_DEFAULT true
 #else
 #define ENABLE_SPARKPLUG_BY_DEFAULT false
@@ -675,7 +674,7 @@ DEFINE_BOOL(baseline_batch_compilation, true, "batch compile Sparkplug code")
 DEFINE_BOOL_READONLY(concurrent_sparkplug, false,
                      "compile Sparkplug code in a background thread")
 #else
-DEFINE_BOOL(concurrent_sparkplug, false,
+DEFINE_BOOL(concurrent_sparkplug, true,
             "compile Sparkplug code in a background thread")
 DEFINE_WEAK_IMPLICATION(future, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(predictable, concurrent_sparkplug)
@@ -683,9 +682,9 @@ DEFINE_NEG_IMPLICATION(single_threaded, concurrent_sparkplug)
 DEFINE_NEG_IMPLICATION(jitless, concurrent_sparkplug)
 #endif
 DEFINE_UINT(
-    concurrent_sparkplug_max_threads, 0,
+    concurrent_sparkplug_max_threads, 1,
     "max number of threads that concurrent Sparkplug can use (0 for unbounded)")
-DEFINE_BOOL(concurrent_sparkplug_high_priority_threads, false,
+DEFINE_BOOL(concurrent_sparkplug_high_priority_threads, true,
             "use high priority compiler threads for concurrent Sparkplug")
 #else
 DEFINE_BOOL(baseline_batch_compilation, false, "batch compile Sparkplug code")
