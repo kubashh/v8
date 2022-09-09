@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28ee2ff_28249cdf",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-09T08:32:01Z",
+      "side": 1,
+      "message": "I think we can simplify this if we print the raw_value after the if/else as MaybeObject. The `TaggedImpl\u003ckRefType, StorageType\u003e::Print(std::ostream\u0026 os)` is almost the same as `Object::Print(std::ostream\u0026 os)` except the way we print Smis. Please make the former do the same as the latter for Smis, hoist it up as `maybe_value` ...",
+      "revId": "7e6490cf366aa8037742ac6493219d259519cb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d7c29c_183ca0ff",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-09T08:32:01Z",
+      "side": 1,
+      "message": "... and do this FATAL after the if but using `maybe_value`.",
+      "revId": "7e6490cf366aa8037742ac6493219d259519cb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

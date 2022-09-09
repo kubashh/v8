@@ -88,6 +88,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "636854e5_1127a8c9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-09T08:32:01Z",
+      "side": 1,
+      "message": "Could you please also try to locally measure if replacing this CAST with ReinterpretCast\u003cHeapObjectReference\u003e() improves time spent running the `benchmarks/kraken/stanford-crypto-aes` benchmark in x64.optdebug mode.",
+      "range": {
+        "startLine": 87,
+        "startChar": 40,
+        "endLine": 87,
+        "endChar": 44
+      },
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeef1730_9837c819",
@@ -119,6 +142,24 @@
       "side": 1,
       "message": "I tried this in patchset 17 (https://chromium-review.googlesource.com/c/v8/v8/+/3861310/17) but it seems that we still encounter the TIMEOUT issue.\n\nAfter some investigations with `perf`, I found that the root cause is that we put the declaration of `std::stringstream` ahead (https://chromium-review.googlesource.com/c/v8/v8/+/3861310/17/src/objects/object-type.cc#20) so it has to be initialized every time this function is called. So in patchset 18 my solution is to move the declaration right before `FATAL`, in this case we only initialize it when `FATAL` is reached. This pass the tryjobs, PTAL.",
       "parentUuid": "eeef1730_9837c819",
+      "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8b3dbd7_4e508a16",
+        "filename": "src/objects/feedback-vector-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-09-09T08:32:01Z",
+      "side": 1,
+      "message": "Nice catch! Thanks! But I think it still makes sense to reverse the DCHECK.",
+      "parentUuid": "24d6192b_cfb4b160",
       "revId": "bf998c73b87b69da0a9ce5fed3652850ee4def20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
