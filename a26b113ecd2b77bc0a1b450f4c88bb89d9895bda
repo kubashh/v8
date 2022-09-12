@@ -33,6 +33,23 @@
       "message": "Given the test failures, something doesn\u0027t seem right here either :(",
       "revId": "a26b113ecd2b77bc0a1b450f4c88bb89d9895bda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f1c658_6368cafa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-12T18:03:02Z",
+      "side": 1,
+      "message": "Most results are coincidentally bad it seems due to an outage. But this one is a clear dead lock still:\nhttps://chromium-swarm.appspot.com/task?id\u003d5d4b4800ff4eb910",
+      "revId": "a26b113ecd2b77bc0a1b450f4c88bb89d9895bda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
