@@ -16,6 +16,23 @@
       "message": "PTAL\n\n(minor_mc bot is red but those are the same failures seen with other CLs)",
       "revId": "4746663302a8d9c363251fb5dd615a8dae6e80ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4252a6c5_41a09d36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-12T08:43:48Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "4746663302a8d9c363251fb5dd615a8dae6e80ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

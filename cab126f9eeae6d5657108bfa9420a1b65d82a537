@@ -22,6 +22,30 @@
       },
       "revId": "cab126f9eeae6d5657108bfa9420a1b65d82a537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "589b5c8d_63473724",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-12T08:43:48Z",
+      "side": 0,
+      "message": "nvm, I checked again locally and couldn\u0027t reproduce that issue anymore. Maybe it was caused by some other bug.",
+      "parentUuid": "123801bc_d5ca7bf4",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 34
+      },
+      "revId": "cab126f9eeae6d5657108bfa9420a1b65d82a537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
