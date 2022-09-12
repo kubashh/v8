@@ -324,10 +324,6 @@ class DefaultExecutionPool(ContextPool):
     if self.abort_now:
       self._terminate_processes()
 
-    self.notify("Joining workers")
-    for p in self.processes:
-      p.join()
-
     # Drain the queues to prevent stderr chatter when queues are garbage
     # collected.
     self.notify("Draining queues")
@@ -354,6 +350,11 @@ class DefaultExecutionPool(ContextPool):
       pass
     except:
       logging.exception('Error draining done queue.')
+
+    self.notify("Joining workers")
+    for p in self.processes:
+      p.join()
+
     self.notify("Pool terminated")
 
   def _get_result_from_queue(self):
