@@ -2320,21 +2320,19 @@ void MaglevGraphBuilder::VisitCreateArrayLiteral() {
   int bytecode_flags = GetFlag8Operand(2);
   int literal_flags =
       interpreter::CreateArrayLiteralFlags::FlagsBits::decode(bytecode_flags);
-  ValueNode* result;
   if (interpreter::CreateArrayLiteralFlags::FastCloneSupportedBit::decode(
           bytecode_flags)) {
     // TODO(victorgomes): CreateShallowArrayLiteral should not need the
     // boilerplate descriptor. However the current builtin checks that the
     // feedback exists and fallsback to CreateArrayLiteral if it doesn't.
-    result = AddNewNode<CreateShallowArrayLiteral>(
+    SetAccumulator(AddNewNode<CreateShallowArrayLiteral>(
         {}, constant_elements, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   } else {
-    result = AddNewNode<CreateArrayLiteral>(
+    SetAccumulator(AddNewNode<CreateArrayLiteral>(
         {}, constant_elements, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   }
-  SetAccumulator(result);
 }
 
 void MaglevGraphBuilder::VisitCreateArrayFromIterable() {
@@ -2357,21 +2355,19 @@ void MaglevGraphBuilder::VisitCreateObjectLiteral() {
   int bytecode_flags = GetFlag8Operand(2);
   int literal_flags =
       interpreter::CreateObjectLiteralFlags::FlagsBits::decode(bytecode_flags);
-  ValueNode* result;
   if (interpreter::CreateObjectLiteralFlags::FastCloneSupportedBit::decode(
           bytecode_flags)) {
     // TODO(victorgomes): CreateShallowObjectLiteral should not need the
     // boilerplate descriptor. However the current builtin checks that the
     // feedback exists and fallsback to CreateObjectLiteral if it doesn't.
-    result = AddNewNode<CreateShallowObjectLiteral>(
+    SetAccumulator(AddNewNode<CreateShallowObjectLiteral>(
         {}, boilerplate_desc, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   } else {
-    result = AddNewNode<CreateObjectLiteral>(
+    SetAccumulator(AddNewNode<CreateObjectLiteral>(
         {}, boilerplate_desc, compiler::FeedbackSource{feedback(), slot_index},
-        literal_flags);
+        literal_flags));
   }
-  SetAccumulator(result);
 }
 
 void MaglevGraphBuilder::VisitCreateEmptyObjectLiteral() {
