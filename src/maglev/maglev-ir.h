@@ -509,6 +509,14 @@ class OpProperties {
   static constexpr OpProperties NeedsRegisterSnapshot() {
     return OpProperties(kNeedsRegisterSnapshotBit::encode(true));
   }
+  // Without auditing the call target, we must assume it can cause a lazy deopt
+  // and throw. Use this when codegen calls runtime or a builtin, unless
+  // certain that the target either doesn't throw or cannot deopt.
+  // TODO(jgruber): Go through all nodes marked with this property and decide
+  // whether to keep it (or remove either the lazy-deopt or throw flag).
+  static constexpr OpProperties GenericRuntimeOrBuiltinCall() {
+    return Call() | NonMemorySideEffects() | LazyDeopt() | Throw();
+  }
   static constexpr OpProperties JSCall() {
     return Call() | NonMemorySideEffects() | LazyDeopt() | Throw();
   }
@@ -663,6 +671,8 @@ class LazyDeoptInfo : public DeoptInfo {
   LazyDeoptInfo(Zone* zone, const MaglevCompilationUnit& compilation_unit,
                 CheckpointedInterpreterState checkpoint)
       : DeoptInfo(zone, compilation_unit, checkpoint) {}
+
+  bool IsResultRegister(interpreter::Register reg) const;
 
   int deopting_call_return_pc = -1;
   interpreter::Register result_location =
@@ -1956,12 +1966,15 @@ class ForInPrepare : public FixedInputValueNodeT<2, ForInPrepare> {
   explicit ForInPrepare(uint64_t bitfield, compiler::FeedbackSource& feedback)
       : Base(bitfield), feedback_(feedback) {}
 
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   compiler::FeedbackSource feedback() const { return feedback_; }
 
   Input& context() { return Node::input(0); }
   Input& enumerator() { return Node::input(1); }
+
+  int ReturnCount() const { return 2; }
 
   DECL_NODE_INTERFACE_WITH_EMPTY_PRINT_PARAMS()
 
@@ -2194,7 +2207,8 @@ class CreateEmptyArrayLiteral
   compiler::FeedbackSource feedback() const { return feedback_; }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   DECL_NODE_INTERFACE_WITH_EMPTY_PRINT_PARAMS()
 
@@ -2248,7 +2262,8 @@ class CreateShallowArrayLiteral
   int flags() const { return flags_; }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   DECL_NODE_INTERFACE_WITH_EMPTY_PRINT_PARAMS()
 
@@ -2330,7 +2345,8 @@ class CreateShallowObjectLiteral
   int flags() const { return flags_; }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   DECL_NODE_INTERFACE_WITH_EMPTY_PRINT_PARAMS()
 
@@ -2360,7 +2376,8 @@ class CreateFunctionContext
   Input& context() { return input(0); }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   DECL_NODE_INTERFACE()
 
@@ -2389,7 +2406,8 @@ class FastCreateClosure : public FixedInputValueNodeT<1, FastCreateClosure> {
   Input& context() { return input(0); }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   DECL_NODE_INTERFACE()
 
@@ -2655,7 +2673,8 @@ class GetTemplateObject : public FixedInputValueNodeT<1, GetTemplateObject> {
         feedback_(feedback) {}
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::Call();
+  static constexpr OpProperties kProperties =
+      OpProperties::GenericRuntimeOrBuiltinCall();
 
   Input& description() { return input(0); }
 
@@ -3301,7 +3320,7 @@ class CallRuntime : public ValueNodeT<CallRuntime> {
     set_input(i + kFixedInputCount, node);
   }
 
-  int ReturnCount() {
+  int ReturnCount() const {
     return Runtime::FunctionForId(function_id())->result_size;
   }
 
