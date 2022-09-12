@@ -46,6 +46,30 @@
       },
       "revId": "cab126f9eeae6d5657108bfa9420a1b65d82a537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a0e5b3_b320565c",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-12T08:45:12Z",
+      "side": 0,
+      "message": "We make the LABs iterable with Heap::MakeHeapIterable. We always invoke that method for verification (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/heap-verifier.cc;l\u003d76;drc\u003d9e249731c0b1aab0e53fb776b9c11e673e721c45;bpv\u003d1;bpt\u003d1?q\u003dHeapVerifier::Verify\u0026ss\u003dchromium%2Fchromium%2Fsrc).",
+      "parentUuid": "123801bc_d5ca7bf4",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 34
+      },
+      "revId": "cab126f9eeae6d5657108bfa9420a1b65d82a537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
