@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81d65d40_7872c14d",
+        "filename": "tools/testrunner/local/pool.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-13T20:21:05Z",
+      "side": 0,
+      "message": "Draining the work queue was never needed because the worker process never calls put() on it.",
+      "range": {
+        "startLine": 339,
+        "startChar": 8,
+        "endLine": 339,
+        "endChar": 34
+      },
+      "revId": "9f454ee1185bf321d02dd96e1df22b22bfde3054",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49bd98e7_abd048ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-13T20:21:05Z",
+      "side": 1,
+      "message": "PTAL at the latest patchset. This withstands extensive local stress testing and trybots so far...\n\nThere is one more orthogonal hang possibility that isn\u0027t related to the pool termination (https://crbug.com/v8/13113#c19). I\u0027ll investigate that separately.",
+      "revId": "86fa7ec21057b6db669e726d863d9d94a133dab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
