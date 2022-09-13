@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a48f2997_af0cf18b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-13T09:31:21Z",
+      "side": 1,
+      "message": "PTAL at reland (no changes beyond rebase)",
+      "revId": "456da32724533b1d2bd4f3d0d238fddd73a108f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
