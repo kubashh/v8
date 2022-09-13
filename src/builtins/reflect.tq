@@ -38,6 +38,9 @@ transitioning javascript builtin ReflectSetPrototypeOf(
   const objectJSReceiver = Cast<JSReceiver>(object)
       otherwise ThrowTypeError(
       MessageTemplate::kCalledOnNonObject, 'Reflect.setPrototypeOf');
+  if (Is<WasmObject>(objectJSReceiver)) {
+    ThrowTypeError(MessageTemplate::kWasmObjectsAreOpaque);
+  }
   typeswitch (proto) {
     case (proto: JSReceiver|Null): {
       return object::ObjectSetPrototypeOfDontThrow(objectJSReceiver, proto);
