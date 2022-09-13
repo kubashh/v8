@@ -25,8 +25,6 @@ def setup_testing():
   del Process
   from queue import Queue
   from threading import Thread as Process
-  # Monkeypatch threading Queue to look like multiprocessing Queue.
-  Queue.cancel_join_thread = lambda self: None
   # Monkeypatch os.kill and add fake pid property on Thread.
   os.kill = lambda *args: None
   Process.pid = property(lambda self: None)
@@ -324,36 +322,6 @@ class DefaultExecutionPool(ContextPool):
     if self.abort_now:
       self._terminate_processes()
 
-    self.notify("Joining workers")
-    for p in self.processes:
-      p.join()
-
-    # Drain the queues to prevent stderr chatter when queues are garbage
-    # collected.
-    self.notify("Draining queues")
-    # TODO(https://crbug.com/v8/13113): Remove extra logging after
-    # investigation.
-    elem_count = 0
-    try:
-      while True:
-        self.work_queue.get(False)
-        elem_count += 1
-        if elem_count < 200:
-          logging.info('Drained an element from work queue.')
-    except Empty:
-      pass
-    except:
-      logging.exception('Error draining work queue.')
-    try:
-      while True:
-        self.done_queue.get(False)
-        elem_count += 1
-        if elem_count < 200:
-          logging.info('Drained an element from done queue.')
-    except Empty:
-      pass
-    except:
-      logging.exception('Error draining done queue.')
     self.notify("Pool terminated")
 
   def _get_result_from_queue(self):
