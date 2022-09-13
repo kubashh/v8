@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e5774ad_110f6b4e",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-13T07:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28ee2ff_28249cdf",
+      "revId": "7e6490cf366aa8037742ac6493219d259519cb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39d7c29c_183ca0ff",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-09T08:32:01Z",
       "side": 1,
       "message": "... and do this FATAL after the if but using `maybe_value`.",
+      "revId": "7e6490cf366aa8037742ac6493219d259519cb90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "801048c6_4d6ff9eb",
+        "filename": "src/objects/object-type.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-13T07:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39d7c29c_183ca0ff",
       "revId": "7e6490cf366aa8037742ac6493219d259519cb90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
