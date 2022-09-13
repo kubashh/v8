@@ -39,6 +39,30 @@
       },
       "revId": "91e102ca04ac9671e0adc41b2818443c44a8e23b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b62b7528_89f39a18",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5446,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-13T09:20:30Z",
+      "side": 1,
+      "message": "I had that initially but the downcast in the second line requires casting. Reversing both lines seemed cleaner then.",
+      "parentUuid": "d28d6a00_3eab669d",
+      "range": {
+        "startLine": 5446,
+        "startChar": 22,
+        "endLine": 5446,
+        "endChar": 25
+      },
+      "revId": "91e102ca04ac9671e0adc41b2818443c44a8e23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
