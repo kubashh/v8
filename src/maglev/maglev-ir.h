@@ -12,6 +12,7 @@
 #include "src/base/threaded-list.h"
 #include "src/codegen/label.h"
 #include "src/codegen/reglist.h"
+#include "src/codegen/source-position.h"
 #include "src/common/globals.h"
 #include "src/common/operation.h"
 #include "src/compiler/backend/instruction.h"
@@ -653,9 +654,12 @@ struct RegisterSnapshot {
 class EagerDeoptInfo : public DeoptInfo {
  public:
   EagerDeoptInfo(Zone* zone, const MaglevCompilationUnit& compilation_unit,
-                 CheckpointedInterpreterState checkpoint)
-      : DeoptInfo(zone, compilation_unit, checkpoint) {}
+                 CheckpointedInterpreterState checkpoint,
+                 SourcePosition source_position)
+      : DeoptInfo(zone, compilation_unit, checkpoint),
+        source_position(source_position) {}
   DeoptimizeReason reason = DeoptimizeReason::kUnknown;
+  SourcePosition source_position;
 };
 
 class LazyDeoptInfo : public DeoptInfo {
@@ -762,18 +766,28 @@ class NodeBase : public ZoneObject {
     return node;
   }
 
-  template <class Derived, typename... Args>
+  template <class Derived, typename... Args,
+            typename std::enable_if_t<Derived::kProperties.can_eager_deopt(),
+                                      int> = 0>
+  static Derived* New(Zone* zone, const MaglevCompilationUnit& compilation_unit,
+                      CheckpointedInterpreterState checkpoint,
+                      SourcePosition source_position, Args&&... args) {
+    Derived* node = New<Derived>(zone, std::forward<Args>(args)...);
+    static_assert(Derived::kProperties.can_eager_deopt());
+    new (node->eager_deopt_info())
+        EagerDeoptInfo(zone, compilation_unit, checkpoint, source_position);
+    return node;
+  }
+
+  template <
+      class Derived, typename... Args,
+      typename std::enable_if_t<Derived::kProperties.can_lazy_deopt(), int> = 0>
   static Derived* New(Zone* zone, const MaglevCompilationUnit& compilation_unit,
                       CheckpointedInterpreterState checkpoint, Args&&... args) {
     Derived* node = New<Derived>(zone, std::forward<Args>(args)...);
-    if constexpr (Derived::kProperties.can_eager_deopt()) {
-      new (node->eager_deopt_info())
-          EagerDeoptInfo(zone, compilation_unit, checkpoint);
-    } else {
-      static_assert(Derived::kProperties.can_lazy_deopt());
-      new (node->lazy_deopt_info())
-          LazyDeoptInfo(zone, compilation_unit, checkpoint);
-    }
+    static_assert(Derived::kProperties.can_lazy_deopt());
+    new (node->lazy_deopt_info())
+        LazyDeoptInfo(zone, compilation_unit, checkpoint);
     return node;
   }
 

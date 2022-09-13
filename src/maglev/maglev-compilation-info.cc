@@ -61,6 +61,8 @@ MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
 {
   DCHECK(FLAG_maglev);
 
+  collect_source_positions_ = isolate->NeedsDetailedOptimizedCodeLineInfo();
+
   MaglevCompilationHandleScope compilation(isolate, this);
 
   compiler::CompilationDependencies* deps =
