@@ -242,7 +242,7 @@ BaselineBatchCompiler::BaselineBatchCompiler(Isolate* isolate)
       compilation_queue_(Handle<WeakFixedArray>::null()),
       last_index_(0),
       estimated_instruction_size_(0),
-      enabled_(true) {
+      enabled_(v8_flags.baseline_batch_compilation) {
   if (v8_flags.concurrent_sparkplug) {
     concurrent_compiler_ =
         std::make_unique<ConcurrentBaselineCompiler>(isolate_);
@@ -266,8 +266,19 @@ void BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
                               &is_compiled_scope);
     return;
   }
-  if (ShouldCompileBatch(*shared)) {
-    if (v8_flags.concurrent_sparkplug) {
+  bool is_small_function = false;
+  if (ShouldCompileBatch(*shared, &is_small_function)) {
+    if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT && is_small_function) {
+      // When V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT is available, if the
+      // function is small enough it might be cheaper to compile the function
+      // now instead of adding it to the batch queue or scheduling a background
+      // compilation task.
+      // TODO(v8:13023): take this path if PKU is available.
+      IsCompiledScope is_compiled_scope(
+          function->shared().is_compiled_scope(isolate_));
+      Compiler::CompileBaseline(isolate_, function, Compiler::CLEAR_EXCEPTION,
+                                &is_compiled_scope);
+    } else if (v8_flags.concurrent_sparkplug) {
       CompileBatchConcurrent(*shared);
     } else {
       CompileBatch(function);
@@ -279,7 +290,8 @@ void BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
 
 void BaselineBatchCompiler::EnqueueSFI(SharedFunctionInfo shared) {
   if (!v8_flags.concurrent_sparkplug || !is_enabled()) return;
-  if (ShouldCompileBatch(shared)) {
+  bool is_small_function = false;
+  if (ShouldCompileBatch(shared, &is_small_function)) {
     CompileBatchConcurrent(shared);
   } else {
     Enqueue(Handle<SharedFunctionInfo>(shared, isolate_));
@@ -334,7 +346,8 @@ void BaselineBatchCompiler::CompileBatchConcurrent(SharedFunctionInfo shared) {
   ClearBatch();
 }
 
-bool BaselineBatchCompiler::ShouldCompileBatch(SharedFunctionInfo shared) {
+bool BaselineBatchCompiler::ShouldCompileBatch(SharedFunctionInfo shared,
+                                               bool* is_small_function_out) {
   // Early return if the function is compiled with baseline already or it is not
   // suitable for baseline compilation.
   if (shared.HasBaselineCode()) return false;
@@ -347,6 +360,22 @@ bool BaselineBatchCompiler::ShouldCompileBatch(SharedFunctionInfo shared) {
     DisallowHeapAllocation no_gc;
     estimated_size = BaselineCompiler::EstimateInstructionSize(
         shared.GetBytecodeArray(isolate_));
+  }
+  if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
+      estimated_size < v8_flags.baseline_batch_compilation_min_threshold) {
+    // TODO(v8:13023): take this path if PKU is available.
+    *should_compile_eagerly_out = true;
+    if (v8_flags.trace_baseline_batch_compilation) {
+      CodeTracer::Scope trace_scope(isolate_->GetCodeTracer());
+      PrintF(trace_scope.file(),
+             "[Baseline batch compilation] Compile eagerly %s",
+             shared.DebugNameCStr().get());
+      PrintF(trace_scope.file(),
+             " with estimated size %d (current budget: %d/%d)\n",
+             estimated_size, estimated_instruction_size_,
+             v8_flags.baseline_batch_compilation_threshold.value());
+    }
+    return true;
   }
   estimated_instruction_size_ += estimated_size;
   if (v8_flags.trace_baseline_batch_compilation) {

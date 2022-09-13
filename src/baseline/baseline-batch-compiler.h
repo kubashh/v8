@@ -42,7 +42,8 @@ class BaselineBatchCompiler {
 
   // Returns true if the current batch exceeds the threshold and should be
   // compiled.
-  bool ShouldCompileBatch(SharedFunctionInfo shared);
+  bool ShouldCompileBatch(SharedFunctionInfo shared,
+                          bool* is_small_function_out);
 
   // Compiles the current batch.
   void CompileBatch(Handle<JSFunction> function);
