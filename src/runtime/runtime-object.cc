@@ -517,6 +517,10 @@ RUNTIME_FUNCTION(Runtime_ObjectCreate) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate, NewTypeError(MessageTemplate::kProtoObjectOrNull, prototype));
   }
+  if (prototype->IsWasmObject()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
+  }
   // 2. Let obj be ObjectCreate(O).
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, obj, JSObject::ObjectCreate(isolate, prototype));
