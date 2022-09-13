@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "437c69cd_0f08cb37",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-13T07:57:10Z",
+      "side": 1,
+      "message": "how about std::pair\u003cRegister,Register\u003e, so that we can use iterator_.GetRegisterPairOperand?",
+      "range": {
+        "startLine": 795,
+        "startChar": 25,
+        "endLine": 796,
+        "endChar": 54
+      },
+      "revId": "8bf482e92216598865ffa429f650e69a8923a253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
