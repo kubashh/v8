@@ -15,7 +15,19 @@ try {
 
 
 const str = /\dei7/sgiuy;
-const obj = {"a":str, "length":9007199254740991};
+// Length needs to have little endian byte order
+// on big endian platforms.
+let buffer = new DataView(new ArrayBuffer(8));
+buffer.setFloat64(0, 9007199254740991, true);
+var h16 = new Int16Array(1);
+var h8 = new Int8Array(h16.buffer);
+h16[0] = 1;
+let l;
+if (h8[0] == 0)
+    l = buffer.getFloat64(0, false);
+else
+    l = buffer.getFloat64(0, true);
+const obj = {"a":str, "length":l};
 const increment = 2061353130;
 let n = increment * 21;
 for (let i = 0; i < 52; i++) {
