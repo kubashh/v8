@@ -28,6 +28,7 @@ TOOLS_ROOT = up(up(os.path.abspath(__file__)))
 sys.path.append(TOOLS_ROOT)
 from testrunner import standard_runner
 from testrunner import num_fuzzer
+from testrunner.testproc import base
 from testrunner.utils.test_utils import (
     temp_base,
     TestRunnerTest,
@@ -511,17 +512,41 @@ class StandardRunnerTest(TestRunnerTest):
     result.has_returncode(0)
 
 
+class FakeTimeoutProc(base.TestProcObserver):
+  """Fake of the total-timeout observer that just stops after counting
+  "count" number of new tests.
+  """
+  def __init__(self, count):
+    super(FakeTimeoutProc, self).__init__()
+    self._n = 0
+    self._count = count
+
+  def _on_next_test(self, test):
+    if self._n >= self._count:
+      self.stop()
+    self._n += 1
+
+
 class NumFuzzerTest(TestRunnerTest):
   def get_runner_class(self):
     return num_fuzzer.NumFuzzer
 
+  @patch('testrunner.testproc.timeout.TimeoutProc.create',
+         lambda x: FakeTimeoutProc(10))
   def testNumFuzzer(self):
     result = self.run_tests(
       '--command-prefix', sys.executable,
       '--outdir', 'out/build',
+      '--variants=default',
+      '--fuzzer-random-seed=12345',
+      '--stress-interrupt-budget=1',
+      '--progress=verbose',
+      'sweet/bananas',
     )
     result.has_returncode(0)
     result.stdout_includes('>>> Autodetected')
+    result.stdout_includes('11 tests ran')
+
 
 class OtherTest(TestRunnerTest):
   def testStatusFilePresubmit(self):
@@ -530,6 +555,7 @@ class OtherTest(TestRunnerTest):
       from testrunner.local import statusfile
       self.assertTrue(statusfile.PresubmitCheck(
           os.path.join(basedir, 'test', 'sweet', 'sweet.status')))
+
 
 if __name__ == '__main__':
   unittest.main()
