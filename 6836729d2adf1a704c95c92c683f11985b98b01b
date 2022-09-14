@@ -16,6 +16,46 @@
       "message": "I\u0027ve updated the CL. PTALA",
       "revId": "6836729d2adf1a704c95c92c683f11985b98b01b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1995310d_0a40697a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-14T11:10:58Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6836729d2adf1a704c95c92c683f11985b98b01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "509d9e87_c0475362",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5882,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-14T11:10:58Z",
+      "side": 1,
+      "message": "I think we can trust unique_ptr :)",
+      "range": {
+        "startLine": 5882,
+        "startChar": 6,
+        "endLine": 5882,
+        "endChar": 17
+      },
+      "revId": "6836729d2adf1a704c95c92c683f11985b98b01b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
