@@ -16,6 +16,23 @@
       "message": "I\u0027m a bit torn if disabling this by default makes sense. All our stack-sampling scripts take the hit here and enable it by default (always with the option to disable it).\n\nThere is a a lot of interpreted code out there that just won\u0027t get proper attribution.\n\n\nHow about turning this into weak implication so it\u0027s enabled for the common user, and you can still disable it over the command line?",
       "revId": "cb8999050a3fb7d10bbcf129b2bd5d81700c0f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d03e6601_099e7b08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-14T13:42:30Z",
+      "side": 1,
+      "message": "LGTM with comment",
+      "revId": "cb8999050a3fb7d10bbcf129b2bd5d81700c0f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

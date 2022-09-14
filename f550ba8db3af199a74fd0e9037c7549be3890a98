@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96398d91_5e72a1ba",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2224,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-14T13:42:30Z",
+      "side": 0,
+      "message": "maybe DEFINE_WEAK_IMPLICATION instead? (also no really strong opinion here)",
+      "range": {
+        "startLine": 2224,
+        "startChar": 0,
+        "endLine": 2224,
+        "endChar": 18
+      },
+      "revId": "f550ba8db3af199a74fd0e9037c7549be3890a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
