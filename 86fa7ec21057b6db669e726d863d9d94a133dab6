@@ -39,6 +39,30 @@
       },
       "revId": "86fa7ec21057b6db669e726d863d9d94a133dab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7974b8d_736ef96f",
+        "filename": "tools/testrunner/local/pool.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-14T05:56:06Z",
+      "side": 1,
+      "message": "I had a first version without the inner while-True loop and I also didn\u0027t run into it after lot\u0027s of testing. It seems like it\u0027s important to unblock process.join. If afterwards there\u0027s still something on the queue, it seems not to be a problem as long as the data is not corrupted.\n\nE.g. on the work_queue there are a few leftovers all the time and removing that draining had zero effect on tear down.",
+      "parentUuid": "43e8e6b5_27745266",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 22
+      },
+      "revId": "86fa7ec21057b6db669e726d863d9d94a133dab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
