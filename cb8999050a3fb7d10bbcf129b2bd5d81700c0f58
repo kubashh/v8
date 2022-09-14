@@ -33,6 +33,24 @@
       "message": "LGTM with comment",
       "revId": "cb8999050a3fb7d10bbcf129b2bd5d81700c0f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5970c1d2_c46bedb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-14T21:10:09Z",
+      "side": 1,
+      "message": "The idea is that in the future the --enable-etw-stack-walking could be enabled by default, as long as it does not cause any performance regressions.\n\nWhich means that the ETW tracing code shouldn\u0027t do any work until a profiler like Windows Performance Recorder starts a ETW tracing session. \n\nThis is why we thought that we should remove this implication.",
+      "parentUuid": "e764ebac_eca0b691",
+      "revId": "cb8999050a3fb7d10bbcf129b2bd5d81700c0f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
