@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2baa0d78_d68dfd0f",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "How much do we care about it for the MVP?",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 43
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b9eafb3_1c76e8e4",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "As proposed I have changed everything to repeated execution.\nThe issue is that this is quite slow taking about 80-90 seconds in `debug` (7 seconds in `optdebug`).\nAs discussed offline, I\u0027ll split it into multiple files to allow parallel execution.\n\nStill, if there are some redundant test patterns (e.g. if we could condense all trigonometric functions into one because they use the same code paths), I\u0027m happy to reduce it as well.",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0924daa9_6cc21e77",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "These tests just iterate over all these functions in the global namespace.\nFor some of them there are `TypeError`s with `new`, for some without.\nSo in those cases the corresponding tests actually don\u0027t do anything with the argument as the `new` operator already throws the `TypeError`.\nShould we remove them from the test or just keep them \"just in case\"?",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d77c787_a04b16e9",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "Can we just assume that it\u0027s pretty much the same + promises?\nI don\u0027t really want to bloat the test even more.",
+      "range": {
+        "startLine": 673,
+        "startChar": 2,
+        "endLine": 675,
+        "endChar": 0
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "155024a5_cf3420aa",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "This doesn\u0027t make any sense as the third parameter should be an object e.g. with a value element. Still it doesn\u0027t throw and just behaves like an empty object (see comment above).\nShould we change that?",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee49b58e_71c1c5f3",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "An alternative would be to fail early and preventing to install a wasm object as a handler. This however would require additional code and for now the implementation choice was \"keep the changes minimal\". 😊",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98058670_858a25a7",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T17:01:06Z",
+      "side": 1,
+      "message": "Is there a simple way to test importing/exporting?",
+      "range": {
+        "startLine": 761,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 66
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
