@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e4695f7_d923bbad",
+        "filename": "src/builtins/promise-resolve.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-14T12:07:52Z",
+      "side": 1,
+      "message": "This could also already be done in line 121.\nIt might however be reasonable to consider this as part of the \"slow\" path as it is somewhat much less likely to have opaque wasm objects as a resolution value.",
+      "revId": "83f2c3bf24d9707d5a3c5c5b44d30fe5c2fab686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
