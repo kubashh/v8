@@ -97,6 +97,8 @@ Maybe<bool> JSReceiver::HasProperty(LookupIterator* it) {
       case LookupIterator::JSPROXY:
         return JSProxy::HasProperty(it->isolate(), it->GetHolder<JSProxy>(),
                                     it->GetName());
+      case LookupIterator::WASM_OBJECT:
+        return Just(false);
       case LookupIterator::INTERCEPTOR: {
         Maybe<PropertyAttributes> result =
             JSObject::GetPropertyAttributesWithInterceptor(it);
@@ -147,6 +149,9 @@ Handle<Object> JSReceiver::GetDataProperty(LookupIterator* it,
                                            AllocationPolicy allocation_policy) {
   for (; it->IsFound(); it->Next()) {
     switch (it->state()) {
+      case LookupIterator::WASM_OBJECT:
+        it->NotFound();
+        return it->isolate()->factory()->undefined_value();
       case LookupIterator::INTERCEPTOR:
       case LookupIterator::NOT_FOUND:
       case LookupIterator::TRANSITION:
@@ -223,6 +228,9 @@ Maybe<bool> JSReceiver::CheckPrivateNameStore(LookupIterator* it,
                          NewTypeError(message, name_string, it->GetReceiver()));
         }
         return Just(true);
+      case LookupIterator::WASM_OBJECT:
+        RETURN_FAILURE(isolate, kThrowOnError,
+                       NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
     }
   }
   DCHECK(!it->IsFound());
@@ -734,6 +742,8 @@ Maybe<PropertyAttributes> JSReceiver::GetPropertyAttributes(
         UNREACHABLE();
       case LookupIterator::JSPROXY:
         return JSProxy::GetPropertyAttributes(it);
+      case LookupIterator::WASM_OBJECT:
+        return Just(ABSENT);
       case LookupIterator::INTERCEPTOR: {
         Maybe<PropertyAttributes> result =
             JSObject::GetPropertyAttributesWithInterceptor(it);
@@ -948,7 +958,6 @@ Maybe<bool> JSReceiver::DeleteProperty(LookupIterator* it,
     }
     return Just(true);
   }
-  Handle<JSObject> receiver = Handle<JSObject>::cast(it->GetReceiver());
 
   for (; it->IsFound(); it->Next()) {
     switch (it->state()) {
@@ -956,6 +965,9 @@ Maybe<bool> JSReceiver::DeleteProperty(LookupIterator* it,
       case LookupIterator::NOT_FOUND:
       case LookupIterator::TRANSITION:
         UNREACHABLE();
+      case LookupIterator::WASM_OBJECT:
+        RETURN_FAILURE(isolate, kThrowOnError,
+                       NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
       case LookupIterator::ACCESS_CHECK:
         if (it->HasAccess()) break;
         isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>());
@@ -986,7 +998,7 @@ Maybe<bool> JSReceiver::DeleteProperty(LookupIterator* it,
           if (is_strict(language_mode)) {
             isolate->Throw(*isolate->factory()->NewTypeError(
                 MessageTemplate::kStrictDeleteProperty, it->GetName(),
-                receiver));
+                it->GetReceiver()));
             return Nothing<bool>();
           }
           return Just(false);
@@ -1158,6 +1170,12 @@ Maybe<bool> JSReceiver::DefineOwnProperty(Isolate* isolate,
         isolate, Handle<JSModuleNamespace>::cast(object), key, desc,
         should_throw);
   }
+#if V8_ENABLE_WEBASSEMBLY
+  if (object->IsWasmObject()) {
+    RETURN_FAILURE(isolate, kThrowOnError,
+                   NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
+  }
+#endif
 
   // OrdinaryDefineOwnProperty, by virtue of calling
   // DefineOwnPropertyIgnoreAttributes, can handle arguments
@@ -1745,6 +1763,9 @@ Maybe<bool> JSReceiver::AddPrivateField(LookupIterator* it,
       return JSProxy::SetPrivateSymbol(isolate, Handle<JSProxy>::cast(receiver),
                                        symbol, &new_desc, should_throw);
     }
+    case LookupIterator::WASM_OBJECT:
+      RETURN_FAILURE(isolate, kThrowOnError,
+                     NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
     case LookupIterator::DATA:
     case LookupIterator::INTERCEPTOR:
     case LookupIterator::ACCESSOR:
@@ -2033,6 +2054,12 @@ Maybe<bool> JSReceiver::PreventExtensions(Handle<JSReceiver> object,
     return JSProxy::PreventExtensions(Handle<JSProxy>::cast(object),
                                       should_throw);
   }
+#if V8_ENABLE_WEBASSEMBLY
+  if (object->IsWasmObject()) {
+    RETURN_FAILURE(object->GetIsolate(), kThrowOnError,
+                   NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
+  }
+#endif
   DCHECK(object->IsJSObject());
   return JSObject::PreventExtensions(Handle<JSObject>::cast(object),
                                      should_throw);
@@ -2042,6 +2069,11 @@ Maybe<bool> JSReceiver::IsExtensible(Handle<JSReceiver> object) {
   if (object->IsJSProxy()) {
     return JSProxy::IsExtensible(Handle<JSProxy>::cast(object));
   }
+#if V8_ENABLE_WEBASSEMBLY
+  if (object->IsWasmObject()) {
+    return Just(false);
+  }
+#endif
   return Just(JSObject::IsExtensible(Handle<JSObject>::cast(object)));
 }
 
@@ -2282,6 +2314,10 @@ Maybe<bool> JSReceiver::SetPrototype(Isolate* isolate,
                                      Handle<JSReceiver> object,
                                      Handle<Object> value, bool from_javascript,
                                      ShouldThrow should_throw) {
+  if (object->IsWasmObject()) {
+    RETURN_FAILURE(isolate, should_throw,
+                   NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
+  }
   if (object->IsJSProxy()) {
     return JSProxy::SetPrototype(isolate, Handle<JSProxy>::cast(object), value,
                                  from_javascript, should_throw);
@@ -3561,6 +3597,7 @@ Maybe<bool> JSObject::DefineOwnPropertyIgnoreAttributes(
   for (; it->IsFound(); it->Next()) {
     switch (it->state()) {
       case LookupIterator::JSPROXY:
+      case LookupIterator::WASM_OBJECT:
       case LookupIterator::TRANSITION:
       case LookupIterator::NOT_FOUND:
         UNREACHABLE();
@@ -5117,6 +5154,11 @@ Maybe<bool> JSObject::SetPrototype(Isolate* isolate, Handle<JSObject> object,
                        NewTypeError(MessageTemplate::kCyclicProto));
       }
     }
+  }
+
+  if (value->IsWasmObject()) {
+    RETURN_FAILURE(isolate, should_throw,
+                   NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
   }
 
   // Set the new prototype of the object.
