@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "710122b5_bdbedb29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-09-14T17:05:29Z",
+      "side": 1,
+      "message": "This is ok for now, but I\u0027m also thinking we might want to provide a script to do this more automatically now that it\u0027s not trivially updatable in a \"normal\" x64/release build.",
+      "revId": "551ac1091fd7a1a5e162ccc99839894e397bb0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
