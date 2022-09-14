@@ -157,8 +157,8 @@ ObjectGetPrototypeOf(js-implicit context: NativeContext)(object: JSAny): JSAny {
 transitioning javascript builtin ObjectSetPrototypeOf(
     js-implicit context: NativeContext)(object: JSAny, proto: JSAny): JSAny {
   // 1. Set O to ? RequireObjectCoercible(O).
-  RequireObjectCoercible(object, 'Object.setPrototypeOf');
 
+  RequireObjectCoercible(object, 'Object.setPrototypeOf');
   // 2. If Type(proto) is neither Object nor Null, throw a TypeError
   // exception.
   // 3. If Type(O) is not Object, return O.
