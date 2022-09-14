@@ -1049,6 +1049,7 @@ void InterpreterAssembler::UpdateInterruptBudget(TNode<Int32T> weight,
     // For a forward jump, we know we only increase the interrupt budget, so
     // no need to check if it's below zero.
     new_budget = Int32Add(budget_after_bytecode, weight);
+    UNREACHABLE();
   }
 
   // Update budget.
@@ -1081,7 +1082,10 @@ TNode<IntPtrT> InterpreterAssembler::Advance(TNode<IntPtrT> delta,
 void InterpreterAssembler::Jump(TNode<IntPtrT> jump_offset, bool backward) {
   DCHECK(!Bytecodes::IsStarLookahead(bytecode_, operand_scale_));
 
-  UpdateInterruptBudget(TruncateIntPtrToInt32(jump_offset), backward);
+  if (backward) {
+    // Don't increase interrupt budget on forward jumps.
+    UpdateInterruptBudget(TruncateIntPtrToInt32(jump_offset), backward);
+  }
   TNode<IntPtrT> new_bytecode_offset = Advance(jump_offset, backward);
   TNode<RawPtrT> target_bytecode =
       UncheckedCast<RawPtrT>(LoadBytecode(new_bytecode_offset));

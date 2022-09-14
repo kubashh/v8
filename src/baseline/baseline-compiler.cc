@@ -600,7 +600,7 @@ INTRINSICS_LIST(DECLARE_VISITOR)
 
 void BaselineCompiler::UpdateInterruptBudgetAndJumpToLabel(
     int weight, Label* label, Label* skip_interrupt_label) {
-  if (weight != 0) {
+  if (weight < 0) {
     ASM_CODE_COMMENT(&masm_);
     __ AddToInterruptBudgetAndJumpIfNotExceeded(weight, skip_interrupt_label);
 
