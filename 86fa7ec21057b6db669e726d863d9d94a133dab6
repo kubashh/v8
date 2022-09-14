@@ -16,6 +16,29 @@
       "message": "PTAL at the latest patchset. This withstands extensive local stress testing and trybots so far...\n\nThere is one more orthogonal hang possibility that isn\u0027t related to the pool termination (https://crbug.com/v8/13113#c19). I\u0027ll investigate that separately.",
       "revId": "86fa7ec21057b6db669e726d863d9d94a133dab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e8e6b5_27745266",
+        "filename": "tools/testrunner/local/pool.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-09-14T04:14:33Z",
+      "side": 1,
+      "message": "IIuc, There\u0027s still a chance that we might not drain the queue fully:\n\n[empty_queue] handles the empty exception (line 128)\n[worker] adds queue item and terminates\n[pool] context manager finishes and sets `keep_running` to `False`\n[empty_queue] will not drain the just added worker queue item\n\nWe could wait for .01s before we falsify keep_running or just accept the unlikely event.",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 22
+      },
+      "revId": "86fa7ec21057b6db669e726d863d9d94a133dab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
