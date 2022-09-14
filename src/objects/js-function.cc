@@ -641,14 +641,7 @@ void JSFunction::InitializeFeedbackCell(
   if (function->shared().sparkplug_compiled() &&
       CanCompileWithBaseline(isolate, function->shared()) &&
       function->ActiveTierIsIgnition()) {
-    if (v8_flags.baseline_batch_compilation) {
-      isolate->baseline_batch_compiler()->EnqueueFunction(function);
-    } else {
-      IsCompiledScope is_compiled_scope(
-          function->shared().is_compiled_scope(isolate));
-      Compiler::CompileBaseline(isolate, function, Compiler::CLEAR_EXCEPTION,
-                                &is_compiled_scope);
-    }
+    isolate->baseline_batch_compiler()->EnqueueFunction(function);
   }
 }
 

@@ -414,14 +414,7 @@ void TieringManager::OnInterruptTick(Handle<JSFunction> function,
   // tiering.
   if (CanCompileWithBaseline(isolate_, function->shared()) &&
       function->ActiveTierIsIgnition()) {
-    if (v8_flags.baseline_batch_compilation) {
-      isolate_->baseline_batch_compiler()->EnqueueFunction(function);
-    } else {
-      IsCompiledScope is_compiled_scope(
-          function->shared().is_compiled_scope(isolate_));
-      Compiler::CompileBaseline(isolate_, function, Compiler::CLEAR_EXCEPTION,
-                                &is_compiled_scope);
-    }
+    isolate_->baseline_batch_compiler()->EnqueueFunction(function);
     function->shared().set_sparkplug_compiled(true);
   }
 
