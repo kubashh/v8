@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5660edee_6efa2702",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-09-15T16:00:18Z",
+      "side": 1,
+      "message": "PTAL. This is a mechanical move of code, no changes intended.",
+      "revId": "e1242fd5e73717f40017e0fba236aff63478c43f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
