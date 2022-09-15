@@ -41,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8a4c992_14864241",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-15T13:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b9eafb3_1c76e8e4",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0924daa9_6cc21e77",
