@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a83053f3_04c493c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-15T23:47:03Z",
+      "side": 1,
+      "message": "lgtm, thanks for fixing! I don\u0027t have access to chromium:1362487 but I can imagine what it says.",
+      "revId": "82cfa6cdd4128ed2e7b8a2577fe5d0f7db9f4815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
