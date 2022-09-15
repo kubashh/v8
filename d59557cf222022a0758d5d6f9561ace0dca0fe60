@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14507400_7a4805d0",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "Not very much. For the MVP, it\u0027s important to have the right behavior and not crash; avoiding deopt loops is just a performance thing and hence can wait.",
+      "parentUuid": "2baa0d78_d68dfd0f",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 43
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b9eafb3_1c76e8e4",
         "filename": "test/mjsunit/wasm/gc-js-interop.js",
         "patchSetId": 15
@@ -78,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "446ab200_a7c18927",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "I don\u0027t mind either way. It\u0027s fine to drop them.\n\n(We *could* pass a third argument to `assertThrows` that checks the error message... would that be worth it?)",
+      "parentUuid": "0924daa9_6cc21e77",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d77c787_a04b16e9",
         "filename": "test/mjsunit/wasm/gc-js-interop.js",
         "patchSetId": 15
@@ -89,6 +131,30 @@
       "writtenOn": "2022-09-14T17:01:06Z",
       "side": 1,
       "message": "Can we just assume that it\u0027s pretty much the same + promises?\nI don\u0027t really want to bloat the test even more.",
+      "range": {
+        "startLine": 673,
+        "startChar": 2,
+        "endLine": 675,
+        "endChar": 0
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75ee820b_9db8dcf6",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "Should be fine.",
+      "parentUuid": "5d77c787_a04b16e9",
       "range": {
         "startLine": 673,
         "startChar": 2,
@@ -118,6 +184,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80ad90a3_cfa88064",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "Not throwing is correct here.\n`Reflect.defineProperty` performs `ToPropertyDescriptor` on the third argument, which carefully checks with `has` whether `value` etc exist before accessing them. We expect that [[Has]] returns `false` (without throwing) for Wasm objects, so passing `wasm_obj` here is indeed equivalent to passing an empty object `{}`.\nYou can include a summary of this explanation in the comment.\n(See https://tc39.es/ecma262/#sec-topropertydescriptor .)",
+      "parentUuid": "155024a5_cf3420aa",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee49b58e_71c1c5f3",
         "filename": "test/mjsunit/wasm/gc-js-interop.js",
         "patchSetId": 15
@@ -129,6 +213,24 @@
       "writtenOn": "2022-09-14T17:01:06Z",
       "side": 1,
       "message": "An alternative would be to fail early and preventing to install a wasm object as a handler. This however would require additional code and for now the implementation choice was \"keep the changes minimal\". 😊",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "287f1d97_abb35a05",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "I think allowing Wasm objects as Proxy targets is fine.",
+      "parentUuid": "ee49b58e_71c1c5f3",
       "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +248,30 @@
       "writtenOn": "2022-09-14T17:01:06Z",
       "side": 1,
       "message": "Is there a simple way to test importing/exporting?",
+      "range": {
+        "startLine": 761,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 66
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6e2314_d1e2f44b",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-15T18:25:14Z",
+      "side": 1,
+      "message": "d8 supports modules. See test/mjsunit/modules-* for inspiration. (And do it in a follow-up CL 😊)",
+      "parentUuid": "98058670_858a25a7",
       "range": {
         "startLine": 761,
         "startChar": 0,
