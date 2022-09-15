@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03d4b3d2_53144f99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-15T13:02:34Z",
+      "side": 1,
+      "message": "@Jakob: Sorry for the large CL. Mostly these are test cases, the changes in production code are small.\nThere are some comments on some cases whether the tested behavior is the desired one, so some further discussion might be required.",
+      "revId": "55b2dc717bd27d4972fc2576f66999b9ceff1a89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
