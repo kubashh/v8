@@ -1996,8 +1996,19 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     DCHECK(shared_isolate->is_shared());
     DCHECK_NULL(shared_isolate_);
     DCHECK(!attached_to_shared_isolate_);
+    DCHECK(!v8_flags.shared_space);
     shared_isolate_ = shared_isolate;
     owns_shareable_data_ = false;
+  }
+
+  // Returns true when this isolate supports allocation in shared spaces.
+  bool has_shared_heap() const {
+    return shared_isolate() || shared_space_isolate();
+  }
+
+  // Returns the isolate that owns the shared spaces.
+  Isolate* shared_heap_isolate() {
+    return shared_isolate() ? shared_isolate() : shared_space_isolate();
   }
 
   GlobalSafepoint* global_safepoint() const { return global_safepoint_.get(); }
@@ -2009,7 +2020,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // TODO(pthier): Unify with owns_shareable_data() once the flag
   // --shared-string-table is removed.
   bool OwnsStringTables() {
-    return !v8_flags.shared_string_table || is_shared();
+    return !v8_flags.shared_string_table || is_shared() ||
+           is_shared_space_isolate();
   }
 
 #if USE_SIMULATOR
