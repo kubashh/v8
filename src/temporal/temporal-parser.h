@@ -15,7 +15,7 @@ namespace internal {
  * ParsedISO8601Result contains the parsed result of ISO 8601 grammar
  * documented in #sec-temporal-iso8601grammar
  * for TemporalInstantString, TemporalZonedDateTimeString,
- * TemporalCalendarString, TemporalDateString, TemporalDateTimeString,
+ * CalendarName, TemporalDateString, TemporalDateTimeString,
  * TemporalMonthDayString, TemporalRelativeToString, TemporalTimeString,
  * TemporalTimeZoneString, and TemporalYearMonthString. For all the fields
  * represented by int32_t, a special value kMinInt31 is used to represent the
@@ -145,7 +145,7 @@ class V8_EXPORT_PRIVATE TemporalParser {
   DEFINE_PARSE_METHOD(ParsedISO8601Result, TemporalZonedDateTimeString);
   DEFINE_PARSE_METHOD(ParsedISO8601Result, TimeZoneIdentifier);
   DEFINE_PARSE_METHOD(ParsedISO8601Result, TemporalRelativeToString);
-  DEFINE_PARSE_METHOD(ParsedISO8601Result, TemporalCalendarString);
+  DEFINE_PARSE_METHOD(ParsedISO8601Result, CalendarName);
   DEFINE_PARSE_METHOD(ParsedISO8601Duration, TemporalDurationString);
   DEFINE_PARSE_METHOD(ParsedISO8601Result, TimeZoneNumericUTCOffset);
 };

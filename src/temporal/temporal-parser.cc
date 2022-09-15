@@ -1139,25 +1139,6 @@ SATISIFY(TemporalZonedDateTimeString, ParsedISO8601Result)
 
 SATISIFY(CalendarName, ParsedISO8601Result)
 
-// TemporalCalendarString :
-//   CalendarName
-//   TemporalInstantString
-//   CalendarDateTime
-//   CalendarTime
-//   DateSpecYearMonth
-//   DateSpecMonthDay
-template <typename Char>
-bool SatisfyTemporalCalendarString(base::Vector<Char> str,
-                                   ParsedISO8601Result* r) {
-  IF_SATISFY_RETURN(CalendarName)
-  IF_SATISFY_RETURN(TemporalInstantString)
-  IF_SATISFY_RETURN(CalendarDateTime)
-  IF_SATISFY_RETURN(CalendarTime)
-  IF_SATISFY_RETURN(DateSpecYearMonth)
-  IF_SATISFY_RETURN(DateSpecMonthDay)
-  return false;
-}
-
 // Duration
 
 // Digits : Digit [Digits]
@@ -1418,7 +1399,7 @@ IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalTimeString)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalInstantString)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalZonedDateTimeString)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TimeZoneIdentifier)
-IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalCalendarString)
+IMPL_PARSE_METHOD(ParsedISO8601Result, CalendarName)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TimeZoneNumericUTCOffset)
 IMPL_PARSE_METHOD(ParsedISO8601Duration, TemporalDurationString)
 
