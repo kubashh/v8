@@ -1533,55 +1533,97 @@ compiler::AllocatedOperand RegisterFrameState<RegisterT>::AllocateRegister(
                                     reg.code());
 }
 
-void StraightForwardRegisterAllocator::AssignFixedTemporaries(NodeBase* node) {
-  // TODO(victorgomes): Support double registers as temporaries.
-  RegList fixed_temporaries = node->temporaries();
-
-  // Make sure that any initially set temporaries are definitely free.
-  for (Register reg : fixed_temporaries) {
-    DCHECK(!general_registers_.is_blocked(reg));
-    if (!general_registers_.free().has(reg)) {
-      DropRegisterValue(general_registers_, reg);
-      general_registers_.AddToFree(reg);
-    }
-    general_registers_.block(reg);
+template <typename RegisterT>
+void StraightForwardRegisterAllocator::AssignFixedTemporaries(
+    RegisterFrameState<RegisterT>& registers, NodeBase* node) {
+  RegListBase<RegisterT> fixed_temporaries;
+  if constexpr (std::is_same_v<RegisterT, Register>) {
+    fixed_temporaries = node->temporaries();
+  } else {
+    fixed_temporaries = node->double_temporaries();
   }
 
-  if (v8_flags.trace_maglev_regalloc) {
-    printing_visitor_->os()
-        << "Fixed temporaries: " << fixed_temporaries << "\n";
+  // Make sure that any initially set temporaries are definitely free.
+  for (RegisterT reg : fixed_temporaries) {
+    DCHECK(!registers.is_blocked(reg));
+    if (!registers.free().has(reg)) {
+      DropRegisterValue(registers, reg);
+      registers.AddToFree(reg);
+    }
+    registers.block(reg);
+  }
+
+  if (v8_flags.trace_maglev_regalloc && !fixed_temporaries.is_empty()) {
+    if constexpr (std::is_same_v<RegisterT, Register>) {
+      printing_visitor_->os()
+          << "Fixed Temporaries: " << fixed_temporaries << "\n";
+    } else {
+      printing_visitor_->os()
+          << "Fixed Double Temporaries: " << fixed_temporaries << "\n";
+    }
+  }
+}
+
+void StraightForwardRegisterAllocator::AssignFixedTemporaries(NodeBase* node) {
+  AssignFixedTemporaries(general_registers_, node);
+  AssignFixedTemporaries(double_registers_, node);
+}
+
+template <typename RegisterT>
+void StraightForwardRegisterAllocator::AssignArbitraryTemporaries(
+    RegisterFrameState<RegisterT>& registers, NodeBase* node) {
+  int num_temporaries_needed;
+  if constexpr (std::is_same_v<RegisterT, Register>) {
+    num_temporaries_needed = node->num_temporaries_needed();
+  } else {
+    num_temporaries_needed = node->num_double_temporaries_needed();
+  }
+  if (num_temporaries_needed == 0) return;
+
+  DCHECK_GT(num_temporaries_needed, 0);
+  RegListBase<RegisterT> temporaries;
+  if constexpr (std::is_same_v<RegisterT, Register>) {
+    temporaries = node->temporaries();
+  } else {
+    temporaries = node->double_temporaries();
+  }
+  int remaining_temporaries_needed = num_temporaries_needed;
+
+  for (RegisterT reg : registers.unblocked_free()) {
+    registers.block(reg);
+    DCHECK(!temporaries.has(reg));
+    temporaries.set(reg);
+    if (--remaining_temporaries_needed == 0) break;
+  }
+
+  // Free extra registers if necessary.
+  for (int i = 0; i < remaining_temporaries_needed; ++i) {
+    DCHECK(registers.UnblockedFreeIsEmpty());
+    RegisterT reg = FreeUnblockedRegister<RegisterT>();
+    registers.block(reg);
+    DCHECK(!temporaries.has(reg));
+    temporaries.set(reg);
+  }
+
+  DCHECK_GE(temporaries.Count(), num_temporaries_needed);
+
+  if constexpr (std::is_same_v<RegisterT, Register>) {
+    node->assign_temporaries(temporaries);
+    if (v8_flags.trace_maglev_regalloc) {
+      printing_visitor_->os() << "Temporaries: " << temporaries << "\n";
+    }
+  } else {
+    node->assign_double_temporaries(temporaries);
+    if (v8_flags.trace_maglev_regalloc) {
+      printing_visitor_->os() << "Double Temporaries: " << temporaries << "\n";
+    }
   }
 }
 
 void StraightForwardRegisterAllocator::AssignArbitraryTemporaries(
     NodeBase* node) {
-  int num_temporaries_needed = node->num_temporaries_needed();
-  if (num_temporaries_needed == 0) return;
-
-  RegList temporaries = node->temporaries();
-
-  // TODO(victorgomes): Support double registers as temporaries.
-  for (Register reg : general_registers_.unblocked_free()) {
-    general_registers_.block(reg);
-    DCHECK(!temporaries.has(reg));
-    temporaries.set(reg);
-    if (--num_temporaries_needed == 0) break;
-  }
-
-  // Free extra registers if necessary.
-  for (int i = 0; i < num_temporaries_needed; ++i) {
-    DCHECK(general_registers_.UnblockedFreeIsEmpty());
-    Register reg = FreeUnblockedRegister<Register>();
-    general_registers_.block(reg);
-    DCHECK(!temporaries.has(reg));
-    temporaries.set(reg);
-  }
-
-  DCHECK_GE(temporaries.Count(), node->num_temporaries_needed());
-  node->assign_temporaries(temporaries);
-  if (v8_flags.trace_maglev_regalloc) {
-    printing_visitor_->os() << "Temporaries: " << temporaries << "\n";
-  }
+  AssignArbitraryTemporaries(general_registers_, node);
+  AssignArbitraryTemporaries(double_registers_, node);
 }
 
 namespace {

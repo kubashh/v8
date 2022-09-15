@@ -762,8 +762,10 @@ class NodeBase : public ZoneObject {
   using OpPropertiesField =
       OpcodeField::Next<OpProperties, OpProperties::kSize>;
   using NumTemporariesNeededField = OpPropertiesField::Next<uint8_t, 2>;
+  using NumDoubleTemporariesNeededField =
+      NumTemporariesNeededField::Next<uint8_t, 1>;
   // Align input count to 32-bit.
-  using UnusedField = NumTemporariesNeededField::Next<uint8_t, 3>;
+  using UnusedField = NumDoubleTemporariesNeededField::Next<uint8_t, 2>;
   using InputCountField = UnusedField::Next<size_t, 17>;
   static_assert(InputCountField::kShift == 32);
 
@@ -879,9 +881,19 @@ class NodeBase : public ZoneObject {
     return NumTemporariesNeededField::decode(bitfield_);
   }
 
+  uint8_t num_double_temporaries_needed() const {
+    return NumDoubleTemporariesNeededField::decode(bitfield_);
+  }
+
   RegList& temporaries() { return temporaries_; }
 
+  DoubleRegList& double_temporaries() { return double_temporaries_; }
+
   void assign_temporaries(RegList list) { temporaries_ = list; }
+
+  void assign_double_temporaries(DoubleRegList list) {
+    double_temporaries_ = list;
+  }
 
   void Print(std::ostream& os, MaglevGraphLabeller*,
              bool skip_targets = false) const;
@@ -954,9 +966,18 @@ class NodeBase : public ZoneObject {
     bitfield_ = NumTemporariesNeededField::update(bitfield_, value);
   }
 
+  void set_double_temporaries_needed(uint8_t value) {
+    DCHECK_EQ(num_double_temporaries_needed(), 0);
+    bitfield_ = NumDoubleTemporariesNeededField::update(bitfield_, value);
+  }
+
   // Require that a specific register is free (and therefore clobberable) by the
   // entry into this node.
   void RequireSpecificTemporary(Register reg) { temporaries_.set(reg); }
+
+  void RequireSpecificDoubleTemporary(DoubleRegister reg) {
+    double_temporaries_.set(reg);
+  }
 
  private:
   template <class Derived, typename... Args>
@@ -1022,6 +1043,7 @@ class NodeBase : public ZoneObject {
   uint64_t bitfield_;
   NodeIdT id_ = kInvalidNodeId;
   RegList temporaries_;
+  DoubleRegList double_temporaries_;
 
   NodeBase() = delete;
   NodeBase(const NodeBase&) = delete;
