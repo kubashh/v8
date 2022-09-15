@@ -88,6 +88,7 @@ RegionAllocator::Region* RegionAllocator::Split(Region* region,
   DCHECK(IsAligned(new_size, page_size_));
   DCHECK_NE(new_size, 0);
   DCHECK_GT(region->size(), new_size);
+  DCHECK_NE(all_regions_.find(region), all_regions_.end());
 
   if (on_split_) on_split_(region->begin(), new_size);
 
@@ -97,11 +98,15 @@ RegionAllocator::Region* RegionAllocator::Split(Region* region,
   Region* new_region =
       new Region(region->begin() + new_size, region->size() - new_size, state);
   if (state == RegionState::kFree) {
-    // Remove region from the free list before updating it's size.
+    // Remove region from the free list before updating its size.
     FreeListRemoveRegion(region);
   }
+  // Remove region from |all_regions_| before updating its size.
+  all_regions_.erase(region);
+
   region->set_size(new_size);
 
+  all_regions_.insert(region);
   all_regions_.insert(new_region);
 
   if (state == RegionState::kFree) {
