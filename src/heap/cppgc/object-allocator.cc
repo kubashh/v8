@@ -209,8 +209,10 @@ bool ObjectAllocator::TryRefillLinearAllocationBuffer(NormalPageSpace& space,
     if (TryRefillLinearAllocationBufferFromFreeList(space, size)) return true;
   }
 
+  // Finish sweeping entirely if it was running and try to allocate from merged
+  // freelists.
   sweeper.FinishIfRunning();
-  // TODO(chromium:1056170): Make use of the synchronously freed memory.
+  if (TryRefillLinearAllocationBufferFromFreeList(space, size)) return true;
 
   auto* new_page = NormalPage::TryCreate(page_backend_, space);
   if (!new_page) {
