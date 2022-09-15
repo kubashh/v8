@@ -837,8 +837,27 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     // Given the fields layout we can read the Code reference as a full word.
     static_assert(CodeDataContainer::kCodeCageBaseUpper32BitsOffset ==
                   CodeDataContainer::kCodeOffset + kTaggedSize);
-    TNode<Object> o = BitcastWordToTagged(Load<RawPtrT>(
+    // TNode<Object> o = BitcastWordToTagged(Load<RawPtrT>(
+    //     code, IntPtrConstant(CodeDataContainer::kCodeOffset -
+    //     kHeapObjectTag)));
+    // TNode<WordT> code_cage_base = IntPtrSub(
+    //     IntPtrConstant(0),
+    //     Signed(WordShl(
+    //         ChangeUint32ToWord(Load<Uint32T>(
+    //             code, IntPtrConstant(
+    //                       CodeDataContainer::kCodeCageBaseUpper32BitsOffset -
+    //                       kHeapObjectTag))),
+    //         32)));
+    TNode<WordT> code_cage_base = WordShl(
+        ChangeUint32ToWord(Load<Uint32T>(
+            code,
+            IntPtrConstant(CodeDataContainer::kCodeCageBaseUpper32BitsOffset -
+                           kHeapObjectTag))),
+        32);
+    TNode<WordT> compressed = ChangeInt32ToIntPtr(Load<Int32T>(
         code, IntPtrConstant(CodeDataContainer::kCodeOffset - kHeapObjectTag)));
+    TNode<Object> o =
+        BitcastWordToTagged(IntPtrAdd(code_cage_base, compressed));
     return CAST(o);
 #else
     return code;

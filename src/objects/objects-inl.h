@@ -731,16 +731,19 @@ HeapObject MapWord::ToForwardingAddress() {
   return obj;
 }
 
+template <typename CompressionScheme>
 HeapObject MapWord::ToForwardingAddress(PtrComprCageBase host_cage_base) {
   DCHECK(IsForwardingAddress());
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    // Recompress value_ using proper host_cage_base since the map word
-    // has the upper 32 bits that correspond to the main cage base value.
-    Address value =
-        DecompressTaggedPointer(host_cage_base, CompressTagged(value_));
-    return HeapObject::FromAddress(value);
-  }
+#ifdef V8_EXTERNAL_CODE_SPACE
+  // Recompress value_ using proper host_cage_base since the map word
+  // has the upper 32 bits that correspond to the main cage base value.
+  Tagged_t compressed = V8HeapCompressionScheme::CompressTagged(value_);
+  Address value =
+      CompressionScheme::DecompressTaggedPointer(host_cage_base, compressed);
+  return HeapObject::FromAddress(value);
+#else
   return HeapObject::FromAddress(value_);
+#endif  // V8_EXTERNAL_CODE_SPACE
 }
 
 #ifdef VERIFY_HEAP

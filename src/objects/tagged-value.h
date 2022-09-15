@@ -19,6 +19,8 @@ namespace internal {
 class StrongTaggedValue
     : public TaggedImpl<HeapObjectReferenceType::STRONG, Tagged_t> {
  public:
+  using CompressionScheme = V8HeapCompressionScheme;
+
   constexpr StrongTaggedValue() : TaggedImpl() {}
   explicit constexpr StrongTaggedValue(Tagged_t ptr) : TaggedImpl(ptr) {}
   explicit StrongTaggedValue(Object o);
@@ -31,6 +33,8 @@ class StrongTaggedValue
 // which doesn't require decompression.
 class TaggedValue : public TaggedImpl<HeapObjectReferenceType::WEAK, Tagged_t> {
  public:
+  using CompressionScheme = V8HeapCompressionScheme;
+
   constexpr TaggedValue() : TaggedImpl() {}
   explicit constexpr TaggedValue(Tagged_t ptr) : TaggedImpl(ptr) {}
   explicit TaggedValue(MaybeObject o);

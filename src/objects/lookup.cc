@@ -773,6 +773,9 @@ void LookupIterator::TransitionToAccessorProperty(
       state_ = ACCESSOR;
       return;
     }
+    if (old_map->is_prototype_map()) {
+      JSObject::InvalidatePrototypeChains(*old_map);
+    }
 
     ReloadPropertyInformation<false>();
     if (!new_map->is_dictionary_map()) return;
@@ -838,11 +841,13 @@ void LookupIterator::TransitionToAccessorPair(Handle<Object> pair,
     ReloadPropertyInformation<true>();
   } else {
     PropertyNormalizationMode mode = CLEAR_INOBJECT_PROPERTIES;
-    if (receiver->map(isolate_).is_prototype_map()) {
-      JSObject::InvalidatePrototypeChains(receiver->map(isolate_));
-      mode = KEEP_INOBJECT_PROPERTIES;
+    {
+      Map old_map = receiver->map(isolate_);
+      if (old_map.is_prototype_map()) {
+        JSObject::InvalidatePrototypeChains(old_map);
+        mode = KEEP_INOBJECT_PROPERTIES;
+      }
     }
-
     // Normalize object to make this operation simple.
     JSObject::NormalizeProperties(isolate_, receiver, mode, 0,
                                   "TransitionToAccessorPair");

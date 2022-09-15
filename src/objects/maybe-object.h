@@ -36,7 +36,7 @@ class MaybeObject : public TaggedImpl<HeapObjectReferenceType::WEAK, Address> {
 #endif
 
  private:
-  template <typename TFieldType, int kFieldOffset>
+  template <typename TFieldType, int kFieldOffset, typename CompressionScheme>
   friend class TaggedField;
 };
 
@@ -44,6 +44,8 @@ class MaybeObject : public TaggedImpl<HeapObjectReferenceType::WEAK, Address> {
 // reference to a HeapObject, or a cleared weak reference.
 class HeapObjectReference : public MaybeObject {
  public:
+  using CompressionScheme = V8HeapCompressionScheme;
+
   explicit HeapObjectReference(Address address) : MaybeObject(address) {}
   V8_INLINE explicit HeapObjectReference(Object object);
 

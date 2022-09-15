@@ -880,6 +880,8 @@ class MapWord {
   // Note, that the parameterless version is preferred because it avoids
   // unnecessary recompressions.
   inline HeapObject ToForwardingAddress();
+
+  template <typename CompressionScheme = V8HeapCompressionScheme>
   inline HeapObject ToForwardingAddress(PtrComprCageBase host_cage_base);
 
   inline Address ptr() { return value_; }
@@ -904,7 +906,7 @@ class MapWord {
  private:
   // HeapObject calls the private constructor and directly reads the value.
   friend class HeapObject;
-  template <typename TFieldType, int kFieldOffset>
+  template <typename TFieldType, int kFieldOffset, typename CompressionScheme>
   friend class TaggedField;
 
   explicit MapWord(Address value) : value_(value) {}
