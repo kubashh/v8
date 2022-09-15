@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b42d0001_173c2330",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-09-15T17:05:04Z",
+      "side": 1,
+      "message": "PTAL - hopefully the last refactoring before adding tiering information :) ",
+      "revId": "56ac1c984e2f4e2921d97ca2232a18e99331385d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
