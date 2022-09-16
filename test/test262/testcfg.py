@@ -53,6 +53,7 @@ FEATURE_FLAGS = {
     'array-find-from-last': '--harmony_array_find_last',
     'ShadowRealm': '--harmony-shadow-realm',
     'regexp-v-flag': '--harmony-regexp-unicode-sets',
+    'array-grouping': '--harmony_array_grouping',
 }
 
 SKIPPED_FEATURES = set([])
