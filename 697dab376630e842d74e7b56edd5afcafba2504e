@@ -156,6 +156,24 @@
       "parentUuid": "748ff549_d0b2c6f4",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d189f7_539abae5",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-16T12:35:53Z",
+      "side": 1,
+      "message": "I found that I may go into a wrong direction to solve this proble, I would like to just slove this `Assignment` as a leaf node at begin, so I chose to use a static variable. \n\nAfter I got your insights, I think I could slove this problem even in a nested `Assignment` by using a stack, I updated this patchset to add a stack called `reserved_indexes_` in `BytecodeGenerator`, PTAL, thank!",
+      "parentUuid": "674436cc_2beb5997",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
