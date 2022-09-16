@@ -1167,7 +1167,7 @@ SATISIFY(TemporalZonedDateTimeString, ParsedISO8601Result)
 
 SATISIFY(CalendarName, ParsedISO8601Result)
 
-// TemporalCalendarString :
+  // TemporalCalendarString :
 //   CalendarName
 //   TemporalInstantString
 //   CalendarDateTime
@@ -1448,6 +1448,7 @@ IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalZonedDateTimeString)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalTimeZoneString)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TimeZoneIdentifier)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TemporalCalendarString)
+IMPL_PARSE_METHOD(ParsedISO8601Result, CalendarName)
 IMPL_PARSE_METHOD(ParsedISO8601Result, TimeZoneNumericUTCOffset)
 IMPL_PARSE_METHOD(ParsedISO8601Duration, TemporalDurationString)
 
