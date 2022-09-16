@@ -16,6 +16,23 @@
       "message": "Jakob, please approve this revert for 10.7.",
       "revId": "315439856110ccd1cd17b8ead986c1acd91f4205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14a200f_a6bb30a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-16T10:29:20Z",
+      "side": 1,
+      "message": "Wait. The target branch should be `10.7`, not `10.7.193`.",
+      "revId": "315439856110ccd1cd17b8ead986c1acd91f4205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
