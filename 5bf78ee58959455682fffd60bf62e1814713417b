@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a72fce13_bc449533",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-16T13:18:52Z",
+      "side": 1,
+      "message": "I see locally in benchmarks that 8 is pretty high and we may miss out by quite a bit on the deadline.\n\nI am pretty sure that\u0027s benchmark specific but since we only check after pages, I think we can be more agressive.",
+      "range": {
+        "startLine": 545,
+        "startChar": 51,
+        "endLine": 545,
+        "endChar": 55
+      },
+      "revId": "5bf78ee58959455682fffd60bf62e1814713417b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d75c3d6_a53498db",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-16T13:18:52Z",
+      "side": 1,
+      "message": "I think we should pass `v8::base::TimeSpan` but since we come from IdleTasks with a deadline, I wanted to avoid refactor this in the current CL.",
+      "range": {
+        "startLine": 876,
+        "startChar": 19,
+        "endLine": 876,
+        "endChar": 27
+      },
+      "revId": "5bf78ee58959455682fffd60bf62e1814713417b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
