@@ -572,8 +572,11 @@ class V8_NODISCARD BytecodeGenerator::RegisterAllocationScope final {
             generator->register_allocator()->next_register_index()) {}
 
   ~RegisterAllocationScope() {
-    generator_->register_allocator()->ReleaseRegisters(
-        outer_next_register_index_);
+    int release_index = outer_next_register_index_;
+    if (generator_->reserved_register_size() > 0)
+      release_index = std::max(outer_next_register_index_,
+                               generator_->get_last_reserved_index() + 1);
+    generator_->register_allocator()->ReleaseRegisters(release_index);
   }
 
   RegisterAllocationScope(const RegisterAllocationScope&) = delete;
@@ -1165,7 +1168,8 @@ BytecodeGenerator::BytecodeGenerator(
       suspend_count_(0),
       loop_depth_(0),
       current_loop_scope_(nullptr),
-      catch_prediction_(HandlerTable::UNCAUGHT) {
+      catch_prediction_(HandlerTable::UNCAUGHT),
+      reserved_indexes_(zone()) {
   DCHECK_EQ(closure_scope(), closure_scope()->GetClosureScope());
   if (info->has_source_range_map()) {
     block_coverage_builder_ = zone()->New<BlockCoverageBuilder>(
@@ -1721,6 +1725,24 @@ void BytecodeGenerator::VisitStatements(
     Visit(stmt);
     if (builder()->RemainderOfBlockIsDead()) break;
   }
+}
+
+void BytecodeGenerator::add_reserved_index(int index) {
+  DCHECK_IMPLIES(reserved_register_size() > 0,
+                 index > get_last_reserved_index());
+  reserved_indexes_.push_back(index);
+}
+
+int BytecodeGenerator::reserved_register_size() {
+  return static_cast<int>(reserved_indexes_.size());
+}
+
+int BytecodeGenerator::get_last_reserved_index() {
+  return reserved_indexes_.back();
+}
+
+void BytecodeGenerator::remove_last_reserved_index() {
+  reserved_indexes_.pop_back();
 }
 
 void BytecodeGenerator::VisitExpressionStatement(ExpressionStatement* stmt) {
@@ -3532,7 +3554,8 @@ void BytecodeGenerator::VisitArrayLiteral(ArrayLiteral* expr) {
 
 void BytecodeGenerator::VisitVariableProxy(VariableProxy* proxy) {
   builder()->SetExpressionPosition(proxy);
-  BuildVariableLoad(proxy->var(), proxy->hole_check_mode());
+  BuildVariableLoad(proxy->var(), proxy->hole_check_mode(),
+                    TypeofMode::kNotInside, proxy->get_should_reserved());
 }
 
 bool BytecodeGenerator::IsVariableInRegister(Variable* var, Register reg) {
@@ -3550,9 +3573,34 @@ void BytecodeGenerator::SetVariableInRegister(Variable* var, Register reg) {
   }
 }
 
+bool BytecodeGenerator::TransferRgisterIfVariableReserved(Variable* var) {
+  if (reserved_register_size() == 0) return false;
+  BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+  if (optimizer) {
+    int potential_register_index = get_last_reserved_index();
+    Register rn(potential_register_index);
+    if (!IsVariableInRegister(var, rn)) return false;
+    Register acc = Register::virtual_accumulator();
+    optimizer->RegisterTransfer(rn, acc);
+    return true;
+  }
+  return false;
+}
+
+void BytecodeGenerator::ReserveAccumulatorInRegisterForReusing() {
+  BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+  if (optimizer) {
+    Register acc = Register::virtual_accumulator();
+    Register reserved_reg = register_allocator()->NewRegister();
+    add_reserved_index(reserved_reg.index());
+    optimizer->RegisterTransfer(acc, reserved_reg);
+  }
+}
+
 void BytecodeGenerator::BuildVariableLoad(Variable* variable,
                                           HoleCheckMode hole_check_mode,
-                                          TypeofMode typeof_mode) {
+                                          TypeofMode typeof_mode,
+                                          bool should_reserved) {
   switch (variable->location()) {
     case VariableLocation::LOCAL: {
       Register source(builder()->Local(variable->index()));
@@ -3612,6 +3660,13 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
       Register acc = Register::virtual_accumulator();
       if (immutable == BytecodeArrayBuilder::kImmutableSlot &&
           IsVariableInRegister(variable, acc)) {
+        if (should_reserved) {
+          ReserveAccumulatorInRegisterForReusing();
+        }
+        return;
+      }
+      if (should_reserved && TransferRgisterIfVariableReserved(variable)) {
+        DCHECK_EQ(immutable, BytecodeArrayBuilder::kImmutableSlot);
         return;
       }
 
@@ -3622,6 +3677,10 @@ void BytecodeGenerator::BuildVariableLoad(Variable* variable,
       }
       if (immutable == BytecodeArrayBuilder::kImmutableSlot) {
         SetVariableInRegister(variable, acc);
+      }
+      if (should_reserved) {
+        DCHECK_EQ(immutable, BytecodeArrayBuilder::kImmutableSlot);
+        ReserveAccumulatorInRegisterForReusing();
       }
       break;
     }
@@ -4584,13 +4643,81 @@ void BytecodeGenerator::BuildAssignment(
   }
 }
 
+Expression* BytecodeGenerator::GetLeftSubExpressionIfExist(Expression* exp) {
+  if (exp->IsProperty()) {
+    return exp->AsProperty()->obj();
+  }
+  if (exp->IsCall()) {
+    return exp->AsCall()->expression();
+  }
+  return exp;
+}
+
+bool BytecodeGenerator::MarkTwoExpressionIfCommonImmutableVariable(
+    Expression* lhs, Expression* rhs) {
+  // We just mark these expression as common variable when lhs have more than 1
+  // depth of property like a.b.bb = a.c
+  int lhs_depth = 0;
+  Expression* left_exp = lhs;
+  Expression* left_sub_exp = GetLeftSubExpressionIfExist(left_exp);
+  while (left_sub_exp != left_exp) {
+    lhs_depth++;
+    left_exp = left_sub_exp;
+    left_sub_exp = GetLeftSubExpressionIfExist(left_exp);
+  }
+  if (!left_exp->IsVariableProxy()) return false;
+
+  Expression* right_exp = rhs;
+  Expression* right_sub_exp = GetLeftSubExpressionIfExist(right_exp);
+  while (right_exp != right_sub_exp) {
+    right_exp = right_sub_exp;
+    right_sub_exp = GetLeftSubExpressionIfExist(right_exp);
+  }
+  if (!right_exp->IsVariableProxy()) return false;
+
+  if (lhs_depth > 1 &&
+      AstRawString::Compare(left_exp->AsVariableProxy()->raw_name(),
+                            right_exp->AsVariableProxy()->raw_name()) == 0) {
+    Variable* var = left_exp->AsVariableProxy()->var();
+    if (var->maybe_assigned() == kNotAssigned) {
+      left_exp->AsVariableProxy()->set_should_reserved(true);
+      right_exp->AsVariableProxy()->set_should_reserved(true);
+      return true;
+    }
+  }
+  return false;
+}
+
+void BytecodeGenerator::ClearReservedFeildInTwoExpression(Expression* lhs,
+                                                          Expression* rhs) {
+  while (lhs->IsProperty() || lhs->IsCall()) {
+    if (lhs->IsProperty()) lhs = lhs->AsProperty()->obj();
+    if (lhs->IsCall()) lhs = lhs->AsCall()->expression();
+  }
+
+  while (rhs->IsProperty() || rhs->IsCall()) {
+    if (rhs->IsProperty()) rhs = rhs->AsProperty()->obj();
+    if (rhs->IsCall()) rhs = rhs->AsCall()->expression();
+  }
+  lhs->AsVariableProxy()->set_should_reserved(false);
+  rhs->AsVariableProxy()->set_should_reserved(false);
+}
+
 void BytecodeGenerator::VisitAssignment(Assignment* expr) {
+  bool is_common_immutable_variable =
+      MarkTwoExpressionIfCommonImmutableVariable(expr->target(), expr->value());
+  int reserved_register_count = reserved_register_size();
   AssignmentLhsData lhs_data = PrepareAssignmentLhs(expr->target());
 
   VisitForAccumulatorValue(expr->value());
 
   builder()->SetExpressionPosition(expr);
   BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode());
+  if (is_common_immutable_variable) {
+    ClearReservedFeildInTwoExpression(expr->target(), expr->value());
+    if (reserved_register_size() - reserved_register_count == 1)
+      remove_last_reserved_index();
+  }
 }
 
 void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
