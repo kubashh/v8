@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5744f311_9551f86a",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2c55833_ddf5333b",
+      "range": {
+        "startLine": 105,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 14
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0050fd76_f9b0f95f",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "nit: this is the same as the JSPROXY case, so you could combine it with that.",
+      "range": {
+        "startLine": 152,
+        "startChar": 6,
+        "endLine": 154,
+        "endChar": 59
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "897530c0_8c17794b",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0050fd76_f9b0f95f",
       "range": {
         "startLine": 152,
         "startChar": 6,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "353abe91_2040dc52",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5162,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "As this requires some more changes to some of the prototype handling, I\u0027ll address this in another CL, so we can follow-up on it independently of this CL.",
+      "parentUuid": "7c8525d6_5829e0c4",
+      "range": {
+        "startLine": 5159,
+        "startChar": 2,
+        "endLine": 5162,
+        "endChar": 3
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bbcf645_fbd00986",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "You don\u0027t need this if you add a SKIP line to mjsunit.status. (Executing this file as a test isn\u0027t useful, after all.)",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 76
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a00095_33f9646a",
+        "filename": "test/mjsunit/wasm/gc-js-interop-helpers.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bbcf645_fbd00986",
       "range": {
         "startLine": 5,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e41f413_1a1e1b81",
+        "filename": "test/mjsunit/wasm/gc-js-interop-helpers.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1de048fd_ee08aa50",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 27
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65e6b81b_d87e1f0a",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d18f28c0_2b2fbaac",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65e6b81b_d87e1f0a",
+      "range": {
+        "startLine": 12,
+        "startChar": 27,
+        "endLine": 14,
+        "endChar": 3
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a0eeae1_c4ff26d7",
@@ -152,6 +296,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "also interesting: `assertFalse(2 \u003d\u003d\u003d wasm_obj)`\nand `assertFalse({} \u003d\u003d\u003d wasm_obj)`",
+      "range": {
+        "startLine": 62,
+        "startChar": 29,
+        "endLine": 62,
+        "endChar": 31
+      },
+      "revId": "234fb1b8bb2f076773f357e26dc182077c6d0c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a488c53_1e83e1f8",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 20
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a0eeae1_c4ff26d7",
       "range": {
         "startLine": 62,
         "startChar": 29,

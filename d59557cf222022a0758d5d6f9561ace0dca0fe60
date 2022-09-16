@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3439ca26_c60a5d6a",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14507400_7a4805d0",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 43
+      },
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b9eafb3_1c76e8e4",
@@ -114,6 +138,24 @@
       "side": 1,
       "message": "I don\u0027t mind either way. It\u0027s fine to drop them.\n\n(We *could* pass a third argument to `assertThrows` that checks the error message... would that be worth it?)",
       "parentUuid": "0924daa9_6cc21e77",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b238a030_ff43a1db",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Back then I decided not to do it mainly for readability and simplicity and I still feel inclined not to do it.",
+      "parentUuid": "446ab200_a7c18927",
       "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -196,6 +238,24 @@
       "side": 1,
       "message": "Not throwing is correct here.\n`Reflect.defineProperty` performs `ToPropertyDescriptor` on the third argument, which carefully checks with `has` whether `value` etc exist before accessing them. We expect that [[Has]] returns `false` (without throwing) for Wasm objects, so passing `wasm_obj` here is indeed equivalent to passing an empty object `{}`.\nYou can include a summary of this explanation in the comment.\n(See https://tc39.es/ecma262/#sec-topropertydescriptor .)",
       "parentUuid": "155024a5_cf3420aa",
+      "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7657c33_004d9649",
+        "filename": "test/mjsunit/wasm/gc-js-interop.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done, thanks for the explanation. 😊",
+      "parentUuid": "80ad90a3_cfa88064",
       "revId": "d59557cf222022a0758d5d6f9561ace0dca0fe60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

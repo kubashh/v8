@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff89c49_46194809",
+        "filename": "test/mjsunit/wasm/gc-js-interop-async.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10549ee2_00344761",
+      "range": {
+        "startLine": 29,
+        "startChar": 28,
+        "endLine": 29,
+        "endChar": 45
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "726e15ed_df93e0a8",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc54c0e9_4f353adf",
+        "filename": "test/mjsunit/wasm/gc-js-interop-async.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "726e15ed_df93e0a8",
+      "range": {
+        "startLine": 41,
+        "startChar": 56,
+        "endLine": 41,
+        "endChar": 73
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b3676a1_a1eec18f",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "nit: `assigned`",
+      "range": {
+        "startLine": 59,
+        "startChar": 28,
+        "endLine": 59,
+        "endChar": 37
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f2d4c6c_e925e667",
+        "filename": "test/mjsunit/wasm/gc-js-interop-async.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b3676a1_a1eec18f",
       "range": {
         "startLine": 59,
         "startChar": 28,
@@ -133,6 +205,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cdaf5ba_35dc251d",
+        "filename": "test/mjsunit/wasm/gc-js-interop-collections.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5df5f8f_2146b9f4",
+      "range": {
+        "startLine": 157,
+        "startChar": 28,
+        "endLine": 157,
+        "endChar": 37
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3eafb15e_9ccbb26d",
@@ -146,6 +242,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "dupe of the previous line",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 59
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e89021b4_3c385c56",
+        "filename": "test/mjsunit/wasm/gc-js-interop-global-constructors.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3eafb15e_9ccbb26d",
       "range": {
         "startLine": 27,
         "startChar": 2,
@@ -179,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14d4eee_51e929b5",
+        "filename": "test/mjsunit/wasm/gc-js-interop-global-constructors.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1e0abd4_7cf034a1",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 63
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c896db7_8ab58a18",
@@ -192,6 +336,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "`assigned`, and a few more times in the other files",
+      "range": {
+        "startLine": 95,
+        "startChar": 28,
+        "endLine": 95,
+        "endChar": 37
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b09f6ac0_f78521bf",
+        "filename": "test/mjsunit/wasm/gc-js-interop-global-constructors.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c896db7_8ab58a18",
       "range": {
         "startLine": 95,
         "startChar": 28,
@@ -225,6 +393,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a146f313_2e814781",
+        "filename": "test/mjsunit/wasm/gc-js-interop-numeric.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "271844a2_2c950ed7",
+      "range": {
+        "startLine": 53,
+        "startChar": 37,
+        "endLine": 53,
+        "endChar": 52
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ba21728_896da1e4",
@@ -238,6 +430,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "No, just like the third argument of `Object.defineProperty`.",
+      "range": {
+        "startLine": 90,
+        "startChar": 24,
+        "endLine": 90,
+        "endChar": 42
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a5bf4a5_24b9d296",
+        "filename": "test/mjsunit/wasm/gc-js-interop-objects.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ba21728_896da1e4",
       "range": {
         "startLine": 90,
         "startChar": 24,
@@ -271,6 +487,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74fcf9a1_b47c11e0",
+        "filename": "test/mjsunit/wasm/gc-js-interop-objects.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86d0dee3_8970d0c9",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 52
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc26eefc_58c184ca",
@@ -284,6 +524,30 @@
       "writtenOn": "2022-09-15T18:25:14Z",
       "side": 1,
       "message": "Is there a reason this isn\u0027t `repeated(...)`?",
+      "range": {
+        "startLine": 103,
+        "startChar": 2,
+        "endLine": 103,
+        "endChar": 45
+      },
+      "revId": "13983399874e2f2848fdc81c90f46a5e6b87ffc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bcf0fb1_a1105a14",
+        "filename": "test/mjsunit/wasm/gc-js-interop-objects.js",
+        "patchSetId": 21
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-16T12:14:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc26eefc_58c184ca",
       "range": {
         "startLine": 103,
         "startChar": 2,
