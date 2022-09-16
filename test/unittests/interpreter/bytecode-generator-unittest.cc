@@ -3204,6 +3204,33 @@ TEST_F(BytecodeGeneratorTest, ElideRedundantLoadOperationOfImmutableContext) {
       LoadGolden("ElideRedundantLoadOperationOfImmutableContext.golden")));
 }
 
+TEST_F(BytecodeGeneratorTest,
+       ElideRedundantLoadOperationOfImmutableContextWithoutSameAccumulator) {
+  printer().set_wrap(false);
+  printer().set_test_function_name("test");
+
+  std::string snippets[] = {
+      "var test;\n"
+      "(function () {\n"
+      "  var a = {b: {bb: 2}, c: 3};\n"
+      "  function foo() {a.b.bb = a.c;}\n"
+      "  foo();\n"
+      "  test = foo;\n"
+      "})();\n",
+
+      "var test;\n"
+      "(function () {\n"
+      "  var a = {b: {bb: 2}, c: function() {return 3}};\n"
+      "  function foo() {a.b.bb = a.c();}\n"
+      "  foo();\n"
+      "  test = foo;\n"
+      "  })();\n"};
+
+  CHECK(CompareTexts(BuildActual(printer(), snippets),
+                     LoadGolden("ElideRedundantLoadOperationOfImmutableContextW"
+                                "ithoutSameAccumulator.golden")));
+}
+
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8

@@ -123,6 +123,8 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
 
   int maxiumum_register_index() const { return max_register_index_; }
 
+  void RegisterTransfer(Register input_reg, Register output_reg);
+
  private:
   static const uint32_t kInvalidEquivalenceId;
 
