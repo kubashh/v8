@@ -120,6 +120,24 @@
       "parentUuid": "0755413b_c06f5299",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "748ff549_d0b2c6f4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-16T00:48:06Z",
+      "side": 1,
+      "message": "Unfortunately JS is a tricky language. It is definitely possible to nest assignments in this case, consider the following, which currently causes an assertion with your CL:\n\n```\nfunction outer() {\n  let a \u003d { x: 42, nested: { name: \"a\" } };\n  let b \u003d { x: 42, nested: { name: \"x\" } };\n  function inner() {\n    a.nested.name \u003d a[b.nested.name \u003d b.x];\n  }\n  inner();\n}\nouter();\n```",
+      "parentUuid": "58b401d5_537915e4",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
