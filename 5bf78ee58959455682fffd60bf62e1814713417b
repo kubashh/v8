@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8311c995_60bd7c1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-09-16T15:47:06Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5bf78ee58959455682fffd60bf62e1814713417b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a72fce13_bc449533",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-09-16T13:18:52Z",
       "side": 1,
       "message": "I see locally in benchmarks that 8 is pretty high and we may miss out by quite a bit on the deadline.\n\nI am pretty sure that\u0027s benchmark specific but since we only check after pages, I think we can be more agressive.",
+      "range": {
+        "startLine": 545,
+        "startChar": 51,
+        "endLine": 545,
+        "endChar": 55
+      },
+      "revId": "5bf78ee58959455682fffd60bf62e1814713417b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a3efc1_136d3316",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-09-16T15:47:06Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "a72fce13_bc449533",
       "range": {
         "startLine": 545,
         "startChar": 51,
