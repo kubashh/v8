@@ -16,6 +16,41 @@
       "message": "lgtm, thanks for fixing! I don\u0027t have access to chromium:1362487 but I can imagine what it says.",
       "revId": "82cfa6cdd4128ed2e7b8a2577fe5d0f7db9f4815",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5fe4e37_745ab0c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-09-16T06:29:35Z",
+      "side": 1,
+      "message": "Oh no, it\u0027s quite annoying that code reviewers aren\u0027t cc\u0027d automatically. But the repro test in this bug is essentially what the ClusterFuzz report said. I also cc:d you manually.",
+      "parentUuid": "a83053f3_04c493c4",
+      "revId": "82cfa6cdd4128ed2e7b8a2577fe5d0f7db9f4815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "420e1633_3a933db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-09-16T06:29:35Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "82cfa6cdd4128ed2e7b8a2577fe5d0f7db9f4815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
