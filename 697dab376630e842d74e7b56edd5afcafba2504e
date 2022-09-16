@@ -138,6 +138,24 @@
       "parentUuid": "58b401d5_537915e4",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "674436cc_2beb5997",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-16T04:32:35Z",
+      "side": 1,
+      "message": "Oops! Thanks for your reminder! You are exactly correct, I didn\u0027t cover this case, there is potential `Assignment` in current marking mechanism, but I have used a `DCHECK` at L3657 `DCHECK(IsVariableInRegister(variable, Register(RegisterAllocationScope::get_reserved_index())));`.\n\nit looks like it could catch these corner cases, because the nested variable `b` is not same as variable `a`, if the nested variable is same as outter variable, we could even elide the nested load bytecode by reusing the outter variable, but in this CL, we would like just to elide load bytecode in leaf node without nested `Assignment`, so if there is futher case like these we could use this `DCHECK` to find it.\n\nI also updated this patch set which avoid marking the case you metioned by checking whether the `key` of `Property` is a `Literal`, and also the arguments in `Call`, hence there may not be potential nested `Assignment`, how does that sounds to you?",
+      "parentUuid": "748ff549_d0b2c6f4",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
