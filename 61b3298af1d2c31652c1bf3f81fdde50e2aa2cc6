@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "02f53e8b_f3009817",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-16T07:39:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c2daccf_cf661818",
+      "revId": "61b3298af1d2c31652c1bf3f81fdde50e2aa2cc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "92df7d9e_b603d150",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "+1 Seems like this getter isn\u0027t used to check for the presence of the shared heap.",
       "parentUuid": "c74d91c5_522c9a8f",
+      "range": {
+        "startLine": 2011,
+        "startChar": 11,
+        "endLine": 2011,
+        "endChar": 25
+      },
+      "revId": "61b3298af1d2c31652c1bf3f81fdde50e2aa2cc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26de9991_0c491a98",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-09-16T07:39:10Z",
+      "side": 1,
+      "message": "Great idea! In the same spirit I\u0027ve added a DCHECK that the result is indeed non-null as well.",
+      "parentUuid": "c0c631ed_dbf5428c",
       "range": {
         "startLine": 2011,
         "startChar": 11,
