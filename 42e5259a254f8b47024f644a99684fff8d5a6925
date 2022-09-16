@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45ef1bd8_14428f47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-16T23:14:33Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "42e5259a254f8b47024f644a99684fff8d5a6925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9a5dba_98fbe424",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-16T23:14:33Z",
+      "side": 1,
+      "message": "Nit: please use the version with tabs (i.e. `--harmony-array-grouping`)",
+      "range": {
+        "startLine": 56,
+        "startChar": 25,
+        "endLine": 56,
+        "endChar": 47
+      },
+      "revId": "42e5259a254f8b47024f644a99684fff8d5a6925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
