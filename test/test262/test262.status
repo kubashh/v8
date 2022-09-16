@@ -540,7 +540,6 @@
   'staging/Temporal/TimeZone/old/subminute-offset': [FAIL],
   'staging/Temporal/ZonedDateTime/old/construction-and-properties': [FAIL],
   'staging/Temporal/ZonedDateTime/old/dst-math': [FAIL],
-  'staging/Temporal/ZonedDateTime/old/dst-properties': [FAIL],
   'staging/Temporal/ZonedDateTime/old/equals': [FAIL],
   'staging/Temporal/ZonedDateTime/old/since': [FAIL],
   'staging/Temporal/ZonedDateTime/old/toPlainMonthDay': [FAIL],
