@@ -87,6 +87,7 @@ class MaglevCompilationInfo final {
   bool Name() const { return Name##_; }
   MAGLEV_COMPILATION_FLAG_LIST(V)
 #undef V
+  bool collect_source_positions() const { return collect_source_positions_; }
 
   // Must be called from within a MaglevCompilationHandleScope. Transfers owned
   // handles (e.g. shared_, function_) to the new scope.
@@ -122,6 +123,7 @@ class MaglevCompilationInfo final {
 #define V(Name) const bool Name##_;
   MAGLEV_COMPILATION_FLAG_LIST(V)
 #undef V
+  bool collect_source_positions_;
 
   // 1) PersistentHandles created via PersistentHandlesScope inside of
   //    CompilationHandleScope.

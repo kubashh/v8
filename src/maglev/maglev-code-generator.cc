@@ -987,9 +987,10 @@ class MaglevCodeGeneratorImpl final {
 
     __ RecordComment("-- Non-lazy deopts");
     for (EagerDeoptInfo* deopt_info : code_gen_state_.eager_deopts()) {
-      // TODO(leszeks): Record source positions.
-      __ RecordDeoptReason(deopt_info->reason, 0, SourcePosition::Unknown(),
-                           deopt_index);
+      if (masm_.compilation_info()->collect_source_positions()) {
+        __ RecordDeoptReason(deopt_info->reason, 0, deopt_info->source_position,
+                             deopt_index);
+      }
       __ bind(&deopt_info->deopt_entry_label);
       __ CallForDeoptimization(Builtin::kDeoptimizationEntry_Eager, deopt_index,
                                &deopt_info->deopt_entry_label,
