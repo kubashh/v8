@@ -6812,10 +6812,12 @@ Map Heap::GcSafeMapOfCodeSpaceObject(HeapObject object) {
   if (map_word.IsForwardingAddress()) {
 #ifdef V8_EXTERNAL_CODE_SPACE
     PtrComprCageBase code_cage_base(isolate()->code_cage_base());
+    return map_word
+        .ToForwardingAddress<ExternalCodeCompressionScheme>(code_cage_base)
+        .map(cage_base);
 #else
-    PtrComprCageBase code_cage_base = cage_base;
+    return map_word.ToForwardingAddress().map(cage_base);
 #endif
-    return map_word.ToForwardingAddress(code_cage_base).map(cage_base);
   }
   return map_word.ToMap();
 }

@@ -69,6 +69,50 @@ Address V8HeapCompressionScheme::DecompressTaggedAny(
 }
 
 //
+// ExternalCodeCompressionScheme
+//
+
+// static
+constexpr Address ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
+    Address on_heap_addr) {
+  return RoundDown<kPtrComprCageBaseAlignment>(on_heap_addr +
+                                               kPtrComprCageBaseAlignment / 2);
+}
+
+// static
+Address ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
+    PtrComprCageBase cage_base) {
+  return cage_base.address();
+}
+
+// static
+Tagged_t ExternalCodeCompressionScheme::CompressTagged(Address tagged) {
+  return static_cast<Tagged_t>(static_cast<uint32_t>(tagged));
+}
+
+// static
+Address ExternalCodeCompressionScheme::DecompressTaggedSigned(
+    Tagged_t raw_value) {
+  // For runtime code the upper 32-bits of the Smi value do not matter.
+  return static_cast<Address>(raw_value);
+}
+
+// static
+template <typename TOnHeapAddress>
+Address ExternalCodeCompressionScheme::DecompressTaggedPointer(
+    TOnHeapAddress on_heap_addr, Tagged_t raw_value) {
+  return GetPtrComprCageBaseAddress(on_heap_addr) +
+         static_cast<intptr_t>(static_cast<int32_t>(raw_value));
+}
+
+// static
+template <typename TOnHeapAddress>
+Address ExternalCodeCompressionScheme::DecompressTaggedAny(
+    TOnHeapAddress on_heap_addr, Tagged_t raw_value) {
+  return DecompressTaggedPointer(on_heap_addr, raw_value);
+}
+
+//
 // Misc functions.
 //
 

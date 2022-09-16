@@ -41,9 +41,35 @@ class V8HeapCompressionScheme {
 };
 
 #ifdef V8_EXTERNAL_CODE_SPACE
+
 // Compression scheme used for fields containing Code objects (namely for the
 // CodeDataContainer::code field).
-using ExternalCodeCompressionScheme = V8HeapCompressionScheme;
+class ExternalCodeCompressionScheme {
+ public:
+  V8_INLINE static constexpr Address GetPtrComprCageBaseAddress(
+      Address on_heap_addr);
+
+  V8_INLINE static Address GetPtrComprCageBaseAddress(
+      PtrComprCageBase cage_base);
+
+  // Compresses full-pointer representation of a tagged value to on-heap
+  // representation.
+  V8_INLINE static Tagged_t CompressTagged(Address tagged);
+
+  // Decompresses smi value.
+  V8_INLINE static Address DecompressTaggedSigned(Tagged_t raw_value);
+
+  // Decompresses weak or strong heap object pointer or forwarding pointer,
+  // preserving both weak- and smi- tags.
+  template <typename TOnHeapAddress>
+  V8_INLINE static Address DecompressTaggedPointer(TOnHeapAddress on_heap_addr,
+                                                   Tagged_t raw_value);
+  // Decompresses any tagged value, preserving both weak- and smi- tags.
+  template <typename TOnHeapAddress>
+  V8_INLINE static Address DecompressTaggedAny(TOnHeapAddress on_heap_addr,
+                                               Tagged_t raw_value);
+};
+
 #endif  // V8_EXTERNAL_CODE_SPACE
 
 // Accessors for fields that may be unaligned due to pointer compression.

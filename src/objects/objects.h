@@ -880,6 +880,8 @@ class MapWord {
   // Note, that the parameterless version is preferred because it avoids
   // unnecessary recompressions.
   inline HeapObject ToForwardingAddress();
+
+  template <typename CompressionScheme = V8HeapCompressionScheme>
   inline HeapObject ToForwardingAddress(PtrComprCageBase host_cage_base);
 
   inline Address ptr() { return value_; }
