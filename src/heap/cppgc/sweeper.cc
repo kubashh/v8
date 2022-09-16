@@ -858,6 +858,8 @@ class Sweeper::SweeperImpl final {
     if (is_in_progress_ && !is_sweeping_on_mutator_thread_ &&
         concurrent_sweeper_handle_ && concurrent_sweeper_handle_->IsValid() &&
         !concurrent_sweeper_handle_->IsActive()) {
+      StatsCollector::EnabledScope stats_scope(
+          stats_collector_, StatsCollector::kSweepFinishIfOutOfWork);
       // At this point we know that the concurrent sweeping task has run
       // out-of-work: all pages are swept. The main thread still needs to finish
       // sweeping though.
@@ -865,7 +867,19 @@ class Sweeper::SweeperImpl final {
                          [](const SpaceState& state) {
                            return state.unswept_pages.IsEmpty();
                          }));
-      FinishIfRunning();
+
+      // There may be unfinalized pages left. Since it's hard to estimate
+      // the actual amount of sweeping necessary, we sweep with a small
+      // deadline to see if sweeping can be fully finished.
+      MutatorThreadSweeper sweeper(heap_.heap(), &space_states_, platform_,
+                                   config_.free_memory_handling);
+      const double deadline =
+          platform_->MonotonicallyIncreasingTime() +
+          v8::base::TimeDelta::FromMicroseconds(100).InSecondsF();
+      if (sweeper.SweepWithDeadline(deadline)) {
+        FinalizeSweep();
+        NotifyDone();
+      }
     }
   }
 
