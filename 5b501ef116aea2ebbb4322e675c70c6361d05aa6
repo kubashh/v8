@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95412ffd_8191678c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-16T12:56:34Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "5b501ef116aea2ebbb4322e675c70c6361d05aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b85bc73_c263e7fa",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-16T12:56:34Z",
+      "side": 1,
+      "message": "We can also just call `FinishIfRunning()` here and re-enter some scopes/loops with empty states.",
+      "range": {
+        "startLine": 880,
+        "startChar": 9,
+        "endLine": 881,
+        "endChar": 21
+      },
+      "revId": "5b501ef116aea2ebbb4322e675c70c6361d05aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
