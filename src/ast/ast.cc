@@ -169,7 +169,8 @@ bool Expression::IsAccessorFunctionDefinition() const {
 VariableProxy::VariableProxy(Variable* var, int start_position)
     : Expression(start_position, kVariableProxy),
       raw_name_(var->raw_name()),
-      next_unresolved_(nullptr) {
+      next_unresolved_(nullptr),
+      should_reserved_(false) {
   DCHECK(!var->is_this());
   bit_field_ |= IsAssignedField::encode(false) |
                 IsResolvedField::encode(false) |
@@ -179,7 +180,8 @@ VariableProxy::VariableProxy(Variable* var, int start_position)
 
 VariableProxy::VariableProxy(const VariableProxy* copy_from)
     : Expression(copy_from->position(), kVariableProxy),
-      next_unresolved_(nullptr) {
+      next_unresolved_(nullptr),
+      should_reserved_(false) {
   bit_field_ = copy_from->bit_field_;
   DCHECK(!copy_from->is_resolved());
   raw_name_ = copy_from->raw_name_;
