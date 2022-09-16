@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db1caacd_f0e5b950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-16T07:10:38Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "6c5ddd84b9ef3df0493f97dfc170671084bf15bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1550f5fa_67b6de0b",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-16T07:10:38Z",
+      "side": 1,
+      "message": "Added this as without the flag there is an overall test limit. The number doesn\u0027t play any role though, since the whole class is patched above.",
+      "range": {
+        "startLine": 566,
+        "startChar": 14,
+        "endLine": 566,
+        "endChar": 39
+      },
+      "revId": "6c5ddd84b9ef3df0493f97dfc170671084bf15bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17630e93_1e41ec4f",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-16T07:10:38Z",
+      "side": 1,
+      "message": "This was None on non-analysis results before the bug. But relying on it was brittle. Keeping/dropping results was meant to be a pure memory optimization (probably a useless one). Hence, now we rely on the more meaningful new safeguard.",
+      "range": {
+        "startLine": 197,
+        "startChar": 9,
+        "endLine": 197,
+        "endChar": 15
+      },
+      "revId": "6c5ddd84b9ef3df0493f97dfc170671084bf15bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
