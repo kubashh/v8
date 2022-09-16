@@ -58,6 +58,14 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void VisitDeclarations(Declaration::List* declarations);
   void VisitStatements(const ZonePtrList<Statement>* statments);
 
+  void add_reserved_index(int index);
+
+  int reserved_register_size();
+
+  int get_last_reserved_index();
+
+  void remove_last_reserved_index();
+
  private:
   class AccumulatorPreservingScope;
   class ContextScope;
@@ -257,8 +265,13 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void SetVariableInRegister(Variable* var, Register reg);
 
+  bool TransferRgisterIfVariableReserved(Variable* var);
+
+  void ReserveAccumulatorInRegisterForReusing();
+
   void BuildVariableLoad(Variable* variable, HoleCheckMode hole_check_mode,
-                         TypeofMode typeof_mode = TypeofMode::kNotInside);
+                         TypeofMode typeof_mode = TypeofMode::kNotInside,
+                         bool should_reserved = false);
   void BuildVariableLoadForAccumulatorValue(
       Variable* variable, HoleCheckMode hole_check_mode,
       TypeofMode typeof_mode = TypeofMode::kNotInside);
@@ -447,6 +460,13 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void AddToEagerLiteralsIfEager(FunctionLiteral* literal);
 
+  Expression* GetLeftSubExpressionIfExist(Expression* exp);
+
+  bool MarkTwoExpressionIfCommonImmutableVariable(Expression* lhs,
+                                                  Expression* rhs);
+
+  void ClearReservedFeildInTwoExpression(Expression* lhs, Expression* rhs);
+
   static constexpr ToBooleanMode ToBooleanModeFromTypeHint(TypeHint type_hint) {
     return type_hint == TypeHint::kBoolean ? ToBooleanMode::kAlreadyBoolean
                                            : ToBooleanMode::kConvertToBoolean;
@@ -552,6 +572,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   LoopScope* current_loop_scope_;
 
   HandlerTable::CatchPrediction catch_prediction_;
+
+  ZoneVector<int> reserved_indexes_;
 };
 
 }  // namespace interpreter
