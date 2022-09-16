@@ -202,7 +202,7 @@ macro TestTurbofanBitsetType(
     }
     @if(V8_ENABLE_WEBASSEMBLY)
     case (WasmObject): {
-      return bitsetLow.wasm_object;
+      return bitsetLow.wasm_object || bitsetLow.other_object;
     }
     case (Object): {
       return false;
