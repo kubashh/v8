@@ -4585,13 +4585,12 @@ class CalendarMap final {
 
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(CalendarMap, GetCalendarMap)
 
-// #sec-temporal-isbuiltincalendar
-bool IsBuiltinCalendar(Isolate* isolate, const std::string& id) {
-  return GetCalendarMap()->Contains(id);
-}
-
 bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id) {
-  return IsBuiltinCalendar(isolate, id->ToCString().get());
+  // 1. Let calendars be AvailableCalendars().
+  // 2. If calendars contains the ASCII-lowercase of id, return true.
+  // 3. Return false.
+  id = Intl::ConvertToLower(isolate, id).ToHandleChecked();
+  return GetCalendarMap()->Contains(id->ToCString().get());
 }
 
 Handle<String> CalendarIdentifier(Isolate* isolate, int32_t index) {
@@ -4600,6 +4599,7 @@ Handle<String> CalendarIdentifier(Isolate* isolate, int32_t index) {
 }
 
 int32_t CalendarIndex(Isolate* isolate, Handle<String> id) {
+  id = Intl::ConvertToLower(isolate, id).ToHandleChecked();
   return GetCalendarMap()->Index(id->ToCString().get());
 }
 
@@ -4620,9 +4620,32 @@ Handle<String> CalendarIdentifier(Isolate* isolate, int32_t index) {
 
 // #sec-temporal-isbuiltincalendar
 bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id) {
-  // 1. If id is not "iso8601", return false.
-  // 2. Return true
-  return isolate->factory()->iso8601_string()->Equals(*id);
+  // Note: For build without intl support, the only item in AvailableCalendars()
+  // is "iso8601".
+  // 1. Let calendars be AvailableCalendars().
+  // 2. If calendars contains the ASCII-lowercase of id, return true.
+  // 3. Return false.
+
+  // Fast path
+  if (isolate->factory()->iso8601_string()->Equals(*id)) return true;
+  if (id->length() != 7) return false;
+  id = String::Flatten(isolate, id);
+
+  DisallowGarbageCollection no_gc;
+  const String::FlatContent& flat = id->GetFlatContent(no_gc);
+  // Return true if id is case insensitive equals to "iso8601".
+  if (flat.IsOneByte()) {
+    const char* s =
+        reinterpret_cast<const char*>(flat.ToOneByteVector().begin());
+    return ((s[0] == 'i' || s[0] == 'I') && (s[1] == 's' || s[1] == 'S') &&
+            (s[2] == 'o' || s[2] == 'O') && s[3] == '8' && s[4] == '6' &&
+            s[5] == '0' && s[6] == '1');
+  } else {
+    const uint16_t* s = flat.ToUC16Vector().begin();
+    return ((s[0] == 'i' || s[0] == 'I') && (s[1] == 's' || s[1] == 'S') &&
+            (s[2] == 'o' || s[2] == 'O') && s[3] == '8' && s[4] == '6' &&
+            s[5] == '0' && s[6] == '1');
+  }
 }
 
 int32_t CalendarIndex(Isolate* isolate, Handle<String> id) { return 0; }
