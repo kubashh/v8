@@ -533,20 +533,31 @@ int32_t ScanTimeZoneIANANameComponent(base::Vector<Char> str, int32_t s) {
 //   MST7MDT
 //   PST8PDT
 
+#define ASCII_TO_LOWER(c) (('A' <= (c) && (c) <= 'Z') ? ((c) - 'A' + 'a') : (c))
+#define ASCII_CASELESS_EQ(a, b) (ASCII_TO_LOWER(a) == ASCII_TO_LOWER(b))
+template <typename Char>
+inline bool ASCIICaselessEqual(base::Vector<Char> str, int32_t s,
+                               const char* rhs, size_t chars) {
+  for (size_t i = 0; i < chars; i++) {
+    if (!ASCII_CASELESS_EQ(str[s + i], rhs[i])) return false;
+  }
+  return true;
+}
+
 template <typename Char>
 int32_t ScanTimeZoneIANALegacyName(base::Vector<Char> str, int32_t s) {
   int32_t cur = s;
   {
     constexpr int32_t len = 4;
     if (str.length() < cur + len) return 0;
-    if (CompareCharsEqual(str.begin() + cur, "GMT0", len)) return len;
+    if (ASCIICaselessEqual(str, cur, "GMT0", len)) return len;
   }
 
   {
     constexpr int32_t len = 5;
     if (str.length() < cur + len) return 0;
-    if (CompareCharsEqual(str.begin() + cur, "GMT+0", len) ||
-        CompareCharsEqual(str.begin() + cur, "GMT-0", len)) {
+    if (ASCIICaselessEqual(str, cur, "GMT+0", len) ||
+        ASCIICaselessEqual(str, cur, "GMT-0", len)) {
       return len;
     }
   }
@@ -554,10 +565,10 @@ int32_t ScanTimeZoneIANALegacyName(base::Vector<Char> str, int32_t s) {
   {
     constexpr int32_t len = 7;
     if (str.length() < cur + len) return 0;
-    if (CompareCharsEqual(str.begin() + cur, "EST5EDT", len) ||
-        CompareCharsEqual(str.begin() + cur, "CST6CDT", len) ||
-        CompareCharsEqual(str.begin() + cur, "MST7MDT", len) ||
-        CompareCharsEqual(str.begin() + cur, "PST8PDT", len)) {
+    if (ASCIICaselessEqual(str, cur, "EST5EDT", len) ||
+        ASCIICaselessEqual(str, cur, "CST6CDT", len) ||
+        ASCIICaselessEqual(str, cur, "MST7MDT", len) ||
+        ASCIICaselessEqual(str, cur, "PST8PDT", len)) {
       return len;
     }
   }
@@ -565,7 +576,7 @@ int32_t ScanTimeZoneIANALegacyName(base::Vector<Char> str, int32_t s) {
   {
     constexpr int32_t len = 8;
     if (str.length() < cur + len) return 0;
-    if (CompareCharsEqual(str.begin() + cur, "Etc/GMT0", len)) return len;
+    if (ASCIICaselessEqual(str, cur, "Etc/GMT0", len)) return len;
   }
 
   return 0;
@@ -577,7 +588,7 @@ int32_t ScanEtcGMTASCIISignUnpaddedHour(base::Vector<Char> str, int32_t s) {
   if ((s + 9) > str.length()) return 0;
   int32_t cur = s;
   int32_t len = arraysize("Etc/GMT") - 1;
-  if (!CompareCharsEqual(str.begin() + cur, "Etc/GMT", len)) return 0;
+  if (!ASCIICaselessEqual(str, cur, "Etc/GMT", len)) return 0;
   cur += len;
   Char sign = str[cur++];
   if (!IsAsciiSign(sign)) return 0;
