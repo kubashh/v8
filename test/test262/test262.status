@@ -688,7 +688,6 @@
   'intl402/Temporal/Calendar/prototype/era/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-out-of-range': [FAIL],
   'intl402/Temporal/Calendar/prototype/eraYear/argument-propertybag-calendar-case-insensitive': [FAIL],
   'intl402/Temporal/Calendar/prototype/eraYear/argument-zoneddatetime-timezone-getoffsetnanosecondsfor-out-of-range': [FAIL],
-  'intl402/Temporal/TimeZone/from/timezone-case-insensitive': [FAIL],
   'intl402/Temporal/ZonedDateTime/prototype/era/timezone-getoffsetnanosecondsfor-out-of-range': [FAIL],
   'intl402/Temporal/ZonedDateTime/prototype/eraYear/timezone-getoffsetnanosecondsfor-out-of-range': [FAIL],
 

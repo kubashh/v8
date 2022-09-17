@@ -410,10 +410,7 @@ class TemporalParserTest : public TestWithIsolate {
     VERIFY_PARSE_FAIL(R, "1900-12-31[-bcdefghijklmn/abcde]");   \
     VERIFY_PARSE_FAIL(R, "1900-12-31[abcdefghi//abde]");        \
     /* Legal Date with illegal [Etc/GMT ASCIISign Hour] */      \
-    VERIFY_PARSE_FAIL(R, "1900-12-31[ETC/GMT+10]");             \
-    /* Wrong case for Etc */                                    \
-    VERIFY_PARSE_FAIL(R, "1900-12-31[etc/GMT-10]");             \
-    /* Wrong case for GMT */                                    \
+    /* double 0 in GMT */                                       \
     VERIFY_PARSE_FAIL(R, "1900-12-31[Etc/gmt+00]");             \
     VERIFY_PARSE_FAIL(R, "1900-12-31[Etc/gmt-00]");             \
     VERIFY_PARSE_FAIL(R, "1900-12-31[Etc/gMt+00]");             \
@@ -884,6 +881,22 @@ TEST_F(TemporalParserTest, TemporalTimeStringIllegal) {
                             "");                                               \
     VerifyParse##R##Success("2021-11-09 23:45:56.891234567Z[Etc/GMT+23]",      \
                             2021, 11, 9, 23, 45, 56, 891234567, "");           \
+    VerifyParse##R##Success("1900-12-31[ETC/GMT+10]", 1900, 12, 31,            \
+                            kUndefined, kUndefined, kUndefined, kUndefined,    \
+                            "");                                               \
+    /* Strange case for Etc */                                                 \
+    VerifyParse##R##Success("1900-12-31[etc/GMT-10]", 1900, 12, 31,            \
+                            kUndefined, kUndefined, kUndefined, kUndefined,    \
+                            "");                                               \
+    /* Strange case for GMT */                                                 \
+    VerifyParse##R##Success("1900-12-31[Etc/gmt+0]", 1900, 12, 31, kUndefined, \
+                            kUndefined, kUndefined, kUndefined, "");           \
+    VerifyParse##R##Success("1900-12-31[Etc/gmt-0]", 1900, 12, 31, kUndefined, \
+                            kUndefined, kUndefined, kUndefined, "");           \
+    VerifyParse##R##Success("1900-12-31[Etc/gMt+0]", 1900, 12, 31, kUndefined, \
+                            kUndefined, kUndefined, kUndefined, "");           \
+    VerifyParse##R##Success("1900-12-31[Etc/gmT-0]", 1900, 12, 31, kUndefined, \
+                            kUndefined, kUndefined, kUndefined, "");           \
     /* TimeZoneIANAName */                                                     \
     VerifyParse##R##Success("2021-11-09[ABCDEFGHIJKLMN]", 2021, 11, 9,         \
                             kUndefined, kUndefined, kUndefined, kUndefined,    \
@@ -2114,6 +2127,16 @@ TEST_F(TemporalParserTest, TimeZoneIdentifierSucccess) {
   VerifyParseTimeZoneIdentifierSuccess("CST6CDT");
   VerifyParseTimeZoneIdentifierSuccess("MST7MDT");
   VerifyParseTimeZoneIdentifierSuccess("PST8PDT");
+
+  // TimeZoneIANALegacyName in other case
+  VerifyParseTimeZoneIdentifierSuccess("eTc/gMt0");
+  VerifyParseTimeZoneIdentifierSuccess("GmT0");
+  VerifyParseTimeZoneIdentifierSuccess("gMt-0");
+  VerifyParseTimeZoneIdentifierSuccess("GMt+0");
+  VerifyParseTimeZoneIdentifierSuccess("EsT5eDt");
+  VerifyParseTimeZoneIdentifierSuccess("cSt6CdT");
+  VerifyParseTimeZoneIdentifierSuccess("Mst7Mdt");
+  VerifyParseTimeZoneIdentifierSuccess("PST8pDT");
 
   // TimeZoneUTCOffsetName
   //  Sign Hour
