@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "880c3d7a_2c595d5d",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-19T18:03:57Z",
+      "side": 1,
+      "message": "Class ExistingCodeLogger uses a macro CALL_CODE_EVENT_HANDLER that logs to the registered listener_ or to the V8FileLogger, if no listener is assigned.\nHere we set the listener when a ETW trace session starts. This means that if were also logging code events to a log file (with --log-code), the logging to file would be replaced by ETW tracing.\nIf this is not the correct behavior and we want to support both kind of loggings together, we\u0027ll need to modify the CALL_CODE_EVENT_HANDLER macro.",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 61
+      },
+      "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
