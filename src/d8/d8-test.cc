@@ -669,10 +669,12 @@ class FastCApiObject {
     CHECK_NOT_NULL(self);
     self->fast_call_count_++;
 
-    // Number is in range.
-    CHECK(in_range && "Number range should have been enforced");
-    if (!std::isnan(real_arg)) {
-      CHECK_EQ(static_cast<IntegerT>(real_arg), checked_arg);
+    if (!i::v8_flags.fuzzing) {
+      // Number is in range.
+      CHECK(in_range && "Number range should have been enforced");
+      if (!std::isnan(real_arg)) {
+        CHECK_EQ(static_cast<IntegerT>(real_arg), checked_arg);
+      }
     }
     return true;
   }
