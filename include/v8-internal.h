@@ -232,7 +232,7 @@ static_assert(kSandboxMinimumReservationSize > kPtrComprCageReservationSize,
 // size allows omitting bounds checks on table accesses if the indices are
 // guaranteed (e.g. through shifting) to be below the maximum index. This
 // value must be a power of two.
-static const size_t kExternalPointerTableReservationSize = 128 * MB;
+static const size_t kExternalPointerTableReservationSize = 0x80 * MB;
 
 // The maximum number of entries in an external pointer table.
 static const size_t kMaxExternalPointers =
