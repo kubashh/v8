@@ -2220,6 +2220,7 @@ DEFINE_BOOL(enable_etw_stack_walking, false,
             "Enable etw stack walking for windows")
 // Don't move code objects.
 DEFINE_NEG_IMPLICATION(enable_etw_stack_walking, compact_code_space)
+DEFINE_WEAK_IMPLICATION(future, enable_etw_stack_walking)
 
 //
 // Disassembler only flags
