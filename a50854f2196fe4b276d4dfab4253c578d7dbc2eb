@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf76e2e4_c80b446c",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-09-19T07:26:46Z",
+      "side": 1,
+      "message": "I do not understand this. By both paths, do you mean up and down in the pipeline? And are 19 and 20 special? Do they have something to do with those paths? They look like magic numbers here.\n\nAlso this looks like a data-driven test. Not sure if at all available to us but I like how this looks https://ddt.readthedocs.io/en/latest/example.html .",
+      "range": {
+        "startLine": 553,
+        "startChar": 5,
+        "endLine": 556,
+        "endChar": 34
+      },
+      "revId": "a50854f2196fe4b276d4dfab4253c578d7dbc2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
