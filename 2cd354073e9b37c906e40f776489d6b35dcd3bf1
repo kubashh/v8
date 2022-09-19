@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adaf7f6e_dafe6102",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:12:10Z",
+      "side": 1,
+      "message": "These are all good suggestions, but my own bandwidth for improving the testing story of numfuzz and of the test framework is rather limited now.\n\nMaybe Almothana could add it to his backlog to improve this testing story?\n\nFor now I try to just add some value to whatever we had before. E.g. now I think we went from next-to-no testing to somewhat-poor testing.",
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1596fdf3_e6b900f8",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-09-19T07:44:36Z",
       "side": 1,
       "message": "As I understand it some flags here will exercices fuzzers without analysis phase and some will exersice analysis as well. Why not make it explicit with at least a comment? Better: extract 2 list of flags with suggestive names and union them in the for loop.",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 30
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baae202b_ca239c46",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:12:10Z",
+      "side": 1,
+      "message": "See follow up CL. I made the cycle over all flags generic. I think we need a different kind of integration tests here. The tests we currently have are E2E. E.g. just start up all fuzzers and ensure that they work.\n\nMaybe the test could query the fuzzer type and check if it\u0027s an analysis based fuzzer and then do some more checks. But right now we don\u0027t distinguish them in the checking...",
+      "parentUuid": "1596fdf3_e6b900f8",
       "range": {
         "startLine": 546,
         "startChar": 0,
@@ -49,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8200133a_0ddde46c",
+        "filename": "tools/testrunner/testdata/testroot1/out/build/d8_mocked.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:12:10Z",
+      "side": 1,
+      "message": "True, the proof is poor. In the test, if we don\u0027t analyze, the fuzzer bails out and only runs 1 test instead of the asserted 11. But that\u0027s rather implicit knowledge. We might want some better integration tests, that just test the code of the analysis-based fuzzer.",
+      "parentUuid": "a9d1b073_4a83b262",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 52
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "392e26ed_2bd751dc",
         "filename": "tools/testrunner/testproc/fuzzer.py",
         "patchSetId": 4
@@ -60,6 +125,30 @@
       "writtenOn": "2022-09-19T07:44:36Z",
       "side": 1,
       "message": "nit: Great opportunity to make a comment superfluous: extract `subtest.was_analysis_phase(result)`.",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 197,
+        "endChar": 57
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9b8c0f7_a9ceddd5",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:12:10Z",
+      "side": 1,
+      "message": "Difficult in the design. There is no test hierarchy where a numfuzz test has a test class here. The test classes are connected to different test suites and their peculiarities. Maybe the result could know that it is an analysis result? Not sure... might be yak shaving...",
+      "parentUuid": "392e26ed_2bd751dc",
       "range": {
         "startLine": 196,
         "startChar": 9,
