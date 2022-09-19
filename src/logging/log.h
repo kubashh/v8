@@ -97,6 +97,11 @@ class ExistingCodeLogger {
       LogEventListener::CodeTag tag = LogEventListener::CodeTag::kFunction);
   void LogCodeObject(AbstractCode object);
 
+  void SetListener(LogEventListener* listener) {
+    DCHECK(!listener_ || !listener);
+    listener_ = listener;
+  }
+
  private:
   Isolate* isolate_;
   LogEventListener* listener_;
@@ -133,6 +138,12 @@ class V8FileLogger : public LogEventListener {
 
   // Sets the current code event handler.
   void SetCodeEventHandler(uint32_t options, JitCodeEventHandler event_handler);
+
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_ETW_STACK_WALKING)
+  void SetEtwCodeEventHandler(uint32_t options,
+                              JitCodeEventHandler event_handler);
+  void ResetEtwCodeEventHandler();
+#endif
 
   sampler::Sampler* sampler();
   V8_EXPORT_PRIVATE std::string file_name() const;
@@ -261,7 +272,10 @@ class V8FileLogger : public LogEventListener {
   V8_EXPORT_PRIVATE bool is_logging();
 
   bool is_listening_to_code_events() override {
-    return is_logging() || jit_logger_ != nullptr;
+    return is_logging() || jit_logger_ != nullptr
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_ETW_STACK_WALKING)
+           || etw_jit_logger_ != nullptr;
+#endif
   }
 
   void LogExistingFunction(Handle<SharedFunctionInfo> shared,
