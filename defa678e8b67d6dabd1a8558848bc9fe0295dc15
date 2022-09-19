@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4470c3d7_87a65a00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T07:12:11Z",
+      "side": 1,
+      "message": "FYI, this also breaks layout tests in debug:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Blink%20Linux%20Debug/16459/overview\nhttps://test-results.appspot.com/data/layout_results/V8_Blink_Linux_Debug/16459/blink_wpt_tests%20%28with%20patch%29/layout-test-results/results.html\n\nSTDERR: # Fatal error in ../../v8/src/heap/cppgc/stats-collector.h, line 483\nSTDERR: # Debug check failed: GarbageCollectionState::kNotRunning !\u003d stats_collector_-\u003egc_state_ (0 vs. 0).\nSTDERR: #\nSTDERR: #\nSTDERR: #\nSTDERR: #FailureMessage Object: 0x7ffca0f12e60#0 0x5642b3720da2 base::debug::CollectStackTrace()\nSTDERR: #1 0x5642b3689983 base::debug::StackTrace::StackTrace()\nSTDERR: #2 0x5642b55b9bcd gin::(anonymous namespace)::PrintStackTrace()\nSTDERR: #3 0x5642b511e438 V8_Fatal()\nSTDERR: #4 0x5642b511e015 v8::base::(anonymous namespace)::DefaultDcheckHandler()\nSTDERR: #5 0x5642b19a9d67 cppgc::internal::Sweeper::SweeperImpl::FinishIfOutOfWork()\nSTDERR: #6 0x5642b0e7998f v8::internal::Heap::CompleteSweepingYoung()\nSTDERR: #7 0x5642b0e7746e v8::internal::Heap::PerformGarbageCollection()\nSTDERR: #8 0x5642b0e75220 v8::internal::Heap::CollectGarbage()\nSTDERR: #9 0x5642b0f34122 v8::internal::ScavengeJob::Task::RunInternal()\nSTDERR: #10 0x5642b36dcb11 base::TaskAnnotator::RunTaskImpl()\nSTDERR: #11 0x5642b36f33ff base::sequence_manager::internal::ThreadControllerWithMessagePumpImpl::DoWorkImpl()\nSTDERR: #12 0x5642b36f2e40 base::sequence_manager::internal::ThreadControllerWithMessagePumpImpl::DoWork()\nSTDERR: #13 0x5642b36f3af5 base::sequence_manager::internal::ThreadControllerWithMessagePumpImpl::DoWork()\nSTDERR: #14 0x5642b36a554c base::MessagePumpDefault::Run()",
+      "revId": "defa678e8b67d6dabd1a8558848bc9fe0295dc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
