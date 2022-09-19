@@ -16,6 +16,46 @@
       "message": "@Jakob: PTAL\n@Nico: PTAL for src/compiler/access-info.cpp",
       "revId": "40790759a040b09c8b03814b7b94cd287e5dd0e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8652d77d_2ee6cde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-19T12:41:23Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "40790759a040b09c8b03814b7b94cd287e5dd0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e57fbda0_c1a802a0",
+        "filename": "src/objects/lookup.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-19T12:41:23Z",
+      "side": 1,
+      "message": "Outdated comment, please drop it while you\u0027re here.",
+      "range": {
+        "startLine": 1045,
+        "startChar": 2,
+        "endLine": 1046,
+        "endChar": 17
+      },
+      "revId": "40790759a040b09c8b03814b7b94cd287e5dd0e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
