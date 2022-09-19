@@ -1,0 +1,406 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f26a4b1c_de6ff604",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "I\u0027m not done with the review, but sending some comments already ...",
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "214d5792_5162c5af",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Do you mean `max()` instead of `min()`?\nHow about using something like `SignedAddOverflow32` from `base/bits.h`?",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 47
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dbfde03_97f17c5e",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Again, I\u0027m confused about the `min()`.",
+      "range": {
+        "startLine": 166,
+        "startChar": 40,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fc44e1_1445fcaf",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "This doesn\u0027t check for 2**32, which could lead to an overflow later I fear.",
+      "range": {
+        "startLine": 199,
+        "startChar": 5,
+        "endLine": 199,
+        "endChar": 55
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b323d99e_79136d0b",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "This doesn\u0027t have to be a two-byte string, but I guess this kind of imprecision is fine here?",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 260,
+        "endChar": 35
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6287776d_5068d10a",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Can\u0027t we be sure it\u0027s a two-byte as soon as one of the inputs is two-byte, that is, do the next check first?",
+      "range": {
+        "startLine": 277,
+        "startChar": 12,
+        "endLine": 277,
+        "endChar": 74
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68dca772_3e4ee378",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Could we have a DCHECK here that `input` doesn\u0027t have effect or control output?",
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c93f06ba_6fd3a9fa",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Maybe turn that into a named constant, as it\u0027s used across functions.",
+      "range": {
+        "startLine": 407,
+        "startChar": 17,
+        "endLine": 407,
+        "endChar": 19
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f6f6325_71236bd7",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "I suspect that you meant to pass `dst` by reference? According to the style-guide, you should use a pointer to make it more explicit.",
+      "range": {
+        "startLine": 443,
+        "startChar": 2,
+        "endLine": 443,
+        "endChar": 5
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd8376f_89a17042",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Maybe change the name to indicate that it\u0027s incomplete, something like `IsClosebyDominator`.",
+      "range": {
+        "startLine": 461,
+        "startChar": 5,
+        "endLine": 461,
+        "endChar": 16
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9de08c2_91c1c2bd",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "nit: `IsPhiContainingGivenInputs`?",
+      "range": {
+        "startLine": 479,
+        "startChar": 5,
+        "endLine": 479,
+        "endChar": 24
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51a06ba3_177c8623",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "not",
+      "range": {
+        "startLine": 515,
+        "startChar": 3,
+        "endLine": 515,
+        "endChar": 7
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ecd903_4c622702",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "As mentioned above, this looks like it should be `\u0026other_predecessors`.",
+      "range": {
+        "startLine": 583,
+        "startChar": 59,
+        "endLine": 583,
+        "endChar": 77
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad70d663_108a20e3",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "It seems that this variable is never set to `true`?",
+      "range": {
+        "startLine": 609,
+        "startChar": 13,
+        "endLine": 609,
+        "endChar": 34
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0580691c_bbe8b6df",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 610,
+        "startChar": 55,
+        "endLine": 610,
+        "endChar": 75
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1ec2868_6e7612a7",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 687,
+        "startChar": 35,
+        "endLine": 687,
+        "endChar": 43
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc6b4d45_90f713b5",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "`enum class State : uint8_t` saves memory, the default is `int`.",
+      "range": {
+        "startLine": 158,
+        "startChar": 13,
+        "endLine": 158,
+        "endChar": 18
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9845c4be_93594bab",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-19T11:57:48Z",
+      "side": 1,
+      "message": "Maybe pick a longer but more descriptive name?",
+      "range": {
+        "startLine": 319,
+        "startChar": 48,
+        "endLine": 319,
+        "endChar": 58
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
