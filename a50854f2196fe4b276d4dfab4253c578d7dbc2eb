@@ -22,6 +22,30 @@
       },
       "revId": "a50854f2196fe4b276d4dfab4253c578d7dbc2eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "347672b4_3f3960c3",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:27:09Z",
+      "side": 1,
+      "message": "They probably are quite magic... I could pick any number of events and as a result I\u0027d have some other number of overall tests. I had no other idea how to test this. The timeout processor is just listening to event (like next-test, next-result) and checks for the overall timeout. Testing based on time is very brittle and flaky, so I replaced it just by counting the events.\n\nBy using two subsequent events, we indeed test this up and down the pipeline. We always get a next-test and a next-result event alternating in this processor. Hence with two consecutive events, we test both callbacks.\n\nI could just count each event separately, which might make the test more obvious, but makes the fake implementation above slightly more complex.",
+      "parentUuid": "cf76e2e4_c80b446c",
+      "range": {
+        "startLine": 553,
+        "startChar": 5,
+        "endLine": 556,
+        "endChar": 34
+      },
+      "revId": "a50854f2196fe4b276d4dfab4253c578d7dbc2eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

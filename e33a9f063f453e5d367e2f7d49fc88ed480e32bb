@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a9af716_1649c3b3",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-09-19T08:27:09Z",
+      "side": 1,
+      "message": "Yep, thanks! In fact I first discovered this test after the fix. For understanding what\u0027s needed for the fix I relied on old-school debugging and logging 😞\n\nI was looking into \"how can we improve testing\" afterwards and tried to ensure that the test would at least catch the previous bug.",
+      "parentUuid": "16c10921_9bdf0776",
+      "range": {
+        "startLine": 524,
+        "startChar": 6,
+        "endLine": 524,
+        "endChar": 19
+      },
+      "revId": "e33a9f063f453e5d367e2f7d49fc88ed480e32bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea5d4fd4_bdc7a09a",
         "filename": "tools/testrunner/standard_runner_test.py",
         "patchSetId": 2
