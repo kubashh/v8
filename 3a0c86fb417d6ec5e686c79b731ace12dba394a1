@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beacc4ef_40643f84",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1492,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-19T06:04:47Z",
+      "side": 1,
+      "message": "Ack, good idea.",
+      "parentUuid": "72acfba5_b0008198",
+      "revId": "3a0c86fb417d6ec5e686c79b731ace12dba394a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ca7bde8_477eb666",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-16T14:15:44Z",
       "side": 1,
       "message": "Add a comment that the IC will go generic if the key isn\u0027t smi/heapnumber/string",
+      "revId": "3a0c86fb417d6ec5e686c79b731ace12dba394a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91e73d99_16ed900b",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-19T06:04:47Z",
+      "side": 1,
+      "message": "Done (above, after the heap number jump)",
+      "parentUuid": "0ca7bde8_477eb666",
       "revId": "3a0c86fb417d6ec5e686c79b731ace12dba394a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
