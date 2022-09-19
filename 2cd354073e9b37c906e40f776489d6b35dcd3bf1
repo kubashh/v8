@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1596fdf3_e6b900f8",
+        "filename": "tools/testrunner/standard_runner_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-09-19T07:44:36Z",
+      "side": 1,
+      "message": "As I understand it some flags here will exercices fuzzers without analysis phase and some will exersice analysis as well. Why not make it explicit with at least a comment? Better: extract 2 list of flags with suggestive names and union them in the for loop.",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 550,
+        "endChar": 30
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d1b073_4a83b262",
+        "filename": "tools/testrunner/testdata/testroot1/out/build/d8_mocked.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-09-19T07:44:36Z",
+      "side": 1,
+      "message": "Is this how analysis data looks like? Is there no additional assertion to be added in the test above for when we exercise analysis phase? I am not sure what the proof is that we do exercise that phase.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 52
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "392e26ed_2bd751dc",
+        "filename": "tools/testrunner/testproc/fuzzer.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-09-19T07:44:36Z",
+      "side": 1,
+      "message": "nit: Great opportunity to make a comment superfluous: extract `subtest.was_analysis_phase(result)`.",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 197,
+        "endChar": 57
+      },
+      "revId": "2cd354073e9b37c906e40f776489d6b35dcd3bf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
