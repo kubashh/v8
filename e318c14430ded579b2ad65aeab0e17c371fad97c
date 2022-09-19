@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779ec0f5_4f03966b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1129,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-19T12:20:54Z",
+      "side": 1,
+      "message": "do we still need these stable map deps if we record property access dependencies below?",
+      "range": {
+        "startLine": 1108,
+        "startChar": 0,
+        "endLine": 1129,
+        "endChar": 3
+      },
+      "revId": "e318c14430ded579b2ad65aeab0e17c371fad97c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
