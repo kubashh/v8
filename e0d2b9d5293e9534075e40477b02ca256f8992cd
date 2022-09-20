@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35e58efc_b0416e01",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Definitely meant `max`... But SignedAddOverflow32 looks like the cleaner solution, thanks :)",
+      "parentUuid": "214d5792_5162c5af",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 47
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7dbfde03_97f17c5e",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31294122_1261b583",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "*hum* once again, meant `max`. Will use `SignedMulOverflow32` instead.",
+      "parentUuid": "7dbfde03_97f17c5e",
+      "range": {
+        "startLine": 166,
+        "startChar": 40,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2fc44e1_1445fcaf",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "This doesn\u0027t check for 2**32, which could lead to an overflow later I fear.",
+      "range": {
+        "startLine": 199,
+        "startChar": 5,
+        "endLine": 199,
+        "endChar": 55
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3dbf73c_1b83c3d4",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Good point, fixed.",
+      "parentUuid": "d2fc44e1_1445fcaf",
       "range": {
         "startLine": 199,
         "startChar": 5,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f80b0452_d7ad8f0b",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "I hadn\u0027t realize that there was an implicit `\u0026 0xFFFF` truncation. I do mind a little bit the loss of precision, so I\u0027ve gone with:\n```\nelse if (range-\u003esecond \u003c\u003d 0xFFFF) { State::kTwoByte; }\nelse { State::kCantKnow }\n```\nLet me know if you have any objections...",
+      "parentUuid": "b323d99e_79136d0b",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 260,
+        "endChar": 35
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6287776d_5068d10a",
         "filename": "src/compiler/string-builder-optimizer.cc",
         "patchSetId": 34
@@ -128,6 +224,53 @@
         "startChar": 12,
         "endLine": 277,
         "endChar": 74
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8ecd96_0806a92d",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Good point yes. This is already done in MergeStates, but it looks like I got it wrong here :D \nI refactored this to use MergedStates instead.",
+      "parentUuid": "6287776d_5068d10a",
+      "range": {
+        "startLine": 277,
+        "startChar": 12,
+        "endLine": 277,
+        "endChar": 74
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4b0546f_90f489ac",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "I think that this is wrong and should instead be `kCantKnow`. Otherwise, we risk building a 2-byte string for something that could have fit on 1 byte.\nI refactored this part of the code; the result is shorter, and probably less buggy.",
+      "range": {
+        "startLine": 290,
+        "startChar": 8,
+        "endLine": 293,
+        "endChar": 7
       },
       "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -150,6 +293,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef2c818_e2f5a604",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68dca772_3e4ee378",
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c93f06ba_6fd3a9fa",
@@ -163,6 +324,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "Maybe turn that into a named constant, as it\u0027s used across functions.",
+      "range": {
+        "startLine": 407,
+        "startChar": 17,
+        "endLine": 407,
+        "endChar": 19
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0227a6d_2c3ed5b1",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Good idea :)",
+      "parentUuid": "c93f06ba_6fd3a9fa",
       "range": {
         "startLine": 407,
         "startChar": 17,
@@ -196,6 +381,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f322b0b3_2a3eb52d",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Good catch :)",
+      "parentUuid": "2f6f6325_71236bd7",
+      "range": {
+        "startLine": 443,
+        "startChar": 2,
+        "endLine": 443,
+        "endChar": 5
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cd8376f_89a17042",
@@ -209,6 +418,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "Maybe change the name to indicate that it\u0027s incomplete, something like `IsClosebyDominator`.",
+      "range": {
+        "startLine": 461,
+        "startChar": 5,
+        "endLine": 461,
+        "endChar": 16
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9adcf7c0_92657db5",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cd8376f_89a17042",
       "range": {
         "startLine": 461,
         "startChar": 5,
@@ -242,6 +475,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5197016_4599fc14",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9de08c2_91c1c2bd",
+      "range": {
+        "startLine": 479,
+        "startChar": 5,
+        "endLine": 479,
+        "endChar": 24
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51a06ba3_177c8623",
@@ -255,6 +512,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "not",
+      "range": {
+        "startLine": 515,
+        "startChar": 3,
+        "endLine": 515,
+        "endChar": 7
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3539a89_d5c91ac5",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "I guess I had a runny nose when writing this...",
+      "parentUuid": "51a06ba3_177c8623",
       "range": {
         "startLine": 515,
         "startChar": 3,
@@ -288,6 +569,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccbc4d5a_fc383d6a",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ecd903_4c622702",
+      "range": {
+        "startLine": 583,
+        "startChar": 59,
+        "endLine": 583,
+        "endChar": 77
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad70d663_108a20e3",
@@ -301,6 +606,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "It seems that this variable is never set to `true`?",
+      "range": {
+        "startLine": 609,
+        "startChar": 13,
+        "endLine": 609,
+        "endChar": 34
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "127ad873_d77f42bf",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad70d663_108a20e3",
       "range": {
         "startLine": 609,
         "startChar": 13,
@@ -334,6 +663,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e1d4890_07089639",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0580691c_bbe8b6df",
+      "range": {
+        "startLine": 610,
+        "startChar": 55,
+        "endLine": 610,
+        "endChar": 75
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1ec2868_6e7612a7",
@@ -347,6 +700,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 687,
+        "startChar": 35,
+        "endLine": 687,
+        "endChar": 43
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a487e4c_69d88dad",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1ec2868_6e7612a7",
       "range": {
         "startLine": 687,
         "startChar": 35,
@@ -380,6 +757,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b548630b_f633ca64",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Nice, thanks :)",
+      "parentUuid": "dc6b4d45_90f713b5",
+      "range": {
+        "startLine": 158,
+        "startChar": 13,
+        "endLine": 158,
+        "endChar": 18
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9845c4be_93594bab",
@@ -393,6 +794,30 @@
       "writtenOn": "2022-09-19T11:57:48Z",
       "side": 1,
       "message": "Maybe pick a longer but more descriptive name?",
+      "range": {
+        "startLine": 319,
+        "startChar": 48,
+        "endLine": 319,
+        "endChar": 58
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddb1ea7b_e0541a57",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-20T07:46:00Z",
+      "side": 1,
+      "message": "Since it took me about 5 minutes to figure out what this variable was (despite that I created it), you\u0027re definitely right. New name: blocks_to_trimmings_map_. I\u0027ve also added a comment above explaining what it contains.",
+      "parentUuid": "9845c4be_93594bab",
       "range": {
         "startLine": 319,
         "startChar": 48,
