@@ -343,6 +343,8 @@ void MutableBigInt::Canonicalize(MutableBigInt result) {
   }
   DCHECK_IMPLIES(result.length() > 0,
                  result.digit(result.length() - 1) != 0);  // MSD is non-zero.
+  // Callers that don't require trimming must ensure this themselves.
+  DCHECK_IMPLIES(result.length() == 0, result.sign() == false);
 }
 
 template <typename IsolateT>
@@ -1379,6 +1381,10 @@ MaybeHandle<BigInt> BigInt::FromSerializedDigits(
   DCHECK(digits_storage.length() == bytelength);
   bool sign = SignBits::decode(bitfield);
   int length = (bytelength + kDigitSize - 1) / kDigitSize;  // Round up.
+  // There is no -0n. Guard against corrupted serialized data that claims
+  // otherwise. This case isn't covered by MakeImmutable() at the end because
+  // that only checks for -0n if it had to trim leading zero digits.
+  if (length == 0) sign = false;
   Handle<MutableBigInt> result =
       MutableBigInt::Cast(isolate->factory()->NewBigInt(length));
   result->initialize_bitfield(sign, length);
