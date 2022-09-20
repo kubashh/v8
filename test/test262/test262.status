@@ -757,10 +757,6 @@
   'built-ins/Array/prototype/groupToMap/this-arg': [FAIL],
   'built-ins/Array/prototype/groupToMap/this-arg-strict': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=13302
-  'staging/ArrayBuffer/resizable/subarray-parameter-conversion-grows': [FAIL],
-  'staging/ArrayBuffer/resizable/subarray-parameter-conversion-shrinks': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=12763
   'language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier': [FAIL],
   'language/expressions/class/decorator/syntax/valid/decorator-call-expr-identifier-reference': [FAIL],
