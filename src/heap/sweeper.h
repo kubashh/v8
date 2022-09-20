@@ -19,6 +19,7 @@
 namespace v8 {
 namespace internal {
 
+class CollectorBase;
 class InvalidatedSlotsCleanup;
 class NonAtomicMarkingState;
 class Page;
@@ -101,15 +102,12 @@ class Sweeper {
   // After calling this function sweeping is considered to be in progress
   // and the main thread can sweep lazily, but the background sweeper tasks
   // are not running yet.
-  void StartSweeping();
+  void StartSweeping(CollectorBase* collector);
   V8_EXPORT_PRIVATE void StartSweeperTasks();
   void EnsureCompleted(
       SweepingMode sweeping_mode = SweepingMode::kLazyOrConcurrent);
   void DrainSweepingWorklistForSpace(AllocationSpace space);
   bool AreSweeperTasksRunning();
-
-  // Support concurrent sweepers from main thread
-  void SupportConcurrentSweeping();
 
   Page* GetSweptPageSafe(PagedSpaceBase* space);
 
@@ -199,6 +197,7 @@ class Sweeper {
   std::atomic<bool> sweeping_in_progress_;
   bool should_reduce_memory_;
   Heap::PretenuringFeedbackMap local_pretenuring_feedback_;
+  CollectorBase* current_collector_{nullptr};
 };
 
 }  // namespace internal

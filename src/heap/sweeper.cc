@@ -69,11 +69,17 @@ class Sweeper::SweeperJob final : public JobTask {
 
   void Run(JobDelegate* delegate) final {
     RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
+    DCHECK_NOT_NULL(sweeper_->current_collector_);
     if (delegate->IsJoiningThread()) {
-      TRACE_GC(tracer_, GCTracer::Scope::MC_SWEEP);
+      TRACE_GC(tracer_, sweeper_->current_collector_->IsMajorMC()
+                            ? GCTracer::Scope::MC_SWEEP
+                            : GCTracer::Scope::MINOR_MC_SWEEP);
       RunImpl(delegate);
     } else {
-      TRACE_GC_EPOCH(tracer_, GCTracer::Scope::MC_BACKGROUND_SWEEPING,
+      TRACE_GC_EPOCH(tracer_,
+                     sweeper_->current_collector_->IsMajorMC()
+                         ? GCTracer::Scope::MC_BACKGROUND_SWEEPING
+                         : GCTracer::Scope::MINOR_MC_BACKGROUND_SWEEPING,
                      ThreadKind::kBackground);
       RunImpl(delegate);
     }
@@ -160,9 +166,10 @@ void Sweeper::TearDown() {
   if (job_handle_ && job_handle_->IsValid()) job_handle_->Cancel();
 }
 
-void Sweeper::StartSweeping() {
+void Sweeper::StartSweeping(CollectorBase* collector) {
   DCHECK(local_pretenuring_feedback_.empty());
   sweeping_in_progress_ = true;
+  current_collector_ = collector;
   should_reduce_memory_ = heap_->ShouldReduceMemory();
   ForAllSweepingSpaces([this](AllocationSpace space) {
     // Sorting is done in order to make compaction more efficient: by sweeping
@@ -238,20 +245,13 @@ void Sweeper::EnsureCompleted(SweepingMode sweeping_mode) {
   local_pretenuring_feedback_.clear();
   concurrent_sweepers_.clear();
 
+  current_collector_ = nullptr;
   sweeping_in_progress_ = false;
 }
 
 void Sweeper::DrainSweepingWorklistForSpace(AllocationSpace space) {
   if (!sweeping_in_progress_) return;
   ParallelSweepSpace(space, SweepingMode::kLazyOrConcurrent, 0);
-}
-
-void Sweeper::SupportConcurrentSweeping() {
-  ForAllSweepingSpaces([this](AllocationSpace space) {
-    const int kMaxPagesToSweepPerSpace = 1;
-    ParallelSweepSpace(space, SweepingMode::kLazyOrConcurrent, 0,
-                       kMaxPagesToSweepPerSpace);
-  });
 }
 
 bool Sweeper::AreSweeperTasksRunning() {
