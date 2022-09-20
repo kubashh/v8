@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e273058_0208abc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-20T05:11:02Z",
+      "side": 1,
+      "message": "What are the performance implications of this change now that enable_etw_stack_walking is on by default on windows?\n\n(Also, did you add me to review something specific or overall?)",
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
