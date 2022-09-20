@@ -429,10 +429,9 @@ class TranslationArrayProcessor {
             if (InReturnValues(reg, result_location, result_size)) {
               translation_array_builder().StoreOptimizedOut();
             } else {
-              EmitDeoptFrameSingleValue(value, *input_location);
+              EmitDeoptFrameSingleValue(value, *input_location++);
             }
             i++;
-            input_location++;
           });
     }
 
@@ -447,18 +446,14 @@ class TranslationArrayProcessor {
       checkpoint_state->ForEachLocal(
           compilation_unit, [&](ValueNode* value, interpreter::Register reg) {
             DCHECK_LE(i, reg.index());
-            if (InReturnValues(reg, result_location, result_size)) {
-              input_location++;
-              return;
-            }
+            if (InReturnValues(reg, result_location, result_size)) return;
             while (i < reg.index()) {
               translation_array_builder().StoreOptimizedOut();
               i++;
             }
             DCHECK_EQ(i, reg.index());
-            EmitDeoptFrameSingleValue(value, *input_location);
+            EmitDeoptFrameSingleValue(value, *input_location++);
             i++;
-            input_location++;
           });
       while (i < compilation_unit.register_count()) {
         translation_array_builder().StoreOptimizedOut();
@@ -472,7 +467,7 @@ class TranslationArrayProcessor {
           !InReturnValues(interpreter::Register::virtual_accumulator(),
                           result_location, result_size)) {
         ValueNode* value = checkpoint_state->accumulator(compilation_unit);
-        EmitDeoptFrameSingleValue(value, *input_location);
+        EmitDeoptFrameSingleValue(value, *input_location++);
       } else {
         translation_array_builder().StoreOptimizedOut();
       }
