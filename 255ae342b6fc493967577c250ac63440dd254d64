@@ -50,6 +50,24 @@
       "message": "Consider using assertMatches(\u003cregex\u003e, \u003cstring\u003e) instead. It\u0027d save you a bit of nesting and give better error messages on failure (the latter, I admit, is unlikely to be important here).",
       "revId": "255ae342b6fc493967577c250ac63440dd254d64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27ab7e2f_5e10d173",
+        "filename": "test/mjsunit/temporal/duration-to-json-boundary-cases.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-09-20T04:16:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b97b012f_5fd6d9f8",
+      "revId": "255ae342b6fc493967577c250ac63440dd254d64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
