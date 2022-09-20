@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cafe1147_c555396e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-09-20T11:32:29Z",
+      "side": 1,
+      "message": "Hi Camillo, could you PTAL at this small hardening of annotations test? Thanks!",
+      "revId": "13d1f7e9d5157a5b4d9ac43b3913e7a6efbb75af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
