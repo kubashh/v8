@@ -22,6 +22,30 @@
       },
       "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5137d0a_df9b3490",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-20T08:01:41Z",
+      "side": 1,
+      "message": "I think it makes sense to clean this up:\n\n- Move those whole logic into a separate ETWJitLogger (that extends JitLogger)\n- Use an internal ExistingCodeLogger there to not interfere with the v8-file-logger\n\nThis way this can be disentangled a bit easier in the future.\n\nNote: I\u0027ve still a plan to clean up the logging infra [1]. Mainly the v8-file-logger should no longer be the central piece, instead multiple loggare are attached to isolate-\u003elogger() and that\u0027s it.\n\n\n[1] http://doc/1rGpYWAdpeQbGDsCI4PSU4AG_yoeW8QSFoZnxX8YN580",
+      "parentUuid": "880c3d7a_2c595d5d",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 61
+      },
+      "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

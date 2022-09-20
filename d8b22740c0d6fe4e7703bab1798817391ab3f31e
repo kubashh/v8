@@ -16,6 +16,75 @@
       "message": "What are the performance implications of this change now that enable_etw_stack_walking is on by default on windows?\n\n(Also, did you add me to review something specific or overall?)",
       "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "021be855_4ff94e67",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-20T08:01:41Z",
+      "side": 1,
+      "message": "Can you make this a DEFINE_BOOL_READONLY flag if V8_ENABLE_ETW_STACK_WALKING is not defined?\n\n\nScript::Run now always calls  i::ETWJITInterface::MaybeSetHandlerNow which involves several likely non-inlined calls. Do you think we could guard this behind a single check on windows?",
+      "range": {
+        "startLine": 2218,
+        "startChar": 0,
+        "endLine": 2221,
+        "endChar": 57
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e71a2b99_3cb87b8e",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-20T08:01:41Z",
+      "side": 1,
+      "message": "unused",
+      "range": {
+        "startLine": 2130,
+        "startChar": 42,
+        "endLine": 2130,
+        "endChar": 75
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "470757bc_2cdda467",
+        "filename": "src/logging/log.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-20T08:01:41Z",
+      "side": 1,
+      "message": "nit: please use DCHECK_IMPLIES",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 10
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
