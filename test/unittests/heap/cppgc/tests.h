@@ -87,10 +87,10 @@ class TestWithHeap : public TestWithPlatform {
   // size of the heap and corresponding pages.
   void ConservativeMemoryDiscardingGC() {
     internal::Heap::From(GetHeap())->CollectGarbage(
-        {GarbageCollector::Config::CollectionType::kMajor,
+        {GCConfig::CollectionType::kMajor,
          Heap::StackState::kMayContainHeapPointers,
          cppgc::Heap::MarkingType::kAtomic, cppgc::Heap::SweepingType::kAtomic,
-         GarbageCollector::Config::FreeMemoryHandling::kDiscardWherePossible});
+         GCConfig::FreeMemoryHandling::kDiscardWherePossible});
   }
 
   cppgc::Heap* GetHeap() const { return heap_.get(); }
