@@ -2549,6 +2549,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsArrayIteratorProtectorCellInvalid();
   TNode<BoolT> IsBigIntInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsBigInt(TNode<HeapObject> object);
+  TNode<BoolT> IsBigInt64(TNode<BigInt> bigint);
   TNode<BoolT> IsBoolean(TNode<HeapObject> object);
   TNode<BoolT> IsCallableMap(TNode<Map> map);
   TNode<BoolT> IsCallable(TNode<HeapObject> object);
