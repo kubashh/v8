@@ -17,7 +17,8 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   Label do_fadd(this), if_lhsisnotnumber(this, Label::kDeferred),
       check_rhsisoddball(this, Label::kDeferred),
       call_with_oddball_feedback(this), call_with_any_feedback(this),
-      call_add_stub(this), end(this), bigint(this, Label::kDeferred);
+      call_add_stub(this), end(this), bigint(this, Label::kDeferred),
+      bigint64(this);
   TVARIABLE(Float64T, var_fadd_lhs);
   TVARIABLE(Float64T, var_fadd_rhs);
   TVARIABLE(Smi, var_type_feedback);
@@ -158,7 +159,14 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
       Goto(&call_with_any_feedback);
 
       BIND(&lhs_is_bigint);
-      Branch(IsBigInt(rhs_heap_object), &bigint, &call_with_any_feedback);
+      {
+        GotoIfNot(IsBigInt(rhs_heap_object), &call_with_any_feedback);
+        if (Is64()) {
+          GotoIf(Word32And(IsBigInt64(CAST(lhs)), IsBigInt64(CAST(rhs))),
+                 &bigint64);
+        }
+        Goto(&bigint);
+      }
 
       BIND(&lhs_is_string);
       {
@@ -189,6 +197,29 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
         InstanceTypeEqual(rhs_instance_type, ODDBALL_TYPE);
     GotoIf(rhs_is_oddball, &call_with_oddball_feedback);
     Goto(&call_with_any_feedback);
+  }
+
+  BIND(&bigint64);
+  {
+    // Both {lhs} and {rhs} are of BigInt type and can fit in 64-bit registers.
+    DCHECK(Is64());
+    Label if_overflow(this);
+    TVARIABLE(UintPtrT, lhs_raw);
+    TVARIABLE(UintPtrT, rhs_raw);
+    BigIntToRawBytes(CAST(lhs), &lhs_raw, &lhs_raw);
+    BigIntToRawBytes(CAST(rhs), &rhs_raw, &rhs_raw);
+    var_result = BigIntFromInt64(
+        TryIntPtrAdd(UncheckedCast<IntPtrT>(lhs_raw.value()),
+                     UncheckedCast<IntPtrT>(rhs_raw.value()), &if_overflow));
+
+    // TODO(panq): Change the feedback to BigInt64 once it is used in compiler.
+    var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
+    UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
+                   update_feedback_mode);
+    Goto(&end);
+
+    BIND(&if_overflow);
+    Goto(&bigint);
   }
 
   BIND(&bigint);
