@@ -729,6 +729,40 @@ Handle<String> GetRefTypeName(Isolate* isolate, wasm::ValueType type,
   return ToInternalString(name, isolate);
 }
 
+// Returns the module object for the given function if it is accessible via the
+// WasmInternalFunction object.
+MaybeHandle<WasmModuleObject> LookupModuleObject(
+    Handle<WasmInternalFunction> function, Isolate* isolate) {
+  if (function->ref().IsWasmInstanceObject()) {
+    return {WasmInstanceObject::cast(function->ref()).module_object(), isolate};
+  } else if (function->ref().IsWasmApiFunctionRef()) {
+    Handle<WasmApiFunctionRef> api_fct_ref(
+        WasmApiFunctionRef::cast(function->ref()), isolate);
+    if (api_fct_ref->instance().IsWasmInstanceObject()) {
+      // FIXME(mliedtke): How to reach this branch? Is it reachable?
+      // "Present when compiling JSFastApiCall wrappers"...
+      DCHECK(false);
+      return {WasmInstanceObject::cast(api_fct_ref->instance()).module_object(),
+              isolate};
+    }
+    return {};
+  }
+  FATAL("Invalid reference value for WasmInternalFunction");
+}
+
+// Returns the type name for the given value. If the module object is not
+// provided, returns the static name (stored in the WasmValue) instead.
+Handle<String> CreateTypeName(MaybeHandle<WasmModuleObject> module_object,
+                              const wasm::WasmValue& value, Isolate* isolate) {
+  if (!module_object.is_null()) {
+    return GetRefTypeName(isolate, value.type(),
+                          module_object.ToHandleChecked()->native_module());
+  }
+  // No module available, use static type.
+  std::string name = value.type().name();
+  return isolate->factory()->InternalizeString({name.data(), name.length()});
+}
+
 }  // namespace
 
 // static
@@ -860,7 +894,7 @@ struct ArrayProxy : IndexedDebugProxy<ArrayProxy, kArrayProxy, FixedArray> {
 // static
 Handle<WasmValueObject> WasmValueObject::New(
     Isolate* isolate, const wasm::WasmValue& value,
-    Handle<WasmModuleObject> module_object) {
+    MaybeHandle<WasmModuleObject> module_object) {
   Handle<String> t;
   Handle<Object> v;
   switch (value.type().kind()) {
@@ -905,38 +939,45 @@ Handle<WasmValueObject> WasmValueObject::New(
     }
     case wasm::kRefNull:
     case wasm::kRef: {
-      t = GetRefTypeName(isolate, value.type(), module_object->native_module());
       Handle<Object> ref = value.to_ref();
       if (ref->IsWasmStruct()) {
         WasmTypeInfo type_info = ref->GetHeapObject().map().wasm_type_info();
         wasm::ValueType type = wasm::ValueType::FromIndex(
             wasm::ValueKind::kRef, type_info.type_index());
-        t = GetRefTypeName(
-            isolate, type,
-            type_info.instance().module_object().native_module());
-        v = StructProxy::Create(isolate, Handle<WasmStruct>::cast(ref),
-                                module_object);
+        Handle<WasmModuleObject> module(type_info.instance().module_object(),
+                                        isolate);
+        t = GetRefTypeName(isolate, type, module->native_module());
+        v = StructProxy::Create(isolate, Handle<WasmStruct>::cast(ref), module);
       } else if (ref->IsWasmArray()) {
         WasmTypeInfo type_info = ref->GetHeapObject().map().wasm_type_info();
         wasm::ValueType type = wasm::ValueType::FromIndex(
             wasm::ValueKind::kRef, type_info.type_index());
-        t = GetRefTypeName(
-            isolate, type,
-            type_info.instance().module_object().native_module());
-        v = ArrayProxy::Create(isolate, Handle<WasmArray>::cast(ref),
-                               module_object);
+        Handle<WasmModuleObject> module(type_info.instance().module_object(),
+                                        isolate);
+        t = GetRefTypeName(isolate, type, module->native_module());
+        v = ArrayProxy::Create(isolate, Handle<WasmArray>::cast(ref), module);
       } else if (ref->IsWasmInternalFunction()) {
-        v = handle(Handle<WasmInternalFunction>::cast(ref)->external(),
-                   isolate);
+        auto internal_fct = Handle<WasmInternalFunction>::cast(ref);
+        v = handle(internal_fct->external(), isolate);
+        // If the module is not provided by the caller, try to find it via the
+        // function. It might still not exist, e.g. if the function was created
+        // in JavaScript using `new WebAssembly.Function(...)`.
+        if (module_object.is_null()) {
+          module_object = LookupModuleObject(internal_fct, isolate);
+        }
+        t = CreateTypeName(module_object, value, isolate);
       } else if (ref->IsJSFunction() || ref->IsSmi() || ref->IsNull() ||
                  ref->IsString() ||
-                 value.type().is_reference_to(wasm::HeapType::kExtern)) {
+                 value.type().is_reference_to(wasm::HeapType::kExtern) ||
+                 value.type().is_reference_to(wasm::HeapType::kAny)) {
+        t = CreateTypeName(module_object, value, isolate);
         v = ref;
       } else {
         // Fail gracefully.
         base::EmbeddedVector<char, 64> error;
         int len = SNPrintF(error, "unimplemented object type: %d",
                            HeapObject::cast(*ref).map().instance_type());
+        t = CreateTypeName(module_object, value, isolate);
         v = isolate->factory()->InternalizeString(error.SubVector(0, len));
       }
       break;
@@ -1037,8 +1078,11 @@ Handle<ArrayList> AddWasmTableObjectInternalProperties(
   for (int i = 0; i < length; ++i) {
     Handle<Object> entry = WasmTableObject::Get(isolate, table, i);
     wasm::WasmValue wasm_value(entry, table->type());
-    Handle<WasmModuleObject> module(
-        WasmInstanceObject::cast(table->instance()).module_object(), isolate);
+    MaybeHandle<WasmModuleObject> module;
+    if (table->instance().IsWasmInstanceObject()) {
+      module = Handle<WasmModuleObject>(
+          WasmInstanceObject::cast(table->instance()).module_object(), isolate);
+    }
     Handle<Object> debug_value =
         WasmValueObject::New(isolate, wasm_value, module);
     entries->set(i, *debug_value);
