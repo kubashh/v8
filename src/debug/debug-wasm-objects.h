@@ -61,7 +61,7 @@ class WasmValueObject : public JSObject {
                                      Handle<Object> value);
   static Handle<WasmValueObject> New(Isolate* isolate,
                                      const wasm::WasmValue& value,
-                                     Handle<WasmModuleObject> module);
+                                     MaybeHandle<WasmModuleObject> module);
 
   OBJECT_CONSTRUCTORS(WasmValueObject, JSObject);
 };
