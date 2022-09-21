@@ -16,6 +16,75 @@
       "message": "The left shift problem is fixed",
       "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a9d0eb_f948d1d4",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6797,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-09-21T15:41:44Z",
+      "side": 1,
+      "message": "we could use something like `sizeof(uintptr_t) * 8 - 1`",
+      "range": {
+        "startLine": 6797,
+        "startChar": 69,
+        "endLine": 6797,
+        "endChar": 71
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab0630d6_bf21a6a3",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-09-21T15:41:44Z",
+      "side": 1,
+      "message": "As discussed offline.",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 19
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007890b2_609c69c1",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-09-21T15:41:44Z",
+      "side": 1,
+      "message": "You should already set the BigInt64 feedback here, even if it is not yet used by the compiler (compiler should for now treat BigInt64 like BigInt).",
+      "range": {
+        "startLine": 216,
+        "startChar": 61,
+        "endLine": 216,
+        "endChar": 68
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
