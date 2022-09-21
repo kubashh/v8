@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "092021f2_64a6b676",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T20:05:46Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "727223ab4cb7f18446492a69711ae98483f0b686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c743e1_79a2281e",
+        "filename": "src/heap/cppgc/heap-config.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T20:05:46Z",
+      "side": 1,
+      "message": "Can we move MarkingType, SweepingType and StackState here and have Heap refer to them instead of having them in Heap?",
+      "range": {
+        "startLine": 18,
+        "startChar": 22,
+        "endLine": 18,
+        "endChar": 46
+      },
+      "revId": "727223ab4cb7f18446492a69711ae98483f0b686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
