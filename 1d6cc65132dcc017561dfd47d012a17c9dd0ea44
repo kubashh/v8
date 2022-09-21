@@ -41,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ebedf53_0103a859",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "I\u0027m not sure; my intuition is that the fundamental reason for the weirdness is that we\u0027re kind of putting two files into one here: we\u0027re both defining the \"website\" that\u0027ll run, and a scripted version of an interactive DevTools session that asynchronously inspects it. For a comparison, it\u0027s a bit like starting a Web Worker by giving it a string containing the script that the worker should execute.",
+      "parentUuid": "54ed482d_72727b5a",
+      "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "20effb44_44078ee9",
@@ -54,6 +72,24 @@
       "writtenOn": "2022-09-21T16:55:08Z",
       "side": 1,
       "message": "I had to adapt the original test case slightly because we actually don\u0027t get the inspected array here but an array containing metadata and then the actual entries.",
+      "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "137d1462_bf5ea7f4",
+        "filename": "test/unittests/runtime/runtime-debug-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "That\u0027s totally fine, the testcase I provided was guesswork: I only ever saw it crash, never got a chance to test its behavior after fixing the crash.",
+      "parentUuid": "20effb44_44078ee9",
       "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

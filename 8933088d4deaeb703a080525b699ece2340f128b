@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddadb03e_2961ca59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "LGTM, just nits. I appreciate your thoroughness!",
+      "revId": "8933088d4deaeb703a080525b699ece2340f128b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0985eb_72435a0a",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "nit: I\u0027d prefer to use regular `Handle` here, and rely on comments (such as the existing comment) to indicate that the handle may be empty if no module is available.\n\nThe reason is that `MaybeHandle` is typically (I\u0027d hope always, but wouldn\u0027t bet against there being an exception) used to indicate error situations for return values, with an invariant that `maybe_handle.is_null() \u003d\u003d isolate.has_pending_exception()`. Using MaybeHandles as return types avoids crashes arising from callers being unaware that their callees may throw and hence not handling that case. Signalling that a parameter is optional doesn\u0027t have the same urgency.\n\nThat said, if you prefer keeping the MaybeHandle, I won\u0027t insist, because I can see the good intentions 😊",
+      "range": {
+        "startLine": 736,
+        "startChar": 30,
+        "endLine": 736,
+        "endChar": 41
+      },
+      "revId": "8933088d4deaeb703a080525b699ece2340f128b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c199cdb7_40954606",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 876,
+        "startChar": 4,
+        "endLine": 876,
+        "endChar": 15
+      },
+      "revId": "8933088d4deaeb703a080525b699ece2340f128b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a63133d6_ad2c07cc",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "nit: `;  // M` (two spaces before `//`, and begin sentences with a capital letter)",
+      "range": {
+        "startLine": 23,
+        "startChar": 22,
+        "endLine": 23,
+        "endChar": 28
+      },
+      "revId": "8933088d4deaeb703a080525b699ece2340f128b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c573c801_834d51be",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "nit: Proper sentences please, with capitalization and punctuation. (Again twice below.)",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 32
+      },
+      "revId": "8933088d4deaeb703a080525b699ece2340f128b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

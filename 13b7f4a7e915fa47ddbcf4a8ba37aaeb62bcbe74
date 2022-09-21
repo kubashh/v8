@@ -50,6 +50,24 @@
       "message": "Could you point me to where `onceScriptParsed()` is defined? \nI\u0027d be interested to see if we can do something to get rid of this \"interleaved\" execution of `instantiateWasm` and `waitForWasmScripts` in this test (and possibly some others as I copied this from another test).",
       "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "807b94ec_15c103b1",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-21T19:35:10Z",
+      "side": 1,
+      "message": "I don\u0027t know; it\u0027s some generated magic. I see \"Debugger.scriptParsed\" in `out/.../gen/src/inspector/protocol/Debugger.cpp`; I couldn\u0027t find who adds the `once` prefix to it (which presumably means \"wait until this possibly-repeated event happened at least once\"?).",
+      "parentUuid": "3a703c52_600f8fe0",
+      "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
