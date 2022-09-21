@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "740a65fd_a246d74b",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-21T08:07:06Z",
+      "side": 1,
+      "message": "nit: can you move this to the header and mark it V8_INLINE to minimize the performance impact",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 23
+      },
+      "revId": "bedf9ad29d3f3668af5a0e67f2430948482c0565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e933b6f5_9a5f7596",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2154,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-21T08:07:06Z",
+      "side": 1,
+      "message": "nit: can you add a todo or so, to only log the existing code on the late-added ETW listener?\n\nI\u0027m fine with landing this as is, since it\u0027s quite unlikely to have both file and etw enabled by default.",
+      "range": {
+        "startLine": 2151,
+        "startChar": 0,
+        "endLine": 2154,
+        "endChar": 27
+      },
+      "revId": "bedf9ad29d3f3668af5a0e67f2430948482c0565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

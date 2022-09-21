@@ -70,6 +70,30 @@
       },
       "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f260b70d_a53ea49f",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-21T08:07:06Z",
+      "side": 1,
+      "message": "Sorry for the wrong link: https://docs.google.com/document/d/1rGpYWAdpeQbGDsCI4PSU4AG_yoeW8QSFoZnxX8YN580/edit?usp\u003dsharing\n\nLooking nice now, thanks 👍",
+      "parentUuid": "6dead21a_43d38b79",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 61
+      },
+      "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
