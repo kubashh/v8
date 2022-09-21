@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e64a0ce3_df1fd253",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "@Jakob: PTAL\n@Manos: FYI",
+      "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f7cf3e_b8f14633",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "This isn\u0027t what I want to do but we may not `await instanstiateWasm();` before initializing the busy wait in `waitForWasmScripts()`, otherwise the whole test case doesn\u0027t work any more.\nStill, before continuing execution in this function, we should \"wait\" for `instantiateWasm` to be finished...",
+      "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a703c52_600f8fe0",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "Could you point me to where `onceScriptParsed()` is defined? \nI\u0027d be interested to see if we can do something to get rid of this \"interleaved\" execution of `instantiateWasm` and `waitForWasmScripts` in this test (and possibly some others as I copied this from another test).",
+      "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

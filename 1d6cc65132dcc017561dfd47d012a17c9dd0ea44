@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0501f285_cc18bdcf",
+        "filename": "src/debug/debug-wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "I guess, in that case there can\u0027t be any specific name either as then the signature was defined directly in JavaScript.",
+      "range": {
+        "startLine": 942,
+        "startChar": 28,
+        "endLine": 944,
+        "endChar": 44
+      },
+      "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54ed482d_72727b5a",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "I don\u0027t know but programming in a string that gets interpreted in a test case that tends to just wait forever without any error message if any exception is thrown, is not ideal.\nStill, I don\u0027t understand the `WasmInspectorTest`\u0027s internals good enough to understand why all this has to be an `evalWithUrl`. Is it because we need the \"source code\" as string in the debugger?",
+      "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20effb44_44078ee9",
+        "filename": "test/unittests/runtime/runtime-debug-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-21T16:55:08Z",
+      "side": 1,
+      "message": "I had to adapt the original test case slightly because we actually don\u0027t get the inspected array here but an array containing metadata and then the actual entries.",
+      "revId": "1d6cc65132dcc017561dfd47d012a17c9dd0ea44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
