@@ -210,6 +210,24 @@
       "parentUuid": "66d44756_1de1aa03",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75f70000_c9698ed3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-21T20:34:34Z",
+      "side": 1,
+      "message": "My opinion is that the bytecode compiler should remain as straightforward as possible, with minimal optimizations, barring really compelling speedups. The general architecture of V8 is many layers of JIT compilers, with each layer doing optimization than the previous. Philosophically I think adding more complexity in the bytecode compiler is usually not worth it -- but some such optimizations are simple or yield significant speedup. In this particular case the patterns being optimized seem pretty targeted, so without really compelling numbers I\u0027d prefer keep the bytecode compiler simple.",
+      "parentUuid": "7e91889f_8f29956f",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
