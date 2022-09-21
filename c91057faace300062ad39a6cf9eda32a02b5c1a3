@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f4df363_b8314046",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-21T14:00:31Z",
+      "side": 1,
+      "message": "@Nico: please take a look at the function IsBigInt64 to see if it can be further simplified.",
+      "revId": "c91057faace300062ad39a6cf9eda32a02b5c1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
