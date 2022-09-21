@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8aaa8e7_8b9e261f",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-21T08:13:59Z",
+      "side": 1,
+      "message": "Actually, I can simplify this by passing input locations in by mutable reference",
+      "parentUuid": "3acec095_dbeba148",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35c1919f_fb4ac067",
@@ -70,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87615daf_b40161ac",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-21T08:13:59Z",
+      "side": 1,
+      "message": "Follow up sounds good.",
+      "parentUuid": "d0fad756_4eff9de2",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c79111c3_97ba3d22",
@@ -83,6 +119,24 @@
       "writtenOn": "2022-09-21T06:10:04Z",
       "side": 1,
       "message": "nit: while nicely succinct, one now needs to understand the order of operator application (and *foo++ is not a common enough pattern for this to be on top of everyone\u0027s mind). I\u0027d suggest sticking to \n\n```\n EmitDeoptFrameSingleValue(value, *input_location);\n input_location++;\n```\n\nOr alternatively, maintaining an index into input_location, using `input_location[i++]`, and returning `\u0026input_location[i]` at the end.\n\nSame below",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab35d0cd_f4dd164d",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-21T08:13:59Z",
+      "side": 1,
+      "message": "done (the first option)",
+      "parentUuid": "c79111c3_97ba3d22",
       "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
