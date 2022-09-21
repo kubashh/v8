@@ -1951,7 +1951,8 @@ HEAP_TEST(TestSizeOfObjects) {
     // concurrent sweeper threads will be busy sweeping the old space on
     // subsequent GC runs.
     AlwaysAllocateScopeForTesting always_allocate(heap);
-    int filler_size = static_cast<int>(FixedArray::SizeFor(8192));
+    int filler_size = ALIGN_TO_ALLOCATION_ALIGNMENT(
+        static_cast<int>(FixedArray::SizeFor(8192)));
     for (int i = 1; i <= 100; i++) {
       isolate->factory()->NewFixedArray(8192, AllocationType::kOld);
       CHECK_EQ(initial_size + i * filler_size,
@@ -1975,6 +1976,8 @@ HEAP_TEST(TestSizeOfObjects) {
 
 TEST(TestAlignmentCalculations) {
   // Maximum fill amounts are consistent.
+  // With 8GB+ heaps, all allocations will be aligned to at least 8 bytes.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   int maximum_double_misalignment = kDoubleSize - kTaggedSize;
   int max_word_fill = Heap::GetMaximumFillToAlign(kTaggedAligned);
   CHECK_EQ(0, max_word_fill);
@@ -2030,6 +2033,8 @@ static Address AlignNewSpace(AllocationAlignment alignment, int offset) {
 
 TEST(TestAlignedAllocation) {
   if (v8_flags.single_generation) return;
+  // With 8GB+ heaps, all allocations will be aligned to at least 8 bytes.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   // Double misalignment is 4 on 32-bit platforms or when pointer compression
   // is enabled, 0 on 64-bit ones when pointer compression is disabled.
   const intptr_t double_misalignment = kDoubleSize - kTaggedSize;
@@ -2108,6 +2113,8 @@ static Address AlignOldSpace(AllocationAlignment alignment, int offset) {
 // may precede or follow the object.
 TEST(TestAlignedOverAllocation) {
   if (v8_flags.stress_concurrent_allocation) return;
+  // With 8GB+ heaps, all allocations will be aligned to at least 8 bytes.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   ManualGCScope manual_gc_scope;
   Heap* heap = CcTest::heap();
   // Test checks for fillers before and behind objects and requires a fresh
@@ -3796,7 +3803,9 @@ TEST(Regress169928) {
 
   heap::FillCurrentPageButNBytes(
       CcTest::heap()->new_space(),
-      JSArray::kHeaderSize + AllocationMemento::kSize + kTaggedSize);
+      ALIGN_TO_ALLOCATION_ALIGNMENT(JSArray::kHeaderSize) +
+          ALIGN_TO_ALLOCATION_ALIGNMENT(AllocationMemento::kSize +
+                                        kTaggedSize));
 
   Handle<JSArray> array =
       factory->NewJSArrayWithElements(array_data, PACKED_SMI_ELEMENTS);
@@ -3806,13 +3815,14 @@ TEST(Regress169928) {
 
   // We need filler the size of AllocationMemento object, plus an extra
   // fill pointer value.
+  int allocation_size =
+      ALIGN_TO_ALLOCATION_ALIGNMENT(AllocationMemento::kSize + kTaggedSize);
   HeapObject obj;
-  AllocationResult allocation = CcTest::heap()->new_space()->AllocateRaw(
-      AllocationMemento::kSize + kTaggedSize, kTaggedAligned);
+  AllocationResult allocation =
+      CcTest::heap()->new_space()->AllocateRaw(allocation_size, kTaggedAligned);
   CHECK(allocation.To(&obj));
   Address addr_obj = obj.address();
-  CcTest::heap()->CreateFillerObjectAt(addr_obj,
-                                       AllocationMemento::kSize + kTaggedSize);
+  CcTest::heap()->CreateFillerObjectAt(addr_obj, allocation_size);
 
   // Give the array a name, making sure not to allocate strings.
   v8::Local<v8::Object> array_obj = v8::Utils::ToLocal(array);
@@ -3947,11 +3957,17 @@ static void TestFillersFromPersistentHandles(bool promote) {
 }
 
 TEST(DoNotEvacuateFillersFromPersistentHandles) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (v8_flags.single_generation || v8_flags.move_object_start) return;
   TestFillersFromPersistentHandles(false /*promote*/);
 }
 
 TEST(DoNotPromoteFillersFromPersistentHandles) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (v8_flags.single_generation || v8_flags.move_object_start) return;
   TestFillersFromPersistentHandles(true /*promote*/);
 }
@@ -5829,8 +5845,14 @@ Handle<FixedArray> ShrinkArrayAndCheckSize(Heap* heap, int length) {
   Handle<FixedArray> array =
       heap->isolate()->factory()->NewFixedArray(length, AllocationType::kOld);
   size_t size_after_allocation = heap->SizeOfObjects();
-  CHECK_EQ(size_after_allocation, size_before_allocation + array->Size());
-  array->Shrink(heap->isolate(), 1);
+  CHECK_EQ(
+      size_after_allocation,
+      size_before_allocation + ALIGN_TO_ALLOCATION_ALIGNMENT(array->Size()));
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+    array->Shrink(heap->isolate(), kObjectAlignment8GbHeap / kTaggedSize);
+  } else {
+    array->Shrink(heap->isolate(), 1);
+  }
   size_t size_after_shrinking = heap->SizeOfObjects();
   // Shrinking does not change the space size immediately.
   CHECK_EQ(size_after_allocation, size_after_shrinking);
@@ -5963,6 +5985,9 @@ TEST(Regress631969) {
 }
 
 TEST(LeftTrimFixedArrayInBlackArea) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (!v8_flags.incremental_marking) return;
   v8_flags.stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
@@ -6005,6 +6030,9 @@ TEST(LeftTrimFixedArrayInBlackArea) {
 }
 
 TEST(ContinuousLeftTrimFixedArrayInBlackArea) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (!v8_flags.incremental_marking) return;
   v8_flags.stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
@@ -6075,6 +6103,7 @@ TEST(ContinuousLeftTrimFixedArrayInBlackArea) {
 
 TEST(ContinuousRightTrimFixedArrayInBlackArea) {
   if (!v8_flags.incremental_marking) return;
+  // if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   v8_flags.stress_concurrent_allocation = false;  // For SimulateFullSpace.
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
@@ -6106,6 +6135,7 @@ TEST(ContinuousRightTrimFixedArrayInBlackArea) {
       CcTest::i_isolate()->factory()->NewFixedArray(100, AllocationType::kOld);
   Address start_address = array->address();
   Address end_address = start_address + array->Size();
+  Address aligned_end_address = ALIGN_TO_ALLOCATION_ALIGNMENT(end_address);
   Page* page = Page::FromAddress(start_address);
   NonAtomicMarkingState* marking_state = marking->non_atomic_marking_state();
   CHECK(marking_state->IsBlack(*array));
@@ -6117,20 +6147,26 @@ TEST(ContinuousRightTrimFixedArrayInBlackArea) {
 
   // Trim it once by one word to make checking for white marking color uniform.
   Address previous = end_address - kTaggedSize;
+  Address aligned_previous = ALIGN_TO_ALLOCATION_ALIGNMENT(previous);
   isolate->heap()->RightTrimFixedArray(*array, 1);
 
-  HeapObject filler = HeapObject::FromAddress(previous);
-  CHECK(filler.IsFreeSpaceOrFiller());
-  CHECK(marking_state->IsImpossible(filler));
-
+  HeapObject filler;
+  if (aligned_end_address - aligned_previous > kTaggedSize) {
+    filler = HeapObject::FromAddress(aligned_previous);
+    CHECK(filler.IsFreeSpaceOrFiller());
+    CHECK(marking_state->IsImpossible(filler));
+  }
   // Trim 10 times by one, two, and three word.
   for (int i = 1; i <= 3; i++) {
     for (int j = 0; j < 10; j++) {
       previous -= kTaggedSize * i;
+      aligned_previous = ALIGN_TO_ALLOCATION_ALIGNMENT(previous);
       isolate->heap()->RightTrimFixedArray(*array, i);
-      filler = HeapObject::FromAddress(previous);
-      CHECK(filler.IsFreeSpaceOrFiller());
-      CHECK(marking_state->IsWhite(filler));
+      if (aligned_end_address - aligned_previous > kTaggedSize) {
+        filler = HeapObject::FromAddress(aligned_previous);
+        CHECK(filler.IsFreeSpaceOrFiller());
+        CHECK(marking_state->IsWhite(filler));
+      }
     }
   }
 
@@ -6336,6 +6372,9 @@ TEST(RememberedSet_InsertInLargePage) {
 }
 
 TEST(RememberedSet_RemoveStaleOnScavenge) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (v8_flags.single_generation || v8_flags.stress_incremental_marking) return;
   v8_flags.stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
@@ -7153,8 +7192,8 @@ class TestAllocationTracker : public HeapObjectAllocationTracker {
 
 HEAP_TEST(CodeLargeObjectSpace) {
   Heap* heap = CcTest::heap();
-  int size_in_bytes =
-      heap->MaxRegularHeapObjectSize(AllocationType::kCode) + kTaggedSize;
+  int size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(
+      heap->MaxRegularHeapObjectSize(AllocationType::kCode) + kTaggedSize);
   TestAllocationTracker allocation_tracker{size_in_bytes};
   heap->AddHeapObjectAllocationTracker(&allocation_tracker);
 
@@ -7187,8 +7226,8 @@ UNINITIALIZED_HEAP_TEST(CodeLargeObjectSpace64k) {
 
   // Allocate a regular code object.
   {
-    int size_in_bytes =
-        heap->MaxRegularHeapObjectSize(AllocationType::kCode) - kTaggedSize;
+    int size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(
+        heap->MaxRegularHeapObjectSize(AllocationType::kCode) - kTaggedSize);
     TestAllocationTracker allocation_tracker{size_in_bytes};
     heap->AddHeapObjectAllocationTracker(&allocation_tracker);
 
@@ -7209,8 +7248,8 @@ UNINITIALIZED_HEAP_TEST(CodeLargeObjectSpace64k) {
 
   // Allocate a large code object.
   {
-    int size_in_bytes =
-        heap->MaxRegularHeapObjectSize(AllocationType::kCode) + kTaggedSize;
+    int size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(
+        heap->MaxRegularHeapObjectSize(AllocationType::kCode) + kTaggedSize);
     TestAllocationTracker allocation_tracker{size_in_bytes};
     heap->AddHeapObjectAllocationTracker(&allocation_tracker);
 

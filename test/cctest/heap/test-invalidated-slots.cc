@@ -289,6 +289,9 @@ HEAP_TEST(InvalidatedSlotsRightTrimLargeFixedArray) {
 }
 
 HEAP_TEST(InvalidatedSlotsLeftTrimFixedArray) {
+  // TODO(v8:13070): LeftTrimFixedArray() will misalign the array, which is
+  // not allowed for 8GB+ heaps.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   if (!v8_flags.incremental_marking) return;
   v8_flags.manual_evacuation_candidates_selection = true;
   v8_flags.parallel_compaction = false;

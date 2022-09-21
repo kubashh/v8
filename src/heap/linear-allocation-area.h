@@ -100,6 +100,7 @@ class LinearAllocationArea final {
     SLOW_DCHECK(top_ <= limit_);
     if (V8_COMPRESS_POINTERS_8GB_BOOL) {
       SLOW_DCHECK(IsAligned(top_, kObjectAlignment8GbHeap));
+      SLOW_DCHECK(IsAligned(limit_, kObjectAlignment8GbHeap));
     } else {
       SLOW_DCHECK(IsAligned(top_, kObjectAlignment));
     }

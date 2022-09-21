@@ -1956,9 +1956,8 @@ TEST(AllocationFoldingCSA) {
       }
       CHECK_EQ(current_array.length(), i * kTaggedSize);
       if (i != 1) {
-        // TODO(v8:13070): Align prev_array.AllocatedSize() to the allocation
-        // size.
-        CHECK_EQ(prev_array.address() + prev_array.AllocatedSize(),
+        CHECK_EQ(prev_array.address() +
+                     ALIGN_TO_ALLOCATION_ALIGNMENT(prev_array.AllocatedSize()),
                  current_array.address());
       }
       prev_array = current_array;

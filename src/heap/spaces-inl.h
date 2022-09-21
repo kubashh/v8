@@ -149,7 +149,6 @@ MemoryChunk* OldGenerationMemoryChunkIterator::next() {
 
 AllocationResult LocalAllocationBuffer::AllocateRawAligned(
     int size_in_bytes, AllocationAlignment alignment) {
-  size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(size_in_bytes);
   Address current_top = allocation_info_.top();
   int filler_size = Heap::GetFillToAlign(current_top, alignment);
   int aligned_size = filler_size + size_in_bytes;
@@ -165,7 +164,6 @@ AllocationResult LocalAllocationBuffer::AllocateRawAligned(
 
 AllocationResult LocalAllocationBuffer::AllocateRawUnaligned(
     int size_in_bytes) {
-  size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(size_in_bytes);
   return allocation_info_.CanIncrementTop(size_in_bytes)
              ? AllocationResult::FromObject(HeapObject::FromAddress(
                    allocation_info_.IncrementTop(size_in_bytes)))
@@ -216,7 +214,6 @@ MemoryChunk* MemoryChunkIterator::Next() {
 
 AllocationResult SpaceWithLinearArea::AllocateFastUnaligned(
     int size_in_bytes, AllocationOrigin origin) {
-  size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(size_in_bytes);
   if (!allocation_info_.CanIncrementTop(size_in_bytes)) {
     return AllocationResult::Failure();
   }

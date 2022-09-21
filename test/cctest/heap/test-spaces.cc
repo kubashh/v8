@@ -467,6 +467,7 @@ TEST(SizeOfInitialHeap) {
 #endif  // DEBUG
 
 static HeapObject AllocateUnaligned(NewSpace* space, int size) {
+  size = ALIGN_TO_ALLOCATION_ALIGNMENT(size);
   AllocationResult allocation = space->AllocateRaw(size, kTaggedAligned);
   CHECK(!allocation.IsFailure());
   HeapObject filler;
@@ -476,6 +477,7 @@ static HeapObject AllocateUnaligned(NewSpace* space, int size) {
 }
 
 static HeapObject AllocateUnaligned(PagedSpace* space, int size) {
+  size = ALIGN_TO_ALLOCATION_ALIGNMENT(size);
   AllocationResult allocation = space->AllocateRaw(size, kTaggedAligned);
   CHECK(!allocation.IsFailure());
   HeapObject filler;
@@ -485,6 +487,7 @@ static HeapObject AllocateUnaligned(PagedSpace* space, int size) {
 }
 
 static HeapObject AllocateUnaligned(OldLargeObjectSpace* space, int size) {
+  size = ALIGN_TO_ALLOCATION_ALIGNMENT(size);
   AllocationResult allocation = space->AllocateRaw(size);
   CHECK(!allocation.IsFailure());
   HeapObject filler;
@@ -543,14 +546,16 @@ void testAllocationObserver(Isolate* i_isolate, T* space) {
   CHECK_EQ(observer2.count(), 1);
 
   AllocateUnaligned(space, 104);
-  CHECK_EQ(observer1.count(), 20);
+  const int observer1_count = 20 + (ALIGN_TO_ALLOCATION_ALIGNMENT(104) >= 128);
+  CHECK_EQ(observer1.count(), observer1_count);
   CHECK_EQ(observer2.count(), 2);
 
   // Callback should stop getting called after an observer is removed.
   space->RemoveAllocationObserver(&observer1);
 
   AllocateUnaligned(space, 384);
-  CHECK_EQ(observer1.count(), 20);  // no more notifications.
+  // no more notifications.
+  CHECK_EQ(observer1.count(), observer1_count);
   CHECK_EQ(observer2.count(), 3);   // this one is still active.
 
   // Ensure that PauseInlineAllocationObserversScope work correctly.
@@ -570,7 +575,7 @@ void testAllocationObserver(Isolate* i_isolate, T* space) {
 
   space->RemoveAllocationObserver(&observer2);
   AllocateUnaligned(space, 384);
-  CHECK_EQ(observer1.count(), 20);
+  CHECK_EQ(observer1.count(), observer1_count);
   CHECK_EQ(observer2.count(), 4);
 }
 
@@ -770,6 +775,10 @@ TEST(ShrinkPageToHighWaterMarkNoFiller) {
 }
 
 TEST(ShrinkPageToHighWaterMarkOneWordFiller) {
+  // For 8GB+ heaps, all object sizes are aligned to at least 8 bytes, so it is
+  // impossible to leave a one-pointer filler at the end of a page.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
+
   v8_flags.stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
@@ -911,7 +920,7 @@ TEST(ReadOnlySpaceMetrics_OnePage) {
   faked_space->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 
   // Allocated objects size.
-  CHECK_EQ(faked_space->Size(), 16);
+  CHECK_EQ(faked_space->Size(), ALIGN_TO_ALLOCATION_ALIGNMENT(16));
 
   size_t committed_memory = RoundUp(
       MemoryChunkLayout::ObjectStartOffsetInDataPage() + faked_space->Size(),
@@ -957,8 +966,9 @@ TEST(ReadOnlySpaceMetrics_AlignedAllocations) {
 
   // Calculate size of allocations based on area_start.
   Address area_start = faked_space->pages().back()->GetAreaStart();
-  Address top = RoundUp(area_start, alignment) + object_size;
-  top = RoundUp(top, alignment) + object_size;
+  Address top = RoundUp(area_start, alignment) +
+                ALIGN_TO_ALLOCATION_ALIGNMENT(object_size);
+  top = RoundUp(top, alignment) + ALIGN_TO_ALLOCATION_ALIGNMENT(object_size);
   size_t expected_size = top - area_start;
 
   faked_space->ShrinkPages();
@@ -1013,7 +1023,7 @@ TEST(ReadOnlySpaceMetrics_TwoPages) {
   faked_space->Seal(ReadOnlySpace::SealMode::kDoNotDetachFromHeap);
 
   // Allocated objects size.
-  CHECK_EQ(faked_space->Size(), object_size * 2);
+  CHECK_EQ(faked_space->Size(), ALIGN_TO_ALLOCATION_ALIGNMENT(object_size) * 2);
 
   // Amount of OS allocated memory.
   size_t committed_memory_per_page =

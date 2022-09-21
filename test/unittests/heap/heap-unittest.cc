@@ -367,6 +367,7 @@ TEST_F(HeapTest, RememberedSet_InsertOnPromotingObjectToOld) {
 TEST_F(HeapTest, Regress978156) {
   if (!v8_flags.incremental_marking) return;
   if (v8_flags.single_generation) return;
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   ManualGCScope manual_gc_scope(isolate());
 
   HandleScope handle_scope(isolate());

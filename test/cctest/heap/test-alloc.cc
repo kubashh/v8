@@ -48,7 +48,7 @@ Handle<Object> HeapTester::TestAllocateAfterFailures() {
   CcTest::CollectAllAvailableGarbage();
   Heap* heap = CcTest::heap();
   AlwaysAllocateScopeForTesting scope(heap);
-  int size = FixedArray::SizeFor(100);
+  int size = ALIGN_TO_ALLOCATION_ALIGNMENT(FixedArray::SizeFor(100));
   // Young generation.
   HeapObject obj =
       heap->AllocateRaw(size, AllocationType::kYoung).ToObjectChecked();
@@ -80,7 +80,8 @@ Handle<Object> HeapTester::TestAllocateAfterFailures() {
   // Map space.
   heap::SimulateFullSpace(heap->space_for_maps());
   obj = heap->AllocateRaw(Map::kSize, AllocationType::kMap).ToObjectChecked();
-  heap->CreateFillerObjectAt(obj.address(), Map::kSize);
+  heap->CreateFillerObjectAt(obj.address(),
+                             ALIGN_TO_ALLOCATION_ALIGNMENT(Map::kSize));
 
   // Code space.
   heap::SimulateFullSpace(heap->code_space());

@@ -99,8 +99,8 @@ int GetObjectSize(int objects_per_page) {
   int allocatable =
       static_cast<int>(MemoryChunkLayout::AllocatableMemoryInDataPage());
   // Make sure that object_size is a multiple of kTaggedSize.
-  int object_size =
-      ((allocatable / kTaggedSize) / objects_per_page) * kTaggedSize;
+  int object_size = ALIGN_TO_ALLOCATION_ALIGNMENT(
+      ((allocatable / kTaggedSize) / objects_per_page) * kTaggedSize);
   return std::min(kMaxRegularHeapObjectSize, object_size);
 }
 

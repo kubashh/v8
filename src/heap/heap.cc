@@ -89,6 +89,7 @@
 #include "src/numbers/conversions.h"
 #include "src/objects/data-handler.h"
 #include "src/objects/feedback-vector.h"
+#include "src/objects/fixed-array.h"
 #include "src/objects/free-space-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/hash-table.h"
@@ -3349,6 +3350,7 @@ void Heap::CreateFillerObjectAtRaw(
 }
 
 bool Heap::CanMoveObjectStart(HeapObject object) {
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return false;
   if (!v8_flags.move_object_start) return false;
 
   // Sampling heap profiler may have a reference to the object.
@@ -3552,16 +3554,33 @@ void Heap::RightTrimFixedArray(FixedArrayBase object, int elements_to_trim) {
 
   int bytes_to_trim;
   if (object.IsByteArray()) {
-    int new_size = ByteArray::SizeFor(len - elements_to_trim);
-    bytes_to_trim = ByteArray::SizeFor(len) - new_size;
+    int new_size = ALIGN_TO_ALLOCATION_ALIGNMENT(
+        ByteArray::SizeFor(len - elements_to_trim));
+    bytes_to_trim =
+        ALIGN_TO_ALLOCATION_ALIGNMENT(ByteArray::SizeFor(len)) - new_size;
     DCHECK_GE(bytes_to_trim, 0);
   } else if (object.IsFixedArray()) {
     CHECK_NE(elements_to_trim, len);
-    bytes_to_trim = elements_to_trim * kTaggedSize;
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+      int new_size = ALIGN_TO_ALLOCATION_ALIGNMENT(
+          FixedArray::SizeFor(len - elements_to_trim));
+      bytes_to_trim =
+          ALIGN_TO_ALLOCATION_ALIGNMENT(FixedArray::SizeFor(len)) - new_size;
+    } else {
+      bytes_to_trim = elements_to_trim * kTaggedSize;
+    }
   } else {
     DCHECK(object.IsFixedDoubleArray());
     CHECK_NE(elements_to_trim, len);
-    bytes_to_trim = elements_to_trim * kDoubleSize;
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+      int new_size = ALIGN_TO_ALLOCATION_ALIGNMENT(
+          FixedDoubleArray::SizeFor(len - elements_to_trim));
+      bytes_to_trim =
+          ALIGN_TO_ALLOCATION_ALIGNMENT(FixedDoubleArray::SizeFor(len)) -
+          new_size;
+    } else {
+      bytes_to_trim = elements_to_trim * kTaggedSize;
+    }
   }
 
   CreateFillerForArray<FixedArrayBase>(object, elements_to_trim, bytes_to_trim);
@@ -3587,13 +3606,13 @@ void Heap::CreateFillerForArray(T object, int elements_to_trim,
   DCHECK(object.map() != ReadOnlyRoots(this).fixed_cow_array_map());
 
   if (bytes_to_trim == 0) {
-    DCHECK_EQ(elements_to_trim, 0);
+    DCHECK_IMPLIES(!V8_COMPRESS_POINTERS_8GB_BOOL, elements_to_trim == 0);
     // No need to create filler and update live bytes counters.
-    return;
+    if (!V8_COMPRESS_POINTERS_8GB_BOOL || elements_to_trim == 0) return;
   }
 
   // Calculate location of new array end.
-  int old_size = object.Size();
+  int old_size = ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size());
   Address old_end = object.address() + old_size;
   Address new_end = old_end - bytes_to_trim;
 

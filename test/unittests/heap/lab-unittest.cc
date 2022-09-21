@@ -26,6 +26,7 @@ bool AllocateFromLab(Heap* heap, LocalAllocationBuffer* lab,
                      size_t size_in_bytes,
                      AllocationAlignment alignment = kTaggedAligned) {
   HeapObject obj;
+  size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(size_in_bytes);
   AllocationResult result =
       lab->AllocateRawAligned(static_cast<int>(size_in_bytes), alignment);
   if (result.To(&obj)) {
@@ -44,8 +45,9 @@ void VerifyIterable(Address base, Address limit,
     object = HeapObject::FromAddress(base);
     EXPECT_TRUE(object.IsFreeSpaceOrFiller());
     EXPECT_LT(counter, expected_size.size());
-    EXPECT_EQ(expected_size[counter], static_cast<size_t>(object.Size()));
-    base += object.Size();
+    EXPECT_EQ(ALIGN_TO_ALLOCATION_ALIGNMENT(expected_size[counter]),
+              static_cast<size_t>(object.Size()));
+    base += ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size());
     counter++;
   }
 }
@@ -255,9 +257,16 @@ TEST_F(LabTest, AllocateAligned) {
       std::make_pair(116, kTaggedAligned), std::make_pair(64, kDoubleAligned)};
   std::vector<std::pair<intptr_t, AllocationAlignment>> sizes(sizes_raw,
                                                               sizes_raw + 2);
+  // When using 8GB+ heaps, allocations are aligned to at least 8 bytes by
+  // leaving the trailing bytes unused, so one pointer fillers are no longer
+  // needed.
+#ifdef V8_COMPRESS_POINTERS_8GB
+  size_t expected_sizes_raw[4] = {116, 64, 1864};
+#else
   size_t expected_sizes_raw[4] = {116, 4, 64, 1864};
-  std::vector<size_t> expected_sizes(expected_sizes_raw,
-                                     expected_sizes_raw + 4);
+#endif
+  std::vector<size_t> expected_sizes(
+      expected_sizes_raw, expected_sizes_raw + arraysize(expected_sizes_raw));
 
   {
     AllocationResult lab_backing_store =

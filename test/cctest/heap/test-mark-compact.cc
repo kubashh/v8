@@ -444,6 +444,9 @@ UNINITIALIZED_TEST(RegressJoinThreadsOnIsolateDeinit) {
 
 TEST(Regress5829) {
   if (!v8_flags.incremental_marking) return;
+  // With 8GB+ heaps, old_end will always be aligned to at least 8 btyes, so
+  // old_end - kTaggedSize is never going to be aligned.
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) return;
   v8_flags.stress_concurrent_allocation = false;  // For SealCurrentObjects.
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
