@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1a3e13_a1bf1b03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T00:55:07Z",
+      "side": 1,
+      "message": "The changes in src/diagnostics/etw-jit-win.cc make sure that nothing happens until a ETW recorder (like Windows Performance Recorder) actually starts a session. \n\nFurthermore, the change in src/init/v8.cc does not set anymore FLAG_log to true when FLAG_enable_etw_stack_walking is true, which was useless. \n\nThe only additional operation when FLAG_enable_etw_stack_walking is set but there is no ETW session running is to maintain a static isolate_map in class IsolateLoadScriptData, but it should not really impact performance.\n\nBefore this CL there was a perf cost in enabling enable_etw_stack_walking because it also set FLAG_log and because it implied FLAG_interpreted_frames_native_stack. The cost was particularly noticeable in the Octane test CodeLoad. But without these implications (the one for FLAG_interpreted_frames_native_stack removed in a previous CL) I verified that there is no measurable performance cost in enabling this flag by default.\nStill, I\u0027ve set it as \u0027future\u0027 so that we can be notified of potential perf problems before enabling it.",
+      "parentUuid": "6e273058_0208abc2",
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "021be855_4ff94e67",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-20T08:01:41Z",
       "side": 1,
       "message": "Can you make this a DEFINE_BOOL_READONLY flag if V8_ENABLE_ETW_STACK_WALKING is not defined?\n\n\nScript::Run now always calls  i::ETWJITInterface::MaybeSetHandlerNow which involves several likely non-inlined calls. Do you think we could guard this behind a single check on windows?",
+      "range": {
+        "startLine": 2218,
+        "startChar": 0,
+        "endLine": 2221,
+        "endChar": 57
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe0213f_d2a17c55",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T00:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "021be855_4ff94e67",
       "range": {
         "startLine": 2218,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e18828a_041186ad",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T00:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e71a2b99_3cb87b8e",
+      "range": {
+        "startLine": 2130,
+        "startChar": 42,
+        "endLine": 2130,
+        "endChar": 75
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "470757bc_2cdda467",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-09-20T08:01:41Z",
       "side": 1,
       "message": "nit: please use DCHECK_IMPLIES",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 10
+      },
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe2e0fa6_abb703de",
+        "filename": "src/logging/log.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T00:55:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "470757bc_2cdda467",
       "range": {
         "startLine": 101,
         "startChar": 4,

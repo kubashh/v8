@@ -46,6 +46,30 @@
       },
       "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dead21a_43d38b79",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T00:55:07Z",
+      "side": 1,
+      "message": "I cannot access http://doc/..., unfortunately :)\n\nI have introduced a class ETWJitLogger but I was actually wrong, we don\u0027t need to set the listener in existing_code_logger. When it is null, the macro \n\n#define CALL_CODE_EVENT_HANDLER(Call) \\\n  if (listener_) {                    \\\n    listener_-\u003eCall;                  \\\n  } else {                            \\\n    PROFILE(isolate_, Call);          \\\n  }\n#define PROFILE(the_isolate, Call) (the_isolate)-\u003elogger()-\u003eCall;\n\ncalls isolate_-\u003elogger()-\u003eCall\nwhich calls the log function on all listeners. And we have added the ETWJitLogger to the listeners of the isolate logger.\nSo the code can be simplified.",
+      "parentUuid": "b5137d0a_df9b3490",
+      "range": {
+        "startLine": 2141,
+        "startChar": 4,
+        "endLine": 2141,
+        "endChar": 61
+      },
+      "revId": "b322f7cece443e4d6f3b4b7d3c8acd9e3a579915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
