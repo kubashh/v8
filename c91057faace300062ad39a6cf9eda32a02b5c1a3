@@ -16,6 +16,46 @@
       "message": "@Nico: please take a look at the function IsBigInt64 to see if it can be further simplified.",
       "revId": "c91057faace300062ad39a6cf9eda32a02b5c1a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0977434c_4021264d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-09-21T14:32:16Z",
+      "side": 1,
+      "message": "We can try with this mechanism to decide when a BigInt is small. When we have the benchmarks we can also compare the performance of different strategies (e.g. when we check for 64 bit BigInt precisely).",
+      "revId": "c91057faace300062ad39a6cf9eda32a02b5c1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc49a36_dedd264d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6797,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-09-21T14:32:16Z",
+      "side": 1,
+      "message": "This is going to produce a compiler error on 32 bit architectures because you cannot shift by 63 if sizeof(uintptr_t) is 4 there.",
+      "range": {
+        "startLine": 6797,
+        "startChar": 50,
+        "endLine": 6797,
+        "endChar": 55
+      },
+      "revId": "c91057faace300062ad39a6cf9eda32a02b5c1a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
