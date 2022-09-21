@@ -15,6 +15,7 @@
 #include "src/heap/base/worklist.h"
 #include "src/heap/cppgc/concurrent-marker.h"
 #include "src/heap/cppgc/globals.h"
+#include "src/heap/cppgc/heap-config.h"
 #include "src/heap/cppgc/incremental-marking-schedule.h"
 #include "src/heap/cppgc/marking-state.h"
 #include "src/heap/cppgc/marking-visitor.h"
@@ -38,26 +39,6 @@ class HeapBase;
 class V8_EXPORT_PRIVATE MarkerBase {
  public:
   class IncrementalMarkingTask;
-
-  struct MarkingConfig {
-    enum class CollectionType : uint8_t {
-      kMinor,
-      kMajor,
-    };
-    using StackState = cppgc::Heap::StackState;
-    using MarkingType = cppgc::Heap::MarkingType;
-    enum class IsForcedGC : uint8_t {
-      kNotForced,
-      kForced,
-    };
-
-    static constexpr MarkingConfig Default() { return {}; }
-
-    const CollectionType collection_type = CollectionType::kMajor;
-    StackState stack_state = StackState::kMayContainHeapPointers;
-    MarkingType marking_type = MarkingType::kIncremental;
-    IsForcedGC is_forced_gc = IsForcedGC::kNotForced;
-  };
 
   enum class WriteBarrierType {
     kDijkstra,

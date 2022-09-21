@@ -46,7 +46,7 @@ void LocalEmbedderHeapTracer::PrepareForTrace(
     EmbedderHeapTracer::TraceFlags flags) {
   if (cpp_heap_)
     cpp_heap()->InitializeTracing(
-        cppgc::internal::GarbageCollector::Config::CollectionType::kMajor,
+        cppgc::internal::GCConfig::CollectionType::kMajor,
         ConvertTraceFlags(flags));
 }
 

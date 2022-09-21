@@ -49,9 +49,7 @@ class EphemeronHolderTraceEphemeron
 };
 
 class EphemeronPairTest : public testing::TestWithHeap {
-  using MarkingConfig = Marker::MarkingConfig;
-
-  static constexpr Marker::MarkingConfig IncrementalPreciseMarkingConfig = {
+  static constexpr MarkingConfig IncrementalPreciseMarkingConfig = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kNoHeapPointers,
       MarkingConfig::MarkingType::kIncremental};
@@ -67,7 +65,7 @@ class EphemeronPairTest : public testing::TestWithHeap {
     // Pretend do finish sweeping as StatsCollector verifies that Notify*
     // methods are called in the right order.
     Heap::From(GetHeap())->stats_collector()->NotifySweepingCompleted(
-        GarbageCollector::Config::SweepingType::kIncremental);
+        GCConfig::SweepingType::kIncremental);
   }
 
   void InitializeMarker(HeapBase& heap, cppgc::Platform* platform) {
@@ -88,8 +86,7 @@ class EphemeronPairTest : public testing::TestWithHeap {
 };
 
 // static
-constexpr Marker::MarkingConfig
-    EphemeronPairTest::IncrementalPreciseMarkingConfig;
+constexpr MarkingConfig EphemeronPairTest::IncrementalPreciseMarkingConfig;
 
 }  // namespace
 
