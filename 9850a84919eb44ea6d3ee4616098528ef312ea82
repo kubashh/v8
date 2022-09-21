@@ -152,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be5e3b16_1a37fcd5",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T11:18:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aed244d0_72ed7f7a",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13251eb2_ee6e47a4",
@@ -165,6 +189,30 @@
       "writtenOn": "2022-09-21T07:45:27Z",
       "side": 1,
       "message": "nit: const",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 6
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d58806bb_222f6a5b",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T11:18:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13251eb2_ee6e47a4",
       "range": {
         "startLine": 172,
         "startChar": 2,
@@ -269,6 +317,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96c5d85_172e4af4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T11:18:41Z",
+      "side": 1,
+      "message": "The parallel task was supposed to be within the scope as well. Fixed now.",
+      "parentUuid": "f6aa559a_b9b4ad23",
+      "range": {
+        "startLine": 5965,
+        "startChar": 30,
+        "endLine": 5965,
+        "endChar": 69
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7da5f334_41d7f963",
@@ -329,6 +401,30 @@
       "writtenOn": "2022-09-21T07:45:27Z",
       "side": 1,
       "message": "We only use the collector to determine whether this is a major or a minor GC and to pick the right scopes.\n\nI\u0027d avoid the collector dependency and use something more conrete (bool is_major, or directly a ScopeId)",
+      "range": {
+        "startLine": 200,
+        "startChar": 17,
+        "endLine": 200,
+        "endChar": 35
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ed68514_47ba19a2",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-09-21T11:18:41Z",
+      "side": 1,
+      "message": "Replaced with the `GarbageCollector` enum we already use elsewhere.",
+      "parentUuid": "e436868b_fd181b44",
       "range": {
         "startLine": 200,
         "startChar": 17,
