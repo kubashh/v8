@@ -192,6 +192,24 @@
       "parentUuid": "33d189f7_539abae5",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e91889f_8f29956f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-21T07:31:33Z",
+      "side": 1,
+      "message": "Thanks for your review! We didn\u0027t find obvious performance gain in spd2.\nIf you think the complexity comes from the addtional logic of release register in the destructor of `RegisterAllocationScope`, we may have to abodon this CL, but if you think the complexity comes from other parts, we may try some other way to work around, how do you think of this?",
+      "parentUuid": "66d44756_1de1aa03",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
