@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0023a87_7f6ebfbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-21T06:10:04Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3acec095_dbeba148",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-21T06:10:04Z",
+      "side": 1,
+      "message": "For this whole fn family, please add a comment explaining the return value.",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35c1919f_fb4ac067",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-21T06:10:04Z",
+      "side": 1,
+      "message": "+1 for this comment, input_locations are hard to understand. What creates this encoding, StraightForwardRegisterAllocator::UpdateUse? MarkCheckpointNodes? Where does it skip over unused locations like return values and how can we ensure the logic stays in sync (should we emit marker sync values, at least in debug builds)? Where does it recurse through parent states? A comment here would be great.",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c79111c3_97ba3d22",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-21T06:10:04Z",
+      "side": 1,
+      "message": "nit: while nicely succinct, one now needs to understand the order of operator application (and *foo++ is not a common enough pattern for this to be on top of everyone\u0027s mind). I\u0027d suggest sticking to \n\n```\n EmitDeoptFrameSingleValue(value, *input_location);\n input_location++;\n```\n\nOr alternatively, maintaining an index into input_location, using `input_location[i++]`, and returning `\u0026input_location[i]` at the end.\n\nSame below",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
