@@ -32,11 +32,10 @@ namespace internal {
 
 namespace {
 
-bool EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
-                                     HeapBase& heap) {
-  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
+bool EnterIncrementalMarkingIfNeeded(MarkingConfig config, HeapBase& heap) {
+  if (config.marking_type == MarkingConfig::MarkingType::kIncremental ||
       config.marking_type ==
-          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+          MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     WriteBarrier::FlagUpdater::Enter();
     heap.set_incremental_marking_in_progress(true);
     return true;
@@ -44,11 +43,10 @@ bool EnterIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
   return false;
 }
 
-bool ExitIncrementalMarkingIfNeeded(Marker::MarkingConfig config,
-                                    HeapBase& heap) {
-  if (config.marking_type == Marker::MarkingConfig::MarkingType::kIncremental ||
+bool ExitIncrementalMarkingIfNeeded(MarkingConfig config, HeapBase& heap) {
+  if (config.marking_type == MarkingConfig::MarkingType::kIncremental ||
       config.marking_type ==
-          Marker::MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
+          MarkingConfig::MarkingType::kIncrementalAndConcurrent) {
     WriteBarrier::FlagUpdater::Exit();
     heap.set_incremental_marking_in_progress(false);
     return true;

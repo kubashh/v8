@@ -75,8 +75,8 @@ class CompactorTest : public testing::TestWithPlatform {
   void StartCompaction() {
     compactor().EnableForNextGCForTesting();
     compactor().InitializeIfShouldCompact(
-        GarbageCollector::Config::MarkingType::kIncremental,
-        GarbageCollector::Config::StackState::kNoHeapPointers);
+        GCConfig::MarkingType::kIncremental,
+        GCConfig::StackState::kNoHeapPointers);
     EXPECT_TRUE(compactor().IsEnabledForTesting());
   }
 
@@ -86,12 +86,11 @@ class CompactorTest : public testing::TestWithPlatform {
     CompactableGCed::g_destructor_callcount = 0u;
     StartCompaction();
     heap()->StartIncrementalGarbageCollection(
-        GarbageCollector::Config::PreciseIncrementalConfig());
+        GCConfig::PreciseIncrementalConfig());
   }
 
   void EndGC() {
-    heap()->marker()->FinishMarking(
-        GarbageCollector::Config::StackState::kNoHeapPointers);
+    heap()->marker()->FinishMarking(GCConfig::StackState::kNoHeapPointers);
     heap()->GetMarkerRefForTesting().reset();
     FinishCompaction();
     // Sweeping also verifies the object start bitmap.
@@ -125,13 +124,12 @@ namespace internal {
 TEST_F(CompactorTest, NothingToCompact) {
   StartCompaction();
   heap()->stats_collector()->NotifyMarkingStarted(
-      GarbageCollector::Config::CollectionType::kMajor,
-      GarbageCollector::Config::MarkingType::kAtomic,
-      GarbageCollector::Config::IsForcedGC::kNotForced);
+      GCConfig::CollectionType::kMajor, GCConfig::MarkingType::kAtomic,
+      GCConfig::IsForcedGC::kNotForced);
   heap()->stats_collector()->NotifyMarkingCompleted(0);
   FinishCompaction();
   heap()->stats_collector()->NotifySweepingCompleted(
-      GarbageCollector::Config::SweepingType::kAtomic);
+      GCConfig::SweepingType::kAtomic);
 }
 
 TEST_F(CompactorTest, NonEmptySpaceAllLive) {

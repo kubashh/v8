@@ -20,12 +20,12 @@ namespace {
 
 class MarkingVerifierTest : public testing::TestWithHeap {
  public:
-  using StackState = Heap::Config::StackState;
+  using StackState = GCConfig::StackState;
 
   V8_NOINLINE void VerifyMarking(HeapBase& heap, StackState stack_state,
                                  size_t expected_marked_bytes) {
     Heap::From(GetHeap())->object_allocator().ResetLinearAllocationBuffers();
-    MarkingVerifier verifier(heap, Heap::Config::CollectionType::kMajor);
+    MarkingVerifier verifier(heap, GCConfig::CollectionType::kMajor);
     verifier.Run(stack_state, v8::base::Stack::GetCurrentStackPosition(),
                  expected_marked_bytes);
   }
@@ -140,8 +140,7 @@ TEST_F(MarkingVerifierTest, DoesntDieOnInConstructionObjectWithWriteBarrier) {
   Persistent<Holder<GCedWithCallbackAndChild>> persistent =
       MakeGarbageCollected<Holder<GCedWithCallbackAndChild>>(
           GetAllocationHandle());
-  GarbageCollector::Config config =
-      GarbageCollector::Config::PreciseIncrementalConfig();
+  GCConfig config = GCConfig::PreciseIncrementalConfig();
   Heap::From(GetHeap())->StartIncrementalGarbageCollection(config);
   MakeGarbageCollected<GCedWithCallbackAndChild>(
       GetAllocationHandle(), MakeGarbageCollected<GCed>(GetAllocationHandle()),
@@ -149,7 +148,7 @@ TEST_F(MarkingVerifierTest, DoesntDieOnInConstructionObjectWithWriteBarrier) {
         persistent->object = obj;
       });
   GetMarkerRef()->IncrementalMarkingStepForTesting(
-      GarbageCollector::Config::StackState::kNoHeapPointers);
+      GCConfig::StackState::kNoHeapPointers);
   Heap::From(GetHeap())->FinalizeIncrementalGarbageCollectionIfRunning(config);
 }
 

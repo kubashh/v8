@@ -25,8 +25,6 @@ namespace internal {
 namespace {
 class MarkerTest : public testing::TestWithHeap {
  public:
-  using MarkingConfig = Marker::MarkingConfig;
-
   void DoMarking(MarkingConfig::StackState stack_state) {
     const MarkingConfig config = {MarkingConfig::CollectionType::kMajor,
                                   stack_state};
@@ -36,7 +34,7 @@ class MarkerTest : public testing::TestWithHeap {
     // Pretend do finish sweeping as StatsCollector verifies that Notify*
     // methods are called in the right order.
     heap->stats_collector()->NotifySweepingCompleted(
-        GarbageCollector::Config::SweepingType::kAtomic);
+        GCConfig::SweepingType::kAtomic);
   }
 
   void InitializeMarker(HeapBase& heap, cppgc::Platform* platform,
@@ -244,7 +242,7 @@ class GCedWithCallback : public GarbageCollected<GCedWithCallback> {
 }  // namespace
 
 TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedEmptyStack) {
-  static const Marker::MarkingConfig config = {
+  static const MarkingConfig config = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kMayContainHeapPointers};
   InitializeMarker(*Heap::From(GetHeap()), GetPlatformHandle().get(), config);
@@ -259,7 +257,7 @@ TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedEmptyStack) {
 }
 
 TEST_F(MarkerTest, InConstructionObjectIsEventuallyMarkedNonEmptyStack) {
-  static const Marker::MarkingConfig config = {
+  static const MarkingConfig config = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kMayContainHeapPointers};
   InitializeMarker(*Heap::From(GetHeap()), GetPlatformHandle().get(), config);
@@ -318,7 +316,7 @@ V8_NOINLINE void RegisterInConstructionObject(
 
 TEST_F(MarkerTest,
        InConstructionObjectIsEventuallyMarkedDifferentNonEmptyStack) {
-  static const Marker::MarkingConfig config = {
+  static const MarkingConfig config = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kMayContainHeapPointers};
   InitializeMarker(*Heap::From(GetHeap()), GetPlatformHandle().get(), config);
@@ -332,7 +330,7 @@ TEST_F(MarkerTest,
 }
 
 TEST_F(MarkerTest, SentinelNotClearedOnWeakPersistentHandling) {
-  static const Marker::MarkingConfig config = {
+  static const MarkingConfig config = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kNoHeapPointers,
       MarkingConfig::MarkingType::kIncremental};
@@ -383,7 +381,7 @@ class ObjectWithEphemeronPair final
 }  // namespace
 
 TEST_F(MarkerTest, MarkerProcessesAllEphemeronPairs) {
-  static const Marker::MarkingConfig config = {
+  static const MarkingConfig config = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kNoHeapPointers,
       MarkingConfig::MarkingType::kAtomic};
@@ -399,8 +397,6 @@ TEST_F(MarkerTest, MarkerProcessesAllEphemeronPairs) {
 
 class IncrementalMarkingTest : public testing::TestWithHeap {
  public:
-  using MarkingConfig = Marker::MarkingConfig;
-
   static constexpr MarkingConfig IncrementalPreciseMarkingConfig = {
       MarkingConfig::CollectionType::kMajor,
       MarkingConfig::StackState::kNoHeapPointers,
@@ -418,7 +414,7 @@ class IncrementalMarkingTest : public testing::TestWithHeap {
     // methods are called in the right order.
     GetMarkerRef().reset();
     Heap::From(GetHeap())->stats_collector()->NotifySweepingCompleted(
-        GarbageCollector::Config::SweepingType::kIncremental);
+        GCConfig::SweepingType::kIncremental);
   }
 
   void InitializeMarker(HeapBase& heap, cppgc::Platform* platform,
@@ -435,8 +431,7 @@ class IncrementalMarkingTest : public testing::TestWithHeap {
   }
 };
 
-constexpr IncrementalMarkingTest::MarkingConfig
-    IncrementalMarkingTest::IncrementalPreciseMarkingConfig;
+constexpr MarkingConfig IncrementalMarkingTest::IncrementalPreciseMarkingConfig;
 
 TEST_F(IncrementalMarkingTest, RootIsMarkedAfterMarkingStarted) {
   Persistent<GCed> root = MakeGarbageCollected<GCed>(GetAllocationHandle());
