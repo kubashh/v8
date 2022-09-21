@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83af37f1_31358209",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-21T15:13:55Z",
+      "side": 1,
+      "message": "The left shift problem is fixed",
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
