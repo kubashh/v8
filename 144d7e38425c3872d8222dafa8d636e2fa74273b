@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a643cbc9_4d113332",
+        "filename": "src/heap/cppgc/heap-config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T18:49:58Z",
+      "side": 1,
+      "message": "I think we could also move some of the aliases out into our global namespace. E.g. `StackState` and `CollectionType` are not even specific to marking/sweeping.\n\nThoughts?",
+      "revId": "144d7e38425c3872d8222dafa8d636e2fa74273b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
