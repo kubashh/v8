@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1e5c9b8_765f0694",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-21T08:18:39Z",
+      "side": 1,
+      "message": "Not sure this an improvement - yes it looks cleaner, but now it\u0027s completely invisible at callsites that input_locations is modified. Anyways, leaving the decision up to you.",
+      "parentUuid": "d8aaa8e7_8b9e261f",
+      "revId": "b218c53b2a110a05e89f3d7389f85d3d36efe623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35c1919f_fb4ac067",
