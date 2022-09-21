@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1fc5792_a7e44c2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2022-09-21T01:02:54Z",
+      "side": 1,
+      "message": "I added you to the review because I needed an owner of src/init/v8.cc...",
+      "parentUuid": "5c1a3e13_a1bf1b03",
+      "revId": "d8b22740c0d6fe4e7703bab1798817391ab3f31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "021be855_4ff94e67",
