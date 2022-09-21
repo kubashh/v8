@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "143346cb_e072e1f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "Already looks good",
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "211d65f7_d823e574",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-09-21T07:38:43Z",
       "side": 1,
       "message": "I\u0027m trying to better align what we report for MinorMC with what we report for full GC. I think that makes sense since they use the same algorithm.",
+      "range": {
+        "startLine": 811,
+        "startChar": 16,
+        "endLine": 811,
+        "endChar": 36
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee3ba4d_61cb8e8a",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "211d65f7_d823e574",
       "range": {
         "startLine": 811,
         "startChar": 16,
@@ -64,6 +105,76 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed34d22f_7032bb1e",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4bcfeb3b_b1d9711d",
+      "range": {
+        "startLine": 820,
+        "startChar": 16,
+        "endLine": 820,
+        "endChar": 33
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aed244d0_72ed7f7a",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 163,
+        "startChar": 2,
+        "endLine": 163,
+        "endChar": 6
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13251eb2_ee6e47a4",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 6
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd0adadc_f012a607",
@@ -77,6 +188,30 @@
       "writtenOn": "2022-09-21T07:38:43Z",
       "side": 1,
       "message": "Moved this block out of the MC_FINISH block to account for it as part of MC_SWEEP.",
+      "range": {
+        "startLine": 1108,
+        "startChar": 2,
+        "endLine": 1108,
+        "endChar": 3
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccbb09e1_37ba9c30",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cd0adadc_f012a607",
       "range": {
         "startLine": 1108,
         "startChar": 2,
@@ -112,6 +247,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6aa559a_b9b4ad23",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "`MINOR_MC_EVACUATE_UPDATE_POINTERS_SLOTS` seems off now? It\u0027s not updating slots IIUC?",
+      "parentUuid": "3082e084_97c01445",
+      "range": {
+        "startLine": 5965,
+        "startChar": 30,
+        "endLine": 5965,
+        "endChar": 69
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7da5f334_41d7f963",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 1
@@ -128,6 +287,53 @@
         "startChar": 2,
         "endLine": 6054,
         "endChar": 3
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c415f023_6841b5ef",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6054,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7da5f334_41d7f963",
+      "range": {
+        "startLine": 6054,
+        "startChar": 2,
+        "endLine": 6054,
+        "endChar": 3
+      },
+      "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e436868b_fd181b44",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 1,
+      "message": "We only use the collector to determine whether this is a major or a minor GC and to pick the right scopes.\n\nI\u0027d avoid the collector dependency and use something more conrete (bool is_major, or directly a ScopeId)",
+      "range": {
+        "startLine": 200,
+        "startChar": 17,
+        "endLine": 200,
+        "endChar": 35
       },
       "revId": "9850a84919eb44ea6d3ee4616098528ef312ea82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

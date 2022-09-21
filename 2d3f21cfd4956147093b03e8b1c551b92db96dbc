@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de8c738_a120e8dc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "994b56dd_51b4bcc6",
+      "range": {
+        "startLine": 6094,
+        "startChar": 35,
+        "endLine": 6094,
+        "endChar": 71
+      },
+      "revId": "2d3f21cfd4956147093b03e8b1c551b92db96dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74a8dca7_c9803150",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-21T07:38:43Z",
       "side": 0,
       "message": "MinorMC atomic pause doesn\u0027t separate roots marking from the transitive closure",
+      "range": {
+        "startLine": 6449,
+        "startChar": 50,
+        "endLine": 6449,
+        "endChar": 69
+      },
+      "revId": "2d3f21cfd4956147093b03e8b1c551b92db96dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f9be4a_8f39a19c",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6449,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T07:45:27Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "74a8dca7_c9803150",
       "range": {
         "startLine": 6449,
         "startChar": 50,
