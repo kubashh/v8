@@ -39,6 +39,30 @@
       },
       "revId": "727223ab4cb7f18446492a69711ae98483f0b686",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a592960_f38e6165",
+        "filename": "src/heap/cppgc/heap-config.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-21T20:11:22Z",
+      "side": 1,
+      "message": "It\u0027s `cppgc::Heap` on the API, so no.",
+      "parentUuid": "d9c743e1_79a2281e",
+      "range": {
+        "startLine": 18,
+        "startChar": 22,
+        "endLine": 18,
+        "endChar": 46
+      },
+      "revId": "727223ab4cb7f18446492a69711ae98483f0b686",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
