@@ -2657,7 +2657,7 @@ void OnStackReplacement(MacroAssembler* masm, OsrSourceTier source,
   }
 
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    __ LoadCodeDataContainerCodeNonBuiltin(rax, rax);
+    __ LoadCodeDataContainerCodeNonBuiltin(rax, rax, kScratchRegister);
   }
 
   // Load deoptimization data from the code object.
@@ -5072,7 +5072,8 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
     AssertCodeTIsBaseline(masm, code_obj, r11);
   }
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    __ LoadCodeDataContainerCodeNonBuiltin(code_obj, code_obj);
+    __ LoadCodeDataContainerCodeNonBuiltin(code_obj, code_obj,
+                                           kScratchRegister);
   }
 
   // Load the feedback vector.

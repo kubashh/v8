@@ -899,6 +899,7 @@ class CompressedMaybeObjectSlot;
 class CompressedMapWordSlot;
 class CompressedHeapObjectSlot;
 class V8HeapCompressionScheme;
+class ExternalCodeCompressionScheme;
 template <typename CompressionScheme>
 class OffHeapCompressedObjectSlot;
 class FullObjectSlot;
@@ -930,7 +931,12 @@ struct SlotTraits {
   using THeapObjectSlot = CompressedHeapObjectSlot;
   using TOffHeapObjectSlot =
       OffHeapCompressedObjectSlot<V8HeapCompressionScheme>;
-  using TCodeObjectSlot = OffHeapCompressedObjectSlot<V8HeapCompressionScheme>;
+#ifdef V8_EXTERNAL_CODE_SPACE
+  using TCodeObjectSlot =
+      OffHeapCompressedObjectSlot<ExternalCodeCompressionScheme>;
+#else
+  using TCodeObjectSlot = OffHeapCompressedObjectSlot;
+#endif  // V8_EXTERNAL_CODE_SPACE
 #else
   using TObjectSlot = FullObjectSlot;
   using TMaybeObjectSlot = FullMaybeObjectSlot;

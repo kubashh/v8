@@ -2294,15 +2294,26 @@ void TurboAssembler::LoadCodeDataContainerEntry(
 }
 
 void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
-    Register destination, Register code_data_container_object) {
+    Register destination, Register code_data_container_object,
+    Register scratch) {
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Given the fields layout we can read the Code reference as a full word.
   static_assert(!V8_EXTERNAL_CODE_SPACE_BOOL ||
                 (CodeDataContainer::kCodeCageBaseUpper32BitsOffset ==
                  CodeDataContainer::kCodeOffset + kTaggedSize));
-  movq(destination, FieldOperand(code_data_container_object,
-                                 CodeDataContainer::kCodeOffset));
+  // movq(destination, FieldOperand(code_data_container_object,
+  //                               CodeDataContainer::kCodeOffset));
+  DCHECK(!AreAliased(scratch, code_data_container_object) &&
+         !AreAliased(destination, scratch));
+  movl(scratch,
+       FieldOperand(code_data_container_object,
+                    CodeDataContainer::kCodeCageBaseUpper32BitsOffset));
+  shlq(scratch, Immediate(32));
+
+  movsxlq(destination, FieldOperand(code_data_container_object,
+                                    CodeDataContainer::kCodeOffset));
+  leaq(destination, Operand(scratch, destination, ScaleFactor::times_1, 0));
 }
 
 void TurboAssembler::CallCodeDataContainerObject(

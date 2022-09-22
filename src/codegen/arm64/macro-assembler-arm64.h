@@ -986,7 +986,8 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // corresponding to builtins, because their entry points values point to
   // the embedded instruction stream in .text section.
   void LoadCodeDataContainerCodeNonBuiltin(Register destination,
-                                           Register code_data_container_object);
+                                           Register code_data_container_object,
+                                           Register scratch);
   void CallCodeDataContainerObject(Register code_data_container_object);
   void JumpCodeDataContainerObject(Register code_data_container_object,
                                    JumpMode jump_mode = JumpMode::kJump);
