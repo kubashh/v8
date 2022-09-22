@@ -6783,6 +6783,20 @@ TNode<BoolT> CodeStubAssembler::IsBigInt(TNode<HeapObject> object) {
   return IsBigIntInstanceType(LoadInstanceType(object));
 }
 
+TNode<BoolT> CodeStubAssembler::IsBigInt64(TNode<BigInt> bigint) {
+  // [-2^63 + 1, 2^63 - 1]
+  DCHECK(Is64());
+  TNode<Uint32T> length =
+      DecodeWord32<BigIntBase::LengthBits>(LoadBigIntBitfield(bigint));
+  return Word32Or(
+      Word32Equal(Int32Constant(0), length),
+      Word32And(Word32Equal(Int32Constant(1), length),
+                WordEqual(UintPtrConstant(0),
+                          WordAnd(LoadBigIntDigit(bigint, 0),
+                                  UintPtrConstant(static_cast<uintptr_t>(
+                                      1ULL << (sizeof(uintptr_t) * 8 - 1)))))));
+}
+
 TNode<BoolT> CodeStubAssembler::IsPrimitiveInstanceType(
     TNode<Int32T> instance_type) {
   return Int32LessThanOrEqual(instance_type,
