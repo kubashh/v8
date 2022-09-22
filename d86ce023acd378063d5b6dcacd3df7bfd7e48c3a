@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb686e3f_1e4407bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-22T08:24:16Z",
+      "side": 1,
+      "message": "@Benedikt: Could you take a look at `debug-wasm-objects.cc`?\nThere are cases where the Table does not have a `WasmInstanceObject` (when defined in JavaScript), so changes were required in that case to try to retrieve it from the element instead (e.g. the `TypeInfo` for wasm structs and arrays.)",
+      "revId": "d86ce023acd378063d5b6dcacd3df7bfd7e48c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
