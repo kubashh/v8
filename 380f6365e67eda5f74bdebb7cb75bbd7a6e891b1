@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfcf5df8_169e6e8d",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6797,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-22T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a9d0eb_f948d1d4",
+      "range": {
+        "startLine": 6797,
+        "startChar": 69,
+        "endLine": 6797,
+        "endChar": 71
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab0630d6_bf21a6a3",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58506acc_ced45d61",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-22T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab0630d6_bf21a6a3",
+      "range": {
+        "startLine": 205,
+        "startChar": 4,
+        "endLine": 205,
+        "endChar": 19
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "007890b2_609c69c1",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-09-21T15:41:44Z",
       "side": 1,
       "message": "You should already set the BigInt64 feedback here, even if it is not yet used by the compiler (compiler should for now treat BigInt64 like BigInt).",
+      "range": {
+        "startLine": 216,
+        "startChar": 61,
+        "endLine": 216,
+        "endChar": 68
+      },
+      "revId": "380f6365e67eda5f74bdebb7cb75bbd7a6e891b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2006ed3b_6aad8715",
+        "filename": "src/ic/binary-op-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-22T13:40:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "007890b2_609c69c1",
       "range": {
         "startLine": 216,
         "startChar": 61,

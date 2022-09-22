@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3c68245_356fce3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-22T13:40:25Z",
+      "side": 1,
+      "message": "@Jakob: please take a look at the changes I made to ic",
+      "revId": "bf8570d62e7ef41665d369b292326cd1891ab960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
