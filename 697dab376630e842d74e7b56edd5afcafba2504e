@@ -228,6 +228,24 @@
       "parentUuid": "7e91889f_8f29956f",
       "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269170e4_945226bb",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4687,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-09-22T06:50:26Z",
+      "side": 1,
+      "message": "Thanks for your clarify!\nThis optimization indeed have some complexity, I will abandon this CL, and try to do some other optimizations.",
+      "parentUuid": "75f70000_c9698ed3",
+      "revId": "697dab376630e842d74e7b56edd5afcafba2504e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
