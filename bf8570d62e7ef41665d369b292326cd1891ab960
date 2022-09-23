@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e1f99f_7dc185e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-23T14:10:33Z",
+      "side": 1,
+      "message": "LGTM with a comment. Happy to take another look if you end up making significant changes.",
+      "revId": "bf8570d62e7ef41665d369b292326cd1891ab960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "922203a3_1a0aa44b",
@@ -53,6 +70,29 @@
         "startChar": 2,
         "endLine": 6787,
         "endChar": 26
+      },
+      "revId": "bf8570d62e7ef41665d369b292326cd1891ab960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a839b9f2_51fd9b44",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6795,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-23T14:10:33Z",
+      "side": 1,
+      "message": "I don\u0027t think this is safe: AFAIK, `WordOr`/`WordAnd` provide no early-termination (as C++ boolean logic would), so this will always read the first digit, even if the BigInt\u0027s length is 0. In most cases that\u0027ll be harmless, as the final result will still be correct, but if a zero-length BigInt happens to be the last object on a page, trying to read its first digit will crash with a segfault.\nThe alternative is to use explicit branching with labels and `GotoIf`s. Looking at the callers, you\u0027ll probably want to call this `GotoIfLargeBigInt(TNode\u003cBigInt\u003e bigint, Label* large)` (with a comment explaining how \"large\" is defined in this context), and the call site becomes:\n```\nif (Is64()) {\n  GotoIfLargeBigInt(CAST(lhs), \u0026bigint);\n  GotoIfLargeBigInt(CAST(lhs), \u0026bigint);\n  Goto(\u0026bigint64);\n} else {\n  Goto(\u0026bigint);\n}\n```",
+      "range": {
+        "startLine": 6795,
+        "startChar": 34,
+        "endLine": 6795,
+        "endChar": 60
       },
       "revId": "bf8570d62e7ef41665d369b292326cd1891ab960",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
