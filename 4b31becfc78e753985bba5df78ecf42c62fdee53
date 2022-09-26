@@ -16,6 +16,24 @@
       "message": "PTAL.",
       "revId": "4b31becfc78e753985bba5df78ecf42c62fdee53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5e718c_557fb96e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-09-26T04:56:47Z",
+      "side": 1,
+      "message": "Do we need to submit a revert/reland or just submit a new CL to fix this?",
+      "parentUuid": "93fca4c2_a6b2cf3f",
+      "revId": "4b31becfc78e753985bba5df78ecf42c62fdee53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
