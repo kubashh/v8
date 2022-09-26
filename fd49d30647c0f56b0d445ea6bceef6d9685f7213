@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1f9104_4ff49ee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-26T09:52:37Z",
+      "side": 1,
+      "message": "@Jakob: The inspection bug is fixed. Thank you for providing the insight.",
+      "revId": "fd49d30647c0f56b0d445ea6bceef6d9685f7213",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
