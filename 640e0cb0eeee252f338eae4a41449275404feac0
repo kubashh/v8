@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0512d9ae_d9ea6987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-26T12:44:24Z",
+      "side": 1,
+      "message": "Just to get rid of this and not stumble over the op codes later on.",
+      "revId": "640e0cb0eeee252f338eae4a41449275404feac0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
