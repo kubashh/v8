@@ -179,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "744b3c6d_1a93996c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5109,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-26T10:24:51Z",
+      "side": 1,
+      "message": "I agree, new code should use the GraphAssembler. Manual construction of the effect and control chains has proven to be error-prone and hard to maintain.",
+      "parentUuid": "72be6485_2572e409",
+      "revId": "1d586d0ab93f2e1e1b7dcbf369e903c7e71ad2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf0ff830_9e9ddbaa",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
