@@ -16,6 +16,86 @@
       "message": "Thanks for the 1st set of reviews. I\u0027ve addressed all of your comments, and left 2 unresolved comments in places where it\u0027d make sense for you to have another look :)",
       "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89649e35_0940fe4e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-26T16:01:19Z",
+      "side": 1,
+      "message": "Why is it necessary to collect non-loop phis separately?",
+      "range": {
+        "startLine": 694,
+        "startChar": 8,
+        "endLine": 696,
+        "endChar": 9
+      },
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c54de0a_e46c0d88",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-26T16:01:19Z",
+      "side": 1,
+      "message": "Maybe DCHECK here that the phi has exactly two inputs? Just for readability.",
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fde960af_19590162",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-26T16:01:19Z",
+      "side": 1,
+      "message": "Why repeat line 777 here?",
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9542a6c_78a03242",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-26T16:01:19Z",
+      "side": 1,
+      "message": "I find this hard to understand. Maybe give `has_next` a different name?",
+      "range": {
+        "startLine": 962,
+        "startChar": 12,
+        "endLine": 964,
+        "endChar": 28
+      },
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
