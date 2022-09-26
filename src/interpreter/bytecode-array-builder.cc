@@ -36,6 +36,10 @@ class RegisterTransferWriter final
     builder_->OutputMovRaw(input, output);
   }
 
+  void PatchOperands(ZoneVector<size_t>& list, uint8_t diff) override {
+    builder_->PatchOperands(list, diff);
+  }
+
  private:
   BytecodeArrayBuilder* builder_;
 };
@@ -168,7 +172,7 @@ void BytecodeArrayBuilder::AttachOrEmitDeferredSourceInfo(BytecodeNode* node) {
 
 void BytecodeArrayBuilder::Write(BytecodeNode* node) {
   AttachOrEmitDeferredSourceInfo(node);
-  bytecode_array_writer_.Write(node);
+  bytecode_array_writer_.Write(node, register_optimizer_);
 }
 
 void BytecodeArrayBuilder::WriteJump(BytecodeNode* node, BytecodeLabel* label) {
@@ -209,6 +213,11 @@ void BytecodeArrayBuilder::OutputMovRaw(Register src, Register dest) {
   BytecodeNode node(
       BytecodeNode::Mov(BytecodeSourceInfo(), operand0, operand1));
   Write(&node);
+}
+
+void BytecodeArrayBuilder::PatchOperands(ZoneVector<size_t>& list,
+                                         int8_t diff) {
+  bytecode_array_writer_.PatchOperands(list, diff);
 }
 
 namespace {

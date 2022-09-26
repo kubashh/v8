@@ -42,6 +42,9 @@ class BytecodeRegisterOptimizerTest
   void EmitMov(Register input, Register output) override {
     output_.push_back({Bytecode::kMov, input, output});
   }
+  void PatchOperands(ZoneVector<size_t>& list, uint8_t diff) override {
+    // TODO
+  }
 
   BytecodeRegisterAllocator* allocator() { return register_allocator_; }
   BytecodeRegisterOptimizer* optimizer() { return register_optimizer_; }
