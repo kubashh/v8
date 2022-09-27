@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cb24cd5_6df162d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-09-27T08:08:11Z",
+      "side": 1,
+      "message": "Ptal, this is the same change that but back-merges to 106.",
+      "revId": "9020d3d31720f0bf5d1f47a023a00bed78361664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
