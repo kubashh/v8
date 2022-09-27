@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "68801f9b_b0b3bb7a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-09-27T12:50:54Z",
+      "side": 1,
+      "message": "As discussed offline, it\u0027d be better to switch callers to not rely on `kBottom` as an error sentinel, and check `decoder.ok()` instead.\n\nSee https://chromium-review.googlesource.com/c/v8/v8/+/3827866 for earlier context.",
+      "parentUuid": "d415121c_9bdbf075",
+      "revId": "d4db33d792d51ed4877807220bcf5cffd29af430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "588c0211_c6d7106b",
         "filename": "test/mjsunit/wasm/wasm-invalid-local.js",
         "patchSetId": 1
