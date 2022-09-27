@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a73f4870_ce9bf617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-09-27T12:19:48Z",
+      "side": 1,
+      "message": "Thanks! LGTM with one nit: can you remove the type reflection flag from the two stack-switching tests since it\u0027s not needed anymore? The tests are test/mjsunit/wasm/{stack-switching.js,stack-switching-export.js}.",
+      "revId": "0aca6ac89afc0ca5136eeffa02f3b02499e5a43c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "954a7a22_5afd26f4",
