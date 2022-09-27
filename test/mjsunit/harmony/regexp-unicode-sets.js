@@ -1,0 +1,132 @@
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// Flags: --harmony-regexp-unicode-sets
+
+// u and v are not allowed together.
+assertThrows('/./uv', SyntaxError);
+assertThrows("new RegExp('.','uv')", SyntaxError);
+
+assertEquals('v', /./v.flags);
+assertTrue(/./v.unicodeSets);
+
+// Characters that require escaping within a character class in /u mode
+assertThrows('/[(]/v', SyntaxError);
+assertThrows('/[)]/v', SyntaxError);
+assertThrows('/[[]/v', SyntaxError);
+assertThrows('/[]]/v', SyntaxError);
+assertThrows('/[{]/v', SyntaxError);
+assertThrows('/[}]/v', SyntaxError);
+assertThrows('/[/]/v', SyntaxError);
+assertThrows('/[-]/v', SyntaxError);
+// Need to escape the backslash, as assertThrows uses eval().
+assertThrows('/[\\]/v', SyntaxError);
+assertThrows('/[|]/v', SyntaxError);
+
+assertThrows('/[&&]/v', SyntaxError);
+assertThrows('/[!!]/v', SyntaxError);
+assertThrows('/[##]/v', SyntaxError);
+assertThrows('/[$$]/v', SyntaxError);
+assertThrows('/[%%]/v', SyntaxError);
+assertThrows('/[**]/v', SyntaxError);
+assertThrows('/[++]/v', SyntaxError);
+assertThrows('/[,,]/v', SyntaxError);
+assertThrows('/[..]/v', SyntaxError);
+assertThrows('/[::]/v', SyntaxError);
+assertThrows('/[;;]/v', SyntaxError);
+assertThrows('/[<<]/v', SyntaxError);
+assertThrows('/[==]/v', SyntaxError);
+assertThrows('/[>>]/v', SyntaxError);
+assertThrows('/[??]/v', SyntaxError);
+assertThrows('/[@@]/v', SyntaxError);
+// The first ^ negates the class. The following two are not valid.
+assertThrows('/[^^^]/v', SyntaxError);
+assertThrows('/[``]/v', SyntaxError);
+assertThrows('/[~~]/v', SyntaxError);
+
+function check(re, expectMatch, expectNoMatch) {
+  for (const match of expectMatch) {
+    assertTrue(re.test(match), `${re}.test(${match})`);
+  }
+  for (const noMatch of expectNoMatch) {
+    assertFalse(re.test(noMatch), `${re}.test(${noMatch})`);
+  }
+  // Nest the current RegExp in a negated class and check expectations are
+  // inversed.
+  const inverted = new RegExp(`[^${re.source}]`, re.flags);
+  for (const match of expectMatch) {
+    assertFalse(inverted.test(match), `${inverted}.test(${match})`);
+  }
+  for (const noMatch of expectNoMatch) {
+    assertTrue(inverted.test(noMatch), `${inverted}.test(${noMatch})`);
+  }
+}
+
+// Union with nested class
+check(
+    /[\da-f[xy][^[^z]]]/v, Array.from('0123456789abcdefxyz'),
+    Array.from('ghijklmnopqrstuv!?'));
+
+// Intersections
+check(/[\d&&[0-9]]/v, Array.from('0123456789'), []);
+check(/[\d&&0]/v, [0], Array.from('123456789'));
+check(/[\d&&9]/v, [9], Array.from('012345678'));
+check(/[\d&&[02468]]/v, Array.from('02468'), Array.from('13579'));
+check(/[\d&&[13579]]/v, Array.from('13579'), Array.from('02468'));
+check(
+    /[\w&&[^a-zA-Z_]]/v, Array.from('0123456789'),
+    Array.from('abcdxyzABCDXYZ_!?'));
+check(
+    /[^\w&&[a-zA-Z_]]/v, Array.from('0123456789!?'),
+    Array.from('abcdxyzABCDXYZ_'));
+
+// Subtractions
+check(/[\d--[!-%]]/v, Array.from('0123456789'), Array.from('!\"#$'));
+check(/[\d--[A-Z]]/v, Array.from('0123456789'), Array.from('ABCXYZ'));
+check(/[\d--[0-9]]/v, [], Array.from('0123456789'));
+check(/[\d--[\w]]/v, [], Array.from('0123456789abcxyzABCXYZ_'));
+check(/[\d--0]/v, Array.from('123456789'), [0]);
+check(/[\d--9]/v, Array.from('012345678'), [9]);
+check(/[[\d[a-c]]--9]/v, Array.from('012345678abc'), [9]);
+check(/[\d--[02468]]/v, Array.from('13579'), Array.from('02468'));
+check(/[\d--[13579]]/v, Array.from('02468'), Array.from('13579'));
+check(/[[3-7]--[0-9]]/v, [], Array.from('0123456789'));
+check(/[[3-7]--[0-7]]/v, [], Array.from('0123456789'));
+check(/[[3-7]--[3-9]]/v, [], Array.from('0123456789'));
+check(/[[3-79]--[0-7]]/v, [9], Array.from('012345678'));
+check(/[[3-79]--[3-9]]/v, [], Array.from('0123456789'));
+check(/[[3-7]--[0-3]]/v, Array.from('4567'), Array.from('012389'));
+check(/[[3-7]--[0-5]]/v, Array.from('67'), Array.from('01234589'));
+check(/[[3-7]--[7-9]]/v, Array.from('3456'), Array.from('012789'));
+check(/[[3-7]--[5-9]]/v, Array.from('34'), Array.from('01256789'));
+check(/[[3-7a-c]--[0-3]]/v, Array.from('4567abc'), Array.from('012389'));
+check(/[[3-7a-c]--[0-5]]/v, Array.from('67abc'), Array.from('01234589'));
+check(/[[3-7a-c]--[7-9]]/v, Array.from('3456abc'), Array.from('012789'));
+check(/[[3-7a-c]--[5-9]]/v, Array.from('34abc'), Array.from('01256789'));
+check(/[[2-8]--[0-3]--5--[7-9]]/v, Array.from('46'), Array.from('01235789'));
+check(/[[2-57-8]--[0-3]--[5-7]]/v, Array.from('48'), Array.from('01235679'));
+check(/[[0-57-8]--[1-34]--[5-7]]/v, Array.from('08'), Array.from('12345679'));
+check(/[\d--[^02468]]/v, Array.from('02468'), Array.from('13579'));
+check(/[\d--[^13579]]/v, Array.from('13579'), Array.from('02468'));
+
+// Ignore-Case
+check(/[Ā-č]/v, Array.from('ĀāĂăĄąĆć'), Array.from('abc'));
+check(/[ĀĂĄĆ]/vi, Array.from('ĀāĂăĄąĆć'), Array.from('abc'));
+check(/[āăąć]/vi, Array.from('ĀāĂăĄąĆć'), Array.from('abc'));
+
+// Some more sophisticated tests taken from
+// https://v8.dev/features/regexp-v-flag
+assertFalse(/[\p{Script_Extensions=Greek}--π]/v.test('π'));
+assertFalse(/[\p{Script_Extensions=Greek}--[αβγ]]/v.test('α'));
+assertFalse(/[\p{Script_Extensions=Greek}--[α-γ]]/v.test('β'));
+assertTrue(/[\p{Decimal_Number}--[0-9]]/v.test('𑜹'));
+assertFalse(/[\p{Decimal_Number}--[0-9]]/v.test('4'));
+assertTrue(/[\p{Script_Extensions=Greek}&&\p{Letter}]/v.test('π'));
+assertFalse(/[\p{Script_Extensions=Greek}&&\p{Letter}]/v.test('𐆊'));
+assertTrue(/[\p{White_Space}&&\p{ASCII}]/v.test('\n'));
+assertFalse(/[\p{White_Space}&&\p{ASCII}]/v.test('\u2028'));
+assertTrue(/[\p{Script_Extensions=Mongolian}&&\p{Number}]/v.test('᠗'));
+assertFalse(/[\p{Script_Extensions=Mongolian}&&\p{Number}]/v.test('ᠴ'));
+assertEquals('XXXXXX4#', 'aAbBcC4#'.replaceAll(/\p{Lowercase_Letter}/giv, 'X'));
+assertEquals('XXXXXX4#', 'aAbBcC4#'.replaceAll(/[^\P{Lowercase_Letter}]/giv, 'X'));
