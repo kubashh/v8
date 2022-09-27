@@ -440,119 +440,121 @@ class ExceptionHandlerTrampolineBuilder {
   void EmitTrampolineFor(NodeBase* node) {
     DCHECK(node->properties().can_throw());
 
-    ExceptionHandlerInfo* handler_info = node->exception_handler_info();
+    ExceptionHandlerInfo* const handler_info = node->exception_handler_info();
     DCHECK(handler_info->HasExceptionHandler());
+    BasicBlock* const catch_block = handler_info->catch_block.block_ptr();
+    LazyDeoptInfo* const deopt_info = node->lazy_deopt_info();
 
-    BasicBlock* block = handler_info->catch_block.block_ptr();
-    LazyDeoptInfo* deopt_info = node->lazy_deopt_info();
+    Reset();
 
-    __ bind(&handler_info->trampoline_entry);
-    ClearState();
     // TODO(v8:7700): Handle inlining.
-    RecordMoves(deopt_info->unit, block, deopt_info->state.register_frame);
-    // We do moves that need to materialise values first, since we might need to
-    // call a builtin to create a HeapNumber, and therefore we would need to
+    ParallelMoveResolver<Register> direct_moves(masm_);
+    RecordMoves(deopt_info->unit, catch_block, deopt_info->state.register_frame,
+                &direct_moves);
+
+    // We do moves that need to materialise values first, since we might need
+    // to call a builtin to create a HeapNumber, and therefore we would need to
     // spill all registers.
-    DoMaterialiseMoves();
+    __ bind(&handler_info->trampoline_entry);
+    EmitMaterialisingMoves();
+
     // Move the rest, we will not call HeapNumber anymore.
-    DoDirectMoves();
-    // Jump to the catch block.
-    __ jmp(block->label());
+    direct_moves.EmitMoves();
+
+    __ jmp(catch_block->label());
   }
 
  private:
   MaglevAssembler* const masm_;
-  using Move = std::pair<const ValueLocation&, ValueNode*>;
-  base::SmallVector<Move, 16> direct_moves_;
-  base::SmallVector<Move, 16> materialisation_moves_;
+  using Move = std::pair<const ValueLocation&, ValueNode*>;  // {target, source}
+  base::SmallVector<Move, 16> materialising_moves_;
   bool save_accumulator_ = false;
 
   MacroAssembler* masm() const { return masm_; }
 
-  void ClearState() {
-    direct_moves_.clear();
-    materialisation_moves_.clear();
+  void Reset() {
+    materialising_moves_.clear();
     save_accumulator_ = false;
   }
 
-  void RecordMoves(const MaglevCompilationUnit& unit, BasicBlock* block,
-                   const CompactInterpreterFrameState* register_frame) {
-    for (Phi* phi : *block->phis()) {
+  void RecordMoves(const MaglevCompilationUnit& unit, BasicBlock* catch_block,
+                   const CompactInterpreterFrameState* register_frame,
+                   ParallelMoveResolver<Register>* direct_moves) {
+    for (Phi* phi : *catch_block->phis()) {
       DCHECK_EQ(phi->input_count(), 0);
       if (!phi->has_valid_live_range()) continue;
+      const ValueLocation& target = phi->result();
       if (phi->owner() == interpreter::Register::virtual_accumulator()) {
         // If the accumulator is live, then it is the exception object located
         // at kReturnRegister0. This is also the first phi in the list.
-        DCHECK_EQ(phi->result().AssignedGeneralRegister(), kReturnRegister0);
+        DCHECK_EQ(target.AssignedGeneralRegister(), kReturnRegister0);
         save_accumulator_ = true;
         continue;
       }
-      ValueNode* value = register_frame->GetValueOf(phi->owner(), unit);
-      DCHECK_NOT_NULL(value);
-      switch (value->properties().value_representation()) {
+      ValueNode* const source = register_frame->GetValueOf(phi->owner(), unit);
+      DCHECK_NOT_NULL(source);
+      switch (source->properties().value_representation()) {
         case ValueRepresentation::kTagged:
           // All registers should have been spilled due to the call.
-          DCHECK(!value->allocation().IsRegister());
-          direct_moves_.emplace_back(phi->result(), value);
+          DCHECK(!source->allocation().IsRegister());
+          direct_moves->RecordMove(
+              source, source->allocation(),
+              compiler::AllocatedOperand::cast(target.operand()));
           break;
         case ValueRepresentation::kInt32:
-          if (value->allocation().IsConstant()) {
-            direct_moves_.emplace_back(phi->result(), value);
+          if (source->allocation().IsConstant()) {
+            direct_moves->RecordMove(
+                source, source->allocation(),
+                compiler::AllocatedOperand::cast(target.operand()));
           } else {
-            materialisation_moves_.emplace_back(phi->result(), value);
+            materialising_moves_.emplace_back(target, source);
           }
           break;
         case ValueRepresentation::kFloat64:
-          materialisation_moves_.emplace_back(phi->result(), value);
+          materialising_moves_.emplace_back(target, source);
           break;
       }
     }
   }
 
-  void DoMaterialiseMoves() {
-    if (materialisation_moves_.size() == 0) return;
+  void EmitMaterialisingMoves() {
+    if (materialising_moves_.size() == 0) return;
     if (save_accumulator_) {
       __ Push(kReturnRegister0);
     }
-    for (auto it = materialisation_moves_.begin();
-         it < materialisation_moves_.end(); it++) {
-      switch (it->second->properties().value_representation()) {
-        case ValueRepresentation::kInt32: {
-          EmitMoveInt32ToReturnValue0(it->second);
-          break;
-        }
-        case ValueRepresentation::kFloat64:
-          EmitMoveFloat64ToReturnValue0(it->second);
-          break;
-        case ValueRepresentation::kTagged:
-          UNREACHABLE();
-      }
-      if (it->first.operand().IsStackSlot()) {
-        // If the target is in a stack sot, we can immediately move
-        // the result to it.
-        __ movq(ToMemOperand(it->first), kReturnRegister0);
+    for (auto it = materialising_moves_.begin();
+         it < materialising_moves_.end(); it++) {
+      const ValueLocation& target = it->first;
+      ValueNode* const source = it->second;
+
+      MaterialiseTo(source, kReturnRegister0);
+
+      if (target.operand().IsStackSlot()) {
+        // If the target is in a stack slot, we can immediately move the result
+        // to it.
+        __ movq(ToMemOperand(target), kReturnRegister0);
       } else {
         // We spill the result to the stack, in order to be able to call the
         // NewHeapNumber builtin again, however we don't need to push the result
         // of the last one.
-        if (it != materialisation_moves_.end() - 1) {
+        if (it != materialising_moves_.end() - 1) {
           __ Push(kReturnRegister0);
         }
       }
     }
     // If the last move target is a register, the result should be in
-    // kReturnValue0, so so we emit a simple move. Otherwise it has already been
-    // moved.
-    const ValueLocation& last_move_target =
-        materialisation_moves_.rbegin()->first;
+    // kReturnRegister0, so so we emit a simple move. Otherwise it has already
+    // been moved.
+    const ValueLocation& last_move_target = materialising_moves_.back().first;
     if (last_move_target.operand().IsRegister()) {
       __ Move(last_move_target.AssignedGeneralRegister(), kReturnRegister0);
     }
     // And then pop the rest.
-    for (auto it = materialisation_moves_.rbegin() + 1;
-         it < materialisation_moves_.rend(); it++) {
-      if (it->first.operand().IsRegister()) {
-        __ Pop(it->first.AssignedGeneralRegister());
+    for (auto it = materialising_moves_.rbegin() + 1;
+         it < materialising_moves_.rend(); it++) {
+      const ValueLocation& target = it->first;
+      if (target.operand().IsRegister()) {
+        __ Pop(target.AssignedGeneralRegister());
       }
     }
     if (save_accumulator_) {
@@ -560,46 +562,39 @@ class ExceptionHandlerTrampolineBuilder {
     }
   }
 
-  void DoDirectMoves() {
-    for (auto& [target, value] : direct_moves_) {
-      if (value->allocation().IsConstant()) {
-        if (Int32Constant* constant = value->TryCast<Int32Constant>()) {
-          EmitMove(target, Smi::FromInt(constant->value()));
-        } else {
-          // Int32 and Float64 constants should have already been dealt with.
-          DCHECK_EQ(value->properties().value_representation(),
-                    ValueRepresentation::kTagged);
-          EmitConstantLoad(target, value);
-        }
-      } else {
-        EmitMove(target, ToMemOperand(value));
+  void MaterialiseTo(ValueNode* value, Register dst) {
+    // Since it's passed as arg0 and returned from %NewHeapNumber:
+    DCHECK_EQ(dst, kReturnRegister0);
+
+    using D = NewHeapNumberDescriptor;
+    switch (value->properties().value_representation()) {
+      case ValueRepresentation::kInt32: {
+        // We consider Int32Constants together with tagged values.
+        DCHECK(!value->allocation().IsConstant());
+        Label done;
+        __ movq(dst, ToMemOperand(value));
+        __ addl(dst, dst);
+        __ j(no_overflow, &done);
+        // If we overflow, instead of bailing out (deopting), we change
+        // representation to a HeapNumber.
+        __ Cvtlsi2sd(D::GetDoubleRegisterParameter(D::kValue),
+                     ToMemOperand(value));
+        __ CallBuiltin(Builtin::kNewHeapNumber);
+        __ bind(&done);
+        break;
       }
+      case ValueRepresentation::kFloat64:
+        if (Float64Constant* constant = value->TryCast<Float64Constant>()) {
+          __ Move(D::GetDoubleRegisterParameter(D::kValue), constant->value());
+        } else {
+          __ Movsd(D::GetDoubleRegisterParameter(D::kValue),
+                   ToMemOperand(value));
+        }
+        __ CallBuiltin(Builtin::kNewHeapNumber);
+        break;
+      case ValueRepresentation::kTagged:
+        UNREACHABLE();
     }
-  }
-
-  void EmitMoveInt32ToReturnValue0(ValueNode* value) {
-    // We consider Int32Constants together with tagged values.
-    DCHECK(!value->allocation().IsConstant());
-    using D = NewHeapNumberDescriptor;
-    Label done;
-    __ movq(kReturnRegister0, ToMemOperand(value));
-    __ addl(kReturnRegister0, kReturnRegister0);
-    __ j(no_overflow, &done);
-    // If we overflow, instead of bailing out (deopting), we change
-    // representation to a HeapNumber.
-    __ Cvtlsi2sd(D::GetDoubleRegisterParameter(D::kValue), ToMemOperand(value));
-    __ CallBuiltin(Builtin::kNewHeapNumber);
-    __ bind(&done);
-  }
-
-  void EmitMoveFloat64ToReturnValue0(ValueNode* value) {
-    using D = NewHeapNumberDescriptor;
-    if (Float64Constant* constant = value->TryCast<Float64Constant>()) {
-      __ Move(D::GetDoubleRegisterParameter(D::kValue), constant->value());
-    } else {
-      __ Movsd(D::GetDoubleRegisterParameter(D::kValue), ToMemOperand(value));
-    }
-    __ CallBuiltin(Builtin::kNewHeapNumber);
   }
 
   MemOperand ToMemOperand(ValueNode* node) {
@@ -610,26 +605,6 @@ class ExceptionHandlerTrampolineBuilder {
   MemOperand ToMemOperand(const ValueLocation& location) {
     DCHECK(location.operand().IsStackSlot());
     return masm_->ToMemOperand(location.operand());
-  }
-
-  template <typename Operand>
-  void EmitMove(const ValueLocation& dst, Operand src) {
-    if (dst.operand().IsRegister()) {
-      __ Move(dst.AssignedGeneralRegister(), src);
-    } else {
-      __ Move(kScratchRegister, src);
-      __ movq(ToMemOperand(dst), kScratchRegister);
-    }
-  }
-
-  void EmitConstantLoad(const ValueLocation& dst, ValueNode* value) {
-    DCHECK(value->allocation().IsConstant());
-    if (dst.operand().IsRegister()) {
-      value->LoadToRegister(masm_, dst.AssignedGeneralRegister());
-    } else {
-      value->LoadToRegister(masm_, kScratchRegister);
-      __ movq(ToMemOperand(dst), kScratchRegister);
-    }
   }
 };
 
