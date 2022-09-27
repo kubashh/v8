@@ -3084,6 +3084,10 @@ ParserBase<Impl>::ParseYieldExpression() {
   ExpressionT yield =
       factory()->NewYield(expression, pos, Suspend::kOnExceptionThrow);
   impl()->RecordSuspendSourceRange(yield, PositionAfterSemicolon());
+  if (IsAsyncGeneratorFunction(function_state_->kind())) {
+    // Yields inside async generators await their expression.
+    function_state_->AddSuspend();
+  }
   function_state_->AddSuspend();
   return yield;
 }

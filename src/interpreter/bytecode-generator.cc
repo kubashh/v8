@@ -4722,16 +4722,17 @@ void BytecodeGenerator::VisitYield(Yield* expr) {
   // If this is not the first yield
   if (suspend_count_ > 0) {
     if (IsAsyncGeneratorFunction(function_kind())) {
-      // AsyncGenerator yields (with the exception of the initial yield)
-      // delegate work to the AsyncGeneratorYield stub, which Awaits the operand
-      // and on success, wraps the value in an IteratorResult.
+      // AsyncGenerator yields (with the exception of the initial yield) awaits
+      // the value in bytecode, then delegate work to the AsyncGeneratorYield
+      // stub, which wraps the awaited value in an IteratorResult and resolves
+      // the head request in the queue.
+      BuildAwait(expr->position());
+
       RegisterAllocationScope register_scope(this);
-      RegisterList args = register_allocator()->NewRegisterList(3);
+      RegisterList args = register_allocator()->NewRegisterList(2);
       builder()
           ->MoveRegister(generator_object(), args[0])  // generator
           .StoreAccumulatorInRegister(args[1])         // value
-          .LoadBoolean(catch_prediction() != HandlerTable::ASYNC_AWAIT)
-          .StoreAccumulatorInRegister(args[2])  // is_caught
           .CallRuntime(Runtime::kInlineAsyncGeneratorYield, args);
     } else {
       // Generator yields (with the exception of the initial yield) wrap the
@@ -4993,12 +4994,10 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
             output, ast_string_constants()->value_string(),
             feedback_index(feedback_spec()->AddLoadICSlot()));
 
-        RegisterList args = register_allocator()->NewRegisterList(3);
+        RegisterList args = register_allocator()->NewRegisterList(2);
         builder()
             ->MoveRegister(generator_object(), args[0])  // generator
             .StoreAccumulatorInRegister(args[1])         // value
-            .LoadBoolean(catch_prediction() != HandlerTable::ASYNC_AWAIT)
-            .StoreAccumulatorInRegister(args[2])  // is_caught
             .CallRuntime(Runtime::kInlineAsyncGeneratorYield, args);
       }
 

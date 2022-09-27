@@ -100,11 +100,11 @@ snippet: "
   async function* f() { yield 42 }
   f();
 "
-frame size: 8
+frame size: 9
 parameter count: 1
-bytecode array length: 171
+bytecode array length: 202
 bytecodes: [
-                B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
+                B(SwitchOnGeneratorState), R(0), U8(0), U8(3),
                 B(Mov), R(closure), R(1),
                 B(Mov), R(this), R(2),
   /*   17 E> */ B(InvokeIntrinsic), U8(Runtime::k_CreateJSGeneratorObject), R(1), U8(2),
@@ -116,29 +116,40 @@ bytecodes: [
                 B(ResumeGenerator), R(0), R(0), U8(5),
                 B(Star5),
                 B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
-                B(SwitchOnSmiNoFeedback), U8(2), U8(2), I8(0),
+                B(SwitchOnSmiNoFeedback), U8(3), U8(2), I8(0),
                 B(Ldar), R(5),
   /*   17 E> */ B(Throw),
                 B(LdaSmi), I8(1),
                 B(Star1),
                 B(Mov), R(5), R(2),
-                B(Jump), U8(82),
+                B(Jump), U8(113),
   /*   22 S> */ B(LdaSmi), I8(42),
                 B(Star6),
-                B(LdaFalse),
-                B(Star7),
                 B(Mov), R(0), R(5),
-                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(5), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorAwaitUncaught), R(5), U8(2),
   /*   22 E> */ B(SuspendGenerator), R(0), R(0), U8(5), U8(1),
                 B(ResumeGenerator), R(0), R(0), U8(5),
                 B(Star5),
                 B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
-                B(SwitchOnSmiNoFeedback), U8(4), U8(2), I8(0),
+                B(Star6),
+                B(LdaZero),
+                B(TestReferenceEqual), R(6),
+                B(JumpIfTrue), U8(5),
                 B(Ldar), R(5),
+                B(ReThrow),
+                B(Mov), R(0), R(7),
+                B(Mov), R(5), R(8),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(7), U8(2),
+  /*   22 E> */ B(SuspendGenerator), R(0), R(0), U8(7), U8(2),
+                B(ResumeGenerator), R(0), R(0), U8(7),
+                B(Star7),
+                B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
+                B(SwitchOnSmiNoFeedback), U8(5), U8(2), I8(0),
+                B(Ldar), R(7),
   /*   22 E> */ B(Throw),
                 B(LdaSmi), I8(1),
                 B(Star1),
-                B(Mov), R(5), R(2),
+                B(Mov), R(7), R(2),
                 B(Jump), U8(41),
                 B(LdaUndefined),
                 B(Star2),
@@ -146,7 +157,7 @@ bytecodes: [
                 B(Star1),
                 B(Jump), U8(34),
                 B(Star5),
-                B(CreateCatchContext), R(5), U8(6),
+                B(CreateCatchContext), R(5), U8(7),
                 B(Star4),
                 B(LdaTheHole),
                 B(SetPendingMessage),
@@ -171,7 +182,7 @@ bytecodes: [
                 B(Ldar), R(3),
                 B(SetPendingMessage),
                 B(Ldar), R(1),
-                B(SwitchOnSmiNoFeedback), U8(7), U8(3), I8(0),
+                B(SwitchOnSmiNoFeedback), U8(8), U8(3), I8(0),
                 B(Jump), U8(21),
                 B(Ldar), R(2),
                 B(ReThrow),
@@ -188,7 +199,8 @@ bytecodes: [
 ]
 constant pool: [
   Smi [28],
-  Smi [69],
+  Smi [67],
+  Smi [100],
   Smi [15],
   Smi [7],
   Smi [15],
@@ -199,8 +211,8 @@ constant pool: [
   Smi [22],
 ]
 handlers: [
-  [18, 129, 129],
-  [21, 100, 100],
+  [18, 160, 160],
+  [21, 131, 131],
 ]
 
 ---
@@ -208,11 +220,11 @@ snippet: "
   async function* f() { for (let x of [42]) yield x }
   f();
 "
-frame size: 17
+frame size: 18
 parameter count: 1
-bytecode array length: 303
+bytecode array length: 334
 bytecodes: [
-                B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
+                B(SwitchOnGeneratorState), R(0), U8(0), U8(3),
                 B(Mov), R(closure), R(4),
                 B(Mov), R(this), R(5),
   /*   17 E> */ B(InvokeIntrinsic), U8(Runtime::k_CreateJSGeneratorObject), R(4), U8(2),
@@ -224,18 +236,18 @@ bytecodes: [
                 B(ResumeGenerator), R(0), R(0), U8(8),
                 B(Star8),
                 B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
-                B(SwitchOnSmiNoFeedback), U8(2), U8(2), I8(0),
+                B(SwitchOnSmiNoFeedback), U8(3), U8(2), I8(0),
                 B(Ldar), R(8),
   /*   17 E> */ B(Throw),
                 B(LdaSmi), I8(1),
                 B(Star4),
                 B(Mov), R(8), R(5),
-                B(Jump), U8(214),
-  /*   36 S> */ B(CreateArrayLiteral), U8(4), U8(0), U8(37),
+                B(Jump), U8(245),
+  /*   36 S> */ B(CreateArrayLiteral), U8(5), U8(0), U8(37),
                 B(Star10),
                 B(GetIterator), R(10), U8(1), U8(3),
                 B(Star9),
-                B(GetNamedProperty), R(9), U8(5), U8(5),
+                B(GetNamedProperty), R(9), U8(6), U8(5),
                 B(Star8),
                 B(LdaFalse),
                 B(Star10),
@@ -246,32 +258,43 @@ bytecodes: [
                 B(Star14),
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(14), U8(1),
-                B(GetNamedProperty), R(14), U8(6), U8(9),
-                B(JumpIfToBooleanTrue), U8(63),
-                B(GetNamedProperty), R(14), U8(7), U8(11),
+                B(GetNamedProperty), R(14), U8(7), U8(9),
+                B(JumpIfToBooleanTrue), U8(94),
+                B(GetNamedProperty), R(14), U8(8), U8(11),
                 B(Star14),
                 B(LdaFalse),
                 B(Star10),
                 B(Mov), R(14), R(1),
   /*   31 S> */ B(Mov), R(1), R(3),
-  /*   42 S> */ B(LdaFalse),
-                B(Star), R(16),
-                B(Mov), R(0), R(14),
+  /*   42 S> */ B(Mov), R(0), R(14),
                 B(Mov), R(3), R(15),
-                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(14), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorAwaitUncaught), R(14), U8(2),
   /*   42 E> */ B(SuspendGenerator), R(0), R(0), U8(14), U8(1),
                 B(ResumeGenerator), R(0), R(0), U8(14),
                 B(Star14),
                 B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
-                B(SwitchOnSmiNoFeedback), U8(8), U8(2), I8(0),
+                B(Star15),
+                B(LdaZero),
+                B(TestReferenceEqual), R(15),
+                B(JumpIfTrue), U8(5),
                 B(Ldar), R(14),
+                B(ReThrow),
+                B(Mov), R(0), R(16),
+                B(Mov), R(14), R(17),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(16), U8(2),
+  /*   42 E> */ B(SuspendGenerator), R(0), R(0), U8(16), U8(2),
+                B(ResumeGenerator), R(0), R(0), U8(16),
+                B(Star), R(16),
+                B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
+                B(SwitchOnSmiNoFeedback), U8(9), U8(2), I8(0),
+                B(Ldar), R(16),
   /*   42 E> */ B(Throw),
                 B(LdaSmi), I8(1),
                 B(Star11),
-                B(Mov), R(14), R(12),
+                B(Mov), R(16), R(12),
                 B(Jump), U8(17),
-                B(Ldar), R(14),
-  /*   22 E> */ B(JumpLoop), U8(77), I8(0), U8(13),
+                B(Ldar), R(16),
+  /*   22 E> */ B(JumpLoop), U8(108), I8(0), U8(13),
                 B(LdaSmi), I8(-1),
                 B(Star12),
                 B(Star11),
@@ -285,7 +308,7 @@ bytecodes: [
                 B(Ldar), R(10),
                 B(JumpIfToBooleanTrue), U8(36),
                 B(Mov), R(context), R(14),
-                B(GetNamedProperty), R(9), U8(10), U8(14),
+                B(GetNamedProperty), R(9), U8(11), U8(14),
                 B(JumpIfUndefinedOrNull), U8(27),
                 B(Star15),
                 B(CallProperty0), R(15), R(9), U8(16),
@@ -302,7 +325,7 @@ bytecodes: [
                 B(Ldar), R(13),
                 B(SetPendingMessage),
                 B(Ldar), R(11),
-                B(SwitchOnSmiNoFeedback), U8(11), U8(2), I8(0),
+                B(SwitchOnSmiNoFeedback), U8(12), U8(2), I8(0),
                 B(Jump), U8(13),
                 B(Ldar), R(12),
                 B(ReThrow),
@@ -316,7 +339,7 @@ bytecodes: [
                 B(Star4),
                 B(Jump), U8(34),
                 B(Star8),
-                B(CreateCatchContext), R(8), U8(13),
+                B(CreateCatchContext), R(8), U8(14),
                 B(Star7),
                 B(LdaTheHole),
                 B(SetPendingMessage),
@@ -341,7 +364,7 @@ bytecodes: [
                 B(Ldar), R(6),
                 B(SetPendingMessage),
                 B(Ldar), R(4),
-                B(SwitchOnSmiNoFeedback), U8(14), U8(3), I8(0),
+                B(SwitchOnSmiNoFeedback), U8(15), U8(3), I8(0),
                 B(Jump), U8(21),
                 B(Ldar), R(5),
                 B(ReThrow),
@@ -358,7 +381,8 @@ bytecodes: [
 ]
 constant pool: [
   Smi [28],
-  Smi [123],
+  Smi [120],
+  Smi [153],
   Smi [15],
   Smi [7],
   ARRAY_BOILERPLATE_DESCRIPTION_TYPE,
@@ -376,10 +400,10 @@ constant pool: [
   Smi [22],
 ]
 handlers: [
-  [18, 261, 261],
-  [21, 232, 232],
-  [72, 153, 159],
-  [172, 192, 194],
+  [18, 292, 292],
+  [21, 263, 263],
+  [72, 184, 190],
+  [203, 223, 225],
 ]
 
 ---
@@ -388,9 +412,9 @@ snippet: "
   async function* f() { yield* g() }
   f();
 "
-frame size: 17
+frame size: 16
 parameter count: 1
-bytecode array length: 423
+bytecode array length: 420
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(5),
                 B(Mov), R(closure), R(1),
@@ -458,7 +482,7 @@ bytecodes: [
                 B(LdaSmi), I8(1),
                 B(Star1),
                 B(Mov), R(10), R(2),
-                B(Jump), U8(216),
+                B(Jump), U8(213),
                 B(GetNamedProperty), R(7), U8(14), U8(20),
                 B(JumpIfUndefinedOrNull), U8(10),
                 B(Star12),
@@ -505,19 +529,17 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(5), U8(1),
                 B(GetNamedProperty), R(5), U8(15), U8(28),
-                B(JumpIfToBooleanTrue), U8(36),
+                B(JumpIfToBooleanTrue), U8(33),
                 B(GetNamedProperty), R(5), U8(16), U8(30),
                 B(Star15),
-                B(LdaFalse),
-                B(Star), R(16),
                 B(Mov), R(0), R(14),
-                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(14), U8(3),
+                B(InvokeIntrinsic), U8(Runtime::k_AsyncGeneratorYield), R(14), U8(2),
   /*   49 E> */ B(SuspendGenerator), R(0), R(0), U8(14), U8(4),
                 B(ResumeGenerator), R(0), R(0), U8(14),
                 B(Star8),
                 B(InvokeIntrinsic), U8(Runtime::k_GeneratorGetResumeMode), R(0), U8(1),
                 B(Star6),
-                B(JumpLoop), U8(220), I8(0), U8(32),
+                B(JumpLoop), U8(217), I8(0), U8(32),
                 B(GetNamedProperty), R(5), U8(16), U8(33),
                 B(Star7),
                 B(LdaSmi), I8(1),
@@ -578,7 +600,7 @@ constant pool: [
   Smi [144],
   Smi [210],
   Smi [256],
-  Smi [312],
+  Smi [309],
   Smi [15],
   Smi [7],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["g"],
@@ -592,13 +614,13 @@ constant pool: [
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["done"],
   ONE_BYTE_INTERNALIZED_STRING_TYPE ["value"],
   SCOPE_INFO_TYPE,
-  Smi [334],
+  Smi [331],
   Smi [6],
   Smi [9],
   Smi [22],
 ]
 handlers: [
-  [18, 381, 381],
-  [21, 352, 352],
+  [18, 378, 378],
+  [21, 349, 349],
 ]
 

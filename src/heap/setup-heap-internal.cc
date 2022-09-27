@@ -1029,10 +1029,6 @@ void Heap::CreateInitialObjects() {
     set_async_generator_await_reject_shared_fun(*info);
 
     info = CreateSharedFunctionInfo(
-        isolate(), Builtin::kAsyncGeneratorYieldResolveClosure, 1);
-    set_async_generator_yield_resolve_shared_fun(*info);
-
-    info = CreateSharedFunctionInfo(
         isolate(), Builtin::kAsyncGeneratorReturnResolveClosure, 1);
     set_async_generator_return_resolve_shared_fun(*info);
 

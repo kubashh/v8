@@ -23,7 +23,7 @@ namespace interpreter {
   V(AsyncGeneratorAwaitUncaught, async_generator_await_uncaught, 2) \
   V(AsyncGeneratorReject, async_generator_reject, 2)                \
   V(AsyncGeneratorResolve, async_generator_resolve, 3)              \
-  V(AsyncGeneratorYield, async_generator_yield, 3)                  \
+  V(AsyncGeneratorYield, async_generator_yield, 2)                  \
   V(CreateJSGeneratorObject, create_js_generator_object, 2)         \
   V(GeneratorGetResumeMode, generator_get_resume_mode, 1)           \
   V(GeneratorClose, generator_close, 1)                             \

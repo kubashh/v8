@@ -605,35 +605,11 @@ TF_BUILTIN(AsyncGeneratorReject, AsyncGeneratorBuiltinsAssembler) {
 TF_BUILTIN(AsyncGeneratorYield, AsyncGeneratorBuiltinsAssembler) {
   const auto generator = Parameter<JSGeneratorObject>(Descriptor::kGenerator);
   const auto value = Parameter<Object>(Descriptor::kValue);
-  const auto is_caught = Parameter<Oddball>(Descriptor::kIsCaught);
   const auto context = Parameter<Context>(Descriptor::kContext);
 
-  const TNode<AsyncGeneratorRequest> request =
-      CAST(LoadFirstAsyncGeneratorRequestFromQueue(generator));
-  const TNode<JSPromise> outer_promise =
-      LoadPromiseFromAsyncGeneratorRequest(request);
-
-  Await(context, generator, value, outer_promise,
-        AsyncGeneratorYieldResolveSharedFunConstant(),
-        AsyncGeneratorAwaitRejectSharedFunConstant(), is_caught);
-  SetGeneratorAwaiting(generator);
-  Return(UndefinedConstant());
-}
-
-TF_BUILTIN(AsyncGeneratorYieldResolveClosure, AsyncGeneratorBuiltinsAssembler) {
-  const auto context = Parameter<Context>(Descriptor::kContext);
-  const auto value = Parameter<Object>(Descriptor::kValue);
-  const TNode<JSAsyncGeneratorObject> generator =
-      CAST(LoadContextElement(context, Context::EXTENSION_INDEX));
-
-  SetGeneratorNotAwaiting(generator);
-
-  // Per proposal-async-iteration/#sec-asyncgeneratoryield step 9
-  // Return ! AsyncGeneratorResolve(_F_.[[Generator]], _value_, *false*).
   CallBuiltin(Builtin::kAsyncGeneratorResolve, context, generator, value,
               FalseConstant());
-
-  TailCallBuiltin(Builtin::kAsyncGeneratorResumeNext, context, generator);
+  Return(UndefinedConstant());
 }
 
 TF_BUILTIN(AsyncGeneratorReturn, AsyncGeneratorBuiltinsAssembler) {
