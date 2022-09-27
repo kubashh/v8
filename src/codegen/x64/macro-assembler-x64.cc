@@ -2,7 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <bits/types/FILE.h>
+
 #include <cstdint>
+#include <optional>
+
+#include "src/codegen/interface-descriptors.h"
+#include "src/codegen/label.h"
+#include "src/codegen/register.h"
+#include "v8-internal.h"
 
 #if V8_TARGET_ARCH_X64
 
@@ -291,9 +299,63 @@ void TurboAssembler::SmiUntagFieldUnsigned(Register dst, Operand src) {
   SmiUntagUnsigned(dst, src);
 }
 
+Register TurboAssembler::ExtractHeapObjectTag(Register tagged,
+                                              Register scratch) {
+  ASM_CODE_COMMENT(this);
+  movq(scratch, tagged);
+  andq(scratch, Immediate(static_cast<int32_t>(kHeapObjectTagMask)));
+  return scratch;
+}
+
+Register TurboAssembler::ExtractHeapObjectTag(Immediate tagged,
+                                              Register scratch) {
+  ASM_CODE_COMMENT(this);
+  movq(scratch, tagged);
+  andq(scratch, Immediate(static_cast<int32_t>(kHeapObjectTagMask)));
+  return scratch;
+}
+
+Register GetSpareRegister(std::optional<Register> value,
+                          std::optional<Operand> operand) {
+  Register scratch = kScratchRegister;
+  Register registers[] = {rax, rdx, rcx};
+  int i = 0;
+  while (
+      (value.has_value() && AreAliased(value.value(), scratch)) ||
+      (operand.has_value() && operand.value().AddressUsesRegister(scratch))) {
+    scratch = registers[i++];
+  }
+  return scratch;
+}
+
+void TurboAssembler::DecompressTaggedValueIf8GbHeap(Register destination) {
+  ASM_CODE_COMMENT(this);
+  if (!V8_COMPRESS_POINTERS_8GB_BOOL) return;
+  Register scratch = GetSpareRegister(destination, {});
+  pushq(scratch);
+  Register tag = ExtractHeapObjectTag(destination, scratch);
+  andl(destination, Immediate(~static_cast<int32_t>(kHeapObjectTagMask)));
+  shlq(destination, Immediate(k8GbPtrComprTaggedValueSpill));
+  // subq(destination, Immediate(1));
+  orq(destination, tag);
+  popq(scratch);
+}
+
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Immediate value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (V8_COMPRESS_POINTERS_8GB_BOOL && (value.value() & kHeapObjectTagMask)) {
+    // Register scratch = GetSpareRegister({}, dst_field_operand);
+    // pushq(scratch);
+    int32_t compressed_value =
+        V8HeapCompressionScheme::CompressTagged(value.value());
+    // Register tag = ExtractHeapObjectTag(value, scratch);
+    // andl(dst_field_operand,
+    // Immediate(static_cast<int32_t>(k8GbPtrComprUntaggedMask)));
+    // shrq(dst_field_operand, Immediate(k8GbPtrComprTaggedValueSpill));
+    // orq(dst_field_operand, tag);
+    // popq(scratch);
+    movl(dst_field_operand, Immediate(compressed_value));
+  } else if (COMPRESS_POINTERS_BOOL) {
     movl(dst_field_operand, value);
   } else {
     movq(dst_field_operand, value);
@@ -302,7 +364,25 @@ void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
 
 void TurboAssembler::StoreTaggedField(Operand dst_field_operand,
                                       Register value) {
-  if (COMPRESS_POINTERS_BOOL) {
+  ASM_CODE_COMMENT(this);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+    movl(dst_field_operand, value);
+    Label smi;
+    testb(value, Immediate(kHeapObjectTag));
+    j(zero, &smi, Label::kNear);
+    Register scratch = GetSpareRegister(value, dst_field_operand);
+    pushq(scratch);
+    Register tag = ExtractHeapObjectTag(value, scratch);
+    pushq(value);
+    Operand tos(rsp, 0);
+    andl(tos, Immediate(static_cast<int32_t>(k8GbPtrComprUntaggedMask)));
+    shrq(tos, Immediate(k8GbPtrComprTaggedValueSpill));
+    orq(tag, tos);
+    movq(dst_field_operand, tag);
+    addq(rsp, Immediate(8));
+    popq(scratch);
+    bind(&smi);
+  } else if (COMPRESS_POINTERS_BOOL) {
     movl(dst_field_operand, value);
   } else {
     movq(dst_field_operand, value);
@@ -340,6 +420,7 @@ void TurboAssembler::DecompressTaggedPointer(Register destination,
                                              Operand field_operand) {
   ASM_CODE_COMMENT(this);
   movl(destination, field_operand);
+  DecompressTaggedValueIf8GbHeap(destination);
   addq(destination, kPtrComprCageBaseRegister);
 }
 
@@ -347,6 +428,7 @@ void TurboAssembler::DecompressTaggedPointer(Register destination,
                                              Register source) {
   ASM_CODE_COMMENT(this);
   movl(destination, source);
+  DecompressTaggedValueIf8GbHeap(destination);
   addq(destination, kPtrComprCageBaseRegister);
 }
 
@@ -354,7 +436,16 @@ void TurboAssembler::DecompressAnyTagged(Register destination,
                                          Operand field_operand) {
   ASM_CODE_COMMENT(this);
   movl(destination, field_operand);
-  addq(destination, kPtrComprCageBaseRegister);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+    Label smi;
+    testb(destination, Immediate(kHeapObjectTag));
+    j(zero, &smi, Label::kNear);
+    DecompressTaggedValueIf8GbHeap(destination);
+    addq(destination, kPtrComprCageBaseRegister);
+    bind(&smi);
+  } else {
+    addq(destination, kPtrComprCageBaseRegister);
+  }
 }
 
 void MacroAssembler::RecordWriteField(Register object, int offset,

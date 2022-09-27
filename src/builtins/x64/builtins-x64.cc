@@ -1009,10 +1009,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(
       kInterpreterBytecodeArrayRegister,
       FieldOperand(shared_function_info,
                    SharedFunctionInfo::kFunctionDataOffset));
+  // __ int3();
 
   Label is_baseline;
   GetSharedFunctionInfoBytecodeOrBaseline(
       masm, kInterpreterBytecodeArrayRegister, kScratchRegister, &is_baseline);
+  // __ int3();
 
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
@@ -2061,7 +2063,7 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   }
 
   Label stack_overflow;
-  __ StackOverflowCheck(rcx, &stack_overflow, Label::kNear);
+  __ StackOverflowCheck(rcx, &stack_overflow);
 
   // Push additional arguments onto the stack.
   // Move the arguments already in the stack,
@@ -2228,7 +2230,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
     } else {
       Label convert_to_object, convert_receiver;
       __ movq(rcx, args.GetReceiverOperand());
-      __ JumpIfSmi(rcx, &convert_to_object, Label::kNear);
+      __ JumpIfSmi(rcx, &convert_to_object);
       static_assert(LAST_JS_RECEIVER_TYPE == LAST_TYPE);
       __ CmpObjectType(rcx, FIRST_JS_RECEIVER_TYPE, rbx);
       __ j(above_equal, &done_convert);
@@ -2417,7 +2419,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // Check if target has a [[Call]] internal method.
   __ testb(FieldOperand(map, Map::kBitFieldOffset),
            Immediate(Map::Bits1::IsCallableBit::kMask));
-  __ j(zero, &non_callable, Label::kNear);
+  __ j(zero, &non_callable);
 
   // Check if target is a proxy and call CallProxy external builtin
   __ cmpw(instance_type, Immediate(JS_PROXY_TYPE));

@@ -667,8 +667,13 @@ TNode<Uint32T> InterpreterAssembler::BytecodeOperandIntrinsicId(
 }
 
 TNode<Object> InterpreterAssembler::LoadConstantPoolEntry(TNode<WordT> index) {
+  // Print("InterpreterAssembler::LoadConstantPoolEntry ---
+  // BytecodeArrayTaggedPointer = ", BytecodeArrayTaggedPointer());
+  // DebugBreak();
   TNode<FixedArray> constant_pool = CAST(LoadObjectField(
       BytecodeArrayTaggedPointer(), BytecodeArray::kConstantPoolOffset));
+  // Print("InterpreterAssembler::LoadConstantPoolEntry --- constant_pool = ",
+  // constant_pool);
   return UnsafeLoadFixedArrayElement(constant_pool,
                                      UncheckedCast<IntPtrT>(index), 0);
 }
@@ -680,7 +685,13 @@ TNode<IntPtrT> InterpreterAssembler::LoadAndUntagConstantPoolEntry(
 
 TNode<Object> InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex(
     int operand_index) {
+  // Print("InterpreterAssemsbler::LoadConstantPoolEntryAtOperandIndex ---
+  // before BytecodeOperandConstantPoolIdx");
   TNode<UintPtrT> index = BytecodeOperandConstantPoolIdx(operand_index);
+  // Print("InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex --- after
+  // BytecodeOperandConstantPoolIdx");
+  // Print("InterpreterAssembler::LoadConstantPoolEntryAtOperandIndex --- ",
+  // SmiTag(Signed(index)));
   return LoadConstantPoolEntry(index);
 }
 

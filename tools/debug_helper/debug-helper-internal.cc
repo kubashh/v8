@@ -3,6 +3,10 @@
 // found in the LICENSE file.
 
 #include "debug-helper-internal.h"
+
+#include <cstddef>
+
+#include "src/common/globals.h"
 #include "src/common/ptr-compr-inl.h"
 #include "torque-generated/class-debug-readers.h"
 
@@ -14,7 +18,10 @@ namespace debug_helper_internal {
 
 bool IsPointerCompressed(uintptr_t address) {
 #if COMPRESS_POINTERS_BOOL
-  return address < i::kPtrComprCageReservationSize;
+  const size_t reservation_size = V8_COMPRESS_POINTERS_8GB_BOOL
+                                      ? i::k8GbPtrComprCageReservationSize
+                                      : i::kPtrComprCageReservationSize;
+  return address < reservation_size;
 #else
   return false;
 #endif

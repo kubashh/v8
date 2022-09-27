@@ -33,6 +33,8 @@ Address PtrComprCageBase::address() const {
 // static
 Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
     Address on_heap_addr) {
+  if (V8_COMPRESS_POINTERS_8GB_BOOL)
+    return RoundDown<k8GbPtrComprCageBaseAlignment>(on_heap_addr);
   return RoundDown<kPtrComprCageBaseAlignment>(on_heap_addr);
 }
 
@@ -44,6 +46,14 @@ Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
 
 // static
 Tagged_t V8HeapCompressionScheme::CompressTagged(Address tagged) {
+  if (V8_COMPRESS_POINTERS_8GB_BOOL && !HAS_SMI_TAG(tagged)) {
+    DCHECK(IsAligned(tagged & ~kHeapObjectTagMask, kObjectAlignment8GbHeap));
+    Address tag = tagged & kHeapObjectTagMask;
+    tagged =
+        ((tagged & k8GbPtrComprUntaggedMask) >> k8GbPtrComprTaggedValueSpill) |
+        tag;
+  }
+  // printf("CompressTagged --- final tagged = 0x%lx\n", tagged);
   return static_cast<Tagged_t>(static_cast<uint32_t>(tagged));
 }
 
@@ -57,8 +67,17 @@ Address V8HeapCompressionScheme::DecompressTaggedSigned(Tagged_t raw_value) {
 template <typename TOnHeapAddress>
 Address V8HeapCompressionScheme::DecompressTaggedPointer(
     TOnHeapAddress on_heap_addr, Tagged_t raw_value) {
-  return GetPtrComprCageBaseAddress(on_heap_addr) +
-         static_cast<Address>(raw_value);
+  Address address_raw_value = static_cast<Address>(raw_value);
+  // printf("DecompressTaggedPointer --- raw_value = 0x%x\n", raw_value);
+  if (V8_COMPRESS_POINTERS_8GB_BOOL && !HAS_SMI_TAG(raw_value)) {
+    Address tag = address_raw_value & kHeapObjectTagMask;
+    address_raw_value = ((address_raw_value & k8GbPtrComprUntaggedMask)
+                         << k8GbPtrComprTaggedValueSpill) |
+                        tag;
+  }
+  // printf("DecompressTaggedPointer --- cage = 0x%lx; shifted_raw = 0x%lx\n",
+  //   GetPtrComprCageBaseAddress(on_heap_addr), address_raw_value);
+  return GetPtrComprCageBaseAddress(on_heap_addr) + address_raw_value;
 }
 
 // static

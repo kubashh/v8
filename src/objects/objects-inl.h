@@ -916,7 +916,7 @@ bool HeapObject::release_compare_and_swap_map_word(MapWord old_map_word,
                                                    MapWord new_map_word) {
   Tagged_t result =
       MapField::Release_CompareAndSwap(*this, old_map_word, new_map_word);
-  return result == static_cast<Tagged_t>(old_map_word.ptr());
+  return result == V8HeapCompressionScheme::CompressTagged(old_map_word.ptr());
 }
 
 // TODO(v8:11880): consider dropping parameterless version.

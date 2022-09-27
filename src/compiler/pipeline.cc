@@ -17,6 +17,7 @@
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/codegen/register-configuration.h"
 #include "src/codegen/reloc-info.h"
+#include "src/common/globals.h"
 #include "src/common/high-allocation-throughput-scope.h"
 #include "src/compiler/add-type-assertions-reducer.h"
 #include "src/compiler/backend/code-generator.h"
@@ -2013,7 +2014,7 @@ struct DecompressionOptimizationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(DecompressionOptimization)
 
   void Run(PipelineData* data, Zone* temp_zone) {
-    if (!COMPRESS_POINTERS_BOOL) return;
+    if (!COMPRESS_POINTERS_BOOL || V8_COMPRESS_POINTERS_8GB_BOOL) return;
     if (data->HasTurboshaftGraph()) {
       turboshaft::RunDecompressionOptimization(data->turboshaft_graph(),
                                                temp_zone);

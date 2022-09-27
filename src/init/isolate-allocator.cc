@@ -41,8 +41,14 @@ struct PtrComprCageReservationParams
         COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL
             ? GetIsolateRootBiasPageSize(page_allocator)
             : 0;
-    reservation_size = kPtrComprCageReservationSize + kIsolateRootBiasPageSize;
-    base_alignment = kPtrComprCageBaseAlignment;
+    const size_t compressed_heap_reservation_size =
+        V8_COMPRESS_POINTERS_8GB_BOOL ? k8GbPtrComprCageReservationSize
+                                      : kPtrComprCageReservationSize;
+    reservation_size =
+        compressed_heap_reservation_size + kIsolateRootBiasPageSize;
+    base_alignment = V8_COMPRESS_POINTERS_8GB_BOOL
+                         ? k8GbPtrComprCageReservationSize
+                         : kPtrComprCageReservationSize;
     base_bias_size = kIsolateRootBiasPageSize;
 
     // Simplify BoundedPageAllocator's life by configuring it to use same page

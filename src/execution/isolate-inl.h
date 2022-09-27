@@ -5,6 +5,7 @@
 #ifndef V8_EXECUTION_ISOLATE_INL_H_
 #define V8_EXECUTION_ISOLATE_INL_H_
 
+#include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/objects/contexts-inl.h"
 #include "src/objects/js-function.h"
@@ -114,9 +115,10 @@ Object Isolate::VerifyBuiltinsResult(Object result) {
   // Check that the returned pointer is actually part of the current isolate,
   // because that's the assumption in generated code (which might call this
   // builtin).
-  if (!result.IsSmi()) {
-    DCHECK_EQ(result.ptr(), V8HeapCompressionScheme::DecompressTaggedPointer(
-                                this, static_cast<Tagged_t>(result.ptr())));
+  if (!V8_COMPRESS_POINTERS_8GB_BOOL && !result.IsSmi()) {
+    DCHECK_EQ(result.ptr(),
+              V8HeapCompressionScheme::DecompressTaggedPointer(
+                  this, V8HeapCompressionScheme::CompressTagged(result.ptr())));
   }
 #endif
   return result;
@@ -131,12 +133,14 @@ ObjectPair Isolate::VerifyBuiltinsResult(ObjectPair pair) {
   // because that's the assumption in generated code (which might call this
   // builtin).
   if (!HAS_SMI_TAG(pair.x)) {
-    DCHECK_EQ(pair.x, V8HeapCompressionScheme::DecompressTaggedPointer(
-                          this, static_cast<Tagged_t>(pair.x)));
+    DCHECK_EQ(pair.x,
+              V8HeapCompressionScheme::DecompressTaggedPointer(
+                  this, V8HeapCompressionScheme::CompressTagged(pair.x)));
   }
   if (!HAS_SMI_TAG(pair.y)) {
-    DCHECK_EQ(pair.y, V8HeapCompressionScheme::DecompressTaggedPointer(
-                          this, static_cast<Tagged_t>(pair.y)));
+    DCHECK_EQ(pair.y,
+              V8HeapCompressionScheme::DecompressTaggedPointer(
+                  this, V8HeapCompressionScheme::CompressTagged(pair.y)));
   }
 #endif  // V8_COMPRESS_POINTERS
 #endif  // V8_HOST_ARCH_64_BIT

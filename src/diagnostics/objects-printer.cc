@@ -1555,7 +1555,8 @@ void JSTypedArray::JSTypedArrayPrint(std::ostream& os) {
   os << "\n - byte_length: " << byte_length();
   os << "\n - length: " << GetLength();
   os << "\n - data_ptr: " << DataPtr();
-  Tagged_t base_ptr = static_cast<Tagged_t>(base_pointer().ptr());
+  Tagged_t base_ptr =
+      V8HeapCompressionScheme::CompressTagged(base_pointer().ptr());
   os << "\n   - base_pointer: "
      << reinterpret_cast<void*>(static_cast<Address>(base_ptr));
   os << "\n   - external_pointer: "

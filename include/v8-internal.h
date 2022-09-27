@@ -124,6 +124,12 @@ struct SmiTagging<8> {
 constexpr size_t kPtrComprCageReservationSize = size_t{1} << 32;
 constexpr size_t kPtrComprCageBaseAlignment = size_t{1} << 32;
 
+constexpr size_t k8GbPtrComprCageReservationSize = size_t{1} << 33;
+constexpr size_t k8GbPtrComprCageBaseAlignment = size_t{1} << 33;
+
+constexpr size_t k8GbPtrComprTaggedValueSpill = 1;
+constexpr size_t k8GbPtrComprUntaggedMask = -1 - kHeapObjectTagMask;
+
 static_assert(
     kApiSystemPointerSize == kApiInt64Size,
     "Pointer compression can be enabled only for 64-bit architectures");
@@ -190,7 +196,9 @@ constexpr size_t kSandboxSize = 1ULL << kSandboxSizeLog2;
 // the alignment of the sandbox including and excluding surrounding guard
 // regions. The alignment requirement is due to the pointer compression cage
 // being located at the start of the sandbox.
-constexpr size_t kSandboxAlignment = kPtrComprCageBaseAlignment;
+constexpr size_t kSandboxAlignment = V8_COMPRESS_POINTERS_8GB_BOOL
+                                         ? k8GbPtrComprCageBaseAlignment
+                                         : kPtrComprCageBaseAlignment;
 
 // Sandboxed pointers are stored inside the heap as offset from the sandbox
 // base shifted to the left. This way, it is guaranteed that the offset is
@@ -745,7 +753,11 @@ class Internals {
     uint32_t value = ReadRawField<uint32_t>(heap_object_ptr, offset);
     internal::Address base =
         GetPtrComprCageBaseFromOnHeapAddress(heap_object_ptr);
+#ifdef V8_COMPRESS_POINTERS_8GB
+    return DecompressTaggedAnyField(base, value);
+#else
     return base + static_cast<internal::Address>(static_cast<uintptr_t>(value));
+#endif
 #else
     return ReadRawField<internal::Address>(heap_object_ptr, offset);
 #endif
@@ -798,14 +810,29 @@ class Internals {
 #ifdef V8_COMPRESS_POINTERS
   V8_INLINE static internal::Address GetPtrComprCageBaseFromOnHeapAddress(
       internal::Address addr) {
+#ifdef V8_COMPRESS_POINTERS_8GB
+    return addr & -static_cast<intptr_t>(k8GbPtrComprCageBaseAlignment);
+#else
     return addr & -static_cast<intptr_t>(kPtrComprCageBaseAlignment);
+#endif
   }
 
   V8_INLINE static internal::Address DecompressTaggedAnyField(
       internal::Address heap_object_ptr, uint32_t value) {
     internal::Address base =
         GetPtrComprCageBaseFromOnHeapAddress(heap_object_ptr);
-    return base + static_cast<internal::Address>(static_cast<uintptr_t>(value));
+    Address address_value =
+        static_cast<internal::Address>(static_cast<uintptr_t>(value));
+    // printf("DecompressTaggedPointer --- raw_value = 0x%x\n", raw_value);
+#ifdef V8_COMPRESS_POINTERS_8GB
+    if (value & kHeapObjectTag) {
+      Address tag = address_value & kHeapObjectTagMask;
+      address_value = ((address_value & k8GbPtrComprUntaggedMask)
+                       << k8GbPtrComprTaggedValueSpill) |
+                      tag;
+    }
+#endif
+    return base + address_value;
   }
 
 #endif  // V8_COMPRESS_POINTERS
