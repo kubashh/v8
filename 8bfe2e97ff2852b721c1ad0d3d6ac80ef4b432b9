@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a03681b_2dba1e0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T11:24:44Z",
+      "side": 1,
+      "message": "Jakob PTAL overall.\n\nMathias mainly as owner of src/inspector and FYI. If you could also take a look from the spec point of view, that would be nice.",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
