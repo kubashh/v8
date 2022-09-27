@@ -29,9 +29,6 @@ AllocationResult EvacuationAllocator::Allocate(AllocationSpace space,
     case CODE_SPACE:
       return compaction_spaces_.Get(CODE_SPACE)
           ->AllocateRaw(object_size, alignment, origin);
-    case SHARED_SPACE:
-      return compaction_spaces_.Get(SHARED_SPACE)
-          ->AllocateRaw(object_size, alignment, origin);
     default:
       UNREACHABLE();
   }
@@ -45,13 +42,10 @@ void EvacuationAllocator::FreeLast(AllocationSpace space, HeapObject object,
       FreeLastInNewSpace(object, object_size);
       return;
     case OLD_SPACE:
-      FreeLastInCompactionSpace(OLD_SPACE, object, object_size);
+      FreeLastInOldSpace(object, object_size);
       return;
     case MAP_SPACE:
-      FreeLastInCompactionSpace(MAP_SPACE, object, object_size);
-      return;
-    case SHARED_SPACE:
-      FreeLastInCompactionSpace(SHARED_SPACE, object, object_size);
+      FreeLastInMapSpace(object, object_size);
       return;
     default:
       // Only new and old space supported.
@@ -67,11 +61,19 @@ void EvacuationAllocator::FreeLastInNewSpace(HeapObject object,
   }
 }
 
-void EvacuationAllocator::FreeLastInCompactionSpace(AllocationSpace space,
-                                                    HeapObject object,
-                                                    int object_size) {
-  if (!compaction_spaces_.Get(space)->TryFreeLast(object.address(),
-                                                  object_size)) {
+void EvacuationAllocator::FreeLastInOldSpace(HeapObject object,
+                                             int object_size) {
+  if (!compaction_spaces_.Get(OLD_SPACE)->TryFreeLast(object.address(),
+                                                      object_size)) {
+    // We couldn't free the last object so we have to write a proper filler.
+    heap_->CreateFillerObjectAt(object.address(), object_size);
+  }
+}
+
+void EvacuationAllocator::FreeLastInMapSpace(HeapObject object,
+                                             int object_size) {
+  if (!compaction_spaces_.Get(MAP_SPACE)->TryFreeLast(object.address(),
+                                                      object_size)) {
     // We couldn't free the last object so we have to write a proper filler.
     heap_->CreateFillerObjectAt(object.address(), object_size);
   }
