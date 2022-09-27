@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f8148d2_ba1bdb7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2022-09-27T11:24:19Z",
+      "side": 1,
+      "message": "Informal review: looks good to me.",
+      "revId": "ea8e2dcb5f6eaab6fc724e65d2b393c2929296b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38076a82_a2492687",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2022-09-27T11:24:19Z",
+      "side": 1,
+      "message": "Maybe adding some scope-like blocker of other notifications, so only the ETW jit ones are generated at this point could be useful.",
+      "revId": "ea8e2dcb5f6eaab6fc724e65d2b393c2929296b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
