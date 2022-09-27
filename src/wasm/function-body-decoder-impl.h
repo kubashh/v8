@@ -287,6 +287,7 @@ HeapType read_heap_type(Decoder* decoder, const byte* pc,
     if (!VALIDATE(module == nullptr || type_index < module->types.capacity())) {
       DecodeError<validate>(decoder, pc, "Type index %u is out of bounds",
                             type_index);
+      return HeapType(HeapType::kBottom);
     }
     return HeapType(type_index);
   }
