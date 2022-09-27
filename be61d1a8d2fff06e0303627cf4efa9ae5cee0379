@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a1f708_4148232c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-27T02:07:42Z",
+      "side": 1,
+      "message": "Leszek, PTAL. Also +Adam since we discussed this at depth in person to walk through how async generators work.\n\nThere are two approaches to implement the normative change:\n\n1. Move the Await from the AsyncGeneratorYield runtime into the bytecode generator. This is a simplification and better for maintainability, but results in larger bytecode.\n\n2. Rename the current AsyncGeneratorYield to AsyncGeneratorYieldWithAwait and add a new AsyncGeneratorYieldNoAwait for use in `yield*`. This is more complexity. It\u0027s another thing to lower in the optimizing compiler, if it ever starts lowering these intrinsics.\n\nThis CL takes (1) since maintainability seems preferable. What\u0027s your preference, Leszek?",
+      "revId": "be61d1a8d2fff06e0303627cf4efa9ae5cee0379",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
