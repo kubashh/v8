@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85aad3a_480120b0",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-27T11:28:15Z",
+      "side": 1,
+      "message": "I\u0027d suggest `fastRegexp.unicode | fastRegexp.unicodeSets`, like you did in other spots.",
+      "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a5a3e3_48b03f2e",
+        "filename": "src/regexp/regexp-flags.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-27T11:28:15Z",
+      "side": 1,
+      "message": "nit: imo `IsUnicodeOrUnicodeSets` (or similar) is better to read.",
+      "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
