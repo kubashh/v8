@@ -28,8 +28,8 @@ transient type FastJSRegExp extends JSRegExp;
 
 extern operator '.global' macro
 RegExpBuiltinsAssembler::FastFlagGetterGlobal(FastJSRegExp): bool;
-extern operator '.unicode' macro
-RegExpBuiltinsAssembler::FastFlagGetterUnicode(FastJSRegExp): bool;
+extern operator '.eitherUnicode' macro
+RegExpBuiltinsAssembler::FastFlagGetterEitherUnicode(FastJSRegExp): bool;
 extern operator '.lastIndex' macro
 RegExpBuiltinsAssembler::FastLoadLastIndex(FastJSRegExp): Smi;
 extern operator '.lastIndex=' macro
