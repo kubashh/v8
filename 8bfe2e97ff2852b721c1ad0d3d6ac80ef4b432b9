@@ -16,6 +16,205 @@
       "message": "Jakob PTAL overall.\n\nMathias mainly as owner of src/inspector and FYI. If you could also take a look from the spec point of view, that would be nice.",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae25b346_d5dee6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "Really exciting to see this progressing!\n\nI left some questions/comments.",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cebb796_c7d30077",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "The outcome of the discussion in https://github.com/tc39/proposal-regexp-v-flag/issues/23 was that `/v` does not strictly imply `/u`. They are separate flags, each with their own sets of features, and with the caveat that they cannot be combined. E.g.\n\n    console.assert(/./v.flags.includes(\u0027u\u0027) \u003d\u003d\u003d false);\n    console.assert(/./v.unicode \u003d\u003d\u003d false);\n\nFor clarity \u0026 to avoid confusion, I think we should:\n\n- rephrase the comment to something like “Either /v or /u enable UnicodeMode.” (matching the name in the spec)\n- rename this `unicode` to `hasUnicodeMode` or some such\n\nWDYT?",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7642a3a_f811b869",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cf73adc_8fa15e3b",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "I think line 8 should be an early SyntaxError, i.e. at parse time rather than at runtime. Line 9 should be a runtime SyntaxError. Do these tests distinguish between those two cases?",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8264734d_76959c08",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "Are these early/parse-time or late/runtime errors?",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f783b7a8_d189c7e4",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "To improve readability, you could use this instead for all these tests:\n\n    assertThrows(String.raw`/[\\]/v`, SyntaxError);",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "031f3786_1a1642c0",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "missing const\n\n    for (const match of expectMatch)",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "defb832c_e690eaa8",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "const",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac488ed_1f0f364c",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "JS style nit: const\n\nhttps://google.github.io/styleguide/jsguide.html#features-use-const-and-let",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ca60139_c1a30dc4",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "const",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a2cb7be_812bad48",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-27T12:02:08Z",
+      "side": 1,
+      "message": "const",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
