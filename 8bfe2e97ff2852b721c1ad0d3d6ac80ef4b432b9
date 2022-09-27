@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01cea702_2f1c1148",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cebb796_c7d30077",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7642a3a_f811b869",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-09-27T12:02:08Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2382a970_48407136",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7642a3a_f811b869",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -94,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "466e7286_288d36a9",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "No these tests don\u0027t distinguish between early/runtime errors.\n\nI think it makes sense to add the capability to explicitly check for early/runtime errors (easily) to mjsunit. Will do this in a separate CL and update the tests here afterwards.",
+      "parentUuid": "7cf73adc_8fa15e3b",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8264734d_76959c08",
         "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
         "patchSetId": 1
@@ -105,6 +165,24 @@
       "writtenOn": "2022-09-27T12:02:08Z",
       "side": 1,
       "message": "Are these early/parse-time or late/runtime errors?",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a988d19a_c175c34b",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Indistinguishable in this test.\nBut if my understanding is correct, all the errors in this test (except the `new RegExp` flag test) should be early errors.\nAs mentioned on the previous comment will update the tests to make this explicit, once we have the capability in mjsunit.",
+      "parentUuid": "8264734d_76959c08",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +206,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b33d94a_69d012ad",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "IMHO this is less readable, especially if it is used for all the tests.",
+      "parentUuid": "f783b7a8_d189c7e4",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "031f3786_1a1642c0",
         "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
         "patchSetId": 1
@@ -139,6 +235,24 @@
       "writtenOn": "2022-09-27T12:02:08Z",
       "side": 1,
       "message": "missing const\n\n    for (const match of expectMatch)",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16e51aa_767618cc",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "031f3786_1a1642c0",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -160,6 +274,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ea0a127_73064018",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "defb832c_e690eaa8",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ac488ed_1f0f364c",
@@ -173,6 +305,24 @@
       "writtenOn": "2022-09-27T12:02:08Z",
       "side": 1,
       "message": "JS style nit: const\n\nhttps://google.github.io/styleguide/jsguide.html#features-use-const-and-let",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4d2c02f_0a626b74",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ac488ed_1f0f364c",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -194,6 +344,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8795e468_1414eca4",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ca60139_c1a30dc4",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a2cb7be_812bad48",
@@ -207,6 +375,30 @@
       "writtenOn": "2022-09-27T12:02:08Z",
       "side": 1,
       "message": "const",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 61,
+        "endChar": 14
+      },
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c526f7f3_d136e22c",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T16:36:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a2cb7be_812bad48",
       "range": {
         "startLine": 61,
         "startChar": 7,
