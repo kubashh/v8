@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8262f1d8_75a17193",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-09-27T03:45:07Z",
+      "side": 1,
+      "message": "Leszek, PTAL. Adam for OWNER stamps and since we discussed this in person.\n\nAfter thinking I decided to abandon the alternative CL https://chromium-review.googlesource.com/c/v8/v8/+/3919915 because bytecode size regressions.",
+      "revId": "a18d5d3e948530f1ed9df7dc22289a50ac58a6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
