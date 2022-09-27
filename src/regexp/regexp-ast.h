@@ -19,6 +19,7 @@ namespace internal {
   VISIT(Alternative)                      \
   VISIT(Assertion)                        \
   VISIT(CharacterClass)                   \
+  VISIT(ClassSet)                         \
   VISIT(Atom)                             \
   VISIT(Quantifier)                       \
   VISIT(Capture)                          \
@@ -137,9 +138,22 @@ class CharacterRange {
   // Negate the contents of a character range in canonical form.
   static void Negate(ZoneList<CharacterRange>* src,
                      ZoneList<CharacterRange>* dst, Zone* zone);
-
+  // Intersect the contents of two character ranges in canonical form.
+  static void Intersect(ZoneList<CharacterRange>* src1,
+                        ZoneList<CharacterRange>* src2,
+                        ZoneList<CharacterRange>* dst, Zone* zone);
+  // Subtract the contents of |src2| from the contents of |src1|.
+  static void Subtract(ZoneList<CharacterRange>* src1,
+                       ZoneList<CharacterRange>* src2,
+                       ZoneList<CharacterRange>* dst, Zone* zone);
+  // Add case equivalent code points for unicode.
+  static void AddUnicodeCaseEquivalents(ZoneList<CharacterRange>* ranges,
+                                        Zone* zone);
   // Remove all ranges outside the one-byte range.
   static void ClampToOneByte(ZoneList<CharacterRange>* ranges);
+  // Checks if two ranges are equal.
+  static bool Equals(ZoneList<CharacterRange>* ranges,
+                     ZoneList<CharacterRange>* other_range);
 
  private:
   CharacterRange(base::uc32 from, base::uc32 to) : from_(from), to_(to) {}
@@ -327,6 +341,41 @@ class RegExpCharacterClass final : public RegExpTree {
  private:
   CharacterSet set_;
   CharacterClassFlags character_class_flags_;
+};
+
+class RegExpClassSet final : public RegExpTree {
+ public:
+  enum class OperationType { kUnion, kIntersection, kSubtraction };
+
+  RegExpClassSet(OperationType op, bool negated,
+                 ZoneList<RegExpTree*>* operands)
+      : operation_(op), negated_(negated), operands_(operands) {}
+
+  DECL_BOILERPLATE(ClassSet);
+
+  bool IsTextElement() override { return true; }
+  int min_match() override { return 1; }
+  int max_match() override { return 2; }
+
+  OperationType operation() { return operation_; }
+  bool is_negated() { return negated_; }
+  ZoneList<RegExpTree*>* operands() { return operands_; }
+
+ private:
+  RegExpCharacterClass* ToCharacterClass(Zone* zone, RegExpFlags flags);
+
+  static void ComputeSet(RegExpTree* root,
+                         ZoneList<CharacterRange>* result_ranges,
+                         ZoneList<CharacterRange>* temp_ranges,
+                         RegExpFlags flags, Zone* zone);
+
+  OperationType operation_;
+  bool negated_;
+  ZoneList<RegExpTree*>* operands_ = nullptr;
+#ifdef ENABLE_SLOW_DCHECKS
+  // Cache ranges for each node during computation for (slow) DCHECKs.
+  ZoneList<CharacterRange>* ranges_ = nullptr;
+#endif
 };
 
 class RegExpAtom final : public RegExpTree {
