@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d415121c_9bdbf075",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-27T11:45:50Z",
+      "side": 1,
+      "message": "There is a DCHECK on the call side that the validator is in a valid state if the type is not `kBottom`.\nOtherwise, as the validator still keeps track of the error, this will still lead to a compiler error without the fix.",
+      "revId": "d4db33d792d51ed4877807220bcf5cffd29af430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "588c0211_c6d7106b",
+        "filename": "test/mjsunit/wasm/wasm-invalid-local.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-09-27T11:45:50Z",
+      "side": 1,
+      "message": "I accidentally used `kEqRefCode` in `wasmRefNullType` instead of `kWasmEqRef` which resulted in such an invalid index.",
+      "revId": "d4db33d792d51ed4877807220bcf5cffd29af430",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
