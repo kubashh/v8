@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a8dbd3_857b4c7c",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T11:46:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b85aad3a_480120b0",
+      "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66a5a3e3_48b03f2e",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-27T11:28:15Z",
       "side": 1,
       "message": "nit: imo `IsUnicodeOrUnicodeSets` (or similar) is better to read.",
+      "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fc1a7e_c954f2c0",
+        "filename": "src/regexp/regexp-flags.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-27T11:46:28Z",
+      "side": 1,
+      "message": "I agree that this name isn\u0027t great, but `EitherUnicode` is the term introduced in the spec. So I think the code is easier to compare to the spec with this naming.",
+      "parentUuid": "66a5a3e3_48b03f2e",
       "revId": "c78ad8cdf462f1bcffbdf418ffceb5d5b13d94d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
