@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f3570cc_46ea6966",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-27T11:01:20Z",
+      "side": 1,
+      "message": "There are a bunch of drive-by refactors here - const, consistent terminology, ...",
+      "revId": "3e6df973e704181bf65ed1b011cb0fc4f00bfa9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
