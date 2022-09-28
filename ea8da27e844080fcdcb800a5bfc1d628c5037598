@@ -16,6 +16,23 @@
       "message": "Hey Leszek, could you take a look? thanks!",
       "revId": "ea8da27e844080fcdcb800a5bfc1d628c5037598",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d924d71c_0f2e003d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-28T10:49:51Z",
+      "side": 1,
+      "message": "Yup, seems very reasonable",
+      "revId": "ea8da27e844080fcdcb800a5bfc1d628c5037598",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
