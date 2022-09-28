@@ -152,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aba2681f_eef1fc84",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T13:06:55Z",
+      "side": 1,
+      "message": "Updated to explicitly check for early errors now.",
+      "parentUuid": "466e7286_288d36a9",
+      "range": {
+        "startLine": 8,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 1
+      },
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8264734d_76959c08",
@@ -183,6 +207,24 @@
       "side": 1,
       "message": "Indistinguishable in this test.\nBut if my understanding is correct, all the errors in this test (except the `new RegExp` flag test) should be early errors.\nAs mentioned on the previous comment will update the tests to make this explicit, once we have the capability in mjsunit.",
       "parentUuid": "8264734d_76959c08",
+      "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fcba071_0156ce6f",
+        "filename": "test/mjsunit/harmony/regexp-unicode-sets.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T13:06:55Z",
+      "side": 1,
+      "message": "Updated to explicitly check for early errors now.",
+      "parentUuid": "a988d19a_c175c34b",
       "revId": "8bfe2e97ff2852b721c1ad0d3d6ac80ef4b432b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
