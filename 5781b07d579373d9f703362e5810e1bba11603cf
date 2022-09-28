@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3762ef_c1e379d4",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-28T13:24:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70f23864_0a8e0d5b",
+      "range": {
+        "startLine": 2955,
+        "startChar": 63,
+        "endLine": 2955,
+        "endChar": 64
+      },
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b497436_dff4e6c0",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46ad695_dfd90c60",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-28T13:24:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9b497436_dff4e6c0",
+      "range": {
+        "startLine": 2961,
+        "startChar": 43,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58513d33_65d52da3",
@@ -94,6 +142,24 @@
       "writtenOn": "2022-09-28T12:56:18Z",
       "side": 1,
       "message": "Instead of checking the most significant digit, why not just check `__ Uint64LessThanOrEqual(lsd, __ Int64Constant(std::numeric_limits\u003cint64_t\u003e::max())`. Both variants have the potential issue though that they will reject -2^63, which is a valid int64_t but has the hightest bit in the BigInt digit set. This is fine as long as we make sure that this value is treated as non-optimizable when collecting feedback.\nLooking at `turbofan-types.tq`, it looks like the corresponding type does include this value...\nI guess one way to fix the check would be to subtract the sign bit before doing the comparison.",
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "857fbe63_08b5b528",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1549857
+      },
+      "writtenOn": "2022-09-28T13:24:17Z",
+      "side": 1,
+      "message": "I agree that checking `Uint64LessThanOrEqual` is a better approach.\nRejecting -2^63 is expected and in accordance with the inspection when collecting feedback. Otherwise there would be a deopt loop which would be caught by the unit test. As a result, the accepted small BigInts are only a subset of signed int64 but the check is simpler. I should put a comment here.",
+      "parentUuid": "58513d33_65d52da3",
       "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
