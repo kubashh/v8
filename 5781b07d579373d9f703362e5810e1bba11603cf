@@ -33,6 +33,69 @@
       "message": "maglev lgtm",
       "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f23864_0a8e0d5b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-28T12:56:18Z",
+      "side": 1,
+      "message": "Maybe write this as `uint32_t{1} \u003c\u003c BigInt::BigInt::LengthBits::kShift`?",
+      "range": {
+        "startLine": 2955,
+        "startChar": 63,
+        "endLine": 2955,
+        "endChar": 64
+      },
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b497436_dff4e6c0",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-28T12:56:18Z",
+      "side": 1,
+      "message": "nit: I have a hard time remembering these suffixes, and their meaning is even platform-dependent. How about `uint64_t{1}`?",
+      "range": {
+        "startLine": 2961,
+        "startChar": 43,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58513d33_65d52da3",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-28T12:56:18Z",
+      "side": 1,
+      "message": "Instead of checking the most significant digit, why not just check `__ Uint64LessThanOrEqual(lsd, __ Int64Constant(std::numeric_limits\u003cint64_t\u003e::max())`. Both variants have the potential issue though that they will reject -2^63, which is a valid int64_t but has the hightest bit in the BigInt digit set. This is fine as long as we make sure that this value is treated as non-optimizable when collecting feedback.\nLooking at `turbofan-types.tq`, it looks like the corresponding type does include this value...\nI guess one way to fix the check would be to subtract the sign bit before doing the comparison.",
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
