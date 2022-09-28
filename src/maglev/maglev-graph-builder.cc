@@ -2555,6 +2555,7 @@ void MaglevGraphBuilder::BuildToNumberOrToNumeric(Object::Conversion mode) {
       UNREACHABLE();
     case BinaryOperationHint::kNumber:
     case BinaryOperationHint::kBigInt:
+    case BinaryOperationHint::kBigInt64:
       AddNewNode<CheckNumber>({value}, mode);
       break;
     default:
