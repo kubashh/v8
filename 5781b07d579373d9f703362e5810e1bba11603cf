@@ -16,6 +16,23 @@
       "message": "@Toon: Please take a look at the one-line change of maglev graph builder.",
       "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e780cd8e_b0c1fb98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-09-28T10:49:05Z",
+      "side": 1,
+      "message": "maglev lgtm",
+      "revId": "5781b07d579373d9f703362e5810e1bba11603cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
