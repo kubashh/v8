@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b2e908_0c0cba46",
+        "filename": "src/inspector/v8-webdriver-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Good point. The idea of not adding it immediately arose before the feature was hidden behind a harmony flag.",
+      "parentUuid": "9fe2515c_4766e889",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35dfc81a_dcf7844e",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3722b04_4fee9b8a",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35dfc81a_dcf7844e",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d00aa423_d47cfc24",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1f11959_c94925c6",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a810cee_46a5e1a3",
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5137e4f_a3e4209f",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a810cee_46a5e1a3",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7116f23_8b2d13f3",
@@ -116,6 +188,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "For all these args: `const ZoneList*` for incoming args, if possible.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "691c8773_0a47db4e",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7116f23_8b2d13f3",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -171,6 +261,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f905250_da84589e",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "606031b2_31a5848e",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f019d2a4_1a5f9d9d",
@@ -188,6 +296,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c28891e7_ccdc6ff5",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f019d2a4_1a5f9d9d",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b53fbaec_acee415d",
@@ -201,6 +327,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "const where possible.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56bb3ed0_2868363f",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b53fbaec_acee415d",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -224,6 +368,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ce18b63_f68b7540",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "True. Just a general habit to always initialize pointers. I consider it best practice.",
+      "parentUuid": "fb5d95b1_7bbc1c66",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37783f4b_d799f5a3",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
@@ -235,6 +397,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Suggestion: make this a non-static method",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d216b04_cf156005",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Why? This method operates on `ZoneList` of `CharacterRange` not a single `CharacterRange`. We don\u0027t access/modify the state of a `CharacterRange` directly so there is nothing to gain from making it non-static?",
+      "parentUuid": "37783f4b_d799f5a3",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -258,6 +438,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3264d02_2cfd75e6",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Added a link.\nGeneral Q: I add links to sections as if they were in the released spec already, although they are not at the moment. OK?\nDirect link to the PR for this part if you want to look it up: https://arai-a.github.io/ecma262-compare/snapshot.html?pr\u003d2418#sec-compileatom",
+      "parentUuid": "e3c477cb_398d94d6",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "753e9534_b914b4a0",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
@@ -269,6 +467,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "\u0027negated\u0027, and add that we create this range type internally.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "488ceae3_a89ca4f1",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "753e9534_b914b4a0",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -286,6 +502,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Btw is there a reason to always construct with capacity 2 for all the ZoneLists added in this CL?",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd8c425_0e11b4ab",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Not really. My general assumption just was that the result ranges are \u003e1 (otherwise most likely people will stick to /u instead of /v for now), but we don\u0027t really know anything else.",
+      "parentUuid": "b2065060_04905afc",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -341,6 +575,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b27dd6c_ccd17c46",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "737ff0c2_8f6cd5a4",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48850f19_4eef2d9a",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Correct. Added DCHECKs.",
+      "parentUuid": "279b89ea_9b54b98a",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cdc5caa_a82224c9",
@@ -354,6 +624,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Because? Is this relevant here?",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6648206c_b3bb2104",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Yes it is.\nIf the class was negated, just taking the ranges without explicitly negating the ranges would be wrong.\nIt is OK to just DCHECK this condition, as there are no negated character classes with /v (See comment in line 482 of this file).",
+      "parentUuid": "4cdc5caa_a82224c9",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -375,6 +663,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92cb733d_6b4c0882",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bef3054_63851f29",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f618a66b_351c6a81",
@@ -388,6 +694,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "nit: lhs/rhs or left/right, here and for Intersection",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60bca885_509c9ac9",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Renamed for `Intersect`. Here I honestly think that `to_remove` is a way better name then `rhs`.",
+      "parentUuid": "f618a66b_351c6a81",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -415,6 +739,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24bd886e_8585e4e7",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "293f70d2_2552db27",
+      "range": {
+        "startLine": 1731,
+        "startChar": 8,
+        "endLine": 1731,
+        "endChar": 38
+      },
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61a5aa3e_48466f44",
@@ -428,6 +776,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "suggestion: left/right or lhs/rhs",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0f2887_d676f70c",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61a5aa3e_48466f44",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -451,6 +817,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65202b5d_0e7a40ed",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Not strictly a requirement I would say. I added a comment in the header explaining that this method checks if ranges are exactly equal.",
+      "parentUuid": "3bf56fd9_cdd48ae8",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "988a736c_1a02323f",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
@@ -462,6 +846,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Let\u0027s define whatever we need to just do `lhs-\u003eat(i) !\u003d rhs-\u003eat(i)`.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6332afc0_cf09837d",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done.\n\nNote: Only added `\u003d\u003d` and `!\u003d`, not `\u003c`, `\u003e` and co, as we don\u0027t need it right now and thus the semantics would be chosen arbitrary now.",
+      "parentUuid": "988a736c_1a02323f",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -483,6 +885,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "859c6e94_6e36e0e9",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "No. Thanks!",
+      "parentUuid": "01e920f5_5ed6385d",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc83f7df_350182d7",
@@ -496,6 +916,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "IsUnicodeMode",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "784dfa9a_337e1c78",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc83f7df_350182d7",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -517,6 +955,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9ea66a1_805ba447",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92e35775_bc23ee69",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f86fb6c_50b59bda",
@@ -534,6 +990,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1f3beed_9c113a22",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f86fb6c_50b59bda",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ad4bdc8_301ff9c0",
@@ -547,6 +1021,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "\u0027unicode mode\u0027, or just move the comment inside the if.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4363a590_c3d1ea91",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ad4bdc8_301ff9c0",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -585,6 +1077,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43994906_15a25ba4",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae360c2e_4c122cb8",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3294146c_68b1bce8",
@@ -602,6 +1112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c704489a_4efe18af",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3294146c_68b1bce8",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "410550bd_e8130a11",
@@ -615,6 +1143,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Same here",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15458bf7_49589eef",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "410550bd_e8130a11",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -670,6 +1216,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc8d54f8_400eeec0",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Link to spec added.",
+      "parentUuid": "b4c9acd1_bd95942b",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d96f758e_e4ea595f",
@@ -683,6 +1247,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "No `Advance()`? That seems inconsistent with paths below.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae33cedb_2c52dbff",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Nice catch!\nThis wasn\u0027t caught by any test, as `ClassSetReservedPunctuator`s are valid escaped and non-escaped.\nSo without the missing `Advance` the character was simply added twice to the range, which had no affect after `Canonicalize`.",
+      "parentUuid": "d96f758e_e4ea595f",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -723,6 +1305,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d36abf6_34f26ddf",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "unicode mode is correct here, as `\\q` is not allowed with either `/v` or `/u`.",
+      "parentUuid": "5d34512b_a014607d",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37901b5f_1a1e5d9a",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
@@ -734,6 +1334,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "This comment belongs to the overload in line 2204",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afaff11d_5de01c8f",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Copied to line 2204 and updated this comment to be correct.",
+      "parentUuid": "37901b5f_1a1e5d9a",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -755,6 +1373,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb3fb8ff_d1bbcad8",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2208,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c07eefa_f088f545",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eea3f2f_d9497b86",
@@ -772,6 +1408,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ced4d49_27771781",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4eea3f2f_d9497b86",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4340e30a_6f29b1a7",
@@ -785,6 +1439,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "DCHECK(unicodeSets());",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc51cc0_c4736f2d",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4340e30a_6f29b1a7",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -840,6 +1512,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd5b4d08_6e0b50d3",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ecd2373_7077d3bf",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c64bea17_f2086ea3",
@@ -891,6 +1581,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "187a8305_803d887e",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2307,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a095f4f_2a7a6874",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae7fcae1_11a55674",
@@ -904,6 +1612,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "q: is `template ` necessary here and in all other similar spots?",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2714f18f_53c97b1f",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2337,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Yes. Required by C++ standard (see page 338 point 4 here: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf)",
+      "parentUuid": "ae7fcae1_11a55674",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -925,6 +1651,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c91e11_94f8038c",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8c3ae4c_0f2ff056",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81e8515e_1cf99c31",
@@ -942,6 +1686,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c6dc405_dae5debc",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2349,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e8515e_1cf99c31",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddffe813_97cf9d58",
@@ -955,6 +1717,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "since this is unused please move next to the call and name it `dummy` or `unused`",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4749d3_8d2070f3",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-28T15:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddffe813_97cf9d58",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
