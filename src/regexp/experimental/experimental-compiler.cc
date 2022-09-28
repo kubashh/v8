@@ -69,6 +69,8 @@ class CanBeHandledVisitor final : private RegExpVisitor {
     return nullptr;
   }
 
+  void* VisitClassSet(RegExpClassSet* node, void*) override { return nullptr; }
+
   void* VisitAssertion(RegExpAssertion* node, void*) override {
     return nullptr;
   }
@@ -418,6 +420,8 @@ class CompileVisitor : private RegExpVisitor {
     });
     return nullptr;
   }
+
+  void* VisitClassSet(RegExpClassSet* node, void*) override { return nullptr; }
 
   void* VisitAtom(RegExpAtom* node, void*) override {
     for (base::uc16 c : node->data()) {

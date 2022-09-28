@@ -56,6 +56,7 @@ String16 _descriptionForRegExpFlags(v8::Local<v8::RegExp> value) {
   if (flags & v8::RegExp::Flags::kMultiline) result_string_builder.append('m');
   if (flags & v8::RegExp::Flags::kDotAll) result_string_builder.append('s');
   if (flags & v8::RegExp::Flags::kUnicode) result_string_builder.append('u');
+  // TODO(pthier, v8:11935): Add v-flag once fully implemented.
   if (flags & v8::RegExp::Flags::kSticky) result_string_builder.append('y');
   return result_string_builder.toString();
 }
