@@ -1330,6 +1330,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c4f993_ed250379",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T11:42:29Z",
+      "side": 1,
+      "message": "Will do in a follow-up.",
+      "parentUuid": "5274aa86_99e29ab8",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae360c2e_4c122cb8",
@@ -1519,6 +1537,24 @@
       "side": 1,
       "message": "That\u0027s assuming ScanForCaptures is only called for \\k (which probably won\u0027t change, but who knows). \n\nFor InClassEscapeState::kInClass with nesting depth !\u003d 0, does this method now work correctly?",
       "parentUuid": "b9552bad_2fba38f9",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0012a3d_fed19757",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T11:42:29Z",
+      "side": 1,
+      "message": "No it does not. I added a DCHECK that this should never happen (at the moment it doesn\u0027t).\nIn my opinion this should be fine. Otherwise we would need to keep track of nesting levels eveywhere just for this method (which at the moment will never be called with a nesting level \u003e 0 as mentioned).",
+      "parentUuid": "64a22999_d9b9b0ae",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
