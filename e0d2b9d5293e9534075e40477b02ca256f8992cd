@@ -230,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7714a56_1b6fd032",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-29T07:23:16Z",
+      "side": 1,
+      "message": "I\u0027ve removed this case: now `\u003c 255` \u003d\u003e kOneByte, and `\u003e\u003d 255` \u003d\u003e kCantKnow.",
+      "parentUuid": "86de9f67_ab8b6cb4",
+      "range": {
+        "startLine": 259,
+        "startChar": 12,
+        "endLine": 260,
+        "endChar": 35
+      },
+      "revId": "e0d2b9d5293e9534075e40477b02ca256f8992cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6287776d_5068d10a",

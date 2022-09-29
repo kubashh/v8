@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab0953b1_ecbef447",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-29T07:23:16Z",
+      "side": 1,
+      "message": "Because when loop phis end string builders, the truncation needs to be done in the following blocks, while when a non-loop phi ends a string builder, the truncation is done right away.\nHere, we thus collect non-loop phis, and insert truncation right away.\nThe truncations for loop phis are done a bit later when I do `if (string_builder_optimizer_-\u003eBlockShouldFinalizeStringBuilders(block))`: in that case, loop phis from previous blocks will be truncated.",
+      "parentUuid": "89649e35_0940fe4e",
+      "range": {
+        "startLine": 694,
+        "startChar": 8,
+        "endLine": 696,
+        "endChar": 9
+      },
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c54de0a_e46c0d88",
         "filename": "src/compiler/string-builder-optimizer.cc",
         "patchSetId": 35
@@ -54,6 +78,24 @@
       "writtenOn": "2022-09-26T16:01:19Z",
       "side": 1,
       "message": "Maybe DCHECK here that the phi has exactly two inputs? Just for readability.",
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90604aad_6dd05f45",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-29T07:23:16Z",
+      "side": 1,
+      "message": "Good idea :)",
+      "parentUuid": "9c54de0a_e46c0d88",
       "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "917ba67d_ffde9da1",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-29T07:23:16Z",
+      "side": 1,
+      "message": "No reason; I\u0027ve removed this line.",
+      "parentUuid": "fde960af_19590162",
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9542a6c_78a03242",
@@ -88,6 +148,30 @@
       "writtenOn": "2022-09-26T16:01:19Z",
       "side": 1,
       "message": "I find this hard to understand. Maybe give `has_next` a different name?",
+      "range": {
+        "startLine": 962,
+        "startChar": 12,
+        "endLine": 964,
+        "endChar": 28
+      },
+      "revId": "6c0dfb59879fcc8c22093616980df4bfc1e0369f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b48a2d_d3980910",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-09-29T07:23:16Z",
+      "side": 1,
+      "message": "Right, it took me a few minutes to figure out what was happening here, despite that I wrote the code :D\nI\u0027ve added a comment before the loop, renamed {has_next} to {has_use_in_string_builder}, changed the condition of this `if` from `if (!(IsLoopPhi(curr) \u0026\u0026 LoopContains(curr, next)))` to `if (!IsLoopPhi(curr) || !LoopContains(curr, next))` and changed this comment to be more detailed.",
+      "parentUuid": "e9542a6c_78a03242",
       "range": {
         "startLine": 962,
         "startChar": 12,
