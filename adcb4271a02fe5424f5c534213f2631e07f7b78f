@@ -1561,6 +1561,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bea14f1a_d1eb56ac",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T11:47:10Z",
+      "side": 1,
+      "message": "Yeah I agree.. perhaps another spot where we could pick better names to avoid misuse (ScanCapturesForBackreferences or such).",
+      "parentUuid": "e0012a3d_fed19757",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4c9acd1_bd95942b",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
