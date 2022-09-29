@@ -510,6 +510,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "845c70f0_6f2d844a",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-09-29T06:44:29Z",
+      "side": 1,
+      "message": "The official spec is the best place to link, but until the proposal lands (Stage 4), it cannot yet be used as a reference.\n\nOTOH, the arai-a.github.io links will stop working over time.\n\nIf we require working links, I guess we should use arai-a.github.io for now. Feel free to assign a TODO to me to update these when the proposal advances to Stage 4.",
+      "parentUuid": "bb6e2306_a5c14dfa",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "753e9534_b914b4a0",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 2
