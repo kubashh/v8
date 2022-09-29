@@ -33,6 +33,207 @@
       "message": "The paper that describes our work, https://arxiv.org/abs/2204.10455, had been heavily updated and put on arxiv.",
       "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49c7d92_d04aa5e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "Thanks for the patch and sorry for the delay. I\u0027d like this to be available via a flag to us so that we can use A/B tests in figuring out how it works in practice.\n\nIn order to continue, we need to get this into production shape tough, so please find below a first round of comments :)",
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604e5233_06ec3d1a",
+        "filename": "AUTHORS",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "I think this email needs to match the email you use to upload on gerrit.\n\nAlso, your gerrit email is recorded as having a CLA signed whereas this one is not.\n\nIf you like to use the @cs.utah.edu email address, then I think you need to reupload the change using that address and sign the CLA again at https://cla.developers.google.com/.",
+      "range": {
+        "startLine": 172,
+        "startChar": 17,
+        "endLine": 172,
+        "endChar": 23
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d69fca_680f98ef",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "We cannot commit stuff like that :)\n\nIf something is just an approximation, then we need to state that and defer improvement to later.",
+      "range": {
+        "startLine": 405,
+        "startChar": 62,
+        "endLine": 406,
+        "endChar": 14
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54717e68_57dbd34f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "There\u0027s `v8::base::TimeTicks::Now()`, or if you need to work with v8\u0027s public platform `MonotonicallyIncreasingTime()`.",
+      "range": {
+        "startLine": 1785,
+        "startChar": 21,
+        "endLine": 1785,
+        "endChar": 40
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b71ee207_61f4f051",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "Lets move this to its own file (similar to memory-reducer.{h,cc} with a class description on top explaining the high level idea.",
+      "range": {
+        "startLine": 1802,
+        "startChar": 6,
+        "endLine": 1802,
+        "endChar": 27
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a63302_b712c7f2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1829,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "Here and elsewhere: Please use CamelCase for non-trivial methods.",
+      "range": {
+        "startLine": 1829,
+        "startChar": 11,
+        "endLine": 1829,
+        "endChar": 39
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94f75e60_312d7e10",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "The constant should have an explanation in how it is derived.",
+      "range": {
+        "startLine": 1872,
+        "startChar": 40,
+        "endLine": 1872,
+        "endChar": 47
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45545f2d_22d80757",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1881,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "We shouldn\u0027t introduce yet another layer but rather integrate into the existing GC call at the right place.",
+      "range": {
+        "startLine": 1881,
+        "startChar": 11,
+        "endLine": 1881,
+        "endChar": 28
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ead0bf_7b5c0a2a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2494,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-09-29T08:17:00Z",
+      "side": 1,
+      "message": "Indeed, we need to use v8\u0027s flag infrastructure here.",
+      "range": {
+        "startLine": 2494,
+        "startChar": 5,
+        "endLine": 2494,
+        "endChar": 9
+      },
+      "revId": "63ac3575a6ca7a28656fa8628c2a9a19db111b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
