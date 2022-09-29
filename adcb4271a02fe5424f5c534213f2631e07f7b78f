@@ -526,6 +526,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dd8d8d5_049fdedc",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T07:45:33Z",
+      "side": 1,
+      "message": "OK I changed all links to arai-a.github.io with a TODO now.",
+      "parentUuid": "845c70f0_6f2d844a",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "753e9534_b914b4a0",
@@ -1497,6 +1515,24 @@
       "side": 1,
       "message": "My thought was that unicode_sets is already DCHECKed above (so the comment could explicitly refer to it). Optional :)",
       "parentUuid": "4d36abf6_34f26ddf",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dda6458_04eaba5a",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T07:45:33Z",
+      "side": 1,
+      "message": "Ah gotcha.. Will leave as is though. Think it is less confusing.",
+      "parentUuid": "493ec6f3_950b2723",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
