@@ -1185,7 +1185,7 @@ class ValueNode : public Node {
 
   struct LiveRange {
     NodeIdT start = kInvalidNodeId;
-    NodeIdT end = kInvalidNodeId;
+    NodeIdT end = kInvalidNodeId;  // Inclusive.
   };
 
   bool has_valid_live_range() const { return end_id_ != 0; }
