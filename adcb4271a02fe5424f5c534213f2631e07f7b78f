@@ -227,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff220d6_d641bf4c",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T13:15:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "681f386c_3aecf04a",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b1e1d62_cb9eef25",
@@ -240,6 +258,24 @@
       "writtenOn": "2022-09-28T13:08:27Z",
       "side": 1,
       "message": "Add a brief comment explaining the 1 and 2.",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a126a329_20256513",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T13:15:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b1e1d62_cb9eef25",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1573,6 +1609,24 @@
       "side": 1,
       "message": "Yeah I agree.. perhaps another spot where we could pick better names to avoid misuse (ScanCapturesForBackreferences or such).",
       "parentUuid": "e0012a3d_fed19757",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e6992b_05ac52ae",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-09-29T13:15:53Z",
+      "side": 1,
+      "message": "I prefer `ScanForCaptures` over `ScanCapturesForBackreferences`. I think the former is pretty descriptive for what the method actually does.\n\nExtended the comment on the method to clarify the nested class special case (the method already has (unchecked/uncheckable) conditions stated as comment).",
+      "parentUuid": "bea14f1a_d1eb56ac",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
