@@ -1049,6 +1049,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60c3c1e_dfc5ffcc",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T10:49:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f4090fe9_f5f4d007",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "988a736c_1a02323f",
@@ -1296,6 +1314,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5274aa86_99e29ab8",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T10:49:50Z",
+      "side": 1,
+      "message": "That sgtm - please either rename in a separate CL before this one, or in a followup.",
+      "parentUuid": "5416b112_f7209107",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae360c2e_4c122cb8",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
@@ -1465,6 +1501,24 @@
       "side": 1,
       "message": "This case should actually be fine. Within a class `\\k` is always an invalid escape, thus we should never call this method when we are currently within a class (added a DCHECK).",
       "parentUuid": "15f28561_e6462bed",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a22999_d9b9b0ae",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T10:49:50Z",
+      "side": 1,
+      "message": "That\u0027s assuming ScanForCaptures is only called for \\k (which probably won\u0027t change, but who knows). \n\nFor InClassEscapeState::kInClass with nesting depth !\u003d 0, does this method now work correctly?",
+      "parentUuid": "b9552bad_2fba38f9",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
