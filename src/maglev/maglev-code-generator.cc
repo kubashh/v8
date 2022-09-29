@@ -463,8 +463,14 @@ class ExceptionHandlerTrampolineBuilder {
  private:
   MaglevAssembler* const masm_;
   using Move = std::pair<const ValueLocation&, ValueNode*>;
-  base::SmallVector<Move, 16> direct_moves_;
-  base::SmallVector<Move, 16> materialisation_moves_;
+  // GCC 12 and Clang with libstdc++ have a frontend bug that wrongly detects
+  // std::pair not trivially copyable
+  template <typename T, size_t N>
+  using VectorType =
+      typename std::conditional<std::is_trivially_copyable<Move>::value,
+                                base::SmallVector<T, N>, std::vector<T>>::type;
+  VectorType<Move, 16> direct_moves_;
+  VectorType<Move, 16> materialisation_moves_;
   bool save_accumulator_ = false;
 
   MacroAssembler* masm() const { return masm_; }
