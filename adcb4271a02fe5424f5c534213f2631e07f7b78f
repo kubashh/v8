@@ -384,6 +384,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfbb87d_6a18a090",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7ce18b63_f68b7540",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37783f4b_d799f5a3",
@@ -419,6 +437,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f043f4c_90cbcf8a",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ah indeed - good point.",
+      "parentUuid": "3d216b04_cf156005",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3c477cb_398d94d6",
@@ -450,6 +486,24 @@
       "side": 1,
       "message": "Added a link.\nGeneral Q: I add links to sections as if they were in the released spec already, although they are not at the moment. OK?\nDirect link to the PR for this part if you want to look it up: https://arai-a.github.io/ecma262-compare/snapshot.html?pr\u003d2418#sec-compileatom",
       "parentUuid": "e3c477cb_398d94d6",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb6e2306_a5c14dfa",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "You mean the links are currently invalid / may become invalid? That\u0027d be a problem, otherwise 👍",
+      "parentUuid": "c3264d02_2cfd75e6",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -520,6 +574,24 @@
       "side": 1,
       "message": "Not really. My general assumption just was that the result ranges are \u003e1 (otherwise most likely people will stick to /u instead of /v for now), but we don\u0027t really know anything else.",
       "parentUuid": "b2065060_04905afc",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "846d9b8c_45d4a30c",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ack.. Thanks, I don\u0027t really have a better solution. But my gut feeling is that potentially avoiding one list reallocation is that beneficial and we could simply allocate empty zonelists initially. Food for thought for followups.",
+      "parentUuid": "fcd8c425_0e11b4ab",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -611,6 +683,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f475894_8c7002b9",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "48850f19_4eef2d9a",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cdc5caa_a82224c9",
@@ -642,6 +732,24 @@
       "side": 1,
       "message": "Yes it is.\nIf the class was negated, just taking the ranges without explicitly negating the ranges would be wrong.\nIt is OK to just DCHECK this condition, as there are no negated character classes with /v (See comment in line 482 of this file).",
       "parentUuid": "4cdc5caa_a82224c9",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e4d8357_c1c87468",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6648206c_b3bb2104",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -712,6 +820,24 @@
       "side": 1,
       "message": "Renamed for `Intersect`. Here I honestly think that `to_remove` is a way better name then `rhs`.",
       "parentUuid": "f618a66b_351c6a81",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73cd3f9_e41562c7",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Okay, fair enough.",
+      "parentUuid": "60bca885_509c9ac9",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -829,6 +955,24 @@
       "side": 1,
       "message": "Not strictly a requirement I would say. I added a comment in the header explaining that this method checks if ranges are exactly equal.",
       "parentUuid": "3bf56fd9_cdd48ae8",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eea5bbf_a8e1317e",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Where \u0027exactly equal\u0027 may be false even though they\u0027re semantically the same? That seems potentially confusing with the generic \u0027Equals\u0027 name, would be nice to clarify this through naming.",
+      "parentUuid": "65202b5d_0e7a40ed",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1323,6 +1467,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "493ec6f3_950b2723",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "My thought was that unicode_sets is already DCHECKed above (so the comment could explicitly refer to it). Optional :)",
+      "parentUuid": "4d36abf6_34f26ddf",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37901b5f_1a1e5d9a",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
@@ -1630,6 +1792,24 @@
       "side": 1,
       "message": "Yes. Required by C++ standard (see page 338 point 4 here: https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4296.pdf)",
       "parentUuid": "ae7fcae1_11a55674",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a8f0de5_a2fef3ab",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2337,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-09-29T06:33:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2714f18f_53c97b1f",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
