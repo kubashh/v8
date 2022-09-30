@@ -10690,6 +10690,8 @@ void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,
 void CodeStubAssembler::ReportFeedbackUpdate(
     TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
     const char* reason) {
+  Label end(this);
+
   // Reset profiler ticks.
   StoreObjectFieldNoWriteBarrier(
       feedback_vector, FeedbackVector::kProfilerTicksOffset, Int32Constant(0));
@@ -10700,6 +10702,28 @@ void CodeStubAssembler::ReportFeedbackUpdate(
               LoadFromParentFrame(StandardFrameConstants::kFunctionOffset),
               SmiTag(Signed(slot_id)), StringConstant(reason));
 #endif  // V8_TRACE_FEEDBACK_UPDATES
+
+  TNode<Uint16T> flags =
+      LoadObjectField<Uint16T>(feedback_vector, FeedbackVector::kFlagsOffset);
+  GotoIfNot(
+      WordEqual(
+          WordAnd(ChangeInt32ToIntPtr(flags),
+                  IntPtrConstant(FeedbackVector::TieringStateBits::kMask)),
+          IntPtrConstant(static_cast<int>(TieringState::kInProgress)
+                         << FeedbackVector::TieringStateBits::kShift)),
+      &end);
+  {
+    StoreObjectFieldNoWriteBarrier<Uint16T>(
+        feedback_vector, FeedbackVector::kFlagsOffset,
+        ReinterpretCast<Uint16T>(WordOr(
+            ReinterpretCast<IntPtrT>(flags),
+            IntPtrConstant(
+                1
+                << FeedbackVector::FeedbackChangedInCompilationBit::kShift))));
+    Goto(&end);
+  }
+
+  BIND(&end);
 }
 
 void CodeStubAssembler::OverwriteFeedback(TVariable<Smi>* existing_feedback,

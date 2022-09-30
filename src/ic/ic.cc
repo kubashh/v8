@@ -319,6 +319,9 @@ void IC::OnFeedbackChanged(Isolate* isolate, FeedbackVector vector,
     }
   }
   vector.set_profiler_ticks(0);
+  if (IsInProgress(vector.tiering_state())) {
+    vector.set_feedback_changed_in_compilation(true);
+  }
 
 #ifdef V8_TRACE_FEEDBACK_UPDATES
   if (FLAG_trace_feedback_updates) {

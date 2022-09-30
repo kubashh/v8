@@ -1270,6 +1270,16 @@ PipelineCompilationJob::Status PipelineCompilationJob::FinalizeJobImpl(
     }
     return FAILED;
   }
+  if (compilation_info()
+          ->closure()
+          ->feedback_vector()
+          .feedback_changed_in_compilation()) {
+    compilation_info()
+        ->closure()
+        ->feedback_vector()
+        .set_feedback_changed_in_compilation(false);
+    return RetryOptimization(BailoutReason::kBailedOutDueToDependencyChange);
+  }
   if (!pipeline_.CommitDependencies(code)) {
     return RetryOptimization(BailoutReason::kBailedOutDueToDependencyChange);
   }

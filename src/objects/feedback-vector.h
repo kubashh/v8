@@ -291,6 +291,9 @@ class FeedbackVector
   TieringState osr_tiering_state();
   void set_osr_tiering_state(TieringState marker);
 
+  inline bool feedback_changed_in_compilation() const;
+  inline void set_feedback_changed_in_compilation(bool value);
+
   void reset_flags();
 
   // Conversion from a slot to an integer index to the underlying array.

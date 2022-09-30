@@ -219,6 +219,14 @@ base::Optional<CodeT> FeedbackVector::GetOptimizedOsrCode(Isolate* isolate,
   return codet;
 }
 
+bool FeedbackVector::feedback_changed_in_compilation() const {
+  return FeedbackChangedInCompilationBit::decode(flags());
+}
+
+void FeedbackVector::set_feedback_changed_in_compilation(bool value) {
+  set_flags(FeedbackChangedInCompilationBit::update(flags(), value));
+}
+
 // Conversion from an integer index to either a slot or an ic slot.
 // static
 FeedbackSlot FeedbackVector::ToSlot(intptr_t index) {

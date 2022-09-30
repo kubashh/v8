@@ -16,7 +16,8 @@ bitfield struct FeedbackVectorFlags extends uint16 {
   maybe_has_turbofan_code: bool: 1 bit;
   // Just one bit, since only {kNone,kInProgress} are relevant for OSR.
   osr_tiering_state: TieringState: 1 bit;
-  all_your_bits_are_belong_to_jgruber: uint32: 9 bit;
+  feedback_changed_in_compilation: bool: 1 bit;
+  all_your_bits_are_belong_to_jgruber: uint32: 8 bit;
 }
 
 bitfield struct OsrState extends uint8 {
