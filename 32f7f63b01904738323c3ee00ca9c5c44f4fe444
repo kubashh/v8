@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef4be60_fad537bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-09-30T04:25:07Z",
+      "side": 1,
+      "message": "Thank Jakob and Tobias for reviewing this change! This change is updated in the latest patchset based on the comments. PTAL, thanks!",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
