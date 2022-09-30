@@ -16,6 +16,52 @@
       "message": "Thanks for the comments, ptal again. 😊",
       "revId": "e56def1cb2df56dbfc16ab9228e3dc8a4ffad6e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "903cbe4c_32066bfa",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-30T09:10:01Z",
+      "side": 1,
+      "message": "nit 1: use FATAL(\"...\")\nnit 2: What happens if real_args is NaN ? Maybe add a separate CHECK for this case",
+      "range": {
+        "startLine": 769,
+        "startChar": 7,
+        "endLine": 769,
+        "endChar": 23
+      },
+      "revId": "e56def1cb2df56dbfc16ab9228e3dc8a4ffad6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d131074f_31db30f2",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-09-30T09:10:01Z",
+      "side": 1,
+      "message": "nit: maybe add `CHECK(!std::isnan(real_arg))` in the previous branch",
+      "range": {
+        "startLine": 771,
+        "startChar": 15,
+        "endLine": 771,
+        "endChar": 36
+      },
+      "revId": "e56def1cb2df56dbfc16ab9228e3dc8a4ffad6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
