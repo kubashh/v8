@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c155fe34_05e6757a",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-09-30T10:13:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "903cbe4c_32066bfa",
+      "range": {
+        "startLine": 769,
+        "startChar": 7,
+        "endLine": 769,
+        "endChar": 23
+      },
+      "revId": "e56def1cb2df56dbfc16ab9228e3dc8a4ffad6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d131074f_31db30f2",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-30T09:10:01Z",
       "side": 1,
       "message": "nit: maybe add `CHECK(!std::isnan(real_arg))` in the previous branch",
+      "range": {
+        "startLine": 771,
+        "startChar": 15,
+        "endLine": 771,
+        "endChar": 36
+      },
+      "revId": "e56def1cb2df56dbfc16ab9228e3dc8a4ffad6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acbf5008_3af94f0f",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-09-30T10:13:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d131074f_31db30f2",
       "range": {
         "startLine": 771,
         "startChar": 15,
