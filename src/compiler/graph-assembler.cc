@@ -337,6 +337,10 @@ TNode<Boolean> JSGraphAssembler::ObjectIsCallable(TNode<Object> value) {
       graph()->NewNode(simplified()->ObjectIsCallable(), value));
 }
 
+TNode<Boolean> JSGraphAssembler::ObjectIsSmi(TNode<Object> value) {
+  return AddNode<Boolean>(graph()->NewNode(simplified()->ObjectIsSmi(), value));
+}
+
 TNode<Boolean> JSGraphAssembler::ObjectIsUndetectable(TNode<Object> value) {
   return AddNode<Boolean>(
       graph()->NewNode(simplified()->ObjectIsUndetectable(), value));
