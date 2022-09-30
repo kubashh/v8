@@ -134,7 +134,8 @@ bool MemoryReducer::WatchdogGC(const State& state, const Event& event) {
 // For specification of this function see the comment for MemoryReducer class.
 MemoryReducer::State MemoryReducer::Step(const State& state,
                                          const Event& event) {
-  if (!v8_flags.incremental_marking || !v8_flags.memory_reducer) {
+  if (Heap::use_membalancer() || !v8_flags.incremental_marking ||
+      !v8_flags.memory_reducer) {
     return State(kDone, 0, 0, state.last_gc_time_ms, 0);
   }
   switch (state.action) {
