@@ -16,6 +16,52 @@
       "message": "Thanks Camillo, ptal again.",
       "revId": "63fccf3b087603464590bf357e62f5b4a975cf02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b50465f8_47c4d515",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5074,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-30T14:50:37Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to check this, the result should always be +0 no matter if it was +0 or -0 before, no?",
+      "range": {
+        "startLine": 5071,
+        "startChar": 2,
+        "endLine": 5074,
+        "endChar": 64
+      },
+      "revId": "63fccf3b087603464590bf357e62f5b4a975cf02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b14abf_504ecc11",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-30T14:50:37Z",
+      "side": 1,
+      "message": "It\u0027s impossible to assign to a `Node*` variable like this without the definition dominating the use, since a Phi node needs to be created in this case. I think we should use a GraphAssembler label and make the value a parameter of the `Goto`.",
+      "range": {
+        "startLine": 5101,
+        "startChar": 8,
+        "endLine": 5101,
+        "endChar": 50
+      },
+      "revId": "63fccf3b087603464590bf357e62f5b4a975cf02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
