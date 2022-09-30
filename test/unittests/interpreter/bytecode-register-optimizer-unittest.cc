@@ -38,9 +38,16 @@ class BytecodeRegisterOptimizerTest
   }
   void EmitStar(Register output) override {
     output_.push_back({Bytecode::kStar, Register(), output});
+    register_optimizer_->AddPatchSta(output, output_.size());
   }
   void EmitMov(Register input, Register output) override {
     output_.push_back({Bytecode::kMov, input, output});
+  }
+  void PatchOperands(ZoneVector<size_t>& list, uint8_t diff) override {
+    for (auto index : list) {
+      Register old = output_[index].output;
+      output_[index].output = Register(old.index() - diff);
+    }
   }
 
   BytecodeRegisterAllocator* allocator() { return register_allocator_; }
@@ -216,6 +223,20 @@ TEST_F(BytecodeRegisterOptimizerTest, RangeOfTemporariesMaterializedForInput) {
   CHECK_EQ(output()->at(1).bytecode, Bytecode::kMov);
   CHECK_EQ(output()->at(1).input.index(), parameter.index());
   CHECK_EQ(output()->at(1).output.index(), temp1.index());
+}
+
+TEST_F(BytecodeRegisterOptimizerTest, OptimizeMoves) {
+  Initialize(1, 1);
+  Register local = Register(0);
+  Register temp0 = NewTemporary();
+  optimizer()
+      ->PrepareForBytecode<Bytecode::kLdaSmi,
+                           ImplicitRegisterUse::kWriteAccumulator>();
+  optimizer()->DoStar(temp0);
+  optimizer()->DoMov(temp0, local);
+  CHECK_EQ(write_count(), 1u);
+  CHECK_EQ(output()->at(0).bytecode, Bytecode::kStar);
+  CHECK_EQ(output()->at(0).output.index(), local.index());
 }
 
 }  // namespace interpreter

@@ -35,6 +35,7 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
     virtual void EmitLdar(Register input) = 0;
     virtual void EmitStar(Register output) = 0;
     virtual void EmitMov(Register input, Register output) = 0;
+    virtual void PatchOperands(ZoneVector<size_t>& list, uint8_t diff) = 0;
   };
 
   BytecodeRegisterOptimizer(Zone* zone,
@@ -123,6 +124,9 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
 
   int maxiumum_register_index() const { return max_register_index_; }
 
+  void AddPatchCandidates(uint32_t operand, size_t offset);
+  void AddPatchSta(Register reg, size_t offset);
+
  private:
   static const uint32_t kInvalidEquivalenceId;
 
@@ -133,6 +137,7 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   void RegisterListAllocateEvent(RegisterList reg_list) override;
   void RegisterListFreeEvent(RegisterList reg) override;
   void RegisterFreeEvent(Register reg) override;
+  bool TryPatchCandidate(RegisterInfo* info, RegisterInfo* output);
 
   // Update internal state for register transfer from |input| to |output|
   void RegisterTransfer(RegisterInfo* input, RegisterInfo* output);
@@ -148,6 +153,7 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
                            RegisterInfo* non_set_member);
 
   void PushToRegistersNeedingFlush(RegisterInfo* reg);
+
   // Methods for finding and creating metadata for each register.
   RegisterInfo* GetRegisterInfo(Register reg) {
     size_t index = GetRegisterInfoTableIndex(reg);
