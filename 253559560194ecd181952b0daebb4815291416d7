@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ede267_ebba18db",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5054,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-09-30T14:53:58Z",
+      "side": 1,
+      "message": "You could also use a variant of the conversion operators that doesn\u0027t have such an assumption, such as `RoundFloat64ToInt32`. Just check for operators that have the same lowering as the Change* operators you used, but are not called \"Change\". I know, it\u0027s extremely confusing...",
+      "parentUuid": "21e8d0a0_9416dd8d",
+      "range": {
+        "startLine": 5054,
+        "startChar": 16,
+        "endLine": 5054,
+        "endChar": 36
+      },
+      "revId": "253559560194ecd181952b0daebb4815291416d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0b8e700_ef9d095c",
