@@ -77,7 +77,7 @@ class Sweeper {
   enum AddPageMode { REGULAR, READD_TEMPORARY_REMOVED_PAGE };
   enum class SweepingMode { kEagerDuringGC, kLazyOrConcurrent };
 
-  Sweeper(Heap* heap, NonAtomicMarkingState* marking_state);
+  Sweeper(Heap* heap);
   ~Sweeper();
 
   bool sweeping_in_progress() const { return sweeping_in_progress_; }
@@ -111,9 +111,9 @@ class Sweeper {
 
   Page* GetSweptPageSafe(PagedSpaceBase* space);
 
+ private:
   NonAtomicMarkingState* marking_state() const { return marking_state_; }
 
- private:
   class ConcurrentSweeper;
   class SweeperJob;
 
@@ -186,7 +186,7 @@ class Sweeper {
   int NumberOfConcurrentSweepers() const;
 
   Heap* const heap_;
-  NonAtomicMarkingState* marking_state_;
+  NonAtomicMarkingState* const marking_state_;
   std::unique_ptr<JobHandle> job_handle_;
   base::Mutex mutex_;
   base::ConditionVariable cv_page_swept_;
