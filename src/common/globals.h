@@ -794,7 +794,11 @@ const uint32_t kClearedWeakHeapObjectLower32 = 3;
 // Should be a recognizable hex value tagged as a failure.
 #ifdef V8_HOST_ARCH_64_BIT
 constexpr uint64_t kClearedFreeMemoryValue = 0;
+#if V8_COMPRESS_POINTERS_8GB
+constexpr uint64_t kZapValue = uint64_t{0xdeadbeedbeadbee0};
+#else
 constexpr uint64_t kZapValue = uint64_t{0xdeadbeedbeadbeef};
+#endif
 constexpr uint64_t kHandleZapValue = uint64_t{0x1baddead0baddeaf};
 constexpr uint64_t kGlobalHandleZapValue = uint64_t{0x1baffed00baffedf};
 constexpr uint64_t kFromSpaceZapValue = uint64_t{0x1beefdad0beefdaf};

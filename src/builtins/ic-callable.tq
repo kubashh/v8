@@ -50,7 +50,9 @@ macro TryInitializeAsMonomorphic(implicit context: Context)(
 
 macro TransitionToMegamorphic(implicit context: Context)(
     feedbackVector: FeedbackVector, slotId: uintptr): void {
+  Print('TransitionToMegamorphic --- begin SetCallFeedbackContent');
   StoreFeedbackVectorSlot(feedbackVector, slotId, kMegamorphicSymbol);
+  Print('TransitionToMegamorphic --- begin SetCallFeedbackContent');
   ReportFeedbackUpdate(feedbackVector, slotId, 'Call:TransitionMegamorphic');
 }
 
@@ -70,6 +72,7 @@ macro FeedbackValueIsReceiver(implicit context: Context)(
 macro SetCallFeedbackContent(implicit context: Context)(
     feedbackVector: FeedbackVector, slotId: uintptr,
     callFeedbackContent: constexpr CallFeedbackContent): void {
+  Print('SetCallFeedbackContent --- begin SetCallFeedbackContent');
   // Load the call count field from the feecback vector.
   const callCount: intptr = SmiUntag(Cast<Smi>(LoadFeedbackVectorSlot(
       feedbackVector, slotId, kTaggedSize)) otherwise return);
@@ -85,6 +88,7 @@ macro SetCallFeedbackContent(implicit context: Context)(
   StoreFeedbackVectorSlot(
       feedbackVector, slotId, SmiTag(newCount), SKIP_WRITE_BARRIER,
       kTaggedSize);
+  Print('SetCallFeedbackContent --- end SetCallFeedbackContent');
   ReportFeedbackUpdate(feedbackVector, slotId, 'Call:SetCallFeedbackContent');
 }
 

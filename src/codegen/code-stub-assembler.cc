@@ -2629,6 +2629,7 @@ TNode<MaybeObject> CodeStubAssembler::LoadFeedbackVectorSlot(
                         additional_offset - kHeapObjectTag;
   TNode<IntPtrT> offset =
       ElementOffsetFromIndex(slot, HOLEY_ELEMENTS, header_size);
+  Comment("from CodeStubAssembler::LoadFeedbackVectorSlot");
   CSA_SLOW_DCHECK(
       this, IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
                              FeedbackVector::kHeaderSize));
@@ -3208,6 +3209,7 @@ void CodeStubAssembler::StoreFeedbackVectorSlot(
   TNode<IntPtrT> offset =
       ElementOffsetFromIndex(Signed(slot), HOLEY_ELEMENTS, header_size);
   // Check that slot <= feedback_vector.length.
+  Comment("from CodeStubAssembler::StoreFeedbackVectorSlot");
   CSA_DCHECK(this,
              IsOffsetInBounds(offset, LoadFeedbackVectorLength(feedback_vector),
                               FeedbackVector::kHeaderSize),
@@ -10658,8 +10660,11 @@ void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,
 
   GotoIf(SmiEqual(previous_feedback, combined_feedback), &end);
   {
+    Print(
+        "CodeStubAssembler::UpdateFeedback --- before SetCallFeedbackContent");
     StoreFeedbackVectorSlot(feedback_vector, slot_id, combined_feedback,
                             SKIP_WRITE_BARRIER);
+    Print("CodeStubAssembler::UpdateFeedback --- after SetCallFeedbackContent");
     ReportFeedbackUpdate(feedback_vector, slot_id, "UpdateFeedback");
     Goto(&end);
   }
@@ -11758,9 +11763,16 @@ TNode<AllocationSite> CodeStubAssembler::CreateAllocationSiteInFeedbackVector(
 TNode<MaybeObject> CodeStubAssembler::StoreWeakReferenceInFeedbackVector(
     TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot,
     TNode<HeapObject> value, int additional_offset) {
+  Print(value);
   TNode<MaybeObject> weak_value = MakeWeak(value);
+  Print(
+      "CodeStubAssembler::StoreWeakReferenceInFeedbackVector --- before "
+      "SetCallFeedbackContent");
   StoreFeedbackVectorSlot(feedback_vector, slot, weak_value,
                           UPDATE_WRITE_BARRIER, additional_offset);
+  Print(
+      "CodeStubAssembler::StoreWeakReferenceInFeedbackVector --- before "
+      "SetCallFeedbackContent");
   return weak_value;
 }
 

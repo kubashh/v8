@@ -23,7 +23,8 @@ CompressedObjectSlot::CompressedObjectSlot(Object* object)
 bool CompressedObjectSlot::contains_value(Address raw_value) const {
   AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
   return static_cast<uint32_t>(value) ==
-         static_cast<uint32_t>(static_cast<Tagged_t>(raw_value));
+         static_cast<uint32_t>(
+             V8HeapCompressionScheme::CompressTagged(raw_value));
 }
 
 bool CompressedObjectSlot::contains_map_value(Address raw_value) const {

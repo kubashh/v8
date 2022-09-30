@@ -33,7 +33,9 @@ builtin GetTemplateObject(
         description, shared, Convert<Smi>(Signed(slot))));
     const vector =
         Cast<FeedbackVector>(maybeFeedbackVector) otherwise return result;
+    Print('GetTemplateObject --- begin SetCallFeedbackContent');
     ic::StoreFeedbackVectorSlot(vector, slot, result);
+    Print('GetTemplateObject --- begin SetCallFeedbackContent');
     return result;
   }
 }

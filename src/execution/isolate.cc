@@ -4122,6 +4122,8 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   DCHECK_EQ(create_heap_objects, startup_snapshot_data == nullptr);
   DCHECK_EQ(create_heap_objects, shared_heap_snapshot_data == nullptr);
 
+  printf("debug addr = %p\n", &isolate_data_.debug_write_);
+
   // Code space setup requires the permissions to be set to default state.
   RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
   base::ElapsedTimer timer;

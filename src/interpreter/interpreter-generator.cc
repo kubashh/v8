@@ -18,6 +18,7 @@
 #include "src/interpreter/interpreter-assembler.h"
 #include "src/interpreter/interpreter-intrinsics-generator.h"
 #include "src/objects/cell.h"
+#include "src/objects/debug-objects.h"
 #include "src/objects/js-generator.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
@@ -79,8 +80,11 @@ IGNITION_HANDLER(LdaSmi, InterpreterAssembler) {
 //
 // Load constant literal at |idx| in the constant pool into the accumulator.
 IGNITION_HANDLER(LdaConstant, InterpreterAssembler) {
+  // Print("before LoadConstantPoolEntryAtOperandIndex");
   TNode<Object> constant = LoadConstantPoolEntryAtOperandIndex(0);
+  // Print(constant);
   SetAccumulator(constant);
+  // Print("after SetAccumulator");
   Dispatch();
 }
 
@@ -317,6 +321,9 @@ IGNITION_HANDLER(StaCurrentContextSlot, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
   TNode<IntPtrT> slot_index = Signed(BytecodeOperandIdx(0));
   TNode<Context> slot_context = GetContext();
+  // Print("value = ", value);
+  // Print("slot_index = ", SmiTag(slot_index));
+  // Print("slot_context = ", slot_context);
   StoreContextElement(slot_context, slot_index, value);
   Dispatch();
 }

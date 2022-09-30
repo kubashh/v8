@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "v8-internal.h"
 #ifndef INCLUDED_FROM_MACRO_ASSEMBLER_H
 #error This header must be included via macro-assembler.h
 #endif
@@ -608,6 +609,10 @@ class V8_EXPORT_PRIVATE TurboAssembler
   void SmiUntagField(Register dst, Operand src);
   void SmiUntagFieldUnsigned(Register dst, Operand src);
 
+  Register ExtractHeapObjectTag(Register tagged, Register scratch);
+  Register ExtractHeapObjectTag(Immediate tagged, Register scratch);
+  void DecompressTaggedValueIf8GbHeap(Register destination);
+
   // Compresses tagged value if necessary and stores it to given on-heap
   // location.
   void StoreTaggedField(Operand dst_field_operand, Immediate immediate);
@@ -969,7 +974,10 @@ inline Operand FieldOperand(Register object, int offset) {
 // Generate an Operand for loading a field from an object. Object pointer is a
 // compressed pointer when pointer compression is enabled.
 inline Operand FieldOperand(TaggedRegister object, int offset) {
-  if (COMPRESS_POINTERS_BOOL) {
+  if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+    return Operand(kPtrComprCageBaseRegister, object.reg(),
+                   ScaleFactor::times_2, offset - (kHeapObjectTag << 1));
+  } else if (COMPRESS_POINTERS_BOOL) {
     return Operand(kPtrComprCageBaseRegister, object.reg(),
                    ScaleFactor::times_1, offset - kHeapObjectTag);
   } else {

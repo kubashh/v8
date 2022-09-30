@@ -6,6 +6,7 @@
 
 #include <atomic>
 #include <cinttypes>
+#include <cstddef>
 #include <iomanip>
 #include <memory>
 #include <unordered_map>
@@ -316,7 +317,10 @@ size_t Heap::MinOldGenerationSize() {
 size_t Heap::AllocatorLimitOnMaxOldGenerationSize() {
 #ifdef V8_COMPRESS_POINTERS
   // Isolate and the young generation are also allocated on the heap.
-  return kPtrComprCageReservationSize -
+  const size_t reservation_size = V8_COMPRESS_POINTERS_8GB_BOOL
+                                      ? k8GbPtrComprCageReservationSize
+                                      : kPtrComprCageReservationSize;
+  return reservation_size -
          YoungGenerationSizeFromSemiSpaceSize(kMaxSemiSpaceSize) -
          RoundUp(sizeof(Isolate), size_t{1} << kPageSizeBits);
 #else

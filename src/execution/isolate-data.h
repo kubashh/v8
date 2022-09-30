@@ -8,6 +8,7 @@
 #include "src/builtins/builtins.h"
 #include "src/codegen/constants-arch.h"
 #include "src/codegen/external-reference-table.h"
+#include "src/common/globals.h"
 #include "src/execution/stack-guard.h"
 #include "src/execution/thread-local-top.h"
 #include "src/heap/linear-allocation-area.h"
@@ -58,7 +59,8 @@ class Isolate;
     builtin_table)                                                            \
   /* Linear allocation areas for the heap's new and old space */              \
   V(kNewAllocationInfo, LinearAllocationArea::kSize, new_allocation_info)     \
-  V(kOldAllocationInfo, LinearAllocationArea::kSize, old_allocation_info)
+  V(kOldAllocationInfo, LinearAllocationArea::kSize, old_allocation_info)     \
+  V(kDebugOffset, kUInt32Size, debug_write)
 
 #ifdef V8_COMPRESS_POINTERS
 #define ISOLATE_DATA_FIELDS_POINTER_COMPRESSION(V)            \
@@ -252,6 +254,8 @@ class IsolateData final {
 
   LinearAllocationArea new_allocation_info_;
   LinearAllocationArea old_allocation_info_;
+
+  uint32_t debug_write_ = 0;
 
   // Ensure the size is 8-byte aligned in order to make alignment of the field
   // following the IsolateData field predictable. This solves the issue with
