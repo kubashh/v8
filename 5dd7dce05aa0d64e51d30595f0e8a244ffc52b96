@@ -16,6 +16,24 @@
       "message": "Hi Leszek, could you help take a look? \nThis can save 100+ register moves for Speedometer2, but no significant performance impact as it may be a small portion. Pinpoint shows around 5~8% compile time regression for v8.browser_desktop, but marked insignificant.",
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "633f07e1_739d4599",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-09-30T09:05:38Z",
+      "side": 1,
+      "message": "One correction, after clean-up disk cache, the savings for register moves are 470+ for Speedometer2.",
+      "parentUuid": "95fba0bd_ce59f5cb",
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
