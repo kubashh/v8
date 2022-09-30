@@ -9,6 +9,7 @@
 #include "src/interpreter/bytecode-jump-table.h"
 #include "src/interpreter/bytecode-label.h"
 #include "src/interpreter/bytecode-node.h"
+#include "src/interpreter/bytecode-register-optimizer.h"
 #include "src/interpreter/bytecode-source-info.h"
 #include "src/interpreter/constant-array-builder.h"
 #include "src/interpreter/handler-table-builder.h"
@@ -106,7 +107,8 @@ int BytecodeArrayWriter::CheckBytecodeMatches(BytecodeArray bytecode) {
 }
 #endif
 
-void BytecodeArrayWriter::Write(BytecodeNode* node) {
+void BytecodeArrayWriter::Write(BytecodeNode* node,
+                                BytecodeRegisterOptimizer* optimizer) {
   DCHECK(!Bytecodes::IsJump(node->bytecode()));
 
   if (exit_seen_in_block_) return;  // Don't emit dead code.
@@ -114,7 +116,7 @@ void BytecodeArrayWriter::Write(BytecodeNode* node) {
   MaybeElideLastBytecode(node->bytecode(), node->source_info().is_valid());
 
   UpdateSourcePositionTable(node);
-  EmitBytecode(node);
+  EmitBytecode(node, optimizer);
 }
 
 void BytecodeArrayWriter::WriteJump(BytecodeNode* node, BytecodeLabel* label) {
@@ -274,7 +276,8 @@ void BytecodeArrayWriter::InvalidateLastBytecode() {
   last_bytecode_ = Bytecode::kIllegal;
 }
 
-void BytecodeArrayWriter::EmitBytecode(const BytecodeNode* const node) {
+void BytecodeArrayWriter::EmitBytecode(BytecodeNode* const node,
+                                       BytecodeRegisterOptimizer* optimizer) {
   DCHECK_NE(node->bytecode(), Bytecode::kIllegal);
 
   Bytecode bytecode = node->bytecode();
@@ -290,7 +293,17 @@ void BytecodeArrayWriter::EmitBytecode(const BytecodeNode* const node) {
   const int operand_count = node->operand_count();
   const OperandSize* operand_sizes =
       Bytecodes::GetOperandSizes(bytecode, operand_scale);
+
+  if (optimizer && !operand_count) {
+    if (Bytecodes::IsShortStar(bytecode))
+      optimizer->AddPatchSta(Register::FromShortStar(bytecode),
+                             bytecodes()->size() - 1);
+  }
+
   for (int i = 0; i < operand_count; ++i) {
+    if (optimizer && Bytecodes::IsRegisterOperandType(
+                         Bytecodes::GetOperandType(bytecode, i)))
+      optimizer->AddPatchCandidates(operands[i], bytecodes()->size());
     switch (operand_sizes[i]) {
       case OperandSize::kNone:
         UNREACHABLE();
@@ -314,6 +327,13 @@ void BytecodeArrayWriter::EmitBytecode(const BytecodeNode* const node) {
         break;
       }
     }
+  }
+}
+
+void BytecodeArrayWriter::PatchOperands(ZoneVector<size_t>& list,
+                                        uint8_t diff) {
+  for (auto index : list) {
+    (*bytecodes())[index] += diff;
   }
 }
 
