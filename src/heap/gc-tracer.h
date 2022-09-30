@@ -402,6 +402,12 @@ class V8_EXPORT_PRIVATE GCTracer {
   V8_INLINE WorkerThreadRuntimeCallStats* worker_thread_runtime_call_stats();
 #endif  // defined(V8_RUNTIME_CALL_STATS)
 
+  bool has_last_gc = false;
+  size_t last_gc_end_bytes = 0;
+  double last_gc_end_time = 0;
+  base::Optional<BytesAndDuration> major_allocation_bytes_and_duration;
+  base::Optional<double> major_gc_time;
+
  private:
   FRIEND_TEST(GCTracer, AverageSpeed);
   FRIEND_TEST(GCTracerTest, AllocationThroughput);

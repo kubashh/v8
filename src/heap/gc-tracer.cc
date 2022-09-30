@@ -398,6 +398,23 @@ void GCTracer::UpdateStatistics(GarbageCollector collector) {
     RecordGCSumCounters();
     combined_mark_compact_speed_cache_ = 0.0;
     long_task_stats->gc_full_atomic_wall_clock_duration_us += duration_us;
+    auto time_taken = duration + current_.incremental_marking_duration;
+    major_gc_time = time_taken;
+    if (has_last_gc) {
+      // Incremental gc may cause the difference to decrease, so we need a max
+      // here. Maybe we should add incremental_marking_bytes_? I forgot to test
+      // that.
+      auto allocation_bytes = std::max<int64_t>(
+          0, current_.start_object_size - last_gc_end_bytes +
+                 heap_->AllocatedExternalMemorySinceMarkCompact());
+      CHECK(current_.end_time - last_gc_end_time - time_taken > 0);
+      auto allocation_time = current_.end_time - last_gc_end_time - time_taken;
+      major_allocation_bytes_and_duration =
+          MakeBytesAndDuration(allocation_bytes, allocation_time);
+    }
+    has_last_gc = true;
+    last_gc_end_bytes = current_.end_object_size;
+    last_gc_end_time = current_.end_time;
   }
 
   heap_->UpdateTotalGCTime(duration);
