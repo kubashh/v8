@@ -1384,7 +1384,7 @@ RUNTIME_FUNCTION(Runtime_PretenureAllocationSite) {
   if (memento.is_null())
     return ReturnFuzzSafe(ReadOnlyRoots(isolate).false_value(), isolate);
   AllocationSite site = memento.GetAllocationSite();
-  heap->PretenureAllocationSiteOnNextCollection(site);
+  heap->pretenuring_handler()->PretenureAllocationSiteOnNextCollection(site);
   return ReturnFuzzSafe(ReadOnlyRoots(isolate).true_value(), isolate);
 }
 

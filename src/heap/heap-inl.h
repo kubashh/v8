@@ -417,32 +417,6 @@ AllocationMemento Heap::FindAllocationMemento(Map map, HeapObject object) {
   UNREACHABLE();
 }
 
-void Heap::UpdateAllocationSite(Map map, HeapObject object,
-                                PretenuringFeedbackMap* pretenuring_feedback) {
-  DCHECK_NE(pretenuring_feedback, &global_pretenuring_feedback_);
-#ifdef DEBUG
-  BasicMemoryChunk* chunk = BasicMemoryChunk::FromHeapObject(object);
-  DCHECK_IMPLIES(chunk->IsToPage(),
-                 v8_flags.minor_mc ||
-                     chunk->IsFlagSet(MemoryChunk::PAGE_NEW_NEW_PROMOTION));
-  DCHECK_IMPLIES(!chunk->InYoungGeneration(),
-                 chunk->IsFlagSet(MemoryChunk::PAGE_NEW_OLD_PROMOTION));
-#endif
-  if (!v8_flags.allocation_site_pretenuring ||
-      !AllocationSite::CanTrack(map.instance_type())) {
-    return;
-  }
-  AllocationMemento memento_candidate =
-      FindAllocationMemento<kForGC>(map, object);
-  if (memento_candidate.is_null()) return;
-
-  // Entering cached feedback is used in the parallel case. We are not allowed
-  // to dereference the allocation site and rather have to postpone all checks
-  // till actually merging the data.
-  Address key = memento_candidate.GetAllocationSiteUnchecked();
-  (*pretenuring_feedback)[AllocationSite::unchecked_cast(Object(key))]++;
-}
-
 bool Heap::IsPendingAllocationInternal(HeapObject object) {
   DCHECK(deserialization_complete());
 
