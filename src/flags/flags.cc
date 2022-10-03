@@ -905,6 +905,38 @@ class ImplicationProcessor {
   std::ostringstream cycle_;
 };
 
+class ImplicationPrinter {
+ public:
+  void PrintImplications(FILE* out) {
+    bool changed = false;
+#define FLAG_MODE_DEFINE_IMPLICATIONS
+#include "src/flags/flag-definitions.h"  // NOLINT(build/include)
+#undef FLAG_MODE_DEFINE_IMPLICATIONS
+    USE(changed);
+    i::PrintF(out, "%s", out_.str().c_str());
+  }
+
+ private:
+  // Called from {DEFINE_*_IMPLICATION} in flag-definitions.h.
+  template <class T>
+  bool TriggerImplication(bool premise, const char* premise_name,
+                          FlagValue<T>* conclusion_value, T value,
+                          bool weak_implication) {
+    // TODO: weak?
+    if constexpr (std::is_same_v<T, bool>) {
+      Flag* premise_flag = FindFlagByName(FlagName(premise_name).name);
+      if (premise_flag != nullptr) {
+        Flag* conclusion_flag = FindFlagByPointer(conclusion_value);
+        out_ << premise_name << "->" << (value ? "" : "!") << conclusion_flag->name() << "\n";
+      }
+    } 
+    
+    return true;
+  }
+
+  std::ostringstream out_;
+};
+
 }  // namespace
 
 // static
@@ -929,6 +961,12 @@ void FlagList::ResetFlagHash() {
   // change flag values anyway.
   CHECK(!IsFrozen());
   flag_hash = 0;
+}
+
+// static
+void FlagList::PrintFlagImplications(FILE* out) {
+  ImplicationPrinter p;
+  p.PrintImplications(out);
 }
 
 }  // namespace v8::internal
