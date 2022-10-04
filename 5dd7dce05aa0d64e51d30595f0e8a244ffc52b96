@@ -34,6 +34,24 @@
       "parentUuid": "95fba0bd_ce59f5cb",
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b278a48_3de44d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-04T12:30:21Z",
+      "side": 1,
+      "message": "Do you see any memory improvements? Otherwise I don\u0027t think the complexity increase and performance regression risk is worth it.",
+      "parentUuid": "633f07e1_739d4599",
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
