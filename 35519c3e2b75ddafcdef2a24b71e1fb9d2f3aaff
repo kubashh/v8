@@ -16,6 +16,92 @@
       "message": "ptal again",
       "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a618e747_e573f218",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-04T07:16:13Z",
+      "side": 1,
+      "message": "Overall +1, but I think the builder could be refactored to use fields (see comment below).",
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b89e3c_d57f4e58",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-04T07:16:13Z",
+      "side": 1,
+      "message": "add a note that this is only safe because the materialised values are tagged, and the stack walk treats unknown slots are tagged.",
+      "range": {
+        "startLine": 461,
+        "startChar": 36,
+        "endLine": 462,
+        "endChar": 25
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe87077f_84c9c95f",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-04T07:16:13Z",
+      "side": 1,
+      "message": "suggestion: create one of these `ExceptionHandlerTrampolineBuilder`s per throwing node, and allow all of these out parameters to be fields instead",
+      "range": {
+        "startLine": 496,
+        "startChar": 54,
+        "endLine": 499,
+        "endChar": 74
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf8b4725_51b36b54",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-04T07:16:13Z",
+      "side": 1,
+      "message": "optinal: add phi-\u003eIsExceptionPhi() and use that.",
+      "range": {
+        "startLine": 501,
+        "startChar": 44,
+        "endLine": 501,
+        "endChar": 71
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
