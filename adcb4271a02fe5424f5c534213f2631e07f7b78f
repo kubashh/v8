@@ -1633,6 +1633,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1a811b4_727b87c3",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T06:39:01Z",
+      "side": 1,
+      "message": "I still don\u0027t feel great about the new silent requirement.. Wdyt about tracking the current nesting level (perhaps in ParseClassSetOperand) and DCHECKing it in this method in debug mode? Also fine to do this in a followup..",
+      "parentUuid": "73e6992b_05ac52ae",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4c9acd1_bd95942b",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
@@ -2118,6 +2136,24 @@
       "side": 1,
       "message": "Clarified in a comment on `ParseClassSetOperand` that either a tree is returned OR ranges modified (never both), based on `type_out`.\nAll possible outcomes are DCHECKed in the overload without ranges. I can only think of creating `AssertParseClassSetOperandContract` or similar to wrap all the DCHECKs and potentially calling it after `ParseClassSetOperand`, but that doesn\u0027t help in my opinion.\n\nIf you have any idea how we can hide the details I\u0027d be happy to hear about it. I have no good idea...",
       "parentUuid": "fce01a2c_49dc4891",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3c5fd0b_e90fed6c",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2290,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T06:39:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f9ec3c4b_221b8eba",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
