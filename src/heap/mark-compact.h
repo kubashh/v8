@@ -276,8 +276,6 @@ class CollectorBase {
   // Used by incremental marking for object that change their layout.
   virtual void VisitObject(HeapObject obj) = 0;
 
-  virtual bool sweeping_in_progress() const = 0;
-
   virtual void Finish() = 0;
 
   bool IsMajorMC();
@@ -399,32 +397,7 @@ class MarkCompactCollector final : public CollectorBase {
     return should_record_old_to_shared_slots_;
   }
 
-  void FinishSweepingIfOutOfWork();
-
-  enum class SweepingForcedFinalizationMode { kUnifiedHeap, kV8Only };
-
-  // Ensures that sweeping is finished.
-  //
-  // Note: Can only be called safely from main thread.
-  V8_EXPORT_PRIVATE void EnsureSweepingCompleted(
-      SweepingForcedFinalizationMode mode);
-
-  void EnsurePageIsSwept(Page* page);
-
-  void DrainSweepingWorklistForSpace(AllocationSpace space);
-
-  // Checks if sweeping is in progress right now on any space.
-  bool sweeping_in_progress() const final {
-    return sweeper_->sweeping_in_progress();
-  }
-
-  void set_evacuation(bool evacuation) { evacuation_ = evacuation; }
-
-  bool evacuation() const { return evacuation_; }
-
   inline void AddTransitionArray(TransitionArray array);
-
-  Sweeper* sweeper() { return sweeper_; }
 
 #ifdef DEBUG
   // Checks whether performing mark-compact collection.
@@ -486,6 +459,8 @@ class MarkCompactCollector final : public CollectorBase {
 #endif  // V8_ENABLE_INNER_POINTER_RESOLUTION_MB
 
  private:
+  Sweeper* sweeper() { return sweeper_; }
+
   void ComputeEvacuationHeuristics(size_t area_size,
                                    int* target_fragmentation_percent,
                                    size_t* max_evacuated_bytes);
@@ -497,9 +472,6 @@ class MarkCompactCollector final : public CollectorBase {
 
   // Free unmarked ArrayBufferExtensions.
   void SweepArrayBufferExtensions();
-
-  // Free unmarked entries in the ExternalPointerTable.
-  void SweepExternalPointerTable();
 
   void MarkLiveObjects();
 
@@ -659,7 +631,6 @@ class MarkCompactCollector final : public CollectorBase {
   const bool is_shared_heap_isolate_;
   const bool should_record_old_to_shared_slots_;
 
-  bool evacuation_ = false;
   // True if we are collecting slots to perform evacuation from evacuation
   // candidates.
   bool compacting_ = false;
@@ -686,7 +657,7 @@ class MarkCompactCollector final : public CollectorBase {
       aborted_evacuation_candidates_due_to_flags_;
   std::vector<LargePage*> promoted_large_pages_;
 
-  Sweeper* sweeper_;
+  Sweeper* const sweeper_;
 
   // Counts the number of major mark-compact collections. The counter is
   // incremented right after marking. This is used for:
@@ -707,15 +678,14 @@ class MarkCompactCollector final : public CollectorBase {
 
 class V8_NODISCARD EvacuationScope {
  public:
-  explicit EvacuationScope(MarkCompactCollector* collector)
-      : collector_(collector) {
-    collector_->set_evacuation(true);
+  explicit EvacuationScope(Heap* heap) : heap_(heap) {
+    heap_->set_evacuation(true);
   }
 
-  ~EvacuationScope() { collector_->set_evacuation(false); }
+  ~EvacuationScope() { heap_->set_evacuation(false); }
 
  private:
-  MarkCompactCollector* collector_;
+  Heap* const heap_;
 };
 
 // Collector for young-generation only.
@@ -747,9 +717,6 @@ class MinorMarkCompactCollector final : public CollectorBase {
 
   void Finish() final;
 
-  Sweeper* sweeper() { return sweeper_.get(); }
-  bool sweeping_in_progress() const { return sweeper_->sweeping_in_progress(); }
-
   void VisitObject(HeapObject obj) final;
 
  private:
@@ -757,6 +724,8 @@ class MinorMarkCompactCollector final : public CollectorBase {
 
   static const int kNumMarkers = 8;
   static const int kMainMarker = 0;
+
+  Sweeper* sweeper() { return sweeper_; }
 
   void MarkLiveObjects();
   void MarkRootSetInParallel(RootMarkingVisitor* root_visitor,
@@ -784,7 +753,7 @@ class MinorMarkCompactCollector final : public CollectorBase {
   std::vector<Page*> promoted_pages_;
   std::vector<LargePage*> promoted_large_pages_;
 
-  std::unique_ptr<Sweeper> sweeper_;
+  Sweeper* const sweeper_;
 
   friend class YoungGenerationMarkingTask;
   friend class YoungGenerationMarkingJob;
