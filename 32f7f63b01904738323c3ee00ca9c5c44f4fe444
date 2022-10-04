@@ -16,6 +16,125 @@
       "message": "Thank Jakob and Tobias for reviewing this change! This change is updated in the latest patchset based on the comments. PTAL, thanks!",
       "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64af3266_4a0f445d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "Thanks - ptal at the comment about non-PACKED_DOUBLE_ELEMENTS paths first. The others are only about impl details.",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d6598f_c069c2ba",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "imo this should go into JSGraphAssembler and use gasm::Word32Shr / gasm::Word32And",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e874bca_bb813707",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "Here\u0027s my main question: how much do these extra checks slow down the (presumably common) non-PACKED_DOUBLE_ELEMENTS paths? We\u0027re adding a whole `ObjectIsSmi, LoadField, LoadField, \u003d\u003d, GotoIf, LoadField, And, Shr, \u003d\u003d, GotoIf` sequence. Are we certain that a faster PACKED_DOUBLE_ELEMENTS is worth the extra work for all other cases?",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b2ad74a_1b376479",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "Let\u0027s not mix raw graph accesses with gasm - please add Max/Min to gasm and change to:\n\n```\n TNode\u003cObject\u003e result \u003d builtin \u003d\u003d Builtin::kMathMax\n  ? DoubleArrayMax() : DoubleArrayMin();\n Goto(\u0026done, result);\n```",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49343009_d7aedd98",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5134,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "nit: the `else {` block isn\u0027t needed",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c0f36f2_1b6708bc",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8462,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "infinite",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b806d4d_0d2e5fc2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8463,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T07:24:50Z",
+      "side": 1,
+      "message": "This recursion only happens because the reduction clones the original node and keeps it in the graph as the fallback slow path, right? We should find a better solution that doesn\u0027t need this helper set structure (e.g. by explicitly generating the builtin call).",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
