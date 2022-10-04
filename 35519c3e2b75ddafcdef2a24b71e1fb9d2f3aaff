@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "897fd03d_29751716",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T09:17:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6b89e3c_d57f4e58",
+      "range": {
+        "startLine": 461,
+        "startChar": 36,
+        "endLine": 462,
+        "endChar": 25
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe87077f_84c9c95f",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6455caf9_a2eb655a",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T09:17:09Z",
+      "side": 1,
+      "message": "I changed the interface to be a static `ExceptionHandlerTrampolineBuilder::Build` method since extracting out the class instance creation doesn\u0027t make sense now that it only contains `masm`. I kept these as params though since imo it\u0027s simpler than fields.",
+      "parentUuid": "fe87077f_84c9c95f",
+      "range": {
+        "startLine": 496,
+        "startChar": 54,
+        "endLine": 499,
+        "endChar": 74
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf8b4725_51b36b54",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-10-04T07:16:13Z",
       "side": 1,
       "message": "optinal: add phi-\u003eIsExceptionPhi() and use that.",
+      "range": {
+        "startLine": 501,
+        "startChar": 44,
+        "endLine": 501,
+        "endChar": 71
+      },
+      "revId": "35519c3e2b75ddafcdef2a24b71e1fb9d2f3aaff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed694daf_03df2ae4",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-10-04T09:17:09Z",
+      "side": 1,
+      "message": "Done (went with lower-case is_exception_phi since ExceptionPhi is not a type).",
+      "parentUuid": "cf8b4725_51b36b54",
       "range": {
         "startLine": 501,
         "startChar": 44,
