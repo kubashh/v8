@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a44b69f4_f0fc5347",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5074,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-04T10:58:27Z",
+      "side": 1,
+      "message": "Yeah, very good point. Thanks!",
+      "parentUuid": "b50465f8_47c4d515",
+      "range": {
+        "startLine": 5071,
+        "startChar": 2,
+        "endLine": 5074,
+        "endChar": 64
+      },
+      "revId": "63fccf3b087603464590bf357e62f5b4a975cf02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7b14abf_504ecc11",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-30T14:50:37Z",
       "side": 1,
       "message": "It\u0027s impossible to assign to a `Node*` variable like this without the definition dominating the use, since a Phi node needs to be created in this case. I think we should use a GraphAssembler label and make the value a parameter of the `Goto`.",
+      "range": {
+        "startLine": 5101,
+        "startChar": 8,
+        "endLine": 5101,
+        "endChar": 50
+      },
+      "revId": "63fccf3b087603464590bf357e62f5b4a975cf02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5882a6b_1298e45c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-04T10:58:27Z",
+      "side": 1,
+      "message": "I was struggling to get this correct and your idea was actually my second option. Thanks for the advice!",
+      "parentUuid": "c7b14abf_504ecc11",
       "range": {
         "startLine": 5101,
         "startChar": 8,
