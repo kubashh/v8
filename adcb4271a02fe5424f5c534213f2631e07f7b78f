@@ -2388,6 +2388,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca5ad43e_0b5e977f",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2357,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2022-10-04T09:22:16Z",
+      "side": 1,
+      "message": "@mscherer@google.com Do you remember why we specced it like this?",
+      "parentUuid": "7a5a35f8_e102f454",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "556881a4_e6066f3f",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 2
