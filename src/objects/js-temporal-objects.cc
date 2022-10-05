@@ -7058,12 +7058,16 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
     Handle<JSTemporalPlainDate> new_relative_to = move_result.relative_to;
     // c. Let oneYearDays be moveResult.[[Days]].
     double one_year_days = move_result.days;
+    // Note: years could be a very large value over the precision limit of
+    // Number.MAX_SAFE_INTEGER  so we use a separate added_years to accumulate
+    // the change in the loop and add it once into years after the loop.
+    double added_years = 0;
     // d. Repeat, while abs(days) ≥ abs(oneYearDays),
     while (std::abs(result.days) >= std::abs(one_year_days)) {
       // i. Set days to days - oneYearDays.
       result.days -= one_year_days;
       // ii. Set years to years + sign.
-      result.years += sign;
+      added_years += sign;
       // iii. Set relativeTo to newRelativeTo.
       relative_to = new_relative_to;
       // iv. Set moveResult to ? MoveRelativeDate(calendar, relativeTo,
@@ -7079,6 +7083,10 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // v. Set oneYearDays to moveResult.[[Days]].
       one_year_days = move_result.days;
     }
+
+    // Note: added_years will be added to result.years later after the
+    // oneYearMonths loop.
+
     // e. Set moveResult to ? MoveRelativeDate(calendar, relativeTo, oneMonth).
     MAYBE_ASSIGN_RETURN_ON_EXCEPTION_VALUE(
         isolate, move_result,
@@ -7089,12 +7097,16 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
     new_relative_to = move_result.relative_to;
     // g. Let oneMonthDays be moveResult.[[Days]].
     double one_month_days = move_result.days;
+    // Note: months could be a very large value over the precision limit of
+    // Number.MAX_SAFE_INTEGER  so we use a separate added_months to accumulate
+    // the change in the loop and add it once into months after the loop.
+    double added_months = 0;
     // h. Repeat, while abs(days) ≥ abs(oneMonthDays),
     while (std::abs(result.days) >= std::abs(one_month_days)) {
       // i. Set days to days - oneMonthDays.
       result.days -= one_month_days;
       // ii. Set months to months + sign.
-      result.months += sign;
+      added_months += sign;
       // iii. Set relativeTo to newRelativeTo.
       relative_to = new_relative_to;
       // iv. Set moveResult to ? MoveRelativeDate(calendar, relativeTo,
@@ -7109,6 +7121,9 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // v. Set oneMonthDays to moveResult.[[Days]].
       one_month_days = move_result.days;
     }
+    // Note: Add the added_months accumulated in the loop above to months at
+    // once to reduce numerical error.
+    result.months += added_months;
     // i. Let dateAdd be ? GetMethod(calendar, "dateAdd").
     Handle<Object> date_add;
     ASSIGN_RETURN_ON_EXCEPTION_VALUE(
@@ -7151,7 +7166,7 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // i. Set months to months - oneYearMonths.
       result.months -= one_year_months;
       // ii. Set years to years + sign.
-      result.years += sign;
+      added_years += sign;
       // iii. Set relativeTo to newRelativeTo.
       relative_to = new_relative_to;
       // iv. Set newRelativeTo to ? CalendarDateAdd(calendar, relativeTo,
@@ -7179,6 +7194,10 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // viii. Set oneYearMonths to untilResult.[[Months]].
       one_year_months = until_result->months().Number();
     }
+    // Note: Add the added_years accumulated in the two loops above (the
+    // oneYearDays and oneYearMonths loop) to months at once to reduce numerical
+    // error.
+    result.years += added_years;
     // 11. Else if largestUnit is "month", then
   } else if (largest_unit == Unit::kMonth) {
     // a. Let moveResult be ? MoveRelativeDate(calendar, relativeTo, oneMonth).
@@ -7192,12 +7211,16 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
     Handle<JSTemporalPlainDate> new_relative_to = move_result.relative_to;
     // c. Let oneMonthDays be moveResult.[[Days]].
     double one_month_days = move_result.days;
+    // Note: months could be a very large value over the precision limit of
+    // Number.MAX_SAFE_INTEGER  so we use a separate added_months to accumulate
+    // the change in the loop and add it once into months after the loop.
+    double added_months = 0;
     // d. Repeat, while abs(days) ≥ abs(oneMonthDays),
     while (std::abs(result.days) >= std::abs(one_month_days)) {
       // i. Set days to days - oneMonthDays.
       result.days -= one_month_days;
       // ii. Set months to months + sign.
-      result.months += sign;
+      added_months += sign;
       // iii. Set relativeTo to newRelativeTo.
       relative_to = new_relative_to;
       // iv. Set moveResult to ? MoveRelativeDate(calendar, relativeTo,
@@ -7212,6 +7235,9 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // vi. Set oneMonthDays to moveResult.[[Days]].
       one_month_days = move_result.days;
     }
+    // Note: Add the added_months accumulated in the loops above to months at
+    // once to reduce numerical error.
+    result.months += added_months;
     // 12. Else
   } else {
     // a. Assert: largestUnit is "week".
@@ -7226,12 +7252,16 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
     Handle<JSTemporalPlainDate> new_relative_to = move_result.relative_to;
     // d. Let oneWeekDays be moveResult.[[Days]].
     double one_week_days = move_result.days;
+    // Note: weeks could be a very large value over the precision limit of
+    // Number.MAX_SAFE_INTEGER  so we use a separate added_weeks to accumulate
+    // the change in the loop and add it once into weeks after the loop.
+    double added_weeks = 0;
     // e. Repeat, while abs(days) ≥ abs(oneWeekDays),
     while (std::abs(result.days) >= std::abs(one_week_days)) {
       // i. Set days to days - oneWeekDays.
       result.days -= one_week_days;
       // ii. Set weeks to weeks + sign.
-      result.weeks += sign;
+      added_weeks += sign;
       // iii. Set relativeTo to newRelativeTo.
       relative_to = new_relative_to;
       // v. Set moveResult to ? MoveRelativeDate(calendar, relativeTo,
@@ -7246,6 +7276,9 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
       // vi. Set oneWeekDays to moveResult.[[Days]].
       one_week_days = move_result.days;
     }
+    // Note: Add the added_weeks accumulated in the loops above to weeks at
+    // once to reduce numerical error.
+    result.weeks += added_weeks;
   }
   // 12. Return ? CreateDateDurationRecord(years, months, weeks, days).
   return DateDurationRecord::Create(isolate, result.years, result.months,

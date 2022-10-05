@@ -546,10 +546,6 @@
 
   'built-ins/Temporal/Duration/compare/precision-exact-mathematical-values-1': [FAIL],
   'built-ins/Temporal/Duration/compare/precision-exact-mathematical-values-2': [FAIL],
-  'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-months': [FAIL],
-  'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-weeks': [FAIL],
-  'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-years-days': [FAIL],
-  'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-years-months': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-years-with-calendar': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/precision-exact-in-round-duration': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/roundingmode-ceil': [FAIL],
