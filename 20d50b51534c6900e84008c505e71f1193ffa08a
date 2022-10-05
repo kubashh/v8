@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "1e7bf85b_7dd00273",
         "filename": "src/compiler/js-call-reducer.h",
@@ -20,10 +21,10 @@
         "endChar": 48
       },
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e9b12ed0_ad8f5d32",
         "filename": "src/ic/call-optimization.h",
@@ -43,10 +44,10 @@
         "endChar": 47
       },
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "59765353_32536e6d",
         "filename": "src/ic/call-optimization.h",
@@ -60,10 +61,10 @@
       "side": 1,
       "message": "It\u0027s not really clear what initialization you are talking about and why/where the difference matters.",
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "808600e9_e83db30f",
         "filename": "src/ic/call-optimization.h",
@@ -77,10 +78,10 @@
       "side": 1,
       "message": "I think you mean simply \"with a JSFunction\".",
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "23d6616f_d26be3a5",
         "filename": "src/ic/call-optimization.h",
@@ -100,10 +101,10 @@
         "endChar": 12
       },
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "18e40e6a_99823b83",
         "filename": "src/ic/call-optimization.h",
@@ -117,10 +118,10 @@
       "side": 1,
       "message": "How about adding a comment here saying that all the methods below assume {is_simple_api_call} to be true.",
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8687bc03_79cf87f5",
         "filename": "src/ic/call-optimization.h",
@@ -140,8 +141,139 @@
         "endChar": 35
       },
       "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
+  "submitRequirementResults": [
+    {
+      "submitRequirement": {
+        "name": "Code-Owners",
+        "description": {
+          "value": "User with the code owner override approved the change"
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "has:enabled_code-owners"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "has:approval_code-owners"
+        },
+        "overrideExpression": {
+          "value": {
+            "expressionString": "label:Owners-Override\u003d+1"
+          }
+        },
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"has:enabled_code-owners"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["has:enabled_code-owners"],"failingAtoms":[]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"has:approval_code-owners"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["has:approval_code-owners"]}
+      },
+      "overrideExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Owners-Override=+1"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Owners-Override=+1"]}
+      },
+      "patchSetCommitId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Code-Review",
+        "description": {
+          "value": "Submit requirement for the \u0027Code-Review\u0027 label"
+        },
+        "applicabilityExpression": {},
+        "submittabilityExpression": {
+          "expressionString": "label:Code-Review\u003dMAX,user\u003dnon_uploader -label:Code-Review\u003dMIN"
+        },
+        "overrideExpression": {
+          "value": {
+            "expressionString": "label:Bot-Commit\u003d+1"
+          }
+        },
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {},
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Code-Review=MAX,user=non_uploader -label:Code-Review=MIN"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Code-Review=MAX,user=non_uploader","label:Code-Review=MIN"]}
+      },
+      "overrideExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Bot-Commit=+1"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Bot-Commit=+1"]}
+      },
+      "patchSetCommitId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Review-Enforcement",
+        "description": {
+          "value": "Two Google employees must approve the change. Uploading the change or voting positively on Code-Review count as approval."
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "is:review-enforced_gerrit"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "is:review-enforcement-satisfied_gerrit"
+        },
+        "overrideExpression": {},
+        "allowOverrideInChildProjects": false
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:review-enforced_gerrit"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:review-enforced_gerrit"]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:review-enforcement-satisfied_gerrit"},"status":"NOT_EVALUATED","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":[]}
+      },
+      "overrideExpressionResult": {},
+      "patchSetCommitId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Verified",
+        "description": {
+          "value": "Submit requirement for the \u0027Verified\u0027 label"
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "is:false"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "is:true"
+        },
+        "overrideExpression": {},
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:false"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:false"]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:true"},"status":"NOT_EVALUATED","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":[]}
+      },
+      "overrideExpressionResult": {},
+      "patchSetCommitId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
     }
   ]
 }
