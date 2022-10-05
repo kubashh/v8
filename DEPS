@@ -54,7 +54,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
-  'fuchsia_version': 'version:9.20220919.2.1',
+  'fuchsia_version': 'WPp8jQMR8sT-DsqiU8k1rqfs06Bq_BC6ndwVvK5QGX0C',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling android_sdk_build-tools_version
