@@ -22,6 +22,30 @@
       },
       "revId": "efeb375d48ae2a298158b51c0eb98fc9364413a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65bbbeb4_b977b4df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-10-05T17:10:00Z",
+      "side": 1,
+      "message": "\u003e Do we have a lot of these cases?\n\nIt\u0027s hard to estimate. I\u0027d expect many optimizations to happen for collections (e.g. HeapVector::push_back). Any std::algorithm with generic lambda or range-based for with \u0027auto\u0027 would also be optimized. Being a trivial optimization, I don\u0027t see harm in it.\n\nfuchsia_binary_size bot reported binary size reduction of 16KB (chrome_fuchsia).",
+      "parentUuid": "aefa4b99_fae8dbb1",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "efeb375d48ae2a298158b51c0eb98fc9364413a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
