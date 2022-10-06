@@ -8650,9 +8650,12 @@ void CodeStubAssembler::NameDictionaryLookup(
   Comment("NameDictionaryLookup");
   CSA_DCHECK(this, IsUniqueName(unique_name));
 
+  Label if_not_computed(this, Label::kDeferred);
+
   TNode<IntPtrT> capacity = SmiUntag(GetCapacity<Dictionary>(dictionary));
   TNode<IntPtrT> mask = IntPtrSub(capacity, IntPtrConstant(1));
-  TNode<UintPtrT> hash = ChangeUint32ToWord(LoadNameHash(unique_name));
+  TNode<UintPtrT> hash =
+      ChangeUint32ToWord(LoadNameHash(unique_name, &if_not_computed));
 
   // See Dictionary::FirstProbe().
   TNode<IntPtrT> count = IntPtrConstant(0);
@@ -8698,6 +8701,38 @@ void CodeStubAssembler::NameDictionaryLookup(
 
     var_entry = entry;
     Goto(&loop);
+  }
+
+  BIND(&if_not_computed);
+  {
+    // TODO(syg): lookup the right function depending on Dictionary type
+    TNode<ExternalReference> function;
+    if (mode == kFindExisting) {
+      function = ExternalConstant(
+          ExternalReference::
+              name_dictionary_lookup_forwarded_external_string());
+    } else {
+      // TODO(syg): FindInsertionEntry
+      function = ExternalConstant(
+          ExternalReference::
+              name_dictionary_lookup_forwarded_external_string());
+    }
+    const TNode<ExternalReference> isolate_ptr =
+        ExternalConstant(ExternalReference::isolate_address(isolate()));
+    TNode<IntPtrT> entry = UncheckedCast<IntPtrT>(
+        CallCFunction(function, MachineType::IntPtr(),
+                      std::make_pair(MachineType::Pointer(), isolate_ptr),
+                      std::make_pair(MachineType::AnyTagged(), dictionary),
+                      std::make_pair(MachineType::AnyTagged(), unique_name)));
+    if (var_name_index) *var_name_index = EntryToIndex<Dictionary>(entry);
+    if (mode == kFindExisting) {
+      GotoIf(IntPtrEqual(entry,
+                         IntPtrConstant(std::numeric_limits<size_t>::max())),
+             if_not_found);
+      Goto(if_found);
+    } else {
+      Goto(if_not_found);
+    }
   }
 }
 

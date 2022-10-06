@@ -1018,6 +1018,17 @@ static uint32_t ComputeSeededIntegerHash(Isolate* isolate, int32_t key) {
 }
 
 FUNCTION_REFERENCE(compute_integer_hash, ComputeSeededIntegerHash)
+
+static size_t NameDictionaryLookupForwardedExternalString(Isolate* isolate,
+                                                          Address dictionary,
+                                                          Address name) {
+  // NYI
+  UNIMPLEMENTED();
+}
+
+FUNCTION_REFERENCE(name_dictionary_lookup_forwarded_external_string,
+                   NameDictionaryLookupForwardedExternalString)
+
 FUNCTION_REFERENCE(copy_fast_number_jsarray_elements_to_typed_array,
                    CopyFastNumberJSArrayElementsToTypedArray)
 FUNCTION_REFERENCE(copy_typed_array_elements_to_typed_array,
