@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f03c3d_74d46850",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-06T11:16:49Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "b2e206a6a9de76c4670f5fc6376a6f0b651e3551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16b5d85_074c588a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-06T11:16:49Z",
+      "side": 1,
+      "message": "`EvacuationScope` should move as well? We can make it a friend and save ourselves the redundent getters.",
+      "range": {
+        "startLine": 1635,
+        "startChar": 0,
+        "endLine": 1637,
+        "endChar": 49
+      },
+      "revId": "b2e206a6a9de76c4670f5fc6376a6f0b651e3551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa1b4e4_64c4ce10",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-06T11:16:49Z",
+      "side": 1,
+      "message": "This should move below.",
+      "range": {
+        "startLine": 1639,
+        "startChar": 7,
+        "endLine": 1639,
+        "endChar": 18
+      },
+      "revId": "b2e206a6a9de76c4670f5fc6376a6f0b651e3551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
