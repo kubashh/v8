@@ -16,6 +16,103 @@
       "message": "Thanks! LGTM % the open question for Mathias, and the discussion about tracking nesting levels.",
       "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7542e296_8705c764",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T00:03:40Z",
+      "side": 1,
+      "message": "Please remove the comma. (I recognize it from my native German language :-)",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae13b34_952cbd5f",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T00:03:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be easier to use UnicodeSet throughout the parser, and build the ZoneList or whatever you need for the matcher at the end -- rather than going back \u0026 forth when you need to fetch properties or perform set operations?\n\nYou might even try to use UnicodeSet in the matcher (after freeze()ing it).",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eca942b7_888a3b36",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T00:03:40Z",
+      "side": 1,
+      "message": "I don\u0027t think this does what we need.\n\nEven in /u mode, [USET_CASE_INSENSITIVE](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/uset_8h.html#a16af7b253440dadd46a80a4b9fddba4da740685a55f610ca84868b60aef83db7b) does more than simple case folding. I see that you build it without strings, and later removeAllStrings(), but I suspect that the behavior is not 100% the same.\n\nIn /v mode, once you support strings (which I realize you don\u0027t yet in this PR), we do need to handle strings, and we won\u0027t want USET_CASE_INSENSITIVE to add a ß when the input contains \"ss\".\n\nI will try to find time in the next few days and write a piece of ICU-using code that adds the scf mappings according to the proposed MaybeSimpleCaseFolding(). Once the spec and the implementations settle, I can propose that as a new API option and move it into the ICU library.\n\nAre you sure that you want to just *add* the scf mappings, and not remove the non-scf versions like the proposed spec says?",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c247e50_5b2b643b",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T00:03:40Z",
+      "side": 1,
+      "message": "This would be so much simpler using icu::UnicodeSet which also supports multi-character strings...\n- union \u003d addAll(set)\n- intersection \u003d retainAll(set)\n- subtraction \u003d removeAll(set)\n\nhttps://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1UnicodeSet.html",
+      "range": {
+        "startLine": 1516,
+        "startChar": 2,
+        "endLine": 1516,
+        "endChar": 30
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5328da_a3077dd6",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T00:03:40Z",
+      "side": 1,
+      "message": "FYI [UnicodeSet::complement()](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1UnicodeSet.html#a60460749e20685e496e819b368496089) \"negates\" all code points. It does not remove or modify strings. But we are not negating sets/classes that contain (or even \"may contain\") strings. Could DCHECK for .hasStrings().",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
