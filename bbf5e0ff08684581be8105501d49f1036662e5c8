@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76458e4b_d50e527b",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T18:44:25Z",
+      "side": 1,
+      "message": "ICU UnicodeSet uses an inversion list for ranges of code points, since its creation in the late 1990s, with optimized algorithms for set operations. Building and manipulating it should be as fast as anything working on ranges, and you would benefit from less code in Chromium.\n\nI don\u0027t understand the part about \"using the ICU library for unicode property values\". Do you have a separate copy of the Unicode properties data? If so, why?\n\nI assume that parsing a regex and building a matcher is less performance-sensitive than doing the matching, but I also assume that you would find it just as fast using UnicodeSet. I do understand if you want to explore that separately, but it seems sad to add so much set operations code in this PR when all of that is redundant with functionality in a library that Chromium is already using.\n\nAs for runtime matching: I don\u0027t know if ICU would fit into your matcher. It does have optimizations for fast \"contains(code point)\" after you call \"freeze()\" on it. Strings are much less optimized; they are stored in a vector. It might be worth exploring to pull the strings out and match them like you normally do in a disjunction, but to use UnicodeSet for matching code points. Note that UnicodeSet also has optimized span() etc. functions for fast iteration over a substring of elements contained or not contained in the set.",
+      "parentUuid": "2f849822_a74bab3d",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eca942b7_888a3b36",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
@@ -142,6 +160,30 @@
       "side": 1,
       "message": "May I ask why you suspect that the behavior is not correct for /u?\n\nFor /v with strings we won\u0027t be able to use the current methods in the ICU library (as far as I am aware), because as you mentioned the library does full case folding instead of simple case folding and with strings we won\u0027t be able to use the hack we use right now to guarantee that ß is not turned into \u0027ss\u0027.\n\nIt would be really awesome, if you could add scf mappings to ICU!\n\nAbout just adding: I think it should work, but it can be improved. That\u0027s why I added the comment/TODO here to `CharacterRange::AddUnicodeCaseEquivalents` (line 424).",
       "parentUuid": "eca942b7_888a3b36",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a635d4df_e11db5b4",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-06T18:44:25Z",
+      "side": 1,
+      "message": "Both /u and /v use simple case folding. I am not confident that your workaround achieves equivalent results in all cases. I don\u0027t know if there are real differences until I can write scf-only code and compare the two.\n\n\u003e It would be really awesome, if you could add scf mappings to ICU!\n\nICU of course has API+data for scf, just not currently available via UnicodeSet::closeOver(). I will write code that does MaybeSimpleCaseFolding() using UnicodeSet and scf APIs.",
+      "parentUuid": "6f0510d2_1f2bf152",
       "range": {
         "startLine": 455,
         "startChar": 0,
