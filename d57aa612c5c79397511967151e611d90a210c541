@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42ff6e76_6749b18a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-06T23:37:11Z",
+      "side": 1,
+      "message": "PTAL, let\u0027s see if Pinpoint works for this approach. If not we can try the simpler fix and rely on PGO.",
+      "revId": "d57aa612c5c79397511967151e611d90a210c541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
