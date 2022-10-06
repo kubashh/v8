@@ -22,6 +22,30 @@
       },
       "revId": "6690df257fc91840d62e6753c502128b2087c450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "233bba3d_2f7634fa",
+        "filename": "builders/integration.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-10-06T09:59:04Z",
+      "side": 1,
+      "message": "Created https://crrev.com/c/3937485 and running it on CQ",
+      "parentUuid": "b79d02bb_247dfede",
+      "range": {
+        "startLine": 12,
+        "startChar": 16,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "6690df257fc91840d62e6753c502128b2087c450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
