@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc2bcd2_422e57d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "Thanks for your comments, Markus!",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7542e296_8705c764",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-10-06T00:03:40Z",
       "side": 1,
       "message": "Please remove the comma. (I recognize it from my native German language :-)",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ab11284_61879fff",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7542e296_8705c764",
       "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f849822_a74bab3d",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "I think if we had scf mappings in the ICU library (like you mentioned in another comment), we could simplify quite a lot stuff.\nEven without it might be better to use UnicodeSet throughout, but we would need to try and measure the performance impact. This is definetly something I see out of scope of this CL.\n\nAd using UnicodeSet in the matcher:\nThat is non-trivial as RegExp patterns are JS objects managed by the V8 Heap/GC.\nThere were ideas about using the ICU library for unicode property values instead of creating large character classes in the past, but I think becuase of the point mentioned above + performance implications we never got to try it out.\n\nI don\u0027t know all the details. Jakob, please correct me if I am wrong or I missed something.",
+      "parentUuid": "5ae13b34_952cbd5f",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eca942b7_888a3b36",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
@@ -65,6 +118,30 @@
       "writtenOn": "2022-10-06T00:03:40Z",
       "side": 1,
       "message": "I don\u0027t think this does what we need.\n\nEven in /u mode, [USET_CASE_INSENSITIVE](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/uset_8h.html#a16af7b253440dadd46a80a4b9fddba4da740685a55f610ca84868b60aef83db7b) does more than simple case folding. I see that you build it without strings, and later removeAllStrings(), but I suspect that the behavior is not 100% the same.\n\nIn /v mode, once you support strings (which I realize you don\u0027t yet in this PR), we do need to handle strings, and we won\u0027t want USET_CASE_INSENSITIVE to add a ß when the input contains \"ss\".\n\nI will try to find time in the next few days and write a piece of ICU-using code that adds the scf mappings according to the proposed MaybeSimpleCaseFolding(). Once the spec and the implementations settle, I can propose that as a new API option and move it into the ICU library.\n\nAre you sure that you want to just *add* the scf mappings, and not remove the non-scf versions like the proposed spec says?",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0510d2_1f2bf152",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "May I ask why you suspect that the behavior is not correct for /u?\n\nFor /v with strings we won\u0027t be able to use the current methods in the ICU library (as far as I am aware), because as you mentioned the library does full case folding instead of simple case folding and with strings we won\u0027t be able to use the hack we use right now to guarantee that ß is not turned into \u0027ss\u0027.\n\nIt would be really awesome, if you could add scf mappings to ICU!\n\nAbout just adding: I think it should work, but it can be improved. That\u0027s why I added the comment/TODO here to `CharacterRange::AddUnicodeCaseEquivalents` (line 424).",
+      "parentUuid": "eca942b7_888a3b36",
       "range": {
         "startLine": 455,
         "startChar": 0,
@@ -100,6 +177,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdf6c986_292a30f9",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "I initially thought (misunderstood), that UnicodeSet operations work on a per-character basis instead of ranges.\nThat\u0027s why I initially decided to implement the operations for ranges myself.\nIIUC I was wrong about the UnicodeSet implementation and it indeed also works on ranges.\n\nThis is related to your comment about using UnicodeSets more throughout the implementation: We might be able to simplify a lot of things by using more ICU methods, but this should be a separate project IMO.",
+      "parentUuid": "1c247e50_5b2b643b",
+      "range": {
+        "startLine": 1516,
+        "startChar": 2,
+        "endLine": 1516,
+        "endChar": 30
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd5328da_a3077dd6",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
@@ -111,6 +212,24 @@
       "writtenOn": "2022-10-06T00:03:40Z",
       "side": 1,
       "message": "FYI [UnicodeSet::complement()](https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1UnicodeSet.html#a60460749e20685e496e819b368496089) \"negates\" all code points. It does not remove or modify strings. But we are not negating sets/classes that contain (or even \"may contain\") strings. Could DCHECK for .hasStrings().",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d70136ef_387cfa21",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "As mentioned in other comments: Worth trying to replace more of our implementations with UnicodeSets (in a follow-up).",
+      "parentUuid": "fd5328da_a3077dd6",
       "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

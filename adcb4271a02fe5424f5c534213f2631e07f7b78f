@@ -1649,6 +1649,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "269e8886_da3c218d",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "Ack.\nWould like to address it in a follow-up to land this CL asap.",
+      "parentUuid": "f1a811b4_727b87c3",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4c9acd1_bd95942b",
@@ -2418,6 +2436,24 @@
       "side": 1,
       "message": "I don\u0027t think that `/[\u0026\u0026\u0026a]/v` is valid. It would have a ClassSetOperand on the left which is a ClassSetCharacter. And that can be any SourceCharacter-except-ClassSetSyntaxCharacter but only if `[lookahead ∉ ClassSetReservedDoublePunctuator]` where ClassSetReservedDoublePunctuator includes `\u0026\u0026`.\n\nSee https://arai-a.github.io/ecma262-compare/snapshot.html?pr\u003d2418#prod-ClassSetCharacter",
       "parentUuid": "ca5ad43e_0b5e977f",
+      "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2469136b_d9298c92",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2357,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-06T13:10:15Z",
+      "side": 1,
+      "message": "Ah you are right! the negative lookahead in `ClassSetCharacter` prevents this (it was actually already implemented that way). Thanks for clarifying.\nFixed the missing lookahead pointed out originally.",
+      "parentUuid": "b7237b79_607e7b70",
       "revId": "adcb4271a02fe5424f5c534213f2631e07f7b78f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
