@@ -511,17 +511,20 @@ class CollectFunctionLiterals final
 };
 
 bool ParseScript(Isolate* isolate, Handle<Script> script, ParseInfo* parse_info,
-                 bool compile_as_well, std::vector<FunctionLiteral*>* literals,
+                 MaybeHandle<ScopeInfo> outer_scope_info, bool compile_as_well,
+                 std::vector<FunctionLiteral*>* literals,
                  debug::LiveEditResult* result) {
   v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
   Handle<SharedFunctionInfo> shared;
   bool success = false;
   if (compile_as_well) {
-    success = Compiler::CompileForLiveEdit(parse_info, script, isolate)
+    success = Compiler::CompileForLiveEdit(parse_info, script, outer_scope_info,
+                                           isolate)
                   .ToHandle(&shared);
   } else {
-    success = parsing::ParseProgram(parse_info, script, isolate,
-                                    parsing::ReportStatisticsMode::kYes);
+    success =
+        parsing::ParseProgram(parse_info, script, outer_scope_info, isolate,
+                              parsing::ReportStatisticsMode::kYes);
     if (!success) {
       // Throw the parser error.
       parse_info->pending_error_handler()->PrepareErrors(
@@ -748,6 +751,20 @@ void UpdatePositions(Isolate* isolate, Handle<SharedFunctionInfo> sfi,
         isolate, handle(sfi->GetBytecodeArray(isolate), isolate), diffs);
   }
 }
+
+// For sloppy eval we need to know the ScopeInfo the eval was compiled in and
+// re-use it when we compile the new version of the script.
+MaybeHandle<ScopeInfo> DetermineOuterScopeInfo(Isolate* isolate,
+                                               Handle<Script> script) {
+  if (!script->has_eval_from_shared()) return kNullMaybeHandle;
+  Handle<ScopeInfo> scope_info =
+      handle(script->eval_from_shared().scope_info(), isolate);
+  if (scope_info->IsEmpty() || scope_info->scope_type() == SCRIPT_SCOPE) {
+    return kNullMaybeHandle;
+  }
+  return scope_info;
+}
+
 }  // anonymous namespace
 
 void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
@@ -771,8 +788,11 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
   flags.set_is_eager(true);
   flags.set_is_reparse(true);
   ParseInfo parse_info(isolate, flags, &compile_state, &reusable_state);
+  MaybeHandle<ScopeInfo> outer_scope_info =
+      DetermineOuterScopeInfo(isolate, script);
   std::vector<FunctionLiteral*> literals;
-  if (!ParseScript(isolate, script, &parse_info, false, &literals, result))
+  if (!ParseScript(isolate, script, &parse_info, outer_scope_info, false,
+                   &literals, result))
     return;
 
   Handle<Script> new_script = isolate->factory()->CloneScript(script);
@@ -784,8 +804,8 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
   ParseInfo new_parse_info(isolate, new_flags, &new_compile_state,
                            &reusable_state);
   std::vector<FunctionLiteral*> new_literals;
-  if (!ParseScript(isolate, new_script, &new_parse_info, true, &new_literals,
-                   result)) {
+  if (!ParseScript(isolate, new_script, &new_parse_info, outer_scope_info, true,
+                   &new_literals, result)) {
     return;
   }
 
