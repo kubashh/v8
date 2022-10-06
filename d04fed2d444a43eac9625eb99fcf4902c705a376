@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ed4f46a_d38db49d",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-06T12:25:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bddd5ef0_7d076307",
+      "range": {
+        "startLine": 759,
+        "startChar": 15,
+        "endLine": 759,
+        "endChar": 35
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c9fdc37_850686c1",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-06T11:57:22Z",
       "side": 1,
       "message": "why drop script scopes?",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a542e31_e2c4cac0",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-06T12:25:17Z",
+      "side": 1,
+      "message": "Actually I think I messed up here. `GetFunctionFromEval` doesn\u0027t use the ScopeInfo of the outer SFI, but rather the ScopeInfo from the current context when an eval happens:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/compiler.cc;l\u003d2813-2820;drc\u003d8d399817282e3c12ed54eb23ec42a5e418298ec6\n\nThis means I should probably walk the ScopeInfo chain until I find one that has `HasContext` true to actually mirror what `GetFunctionFromEval` does. Do I understand that correctly?",
+      "parentUuid": "2c9fdc37_850686c1",
       "range": {
         "startLine": 762,
         "startChar": 32,
