@@ -117,6 +117,30 @@
       },
       "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef3f145a_69d04e89",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-06T12:49:03Z",
+      "side": 1,
+      "message": "It would break some important dev workflows. e.g. bundlers like webpack use eval under the hood, which means we loose live edit for any project thats bundled that way. Live edit is also used implicitly with the \"Workspaces\" feature. You can map a local build output directory on top of your page. Then, every time the build output changes, DevTools will pick that up and live edit the existing page.\n\nq: How can the ScopeInfo we grab from the context not be on the scope chain starting at the \"eval_from_shared\" SFI? Btw the only place where we actually use a contxt other than the native context (and thus skip using any outer scope info) is here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/runtime/runtime-compiler.cc;l\u003d571;drc\u003d8d399817282e3c12ed54eb23ec42a5e418298ec6\n\nand its for \"Runtime_ResolvePossiblyDirectEval\"",
+      "parentUuid": "843c1cbd_68ebee75",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
