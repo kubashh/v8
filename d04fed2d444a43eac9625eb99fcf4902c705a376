@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bddd5ef0_7d076307",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-06T11:57:22Z",
+      "side": 1,
+      "message": "can you add some DCHECKs here around invariants that we expect (e.g. that the script is a COMPILATION_TYPE_EVAL etc)?",
+      "range": {
+        "startLine": 759,
+        "startChar": 15,
+        "endLine": 759,
+        "endChar": 35
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c9fdc37_850686c1",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-06T11:57:22Z",
+      "side": 1,
+      "message": "why drop script scopes?",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
