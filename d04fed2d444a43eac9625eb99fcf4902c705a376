@@ -189,6 +189,30 @@
       },
       "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31180a2a_5a396835",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-06T15:59:01Z",
+      "side": 1,
+      "message": "Maybe you could DCHECK by taking a SharedFunctionInfo out of the Script\u0027s SFI list, walk its ScopeInfo chain up to the EVAL_SCOPE, and then walk one more up? `context_data` could work too though.",
+      "parentUuid": "a1f60bb4_2d1e8e88",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
