@@ -141,6 +141,30 @@
       },
       "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41db6104_e0b3eab7",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-06T13:10:30Z",
+      "side": 1,
+      "message": "The webpack argument makes sense, workspaces less so since I would have assumed that this local build output is files, not eval. Nevertheless, ok, fine.\n\nI think you might be right that you can walk up from `eval_from_shared` to get the nearest relevant context, though I don\u0027t know if I\u0027m _100%_ sure here that this can\u0027t false positive to a too-near context, which is why I\u0027m hesitating. Any ideas on how we could verify/DCHECK this, maybe with a more expensive context/scope walk?",
+      "parentUuid": "ef3f145a_69d04e89",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
