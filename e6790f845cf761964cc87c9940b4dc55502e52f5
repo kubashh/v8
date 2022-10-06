@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aacc04a_209b818b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-06T09:43:32Z",
+      "side": 1,
+      "message": "Yes. I updated the CL title to make this clearer.",
+      "parentUuid": "262b9119_286ef3e2",
+      "revId": "e6790f845cf761964cc87c9940b4dc55502e52f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad9d4a47_33bb6a9c",
