@@ -2270,7 +2270,8 @@ class Heap {
   // which collector to invoke, before expanding a paged space in the old
   // generation and on every allocation in large object space.
   std::atomic<size_t> old_generation_allocation_limit_{0};
-  size_t global_allocation_limit_ = 0;
+  std::atomic<size_t> global_allocation_limit_{0};
+  std::atomic<size_t> global_allocation_limit_delta_{0};
 
   // Weak list heads, threaded through the objects.
   // List heads are initialized lazily and contain the undefined_value at start.
@@ -2498,6 +2499,42 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+ public:
+  static bool UseMembalancer() { return v8_flags.memory_balancer; }
+
+  // a special constant to balance between memory and space tradeoff. The
+  // smaller the more memory it use.
+  static double CValue() { return v8_flags.memory_balancer_c_value; }
+  // also touch global allocation limit
+  void UpdateHeapLimit(size_t new_limit);
+  friend class MemoryMeasurementTask;
+  std::atomic<bool> allocation_measurer_started{false};
+  void PostMemoryMeasurementTask();
+  std::atomic<size_t> live_memory{0};
+  std::atomic<double> major_allocation_bytes{0}, major_allocation_time{0},
+      major_gc_bytes{0}, major_gc_time{0};
+  std::atomic<bool> has_major_allocation{false}, has_major_gc{false};
+  void UpdateLiveMemoryMajorGC(size_t live_memory, double major_gc_bytes,
+                               double major_gc_time) {
+    this->live_memory = live_memory;
+    this->major_gc_bytes = (this->major_gc_bytes + major_gc_bytes) / 2;
+    this->major_gc_time = (this->major_gc_time + major_gc_time) / 2;
+    has_major_gc = true;
+  }
+  void UpdateMajorAllocation(double major_allocation_bytes,
+                             double major_allocation_time) {
+    double k = 0.95;
+    this->major_allocation_bytes =
+        this->major_allocation_bytes * k + major_allocation_bytes * (1 - k);
+    this->major_allocation_time =
+        this->major_allocation_time * k + major_allocation_time * (1 - k);
+    has_major_allocation = true;
+  }
+  std::atomic<size_t> last_M_update_time{0};
+  std::atomic<double> last_M_memory{0};
+  std::atomic<size_t> concurrent_gc_time{0};
+  void MembalancerUpdate();
 };
 
 class HeapStats {
