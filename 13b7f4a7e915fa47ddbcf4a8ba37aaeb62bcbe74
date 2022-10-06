@@ -68,6 +68,24 @@
       "parentUuid": "3a703c52_600f8fe0",
       "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8152f0b8_8b2cd201",
+        "filename": "test/inspector/debugger/wasm-gc-anyref.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-06T15:20:57Z",
+      "side": 1,
+      "message": "This is indeed black magic hidden deep inside the `protocol-test.js` driver, which is automatically included for inspector tests.\n\nSee https://source.chromium.org/chromium/chromium/src/+/main:v8/test/inspector/protocol-test.js;l\u003d397;drc\u003d6a6f5de1a779279b746bdfec7f099254d1208cf4\nand https://source.chromium.org/chromium/chromium/src/+/main:v8/test/inspector/testcfg.py;l\u003d44;drc\u003db3477fdd012fb35b5b6ce09e39be46147168d9f2",
+      "parentUuid": "807b94ec_15c103b1",
+      "revId": "13b7f4a7e915fa47ddbcf4a8ba37aaeb62bcbe74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
