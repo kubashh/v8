@@ -46,6 +46,30 @@
       },
       "revId": "2a24668a21e0839bee084dff58d317489f5e4f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a503c1a_0469ed78",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1554597
+      },
+      "writtenOn": "2022-10-07T12:18:54Z",
+      "side": 1,
+      "message": "thanks for fixing!",
+      "parentUuid": "b57b84b5_0ad22fe3",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "2a24668a21e0839bee084dff58d317489f5e4f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
