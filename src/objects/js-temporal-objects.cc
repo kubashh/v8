@@ -432,7 +432,7 @@ void BalanceISOYearMonth(Isolate* isolate, int32_t* year, int32_t* month);
 
 // #sec-temporal-balancetime
 V8_WARN_UNUSED_RESULT DateTimeRecord
-BalanceTime(const UnbalancedTimeRecord& time);
+BalanceTime(Isolate* isolate, const UnbalancedTimeRecord& time);
 
 // #sec-temporal-differencetime
 V8_WARN_UNUSED_RESULT Maybe<TimeDurationRecord> DifferenceTime(
@@ -506,7 +506,10 @@ MaybeHandle<Object> ToIntegerThrowOnInfinity(Isolate* isolate,
 MaybeHandle<Object> ToPositiveInteger(Isolate* isolate,
                                       Handle<Object> argument);
 
-inline double modulo(double a, int32_t b) { return a - std::floor(a / b) * b; }
+inline double modulo(double a, int32_t b) {
+  double value = std::fmod(a, b);
+  return (value < 0) ? value + b : value;
+}
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
@@ -1273,6 +1276,26 @@ Handle<JSTemporalTimeZone> SystemTimeZone(Isolate* isolate) {
       .ToHandleChecked();
 }
 
+Handle<BigInt> Modulo(Isolate* isolate, Handle<BigInt> x, Handle<BigInt> y) {
+  Handle<BigInt> value = BigInt::Remainder(isolate, x, y).ToHandleChecked();
+  // Need to do some remainder magic to negative remainder.
+  if (value->IsNegative()) {
+    return BigInt::Add(isolate, value, y).ToHandleChecked();
+  }
+  return value;
+}
+
+Handle<BigInt> FloorDivide(Isolate* isolate, Handle<BigInt> x,
+                           Handle<BigInt> y) {
+  DCHECK(!y->IsNegative());
+  if (x->IsNegative()) {
+    x = BigInt::Subtract(isolate, x, y).ToHandleChecked();
+    x = BigInt::Add(isolate, x, BigInt::FromUint64(isolate, 1))
+            .ToHandleChecked();
+  }
+  return BigInt::Divide(isolate, x, y).ToHandleChecked();
+}
+
 DateTimeRecord GetISOPartsFromEpoch(Isolate* isolate,
                                     Handle<BigInt> epoch_nanoseconds) {
   TEMPORAL_ENTER_FUNC();
@@ -1281,13 +1304,7 @@ DateTimeRecord GetISOPartsFromEpoch(Isolate* isolate,
   DCHECK(IsValidEpochNanoseconds(isolate, epoch_nanoseconds));
   // 2. Let remainderNs be epochNanoseconds modulo 10^6.
   Handle<BigInt> million = BigInt::FromUint64(isolate, 1000000);
-  Handle<BigInt> remainder_ns =
-      BigInt::Remainder(isolate, epoch_nanoseconds, million).ToHandleChecked();
-  // Need to do some remainder magic to negative remainder.
-  if (remainder_ns->IsNegative()) {
-    remainder_ns =
-        BigInt::Add(isolate, remainder_ns, million).ToHandleChecked();
-  }
+  Handle<BigInt> remainder_ns = Modulo(isolate, epoch_nanoseconds, million);
 
   // 3. Let epochMilliseconds be (epochNanoseconds − remainderNs) / 10^6.
   int64_t epoch_milliseconds =
@@ -1359,12 +1376,12 @@ DateTimeRecord BalanceISODateTime(Isolate* isolate,
   // 2. Let balancedTime be ! BalanceTime(hour, minute, second, millisecond,
   // microsecond, nanosecond).
   DateTimeRecord balanced_time =
-      BalanceTime({static_cast<double>(date_time.time.hour),
-                   static_cast<double>(date_time.time.minute),
-                   static_cast<double>(date_time.time.second),
-                   static_cast<double>(date_time.time.millisecond),
-                   static_cast<double>(date_time.time.microsecond),
-                   static_cast<double>(date_time.time.nanosecond)});
+      BalanceTime(isolate, {static_cast<double>(date_time.time.hour),
+                            static_cast<double>(date_time.time.minute),
+                            static_cast<double>(date_time.time.second),
+                            static_cast<double>(date_time.time.millisecond),
+                            static_cast<double>(date_time.time.microsecond),
+                            static_cast<double>(date_time.time.nanosecond)});
   // 3. Let balancedDate be ! BalanceISODate(year, month, day +
   // balancedTime.[[Days]]).
   DateRecord added_date = date_time.date;
@@ -5287,28 +5304,25 @@ Maybe<BalancePossiblyInfiniteDurationResult> BalancePossiblyInfiniteDuration(
       microseconds =
           BigInt::Divide(isolate, nanoseconds, thousand).ToHandleChecked();
       // b. Set nanoseconds to nanoseconds modulo 1000.
-      nanoseconds =
-          BigInt::Remainder(isolate, nanoseconds, thousand).ToHandleChecked();
+      nanoseconds = Modulo(isolate, nanoseconds, thousand);
       // c. Set milliseconds to floor(microseconds / 1000).
       milliseconds =
           BigInt::Divide(isolate, microseconds, thousand).ToHandleChecked();
       // d. Set microseconds to microseconds modulo 1000.
-      microseconds =
-          BigInt::Remainder(isolate, microseconds, thousand).ToHandleChecked();
+      microseconds = Modulo(isolate, microseconds, thousand);
       // e. Set seconds to floor(milliseconds / 1000).
       seconds =
           BigInt::Divide(isolate, milliseconds, thousand).ToHandleChecked();
       // f. Set milliseconds to milliseconds modulo 1000.
-      milliseconds =
-          BigInt::Remainder(isolate, milliseconds, thousand).ToHandleChecked();
+      milliseconds = Modulo(isolate, milliseconds, thousand);
       // g. Set minutes to floor(seconds, 60).
       minutes = BigInt::Divide(isolate, seconds, sixty).ToHandleChecked();
       // h. Set seconds to seconds modulo 60.
-      seconds = BigInt::Remainder(isolate, seconds, sixty).ToHandleChecked();
+      seconds = Modulo(isolate, seconds, sixty);
       // i. Set hours to floor(minutes / 60).
       hours = BigInt::Divide(isolate, minutes, sixty).ToHandleChecked();
       // j. Set minutes to minutes modulo 60.
-      minutes = BigInt::Remainder(isolate, minutes, sixty).ToHandleChecked();
+      minutes = Modulo(isolate, minutes, sixty);
       break;
     // 10. Else if largestUnit is "minute", then
     case Unit::kMinute:
@@ -5316,24 +5330,21 @@ Maybe<BalancePossiblyInfiniteDurationResult> BalancePossiblyInfiniteDuration(
       microseconds =
           BigInt::Divide(isolate, nanoseconds, thousand).ToHandleChecked();
       // b. Set nanoseconds to nanoseconds modulo 1000.
-      nanoseconds =
-          BigInt::Remainder(isolate, nanoseconds, thousand).ToHandleChecked();
+      nanoseconds = Modulo(isolate, nanoseconds, thousand);
       // c. Set milliseconds to floor(microseconds / 1000).
       milliseconds =
           BigInt::Divide(isolate, microseconds, thousand).ToHandleChecked();
       // d. Set microseconds to microseconds modulo 1000.
-      microseconds =
-          BigInt::Remainder(isolate, microseconds, thousand).ToHandleChecked();
+      microseconds = Modulo(isolate, microseconds, thousand);
       // e. Set seconds to floor(milliseconds / 1000).
       seconds =
           BigInt::Divide(isolate, milliseconds, thousand).ToHandleChecked();
       // f. Set milliseconds to milliseconds modulo 1000.
-      milliseconds =
-          BigInt::Remainder(isolate, milliseconds, thousand).ToHandleChecked();
+      milliseconds = Modulo(isolate, milliseconds, thousand);
       // g. Set minutes to floor(seconds / 60).
       minutes = BigInt::Divide(isolate, seconds, sixty).ToHandleChecked();
       // h. Set seconds to seconds modulo 60.
-      seconds = BigInt::Remainder(isolate, seconds, sixty).ToHandleChecked();
+      seconds = Modulo(isolate, seconds, sixty);
       break;
     // 11. Else if largestUnit is "second", then
     case Unit::kSecond:
@@ -5341,20 +5352,17 @@ Maybe<BalancePossiblyInfiniteDurationResult> BalancePossiblyInfiniteDuration(
       microseconds =
           BigInt::Divide(isolate, nanoseconds, thousand).ToHandleChecked();
       // b. Set nanoseconds to nanoseconds modulo 1000.
-      nanoseconds =
-          BigInt::Remainder(isolate, nanoseconds, thousand).ToHandleChecked();
+      nanoseconds = Modulo(isolate, nanoseconds, thousand);
       // c. Set milliseconds to floor(microseconds / 1000).
       milliseconds =
           BigInt::Divide(isolate, microseconds, thousand).ToHandleChecked();
       // d. Set microseconds to microseconds modulo 1000.
-      microseconds =
-          BigInt::Remainder(isolate, microseconds, thousand).ToHandleChecked();
+      microseconds = Modulo(isolate, microseconds, thousand);
       // e. Set seconds to floor(milliseconds / 1000).
       seconds =
           BigInt::Divide(isolate, milliseconds, thousand).ToHandleChecked();
       // f. Set milliseconds to milliseconds modulo 1000.
-      milliseconds =
-          BigInt::Remainder(isolate, milliseconds, thousand).ToHandleChecked();
+      milliseconds = Modulo(isolate, milliseconds, thousand);
       break;
     // 12. Else if largestUnit is "millisecond", then
     case Unit::kMillisecond:
@@ -5362,14 +5370,12 @@ Maybe<BalancePossiblyInfiniteDurationResult> BalancePossiblyInfiniteDuration(
       microseconds =
           BigInt::Divide(isolate, nanoseconds, thousand).ToHandleChecked();
       // b. Set nanoseconds to nanoseconds modulo 1000.
-      nanoseconds =
-          BigInt::Remainder(isolate, nanoseconds, thousand).ToHandleChecked();
+      nanoseconds = Modulo(isolate, nanoseconds, thousand);
       // c. Set milliseconds to floor(microseconds / 1000).
       milliseconds =
           BigInt::Divide(isolate, microseconds, thousand).ToHandleChecked();
       // d. Set microseconds to microseconds modulo 1000.
-      microseconds =
-          BigInt::Remainder(isolate, microseconds, thousand).ToHandleChecked();
+      microseconds = Modulo(isolate, microseconds, thousand);
       break;
     // 13. Else if largestUnit is "microsecond", then
     case Unit::kMicrosecond:
@@ -5377,8 +5383,7 @@ Maybe<BalancePossiblyInfiniteDurationResult> BalancePossiblyInfiniteDuration(
       microseconds =
           BigInt::Divide(isolate, nanoseconds, thousand).ToHandleChecked();
       // b. Set nanoseconds to nanoseconds modulo 1000.
-      nanoseconds =
-          BigInt::Remainder(isolate, nanoseconds, thousand).ToHandleChecked();
+      nanoseconds = Modulo(isolate, nanoseconds, thousand);
       break;
     // 14. Else,
     case Unit::kNanosecond:
@@ -6193,9 +6198,23 @@ void BalanceISOYearMonth(Isolate* isolate, int32_t* year, int32_t* month) {
 
   // 4. Return the new Record { [[Year]]: year, [[Month]]: month }.
 }
+
 // #sec-temporal-balancetime
-DateTimeRecord BalanceTime(const UnbalancedTimeRecord& input) {
+
+// A threshold to use BalanceTimeFast for BalanceTime.
+// kFastBalanceTimeLimit is set to 95% of kMaxSafeIntegerUint64 because
+// we need to ensure the accumulated values from smaller fields will not
+// larger than kMaxSafeIntegerUint64.
+constexpr double kFastBalanceTimeLimit = kMaxSafeIntegerUint64 * 0.95;
+DateTimeRecord BalanceTimeFast(const UnbalancedTimeRecord& input) {
   TEMPORAL_ENTER_FUNC();
+  DCHECK_LT(input.hour, kFastBalanceTimeLimit);
+  DCHECK_LT(input.minute, kFastBalanceTimeLimit);
+  DCHECK_LT(input.second, kFastBalanceTimeLimit);
+  DCHECK_LT(input.millisecond, kFastBalanceTimeLimit);
+  DCHECK_LT(input.microsecond, kFastBalanceTimeLimit);
+  DCHECK_LT(input.nanosecond, kFastBalanceTimeLimit);
+
   UnbalancedTimeRecord time(input);
   TimeRecord result;
 
@@ -6231,6 +6250,97 @@ DateTimeRecord BalanceTime(const UnbalancedTimeRecord& input) {
   return {{0, 0, days}, result};
 }
 
+// This version use BigInt for internal calculation while one or more of the
+// field value may exceed the precision the double can handle.
+DateTimeRecord BalanceTimeSlow(Isolate* isolate,
+                               const UnbalancedTimeRecord& input) {
+  TEMPORAL_ENTER_FUNC();
+  Factory* factory = isolate->factory();
+
+  // 1. Assert: hour, minute, second, millisecond, microsecond, and nanosecond
+  // are integers.
+  Handle<BigInt> hour =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.hour))
+          .ToHandleChecked();
+  Handle<BigInt> minute =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.minute))
+          .ToHandleChecked();
+  Handle<BigInt> second =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.second))
+          .ToHandleChecked();
+  Handle<BigInt> millisecond =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.millisecond))
+          .ToHandleChecked();
+  Handle<BigInt> microsecond =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.microsecond))
+          .ToHandleChecked();
+  Handle<BigInt> nanosecond =
+      BigInt::FromNumber(isolate, factory->NewNumber(input.nanosecond))
+          .ToHandleChecked();
+  Handle<BigInt> thousand = BigInt::FromInt64(isolate, 1000);
+  Handle<BigInt> sixty = BigInt::FromInt64(isolate, 60);
+  Handle<BigInt> twentyfour = BigInt::FromInt64(isolate, 24);
+
+  // 2. Set microsecond to microsecond + floor(nanosecond / 1000).
+  microsecond = BigInt::Add(isolate, microsecond,
+                            FloorDivide(isolate, nanosecond, thousand))
+                    .ToHandleChecked();
+  // 3. Set nanosecond to nanosecond modulo 1000.
+  nanosecond = Modulo(isolate, nanosecond, thousand);
+  // 4. Set millisecond to millisecond + floor(microsecond / 1000).
+  millisecond = BigInt::Add(isolate, millisecond,
+                            FloorDivide(isolate, microsecond, thousand))
+                    .ToHandleChecked();
+  // 5. Set microsecond to microsecond modulo 1000.
+  microsecond = Modulo(isolate, microsecond, thousand);
+  // 6. Set second to second + floor(millisecond / 1000).
+  second =
+      BigInt::Add(isolate, second, FloorDivide(isolate, millisecond, thousand))
+          .ToHandleChecked();
+  // 7. Set millisecond to millisecond modulo 1000.
+  millisecond = Modulo(isolate, millisecond, thousand);
+  // 8. Set minute to minute + floor(second / 60).
+  minute = BigInt::Add(isolate, minute, FloorDivide(isolate, second, sixty))
+               .ToHandleChecked();
+  // 9. Set second to second modulo 60.
+  second = Modulo(isolate, second, sixty);
+  // 10. Set hour to hour + floor(minute / 60).
+  hour = BigInt::Add(isolate, hour, FloorDivide(isolate, minute, sixty))
+             .ToHandleChecked();
+  // 11. Set minute to minute modulo 60.
+  minute = Modulo(isolate, minute, sixty);
+  // 12. Let days be floor(hour / 24).
+  Handle<BigInt> days = FloorDivide(isolate, hour, twentyfour);
+  // 13. Set hour to hour modulo 24.
+  hour = Modulo(isolate, hour, twentyfour);
+  // 14. Return the new Record { [[Days]]: days, [[Hour]]: hour, [[Minute]]:
+  // minute, [[Second]]: second, [[Millisecond]]: millisecond, [[Microsecond]]:
+  // microsecond, [[Nanosecond]]: nanosecond }.
+  return {
+      {0, 0, static_cast<int32_t>(BigInt::ToNumber(isolate, days)->Number())},
+      {static_cast<int32_t>(BigInt::ToNumber(isolate, hour)->Number()),
+       static_cast<int32_t>(BigInt::ToNumber(isolate, minute)->Number()),
+       static_cast<int32_t>(BigInt::ToNumber(isolate, second)->Number()),
+       static_cast<int32_t>(BigInt::ToNumber(isolate, millisecond)->Number()),
+       static_cast<int32_t>(BigInt::ToNumber(isolate, microsecond)->Number()),
+       static_cast<int32_t>(BigInt::ToNumber(isolate, nanosecond)->Number())}};
+}
+
+// #sec-temporal-balancetime
+DateTimeRecord BalanceTime(Isolate* isolate,
+                           const UnbalancedTimeRecord& input) {
+  if (std::abs(input.hour) < kFastBalanceTimeLimit &&
+      std::abs(input.minute) < kFastBalanceTimeLimit &&
+      std::abs(input.second) < kFastBalanceTimeLimit &&
+      std::abs(input.millisecond) < kFastBalanceTimeLimit &&
+      std::abs(input.microsecond) < kFastBalanceTimeLimit &&
+      std::abs(input.nanosecond) < kFastBalanceTimeLimit) {
+    return BalanceTimeFast(input);
+  }
+  // The values is bigger than the double precision, use BigInt to calculate
+  return BalanceTimeSlow(isolate, input);
+}
+
 // #sec-temporal-differencetime
 Maybe<TimeDurationRecord> DifferenceTime(Isolate* isolate,
                                          const TimeRecord& time1,
@@ -6264,9 +6374,9 @@ Maybe<TimeDurationRecord> DifferenceTime(Isolate* isolate,
   // 9. Let bt be ! BalanceTime(hours × sign, minutes × sign, seconds × sign,
   // milliseconds × sign, microseconds × sign, nanoseconds × sign).
   DateTimeRecord bt =
-      BalanceTime({dur.hours * sign, dur.minutes * sign, dur.seconds * sign,
-                   dur.milliseconds * sign, dur.microseconds * sign,
-                   dur.nanoseconds * sign});
+      BalanceTime(isolate, {dur.hours * sign, dur.minutes * sign,
+                            dur.seconds * sign, dur.milliseconds * sign,
+                            dur.microseconds * sign, dur.nanoseconds * sign});
 
   // 9. Return ! CreateTimeDurationRecord(bt.[[Days]] × sign, bt.[[Hour]] ×
   // sign, bt.[[Minute]] × sign, bt.[[Second]] × sign, bt.[[Millisecond]] ×
@@ -6287,7 +6397,8 @@ DateTimeRecord AddTime(Isolate* isolate, const TimeRecord& time,
   // hours, minutes, seconds, milliseconds, microseconds, and nanoseconds are
   // integers.
   // 2. Let hour be hour + hours.
-  return BalanceTime({time.hour + addend.hours,
+  return BalanceTime(isolate,
+                     {time.hour + addend.hours,
                       // 3. Let minute be minute + minutes.
                       time.minute + addend.minutes,
                       // 4. Let second be second + seconds.
@@ -15516,39 +15627,40 @@ DateTimeRecord RoundTime(Isolate* isolate, const TimeRecord& time,
     // 12. If unit is "hour", then
     case Unit::kHour:
       // a. Return ! BalanceTime(result, 0, 0, 0, 0, 0).
-      return BalanceTime({static_cast<double>(result), 0, 0, 0, 0, 0});
+      return BalanceTime(isolate, {static_cast<double>(result), 0, 0, 0, 0, 0});
     // 13. If unit is "minute", then
     case Unit::kMinute:
       // a. Return ! BalanceTime(hour, result, 0, 0, 0, 0).
-      return BalanceTime({static_cast<double>(time.hour),
-                          static_cast<double>(result), 0, 0, 0, 0});
+      return BalanceTime(isolate, {static_cast<double>(time.hour),
+                                   static_cast<double>(result), 0, 0, 0, 0});
     // 14. If unit is "second", then
     case Unit::kSecond:
       // a. Return ! BalanceTime(hour, minute, result, 0, 0, 0).
-      return BalanceTime({static_cast<double>(time.hour),
-                          static_cast<double>(time.minute),
-                          static_cast<double>(result), 0, 0, 0});
+      return BalanceTime(isolate, {static_cast<double>(time.hour),
+                                   static_cast<double>(time.minute),
+                                   static_cast<double>(result), 0, 0, 0});
     // 15. If unit is "millisecond", then
     case Unit::kMillisecond:
       // a. Return ! BalanceTime(hour, minute, second, result, 0, 0).
-      return BalanceTime({static_cast<double>(time.hour),
-                          static_cast<double>(time.minute),
-                          static_cast<double>(time.second),
-                          static_cast<double>(result), 0, 0});
+      return BalanceTime(isolate, {static_cast<double>(time.hour),
+                                   static_cast<double>(time.minute),
+                                   static_cast<double>(time.second),
+                                   static_cast<double>(result), 0, 0});
     // 16. If unit is "microsecond", then
     case Unit::kMicrosecond:
       // a. Return ! BalanceTime(hour, minute, second, millisecond, result, 0).
-      return BalanceTime({static_cast<double>(time.hour),
-                          static_cast<double>(time.minute),
-                          static_cast<double>(time.second),
-                          static_cast<double>(time.millisecond),
-                          static_cast<double>(result), 0});
+      return BalanceTime(isolate, {static_cast<double>(time.hour),
+                                   static_cast<double>(time.minute),
+                                   static_cast<double>(time.second),
+                                   static_cast<double>(time.millisecond),
+                                   static_cast<double>(result), 0});
     default:
       // 17. Assert: unit is "nanosecond".
       DCHECK_EQ(unit, Unit::kNanosecond);
       // 18. Return ! BalanceTime(hour, minute, second, millisecond,
       // microsecond, result).
       return BalanceTime(
+          isolate,
           {static_cast<double>(time.hour), static_cast<double>(time.minute),
            static_cast<double>(time.second),
            static_cast<double>(time.millisecond),
