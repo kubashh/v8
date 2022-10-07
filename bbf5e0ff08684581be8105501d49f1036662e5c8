@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9122de89_1892ca8f",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-07T13:23:57Z",
+      "side": 1,
+      "message": "ad \"using the ICU library for unicode property values\": We do use the ICU library for property values to create RegExp character ranges (but those ranges can get quite large). What I was referring to was an idea (and I might misremember/misunderstood it) to use ICU at runtime to check for property values.\n\nWhile building a matcher is less performance-sensitive than doing the matching, we still had performance issues in the past (e.g. https://crbug.com/v8/6727).\nI did a quick microbenchmark comparing the current implementation with one that uses the ICU functions and ICU was ~11% slower. This doesn\u0027t mean that the ICU implementation is strictly slower though, because the ICU version includes conversions from our `CharacterRange`s to `UnicodeSet`. So if we would use `UnicodeSet` throughout the parser, we should re-evaluate this.",
+      "parentUuid": "76458e4b_d50e527b",
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eca942b7_888a3b36",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
@@ -184,6 +202,30 @@
       "side": 1,
       "message": "Both /u and /v use simple case folding. I am not confident that your workaround achieves equivalent results in all cases. I don\u0027t know if there are real differences until I can write scf-only code and compare the two.\n\n\u003e It would be really awesome, if you could add scf mappings to ICU!\n\nICU of course has API+data for scf, just not currently available via UnicodeSet::closeOver(). I will write code that does MaybeSimpleCaseFolding() using UnicodeSet and scf APIs.",
       "parentUuid": "6f0510d2_1f2bf152",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3b76b7c_ddfea01f",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-07T13:23:57Z",
+      "side": 1,
+      "message": "If you could point me to the ICU API for scf, I would be happy to give it a shot myself. I was just not able to find it in the documentation myself :/",
+      "parentUuid": "a635d4df_e11db5b4",
       "range": {
         "startLine": 455,
         "startChar": 0,
