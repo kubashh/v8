@@ -33,6 +33,23 @@
       "message": "+Leszek for CSA OWNER.\n\nPinpoint runs look promising.",
       "revId": "d57aa612c5c79397511967151e611d90a210c541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b21abd68_93a22adb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-07T12:11:21Z",
+      "side": 1,
+      "message": "Thanks for all the effort you put into this, Shu!\n\nInteresting, that this approach seems to cause a regression on ReactRedux on the M1, whereas the initial approach that caused a regression on EmberJS-Debug even improved that line item (according to pinpoint).\nI am more and more convinced that the regressions are due to layout changes/different cache behaviour. Reducing code size of the builtin by replacing the call to the C-function with Unreachable also recovered (most) of the original regressions and shows similar results to the ones here (https://crrev.com/c/3933557).",
+      "revId": "d57aa612c5c79397511967151e611d90a210c541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
