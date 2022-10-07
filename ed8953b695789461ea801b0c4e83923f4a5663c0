@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79c510a0_a1499a3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-07T20:50:32Z",
+      "side": 1,
+      "message": "This fails in gc stress:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8800933092611693681/+/u/Mjsunit/shared-external-string-dictionar...",
+      "revId": "ed8953b695789461ea801b0c4e83923f4a5663c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
