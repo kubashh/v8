@@ -22,6 +22,30 @@
       },
       "revId": "4c5cf2e9e1709795c580d8d4b76bf7c4e8dac303",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf9f7eb0_598a922c",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-10-07T17:39:51Z",
+      "side": 1,
+      "message": "Argh, of course. Fix LGTM.",
+      "parentUuid": "9c35f2ab_7bd87748",
+      "range": {
+        "startLine": 126,
+        "startChar": 6,
+        "endLine": 126,
+        "endChar": 44
+      },
+      "revId": "4c5cf2e9e1709795c580d8d4b76bf7c4e8dac303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
