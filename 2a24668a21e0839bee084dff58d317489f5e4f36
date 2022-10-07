@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a070d1_c0320310",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1554597
+      },
+      "writtenOn": "2022-10-07T03:13:00Z",
+      "side": 1,
+      "message": "Did this file missed getting updated? It would seem that MarkingConfig is no longer nested within Marker. MarkerTest seems to have been updated.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "2a24668a21e0839bee084dff58d317489f5e4f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
