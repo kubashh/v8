@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "006333f2_283c09cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-07T09:02:21Z",
+      "side": 1,
+      "message": "lgtm with one code style nit. thanks for your patience!",
+      "revId": "bc563cdfeee83ea56bc4567449e00df947018371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8d1a511_f7e12650",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-07T09:02:21Z",
+      "side": 1,
+      "message": "nit: it\u0027s simpler to avoid the multiple checks (and repeat handle creation) with:\n\n```\n while (!scope_info.IsEmpty()) {\n   if (scope_info.HasContext()) {\n     .. check and return ..\n   }\n   scope_info \u003d scope_info.OuterScopeInfo();\n }\n return kNullMaybeHandle;\n```",
+      "range": {
+        "startLine": 799,
+        "startChar": 0,
+        "endLine": 802,
+        "endChar": 3
+      },
+      "revId": "bc563cdfeee83ea56bc4567449e00df947018371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
