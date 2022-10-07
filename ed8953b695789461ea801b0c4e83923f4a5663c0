@@ -16,6 +16,24 @@
       "message": "This fails in gc stress:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8800933092611693681/+/u/Mjsunit/shared-external-string-dictionar...",
       "revId": "ed8953b695789461ea801b0c4e83923f4a5663c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9712807e_3c67a823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-07T20:51:16Z",
+      "side": 1,
+      "message": "Better link as the ... doesn\u0027t linkify:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20GC%20Stress%20-%20custom%20snapshot/44190/overview",
+      "parentUuid": "79c510a0_a1499a3b",
+      "revId": "ed8953b695789461ea801b0c4e83923f4a5663c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
