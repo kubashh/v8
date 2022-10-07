@@ -213,6 +213,30 @@
       },
       "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1775f02_f9328e35",
+        "filename": "src/debug/liveedit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-07T05:52:20Z",
+      "side": 1,
+      "message": "Added the DCHECK. That keeps this funkiness more localized than messing with `Script::context_data`.",
+      "parentUuid": "31180a2a_5a396835",
+      "range": {
+        "startLine": 762,
+        "startChar": 32,
+        "endLine": 762,
+        "endChar": 71
+      },
+      "revId": "d04fed2d444a43eac9625eb99fcf4902c705a376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
