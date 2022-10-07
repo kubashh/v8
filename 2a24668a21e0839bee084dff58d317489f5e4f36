@@ -22,6 +22,30 @@
       },
       "revId": "2a24668a21e0839bee084dff58d317489f5e4f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b57b84b5_0ad22fe3",
+        "filename": "test/unittests/heap/cppgc/stats-collector-scopes-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-07T07:00:46Z",
+      "side": 1,
+      "message": "Good catch, thanks!\n\nIndeed that\u0027s also missing. These are stand-alone only tests that are not generally tested on the waterfall (yet).\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/3938068",
+      "parentUuid": "d2a070d1_c0320310",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "2a24668a21e0839bee084dff58d317489f5e4f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
