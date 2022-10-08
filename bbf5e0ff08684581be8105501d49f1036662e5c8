@@ -238,6 +238,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4de4cce_557fe6c3",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1249238
+      },
+      "writtenOn": "2022-10-08T00:41:17Z",
+      "side": 1,
+      "message": "Please see https://github.com/unicode-org/icu/pull/2225/files\n- scfCloseOver() is a condensed version of your code here\n- scfDirect() implements MaybeSimpleCaseFolding(), including support for strings\n\nI have some interesting test cases for scfDirect() which pass.\n\nI have code that compares the results of both for single-code-point sets of lots of code points (all except controls and Chinese/Korean).\nThere are 7 code points where closeOver() yields more characters than the ECMAScript spec. For example, you should see an incorrect match of `\\0390` given `[\\u1FD3]`.\nThese differences actually smell like a bug in the derivation of Unicode CaseFolding.txt, but due to stability guarantees they cannot be fixed.",
+      "parentUuid": "c3b76b7c_ddfea01f",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c247e50_5b2b643b",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
