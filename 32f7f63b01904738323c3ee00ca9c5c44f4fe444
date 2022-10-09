@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b89bb01_2539f617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-09T03:42:03Z",
+      "side": 1,
+      "message": "Thanks Jakob for reviewing this change! The response for non-PACKED_DOUBLE_ELEMENTS paths is attached below. PTAL, thanks.",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5d6598f_c069c2ba",
@@ -65,6 +82,24 @@
       "writtenOn": "2022-10-04T07:24:50Z",
       "side": 1,
       "message": "Here\u0027s my main question: how much do these extra checks slow down the (presumably common) non-PACKED_DOUBLE_ELEMENTS paths? We\u0027re adding a whole `ObjectIsSmi, LoadField, LoadField, \u003d\u003d, GotoIf, LoadField, And, Shr, \u003d\u003d, GotoIf` sequence. Are we certain that a faster PACKED_DOUBLE_ELEMENTS is worth the extra work for all other cases?",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829eaedf_f3c57bb8",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-09T03:42:03Z",
+      "side": 1,
+      "message": "We measure the performance of micro-case below with different elements kind and number.\n\n\n    Array.max \u003d function(array) {\n            return Math.max.apply(Math, array);\n    };\n\n    Array.min \u003d function(array) {\n            return Math.min.apply(Math, array);\n    };\n\n    function func(inputArray, n) {\n      var result \u003d [];\n      for ( var i \u003d n; i \u003c inputArray.length; i++) {\n        var prev_n \u003d inputArray.slice(i-n,i)\n        var low \u003d Array.min(prev_n);\n        var high \u003d Array.max(prev_n);\n\n        result[i-n] \u003d high - low;\n      }\n      return result;\n    }\n\n\nChange on execution time,\n| array length           | 2       | 10      | 20      |\n|------------------------|---------|---------|---------|\n| PACKED_SMI_ELEMENTS    | 4.60%   | 2.70%   | 1.80%   |\n| PACKED_DOUBLE_ELEMENTS | -48.40% | -69.00% | -76.60% |\n\nThe regression on array with PACKED_SMI_ELEMENTS is ~4.6% when length of array is 2, while the improvement on PACKED_DOUBLE_ELEMENTS is large. \n\nMeanwhile, the extra check and loop for PACKED_DOUBLE_ELEMENTS path will not be generated if CallWithArrayLike node is reducible by ReduceCallOrConstructWithArrayLikeOrSpread, which is common in JetStream2.",
+      "parentUuid": "3e874bca_bb813707",
       "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
