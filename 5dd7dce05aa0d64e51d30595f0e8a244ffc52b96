@@ -52,6 +52,24 @@
       "parentUuid": "633f07e1_739d4599",
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "712ebead_bfd59eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-10T07:30:02Z",
+      "side": 1,
+      "message": "Hi Leszek, I only see 1.8%/2.9% reduction for footprint/peak size in render process. The p-value is 0.5/0.2, still not considered significant. I think I\u0027d better restrict the compile time overhead to where there\u0027s a benefit only, e.g. not to track candidates in general cases. The Jetstream2 test shows both regressions and improvements in some cases. I will try to revise the patch and run the tests again.",
+      "parentUuid": "6b278a48_3de44d0f",
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
