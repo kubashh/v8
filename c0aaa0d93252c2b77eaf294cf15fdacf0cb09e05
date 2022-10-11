@@ -16,6 +16,24 @@
       "message": "Hi Tobias,\n\nI find that this patch also impacts OSR heuristic, below constant\n    static const int kOSRBytecodeSizeAllowancePerTick \u003d 44;\nof src/execution/tiering-manager.cc is related to FLAG_interrupt_budget.\ne.g. a function’s bytecode size is 471,\nbefore this CL, V8 will try to OSR compiling this function after executing\n    (bytecode_size(471) – kOSRBytecodeSizeAllowanceBase(119)) / kOSRBytecodeSizeAllowancePerTick(44) * FLAG_interrupt_budget(132k) \u003d 1056k bytecode\nAfter this CL, V8 will try to OSR compiling this function after executing\n    (bytecode_size(471) – kOSRBytecodeSizeAllowanceBase(119)) / kOSRBytecodeSizeAllowancePerTick(44) * FLAG_interrupt_budget(66k) \u003d 528k(1/2 of before) bytecode\nSo this CL not only speedup small function tiering, but also impact the OSR of some functions with hot loops. Is that expected?",
       "revId": "c0aaa0d93252c2b77eaf294cf15fdacf0cb09e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bbbfc6a_eafe81bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-11T08:48:19Z",
+      "side": 1,
+      "message": "Yeah, this was intentional. Do you think it is bad?",
+      "parentUuid": "595a3adb_eb56a302",
+      "revId": "c0aaa0d93252c2b77eaf294cf15fdacf0cb09e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
