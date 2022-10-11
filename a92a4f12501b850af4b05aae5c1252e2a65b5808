@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fefa18b_c15249d5",
+        "filename": "builders/experiments.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-10-11T07:30:56Z",
+      "side": 0,
+      "message": "Now migrated in https://crrev.com/c/3935512, added link to the CL description",
+      "parentUuid": "44479245_6b87c197",
+      "range": {
+        "startLine": 282,
+        "startChar": 16,
+        "endLine": 282,
+        "endChar": 62
+      },
+      "revId": "a92a4f12501b850af4b05aae5c1252e2a65b5808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa0179e_49e1b1b3",
@@ -85,6 +109,30 @@
       "side": 0,
       "message": "I see what\u0027s been happening - I\u0027ve mistakenly run under the assumption integration.star contained cq related builders. Apologies for the confusion, sent you the migration for those builders https://crrev.com/c/3935512",
       "parentUuid": "0fa0179e_49e1b1b3",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 15
+      },
+      "revId": "a92a4f12501b850af4b05aae5c1252e2a65b5808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a94ef7c8_5849a486",
+        "filename": "builders/official.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2022-10-11T07:30:56Z",
+      "side": 0,
+      "message": "This is now resolved, added links to all migrated builders in the CL description",
+      "parentUuid": "529dfc80_1936e7f3",
       "range": {
         "startLine": 205,
         "startChar": 0,
