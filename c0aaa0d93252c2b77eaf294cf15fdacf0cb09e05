@@ -34,6 +34,24 @@
       "parentUuid": "595a3adb_eb56a302",
       "revId": "c0aaa0d93252c2b77eaf294cf15fdacf0cb09e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00e328d3_ab238bd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-11T16:06:28Z",
+      "side": 1,
+      "message": "I’m not sure whether unconditionally decrease interrupt budget before OSR is benefit for performance and memory usage, I simply test JetStream2, overall amount of OSR increases ~18%. I’m considering whether trigger OSR faster for small functions and waiting longer for big function is better.",
+      "parentUuid": "4bbbfc6a_eafe81bd",
+      "revId": "c0aaa0d93252c2b77eaf294cf15fdacf0cb09e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
