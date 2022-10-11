@@ -39,6 +39,30 @@
       },
       "revId": "c4ef806a00cf8cb6f3bea672cc2bdc9a4abf2558",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c9c3e8_4422d8a3",
+        "filename": "src/heap/cppgc/member-storage.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-10-11T14:09:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2937aec_1a1a91f9",
+      "range": {
+        "startLine": 32,
+        "startChar": 29,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "c4ef806a00cf8cb6f3bea672cc2bdc9a4abf2558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
