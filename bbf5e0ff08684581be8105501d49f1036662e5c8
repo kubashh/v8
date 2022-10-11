@@ -262,6 +262,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce58f886_b3323a2a",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-11T14:29:58Z",
+      "side": 1,
+      "message": "Thanks a lot Markus!\nFirst, The example code provides very useful hints for implementing a correct SimpleCaseFolding in V8.\nAnd you just found a bug we had for `/ui` RegExps. Filed at https://crbug.com/v8/13377 and will address in a follow-up.",
+      "parentUuid": "f4de4cce_557fe6c3",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 3
+      },
+      "revId": "bbf5e0ff08684581be8105501d49f1036662e5c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c247e50_5b2b643b",
         "filename": "src/regexp/regexp-compiler-tonode.cc",
         "patchSetId": 7
