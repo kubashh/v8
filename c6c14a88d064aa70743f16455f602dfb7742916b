@@ -16,6 +16,40 @@
       "message": "Thanks!",
       "revId": "c6c14a88d064aa70743f16455f602dfb7742916b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d323129_e73f24fa",
+        "filename": "tools/gdbinit",
+        "patchSetId": 6
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1001706
+      },
+      "writtenOn": "2022-10-11T14:51:00Z",
+      "side": 1,
+      "message": "Can you s/call/print/, so that gdb assigns the result to a convenience variable?",
+      "revId": "c6c14a88d064aa70743f16455f602dfb7742916b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3998a039_a706e34b",
+        "filename": "tools/gdbinit",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1001706
+      },
+      "writtenOn": "2022-10-11T14:51:00Z",
+      "side": 1,
+      "message": "Same comment.",
+      "revId": "c6c14a88d064aa70743f16455f602dfb7742916b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
