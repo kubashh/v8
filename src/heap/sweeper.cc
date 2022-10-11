@@ -268,10 +268,11 @@ V8_INLINE size_t Sweeper::FreeAndProcessFreedMemory(
   CHECK_GT(free_end, free_start);
   size_t freed_bytes = 0;
   size_t size = static_cast<size_t>(free_end - free_start);
-  if (free_space_treatment_mode == FreeSpaceTreatmentMode::kZapFreeSpace) {
-    ZapCode(free_start, size);
-  }
-  page->heap()->CreateFillerObjectAtSweeper(free_start, static_cast<int>(size));
+  Executability executable = (space->identity() == CODE_SPACE)
+                                 ? Executability::EXECUTABLE
+                                 : Executability::NOT_EXECUTABLE;
+  page->heap()->CreateFillerObjectAtSweeper(free_start, static_cast<int>(size),
+                                            executable);
   freed_bytes = reinterpret_cast<PagedSpaceBase*>(space)->UnaccountedFree(
       free_start, size);
   if (should_reduce_memory_) page->DiscardUnusedMemory(free_start, size);
@@ -370,7 +371,7 @@ int Sweeper::RawSweep(
   // Set the allocated_bytes_ counter to area_size and clear the wasted_memory_
   // counter. The free operations below will decrease allocated_bytes_ to actual
   // live bytes and keep track of wasted_memory_.
-  p->ResetAllocationStatistics();
+  p->AsCodePointer()->ResetAllocationStatistics();
 
   CodeObjectRegistry* code_object_registry = p->GetCodeObjectRegistry();
   std::vector<Address> code_objects;
@@ -484,7 +485,8 @@ int Sweeper::RawSweep(
 
   if (code_object_registry)
     code_object_registry->ReinitializeFrom(std::move(code_objects));
-  p->set_concurrent_sweeping_state(Page::ConcurrentSweepingState::kDone);
+  p->AsCodePointer()->set_concurrent_sweeping_state(
+      Page::ConcurrentSweepingState::kDone);
 
   return static_cast<int>(
       p->owner()->free_list()->GuaranteedAllocatable(max_freed_bytes));
@@ -541,7 +543,7 @@ int Sweeper::ParallelSweepPage(
 
     DCHECK_EQ(Page::ConcurrentSweepingState::kPending,
               page->concurrent_sweeping_state());
-    page->set_concurrent_sweeping_state(
+    page->AsCodePointer()->set_concurrent_sweeping_state(
         Page::ConcurrentSweepingState::kInProgress);
     const FreeSpaceTreatmentMode free_space_treatment_mode =
         Heap::ShouldZapGarbage() ? FreeSpaceTreatmentMode::kZapFreeSpace
@@ -638,7 +640,8 @@ void Sweeper::PrepareToBeSweptPage(AllocationSpace space, Page* page) {
     DCHECK(!category->is_linked(page->owner()->free_list()));
   });
 #endif  // DEBUG
-  page->set_concurrent_sweeping_state(Page::ConcurrentSweepingState::kPending);
+  page->AsCodePointer()->set_concurrent_sweeping_state(
+      Page::ConcurrentSweepingState::kPending);
   PagedSpaceBase* paged_space;
   if (space == NEW_SPACE) {
     DCHECK(v8_flags.minor_mc);

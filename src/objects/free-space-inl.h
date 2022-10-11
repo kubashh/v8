@@ -47,6 +47,7 @@ FreeSpace FreeSpace::unchecked_cast(const Object o) {
 }
 
 bool FreeSpace::IsValid() {
+  if (v8_flags.code_space_dual_mapping) return true;
   Heap* heap = GetHeapFromWritableObject(*this);
   Object free_space_map =
       Isolate::FromHeap(heap)->root(RootIndex::kFreeSpaceMap);

@@ -53,17 +53,19 @@ constexpr BasicMemoryChunk::MainThreadFlags
     BasicMemoryChunk::kSkipEvacuationSlotsRecordingMask;
 
 BasicMemoryChunk::BasicMemoryChunk(Heap* heap, BaseSpace* space,
-                                   size_t chunk_size, Address area_start,
-                                   Address area_end, VirtualMemory reservation)
+                                   Address address, size_t chunk_size,
+                                   Address area_start, Address area_end,
+                                   VirtualMemory reservation,
+                                   Executability executable)
     : size_(chunk_size),
       heap_(heap),
       area_start_(area_start),
       area_end_(area_end),
       allocated_bytes_(area_end - area_start),
       wasted_memory_(0),
-      high_water_mark_(area_start - reinterpret_cast<Address>(this)),
       owner_(space),
       reservation_(std::move(reservation)) {
+  high_water_mark_ = area_start - address;
   marking_bitmap<AccessMode::NON_ATOMIC>()->Clear();
 }
 

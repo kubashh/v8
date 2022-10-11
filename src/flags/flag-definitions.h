@@ -1329,6 +1329,9 @@ DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
 DEFINE_BOOL(cppgc_young_generation, false,
             "run young generation garbage collections in Oilpan")
 DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
+DEFINE_BOOL(code_space_dual_mapping, false, "")
+DEFINE_NEG_IMPLICATION(code_space_dual_mapping, write_protect_code_memory)
+DEFINE_NEG_IMPLICATION(jitless, code_space_dual_mapping)
 #if defined(V8_ATOMIC_OBJECT_FIELD_WRITES)
 #define V8_CONCURRENT_MARKING_BOOL true
 #else

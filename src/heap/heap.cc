@@ -1178,7 +1178,10 @@ void Heap::PublishPendingAllocations() {
 
 void Heap::InvalidateCodeDeoptimizationData(Code code) {
   CodePageMemoryModificationScope modification_scope(code);
-  code.set_deoptimization_data(ReadOnlyRoots(this).empty_fixed_array());
+  Code::unchecked_cast(
+      HeapObject::FromAddress(code_range()->GetWritableAddress(code.address())))
+      .set_deoptimization_data(this, code,
+                               ReadOnlyRoots(this).empty_fixed_array());
 }
 
 void Heap::DeoptMarkedAllocationSites() {
@@ -3121,6 +3124,7 @@ void Heap::FlushNumberStringCache() {
 namespace {
 
 void CreateFillerObjectAtImpl(Heap* heap, Address addr, int size,
+                              Executability executable,
                               ClearFreedMemoryMode clear_memory_mode) {
   if (size == 0) return;
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
@@ -3130,25 +3134,30 @@ void CreateFillerObjectAtImpl(Heap* heap, Address addr, int size,
   // TODO(v8:13070): Filler sizes are irrelevant for 8GB+ heaps. Adding them
   // should be avoided in this mode.
   HeapObject filler = HeapObject::FromAddress(addr);
+  HeapObject writable_filler = filler;
+  if (executable == Executability::EXECUTABLE) {
+    writable_filler =
+        HeapObject::FromAddress(heap->code_range()->GetWritableAddress(addr));
+  }
   ReadOnlyRoots roots(heap);
   if (size == kTaggedSize) {
     filler.set_map_after_allocation(roots.unchecked_one_pointer_filler_map(),
-                                    SKIP_WRITE_BARRIER);
+                                    writable_filler, SKIP_WRITE_BARRIER);
   } else if (size == 2 * kTaggedSize) {
     filler.set_map_after_allocation(roots.unchecked_two_pointer_filler_map(),
-                                    SKIP_WRITE_BARRIER);
+                                    writable_filler, SKIP_WRITE_BARRIER);
     if (clear_memory_mode == ClearFreedMemoryMode::kClearFreedMemory) {
-      AtomicSlot slot(ObjectSlot(addr) + 1);
+      AtomicSlot slot(ObjectSlot(writable_filler.address()) + 1);
       *slot = static_cast<Tagged_t>(kClearedFreeMemoryValue);
     }
   } else {
     DCHECK_GT(size, 2 * kTaggedSize);
     filler.set_map_after_allocation(roots.unchecked_free_space_map(),
-                                    SKIP_WRITE_BARRIER);
-    FreeSpace::cast(filler).set_size(size, kRelaxedStore);
+                                    writable_filler, SKIP_WRITE_BARRIER);
+    FreeSpace::unchecked_cast(writable_filler).set_size(size, kRelaxedStore);
     if (clear_memory_mode == ClearFreedMemoryMode::kClearFreedMemory) {
-      MemsetTagged(ObjectSlot(addr) + 2, Object(kClearedFreeMemoryValue),
-                   (size / kTaggedSize) - 2);
+      MemsetTagged(ObjectSlot(writable_filler.address()) + 2,
+                   Object(kClearedFreeMemoryValue), (size / kTaggedSize) - 2);
     }
   }
 
@@ -3174,39 +3183,42 @@ void VerifyNoNeedToClearSlots(Address start, Address end) {}
 
 }  // namespace
 
-void Heap::CreateFillerObjectAtBackground(Address addr, int size) {
+void Heap::CreateFillerObjectAtBackground(Address addr, int size,
+                                          Executability executability) {
   // TODO(leszeks): Verify that no slots need to be recorded.
   // Do not verify whether slots are cleared here: the concurrent thread is not
   // allowed to access the main thread's remembered set.
-  CreateFillerObjectAtRaw(addr, size,
+  CreateFillerObjectAtRaw(addr, size, executability,
                           ClearFreedMemoryMode::kDontClearFreedMemory,
                           ClearRecordedSlots::kNo, VerifyNoSlotsRecorded::kNo);
 }
 
-void Heap::CreateFillerObjectAtSweeper(Address addr, int size) {
+void Heap::CreateFillerObjectAtSweeper(Address addr, int size,
+                                       Executability executability) {
   // Do not verify whether slots are cleared here: the concurrent sweeper is not
   // allowed to access the main thread's remembered set.
-  CreateFillerObjectAtRaw(addr, size,
+  CreateFillerObjectAtRaw(addr, size, executability,
                           ClearFreedMemoryMode::kDontClearFreedMemory,
                           ClearRecordedSlots::kNo, VerifyNoSlotsRecorded::kNo);
 }
 
-void Heap::CreateFillerObjectAt(Address addr, int size) {
-  CreateFillerObjectAtRaw(addr, size,
+void Heap::CreateFillerObjectAt(Address addr, int size,
+                                Executability executable) {
+  CreateFillerObjectAtRaw(addr, size, executable,
                           ClearFreedMemoryMode::kDontClearFreedMemory,
                           ClearRecordedSlots::kNo, VerifyNoSlotsRecorded::kYes);
 }
 
 void Heap::CreateFillerObjectAtRaw(
-    Address addr, int size, ClearFreedMemoryMode clear_memory_mode,
-    ClearRecordedSlots clear_slots_mode,
+    Address addr, int size, Executability executable,
+    ClearFreedMemoryMode clear_memory_mode, ClearRecordedSlots clear_slots_mode,
     VerifyNoSlotsRecorded verify_no_slots_recorded) {
   // TODO(mlippautz): It would be nice to DCHECK that we never call this
   // with {addr} pointing into large object space; however we currently
   // initialize LO allocations with a filler, see
   // LargeObjectSpace::AllocateLargePage.
   if (size == 0) return;
-  CreateFillerObjectAtImpl(this, addr, size, clear_memory_mode);
+  CreateFillerObjectAtImpl(this, addr, size, executable, clear_memory_mode);
   if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
     if (clear_slots_mode == ClearRecordedSlots::kYes) {
       ClearRecordedSlotRange(addr, addr + size);
@@ -3371,7 +3383,8 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
   // debug mode which iterates through the heap), but to play safer
   // we still do it.
   CreateFillerObjectAtRaw(
-      old_start, bytes_to_trim, ClearFreedMemoryMode::kClearFreedMemory,
+      old_start, bytes_to_trim, Executability::NOT_EXECUTABLE,
+      ClearFreedMemoryMode::kClearFreedMemory,
       MayContainRecordedSlots(object) ? ClearRecordedSlots::kYes
                                       : ClearRecordedSlots::kNo,
       VerifyNoSlotsRecorded::kYes);
@@ -3829,8 +3842,9 @@ void Heap::NotifyObjectSizeChange(HeapObject object, int old_size, int new_size,
 
   const Address filler = object.address() + new_size;
   const int filler_size = old_size - new_size;
-  CreateFillerObjectAtRaw(filler, filler_size, clear_memory_mode,
-                          clear_recorded_slots, verify_no_slots_recorded);
+  CreateFillerObjectAtRaw(filler, filler_size, Executability::NOT_EXECUTABLE,
+                          clear_memory_mode, clear_recorded_slots,
+                          verify_no_slots_recorded);
 }
 
 void Heap::UpdateInvalidatedObjectSize(HeapObject object, int new_size) {
@@ -4409,6 +4423,7 @@ void Heap::VerifyCommittedPhysicalMemory() {
 void Heap::ZapCodeObject(Address start_address, int size_in_bytes) {
 #ifdef DEBUG
   DCHECK(IsAligned(start_address, kIntSize));
+  start_address = code_range_->GetWritableAddress(start_address);
   for (int i = 0; i < size_in_bytes / kIntSize; i++) {
     Memory<int>(start_address + i * kIntSize) = kCodeZapValue;
   }
@@ -5317,7 +5332,6 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
       reinterpret_cast<uintptr_t>(v8::internal::GetRandomMmapAddr()) &
       ~kMmapRegionMask;
 
-  v8::PageAllocator* code_page_allocator;
   if (isolate_->RequiresCodeRange() || code_range_size_ != 0) {
     const size_t requested_size =
         code_range_size_ == 0 ? kMaximalCodeRangeSize : code_range_size_;
@@ -5346,14 +5360,14 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
 
     isolate_->AddCodeRange(code_range_->reservation()->region().begin(),
                            code_range_->reservation()->region().size());
-    code_page_allocator = code_range_->page_allocator();
+    // Set up memory allocator.
+    memory_allocator_.reset(new MemoryAllocator(
+        isolate_, code_range_->page_allocator(), MaxReserved()));
   } else {
-    code_page_allocator = isolate_->page_allocator();
+    // Set up memory allocator.
+    memory_allocator_.reset(new MemoryAllocator(
+        isolate_, isolate_->page_allocator(), MaxReserved()));
   }
-
-  // Set up memory allocator.
-  memory_allocator_.reset(
-      new MemoryAllocator(isolate_, code_page_allocator, MaxReserved()));
 
   sweeper_.reset(new Sweeper(this));
 
@@ -5659,7 +5673,7 @@ void Heap::NotifyOldGenerationExpansion(AllocationSpace space,
   // Pages created during bootstrapping may contain immortal immovable objects.
   if (!deserialization_complete()) {
     DCHECK_NE(NEW_SPACE, chunk->owner()->identity());
-    chunk->MarkNeverEvacuate();
+    chunk->AsCodePointer()->MarkNeverEvacuate();
   }
   if (space == CODE_SPACE || space == CODE_LO_SPACE) {
     isolate()->AddCodeMemoryChunk(chunk);

@@ -575,12 +575,16 @@ void Assembler::deserialization_set_target_internal_reference_at(
   WriteUnalignedValue<Address>(pc, target);
 }
 
-void Assembler::set_target_address_at(Address pc, Address constant_pool,
-                                      Address target,
+void Assembler::set_target_address_at(CodeRange* code_range, Address pc,
+                                      Address constant_pool, Address target,
                                       ICacheFlushMode icache_flush_mode) {
   Instruction* instr = reinterpret_cast<Instruction*>(pc);
   if (instr->IsLdrLiteralX()) {
-    Memory<Address>(target_pointer_address_at(pc)) = target;
+    Address address = target_pointer_address_at(pc);
+    if (code_range != nullptr) {
+      address = code_range->GetWritableAddress(address);
+    }
+    Memory<Address>(address) = target;
     // Intuitively, we would think it is necessary to always flush the
     // instruction cache after patching a target address in the code. However,
     // in this case, only the constant pool contents change. The instruction
@@ -591,9 +595,15 @@ void Assembler::set_target_address_at(Address pc, Address constant_pool,
     if (target == 0) {
       // We are simply wiping the target out for serialization. Set the offset
       // to zero instead.
-      target = pc;
+      instr->SetBranchImmTarget(reinterpret_cast<Instruction*>(pc));
+    } else {
+      if (code_range != nullptr) {
+        target = code_range->GetWritableAddress(target);
+        instr = reinterpret_cast<Instruction*>(
+            code_range->GetWritableAddress(reinterpret_cast<Address>(instr)));
+      }
+      instr->SetBranchImmTarget(reinterpret_cast<Instruction*>(target));
     }
-    instr->SetBranchImmTarget(reinterpret_cast<Instruction*>(target));
     if (icache_flush_mode != SKIP_ICACHE_FLUSH) {
       FlushInstructionCache(pc, kInstrSize);
     }
@@ -601,11 +611,15 @@ void Assembler::set_target_address_at(Address pc, Address constant_pool,
 }
 
 void Assembler::set_target_compressed_address_at(
-    Address pc, Address constant_pool, Tagged_t target,
+    CodeRange* code_range, Address pc, Address constant_pool, Tagged_t target,
     ICacheFlushMode icache_flush_mode) {
   Instruction* instr = reinterpret_cast<Instruction*>(pc);
   CHECK(instr->IsLdrLiteralW());
-  Memory<Tagged_t>(target_pointer_address_at(pc)) = target;
+  Address address = target_pointer_address_at(pc);
+  if (code_range != nullptr) {
+    address = code_range->GetWritableAddress(address);
+  }
+  Memory<Tagged_t>(address) = target;
 }
 
 int RelocInfo::target_address_size() {
@@ -687,13 +701,13 @@ void RelocInfo::set_target_object(Heap* heap, HeapObject target,
   DCHECK(IsCodeTarget(rmode_) || IsEmbeddedObjectMode(rmode_));
   if (IsCompressedEmbeddedObject(rmode_)) {
     Assembler::set_target_compressed_address_at(
-        pc_, constant_pool_,
+        heap->code_range(), pc_, constant_pool_,
         V8HeapCompressionScheme::CompressTagged(target.ptr()),
         icache_flush_mode);
   } else {
     DCHECK(IsFullEmbeddedObject(rmode_));
-    Assembler::set_target_address_at(pc_, constant_pool_, target.ptr(),
-                                     icache_flush_mode);
+    Assembler::set_target_address_at(heap->code_range(), pc_, constant_pool_,
+                                     target.ptr(), icache_flush_mode);
   }
   if (!host().is_null() && !v8_flags.disable_write_barriers) {
     WriteBarrierForCode(host(), this, target, write_barrier_mode);
@@ -706,9 +720,9 @@ Address RelocInfo::target_external_reference() {
 }
 
 void RelocInfo::set_target_external_reference(
-    Address target, ICacheFlushMode icache_flush_mode) {
+    CodeRange* code_range, Address target, ICacheFlushMode icache_flush_mode) {
   DCHECK(rmode_ == RelocInfo::EXTERNAL_REFERENCE);
-  Assembler::set_target_address_at(pc_, constant_pool_, target,
+  Assembler::set_target_address_at(code_range, pc_, constant_pool_, target,
                                    icache_flush_mode);
 }
 
@@ -739,10 +753,11 @@ void RelocInfo::WipeOut() {
   if (IsInternalReference(rmode_)) {
     WriteUnalignedValue<Address>(pc_, kNullAddress);
   } else if (IsCompressedEmbeddedObject(rmode_)) {
-    Assembler::set_target_compressed_address_at(pc_, constant_pool_,
+    Assembler::set_target_compressed_address_at(nullptr, pc_, constant_pool_,
                                                 kNullAddress);
   } else {
-    Assembler::set_target_address_at(pc_, constant_pool_, kNullAddress);
+    Assembler::set_target_address_at(nullptr, pc_, constant_pool_,
+                                     kNullAddress);
   }
 }
 

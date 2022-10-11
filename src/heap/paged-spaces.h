@@ -158,16 +158,8 @@ class V8_EXPORT_PRIVATE PagedSpaceBase
   RawAllocateBackground(LocalHeap* local_heap, size_t min_size_in_bytes,
                         size_t max_size_in_bytes, AllocationOrigin origin);
 
-  size_t Free(Address start, size_t size_in_bytes, SpaceAccountingMode mode) {
-    if (size_in_bytes == 0) return 0;
-    heap()->CreateFillerObjectAtBackground(start,
-                                           static_cast<int>(size_in_bytes));
-    if (mode == SpaceAccountingMode::kSpaceAccounted) {
-      return AccountedFree(start, size_in_bytes);
-    } else {
-      return UnaccountedFree(start, size_in_bytes);
-    }
-  }
+  inline size_t Free(Address start, size_t size_in_bytes,
+                     SpaceAccountingMode mode);
 
   // Give a block of memory to the space's free list.  It might be added to
   // the free list or accounted as waste.

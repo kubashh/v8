@@ -134,7 +134,6 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
                  requested <= kMaximalCodeRangeSize);
 
   VirtualMemoryCage::ReservationParams params;
-  params.page_allocator = page_allocator;
   params.reservation_size = requested;
   const size_t allocate_page_size = page_allocator->AllocatePageSize();
   params.base_alignment = base_alignment;
@@ -144,6 +143,16 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
       GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
   params.jit =
       v8_flags.jitless ? JitPermission::kNoJit : JitPermission::kMapAsJittable;
+
+  if (v8_flags.code_space_dual_mapping) {
+    shared_memory_handle_ = base::OS::CreateSharedMemoryHandleForTesting(
+        requested + (params.base_alignment + params.page_size));
+    code_page_allocator_ = std::make_unique<base::CodePageAllocator>(
+        page_allocator, shared_memory_handle_);
+    params.page_allocator = code_page_allocator_.get();
+  } else {
+    params.page_allocator = page_allocator;
+  }
 
   if (!VirtualMemoryCage::InitReservation(params)) return false;
 
@@ -167,6 +176,19 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
       return false;
     }
   }
+  if (v8_flags.code_space_dual_mapping) {
+    size_t offset = code_page_allocator_->offset();
+    writable_mapping_ = base::OS::AllocateShared(
+        page_allocator->GetRandomMmapAddr(), page_allocator_->size(),
+        allocate_page_size /* MemoryChunk::kAlignment */,
+        base::OS::MemoryPermission::kReadWrite, shared_memory_handle_, &offset);
+    // Premap entire code space as RX.
+    void* base = reinterpret_cast<void*>(page_allocator_->begin());
+    size_t size = page_allocator_->size();
+    CHECK(params.page_allocator->SetPermissions(base, size,
+                                                PageAllocator::kReadExecute));
+    CHECK(params.page_allocator->DiscardSystemPages(base, size));
+  }
   if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
       params.jit == JitPermission::kMapAsJittable) {
     void* base = reinterpret_cast<void*>(page_allocator_->begin());
@@ -183,6 +205,9 @@ void CodeRange::Free() {
     GetCodeRangeAddressHint()->NotifyFreedCodeRange(
         reservation()->region().begin(), reservation()->region().size());
     VirtualMemoryCage::Free();
+    if (v8_flags.code_space_dual_mapping) {
+      base::OS::DestroySharedMemoryHandle(shared_memory_handle_);
+    }
   }
 }
 
@@ -326,6 +351,13 @@ std::shared_ptr<CodeRange> CodeRange::EnsureProcessWideCodeRange(
 // static
 std::shared_ptr<CodeRange> CodeRange::GetProcessWideCodeRange() {
   return process_wide_code_range_.Get().lock();
+}
+
+Address CodeRange::GetWritableAddress(Address address) {
+  if (v8_flags.jitless || !v8_flags.code_space_dual_mapping) return address;
+  Address writable_mapping = reinterpret_cast<Address>(writable_mapping_);
+
+  return writable_mapping + (address & (size_ - 1));
 }
 
 }  // namespace internal

@@ -553,12 +553,16 @@ class Heap {
   // Initialize a filler object to keep the ability to iterate over the heap
   // when introducing gaps within pages. This method will verify that no slots
   // are recorded in this free memory.
-  V8_EXPORT_PRIVATE void CreateFillerObjectAt(Address addr, int size);
+  V8_EXPORT_PRIVATE void CreateFillerObjectAt(
+      Address addr, int size,
+      Executability executable = Executability::NOT_EXECUTABLE);
 
   // Initialize a filler object at a specific address. Unlike
   // `CreateFillerObjectAt` this method will not perform slot verification since
   // this would race on background threads.
-  void CreateFillerObjectAtBackground(Address addr, int size);
+  void CreateFillerObjectAtBackground(
+      Address addr, int size,
+      Executability executable = Executability::NOT_EXECUTABLE);
 
   template <typename T>
   void CreateFillerForArray(T object, int elements_to_trim, int bytes_to_trim);
@@ -1852,11 +1856,12 @@ class Heap {
   // This method is used by the sweeper on free memory ranges to make the page
   // iterable again. Unlike `CreateFillerObjectAt` this method will not verify
   // slots since the sweeper can run concurrently.
-  void CreateFillerObjectAtSweeper(Address addr, int size);
+  void CreateFillerObjectAtSweeper(Address addr, int size,
+                                   Executability executable);
 
   // Creates a filler object in the specified memory area. This method is the
   // internal method used by all CreateFillerObjectAtXXX-methods.
-  void CreateFillerObjectAtRaw(Address addr, int size,
+  void CreateFillerObjectAtRaw(Address addr, int size, Executability executable,
                                ClearFreedMemoryMode clear_memory_mode,
                                ClearRecordedSlots clear_slots_mode,
                                VerifyNoSlotsRecorded verify_no_slots_recorded);

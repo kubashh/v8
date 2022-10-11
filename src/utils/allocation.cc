@@ -433,7 +433,8 @@ bool VirtualMemoryCage::InitReservation(
   size_ = allocatable_base + allocatable_size - base_;
 
   const base::PageFreeingMode page_freeing_mode =
-      V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT &&
+      (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT ||
+       v8_flags.code_space_dual_mapping) &&
               params.jit == JitPermission::kMapAsJittable
           // On MacOS on ARM64 ("Apple M1"/Apple Silicon) setting permission to
           // none might fail if the pages were allocated with RWX permissions,

@@ -194,7 +194,7 @@ void MarkingBarrier::Publish() {
 void MarkingBarrier::DeactivateSpace(PagedSpace* space) {
   DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
-    p->SetOldGenerationPageFlags(false);
+    p->AsCodePointer()->SetOldGenerationPageFlags(false);
   }
 }
 
@@ -224,7 +224,7 @@ void MarkingBarrier::Deactivate() {
       p->SetOldGenerationPageFlags(false);
     }
     for (LargePage* p : *heap_->code_lo_space()) {
-      p->SetOldGenerationPageFlags(false);
+      p->AsCodePointer()->SetOldGenerationPageFlags(false);
     }
     if (heap_->shared_lo_space()) {
       for (LargePage* p : *heap_->shared_lo_space()) {
@@ -239,7 +239,7 @@ void MarkingBarrier::Deactivate() {
 void MarkingBarrier::ActivateSpace(PagedSpace* space) {
   DCHECK(is_main_thread_barrier_);
   for (Page* p : *space) {
-    p->SetOldGenerationPageFlags(true);
+    p->AsCodePointer()->SetOldGenerationPageFlags(true);
   }
 }
 
@@ -285,7 +285,7 @@ void MarkingBarrier::Activate(bool is_compacting,
       CodePageHeaderModificationScope rwx_write_scope(
           "Modification of Code page header flags requires write access");
       for (LargePage* p : *heap_->code_lo_space()) {
-        p->SetOldGenerationPageFlags(true);
+        p->AsCodePointer()->SetOldGenerationPageFlags(true);
       }
     }
 

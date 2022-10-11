@@ -64,6 +64,18 @@ bool PagedSpaceBase::TryFreeLast(Address object_address, int object_size) {
   return false;
 }
 
+size_t PagedSpaceBase::Free(Address start, size_t size_in_bytes,
+                            SpaceAccountingMode mode) {
+  if (size_in_bytes == 0) return 0;
+  heap()->CreateFillerObjectAtBackground(start, static_cast<int>(size_in_bytes),
+                                         executable_);
+  if (mode == SpaceAccountingMode::kSpaceAccounted) {
+    return AccountedFree(start, size_in_bytes);
+  } else {
+    return UnaccountedFree(start, size_in_bytes);
+  }
+}
+
 V8_INLINE bool PagedSpaceBase::EnsureAllocation(int size_in_bytes,
                                                 AllocationAlignment alignment,
                                                 AllocationOrigin origin,

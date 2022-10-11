@@ -21,7 +21,7 @@ SlotCallbackResult UpdateTypedSlotHelper::UpdateTypedSlot(Heap* heap,
   switch (slot_type) {
     case SlotType::kCodeEntry: {
       RelocInfo rinfo(addr, RelocInfo::CODE_TARGET, 0, Code());
-      return UpdateCodeTarget(&rinfo, callback);
+      return UpdateCodeTarget(heap, &rinfo, callback);
     }
     case SlotType::kConstPoolCodeEntry: {
       return UpdateCodeEntry(addr, callback);
@@ -42,13 +42,15 @@ SlotCallbackResult UpdateTypedSlotHelper::UpdateTypedSlot(Heap* heap,
       SlotCallbackResult result = callback(FullMaybeObjectSlot(&new_target));
       DCHECK(!HasWeakHeapObjectTag(new_target));
       if (new_target != old_target) {
-        base::Memory<Tagged_t>(addr) =
+        Address rw_addr = heap->code_range()->GetWritableAddress(addr);
+        base::Memory<Tagged_t>(rw_addr) =
             V8HeapCompressionScheme::CompressTagged(new_target.ptr());
       }
       return result;
     }
     case SlotType::kConstPoolEmbeddedObjectFull: {
-      return callback(FullMaybeObjectSlot(addr));
+      Address rw_addr = heap->code_range()->GetWritableAddress(addr);
+      return callback(FullMaybeObjectSlot(rw_addr));
     }
     case SlotType::kCleared:
       break;

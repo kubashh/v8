@@ -75,7 +75,16 @@ FreeSpace FreeListCategory::SearchForNodeInList(size_t minimum_size,
 void FreeListCategory::Free(Address start, size_t size_in_bytes, FreeMode mode,
                             FreeList* owner) {
   FreeSpace free_space = FreeSpace::cast(HeapObject::FromAddress(start));
-  free_space.set_next(top());
+  FreeSpace free_space_rw = free_space;
+  {
+    Page* page = Page::FromAddress(start);
+    if (page->owner_identity() == CODE_SPACE) {
+      free_space_rw = FreeSpace::unchecked_cast(HeapObject::FromAddress(
+          page->heap()->code_range()->GetWritableAddress(
+              free_space.address())));
+    }
+  }
+  free_space_rw.set_next(top());
   set_top(free_space);
   available_ += size_in_bytes;
   if (mode == kLinkCategory) {
@@ -152,7 +161,7 @@ FreeSpace FreeList::SearchForNodeInList(FreeListCategoryType type,
 
 size_t FreeList::Free(Address start, size_t size_in_bytes, FreeMode mode) {
   Page* page = Page::FromAddress(start);
-  page->DecreaseAllocatedBytes(size_in_bytes);
+  page->AsCodePointer()->DecreaseAllocatedBytes(size_in_bytes);
 
   // Blocks have to be a minimum size to hold free list items.
   if (size_in_bytes < min_block_size_) {
@@ -278,7 +287,7 @@ void FreeListManyCached::RemoveCategory(FreeListCategory* category) {
 size_t FreeListManyCached::Free(Address start, size_t size_in_bytes,
                                 FreeMode mode) {
   Page* page = Page::FromAddress(start);
-  page->DecreaseAllocatedBytes(size_in_bytes);
+  page->AsCodePointer()->DecreaseAllocatedBytes(size_in_bytes);
 
   // Blocks have to be a minimum size to hold free list items.
   if (size_in_bytes < min_block_size_) {
@@ -335,7 +344,9 @@ FreeSpace FreeListManyCached::Allocate(size_t size_in_bytes, size_t* node_size,
 #endif
 
   if (!node.is_null()) {
-    Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+    Page* page = Page::FromHeapObject(node);
+    CodeRange::Pointer(page, page->owner_identity() != CODE_SPACE)
+        ->IncreaseAllocatedBytes(*node_size);
   }
 
   DCHECK(IsVeryLong() || Available() == SumFreeLists());
@@ -395,7 +406,8 @@ FreeSpace FreeListManyCachedFastPath::Allocate(size_t size_in_bytes,
 
   if (!node.is_null()) {
     if (categories_[type] == nullptr) UpdateCacheAfterRemoval(type);
-    Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+    Page::FromHeapObject(node)->AsCodePointer()->IncreaseAllocatedBytes(
+        *node_size);
   }
 
 #ifdef DEBUG

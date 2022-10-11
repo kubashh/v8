@@ -254,30 +254,38 @@ void RelocIterator::next() {
 }
 
 RelocIterator::RelocIterator(Code code, int mode_mask)
-    : RelocIterator(code, code.unchecked_relocation_info(), mode_mask) {}
+    : RelocIterator(code, code, mode_mask) {}
+
+RelocIterator::RelocIterator(Code code, Code writable_code, int mode_mask)
+    : RelocIterator(code, writable_code, code.unchecked_relocation_info(),
+                    mode_mask) {}
 
 RelocIterator::RelocIterator(Code code, ByteArray relocation_info,
                              int mode_mask)
-    : RelocIterator(code, code.raw_instruction_start(), code.constant_pool(),
-                    relocation_info.GetDataEndAddress(),
+    : RelocIterator(code, code, relocation_info, mode_mask) {}
+
+RelocIterator::RelocIterator(Code code, Code writable_code,
+                             ByteArray relocation_info, int mode_mask)
+    : RelocIterator(code, writable_code, code.raw_instruction_start(),
+                    code.constant_pool(), relocation_info.GetDataEndAddress(),
                     relocation_info.GetDataStartAddress(), mode_mask) {}
 
 RelocIterator::RelocIterator(const CodeReference code_reference, int mode_mask)
-    : RelocIterator(Code(), code_reference.instruction_start(),
+    : RelocIterator(Code(), Code(), code_reference.instruction_start(),
                     code_reference.constant_pool(),
                     code_reference.relocation_end(),
                     code_reference.relocation_start(), mode_mask) {}
 
 RelocIterator::RelocIterator(EmbeddedData* embedded_data, Code code,
                              int mode_mask)
-    : RelocIterator(code,
+    : RelocIterator(code, code,
                     embedded_data->InstructionStartOfBuiltin(code.builtin_id()),
                     code.constant_pool(),
                     code.relocation_start() + code.relocation_size(),
                     code.relocation_start(), mode_mask) {}
 
 RelocIterator::RelocIterator(const CodeDesc& desc, int mode_mask)
-    : RelocIterator(Code(), reinterpret_cast<Address>(desc.buffer), 0,
+    : RelocIterator(Code(), Code(), reinterpret_cast<Address>(desc.buffer), 0,
                     desc.buffer + desc.buffer_size,
                     desc.buffer + desc.buffer_size - desc.reloc_size,
                     mode_mask) {}
@@ -285,16 +293,19 @@ RelocIterator::RelocIterator(const CodeDesc& desc, int mode_mask)
 RelocIterator::RelocIterator(base::Vector<byte> instructions,
                              base::Vector<const byte> reloc_info,
                              Address const_pool, int mode_mask)
-    : RelocIterator(Code(), reinterpret_cast<Address>(instructions.begin()),
-                    const_pool, reloc_info.begin() + reloc_info.size(),
-                    reloc_info.begin(), mode_mask) {}
+    : RelocIterator(Code(), Code(),
+                    reinterpret_cast<Address>(instructions.begin()), const_pool,
+                    reloc_info.begin() + reloc_info.size(), reloc_info.begin(),
+                    mode_mask) {}
 
-RelocIterator::RelocIterator(Code host, Address pc, Address constant_pool,
-                             const byte* pos, const byte* end, int mode_mask)
+RelocIterator::RelocIterator(Code host, Code writable_host, Address pc,
+                             Address constant_pool, const byte* pos,
+                             const byte* end, int mode_mask)
     : pos_(pos), end_(end), mode_mask_(mode_mask) {
   // Relocation info is read backwards.
   DCHECK_GE(pos_, end_);
   rinfo_.host_ = host;
+  rinfo_.writable_host_ = writable_host;
   rinfo_.pc_ = pc;
   rinfo_.constant_pool_ = constant_pool;
   if (mode_mask_ == 0) pos_ = end_;
@@ -325,7 +336,7 @@ Address RelocInfo::wasm_call_address() const {
 void RelocInfo::set_wasm_call_address(Address address,
                                       ICacheFlushMode icache_flush_mode) {
   DCHECK_EQ(rmode_, WASM_CALL);
-  Assembler::set_target_address_at(pc_, constant_pool_, address,
+  Assembler::set_target_address_at(nullptr, pc_, constant_pool_, address,
                                    icache_flush_mode);
 }
 
@@ -337,16 +348,16 @@ Address RelocInfo::wasm_stub_call_address() const {
 void RelocInfo::set_wasm_stub_call_address(Address address,
                                            ICacheFlushMode icache_flush_mode) {
   DCHECK_EQ(rmode_, WASM_STUB_CALL);
-  Assembler::set_target_address_at(pc_, constant_pool_, address,
+  Assembler::set_target_address_at(nullptr, pc_, constant_pool_, address,
                                    icache_flush_mode);
 }
 
-void RelocInfo::set_target_address(Address target,
+void RelocInfo::set_target_address(CodeRange* code_range, Address target,
                                    WriteBarrierMode write_barrier_mode,
                                    ICacheFlushMode icache_flush_mode) {
   DCHECK(IsCodeTargetMode(rmode_) || IsNearBuiltinEntry(rmode_) ||
          IsWasmCall(rmode_));
-  Assembler::set_target_address_at(pc_, constant_pool_, target,
+  Assembler::set_target_address_at(code_range, pc_, constant_pool_, target,
                                    icache_flush_mode);
   if (!host().is_null() && IsCodeTargetMode(rmode_) &&
       !v8_flags.disable_write_barriers) {
@@ -358,7 +369,7 @@ void RelocInfo::set_target_address(Address target,
 void RelocInfo::set_off_heap_target_address(Address target,
                                             ICacheFlushMode icache_flush_mode) {
   DCHECK(IsCodeTargetMode(rmode_));
-  Assembler::set_target_address_at(pc_, constant_pool_, target,
+  Assembler::set_target_address_at(nullptr, pc_, constant_pool_, target,
                                    icache_flush_mode);
 }
 

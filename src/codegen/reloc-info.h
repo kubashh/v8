@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+class CodeRange;
 class CodeReference;
 class EmbeddedData;
 
@@ -214,6 +215,7 @@ class RelocInfo {
   Mode rmode() const { return rmode_; }
   intptr_t data() const { return data_; }
   Code host() const { return host_; }
+  Code writable_host() const { return writable_host_; }
   Address constant_pool() const { return constant_pool_; }
 
   // Apply a relocation by delta bytes. When the code object is moved, PC
@@ -246,7 +248,7 @@ class RelocInfo {
       Address, ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
 
   void set_target_address(
-      Address target,
+      CodeRange* code_range, Address target,
       WriteBarrierMode write_barrier_mode = UPDATE_WRITE_BARRIER,
       ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
 
@@ -271,7 +273,8 @@ class RelocInfo {
   V8_INLINE Builtin target_builtin_at(Assembler* origin);
   V8_INLINE Address target_off_heap_target();
   V8_INLINE void set_target_external_reference(
-      Address, ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
+      CodeRange* code_range, Address target,
+      ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
 
   // Returns the address of the constant pool entry where the target address
   // is held.  This should only be called if IsInConstantPool returns true.
@@ -375,6 +378,7 @@ class RelocInfo {
   Mode rmode_;
   intptr_t data_ = 0;
   Code host_;
+  Code writable_host_;
   Address constant_pool_ = kNullAddress;
   friend class RelocIterator;
 };
@@ -433,6 +437,9 @@ class V8_EXPORT_PRIVATE RelocIterator : public Malloced {
   // Relocation information with mode k is included in the
   // iteration iff bit k of mode_mask is set.
   explicit RelocIterator(Code code, int mode_mask = -1);
+  explicit RelocIterator(Code code, Code writable_code, int mode_mask = -1);
+  explicit RelocIterator(Code code, Code writable_code,
+                         ByteArray relocation_info, int mode_mask);
   explicit RelocIterator(Code code, ByteArray relocation_info, int mode_mask);
   explicit RelocIterator(EmbeddedData* embedded_data, Code code, int mode_mask);
   explicit RelocIterator(const CodeDesc& desc, int mode_mask = -1);
@@ -457,8 +464,9 @@ class V8_EXPORT_PRIVATE RelocIterator : public Malloced {
   }
 
  private:
-  RelocIterator(Code host, Address pc, Address constant_pool, const byte* pos,
-                const byte* end, int mode_mask);
+  RelocIterator(Code host, Code writable_host, Address pc,
+                Address constant_pool, const byte* pos, const byte* end,
+                int mode_mask);
 
   // Advance* moves the position before/after reading.
   // *Read* reads from current byte(s) into rinfo_.

@@ -63,6 +63,9 @@ class HeapObject : public Object {
   // Do not use this outside Heap.
   inline void set_map_after_allocation(
       Map value, WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+  inline void set_map_after_allocation(
+      Map value, HeapObject writable_host,
+      WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
 
   // During garbage collection, the map word of a heap object does not
   // necessarily contain a map pointer.

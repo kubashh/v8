@@ -325,7 +325,7 @@ class UpdateTypedSlotHelper {
   // Updates a code target slot using an untyped slot callback.
   // The callback accepts FullMaybeObjectSlot and returns SlotCallbackResult.
   template <typename Callback>
-  static SlotCallbackResult UpdateCodeTarget(RelocInfo* rinfo,
+  static SlotCallbackResult UpdateCodeTarget(Heap* heap, RelocInfo* rinfo,
                                              Callback callback) {
     DCHECK(RelocInfo::IsCodeTargetMode(rinfo->rmode()));
     Code old_target = Code::GetCodeFromTargetAddress(rinfo->target_address());
@@ -333,7 +333,8 @@ class UpdateTypedSlotHelper {
     SlotCallbackResult result = callback(FullMaybeObjectSlot(&new_target));
     DCHECK(!HasWeakHeapObjectTag(new_target));
     if (new_target != old_target) {
-      rinfo->set_target_address(Code::cast(new_target).raw_instruction_start());
+      rinfo->set_target_address(heap->code_range(),
+                                Code::cast(new_target).raw_instruction_start());
     }
     return result;
   }

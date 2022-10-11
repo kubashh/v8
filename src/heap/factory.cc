@@ -173,13 +173,14 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
   }
 
   {
-    Code raw_code = *code;
+    Code raw_code = Code::unchecked_cast(HeapObject::FromAddress(
+        heap->code_range()->GetWritableAddress(code->address())));
     constexpr bool kIsNotOffHeapTrampoline = false;
     DisallowGarbageCollection no_gc;
 
     raw_code.set_raw_instruction_size(code_desc_.instruction_size());
     raw_code.set_raw_metadata_size(code_desc_.metadata_size());
-    raw_code.set_relocation_info(*reloc_info);
+    raw_code.set_relocation_info(heap, *code, *reloc_info);
     raw_code.initialize_flags(kind_, is_turbofanned_, stack_slots_,
                               kIsNotOffHeapTrampoline);
     raw_code.set_builtin_id(builtin_);
@@ -188,13 +189,15 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     // passing IsPendingAllocation).
     raw_code.set_inlined_bytecode_size(inlined_bytecode_size_);
     raw_code.set_osr_offset(osr_offset_);
-    raw_code.set_code_data_container(*data_container, kReleaseStore);
+    raw_code.set_code_data_container(heap, *code, *data_container,
+                                     kReleaseStore);
     if (kind_ == CodeKind::BASELINE) {
-      raw_code.set_bytecode_or_interpreter_data(*interpreter_data_);
-      raw_code.set_bytecode_offset_table(*position_table_);
+      raw_code.set_bytecode_or_interpreter_data(heap, *code,
+                                                *interpreter_data_);
+      raw_code.set_bytecode_offset_table(heap, *code, *position_table_);
     } else {
-      raw_code.set_deoptimization_data(*deoptimization_data_);
-      raw_code.set_source_position_table(*position_table_);
+      raw_code.set_deoptimization_data(heap, *code, *deoptimization_data_);
+      raw_code.set_source_position_table(heap, *code, *position_table_);
     }
     raw_code.set_handler_table_offset(
         code_desc_.handler_table_offset_relative());
@@ -234,16 +237,18 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     // like a handle) that are dereferenced during the copy to point directly
     // to the actual heap objects. These pointers can include references to
     // the code object itself, through the self_reference parameter.
-    raw_code.CopyFromNoFlush(*reloc_info, heap, code_desc_);
+    raw_code.CopyFromNoFlush(code_desc_);
+
+    raw_code.CopyRelocInfo(*reloc_info, heap, *code, code_desc_);
 
     raw_code.clear_padding();
 
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
       raw_code.set_main_cage_base(isolate_->cage_base(), kRelaxedStore);
-      data_container->SetCodeAndEntryPoint(isolate_, raw_code);
+      data_container->SetCodeAndEntryPoint(isolate_, *code);
     }
 #ifdef VERIFY_HEAP
-    if (v8_flags.verify_heap) HeapObject::VerifyCodePointer(isolate_, raw_code);
+    if (v8_flags.verify_heap) HeapObject::VerifyCodePointer(isolate_, *code);
 #endif
 
     // Flush the instruction cache before changing the permissions.
@@ -295,8 +300,11 @@ MaybeHandle<Code> Factory::CodeBuilder::AllocateCode(
   // The code object has not been fully initialized yet.  We rely on the
   // fact that no allocation will happen from this point on.
   DisallowGarbageCollection no_gc;
-  result.set_map_after_allocation(*isolate_->factory()->code_map(),
-                                  SKIP_WRITE_BARRIER);
+  result.set_map_after_allocation(
+      *isolate_->factory()->code_map(),
+      HeapObject::FromAddress(
+          heap->code_range()->GetWritableAddress(result.address())),
+      SKIP_WRITE_BARRIER);
   Handle<Code> code = handle(Code::cast(result), isolate_);
   if (is_executable_) {
     DCHECK(IsAligned(code->address(), kCodeAlignment));
@@ -323,8 +331,11 @@ MaybeHandle<Code> Factory::CodeBuilder::AllocateConcurrentSparkplugCode(
   // The code object has not been fully initialized yet.  We rely on the
   // fact that no allocation will happen from this point on.
   DisallowGarbageCollection no_gc;
-  result.set_map_after_allocation(*local_isolate_->factory()->code_map(),
-                                  SKIP_WRITE_BARRIER);
+  result.set_map_after_allocation(
+      *local_isolate_->factory()->code_map(),
+      HeapObject::FromAddress(
+          heap->code_range()->GetWritableAddress(result.address())),
+      SKIP_WRITE_BARRIER);
   Handle<Code> code = handle(Code::cast(result), local_isolate_);
   DCHECK_IMPLIES(is_executable_, IsAligned(code->address(), kCodeAlignment));
   return code;
@@ -2526,8 +2537,10 @@ Handle<CodeT> Factory::NewOffHeapTrampolineFor(Handle<CodeT> code,
   {
     DisallowGarbageCollection no_gc;
     CodePageMemoryModificationScope code_allocation(*result);
+    CodeRange* code_range = isolate()->heap()->code_range();
     Code raw_code = FromCodeT(*code);
-    Code raw_result = *result;
+    Code raw_result = Code::unchecked_cast(HeapObject::FromAddress(
+        code_range->GetWritableAddress(result->address())));
 
     const bool set_is_off_heap_trampoline = true;
     raw_result.initialize_flags(raw_code.kind(), raw_code.is_turbofanned(),
@@ -2554,13 +2567,14 @@ Handle<CodeT> Factory::NewOffHeapTrampolineFor(Handle<CodeT> code,
       DCHECK_EQ(reloc_info.get(i), canonical_reloc_info.get(i));
     }
 #endif
-    raw_result.set_relocation_info(canonical_reloc_info);
+    raw_result.set_relocation_info(isolate()->heap(), *result,
+                                   canonical_reloc_info);
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
       CodeDataContainer code_data_container =
           raw_result.code_data_container(kAcquireLoad);
       // Updating flags (in particular is_off_heap_trampoline one) might change
       // the value of the instruction start, so update it here.
-      code_data_container.UpdateCodeEntryPoint(isolate(), raw_result);
+      code_data_container.UpdateCodeEntryPoint(isolate(), *result);
       // Also update flag values cached on the code data container.
       code_data_container.initialize_flags(
           raw_code.kind(), raw_code.builtin_id(), raw_code.is_turbofanned(),

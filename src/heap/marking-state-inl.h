@@ -97,13 +97,14 @@ void MarkingStateBase<ConcreteState, access_mode>::ClearLiveness(
 
 ConcurrentBitmap<AccessMode::ATOMIC>* MarkingState::bitmap(
     const BasicMemoryChunk* chunk) const {
-  return chunk->marking_bitmap<AccessMode::ATOMIC>();
+  return chunk->AsCodePointer()->marking_bitmap<AccessMode::ATOMIC>();
 }
 
 void MarkingState::IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
                  IsAligned(by, kObjectAlignment8GbHeap));
-  chunk->live_byte_count_.fetch_add(by, std::memory_order_relaxed);
+  chunk->AsCodePointer()->live_byte_count_.fetch_add(by,
+                                                     std::memory_order_relaxed);
 }
 
 intptr_t MarkingState::live_bytes(const MemoryChunk* chunk) const {
@@ -113,19 +114,21 @@ intptr_t MarkingState::live_bytes(const MemoryChunk* chunk) const {
 void MarkingState::SetLiveBytes(MemoryChunk* chunk, intptr_t value) {
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
                  IsAligned(value, kObjectAlignment8GbHeap));
-  chunk->live_byte_count_.store(value, std::memory_order_relaxed);
+  chunk->AsCodePointer()->live_byte_count_.store(value,
+                                                 std::memory_order_relaxed);
 }
 
 ConcurrentBitmap<AccessMode::NON_ATOMIC>* NonAtomicMarkingState::bitmap(
     const BasicMemoryChunk* chunk) const {
-  return chunk->marking_bitmap<AccessMode::NON_ATOMIC>();
+  return chunk->AsCodePointer()->marking_bitmap<AccessMode::NON_ATOMIC>();
 }
 
 void NonAtomicMarkingState::IncrementLiveBytes(MemoryChunk* chunk,
                                                intptr_t by) {
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
                  IsAligned(by, kObjectAlignment8GbHeap));
-  chunk->live_byte_count_.fetch_add(by, std::memory_order_relaxed);
+  chunk->AsCodePointer()->live_byte_count_.fetch_add(by,
+                                                     std::memory_order_relaxed);
 }
 
 intptr_t NonAtomicMarkingState::live_bytes(const MemoryChunk* chunk) const {
@@ -135,18 +138,19 @@ intptr_t NonAtomicMarkingState::live_bytes(const MemoryChunk* chunk) const {
 void NonAtomicMarkingState::SetLiveBytes(MemoryChunk* chunk, intptr_t value) {
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
                  IsAligned(value, kObjectAlignment8GbHeap));
-  chunk->live_byte_count_.store(value, std::memory_order_relaxed);
+  chunk->AsCodePointer()->live_byte_count_.store(value,
+                                                 std::memory_order_relaxed);
 }
 
 ConcurrentBitmap<AccessMode::ATOMIC>* AtomicMarkingState::bitmap(
     const BasicMemoryChunk* chunk) const {
-  return chunk->marking_bitmap<AccessMode::ATOMIC>();
+  return chunk->AsCodePointer()->marking_bitmap<AccessMode::ATOMIC>();
 }
 
 void AtomicMarkingState::IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
   DCHECK_IMPLIES(V8_COMPRESS_POINTERS_8GB_BOOL,
                  IsAligned(by, kObjectAlignment8GbHeap));
-  chunk->live_byte_count_.fetch_add(by);
+  chunk->AsCodePointer()->live_byte_count_.fetch_add(by);
 }
 
 }  // namespace internal

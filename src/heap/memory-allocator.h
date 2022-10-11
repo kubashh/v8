@@ -279,6 +279,7 @@ class MemoryAllocator {
   // AllocateUninitializedChunk.
   struct MemoryChunkAllocationResult {
     void* start;
+    void* start_rw;
     size_t size;
     size_t area_start;
     size_t area_end;

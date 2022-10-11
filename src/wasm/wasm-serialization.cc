@@ -802,7 +802,8 @@ void NativeModuleDeserializer::CopyAndRelocate(
       case RelocInfo::EXTERNAL_REFERENCE: {
         uint32_t tag = GetWasmCalleeTag(iter.rinfo());
         Address address = ExternalReferenceList::Get().address_from_tag(tag);
-        iter.rinfo()->set_target_external_reference(address, SKIP_ICACHE_FLUSH);
+        iter.rinfo()->set_target_external_reference(nullptr, address,
+                                                    SKIP_ICACHE_FLUSH);
         break;
       }
       case RelocInfo::INTERNAL_REFERENCE:

@@ -50,8 +50,8 @@ class MemoryChunk : public BasicMemoryChunk {
   // Page size in bytes.  This must be a multiple of the OS page size.
   static const int kPageSize = 1 << kPageSizeBits;
 
-  MemoryChunk(Heap* heap, BaseSpace* space, size_t size, Address area_start,
-              Address area_end, VirtualMemory reservation,
+  MemoryChunk(Heap* heap, BaseSpace* space, Address address, size_t size,
+              Address area_start, Address area_end, VirtualMemory reservation,
               Executability executable, PageSize page_size);
 
   // Only works if the pointer is in the first kPageSize of the MemoryChunk.
@@ -223,6 +223,16 @@ class MemoryChunk : public BasicMemoryChunk {
   void MarkWasUsedForAllocation() { was_used_for_allocation_ = true; }
   void ClearWasUsedForAllocation() { was_used_for_allocation_ = false; }
   bool WasUsedForAllocation() const { return was_used_for_allocation_; }
+
+  CodeRange::Pointer<MemoryChunk> AsCodePointer() {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
+  }
+
+  CodeRange::Pointer<const MemoryChunk> AsCodePointer() const {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
+  }
 
  protected:
   // Release all memory allocated by the chunk. Should be called when memory

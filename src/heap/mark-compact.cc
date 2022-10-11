@@ -1642,14 +1642,17 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
       dst.IterateFast(dst.map(cage_base), size, base->record_visitor_);
     } else if (dest == CODE_SPACE) {
       DCHECK_CODEOBJECT_SIZE(size, base->heap_->code_space());
-      base->heap_->CopyBlock(dst_addr, src_addr, size);
-      Code code = Code::cast(dst);
+      CodeRange* code_range = base->heap_->code_range();
+      Address rw_dst_addr = code_range->GetWritableAddress(dst_addr);
+      base->heap_->CopyBlock(rw_dst_addr, src_addr, size);
+      Code code = Code::unchecked_cast(HeapObject::FromAddress(rw_dst_addr));
       code.Relocate(dst_addr - src_addr);
       if (mode != MigrationMode::kFast)
         base->ExecuteMigrationObservers(dest, src, dst, size);
       // In case the object's map gets relocated during GC we load the old map
       // here. This is fine since they store the same content.
       dst.IterateFast(dst.map(cage_base), size, base->record_visitor_);
+      src = HeapObject::FromAddress(code_range->GetWritableAddress(src_addr));
     } else {
       DCHECK_OBJECT_SIZE(size);
       DCHECK(dest == NEW_SPACE);
@@ -4570,7 +4573,7 @@ void MarkCompactCollector::Evacuate() {
     for (Page* p : old_space_evacuation_pages_) {
       if (p->IsFlagSet(Page::COMPACTION_WAS_ABORTED)) {
         sweeper()->AddPage(p->owner_identity(), p, Sweeper::REGULAR);
-        p->ClearFlag(Page::COMPACTION_WAS_ABORTED);
+        p->AsCodePointer()->ClearFlag(Page::COMPACTION_WAS_ABORTED);
       }
     }
   }
@@ -4876,11 +4879,20 @@ class RememberedSetUpdatingItem : public UpdatingItem {
         (chunk_->slot_set<OLD_TO_OLD, AccessMode::NON_ATOMIC>() != nullptr)) {
       InvalidatedSlotsFilter filter = InvalidatedSlotsFilter::OldToOld(
           chunk_, InvalidatedSlotsFilter::LivenessCheck::kNo);
+      CodeRange* code_range = heap_->code_range();
+      bool is_executable = chunk_->IsFlagSet(MemoryChunk::IS_EXECUTABLE);
       RememberedSet<OLD_TO_OLD>::Iterate(
           chunk_,
-          [this, &filter, cage_base](MaybeObjectSlot slot) {
+          [this, &filter, cage_base, code_range,
+           is_executable](MaybeObjectSlot slot) {
             if (filter.IsValid(slot.address())) {
-              UpdateSlot<AccessMode::NON_ATOMIC>(cage_base, slot);
+              if (is_executable) {
+                UpdateSlot<AccessMode::NON_ATOMIC>(
+                    cage_base, MaybeObjectSlot(code_range->GetWritableAddress(
+                                   slot.address())));
+              } else {
+                UpdateSlot<AccessMode::NON_ATOMIC>(cage_base, slot);
+              }
               // A string might have been promoted into the shared heap during
               // GC.
               if (record_old_to_shared_slots_) {
@@ -5239,7 +5251,7 @@ void MarkCompactCollector::ReportAbortedEvacuationCandidateDueToOOM(
 void MarkCompactCollector::ReportAbortedEvacuationCandidateDueToFlags(
     Address failed_start, Page* page) {
   DCHECK(!page->IsFlagSet(Page::COMPACTION_WAS_ABORTED));
-  page->SetFlag(Page::COMPACTION_WAS_ABORTED);
+  page->AsCodePointer()->SetFlag(Page::COMPACTION_WAS_ABORTED);
   base::MutexGuard guard(&mutex_);
   aborted_evacuation_candidates_due_to_flags_.push_back(
       std::make_pair(failed_start, page));

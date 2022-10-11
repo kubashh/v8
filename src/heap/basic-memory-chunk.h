@@ -12,6 +12,7 @@
 #include "src/base/flags.h"
 #include "src/common/globals.h"
 #include "src/flags/flags.h"
+#include "src/heap/code-range.h"
 #include "src/heap/marking.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/objects/heap-object.h"
@@ -146,9 +147,9 @@ class BasicMemoryChunk {
 
   static const intptr_t kAlignmentMask = kAlignment - 1;
 
-  BasicMemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
-                   Address area_start, Address area_end,
-                   VirtualMemory reservation);
+  BasicMemoryChunk(Heap* heap, BaseSpace* space, Address address,
+                   size_t chunk_size, Address area_start, Address area_end,
+                   VirtualMemory reservation, Executability executable);
 
   static Address BaseAddress(Address a) { return a & ~kAlignmentMask; }
 
@@ -309,19 +310,7 @@ class BasicMemoryChunk {
 
   Address HighWaterMark() const { return address() + high_water_mark_; }
 
-  static inline void UpdateHighWaterMark(Address mark) {
-    if (mark == kNullAddress) return;
-    // Need to subtract one from the mark because when a chunk is full the
-    // top points to the next address after the chunk, which effectively belongs
-    // to another chunk. See the comment to Page::FromAllocationAreaAddress.
-    BasicMemoryChunk* chunk = BasicMemoryChunk::FromAddress(mark - 1);
-    intptr_t new_mark = static_cast<intptr_t>(mark - chunk->address());
-    intptr_t old_mark = chunk->high_water_mark_.load(std::memory_order_relaxed);
-    while ((new_mark > old_mark) &&
-           !chunk->high_water_mark_.compare_exchange_weak(
-               old_mark, new_mark, std::memory_order_acq_rel)) {
-    }
-  }
+  static inline void UpdateHighWaterMark(Address mark);
 
   VirtualMemory* reserved_memory() { return &reservation_; }
 
@@ -347,6 +336,16 @@ class BasicMemoryChunk {
   // release store.
   void SynchronizedHeapLoad() const;
 #endif
+
+  CodeRange::Pointer<BasicMemoryChunk> AsCodePointer() {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
+  }
+
+  CodeRange::Pointer<const BasicMemoryChunk> AsCodePointer() const {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
+  }
 
  protected:
   // Overall size of the chunk, including the header and guards.

@@ -52,21 +52,7 @@ class List {
     }
   }
 
-  void Remove(T* element) {
-    DCHECK(Contains(element));
-    if (back_ == element) {
-      back_ = element->list_node().prev();
-    }
-    if (front_ == element) {
-      front_ = element->list_node().next();
-    }
-    T* next = element->list_node().next();
-    T* prev = element->list_node().prev();
-    if (next) next->list_node().set_prev(prev);
-    if (prev) prev->list_node().set_next(next);
-    element->list_node().set_prev(nullptr);
-    element->list_node().set_next(nullptr);
-  }
+  void Remove(T* element);
 
   bool Contains(T* element) const {
     const T* it = front_;
@@ -86,39 +72,9 @@ class List {
   const T* back() const { return back_; }
 
  private:
-  void AddFirstElement(T* element) {
-    DCHECK(!back_);
-    DCHECK(!front_);
-    DCHECK(!element->list_node().next());
-    DCHECK(!element->list_node().prev());
-    element->list_node().set_prev(nullptr);
-    element->list_node().set_next(nullptr);
-    front_ = element;
-    back_ = element;
-  }
-
-  void InsertAfter(T* element, T* other) {
-    T* other_next = other->list_node().next();
-    element->list_node().set_next(other_next);
-    element->list_node().set_prev(other);
-    other->list_node().set_next(element);
-    if (other_next)
-      other_next->list_node().set_prev(element);
-    else
-      back_ = element;
-  }
-
-  void InsertBefore(T* element, T* other) {
-    T* other_prev = other->list_node().prev();
-    element->list_node().set_next(other);
-    element->list_node().set_prev(other_prev);
-    other->list_node().set_prev(element);
-    if (other_prev) {
-      other_prev->list_node().set_next(element);
-    } else {
-      front_ = element;
-    }
-  }
+  void AddFirstElement(T* element);
+  void InsertAfter(T* element, T* other);
+  void InsertBefore(T* element, T* other);
 
   T* front_;
   T* back_;

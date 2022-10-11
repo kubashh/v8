@@ -153,7 +153,7 @@ bool ConcurrentAllocator::EnsureLab(AllocationOrigin origin) {
 
   HeapObject object = HeapObject::FromAddress(result->first);
   lab_ = LocalAllocationBuffer::FromResult(
-      owning_heap(), AllocationResult::FromObject(object), result->second);
+      space_, AllocationResult::FromObject(object), result->second);
   DCHECK(lab_.IsValid());
 
   if (IsBlackAllocationEnabled()) {

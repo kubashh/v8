@@ -13,6 +13,7 @@
 #include "src/common/ptr-compr-inl.h"
 #include "src/execution/isolate.h"
 #include "src/heap/allocation-stats.h"
+#include "src/heap/basic-memory-chunk-inl.h"
 #include "src/heap/basic-memory-chunk.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/marking-state-inl.h"
@@ -329,11 +330,11 @@ void ReadOnlySpace::DetachPagesAndAddToArtifacts(
   artifacts->Initialize(heap->isolate(), std::move(pages_), accounting_stats_);
 }
 
-ReadOnlyPage::ReadOnlyPage(Heap* heap, BaseSpace* space, size_t chunk_size,
-                           Address area_start, Address area_end,
-                           VirtualMemory reservation)
-    : BasicMemoryChunk(heap, space, chunk_size, area_start, area_end,
-                       std::move(reservation)) {
+ReadOnlyPage::ReadOnlyPage(Heap* heap, BaseSpace* space, Address address,
+                           size_t chunk_size, Address area_start,
+                           Address area_end, VirtualMemory reservation)
+    : BasicMemoryChunk(heap, space, address, chunk_size, area_start, area_end,
+                       std::move(reservation), NOT_EXECUTABLE) {
   allocated_bytes_ = 0;
   SetFlags(Flag::NEVER_EVACUATE | Flag::READ_ONLY_HEAP);
   heap->non_atomic_marking_state()->bitmap(this)->MarkAllBits();

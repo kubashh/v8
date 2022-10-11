@@ -171,8 +171,7 @@ void Code::FlushICache() const {
   FlushInstructionCache(raw_instruction_start(), raw_instruction_size());
 }
 
-void Code::CopyFromNoFlush(ByteArray reloc_info, Heap* heap,
-                           const CodeDesc& desc) {
+void Code::CopyFromNoFlush(const CodeDesc& desc) {
   // Copy code.
   static_assert(kOnHeapBodyIsContiguous);
   CopyBytes(reinterpret_cast<byte*>(raw_instruction_start()), desc.buffer,
@@ -180,20 +179,24 @@ void Code::CopyFromNoFlush(ByteArray reloc_info, Heap* heap,
   // TODO(jgruber,v8:11036): Merge with the above.
   CopyBytes(reinterpret_cast<byte*>(raw_instruction_start() + desc.instr_size),
             desc.unwinding_info, static_cast<size_t>(desc.unwinding_info_size));
+}
 
+void Code::CopyRelocInfo(ByteArray reloc_info, Heap* heap, Code code,
+                         const CodeDesc& desc) {
   // Copy reloc info.
   CopyRelocInfoToByteArray(reloc_info, desc);
 
   // Unbox handles and relocate.
-  RelocateFromDesc(reloc_info, heap, desc);
+  RelocateFromDesc(reloc_info, heap, code, desc);
 }
 
-void Code::RelocateFromDesc(ByteArray reloc_info, Heap* heap,
+void Code::RelocateFromDesc(ByteArray reloc_info, Heap* heap, Code code,
                             const CodeDesc& desc) {
   // Unbox handles and relocate.
   Assembler* origin = desc.origin;
   const int mode_mask = RelocInfo::PostCodegenRelocationMask();
-  for (RelocIterator it(*this, reloc_info, mode_mask); !it.done(); it.next()) {
+  for (RelocIterator it(code, *this, reloc_info, mode_mask); !it.done();
+       it.next()) {
     RelocInfo::Mode mode = it.rinfo()->rmode();
     if (RelocInfo::IsEmbeddedObjectMode(mode)) {
       Handle<HeapObject> p = it.rinfo()->target_object_handle(origin);
@@ -205,19 +208,20 @@ void Code::RelocateFromDesc(ByteArray reloc_info, Heap* heap,
       Handle<HeapObject> p = it.rinfo()->target_object_handle(origin);
       DCHECK(p->IsCodeT(GetPtrComprCageBaseSlow(*p)));
       Code code = FromCodeT(CodeT::cast(*p));
-      it.rinfo()->set_target_address(code.raw_instruction_start(),
+      it.rinfo()->set_target_address(heap->code_range(),
+                                     code.raw_instruction_start(),
                                      UPDATE_WRITE_BARRIER, SKIP_ICACHE_FLUSH);
     } else if (RelocInfo::IsNearBuiltinEntry(mode)) {
       // Rewrite builtin IDs to PC-relative offset to the builtin entry point.
       Builtin builtin = it.rinfo()->target_builtin_at(origin);
       Address p =
           heap->isolate()->builtin_entry_table()[Builtins::ToInt(builtin)];
-      it.rinfo()->set_target_address(p, UPDATE_WRITE_BARRIER,
-                                     SKIP_ICACHE_FLUSH);
+      it.rinfo()->set_target_address(heap->code_range(), p,
+                                     UPDATE_WRITE_BARRIER, SKIP_ICACHE_FLUSH);
       DCHECK_EQ(p, it.rinfo()->target_address());
     } else {
       intptr_t delta =
-          raw_instruction_start() - reinterpret_cast<Address>(desc.buffer);
+          code.raw_instruction_start() - reinterpret_cast<Address>(desc.buffer);
       it.rinfo()->apply(delta);
     }
   }

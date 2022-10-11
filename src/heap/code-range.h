@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "src/base/code-page-allocator.h"
 #include "src/base/platform/mutex.h"
 #include "src/common/globals.h"
 #include "src/utils/allocation.h"
@@ -136,6 +137,33 @@ class CodeRange final : public VirtualMemoryCage {
   // initialized CodeRange. Otherwise returns an empty std::shared_ptr.
   V8_EXPORT_PRIVATE static std::shared_ptr<CodeRange> GetProcessWideCodeRange();
 
+  template <typename T>
+  class Pointer {
+   public:
+    Pointer(T* ptr, bool passthrough = false)
+        : ptr_(ptr), passthrough_(passthrough) {}
+
+    T& operator*() { return *Get(); }
+    T* operator->() { return Get(); }
+
+   private:
+    T* Get() {
+      if (passthrough_) return ptr_;
+      return reinterpret_cast<T*>(GetProcessWideCodeRange()->GetWritableAddress(
+          reinterpret_cast<Address>(ptr_)));
+    }
+
+    T* ptr_;
+    bool passthrough_;
+  };
+
+  template <typename T>
+  Pointer(T*) -> Pointer<T>;
+  template <typename T>
+  Pointer(T*, bool) -> Pointer<T>;
+
+  Address GetWritableAddress(Address address);
+
  private:
   // Used when short builtin calls are enabled, where embedded builtins are
   // copied into the CodeRange so calls can be nearer.
@@ -144,6 +172,10 @@ class CodeRange final : public VirtualMemoryCage {
   // When sharing a CodeRange among Isolates, calls to RemapEmbeddedBuiltins may
   // race during Isolate::Init.
   base::Mutex remap_embedded_builtins_mutex_;
+
+  PlatformSharedMemoryHandle shared_memory_handle_ = kInvalidSharedMemoryHandle;
+  std::unique_ptr<base::CodePageAllocator> code_page_allocator_;
+  void* writable_mapping_ = nullptr;
 
 #ifdef V8_OS_WIN64
   std::atomic<uint32_t> unwindinfo_use_count_{0};

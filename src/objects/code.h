@@ -470,25 +470,36 @@ class Code : public HeapObject {
                                      Address current_pc = kNullAddress);
 #endif
 
+#define CODE_DECL_ACCESSORS(name, type)                                \
+  DECL_GETTER(name, type)                                              \
+  inline void set_##name(Heap* heap, Code executable_code, type value, \
+                         WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+
+#define CODE_DECL_RELEASE_ACQUIRE_ACCESSORS(name, type)                \
+  DECL_ACQUIRE_GETTER(name, type)                                      \
+  inline void set_##name(Heap* heap, Code executable_code, type value, \
+                         ReleaseStoreTag,                              \
+                         WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+
   // [relocation_info]: Code relocation information
-  DECL_ACCESSORS(relocation_info, ByteArray)
+  CODE_DECL_ACCESSORS(relocation_info, ByteArray)
 
   // This function should be called only from GC.
   void ClearEmbeddedObjects(Heap* heap);
 
   // [deoptimization_data]: Array containing data for deopt for non-baseline
   // code.
-  DECL_ACCESSORS(deoptimization_data, FixedArray)
+  CODE_DECL_ACCESSORS(deoptimization_data, FixedArray)
   // [bytecode_or_interpreter_data]: BytecodeArray or InterpreterData for
   // baseline code.
-  DECL_ACCESSORS(bytecode_or_interpreter_data, HeapObject)
+  CODE_DECL_ACCESSORS(bytecode_or_interpreter_data, HeapObject)
 
   // [source_position_table]: ByteArray for the source positions table for
   // non-baseline code.
-  DECL_ACCESSORS(source_position_table, ByteArray)
+  CODE_DECL_ACCESSORS(source_position_table, ByteArray)
   // [bytecode_offset_table]: ByteArray for the bytecode offset for baseline
   // code.
-  DECL_ACCESSORS(bytecode_offset_table, ByteArray)
+  CODE_DECL_ACCESSORS(bytecode_offset_table, ByteArray)
 
   // If source positions have not been collected or an exception has been thrown
   // this will return empty_byte_array.
@@ -496,7 +507,10 @@ class Code : public HeapObject {
                                        SharedFunctionInfo sfi) const;
 
   // [code_data_container]: A container indirection for all mutable fields.
-  DECL_RELEASE_ACQUIRE_ACCESSORS(code_data_container, CodeDataContainer)
+  CODE_DECL_RELEASE_ACQUIRE_ACCESSORS(code_data_container, CodeDataContainer)
+
+#undef CODE_DECL_ACCESSORS
+#undef CODE_DECL_RELEASE_ACQUIRE_ACCESSORS
 
   // [next_code_link]: Link for lists of optimized or deoptimized code.
   // Note that this field is stored in the {CodeDataContainer} to be mutable.
@@ -643,8 +657,12 @@ class Code : public HeapObject {
   void Relocate(intptr_t delta);
 
   // Migrate code from desc without flushing the instruction cache.
-  void CopyFromNoFlush(ByteArray reloc_info, Heap* heap, const CodeDesc& desc);
-  void RelocateFromDesc(ByteArray reloc_info, Heap* heap, const CodeDesc& desc);
+  void CopyFromNoFlush(const CodeDesc& desc);
+  void CopyRelocInfo(ByteArray reloc_info, Heap* heap, Code code,
+                     const CodeDesc& desc);
+
+  void RelocateFromDesc(ByteArray reloc_info, Heap* heap, Code code,
+                        const CodeDesc& desc);
 
   // Copy the RelocInfo portion of |desc| to |dest|. The ByteArray must be
   // exactly the same size as the RelocInfo in |desc|.

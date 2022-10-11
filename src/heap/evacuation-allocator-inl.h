@@ -104,7 +104,8 @@ bool EvacuationAllocator::NewLocalAllocationBuffer() {
     return false;
   }
   LocalAllocationBuffer saved_lab = std::move(new_space_lab_);
-  new_space_lab_ = LocalAllocationBuffer::FromResult(heap_, result, kLabSize);
+  new_space_lab_ =
+      LocalAllocationBuffer::FromResult(new_space_, result, kLabSize);
   DCHECK(new_space_lab_.IsValid());
   if (!new_space_lab_.TryMerge(&saved_lab)) {
     saved_lab.CloseAndMakeIterable();

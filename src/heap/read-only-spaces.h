@@ -26,7 +26,7 @@ class SnapshotData;
 
 class ReadOnlyPage : public BasicMemoryChunk {
  public:
-  ReadOnlyPage(Heap* heap, BaseSpace* space, size_t chunk_size,
+  ReadOnlyPage(Heap* heap, BaseSpace* space, Address address, size_t chunk_size,
                Address area_start, Address area_end, VirtualMemory reservation);
 
   // Clears any pointers in the header that point out of the page that would

@@ -858,8 +858,13 @@ void HeapObject::set_map(Map value, MemoryOrder order, VerificationMode mode) {
 }
 
 void HeapObject::set_map_after_allocation(Map value, WriteBarrierMode mode) {
+  set_map_after_allocation(value, *this, mode);
+}
+
+void HeapObject::set_map_after_allocation(Map value, HeapObject writable_host,
+                                          WriteBarrierMode mode) {
   MapWord mapword = MapWord::FromMap(value);
-  set_map_word(mapword, kRelaxedStore);
+  writable_host.set_map_word(mapword, kRelaxedStore);
 #ifndef V8_DISABLE_WRITE_BARRIERS
   if (mode != SKIP_WRITE_BARRIER) {
     DCHECK(!value.is_null());

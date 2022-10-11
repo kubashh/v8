@@ -268,21 +268,22 @@ INT32_ACCESSORS(Code, unwinding_info_offset, kUnwindingInfoOffsetOffset)
 
 // Same as ACCESSORS_CHECKED2 macro but with Code as a host and using
 // main_cage_base() for computing the base.
-#define CODE_ACCESSORS_CHECKED2(name, type, offset, get_condition,  \
-                                set_condition)                      \
-  type Code::name() const {                                         \
-    PtrComprCageBase cage_base = main_cage_base();                  \
-    return Code::name(cage_base);                                   \
-  }                                                                 \
-  type Code::name(PtrComprCageBase cage_base) const {               \
-    type value = TaggedField<type, offset>::load(cage_base, *this); \
-    DCHECK(get_condition);                                          \
-    return value;                                                   \
-  }                                                                 \
-  void Code::set_##name(type value, WriteBarrierMode mode) {        \
-    DCHECK(set_condition);                                          \
-    TaggedField<type, offset>::store(*this, value);                 \
-    CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);          \
+#define CODE_ACCESSORS_CHECKED2(name, type, offset, get_condition,    \
+                                set_condition)                        \
+  type Code::name() const {                                           \
+    PtrComprCageBase cage_base = main_cage_base();                    \
+    return Code::name(cage_base);                                     \
+  }                                                                   \
+  type Code::name(PtrComprCageBase cage_base) const {                 \
+    type value = TaggedField<type, offset>::load(cage_base, *this);   \
+    DCHECK(get_condition);                                            \
+    return value;                                                     \
+  }                                                                   \
+  void Code::set_##name(Heap* heap, Code executable_code, type value, \
+                        WriteBarrierMode mode) {                      \
+    DCHECK(set_condition);                                            \
+    TaggedField<type, offset>::store(*this, value);                   \
+    CONDITIONAL_WRITE_BARRIER(executable_code, offset, value, mode);  \
   }
 
 // Same as RELEASE_ACQUIRE_ACCESSORS_CHECKED2 macro but with Code as a host and
@@ -298,10 +299,11 @@ INT32_ACCESSORS(Code, unwinding_info_offset, kUnwindingInfoOffsetOffset)
     DCHECK(get_condition);                                                    \
     return value;                                                             \
   }                                                                           \
-  void Code::set_##name(type value, ReleaseStoreTag, WriteBarrierMode mode) { \
+  void Code::set_##name(Heap* heap, Code executable_code, type value,         \
+                        ReleaseStoreTag, WriteBarrierMode mode) {             \
     DCHECK(set_condition);                                                    \
     TaggedField<type, offset>::Release_Store(*this, value);                   \
-    CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);                    \
+    CONDITIONAL_WRITE_BARRIER(executable_code, offset, value, mode);          \
   }
 
 #define CODE_ACCESSORS(name, type, offset) \

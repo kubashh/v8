@@ -81,6 +81,49 @@ class SlotAccessorForHeapObject {
   const int offset_;
 };
 
+class SlotAccessorForCodeObject {
+ public:
+  static SlotAccessorForCodeObject ForSlotIndex(Handle<HeapObject> object,
+                                                HeapObject writable_object,
+                                                int index) {
+    return SlotAccessorForCodeObject(object, writable_object,
+                                     index * kTaggedSize);
+  }
+
+  MaybeObjectSlot slot() const {
+    return writable_object_.RawMaybeWeakField(offset_);
+  }
+  ExternalPointerSlot external_pointer_slot() const { UNREACHABLE(); }
+  Handle<HeapObject> object() const { return object_; }
+  int offset() const { return offset_; }
+
+  // Writes the given value to this slot, optionally with an offset (e.g. for
+  // repeat writes). Returns the number of slots written (which is one).
+  int Write(MaybeObject value, int slot_offset = 0) {
+    MaybeObjectSlot current_slot = slot() + slot_offset;
+    current_slot.Relaxed_Store(value);
+    CombinedWriteBarrier(*object_, current_slot, value, UPDATE_WRITE_BARRIER);
+    return 1;
+  }
+  int Write(HeapObject value, HeapObjectReferenceType ref_type,
+            int slot_offset = 0) {
+    return Write(HeapObjectReference::From(value, ref_type), slot_offset);
+  }
+  int Write(Handle<HeapObject> value, HeapObjectReferenceType ref_type,
+            int slot_offset = 0) {
+    return Write(*value, ref_type, slot_offset);
+  }
+
+ private:
+  SlotAccessorForCodeObject(Handle<HeapObject> object,
+                            HeapObject writable_object, int offset)
+      : object_(object), writable_object_(writable_object), offset_(offset) {}
+
+  const Handle<HeapObject> object_;
+  const HeapObject writable_object_;
+  const int offset_;
+};
+
 // A SlotAccessor for absolute full slot addresses.
 class SlotAccessorForRootSlots {
  public:
@@ -630,8 +673,16 @@ Handle<HeapObject> Deserializer<IsolateT>::ReadObject(SnapshotSpace space) {
   //       previously allocated object has a valid size (see `Allocate`).
   HeapObject raw_obj =
       Allocate(allocation, size_in_bytes, HeapObject::RequiredAlignment(*map));
-  raw_obj.set_map_after_allocation(*map);
-  MemsetTagged(raw_obj.RawField(kTaggedSize),
+
+  HeapObject raw_writable_obj = raw_obj;
+  if (allocation == AllocationType::kCode) {
+    raw_writable_obj = HeapObject::FromAddress(
+        main_thread_isolate()->heap()->code_range()->GetWritableAddress(
+            raw_obj.address()));
+  }
+
+  raw_obj.set_map_after_allocation(*map, raw_writable_obj);
+  MemsetTagged(raw_writable_obj.RawField(kTaggedSize),
                Smi::uninitialized_deserialization_value(), size_in_tagged - 1);
   DCHECK(raw_obj.CheckRequiredAlignment(isolate()));
 
@@ -749,7 +800,8 @@ class DeserializerRelocInfoVisitor {
 void DeserializerRelocInfoVisitor::VisitCodeTarget(Code host,
                                                    RelocInfo* rinfo) {
   HeapObject object = *objects_->at(current_object_++);
-  rinfo->set_target_address(Code::cast(object).raw_instruction_start());
+  rinfo->set_target_address(isolate()->heap()->code_range(),
+                            Code::cast(object).raw_instruction_start());
 }
 
 void DeserializerRelocInfoVisitor::VisitEmbeddedPointer(Code host,
@@ -814,7 +866,9 @@ void DeserializerRelocInfoVisitor::VisitOffHeapTarget(Code host,
     Assembler::deserialization_set_special_target_at(location_of_branch_data,
                                                      host, address);
   } else {
-    WriteUnalignedValue(rinfo->target_address_address(), address);
+    Address pc = isolate()->heap()->code_range()->GetWritableAddress(
+        rinfo->target_address_address());
+    WriteUnalignedValue(pc, address);
   }
 }
 
@@ -874,6 +928,21 @@ void Deserializer<IsolateT>::ReadData(Handle<HeapObject> object,
     byte data = source_.Get();
     current += ReadSingleBytecodeData(
         data, SlotAccessorForHeapObject::ForSlotIndex(object, current));
+  }
+  CHECK_EQ(current, end_slot_index);
+}
+
+template <typename IsolateT>
+void Deserializer<IsolateT>::ReadCode(Handle<HeapObject> object,
+                                      HeapObject writable_object,
+                                      int start_slot_index,
+                                      int end_slot_index) {
+  int current = start_slot_index;
+  while (current < end_slot_index) {
+    byte data = source_.Get();
+    current +=
+        ReadSingleBytecodeData(data, SlotAccessorForCodeObject::ForSlotIndex(
+                                         object, writable_object, current));
   }
   CHECK_EQ(current, end_slot_index);
 }
@@ -1085,18 +1154,22 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(byte data,
       int size_in_tagged = source_.GetInt();
       int size_in_bytes = size_in_tagged * kTaggedSize;
 
+      Code code_rw = Code::unchecked_cast(HeapObject::FromAddress(
+          main_thread_isolate()->heap()->code_range()->GetWritableAddress(
+              (*slot_accessor.object()).address())));
+
       {
         DisallowGarbageCollection no_gc;
-        Code code = Code::cast(*slot_accessor.object());
 
         // First deserialize the code itself.
         source_.CopyRaw(
-            reinterpret_cast<void*>(code.address() + Code::kDataStart),
+            reinterpret_cast<void*>(code_rw.address() + Code::kDataStart),
             size_in_bytes);
       }
 
       // Then deserialize the code header
-      ReadData(slot_accessor.object(), HeapObject::kHeaderSize / kTaggedSize,
+      ReadCode(slot_accessor.object(), code_rw,
+               HeapObject::kHeaderSize / kTaggedSize,
                Code::kDataStart / kTaggedSize);
 
       // Then deserialize the pre-serialized RelocInfo objects.
@@ -1118,10 +1191,11 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(byte data,
 
         Code code = Code::cast(*slot_accessor.object());
         if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-          code.set_main_cage_base(isolate()->cage_base(), kRelaxedStore);
+          code_rw.set_main_cage_base(isolate()->cage_base(), kRelaxedStore);
         }
         DeserializerRelocInfoVisitor visitor(this, &preserialized_objects);
-        for (RelocIterator it(code, Code::BodyDescriptor::kRelocModeMask);
+        for (RelocIterator it(code, code_rw,
+                              Code::BodyDescriptor::kRelocModeMask);
              !it.done(); it.next()) {
           it.rinfo()->Visit(&visitor);
         }

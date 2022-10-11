@@ -10,6 +10,7 @@
 #include "src/execution/isolate.h"
 #include "src/heap/combined-heap.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/list-inl.h"
 #include "src/heap/list.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking.h"
@@ -31,10 +32,10 @@ namespace internal {
 // order to figure out if it's a cleared weak reference or not.
 static_assert(kClearedWeakHeapObjectLower32 < LargePage::kHeaderSize);
 
-LargePage::LargePage(Heap* heap, BaseSpace* space, size_t chunk_size,
-                     Address area_start, Address area_end,
+LargePage::LargePage(Heap* heap, BaseSpace* space, Address address,
+                     size_t chunk_size, Address area_start, Address area_end,
                      VirtualMemory reservation, Executability executable)
-    : MemoryChunk(heap, space, chunk_size, area_start, area_end,
+    : MemoryChunk(heap, space, address, chunk_size, area_start, area_end,
                   std::move(reservation), executable, PageSize::kLarge) {
   static_assert(LargePage::kMaxCodePageSize <= TypedSlotSet::kMaxOffset);
 
@@ -145,7 +146,8 @@ AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size,
 
   LargePage* page = AllocateLargePage(object_size, executable);
   if (page == nullptr) return AllocationResult::Failure();
-  page->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
+  page->AsCodePointer()->SetOldGenerationPageFlags(
+      heap()->incremental_marking()->IsMarking());
   HeapObject object = page->GetObject();
   UpdatePendingObject(object);
   heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
@@ -181,7 +183,8 @@ AllocationResult OldLargeObjectSpace::AllocateRawBackground(
 
   LargePage* page = AllocateLargePage(object_size, executable);
   if (page == nullptr) return AllocationResult::Failure();
-  page->SetOldGenerationPageFlags(heap()->incremental_marking()->IsMarking());
+  page->AsCodePointer()->SetOldGenerationPageFlags(
+      heap()->incremental_marking()->IsMarking());
   HeapObject object = page->GetObject();
   heap()->StartIncrementalMarkingIfAllocationLimitIsReachedBackground();
   if (heap()->incremental_marking()->black_allocation()) {
@@ -210,7 +213,7 @@ LargePage* LargeObjectSpace::AllocateLargePage(int object_size,
 
   HeapObject object = page->GetObject();
 
-  heap()->CreateFillerObjectAt(object.address(), object_size);
+  heap()->CreateFillerObjectAt(object.address(), object_size, executable);
   return page;
 }
 
@@ -266,9 +269,9 @@ void LargeObjectSpace::AddPage(LargePage* page, size_t object_size) {
   objects_size_ += object_size;
   page_count_++;
   memory_chunk_list_.PushBack(page);
-  page->set_owner(this);
-  page->SetOldGenerationPageFlags(!is_off_thread() &&
-                                  heap()->incremental_marking()->IsMarking());
+  page->AsCodePointer()->set_owner(this);
+  page->AsCodePointer()->SetOldGenerationPageFlags(
+      !is_off_thread() && heap()->incremental_marking()->IsMarking());
   for (size_t i = 0; i < ExternalBackingStoreType::kNumTypes; i++) {
     ExternalBackingStoreType t = static_cast<ExternalBackingStoreType>(i);
     IncrementExternalBackingStoreBytes(t, page->ExternalBackingStoreBytes(t));
@@ -279,7 +282,7 @@ void LargeObjectSpace::RemovePage(LargePage* page) {
   AccountUncommitted(page->size());
   page_count_--;
   memory_chunk_list_.Remove(page);
-  page->set_owner(nullptr);
+  page->AsCodePointer()->set_owner(nullptr);
   for (size_t i = 0; i < ExternalBackingStoreType::kNumTypes; i++) {
     ExternalBackingStoreType t = static_cast<ExternalBackingStoreType>(i);
     DecrementExternalBackingStoreBytes(t, page->ExternalBackingStoreBytes(t));

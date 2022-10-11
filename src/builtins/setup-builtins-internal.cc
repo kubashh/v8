@@ -240,13 +240,17 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
       RelocInfo::ModeMask(RelocInfo::COMPRESSED_EMBEDDED_OBJECT) |
       RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
   PtrComprCageBase cage_base(isolate);
+  CodeRange* code_range = isolate->heap()->code_range();
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
        ++builtin) {
     Code code = FromCodeT(builtins->code(builtin));
+    Code writable_code = Code::cast(HeapObject::FromAddress(
+        code_range->GetWritableAddress(code.address())));
     isolate->heap()->UnprotectAndRegisterMemoryChunk(
         code, UnprotectMemoryOrigin::kMainThread);
     bool flush_icache = false;
-    for (RelocIterator it(code, kRelocMask); !it.done(); it.next()) {
+    for (RelocIterator it(code, writable_code, kRelocMask); !it.done();
+         it.next()) {
       RelocInfo* rinfo = it.rinfo();
       if (RelocInfo::IsCodeTargetMode(rinfo->rmode())) {
         Code target = Code::GetCodeFromTargetAddress(rinfo->target_address());
@@ -254,7 +258,8 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
                        Builtins::IsIsolateIndependent(target.builtin_id()));
         if (!target.is_builtin()) continue;
         CodeT new_target = builtins->code(target.builtin_id());
-        rinfo->set_target_address(new_target.raw_instruction_start(),
+        rinfo->set_target_address(code_range,
+                                  new_target.raw_instruction_start(),
                                   UPDATE_WRITE_BARRIER, SKIP_ICACHE_FLUSH);
       } else {
         DCHECK(RelocInfo::IsEmbeddedObjectMode(rinfo->rmode()));

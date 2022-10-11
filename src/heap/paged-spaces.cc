@@ -14,10 +14,12 @@
 #include "src/execution/vm-state-inl.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/array-buffer-sweeper.h"
+#include "src/heap/basic-memory-chunk-inl.h"
 #include "src/heap/gc-tracer-inl.h"
 #include "src/heap/gc-tracer.h"
 #include "src/heap/heap.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/list-inl.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/memory-allocator.h"
 #include "src/heap/memory-chunk-inl.h"
@@ -312,7 +314,7 @@ Page* PagedSpaceBase::RemovePageSafe(int size_in_bytes) {
 size_t PagedSpaceBase::AddPage(Page* page) {
   DCHECK_NOT_NULL(page);
   CHECK(page->SweepingDone());
-  page->set_owner(this);
+  page->AsCodePointer()->set_owner(this);
   DCHECK_IMPLIES(identity() == NEW_SPACE, page->IsFlagSet(Page::TO_PAGE));
   DCHECK_IMPLIES(identity() != NEW_SPACE, !page->IsFlagSet(Page::TO_PAGE));
   memory_chunk_list_.PushBack(page);
@@ -495,8 +497,10 @@ void PagedSpaceBase::MakeLinearAllocationAreaIterable() {
       optional_scope.emplace(chunk);
     }
 
-    heap_->CreateFillerObjectAt(current_top,
-                                static_cast<int>(current_limit - current_top));
+    heap_->CreateFillerObjectAt(
+        current_top, static_cast<int>(current_limit - current_top),
+        (identity() == CODE_SPACE) ? Executability::EXECUTABLE
+                                   : Executability::NOT_EXECUTABLE);
   }
 }
 
@@ -1085,7 +1089,7 @@ void PagedSpaceBase::AddRangeToActiveSystemPages(Page* page, Address start,
   DCHECK_LT(start, end);
   DCHECK_LE(end, page->address() + Page::kPageSize);
 
-  const size_t added_pages = page->active_system_pages()->Add(
+  const size_t added_pages = page->AsCodePointer()->active_system_pages()->Add(
       start - page->address(), end - page->address(),
       MemoryAllocator::GetCommitPageSizeBits());
 
@@ -1096,7 +1100,7 @@ void PagedSpaceBase::AddRangeToActiveSystemPages(Page* page, Address start,
 void PagedSpaceBase::ReduceActiveSystemPages(
     Page* page, ActiveSystemPages active_system_pages) {
   const size_t reduced_pages =
-      page->active_system_pages()->Reduce(active_system_pages);
+      page->AsCodePointer()->active_system_pages()->Reduce(active_system_pages);
   DecrementCommittedPhysicalMemory(reduced_pages *
                                    MemoryAllocator::GetCommitPageSize());
 }

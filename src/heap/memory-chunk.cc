@@ -124,12 +124,12 @@ PageAllocator::Permission DefaultWritableCodePermissions() {
 
 }  // namespace
 
-MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
-                         Address area_start, Address area_end,
-                         VirtualMemory reservation, Executability executable,
-                         PageSize page_size)
-    : BasicMemoryChunk(heap, space, chunk_size, area_start, area_end,
-                       std::move(reservation))
+MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, Address address,
+                         size_t chunk_size, Address area_start,
+                         Address area_end, VirtualMemory reservation,
+                         Executability executable, PageSize page_size)
+    : BasicMemoryChunk(heap, space, address, chunk_size, area_start, area_end,
+                       std::move(reservation), executable)
 #ifdef V8_ENABLE_INNER_POINTER_RESOLUTION_OSB
       ,
       object_start_bitmap_(PtrComprCageBase{heap->isolate()}, area_start)
@@ -169,7 +169,8 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
     if (heap->write_protect_code_memory()) {
       write_unprotect_counter_ =
           heap->code_space_memory_modification_scope_depth();
-    } else if (!V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) {
+    } else if (!v8_flags.code_space_dual_mapping &&
+               !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) {
       size_t page_size = MemoryAllocator::GetCommitPageSize();
       DCHECK(IsAligned(area_start_, page_size));
       size_t area_size = RoundUp(area_end_ - area_start_, page_size);
@@ -281,7 +282,7 @@ template V8_EXPORT_PRIVATE SlotSet* MemoryChunk::AllocateSlotSet<OLD_TO_CODE>();
 
 template <RememberedSetType type>
 SlotSet* MemoryChunk::AllocateSlotSet() {
-  return AllocateSlotSet(&slot_set_[type]);
+  return AllocateSlotSet(&AsCodePointer()->slot_set_[type]);
 }
 
 SlotSet* MemoryChunk::AllocateSlotSet(SlotSet** slot_set) {
@@ -305,7 +306,7 @@ template void MemoryChunk::ReleaseSlotSet<OLD_TO_CODE>();
 
 template <RememberedSetType type>
 void MemoryChunk::ReleaseSlotSet() {
-  ReleaseSlotSet(&slot_set_[type]);
+  ReleaseSlotSet(&AsCodePointer()->slot_set_[type]);
 }
 
 void MemoryChunk::ReleaseSlotSet(SlotSet** slot_set) {
@@ -323,7 +324,7 @@ template <RememberedSetType type>
 TypedSlotSet* MemoryChunk::AllocateTypedSlotSet() {
   TypedSlotSet* typed_slot_set = new TypedSlotSet(address());
   TypedSlotSet* old_value = base::AsAtomicPointer::Release_CompareAndSwap(
-      &typed_slot_set_[type], nullptr, typed_slot_set);
+      &AsCodePointer()->typed_slot_set_[type], nullptr, typed_slot_set);
   if (old_value != nullptr) {
     delete typed_slot_set;
     typed_slot_set = old_value;
@@ -340,7 +341,7 @@ template <RememberedSetType type>
 void MemoryChunk::ReleaseTypedSlotSet() {
   TypedSlotSet* typed_slot_set = typed_slot_set_[type];
   if (typed_slot_set) {
-    typed_slot_set_[type] = nullptr;
+    AsCodePointer()->typed_slot_set_[type] = nullptr;
     delete typed_slot_set;
   }
 }

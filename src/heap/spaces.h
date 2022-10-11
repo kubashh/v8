@@ -43,6 +43,7 @@ class LargePage;
 class Page;
 class PagedSpaceBase;
 class SemiSpace;
+class SpaceWithLinearArea;
 
 // -----------------------------------------------------------------------------
 // Heap structures:
@@ -229,8 +230,9 @@ class Page : public MemoryChunk {
       MainThreadFlags(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING) |
       MainThreadFlags(MemoryChunk::INCREMENTAL_MARKING);
 
-  Page(Heap* heap, BaseSpace* space, size_t size, Address area_start,
-       Address area_end, VirtualMemory reservation, Executability executable);
+  Page(Heap* heap, BaseSpace* space, Address address, size_t size,
+       Address area_start, Address area_end, VirtualMemory reservation,
+       Executability executable);
 
   // Returns the page containing a given address. The address ranges
   // from [page_addr .. page_addr + kPageSize]. This only works if the object
@@ -333,6 +335,16 @@ class Page : public MemoryChunk {
       typed_slot_set->AssertNoInvalidSlots(ranges);
     }
 #endif  // DEBUG
+  }
+
+  CodeRange::Pointer<Page> AsCodePointer() {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
+  }
+
+  CodeRange::Pointer<const Page> AsCodePointer() const {
+    return CodeRange::Pointer(this,
+                              executable() == Executability::NOT_EXECUTABLE);
   }
 
  private:
@@ -447,7 +459,7 @@ class LocalAllocationBuffer {
 
   // Creates a new LAB from a given {AllocationResult}. Results in
   // InvalidBuffer if the result indicates a retry.
-  static inline LocalAllocationBuffer FromResult(Heap* heap,
+  static inline LocalAllocationBuffer FromResult(SpaceWithLinearArea* space,
                                                  AllocationResult result,
                                                  intptr_t size);
 
@@ -482,10 +494,11 @@ class LocalAllocationBuffer {
   Address limit() const { return allocation_info_.limit(); }
 
  private:
-  V8_EXPORT_PRIVATE LocalAllocationBuffer(
-      Heap* heap, LinearAllocationArea allocation_info) V8_NOEXCEPT;
+  V8_EXPORT_PRIVATE LocalAllocationBuffer(SpaceWithLinearArea* space,
+                                          LinearAllocationArea allocation_info)
+      V8_NOEXCEPT;
 
-  Heap* heap_;
+  SpaceWithLinearArea* space_;
   LinearAllocationArea allocation_info_;
 };
 

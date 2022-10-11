@@ -49,10 +49,10 @@ static_assert(kClearedWeakHeapObjectLower32 < Page::kHeaderSize);
 // static
 constexpr Page::MainThreadFlags Page::kCopyOnFlipFlagsMask;
 
-Page::Page(Heap* heap, BaseSpace* space, size_t size, Address area_start,
-           Address area_end, VirtualMemory reservation,
+Page::Page(Heap* heap, BaseSpace* space, Address address, size_t size,
+           Address area_start, Address area_end, VirtualMemory reservation,
            Executability executable)
-    : MemoryChunk(heap, space, size, area_start, area_end,
+    : MemoryChunk(heap, space, address, size, area_start, area_end,
                   std::move(reservation), executable, PageSize::kRegular) {}
 
 void Page::AllocateFreeListCategories() {
@@ -157,7 +157,9 @@ size_t Page::ShrinkToHighWaterMark() {
     }
     heap()->CreateFillerObjectAt(
         filler.address(),
-        static_cast<int>(area_end() - filler.address() - unused));
+        static_cast<int>(area_end() - filler.address() - unused),
+        owner()->identity() == CODE_SPACE ? Executability::EXECUTABLE
+                                          : Executability::NOT_EXECUTABLE);
     heap()->memory_allocator()->PartialFreeMemory(
         this, address() + size() - unused, unused, area_end() - unused);
     if (filler.address() != area_end()) {
@@ -306,15 +308,19 @@ LinearAllocationArea LocalAllocationBuffer::CloseAndMakeIterable() {
 
 void LocalAllocationBuffer::MakeIterable() {
   if (IsValid()) {
-    heap_->CreateFillerObjectAtBackground(
-        allocation_info_.top(),
-        static_cast<int>(allocation_info_.limit() - allocation_info_.top()));
+    Address start = allocation_info_.top();
+    space_->heap()->CreateFillerObjectAtBackground(
+        start,
+        static_cast<int>(allocation_info_.limit() - allocation_info_.top()),
+        space_->identity() == CODE_SPACE ? Executability::EXECUTABLE
+                                         : Executability::NOT_EXECUTABLE);
   }
 }
 
 LocalAllocationBuffer::LocalAllocationBuffer(
-    Heap* heap, LinearAllocationArea allocation_info) V8_NOEXCEPT
-    : heap_(heap),
+    SpaceWithLinearArea* space,
+    LinearAllocationArea allocation_info) V8_NOEXCEPT
+    : space_(space),
       allocation_info_(allocation_info) {}
 
 LocalAllocationBuffer::LocalAllocationBuffer(LocalAllocationBuffer&& other)
@@ -324,7 +330,7 @@ LocalAllocationBuffer::LocalAllocationBuffer(LocalAllocationBuffer&& other)
 
 LocalAllocationBuffer& LocalAllocationBuffer::operator=(
     LocalAllocationBuffer&& other) V8_NOEXCEPT {
-  heap_ = other.heap_;
+  space_ = other.space_;
   allocation_info_ = other.allocation_info_;
 
   other.allocation_info_.Reset(kNullAddress, kNullAddress);
@@ -416,7 +422,10 @@ void SpaceWithLinearArea::InvokeAllocationObservers(
       heap()->UnprotectAndRegisterMemoryChunk(
           chunk, UnprotectMemoryOrigin::kMainThread);
     }
-    heap_->CreateFillerObjectAt(soon_object, static_cast<int>(size_in_bytes));
+    heap()->CreateFillerObjectAt(soon_object, static_cast<int>(size_in_bytes),
+                                 identity() == CODE_SPACE
+                                     ? Executability::EXECUTABLE
+                                     : Executability::NOT_EXECUTABLE);
 
 #if DEBUG
     // Ensure that allocation_info_ isn't modified during one of the

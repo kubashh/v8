@@ -299,8 +299,11 @@ void CreateInterpreterDataForDeserializedCode(Isolate* isolate,
     interpreter_data->set_bytecode_array(info->GetBytecodeArray(isolate));
     interpreter_data->set_interpreter_trampoline(ToCodeT(*code));
     if (info->HasBaselineCode()) {
-      FromCodeT(info->baseline_code(kAcquireLoad))
-          .set_bytecode_or_interpreter_data(*interpreter_data);
+      Code code = FromCodeT(info->baseline_code(kAcquireLoad));
+      Code code_rw = Code::cast(HeapObject::FromAddress(
+          isolate->heap()->code_range()->GetWritableAddress(code.address())));
+      code_rw.set_bytecode_or_interpreter_data(isolate->heap(), code,
+                                               *interpreter_data);
     } else {
       info->set_interpreter_data(*interpreter_data);
     }

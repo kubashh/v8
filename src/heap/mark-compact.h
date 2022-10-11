@@ -10,6 +10,7 @@
 
 #include "include/v8-internal.h"
 #include "src/heap/base/worklist.h"
+#include "src/heap/code-range.h"
 #include "src/heap/concurrent-marking.h"
 #include "src/heap/marking-state.h"
 #include "src/heap/marking-visitor.h"

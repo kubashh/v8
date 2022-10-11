@@ -158,6 +158,8 @@ class Deserializer : public SerializerDeserializer {
   // are slot indices within the object.
   void ReadData(Handle<HeapObject> object, int start_slot_index,
                 int end_slot_index);
+  void ReadCode(Handle<HeapObject> object, HeapObject writable_object,
+                int start_slot_index, int end_slot_index);
 
   // Fills in a contiguous range of full object slots (e.g. root pointers) from
   // start to end (exclusive).

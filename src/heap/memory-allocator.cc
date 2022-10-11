@@ -374,13 +374,19 @@ MemoryAllocator::AllocateUninitializedChunk(BaseSpace* space, size_t area_size,
     size_executable_ += reservation.size();
   }
 
+  Address writable_base = base;
+  if (executable == EXECUTABLE) {
+    writable_base = isolate_->heap()->code_range()->GetWritableAddress(base);
+  }
+
   if (Heap::ShouldZapGarbage()) {
     if (executable == EXECUTABLE) {
       // Page header and object area is split by guard page. Zap page header
       // first.
-      ZapBlock(base, MemoryChunkLayout::CodePageGuardStartOffset(), kZapValue);
+      ZapBlock(writable_base, MemoryChunkLayout::CodePageGuardStartOffset(),
+               kZapValue);
       // Now zap object area.
-      ZapBlock(base + MemoryChunkLayout::ObjectStartOffsetInCodePage(),
+      ZapBlock(writable_base + MemoryChunkLayout::ObjectStartOffsetInCodePage(),
                area_size, kZapValue);
     } else {
       DCHECK_EQ(executable, NOT_EXECUTABLE);
@@ -399,7 +405,11 @@ MemoryAllocator::AllocateUninitializedChunk(BaseSpace* space, size_t area_size,
   Address area_end = area_start + area_size;
 
   return MemoryChunkAllocationResult{
-      reinterpret_cast<void*>(base), chunk_size, area_start, area_end,
+      reinterpret_cast<void*>(base),
+      reinterpret_cast<void*>(writable_base),
+      chunk_size,
+      area_start,
+      area_end,
       std::move(reservation),
   };
 }
@@ -408,10 +418,11 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
                                         Address start_free,
                                         size_t bytes_to_free,
                                         Address new_area_end) {
+  chunk->AsCodePointer()->set_size(chunk->size() - bytes_to_free);
+  chunk->AsCodePointer()->set_area_end(new_area_end);
+
   VirtualMemory* reservation = chunk->reserved_memory();
   DCHECK(reservation->IsReserved());
-  chunk->set_size(chunk->size() - bytes_to_free);
-  chunk->set_area_end(new_area_end);
   if (chunk->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
     // Add guard page at the end.
     size_t page_size = GetCommitPageSize();
@@ -419,7 +430,11 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
     DCHECK_EQ(chunk->address() + chunk->size(),
               chunk->area_end() + MemoryChunkLayout::CodePageGuardSize());
 
-    if (V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT && !isolate_->jitless()) {
+    // TODO(pierre.langlois@arm.com): This should be abtracted in the page
+    // allocator.
+    if ((v8_flags.code_space_dual_mapping ||
+         V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) &&
+        !isolate_->jitless()) {
       DCHECK(isolate_->RequiresCodeRange());
       reservation->DiscardSystemPages(chunk->area_end(), page_size);
     } else {
@@ -430,7 +445,10 @@ void MemoryAllocator::PartialFreeMemory(BasicMemoryChunk* chunk,
   // On e.g. Windows, a reservation may be larger than a page and releasing
   // partially starting at |start_free| will also release the potentially
   // unused part behind the current page.
-  const size_t released_bytes = reservation->Release(start_free);
+  const size_t released_bytes =
+      CodeRange::Pointer(reservation,
+                         chunk->executable() == Executability::NOT_EXECUTABLE)
+          ->Release(start_free);
   DCHECK_GE(size_, released_bytes);
   size_ -= released_bytes;
 }
@@ -462,7 +480,7 @@ void MemoryAllocator::UnregisterBasicMemoryChunk(BasicMemoryChunk* chunk,
     chunk->heap()->UnregisterUnprotectedMemoryChunk(
         static_cast<MemoryChunk*>(chunk));
   }
-  chunk->SetFlag(MemoryChunk::UNREGISTERED);
+  chunk->AsCodePointer()->SetFlag(MemoryChunk::UNREGISTERED);
 }
 
 void MemoryAllocator::UnregisterMemoryChunk(MemoryChunk* chunk) {
@@ -499,7 +517,7 @@ void MemoryAllocator::PreFreeMemory(MemoryChunk* chunk) {
   UnregisterMemoryChunk(chunk);
   isolate_->heap()->RememberUnmappedPage(reinterpret_cast<Address>(chunk),
                                          chunk->IsEvacuationCandidate());
-  chunk->SetFlag(MemoryChunk::PRE_FREED);
+  chunk->AsCodePointer()->SetFlag(MemoryChunk::PRE_FREED);
 }
 
 void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
@@ -513,12 +531,13 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
   DCHECK(chunk->IsFlagSet(MemoryChunk::UNREGISTERED));
   DCHECK(chunk->IsFlagSet(MemoryChunk::PRE_FREED));
   DCHECK(!chunk->InReadOnlySpace());
-  chunk->ReleaseAllAllocatedMemory();
+  chunk->AsCodePointer()->ReleaseAllAllocatedMemory();
 
-  VirtualMemory* reservation = chunk->reserved_memory();
   if (chunk->IsFlagSet(MemoryChunk::POOLED)) {
-    UncommitMemory(reservation);
+    UncommitMemory(chunk->reserved_memory());
   } else {
+    auto reservation = CodeRange::Pointer(
+        chunk->reserved_memory(), chunk->executable() == NOT_EXECUTABLE);
     DCHECK(reservation->IsReserved());
     reservation->Free();
   }
@@ -574,15 +593,18 @@ Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
 
   if (!chunk_info) return nullptr;
 
-  Page* page = new (chunk_info->start) Page(
-      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation), executable);
+  Address page_addr = reinterpret_cast<Address>(chunk_info->start);
+  Page* page_rw = new (chunk_info->start_rw)
+      Page(isolate_->heap(), space, page_addr, chunk_info->size,
+           chunk_info->area_start, chunk_info->area_end,
+           std::move(chunk_info->reservation), executable);
+  Page* page = Page::FromAddress(page_addr);
 
 #ifdef DEBUG
   if (page->executable()) RegisterExecutableMemoryChunk(page);
 #endif  // DEBUG
 
-  space->InitializePage(page);
+  space->InitializePage(page_rw);
   RecordNormalPageCreated(*page);
   return page;
 }
@@ -595,8 +617,9 @@ ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(ReadOnlySpace* space) {
                                  PageSize::kRegular);
   if (!chunk_info) return nullptr;
   return new (chunk_info->start) ReadOnlyPage(
-      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation));
+      isolate_->heap(), space, reinterpret_cast<Address>(chunk_info->start),
+      chunk_info->size, chunk_info->area_start, chunk_info->area_end,
+      std::move(chunk_info->reservation));
 }
 
 std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>
@@ -614,9 +637,13 @@ LargePage* MemoryAllocator::AllocateLargePage(LargeObjectSpace* space,
 
   if (!chunk_info) return nullptr;
 
-  LargePage* page = new (chunk_info->start) LargePage(
-      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation), executable);
+  Address page_addr = reinterpret_cast<Address>(chunk_info->start);
+  new (chunk_info->start_rw)
+      LargePage(isolate_->heap(), space, page_addr, chunk_info->size,
+                chunk_info->area_start, chunk_info->area_end,
+                std::move(chunk_info->reservation), executable);
+  LargePage* page =
+      static_cast<LargePage*>(MemoryChunk::FromAddress(page_addr));
 
 #ifdef DEBUG
   if (page->executable()) RegisterExecutableMemoryChunk(page);
@@ -646,7 +673,7 @@ MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
 
   size_ += size;
   return MemoryChunkAllocationResult{
-      chunk, size, area_start, area_end, std::move(reservation),
+      chunk, chunk, size, area_start, area_end, std::move(reservation),
   };
 }
 
@@ -726,7 +753,17 @@ bool MemoryAllocator::SetPermissionsOnExecutableMemoryChunk(VirtualMemory* vm,
       }
       vm->DiscardSystemPages(start, pre_guard_offset);
     }
-
+  } else if (v8_flags.code_space_dual_mapping) {
+    // Create the pre-code guard page, following the header.
+    if (vm->DiscardSystemPages(pre_guard_page, page_size)) {
+      // Create the post-code guard page.
+      if (vm->DiscardSystemPages(post_guard_page, page_size)) {
+        UpdateAllocatedSpaceLimits(start, code_area + area_size);
+        return true;
+      }
+      vm->DiscardSystemPages(code_area, area_size);
+    }
+    vm->DiscardSystemPages(start, pre_guard_offset);
   } else {
     // Commit the non-executable header, from start to pre-code guard page.
     if (vm->SetPermissions(start, pre_guard_offset,

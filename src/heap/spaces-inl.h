@@ -85,7 +85,7 @@ void Page::MarkEvacuationCandidate() {
   DCHECK(!IsFlagSet(NEVER_EVACUATE));
   DCHECK_NULL(slot_set<OLD_TO_OLD>());
   DCHECK_NULL(typed_slot_set<OLD_TO_OLD>());
-  SetFlag(EVACUATION_CANDIDATE);
+  AsCodePointer()->SetFlag(EVACUATION_CANDIDATE);
   reinterpret_cast<PagedSpace*>(owner())->free_list()->EvictFreeListItems(this);
 }
 
@@ -94,7 +94,7 @@ void Page::ClearEvacuationCandidate() {
     DCHECK_NULL(slot_set<OLD_TO_OLD>());
     DCHECK_NULL(typed_slot_set<OLD_TO_OLD>());
   }
-  ClearFlag(EVACUATION_CANDIDATE);
+  AsCodePointer()->ClearFlag(EVACUATION_CANDIDATE);
   InitializeFreeListCategories();
 }
 
@@ -158,9 +158,10 @@ AllocationResult LocalAllocationBuffer::AllocateRawAligned(
   }
   HeapObject object =
       HeapObject::FromAddress(allocation_info_.IncrementTop(aligned_size));
-  return filler_size > 0 ? AllocationResult::FromObject(
-                               heap_->PrecedeWithFiller(object, filler_size))
-                         : AllocationResult::FromObject(object);
+  return filler_size > 0
+             ? AllocationResult::FromObject(
+                   space_->heap()->PrecedeWithFiller(object, filler_size))
+             : AllocationResult::FromObject(object);
 }
 
 AllocationResult LocalAllocationBuffer::AllocateRawUnaligned(
@@ -172,16 +173,15 @@ AllocationResult LocalAllocationBuffer::AllocateRawUnaligned(
              : AllocationResult::Failure();
 }
 
-LocalAllocationBuffer LocalAllocationBuffer::FromResult(Heap* heap,
-                                                        AllocationResult result,
-                                                        intptr_t size) {
+LocalAllocationBuffer LocalAllocationBuffer::FromResult(
+    SpaceWithLinearArea* space, AllocationResult result, intptr_t size) {
   if (result.IsFailure()) return InvalidBuffer();
   HeapObject obj;
   bool ok = result.To(&obj);
   USE(ok);
   DCHECK(ok);
   Address top = HeapObject::cast(obj).address();
-  return LocalAllocationBuffer(heap, LinearAllocationArea(top, top + size));
+  return LocalAllocationBuffer(space, LinearAllocationArea(top, top + size));
 }
 
 bool LocalAllocationBuffer::TryMerge(LocalAllocationBuffer* other) {

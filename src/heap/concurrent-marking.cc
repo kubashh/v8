@@ -46,10 +46,9 @@ class ConcurrentMarkingState final
   ConcurrentMarkingState(PtrComprCageBase cage_base,
                          MemoryChunkDataMap* memory_chunk_data)
       : MarkingStateBase(cage_base), memory_chunk_data_(memory_chunk_data) {}
-
   ConcurrentBitmap<AccessMode::ATOMIC>* bitmap(
       const BasicMemoryChunk* chunk) const {
-    return chunk->marking_bitmap<AccessMode::ATOMIC>();
+    return chunk->AsCodePointer()->marking_bitmap<AccessMode::ATOMIC>();
   }
 
   void IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
