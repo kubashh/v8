@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e0c88b_89918847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-11T13:51:01Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c4ef806a00cf8cb6f3bea672cc2bdc9a4abf2558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2937aec_1a1a91f9",
+        "filename": "src/heap/cppgc/member-storage.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-11T13:51:01Z",
+      "side": 1,
+      "message": "`MemberBase*` and `GetRaw()` below? That way you don\u0027t need the dummy class.",
+      "range": {
+        "startLine": 32,
+        "startChar": 29,
+        "endLine": 32,
+        "endChar": 46
+      },
+      "revId": "c4ef806a00cf8cb6f3bea672cc2bdc9a4abf2558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
