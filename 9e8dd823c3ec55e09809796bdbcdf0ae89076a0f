@@ -16,6 +16,24 @@
       "message": "Well, these checks (and the casts) have to be re-added to preserve the old behavior..",
       "revId": "9e8dd823c3ec55e09809796bdbcdf0ae89076a0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d7bf4d9_49bd3a64",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5433,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-12T10:09:38Z",
+      "side": 0,
+      "message": "So IIUC, this CL updates runtime type-checking instructions, and only preserves the legacy behavior for static typing. Let\u0027s hope that\u0027ll be enough to serve the backwards compatibility needs.",
+      "parentUuid": "ac7fc653_2e6158be",
+      "revId": "9e8dd823c3ec55e09809796bdbcdf0ae89076a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

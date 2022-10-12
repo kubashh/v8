@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bf146fb_5b3f1505",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-12T10:09:38Z",
+      "side": 1,
+      "message": "Please add a brief summary of what\u0027s changed since the previous attempt. Maybe \"Changed in reland: in static typing, `structref` behaves like `dataref` for now; `--nowasm-gc-structref-as-dataref` enables the new behavior.\" or something like that.",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "dfebbe34f3c3059ed8d364079ac627f4cd3a9eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5837996b_a0f4536d",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-10-11T11:02:02Z",
       "side": 1,
       "message": "@jkummerow@chromium.org: PTAL. Patchset 1 is an exact reland of the original commit. Patchset 2 contains the flag added for backwards-compatibility.\nAre we fine with just adapting the subtyping or do we also have to worry e.g. about the string types e.g. for Tables from JavaScript?",
+      "revId": "dfebbe34f3c3059ed8d364079ac627f4cd3a9eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27cb829d_a0f059cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-12T10:09:38Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
       "revId": "dfebbe34f3c3059ed8d364079ac627f4cd3a9eae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
