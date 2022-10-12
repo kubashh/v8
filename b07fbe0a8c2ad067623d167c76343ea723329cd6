@@ -46,6 +46,30 @@
       },
       "revId": "b07fbe0a8c2ad067623d167c76343ea723329cd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5abefb22_dc040718",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-12T11:58:17Z",
+      "side": 1,
+      "message": "ok, I\u0027m not sure either what guarantees `GetPropertyAccessInfo` has there so defensive is good.",
+      "parentUuid": "f8919813_7b335016",
+      "range": {
+        "startLine": 1284,
+        "startChar": 6,
+        "endLine": 1284,
+        "endChar": 19
+      },
+      "revId": "b07fbe0a8c2ad067623d167c76343ea723329cd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
