@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbcc452d_ead257e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-10-12T08:01:24Z",
+      "side": 1,
+      "message": "Hi Camillo, would you mind taking a look at this CL? thank you.",
+      "revId": "05d6ba918dca66d4ae2282bf8c056e56aa9a1f1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
