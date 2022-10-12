@@ -22,6 +22,30 @@
       },
       "revId": "f7942ebb25918defc94d65fa06cc2c33bfbec365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f65b6fa_62a0471d",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-12T07:09:43Z",
+      "side": 1,
+      "message": "Assuming you clean it up in a follow up as mentioned in CL description...",
+      "parentUuid": "5577ee76_38d2ae30",
+      "range": {
+        "startLine": 258,
+        "startChar": 3,
+        "endLine": 258,
+        "endChar": 29
+      },
+      "revId": "f7942ebb25918defc94d65fa06cc2c33bfbec365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
