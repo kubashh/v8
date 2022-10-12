@@ -979,6 +979,13 @@ class RepresentationSelector {
             use.truncation().description());
       if (input_type.IsInvalid()) {
         input_type = TypeOf(input);
+      } else {
+        // This case is reached when ConvertInput is called for TypeGuard nodes
+        // which explicitly set the {input_type} for their input. In order to
+        // correctly verify the resulting graph, we have to preserve this
+        // forced type for the verifier.
+        DCHECK_EQ(node->opcode(), IrOpcode::kTypeGuard);
+        input = InsertTypeOverrideForVerifier(input_type, input);
       }
       Node* n = changer_->GetRepresentationFor(input, input_rep, input_type,
                                                node, use);
@@ -1037,10 +1044,10 @@ class RepresentationSelector {
 
   // Helper for an unused node.
   template <Phase T>
-  void VisitUnused(Node* node) {
+  void VisitUnused(Node* node, UseInfo use_info = UseInfo::None()) {
     int first_effect_index = NodeProperties::FirstEffectIndex(node);
     for (int i = 0; i < first_effect_index; i++) {
-      ProcessInput<T>(node, i, UseInfo::None());
+      ProcessInput<T>(node, i, use_info);
     }
     ProcessRemainingInputs<T>(node, first_effect_index);
 
