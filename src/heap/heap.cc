@@ -3805,8 +3805,9 @@ void Heap::NotifyObjectLayoutChange(
   }
 #ifdef VERIFY_HEAP
   if (v8_flags.verify_heap) {
-    DCHECK(pending_layout_change_object_.is_null());
-    pending_layout_change_object_ = object;
+    Heap* heap = GetHeapFromWritableObject(object);
+    DCHECK(heap->pending_layout_change_object_.is_null());
+    heap->pending_layout_change_object_ = object;
   }
 #endif
 }
