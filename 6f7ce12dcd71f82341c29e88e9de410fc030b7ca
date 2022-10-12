@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "980185c4_c9e093f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-12T11:22:36Z",
+      "side": 1,
+      "message": "This looks great!",
+      "revId": "6f7ce12dcd71f82341c29e88e9de410fc030b7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79fe5493_14cf12e9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-12T11:22:36Z",
+      "side": 1,
+      "message": "nit: make this an `if-else` to make it clear that load_source is `lookup_start_object` only in the `else` case (my eyes skimmed over this at first)",
+      "range": {
+        "startLine": 1250,
+        "startChar": 2,
+        "endLine": 1250,
+        "endChar": 4
+      },
+      "revId": "6f7ce12dcd71f82341c29e88e9de410fc030b7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
