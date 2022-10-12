@@ -68,6 +68,40 @@
       "message": "I thought for some reason that Mathias is owner of src/inspector.\nKim, PTAL as owner of src/inspector",
       "revId": "9a35c9716383e70603b7bc49d20c72035e91d521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3401f66a_36c267a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-10-12T10:27:51Z",
+      "side": 1,
+      "message": "LGTM src/inspector % comment",
+      "revId": "9a35c9716383e70603b7bc49d20c72035e91d521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "134cd4a8_ea7af353",
+        "filename": "src/inspector/v8-webdriver-serializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2022-10-12T10:27:51Z",
+      "side": 1,
+      "message": "nit: is there a reason for formatting this with braces as opposed to how the surrounding code does it?",
+      "revId": "9a35c9716383e70603b7bc49d20c72035e91d521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
