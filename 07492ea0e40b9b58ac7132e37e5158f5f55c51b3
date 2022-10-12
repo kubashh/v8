@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b678fc3a_c3cb40f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-12T13:40:47Z",
+      "side": 1,
+      "message": "I doubt that it\u0027s an `int` :)",
+      "range": {
+        "startLine": 17,
+        "startChar": 16,
+        "endLine": 17,
+        "endChar": 19
+      },
+      "revId": "07492ea0e40b9b58ac7132e37e5158f5f55c51b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
