@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5577ee76_38d2ae30",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-12T07:08:54Z",
+      "side": 1,
+      "message": "Here are several other artifact builders that don\u0027t set these. Maybe rather remove them everywhere now, since the defaults seem to be enough?",
+      "range": {
+        "startLine": 258,
+        "startChar": 3,
+        "endLine": 258,
+        "endChar": 29
+      },
+      "revId": "f7942ebb25918defc94d65fa06cc2c33bfbec365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
