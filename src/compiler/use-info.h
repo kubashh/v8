@@ -6,6 +6,7 @@
 #define V8_COMPILER_USE_INFO_H_
 
 #include "src/base/functional.h"
+#include "src/codegen/machine-type.h"
 #include "src/compiler/feedback-source.h"
 #include "src/compiler/globals.h"
 
@@ -188,6 +189,12 @@ class UseInfo {
         feedback_(feedback) {}
   static UseInfo TruncatingWord32() {
     return UseInfo(MachineRepresentation::kWord32, Truncation::Word32());
+  }
+  static UseInfo CheckedBigIntTruncatingNone(const FeedbackSource& feedback) {
+    // This UseInfo is to be used when the value is unused, but we still need
+    // to make sure that the input has BigInt type.
+    return UseInfo(MachineRepresentation::kNone, Truncation::None(),
+                   TypeCheckKind::kBigInt, feedback);
   }
   static UseInfo CheckedBigIntTruncatingWord64(const FeedbackSource& feedback) {
     // Note that Trunction::Word64() can safely use kIdentifyZero, because
