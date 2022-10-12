@@ -102,6 +102,24 @@
       "message": "nit: is there a reason for formatting this with braces as opposed to how the surrounding code does it?",
       "revId": "9a35c9716383e70603b7bc49d20c72035e91d521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f796877c_51d48705",
+        "filename": "src/inspector/v8-webdriver-serializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-12T10:41:02Z",
+      "side": 1,
+      "message": "Yes. It is too long to fit in a single line.",
+      "parentUuid": "134cd4a8_ea7af353",
+      "revId": "9a35c9716383e70603b7bc49d20c72035e91d521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
