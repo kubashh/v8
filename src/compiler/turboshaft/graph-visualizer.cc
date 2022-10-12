@@ -37,7 +37,7 @@ void JSONTurboshaftGraphWriter::PrintNodes() {
       os_ << "{\"id\":" << index.id() << ",";
       os_ << "\"title\":\"" << OpcodeName(op.opcode) << "\",";
       os_ << "\"block_id\":" << block.index().id() << ",";
-      os_ << "\"op_properties_type\":\"" << op.properties() << "\"";
+      os_ << "\"op_properties_type\":\"" << op.Properties() << "\"";
       if (origins_) {
         NodeOrigin origin = origins_->GetNodeOrigin(index.id());
         if (origin.IsKnown()) {
