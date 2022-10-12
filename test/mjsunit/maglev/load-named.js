@@ -14,6 +14,7 @@
   assertEquals(42, load({smi:42}));
 
   %OptimizeMaglevOnNextCall(load);
+  // %OptimizeFunctionOnNextCall(load);
   assertEquals(42, load({smi:42}));
   assertTrue(isMaglevved(load));
 
