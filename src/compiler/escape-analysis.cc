@@ -616,11 +616,8 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       Node* value = current->ValueInput(1);
       const VirtualObject* vobject = current->GetVirtualObject(object);
       Variable var;
-      // BoundedSize fields cannot currently be materialized by the deoptimizer,
-      // so we must not dematerialze them.
       if (vobject && !vobject->HasEscaped() &&
-          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var) &&
-          !FieldAccessOf(op).is_bounded_size_access) {
+          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var)) {
         current->Set(var, value);
         current->MarkForDeletion();
       } else {
