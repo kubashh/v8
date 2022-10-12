@@ -22,6 +22,30 @@
       },
       "revId": "07492ea0e40b9b58ac7132e37e5158f5f55c51b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4aa628_c7506ec6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-10-12T14:13:24Z",
+      "side": 1,
+      "message": "That was produced in a local experiment 😊",
+      "parentUuid": "b678fc3a_c3cb40f9",
+      "range": {
+        "startLine": 17,
+        "startChar": 16,
+        "endLine": 17,
+        "endChar": 19
+      },
+      "revId": "07492ea0e40b9b58ac7132e37e5158f5f55c51b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
