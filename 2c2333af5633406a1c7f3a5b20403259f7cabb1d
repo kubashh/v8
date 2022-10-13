@@ -16,6 +16,46 @@
       "message": "@jkummerow@chromium.org: PTAL.",
       "revId": "2c2333af5633406a1c7f3a5b20403259f7cabb1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d791550a_02df1845",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-13T14:28:30Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "2c2333af5633406a1c7f3a5b20403259f7cabb1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f17594c8_40f9ceef",
+        "filename": "src/builtins/builtins-intl-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-13T14:28:30Z",
+      "side": 1,
+      "message": "Big endian platform teams: I expect that you\u0027ll need to replace this line with `(pattern[0] \u003c\u003c 8) + pattern[1]`.",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 53
+      },
+      "revId": "2c2333af5633406a1c7f3a5b20403259f7cabb1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
