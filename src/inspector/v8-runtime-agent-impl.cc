@@ -491,6 +491,8 @@ Response V8RuntimeAgentImpl::releaseObjectGroup(const String16& objectGroup) {
 }
 
 Response V8RuntimeAgentImpl::runIfWaitingForDebugger() {
+  if (m_runIfWaitingForDebuggerCalled) return Response::Success();
+  m_runIfWaitingForDebuggerCalled = true;
   m_inspector->client()->runIfWaitingForDebugger(m_session->contextGroupId());
   return Response::Success();
 }
