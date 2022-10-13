@@ -794,6 +794,7 @@ Response V8DebuggerAgentImpl::getPossibleBreakpoints(
     }
     v8::Context::Scope contextScope(inspected->context());
     v8::MicrotasksScope microtasks(m_isolate,
+                                   inspected->context()->GetMicrotaskQueue(),
                                    v8::MicrotasksScope::kDoNotRunMicrotasks);
     v8::TryCatch tryCatch(m_isolate);
     it->second->getPossibleBreakpoints(
