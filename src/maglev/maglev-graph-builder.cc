@@ -1316,9 +1316,9 @@ bool MaglevGraphBuilder::TryBuildMonomorphicLoadFromLoadHandler(
       compiler::ObjectRef getter_ref = MakeRefAssumeMemoryFence(
           broker(), broker()->CanonicalPersistentHandle(data1));
 
-      Call* call = CreateNewNode<Call>(Call::kFixedInputCount + 1,
-                                       ConvertReceiverMode::kNotNullOrUndefined,
-                                       GetConstant(getter_ref), GetContext());
+      Call* call = CreateNewNode<Call>(
+          Call::kFixedInputCount + 1, ConvertReceiverMode::kNotNullOrUndefined,
+          compiler::FeedbackSource(), GetConstant(getter_ref), GetContext());
       call->set_arg(0, receiver);
       SetAccumulator(AddNode(call));
       break;
@@ -2165,13 +2165,16 @@ void MaglevGraphBuilder::BuildCallFromRegisterList(
   interpreter::RegisterList args = iterator_.GetRegisterListOperand(1);
   ValueNode* context = GetContext();
 
+  FeedbackSlot slot = GetSlotOperand(3);
+  compiler::FeedbackSource feedback_source(feedback(), slot);
+
   size_t input_count = args.register_count() + Call::kFixedInputCount;
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     input_count++;
   }
 
-  Call* call =
-      CreateNewNode<Call>(input_count, receiver_mode, function, context);
+  Call* call = CreateNewNode<Call>(input_count, receiver_mode, feedback_source,
+                                   function, context);
   int arg_index = 0;
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     call->set_arg(arg_index++, GetRootConstant(RootIndex::kUndefinedValue));
@@ -2197,9 +2200,10 @@ void MaglevGraphBuilder::BuildCallFromRegisters(
   ValueNode* function = LoadRegisterTagged(0);
   ValueNode* context = GetContext();
   FeedbackSlot slot = GetSlotOperand(kSlotOperandIndex);
+  compiler::FeedbackSource feedback_source(feedback(), slot);
 
   const compiler::ProcessedFeedback& processed_feedback =
-      broker()->GetFeedbackForCall(compiler::FeedbackSource(feedback(), slot));
+      broker()->GetFeedbackForCall(feedback_source);
   switch (processed_feedback.kind()) {
     case compiler::ProcessedFeedback::kInsufficient:
       EmitUnconditionalDeopt(
@@ -2238,8 +2242,8 @@ void MaglevGraphBuilder::BuildCallFromRegisters(
 
   int arg_index = 0;
   int reg_count = argc_count_with_recv;
-  Call* call =
-      CreateNewNode<Call>(input_count, receiver_mode, function, context);
+  Call* call = CreateNewNode<Call>(input_count, receiver_mode, feedback_source,
+                                   function, context);
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
     reg_count = argc_count;
     call->set_arg(arg_index++, GetRootConstant(RootIndex::kUndefinedValue));
@@ -2283,10 +2287,12 @@ void MaglevGraphBuilder::VisitCallWithSpread() {
   ValueNode* function = LoadRegisterTagged(0);
   interpreter::RegisterList args = iterator_.GetRegisterListOperand(1);
   ValueNode* context = GetContext();
+  FeedbackSlot slot = GetSlotOperand(3);
+  compiler::FeedbackSource feedback_source(feedback(), slot);
 
   size_t input_count = args.register_count() + CallWithSpread::kFixedInputCount;
-  CallWithSpread* call =
-      CreateNewNode<CallWithSpread>(input_count, function, context);
+  CallWithSpread* call = CreateNewNode<CallWithSpread>(
+      input_count, feedback_source, function, context);
   for (int i = 0; i < args.register_count(); ++i) {
     call->set_arg(i, GetTaggedValue(args[i]));
   }
@@ -2322,8 +2328,9 @@ void MaglevGraphBuilder::VisitCallJSRuntime() {
   size_t input_count =
       args.register_count() + Call::kFixedInputCount + kTheReceiver;
 
-  Call* call = CreateNewNode<Call>(
-      input_count, ConvertReceiverMode::kNullOrUndefined, callee, GetContext());
+  Call* call =
+      CreateNewNode<Call>(input_count, ConvertReceiverMode::kNullOrUndefined,
+                          compiler::FeedbackSource(), callee, GetContext());
   int arg_index = 0;
   call->set_arg(arg_index++, GetRootConstant(RootIndex::kUndefinedValue));
   for (int i = 0; i < args.register_count(); ++i) {
@@ -2533,12 +2540,14 @@ void MaglevGraphBuilder::VisitConstructWithSpread() {
   ValueNode* constructor = LoadRegisterTagged(0);
   interpreter::RegisterList args = iterator_.GetRegisterListOperand(1);
   ValueNode* context = GetContext();
+  FeedbackSlot slot = GetSlotOperand(3);
+  compiler::FeedbackSource feedback_source(feedback(), slot);
 
   int kReceiver = 1;
   size_t input_count =
       args.register_count() + kReceiver + ConstructWithSpread::kFixedInputCount;
   ConstructWithSpread* construct = CreateNewNode<ConstructWithSpread>(
-      input_count, constructor, new_target, context);
+      input_count, feedback_source, constructor, new_target, context);
   int arg_index = 0;
   // Add undefined receiver.
   construct->set_arg(arg_index++, GetRootConstant(RootIndex::kUndefinedValue));
