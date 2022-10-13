@@ -412,12 +412,30 @@ void HeapVerifier::VerifyRememberedSetFor(Heap* heap, HeapObject object) {
 }
 
 // static
+void HeapVerifier::VerifyObjectLayoutChangeIsAllowed(Heap* heap,
+                                                     HeapObject object) {
+  Isolate* isolate = heap->isolate();
+  if (object.InSharedWritableHeap()) {
+    // Out of objects in the shared heap, only strings can change layout.
+    DCHECK(object.IsString());
+    // Shared strings only change layout under GC, never concurrently.
+    if (object.IsShared()) {
+      isolate->shared_heap_isolate()->global_safepoint()->AssertActive();
+    }
+    // Non-shared strings in the shared heap are allowed to change layout
+    // outside of GC like strings in non-shared heaps.
+  }
+}
+
+// static
 void HeapVerifier::VerifyObjectLayoutChange(Heap* heap, HeapObject object,
                                             Map new_map) {
   // Object layout changes are currently not supported on background threads.
   DCHECK_NULL(LocalHeap::Current());
 
   if (!v8_flags.verify_heap) return;
+
+  VerifyObjectLayoutChangeIsAllowed(heap, object);
 
   PtrComprCageBase cage_base(heap->isolate());
 

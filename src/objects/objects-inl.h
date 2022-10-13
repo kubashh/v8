@@ -845,7 +845,9 @@ void HeapObject::set_map(Map value, MemoryOrder order, VerificationMode mode) {
   DCHECK_IMPLIES(mode != VerificationMode::kSafeMapTransition,
                  !LocalHeap::Current());
   if (v8_flags.verify_heap && !value.is_null()) {
-    Heap* heap = GetHeapFromWritableObject(*this);
+    // To support objects in shared space, object layout transitions are
+    // verified on the executing heap, not the heap that owns the object.
+    Heap* heap = Isolate::Current()->heap();
     if (mode == VerificationMode::kSafeMapTransition) {
       HeapVerifier::VerifySafeMapTransition(heap, *this, value);
     } else {
