@@ -33,6 +33,24 @@
       "message": "Wouldn\u0027t that cause a race when two isolates update maps in the shared heap at the same time? AFAIU both isolates would then update the same field.\n\nI guess we could use the current Heap instance but update set_map to use the same Heap as well. Wdyt?",
       "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53c8ed62_62865fa0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-13T16:29:48Z",
+      "side": 1,
+      "message": "You\u0027re right, this would cause a race. Currently there\u0027s no concurrent map updating for shared objects AFAIU, since shared strings transition using the hash field instead of the map field, and all other shared objects don\u0027t change layouts.\n\nI thought about this a bit and think that TSAN detecting a race here would actually be beneficial. Concurrent mutators can\u0027t race on `set_map` calls that cause layout change in a safe way: they should be doing a CAS on maps at a minimum. Thoughts?",
+      "parentUuid": "71837630_39dd3ff6",
+      "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
