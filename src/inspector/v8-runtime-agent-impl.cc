@@ -153,6 +153,7 @@ void innerCallFunctionOn(
           ->compileScript(scope.context(), "(" + expression + ")", String16())
           .ToLocal(&functionScript)) {
     v8::MicrotasksScope microtasksScope(inspector->isolate(),
+                                        scope.context()->GetMicrotaskQueue(),
                                         v8::MicrotasksScope::kRunMicrotasks);
     maybeFunctionValue = functionScript->Run(scope.context());
   }
@@ -182,6 +183,7 @@ void innerCallFunctionOn(
   v8::MaybeLocal<v8::Value> maybeResultValue;
   {
     v8::MicrotasksScope microtasksScope(inspector->isolate(),
+                                        scope.context()->GetMicrotaskQueue(),
                                         v8::MicrotasksScope::kRunMicrotasks);
     maybeResultValue = v8::debug::CallFunctionOn(
         scope.context(), functionValue.As<v8::Function>(), recv, argc,
@@ -300,6 +302,7 @@ void V8RuntimeAgentImpl::evaluate(
       }
     }
     v8::MicrotasksScope microtasksScope(m_inspector->isolate(),
+                                        scope.context()->GetMicrotaskQueue(),
                                         v8::MicrotasksScope::kRunMicrotasks);
     v8::debug::EvaluateGlobalMode mode =
         v8::debug::EvaluateGlobalMode::kDefault;
@@ -448,6 +451,7 @@ Response V8RuntimeAgentImpl::getProperties(
 
   scope.ignoreExceptionsAndMuteConsole();
   v8::MicrotasksScope microtasks_scope(m_inspector->isolate(),
+                                       scope.context()->GetMicrotaskQueue(),
                                        v8::MicrotasksScope::kRunMicrotasks);
   if (!scope.object()->IsObject())
     return Response::ServerError("Value with given id is not an object");
@@ -616,6 +620,7 @@ void V8RuntimeAgentImpl::runScript(
   v8::MaybeLocal<v8::Value> maybeResultValue;
   {
     v8::MicrotasksScope microtasksScope(m_inspector->isolate(),
+                                        scope.context()->GetMicrotaskQueue(),
                                         v8::MicrotasksScope::kRunMicrotasks);
     maybeResultValue = script->Run(scope.context());
   }
@@ -795,6 +800,7 @@ void V8RuntimeAgentImpl::addBinding(InspectedContext* context,
   v8::Local<v8::String> v8Name = toV8String(m_inspector->isolate(), name);
   v8::Local<v8::Value> functionValue;
   v8::MicrotasksScope microtasks(m_inspector->isolate(),
+                                 localContext->GetMicrotaskQueue(),
                                  v8::MicrotasksScope::kDoNotRunMicrotasks);
   if (v8::Function::New(localContext, bindingCallback, v8Name)
           .ToLocal(&functionValue)) {

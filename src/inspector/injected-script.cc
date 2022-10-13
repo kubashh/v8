@@ -714,6 +714,7 @@ void InjectedScript::addPromiseCallback(
   }
 
   v8::MicrotasksScope microtasksScope(m_context->isolate(),
+                                      m_context->context()->GetMicrotaskQueue(),
                                       v8::MicrotasksScope::kRunMicrotasks);
   ProtocolPromiseHandler::add(session, m_context->context(),
                               value.ToLocalChecked(), m_context->contextId(),
