@@ -1154,6 +1154,16 @@ class FastZoneVector {
   T* begin() const { return begin_; }
   T* end() const { return end_; }
 
+  T& front() {
+    DCHECK(!empty());
+    return begin_[0];
+  }
+
+  T& back() {
+    DCHECK(!empty());
+    return end_[-1];
+  }
+
   uint32_t size() const { return static_cast<uint32_t>(end_ - begin_); }
 
   bool empty() const { return begin_ == end_; }
@@ -1176,6 +1186,13 @@ class FastZoneVector {
   void push(T value) {
     DCHECK_GT(capacity_end_, end_);
     *end_ = std::move(value);
+    ++end_;
+  }
+
+  template <typename... Args>
+  void emplace_back(Args&&... args) {
+    DCHECK_GT(capacity_end_, end_);
+    new (end_) T{std::forward<Args>(args)...};
     ++end_;
   }
 
@@ -2507,8 +2524,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
                                              body.offset),
         interface_(std::forward<InterfaceArgs>(interface_args)...),
         initialized_locals_(zone),
-        locals_initializers_stack_(zone),
-        control_(zone) {}
+        locals_initializers_stack_(zone) {}
 
   Interface& interface() { return interface_; }
 
@@ -2587,7 +2603,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
 
   Control* control_at(uint32_t depth) {
     DCHECK_GT(control_.size(), depth);
-    return &control_.back() - depth;
+    return control_.end() - 1 - depth;
   }
 
   uint32_t stack_size() const { return stack_.size(); }
@@ -2671,6 +2687,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       DCHECK(control_.empty());
       constexpr uint32_t kStackDepth = 0;
       constexpr uint32_t kInitStackDepth = 0;
+      control_.EnsureMoreCapacity(1, this->compilation_zone_);
       control_.emplace_back(kControlBlock, kStackDepth, kInitStackDepth,
                             this->pc_, kReachable);
       Control* c = &control_.back();
@@ -2769,8 +2786,8 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
   // allocated) to the number of non-defaultable locals in the function.
   ZoneVector<uint32_t> locals_initializers_stack_;
 
-  // stack of blocks, loops, and ifs.
-  ZoneVector<Control> control_;
+  // Control stack (blocks, loops, ifs, ...).
+  FastZoneVector<Control> control_;
 
   // Controls whether code should be generated for the current block (basically
   // a cache for {ok() && control_.back().reachable()}).
@@ -3248,7 +3265,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
       // The result of the block is the return value.
       trace_msg->Append("\n" TRACE_INST_FORMAT, startrel(this->pc_),
                         "(implicit) return");
-      control_.clear();
+      control_.pop();
       return 1;
     }
 
@@ -4039,6 +4056,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
         stack_.size() >= drop_values ? stack_.size() - drop_values : 0;
     stack_depth = std::max(stack_depth, control_.back().stack_depth);
     uint32_t init_stack_depth = this->locals_initialization_stack_depth();
+    control_.EnsureMoreCapacity(1, this->compilation_zone_);
     control_.emplace_back(kind, stack_depth, init_stack_depth, this->pc_,
                           reachability);
     current_code_reachable_and_ok_ = this->ok() && reachability == kReachable;
@@ -4065,7 +4083,7 @@ class WasmFullDecoder : public WasmDecoder<validate, decoding_mode> {
 
     bool parent_reached =
         c->reachable() || c->end_merge.reached || c->is_onearmed_if();
-    control_.pop_back();
+    control_.pop();
     // If the parent block was reachable before, but the popped control does not
     // return to here, this block becomes "spec only reachable".
     if (!parent_reached) SetSucceedingCodeDynamicallyUnreachable();
