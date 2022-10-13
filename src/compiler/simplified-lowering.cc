@@ -979,6 +979,13 @@ class RepresentationSelector {
             use.truncation().description());
       if (input_type.IsInvalid()) {
         input_type = TypeOf(input);
+      } else {
+        // This case is reached when ConvertInput is called for TypeGuard nodes
+        // which explicitly set the {input_type} for their input. In order to
+        // correctly verify the resulting graph, we have to preserve this
+        // forced type for the verifier.
+        DCHECK_EQ(node->opcode(), IrOpcode::kTypeGuard);
+        input = InsertTypeOverrideForVerifier(input_type, input);
       }
       Node* n = changer_->GetRepresentationFor(input, input_rep, input_type,
                                                node, use);
@@ -3191,11 +3198,14 @@ class RepresentationSelector {
         return;
       }
       case IrOpcode::kSpeculativeBigIntAdd: {
-        // TODO(nicohartmann@, chromium:1073440): There should be special
-        // handling for trunction.IsUnused() that correctly propagates deadness,
-        // but preserves type checking which may throw exceptions. Until this
-        // is fully supported, we lower to int64 operations but keep pushing
-        // type constraints.
+        if (truncation.IsUnused()) {
+          Type left_type = GetUpperBound(node->InputAt(0));
+          Type right_type = GetUpperBound(node->InputAt(1));
+          if (left_type.Is(Type::BigInt()) && right_type.Is(Type::BigInt())) {
+            VisitUnused<T>(node);
+            return;
+          }
+        }
         if (truncation.IsUsedAsWord64()) {
           VisitBinop<T>(
               node, UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource{}),
@@ -3203,32 +3213,42 @@ class RepresentationSelector {
           if (lower<T>()) {
             ChangeToPureOp(node, lowering->machine()->Int64Add());
           }
-          return;
-        }
-        BigIntOperationHint hint = BigIntOperationHintOf(node->op());
-        switch (hint) {
-          case BigIntOperationHint::kBigInt64: {
-            VisitBinop<T>(
-                node, UseInfo::CheckedBigInt64AsWord64(FeedbackSource{}),
-                MachineRepresentation::kWord64, Type::SignedBigInt64());
-            if (lower<T>()) {
-              ChangeOp(node, lowering->simplified()->CheckedBigInt64Add());
+        } else {
+          BigIntOperationHint hint = BigIntOperationHintOf(node->op());
+          switch (hint) {
+            case BigIntOperationHint::kBigInt64: {
+              VisitBinop<T>(
+                  node, UseInfo::CheckedBigInt64AsWord64(FeedbackSource{}),
+                  MachineRepresentation::kWord64, Type::SignedBigInt64());
+              if (lower<T>()) {
+                ChangeOp(node, lowering->simplified()->CheckedBigInt64Add());
+              }
+              break;
             }
-            return;
-          }
-          case BigIntOperationHint::kBigInt: {
-            VisitBinop<T>(
-                node, UseInfo::CheckedBigIntAsTaggedPointer(FeedbackSource{}),
-                MachineRepresentation::kTaggedPointer);
-            if (lower<T>()) {
-              ChangeOp(node, lowering->simplified()->BigIntAdd());
+            case BigIntOperationHint::kBigInt: {
+              VisitBinop<T>(
+                  node, UseInfo::CheckedBigIntAsTaggedPointer(FeedbackSource{}),
+                  MachineRepresentation::kTaggedPointer);
+              if (lower<T>()) {
+                ChangeOp(node, lowering->simplified()->BigIntAdd());
+              }
+              break;
             }
-            return;
+            default:
+              UNREACHABLE();
           }
-            UNREACHABLE();
         }
+        return;
       }
       case IrOpcode::kSpeculativeBigIntSubtract: {
+        if (truncation.IsUnused()) {
+          Type left_type = GetUpperBound(node->InputAt(0));
+          Type right_type = GetUpperBound(node->InputAt(1));
+          if (left_type.Is(Type::BigInt()) && right_type.Is(Type::BigInt())) {
+            VisitUnused<T>(node);
+            return;
+          }
+        }
         if (truncation.IsUsedAsWord64()) {
           VisitBinop<T>(
               node, UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource{}),
@@ -3247,6 +3267,14 @@ class RepresentationSelector {
         return;
       }
       case IrOpcode::kSpeculativeBigIntMultiply: {
+        if (truncation.IsUnused()) {
+          Type left_type = GetUpperBound(node->InputAt(0));
+          Type right_type = GetUpperBound(node->InputAt(1));
+          if (left_type.Is(Type::BigInt()) && right_type.Is(Type::BigInt())) {
+            VisitUnused<T>(node);
+            return;
+          }
+        }
         if (truncation.IsUsedAsWord64()) {
           VisitBinop<T>(
               node, UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource{}),
@@ -3264,8 +3292,27 @@ class RepresentationSelector {
         }
         return;
       }
+      case IrOpcode::kSpeculativeBigIntDivide: {
+        if (truncation.IsUnused()) {
+          Type left_type = GetUpperBound(node->InputAt(0));
+          Type right_type = GetUpperBound(node->InputAt(1));
+          if (left_type.Is(Type::BigInt()) && right_type.Is(Type::BigInt())) {
+            VisitUnused<T>(node);
+            return;
+          }
+        }
+        VisitBinop<T>(node,
+                      UseInfo::CheckedBigIntAsTaggedPointer(FeedbackSource{}),
+                      MachineRepresentation::kTaggedPointer);
+        if (lower<T>()) {
+          ChangeOp(node, lowering->simplified()->BigIntDivide());
+        }
+        return;
+      }
       case IrOpcode::kSpeculativeBigIntBitwiseAnd: {
-        if (truncation.IsUsedAsWord64()) {
+        if (truncation.IsUnused()) {
+          VisitUnused<T>(node);
+        } else if (truncation.IsUsedAsWord64()) {
           VisitBinop<T>(
               node, UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource{}),
               MachineRepresentation::kWord64);
@@ -3282,17 +3329,10 @@ class RepresentationSelector {
         }
         return;
       }
-      case IrOpcode::kSpeculativeBigIntDivide: {
-        VisitBinop<T>(node,
-                      UseInfo::CheckedBigIntAsTaggedPointer(FeedbackSource{}),
-                      MachineRepresentation::kTaggedPointer);
-        if (lower<T>()) {
-          ChangeOp(node, lowering->simplified()->BigIntDivide());
-        }
-        return;
-      }
       case IrOpcode::kSpeculativeBigIntNegate: {
-        if (truncation.IsUsedAsWord64()) {
+        if (truncation.IsUnused()) {
+          VisitUnused<T>(node);
+        } else if (truncation.IsUsedAsWord64()) {
           VisitUnop<T>(node,
                        UseInfo::CheckedBigIntTruncatingWord64(FeedbackSource{}),
                        MachineRepresentation::kWord64);

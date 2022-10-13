@@ -98,6 +98,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/isolate-inl.h"
+#include "src/flags/flags.h"
 #include "src/heap/local-heap.h"
 #include "src/logging/code-events.h"
 #include "src/logging/counters.h"
@@ -1991,7 +1992,7 @@ struct LateOptimizationPhase {
       AddReducer(data, &graph_reducer, &dead_code_elimination);
       AddReducer(data, &graph_reducer, &machine_reducer);
       AddReducer(data, &graph_reducer, &common_reducer);
-      if (!FLAG_turboshaft) {
+      if (!v8_flags.turboshaft) {
         AddReducer(data, &graph_reducer, &select_lowering);
       }
       AddReducer(data, &graph_reducer, &value_numbering);
