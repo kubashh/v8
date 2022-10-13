@@ -1873,7 +1873,8 @@ namespace internal {
   /* ES #sec-string.prototype.normalize */                             \
   CPP(StringPrototypeNormalizeIntl)                                    \
   /* ecma402 #sup-string.prototype.tolocalelowercase */                \
-  CPP(StringPrototypeToLocaleLowerCase)                                \
+  CPP(StringPrototypeToLocaleLowerCaseSlow)                            \
+  TFJ(StringPrototypeToLocaleLowerCase, kDontAdaptArgumentsSentinel)   \
   /* ecma402 #sup-string.prototype.tolocaleuppercase */                \
   CPP(StringPrototypeToLocaleUpperCase)                                \
   /* ES #sec-string.prototype.tolowercase */                           \

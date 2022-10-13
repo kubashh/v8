@@ -901,7 +901,7 @@ BUILTIN(RelativeTimeFormatPrototypeResolvedOptions) {
   return *JSRelativeTimeFormat::ResolvedOptions(isolate, format_holder);
 }
 
-BUILTIN(StringPrototypeToLocaleLowerCase) {
+BUILTIN(StringPrototypeToLocaleLowerCaseSlow) {
   HandleScope scope(isolate);
 
   isolate->CountUsage(v8::Isolate::UseCounterFeature::kStringToLocaleLowerCase);
