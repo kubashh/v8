@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71837630_39dd3ff6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-13T14:55:09Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that cause a race when two isolates update maps in the shared heap at the same time? AFAIU both isolates would then update the same field.\n\nI guess we could use the current Heap instance but update set_map to use the same Heap as well. Wdyt?",
+      "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
