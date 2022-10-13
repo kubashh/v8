@@ -51,6 +51,24 @@
       "parentUuid": "71837630_39dd3ff6",
       "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b39f2547_6cafb1c7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-13T19:34:30Z",
+      "side": 1,
+      "message": "Per our chat I\u0027ve updated the approach to:\n\n1. Assert that strings are the only objects in shared space that can change layout.\n2. Use the current `Heap` instead of the owner `Heap`.",
+      "parentUuid": "53c8ed62_62865fa0",
+      "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
