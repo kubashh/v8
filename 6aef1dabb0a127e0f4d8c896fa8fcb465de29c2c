@@ -16,6 +16,29 @@
       "message": "PTAL!",
       "revId": "6aef1dabb0a127e0f4d8c896fa8fcb465de29c2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68b01f9d_167431c9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-13T07:52:02Z",
+      "side": 1,
+      "message": "nit: braces",
+      "range": {
+        "startLine": 1469,
+        "startChar": 4,
+        "endLine": 1469,
+        "endChar": 10
+      },
+      "revId": "6aef1dabb0a127e0f4d8c896fa8fcb465de29c2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
