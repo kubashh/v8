@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ffa80a_dfe1e4ca",
+        "filename": "src/init/v8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-10-13T12:51:15Z",
+      "side": 1,
+      "message": "This might still be a bit confusing, how about:\n```\n    FATAL(\"Wrong initialization order: %d \u003d\u003e %d, expected %d!\",\n          static_cast\u003cint\u003e(current_state),\n          static_cast\u003cint\u003e(next_state),\n          static_cast\u003cint\u003e(expected_next_state));\n```",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 49
+      },
+      "revId": "f9e70ff591dc26d7b8d671268cfc1f998cf8bd1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
