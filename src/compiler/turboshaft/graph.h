@@ -429,8 +429,10 @@ class Graph {
   }
 
   template <class Op, class... Args>
-  V8_INLINE OpIndex Add(Args... args) {
+  V8_INLINE Op& Add(Args... args) {
+#ifdef DEBUG
     OpIndex result = next_operation_index();
+#endif  // DEBUG
     Op& op = Op::New(this, args...);
     IncrementInputUses(op);
     DCHECK_EQ(result, Index(op));
@@ -439,7 +441,7 @@ class Graph {
       DCHECK_LT(input, result);
     }
 #endif  // DEBUG
-    return result;
+    return op;
   }
 
   template <class Op, class... Args>
