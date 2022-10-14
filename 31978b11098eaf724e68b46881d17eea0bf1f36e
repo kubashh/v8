@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e75a3035_1fd9a669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-10-14T17:47:49Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "31978b11098eaf724e68b46881d17eea0bf1f36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f29a289_3ffabbba",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2022-10-14T17:47:49Z",
+      "side": 1,
+      "message": "This still doesn\u0027t account for the fact that the session may have not been waiting? Let\u0027s mention this in the comments.",
+      "revId": "31978b11098eaf724e68b46881d17eea0bf1f36e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
