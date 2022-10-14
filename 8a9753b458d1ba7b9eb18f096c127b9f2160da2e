@@ -16,6 +16,92 @@
       "message": "Added a few more things. PTanotherL, thanks",
       "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01905331_be51fce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T08:47:57Z",
+      "side": 1,
+      "message": "LGTM with a few comments ;)",
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7700030_78094651",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3241,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T08:47:57Z",
+      "side": 1,
+      "message": "Nothing really changed here, right? I think that you could leave the original code as-is. (but if you prefer your new code, feel free to keep it, that\u0027s also fine!)",
+      "range": {
+        "startLine": 3216,
+        "startChar": 8,
+        "endLine": 3241,
+        "endChar": 15
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c7da2d_ae05945b",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T08:47:57Z",
+      "side": 1,
+      "message": "As discussed offline, you probably need to check if the inputs are bigints here ;)",
+      "range": {
+        "startLine": 3314,
+        "startChar": 10,
+        "endLine": 3314,
+        "endChar": 31
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c914c3b9_4d86ef1c",
+        "filename": "src/compiler/use-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T08:47:57Z",
+      "side": 1,
+      "message": "Was this pulled in by mistake by VS code or something?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
