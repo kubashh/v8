@@ -39,6 +39,30 @@
       },
       "revId": "f9df044f9ce7af31a06c6a216cb1698a20d68bec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "174af071_118ac9d3",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-14T09:22:52Z",
+      "side": 1,
+      "message": "Yes, because we kind of mis-use the compilation dependency mechanism to just validate loads at the end of compilation.",
+      "parentUuid": "f0a120f6_f265645e",
+      "range": {
+        "startLine": 890,
+        "startChar": 57,
+        "endLine": 890,
+        "endChar": 59
+      },
+      "revId": "f9df044f9ce7af31a06c6a216cb1698a20d68bec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
