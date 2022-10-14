@@ -821,6 +821,18 @@ void HeapObject::set_map_safe_transition(Map value, ReleaseStoreTag tag) {
                                   VerificationMode::kSafeMapTransition);
 }
 
+void HeapObject::set_map_safe_transition_no_write_barrier(Map value,
+                                                          RelaxedStoreTag tag) {
+  set_map<EmitWriteBarrier::kNo>(value, kRelaxedStore,
+                                 VerificationMode::kSafeMapTransition);
+}
+
+void HeapObject::set_map_safe_transition_no_write_barrier(Map value,
+                                                          ReleaseStoreTag tag) {
+  set_map<EmitWriteBarrier::kNo>(value, kReleaseStore,
+                                 VerificationMode::kSafeMapTransition);
+}
+
 // Unsafe accessor omitting write barrier.
 void HeapObject::set_map_no_write_barrier(Map value, RelaxedStoreTag tag) {
   set_map<EmitWriteBarrier::kNo>(value, kRelaxedStore,
@@ -845,6 +857,8 @@ void HeapObject::set_map(Map value, MemoryOrder order, VerificationMode mode) {
   DCHECK_IMPLIES(mode != VerificationMode::kSafeMapTransition,
                  !LocalHeap::Current());
   if (v8_flags.verify_heap && !value.is_null()) {
+    // To support objects in shared space, object layout transitions are
+    // verified on the executing heap, not the heap that owns the object.
     Heap* heap = GetHeapFromWritableObject(*this);
     if (mode == VerificationMode::kSafeMapTransition) {
       HeapVerifier::VerifySafeMapTransition(heap, *this, value);
