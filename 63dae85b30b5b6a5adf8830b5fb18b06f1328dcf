@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "506a16ee_b35e60b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-10-14T10:13:21Z",
+      "side": 1,
+      "message": "LGTM, but it looks like the control blocks leak now (see failing tests).",
+      "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
