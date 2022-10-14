@@ -69,6 +69,24 @@
       "parentUuid": "41d4ace3_613f456c",
       "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d4934f_a723d69b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-14T16:01:51Z",
+      "side": 1,
+      "message": "Reading my previous message again, I need to clarify: We need to call *destructors* of course, not constructors.",
+      "parentUuid": "08d38ce4_ede43ce0",
+      "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
