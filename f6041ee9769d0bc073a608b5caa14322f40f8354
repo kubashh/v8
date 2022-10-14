@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5393bd30_1f3f5734",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-14T08:57:42Z",
+      "side": 1,
+      "message": "nit: I think the participle of \"bind\" is \"bound\".",
+      "range": {
+        "startLine": 744,
+        "startChar": 9,
+        "endLine": 744,
+        "endChar": 15
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd878d7f_d76c6cff",
+        "filename": "src/compiler/turboshaft/machine-optimization-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-14T08:57:42Z",
+      "side": 1,
+      "message": "nit: We normally put these on separate lines.",
+      "range": {
+        "startLine": 546,
+        "startChar": 44,
+        "endLine": 546,
+        "endChar": 45
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3595cb9a_9c7a4761",
+        "filename": "src/compiler/turboshaft/machine-optimization-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-14T08:57:42Z",
+      "side": 1,
+      "message": "Argh... this is so ugly ... we should really build a better way to do this, something like a `VariableAssembler` ... :)",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 11
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7adf151a_af77e09d",
+        "filename": "src/compiler/turboshaft/select-lowering-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-14T08:57:42Z",
+      "side": 1,
+      "message": "I fear that this phi needs to be adapted to the predecessor count too -.-",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 59
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
