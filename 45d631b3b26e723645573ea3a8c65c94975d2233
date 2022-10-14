@@ -87,6 +87,24 @@
       "parentUuid": "b39f2547_6cafb1c7",
       "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83683565_43e19da0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-14T07:21:23Z",
+      "side": 1,
+      "message": "I see, that makes sense. I think I even prefer your thread_local in heap-verifier.cc to having that field in Heap.",
+      "parentUuid": "485dad60_0e751a7b",
+      "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
