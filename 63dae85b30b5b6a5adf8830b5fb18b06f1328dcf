@@ -33,6 +33,24 @@
       "message": "LGTM, but it looks like the control blocks leak now (see failing tests).",
       "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41d4ace3_613f456c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-14T15:03:16Z",
+      "side": 1,
+      "message": "Oh, yes, we need to call constructors when popping elements or when the whole vector dies. I\u0027ll fix this as part of this CL, as it\u0027s only needed for the control stack and not for the value stack.\nI\u0027ll ping you when it\u0027s done.",
+      "parentUuid": "506a16ee_b35e60b9",
+      "revId": "63dae85b30b5b6a5adf8830b5fb18b06f1328dcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
