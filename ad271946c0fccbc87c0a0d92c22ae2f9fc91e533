@@ -16,6 +16,23 @@
       "message": "@clemensb@chromium.org: PTAL. Unmodified cherry-pick for 10.8.",
       "revId": "ad271946c0fccbc87c0a0d92c22ae2f9fc91e533",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f87eb777_4e6cdcf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-14T17:17:19Z",
+      "side": 1,
+      "message": "LGTM, but let\u0027s wait until the original fix was rolled into chromium and was released in a canary (Monday or Tuesday).\nCheck https://chromiumdash.appspot.com/commit/0cae66a5cbc88a06b5587c83dc1f29b14af245f9 for that information.",
+      "revId": "ad271946c0fccbc87c0a0d92c22ae2f9fc91e533",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
