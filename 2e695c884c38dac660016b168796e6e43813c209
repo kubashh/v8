@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3e9bc7f3_0913b47c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-14T22:40:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1867b4d3_0d3a5ae8",
+      "revId": "2e695c884c38dac660016b168796e6e43813c209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d525c43c_c57ad1fc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-14T07:21:23Z",
       "side": 1,
       "message": "Could it be that this comment got outdated when you added the thread_local? AFAIU GetHeapFromWritableObject would return the owning heap not the executing heap.",
+      "revId": "2e695c884c38dac660016b168796e6e43813c209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08b59d8c_20367fd8",
+        "filename": "src/objects/objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-14T22:40:07Z",
+      "side": 1,
+      "message": "Good catch, yes this is outdated.",
+      "parentUuid": "ef4d6ed3_e5823936",
       "revId": "2e695c884c38dac660016b168796e6e43813c209",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
