@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9af9046d_c45a665b",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T09:43:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5393bd30_1f3f5734",
+      "range": {
+        "startLine": 744,
+        "startChar": 9,
+        "endLine": 744,
+        "endChar": 15
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd878d7f_d76c6cff",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-14T08:57:42Z",
       "side": 1,
       "message": "nit: We normally put these on separate lines.",
+      "range": {
+        "startLine": 546,
+        "startChar": 44,
+        "endLine": 546,
+        "endChar": 45
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3ba1959_de5f7740",
+        "filename": "src/compiler/turboshaft/machine-optimization-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T09:43:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd878d7f_d76c6cff",
       "range": {
         "startLine": 546,
         "startChar": 44,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "400cc0d5_d2500dc2",
+        "filename": "src/compiler/turboshaft/machine-optimization-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T09:43:52Z",
+      "side": 1,
+      "message": "Hehe, indeed. I\u0027ve added a TODO so that we don\u0027t forget to clean that up once we have the VariableAssembler ;)",
+      "parentUuid": "3595cb9a_9c7a4761",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 565,
+        "endChar": 11
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7adf151a_af77e09d",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-10-14T08:57:42Z",
       "side": 1,
       "message": "I fear that this phi needs to be adapted to the predecessor count too -.-",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 59
+      },
+      "revId": "f6041ee9769d0bc073a608b5caa14322f40f8354",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c71fc72d_0a54869b",
+        "filename": "src/compiler/turboshaft/select-lowering-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-10-14T09:43:52Z",
+      "side": 1,
+      "message": "Whups indeed, thanks!",
+      "parentUuid": "7adf151a_af77e09d",
       "range": {
         "startLine": 76,
         "startChar": 4,
