@@ -69,6 +69,24 @@
       "parentUuid": "53c8ed62_62865fa0",
       "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "485dad60_0e751a7b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-14T01:48:29Z",
+      "side": 1,
+      "message": "Oops, I spoke too soon. It turned out that using `Isolate::Current()` requires a lot of churn, as some tests don\u0027t enter the Isolates they use. Moreover, there\u0027s a long standing issue (v8:2487) to discourage uses of `Isolate::Current()`.\n\nThe other alternative of passing in an explicit `Isolate*` to `HeapObject::set_map` requires even more churn.\n\nSo, instead, with PS3 I\u0027ve elected to use a `thread_local HeapObject`. This is only present when `VERIFY_HEAP`, which seems fine.",
+      "parentUuid": "b39f2547_6cafb1c7",
+      "revId": "45d631b3b26e723645573ea3a8c65c94975d2233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
