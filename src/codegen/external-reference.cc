@@ -349,6 +349,15 @@ FUNCTION_REFERENCE(delete_handle_scope_extensions,
 FUNCTION_REFERENCE(ephemeron_key_write_barrier_function,
                    Heap::EphemeronKeyWriteBarrierFromCode)
 
+ExternalPointerHandle AllocateAndInitializeExternalPointerTableEntry(
+    Isolate* isolate, Address pointer) {
+  return isolate->external_pointer_table().AllocateAndInitializeEntry(
+      isolate, pointer, kExternalObjectValueTag);
+}
+
+FUNCTION_REFERENCE(allocate_and_initialize_external_pointer_table_entry,
+                   AllocateAndInitializeExternalPointerTableEntry)
+
 FUNCTION_REFERENCE(get_date_field_function, JSDate::GetField)
 
 ExternalReference ExternalReference::date_cache_stamp(Isolate* isolate) {
