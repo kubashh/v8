@@ -16,6 +16,23 @@
       "message": "This is a reimplementation of the CSA checks for `toLocaleLowerCase`.\nWe\u0027d have to migrate the `BUILTIN` below to CSA and then it would always call into C++ (either the fast `ConvertToUpper` or the slow `StringLocaleConvertCase`, however differently to the lowercase variant we\u0027d always have the call.\n1) Is it supported to call C++ builtins from CSA builtins?\n2) Is there an additional cost to that compared to calling a C++ builtin from another C++ builtin as we do it right now?",
       "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467b2636_781a7262",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-17T07:56:46Z",
+      "side": 1,
+      "message": "Measured performance on a 1000 chars 1-Byte-String literal:\n```\nStringToLowerCase-Strings(Score): 193\nStringToLocaleLowerCase-Strings(Score): 192\nStringToLocaleLowerCaseEn-Strings(Score): 189\nStringToLocaleLowerCaseEnUs-Strings(Score): 188\nStringToLocaleLowerCaseEnArray-Strings(Score): 71.9\nStringToLocaleLowerCaseTr-Strings(Score): 7.86\nStringToUpperCase-Strings(Score): 187\nStringToLocaleUpperCase-Strings(Score): 183\nStringToLocaleUpperCaseEn-Strings(Score): 177\nStringToLocaleUpperCaseEnUs-Strings(Score): 177\nStringToLocaleUpperCaseEnArray-Strings(Score): 71.6\nStringToLocaleUpperCaseTr-Strings(Score): 8.18\n```\nArguments for the call:\n- En \u003d\u003e \"en\"\n- EnUs \u003d\u003e \"en-us\"\n- EnArray \u003d\u003e [\"en\"]\n- Tr \u003d\u003e \"tr\"\n\nSo using an array now makes it twice as slow as the fast path.\nAlso, toLowerCase and toUpperCase are now very close in terms of performance in this case.",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
