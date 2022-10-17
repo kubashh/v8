@@ -730,6 +730,9 @@
   # BUG(v8:9337).
   'compiler/regress-9017': [SKIP],
 
+  # Relies on SSE4 support.
+  'compiler/fast-api-clamp-annotations': [SKIP],
+
   # Slow tests.
   'array-sort': [PASS, SLOW],
   'compiler/osr-with-args': [PASS, SLOW],
