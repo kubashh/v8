@@ -756,7 +756,7 @@ TF_BUILTIN(ObjectToString, ObjectBuiltinsAssembler) {
       if_number(this, Label::kDeferred), if_object(this), if_primitive(this),
       if_proxy(this, Label::kDeferred), if_regexp(this), if_string(this),
       if_symbol(this, Label::kDeferred), if_value(this),
-      if_bigint(this, Label::kDeferred);
+      if_bigint(this, Label::kDeferred), if_wasm(this);
 
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   auto context = Parameter<Context>(Descriptor::kContext);
@@ -785,7 +785,9 @@ TF_BUILTIN(ObjectToString, ObjectBuiltinsAssembler) {
                     {JS_SPECIAL_API_OBJECT_TYPE, &if_object},
                     {JS_PROXY_TYPE, &if_proxy},
                     {JS_ERROR_TYPE, &if_error},
-                    {JS_PRIMITIVE_WRAPPER_TYPE, &if_value}};
+                    {JS_PRIMITIVE_WRAPPER_TYPE, &if_value},
+                    {WASM_STRUCT_TYPE, &if_wasm},
+                    {WASM_ARRAY_TYPE, &if_wasm}};
   size_t const kNumCases = arraysize(kJumpTable);
   Label* case_labels[kNumCases];
   int32_t case_values[kNumCases];
@@ -1050,6 +1052,9 @@ TF_BUILTIN(ObjectToString, ObjectBuiltinsAssembler) {
       var_holder = LoadMapPrototype(holder_map);
       Goto(&loop);
     }
+
+    BIND(&if_wasm);
+    ThrowTypeError(context, MessageTemplate::kWasmObjectsAreOpaque);
 
     BIND(&return_generic);
     {
