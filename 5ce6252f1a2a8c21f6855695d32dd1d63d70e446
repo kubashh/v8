@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e0b298_d82c9b40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-10-17T13:28:40Z",
+      "side": 1,
+      "message": "LGTM with a question.",
+      "revId": "5ce6252f1a2a8c21f6855695d32dd1d63d70e446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd08e443_ee0cbc3c",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2022-10-17T13:28:40Z",
+      "side": 1,
+      "message": "Why are not these two ifs merged? Or even better - can\u0027t we invert the condition and return conditionally? I think the following code for the for loop is equivalent, no?\n\n```\n for (SharedFunctionInfo info \u003d iterator.Next(); !info.is_null();\n       info \u003d iterator.Next()) {\n    ScopeInfo scope_info \u003d info.scope_info();\n    if (info.is_compiled() \u0026\u0026\n        !scope_info.is_null() \u0026\u0026\n        scope-\u003estart_position() \u003d\u003d info.StartPosition() \u0026\u0026\n        scope-\u003eend_position() \u003d\u003d info.EndPosition() \u0026\u0026\n        scope-\u003escope_type() \u003d\u003d scope_info.scope_type()) {\n      return handle(scope_info, isolate_);\n    }\n }\n```",
+      "range": {
+        "startLine": 1227,
+        "startChar": 0,
+        "endLine": 1233,
+        "endChar": 5
+      },
+      "revId": "5ce6252f1a2a8c21f6855695d32dd1d63d70e446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
