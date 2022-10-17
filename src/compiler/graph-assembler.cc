@@ -342,6 +342,10 @@ TNode<Boolean> JSGraphAssembler::ObjectIsCallable(TNode<Object> value) {
       graph()->NewNode(simplified()->ObjectIsCallable(), value));
 }
 
+TNode<Boolean> JSGraphAssembler::ObjectIsSmi(TNode<Object> value) {
+  return AddNode<Boolean>(graph()->NewNode(simplified()->ObjectIsSmi(), value));
+}
+
 TNode<Boolean> JSGraphAssembler::ObjectIsUndetectable(TNode<Object> value) {
   return AddNode<Boolean>(
       graph()->NewNode(simplified()->ObjectIsUndetectable(), value));
@@ -377,6 +381,16 @@ TNode<FixedArrayBase> JSGraphAssembler::MaybeGrowFastElements(
   return AddNode<FixedArrayBase>(graph()->NewNode(
       simplified()->MaybeGrowFastElements(mode, feedback), array, elements,
       index_needed, old_length, effect(), control()));
+}
+
+TNode<Object> JSGraphAssembler::DoubleArrayMax(TNode<JSArray> array) {
+  return AddNode<Object>(graph()->NewNode(simplified()->DoubleArrayMax(), array,
+                                          effect(), control()));
+}
+
+TNode<Object> JSGraphAssembler::DoubleArrayMin(TNode<JSArray> array) {
+  return AddNode<Object>(graph()->NewNode(simplified()->DoubleArrayMax(), array,
+                                          effect(), control()));
 }
 
 Node* JSGraphAssembler::StringCharCodeAt(TNode<String> string,

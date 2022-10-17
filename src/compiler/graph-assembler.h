@@ -70,6 +70,8 @@ class Reducer;
   V(Float64InsertLowWord32)               \
   V(Float64LessThan)                      \
   V(Float64LessThanOrEqual)               \
+  V(Float64Max)                           \
+  V(Float64Min)                           \
   V(Float64Mod)                           \
   V(Float64Sub)                           \
   V(Int32Add)                             \
@@ -946,6 +948,7 @@ class V8_EXPORT_PRIVATE JSGraphAssembler : public GraphAssembler {
   TNode<String> StringSubstring(TNode<String> string, TNode<Number> from,
                                 TNode<Number> to);
   TNode<Boolean> ObjectIsCallable(TNode<Object> value);
+  TNode<Boolean> ObjectIsSmi(TNode<Object> value);
   TNode<Boolean> ObjectIsUndetectable(TNode<Object> value);
   Node* CheckIf(Node* cond, DeoptimizeReason reason);
   TNode<Boolean> NumberIsFloat64Hole(TNode<Number> value);
@@ -958,6 +961,8 @@ class V8_EXPORT_PRIVATE JSGraphAssembler : public GraphAssembler {
                                               TNode<Number> new_length,
                                               TNode<Number> old_length);
   Node* StringCharCodeAt(TNode<String> string, TNode<Number> position);
+  TNode<Object> DoubleArrayMax(TNode<JSArray> array);
+  TNode<Object> DoubleArrayMin(TNode<JSArray> array);
 
   JSGraph* jsgraph() const { return jsgraph_; }
   Isolate* isolate() const { return jsgraph()->isolate(); }
