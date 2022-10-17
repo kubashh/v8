@@ -98,8 +98,19 @@ bool CanOptimizeFastSignature(const CFunctionInfo* c_signature) {
   }
 #endif
 
+  bool float_rounding_enabled =
+      v8_flags.enable_sse4_1 && v8_flags.enable_sse4_2;
+
   for (unsigned int i = 0; i < c_signature->ArgumentCount(); ++i) {
     USE(i);
+
+    uint8_t flags = uint8_t(c_signature->ArgumentInfo(i).GetFlags());
+    if ((flags & uint8_t(CTypeInfo::Flags::kClampBit)) &&
+        !float_rounding_enabled) {
+      // Clamp lowering in EffectControlLinearizer uses rounding.
+      printf("Can't optimize to fast %u\n", i);
+      return false;
+    }
 
 #ifndef V8_ENABLE_FP_PARAMS_IN_C_LINKAGE
     if (c_signature->ArgumentInfo(i).GetType() == CTypeInfo::Type::kFloat32 ||
