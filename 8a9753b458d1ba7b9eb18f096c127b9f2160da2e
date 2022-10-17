@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85260e33_d6ede866",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3241,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-10-17T09:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7700030_78094651",
+      "range": {
+        "startLine": 3216,
+        "startChar": 8,
+        "endLine": 3241,
+        "endChar": 15
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8c7da2d_ae05945b",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbdf3a63_5a7f97d7",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-10-17T09:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8c7da2d_ae05945b",
+      "range": {
+        "startLine": 3314,
+        "startChar": 10,
+        "endLine": 3314,
+        "endChar": 31
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c914c3b9_4d86ef1c",
@@ -94,6 +142,30 @@
       "writtenOn": "2022-10-14T08:47:57Z",
       "side": 1,
       "message": "Was this pulled in by mistake by VS code or something?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "8a9753b458d1ba7b9eb18f096c127b9f2160da2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee4ab7d1_c134910f",
+        "filename": "src/compiler/use-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-10-17T09:56:46Z",
+      "side": 1,
+      "message": "yeah, probably. Sometimes it auto adds includes for some reason.",
+      "parentUuid": "c914c3b9_4d86ef1c",
       "range": {
         "startLine": 9,
         "startChar": 0,
