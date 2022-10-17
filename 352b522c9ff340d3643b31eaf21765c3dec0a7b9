@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73647bee_fafdc700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T13:45:11Z",
+      "side": 1,
+      "message": "LGTM with a nit (and an optional suggestion, if you feel like it). Nice work!",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b590a2e9_c7de3d10",
@@ -14,6 +31,47 @@
       "writtenOn": "2022-10-17T07:50:27Z",
       "side": 1,
       "message": "This is a reimplementation of the CSA checks for `toLocaleLowerCase`.\nWe\u0027d have to migrate the `BUILTIN` below to CSA and then it would always call into C++ (either the fast `ConvertToUpper` or the slow `StringLocaleConvertCase`, however differently to the lowercase variant we\u0027d always have the call.\n1) Is it supported to call C++ builtins from CSA builtins?\n2) Is there an additional cost to that compared to calling a C++ builtin from another C++ builtin as we do it right now?",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb731a19_ee13e466",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T13:45:11Z",
+      "side": 1,
+      "message": "1) Yes, e.g. TFJ(ArrayPrototypePop) calls CPP(ArrayPop).\n2) As discussed offline: calls from generated code to C++ have a certain cost. If we have to incur this cost anyway, then there\u0027s (usually) no performance benefit to doing some work beforehand.\n\nI think the current approach is good: eliminating the duplication isn\u0027t worth introducing another CSA builtin.\n\nWe could micro-optimize the details here (e.g. make sure there\u0027s only one `Get(0)` call, and/or have a `DisallowGarbageCollection` scope and use `String::GetChars`, and/or do the \"load 16 bits at a time\" trick we use in the CSA builtin), but I\u0027m not sure it\u0027s worth it. You could experimentally implement that, use the 1-character benchmark to evaluate the performance impact, and then decide whether it\u0027s worth the loss in conciseness. Or you can just land what you have :-)",
+      "parentUuid": "b590a2e9_c7de3d10",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bf0781f_325ccf8a",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T13:45:11Z",
+      "side": 1,
+      "message": "You don\u0027t need this: in the C++ implementation, it\u0027s implied by `IsSeqOneByteString`.",
+      "range": {
+        "startLine": 905,
+        "startChar": 6,
+        "endLine": 905,
+        "endChar": 35
+      },
       "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -53,6 +111,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36172495_ec022d32",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T13:45:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "467b2636_781a7262",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eab523b3_29c5f65b",
@@ -66,6 +142,24 @@
       "writtenOn": "2022-10-17T08:03:00Z",
       "side": 1,
       "message": "I don\u0027t do any checking for the string. Does the `FastLocale` rule only apply to 1-Byte-Strings or to all kind of strings?\nI\u0027m not quite sure about when the locale is and when it isn\u0027t needed. I guess, I need to add a check here, sth. like:\n`if (maybe_locale-\u003eIsUndefined() || (string-\u003eIsSeqOneByteString() \u0026\u0026 IsFastLocale(maybe_locale)))`?",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b736d335_ed80e7f4",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T13:45:11Z",
+      "side": 1,
+      "message": "The implementation of `StringLocaleConvertCase` answers this question: `ConvertToUpper` can handle any `string`, but not the four special-cased locales. So I think what you have is correct.",
+      "parentUuid": "eab523b3_29c5f65b",
       "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
