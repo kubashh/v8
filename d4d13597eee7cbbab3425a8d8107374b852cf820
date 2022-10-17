@@ -16,6 +16,24 @@
       "message": "LGTM. One question though: do I understand correctly that you\u0027re not freeing the array and its elements in FastZoneVector\u0027s destructor because it needs the Zone parameter? Do you think storing the zone in the FastZoneVector would be too expensive?",
       "revId": "d4d13597eee7cbbab3425a8d8107374b852cf820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67589957_6c0e0ea3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:35:25Z",
+      "side": 1,
+      "message": "Right, that\u0027s the reason to do it in a separate method.\nI thought about storing it in the vector, like the previous `ZoneVector` implementation does. It would not be too bad, but since it\u0027s only needed in very few places, I thought it\u0027s nicer to just pass it as a parameter where needed.\n\nWe can still revisit this if we start using FastZoneVectors more.",
+      "parentUuid": "ee34fb8d_fc84224e",
+      "revId": "d4d13597eee7cbbab3425a8d8107374b852cf820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
