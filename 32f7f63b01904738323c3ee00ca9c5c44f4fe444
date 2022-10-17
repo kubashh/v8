@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65c71eb7_47667fbe",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-17T07:04:05Z",
+      "side": 1,
+      "message": "Machine Op seems to be not reducible now at typer.",
+      "parentUuid": "a5d6598f_c069c2ba",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e874bca_bb813707",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 3
@@ -121,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56ec9bd7_fced8329",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-17T07:04:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b2ad74a_1b376479",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49343009_d7aedd98",
@@ -134,6 +170,24 @@
       "writtenOn": "2022-10-04T07:24:50Z",
       "side": 1,
       "message": "nit: the `else {` block isn\u0027t needed",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "620eb612_2771b939",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5134,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-17T07:04:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49343009_d7aedd98",
       "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +209,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1f50a5_3fdb6b7d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8462,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-17T07:04:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c0f36f2_1b6708bc",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b806d4d_0d2e5fc2",
@@ -168,6 +240,24 @@
       "writtenOn": "2022-10-04T07:24:50Z",
       "side": 1,
       "message": "This recursion only happens because the reduction clones the original node and keeps it in the graph as the fallback slow path, right? We should find a better solution that doesn\u0027t need this helper set structure (e.g. by explicitly generating the builtin call).",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f65b7653_9de86286",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8463,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2022-10-17T07:04:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b806d4d_0d2e5fc2",
       "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
