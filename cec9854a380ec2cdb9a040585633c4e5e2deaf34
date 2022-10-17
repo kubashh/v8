@@ -77,6 +77,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0bcc623_63870d74",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:28:43Z",
+      "side": 1,
+      "message": "This is another place where the connection between \"liftoff setup\" and lazy validation is totally unclear.",
+      "range": {
+        "startLine": 2130,
+        "startChar": 0,
+        "endLine": 2133,
+        "endChar": 46
+      },
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0fa8307_d8f77c7d",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 3
