@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17f7d34d_1b96cf13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-17T10:05:52Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL, implemented as proposed by you. 😊",
+      "revId": "1f45b7e66c314aa708b06e4e66fb0b385ec353df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
