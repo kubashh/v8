@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5f2eba_2c5902a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:27:10Z",
+      "side": 1,
+      "message": "Please add a sentence or two about the changes from the original CL.",
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fe66f4_affad3cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:27:10Z",
+      "side": 1,
+      "message": "Nice, LGTM with minor comments.",
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "491fa029_4ec168e2",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:27:10Z",
+      "side": 1,
+      "message": "nit: Comments are missing punctuation.",
+      "range": {
+        "startLine": 2576,
+        "startChar": 0,
+        "endLine": 2577,
+        "endChar": 58
+      },
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7659ae5b_10f532ec",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3027,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:27:10Z",
+      "side": 1,
+      "message": "Using `WASM_LIFTOFF_SETUP` for `WasmCompileLazy` frames does not look right. We don\u0027t need any GC support here, since we only allocate in the error case, and then the frame is immediately discarded anyway.\n\nFeel free to leave a TODO to try to use a more generic \"does-not-need-gc\" frame marker instead.",
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0fa8307_d8f77c7d",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-17T14:27:10Z",
+      "side": 1,
+      "message": "We should DCHECK that the previous value is `Smi::zero()`.",
+      "revId": "cec9854a380ec2cdb9a040585633c4e5e2deaf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
