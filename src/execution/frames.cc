@@ -768,7 +768,7 @@ StackFrame::Type StackFrame::ComputeType(const StackFrameIteratorBase* iterator,
 #if V8_ENABLE_WEBASSEMBLY
     case WASM_TO_JS:
     case WASM:
-    case WASM_COMPILE_LAZY:
+    case WASM_LIFTOFF_SETUP:
     case WASM_EXIT:
     case WASM_DEBUG_BREAK:
     case JS_TO_WASM:
@@ -2693,25 +2693,25 @@ void StackSwitchFrame::GetStateForJumpBuffer(wasm::JumpBuffer* jmpbuf,
   DCHECK_NE(*state->pc_address, kNullAddress);
 }
 
-int WasmCompileLazyFrame::GetFunctionIndex() const {
+int WasmLiftoffSetupFrame::GetFunctionIndex() const {
   Object func_index(Memory<Address>(
-      sp() + WasmCompileLazyFrameConstants::kFunctionIndexOffset));
+      sp() + WasmLiftoffSetupFrameConstants::kFunctionIndexOffset));
   return Smi::ToInt(func_index);
 }
 
-wasm::NativeModule* WasmCompileLazyFrame::GetNativeModule() const {
+wasm::NativeModule* WasmLiftoffSetupFrame::GetNativeModule() const {
   return *reinterpret_cast<wasm::NativeModule**>(
-      sp() + WasmCompileLazyFrameConstants::kNativeModuleOffset);
+      sp() + WasmLiftoffSetupFrameConstants::kNativeModuleOffset);
 }
 
-FullObjectSlot WasmCompileLazyFrame::wasm_instance_slot() const {
+FullObjectSlot WasmLiftoffSetupFrame::wasm_instance_slot() const {
   return FullObjectSlot(&Memory<Address>(
-      sp() + WasmCompileLazyFrameConstants::kWasmInstanceOffset));
+      sp() + WasmLiftoffSetupFrameConstants::kWasmInstanceOffset));
 }
 
-void WasmCompileLazyFrame::Iterate(RootVisitor* v) const {
+void WasmLiftoffSetupFrame::Iterate(RootVisitor* v) const {
   FullObjectSlot spilled_instance_slot(&Memory<Address>(
-      fp() + WasmCompileLazyFrameConstants::kInstanceSpillOffset));
+      fp() + WasmLiftoffSetupFrameConstants::kInstanceSpillOffset));
   v->VisitRootPointer(Root::kStackRoots, "spilled wasm instance",
                       spilled_instance_slot);
   v->VisitRootPointer(Root::kStackRoots, "wasm instance parameter",
@@ -2743,22 +2743,25 @@ void WasmCompileLazyFrame::Iterate(RootVisitor* v) const {
   // There are no reference parameters, there is nothing to scan.
   if (num_ref_params == 0) return;
 
-  int num_int_params_in_registers = std::min(
-      num_int_params, WasmCompileLazyFrameConstants::kNumberOfSavedGpParamRegs);
-  int num_ref_params_in_registers = std::min(
-      num_ref_params, WasmCompileLazyFrameConstants::kNumberOfSavedGpParamRegs -
-                          num_int_params_in_registers);
+  int num_int_params_in_registers =
+      std::min(num_int_params,
+               WasmLiftoffSetupFrameConstants::kNumberOfSavedGpParamRegs);
+  int num_ref_params_in_registers =
+      std::min(num_ref_params,
+               WasmLiftoffSetupFrameConstants::kNumberOfSavedGpParamRegs -
+                   num_int_params_in_registers);
 
   for (int i = 0; i < num_ref_params_in_registers; ++i) {
     FullObjectSlot spill_slot(
-        fp() + WasmCompileLazyFrameConstants::kParameterSpillsOffset
+        fp() + WasmLiftoffSetupFrameConstants::kParameterSpillsOffset
                    [num_int_params_in_registers + i]);
 
     v->VisitRootPointer(Root::kStackRoots, "register parameter", spill_slot);
   }
 
   // Next we scan the slots of stack parameters.
-  // If there is no code, then lazy compilation failed (which can happen with
+  // If there is no code, then this frame type is being used by the
+  // WasmLazyCompile builtin and lazy compilation failed (which can happen with
   // lazy validation). In that case, just do not scan parameters, which will
   // never be used anyway because the stack will get unwound when returning to
   // the CEntry stub.
@@ -2945,7 +2948,7 @@ void InternalFrame::Iterate(RootVisitor* v) const {
   // only contains tagged pointers.
   // We are misusing the has_tagged_outgoing_params flag here to tell us whether
   // the full stack frame contains only tagged pointers or only raw values.
-  // This is used for the WasmCompileLazy builtin, where we actually pass
+  // This is used for the WasmLiftoffFrameSetup builtin, where we actually pass
   // untagged arguments and also store untagged values on the stack.
   if (code.has_tagged_outgoing_params()) IterateExpressions(v);
 }

@@ -1249,17 +1249,6 @@ bool CompileLazy(Isolate* isolate, Handle<WasmInstanceObject> instance,
     WasmCompilationUnit tiering_unit{func_index, tiers.top_tier, kNoDebugging};
     compilation_state->CommitTopTierCompilationUnit(tiering_unit);
   }
-
-  // Allocate feedback vector if needed.
-  int feedback_vector_slots = NumFeedbackSlots(module, func_index);
-  if (feedback_vector_slots > 0) {
-    DCHECK(v8_flags.wasm_speculative_inlining);
-    Handle<FixedArray> vector =
-        isolate->factory()->NewFixedArrayWithZeroes(feedback_vector_slots);
-    instance->feedback_vectors().set(
-        declared_function_index(module, func_index), *vector);
-  }
-
   return true;
 }
 
