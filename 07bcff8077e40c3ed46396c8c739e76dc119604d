@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e9870de_74962cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-17T17:42:21Z",
+      "side": 1,
+      "message": "LGTM, but I\u0027m not a src/d8/OWNER.",
+      "revId": "07bcff8077e40c3ed46396c8c739e76dc119604d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
