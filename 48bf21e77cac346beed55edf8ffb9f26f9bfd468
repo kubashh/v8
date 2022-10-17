@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f3c720_4c70c22a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2022-10-17T17:32:48Z",
+      "side": 1,
+      "message": "Hi Igor, would you mind taking a look at this CL as a code owner? thank you!",
+      "revId": "48bf21e77cac346beed55edf8ffb9f26f9bfd468",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
