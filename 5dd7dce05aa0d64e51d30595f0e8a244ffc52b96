@@ -129,6 +129,30 @@
       },
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3273516_3c6cffb1",
+        "filename": "test/unittests/interpreter/bytecode_expectations/ForOf.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-17T14:44:14Z",
+      "side": 1,
+      "message": "I don\u0027t expect interpreter register data dependencies have a big impact in execution, there\u0027s enough going on with the dispatch machinery that the data dependency on the stack slot shouldn\u0027t be a bottleneck (that\u0027d be my hypothesis anyway, it\u0027s worth validating).",
+      "parentUuid": "aabf0827_fe6a8cd8",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
