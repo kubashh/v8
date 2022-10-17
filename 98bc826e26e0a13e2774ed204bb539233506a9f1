@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10783af5_ed79def5",
+        "filename": "src/compiler/fast-api-calls.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-17T17:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ea4217a_bf6a1681",
+      "range": {
+        "startLine": 102,
+        "startChar": 6,
+        "endLine": 102,
+        "endChar": 55
+      },
+      "revId": "98bc826e26e0a13e2774ed204bb539233506a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f423c945_18ba77eb",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-10-17T13:42:58Z",
       "side": 1,
       "message": "nit: please remove debugging printfs before landing. (Or put it behind some `--trace-*` flag if you think it\u0027s permanently useful.)",
+      "range": {
+        "startLine": 111,
+        "startChar": 6,
+        "endLine": 111,
+        "endChar": 47
+      },
+      "revId": "98bc826e26e0a13e2774ed204bb539233506a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c933a1ab_934bf84e",
+        "filename": "src/compiler/fast-api-calls.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-17T17:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f423c945_18ba77eb",
       "range": {
         "startLine": 111,
         "startChar": 6,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e555418_baab9769",
+        "filename": "test/mjsunit/compiler/fast-api-clamp-annotations.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-17T17:18:27Z",
+      "side": 1,
+      "message": "Good point, I made the test more robust to avoid special casing.",
+      "parentUuid": "03486baf_c8aa73a3",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "98bc826e26e0a13e2774ed204bb539233506a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d855fc45_e647aa13",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-10-17T13:42:58Z",
       "side": 1,
       "message": "\"Relies on SSE4 support\" is a surprising reason for skipping the test only on arm (what about arm64?). See my comment on the test -- is it possible to run it everywhere?",
+      "range": {
+        "startLine": 733,
+        "startChar": 2,
+        "endLine": 734,
+        "endChar": 48
+      },
+      "revId": "98bc826e26e0a13e2774ed204bb539233506a9f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada41418_8574de28",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-17T17:18:27Z",
+      "side": 1,
+      "message": "Yes, fixed the test (in both the slow path and the expectations in mjsunit), thanks!",
+      "parentUuid": "d855fc45_e647aa13",
       "range": {
         "startLine": 733,
         "startChar": 2,
