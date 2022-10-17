@@ -88,6 +88,47 @@
       "parentUuid": "712ebead_bfd59eb0",
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe1d5a6_96d1ba8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-17T12:23:22Z",
+      "side": 1,
+      "message": "Got it，Leszek. I\u0027ve prepared a local prototype and need more tests to verify the performance and overheads. Besides I also found somde side effect with the existing solution that I\u0027d like to address firstly. Please see my comment in the ForOf test.",
+      "parentUuid": "351f54ae_0494210f",
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aabf0827_fe6a8cd8",
+        "filename": "test/unittests/interpreter/bytecode_expectations/ForOf.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-17T12:23:22Z",
+      "side": 1,
+      "message": "Here Ldar R8 has been changed to Ldar R0, which induces an immediate depedence from previous bytecode Mov R1, R0. This seems a side effect that may hurt the performance.",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
