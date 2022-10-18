@@ -16,6 +16,23 @@
       "message": "LGTM, but I\u0027m not a src/d8/OWNER.",
       "revId": "07bcff8077e40c3ed46396c8c739e76dc119604d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf0b7cac_b6ea613f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-18T07:42:50Z",
+      "side": 1,
+      "message": "Hi, Camillo, could you ptal at src/d8/*? Thanks!",
+      "revId": "07bcff8077e40c3ed46396c8c739e76dc119604d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
