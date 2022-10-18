@@ -904,7 +904,7 @@ class MapWord {
  private:
   // HeapObject calls the private constructor and directly reads the value.
   friend class HeapObject;
-  template <typename TFieldType, int kFieldOffset, typename CompressionScheme>
+  template <typename TFieldType, int kFieldOffset>
   friend class TaggedField;
 
   explicit MapWord(Address value) : value_(value) {}

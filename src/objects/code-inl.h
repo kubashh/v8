@@ -1436,21 +1436,15 @@ Object CodeDataContainer::raw_code() const {
 }
 
 Object CodeDataContainer::raw_code(PtrComprCageBase cage_base) const {
-#ifdef V8_EXTERNAL_CODE_SPACE
-  Object value = ExternalCodeField::load(cage_base, *this);
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  Object value = TaggedField<Object, kCodeOffset>::load(cage_base, *this);
   return value;
-#else
-  UNREACHABLE();
-#endif  // V8_EXTERNAL_CODE_SPACE
 }
 
 void CodeDataContainer::set_raw_code(Object value, WriteBarrierMode mode) {
-#ifdef V8_EXTERNAL_CODE_SPACE
-  ExternalCodeField::Release_Store(*this, value);
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  TaggedField<Object, kCodeOffset>::Release_Store(*this, value);
   CONDITIONAL_WRITE_BARRIER(*this, kCodeOffset, value, mode);
-#else
-  UNREACHABLE();
-#endif  // V8_EXTERNAL_CODE_SPACE
 }
 
 Object CodeDataContainer::raw_code(RelaxedLoadTag tag) const {
@@ -1460,12 +1454,10 @@ Object CodeDataContainer::raw_code(RelaxedLoadTag tag) const {
 
 Object CodeDataContainer::raw_code(PtrComprCageBase cage_base,
                                    RelaxedLoadTag) const {
-#ifdef V8_EXTERNAL_CODE_SPACE
-  Object value = ExternalCodeField::Relaxed_Load(cage_base, *this);
+  Object value =
+      TaggedField<Object, kCodeOffset>::Relaxed_Load(cage_base, *this);
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   return value;
-#else
-  UNREACHABLE();
-#endif  // V8_EXTERNAL_CODE_SPACE
 }
 
 ACCESSORS(CodeDataContainer, next_code_link, Object, kNextCodeLinkOffset)
