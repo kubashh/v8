@@ -106,6 +106,23 @@ class SaveRegisterStateForCall {
     __ PushAll(snapshot_.live_double_registers, kDoubleSize);
   }
 
+  SaveRegisterStateForCall(MaglevAssembler* masm, Node* node)
+      : SaveRegisterStateForCall(masm, node->register_snapshot()) {}
+
+  SaveRegisterStateForCall(MaglevAssembler* masm, ValueNode* node)
+      : masm(masm), snapshot_(node->register_snapshot()) {
+    // The result register is removed from the snapshot.
+    if (node->use_double_register()) {
+      snapshot_.live_double_registers.clear(ToDoubleRegister(node->result()));
+    } else {
+      Register reg = ToRegister(node->result());
+      snapshot_.live_registers.clear(reg);
+      snapshot_.live_tagged_registers.clear(reg);
+    }
+    __ PushAll(snapshot_.live_registers);
+    __ PushAll(snapshot_.live_double_registers, kDoubleSize);
+  }
+
   ~SaveRegisterStateForCall() {
     __ PopAll(snapshot_.live_double_registers, kDoubleSize);
     __ PopAll(snapshot_.live_registers);
@@ -1363,9 +1380,7 @@ void CheckMapsWithMigration::GenerateCode(MaglevAssembler* masm,
         // returns Smi zero, then it failed and we should deopt.
         Register return_val = Register::no_reg();
         {
-          SaveRegisterStateForCall save_register_state(
-              masm, node->register_snapshot());
-
+          SaveRegisterStateForCall save_register_state(masm, node);
           __ Push(object);
           __ Move(kContextRegister, masm->native_context().object());
           __ CallRuntime(Runtime::kTryMigrateInstance);
@@ -1569,11 +1584,8 @@ void CheckedObjectToIndex::GenerateCode(MaglevAssembler* masm,
         // String.
         __ bind(&is_string);
         {
-          RegisterSnapshot snapshot = node->register_snapshot();
-          snapshot.live_registers.clear(result_reg);
-          DCHECK(!snapshot.live_tagged_registers.has(result_reg));
           {
-            SaveRegisterStateForCall save_register_state(masm, snapshot);
+            SaveRegisterStateForCall save_register_state(masm, node);
             AllowExternalCallThatCantCauseGC scope(masm);
             __ PrepareCallCFunction(1);
             __ Move(arg_reg_1, object);
@@ -1904,10 +1916,8 @@ void StringAt::GenerateCode(MaglevAssembler* masm,
       [](MaglevAssembler* masm, ZoneLabelRef create_string,
          Register string_object, Register index, Register character,
          StringAt* node) {
-        RegisterSnapshot save_registers = node->register_snapshot();
-        DCHECK(!save_registers.live_registers.has(character));
         {
-          SaveRegisterStateForCall save_register_state(masm, save_registers);
+          SaveRegisterStateForCall save_register_state(masm, node);
           __ Push(string_object);
           __ SmiTag(index);
           __ Push(index);
@@ -3571,8 +3581,7 @@ void ReduceInterruptBudget::GenerateCode(MaglevAssembler* masm,
       [](MaglevAssembler* masm, ZoneLabelRef done,
          ReduceInterruptBudget* node) {
         {
-          SaveRegisterStateForCall save_register_state(
-              masm, node->register_snapshot());
+          SaveRegisterStateForCall save_register_state(masm, node);
           __ Move(kContextRegister, masm->native_context().object());
           __ Push(MemOperand(rbp, StandardFrameConstants::kFunctionOffset));
           __ CallRuntime(Runtime::kBytecodeBudgetInterruptWithStackCheck_Maglev,
