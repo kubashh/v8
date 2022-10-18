@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "349ec8c3_5becf1d0",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-18T12:09:43Z",
+      "side": 1,
+      "message": "do we ever actually use this? Seems like the only cases where it is used are the ones where the node doesn\u0027t have a result at all.",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 23
+      },
+      "revId": "ff3f4b5d63a0c996b4984ce9382d5cde78e1c157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
