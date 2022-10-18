@@ -46,6 +46,30 @@
       },
       "revId": "ee7aae4004f0447a2c61fec7fde74642a4f65b46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0778ce1e_4e00accc",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-18T17:58:46Z",
+      "side": 1,
+      "message": "In 3) we essentially process feedback from page promotions first and then later process feedback from sweeping. The timing depends on the ratio between pages promoted and pages swept so keep in mind that this is something we should consider stable.\n\nLocal runs of Splay indicate that 3) is significantly better than 2).\nLet\u0027s go with 3).",
+      "parentUuid": "3ee6b594_48389e12",
+      "range": {
+        "startLine": 2135,
+        "startChar": 2,
+        "endLine": 2135,
+        "endChar": 24
+      },
+      "revId": "ee7aae4004f0447a2c61fec7fde74642a4f65b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
