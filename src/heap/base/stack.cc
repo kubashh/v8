@@ -163,5 +163,11 @@ void Stack::IteratePointersUnsafe(StackVisitor* visitor,
   IteratePointersImpl(this, visitor, reinterpret_cast<intptr_t*>(stack_end));
 }
 
+void Stack::SanityCheck() {
+  const void* real_stack_start = v8::base::Stack::GetStackStart();
+  const void* real_stack_top = v8::base::Stack::GetCurrentStackPosition();
+  CHECK_LE(real_stack_top, real_stack_start);
+}
+
 }  // namespace base
 }  // namespace heap

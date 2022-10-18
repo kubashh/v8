@@ -1658,6 +1658,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
         this, IsYoungGenerationCollector(collector) ? "MinorGC" : "MajorGC",
         GarbageCollectionReasonToString(gc_reason));
 
+    stack().SanityCheck();
+
     if (collector == GarbageCollector::MARK_COMPACTOR && cpp_heap()) {
       // CppHeap needs a stack marker at the top of all entry points to allow
       // deterministic passes over the stack. E.g., a verifier that should only
