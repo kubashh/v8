@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98173c45_4b33a124",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-18T15:46:30Z",
+      "side": 1,
+      "message": "We have 3 options here:\n1) Move pretenure feedback processing here unconditionally. I don\u0027t want to do that because if it regresses I don\u0027t want it to affect Scavenger.\n2) Leave Scavenger as is and process pretenure feedback for MinorMC only after sweeping is done.\n3) (implemented here) Process pretenure feedback both at the end of the atomic pause and after sweeping is done (for MinorMC).\n\nOption 3 may have the benefit that pretenuring feedback from page promotions is processed in the same cycle while only feedback from sweeping is delayed. I recall you mentioned before that changes to pretenuring were noticeable on benchmarks, so I suspected option 3 makes sense here.",
+      "range": {
+        "startLine": 2135,
+        "startChar": 2,
+        "endLine": 2135,
+        "endChar": 24
+      },
+      "revId": "ee7aae4004f0447a2c61fec7fde74642a4f65b46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
