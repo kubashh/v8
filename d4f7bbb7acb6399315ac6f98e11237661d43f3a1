@@ -33,6 +33,29 @@
       "message": "ptal",
       "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b816b456_16e29e82",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-18T10:57:45Z",
+      "side": 1,
+      "message": "`ScavengeVisitor::ScavengeVisitor()` is in the .cc file. This means that it cannot be simply instantiated from a .cc file anymore without having the -inl.h header. Usually, there\u0027s only the need for the -inl.h header when you use one of the inlined functions.",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 21
+      },
+      "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
