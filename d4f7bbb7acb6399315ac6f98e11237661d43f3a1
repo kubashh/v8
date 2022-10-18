@@ -56,6 +56,30 @@
       },
       "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d4cf94_323484e4",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-18T11:12:17Z",
+      "side": 1,
+      "message": "The \"-Wundefined-inline\" compile flag complains that these virtual methods aren\u0027t defined. I think it\u0027s because the compiler is trying to generate the vtable, possibly because all virtual methods are marked as inline and it allegedly can.",
+      "parentUuid": "b816b456_16e29e82",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 21
+      },
+      "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
