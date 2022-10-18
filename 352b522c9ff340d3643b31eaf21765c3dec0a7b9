@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f876bcd6_99ccec82",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-18T08:38:01Z",
+      "side": 1,
+      "message": "I tested it:\nUsing the char array directly in a `DisallowGarbageCollection` scope gives us about 8% improvement for the `\"en\"` case. For `\"en-us\"` it\u0027s already getting close to being noise.\nThe 2 Byte comparison didn\u0027t do anything measurable on top, although the generated code looks nicer as it removes all jumps: https://godbolt.org/z/oz56hTx1j\nI\u0027ll upload the char array and ignore the 2 Byte change.\n(Maybe with different locales and branch misses one could produce a micro-benchmark where the 2 Bytes clearly outperform the other but I\u0027d assume nobody uses different locales in a hot loop. 😊)",
+      "parentUuid": "cb731a19_ee13e466",
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bf0781f_325ccf8a",
@@ -66,6 +84,30 @@
       "writtenOn": "2022-10-17T13:45:11Z",
       "side": 1,
       "message": "You don\u0027t need this: in the C++ implementation, it\u0027s implied by `IsSeqOneByteString`.",
+      "range": {
+        "startLine": 905,
+        "startChar": 6,
+        "endLine": 905,
+        "endChar": 35
+      },
+      "revId": "352b522c9ff340d3643b31eaf21765c3dec0a7b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb17526_d261edfe",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-18T08:38:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bf0781f_325ccf8a",
       "range": {
         "startLine": 905,
         "startChar": 6,
