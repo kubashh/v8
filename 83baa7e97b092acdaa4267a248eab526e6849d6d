@@ -16,6 +16,29 @@
       "message": "PTAL again!",
       "revId": "83baa7e97b092acdaa4267a248eab526e6849d6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aaba461_10fcc77e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-18T13:01:14Z",
+      "side": 1,
+      "message": "how about removing the result register from the snapshot already at snapshot time, in the register allocator?",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 5
+      },
+      "revId": "83baa7e97b092acdaa4267a248eab526e6849d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
