@@ -879,6 +879,9 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtin id) {
     case Builtin::kAllocateRegularInOldGeneration:
     case Builtin::kConstructVarargs:
     case Builtin::kConstructWithArrayLike:
+    case Builtin::kGetOwnPropertyDescriptor:
+    case Builtin::kOrdinaryGetOwnPropertyDescriptor:
+    case Builtin::kProxyGetOwnPropertyDescriptor:
       return DebugInfo::kHasNoSideEffect;
 
 #ifdef V8_INTL_SUPPORT

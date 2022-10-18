@@ -78,6 +78,12 @@ transitioning builtin ForInNext(
 
 extern macro GetImportMetaObject(Context): Object;
 extern macro LoadContextFromBaseline(): Context;
+extern macro TryGetOwnPropertyDescriptor(
+    Context, Object, JSReceiver, Map, InstanceType, Name):
+    never labels IfFound(PropertyDescriptorObject),
+    IfNotFound, IfBailout;
+extern builtin GetOwnPropertyDescriptor(
+    Context, Object, Name): (PropertyDescriptorObject|Undefined);
 
 builtin GetImportMetaObjectBaseline(): Object {
   const context: Context = LoadContextFromBaseline();

@@ -119,6 +119,11 @@ macro IsSymbol(o: HeapObject): bool {
   return Is<Symbol>(o);
 }
 
+@export
+macro IsTheHole(o: Object): bool {
+  return Is<TheHole>(o);
+}
+
 extern macro TaggedToHeapObject(Object): HeapObject
     labels CastError;
 extern macro TaggedToSmi(Object): Smi

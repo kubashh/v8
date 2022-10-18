@@ -3316,6 +3316,19 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                          TVariable<Object>* var_raw_value, Label* if_not_found,
                          Label* if_bailout, GetOwnPropertyMode mode);
 
+  TNode<PropertyDescriptorObject> AllocatePropertyDescriptorObject(
+      TNode<Context> context);
+  void InitializePropertyDescriptorObject(
+      TNode<PropertyDescriptorObject> descriptor, TNode<Object> value,
+      TNode<Uint32T> details, Label* if_bailout);
+  void TryGetOwnPropertyDescriptor(TNode<Context> context,
+                                   TNode<Object> receiver,
+                                   TNode<JSReceiver> object, TNode<Map> map,
+                                   TNode<Int32T> instance_type,
+                                   TNode<Name> unique_name,
+                                   Reference out_descriptor, Label* if_found,
+                                   Label* if_notfound, Label* if_bailout);
+
   TNode<Object> GetProperty(TNode<Context> context, TNode<Object> receiver,
                             Handle<Name> name) {
     return GetProperty(context, receiver, HeapConstant(name));

@@ -1537,5 +1537,34 @@ TF_BUILTIN(FindNonDefaultConstructorOrConstruct, CodeStubAssembler) {
   }
 }
 
+// Dispatcher for different implementations of the [[GetOwnProperty]] internal
+// method, returning a PropertyDescriptorObject (a Struct representation of the
+// spec PropertyDescriptor concept)
+TF_BUILTIN(GetOwnPropertyDescriptor, CodeStubAssembler) {
+  {
+    auto context = Parameter<Context>(Descriptor::kContext);
+    auto receiver = Parameter<JSReceiver>(Descriptor::kReceiver);
+    auto key = Parameter<Name>(Descriptor::kKey);
+
+    Label check_proxy(this), call_runtime(this);
+
+    TNode<Map> map = LoadMap(receiver);
+    TNode<Uint16T> instance_type = LoadMapInstanceType(map);
+
+    GotoIf(IsSpecialReceiverInstanceType(instance_type), &check_proxy);
+    TailCallBuiltin(Builtin::kOrdinaryGetOwnPropertyDescriptor, context,
+                    receiver, key);
+
+    BIND(&check_proxy);
+    GotoIfNot(InstanceTypeEqual(instance_type, JS_PROXY_TYPE), &call_runtime);
+    TailCallBuiltin(Builtin::kProxyGetOwnPropertyDescriptor, context, receiver,
+                    key);
+
+    BIND(&call_runtime);
+    TailCallRuntime(Runtime::kGetOwnPropertyDescriptorObject, context, receiver,
+                    key);
+  }
+}
+
 }  // namespace internal
 }  // namespace v8

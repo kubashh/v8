@@ -1,0 +1,109 @@
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-proxy-gen.h'
+
+namespace proxy {
+
+macro CheckConfigurable(targetDesc: PropertyDescriptorObject):
+    void labels NonExtensible {
+  if (!targetDesc.flags.is_configurable) goto NonExtensible;
+}
+
+// ES #sec-proxy-object-internal-methods-and-internal-slots-delete-p
+// https://tc39.es/ecma262/#sec-proxy-object-internal-methods-and-internal-slots-delete-p
+transitioning builtin
+ProxyGetOwnPropertyDescriptor(implicit context: Context)(
+    proxy: JSProxy, name: Name): PropertyDescriptorObject|Undefined {
+  // Handle deeply nested proxy.
+  PerformStackCheck();
+  // 1. Assert: IsPropertyKey(P) is true.
+  dcheck(TaggedIsNotSmi(name));
+  dcheck(Is<Name>(name));
+
+  // Unfortunately, we can't assert !IsPrivateSymbol(), because it is possible
+  // for private symbols to be exposed via the %CreatePrivateSymbol API.
+  if (IsPrivateSymbol(name)) return Undefined;
+
+  // 2. Let handler be O.[[ProxyHandler]].
+  // 3. If handler is null, throw a TypeError exception.
+  // 4. Assert: Type(handler) is Object.åå
+  const handler = Cast<JSReceiver>(proxy.handler) otherwise ThrowTypeError(
+      MessageTemplate::kProxyRevoked, 'getOwnPropertyDescriptor');
+
+  // 5. Let target be O.[[ProxyTarget]].
+  const target = Cast<JSReceiver>(proxy.target) otherwise unreachable;
+
+  // 6. Let trap be ? GetMethod(handler, "get").
+  // 7. If trap is undefined, then (see 7.a below).
+  // 7.a. Return ? target.[[Get]](P, Receiver).
+  const trap: Callable = GetMethod(handler, 'getOwnPropertyDescriptor')
+      otherwise return internal::GetOwnPropertyDescriptor(context, target, name);
+
+  // 7. 7. Let trapResultObj be ? Call(trap, handler, « target, P »).
+  // 8. f Type(trapResultObj) is neither Object nor Undefined, throw a TypeError
+  // exception.
+  dcheck(!IsPrivateSymbol(name));
+  const trapResultObj =
+      Call(context, trap, handler, target, UnsafeCast<JSAny>(name));
+
+  // 9. Let targetDesc be ? target.[[GetOwnProperty]](P).
+  const targetDesc = internal::GetOwnPropertyDescriptor(context, target, name);
+
+  try {
+    if (Is<Undefined>(trapResultObj)) {
+      const targetDesc =
+          Cast<PropertyDescriptorObject>(targetDesc) otherwise return Undefined;
+      CheckConfigurable(targetDesc) otherwise NonExtensible;
+    }
+
+    const extensibleTarget = ToBoolean(object::ObjectIsExtensibleImpl(target));
+
+    if (Is<Undefined>(trapResultObj)) {
+      if (!extensibleTarget) goto NonExtensible;
+      return Undefined;
+    }
+
+    const trapResultObj =
+        Cast<JSReceiver>(trapResultObj) otherwise ThrowTypeError(
+            MessageTemplate::kProxyGetOwnPropertyDescriptorInvalid, name);
+    const resultDesc = object::ToPropertyDescriptor(trapResultObj);
+    CompletePropertyDescriptor(resultDesc);
+
+    if (!IsCompatiblePropertyDescriptor(
+            extensibleTarget, resultDesc, targetDesc))
+      ThrowTypeError(
+          MessageTemplate::kProxyGetOwnPropertyDescriptorIncompatible, name);
+
+    // 16. If resultDesc.[[Configurable]] is false, then
+    // 16a. If targetDesc is undefined or targetDesc.[[Configurable]] is true,
+    // then
+    //     i. Throw a TypeError exception.
+    // 16b. If resultDesc has a [[Writable]] field and resultDesc.[[Writable]]
+    // is false, then
+    //     i. Assert: targetDesc has a [[Writable]] field.
+    //    ii. If targetDesc.[[Writable]] is true, throw a TypeError exception.
+    if (!resultDesc.flags.is_configurable) {
+      const targetDesc =
+          Cast<PropertyDescriptorObject>(targetDesc) otherwise NonConfigurable;
+      if (targetDesc.flags.is_configurable) goto NonConfigurable;
+      if (resultDesc.flags.has_writable && !resultDesc.flags.is_writable) {
+        dcheck(targetDesc.flags.has_writable);
+        if (targetDesc.flags.is_writable) goto NonWritable;
+      }
+    }
+    return resultDesc;
+  } label NonExtensible deferred {
+    ThrowTypeError(
+        MessageTemplate::kProxyGetOwnPropertyDescriptorNonExtensible, name);
+  } label NonConfigurable deferred {
+    ThrowTypeError(
+        MessageTemplate::kProxyGetOwnPropertyDescriptorNonConfigurable, name);
+  } label NonWritable deferred {
+    ThrowTypeError(
+        MessageTemplate::kProxyGetOwnPropertyDescriptorNonConfigurableWritable,
+        name);
+  }
+}
+}
