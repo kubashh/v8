@@ -104,6 +104,30 @@
       },
       "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3701483_21392dd7",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-18T11:51:41Z",
+      "side": 1,
+      "message": "Yes, but the failures we\u0027re seeing are in test-header-include, not in real code.\nThat special mode auto-generates tries to include each header in isolation and make sure that it builds. That is why it is only including the h file without the -inl.h file.\nNothing is actually broken in production code, it\u0027s just this special testing mode that is broken.",
+      "parentUuid": "d8c021c3_54d81e66",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 21
+      },
+      "revId": "d4f7bbb7acb6399315ac6f98e11237661d43f3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
