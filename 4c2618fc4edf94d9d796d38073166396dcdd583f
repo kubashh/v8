@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a14b65_1249e1b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-18T09:17:40Z",
+      "side": 1,
+      "message": "Thanks for the comments! Looks like the CL needs another round of +1\u0027s.",
+      "revId": "4c2618fc4edf94d9d796d38073166396dcdd583f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
