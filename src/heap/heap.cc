@@ -2132,6 +2132,7 @@ size_t Heap::PerformGarbageCollection(
                            GCTracer::MarkingType::kAtomic);
     }
   }
+  if (v8_flags.minor_mc) pretenuring_handler_.ProcessPretenuringFeedback();
 
   tracer()->StartAtomicPause();
   if (!Heap::IsYoungGenerationCollector(collector) &&
@@ -2185,7 +2186,7 @@ size_t Heap::PerformGarbageCollection(
     Scavenge();
   }
 
-  pretenuring_handler_.ProcessPretenuringFeedback();
+  if (!v8_flags.minor_mc) pretenuring_handler_.ProcessPretenuringFeedback();
 
   UpdateSurvivalStatistics(static_cast<int>(start_young_generation_size));
   ConfigureInitialOldGenerationSize();
