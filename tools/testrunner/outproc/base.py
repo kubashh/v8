@@ -9,6 +9,8 @@ from ..testproc.base import (
 from ..local import statusfile
 from ..testproc.result import Result
 
+import testrunner.clusterfuzz.stacktraces as stacktraces
+
 import difflib
 
 OUTCOMES_PASS = [statusfile.PASS]
@@ -25,6 +27,18 @@ class BaseOutProc(object):
     if has_unexpected_output:
       self.regenerate_expected_files(output)
     return self._create_result(has_unexpected_output, output, reduction)
+
+  def analyze(self, output):
+    stack_parser = stacktraces.StackParser(
+        symbolized=True,
+        detect_ooms_and_hangs=True,
+        detect_v8_runtime_errors=True,
+        custom_stack_frame_ignore_regexes=None,
+        fuzz_target=None,
+        include_ubsan=True)
+
+    result = stack_parser.parse(output)
+    return result
 
   def regenerate_expected_files(self, output):
     return
