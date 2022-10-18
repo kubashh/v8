@@ -16,6 +16,40 @@
       "message": "Thanks for the review! Comments addressed; need a fresh +1 due to touching isolate.cc and v8heapconst.py.",
       "revId": "b9d15fa3f04569514c436a80e0e6d99cc02b748c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f8cbef_d3785b6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-18T15:04:22Z",
+      "side": 1,
+      "message": "Nice! LGTM with one question, and the no-wasm builders are unhappy which should be easy to fix.",
+      "revId": "b9d15fa3f04569514c436a80e0e6d99cc02b748c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ed8a69_3f818d6b",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3034,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-18T15:04:22Z",
+      "side": 1,
+      "message": "Who needs this? And why is this even a valid stack slot? Who allocated space for it?",
+      "revId": "b9d15fa3f04569514c436a80e0e6d99cc02b748c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
