@@ -16,6 +16,24 @@
       "message": "If we don\u0027t do this any more, we can also undo some more parts of https://crrev.com/c/3804599, right?",
       "revId": "4d68f7f8584c8aa0da3953dcb00028c7253630e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974bf703_85b57798",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1253,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-18T14:43:46Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "2f67bb16_37129849",
+      "revId": "4d68f7f8584c8aa0da3953dcb00028c7253630e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
