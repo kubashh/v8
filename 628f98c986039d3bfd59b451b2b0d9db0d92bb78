@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5599aa96_a5c932b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "Please add a link to the relevant section of the design doc an make it accessible to other collaborators (maybe public?). A very short paragraph what the CL implements would also be helpful, besides the link.",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3158b07d_cfa39f85",
@@ -14,6 +37,184 @@
       "writtenOn": "2022-08-30T09:01:56Z",
       "side": 1,
       "message": "Hi Deepti and Tobias,\n\nWe\u0027ve rebased the code and passed tryjobs. In current unittest we will verify whether the 256-bit op is generated successfully. We still need the codegen support to validate the value though.",
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16ef541a_d6768841",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "LGTM for src/compiler, thanks! Mostly nits from my side, took over the review from Tobias.",
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee381b6_78fb9646",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: is it guaranteed that `pnode` is not nullptr now?",
+      "range": {
+        "startLine": 502,
+        "startChar": 20,
+        "endLine": 502,
+        "endChar": 25
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "255ca3b7_6d76f750",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: could you add comments what each of these if\u0027s mean?",
+      "range": {
+        "startLine": 519,
+        "startChar": 4,
+        "endLine": 519,
+        "endChar": 6
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f39326f_69ea54e9",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: please add {} blocks around even single line if bodies (same below).",
+      "range": {
+        "startLine": 519,
+        "startChar": 40,
+        "endLine": 519,
+        "endChar": 47
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d128860_2b0b36ec",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: you could negate this condition and add `continue` to reduce the level of nesting.",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 46
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78d9c82_d3bf6635",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: by default\nedit: actually what does this comment mean? We seem to clear the effect input, not the value input here, right?",
+      "range": {
+        "startLine": 576,
+        "startChar": 20,
+        "endLine": 576,
+        "endChar": 27
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1df40aaf_b501c853",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: please rename to `input_count`.",
+      "range": {
+        "startLine": 591,
+        "startChar": 6,
+        "endLine": 591,
+        "endChar": 11
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677d8614_136a0409",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-19T14:50:11Z",
+      "side": 1,
+      "message": "nit: `new_op`",
+      "range": {
+        "startLine": 596,
+        "startChar": 18,
+        "endLine": 596,
+        "endChar": 23
+      },
       "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
