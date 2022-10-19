@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "528172fb_43bfd260",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-19T16:21:25Z",
+      "side": 1,
+      "message": "I am leaving this here as a way to optimize this as much as possible: https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/heap/thread_state_storage.h;l\u003d46;bpv\u003d1;bpt\u003d1\n\ntl;dr: Custom getters and different TLS models depending on configuration.",
+      "parentUuid": "995a6146_1c5eaa1e",
+      "revId": "fb5bfec80bf65803d0a4c3ed90a652c504b8b177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24cbcfd5_3660ea77",
         "filename": "src/execution/isolate.h",
         "patchSetId": 3
