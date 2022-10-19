@@ -3382,6 +3382,9 @@ void Isolate::Delete(Isolate* isolate) {
       base::Thread::GetThreadLocal(isolate->isolate_key_));
   SetIsolateThreadLocals(isolate, nullptr);
   isolate->set_thread_id(ThreadId::Current());
+  isolate->thread_local_top()->stack_ =
+      saved_isolate ? saved_isolate->thread_local_top()->stack_
+                    : ::heap::base::Stack(base::Stack::GetStackStart());
 
   bool owns_shared_isolate = isolate->owns_shared_isolate_;
   Isolate* maybe_shared_isolate = isolate->shared_isolate_;
