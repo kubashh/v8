@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "995a6146_1c5eaa1e",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-19T16:18:59Z",
+      "side": 1,
+      "message": "Initially I tried to make it inlined by making `current_per_isolate_thread_data` a `static thread_local`. However, `static thread_local` didn\u0027t compile on Windows because thread locals can\u0027t have dllexport linkage or something like that (I guess that\u0027s because of `V8_EXPORT_PRIVATE`. Any pointers how to make it inlined?",
+      "parentUuid": "2a3e24b8_a6d3dde2",
+      "revId": "fb5bfec80bf65803d0a4c3ed90a652c504b8b177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24cbcfd5_3660ea77",
         "filename": "src/execution/isolate.h",
         "patchSetId": 3
