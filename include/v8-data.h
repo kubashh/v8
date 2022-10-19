@@ -15,7 +15,7 @@ class Context;
 /**
  * The superclass of objects that can reside on V8's heap.
  */
-class V8_EXPORT Data {
+class V8_EXPORT V8_STANDALONE_DEBUG Data {
  public:
   /**
    * Returns true if this data is a |v8::Value|.

@@ -340,6 +340,7 @@ path. Add it with -I<path> to the command line
 # define V8_HAS_ATTRIBUTE_VISIBILITY (__has_attribute(visibility))
 # define V8_HAS_ATTRIBUTE_WARN_UNUSED_RESULT \
     (__has_attribute(warn_unused_result))
+# define V8_HAS_ATTRIBUTE_STANDALONE_DEBUG (__has_attribute(standalone_debug))
 
 # define V8_HAS_CPP_ATTRIBUTE_NODISCARD (V8_HAS_CPP_ATTRIBUTE(nodiscard))
 # define V8_HAS_CPP_ATTRIBUTE_NO_UNIQUE_ADDRESS \
@@ -556,6 +557,14 @@ path. Add it with -I<path> to the command line
 #define V8_NODISCARD [[nodiscard]]
 #else
 #define V8_NODISCARD /* NOT SUPPORTED */
+#endif
+
+// Annotate a class to emit debug info for a record type regardless of the debug
+// info optimizations that are enabled with -fno-standalone-debug.
+#if V8_HAS_ATTRIBUTE_STANDALONE_DEBUG
+#define V8_STANDALONE_DEBUG __attribute__((standalone_debug))
+#else
+#define V8_STANDALONE_DEBUG /* NOT SUPPORTED */
 #endif
 
 // The no_unique_address attribute allows tail padding in a non-static data
