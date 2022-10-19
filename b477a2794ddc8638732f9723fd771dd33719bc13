@@ -16,6 +16,24 @@
       "message": "Proposal: Add these lines to increase the chance to not get reverted again :) \nCq-Include-Trybots: luci.v8.try:v8_linux64_gc_stress_dbg_ng\nCq-Include-Trybots: luci.v8.try:v8_linux_gc_stress_dbg_ng\nCq-Include-Trybots: luci.v8.try:v8_mac64_gc_stress_dbg_ng",
       "revId": "b477a2794ddc8638732f9723fd771dd33719bc13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aefd969_2f8f4a67",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-19T11:44:02Z",
+      "side": 1,
+      "message": "Done (via manual selection). (I\u0027ve also run tests with `--variant\u003dslow_path` locally before uploading.)",
+      "parentUuid": "47116b64_6ebef3af",
+      "revId": "b477a2794ddc8638732f9723fd771dd33719bc13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

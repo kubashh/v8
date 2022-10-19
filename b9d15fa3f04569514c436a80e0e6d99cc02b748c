@@ -50,6 +50,24 @@
       "message": "Who needs this? And why is this even a valid stack slot? Who allocated space for it?",
       "revId": "b9d15fa3f04569514c436a80e0e6d99cc02b748c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad279f4e_73e6e28a",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3034,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-19T11:44:02Z",
+      "side": 1,
+      "message": "Good point, this comment should provide a more detailed explanation. To answer your questions:\n(1) Once we\u0027re done in this stub, we\u0027ll enter a regular Wasm function, which of course needs an instance. Line 3057 retrieves it from the stack.\n(2+3) `EnterFrame` (called by `FrameScope`) on arm64, because of stack alignment requirements, always allocates the stack slot where Wasm frames store the instance, and for Wasm-related frame types stores the instance there implicitly. With an `INTERNAL` frame type we have to do it explicitly.",
+      "parentUuid": "24ed8a69_3f818d6b",
+      "revId": "b9d15fa3f04569514c436a80e0e6d99cc02b748c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
