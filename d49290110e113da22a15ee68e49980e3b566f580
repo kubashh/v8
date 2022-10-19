@@ -16,6 +16,23 @@
       "message": "PTAL, small cleanup.",
       "revId": "d49290110e113da22a15ee68e49980e3b566f580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a14c9d_7c510344",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-19T14:55:40Z",
+      "side": 1,
+      "message": "Thanks for the cleanup!",
+      "revId": "d49290110e113da22a15ee68e49980e3b566f580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
