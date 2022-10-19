@@ -384,6 +384,8 @@ class JsonTestProgressIndicator(ProgressIndicator):
           "stdout": output.stdout,
           "stderr": output.stderr,
           "error_details": result.error_details,
+          "crash_state": result.crash_info.crash_state,
+          "crash_type": result.crash_info.crash_type,
       })
       self.results.append(record)
 

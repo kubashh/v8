@@ -9,6 +9,8 @@ from ..testproc.base import (
 from ..local import statusfile
 from ..testproc.result import Result
 
+import testrunner.clusterfuzz.stacktraces as stacktraces
+
 import difflib
 
 OUTCOMES_PASS = [statusfile.PASS]
@@ -26,6 +28,18 @@ class BaseOutProc(object):
       self.regenerate_expected_files(output)
     return self._create_result(has_unexpected_output, output, reduction)
 
+  def get_crash_info(self, stderr=''):
+    stack_parser = stacktraces.StackParser(
+      symbolized=True,
+      detect_ooms_and_hangs=True,
+      detect_v8_runtime_errors=True,
+      custom_stack_frame_ignore_regexes=None,
+      fuzz_target=None,
+      include_ubsan=True)
+
+    result = stack_parser.parse(stderr)
+    return result
+
   def regenerate_expected_files(self, output):
     return
 
@@ -41,6 +55,8 @@ class BaseOutProc(object):
       return None
     error_details = \
       self._get_error_details(output) if has_unexpected_output else None
+    crash_info = \
+      self.get_crash_info(output.stderr) if has_unexpected_output else self.get_crash_info()
     if reduction == DROP_OUTPUT:
       return Result(has_unexpected_output, None, error_details=error_details)
     if not has_unexpected_output:
@@ -49,7 +65,7 @@ class BaseOutProc(object):
       if reduction == DROP_PASS_STDOUT:
         return Result(has_unexpected_output, output.without_text())
 
-    return Result(has_unexpected_output, output, error_details=error_details)
+    return Result(has_unexpected_output, output, error_details=error_details, crash_info=crash_info)
 
   def get_outcome(self, output):
     if output.HasCrashed():

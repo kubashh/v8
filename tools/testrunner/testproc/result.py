@@ -28,11 +28,13 @@ class Result(ResultBase):
                has_unexpected_output,
                output,
                cmd=None,
-               error_details=None):
+               error_details=None,
+               crash_info=None):
     self.has_unexpected_output = has_unexpected_output
     self.output = output
     self.cmd = cmd
     self.error_details = error_details
+    self.crash_info = crash_info
 
   def status(self):
     if self.has_unexpected_output:
