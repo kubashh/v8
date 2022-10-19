@@ -46,6 +46,8 @@ class V8_EXPORT_PRIVATE Stack final {
   // Returns the start of the stack.
   const void* stack_start() const { return stack_start_; }
 
+  static void SanityCheck();
+
  private:
   const void* stack_start_;
 };
