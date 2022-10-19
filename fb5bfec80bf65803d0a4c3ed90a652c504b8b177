@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43670738_f0caf60e",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-10-19T16:34:49Z",
+      "side": 1,
+      "message": "I had a similar issue with thread_local `RwxMemoryWriteScope::code_space_write_nesting_level_` but in that case cross-component usage happened only for usages in cctest/unittests components, so I ended up with introducing a non-inlining version `RwxMemoryWriteScopeForTesting` which I used from the tests.\n\nProbably the issue is that we `V8_EXPORT_PRIVATE` the whole Isolate class instead of per-method approach that we use in other places. WDYT about trying to export only those Isolate methods that are used cross/component, maybe as a follow-up CL?",
+      "parentUuid": "995a6146_1c5eaa1e",
+      "revId": "fb5bfec80bf65803d0a4c3ed90a652c504b8b177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24cbcfd5_3660ea77",
         "filename": "src/execution/isolate.h",
         "patchSetId": 3
