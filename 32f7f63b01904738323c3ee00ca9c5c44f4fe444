@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "341f6745_0b6053d2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-19T11:54:30Z",
+      "side": 1,
+      "message": "Yes, it is currently still impossible to emit machine-ops before SimplifiedLowering. Nico actually recently built some machinery to allow this (https://chromium-review.googlesource.com/c/v8/v8/+/3898690), but it hasn\u0027t landed yet. So I\u0027m fine with this solution, at least for now. We could clean it up later, as Nico actually adds an equivalent function to load the elements kind in his CL.",
+      "parentUuid": "65c71eb7_47667fbe",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e874bca_bb813707",
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "We measure the performance of micro-case below with different elements kind and number.\n\n\n    Array.max \u003d function(array) {\n            return Math.max.apply(Math, array);\n    };\n\n    Array.min \u003d function(array) {\n            return Math.min.apply(Math, array);\n    };\n\n    function func(inputArray, n) {\n      var result \u003d [];\n      for ( var i \u003d n; i \u003c inputArray.length; i++) {\n        var prev_n \u003d inputArray.slice(i-n,i)\n        var low \u003d Array.min(prev_n);\n        var high \u003d Array.max(prev_n);\n\n        result[i-n] \u003d high - low;\n      }\n      return result;\n    }\n\n\nChange on execution time,\n| array length           | 2       | 10      | 20      |\n|------------------------|---------|---------|---------|\n| PACKED_SMI_ELEMENTS    | 4.60%   | 2.70%   | 1.80%   |\n| PACKED_DOUBLE_ELEMENTS | -48.40% | -69.00% | -76.60% |\n\nThe regression on array with PACKED_SMI_ELEMENTS is ~4.6% when length of array is 2, while the improvement on PACKED_DOUBLE_ELEMENTS is large. \n\nMeanwhile, the extra check and loop for PACKED_DOUBLE_ELEMENTS path will not be generated if CallWithArrayLike node is reducible by ReduceCallOrConstructWithArrayLikeOrSpread, which is common in JetStream2.",
       "parentUuid": "3e874bca_bb813707",
+      "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886b8d4c_dce2aa50",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-19T11:54:30Z",
+      "side": 1,
+      "message": "I think the existing code should also work for HOLEY_DOUBLE_ELEMENTS as long as `DependOnNoElementsProtector()` returns `true`. But I\u0027m also fine with landing it as-is.",
+      "parentUuid": "829eaedf_f3c57bb8",
       "revId": "32f7f63b01904738323c3ee00ca9c5c44f4fe444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
