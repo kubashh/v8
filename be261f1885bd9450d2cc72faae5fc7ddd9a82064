@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5947f11c_8a87b074",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-19T11:16:05Z",
+      "side": 1,
+      "message": "this is not necessarily the case, if e.g. the first OSR compilation didn\u0027t know about feedback collected while executing the second loop.",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8987b2a4_67714aad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-19T11:16:05Z",
+      "side": 1,
+      "message": "does it have an effect on actual performance/score?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 21
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "16173a2f_443b18c0",
