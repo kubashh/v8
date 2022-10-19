@@ -16,6 +16,41 @@
       "message": "(See diff of patch 2 and the previous CL to see the changes.)\n\nHey Michael, I believe I\u0027ve fixed the issue with this CL: for some of the tests in Chrome, |zone_backing_malloc_| !\u003d |::malloc|, so the free function that was used caused a crash. \n\nI\u0027ve tested this locally (patching chrome with my new CL) and it seems to be working. I also tested a version of v8 that is exactly the same as the current V8 (i.e. without this patch), except for not passing |zone_backing_malloc_| to the |AllocWithRetry| call in accounting-allocator, and got the same error that my CL originally caused, which corroborates my fix being correct.",
       "revId": "eeb1c223fa94fc2ac99d5c3ff4478e5e7f84dab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e071b15e_64d0aa70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-19T08:33:55Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "eeb1c223fa94fc2ac99d5c3ff4478e5e7f84dab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "244a9770_878dc1dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-19T08:33:55Z",
+      "side": 1,
+      "message": "Thanks a lot for digging!",
+      "parentUuid": "db76e47d_7d2b320a",
+      "revId": "eeb1c223fa94fc2ac99d5c3ff4478e5e7f84dab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
