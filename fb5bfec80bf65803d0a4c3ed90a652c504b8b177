@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cd81285_2f611977",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-10-19T23:22:45Z",
+      "side": 1,
+      "message": "I\u0027ve copied the extern + constinit trick and made the functions inline again. PTAL.",
+      "parentUuid": "e7dda7a0_426b49ed",
+      "revId": "fb5bfec80bf65803d0a4c3ed90a652c504b8b177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24cbcfd5_3660ea77",
         "filename": "src/execution/isolate.h",
         "patchSetId": 3
