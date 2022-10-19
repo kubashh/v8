@@ -16,6 +16,24 @@
       "message": "Can we use `\u003d delete` here instead? Was there a reason not to do this?",
       "revId": "8be16a93d4dbac708617b89bb871555560a2dda1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d72163a8_9b54e248",
+        "filename": "include/v8-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1403119
+      },
+      "writtenOn": "2022-10-19T23:11:45Z",
+      "side": 1,
+      "message": "From https://b.corp.google.com/issues/246583948#comment19, David mentioned it\u0027s more reliable to use standalong_debug. use `\u003d delete` also works.",
+      "parentUuid": "e561fed7_cdc0478d",
+      "revId": "8be16a93d4dbac708617b89bb871555560a2dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
