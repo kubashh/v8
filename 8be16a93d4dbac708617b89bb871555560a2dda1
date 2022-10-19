@@ -34,6 +34,24 @@
       "parentUuid": "e561fed7_cdc0478d",
       "revId": "8be16a93d4dbac708617b89bb871555560a2dda1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0834e485_8ca2cc2f",
+        "filename": "include/v8-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1403119
+      },
+      "writtenOn": "2022-10-19T23:25:25Z",
+      "side": 1,
+      "message": "Updated to use `\u003d delete`.",
+      "parentUuid": "d72163a8_9b54e248",
+      "revId": "8be16a93d4dbac708617b89bb871555560a2dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
