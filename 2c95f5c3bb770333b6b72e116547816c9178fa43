@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "750b394f_00e822dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2022-10-19T05:11:44Z",
+      "side": 1,
+      "message": "LGTM (rubber-stamp) on the src/inspector changes.",
+      "revId": "2c95f5c3bb770333b6b72e116547816c9178fa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
