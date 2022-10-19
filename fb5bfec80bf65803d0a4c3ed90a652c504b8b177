@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7dda7a0_426b49ed",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-19T16:39:45Z",
+      "side": 1,
+      "message": "\u003e Probably the issue is that we `V8_EXPORT_PRIVATE` the whole Isolate class instead of per-method approach that we use in other places. WDYT about trying to export only those Isolate methods that are used cross/component, maybe as a follow-up CL?\n\nIn Blink we have a comment there saying that platform export clashes with static fields using clang-cl.",
+      "parentUuid": "43670738_f0caf60e",
+      "revId": "fb5bfec80bf65803d0a4c3ed90a652c504b8b177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24cbcfd5_3660ea77",
         "filename": "src/execution/isolate.h",
         "patchSetId": 3
