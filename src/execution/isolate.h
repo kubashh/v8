@@ -621,7 +621,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   };
 
   static void InitializeOncePerProcess();
-  static void DisposeOncePerProcess();
 
   // Creates Isolate object. Must be used instead of constructing Isolate with
   // new operator.
@@ -643,16 +642,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // Returns the PerIsolateThreadData for the current thread (or nullptr if one
   // is not currently set).
   static PerIsolateThreadData* CurrentPerIsolateThreadData() {
-    return reinterpret_cast<PerIsolateThreadData*>(
-        base::Thread::GetThreadLocal(per_isolate_thread_data_key_));
+    return current_per_isolate_thread_data_;
   }
 
   // Returns the isolate inside which the current thread is running or nullptr.
-  V8_INLINE static Isolate* TryGetCurrent() {
-    DCHECK_EQ(true, isolate_key_created_.load(std::memory_order_relaxed));
-    return reinterpret_cast<Isolate*>(
-        base::Thread::GetExistingThreadLocal(isolate_key_));
-  }
+  V8_INLINE static Isolate* TryGetCurrent() { return current_isolate_; }
 
   // Returns the isolate inside which the current thread is running.
   V8_INLINE static Isolate* Current() {
@@ -2123,9 +2117,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   static Isolate* process_wide_shared_space_isolate_;
 
-  static base::Thread::LocalStorageKey per_isolate_thread_data_key_;
-  static base::Thread::LocalStorageKey isolate_key_;
-  static std::atomic<bool> isolate_key_created_;
+  static thread_local PerIsolateThreadData* current_per_isolate_thread_data_;
+  static thread_local Isolate* current_isolate_;
 
   void Deinit();
 
