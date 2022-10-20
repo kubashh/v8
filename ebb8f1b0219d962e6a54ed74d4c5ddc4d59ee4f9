@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19200d09_3f51c67f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-20T13:14:11Z",
+      "side": 1,
+      "message": "rubberstamp LGTM for liftoff-assembler-defs.h. Haven\u0027t reviewed this in detail.",
+      "revId": "ebb8f1b0219d962e6a54ed74d4c5ddc4d59ee4f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
