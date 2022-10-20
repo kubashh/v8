@@ -595,7 +595,7 @@ class V8_EXPORT Isolate {
    *
    * This method must not be invoked before V8::Initialize() was invoked.
    */
-  static Isolate* GetCurrent();
+  V8_INLINE static Isolate* GetCurrent();
 
   /**
    * Returns the entered isolate for the current thread or NULL in
@@ -603,7 +603,7 @@ class V8_EXPORT Isolate {
    *
    * No checks are performed by this method.
    */
-  static Isolate* TryGetCurrent();
+  V8_INLINE static Isolate* TryGetCurrent();
 
   /**
    * Return true if this isolate is currently active.
@@ -1666,6 +1666,20 @@ class V8_EXPORT Isolate {
   internal::Address* GetDataFromSnapshotOnce(size_t index);
   void ReportExternalAllocationLimitReached();
 };
+
+// static
+Isolate* Isolate::GetCurrent() {
+  using I = internal::Internals;
+  Isolate* isolate = TryGetCurrent();
+  I::CheckInitialized(isolate);
+  return isolate;
+}
+
+// static
+Isolate* Isolate::TryGetCurrent() {
+  using I = internal::Internals;
+  return I::TryGetCurrentIsolate();
+}
 
 void Isolate::SetData(uint32_t slot, void* data) {
   using I = internal::Internals;
