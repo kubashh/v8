@@ -146,6 +146,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a633c9b7_42403f95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-20T13:42:39Z",
+      "side": 1,
+      "message": "So what happens is:\n\n  1. We start executing the first loop,\n  2. Eventually, we collect enough profiling ticks to OSR the first loop, so we start concurrent OSR (and reset ticks when starting), \n  3. We continue executing the first loop, increasing profiling ticks again,\n  4. We finish executing the first loop,\n  5. We start executing the second loop, with profiling ticks quite high due to (3)\n  6. Concurrent OSR for the first loop completes,\n  7. We immediately start concurrent OSR for the second loop, despite there not being many ticks created by the second loop.\n  \nAnd you want to insert a second tick reset between (6) and (7), to delay when (7) happens? My question is: what if the time between (5) and (6) is long?",
+      "parentUuid": "a0efd45c_91b2a44b",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8987b2a4_67714aad",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4

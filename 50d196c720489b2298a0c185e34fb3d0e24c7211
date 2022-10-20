@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7783a34_ac6890d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-20T13:42:39Z",
+      "side": 1,
+      "message": "I don\u0027t see anything in the code about \"the same nesting loop\", can you clarify if this is necessary for this optimisation?",
+      "range": {
+        "startLine": 13,
+        "startChar": 45,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "50d196c720489b2298a0c185e34fb3d0e24c7211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
