@@ -46,6 +46,30 @@
       },
       "revId": "50d196c720489b2298a0c185e34fb3d0e24c7211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfc5cc40_ef47b54b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-20T15:58:15Z",
+      "side": 1,
+      "message": "It\u0027s still not clear to me if the outer loop is necessary or not.",
+      "parentUuid": "3cff0434_39abda6f",
+      "range": {
+        "startLine": 13,
+        "startChar": 45,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "50d196c720489b2298a0c185e34fb3d0e24c7211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
