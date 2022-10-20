@@ -197,32 +197,41 @@ void CcTest::AddGlobalFunction(v8::Local<v8::Context> env, const char* name,
   env->Global()->Set(env, v8_str(name), func).FromJust();
 }
 
-void CcTest::CollectGarbage(i::AllocationSpace space, i::Isolate* isolate) {
+void CcTest::CollectGarbage(i::AllocationSpace space, i::Isolate* isolate,
+                            i::Heap::ScanStackMode mode) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
-  iso->heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting);
+  iso->heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting,
+                              v8::kNoGCCallbackFlags, mode);
 }
 
-void CcTest::CollectAllGarbage(i::Isolate* isolate) {
+void CcTest::CollectAllGarbage(i::Isolate* isolate,
+                               i::Heap::ScanStackMode mode) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
   iso->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
-                                 i::GarbageCollectionReason::kTesting);
+                                 i::GarbageCollectionReason::kTesting,
+                                 v8::kNoGCCallbackFlags, mode);
 }
 
-void CcTest::CollectAllAvailableGarbage(i::Isolate* isolate) {
+void CcTest::CollectAllAvailableGarbage(i::Isolate* isolate,
+                                        i::Heap::ScanStackMode mode) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
-  iso->heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting);
+  iso->heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting,
+                                          mode);
 }
 
-void CcTest::PreciseCollectAllGarbage(i::Isolate* isolate) {
+void CcTest::PreciseCollectAllGarbage(i::Isolate* isolate,
+                                      i::Heap::ScanStackMode mode) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
   iso->heap()->PreciseCollectAllGarbage(i::Heap::kNoGCFlags,
-                                        i::GarbageCollectionReason::kTesting);
+                                        i::GarbageCollectionReason::kTesting,
+                                        v8::kNoGCCallbackFlags, mode);
 }
 
-void CcTest::CollectSharedGarbage(i::Isolate* isolate) {
+void CcTest::CollectSharedGarbage(i::Isolate* isolate,
+                                  i::Heap::ScanStackMode mode) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
   iso->heap()->CollectGarbageShared(iso->main_thread_local_heap(),
-                                    i::GarbageCollectionReason::kTesting);
+                                    i::GarbageCollectionReason::kTesting, mode);
 }
 
 i::Handle<i::String> CcTest::MakeString(const char* str) {
