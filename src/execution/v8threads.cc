@@ -261,7 +261,7 @@ void ThreadManager::EagerlyArchiveThread() {
   state->LinkInto(ThreadState::IN_USE_LIST);
   char* to = state->data();
   // Ensure that data containing GC roots are archived first, and handle them
-  // in ThreadManager::Iterate(RootVisitor*).
+  // in ThreadManager::Iterate.
   to = isolate_->handle_scope_implementer()->ArchiveThread(to);
   to = isolate_->ArchiveThread(to);
   to = Relocatable::ArchiveState(isolate_, to);
@@ -291,13 +291,13 @@ bool ThreadManager::IsArchived() {
   return data != nullptr && data->thread_state() != nullptr;
 }
 
-void ThreadManager::Iterate(RootVisitor* v) {
+void ThreadManager::Iterate(RootVisitor* v, Heap::ScanStackMode mode) {
   // Expecting no threads during serialization/deserialization
   for (ThreadState* state = FirstThreadStateInUse(); state != nullptr;
        state = state->Next()) {
     char* data = state->data();
     data = HandleScopeImplementer::Iterate(v, data);
-    data = isolate_->Iterate(v, data);
+    data = isolate_->Iterate(v, data, mode);
     data = Relocatable::Iterate(v, data);
     data = StackGuard::Iterate(v, data);
     data = Debug::Iterate(v, data);
