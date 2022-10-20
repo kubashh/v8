@@ -170,7 +170,9 @@ enum class SkipRoot {
   kStack,
   kMainThreadHandles,
   kUnserializable,
-  kWeak
+  kWeak,
+  kTopOfStack,
+  kConservativeStack,
 };
 
 enum UnprotectMemoryOrigin {
@@ -965,38 +967,46 @@ class Heap {
   // Methods triggering GCs. ===================================================
   // ===========================================================================
 
+  enum class ScanStackMode { kNone, kFromMarker, kComplete };
+
   // Performs garbage collection operation.
   // Returns whether there is a chance that another major GC could
   // collect more garbage.
   V8_EXPORT_PRIVATE bool CollectGarbage(
       AllocationSpace space, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Performs a full garbage collection.
   V8_EXPORT_PRIVATE void CollectAllGarbage(
       int flags, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Last hope GC, should try to squeeze as much as possible.
   V8_EXPORT_PRIVATE void CollectAllAvailableGarbage(
-      GarbageCollectionReason gc_reason);
+      GarbageCollectionReason gc_reason,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Precise garbage collection that potentially finalizes already running
   // incremental marking before performing an atomic garbage collection.
   // Only use if absolutely necessary or in tests to avoid floating garbage!
   V8_EXPORT_PRIVATE void PreciseCollectAllGarbage(
       int flags, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Performs garbage collection operation for the shared heap.
   V8_EXPORT_PRIVATE bool CollectGarbageShared(
-      LocalHeap* local_heap, GarbageCollectionReason gc_reason);
+      LocalHeap* local_heap, GarbageCollectionReason gc_reason,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Requests garbage collection from some other thread.
   V8_EXPORT_PRIVATE bool CollectGarbageFromAnyThread(
       LocalHeap* local_heap,
       GarbageCollectionReason gc_reason =
-          GarbageCollectionReason::kBackgroundAllocationFailure);
+          GarbageCollectionReason::kBackgroundAllocationFailure,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Reports and external memory pressure event, either performs a major GC or
   // completes incremental marking in order to free external resources.
@@ -1026,7 +1036,7 @@ class Heap {
   void IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
   void IterateRootsIncludingClients(RootVisitor* v,
                                     base::EnumSet<SkipRoot> options);
-  void IterateRootsFromStackIncludingClient(RootVisitor* v);
+  void IterateRootsFromStackIncludingClient(RootVisitor* v, ScanStackMode mode);
 
   // Iterates over entries in the smi roots list.  Only interesting to the
   // serializer/deserializer, since GC does not care about smis.
@@ -1035,7 +1045,7 @@ class Heap {
   void IterateWeakRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
   void IterateWeakGlobalHandles(RootVisitor* v);
   void IterateBuiltins(RootVisitor* v);
-  void IterateStackRoots(RootVisitor* v);
+  void IterateStackRoots(RootVisitor* v, ScanStackMode mode);
 
   // ===========================================================================
   // Remembered set API. =======================================================
@@ -1780,14 +1790,15 @@ class Heap {
 
   // Performs garbage collection in a safepoint.
   // Returns the number of freed global handles.
-  size_t PerformGarbageCollection(
-      GarbageCollector collector, GarbageCollectionReason gc_reason,
-      const char* collector_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+  size_t PerformGarbageCollection(GarbageCollector collector,
+                                  GarbageCollectionReason gc_reason,
+                                  const char* collector_reason,
+                                  ScanStackMode mode);
 
   // Performs garbage collection in the shared heap.
   void PerformSharedGarbageCollection(Isolate* initiator,
-                                      GarbageCollectionReason gc_reason);
+                                      GarbageCollectionReason gc_reason,
+                                      ScanStackMode mode);
 
   inline void UpdateOldSpaceLimits();
 
@@ -1890,9 +1901,9 @@ class Heap {
   void GarbageCollectionEpilogueInSafepoint(GarbageCollector collector);
 
   // Performs a major collection in the whole heap.
-  void MarkCompact();
+  void MarkCompact(ScanStackMode mode);
   // Performs a minor collection of just the young generation.
-  void MinorMarkCompact();
+  void MinorMarkCompact(ScanStackMode mode);
 
   // Code to be run before and after mark-compact.
   void MarkCompactPrologue();
@@ -2371,6 +2382,7 @@ class Heap {
   bool force_oom_ = false;
   bool force_gc_on_next_allocation_ = false;
   bool delay_sweeper_tasks_for_testing_ = false;
+  base::Optional<ScanStackMode> override_scan_stack_mode_;
 
   std::unordered_map<HeapObject, HeapObject, Object::Hasher> retainer_;
   std::unordered_map<HeapObject, Root, Object::Hasher> retaining_root_;
@@ -2418,8 +2430,6 @@ class Heap {
   friend class LargeObjectSpace;
   friend class LocalHeap;
   friend class MarkingBarrier;
-  friend class OldLargeObjectSpace;
-  friend class OptionalAlwaysAllocateScope;
   template <typename ConcreteVisitor, typename MarkingState>
   friend class MarkingVisitorBase;
   friend class MarkCompactCollector;
@@ -2428,7 +2438,10 @@ class Heap {
   friend class MinorMCTaskObserver;
   friend class NewLargeObjectSpace;
   friend class NewSpace;
+  friend class ScanStackModeScopeForTesting;
   friend class ObjectStatsCollector;
+  friend class OldLargeObjectSpace;
+  friend class OptionalAlwaysAllocateScope;
   friend class Page;
   friend class PagedSpaceBase;
   friend class PretenturingHandler;
@@ -2647,6 +2660,16 @@ class V8_NODISCARD IgnoreLocalGCRequests {
  public:
   explicit inline IgnoreLocalGCRequests(Heap* heap);
   inline ~IgnoreLocalGCRequests();
+
+ private:
+  Heap* heap_;
+};
+
+class V8_NODISCARD ScanStackModeScopeForTesting {
+ public:
+  explicit inline ScanStackModeScopeForTesting(Heap* heap,
+                                               Heap::ScanStackMode mode);
+  inline ~ScanStackModeScopeForTesting();
 
  private:
   Heap* heap_;
