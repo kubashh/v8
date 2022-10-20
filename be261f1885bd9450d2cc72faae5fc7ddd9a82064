@@ -168,6 +168,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72eae3b6_d27eaa22",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-20T15:26:51Z",
+      "side": 1,
+      "message": "Thanks for the detail sequence! I understood your question. I don\u0027t think it matters if the time between (5) and (6) is long. Without new feedback change, execution speed of all OSR code are almost same. If there is a OSR code, don\u0027t need to compile a new one, but if long time not meet entry of the OSR code, start a new OSR. This is a small probability event, two example:\n1. The loop including OSR entry is conditional executed, it\u0027s executed before (2) and is not executed after (6).\n2. The iteration count of another loop (not including OSR entry) suddenly became very big).\nA little correction, in (2), (and reset OSR urgency when starting, don\u0027t reset ticks).",
+      "parentUuid": "a633c9b7_42403f95",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8987b2a4_67714aad",
