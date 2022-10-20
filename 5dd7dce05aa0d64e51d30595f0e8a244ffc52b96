@@ -153,6 +153,30 @@
       },
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c378a51_b545b8d3",
+        "filename": "test/unittests/interpreter/bytecode_expectations/ForOf.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-20T07:06:34Z",
+      "side": 1,
+      "message": "I did not observe obvious performance improvement, but slight regressions in local test by mitigating this dependence(not sure why). Besides by simply replacing the \"MarkTemporariesAsUnmaterialized\" to unmaterialized the patched input only can bring up a stable 0.9~1% improvement in local tests. Seems calling this function will induce some side effects. I\u0027m now verifying with Pinpoint.",
+      "parentUuid": "d3273516_3c6cffb1",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
