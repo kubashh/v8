@@ -5772,6 +5772,10 @@ void BytecodeGenerator::BuildSuperCallOptimization(
     Register constructor_then_instance, BytecodeLabel* super_ctor_call_done) {
   DCHECK(v8_flags.omit_default_ctors);
   RegisterList output = register_allocator()->NewRegisterList(2);
+  // Lazy deopt in the "default base ctor" case only works if the output
+  // register already contains the right value, in case the object creation
+  // lazy-deopts.
+  builder()->LoadTrue().StoreAccumulatorInRegister(output[0]);
   builder()->FindNonDefaultConstructorOrConstruct(this_function, new_target,
                                                   output);
   builder()->MoveRegister(output[1], constructor_then_instance);

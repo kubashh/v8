@@ -3216,6 +3216,7 @@ void BytecodeGraphBuilder::VisitGetSuperConstructor() {
 }
 
 void BytecodeGraphBuilder::VisitFindNonDefaultConstructorOrConstruct() {
+  PrepareEagerCheckpoint();
   Node* this_function =
       environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
   Node* new_target =
