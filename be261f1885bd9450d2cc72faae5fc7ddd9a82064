@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2592f2b2_f7d5de05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-20T08:24:55Z",
+      "side": 1,
+      "message": "So you\u0027re saying that your patch isn\u0027t necessary if feedback changes (because profiler ticks get reset anyway), and only has interesting behaviour if feedback doesn\u0027t change (because the second loop is included in the first loop)? And you want the second loop to go through the same profiler tick increase as the first loop did, before actually getting compiled?",
+      "parentUuid": "9a0b1708_876c52cf",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8987b2a4_67714aad",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
