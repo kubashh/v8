@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0b1708_876c52cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-20T03:47:51Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t write potential precondition \"If no more feedback change“ to the git commit message, I added the potential precondition just now. This patch intervene OSR compilation only in the condition that there is no more feedback change.\nIf new feedback was collected while executing the second loop, profiler ticks is reset by IC::OnFeedbackChanged() or CodeStubAssembler::ReportFeedbackUpdate(), the feedback collection state go back to the beginning and start again, the OSR urgency will not increase to more than 0 before accumulating enough no feedback change profiler ticks to meet the condition of SmallEnoughForOSR().",
+      "parentUuid": "5947f11c_8a87b074",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8987b2a4_67714aad",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-19T11:16:05Z",
       "side": 1,
       "message": "does it have an effect on actual performance/score?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 21
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4139efa3_8353f03a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-20T03:47:51Z",
+      "side": 1,
+      "message": "I didn\u0027t see stable performance/score modification. I think this patch takes more effect on few cpu core or little memory or the os is executing some other heavy workload. As the os is executing some other heavy workload may increase variance, I\u0027m trying to find test machine with few cpu core and little memory to test this patch.",
+      "parentUuid": "8987b2a4_67714aad",
       "range": {
         "startLine": 23,
         "startChar": 0,
