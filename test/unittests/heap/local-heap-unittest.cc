@@ -176,8 +176,9 @@ TEST_F(LocalHeapTest, GCEpilogue) {
   epilogue[2].WaitUntilStarted();
   {
     UnparkedScope scope(&lh);
-    heap->PreciseCollectAllGarbage(Heap::kNoGCFlags,
-                                   GarbageCollectionReason::kTesting);
+    heap->PreciseCollectAllGarbage(
+        Heap::kNoGCFlags, GarbageCollectionReason::kTesting, kNoGCCallbackFlags,
+        i::Heap::ScanStackMode::kNone);
   }
   epilogue[1].RequestStop();
   epilogue[2].RequestStop();

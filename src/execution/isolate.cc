@@ -140,6 +140,10 @@
 #include "src/diagnostics/unwinding-info-win64.h"
 #endif  // V8_OS_WIN64
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
 #if USE_SIMULATOR
 #include "src/execution/simulator-base.h"
 #endif
@@ -585,9 +589,10 @@ Address Isolate::get_address_from_id(IsolateAddressId id) {
   return isolate_addresses_[id];
 }
 
-char* Isolate::Iterate(RootVisitor* v, char* thread_storage) {
+char* Isolate::Iterate(RootVisitor* v, char* thread_storage,
+                       Heap::ScanStackMode mode) {
   ThreadLocalTop* thread = reinterpret_cast<ThreadLocalTop*>(thread_storage);
-  Iterate(v, thread);
+  Iterate(v, thread, mode);
   return thread_storage + sizeof(ThreadLocalTop);
 }
 
@@ -596,7 +601,8 @@ void Isolate::IterateThread(ThreadVisitor* v, char* t) {
   v->VisitThread(this, thread);
 }
 
-void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
+void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread,
+                      Heap::ScanStackMode mode) {
   // Visit the roots from the top for a given thread.
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->pending_exception_));
@@ -618,7 +624,26 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
         FullObjectSlot(reinterpret_cast<Address>(&(block->message_obj_))));
   }
 
-  // Iterate over pointers on native execution stack.
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  switch (mode) {
+    case Heap::ScanStackMode::kNone:
+      break;
+    case Heap::ScanStackMode::kComplete: {
+      ConservativeStackVisitor stack_visitor(this, v);
+      heap()->stack().IteratePointers(&stack_visitor);
+      break;
+    }
+    case Heap::ScanStackMode::kFromMarker: {
+      ConservativeStackVisitor stack_visitor(this, v);
+      heap()->stack().IteratePointersUnsafe(
+          &stack_visitor,
+          reinterpret_cast<intptr_t>(heap()->stack().get_marker()));
+      break;
+    }
+  }
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
+    // Iterate over pointers on native execution stack.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope wasm_code_ref_scope;
   if (v8_flags.experimental_wasm_stack_switching) {
@@ -643,9 +668,9 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
   }
 }
 
-void Isolate::Iterate(RootVisitor* v) {
+void Isolate::Iterate(RootVisitor* v, Heap::ScanStackMode mode) {
   ThreadLocalTop* current_t = thread_local_top();
-  Iterate(v, current_t);
+  Iterate(v, current_t, mode);
 }
 
 void Isolate::RegisterTryCatchHandler(v8::TryCatch* that) {
@@ -3382,6 +3407,9 @@ void Isolate::Delete(Isolate* isolate) {
       base::Thread::GetThreadLocal(isolate->isolate_key_));
   SetIsolateThreadLocals(isolate, nullptr);
   isolate->set_thread_id(ThreadId::Current());
+  isolate->thread_local_top()->stack_ =
+      saved_isolate ? saved_isolate->thread_local_top()->stack_
+                    : ::heap::base::Stack(base::Stack::GetStackStart());
 
   bool owns_shared_isolate = isolate->owns_shared_isolate_;
   Isolate* maybe_shared_isolate = isolate->shared_isolate_;
