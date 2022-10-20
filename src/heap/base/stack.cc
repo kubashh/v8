@@ -163,5 +163,46 @@ void Stack::IteratePointersUnsafe(StackVisitor* visitor,
   IteratePointersImpl(this, visitor, reinterpret_cast<intptr_t*>(stack_end));
 }
 
+namespace {
+
+#ifdef DEBUG
+
+bool IsTheCurrentStack(const void* stack_start) {
+  DCHECK_NOT_NULL(stack_start);
+  const void* current_stack_start = v8::base::Stack::GetStackStart();
+  const void* current_stack_top = v8::base::Stack::GetCurrentStackPosition();
+  // The declared stack start needs not coincide with the current stack start
+  // (e.g., in case it was explicitly set to a lower address, in tests) but has
+  // to be inside the current stack.
+  return stack_start <= current_stack_start && stack_start >= current_stack_top;
+}
+
+bool IsValidMarker(const void* stack_start, const void* stack_marker) {
+  const void* current_stack_top = v8::base::Stack::GetCurrentStackPosition();
+  return stack_marker <= stack_start && stack_marker >= current_stack_top;
+}
+
+#endif  // DEBUG
+
+}  // namespace
+
+void Stack::set_marker(const void* stack_marker) {
+  DCHECK(IsTheCurrentStack(stack_start_));
+  DCHECK_NOT_NULL(stack_marker);
+  DCHECK(IsValidMarker(stack_start_, stack_marker));
+  stack_marker_ = stack_marker;
+}
+
+void Stack::clear_marker() {
+  DCHECK(IsTheCurrentStack(stack_start_));
+  stack_marker_ = nullptr;
+}
+
+const void* Stack::get_marker() const {
+  DCHECK(IsTheCurrentStack(stack_start_));
+  DCHECK_NOT_NULL(stack_marker_);
+  return stack_marker_;
+}
+
 }  // namespace base
 }  // namespace heap
