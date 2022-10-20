@@ -648,6 +648,18 @@ IgnoreLocalGCRequests::~IgnoreLocalGCRequests() {
   heap_->ignore_local_gc_requests_depth_--;
 }
 
+ScanStackModeScopeForTesting::ScanStackModeScopeForTesting(
+    Heap* heap, Heap::ScanStackMode mode)
+    : heap_(heap) {
+  DCHECK(!heap_->override_scan_stack_mode_.has_value());
+  heap_->override_scan_stack_mode_ = mode;
+}
+
+ScanStackModeScopeForTesting::~ScanStackModeScopeForTesting() {
+  DCHECK(heap_->override_scan_stack_mode_.has_value());
+  heap_->override_scan_stack_mode_.reset();
+}
+
 }  // namespace internal
 }  // namespace v8
 
