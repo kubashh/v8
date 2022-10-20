@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c17928c8_a59f7fc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-20T12:10:52Z",
+      "side": 1,
+      "message": "We could still have the case though, that the first loop compile takes a long time, and the second loop\u0027s compile has been going for a long time, right? Resetting profile ticks on compile completion is not the same thing as resetting them when the new loop starts. Maybe we should reset OSR urgency / profiling ticks when a different loop is taken?",
+      "parentUuid": "091a6073_f8ade098",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8987b2a4_67714aad",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
