@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0efd45c_91b2a44b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-20T13:20:52Z",
+      "side": 1,
+      "message": "No, the second loop\u0027s compile (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/tiering-manager.cc;drc\u003d325853cf50658e7e14980a42e42ecb5dbed1f411;l\u003d302) won\u0027t start before the first loop compile completion (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/tiering-manager.cc;drc\u003d325853cf50658e7e14980a42e42ecb5dbed1f411;l\u003d271), we reset OSR urgency when the first loop\u0027s compile start (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/compiler.cc;drc\u003d283791d250fe8cce64e1d973116faf92ddd304e4;l\u003d3897), I don\u0027t understand why we should reset OSR urgency / profiling ticks when a different (nesting?) loop is taken.",
+      "parentUuid": "c17928c8_a59f7fc1",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8987b2a4_67714aad",
