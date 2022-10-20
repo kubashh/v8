@@ -2536,15 +2536,20 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   friend class SharedHeapNoClientsTest;
 };
 
-// The current entered Isolate and its thread data. Do not access these
+// The current entered Isolate's thread data. Do not access this
 // directly! Use Isolate::Current and Isolate::CurrentPerIsolateThreadData.
 //
-// These are outside the Isolate class with extern storage because in clang-cl,
+// This is outside the Isolate class with extern storage because in clang-cl,
 // thread_local is incompatible with dllexport linkage caused by
 // V8_EXPORT_PRIVATE being applied to Isolate.
+//
+// Note that the current entered Isolate is stored in the Internals class so the
+// public API call can be inlined.
+#ifdef BUILDING_V8_SHARED
+extern thread_local Isolate* g_current_isolate_ V8_CONSTINIT;
+#endif
 extern thread_local Isolate::PerIsolateThreadData*
     g_current_per_isolate_thread_data_ V8_CONSTINIT;
-extern thread_local Isolate* g_current_isolate_ V8_CONSTINIT;
 
 #undef FIELD_ACCESSOR
 #undef THREAD_LOCAL_TOP_ACCESSOR

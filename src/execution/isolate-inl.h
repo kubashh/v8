@@ -30,7 +30,13 @@ Isolate::CurrentPerIsolateThreadData() {
 }
 
 // static
-V8_INLINE Isolate* Isolate::TryGetCurrent() { return g_current_isolate_; }
+V8_INLINE Isolate* Isolate::TryGetCurrent() {
+#ifdef BUILDING_V8_SHARED
+  return g_current_isolate_;
+#else
+  return reinterpret_cast<Isolate*>(v8::Isolate::TryGetCurrent());
+#endif
+}
 
 // static
 V8_INLINE Isolate* Isolate::Current() {

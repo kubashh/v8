@@ -506,9 +506,11 @@ Isolate* Isolate::process_wide_shared_isolate_{nullptr};
 
 Isolate* Isolate::process_wide_shared_space_isolate_{nullptr};
 
+#ifdef BUILDING_V8_SHARED
+thread_local Isolate* g_current_isolate_ V8_CONSTINIT = nullptr;
+#endif
 thread_local Isolate::PerIsolateThreadData* g_current_per_isolate_thread_data_
     V8_CONSTINIT = nullptr;
-thread_local Isolate* g_current_isolate_ V8_CONSTINIT = nullptr;
 
 namespace {
 // A global counter for all generated Isolates, might overflow.
@@ -3720,7 +3722,11 @@ void Isolate::Deinit() {
 
 void Isolate::SetIsolateThreadLocals(Isolate* isolate,
                                      PerIsolateThreadData* data) {
+#ifdef BUILDING_V8_SHARED
   g_current_isolate_ = isolate;
+#else
+  Internals::current_isolate_ = reinterpret_cast<v8::Isolate*>(isolate);
+#endif
   g_current_per_isolate_thread_data_ = data;
 }
 

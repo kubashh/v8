@@ -8744,16 +8744,6 @@ void Isolate::RequestGarbageCollectionForTesting(GarbageCollectionType type,
   RequestGarbageCollectionForTesting(type);
 }
 
-Isolate* Isolate::GetCurrent() {
-  i::Isolate* i_isolate = i::Isolate::Current();
-  return reinterpret_cast<Isolate*>(i_isolate);
-}
-
-Isolate* Isolate::TryGetCurrent() {
-  i::Isolate* i_isolate = i::Isolate::TryGetCurrent();
-  return reinterpret_cast<Isolate*>(i_isolate);
-}
-
 bool Isolate::IsCurrent() const {
   return reinterpret_cast<const i::Isolate*>(this)->IsCurrent();
 }
@@ -10894,6 +10884,15 @@ TryToCopyAndConvertArrayToCppBuffer<CTypeInfoBuilder<double>::Build().GetId(),
           .GetId(),
       double>(src, dst, max_length);
 }
+
+#ifdef BUILDING_V8_SHARED
+// static
+v8::Isolate* i::Internals::TryGetCurrentIsolate() {
+  return reinterpret_cast<v8::Isolate*>(Isolate::TryGetCurrent());
+}
+#else
+thread_local Isolate* i::Internals::current_isolate_ V8_CONSTINIT = nullptr;
+#endif
 
 }  // namespace v8
 

@@ -490,12 +490,20 @@ V8_EXPORT internal::Isolate* IsolateFromNeverReadOnlySpaceObject(Address obj);
 // mode based on the current context and the closure. This returns true if the
 // language mode is strict.
 V8_EXPORT bool ShouldThrowOnError(v8::internal::Isolate* isolate);
+
 /**
  * This class exports constants and functionality from within v8 that
  * is necessary to implement inline functions in the v8 api.  Don't
  * depend on functions and constants defined here.
  */
 class Internals {
+#if !defined(BUILDING_V8_SHARED) && !defined(USING_V8_SHARED)
+  // If not building shared V8 accessing the current isolate can be inlined in
+  // the API boundary.
+  friend class internal::Isolate;
+  static thread_local v8::Isolate* current_isolate_ V8_CONSTINIT;
+#endif
+
 #ifdef V8_MAP_PACKING
   V8_INLINE static constexpr internal::Address UnpackMapWord(
       internal::Address mapword) {
@@ -687,6 +695,14 @@ class Internals {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     *addr = static_cast<uint8_t>((*addr & ~kNodeStateMask) | value);
   }
+
+#if defined(BUILDING_V8_SHARED) || defined(USING_V8_SHARED)
+  V8_EXPORT static v8::Isolate* TryGetCurrentIsolate();
+#else
+  V8_INLINE static v8::Isolate* TryGetCurrentIsolate() {
+    return current_isolate_;
+  }
+#endif
 
   V8_INLINE static void SetEmbedderData(v8::Isolate* isolate, uint32_t slot,
                                         void* data) {
