@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "091a6073_f8ade098",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-20T09:17:55Z",
+      "side": 1,
+      "message": "Yes. The current latency of waiting for hitting the entry of the first OSR (1 profiler tick) is too few, change to the latency of from scratch OSR (go through the same profiler tick increase as the first loop did).",
+      "parentUuid": "2592f2b2_f7d5de05",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "be261f1885bd9450d2cc72faae5fc7ddd9a82064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8987b2a4_67714aad",
