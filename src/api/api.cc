@@ -784,6 +784,8 @@ void ResourceConstraints::ConfigureDefaults(uint64_t physical_memory,
 
 namespace internal {
 
+thread_local v8::Isolate* g_current_isolate_ V8_CONSTINIT = nullptr;
+
 i::Address* GlobalizeTracedReference(i::Isolate* i_isolate, i::Address* obj,
                                      internal::Address* slot,
                                      GlobalHandleStoreMode store_mode) {
@@ -8742,16 +8744,6 @@ void Isolate::RequestGarbageCollectionForTesting(GarbageCollectionType type,
                         stack_state);
   }
   RequestGarbageCollectionForTesting(type);
-}
-
-Isolate* Isolate::GetCurrent() {
-  i::Isolate* i_isolate = i::Isolate::Current();
-  return reinterpret_cast<Isolate*>(i_isolate);
-}
-
-Isolate* Isolate::TryGetCurrent() {
-  i::Isolate* i_isolate = i::Isolate::TryGetCurrent();
-  return reinterpret_cast<Isolate*>(i_isolate);
 }
 
 bool Isolate::IsCurrent() const {

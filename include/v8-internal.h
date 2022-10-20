@@ -490,6 +490,11 @@ V8_EXPORT internal::Isolate* IsolateFromNeverReadOnlySpaceObject(Address obj);
 // mode based on the current context and the closure. This returns true if the
 // language mode is strict.
 V8_EXPORT bool ShouldThrowOnError(v8::internal::Isolate* isolate);
+
+// The current entered Isolate's thread data. Do not access this
+// directly! Use i::Internals::TryGetCurrentIsolate.
+V8_EXPORT extern thread_local v8::Isolate* g_current_isolate_ V8_CONSTINIT;
+
 /**
  * This class exports constants and functionality from within v8 that
  * is necessary to implement inline functions in the v8 api.  Don't
@@ -686,6 +691,10 @@ class Internals {
   V8_INLINE static void UpdateNodeState(internal::Address* obj, uint8_t value) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     *addr = static_cast<uint8_t>((*addr & ~kNodeStateMask) | value);
+  }
+
+  V8_INLINE static v8::Isolate* TryGetCurrentIsolate() {
+    return g_current_isolate_;
   }
 
   V8_INLINE static void SetEmbedderData(v8::Isolate* isolate, uint32_t slot,
