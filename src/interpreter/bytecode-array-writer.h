@@ -23,6 +23,7 @@ class BytecodeNode;
 class BytecodeJumpTable;
 class ConstantArrayBuilder;
 class HandlerTableBuilder;
+class BytecodeRegisterOptimizer;
 
 namespace bytecode_array_writer_unittest {
 class BytecodeArrayWriterUnittest;
@@ -38,7 +39,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
   BytecodeArrayWriter(const BytecodeArrayWriter&) = delete;
   BytecodeArrayWriter& operator=(const BytecodeArrayWriter&) = delete;
 
-  void Write(BytecodeNode* node);
+  void Write(BytecodeNode* node,
+             BytecodeRegisterOptimizer* optimizer = nullptr);
   void WriteJump(BytecodeNode* node, BytecodeLabel* label);
   void WriteJumpLoop(BytecodeNode* node, BytecodeLoopHeader* loop_header);
   void WriteSwitch(BytecodeNode* node, BytecodeJumpTable* jump_table);
@@ -70,6 +72,7 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
 #endif
 
   bool RemainderOfBlockIsDead() const { return exit_seen_in_block_; }
+  void PatchOperands(ZoneVector<size_t>& list, uint8_t diff);
 
  private:
   // Maximum sized packed bytecode is comprised of a prefix bytecode,
@@ -93,7 +96,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
   void PatchJumpWith16BitOperand(size_t jump_location, int delta);
   void PatchJumpWith32BitOperand(size_t jump_location, int delta);
 
-  void EmitBytecode(const BytecodeNode* const node);
+  void EmitBytecode(BytecodeNode* const node,
+                    BytecodeRegisterOptimizer* optimizer = nullptr);
   void EmitJump(BytecodeNode* node, BytecodeLabel* label);
   void EmitJumpLoop(BytecodeNode* node, BytecodeLoopHeader* loop_header);
   void EmitSwitch(BytecodeNode* node, BytecodeJumpTable* jump_table);

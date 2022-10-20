@@ -568,6 +568,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
 
   void EmitFunctionStartSourcePosition(int position);
 
+  void PatchOperands(ZoneVector<size_t>& list, int8_t diff);
+
   // Accessors
   BytecodeRegisterAllocator* register_allocator() {
     return &register_allocator_;
