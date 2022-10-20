@@ -143,6 +143,9 @@ UNINITIALIZED_TEST(ConcurrentAllocationWhileMainThreadIsParked) {
   std::vector<std::unique_ptr<ConcurrentAllocationThread>> threads;
   const int kThreads = 4;
 
+  ScanStackModeScopeForTesting no_stack_scanning(i_isolate->heap(),
+                                                 Heap::ScanStackMode::kNone);
+
   {
     ParkedScope scope(i_isolate->main_thread_local_isolate());
 
@@ -173,6 +176,9 @@ UNINITIALIZED_TEST(ConcurrentAllocationWhileMainThreadParksAndUnparks) {
 
   std::vector<std::unique_ptr<ConcurrentAllocationThread>> threads;
   const int kThreads = 4;
+
+  ScanStackModeScopeForTesting no_stack_scanning(i_isolate->heap(),
+                                                 Heap::ScanStackMode::kNone);
 
   for (int i = 0; i < kThreads; i++) {
     auto thread =
@@ -208,6 +214,9 @@ UNINITIALIZED_TEST(ConcurrentAllocationWhileMainThreadRunsWithSafepoints) {
 
   std::vector<std::unique_ptr<ConcurrentAllocationThread>> threads;
   const int kThreads = 4;
+
+  ScanStackModeScopeForTesting no_stack_scanning(i_isolate->heap(),
+                                                 Heap::ScanStackMode::kNone);
 
   for (int i = 0; i < kThreads; i++) {
     auto thread =
