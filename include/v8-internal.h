@@ -496,6 +496,9 @@ V8_EXPORT bool ShouldThrowOnError(v8::internal::Isolate* isolate);
  * depend on functions and constants defined here.
  */
 class Internals {
+  friend class internal::Isolate;
+  static thread_local v8::Isolate* current_isolate_ V8_CONSTINIT;
+
 #ifdef V8_MAP_PACKING
   V8_INLINE static constexpr internal::Address UnpackMapWord(
       internal::Address mapword) {
@@ -686,6 +689,10 @@ class Internals {
   V8_INLINE static void UpdateNodeState(internal::Address* obj, uint8_t value) {
     uint8_t* addr = reinterpret_cast<uint8_t*>(obj) + kNodeFlagsOffset;
     *addr = static_cast<uint8_t>((*addr & ~kNodeStateMask) | value);
+  }
+
+  V8_INLINE static v8::Isolate* TryGetCurrentIsolate() {
+    return current_isolate_;
   }
 
   V8_INLINE static void SetEmbedderData(v8::Isolate* isolate, uint32_t slot,

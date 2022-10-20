@@ -135,15 +135,23 @@
 #define ALIGNAS(byte_alignment) __attribute__((aligned(byte_alignment)))
 #endif
 
-// Forces the linker to not GC the section corresponding to the symbol.
 #if defined(__has_attribute)
+// Forces the linker to not GC the section corresponding to the symbol.
 #if __has_attribute(used) && __has_attribute(retain)
 #define V8_DONT_STRIP_SYMBOL __attribute__((used, retain))
 #endif  // __has_attribute(used) && __has_attribute(retain)
+
+#if __has_attribute(require_constant_initialization)
+#define V8_CONSTINIT __attribute__((require_constant_initialization))
+#endif  // __has_attribute(require_constant_initialization)
 #endif  // defined(__has_attribute)
 
 #if !defined(V8_DONT_STRIP_SYMBOL)
 #define V8_DONT_STRIP_SYMBOL
 #endif  // !defined(V8_DONT_STRIP_SYMBOL)
+
+#if !defined(V8_CONSTINIT)
+#define V8_CONSTINIT
+#endif  // !defined(V8_CONSTINIT)
 
 #endif  // V8_BASE_COMPILER_SPECIFIC_H_
