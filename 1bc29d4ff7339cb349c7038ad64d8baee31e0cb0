@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acdabea8_9c1f622e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-10-20T17:35:57Z",
+      "side": 1,
+      "message": "started too late today to look at this.\nI\u0027ll work 1 or 2h on Friday, otherwise it will be monday (feel free to reassign if it\u0027s urgent)",
+      "revId": "1bc29d4ff7339cb349c7038ad64d8baee31e0cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
