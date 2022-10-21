@@ -70,6 +70,30 @@
       },
       "revId": "50d196c720489b2298a0c185e34fb3d0e24c7211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8495706_f51a64f6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-21T02:51:57Z",
+      "side": 1,
+      "message": "Sorry for the not clear description. I updated the git commit log. The outer loop is not necessary. One outer loop includes multiple inner loops is common situation (see JetStream2 case gaussian-blur function convolveRGBA) of redundant OSR compilation, because:\n1. The multiple inner loops are executed multiple times before the first OSR compilation start due to iteration of the outer loop, it\u0027s common pre-condition of no more feedback change after the first OSR compilation start.\n2. The not OSR entry loop is common pre-condition of not hitting OSRed entry in one profiler tick and starting a new OSR compilation, executing loop code is easily to accumulate interrupt budget more than one profiler tick.\n\nBecause the upper pre-condition can also be matched under other situations, the outer loop is not necessary.",
+      "parentUuid": "cfc5cc40_ef47b54b",
+      "range": {
+        "startLine": 13,
+        "startChar": 45,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "50d196c720489b2298a0c185e34fb3d0e24c7211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
