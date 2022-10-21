@@ -1063,9 +1063,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void InvokeApiInterruptCallbacks();
 
   // Administration
-  void Iterate(RootVisitor* v);
-  void Iterate(RootVisitor* v, ThreadLocalTop* t);
-  char* Iterate(RootVisitor* v, char* t);
+  void Iterate(RootVisitor* v, Heap::ScanStackMode mode);
+  void Iterate(RootVisitor* v, ThreadLocalTop* t, Heap::ScanStackMode mode);
+  char* Iterate(RootVisitor* v, char* t, Heap::ScanStackMode mode);
   void IterateThread(ThreadVisitor* v, char* t);
 
   // Returns the current native context.
