@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de4c278_a74e17cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-21T18:34:18Z",
+      "side": 1,
+      "message": "LGTM for liftoff-assembler-defs.h. I haven\u0027t reviewed the rest in detail.",
+      "revId": "c26751aa3f5a9f6a886b8cda2fadce122c50a90a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
