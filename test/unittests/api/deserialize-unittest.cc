@@ -358,13 +358,15 @@ class MergeDeserializedCodeTest : public DeserializeTest {
         }
       }
     }
-    i_isolate->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
-                                         i::GarbageCollectionReason::kTesting);
+    i_isolate->heap()->CollectAllGarbage(
+        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting,
+        kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
 
     // A second round of GC is necessary in case incremental marking had already
     // started before the bytecode was aged.
-    i_isolate->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
-                                         i::GarbageCollectionReason::kTesting);
+    i_isolate->heap()->CollectAllGarbage(
+        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting,
+        kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   class MergeThread : public base::Thread {
@@ -506,8 +508,9 @@ class MergeDeserializedCodeTest : public DeserializeTest {
     // At this point, the original_objects array might still have pointers to
     // some old discarded content, such as UncompiledData from flushed
     // functions. GC again to clear it all out.
-    i_isolate->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
-                                         i::GarbageCollectionReason::kTesting);
+    i_isolate->heap()->CollectAllGarbage(
+        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting,
+        kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
 
     // All tracked objects from the original Script should have been reused if
     // they're still alive.
