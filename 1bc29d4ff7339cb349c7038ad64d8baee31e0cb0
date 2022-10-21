@@ -34,6 +34,29 @@
       "parentUuid": "acdabea8_9c1f622e",
       "revId": "1bc29d4ff7339cb349c7038ad64d8baee31e0cb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49b43d29_7f1b66b2",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2798,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-10-21T08:50:20Z",
+      "side": 1,
+      "message": "Should we add a `DCHECK(!pending_empty_)` here? I feel like this should be done in the text_builder to maintain the invariants.",
+      "range": {
+        "startLine": 2798,
+        "startChar": 0,
+        "endLine": 2798,
+        "endChar": 33
+      },
+      "revId": "1bc29d4ff7339cb349c7038ad64d8baee31e0cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
