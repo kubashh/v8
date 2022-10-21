@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b69f05b_0804aadc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-21T12:21:20Z",
+      "side": 1,
+      "message": "PTAL! This is blocking the HEAD import.",
+      "revId": "bc0eb148e37cfe32d907d8fc65fa565f57366a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
