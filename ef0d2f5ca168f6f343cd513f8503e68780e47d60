@@ -22,6 +22,30 @@
       },
       "revId": "ef0d2f5ca168f6f343cd513f8503e68780e47d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca954fa8_ef5d3abf",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-21T12:44:31Z",
+      "side": 0,
+      "message": "Uhm.. After trying hard to come up with a test-case, this actually isn\u0027t fine. Great catch!\nThe fun part: How it was previously is also not fine I think. 😄\n\"Fine\" here refers to other engines won\u0027t agree with our implementation.\nHave to dig through the spec and try to figure out whats correct.",
+      "parentUuid": "276e9e5b_f4d05a29",
+      "range": {
+        "startLine": 2746,
+        "startChar": 0,
+        "endLine": 2750,
+        "endChar": 3
+      },
+      "revId": "ef0d2f5ca168f6f343cd513f8503e68780e47d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
