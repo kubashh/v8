@@ -69,6 +69,30 @@
       },
       "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ab7def_4d54fb04",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-21T18:33:22Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "32a4f0e9_8f60aeb7",
+      "range": {
+        "startLine": 2833,
+        "startChar": 2,
+        "endLine": 2833,
+        "endChar": 72
+      },
+      "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
