@@ -16,6 +16,24 @@
       "message": "Hi Jakob. On PPC we are pushing both {lr} and {r11} right before calling kWasmAllocateFeedbackVector. Note this is only happening under WasmLiftoffFrameSetup and not happening under WasmCompileLazy. Just wanted to make sure offsetting the values by 2 is done correctly here then as we have 2 extra values on the stack which not really a parameter?",
       "revId": "323aa2c3f6d2199007e07d75c5162c1b08d844ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92785ddc_295efd11",
+        "filename": "src/execution/ppc/frame-constants-ppc.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-21T17:46:49Z",
+      "side": 1,
+      "message": "Having a difference between WasmCompileLazy and WasmLiftoffFrameSetup is fine.\nChoosing `2` here right now matches what you do in the builtin, but see my comments there.",
+      "parentUuid": "579e3566_5f0fd0de",
+      "revId": "323aa2c3f6d2199007e07d75c5162c1b08d844ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

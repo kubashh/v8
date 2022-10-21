@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1204aaa_99317ebd",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2831,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-21T17:46:49Z",
+      "side": 1,
+      "message": "That\u0027s a bug. This builtin must not overwrite any of the kGpParamRegisters.",
+      "range": {
+        "startLine": 2831,
+        "startChar": 5,
+        "endLine": 2831,
+        "endChar": 54
+      },
+      "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42bb874_2d0e7cd9",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-21T17:46:49Z",
+      "side": 1,
+      "message": "If you use a register for `vector` that\u0027s not in kGpParamRegisters, then you don\u0027t need to do this.\nYou also don\u0027t need to preserve the value of `vector` across the runtime call, as you\u0027ll overwrite `vector` with the result of the runtime call.",
+      "range": {
+        "startLine": 2833,
+        "startChar": 2,
+        "endLine": 2833,
+        "endChar": 72
+      },
+      "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
