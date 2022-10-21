@@ -5643,6 +5643,7 @@ int Heap::NextStressMarkingLimit() {
 void Heap::NotifyDeserializationComplete() {
   PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
+    if (s->identity() == SHARED_SPACE) continue;
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
     // All pages right after bootstrapping must be marked as never-evacuate.
@@ -6195,8 +6196,11 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
 
 PagedSpace* PagedSpaceIterator::Next() {
   DCHECK_GE(counter_, FIRST_GROWABLE_PAGED_SPACE);
-  if (counter_ > LAST_GROWABLE_PAGED_SPACE) return nullptr;
-  return heap_->paged_space(counter_++);
+  while (counter_ <= LAST_GROWABLE_PAGED_SPACE) {
+    PagedSpace* space = heap_->paged_space(counter_++);
+    if (space) return space;
+  }
+  return nullptr;
 }
 
 SpaceIterator::SpaceIterator(Heap* heap)
