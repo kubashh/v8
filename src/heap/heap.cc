@@ -449,6 +449,12 @@ bool Heap::CanExpandOldGeneration(size_t size) {
   return memory_allocator()->Size() + size <= MaxReserved();
 }
 
+namespace {
+bool IsIsolateDeserializationActive(LocalHeap* local_heap) {
+  return local_heap && !local_heap->heap()->deserialization_complete();
+}
+}  // anonymous namespace
+
 bool Heap::CanExpandOldGenerationBackground(LocalHeap* local_heap,
                                             size_t size) {
   if (force_oom_) return false;
@@ -456,6 +462,7 @@ bool Heap::CanExpandOldGenerationBackground(LocalHeap* local_heap,
   // When the heap is tearing down, then GC requests from background threads
   // are not served and the threads are allowed to expand the heap to avoid OOM.
   return gc_state() == TEAR_DOWN || IsMainThreadParked(local_heap) ||
+         IsIsolateDeserializationActive(local_heap) ||
          memory_allocator()->Size() + size <= MaxReserved();
 }
 
@@ -5128,8 +5135,14 @@ bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap) {
   // allowing the allocation.
   if (IsMainThreadParked(local_heap)) return true;
 
+  //
+  if (IsIsolateDeserializationActive(local_heap)) return true;
+
   // Make it more likely that retry of allocation on background thread succeeds
   if (IsRetryOfFailedAllocation(local_heap)) return true;
+
+  if (local_heap && !local_heap->heap()->deserialization_complete())
+    return true;
 
   // Background thread requested GC, allocation should fail
   if (CollectionRequested()) return false;
@@ -5658,6 +5671,7 @@ int Heap::NextStressMarkingLimit() {
 void Heap::NotifyDeserializationComplete() {
   PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
+    if (s->identity() == SHARED_SPACE) continue;
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
     // All pages right after bootstrapping must be marked as never-evacuate.
@@ -6211,8 +6225,11 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
 
 PagedSpace* PagedSpaceIterator::Next() {
   DCHECK_GE(counter_, FIRST_GROWABLE_PAGED_SPACE);
-  if (counter_ > LAST_GROWABLE_PAGED_SPACE) return nullptr;
-  return heap_->paged_space(counter_++);
+  while (counter_ <= LAST_GROWABLE_PAGED_SPACE) {
+    PagedSpace* space = heap_->paged_space(counter_++);
+    if (space) return space;
+  }
+  return nullptr;
 }
 
 SpaceIterator::SpaceIterator(Heap* heap)
