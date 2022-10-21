@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5abda55_6908afde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-21T07:36:55Z",
+      "side": 1,
+      "message": "Typo: DCHECK",
+      "revId": "05c409bbe747e18647f6d526bf9dd28780aa739a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5005df58_8ed8400b",
@@ -14,6 +31,40 @@
       "writtenOn": "2022-10-20T20:28:17Z",
       "side": 1,
       "message": "ptal",
+      "revId": "05c409bbe747e18647f6d526bf9dd28780aa739a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72bdbbfe_66df67fd",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3930,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-21T07:36:55Z",
+      "side": 1,
+      "message": "Since this is only verification code and the checks aren\u0027t super hot as well, I would prefer to pass the collector as a regular argument to that function.",
+      "revId": "05c409bbe747e18647f6d526bf9dd28780aa739a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "477cd489_04025760",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3965,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-21T07:36:55Z",
+      "side": 1,
+      "message": "Nit: I think we use curly braces when `if` isn\u0027t just a single line, at least I got those comments in my CLs.",
       "revId": "05c409bbe747e18647f6d526bf9dd28780aa739a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
