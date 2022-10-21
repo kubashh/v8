@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95b750db_a77f996a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-21T06:49:21Z",
+      "side": 1,
+      "message": "lgtm, great example of how to make something robust against conservative stack scanning",
+      "revId": "301d4fdad618dd3ef4d0639f405f21c13404dfb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
