@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16ef5c24_0892d56c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-21T08:27:58Z",
+      "side": 1,
+      "message": "thanks for all the explanation! Can you document some of our discussion here as a comment?",
+      "range": {
+        "startLine": 3926,
+        "startChar": 32,
+        "endLine": 3926,
+        "endChar": 50
+      },
+      "revId": "0726cf394783447db508358d2d8efba2b32e76cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
