@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c6820c2_31b2611d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "The design doc currently contains some internal information e.g. on the top website. I will do some clean up and share the link later.",
+      "parentUuid": "5599aa96_a5c932b7",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3158b07d_cfa39f85",
@@ -58,6 +82,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99673789_6b64fb7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Thanks Maya for the review! I\u0027ve resolved most of the comments.\nThis patch has one depedent CL 3411357 on adding the revec phase (https://chromium-review.googlesource.com/c/v8/v8/+/3411357). Will you help to review that one as well?",
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bee381b6_78fb9646",
@@ -71,6 +112,30 @@
       "writtenOn": "2022-10-19T14:50:11Z",
       "side": 1,
       "message": "nit: is it guaranteed that `pnode` is not nullptr now?",
+      "range": {
+        "startLine": 502,
+        "startChar": 20,
+        "endLine": 502,
+        "endChar": 25
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb39a2f2_22ab5f09",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Yes. The node_to_packnode_ map is only initialized when create new PackNode and not modified otherwhere.",
+      "parentUuid": "bee381b6_78fb9646",
       "range": {
         "startLine": 502,
         "startChar": 20,
@@ -127,6 +192,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39182b9_ef875945",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f39326f_69ea54e9",
+      "range": {
+        "startLine": 519,
+        "startChar": 40,
+        "endLine": 519,
+        "endChar": 47
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b07a78a0_40360c74",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "255ca3b7_6d76f750",
+      "range": {
+        "startLine": 519,
+        "startChar": 4,
+        "endLine": 519,
+        "endChar": 6
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d128860_2b0b36ec",
@@ -140,6 +253,30 @@
       "writtenOn": "2022-10-19T14:50:11Z",
       "side": 1,
       "message": "nit: you could negate this condition and add `continue` to reduce the level of nesting.",
+      "range": {
+        "startLine": 528,
+        "startChar": 8,
+        "endLine": 528,
+        "endChar": 46
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "112aabd6_4767d7e2",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d128860_2b0b36ec",
       "range": {
         "startLine": 528,
         "startChar": 8,
@@ -173,6 +310,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c67864_1abb7070",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Yes, I meant the value input is skipped and won\u0027t be updated here. I modified the comment to \"Set the effect input and the value input will be set later\" to avoid the confusion.",
+      "parentUuid": "d78d9c82_d3bf6635",
+      "range": {
+        "startLine": 576,
+        "startChar": 20,
+        "endLine": 576,
+        "endChar": 27
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1df40aaf_b501c853",
@@ -196,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5088eb93_7b231506",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1df40aaf_b501c853",
+      "range": {
+        "startLine": 591,
+        "startChar": 6,
+        "endLine": 591,
+        "endChar": 11
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "677d8614_136a0409",
@@ -209,6 +394,30 @@
       "writtenOn": "2022-10-19T14:50:11Z",
       "side": 1,
       "message": "nit: `new_op`",
+      "range": {
+        "startLine": 596,
+        "startChar": 18,
+        "endLine": 596,
+        "endChar": 23
+      },
+      "revId": "628f98c986039d3bfd59b451b2b0d9db0d92bb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d23899ba_2f9cc968",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-21T08:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "677d8614_136a0409",
       "range": {
         "startLine": 596,
         "startChar": 18,
