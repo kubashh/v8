@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23353c7d_71985482",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3219,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-21T13:12:13Z",
+      "side": 1,
+      "message": "I was confused; there\u0027s no eager deopt here. -\u003e removed",
+      "parentUuid": "0369cd96_eda27b89",
+      "range": {
+        "startLine": 3219,
+        "startChar": 2,
+        "endLine": 3219,
+        "endChar": 24
+      },
+      "revId": "fe13b55107c97e8e2fdd8fa076a5d9d8ed49755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a704b6d3_d51f5e29",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f42b2e0_65599a4d",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-21T13:12:13Z",
+      "side": 1,
+      "message": "Offline discussion -\u003e this is too complex to implement in comparison to the benefit it brings",
+      "parentUuid": "a704b6d3_d51f5e29",
+      "range": {
+        "startLine": 622,
+        "startChar": 21,
+        "endLine": 624,
+        "endChar": 20
+      },
+      "revId": "fe13b55107c97e8e2fdd8fa076a5d9d8ed49755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4459205_ff36cd40",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-10-21T12:18:15Z",
       "side": 1,
       "message": "document the -1?",
+      "range": {
+        "startLine": 631,
+        "startChar": 60,
+        "endLine": 631,
+        "endChar": 63
+      },
+      "revId": "fe13b55107c97e8e2fdd8fa076a5d9d8ed49755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e625aeb_3dad8ec9",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-21T13:12:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4459205_ff36cd40",
       "range": {
         "startLine": 631,
         "startChar": 60,
