@@ -45,6 +45,30 @@
       },
       "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a4f0e9_8f60aeb7",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-10-21T18:26:26Z",
+      "side": 1,
+      "message": "Thank you for sharing the detailed info in an email.\nI\u0027m going to use r11 as the vector register now on PPC, it\u0027s not part of kGpParamRegisters list, it is listed under kLiftoffAssemblerGpCacheRegs and it is not used by kWasmInstanceRegister, kLiftoffFrameSetupFunctionReg or any other place within this builtin. Seems to be safe to use? (the usual convention we follow is the `arm32 register + 3`. Since r8 is not usable here and scratch registers are already in use we need to be careful on what to choose).\n\nI\u0027ve also modified the TYPED_FRAME_PUSHED_VALUE_OFFSET offset as we are now only pushing {lr}.",
+      "parentUuid": "a42bb874_2d0e7cd9",
+      "range": {
+        "startLine": 2833,
+        "startChar": 2,
+        "endLine": 2833,
+        "endChar": 72
+      },
+      "revId": "a176a64836772db39e4a3716fca2da8ce7a14fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
