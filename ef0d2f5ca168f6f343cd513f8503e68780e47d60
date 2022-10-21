@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276e9e5b_f4d05a29",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-10-21T08:43:34Z",
+      "side": 0,
+      "message": "Could maybe quickly outline why this order changes is fine?\nGoing through the code as we speak (and the rest mostly seems moving code)",
+      "range": {
+        "startLine": 2746,
+        "startChar": 0,
+        "endLine": 2750,
+        "endChar": 3
+      },
+      "revId": "ef0d2f5ca168f6f343cd513f8503e68780e47d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
