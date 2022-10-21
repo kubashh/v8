@@ -14,6 +14,7 @@
 #include "src/compiler/allocation-builder-inl.h"
 #include "src/compiler/allocation-builder.h"
 #include "src/compiler/compilation-dependencies.h"
+#include "src/compiler/frame-states.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/js-operator.h"
@@ -614,9 +615,24 @@ JSNativeContextSpecialization::ReduceJSFindNonDefaultConstructorOrConstruct(
         // Generate a builtin call for creating the instance.
         Node* constructor = jsgraph()->Constant(current_function);
 
+        // In the current FrameState setup, the two outputs of this bytecode are
+        // poked at indices [2 (boolean output), 3 (object output)]. Now we're
+        // reducing this bytecode to a builtin call which only has one output
+        // (object_output). Change where in the FrameState the output is
+        // poked at. boolean_output is already set to true (which is the correct
+        // value here) before the JSFindNonDefaultConstructorOrConstruct
+        // bytecode.
+        FrameState old_frame_state = n.frame_state();
+        auto old_poke_offset = old_frame_state.frame_state_info()
+                                   .state_combine()
+                                   .GetOffsetToPokeAt();
+        FrameState new_frame_state = CloneFrameState(
+            jsgraph(), old_frame_state,
+            OutputFrameStateCombine::PokeAt(old_poke_offset + 1));
+
         effect = ctor_or_instance = graph()->NewNode(
             jsgraph()->javascript()->Create(), constructor, new_target,
-            n.context(), n.frame_state(), effect, control);
+            n.context(), new_frame_state, effect, control);
       } else {
         return_value = jsgraph()->BooleanConstant(false);
         ctor_or_instance = jsgraph()->Constant(current_function);
