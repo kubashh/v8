@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c814687a_38c9c48a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-21T12:15:18Z",
+      "side": 1,
+      "message": "ptal - this is the problem we discussed yesterday, and the solution leszeks@ suggested: not changing statevalues after the fact but hard-wiring the true constant into the correct location, which is also the initial poke location.",
+      "revId": "fe13b55107c97e8e2fdd8fa076a5d9d8ed49755f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
