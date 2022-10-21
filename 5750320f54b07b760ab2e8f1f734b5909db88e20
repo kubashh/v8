@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfb721e2_ba46a7a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-21T16:18:28Z",
+      "side": 1,
+      "message": "nit: Msybe rephrase? When I read redundant I think we can get rid of it. I think what you meant is that it\u0027s contributing anything yet.",
+      "range": {
+        "startLine": 12,
+        "startChar": 12,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c20324_7f44f3dc",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-21T16:18:28Z",
+      "side": 1,
+      "message": "nit: `options.Add(mode_ \u003d\u003d Heap::ScanStackMode::kNone ? SkipRoot::kConservativeStack : SkipRoot::kTopOfStack);`?",
+      "range": {
+        "startLine": 159,
+        "startChar": 2,
+        "endLine": 167,
+        "endChar": 3
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96bbfe1d_5cf369ad",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-21T16:18:28Z",
+      "side": 1,
+      "message": "nit: Instead of passing the mode around between methods, can we just store it in a field and read it when we need it?",
+      "range": {
+        "startLine": 261,
+        "startChar": 26,
+        "endLine": 261,
+        "endChar": 30
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeeca70e_8c069312",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-21T16:18:28Z",
+      "side": 1,
+      "message": "IIUC this method was introduced solely for the purpose of evaluating cost of stack scanning on Scavenger. Can we get rid of it now?\n(seeing as we don\u0027t plan to enable CSS with Scavenger, that cost wouldn\u0027t even be relevant anymore.)",
+      "range": {
+        "startLine": 503,
+        "startChar": 25,
+        "endLine": 503,
+        "endChar": 48
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
