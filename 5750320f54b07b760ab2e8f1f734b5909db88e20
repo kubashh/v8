@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "328e0892_4ac2308e",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-23T23:04:15Z",
+      "side": 1,
+      "message": "I think these are orthogonal issues.\nWe pass an explicit parameter for triggering a GC, but then internally we can stash that parameter in a field.",
+      "parentUuid": "6ec9dea6_be4d78e4",
+      "range": {
+        "startLine": 261,
+        "startChar": 26,
+        "endLine": 261,
+        "endChar": 30
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aeeca70e_8c069312",
         "filename": "src/heap/scavenger.cc",
         "patchSetId": 16
