@@ -5,6 +5,8 @@
 #ifndef V8_BASE_IEEE754_H_
 #define V8_BASE_IEEE754_H_
 
+#include <cmath>
+
 #include "src/base/base-export.h"
 
 namespace v8 {
@@ -34,7 +36,7 @@ V8_BASE_EXPORT double atan(double x);
 V8_BASE_EXPORT double atan2(double y, double x);
 
 // Returns the cosine of |x|, where |x| is given in radians.
-V8_BASE_EXPORT double cos(double x);
+inline double cos(double x) { return std::cos(x); }
 
 // Returns the base-e exponential of |x|.
 V8_BASE_EXPORT double exp(double x);
@@ -69,10 +71,10 @@ V8_BASE_EXPORT double expm1(double x);
 V8_BASE_EXPORT double pow(double x, double y);
 
 // Returns the sine of |x|, where |x| is given in radians.
-V8_BASE_EXPORT double sin(double x);
+inline double sin(double x) { return std::sin(x); }
 
 // Returns the tangent of |x|, where |x| is given in radians.
-V8_BASE_EXPORT double tan(double x);
+inline double tan(double x) { return std::tan(x); }
 
 // Returns the hyperbolic cosine of |x|, where |x| is given radians.
 V8_BASE_EXPORT double cosh(double x);
