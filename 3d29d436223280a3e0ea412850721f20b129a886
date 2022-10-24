@@ -50,6 +50,24 @@
       "message": "Your proposal is to remove the operator from turbofan, right? I\u0027m in favor of it, doesn\u0027t make much sense to keep the reducers busy to inspect irrelevant nodes.",
       "revId": "3d29d436223280a3e0ea412850721f20b129a886",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d402477e_a8ed9836",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2022-10-24T12:57:07Z",
+      "side": 1,
+      "message": "It\u0027s not that simple though: We need to insert a node to cast from anyref to externref, but currently we treat TypeGuard as a downcast only. We may need to leave this node simply as a type cast.",
+      "parentUuid": "85ddc69e_c56dc595",
+      "revId": "3d29d436223280a3e0ea412850721f20b129a886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
