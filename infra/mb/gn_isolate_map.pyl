@@ -27,26 +27,6 @@
     "label": "//tools:v8_check_static_initializers",
     "type": "script",
   },
-  "d8_default": {
-    "label": "//test:v8_d8_default",
-    "type": "script",
-  },
-  "generate-bytecode-expectations": {
-    "label": "//test/unittests:generate-bytecode-expectations",
-    "type": "script",
-  },
-  "mjsunit": {
-    "label": "//test/mjsunit:v8_mjsunit",
-    "type": "script",
-  },
-  "mozilla": {
-    "label": "//test/mozilla:v8_mozilla",
-    "type": "script",
-  },
-  "optimize_for_size": {
-    "label": "//test:v8_optimize_for_size",
-    "type": "script",
-  },
   "perf": {
     "label": "//test:v8_perf",
     "type": "script",
@@ -65,14 +45,6 @@
   },
   "run-num-fuzzer": {
     "label": "//test:v8_run_num_fuzzer",
-    "type": "script",
-  },
-  "test262": {
-    "label": "//test/test262:v8_test262",
-    "type": "script",
-  },
-  "unittests": {
-    "label": "//test/unittests:unittests",
     "type": "script",
   },
   "fuchsia-unittests": {
