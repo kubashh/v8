@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a36751b_286a8216",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T13:50:58Z",
+      "side": 1,
+      "message": "Ah, I see. But for..in shouldn\u0027t crash indeed. Did you check if it works now?",
+      "parentUuid": "a02fcbf2_c78b2dd3",
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9fd1ccb5_6eef8b37",
         "filename": "src/compiler/access-builder.cc",
         "patchSetId": 5
@@ -85,6 +103,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "642fde23_43cfdc92",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T13:50:58Z",
+      "side": 1,
+      "message": "Yeah, I guess. But Samuel assumed that maybe you wouldn\u0027t be using sandboxed mode at all.",
+      "parentUuid": "e77b1ffe_911eb860",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -120,6 +162,30 @@
       "side": 1,
       "message": "AccessBuilder is sill needed for parameter side (unless done manually).\n\nI\u0027m... not sure if Deno disables sandbox or not, honestly. If we\u0027re not using it yet, I\u0027d expect we\u0027d want to use it eventually...\n\nBut yeah, it does seem like Deno does disable the sandbox: https://github.com/denoland/rusty_v8/blob/c89ae9453bc18919a2b5dd8e714b9f8358ee27a5/.gn#L33\n\nStill, do we really want to implement this feature with only Deno in mind and make it non-sandboxed only?",
       "parentUuid": "46480391_57d81af5",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58fe348b_debdd930",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T13:50:58Z",
+      "side": 1,
+      "message": "Well, currently Chromium doesn\u0027t use it, and it\u0027s the only embedder (we know of) that enables the sandbox. In ideal world we\u0027d want to support both modes, but then I agree with Samuel\u0027s suggestion to move the allocation and pointer registration in the table to a C++ function. It can also branch based on the ENABLE_SANDBOX macro.",
+      "parentUuid": "63e1faf6_99ae0854",
       "range": {
         "startLine": 6900,
         "startChar": 7,
