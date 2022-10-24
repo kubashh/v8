@@ -3923,7 +3923,11 @@ bool Compiler::FinalizeTurbofanCompilationJob(TurbofanCompilationJob* job,
   const BytecodeOffset osr_offset = compilation_info->osr_offset();
 
   if (V8_LIKELY(use_result)) {
-    ResetProfilerTicks(*function, osr_offset);
+    // The unoptimized code is executed before hit the optimized code, reset
+    // profiler ticks for accumulate profiler ticks from scratch, more patient
+    // for hit the optimized code, and start a new compilation job once long
+    // time not hit the optimized code.
+    function->feedback_vector().set_profiler_ticks(0);
   }
 
   DCHECK(!shared->HasBreakInfo());
