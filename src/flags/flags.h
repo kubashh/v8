@@ -136,6 +136,8 @@ class V8_EXPORT_PRIVATE FlagList {
 
   static void PrintValues();
 
+  static void PrintFlagImplications(FILE* out);
+
   // Set flags as consequence of being implied by another flag.
   static void EnforceFlagImplications();
 

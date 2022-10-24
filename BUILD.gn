@@ -6502,6 +6502,22 @@ v8_executable("d8") {
   }
 }
 
+v8_executable("mkflagdump") {
+  sources = [ "src/d8/mkflagdump.cc" ]
+
+  configs = [ ":internal_config_base" ]
+
+  defines = []
+
+  deps = [
+    #"../..:v8",
+    #":v8_libbase",
+    #":v8_libplatform",
+    ":v8_base_without_compiler",
+    "//build/win:default_exe_manifest",
+  ]
+}
+
 v8_executable("v8_hello_world") {
   sources = [ "samples/hello-world.cc" ]
 
