@@ -2417,12 +2417,23 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
 
         {
           RegisterAllocationScope allocation_scope(this);
-          Register next_result = register_allocator()->NewRegister();
+
+          auto each = stmt->each();
+          bool each_is_temp = false;
+          Register next_result;
+
+          if (each->IsVariableProxy() && each->AsVariableProxy()->is_temp()) {
+            next_result =
+                builder()->Local(each->AsVariableProxy()->var()->index());
+            each_is_temp = true;
+          } else {
+            next_result = register_allocator()->NewRegister();
+          }
 
           // Call the iterator's .next() method. Break from the loop if the
           // `done` property is truthy, otherwise load the value from the
           // iterator result and append the argument.
-          builder()->SetExpressionAsStatementPosition(stmt->each());
+          builder()->SetExpressionAsStatementPosition(each);
           BuildIteratorNext(iterator, next_result);
           builder()->LoadNamedProperty(
               next_result, ast_string_constants()->done_string(),
@@ -2441,10 +2452,13 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
               .LoadFalse()
               .StoreAccumulatorInRegister(done);
 
-          // Assign to the 'each' target.
-          AssignmentLhsData lhs_data = PrepareAssignmentLhs(stmt->each());
-          builder()->LoadAccumulatorWithRegister(next_result);
-          BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
+          if (!each_is_temp) {
+            // Assign to the 'each' target.
+            AssignmentLhsData lhs_data = PrepareAssignmentLhs(each);
+            builder()->LoadAccumulatorWithRegister(next_result);
+            BuildAssignment(lhs_data, Token::ASSIGN,
+                            LookupHoistingMode::kNormal);
+          }
         }
 
         VisitIterationBody(stmt, &loop_builder);

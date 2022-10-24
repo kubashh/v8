@@ -2245,7 +2245,10 @@ void Parser::DesugarBindingInForEachStatement(ForInfo* for_info,
   (*body_block)
       ->statements()
       ->Add(factory()->NewBlock(true, each_initialization_statements), zone());
-  *each_variable = factory()->NewVariableProxy(temp, for_info->position);
+  VariableProxy* each_proxy =
+      factory()->NewVariableProxy(temp, for_info->position);
+  each_proxy->set_is_temp();
+  *each_variable = each_proxy;
 }
 
 // Create a TDZ for any lexically-bound names in for in/of statements.

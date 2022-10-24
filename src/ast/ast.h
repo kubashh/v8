@@ -1533,6 +1533,13 @@ class VariableProxy final : public Expression {
     bit_field_ = IsRemovedFromUnresolvedField::update(bit_field_, true);
   }
 
+  void set_is_temp() {
+    DCHECK_NOT_NULL(var_);
+    bit_field_ = IsTempField::update(bit_field_,
+                                     var_->mode() == VariableMode::kTemporary);
+  }
+  bool is_temp() const { return IsTempField::decode(bit_field_); }
+
   // Provides filtered access to the unresolved variable proxy threaded list.
   struct UnresolvedNext {
     static VariableProxy** filter(VariableProxy** t) {
@@ -1574,6 +1581,7 @@ class VariableProxy final : public Expression {
   using IsRemovedFromUnresolvedField = IsResolvedField::Next<bool, 1>;
   using IsNewTargetField = IsRemovedFromUnresolvedField::Next<bool, 1>;
   using HoleCheckModeField = IsNewTargetField::Next<HoleCheckMode, 1>;
+  using IsTempField = HoleCheckModeField::Next<bool, 1>;
 
   union {
     const AstRawString* raw_name_;  // if !is_resolved_
