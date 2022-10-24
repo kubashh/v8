@@ -50,6 +50,7 @@
 #include "src/diagnostics/compilation-statistics.h"
 #include "src/execution/frames-inl.h"
 #include "src/execution/frames.h"
+#include "src/execution/ipc.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/local-isolate.h"
 #include "src/execution/messages.h"
@@ -4527,6 +4528,8 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   // pretentured to old space.
   DCHECK_IMPLIES(heap()->new_space(), (heap()->new_space()->Size() == 0) &&
                                           (heap()->gc_count() == 0));
+
+  ipc::Initialize(this);
 
   initialized_ = true;
 

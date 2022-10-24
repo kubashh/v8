@@ -12,6 +12,7 @@
 #include "src/codegen/safepoint-table.h"
 #include "src/codegen/source-position.h"
 #include "src/deoptimizer/deoptimizer.h"
+#include "src/execution/ipc.h"
 #include "src/execution/isolate-utils-inl.h"
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/interpreter/bytecode-decoder.h"
@@ -175,8 +176,13 @@ void Code::CopyFromNoFlush(ByteArray reloc_info, Heap* heap,
                            const CodeDesc& desc) {
   // Copy code.
   static_assert(kOnHeapBodyIsContiguous);
-  CopyBytes(reinterpret_cast<byte*>(raw_instruction_start()), desc.buffer,
-            static_cast<size_t>(desc.instr_size));
+  if (ipc::HasOOPC() && v8_flags.oopc_write_code &&
+      (desc.instr_size <= MemoryChunkLayout::MaxRegularCodeObjectSize())) {
+    ipc::WriteCode(raw_instruction_start(), desc.buffer, desc.instr_size);
+  } else {
+    CopyBytes(reinterpret_cast<byte*>(raw_instruction_start()), desc.buffer,
+              static_cast<size_t>(desc.instr_size));
+  }
   // TODO(jgruber,v8:11036): Merge with the above.
   CopyBytes(reinterpret_cast<byte*>(raw_instruction_start() + desc.instr_size),
             desc.unwinding_info, static_cast<size_t>(desc.unwinding_info_size));

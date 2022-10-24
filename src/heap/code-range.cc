@@ -134,7 +134,6 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
                  requested <= kMaximalCodeRangeSize);
 
   VirtualMemoryCage::ReservationParams params;
-  params.page_allocator = page_allocator;
   params.reservation_size = requested;
   const size_t allocate_page_size = page_allocator->AllocatePageSize();
   params.base_alignment = base_alignment;
@@ -144,6 +143,16 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
       GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
   params.jit =
       v8_flags.jitless ? JitPermission::kNoJit : JitPermission::kMapAsJittable;
+
+  if (v8_flags.oopc != nullptr) {
+    shared_memory_handle_ = base::OS::CreateSharedMemoryHandleForTesting(
+        requested + (params.base_alignment + params.page_size));
+    code_page_allocator_ = std::make_unique<base::CodePageAllocator>(
+        page_allocator, shared_memory_handle_);
+    params.page_allocator = code_page_allocator_.get();
+  } else {
+    params.page_allocator = page_allocator;
+  }
 
   if (!VirtualMemoryCage::InitReservation(params)) return false;
 
@@ -183,6 +192,9 @@ void CodeRange::Free() {
     GetCodeRangeAddressHint()->NotifyFreedCodeRange(
         reservation()->region().begin(), reservation()->region().size());
     VirtualMemoryCage::Free();
+    if (v8_flags.oopc != nullptr) {
+      base::OS::DestroySharedMemoryHandle(shared_memory_handle_);
+    }
   }
 }
 

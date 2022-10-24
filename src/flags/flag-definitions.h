@@ -1676,6 +1676,11 @@ DEFINE_BOOL(external_reference_stats, false,
             "print statistics on external references used during serialization")
 #endif  // DEBUG
 
+DEFINE_STRING(oopc, nullptr, "")
+DEFINE_BOOL(oopc_background_wait, false, "")
+DEFINE_BOOL(oopc_copy_vm, false, "")
+DEFINE_BOOL(oopc_write_code, true, "")
+
 // compilation-cache.cc
 DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
 

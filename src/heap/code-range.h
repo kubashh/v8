@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "src/base/code-page-allocator.h"
 #include "src/base/platform/mutex.h"
 #include "src/common/globals.h"
 #include "src/utils/allocation.h"
@@ -136,6 +137,12 @@ class CodeRange final : public VirtualMemoryCage {
   // initialized CodeRange. Otherwise returns an empty std::shared_ptr.
   V8_EXPORT_PRIVATE static std::shared_ptr<CodeRange> GetProcessWideCodeRange();
 
+  PlatformSharedMemoryHandle shared_memory_handle() const {
+    return shared_memory_handle_;
+  }
+
+  size_t offset() const { return code_page_allocator_->offset(); }
+
  private:
   // Used when short builtin calls are enabled, where embedded builtins are
   // copied into the CodeRange so calls can be nearer.
@@ -144,6 +151,9 @@ class CodeRange final : public VirtualMemoryCage {
   // When sharing a CodeRange among Isolates, calls to RemapEmbeddedBuiltins may
   // race during Isolate::Init.
   base::Mutex remap_embedded_builtins_mutex_;
+
+  PlatformSharedMemoryHandle shared_memory_handle_ = kInvalidSharedMemoryHandle;
+  std::unique_ptr<base::CodePageAllocator> code_page_allocator_;
 
 #ifdef V8_OS_WIN64
   std::atomic<uint32_t> unwindinfo_use_count_{0};

@@ -17,6 +17,7 @@
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/frames.h"
+#include "src/execution/ipc.h"
 #include "src/execution/isolate.h"
 #include "src/execution/simulator.h"
 #include "src/init/bootstrapper.h"
@@ -90,6 +91,7 @@ void AdvanceStartupState(V8StartupState expected_next_state) {
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
 V8_DECLARE_ONCE(init_snapshot_once);
 #endif
+V8_DECLARE_ONCE(init_oopc_fd_once);
 
 void V8::InitializePlatform(v8::Platform* platform) {
   AdvanceStartupState(V8StartupState::kPlatformInitializing);
@@ -263,6 +265,8 @@ void V8::Initialize() {
 
   ExternalReferenceTable::InitializeOncePerProcess();
 
+  ipc::InitializeOncePerProcess();
+
   AdvanceStartupState(V8StartupState::kV8Initialized);
 }
 
@@ -282,6 +286,7 @@ void V8::Dispose() {
   RegisteredExtension::UnregisterAll();
   Isolate::DisposeOncePerProcess();
   FlagList::ReleaseDynamicAllocations();
+  ipc::DisposeOncePerProcess();
   AdvanceStartupState(V8StartupState::kV8Disposed);
 }
 
@@ -325,6 +330,7 @@ void V8::SetSnapshotBlob(StartupData* snapshot_blob) {
   UNREACHABLE();
 #endif
 }
+
 }  // namespace internal
 
 // static

@@ -123,6 +123,7 @@ V8_INLINE intptr_t InternalGetExistingThreadLocal(intptr_t index) {
 
 class AddressSpaceReservation;
 class PageAllocator;
+class CodePageAllocator;
 class TimezoneCache;
 class VirtualAddressSpace;
 class VirtualAddressSubspace;
@@ -342,12 +343,17 @@ class V8_BASE_EXPORT OS {
   // Make part of the process's data memory read-only.
   static void SetDataReadOnly(void* address, size_t size);
 
+  V8_WARN_UNUSED_RESULT static void* AllocateShared(
+      void* address, size_t size, size_t alignment, MemoryPermission access,
+      PlatformSharedMemoryHandle handle, size_t* offset);
+
  private:
   // These classes use the private memory management API below.
   friend class AddressSpaceReservation;
   friend class MemoryMappedFile;
   friend class PosixMemoryMappedFile;
   friend class v8::base::PageAllocator;
+  friend class v8::base::CodePageAllocator;
   friend class v8::base::VirtualAddressSpace;
   friend class v8::base::VirtualAddressSubspace;
   FRIEND_TEST(OS, RemapPages);

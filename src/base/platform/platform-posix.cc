@@ -126,12 +126,22 @@ constexpr int kAppleArmPageSize = 1 << 14;
 
 const int kMmapFdOffset = 0;
 
-enum class PageType { kShared, kPrivate };
+enum class PageType { kShared, kSharedFileBacked, kPrivate };
 
 int GetFlagsForMemoryPermission(OS::MemoryPermission access,
                                 PageType page_type) {
-  int flags = MAP_ANONYMOUS;
-  flags |= (page_type == PageType::kShared) ? MAP_SHARED : MAP_PRIVATE;
+  int flags;
+  switch (page_type) {
+    case PageType::kShared:
+      flags = (MAP_ANONYMOUS | MAP_SHARED);
+      break;
+    case PageType::kSharedFileBacked:
+      flags = MAP_SHARED;
+      break;
+    case PageType::kPrivate:
+      flags = (MAP_ANONYMOUS | MAP_PRIVATE);
+      break;
+  }
   if (access == OS::MemoryPermission::kNoAccess) {
 #if !V8_OS_AIX && !V8_OS_FREEBSD && !V8_OS_QNX
     flags |= MAP_NORESERVE;
@@ -153,10 +163,11 @@ int GetFlagsForMemoryPermission(OS::MemoryPermission access,
 }
 
 void* Allocate(void* hint, size_t size, OS::MemoryPermission access,
-               PageType page_type) {
+               PageType page_type, int fd = kMmapFd,
+               uint64_t offset = kMmapFdOffset) {
   int prot = GetProtectionFromMemoryPermission(access);
   int flags = GetFlagsForMemoryPermission(access, page_type);
-  void* result = mmap(hint, size, prot, flags, kMmapFd, kMmapFdOffset);
+  void* result = mmap(hint, size, prot, flags, fd, offset);
   if (result == MAP_FAILED) return nullptr;
 #if ENABLE_HUGEPAGE
   if (result != nullptr && size >= kHugePageSize) {
@@ -432,6 +443,45 @@ void* OS::Allocate(void* hint, size_t size, size_t alignment,
 }
 
 // static
+void* OS::AllocateShared(void* hint, size_t size, size_t alignment,
+                         MemoryPermission access,
+                         PlatformSharedMemoryHandle handle, size_t* offset) {
+  size_t page_size = AllocatePageSize();
+  DCHECK_EQ(0, size % page_size);
+  DCHECK_EQ(0, alignment % page_size);
+  hint = AlignedAddress(hint, alignment);
+  // Add the maximum misalignment so we are guaranteed an aligned base address.
+  size_t request_size = size + (alignment - page_size);
+  request_size = RoundUp(request_size, OS::AllocatePageSize());
+  void* result =
+      base::Allocate(nullptr, request_size, access, PageType::kSharedFileBacked,
+                     FileDescriptorFromSharedMemoryHandle(handle), *offset);
+  if (result == nullptr) return nullptr;
+
+  // Unmap memory allocated before the aligned base address.
+  uint8_t* base = static_cast<uint8_t*>(result);
+  uint8_t* aligned_base = reinterpret_cast<uint8_t*>(
+      RoundUp(reinterpret_cast<uintptr_t>(base), alignment));
+  if (aligned_base != base) {
+    DCHECK_LT(base, aligned_base);
+    size_t prefix_size = static_cast<size_t>(aligned_base - base);
+    Free(base, prefix_size);
+    request_size -= prefix_size;
+    *offset = prefix_size;
+  }
+  // Unmap memory allocated after the potentially unaligned end.
+  if (size != request_size) {
+    DCHECK_LT(size, request_size);
+    size_t suffix_size = request_size - size;
+    Free(aligned_base + size, suffix_size);
+    request_size -= suffix_size;
+  }
+
+  DCHECK_EQ(size, request_size);
+  return static_cast<void*>(aligned_base);
+}
+
+// static
 void* OS::AllocateShared(size_t size, MemoryPermission access) {
   DCHECK_EQ(0, size % AllocatePageSize());
   return base::Allocate(nullptr, size, access, PageType::kShared);
@@ -618,7 +668,7 @@ void OS::FreeAddressSpaceReservation(AddressSpaceReservation reservation) {
 // Need to disable CFI_ICALL due to the indirect call to memfd_create.
 DISABLE_CFI_ICALL
 PlatformSharedMemoryHandle OS::CreateSharedMemoryHandleForTesting(size_t size) {
-#if V8_OS_LINUX && !V8_OS_ANDROID
+#if V8_OS_LINUX
   // Use memfd_create if available, otherwise mkstemp.
   using memfd_create_t = int (*)(const char*, unsigned int);
   memfd_create_t memfd_create =
