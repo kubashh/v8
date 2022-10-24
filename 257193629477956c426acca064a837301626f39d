@@ -86,6 +86,24 @@
       "parentUuid": "a57239e3_1fb27a9d",
       "revId": "257193629477956c426acca064a837301626f39d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e5b7692_4cd42c7e",
+        "filename": "test/wasm-spec-tests/wasm-spec-tests.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-24T12:05:26Z",
+      "side": 1,
+      "message": "I meant in the status file :/ \nBut since the PR is merged already, I guess this can be removed with the next update again?",
+      "parentUuid": "78ff8048_bccbcd9f",
+      "revId": "257193629477956c426acca064a837301626f39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
