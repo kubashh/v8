@@ -28,6 +28,8 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to an IntPtr field identified by an external reference.
   static FieldAccess ForExternalIntPtr();
 
+  static FieldAccess ForJSExternalObjectValue();
+
   // ===========================================================================
   // Access to heap object fields and elements (based on tagged pointer).
 
@@ -73,6 +75,9 @@ class V8_EXPORT_PRIVATE AccessBuilder final
 
   // Provides access to JSCollectionIterator::index() field.
   static FieldAccess ForJSCollectionIteratorIndex();
+
+  // Provides access to JSExternalObject instance size
+  static FieldAccess ForJSExternalObjectInstanceSizeInWords();
 
   // Provides access to JSFunction::prototype_or_initial_map() field.
   static FieldAccess ForJSFunctionPrototypeOrInitialMap();

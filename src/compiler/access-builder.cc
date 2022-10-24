@@ -27,6 +27,27 @@ FieldAccess AccessBuilder::ForExternalIntPtr() {
   return access;
 }
 
+FieldAccess AccessBuilder::ForJSExternalObjectValue() {
+  FieldAccess access = {
+      kTaggedBase,
+      JSExternalObject::kValueOffset,
+      MaybeHandle<Name>(),
+      MaybeHandle<Map>(),
+#ifdef V8_ENABLE_SANDBOX
+      type::Uint32(),
+#else
+      Type::ExternalPointer(),
+#endif
+      MachineType::Pointer(),
+      kNoWriteBarrier,
+      "JSExternalObjectValue",
+      ConstFieldInfo::None(),
+      false,
+      kExternalObjectValueTag,
+  };
+  return access;
+}
+
 // static
 FieldAccess AccessBuilder::ForMap(WriteBarrierKind write_barrier) {
   FieldAccess access = {kTaggedBase,           HeapObject::kMapOffset,
@@ -152,6 +173,15 @@ FieldAccess AccessBuilder::ForJSCollectionIteratorIndex() {
                         MachineType::TaggedSigned(),
                         kNoWriteBarrier,
                         "JSCollectionIteratorIndex"};
+  return access;
+}
+
+FieldAccess AccessBuilder::ForJSExternalObjectInstanceSizeInWords() {
+  FieldAccess access = {
+      kTaggedBase,          Map::kInstanceSizeInWordsOffset,
+      MaybeHandle<Name>(),  MaybeHandle<Map>(),
+      Type::Signed32(),     MachineType::Uint8(),
+      kPointerWriteBarrier, "JSExternalObjectInstanceSizeInWords"};
   return access;
 }
 
