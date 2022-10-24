@@ -127,6 +127,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0652268d_e51cfed9",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T14:54:23Z",
+      "side": 1,
+      "message": "@Samuel again interestingly this seems to work better with `ExternalPointer`, since it later gets replaced by memory lowering. The only thing that we\u0027re not doing 100% correct in this case is maybe setting some bit on the object\u0027s map to tell it to not have enumerable properties.\n\nCan you dig out the link of the CL that removed the external pointer support in generated code, which you mentioned today? Thanks!",
+      "parentUuid": "642fde23_43cfdc92",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
