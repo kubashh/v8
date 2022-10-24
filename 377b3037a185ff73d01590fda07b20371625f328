@@ -194,6 +194,30 @@
       },
       "revId": "377b3037a185ff73d01590fda07b20371625f328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef63791d_5ba46c16",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-24T13:54:58Z",
+      "side": 1,
+      "message": "I started making an ExternalReference C++ function that would handle the both the allocation and pointer registration, but it would have to return a Local or Handle (not quite sure which), and ExternalReference is apparently not allowed to return those.",
+      "parentUuid": "58fe348b_debdd930",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
