@@ -129,6 +129,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
   // Create filler object in linear allocation areas. Verifying requires
   // iterable heap.
   void MakeLinearAllocationAreaIterable();
+  void MakeSharedLinearAllocationAreaIterable();
 
   // Fetches a pointer to the local heap from the thread local storage.
   // It is intended to be used in handle and write barrier code where it is

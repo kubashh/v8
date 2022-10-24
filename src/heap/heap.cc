@@ -449,6 +449,12 @@ bool Heap::CanExpandOldGeneration(size_t size) {
   return memory_allocator()->Size() + size <= MaxReserved();
 }
 
+namespace {
+bool IsIsolateDeserializationActive(LocalHeap* local_heap) {
+  return local_heap && !local_heap->heap()->deserialization_complete();
+}
+}  // anonymous namespace
+
 bool Heap::CanExpandOldGenerationBackground(LocalHeap* local_heap,
                                             size_t size) {
   if (force_oom_) return false;
@@ -456,6 +462,7 @@ bool Heap::CanExpandOldGenerationBackground(LocalHeap* local_heap,
   // When the heap is tearing down, then GC requests from background threads
   // are not served and the threads are allowed to expand the heap to avoid OOM.
   return gc_state() == TEAR_DOWN || IsMainThreadParked(local_heap) ||
+         IsIsolateDeserializationActive(local_heap) ||
          memory_allocator()->Size() + size <= MaxReserved();
 }
 
@@ -3547,6 +3554,12 @@ void Heap::MakeHeapIterable() {
     local_heap->MakeLinearAllocationAreaIterable();
   });
 
+  if (isolate()->is_shared_space_isolate()) {
+    isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
+      client->heap()->MakeSharedLinearAllocationAreasIterable();
+    });
+  }
+
   PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -3587,6 +3600,18 @@ void Heap::FreeSharedLinearAllocationAreas() {
     local_heap->FreeSharedLinearAllocationArea();
   });
   FreeMainThreadSharedLinearAllocationAreas();
+}
+
+void Heap::MakeSharedLinearAllocationAreasIterable() {
+  if (!isolate()->has_shared_heap()) return;
+
+  safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
+    local_heap->MakeSharedLinearAllocationAreaIterable();
+  });
+
+  if (v8_flags.shared_space && shared_space_allocator_) {
+    shared_space_allocator_->MakeLinearAllocationAreaIterable();
+  }
 }
 
 void Heap::FreeMainThreadSharedLinearAllocationAreas() {
@@ -4418,6 +4443,7 @@ bool Heap::IsValidAllocationSpace(AllocationSpace space) {
 
 #ifdef DEBUG
 void Heap::VerifyCountersAfterSweeping() {
+  MakeHeapIterable();
   PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -5128,6 +5154,10 @@ bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap) {
   // allowing the allocation.
   if (IsMainThreadParked(local_heap)) return true;
 
+  // If allocating isolate is still in deserialization allocations should
+  // succeed.
+  if (IsIsolateDeserializationActive(local_heap)) return true;
+
   // Make it more likely that retry of allocation on background thread succeeds
   if (IsRetryOfFailedAllocation(local_heap)) return true;
 
@@ -5658,6 +5688,7 @@ int Heap::NextStressMarkingLimit() {
 void Heap::NotifyDeserializationComplete() {
   PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
+    if (s->identity() == SHARED_SPACE) continue;
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
     // All pages right after bootstrapping must be marked as never-evacuate.
@@ -6381,7 +6412,7 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
 HeapObjectIterator::HeapObjectIterator(
     Heap* heap, HeapObjectIterator::HeapObjectsFiltering filtering)
     : heap_(heap),
-      safepoint_scope_(std::make_unique<SafepointScope>(heap)),
+      safepoint_scope_(std::make_unique<GlobalSafepointScope>(heap)),
       filtering_(filtering),
       filter_(nullptr),
       space_iterator_(nullptr),

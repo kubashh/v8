@@ -426,6 +426,9 @@ GlobalSafepointScope::GlobalSafepointScope(Isolate* initiator)
   }
 }
 
+GlobalSafepointScope::GlobalSafepointScope(Heap* heap)
+    : GlobalSafepointScope(heap->isolate()) {}
+
 GlobalSafepointScope::~GlobalSafepointScope() {
   if (shared_heap_isolate_) {
     shared_heap_isolate_->global_safepoint()->LeaveGlobalSafepointScope(

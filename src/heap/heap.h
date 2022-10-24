@@ -100,6 +100,7 @@ class CppHeap;
 class GCIdleTimeHandler;
 class GCIdleTimeHeapState;
 class GCTracer;
+class GlobalSafepointScope;
 class IsolateSafepoint;
 class HeapObjectAllocationTracker;
 class HeapObjectsFilter;
@@ -1777,6 +1778,9 @@ class Heap {
   // Free all shared LABs.
   void FreeSharedLinearAllocationAreas();
 
+  // Makes all shared LABs iterable.
+  void MakeSharedLinearAllocationAreasIterable();
+
   // Free all shared LABs of main thread.
   void FreeMainThreadSharedLinearAllocationAreas();
 
@@ -2751,7 +2755,7 @@ class V8_EXPORT_PRIVATE HeapObjectIterator {
   HeapObject NextObject();
 
   Heap* heap_;
-  std::unique_ptr<SafepointScope> safepoint_scope_;
+  std::unique_ptr<GlobalSafepointScope> safepoint_scope_;
   HeapObjectsFiltering filtering_;
   HeapObjectsFilter* filter_;
   // Space iterator for iterating all the spaces.
