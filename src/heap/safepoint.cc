@@ -415,23 +415,21 @@ void GlobalSafepoint::LeaveGlobalSafepointScope(Isolate* initiator) {
 
 GlobalSafepointScope::GlobalSafepointScope(Isolate* initiator)
     : initiator_(initiator),
-      shared_heap_isolate_(initiator->has_shared_heap()
-                               ? initiator->shared_heap_isolate()
-                               : nullptr) {
-  if (shared_heap_isolate_) {
-    shared_heap_isolate_->global_safepoint()->EnterGlobalSafepointScope(
-        initiator_);
-  } else {
-    initiator_->heap()->safepoint()->EnterLocalSafepointScope();
-  }
+      shared_heap_isolate_(initiator->shared_heap_isolate()) {
+  shared_heap_isolate_->global_safepoint()->EnterGlobalSafepointScope(
+      initiator_);
 }
 
 GlobalSafepointScope::~GlobalSafepointScope() {
-  if (shared_heap_isolate_) {
-    shared_heap_isolate_->global_safepoint()->LeaveGlobalSafepointScope(
-        initiator_);
+  shared_heap_isolate_->global_safepoint()->LeaveGlobalSafepointScope(
+      initiator_);
+}
+
+HeapSafepointScope::HeapSafepointScope(Isolate* initiator) {
+  if (initiator->has_shared_heap()) {
+    global_safepoint_.emplace(initiator);
   } else {
-    initiator_->heap()->safepoint()->LeaveLocalSafepointScope();
+    isolate_safepoint_.emplace(initiator->heap());
   }
 }
 

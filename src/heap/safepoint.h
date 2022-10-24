@@ -204,6 +204,15 @@ class V8_NODISCARD GlobalSafepointScope {
   Isolate* const shared_heap_isolate_;
 };
 
+class V8_NODISCARD HeapSafepointScope {
+ public:
+  V8_EXPORT_PRIVATE explicit HeapSafepointScope(Isolate* initiator);
+
+ private:
+  base::Optional<SafepointScope> isolate_safepoint_;
+  base::Optional<GlobalSafepointScope> global_safepoint_;
+};
+
 }  // namespace internal
 }  // namespace v8
 

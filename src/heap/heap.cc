@@ -2172,7 +2172,7 @@ size_t Heap::PerformGarbageCollection(
     AllowGarbageCollection allow_shared_gc;
     IgnoreLocalGCRequests ignore_gc_requests(this);
 
-    if (isolate()->is_shared_heap_isolate()) {
+    if (v8_flags.shared_space && isolate()->is_shared_heap_isolate()) {
       global_safepoint_scope.emplace(isolate());
     } else {
       isolate_safepoint_scope.emplace(this);

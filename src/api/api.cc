@@ -617,7 +617,7 @@ StartupData SnapshotCreator::CreateBlob(
   i::Snapshot::ClearReconstructableDataForSerialization(
       i_isolate, function_code_handling == FunctionCodeHandling::kClear);
 
-  i::GlobalSafepointScope global_safepoint(i_isolate);
+  i::HeapSafepointScope heap_safepoint(i_isolate);
   i::DisallowGarbageCollection no_gc_from_here_on;
 
   // Create a vector with all contexts and clear associated Persistent fields.
@@ -655,7 +655,7 @@ StartupData SnapshotCreator::CreateBlob(
 
   data->created_ = true;
   return i::Snapshot::Create(i_isolate, &contexts, embedder_fields_serializers,
-                             global_safepoint, no_gc_from_here_on);
+                             heap_safepoint, no_gc_from_here_on);
 }
 
 bool StartupData::CanBeRehashed() const {
