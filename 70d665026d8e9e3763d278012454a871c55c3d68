@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d71bec_66eebd10",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-24T13:52:00Z",
+      "side": 1,
+      "message": "Why is this one different in that it can always be optimized away?",
+      "range": {
+        "startLine": 3339,
+        "startChar": 8,
+        "endLine": 3340,
+        "endChar": 31
+      },
+      "revId": "70d665026d8e9e3763d278012454a871c55c3d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
