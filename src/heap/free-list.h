@@ -446,8 +446,16 @@ class V8_EXPORT_PRIVATE FreeListManyCached : public FreeListMany {
 // FreeListMany), which makes its fast path less fast in the Scavenger. This is
 // done on purpose, since this class's only purpose is to be used by
 // FreeListManyCachedOrigin, which is precise for the scavenger.
-class V8_EXPORT_PRIVATE FreeListManyCachedFastPath : public FreeListManyCached {
+template <bool allow_small_blocks>
+class V8_EXPORT_PRIVATE FreeListManyCachedFastPathBase
+    : public FreeListManyCached {
  public:
+  FreeListManyCachedFastPathBase() {
+    if (!allow_small_blocks) {
+      min_block_size_ = kFastPathStart;
+    }
+  }
+
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
                                            AllocationOrigin origin) override;
@@ -485,20 +493,9 @@ class V8_EXPORT_PRIVATE FreeListManyCachedFastPath : public FreeListManyCached {
       FreeListManyCachedFastPathSelectFastAllocationFreeListCategoryType);
 };
 
-// Same as FreeListManyCachedFastPath but falls back to a precise search of the
-// precise category in case allocation fails. Because new space is relatively
-// small, the free list is also relatively small and larger categories are more
-// likely to be empty. The precise search is meant to avoid an allocation
-// failure and thus avoid GCs.
-class V8_EXPORT_PRIVATE FreeListManyCachedFastPathForNewSpace
-    : public FreeListManyCachedFastPath {
- public:
-  V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
-                                           size_t* node_size,
-                                           AllocationOrigin origin) override;
-
- protected:
-};
+using FreeListManyCachedFastPath = FreeListManyCachedFastPathBase<true>;
+using FreeListManyCachedFastPathForNewSpace =
+    FreeListManyCachedFastPathBase<false>;
 
 // Uses FreeListManyCached if in the GC; FreeListManyCachedFastPath otherwise.
 // The reasoning behind this FreeList is the following: the GC runs in
@@ -510,16 +507,6 @@ class V8_EXPORT_PRIVATE FreeListManyCachedFastPathForNewSpace
 // fragmentation (FreeListManyCachedFastPath).
 class V8_EXPORT_PRIVATE FreeListManyCachedOrigin
     : public FreeListManyCachedFastPath {
- public:
-  V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
-                                           size_t* node_size,
-                                           AllocationOrigin origin) override;
-};
-
-// Similar to FreeListManyCachedOrigin but uses
-// FreeListManyCachedFastPathForNewSpace for allocations outside the GC.
-class V8_EXPORT_PRIVATE FreeListManyCachedOriginForNewSpace
-    : public FreeListManyCachedFastPathForNewSpace {
  public:
   V8_WARN_UNUSED_RESULT FreeSpace Allocate(size_t size_in_bytes,
                                            size_t* node_size,
