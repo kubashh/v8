@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a02fcbf2_c78b2dd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-24T13:47:55Z",
+      "side": 1,
+      "message": "They have no enumerable properties and no prototype set (so they look equal to an object created through `Object.create(null)`).",
+      "parentUuid": "b9098abc_d638adab",
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9fd1ccb5_6eef8b37",
         "filename": "src/compiler/access-builder.cc",
         "patchSetId": 5
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e77b1ffe_911eb860",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-24T13:47:55Z",
+      "side": 1,
+      "message": "That would be for sandboxed code only, right? Non-sandboxed code will still save an external pointer I think?",
+      "parentUuid": "9fd1ccb5_6eef8b37",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -54,6 +96,30 @@
       "writtenOn": "2022-10-24T12:30:42Z",
       "side": 1,
       "message": "Do you actually use the sandbox mode in Deno?\n  - If not, Samuel suggested that we remove the if-section (or replace it with an UNIMPLEMENTED() basically) and only have the non-sandboxed version with doesn\u0027t store in the external pointer table. Same goes for loading too.\n  - If you do need the sandbox mode, then let\u0027s create a C++ (prob. static) function that allocates and initializes the JSExternalObject with a given pointer value (mostly what is already there in factory.cc), which will also allow us to not have an AccessBuilder helper.",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e1faf6_99ae0854",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-24T13:47:55Z",
+      "side": 1,
+      "message": "AccessBuilder is sill needed for parameter side (unless done manually).\n\nI\u0027m... not sure if Deno disables sandbox or not, honestly. If we\u0027re not using it yet, I\u0027d expect we\u0027d want to use it eventually...\n\nBut yeah, it does seem like Deno does disable the sandbox: https://github.com/denoland/rusty_v8/blob/c89ae9453bc18919a2b5dd8e714b9f8358ee27a5/.gn#L33\n\nStill, do we really want to implement this feature with only Deno in mind and make it non-sandboxed only?",
+      "parentUuid": "46480391_57d81af5",
       "range": {
         "startLine": 6900,
         "startChar": 7,
