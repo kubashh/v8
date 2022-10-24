@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2432c7f_7ceea455",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-24T10:19:03Z",
+      "side": 1,
+      "message": "Last patch drops again the attempt to switch of the command line warning. It\u0027s not a real compiler warning, hence it can\u0027t be switched off (resulting now in two warnings). I\u0027ll leave it for now and the compiler will be a bit chatty until this bug is fully fixed.",
+      "revId": "18de4d61d7983729b02cc355078c6f04a684391e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
