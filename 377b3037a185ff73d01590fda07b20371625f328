@@ -151,6 +151,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e126c5e2_9f830bfc",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-24T16:31:30Z",
+      "side": 1,
+      "message": "Ah yeah, for loading ExternalPointers this needs to be `Type::ExternalPointer()` since then memory-lowering adds the necessary logic. Memory-lowering does not have the logic needed to store ExternalPointers though (that\u0027s why there\u0027s that DCHECK). So if we need to support this, then either that logic needs to be added (probably to memory-lowering, but then effect-control-linearizer still needs to write the ExternalPointerHandle [the 32-bit index] into the object first), or it could be performed by the C++ function (can we pass the allocated object to it and have it initialize it?).\n\nThere was never ExternalPointerTable allocation support in Turbofan, but we used to have it in CSA: https://chromium.googlesource.com/v8/v8.git/+/8a59678b8335ae8c3fa237317aa8ae6cb281efa2",
+      "parentUuid": "0652268d_e51cfed9",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -306,6 +330,30 @@
       "side": 1,
       "message": "Ah, I see what you mean. Yeah, ExternalReference is needed to call a C function from generated code. Then maybe we still need a Builtin, as they can return Object (or anything that inherits from it), e.g. BUILTIN_CALL_PAIR.\n@Samuel do you think the function storing an external pointer in the table and allocating the JSExternalObject can actually be a builtin? I guess with C++ linkage?",
       "parentUuid": "efe82f02_ee022bc6",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d891a7e_306942fc",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-24T16:31:30Z",
+      "side": 1,
+      "message": "I am a bit worried that we\u0027re adding (more) code that cannot currently be used securely when the sandbox is enabled (see other comment about needing unique ExternalPointerTags for it to be secure). So if this is only used by Deno (for now), I\u0027d prefer not adding the logic at all so it cannot be accidentally misused in the future (the feature is then essentially incompatible with the Sandbox).\n\nThe sandbox only has security benefits for an Embedder like Chromium that runs untrusted JavaScript code. IIUC, for Deno (and Node.js, etc.) this is not the case, so the sandbox provides no security benefits but only causes (small) performance regressions.",
+      "parentUuid": "1fa156a7_edbcffc3",
       "range": {
         "startLine": 6900,
         "startChar": 7,

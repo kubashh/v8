@@ -16,6 +16,40 @@
       "message": "Hi Samuel, ptal - adding you if you could add some more detail regarding this C++ function idea.",
       "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad5e119d_56fe2ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-24T16:31:30Z",
+      "side": 1,
+      "message": "Hi! My main question is whether we really need to support the sandbox mode. JSExternalObject cannot currently be used securely with the sandbox (as they need unique ExternalPointerTags), and I\u0027m worried that adding more logic around those will make it harder to fix that in the future. Moreover, the sandbox is (more or less) only useful for Chromium, which runs untrusted JavaScript code, but not (most) other Embedders. So I think it\u0027d be fine to just make this feature incompatible with the sandbox for now and potentially revisit that should the circumstances change. Let me know what you think!",
+      "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b6ac868_1b8c30d3",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-24T16:31:30Z",
+      "side": 1,
+      "message": "Using `kExternalObjectValueTag` is probably not secure. In general, for the ExternalPointerTable mechanism to work securely, we\u0027ll need a unique ExternalPointerTag for every type of object referenced through an external pointer, see https://source.chromium.org/chromium/chromium/src/+/main:v8/include/v8-internal.h;l\u003d329;drc\u003de9775165b6fe77c4a94cf7802865ed40996197aa\n\nFor this to work securely, I think there would need to be a way to express the type of the pointed-to object (i.e. not just `kPointer`, but \"pointer to C++ object of class X\" or so), associate that with an ExternalPointerTag, and pass that to this function from the JIT code. Otherwise, an attacker will be able to break out of the sandbox.\n\n(I realize that other users of JSExternalObjects also currently use this tag, but that needs to be fixed in the future).",
+      "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
