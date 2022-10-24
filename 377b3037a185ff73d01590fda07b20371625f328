@@ -242,6 +242,30 @@
       },
       "revId": "377b3037a185ff73d01590fda07b20371625f328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efe82f02_ee022bc6",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-24T14:08:31Z",
+      "side": 1,
+      "message": "ExternalReference is a class used to give pointers to the JIT code, so eg. isolate_address or such. Or so I think. If my understanding is correct, it\u0027s required to give the function to the TurboFan code, but the macro that creates ExternalReferences didn\u0027t allow returning a Local, nor a Handle either if memory serves.",
+      "parentUuid": "76632aef_30642915",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
