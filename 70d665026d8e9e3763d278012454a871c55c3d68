@@ -22,6 +22,30 @@
       },
       "revId": "70d665026d8e9e3763d278012454a871c55c3d68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c89af523_d32adab3",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-10-24T14:10:05Z",
+      "side": 1,
+      "message": "The others cannot be removed because they might throw a TypeError if BigInt is mixed with non-BigInt. For Negate (or rather any unary op) there is no such issue. If we have speculated for the input to be a BigInt and we find a non-BigInt, we could deopt but there is really no point since the result is not used anyway.",
+      "parentUuid": "23d71bec_66eebd10",
+      "range": {
+        "startLine": 3339,
+        "startChar": 8,
+        "endLine": 3340,
+        "endChar": 31
+      },
+      "revId": "70d665026d8e9e3763d278012454a871c55c3d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
