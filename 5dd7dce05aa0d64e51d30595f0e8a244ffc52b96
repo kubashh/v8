@@ -177,6 +177,30 @@
       },
       "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f3f652_859ade32",
+        "filename": "test/unittests/interpreter/bytecode_expectations/ForOf.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-10-24T10:05:01Z",
+      "side": 1,
+      "message": "I start to see some significant number when increase the attemp count to 40 in Pinpoint for each round of test. In the v8.browsing_desktop, the 5.7% compile time regression is marked significant. There is also one subcase in Speedometer2 shows 2% significant improvement. Details can be found in the last two pinpoint tests. I also feel the bytecode patching method is too heavy for such small improvement. I found some simple way to partially improve stack moves. Please find a prototype at https://chromium-review.googlesource.com/c/v8/v8/+/3974508. HDYT?",
+      "parentUuid": "2c378a51_b545b8d3",
+      "range": {
+        "startLine": 38,
+        "startChar": 16,
+        "endLine": 38,
+        "endChar": 30
+      },
+      "revId": "5dd7dce05aa0d64e51d30595f0e8a244ffc52b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
