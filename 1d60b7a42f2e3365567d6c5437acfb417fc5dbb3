@@ -33,6 +33,23 @@
       "message": "Infra folks for stamping the DEPS file (unchanged from me),",
       "revId": "1d60b7a42f2e3365567d6c5437acfb417fc5dbb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac692c2_295baa6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-10-24T10:14:33Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "1d60b7a42f2e3365567d6c5437acfb417fc5dbb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
