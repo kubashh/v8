@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06935b8d_c8fea591",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-10-24T10:57:39Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "257193629477956c426acca064a837301626f39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69e1683_1047c4ea",
+        "filename": "test/wasm-spec-tests/wasm-spec-tests.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-10-24T10:57:39Z",
+      "side": 1,
+      "message": "The spec test is broken at the moment and needs to be fixed upstream.",
+      "revId": "257193629477956c426acca064a837301626f39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
