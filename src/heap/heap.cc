@@ -5665,6 +5665,8 @@ int Heap::NextStressMarkingLimit() {
 void Heap::NotifyDeserializationComplete() {
   PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {
+    // Shared space is used concurrently and cannot be shrunk.
+    if (s->identity() == SHARED_SPACE) continue;
     if (isolate()->snapshot_available()) s->ShrinkImmortalImmovablePages();
 #ifdef DEBUG
     // All pages right after bootstrapping must be marked as never-evacuate.
