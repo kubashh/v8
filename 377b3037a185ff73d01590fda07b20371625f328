@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9098abc_d638adab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T12:30:42Z",
+      "side": 1,
+      "message": "As a high-level comment for the failing `for..in` on external objects - are they actually supposed to have their properties enumerable like on regular JSObjects? If not, maybe we should allocate them in a way that all properties are not enumerable?",
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fd1ccb5_6eef8b37",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T12:30:42Z",
+      "side": 1,
+      "message": "Should be Type::Uint32.",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46480391_57d81af5",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-24T12:30:42Z",
+      "side": 1,
+      "message": "Do you actually use the sandbox mode in Deno?\n  - If not, Samuel suggested that we remove the if-section (or replace it with an UNIMPLEMENTED() basically) and only have the non-sandboxed version with doesn\u0027t store in the external pointer table. Same goes for loading too.\n  - If you do need the sandbox mode, then let\u0027s create a C++ (prob. static) function that allocates and initializes the JSExternalObject with a given pointer value (mostly what is already there in factory.cc), which will also allow us to not have an AccessBuilder helper.",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
