@@ -68,6 +68,24 @@
       "parentUuid": "c69e1683_1047c4ea",
       "revId": "257193629477956c426acca064a837301626f39d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ff8048_bccbcd9f",
+        "filename": "test/wasm-spec-tests/wasm-spec-tests.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-10-24T11:15:57Z",
+      "side": 1,
+      "message": "https://github.com/WebAssembly/spec/pull/1554",
+      "parentUuid": "a57239e3_1fb27a9d",
+      "revId": "257193629477956c426acca064a837301626f39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
