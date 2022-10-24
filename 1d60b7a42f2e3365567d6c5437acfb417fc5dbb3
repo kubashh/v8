@@ -16,6 +16,23 @@
       "message": "PTAL. Patched the first failing deps roll.",
       "revId": "1d60b7a42f2e3365567d6c5437acfb417fc5dbb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da03d128_b078be7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-24T10:08:17Z",
+      "side": 1,
+      "message": "Infra folks for stamping the DEPS file (unchanged from me),",
+      "revId": "1d60b7a42f2e3365567d6c5437acfb417fc5dbb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
