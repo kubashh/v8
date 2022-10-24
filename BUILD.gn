@@ -1458,6 +1458,8 @@ config("toolchain") {
       "/wd4715",  # 'function' : not all control paths return a value'
                   # MSVC does not analyze switch (enum) for completeness.
     ]
+
+    cflags_cc = [ "/std:c++17" ]
   }
 
   if (!is_clang && !is_win) {
