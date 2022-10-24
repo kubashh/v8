@@ -16,6 +16,23 @@
       "message": "PTAL! Just your offline fix... 😊",
       "revId": "5a7318b6e66b155edb704cce839769e13e776193",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "babaec35_349f6caf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-24T13:33:00Z",
+      "side": 1,
+      "message": "glad it works :)",
+      "revId": "5a7318b6e66b155edb704cce839769e13e776193",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
