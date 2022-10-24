@@ -68,6 +68,24 @@
       "parentUuid": "85ddc69e_c56dc595",
       "revId": "3d29d436223280a3e0ea412850721f20b129a886",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "935f5938_86468914",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-24T13:01:05Z",
+      "side": 1,
+      "message": "Ah, makes sense. Then we can just keep it. If we ever need a trivial upast-node to satisfy the typer, we can replace the externalize-node with it.",
+      "parentUuid": "d402477e_a8ed9836",
+      "revId": "3d29d436223280a3e0ea412850721f20b129a886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
