@@ -175,6 +175,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1ea2fb4_d9ef806d",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-25T10:12:37Z",
+      "side": 1,
+      "message": "I would suppose that memory-lowering would be changed in such a way that ECL simply calls `__ StoreField(ForJSExternalObjectValue(), external, pointer)` and ML changes the StoreField to actually store the pointer in the external table, get the handle and finally store the handle in the external object. I don\u0027t see how ECL would need to write the handle into the object first, if ML is the one doing the storing anyway: ECL wouldn\u0027t even see or know the handle, so how could it store it?\n\nI\u0027ll take a look at the CSA code later to see if I can adapt it to TF. So far trying to write C++ functions for the allocation + initialization has run into one of two issues:\n1. If creating a Builtin, it requires passing the parameters using V8 wrappers (handles etc). This seems terribly inefficient and I\u0027d like to avoid such useless waste of performance, as both the original TF code and the receiving C++ code just want the raw data and not some wrapped up indirection.\n2. If creating an ExternalReference to the function, which would allow calling with the raw data, it\u0027s apparently not possible to return eg. a Handle. So the ExternalReference to the function cannot do the allocation as it would need to return a Handle to the allocated object, and the ExternalReference macro forbids that.",
+      "parentUuid": "e126c5e2_9f830bfc",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -354,6 +378,30 @@
       "side": 1,
       "message": "I am a bit worried that we\u0027re adding (more) code that cannot currently be used securely when the sandbox is enabled (see other comment about needing unique ExternalPointerTags for it to be secure). So if this is only used by Deno (for now), I\u0027d prefer not adding the logic at all so it cannot be accidentally misused in the future (the feature is then essentially incompatible with the Sandbox).\n\nThe sandbox only has security benefits for an Embedder like Chromium that runs untrusted JavaScript code. IIUC, for Deno (and Node.js, etc.) this is not the case, so the sandbox provides no security benefits but only causes (small) performance regressions.",
       "parentUuid": "1fa156a7_edbcffc3",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcae4a5a_1eebf300",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-25T10:12:37Z",
+      "side": 1,
+      "message": "I\u0027d argue that all code should always be untrusted :) Deno also opts into a browser-like permissions model, where all code is considered unsafe and is disallowed from doing anything that would escape the V8 sandbox unless explicitly allowed. There are commercial users who explicitly use Deno to run user code (thus unsafe) as an edge computing platform, and for them the sandbox would definitely be a security benefit.\n\nThough I do not quite understand some of the proposed / required security guarantees of the sandboxed pointers. Them being outside the actual V8 heap and thus not followable or corruptable I understand, and that makes a lot of sense. Non-interchangeability makes some sense for an embedder as it gives essentially run-time type safety to pointer usage. What I don\u0027t understand is how interchangeability of external pointers allows for breaking out of the sandbox, not directly anyway. Of course, if you can forge your own external pointers and access an API to get the pointer value with your forged external pointer tag, you can get the pointer values of other external pointers with the same tag and then follow those pointers. But that sort of an API is probably not normally offered?\n\nAdditionally, I do not understand how V8 intends to guarantee the live-ness of pointers in the pointer table. For eg. ArrayBuffers and so on I understand: You can control how/when they\u0027re allocated into the pointer table, but for external pointers I simply do not understand how this is meant to work. The only feature that points towards this is FinalizationRegistries, but you\u0027re not required to use those with `External`.\n\nI\u0027ve personally viewed the `External` object as the, well, external (void*) pointer of V8: The engine (language / API) can give no guarantees about the validity of pointer, or what it is pointing to and instead it is up to the embedder / user to guarantee the safe usage of these.",
+      "parentUuid": "1d891a7e_306942fc",
       "range": {
         "startLine": 6900,
         "startChar": 7,

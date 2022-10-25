@@ -50,6 +50,24 @@
       "message": "Using `kExternalObjectValueTag` is probably not secure. In general, for the ExternalPointerTable mechanism to work securely, we\u0027ll need a unique ExternalPointerTag for every type of object referenced through an external pointer, see https://source.chromium.org/chromium/chromium/src/+/main:v8/include/v8-internal.h;l\u003d329;drc\u003de9775165b6fe77c4a94cf7802865ed40996197aa\n\nFor this to work securely, I think there would need to be a way to express the type of the pointed-to object (i.e. not just `kPointer`, but \"pointer to C++ object of class X\" or so), associate that with an ExternalPointerTag, and pass that to this function from the JIT code. Otherwise, an attacker will be able to break out of the sandbox.\n\n(I realize that other users of JSExternalObjects also currently use this tag, but that needs to be fixed in the future).",
       "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4509c02_31e8846c",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-10-25T10:12:37Z",
+      "side": 1,
+      "message": "From Deno\u0027s point of view, we offer users an API (called Deno FFI) to open native libraries (.dll / .so) which may then expose new pointers to the runtime.\n\nThis would mean that defining the pointer tag for a `kPointer` used would need to be doable at essentially runtime level. I\u0027m not sure if this is reasonable or not. Our current API gives users just the possibility to define parameters and return values of FFI APIs as \"pointer\"s.\n\nI personally am a big fan of the `External` object type: Currently we expose pointers as just numbers (or BigInts if they can\u0027t fit into a number safely, though that\u0027s only a theoretical case, eg. for pointer cryptography). I wouldn\u0027t personally particularly mind if we needed to setup some sort of API to create new pointer types, eg.\n\n`const myClassPointer \u003d Deno.createPointer(\"MyClass\");`\n\nand this would then be used in FFI APIs instead of a plain \"pointer\". However, I expect others won\u0027t particularly like this. It would also be a horrible shame to lose `External` as a usable API, ie. if each `External` required a unique tag defined.\n\nAgain, from Deno\u0027s point of view all external pointers (\"some user defined pointer\") are interchangeable so for use it\u0027s exactly correct that they\u0027re all just `External` tagged. Of course for V8 and the strict interpretation of the external pointer table this is not acceptable.",
+      "parentUuid": "6b6ac868_1b8c30d3",
+      "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
