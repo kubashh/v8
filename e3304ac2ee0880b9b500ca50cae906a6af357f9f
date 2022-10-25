@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "705fcc72_112e78f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-25T10:52:16Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "e3304ac2ee0880b9b500ca50cae906a6af357f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e267ca_a28670a7",
+        "filename": "src/runtime/runtime-scopes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-10-25T10:52:16Z",
+      "side": 1,
+      "message": "I was unsure how to re-structure the code. We could also pull this up into an `if` and check the \"throw kVarNotAllowedInEvalScope\" case first. But that feels equally awkward.",
+      "range": {
+        "startLine": 298,
+        "startChar": 13,
+        "endLine": 298,
+        "endChar": 69
+      },
+      "revId": "e3304ac2ee0880b9b500ca50cae906a6af357f9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
