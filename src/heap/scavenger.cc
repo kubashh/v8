@@ -373,12 +373,14 @@ void ScavengerCollector::CollectGarbage() {
       // Scavenger treats all weak roots except for global handles as strong.
       // That is why we don't set skip_weak = true here and instead visit
       // global handles separately.
-      base::EnumSet<SkipRoot> options({SkipRoot::kExternalStringTable,
-                                       SkipRoot::kGlobalHandles,
-                                       SkipRoot::kOldGeneration});
+      base::EnumSet<SkipRoot> options(
+          {SkipRoot::kExternalStringTable, SkipRoot::kGlobalHandles,
+           SkipRoot::kOldGeneration, SkipRoot::kConservativeStack});
       if (V8_UNLIKELY(v8_flags.scavenge_separate_stack_scanning)) {
         options.Add(SkipRoot::kStack);
       }
+      ScanStackModeScope stack_scanning_scope(heap_,
+                                              Heap::ScanStackMode::kNone);
       heap_->IterateRoots(&root_scavenge_visitor, options);
       isolate_->global_handles()->IterateYoungStrongAndDependentRoots(
           &root_scavenge_visitor);
@@ -501,7 +503,6 @@ void ScavengerCollector::CollectGarbage() {
 }
 
 void ScavengerCollector::IterateStackAndScavenge(
-
     RootScavengeVisitor* root_scavenge_visitor,
     std::vector<std::unique_ptr<Scavenger>>* scavengers, int main_thread_id) {
   // Scan the stack, scavenge the newly discovered objects, and report
@@ -513,7 +514,7 @@ void ScavengerCollector::IterateStackAndScavenge(
     survived_bytes_before +=
         scavenger->bytes_copied() + scavenger->bytes_promoted();
   }
-  heap_->IterateStackRoots(root_scavenge_visitor);
+  heap_->IterateStackRoots(root_scavenge_visitor, Heap::ScanStackMode::kNone);
   (*scavengers)[main_thread_id]->Process();
   size_t survived_bytes_after = 0;
   for (auto& scavenger : *scavengers) {

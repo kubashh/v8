@@ -646,6 +646,28 @@ IgnoreLocalGCRequests::~IgnoreLocalGCRequests() {
   heap_->ignore_local_gc_requests_depth_--;
 }
 
+ScanStackModeScope::ScanStackModeScope(Heap* heap, Heap::ScanStackMode mode)
+    : heap_(heap), old_value_(heap_->scan_stack_mode_) {
+  // We can only "decrease" the stack scanning mode, we cannot "increase" it.
+  heap_->scan_stack_mode_ = std::min(heap_->scan_stack_mode_, mode);
+}
+
+ScanStackModeScope::~ScanStackModeScope() {
+  heap_->scan_stack_mode_ = old_value_;
+}
+
+ScanStackModeScopeForTesting::ScanStackModeScopeForTesting(
+    Heap* heap, Heap::ScanStackMode mode)
+    : ScanStackModeScope(heap, mode) {
+  DCHECK(!heap_->override_scan_stack_mode_.has_value());
+  heap_->override_scan_stack_mode_ = mode;
+}
+
+ScanStackModeScopeForTesting::~ScanStackModeScopeForTesting() {
+  DCHECK(heap_->override_scan_stack_mode_.has_value());
+  heap_->override_scan_stack_mode_.reset();
+}
+
 }  // namespace internal
 }  // namespace v8
 

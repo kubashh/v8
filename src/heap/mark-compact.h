@@ -257,7 +257,8 @@ class CollectorBase {
 
   virtual void SetUp() {}
   virtual void TearDown() {}
-  virtual void CollectGarbage() = 0;
+  virtual void CollectGarbage(
+      Heap::ScanStackMode mode = Heap::ScanStackMode::kComplete) = 0;
   virtual void Prepare() = 0;
   virtual void StartMarking() = 0;
 
@@ -346,7 +347,8 @@ class MarkCompactCollector final : public CollectorBase {
   void TearDown() final;
 
   // Performs a global garbage collection.
-  void CollectGarbage() final;
+  void CollectGarbage(
+      Heap::ScanStackMode mode = Heap::ScanStackMode::kComplete) final;
 
   void CollectEvacuationCandidates(PagedSpace* space);
 
@@ -405,7 +407,7 @@ class MarkCompactCollector final : public CollectorBase {
   bool are_map_pointers_encoded() { return state_ == UPDATE_POINTERS; }
 #endif
 
-  void VerifyMarking();
+  void VerifyMarking(Heap::ScanStackMode mode);
 #ifdef VERIFY_HEAP
   void VerifyMarkbitsAreClean();
   void VerifyMarkbitsAreDirty(ReadOnlySpace* space);
@@ -473,7 +475,7 @@ class MarkCompactCollector final : public CollectorBase {
   // Free unmarked ArrayBufferExtensions.
   void SweepArrayBufferExtensions();
 
-  void MarkLiveObjects();
+  void MarkLiveObjects(Heap::ScanStackMode mode);
 
   // Marks the object grey and adds it to the marking work list.
   // This is for non-incremental marking only.
@@ -488,7 +490,7 @@ class MarkCompactCollector final : public CollectorBase {
                  ObjectVisitor* custom_root_body_visitor);
 
   // Mark the stack roots and all objects reachable from them.
-  void MarkRootsFromStack(RootVisitor* root_visitor);
+  void MarkRootsFromStack(RootVisitor* root_visitor, Heap::ScanStackMode mode);
 
   // Mark all objects that are directly referenced from one of the clients
   // heaps.
@@ -691,7 +693,8 @@ class MinorMarkCompactCollector final : public CollectorBase {
 
   void SetUp() final;
   void TearDown() final;
-  void CollectGarbage() final;
+  void CollectGarbage(
+      Heap::ScanStackMode mode = Heap::ScanStackMode::kComplete) final;
   void Prepare() final;
   void StartMarking() final;
 
@@ -713,9 +716,10 @@ class MinorMarkCompactCollector final : public CollectorBase {
 
   Sweeper* sweeper() { return sweeper_; }
 
-  void MarkLiveObjects();
+  void MarkLiveObjects(Heap::ScanStackMode mode);
   void MarkRootSetInParallel(RootMarkingVisitor* root_visitor,
-                             bool was_marked_incrementally);
+                             bool was_marked_incrementally,
+                             Heap::ScanStackMode mode);
   V8_INLINE void MarkRootObject(HeapObject obj);
   void DrainMarkingWorklist();
   void TraceFragmentation();

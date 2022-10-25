@@ -569,9 +569,10 @@ Address Isolate::get_address_from_id(IsolateAddressId id) {
   return isolate_addresses_[id];
 }
 
-char* Isolate::Iterate(RootVisitor* v, char* thread_storage) {
+char* Isolate::Iterate(RootVisitor* v, char* thread_storage,
+                       Heap::ScanStackMode mode) {
   ThreadLocalTop* thread = reinterpret_cast<ThreadLocalTop*>(thread_storage);
-  Iterate(v, thread);
+  Iterate(v, thread, mode);
   return thread_storage + sizeof(ThreadLocalTop);
 }
 
@@ -580,7 +581,8 @@ void Isolate::IterateThread(ThreadVisitor* v, char* t) {
   v->VisitThread(this, thread);
 }
 
-void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
+void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread,
+                      Heap::ScanStackMode mode) {
   // Visit the roots from the top for a given thread.
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->pending_exception_));
@@ -601,6 +603,11 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
         Root::kStackRoots, nullptr,
         FullObjectSlot(reinterpret_cast<Address>(&(block->message_obj_))));
   }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  CHECK_EQ(heap()->isolate(), this);
+  heap()->IterateStackConservatively(v, mode);
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
   // Iterate over pointers on native execution stack.
 #if V8_ENABLE_WEBASSEMBLY
@@ -627,9 +634,9 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
   }
 }
 
-void Isolate::Iterate(RootVisitor* v) {
+void Isolate::Iterate(RootVisitor* v, Heap::ScanStackMode mode) {
   ThreadLocalTop* current_t = thread_local_top();
-  Iterate(v, current_t);
+  Iterate(v, current_t, mode);
 }
 
 void Isolate::RegisterTryCatchHandler(v8::TryCatch* that) {

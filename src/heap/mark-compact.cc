@@ -104,8 +104,8 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
   virtual void Run() = 0;
 
  protected:
-  explicit MarkingVerifier(Heap* heap)
-      : ObjectVisitorWithCageBases(heap), heap_(heap) {}
+  explicit MarkingVerifier(Heap* heap, Heap::ScanStackMode mode)
+      : ObjectVisitorWithCageBases(heap), heap_(heap), mode_(mode) {}
 
   virtual ConcurrentBitmap<AccessMode::NON_ATOMIC>* bitmap(
       const MemoryChunk* chunk) = 0;
@@ -149,11 +149,18 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
   void VerifyMarking(LargeObjectSpace* lo_space);
 
   Heap* heap_;
+  Heap::ScanStackMode mode_;
 };
 
 void MarkingVerifier::VerifyRoots() {
-  heap_->IterateRootsIncludingClients(this,
-                                      base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  auto options = base::EnumSet<SkipRoot>{SkipRoot::kWeak};
+  // When verifying marking, we never want to scan conservatively the top of the
+  // stack.
+  ScanStackModeScope stack_scanning_scope(heap_,
+                                          Heap::ScanStackMode::kFromMarker);
+  options.Add(mode_ == Heap::ScanStackMode::kNone ? SkipRoot::kConservativeStack
+                                                  : SkipRoot::kTopOfStack);
+  heap_->IterateRootsIncludingClients(this, options);
 }
 
 void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
@@ -222,8 +229,8 @@ void MarkingVerifier::VerifyMarking(LargeObjectSpace* lo_space) {
 
 class FullMarkingVerifier : public MarkingVerifier {
  public:
-  explicit FullMarkingVerifier(Heap* heap)
-      : MarkingVerifier(heap),
+  explicit FullMarkingVerifier(Heap* heap, Heap::ScanStackMode mode)
+      : MarkingVerifier(heap, mode),
         marking_state_(heap->non_atomic_marking_state()) {}
 
   void Run() override {
@@ -585,14 +592,14 @@ void MarkCompactCollector::StartMarking() {
 #endif  // VERIFY_HEAP
 }
 
-void MarkCompactCollector::CollectGarbage() {
+void MarkCompactCollector::CollectGarbage(Heap::ScanStackMode mode) {
   // Make sure that Prepare() has been called. The individual steps below will
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
 
-  MarkLiveObjects();
+  MarkLiveObjects(mode);
   ClearNonLiveReferences();
-  VerifyMarking();
+  VerifyMarking(mode);
   heap()->memory_measurement()->FinishProcessing(native_context_stats_);
   RecordObjectStats();
 
@@ -936,12 +943,12 @@ void MarkCompactCollector::FinishConcurrentMarking() {
   }
 }
 
-void MarkCompactCollector::VerifyMarking() {
+void MarkCompactCollector::VerifyMarking(Heap::ScanStackMode mode) {
   CHECK(local_marking_worklists()->IsEmpty());
   DCHECK(heap_->incremental_marking()->IsStopped());
 #ifdef VERIFY_HEAP
   if (v8_flags.verify_heap) {
-    FullMarkingVerifier verifier(heap());
+    FullMarkingVerifier verifier(heap(), mode);
     verifier.Run();
   }
 #endif
@@ -2130,8 +2137,9 @@ Address MarkCompactCollector::FindBasePtrForMarking(Address maybe_inner_ptr) {
 }
 #endif  // V8_ENABLE_INNER_POINTER_RESOLUTION_MB
 
-void MarkCompactCollector::MarkRootsFromStack(RootVisitor* root_visitor) {
-  heap()->IterateRootsFromStackIncludingClient(root_visitor);
+void MarkCompactCollector::MarkRootsFromStack(RootVisitor* root_visitor,
+                                              Heap::ScanStackMode mode) {
+  heap()->IterateRootsFromStackIncludingClient(root_visitor, mode);
 }
 
 void MarkCompactCollector::MarkObjectsFromClientHeaps() {
@@ -2660,7 +2668,7 @@ void MarkCompactCollector::RetainMaps() {
   }
 }
 
-void MarkCompactCollector::MarkLiveObjects() {
+void MarkCompactCollector::MarkLiveObjects(Heap::ScanStackMode mode) {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK);
   // The recursive GC marker detects when it is nearing stack overflow,
   // and switches to a different marking system.  JS interrupts interfere
@@ -2717,7 +2725,7 @@ void MarkCompactCollector::MarkLiveObjects() {
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_ROOTS);
-    MarkRootsFromStack(&root_visitor);
+    MarkRootsFromStack(&root_visitor, mode);
   }
 
   {
@@ -5181,9 +5189,11 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
              GCTracer::Scope::MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS);
     // The external string table is updated at the end.
     PointersUpdatingVisitor updating_visitor(heap());
+    ScanStackModeScope stack_scanning_scope(heap_, Heap::ScanStackMode::kNone);
     heap_->IterateRootsIncludingClients(
         &updating_visitor,
-        base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable});
+        base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable,
+                                SkipRoot::kConservativeStack});
   }
 
   {
@@ -5449,8 +5459,8 @@ namespace {
 
 class YoungGenerationMarkingVerifier : public MarkingVerifier {
  public:
-  explicit YoungGenerationMarkingVerifier(Heap* heap)
-      : MarkingVerifier(heap),
+  explicit YoungGenerationMarkingVerifier(Heap* heap, Heap::ScanStackMode mode)
+      : MarkingVerifier(heap, mode),
         marking_state_(heap->non_atomic_marking_state()) {}
 
   ConcurrentBitmap<AccessMode::NON_ATOMIC>* bitmap(
@@ -5823,7 +5833,7 @@ void MinorMarkCompactCollector::Finish() {
   sweeper()->StartSweeperTasks();
 }
 
-void MinorMarkCompactCollector::CollectGarbage() {
+void MinorMarkCompactCollector::CollectGarbage(Heap::ScanStackMode mode) {
   DCHECK(!heap()->mark_compact_collector()->in_use());
   DCHECK_NOT_NULL(heap()->new_space());
   // Minor MC does not support processing the ephemeron remembered set.
@@ -5831,11 +5841,11 @@ void MinorMarkCompactCollector::CollectGarbage() {
 
   heap()->array_buffer_sweeper()->EnsureFinished();
 
-  MarkLiveObjects();
+  MarkLiveObjects(mode);
   ClearNonLiveReferences();
 #ifdef VERIFY_HEAP
   if (v8_flags.verify_heap) {
-    YoungGenerationMarkingVerifier verifier(heap());
+    YoungGenerationMarkingVerifier verifier(heap(), mode);
     verifier.Run();
   }
 #endif  // VERIFY_HEAP
@@ -6156,7 +6166,8 @@ void YoungGenerationMarkingJob::ProcessMarkingItems(
 }
 
 void MinorMarkCompactCollector::MarkRootSetInParallel(
-    RootMarkingVisitor* root_visitor, bool was_marked_incrementally) {
+    RootMarkingVisitor* root_visitor, bool was_marked_incrementally,
+    Heap::ScanStackMode mode) {
   {
     std::vector<PageMarkingItem> marking_items;
 
@@ -6168,10 +6179,22 @@ void MinorMarkCompactCollector::MarkRootSetInParallel(
       // MinorMC treats all weak roots except for global handles as strong.
       // That is why we don't set skip_weak = true here and instead visit
       // global handles separately.
-      heap()->IterateRoots(
-          root_visitor, base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable,
-                                                SkipRoot::kGlobalHandles,
-                                                SkipRoot::kOldGeneration});
+      auto options = base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable,
+                                             SkipRoot::kGlobalHandles,
+                                             SkipRoot::kOldGeneration};
+      switch (mode) {
+        case Heap::ScanStackMode::kNone:
+          options.Add(SkipRoot::kConservativeStack);
+          break;
+        case Heap::ScanStackMode::kFromMarker:
+          options.Add(SkipRoot::kTopOfStack);
+          break;
+        case Heap::ScanStackMode::kComplete:
+          break;
+        case Heap::ScanStackMode::kUninitialized:
+          UNREACHABLE();
+      }
+      heap()->IterateRoots(root_visitor, options);
       isolate()->global_handles()->IterateYoungStrongAndDependentRoots(
           root_visitor);
 
@@ -6205,7 +6228,7 @@ void MinorMarkCompactCollector::MarkRootSetInParallel(
   }
 }
 
-void MinorMarkCompactCollector::MarkLiveObjects() {
+void MinorMarkCompactCollector::MarkLiveObjects(Heap::ScanStackMode mode) {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK);
 
   DCHECK_NOT_NULL(local_marking_worklists_);
@@ -6229,7 +6252,7 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
   RootMarkingVisitor root_visitor(this);
 
-  MarkRootSetInParallel(&root_visitor, was_marked_incrementally);
+  MarkRootSetInParallel(&root_visitor, was_marked_incrementally, mode);
 
   // Mark rest on the main thread.
   {

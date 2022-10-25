@@ -68,7 +68,7 @@ class ThreadManager {
   void FreeThreadResources();
   bool IsArchived();
 
-  void Iterate(RootVisitor* v);
+  void Iterate(RootVisitor* v, Heap::ScanStackMode mode);
   void IterateArchivedThreads(ThreadVisitor* v);
   bool IsLockedByCurrentThread() const {
     return mutex_owner_.load(std::memory_order_relaxed) == ThreadId::Current();

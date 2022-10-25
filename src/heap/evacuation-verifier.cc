@@ -5,6 +5,7 @@
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/reloc-info.h"
 #include "src/heap/evacuation-verifier-inl.h"
+#include "src/heap/heap.h"
 #include "src/objects/map-inl.h"
 
 namespace v8 {
@@ -41,8 +42,10 @@ void EvacuationVerifier::VisitMapPointer(HeapObject object) {
   VerifyMap(object.map(cage_base()));
 }
 void EvacuationVerifier::VerifyRoots() {
-  heap_->IterateRootsIncludingClients(this,
-                                      base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  ScanStackModeScope stack_scanning_scope(heap_, Heap::ScanStackMode::kNone);
+  heap_->IterateRootsIncludingClients(
+      this,
+      base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kConservativeStack});
 }
 
 void EvacuationVerifier::VerifyEvacuationOnPage(Address start, Address end) {

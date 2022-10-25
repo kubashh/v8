@@ -662,6 +662,12 @@
 }], # variant == stress_concurrent_inlining
 
 ################################################################################
+['conservative_stack_scanning', {
+  # TODO(v8:13257): Temporary, do not land this!!!
+  'test-heap/Regress12777': [SKIP],
+}], # conservative_stack_scanning
+
+################################################################################
 ['third_party_heap', {
   # v8::Unwinder::PCIsInV8 is not supported
   'test-unwinder-code-pages/PCIsInV8_LargeCodeObject_CodePagesAPI': [SKIP],
