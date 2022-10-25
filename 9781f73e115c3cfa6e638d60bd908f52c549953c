@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "9781f73e115c3cfa6e638d60bd908f52c549953c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9fa798_48efd2f3",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T14:24:42Z",
+      "side": 1,
+      "message": "set `last_function` here?",
+      "range": {
+        "startLine": 628,
+        "startChar": 6,
+        "endLine": 628,
+        "endChar": 11
+      },
+      "revId": "9781f73e115c3cfa6e638d60bd908f52c549953c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
