@@ -16,6 +16,167 @@
       "message": "PTAL!",
       "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1607779_d06d7d69",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "maybe pass in the index of the first argument operand?",
+      "range": {
+        "startLine": 2490,
+        "startChar": 29,
+        "endLine": 2490,
+        "endChar": 46
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef14c3f_50e47373",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "nit: braces",
+      "range": {
+        "startLine": 2558,
+        "startChar": 10,
+        "endLine": 2558,
+        "endChar": 16
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5de6f392_e6c58ee3",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "should `Register reg` be a reference, so that this updates it also for the caller?",
+      "range": {
+        "startLine": 1699,
+        "startChar": 4,
+        "endLine": 1699,
+        "endChar": 18
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b477f678_cf51052b",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "very nitty nit: this is a char code, not a code point, there\u0027s a separate `String.fromCodePoint()` function that handles values above `0xFFFF`",
+      "range": {
+        "startLine": 1723,
+        "startChar": 12,
+        "endLine": 1723,
+        "endChar": 22
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15f2fb13_8c2603c1",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "nit: code_point",
+      "range": {
+        "startLine": 1724,
+        "startChar": 9,
+        "endLine": 1724,
+        "endChar": 25
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "277cd22b_8e7ad459",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1732,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "you don\u0027t actually care about preserving code_input here when it aliases with the result register, it\u0027s dead anyway, so this is unnecessary",
+      "range": {
+        "startLine": 1732,
+        "startChar": 10,
+        "endLine": 1732,
+        "endChar": 35
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b46a94_7c915907",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T11:03:51Z",
+      "side": 1,
+      "message": "same as above, `char_code`",
+      "range": {
+        "startLine": 1738,
+        "startChar": 13,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
