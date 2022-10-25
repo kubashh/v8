@@ -1085,37 +1085,50 @@ void WasmEngine::RemoveIsolate(Isolate* isolate) {
 
 void WasmEngine::LogCode(base::Vector<WasmCode*> code_vec) {
   if (code_vec.empty()) return;
-  base::MutexGuard guard(&mutex_);
-  NativeModule* native_module = code_vec[0]->native_module();
-  DCHECK_EQ(1, native_modules_.count(native_module));
-  for (Isolate* isolate : native_modules_[native_module]->isolates) {
-    DCHECK_EQ(1, isolates_.count(isolate));
-    IsolateInfo* info = isolates_[isolate].get();
-    if (info->log_codes == false) continue;
-    if (info->log_codes_task == nullptr) {
-      auto new_task = std::make_unique<LogCodesTask>(
-          &mutex_, &info->log_codes_task, isolate, this);
-      info->log_codes_task = new_task.get();
-      info->foreground_task_runner->PostTask(std::move(new_task));
-    }
-    if (info->code_to_log.empty()) {
-      isolate->stack_guard()->RequestLogWasmCode();
-    }
-    for (WasmCode* code : code_vec) {
-      DCHECK_EQ(native_module, code->native_module());
-      code->IncRef();
-    }
+  using TaskToSchedule =
+      std::pair<std::shared_ptr<v8::TaskRunner>, std::unique_ptr<LogCodesTask>>;
+  std::vector<TaskToSchedule> to_schedule;
+  {
+    base::MutexGuard guard(&mutex_);
+    NativeModule* native_module = code_vec[0]->native_module();
+    DCHECK_EQ(1, native_modules_.count(native_module));
+    for (Isolate* isolate : native_modules_[native_module]->isolates) {
+      DCHECK_EQ(1, isolates_.count(isolate));
+      IsolateInfo* info = isolates_[isolate].get();
+      if (info->log_codes == false) continue;
+      if (info->log_codes_task == nullptr) {
+        auto new_task = std::make_unique<LogCodesTask>(
+            &mutex_, &info->log_codes_task, isolate, this);
+        info->log_codes_task = new_task.get();
+        // Store tasks to be added in vector.
+        // The tasks can't be added to the runner directly as it could destroy
+        // the LogCodesTask if the runner is already terminated, causing a
+        // dead-lock on the WasmEngine::mutex_.
+        to_schedule.emplace_back(info->foreground_task_runner,
+                                 std::move(new_task));
+      }
+      if (info->code_to_log.empty()) {
+        isolate->stack_guard()->RequestLogWasmCode();
+      }
+      for (WasmCode* code : code_vec) {
+        DCHECK_EQ(native_module, code->native_module());
+        code->IncRef();
+      }
 
-    auto script_it = info->scripts.find(native_module);
-    // If the script does not yet exist, logging will happen later. If the weak
-    // handle is cleared already, we also don't need to log any more.
-    if (script_it == info->scripts.end()) continue;
-    auto& log_entry = info->code_to_log[script_it->second.script_id()];
-    if (!log_entry.source_url) {
-      log_entry.source_url = script_it->second.source_url();
+      auto script_it = info->scripts.find(native_module);
+      // If the script does not yet exist, logging will happen later. If the
+      // weak handle is cleared already, we also don't need to log any more.
+      if (script_it == info->scripts.end()) continue;
+      auto& log_entry = info->code_to_log[script_it->second.script_id()];
+      if (!log_entry.source_url) {
+        log_entry.source_url = script_it->second.source_url();
+      }
+      log_entry.code.insert(log_entry.code.end(), code_vec.begin(),
+                            code_vec.end());
     }
-    log_entry.code.insert(log_entry.code.end(), code_vec.begin(),
-                          code_vec.end());
+  }
+  for (auto& [runner, task] : to_schedule) {
+    runner->PostTask(std::move(task));
   }
 }
 
