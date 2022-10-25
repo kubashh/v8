@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "031a1b1a_f85a0eac",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-25T14:41:33Z",
+      "side": 1,
+      "message": "Absolutely, truncating here is the right thing to do.",
+      "parentUuid": "d7b39613_dcf8612e",
+      "range": {
+        "startLine": 1723,
+        "startChar": 12,
+        "endLine": 1723,
+        "endChar": 22
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15f2fb13_8c2603c1",
