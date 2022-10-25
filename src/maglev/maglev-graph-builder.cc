@@ -2476,13 +2476,20 @@ void MaglevGraphBuilder::BuildCallFromRegisterList(
   SetAccumulator(AddNode(call));
 }
 
-bool MaglevGraphBuilder::TryInlineBuiltin(int argc_count, Builtin builtin) {
+bool MaglevGraphBuilder::TryInlineBuiltin(int argc_count,
+                                          ConvertReceiverMode receiver_mode,
+                                          Builtin builtin) {
   switch (builtin) {
-    case Builtin::kStringFromCharCode:
+    case Builtin::kStringFromCharCode: {
       if (argc_count != 1) return false;
-      SetAccumulator(
-          AddNewNode<InlinedBuiltinStringFromCharCode>({LoadRegisterInt32(0)}));
+      int operand_index = 0;
+      if (receiver_mode != ConvertReceiverMode::kNullOrUndefined) {
+        operand_index++;
+      }
+      SetAccumulator(AddNewNode<InlinedBuiltinStringFromCharCode>(
+          {LoadRegisterInt32(operand_index + 1)}));
       return true;
+    }
     default:
       // TODO(v8:7700): Inline more builtins.
       return false;
@@ -2547,7 +2554,8 @@ void MaglevGraphBuilder::BuildCallFromRegisters(
 
       compiler::SharedFunctionInfoRef shared = target.AsJSFunction().shared();
       if (shared.HasBuiltinId()) {
-        if (TryInlineBuiltin(argc_count, shared.builtin_id())) return;
+        if (TryInlineBuiltin(argc_count, receiver_mode, shared.builtin_id()))
+          return;
       }
 
       break;

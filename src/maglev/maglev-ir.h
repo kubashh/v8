@@ -3069,6 +3069,12 @@ class InlinedBuiltinStringFromCharCode
   void AllocateVreg(MaglevVregAllocationState*);
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+
+ private:
+  RegisterSnapshot RegisterSnapshotIncluding(MaglevAssembler* masm,
+                                             Register reg, Register scratch);
+  void AllocateTwoByteString(MaglevAssembler* masm, Register result_string,
+                             RegisterSnapshot save_registers);
 };
 
 class LoadTaggedField : public FixedInputValueNodeT<1, LoadTaggedField> {
