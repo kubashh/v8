@@ -197,6 +197,8 @@ class GlobalSafepoint final {
 class V8_NODISCARD GlobalSafepointScope {
  public:
   V8_EXPORT_PRIVATE explicit GlobalSafepointScope(Isolate* initiator);
+  V8_EXPORT_PRIVATE explicit GlobalSafepointScope(Heap* heap);
+
   V8_EXPORT_PRIVATE ~GlobalSafepointScope();
 
  private:

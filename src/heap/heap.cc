@@ -3557,6 +3557,12 @@ void Heap::MakeHeapIterable() {
     local_heap->MakeLinearAllocationAreaIterable();
   });
 
+  if (isolate()->is_shared_space_isolate()) {
+    isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
+      client->heap()->MakeSharedLinearAllocationAreasIterable();
+    });
+  }
+
   PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -3597,6 +3603,18 @@ void Heap::FreeSharedLinearAllocationAreas() {
     local_heap->FreeSharedLinearAllocationArea();
   });
   FreeMainThreadSharedLinearAllocationAreas();
+}
+
+void Heap::MakeSharedLinearAllocationAreasIterable() {
+  if (!isolate()->has_shared_heap()) return;
+
+  safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
+    local_heap->MakeSharedLinearAllocationAreaIterable();
+  });
+
+  if (v8_flags.shared_space && shared_space_allocator_) {
+    shared_space_allocator_->MakeLinearAllocationAreaIterable();
+  }
 }
 
 void Heap::FreeMainThreadSharedLinearAllocationAreas() {
@@ -4428,6 +4446,7 @@ bool Heap::IsValidAllocationSpace(AllocationSpace space) {
 
 #ifdef DEBUG
 void Heap::VerifyCountersAfterSweeping() {
+  MakeHeapIterable();
   PagedSpaceIterator spaces(this);
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
@@ -6401,7 +6420,7 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
 HeapObjectIterator::HeapObjectIterator(
     Heap* heap, HeapObjectIterator::HeapObjectsFiltering filtering)
     : heap_(heap),
-      safepoint_scope_(std::make_unique<SafepointScope>(heap)),
+      safepoint_scope_(std::make_unique<GlobalSafepointScope>(heap)),
       filtering_(filtering),
       filter_(nullptr),
       space_iterator_(nullptr),
