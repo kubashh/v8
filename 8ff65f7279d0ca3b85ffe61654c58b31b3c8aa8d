@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf1b87fe_df9b90e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1403119
+      },
+      "writtenOn": "2022-10-25T18:49:42Z",
+      "side": 1,
+      "message": "It doesn\u0027t recognize internal bug tracker. Maybe I should just remove it?",
+      "revId": "8ff65f7279d0ca3b85ffe61654c58b31b3c8aa8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
