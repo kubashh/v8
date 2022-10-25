@@ -125,6 +125,85 @@ assertOptimized(add_32bit_int);
 assertEquals(1, fast_c_api.fast_call_count());
 assertEquals(0, fast_c_api.slow_call_count());
 
+// ---------- Test external pointer passing -----------
+
+function assertIsExternal(pointer) {
+  return fast_c_api.assert_is_external(pointer);
+}
+
+function get_pointer() {
+  return fast_c_api.get_pointer();
+}
+
+function get_other_pointer() {
+  return fast_c_api.get_other_pointer();
+}
+
+function pass_pointer(pointer) {
+  return fast_c_api.pass_pointer(pointer);
+}
+
+function compare_pointers(pointer_a, pointer_b) {
+  return fast_c_api.compare_pointers(pointer_a, pointer_b);
+}
+
+%PrepareFunctionForOptimization(get_pointer);
+const one_external = get_pointer();
+assertIsExternal(one_external);
+
+%PrepareFunctionForOptimization(pass_pointer);
+const passed_pointer = pass_pointer(one_external);
+// Slow call returns the same External object
+assertEquals(passed_pointer, one_external);
+%OptimizeFunctionOnNextCall(pass_pointer);
+const passed_pointer_fast = pass_pointer(one_external);
+assertOptimized(pass_pointer);
+// Fast call always creates a new External object
+assertIsExternal(one_external);
+assertIsExternal(passed_pointer_fast);
+//assertNotEquals(passed_pointer_fast, one_external);
+assertThrows(() => pass_pointer(Object.create(null)));
+
+%OptimizeFunctionOnNextCall(get_pointer);
+const one_external_copy = get_pointer();
+assertIsExternal(one_external_copy);
+assertOptimized(get_pointer);
+console.log("ABOUT TO FAIL");
+//assertEquals(one_external_copy, one_external);
+for (const x in one_external_copy) {
+  console.log(x);
+}
+
+%PrepareFunctionForOptimization(get_other_pointer);
+const other_external = get_other_pointer();
+assertEquals(other_external, null);
+%OptimizeFunctionOnNextCall(get_other_pointer);
+const other_external_copy = get_other_pointer();
+assertEquals(other_external_copy, null);
+assertOptimized(get_other_pointer);
+
+%PrepareFunctionForOptimization(pass_pointer);
+const slow_passed_external = pass_pointer(other_external);
+assertEquals(slow_passed_external, null);
+assertEquals(slow_passed_external, other_external);
+%OptimizeFunctionOnNextCall(pass_pointer);
+const fast_passed_external = pass_pointer(other_external);
+assertEquals(fast_passed_external, null);
+assertOptimized(pass_pointer);
+assertEquals(fast_passed_external, other_external);
+
+%PrepareFunctionForOptimization(compare_pointers);
+assertEquals(compare_pointers(one_external, other_external), false);
+%OptimizeFunctionOnNextCall(compare_pointers);
+assertEquals(compare_pointers(one_external, other_external), false);
+assertOptimized(compare_pointers);
+assertEquals(compare_pointers(one_external, one_external), true);
+assertEquals(compare_pointers(one_external, one_external_copy), true);
+assertEquals(compare_pointers(other_external, other_external), true);
+assertEquals(compare_pointers(other_external, other_external_copy), true);
+assertEquals(compare_pointers(other_external, slow_passed_external), true);
+assertEquals(compare_pointers(other_external, fast_passed_external), true);
+
 // ----------- Test various signature mismatches -----------
 function add_32bit_int_mismatch(arg0, arg1, arg2) {
   return fast_c_api.add_32bit_int(arg0, arg1, arg2);
