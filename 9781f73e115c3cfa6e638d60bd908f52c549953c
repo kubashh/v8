@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe4ffa65_e69ca92a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-25T14:41:18Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "9781f73e115c3cfa6e638d60bd908f52c549953c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c9fa798_48efd2f3",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-10-25T14:24:42Z",
       "side": 1,
       "message": "set `last_function` here?",
+      "range": {
+        "startLine": 628,
+        "startChar": 6,
+        "endLine": 628,
+        "endChar": 11
+      },
+      "revId": "9781f73e115c3cfa6e638d60bd908f52c549953c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce54a3e0_9ef14c52",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-25T14:41:18Z",
+      "side": 1,
+      "message": "Done (I added it a couple of lines above but conceptually here)",
+      "parentUuid": "3c9fa798_48efd2f3",
       "range": {
         "startLine": 628,
         "startChar": 6,
