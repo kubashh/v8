@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "ff1f6558beeccb7df6b7932fc1c59663b2eb487e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63cc18fd_72399056",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-25T13:52:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ff1f6558beeccb7df6b7932fc1c59663b2eb487e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bdc9bfe_676144aa",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-25T13:52:40Z",
+      "side": 1,
+      "message": "Sort",
+      "range": {
+        "startLine": 126,
+        "startChar": 6,
+        "endLine": 126,
+        "endChar": 27
+      },
+      "revId": "ff1f6558beeccb7df6b7932fc1c59663b2eb487e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
