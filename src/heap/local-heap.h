@@ -339,7 +339,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
   friend class Heap;
   friend class Isolate;
   friend class ParkedScope;
-  friend class SafepointScope;
+  friend class IsolateSafepointScope;
   friend class UnparkedScope;
 };
 
