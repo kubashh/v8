@@ -43,7 +43,7 @@ class JSGlobalObject;
 class JSGlobalProxy;
 class JSPromise;
 class JSWeakCollection;
-class SafepointScope;
+class IsolateSafepointScope;
 
 struct SourceLocation {
   SourceLocation(int entry_index, int scriptId, int line, int col)
@@ -390,7 +390,7 @@ class V8_EXPORT_PRIVATE V8HeapExplorer : public HeapEntriesAllocator {
   uint32_t EstimateObjectsCount();
   bool IterateAndExtractReferences(HeapSnapshotGenerator* generator);
   void CollectGlobalObjectsTags();
-  void MakeGlobalObjectTagMap(const SafepointScope& safepoint_scope);
+  void MakeGlobalObjectTagMap(const IsolateSafepointScope& safepoint_scope);
   void TagBuiltinCodeObject(CodeT code, const char* name);
   HeapEntry* AddEntry(Address address,
                       HeapEntry::Type type,

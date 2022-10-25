@@ -149,13 +149,13 @@ class IsolateSafepoint final {
   friend class GlobalSafepointScope;
   friend class Isolate;
   friend class LocalHeap;
-  friend class SafepointScope;
+  friend class IsolateSafepointScope;
 };
 
-class V8_NODISCARD SafepointScope {
+class V8_NODISCARD IsolateSafepointScope {
  public:
-  V8_EXPORT_PRIVATE explicit SafepointScope(Heap* heap);
-  V8_EXPORT_PRIVATE ~SafepointScope();
+  V8_EXPORT_PRIVATE explicit IsolateSafepointScope(Heap* heap);
+  V8_EXPORT_PRIVATE ~IsolateSafepointScope();
 
  private:
   IsolateSafepoint* safepoint_;
@@ -202,6 +202,15 @@ class V8_NODISCARD GlobalSafepointScope {
  private:
   Isolate* const initiator_;
   Isolate* const shared_heap_isolate_;
+};
+
+class V8_NODISCARD HeapSafepointScope {
+ public:
+  V8_EXPORT_PRIVATE explicit HeapSafepointScope(Isolate* initiator);
+
+ private:
+  base::Optional<IsolateSafepointScope> isolate_safepoint_;
+  base::Optional<GlobalSafepointScope> global_safepoint_;
 };
 
 }  // namespace internal
