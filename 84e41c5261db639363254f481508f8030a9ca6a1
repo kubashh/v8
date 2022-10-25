@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0869e90_10d83e86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-25T13:33:34Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL\n@ahaas@chromium.org: FYI",
+      "revId": "84e41c5261db639363254f481508f8030a9ca6a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c4caed_d0a03bfb",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-25T13:33:34Z",
+      "side": 1,
+      "message": "These are the only changed lines within the scope starting at line 1091.\nand replaces line 1099 on the old code.",
+      "range": {
+        "startLine": 1103,
+        "startChar": 0,
+        "endLine": 1108,
+        "endChar": 54
+      },
+      "revId": "84e41c5261db639363254f481508f8030a9ca6a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b38bb3f_4c4438a0",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-25T13:33:34Z",
+      "side": 1,
+      "message": "this is the delayed `PostTask` from line 1099 in the old code after the `WasmEngine` mutex now has already been released.",
+      "range": {
+        "startLine": 1130,
+        "startChar": 0,
+        "endLine": 1132,
+        "endChar": 3
+      },
+      "revId": "84e41c5261db639363254f481508f8030a9ca6a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
