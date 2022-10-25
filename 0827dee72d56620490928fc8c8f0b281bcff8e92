@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "274db4b1_463a9665",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Passing the receiver index (unused, since the current builtin does not need) and the first argument index.",
+      "parentUuid": "c1607779_d06d7d69",
+      "range": {
+        "startLine": 2490,
+        "startChar": 29,
+        "endLine": 2490,
+        "endChar": 46
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ef14c3f_50e47373",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-10-25T11:03:51Z",
       "side": 1,
       "message": "nit: braces",
+      "range": {
+        "startLine": 2558,
+        "startChar": 10,
+        "endLine": 2558,
+        "endChar": 16
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ae9353_2f081e8b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ef14c3f_50e47373",
       "range": {
         "startLine": 2558,
         "startChar": 10,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07d1ee31_d5156957",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1699,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "I think you\u0027re right! I decided to inline the function now, since there is only one use.",
+      "parentUuid": "5de6f392_e6c58ee3",
+      "range": {
+        "startLine": 1699,
+        "startChar": 4,
+        "endLine": 1699,
+        "endChar": 18
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b477f678_cf51052b",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-10-25T11:03:51Z",
       "side": 1,
       "message": "very nitty nit: this is a char code, not a code point, there\u0027s a separate `String.fromCodePoint()` function that handles values above `0xFFFF`",
+      "range": {
+        "startLine": 1723,
+        "startChar": 12,
+        "endLine": 1723,
+        "endChar": 22
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b39613_dcf8612e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Renamed.\n\nRegarding the 0xffff, I followed TF: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/effect-control-linearizer.cc;drc\u003d327a3573ed3d1ee29d433ee215e50947f1b94170;l\u003d4214\n\nI guess it truncates the input as explained in: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode",
+      "parentUuid": "b477f678_cf51052b",
       "range": {
         "startLine": 1723,
         "startChar": 12,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63137ad_90914aab",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15f2fb13_8c2603c1",
+      "range": {
+        "startLine": 1724,
+        "startChar": 9,
+        "endLine": 1724,
+        "endChar": 25
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "277cd22b_8e7ad459",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5c2b5c_9b54bbf9",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1732,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Of course! Thanks!",
+      "parentUuid": "277cd22b_8e7ad459",
+      "range": {
+        "startLine": 1732,
+        "startChar": 10,
+        "endLine": 1732,
+        "endChar": 35
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33b46a94_7c915907",
@@ -169,6 +313,30 @@
       "writtenOn": "2022-10-25T11:03:51Z",
       "side": 1,
       "message": "same as above, `char_code`",
+      "range": {
+        "startLine": 1738,
+        "startChar": 13,
+        "endLine": 1738,
+        "endChar": 23
+      },
+      "revId": "0827dee72d56620490928fc8c8f0b281bcff8e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32e2c4bb_48479d41",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T11:37:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33b46a94_7c915907",
       "range": {
         "startLine": 1738,
         "startChar": 13,
