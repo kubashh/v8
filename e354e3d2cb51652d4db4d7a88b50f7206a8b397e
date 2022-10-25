@@ -68,6 +68,24 @@
       "parentUuid": "6b6ac868_1b8c30d3",
       "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4db6fd9_0a62f64f",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-25T10:57:35Z",
+      "side": 1,
+      "message": "I see, thanks for the explanation. Currently the ExternalPointerTags must all be compile-time constexprs for performance reasons. How about we just add a comment here that says something along the lines of \"Using kExternalObjectValueTag is only secure as long as the Embedder ensures that these pointers can always be swapped without causing memory corruption\" or so and then keep using that tag?",
+      "parentUuid": "d4509c02_31e8846c",
+      "revId": "e354e3d2cb51652d4db4d7a88b50f7206a8b397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

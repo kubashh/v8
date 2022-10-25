@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ecac86_3912a0c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-10-25T10:57:35Z",
+      "side": 1,
+      "message": "Cool, thanks for the explanations. If the sandbox has value to you then lets make it work there as well.",
+      "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
