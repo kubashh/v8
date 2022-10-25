@@ -39,6 +39,30 @@
       },
       "revId": "aa6ca896119e8283b904369fcebde5a3eb5461de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fae20ec5_f7e89475",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-10-25T14:40:10Z",
+      "side": 1,
+      "message": "I guess you submitted the CL before I could fix the nit! 😊\nFixed here: https://chromium-review.googlesource.com/c/v8/v8/+/3978010",
+      "parentUuid": "ddefc8a2_bdb35817",
+      "range": {
+        "startLine": 2556,
+        "startChar": 10,
+        "endLine": 2556,
+        "endChar": 25
+      },
+      "revId": "aa6ca896119e8283b904369fcebde5a3eb5461de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
