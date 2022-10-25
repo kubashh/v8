@@ -41,6 +41,7 @@ void EvacuationVerifier::VisitMapPointer(HeapObject object) {
   VerifyMap(object.map(cage_base()));
 }
 void EvacuationVerifier::VerifyRoots() {
+  ScanStackModeScope stack_scanning_scope(heap_, Heap::ScanStackMode::kNone);
   heap_->IterateRootsIncludingClients(this,
                                       base::EnumSet<SkipRoot>{SkipRoot::kWeak});
 }

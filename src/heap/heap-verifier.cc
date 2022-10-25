@@ -81,7 +81,10 @@ void HeapVerification::Verify() {
   heap()->array_buffer_sweeper()->EnsureFinished();
 
   VerifyPointersVisitor visitor(heap());
-  heap()->IterateRoots(&visitor, {});
+  {
+    ScanStackModeScope no_stack_scanning(heap(), Heap::ScanStackMode::kNone);
+    heap()->IterateRoots(&visitor, {});
+  }
 
   if (!isolate()->context().is_null() &&
       !isolate()->raw_native_context().is_null()) {

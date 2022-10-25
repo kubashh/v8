@@ -967,38 +967,49 @@ class Heap {
   // Methods triggering GCs. ===================================================
   // ===========================================================================
 
+  // The order of this enumeration's elements is important: they should go from
+  // more precise to more conservative modes for stack scanning, so that
+  // std::min is the greatest lower bound operator.
+  enum class ScanStackMode { kNone, kFromMarker, kComplete };
+
   // Performs garbage collection operation.
   // Returns whether there is a chance that another major GC could
   // collect more garbage.
   V8_EXPORT_PRIVATE bool CollectGarbage(
       AllocationSpace space, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Performs a full garbage collection.
   V8_EXPORT_PRIVATE void CollectAllGarbage(
       int flags, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Last hope GC, should try to squeeze as much as possible.
   V8_EXPORT_PRIVATE void CollectAllAvailableGarbage(
-      GarbageCollectionReason gc_reason);
+      GarbageCollectionReason gc_reason,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Precise garbage collection that potentially finalizes already running
   // incremental marking before performing an atomic garbage collection.
   // Only use if absolutely necessary or in tests to avoid floating garbage!
   V8_EXPORT_PRIVATE void PreciseCollectAllGarbage(
       int flags, GarbageCollectionReason gc_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Performs garbage collection operation for the shared heap.
   V8_EXPORT_PRIVATE bool CollectGarbageShared(
-      LocalHeap* local_heap, GarbageCollectionReason gc_reason);
+      LocalHeap* local_heap, GarbageCollectionReason gc_reason,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Requests garbage collection from some other thread.
   V8_EXPORT_PRIVATE bool CollectGarbageFromAnyThread(
       LocalHeap* local_heap,
       GarbageCollectionReason gc_reason =
-          GarbageCollectionReason::kBackgroundAllocationFailure);
+          GarbageCollectionReason::kBackgroundAllocationFailure,
+      ScanStackMode mode = ScanStackMode::kComplete);
 
   // Reports and external memory pressure event, either performs a major GC or
   // completes incremental marking in order to free external resources.
@@ -1038,6 +1049,10 @@ class Heap {
   void IterateWeakGlobalHandles(RootVisitor* v);
   void IterateBuiltins(RootVisitor* v);
   void IterateStackRoots(RootVisitor* v);
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  void IterateStackConservatively(RootVisitor* v);
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
   // ===========================================================================
   // Remembered set API. =======================================================
@@ -1786,10 +1801,9 @@ class Heap {
 
   // Performs garbage collection in a safepoint.
   // Returns the number of freed global handles.
-  size_t PerformGarbageCollection(
-      GarbageCollector collector, GarbageCollectionReason gc_reason,
-      const char* collector_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+  size_t PerformGarbageCollection(GarbageCollector collector,
+                                  GarbageCollectionReason gc_reason,
+                                  const char* collector_reason);
 
   // Performs garbage collection in the shared heap.
   void PerformSharedGarbageCollection(Isolate* initiator,
@@ -2350,6 +2364,9 @@ class Heap {
   GCCallbackFlags current_gc_callback_flags_ =
       GCCallbackFlags::kNoGCCallbackFlags;
 
+  // Currently set mode for conservative stack scanning.
+  ScanStackMode scan_stack_mode_ = ScanStackMode::kComplete;
+
   std::unique_ptr<IsolateSafepoint> safepoint_;
 
   bool is_current_gc_forced_ = false;
@@ -2439,6 +2456,7 @@ class Heap {
   friend class PagedSpaceBase;
   friend class PretenturingHandler;
   friend class ReadOnlyRoots;
+  friend class ScanStackModeScope;
   friend class Scavenger;
   friend class ScavengerCollector;
   friend class StressConcurrentAllocationObserver;
@@ -2657,6 +2675,18 @@ class V8_NODISCARD IgnoreLocalGCRequests {
  private:
   Heap* heap_;
 };
+
+class V8_NODISCARD ScanStackModeScope {
+ public:
+  explicit inline ScanStackModeScope(Heap* heap, Heap::ScanStackMode mode);
+  inline ~ScanStackModeScope();
+
+ protected:
+  Heap* heap_;
+  Heap::ScanStackMode old_value_;
+};
+
+using ScanStackModeScopeForTesting = ScanStackModeScope;
 
 // Visitor class to verify interior pointers in spaces that do not contain
 // or care about inter-generational references. All heap object pointers have to

@@ -152,6 +152,10 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
 };
 
 void MarkingVerifier::VerifyRoots() {
+  // When verifying marking, we never want to scan conservatively the top of the
+  // stack.
+  ScanStackModeScope stack_scanning_scope(heap_,
+                                          Heap::ScanStackMode::kFromMarker);
   heap_->IterateRootsIncludingClients(this,
                                       base::EnumSet<SkipRoot>{SkipRoot::kWeak});
 }
@@ -5181,6 +5185,7 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
              GCTracer::Scope::MC_EVACUATE_UPDATE_POINTERS_TO_NEW_ROOTS);
     // The external string table is updated at the end.
     PointersUpdatingVisitor updating_visitor(heap());
+    ScanStackModeScope stack_scanning_scope(heap_, Heap::ScanStackMode::kNone);
     heap_->IterateRootsIncludingClients(
         &updating_visitor,
         base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable});
