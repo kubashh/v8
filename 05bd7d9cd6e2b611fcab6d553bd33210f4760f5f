@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c7b77ab_51a9b7d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-10-26T08:50:17Z",
+      "side": 1,
+      "message": "nit: Please add reland reasons. The CL doesn\u0027t have an obvious fix patchset, and the tracker bug doesn\u0027t show any other CL associated with the bug. I assume something has landed, but it\u0027s not really clear here what fixed it. I\u0027d e.g. be interested if more testing was added.\n\nThe latest revert had a breakage on linux-rel, but there was not a single failure in v8 land, which points to some missing test coverage.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 61
+      },
+      "revId": "05bd7d9cd6e2b611fcab6d553bd33210f4760f5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
