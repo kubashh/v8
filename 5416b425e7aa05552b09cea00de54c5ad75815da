@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594eebf6_a4af4a39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-10-26T06:50:09Z",
+      "side": 1,
+      "message": "PTAL. I think it\u0027s much better now, after Omer\u0027s suggestion.\nMaybe we could use the scope for simplifying the tests as well, if you like the idea.",
+      "revId": "5416b425e7aa05552b09cea00de54c5ad75815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
