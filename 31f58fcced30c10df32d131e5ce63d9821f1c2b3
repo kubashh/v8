@@ -56,6 +56,30 @@
       },
       "revId": "31f58fcced30c10df32d131e5ce63d9821f1c2b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "268adf4c_181f0b30",
+        "filename": "src/heap/free-list-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-26T08:00:19Z",
+      "side": 1,
+      "message": "It doesn\u0027t have to be a template. I\u0027m replacing it with a normal field in the class.",
+      "parentUuid": "7808e7f0_d10a21ea",
+      "range": {
+        "startLine": 54,
+        "startChar": 6,
+        "endLine": 54,
+        "endChar": 24
+      },
+      "revId": "31f58fcced30c10df32d131e5ce63d9821f1c2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
