@@ -246,7 +246,7 @@ void String::MakeThin(
   // that the concurrent marker will read the pointer when visiting a
   // ThinString.
   ThinString thin = ThinString::unchecked_cast(*this);
-  thin.set_actual(internalized);
+  thin.set_actual(internalized, kReleaseStore);
   if (initial_shape.IsExternal()) {
     set_map(target_map, kReleaseStore);
   } else {
@@ -576,7 +576,9 @@ bool String::MakeExternal(v8::String::ExternalOneByteStringResource* resource) {
 
 bool String::SupportsExternalization() {
   if (this->IsThinString()) {
-    return i::ThinString::cast(*this).actual().SupportsExternalization();
+    return i::ThinString::cast(*this)
+        .actual(kAcquireLoad)
+        .SupportsExternalization();
   }
 
   // RO_SPACE strings cannot be externalized.
@@ -817,7 +819,7 @@ String::FlatContent String::SlowGetFlatContent(
   // Extract thin strings.
   if (shape.IsThin()) {
     ThinString thin = ThinString::cast(string);
-    string = thin.actual(cage_base);
+    string = thin.actual(cage_base, kAcquireLoad);
     shape = StringShape(string, cage_base);
   }
 
@@ -981,7 +983,7 @@ void String::WriteToFlat(String source, sinkchar* sink, int start, int length,
       }
       case kOneByteStringTag | kThinStringTag:
       case kTwoByteStringTag | kThinStringTag:
-        source = ThinString::cast(source).actual(cage_base);
+        source = ThinString::cast(source).actual(cage_base, kAcquireLoad);
         continue;
     }
     UNREACHABLE();
@@ -1069,9 +1071,11 @@ bool String::SlowEquals(
   // and restart.
   if (this->IsThinString(cage_base) || other.IsThinString(cage_base)) {
     if (other.IsThinString(cage_base))
-      other = ThinString::cast(other).actual(cage_base);
+      other = ThinString::cast(other).actual(cage_base, kAcquireLoad);
     if (this->IsThinString(cage_base)) {
-      return ThinString::cast(*this).actual(cage_base).Equals(other);
+      return ThinString::cast(*this)
+          .actual(cage_base, kAcquireLoad)
+          .Equals(other);
     } else {
       return this->Equals(other);
     }
@@ -1129,10 +1133,10 @@ bool String::SlowEquals(Isolate* isolate, Handle<String> one,
   // and restart.
   if (one->IsThinString() || two->IsThinString()) {
     if (one->IsThinString()) {
-      one = handle(ThinString::cast(*one).actual(), isolate);
+      one = handle(ThinString::cast(*one).actual(kAcquireLoad), isolate);
     }
     if (two->IsThinString()) {
-      two = handle(ThinString::cast(*two).actual(), isolate);
+      two = handle(ThinString::cast(*two).actual(kAcquireLoad), isolate);
     }
     return String::Equals(isolate, one, two);
   }
@@ -1697,7 +1701,7 @@ uint32_t String::ComputeAndSetRawHash(
     shape = StringShape(string, cage_base);
   }
   if (shape.IsThin()) {
-    string = ThinString::cast(string).actual(cage_base);
+    string = ThinString::cast(string).actual(cage_base, kAcquireLoad);
     shape = StringShape(string, cage_base);
     if (length() == string.length()) {
       uint32_t raw_hash = string.RawHash();
@@ -1855,7 +1859,7 @@ uint16_t ConsString::Get(
 uint16_t ThinString::Get(
     int index, PtrComprCageBase cage_base,
     const SharedStringAccessGuardIfNeeded& access_guard) const {
-  return actual(cage_base).Get(index, cage_base, access_guard);
+  return actual(cage_base, kAcquireLoad).Get(index, cage_base, access_guard);
 }
 
 uint16_t SlicedString::Get(
@@ -2039,7 +2043,7 @@ const byte* String::AddressOfCharacterAt(
     shape = StringShape(subject, cage_base);
   }
   if (subject.IsThinString(cage_base)) {
-    subject = ThinString::cast(subject).actual(cage_base);
+    subject = ThinString::cast(subject).actual(cage_base, kAcquireLoad);
     shape = StringShape(subject, cage_base);
   }
   CHECK_LE(0, start_index);

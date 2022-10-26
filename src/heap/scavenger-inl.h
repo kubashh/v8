@@ -294,7 +294,7 @@ SlotCallbackResult Scavenger::EvacuateThinString(Map map, THeapObjectSlot slot,
     // The ThinString should die after Scavenge, so avoid writing the proper
     // forwarding pointer and instead just signal the actual object as forwarded
     // reference.
-    String actual = object.actual();
+    String actual = object.actual(kAcquireLoad);
     // ThinStrings always refer to internalized strings, which are always in old
     // space.
     DCHECK(!Heap::InYoungGeneration(actual));

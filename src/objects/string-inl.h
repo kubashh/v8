@@ -576,7 +576,7 @@ bool String::IsEqualToImpl(
 
       case kThinStringTag | kOneByteStringTag:
       case kThinStringTag | kTwoByteStringTag:
-        string = ThinString::cast(string).actual(cage_base);
+        string = ThinString::cast(string).actual(cage_base, kAcquireLoad);
         continue;
 
       default:
@@ -661,7 +661,7 @@ Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,
   }
 
   if (shape.IsThin()) {
-    s = ThinString::cast(s).actual(cage_base);
+    s = ThinString::cast(s).actual(cage_base, kAcquireLoad);
     DCHECK(!s.IsConsString());
   }
 
@@ -947,7 +947,7 @@ ConsString String::VisitFlat(
 
       case kThinStringTag | kOneByteStringTag:
       case kThinStringTag | kTwoByteStringTag:
-        string = ThinString::cast(string).actual(cage_base);
+        string = ThinString::cast(string).actual(cage_base, kAcquireLoad);
         continue;
 
       default:

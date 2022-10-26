@@ -870,7 +870,8 @@ Utf16CharacterStream* ScannerStream::For(Isolate* isolate, Handle<String> data,
     SlicedString string = SlicedString::cast(*data);
     start_offset = string.offset();
     String parent = string.parent();
-    if (parent.IsThinString()) parent = ThinString::cast(parent).actual();
+    if (parent.IsThinString())
+      parent = ThinString::cast(parent).actual(kAcquireLoad);
     data = handle(parent, isolate);
   } else {
     data = String::Flatten(isolate, data);

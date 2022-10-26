@@ -288,7 +288,7 @@ JsonParser<Char>::JsonParser(Isolate* isolate, Handle<String> source)
     start = string.offset();
     String parent = string.parent(cage_base);
     if (parent.IsThinString(cage_base))
-      parent = ThinString::cast(parent).actual(cage_base);
+      parent = ThinString::cast(parent).actual(cage_base, kAcquireLoad);
     source_ = handle(parent, isolate);
   } else {
     source_ = String::Flatten(isolate, source);

@@ -394,7 +394,7 @@ int NativeRegExpMacroAssembler::Match(Handle<JSRegExp> regexp,
     slice_offset = slice.offset();
   }
   if (StringShape(subject_ptr).IsThin()) {
-    subject_ptr = ThinString::cast(subject_ptr).actual();
+    subject_ptr = ThinString::cast(subject_ptr).actual(kAcquireLoad);
   }
   // Ensure that an underlying string has the same representation.
   bool is_one_byte = subject_ptr.IsOneByteRepresentation();

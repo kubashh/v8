@@ -1885,7 +1885,7 @@ TEST(Regress876759) {
   factory->InternalizeString(parent);
   CHECK(parent->IsThinString());
   Handle<String> grandparent =
-      handle(ThinString::cast(*parent).actual(), isolate);
+      handle(ThinString::cast(*parent).actual(kAcquireLoad), isolate);
   CHECK_EQ(*parent, SlicedString::cast(*sliced).parent());
   OneByteStringResource* resource =
       new OneByteStringResource(external_one_byte_buf, kLength);

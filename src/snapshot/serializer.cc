@@ -129,7 +129,8 @@ void Serializer::SerializeObject(Handle<HeapObject> obj) {
   // ThinStrings are just an indirection to an internalized string, so elide the
   // indirection and serialize the actual string directly.
   if (obj->IsThinString(isolate())) {
-    obj = handle(ThinString::cast(*obj).actual(isolate()), isolate());
+    obj = handle(ThinString::cast(*obj).actual(isolate(), kAcquireLoad),
+                 isolate());
   } else if (obj->IsCodeT(isolate())) {
     CodeT code = CodeT::cast(*obj);
     if (code.kind() == CodeKind::BASELINE) {

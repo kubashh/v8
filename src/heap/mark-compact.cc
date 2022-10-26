@@ -2841,7 +2841,8 @@ class StringForwardingTableCleaner final {
     if (marking_state_->IsBlack(HeapObject::cast(original))) {
       String original_string = String::cast(original);
       if (original_string.IsThinString()) {
-        original_string = ThinString::cast(original_string).actual();
+        original_string =
+            ThinString::cast(original_string).actual(kAcquireLoad);
       }
       TryExternalize(original_string, record);
       TryInternalize(original_string, record);

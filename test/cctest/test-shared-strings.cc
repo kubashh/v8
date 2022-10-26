@@ -1738,7 +1738,7 @@ void TestConcurrentExternalizationAndInternalization(
     String string = *input_string;
     if (hit_or_miss == kTestHit) {
       CHECK(string.IsThinString());
-      string = ThinString::cast(string).actual();
+      string = ThinString::cast(string).actual(kAcquireLoad);
     }
     int alive_resources = 0;
     for (int t = kInternalizationThreads; t < kTotalThreads; t++) {

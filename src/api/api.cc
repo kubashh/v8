@@ -5876,7 +5876,7 @@ void v8::String::VerifyExternalStringResource(
   const v8::String::ExternalStringResource* expected;
 
   if (str.IsThinString()) {
-    str = i::ThinString::cast(str).actual();
+    str = i::ThinString::cast(str).actual(kAcquireLoad);
   }
 
   if (i::StringShape(str).IsExternalTwoByte()) {
@@ -5906,7 +5906,7 @@ void v8::String::VerifyExternalStringResourceBase(
   Encoding expectedEncoding;
 
   if (str.IsThinString()) {
-    str = i::ThinString::cast(str).actual();
+    str = i::ThinString::cast(str).actual(kAcquireLoad);
   }
 
   if (i::StringShape(str).IsExternalOneByte()) {
@@ -5939,7 +5939,7 @@ String::ExternalStringResource* String::GetExternalStringResourceSlow() const {
   i::String str = *Utils::OpenHandle(this);
 
   if (str.IsThinString()) {
-    str = i::ThinString::cast(str).actual();
+    str = i::ThinString::cast(str).actual(kAcquireLoad);
   }
 
   if (i::StringShape(str).IsExternalTwoByte()) {
@@ -5987,7 +5987,7 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBaseSlow(
   i::String str = *Utils::OpenHandle(this);
 
   if (str.IsThinString()) {
-    str = i::ThinString::cast(str).actual();
+    str = i::ThinString::cast(str).actual(kAcquireLoad);
   }
 
   internal::Address string = str.ptr();
@@ -6022,7 +6022,7 @@ v8::String::GetExternalOneByteStringResource() const {
   if (i::StringShape(str).IsExternalOneByte()) {
     return i::ExternalOneByteString::cast(str).resource();
   } else if (str.IsThinString()) {
-    str = i::ThinString::cast(str).actual();
+    str = i::ThinString::cast(str).actual(kAcquireLoad);
     if (i::StringShape(str).IsExternalOneByte()) {
       return i::ExternalOneByteString::cast(str).resource();
     }
@@ -7112,7 +7112,7 @@ bool v8::String::MakeExternal(v8::String::ExternalStringResource* resource) {
   i::String obj = *Utils::OpenHandle(this);
 
   if (obj.IsThinString()) {
-    obj = i::ThinString::cast(obj).actual();
+    obj = i::ThinString::cast(obj).actual(kAcquireLoad);
   }
 
   if (!obj.SupportsExternalization()) {
@@ -7145,7 +7145,7 @@ bool v8::String::MakeExternal(
   i::String obj = *Utils::OpenHandle(this);
 
   if (obj.IsThinString()) {
-    obj = i::ThinString::cast(obj).actual();
+    obj = i::ThinString::cast(obj).actual(kAcquireLoad);
   }
 
   if (!obj.SupportsExternalization()) {
@@ -7175,7 +7175,7 @@ bool v8::String::CanMakeExternal() const {
   i::String obj = *Utils::OpenHandle(this);
 
   if (obj.IsThinString()) {
-    obj = i::ThinString::cast(obj).actual();
+    obj = i::ThinString::cast(obj).actual(kAcquireLoad);
   }
 
   if (!obj.SupportsExternalization()) {

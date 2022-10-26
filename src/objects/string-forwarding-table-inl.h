@@ -214,7 +214,7 @@ void StringForwardingTable::Record::DisposeUnusedExternalResource(
   String stored_original =
       original_string(GetIsolateFromWritableObject(original));
   if (stored_original.IsThinString()) {
-    stored_original = ThinString::cast(stored_original).actual();
+    stored_original = ThinString::cast(stored_original).actual(kAcquireLoad);
   }
   DCHECK_EQ(original, stored_original);
 #endif

@@ -806,7 +806,7 @@ Address StringTable::TryStringToIndexOrLookupExisting(Isolate* isolate,
     source = ConsString::cast(source).first();
   }
   if (source.IsThinString()) {
-    source = ThinString::cast(source).actual();
+    source = ThinString::cast(source).actual(kAcquireLoad);
     if (string.length() == source.length()) {
       return source.ptr();
     }

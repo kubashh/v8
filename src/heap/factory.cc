@@ -1136,7 +1136,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   }
   if (str->IsThinString()) {
     Handle<ThinString> thin = Handle<ThinString>::cast(str);
-    str = handle(thin->actual(), isolate());
+    str = handle(thin->actual(kAcquireLoad), isolate());
   }
 
   DCHECK(str->IsSeqString() || str->IsExternalString());

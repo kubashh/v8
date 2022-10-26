@@ -721,10 +721,10 @@ template <typename Impl>
 MaybeHandle<String> FactoryBase<Impl>::NewConsString(
     Handle<String> left, Handle<String> right, AllocationType allocation) {
   if (left->IsThinString()) {
-    left = handle(ThinString::cast(*left).actual(), isolate());
+    left = handle(ThinString::cast(*left).actual(kAcquireLoad), isolate());
   }
   if (right->IsThinString()) {
-    right = handle(ThinString::cast(*right).actual(), isolate());
+    right = handle(ThinString::cast(*right).actual(kAcquireLoad), isolate());
   }
   int left_length = left->length();
   if (left_length == 0) return right;

@@ -124,7 +124,7 @@ extern class SlicedString extends String {
 @generateBodyDescriptor
 @doNotGenerateCast
 extern class ThinString extends String {
-  actual: String;
+  @cppAcquireLoad @cppReleaseStore actual: String;
 }
 
 // A direct string can be accessed directly through CSA without going into the
