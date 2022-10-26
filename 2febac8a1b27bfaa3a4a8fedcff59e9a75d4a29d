@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c9d66a3_939052d4",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-10-26T10:43:06Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I find this comment hard to understand. Maybe bullet points or numbered steps would help?",
+      "range": {
+        "startLine": 3926,
+        "startChar": 4,
+        "endLine": 3926,
+        "endChar": 5
+      },
+      "revId": "2febac8a1b27bfaa3a4a8fedcff59e9a75d4a29d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
