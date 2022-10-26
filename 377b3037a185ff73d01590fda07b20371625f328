@@ -223,6 +223,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7f9375c_01081ff4",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-26T10:12:29Z",
+      "side": 1,
+      "message": "I tend to think that initializing the external pointer in ML sounds reasonable. But then it needs to happen before ECL stores it into the object, right? Another option is to do both the initialization and the storing in ML, which is I believe what Aapo is suggesting with the `__ StoreField` call in ECL.\n\nAnd I agree that creating a Handle just to call a builtin might not make sense, since the whole purpose of the fast API is to pass data unhandlified. How about changing the ExternalReference macro to allow passing a Handle as a return value?",
+      "parentUuid": "3f616369_6054a30d",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5

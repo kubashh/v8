@@ -16,6 +16,23 @@
       "message": "Cool, thanks for the explanations. If the sandbox has value to you then lets make it work there as well.",
       "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf3f6ec_8a760eca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-26T10:12:29Z",
+      "side": 1,
+      "message": "Thanks for your active responses, Samuel!\n\nSo we\u0027re gravitating towards properly supporting the sandbox here?",
+      "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
