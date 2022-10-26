@@ -16,6 +16,23 @@
       "message": "This is still waiting on appoval of the design doc sent to v8-dev, but otherwise it seems ready to go",
       "revId": "1bae62f9e8c0ab0f59c43deb63f9c22347301f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54fd4bf6_79bdb18f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2022-10-26T13:37:29Z",
+      "side": 1,
+      "message": "Hi, I\u0027ve had this on my backburner for some time now, might as well sent it out for review and see if there\u0027s any interest in upstreaming it. I submitted a design doc to v8-dev a few weeks ago, https://docs.google.com/document/d/1ii17O_rioObCrxv_5kvy-SxPc7I2R84CsYV3S1wzWY8/edit?usp\u003dsharing -- and note again that it does consistently result in some measurable benefit to startup of a customer application, without clearly demonstrating a regression on jetstream 2",
+      "revId": "1bae62f9e8c0ab0f59c43deb63f9c22347301f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
