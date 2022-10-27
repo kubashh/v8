@@ -45,57 +45,40 @@ namespace {
 // A task to log a set of {WasmCode} objects in an isolate. It does not own any
 // data itself, since it is owned by the platform, so lifetime is not really
 // bound to the wasm engine.
-class LogCodesTask : public Task {
+class LogCodesTask : public CancelableTask {
  public:
-  LogCodesTask(base::Mutex* mutex, LogCodesTask** task_slot, Isolate* isolate,
+  LogCodesTask(base::Mutex* mutex, bool* is_scheduled, Isolate* isolate,
                WasmEngine* engine)
-      : mutex_(mutex),
-        task_slot_(task_slot),
+      : CancelableTask(isolate),
+        mutex_(mutex),
+        is_scheduled_(is_scheduled),
         isolate_(isolate),
         engine_(engine) {
-    DCHECK_NOT_NULL(task_slot);
+    DCHECK_NOT_NULL(is_scheduled);
     DCHECK_NOT_NULL(isolate);
+    *is_scheduled_ = true;
   }
 
-  ~LogCodesTask() override {
-    // If the platform deletes this task before executing it, we also deregister
-    // it to avoid use-after-free from still-running background threads.
-    if (!cancelled()) DeregisterTask();
-  }
-
-  void Run() override {
-    if (cancelled()) return;
+  void RunInternal() override {
     DeregisterTask();
     engine_->LogOutstandingCodesForIsolate(isolate_);
   }
 
-  void Cancel() {
-    // Cancel will only be called on Isolate shutdown, which happens on the
-    // Isolate's foreground thread. Thus no synchronization needed.
-    isolate_ = nullptr;
-  }
-
-  bool cancelled() const { return isolate_ == nullptr; }
-
   void DeregisterTask() {
-    // The task will only be deregistered from the foreground thread (executing
-    // this task or calling its destructor), thus we do not need synchronization
-    // on this field access.
-    if (task_slot_ == nullptr) return;  // already deregistered.
-    // Remove this task from the {IsolateInfo} in the engine. The next
-    // logging request will allocate and schedule a new task.
+    // Deregister this task. The next logging request will allocate and schedule
+    // a new task.
     base::MutexGuard guard(mutex_);
-    DCHECK_EQ(this, *task_slot_);
-    *task_slot_ = nullptr;
-    task_slot_ = nullptr;
+    DCHECK_NE(is_scheduled_, nullptr);
+    DCHECK(*is_scheduled_);
+    *is_scheduled_ = false;
+    is_scheduled_ = nullptr;
   }
 
  private:
   // The mutex of the WasmEngine.
   base::Mutex* const mutex_;
-  // The slot in the WasmEngine where this LogCodesTask is stored. This is
-  // cleared by this task before execution or on task destruction.
-  LogCodesTask** task_slot_;
+  // Flag in WasmEngine if a LogCodesTask already exists.
+  bool* is_scheduled_;
   Isolate* isolate_;
   WasmEngine* const engine_;
 };
@@ -371,7 +354,7 @@ struct WasmEngine::IsolateInfo {
   bool log_codes;
 
   // The currently scheduled LogCodesTask.
-  LogCodesTask* log_codes_task = nullptr;
+  bool has_log_task_scheduled = true;
 
   // Maps script ID to vector of code objects that still need to be logged, and
   // the respective source URL.
@@ -1073,67 +1056,46 @@ void WasmEngine::RemoveIsolate(Isolate* isolate) {
   if (current_gc_info_) {
     if (RemoveIsolateFromCurrentGC(isolate)) PotentiallyFinishCurrentGC();
   }
-  if (auto* task = info->log_codes_task) {
-    task->Cancel();
-    for (auto& log_entry : info->code_to_log) {
-      WasmCode::DecrementRefCount(base::VectorOf(log_entry.second.code));
-    }
-    info->code_to_log.clear();
+
+  for (auto& log_entry : info->code_to_log) {
+    WasmCode::DecrementRefCount(base::VectorOf(log_entry.second.code));
   }
+  info->code_to_log.clear();
   DCHECK(info->code_to_log.empty());
 }
 
 void WasmEngine::LogCode(base::Vector<WasmCode*> code_vec) {
   if (code_vec.empty()) return;
-  using TaskToSchedule =
-      std::pair<std::shared_ptr<v8::TaskRunner>, std::unique_ptr<LogCodesTask>>;
-  std::vector<TaskToSchedule> to_schedule;
-  {
-    base::MutexGuard guard(&mutex_);
-    NativeModule* native_module = code_vec[0]->native_module();
-    DCHECK_EQ(1, native_modules_.count(native_module));
-    for (Isolate* isolate : native_modules_[native_module]->isolates) {
-      DCHECK_EQ(1, isolates_.count(isolate));
-      IsolateInfo* info = isolates_[isolate].get();
-      if (info->log_codes == false) continue;
-      if (info->log_codes_task == nullptr) {
-        auto new_task = std::make_unique<LogCodesTask>(
-            &mutex_, &info->log_codes_task, isolate, this);
-        info->log_codes_task = new_task.get();
-        // Store the LogCodeTasks to post them outside the WasmEngine::mutex_.
-        // Posting the task in the mutex can cause the following deadlock (only
-        // in d8): When d8 shuts down, it sets a terminate to the task runner.
-        // When the terminate flag in the taskrunner is set, all newly posted
-        // tasks get destroyed immediately. When the LogCodesTask gets
-        // destroyed, it takes the WasmEngine::mutex_ lock to deregister itself
-        // from the IsolateInfo. Therefore, as the LogCodesTask may get
-        // destroyed immediately when it gets posted, it cannot get posted when
-        // the WasmEngine::mutex_ lock is held.
-        to_schedule.emplace_back(info->foreground_task_runner,
-                                 std::move(new_task));
-      }
-      if (info->code_to_log.empty()) {
-        isolate->stack_guard()->RequestLogWasmCode();
-      }
-      for (WasmCode* code : code_vec) {
-        DCHECK_EQ(native_module, code->native_module());
-        code->IncRef();
-      }
-
-      auto script_it = info->scripts.find(native_module);
-      // If the script does not yet exist, logging will happen later. If the
-      // weak handle is cleared already, we also don't need to log any more.
-      if (script_it == info->scripts.end()) continue;
-      auto& log_entry = info->code_to_log[script_it->second.script_id()];
-      if (!log_entry.source_url) {
-        log_entry.source_url = script_it->second.source_url();
-      }
-      log_entry.code.insert(log_entry.code.end(), code_vec.begin(),
-                            code_vec.end());
+  base::MutexGuard guard(&mutex_);
+  NativeModule* native_module = code_vec[0]->native_module();
+  DCHECK_EQ(1, native_modules_.count(native_module));
+  for (Isolate* isolate : native_modules_[native_module]->isolates) {
+    DCHECK_EQ(1, isolates_.count(isolate));
+    IsolateInfo* info = isolates_[isolate].get();
+    if (info->log_codes == false) continue;
+    if (!info->has_log_task_scheduled) {
+      auto new_task = std::make_unique<LogCodesTask>(
+          &mutex_, &info->has_log_task_scheduled, isolate, this);
+      info->foreground_task_runner->PostTask(std::move(new_task));
     }
-  }
-  for (auto& [runner, task] : to_schedule) {
-    runner->PostTask(std::move(task));
+    if (info->code_to_log.empty()) {
+      isolate->stack_guard()->RequestLogWasmCode();
+    }
+    for (WasmCode* code : code_vec) {
+      DCHECK_EQ(native_module, code->native_module());
+      code->IncRef();
+    }
+
+    auto script_it = info->scripts.find(native_module);
+    // If the script does not yet exist, logging will happen later. If the
+    // weak handle is cleared already, we also don't need to log any more.
+    if (script_it == info->scripts.end()) continue;
+    auto& log_entry = info->code_to_log[script_it->second.script_id()];
+    if (!log_entry.source_url) {
+      log_entry.source_url = script_it->second.source_url();
+    }
+    log_entry.code.insert(log_entry.code.end(), code_vec.begin(),
+                          code_vec.end());
   }
 }
 
