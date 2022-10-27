@@ -70,6 +70,30 @@
       },
       "revId": "2febac8a1b27bfaa3a4a8fedcff59e9a75d4a29d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06c2a87d_b5695e2f",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-27T08:49:37Z",
+      "side": 1,
+      "message": "Thanks, I removed the comment in code. Could you please further review?",
+      "parentUuid": "d77f28b8_fcbc59ce",
+      "range": {
+        "startLine": 3926,
+        "startChar": 4,
+        "endLine": 3926,
+        "endChar": 5
+      },
+      "revId": "2febac8a1b27bfaa3a4a8fedcff59e9a75d4a29d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
