@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27f04fe1_ef04be39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-10-27T19:08:23Z",
+      "side": 1,
+      "message": "Only skimmed the non-testing parts now. I like the explicit parameters.\n\nI would also use the existing `SkipRoot` mechanism for skipping stack scanning. It seems like we always use the scope right before the `IterateRoots()` call which means we may as well pass a skip option?",
+      "parentUuid": "0a44e508_62b844bd",
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb4ffe1_5f6dd0b6",
         "filename": "src/heap/heap.cc",
         "patchSetId": 21
