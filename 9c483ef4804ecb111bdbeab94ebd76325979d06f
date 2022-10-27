@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a44e508_62b844bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-27T19:02:10Z",
+      "side": 1,
+      "message": "Thought about it a bot more.\nI think using the scope internally in the heap is fine.\nKeeping the explicit parameters is also fine. Alternatively we could get rid of the explicit parameter to Heap GC methods, keep the parameter for testing methods, and establish a scope there as needed.\n\nI think the only thing I would consider is to use the existing SkipRoot mechanism to skip CSS altogether when we know we don\u0027t want it. However, even that will not change any of the semantics imo and probably will be negligible. \n\nI was trying to simplify the how we choose the stack scanning mode, but on second thought maybe it\u0027s not as complicated as I initially thought.",
+      "parentUuid": "94fbf027_b41c8939",
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb4ffe1_5f6dd0b6",
         "filename": "src/heap/heap.cc",
         "patchSetId": 21
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "This could only \"lower\" the CSS mode, so it is correct.\nWhat it does is disabling CSS if it\u0027s not consistent with the `SkipRoot` parameter.",
       "parentUuid": "efb4ffe1_5f6dd0b6",
+      "range": {
+        "startLine": 4631,
+        "startChar": 21,
+        "endLine": 4631,
+        "endChar": 40
+      },
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0daba6a_9e0c31bd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 4631,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-27T19:02:10Z",
+      "side": 1,
+      "message": "Thanks, I missed the min between modes.",
+      "parentUuid": "788900ef_675a3ddb",
       "range": {
         "startLine": 4631,
         "startChar": 21,
