@@ -16,6 +16,161 @@
       "message": "Jakob, could you take a look please?\nWhile the C++ code should be ready, the WAT code does not cover all MVP features yet. I plan on extending it in a separate CL later.",
       "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f31fc31e_f3eec932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "Nice! My comments mostly answer your questions. I\u0027m not so happy with the big literal, see below. WDYT about doing that differently?",
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4cda96_680ba6de",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wasm.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "Well, this isn\u0027t exactly readable...\n\nI can see value in the sort-of roundtrip you\u0027ve built into this design by making sure our disassembler produces output that `wat2wasm` understands. But I think in the long run, being able to edit our tests without relying on external tools is more important than optimizing for easy auto-generation of the initial tests. So I\u0027m inclined to prefer `wami --full-hexdump` over `xxd`, to make this more human-editable. My guess why you haven\u0027t done that yet is that wami adds `[...]` around everything. I\u0027d probably just manually copy-paste the body of the literal right into the array definition in the .cc file. Alternatively we could also add a flag to wami that either skips the `[]` or uses `{}` instead, but I\u0027m not sure that\u0027s worth it, as we don\u0027t really need this to be a standalone .inc file.",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "068a5585_4b89dfdc",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "Yes. It\u0027s shorter, and it follows wasmparser behavior (https://github.com/wasdk/wasmparser).",
+      "range": {
+        "startLine": 5,
+        "startChar": 22,
+        "endLine": 5,
+        "endChar": 52
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17535e2_e0225f2f",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "Yes, same as imports.",
+      "range": {
+        "startLine": 9,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d32cca5_367a0285",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "The current behavior is good: if we have a name for the global (from imports, exports, or name section), add the index. If we don\u0027t have a name and generate `global{index}` as automatic name, there\u0027s no point in repeating the index. If you exported `global3` as `globalfoo`, the resulting behavior would be less confusing :-)\nAnd if the module had a name section, you could create the situation \n`(global $foo (;3;) (export \"bar\") ...)`.",
+      "range": {
+        "startLine": 10,
+        "startChar": 22,
+        "endLine": 10,
+        "endChar": 74
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16741113_932c5b72",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "The binary format provides no hints for making this decision, so printing all constants as signed is the best we can do.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 73
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95fd3325_1d7c5668",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-10-27T15:04:45Z",
+      "side": 1,
+      "message": "Cute :-)\nAnd `#include` is a nice solution to the path resolution problem.",
+      "range": {
+        "startLine": 54,
+        "startChar": 5,
+        "endLine": 54,
+        "endChar": 54
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
