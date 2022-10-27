@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df877b0a_62668dc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-27T09:22:15Z",
+      "side": 1,
+      "message": "I like that we stash the stack scanning mode in the heap instead of passing it to the individual collectors.\nHowever I think the combination of scopes, arguments and SkipRoots is getting confusing.\n\nUsing the scope withing heap methods seems odd to me. I would leave the scope for uses external to the heap and internally we can just update the stack scanning mode directly.\nI would also use the SkipRoots set that we already have everywhere instead of wrapping calls to IterateRoots* method with a scope (and then IterateStackConservatively can assume that scan mode is not kNone).\n\nI\u0027m also concerned that the internal uses of the scope can create bugs where we accidentally override a previous scope.\n\nWill the explicit argument to the CollectGarbage methods stick around? If it is then I think we can drop the default stack scanning mode. We can set the stack scan mode when we start the GC and use the scopes only for setting an override.",
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb4ffe1_5f6dd0b6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 4631,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-10-27T09:22:15Z",
+      "side": 1,
+      "message": "If I have a scope outside of IterateRoots, this one will override it. I\u0027m not sure that\u0027s the correct behavior we want (same below for the other IterateRoots* methods).",
+      "range": {
+        "startLine": 4631,
+        "startChar": 21,
+        "endLine": 4631,
+        "endChar": 40
+      },
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
