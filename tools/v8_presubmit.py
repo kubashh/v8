@@ -31,6 +31,7 @@ import hashlib
 md5er = hashlib.md5
 
 
+import contextlib
 import json
 import multiprocessing
 import optparse
@@ -41,6 +42,7 @@ import re
 import subprocess
 from subprocess import PIPE
 import sys
+import time
 
 from testrunner.local import statusfile
 from testrunner.local import testsuite
@@ -82,10 +84,20 @@ DEPS_DEPOT_TOOLS_PATH = abspath(
     join(TOOLS_PATH, '..', 'third_party', 'depot_tools'))
 
 
+@contextlib.contextmanager
+def log_slow(name):
+  start = time.time()
+  yield
+  duration = time.time() - start
+  if duration > 60:
+    print(f'Processing {name} took {duration} seconds.')
+
+
 def CppLintWorker(command):
   try:
     process = subprocess.Popen(command, stderr=subprocess.PIPE)
-    process.wait()
+    with log_slow(command[-1]):
+      process.wait()
     out_lines = ""
     error_count = -1
     while True:
@@ -337,7 +349,7 @@ class CacheableSourceFileProcessor(SourceFileProcessor):
     count = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(count)
     try:
-      results = pool.map_async(worker, commands).get(timeout=240)
+      results = pool.map_async(worker, commands).get(timeout=300)
     except KeyboardInterrupt:
       print("\nCaught KeyboardInterrupt, terminating workers.")
       pool.terminate()
