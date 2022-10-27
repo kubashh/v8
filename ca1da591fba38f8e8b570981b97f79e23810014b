@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac30294_805f96e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-27T08:36:28Z",
+      "side": 1,
+      "message": "@ahaas@chromium.org @clemensb@chromium.org: This is the CL about using a `CancelableTask` for `LogCodesTask`. See my unresolved comment, I\u0027m not convinced that this CL would preserve the behavior but I\u0027m happy to discuss.",
+      "revId": "ca1da591fba38f8e8b570981b97f79e23810014b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bccf5fd_353a806f",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-10-27T08:36:28Z",
+      "side": 1,
+      "message": "This changes the following behaviors:\n1) If the Isolate gets removed in `RemoveIsolate`, we don\u0027t cancel this task? How do we prevent the possibility of the `IsolateInfo` to be destroyed and therefore the `DeregisterTask()` to access invalid memory?\n2) if the `LogCodesTask` would be canceled (how can that happen?), we don\u0027t flip the `has_log_task_scheduled` flag. So in that case the `WasmEngine` would still assume that there is a `LogCodesTask` scheduled even though it isn\u0027t.\n3) It is assumed that the `LogCodesTask` and `RemoveIsolate` are only happening on the JS main thread. Is this guaranteed? Otherwise we\u0027d need some synchronization when accessing the flag. As `Isolate::Deinit` gets called indirectly from `Shell::OnExit` which I assume wouldn\u0027t run on the JS main thread, I don\u0027t think, we are safe without synchronization.",
+      "revId": "ca1da591fba38f8e8b570981b97f79e23810014b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
