@@ -6233,9 +6233,8 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
   if (!page->InYoungGeneration()) {
     // Shared GCs will invoke this method on objects in the shared heap for
     // string forwarding.
-    DCHECK(
-        page->owner_identity() == OLD_SPACE ||
-        (page->owner_identity() == SHARED_SPACE && gc_state() == MARK_COMPACT));
+    DCHECK(page->owner_identity() == OLD_SPACE ||
+           page->owner_identity() == SHARED_SPACE);
 
     if (!page->SweepingDone()) {
       RememberedSet<OLD_TO_NEW>::RemoveRange(page, start, end,
