@@ -22,6 +22,30 @@
       },
       "revId": "2febac8a1b27bfaa3a4a8fedcff59e9a75d4a29d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72dbfa38_49723ba6",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-10-27T07:49:57Z",
+      "side": 1,
+      "message": "Sorry for the not clear comment!\nHere is just one step of turbofan compilation job, should I explain all steps here? I’m concerning someone change other steps without modify comment here.\nWhat do you think of not adding comment and explain the numbered steps in git commit log?",
+      "parentUuid": "8c9d66a3_939052d4",
+      "range": {
+        "startLine": 3926,
+        "startChar": 4,
+        "endLine": 3926,
+        "endChar": 5
+      },
+      "revId": "2febac8a1b27bfaa3a4a8fedcff59e9a75d4a29d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
