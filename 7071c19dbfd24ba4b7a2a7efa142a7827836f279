@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddcd87de_61bcbbc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-27T13:30:53Z",
+      "side": 1,
+      "message": "LGTM with nit",
+      "revId": "7071c19dbfd24ba4b7a2a7efa142a7827836f279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "911e478b_f6f89cbd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6235,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-10-27T13:30:53Z",
+      "side": 1,
+      "message": "nit: I don\u0027t think this comment is correct. Internalization doesn\u0027t clear any recorded slots (Internalization doesn\u0027t change layout or size). Is this just a typo and you meant externalization?",
+      "range": {
+        "startLine": 6235,
+        "startChar": 7,
+        "endLine": 6235,
+        "endChar": 26
+      },
+      "revId": "7071c19dbfd24ba4b7a2a7efa142a7827836f279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
