@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6521a6a_c322f204",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-27T11:58:39Z",
+      "side": 1,
+      "message": "How about `MachineOptimiaztionReducerSignallingNanPossible` and `MachineOptimiaztionReducerSignallingNanImpossible`",
+      "range": {
+        "startLine": 35,
+        "startChar": 6,
+        "endLine": 35,
+        "endChar": 41
+      },
+      "revId": "f66cd25b11dd233530abfa4b780ff4eb7d659816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
