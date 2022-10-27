@@ -16,6 +16,23 @@
       "message": "ptal, copy/paste error... \n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/3984605/1..2",
       "revId": "355e4f62e70a7ded647b2352e34ff0b7b595880f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6b2c1c7_bf1a3fd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-10-27T07:40:40Z",
+      "side": 1,
+      "message": "Great catch! LGTM",
+      "revId": "355e4f62e70a7ded647b2352e34ff0b7b595880f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
