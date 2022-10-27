@@ -379,6 +379,8 @@ void ScavengerCollector::CollectGarbage() {
       if (V8_UNLIKELY(v8_flags.scavenge_separate_stack_scanning)) {
         options.Add(SkipRoot::kStack);
       }
+      ScanStackModeScope stack_scanning_scope(heap_,
+                                              Heap::ScanStackMode::kNone);
       heap_->IterateRoots(&root_scavenge_visitor, options);
       isolate_->global_handles()->IterateYoungStrongAndDependentRoots(
           &root_scavenge_visitor);
@@ -504,7 +506,6 @@ void ScavengerCollector::CollectGarbage() {
 }
 
 void ScavengerCollector::IterateStackAndScavenge(
-
     RootScavengeVisitor* root_scavenge_visitor,
     std::vector<std::unique_ptr<Scavenger>>* scavengers, int main_thread_id) {
   // Scan the stack, scavenge the newly discovered objects, and report

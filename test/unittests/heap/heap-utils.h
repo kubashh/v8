@@ -33,19 +33,23 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
   WithHeapInternals& operator=(const WithHeapInternals&) = delete;
 
   void CollectGarbage(i::AllocationSpace space) {
-    heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting);
+    heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting,
+                           kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   void FullGC() {
-    heap()->CollectGarbage(OLD_SPACE, i::GarbageCollectionReason::kTesting);
+    heap()->CollectGarbage(OLD_SPACE, i::GarbageCollectionReason::kTesting,
+                           kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   void YoungGC() {
-    heap()->CollectGarbage(NEW_SPACE, i::GarbageCollectionReason::kTesting);
+    heap()->CollectGarbage(NEW_SPACE, i::GarbageCollectionReason::kTesting,
+                           kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   void CollectAllAvailableGarbage() {
-    heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting);
+    heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting,
+                                       i::Heap::ScanStackMode::kNone);
   }
 
   Heap* heap() const { return this->i_isolate()->heap(); }
@@ -87,7 +91,8 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
   }
 
   void GcAndSweep(i::AllocationSpace space) {
-    heap()->CollectGarbage(space, GarbageCollectionReason::kTesting);
+    heap()->CollectGarbage(space, GarbageCollectionReason::kTesting,
+                           kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
     if (heap()->sweeping_in_progress()) {
       IsolateSafepointScope scope(heap());
       heap()->EnsureSweepingCompleted(
@@ -130,17 +135,20 @@ using TestWithHeapInternalsAndContext =  //
 
 inline void CollectGarbage(i::AllocationSpace space, v8::Isolate* isolate) {
   reinterpret_cast<i::Isolate*>(isolate)->heap()->CollectGarbage(
-      space, i::GarbageCollectionReason::kTesting);
+      space, i::GarbageCollectionReason::kTesting, kNoGCCallbackFlags,
+      i::Heap::ScanStackMode::kNone);
 }
 
 inline void FullGC(v8::Isolate* isolate) {
   reinterpret_cast<i::Isolate*>(isolate)->heap()->CollectAllGarbage(
-      i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting);
+      i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting,
+      kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
 }
 
 inline void YoungGC(v8::Isolate* isolate) {
   reinterpret_cast<i::Isolate*>(isolate)->heap()->CollectGarbage(
-      i::NEW_SPACE, i::GarbageCollectionReason::kTesting);
+      i::NEW_SPACE, i::GarbageCollectionReason::kTesting, kNoGCCallbackFlags,
+      i::Heap::ScanStackMode::kNone);
 }
 
 template <typename GlobalOrPersistent>

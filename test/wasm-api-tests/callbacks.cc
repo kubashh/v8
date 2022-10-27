@@ -32,7 +32,7 @@ own<Trap> Stage4_GC(void* env, const Val args[], Val results[]) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(env);
   isolate->heap()->PreciseCollectAllGarbage(
       i::Heap::kForcedGC, i::GarbageCollectionReason::kTesting,
-      v8::kNoGCCallbackFlags);
+      v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   results[0] = Val::i32(args[0].i32() + 1);
   return nullptr;
 }

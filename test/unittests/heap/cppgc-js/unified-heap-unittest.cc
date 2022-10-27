@@ -359,8 +359,10 @@ class InConstructionObjectReferringToGlobalHandle final
   InConstructionObjectReferringToGlobalHandle(Heap* heap,
                                               v8::Local<v8::Object> wrapper)
       : wrapper_(reinterpret_cast<v8::Isolate*>(heap->isolate()), wrapper) {
-    heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
-    heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
+    heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting,
+                         kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
+    heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting,
+                         kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   void Trace(cppgc::Visitor* visitor) const { visitor->Trace(wrapper_); }
