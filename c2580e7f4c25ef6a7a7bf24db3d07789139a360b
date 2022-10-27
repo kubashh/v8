@@ -33,6 +33,24 @@
       "message": "Worth also testing a non-throwing case?",
       "revId": "c2580e7f4c25ef6a7a7bf24db3d07789139a360b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb9f9f1_5b89538f",
+        "filename": "test/mjsunit/regress/regress-crbug-1377840.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-10-27T07:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5208e89d_7bc4e850",
+      "revId": "c2580e7f4c25ef6a7a7bf24db3d07789139a360b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
