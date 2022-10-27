@@ -39,10 +39,10 @@ TEST_F(WasmCapiTest, Serialize) {
       reinterpret_cast<::wasm::StoreImpl*>(store())->i_isolate();
   isolate->heap()->PreciseCollectAllGarbage(
       i::Heap::kForcedGC, i::GarbageCollectionReason::kTesting,
-      v8::kNoGCCallbackFlags);
+      v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   isolate->heap()->PreciseCollectAllGarbage(
       i::Heap::kForcedGC, i::GarbageCollectionReason::kTesting,
-      v8::kNoGCCallbackFlags);
+      v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   own<Module> deserialized = Module::deserialize(store(), serialized);
 
   // Try to serialize the module again. This can fail if deserialization does

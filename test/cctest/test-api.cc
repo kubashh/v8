@@ -752,8 +752,9 @@ TEST(MakingExternalUnalignedOneByteString) {
 
   // Trigger GCs and force evacuation.
   CcTest::CollectAllGarbage();
-  CcTest::heap()->CollectAllGarbage(i::Heap::kReduceMemoryFootprintMask,
-                                    i::GarbageCollectionReason::kTesting);
+  CcTest::heap()->CollectAllGarbage(
+      i::Heap::kReduceMemoryFootprintMask, i::GarbageCollectionReason::kTesting,
+      v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
 }
 
 THREADED_TEST(UsingExternalString) {
@@ -21027,7 +21028,8 @@ class RegExpInterruptTest {
   static void CollectAllGarbage(v8::Isolate* isolate, void* data) {
     i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
     i_isolate->heap()->PreciseCollectAllGarbage(
-        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kRuntime);
+        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kRuntime,
+        v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   }
 
   static void MakeSubjectOneByteExternal(v8::Isolate* isolate, void* data) {
@@ -27448,7 +27450,7 @@ static void CallIsolate2(const v8::FunctionCallbackInfo<v8::Value>& args) {
   v8::Context::Scope context_scope(context);
   reinterpret_cast<i::Isolate*>(isolate_2)->heap()->CollectAllGarbage(
       i::Heap::kForcedGC, i::GarbageCollectionReason::kTesting,
-      v8::kNoGCCallbackFlags);
+      v8::kNoGCCallbackFlags, i::Heap::ScanStackMode::kNone);
   CompileRun("f2() //# sourceURL=isolate2b");
 }
 

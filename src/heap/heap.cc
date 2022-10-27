@@ -115,6 +115,11 @@
 #include "src/tracing/trace-event.h"
 #include "src/utils/utils-inl.h"
 #include "src/utils/utils.h"
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
 
@@ -1388,12 +1393,13 @@ void Heap::StartMinorMCIncrementalMarkingIfNeeded() {
 }
 
 void Heap::CollectAllGarbage(int flags, GarbageCollectionReason gc_reason,
-                             const v8::GCCallbackFlags gc_callback_flags) {
+                             const v8::GCCallbackFlags gc_callback_flags,
+                             ScanStackMode mode) {
   // Since we are ignoring the return value, the exact choice of space does
   // not matter, so long as we do not specify NEW_SPACE, which would not
   // cause a full GC.
   set_current_gc_flags(flags);
-  CollectGarbage(OLD_SPACE, gc_reason, gc_callback_flags);
+  CollectGarbage(OLD_SPACE, gc_reason, gc_callback_flags, mode);
   set_current_gc_flags(kNoGCFlags);
 }
 
@@ -1457,7 +1463,8 @@ void ReportDuplicates(int size, std::vector<HeapObject>* objects) {
 }
 }  // anonymous namespace
 
-void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
+void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason,
+                                      ScanStackMode mode) {
   // Since we are ignoring the return value, the exact choice of space does
   // not matter, so long as we do not specify NEW_SPACE, which would not
   // cause a full GC.
@@ -1485,7 +1492,7 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
   const int kMaxNumberOfAttempts = 7;
   const int kMinNumberOfAttempts = 2;
   for (int attempt = 0; attempt < kMaxNumberOfAttempts; attempt++) {
-    if (!CollectGarbage(OLD_SPACE, gc_reason, kNoGCCallbackFlags) &&
+    if (!CollectGarbage(OLD_SPACE, gc_reason, kNoGCCallbackFlags, mode) &&
         attempt + 1 >= kMinNumberOfAttempts) {
       break;
     }
@@ -1519,11 +1526,12 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
 
 void Heap::PreciseCollectAllGarbage(int flags,
                                     GarbageCollectionReason gc_reason,
-                                    const GCCallbackFlags gc_callback_flags) {
+                                    const GCCallbackFlags gc_callback_flags,
+                                    ScanStackMode mode) {
   if (!incremental_marking()->IsStopped()) {
     FinalizeIncrementalMarkingAtomically(gc_reason);
   }
-  CollectAllGarbage(flags, gc_reason, gc_callback_flags);
+  CollectAllGarbage(flags, gc_reason, gc_callback_flags, mode);
 }
 
 void Heap::ReportExternalMemoryPressure() {
@@ -1581,7 +1589,8 @@ Heap::DevToolsTraceEventScope::~DevToolsTraceEventScope() {
 
 bool Heap::CollectGarbage(AllocationSpace space,
                           GarbageCollectionReason gc_reason,
-                          const v8::GCCallbackFlags gc_callback_flags) {
+                          const v8::GCCallbackFlags gc_callback_flags,
+                          ScanStackMode mode) {
   if (V8_UNLIKELY(!deserialization_complete_)) {
     // During isolate initialization heap always grows. GC is only requested
     // if a new page allocation fails. In such a case we should crash with
@@ -1590,6 +1599,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     CHECK(always_allocate());
     FatalProcessOutOfMemory("GC during deserialization");
   }
+
+  ScanStackModeScope stack_scanning_scope(this, mode);
 
   // CollectGarbage consists of three parts:
   // 1. The prologue part which may execute callbacks. These callbacks may
@@ -1689,8 +1700,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
       if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
         tp_heap_->CollectGarbage();
       } else {
-        freed_global_handles += PerformGarbageCollection(
-            collector, gc_reason, collector_reason, gc_callback_flags);
+        freed_global_handles +=
+            PerformGarbageCollection(collector, gc_reason, collector_reason);
       }
       // Clear flags describing the current GC now that the current GC is
       // complete. Do this before GarbageCollectionEpilogue() since that could
@@ -2118,9 +2129,9 @@ GCTracer::Scope::ScopeId CollectorScopeId(GarbageCollector collector) {
 }
 }  // namespace
 
-size_t Heap::PerformGarbageCollection(
-    GarbageCollector collector, GarbageCollectionReason gc_reason,
-    const char* collector_reason, const v8::GCCallbackFlags gc_callback_flags) {
+size_t Heap::PerformGarbageCollection(GarbageCollector collector,
+                                      GarbageCollectionReason gc_reason,
+                                      const char* collector_reason) {
   DisallowJavascriptExecution no_js(isolate());
 
   if (IsYoungGenerationCollector(collector)) {
@@ -2287,19 +2298,21 @@ size_t Heap::PerformGarbageCollection(
 }
 
 bool Heap::CollectGarbageShared(LocalHeap* local_heap,
-                                GarbageCollectionReason gc_reason) {
+                                GarbageCollectionReason gc_reason,
+                                ScanStackMode mode) {
   CHECK(deserialization_complete());
   DCHECK(isolate()->has_shared_heap());
 
   if (v8_flags.shared_space) {
     Isolate* shared_space_isolate = isolate()->shared_space_isolate();
-    return shared_space_isolate->heap()->CollectGarbageFromAnyThread(local_heap,
-                                                                     gc_reason);
-
+    return shared_space_isolate->heap()->CollectGarbageFromAnyThread(
+        local_heap, gc_reason, mode);
   } else {
     DCHECK(!IsShared());
     DCHECK_NOT_NULL(isolate()->shared_isolate());
 
+    ScanStackModeScope stack_scanning_scope(isolate()->shared_isolate()->heap(),
+                                            mode);
     isolate()->shared_isolate()->heap()->PerformSharedGarbageCollection(
         isolate(), gc_reason);
     return true;
@@ -2307,12 +2320,14 @@ bool Heap::CollectGarbageShared(LocalHeap* local_heap,
 }
 
 bool Heap::CollectGarbageFromAnyThread(LocalHeap* local_heap,
-                                       GarbageCollectionReason gc_reason) {
+                                       GarbageCollectionReason gc_reason,
+                                       ScanStackMode mode) {
   DCHECK(local_heap->IsRunning());
 
   if (isolate() == local_heap->heap()->isolate() &&
       local_heap->is_main_thread()) {
-    CollectAllGarbage(current_gc_flags_, gc_reason, current_gc_callback_flags_);
+    CollectAllGarbage(current_gc_flags_, gc_reason, current_gc_callback_flags_,
+                      mode);
     return true;
   } else {
     if (!collection_barrier_->TryRequestGC()) return false;
@@ -3440,6 +3455,8 @@ FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
 
     LeftTrimmerVerifierRootVisitor root_visitor(object);
     ReadOnlyRoots(this).Iterate(&root_visitor);
+
+    ScanStackModeScope stack_scanning_scope(this, ScanStackMode::kNone);
     IterateRoots(&root_visitor, {});
   }
 #endif  // ENABLE_SLOW_DCHECKS
@@ -4632,6 +4649,12 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
     v->Synchronize(VisitorSynchronization::kBuiltins);
   }
 
+  ScanStackModeScope stack_scanning_mode(
+      this, options.contains(SkipRoot::kUnserializable) ||
+                    options.contains(SkipRoot::kStack)
+                ? Heap::ScanStackMode::kNone
+                : Heap::ScanStackMode::kComplete);
+
   // Iterate over pointers being held by inactive threads.
   isolate_->thread_manager()->Iterate(v);
   v->Synchronize(VisitorSynchronization::kThreadManager);
@@ -4801,6 +4824,12 @@ void Heap::IterateRootsIncludingClients(RootVisitor* v,
     ClientRootVisitor client_root_visitor(v);
     isolate()->global_safepoint()->IterateClientIsolates(
         [v = &client_root_visitor, options](Isolate* client) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+          // TODO(v8:13257): We cannot run CSS on client isolates now, as the
+          // stack markers will not be correct.
+          ScanStackModeScope stack_scanning_scope(client->heap(),
+                                                  ScanStackMode::kNone);
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
           client->heap()->IterateRoots(v, options);
         });
   }
@@ -4808,10 +4837,17 @@ void Heap::IterateRootsIncludingClients(RootVisitor* v,
 
 void Heap::IterateRootsFromStackIncludingClient(RootVisitor* v) {
   IterateStackRoots(v);
+
   if (isolate()->is_shared_heap_isolate()) {
     ClientRootVisitor client_root_visitor(v);
     isolate()->global_safepoint()->IterateClientIsolates(
         [v = &client_root_visitor](Isolate* client) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+          // TODO(v8:13257): We cannot run CSS on client isolates now, as the
+          // stack markers will not be correct.
+          ScanStackModeScope stack_scanning_scope(client->heap(),
+                                                  ScanStackMode::kNone);
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
           client->heap()->IterateStackRoots(v);
         });
   }
@@ -4841,6 +4877,26 @@ void Heap::IterateBuiltins(RootVisitor* v) {
 }
 
 void Heap::IterateStackRoots(RootVisitor* v) { isolate_->Iterate(v); }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+void Heap::IterateStackConservatively(RootVisitor* v) {
+  switch (scan_stack_mode_) {
+    case ScanStackMode::kNone:
+      break;
+    case ScanStackMode::kComplete: {
+      ConservativeStackVisitor stack_visitor(isolate(), v);
+      stack().IteratePointers(&stack_visitor);
+      break;
+    }
+    case ScanStackMode::kFromMarker: {
+      ConservativeStackVisitor stack_visitor(isolate(), v);
+      stack().IteratePointersUnsafe(
+          &stack_visitor, reinterpret_cast<intptr_t>(stack().get_marker()));
+      break;
+    }
+  }
+}
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
 namespace {
 size_t GlobalMemorySizeFromV8Size(size_t v8_size) {
