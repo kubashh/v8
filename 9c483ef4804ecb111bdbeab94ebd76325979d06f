@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94fbf027_b41c8939",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-10-27T11:52:00Z",
+      "side": 1,
+      "message": "We discussed about this offline. I\u0027m leaving it as unresolved, to discuss it again with Michael and decide on the balance between scopes and explicit parameters.",
+      "parentUuid": "df877b0a_62668dc5",
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb4ffe1_5f6dd0b6",
         "filename": "src/heap/heap.cc",
         "patchSetId": 21
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-27T09:22:15Z",
       "side": 1,
       "message": "If I have a scope outside of IterateRoots, this one will override it. I\u0027m not sure that\u0027s the correct behavior we want (same below for the other IterateRoots* methods).",
+      "range": {
+        "startLine": 4631,
+        "startChar": 21,
+        "endLine": 4631,
+        "endChar": 40
+      },
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "788900ef_675a3ddb",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 4631,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-10-27T11:52:00Z",
+      "side": 1,
+      "message": "This could only \"lower\" the CSS mode, so it is correct.\nWhat it does is disabling CSS if it\u0027s not consistent with the `SkipRoot` parameter.",
+      "parentUuid": "efb4ffe1_5f6dd0b6",
       "range": {
         "startLine": 4631,
         "startChar": 21,
