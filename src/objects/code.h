@@ -1016,11 +1016,10 @@ class Code::OptimizedCodeIterator {
 inline CodeT ToCodeT(Code code);
 inline Handle<CodeT> ToCodeT(Handle<Code> code, Isolate* isolate);
 inline Code FromCodeT(CodeT code);
-inline Code FromCodeT(CodeT code, RelaxedLoadTag);
-inline Code FromCodeT(CodeT code, AcquireLoadTag);
+inline Code FromCodeT(CodeT code, Isolate* isolate);
 inline Code FromCodeT(CodeT code, PtrComprCageBase);
+inline Code FromCodeT(CodeT code, Isolate* isolate, RelaxedLoadTag);
 inline Code FromCodeT(CodeT code, PtrComprCageBase, RelaxedLoadTag);
-inline Code FromCodeT(CodeT code, PtrComprCageBase, AcquireLoadTag);
 inline Handle<Code> FromCodeT(Handle<CodeT> code, Isolate* isolate);
 inline AbstractCode ToAbstractCode(CodeT code);
 inline Handle<AbstractCode> ToAbstractCode(Handle<CodeT> code,
