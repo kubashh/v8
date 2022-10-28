@@ -556,6 +556,7 @@ KNOWN_OBJECTS = {
   ("old_space", 0x045a1): "StringSplitCache",
   ("old_space", 0x049a9): "RegExpMultipleCache",
   ("old_space", 0x04db1): "BuiltinsConstantsTable",
+<<<<<<< HEAD   (1544f1 Version 10.8.168.13)
   ("old_space", 0x0520d): "AsyncFunctionAwaitRejectSharedFun",
   ("old_space", 0x05231): "AsyncFunctionAwaitResolveSharedFun",
   ("old_space", 0x05255): "AsyncGeneratorAwaitRejectSharedFun",
@@ -580,6 +581,32 @@ KNOWN_OBJECTS = {
   ("old_space", 0x05501): "ShadowRealmImportValueFulfilledSFI",
   ("old_space", 0x05525): "SourceTextModuleExecuteAsyncModuleFulfilledSFI",
   ("old_space", 0x05549): "SourceTextModuleExecuteAsyncModuleRejectedSFI",
+=======
+  ("old_space", 0x05215): "AsyncFunctionAwaitRejectSharedFun",
+  ("old_space", 0x05239): "AsyncFunctionAwaitResolveSharedFun",
+  ("old_space", 0x0525d): "AsyncGeneratorAwaitRejectSharedFun",
+  ("old_space", 0x05281): "AsyncGeneratorAwaitResolveSharedFun",
+  ("old_space", 0x052a5): "AsyncGeneratorYieldWithAwaitResolveSharedFun",
+  ("old_space", 0x052c9): "AsyncGeneratorReturnResolveSharedFun",
+  ("old_space", 0x052ed): "AsyncGeneratorReturnClosedRejectSharedFun",
+  ("old_space", 0x05311): "AsyncGeneratorReturnClosedResolveSharedFun",
+  ("old_space", 0x05335): "AsyncIteratorValueUnwrapSharedFun",
+  ("old_space", 0x05359): "PromiseAllResolveElementSharedFun",
+  ("old_space", 0x0537d): "PromiseAllSettledResolveElementSharedFun",
+  ("old_space", 0x053a1): "PromiseAllSettledRejectElementSharedFun",
+  ("old_space", 0x053c5): "PromiseAnyRejectElementSharedFun",
+  ("old_space", 0x053e9): "PromiseCapabilityDefaultRejectSharedFun",
+  ("old_space", 0x0540d): "PromiseCapabilityDefaultResolveSharedFun",
+  ("old_space", 0x05431): "PromiseCatchFinallySharedFun",
+  ("old_space", 0x05455): "PromiseGetCapabilitiesExecutorSharedFun",
+  ("old_space", 0x05479): "PromiseThenFinallySharedFun",
+  ("old_space", 0x0549d): "PromiseThrowerFinallySharedFun",
+  ("old_space", 0x054c1): "PromiseValueThunkFinallySharedFun",
+  ("old_space", 0x054e5): "ProxyRevokeSharedFun",
+  ("old_space", 0x05509): "ShadowRealmImportValueFulfilledSFI",
+  ("old_space", 0x0552d): "SourceTextModuleExecuteAsyncModuleFulfilledSFI",
+  ("old_space", 0x05551): "SourceTextModuleExecuteAsyncModuleRejectedSFI",
+>>>>>>> CHANGE (8b3509 Reland "[Promise.any] Fix errors allocation")
 }
 
 # Lower 32 bits of first page addresses for various heap spaces.
