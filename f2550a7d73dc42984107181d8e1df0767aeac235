@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c32684b_2e437ba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-10-28T07:46:11Z",
+      "side": 1,
+      "message": "Hey Milad, I don\u0027t think that\u0027s the way we want to fix this.\nWhen relanding my original CL I was already thinking about that problem and came to the conclusion that with every C++14 compiler this should work because the V8_Fatal function inside UNREACHABLE should never be called in a constexpr context, so this should be okay.\n\nI was wondering what compiler you are using that this doesn\u0027t work. I checked a few gcc versions on godbolt.org but it did indeed work with every single one.\nCan you please share some details? Thanks",
+      "revId": "f2550a7d73dc42984107181d8e1df0767aeac235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
