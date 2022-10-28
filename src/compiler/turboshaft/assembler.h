@@ -10,6 +10,7 @@
 #include <limits>
 #include <memory>
 #include <type_traits>
+#include <unordered_set>
 
 #include "src/base/logging.h"
 #include "src/base/macros.h"
@@ -23,9 +24,6 @@
 #include "src/compiler/turboshaft/representations.h"
 
 namespace v8::internal::compiler::turboshaft {
-
-// Forward declarations
-struct OptimizationPhaseState;
 
 template <class Assembler, template <class> class... Reducers>
 class ReducerStack {};
@@ -811,33 +809,38 @@ template <template <class> class... Reducers>
 class Assembler
     : public ReducerStack<Assembler<Reducers...>, Reducers..., ReducerBase>,
       public OperationMatching<Assembler<Reducers...>>,
+      public GraphVisitor<Assembler<Reducers...>>,
       public AssemblerOpInterface<Assembler<Reducers...>> {
   using Stack = ReducerStack<Assembler<Reducers...>, Reducers...,
                              v8::internal::compiler::turboshaft::ReducerBase>;
 
  public:
-  explicit Assembler(Graph* graph, Zone* phase_zone,
+  explicit Assembler(Graph& input_graph, Graph& output_graph, Zone* phase_zone,
                      compiler::NodeOriginTable* origins = nullptr)
-      : Stack(graph, phase_zone), graph_(*graph), phase_zone_(phase_zone) {
-    graph_.Reset();
+      : Stack(input_graph, output_graph, phase_zone),
+        GraphVisitor<Assembler>(input_graph, output_graph, phase_zone, origins),
+        input_graph_(input_graph),
+        output_graph_(output_graph),
+        phase_zone_(phase_zone) {
+    output_graph_.Reset();
     SupportedOperations::Initialize();
   }
 
-  Block* NewBlock(Block::Kind kind) { return graph_.NewBlock(kind); }
+  Block* NewBlock(Block::Kind kind) { return output_graph_.NewBlock(kind); }
 
   using OperationMatching<Assembler<Reducers...>>::Get;
 
   V8_INLINE V8_WARN_UNUSED_RESULT bool Bind(Block* block,
                                             const Block* origin = nullptr) {
-    if (!graph().Add(block)) return false;
+    if (!output_graph().Add(block)) return false;
     DCHECK_NULL(current_block_);
     current_block_ = block;
     Stack::Bind(block, origin);
     return true;
   }
 
-  V8_INLINE void BindReachable(Block* block) {
-    bool bound = Bind(block);
+  V8_INLINE void BindReachable(Block* block, const Block* origin = nullptr) {
+    bool bound = Bind(block, origin);
     DCHECK(bound);
     USE(bound);
   }
@@ -847,8 +850,10 @@ class Assembler
   }
 
   Block* current_block() const { return current_block_; }
-  Zone* graph_zone() const { return graph().graph_zone(); }
-  Graph& graph() const { return graph_; }
+  Zone* graph_zone() const { return input_graph().graph_zone(); }
+  Graph& input_graph() const { return input_graph_; }
+  Graph& output_graph() const { return output_graph_; }
+  OpIndex current_operation_origin() const { return current_operation_origin_; }
   Zone* phase_zone() { return phase_zone_; }
 
   template <class Op, class... Args>
@@ -856,21 +861,24 @@ class Assembler
     static_assert((std::is_base_of<Operation, Op>::value));
     static_assert(!(std::is_same<Op, Operation>::value));
     DCHECK_NOT_NULL(current_block_);
-    OpIndex result = graph().next_operation_index();
-    Op& op = graph().template Add<Op>(args...);
-    graph().operation_origins()[result] = current_operation_origin_;
+    OpIndex result = output_graph().next_operation_index();
+    Op& op = output_graph().template Add<Op>(args...);
+    output_graph().operation_origins()[result] = current_operation_origin_;
     if (op.Properties().is_block_terminator) FinalizeBlock();
     return result;
   }
 
  private:
   void FinalizeBlock() {
-    graph().Finalize(current_block_);
+    output_graph().Finalize(current_block_);
     current_block_ = nullptr;
   }
 
   Block* current_block_ = nullptr;
-  Graph& graph_;
+  Graph& input_graph_;
+  Graph& output_graph_;
+  // TODO(dmercadier,tebbi): remove {current_operation_origin_} and pass instead
+  // additional parameters to ReduceXXX methods.
   OpIndex current_operation_origin_ = OpIndex::Invalid();
   Zone* const phase_zone_;
 };
