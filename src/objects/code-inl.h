@@ -420,11 +420,21 @@ inline Code FromCodeT(CodeT code) {
 #endif
 }
 
-inline Code FromCodeT(CodeT code, RelaxedLoadTag) {
+inline Code FromCodeT(CodeT code, PtrComprCageBase code_cage_base,
+                      RelaxedLoadTag tag) {
 #ifdef V8_EXTERNAL_CODE_SPACE
   DCHECK_IMPLIES(V8_REMOVE_BUILTINS_CODE_OBJECTS,
                  !code.is_off_heap_trampoline());
-  return code.code(kRelaxedLoad);
+  return code.code(code_cage_base, tag);
+#else
+  return code;
+#endif
+}
+
+inline Code FromCodeT(CodeT code, Isolate* isolate, RelaxedLoadTag tag) {
+#ifdef V8_EXTERNAL_CODE_SPACE
+  PtrComprCageBase code_cage_base{isolate->code_cage_base()};
+  return FromCodeT(code, code_cage_base, tag);
 #else
   return code;
 #endif
@@ -1482,10 +1492,8 @@ ACCESSORS(CodeDataContainer, next_code_link, Object, kNextCodeLinkOffset)
 
 PtrComprCageBase CodeDataContainer::code_cage_base() const {
 #ifdef V8_EXTERNAL_CODE_SPACE
-  // TODO(v8:10391): consider protecting this value with the sandbox.
-  Address code_cage_base_hi =
-      ReadField<Tagged_t>(kCodeCageBaseUpper32BitsOffset);
-  return PtrComprCageBase(code_cage_base_hi << 32);
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
+  return PtrComprCageBase{isolate->code_cage_base()};
 #else
   return GetPtrComprCageBase(*this);
 #endif
@@ -1502,10 +1510,8 @@ void CodeDataContainer::set_code_cage_base(Address code_cage_base) {
 
 PtrComprCageBase CodeDataContainer::code_cage_base(RelaxedLoadTag) const {
 #ifdef V8_EXTERNAL_CODE_SPACE
-  // TODO(v8:10391): consider protecting this value with the sandbox.
-  Address code_cage_base_hi =
-      Relaxed_ReadField<Tagged_t>(kCodeCageBaseUpper32BitsOffset);
-  return PtrComprCageBase(code_cage_base_hi << 32);
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
+  return PtrComprCageBase{isolate->code_cage_base()};
 #else
   return GetPtrComprCageBase(*this);
 #endif
