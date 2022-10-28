@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cc30233_59e32875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "LGTM, thank you! I only have some nits.",
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f2c7ff_98e73d84",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "Is this used anywhere?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a56da651_5433bab6",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "Is passing these really necessary? I\u0027d think that you can just get them from `Next::Asm()`. However, currently this is not possible in the constructor because base classes are initialized before subclass members. To solve this, we could put the input and output graph in a base class of `Assembler` that comes before the reducer stack.",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2bcb497_34d2a711",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "leftover?",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 28
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a90f5d00_4c790284",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "By convention, we use `class` as soon as we use `public:` and `private:`. Although I actually wonder if there is much point in splitting this into a separate class, it mostly makes the code more verbose by having `state_` everywhere. The methods in `GraphVisitorState` will be inlined anyway, and if not, C++ linkers do reduce binary size by merging identical template instantiations.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 6
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f42d0e8_b10b58c7",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "By convention, private members end in an underscore.",
+      "range": {
+        "startLine": 148,
+        "startChar": 9,
+        "endLine": 148,
+        "endChar": 20
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44cb55ee_b4715138",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "origins?",
+      "range": {
+        "startLine": 194,
+        "startChar": 30,
+        "endLine": 194,
+        "endChar": 37
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ccb01d4_ed331445",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "nit: I think it would be nice if all the ways to refer to the current assembler would be unified. At the moment, we have `Asm()`, `stack()` and `assembler()`. But it doesn\u0027t have to be in this CL, this is an easy refactoring once all the rebasing is done :).",
+      "range": {
+        "startLine": 445,
+        "startChar": 11,
+        "endLine": 445,
+        "endChar": 22
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9697453b_fe207e3f",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-10-28T16:57:23Z",
+      "side": 1,
+      "message": "I don\u0027t think we want a `LivenessAnalyzer` by default. How about removing this for now?",
+      "range": {
+        "startLine": 620,
+        "startChar": 2,
+        "endLine": 620,
+        "endChar": 28
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
