@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01f93ffb_16f5f530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-10-28T09:12:24Z",
+      "side": 1,
+      "message": "Yes, that was pretty much patchset #17.\nThere were two extra `SkipRoot` values:\n- `kConservativeStack` for skipping CSS entirely\n- `kTopOfStack` for skipping scanning the top of the stack, i.e., use the marker\n\nWe can go back to something like that, if you prefer it, but notice the following.\n\nThe methods that currently take `SkipRoot` options are `Heap::IterateRoots`, `Heap::IterateWeakRoots` (unimportant) and `Heap::IterateRootsIncludingClients` (see the document shared to v8-gc [1], a little outdated now). There\u0027s no such parameter in `Heap::IterateStackRoots`, `Heap::IterateRootsFromStackIncludingClient` or in the `Isolate::Iterate*` methods. Also, there\u0027s no such parameter in the top-level `CollectGarbage*` methods.\n\nSo, inside these methods we would have two alternatives:\n1. Introduce options to the rest and pass them around. This is what I had in patchset #17. Eventually, it requires converting between `SkipRoot` and `ScanStackMode`, which was not very elegant.\n2. Use a scope (so we would just delay using it).\n\nIn general, we now have two methods for controlling CSS mode: explicit parameters and scopes. The former are used in the top-level API methods. The latter are both for internal use and API. I think that using the `SkipRoot` would introduce a third method and that would rather complicate than simplify things.\n\n[1] https://docs.google.com/drawings/d/1p7eziR1c6sYPnbeya2csbTUpde1uj3-RUFM53f0_zOU/",
+      "parentUuid": "27f04fe1_ef04be39",
+      "revId": "9c483ef4804ecb111bdbeab94ebd76325979d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efb4ffe1_5f6dd0b6",
         "filename": "src/heap/heap.cc",
         "patchSetId": 21
