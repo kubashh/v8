@@ -880,6 +880,9 @@ DEFINE_BOOL(use_osr, true, "use on-stack replacement")
 DEFINE_BOOL(concurrent_osr, true, "enable concurrent OSR")
 DEFINE_WEAK_IMPLICATION(future, concurrent_osr)
 
+DEFINE_BOOL(turbo_string_builder, false, "use TurboFan fast string builder")
+DEFINE_WEAK_IMPLICATION(future, turbo_string_builder)
+
 DEFINE_BOOL(trace_osr, false, "trace on-stack replacement")
 DEFINE_BOOL(log_or_trace_osr, false,
             "internal helper flag, please use --trace-osr instead.")
