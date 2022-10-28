@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "208a5ed0_a39c6a71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-10-28T15:34:33Z",
+      "side": 1,
+      "message": "Thanks, LGTM. Hopefully we can remove this again soon, given that we already use C++17 features, and will start using C++20 soon. So probably GCC 8 will have to be replaced by something newer anyway.",
+      "revId": "403fcef7c82f1e27d6fcc92851abf79cd0221e7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
