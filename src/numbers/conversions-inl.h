@@ -21,9 +21,39 @@
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/objects-inl.h"
 
+#if V8_TARGET_ARCH_X64
+#include <emmintrin.h>
+#endif
+
 namespace v8 {
 namespace internal {
 
+#if V8_TARGET_ARCH_X64
+// The fast double-to-unsigned-int conversion routine does not guarantee
+// rounding towards zero, or any reasonable value if the argument is larger
+// than what fits in an unsigned 32-bit integer.
+inline unsigned int FastD2UI(double x) {
+  const double k2Pow52 = 4503599627370496.0;
+  __m128d xVect = _mm_set_sd(x);
+  __m128d absX = _mm_and_pd(
+      xVect, _mm_castsi128_pd(_mm_set_epi64x(0, 0x7FFFFFFFFFFFFFFF)));
+
+  // Check to see if |x| < k2Pow52
+  __m128d inRangeMask = _mm_cmplt_sd(absX, _mm_set_sd(k2Pow52));
+
+  // Set xToConv to x if |x| < k2Pow52 is true
+  __m128d xToConv = _mm_and_pd(xVect, inRangeMask);
+
+  // Set xToConv to 2147483648 if |x| < k2Pow52 is false
+  xToConv =
+      _mm_or_pd(xToConv, _mm_andnot_pd(inRangeMask, _mm_set_sd(2147483648.0)));
+
+  // First convert xToConv to a 64-bit signed integer,
+  // and then truncate the 64-bit signed integer to a 32-bit unsigned
+  // integer.
+  return static_cast<unsigned int>(_mm_cvttsd_si64(xToConv));
+}
+#elif
 // The fast double-to-unsigned-int conversion routine does not guarantee
 // rounding towards zero, or any reasonable value if the argument is larger
 // than what fits in an unsigned 32-bit integer.
@@ -56,6 +86,7 @@ inline unsigned int FastD2UI(double x) {
   // Large number (outside uint32 range), Infinity or NaN.
   return 0x80000000u;  // Return integer indefinite.
 }
+#endif  // V8_TARGET_ARCH_X64
 
 inline float DoubleToFloat32(double x) {
   using limits = std::numeric_limits<float>;
@@ -79,6 +110,80 @@ inline float DoubleToFloat32(double x) {
   return static_cast<float>(x);
 }
 
+#if V8_TARGET_ARCH_X64
+// #sec-tointegerorinfinity
+inline double DoubleToInteger(double x) {
+  __m128d xVect = _mm_set_sd(x);
+
+  // Zero out any NaN value
+  xVect = _mm_and_pd(xVect, _mm_cmpord_sd(xVect, xVect));
+
+  __m128i biasedExp = _mm_and_si128(_mm_srli_epi64(_mm_castpd_si128(xVect), 52),
+                                    _mm_set_epi64x(0, 0x07FF));
+
+  // Compute the number of fractional bits by doing a 16-bit
+  // unsigned saturated subtraction of 1075 - biasedExp. This
+  // will ensure that numOfFracBits is equal to zero if
+  // biasedExp >= 1075.
+  __m128i numOfFracBits = _mm_subs_epu16(_mm_set_epi64x(0, 1075), biasedExp);
+
+  // If numOfFracBits <= 52 is true, set nonFracBitsMask to (-1LL <<
+  // numOfFracBits). Otherwise, set nonFracBitsMask to 0.
+  __m128d nonFracBitsMask = _mm_castsi128_pd(
+      _mm_andnot_si128(_mm_cmpgt_epi32(_mm_shuffle_epi32(numOfFracBits, 0xA0),
+                                       _mm_set_epi32(0, 0, 52, 52)),
+                       _mm_sll_epi64(_mm_set1_epi64x(-1), numOfFracBits)));
+
+  // Mask out the fractional bits
+  xVect = _mm_and_pd(xVect, nonFracBitsMask);
+
+  return _mm_cvtsd_f64(xVect);
+}
+
+// Implements https://heycam.github.io/webidl/#abstract-opdef-converttoint for
+// the general case (step 1 and steps 8 to 12). Support for Clamp and
+// EnforceRange will come in the future.
+inline int64_t DoubleToWebIDLInt64(double x) {
+  __m128d adjX = _mm_set_sd(x);
+
+  // If x is NaN or |x| >= 9223372036854775808.0, adjust the exponent of
+  // x so that 4611686018427387904.0 <= |adjX| <= 9223372036854774784.0 is true
+
+  // Compute expAdj by masking out the exponent bits and then subtracting
+  // 0x43D0000000000000 using an unsigned saturated subtraction
+  __m128i expAdj = _mm_and_si128(_mm_castpd_si128(adjX),
+                                 _mm_set_epi64x(0, 0x7FF0000000000000));
+
+  // Subtracting 0x43D0000000000000 from the exponent bits using
+  // 16-bit unsigned saturated subtraction is sufficient here as the lower
+  // 52 bits of expAdj have been zeroed out in the previous step.
+
+  // A 16-bit unsigned saturated subtraction will ensure that expAdj is
+  // equal to zero if the exponent of x is less than 62.
+  expAdj = _mm_subs_epu16(expAdj, _mm_set_epi64x(0, 0x43D0000000000000));
+
+  // Subtract expAdj from the bitwise representation of adjX using 64-bit
+  // integer subtraction.
+  adjX = _mm_castsi128_pd(_mm_sub_epi64(_mm_castpd_si128(adjX), expAdj));
+
+  // |adjX| <= 9223372036854774784.0 is now true
+
+  // Convert adjX to a 64-bit signed integer
+  __m128i resultVal = _mm_cvtsi64_si128(_mm_cvttsd_si64(adjX));
+
+  // Shift resultVal left by (expAdj >> 52).
+  // If expAdj >> 52 is greater than 63, resultVal will be zeroed out.
+  resultVal = _mm_sll_epi64(resultVal, _mm_srli_epi64(expAdj, 52));
+
+  // Return resultVal
+  return _mm_cvtsi128_si64(resultVal);
+}
+
+// Implements most of https://tc39.github.io/ecma262/#sec-toint32.
+inline int32_t DoubleToInt32(double x) {
+  return static_cast<int32_t>(DoubleToWebIDLInt64(x));
+}
+#else
 // #sec-tointegerorinfinity
 inline double DoubleToInteger(double x) {
   // ToIntegerOrInfinity normalizes -0 to +0. Special case 0 for performance.
@@ -134,6 +239,7 @@ inline int64_t DoubleToWebIDLInt64(double x) {
   }
   return static_cast<int64_t>(d.Sign() * static_cast<int64_t>(bits));
 }
+#endif  // V8_TARGET_ARCH_X64
 
 inline uint64_t DoubleToWebIDLUint64(double x) {
   return static_cast<uint64_t>(DoubleToWebIDLInt64(x));
@@ -151,6 +257,70 @@ bool IsSmiDouble(double value) {
          !IsMinusZero(value) && value == FastI2D(FastD2I(value));
 }
 
+#if V8_TARGET_ARCH_X64
+bool IsInt32Double(double value) {
+  __m128d valVect = _mm_set_sd(value);
+  __m128d absVal = _mm_and_pd(
+      valVect, _mm_castsi128_pd(_mm_set_epi64x(0, 0x7FFFFFFFFFFFFFFF)));
+  __m128d xSignBit = _mm_xor_pd(valVect, absVal);
+
+  // Ensure that |valToConv| < 4294967296.0 is true by making
+  // sure that the unbiased exponent is less than or equal to 31
+  __m128d valToConv = _mm_castsi128_pd(_mm_min_epi16(
+      _mm_castpd_si128(absVal), _mm_set_epi64x(0, 0x41EF7FFF7FFF7FFF)));
+
+  // Copy the sign bit of x to valToConv
+  valToConv = _mm_or_pd(valToConv, xSignBit);
+
+  // valToConv is equal to x if |x| < 4294967296.0 is true
+
+  // Convert valToConv as follows:
+  // 1. Convert valToConv to a 64-bit signed integer (with truncation)
+  //    by using _mm_cvttsd_si64.
+  // 2. Truncate the 64-bit signed integer to a 32-bit signed integer.
+  // 3. Convert the truncated 32-bit signed integer back to a double.
+  __m128d int32DblVal = _mm_cvtsi32_sd(
+      valToConv, static_cast<int32_t>(_mm_cvttsd_si64(valToConv)));
+
+  // Return true if the bitwise representation of value is equal to
+  // the bitwise representation of int32DblVal.
+  return _mm_cvtsi128_si64(_mm_castpd_si128(valVect)) ==
+         _mm_cvtsi128_si64(_mm_castpd_si128(int32DblVal));
+}
+
+bool IsUint32Double(double value) {
+  __m128d valVect = _mm_set_sd(value);
+
+  // Ensure that valToConv >= 0 by zeroing out valToConv if
+  // value < 0.0 is true
+  __m128i isNegMask =
+      _mm_srai_epi32(_mm_shuffle_epi32(_mm_castpd_si128(valVect), 0x55), 31);
+  __m128d valToConv = _mm_andnot_pd(_mm_castsi128_pd(isNegMask), valVect);
+
+  // Ensure that 0 <= valToConv < 4294967296.0 is true by making
+  // sure that the unbiased exponent is less than or equal to 31
+  valToConv = _mm_castsi128_pd(_mm_min_epi16(
+      _mm_castpd_si128(valToConv), _mm_set_epi64x(0, 0x41EF7FFF7FFF7FFF)));
+
+  // valToConv is equal to x if 0.0 <= x < 4294967296.0 is true
+
+  // Convert valToConv as follows:
+  // 1. Convert valToConv to a 64-bit signed integer (with truncation)
+  //    by using _mm_cvttsd_si64.
+  // 2. Truncate the 64-bit signed integer to a 32-bit unsigned integer.
+  // 3. Convert the truncated 32-bit unsigned integer back to a double
+  //    by using _mm_cvtsi64_sd (which will convert the 32-bit unsigned
+  //    integer to a signed 64-bit integer prior to doing the
+  //    integer to double conversion).
+  __m128d uint32DblVal = _mm_cvtsi64_sd(
+      valToConv, static_cast<uint32_t>(_mm_cvttsd_si64(valToConv)));
+
+  // Return true if the bitwise representation of value is equal to
+  // the bitwise representation of uint32DblVal.
+  return _mm_cvtsi128_si64(_mm_castpd_si128(valVect)) ==
+         _mm_cvtsi128_si64(_mm_castpd_si128(uint32DblVal));
+}
+#else
 bool IsInt32Double(double value) {
   return value >= kMinInt && value <= kMaxInt && !IsMinusZero(value) &&
          value == FastI2D(FastD2I(value));
@@ -160,6 +330,7 @@ bool IsUint32Double(double value) {
   return !IsMinusZero(value) && value >= 0 && value <= kMaxUInt32 &&
          value == FastUI2D(FastD2UI(value));
 }
+#endif  // V8_TARGET_ARCH_X64
 
 bool DoubleToUint32IfEqualToSelf(double value, uint32_t* uint32_value) {
   const double k2Pow52 = 4503599627370496.0;
