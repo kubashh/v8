@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5fb3236_3a286865",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-10-31T13:06:44Z",
+      "side": 1,
+      "message": "Hi Camillo, could you ptal at yet another UB fix in float conversions (test-only)? This time it should be the proper fix (famous last words).",
+      "revId": "10b79aab7d8fea22c9bd1ad8450e1de946ff333a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
