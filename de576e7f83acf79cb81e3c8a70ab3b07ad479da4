@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47d37219_0ac26b60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-10-31T12:38:22Z",
+      "side": 1,
+      "message": "Hello,\n\nWe are skipping these binaries on ppc/s390 as they are not available for these platforms: crrev.com/c/3992966\nI also wanted double check on what \"re-client\" is used for and if it also needs to be built for ppc/s390, is it part of the chromium build tools? We don not support chromium and only use V8 on Node.js.",
+      "revId": "de576e7f83acf79cb81e3c8a70ab3b07ad479da4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
