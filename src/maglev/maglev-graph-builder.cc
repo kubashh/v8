@@ -381,6 +381,11 @@ void MaglevGraphBuilder::BuildGenericBinarySmiOperationNode() {
 template <Operation kOperation>
 ValueNode* MaglevGraphBuilder::TryFoldInt32BinaryOperation(ValueNode* left,
                                                            ValueNode* right) {
+  // TODO(v8:7700): Do constant folding.
+  left = current_interpreter_frame_.get(iterator_.GetRegisterOperand(0));
+  right = current_interpreter_frame_.get(
+      interpreter::Register::virtual_accumulator());
+
   switch (kOperation) {
     case Operation::kModulus:
       // x % x = 0
@@ -414,15 +419,15 @@ ValueNode* MaglevGraphBuilder::TryFoldInt32BinaryOperation(ValueNode* left,
 
 template <Operation kOperation>
 void MaglevGraphBuilder::BuildInt32BinaryOperationNode() {
-  // TODO(v8:7700): Do constant folding.
-  ValueNode* left = LoadRegisterInt32(0);
-  ValueNode* right = GetAccumulatorInt32();
-
   if (ValueNode* result =
-          TryFoldInt32BinaryOperation<kOperation>(left, right)) {
+          TryFoldInt32BinaryOperation<kOperation>(nullptr, nullptr)) {
     SetAccumulator(result);
     return;
   }
+
+  // TODO(v8:7700): Do constant folding.
+  ValueNode* left = LoadRegisterInt32(0);
+  ValueNode* right = GetAccumulatorInt32();
 
   SetAccumulator(AddNewInt32BinaryOperationNode<kOperation>({left, right}));
 }
@@ -3391,7 +3396,7 @@ void MaglevGraphBuilder::VisitJumpLoop() {
   BasicBlock* block =
       FinishBlock<JumpLoop>({}, jump_targets_[target].block_ptr());
 
-  merge_states_[target]->MergeLoop(*compilation_unit_,
+  merge_states_[target]->MergeLoop(*compilation_unit_, graph_->smi(),
                                    current_interpreter_frame_, block, target);
   block->set_predecessor_id(merge_states_[target]->predecessor_count() - 1);
 }
@@ -3441,8 +3446,9 @@ void MaglevGraphBuilder::MergeIntoFrameState(BasicBlock* predecessor,
         NumPredecessors(target), predecessor, liveness);
   } else {
     // If there already is a frame state, merge.
-    merge_states_[target]->Merge(*compilation_unit_, current_interpreter_frame_,
-                                 predecessor, target);
+    merge_states_[target]->Merge(*compilation_unit_, graph_->smi(),
+                                 current_interpreter_frame_, predecessor,
+                                 target);
   }
 }
 
@@ -3492,8 +3498,9 @@ void MaglevGraphBuilder::MergeIntoInlinedReturnFrameState(
     // Again, all returns should have the same liveness, so double check this.
     DCHECK(GetInLiveness()->Equals(
         *merge_states_[target]->frame_state().liveness()));
-    merge_states_[target]->Merge(*compilation_unit_, current_interpreter_frame_,
-                                 predecessor, target);
+    merge_states_[target]->Merge(*compilation_unit_, graph_->smi(),
+                                 current_interpreter_frame_, predecessor,
+                                 target);
   }
 }
 
