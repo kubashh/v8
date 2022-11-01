@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3084409_1924d523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-01T21:52:02Z",
+      "side": 1,
+      "message": "PTAL Camillo, as you seem to have written a lot of the enumeration code. Please redirect if there\u0027s a better reviewer. Most of this CL is factoring out some code so builtins-struct can call it.",
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
