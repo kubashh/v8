@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#include "src/tracing/trace-event.h"
 #include "src/base/logging.h"
 #include "src/common/globals.h"
 #include "src/execution/vm-state-inl.h"
@@ -69,6 +70,8 @@ class Sweeper::SweeperJob final : public JobTask {
   SweeperJob& operator=(const SweeperJob&) = delete;
 
   void Run(JobDelegate* delegate) final {
+    TRACE_EVENT0("v8", "V8 job: Sweeper");
+
     RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
     DCHECK(sweeper_->current_new_space_collector_.has_value());
     RunImpl(delegate, delegate->IsJoiningThread());

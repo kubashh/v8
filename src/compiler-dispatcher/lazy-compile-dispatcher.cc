@@ -6,6 +6,7 @@
 
 #include <atomic>
 
+#include "src/tracing/trace-event.h"
 #include "include/v8-platform.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/time.h"
@@ -37,6 +38,7 @@ class LazyCompileDispatcher::JobTask : public v8::JobTask {
       : lazy_compile_dispatcher_(lazy_compile_dispatcher) {}
 
   void Run(JobDelegate* delegate) final {
+    TRACE_EVENT0("v8", "V8 job: Lazy compile dispatcher");
     lazy_compile_dispatcher_->DoBackgroundWork(delegate);
   }
 

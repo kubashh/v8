@@ -11,6 +11,7 @@
 
 #include <algorithm>
 
+#include "src/tracing/trace-event.h"
 #include "src/baseline/baseline-compiler.h"
 #include "src/codegen/compiler.h"
 #include "src/execution/isolate.h"
@@ -161,6 +162,8 @@ class ConcurrentBaselineCompiler {
           outgoing_queue_(outcoming_queue) {}
 
     void Run(JobDelegate* delegate) override {
+      TRACE_EVENT0("v8", "V8 job: Concurrent baseline compiler");
+
       RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
       LocalIsolate local_isolate(isolate_, ThreadKind::kBackground);
       UnparkedScope unparked_scope(&local_isolate);

@@ -7,6 +7,7 @@
 #include <stack>
 #include <unordered_map>
 
+#include "src/tracing/trace-event.h"
 #include "include/v8config.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
@@ -649,6 +650,8 @@ class ConcurrentMarking::JobTaskMajor : public v8::JobTask {
 
   // v8::JobTask overrides.
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8", "V8 job: Major Concurrent Marking");
+
     if (delegate->IsJoiningThread()) {
       // TRACE_GC is not needed here because the caller opens the right scope.
       concurrent_marking_->RunMajor(delegate, code_flush_mode_,
@@ -686,6 +689,8 @@ class ConcurrentMarking::JobTaskMinor : public v8::JobTask {
 
   // v8::JobTask overrides.
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8", "V8 job: Minor Concurrent Marking");
+
     if (delegate->IsJoiningThread()) {
       // TRACE_GC is not needed here because the caller opens the right scope.
       concurrent_marking_->RunMinor(delegate);

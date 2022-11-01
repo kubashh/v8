@@ -6,6 +6,7 @@
 
 #include <cinttypes>
 
+#include "src/tracing/trace-event.h"
 #include "src/base/address-region.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
@@ -71,6 +72,8 @@ class MemoryAllocator::Unmapper::UnmapFreeMemoryJob : public JobTask {
   UnmapFreeMemoryJob& operator=(const UnmapFreeMemoryJob&) = delete;
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8", "V8 job: Unmap free memory");
+
     if (delegate->IsJoiningThread()) {
       TRACE_GC(tracer_, GCTracer::Scope::UNMAPPER);
       RunImpl(delegate);
