@@ -50,6 +50,24 @@
       "message": "Hi again, I debugged a bit and it looked like object we create from ECL was not fully initialized, so tried adding a Builtin to do the allocation \u0026 initialization. This seems to work: https://chromium-review.googlesource.com/c/v8/v8/+/3997091 except the %DebugPrint fails for all objects created by fast callbacks.\n\nI\u0027m not entirely sure what\u0027s going on, but my initial thought was that the not-fully-initialized comes from the fact that we\u0027re storing the Uint32 handle rather than the full 64-bit pointer. So whenever I change it to store the raw pointer rather than the handle (https://chromium-review.googlesource.com/c/v8/v8/+/3997091/2/src/compiler/effect-control-linearizer.cc#6907), the object seems to be initialized properly.\n\nThe main downside of this solution is that we need a runtime function to call the allocation, and those can\u0027t take arbitrary word64 pointers, so I had to go through a BigInt creation again. So the result is probably not any faster than what you have currently in Deno.\n\nUltimately we should be able to fix your CL and avoid the builtin/runtime overhead completely. Let\u0027s discuss this further in the coming days!",
       "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "670d1063_1c8fc76e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-01T15:37:32Z",
+      "side": 1,
+      "message": "Hey,\n\nSorry I\u0027ve been a bit busy and also simply preoccupied with a newly released video game 😄\n\nI think the builtin you created, which internally calls `NewExternal(value)`, is simply essentially equal to `v8::External::New` which takes as its argument a pointer, and thus of course if you try to pass it a Uint32 handle created semi-manually from TC code using the `allocate_and_initialize_external_pointer_table_entry` call, it will fail. That Builtin would be ideal except for the BigInt creation 😞 Though I do the BigInt being explicitly created anywhere? Except for this line:\n\n`Handle\u003cBigInt\u003e value \u003d args.at\u003cBigInt\u003e(0);`\n\nFrom TC code you seem to be passing in just the raw pointer value. So to me it seems like the `args.at\u003cX\u003e(0)` is doing the BigInt creation, though I presume I am mistaken. I don\u0027t suppose it\u0027s possible to get just `args.at\u003cuint64_t\u003e(0);`? 😄\n\nStill, it would of course be best if we could just get the `FUNCTION_REFERENCE(AllocateAndInitializeExternalPointerTableEntry)` to return a `Handle\u003cJSObject\u003e`.",
+      "parentUuid": "338e0adf_d5638234",
+      "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -247,6 +247,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84b842c4_a0966c8b",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-01T15:37:32Z",
+      "side": 1,
+      "message": "So, if I\u0027m reading this right the play-by-play guide to getting a pointer into the table should be:\n1. Allocate a heap object of type W (for us an `External`) for a given pointer W*.\n2. Allocate an entry E in the ExternalPointerTable, receiving a handle.\n3. Store the handle into the heap object.\n5. Store the pointer W* into the table using the handle, adding the tag for type W.",
+      "parentUuid": "f7f9375c_01081ff4",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -474,6 +498,30 @@
       "side": 1,
       "message": "```\nWhat I don\u0027t understand is how interchangeability of external pointers allows for breaking out of the sandbox, not directly anyway\n```\nThe scenario its trying to avoid is something like this:\n- Embedder code creates the C++ objects A of class ClassA and B of class ClassB\n- Embedder code creates two V8 wrapper objects, WA and WB, and stores the pointers to A and B in them respectively, using the same external pointer tag\n- Embedder code later on loads the native pointer from WA and essentially does a \"reinterpret_cast\u003cClassA*\u003e(value)\" on it, then goes on to use it as a ClassA instance\n\nHere the interchangeability requirement is violated: WA and WB both use the same tag, but their external pointers are not interchangeable: doing so will cause a type confusion in the Embedder, likely causing memory corruption and allowing an attacker to escape from the sandbox. \n\n\n```\nAdditionally, I do not understand how V8 intends to guarantee the live-ness of pointers in the pointer table\n```\nThe rough idea is that the table is garbage-collected, and we keep the pointed-to objects alive as long as there\u0027s an entry for them in the table. Once an external object is no longer referenced from V8, its entry will be freed by the GC, at which point we can also free the external object (unless there are other references to it). So basically all external objects either need to the statically allocated (and never be freed), or be uniquely owned by the table, or use some sort of reference counting.\n\n\n```\nI\u0027ve personally viewed the External object as the, well, external (void*) pointer of V8: The engine (language / API) can give no guarantees about the validity of pointer, or what it is pointing to and instead it is up to the embedder / user to guarantee the safe usage of these.\n```\nYeah that works. Maybe we should just add some comments that clarify this to avoid misuse in the future and then just keep using kExternalObjectValueTag for now.\n\nHope that helps!",
       "parentUuid": "dcae4a5a_1eebf300",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ec2d66e_445e3505",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-01T15:37:32Z",
+      "side": 1,
+      "message": "\u003e Re: External Pointer Table and GC\n\nFor ownership including pointers this is definitely reasonable, `External` is just a notable exception to this as it does not carry ownership (at a language level) and does not require or offer any means of bolting into the GC of its own.\n\nSo, sounds reasonable to me to add comments about this as an \"escape hatch\" of sorts. The `kExternalObjectValueTag` is definitely a risk compared to compile-time constexpr tags \"built to purpose\" but it is also possibly the only thing available under some circumstances. Any ideas where such comments should be added? Would this extend all the way to the `External` class\u0027 public API documents?",
+      "parentUuid": "45d17fc4_0b15c4a8",
       "range": {
         "startLine": 6900,
         "startChar": 7,
