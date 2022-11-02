@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9190195e_c78de9a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T17:20:21Z",
+      "side": 1,
+      "message": "Some context around those functions, which could be useful to determine if it\u0027s worth optimizing them: in JetStream2 (arguably not the best benchmark, and it\u0027s possible that this doesn\u0027t reflect real-world benchmarks, but still better than nothing), here is the number of times that those functions are called:\n  - DoubleToInt32: 10,200,000 times\n  - DoubleToInteger: 11,000,000 times\n  - IsInt32Double: 1,400,000 times\n  - the other functions are not called.\nI would say that this sounds like large-ish numbers, so maybe it\u0027s worth optimizing those functions.\n\nHowever, in my benchmarks (on a Comet Lake), your SSE versions of DoubleToInteger and IsInt32Double are 2.5 times slower than the scalar versions (I didn\u0027t benchmark DoubleToInt32, but I expect similar results). Could you please share the performance numbers you measured on your side, how you measured them, and on which architecture?",
+      "revId": "6e68396f2c07d9fbd7101c9983f5da263551cdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50f65395_84cfeb34",
