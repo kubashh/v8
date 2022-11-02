@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e72d4233_3ea24936",
+        "filename": "src/builtins/builtins-struct.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-02T16:01:22Z",
+      "side": 1,
+      "message": "This is happening in struct *type* creation (since structs have fixed layout and are sealed), not struct instance creation, so that seems acceptable to me.\n\nIt\u0027s easy enough to figure out if the map is in the shared old space. The issue with making it lazy for shared struct maps requires extra synchronization code in addition making it allocate in the shared old space:\n\n- Loads of the enum length will need to be acquire\n- Setting the enum length and initializing the enum cache for shared structs will need to use compare-and-swap to account for races\n\nI\u0027ll do some quick hacking to see how invasive the change is, maybe it\u0027s not too bad.",
+      "parentUuid": "7006f93b_42ab7b85",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 58
+      },
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e87af3d_7a3370a2",
         "filename": "src/heap/factory.cc",
         "patchSetId": 1
