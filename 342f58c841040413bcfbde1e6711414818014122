@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b582259_7341ab82",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2022-11-02T17:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "178c5fb3_4579e893",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5a5ac99_263f758d",
@@ -83,6 +101,30 @@
       "writtenOn": "2022-11-02T15:11:06Z",
       "side": 1,
       "message": "`wami` is fully pipe-capable, so you can keep `--output\u003d-` here, and don\u0027t need `module.wasm` on the next line. (I\u0027m kinda surprised that the current form even works; I guess I\u0027ve accidentally made the mechanism more flexible than I intended 😊)",
+      "range": {
+        "startLine": 28,
+        "startChar": 53,
+        "endLine": 28,
+        "endChar": 67
+      },
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1c383ae_5094b61e",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2022-11-02T17:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5a5ac99_263f758d",
       "range": {
         "startLine": 28,
         "startChar": 53,
