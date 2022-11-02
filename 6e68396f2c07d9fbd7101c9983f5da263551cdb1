@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50f65395_84cfeb34",
+        "filename": "src/numbers/conversions-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T16:44:56Z",
+      "side": 1,
+      "message": "It looks like your implementation is truncating its input, whereas the older implementations rounds it. I haven\u0027t looked at the use-cases in details, but I would expect that this could be an issue. It might be worth adding a DCHECK to make sure that this implementation returns the same result as the older one.\n\nAlso, on which architecture have you benchmarked your code? On my Comet Lake, the old scalar implementation is 1.2x faster that your new implementation.\n\nRegardless, I share Clemens\u0027 concern that the added complexity of this SSE version might not be worth the potential performance improvements, but I\u0027ll let Tobias be the judge of that :)",
+      "range": {
+        "startLine": 35,
+        "startChar": 20,
+        "endLine": 35,
+        "endChar": 38
+      },
+      "revId": "6e68396f2c07d9fbd7101c9983f5da263551cdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
