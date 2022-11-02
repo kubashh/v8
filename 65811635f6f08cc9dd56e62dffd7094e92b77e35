@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f2ace5_3bc07cfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-02T11:31:14Z",
+      "side": 1,
+      "message": "@John: What is the motivation for these changes? Is this on any critical path?\n\nI know very little about the use of these functions. Seems to be used mostly during compilation.\n+Tobias, any opinion if this change is worth the added complexity?",
+      "revId": "65811635f6f08cc9dd56e62dffd7094e92b77e35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
