@@ -112,15 +112,29 @@ Reduction WasmGCLowering::ReduceWasmTypeCheck(Node* node) {
 
   Node* map = gasm_.LoadMap(object);
 
-  if (config.hint > 0) {
-    // First, check if the type happens to be equal to the hinted type.
-    int hint_result = wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint),
+  if (config.hint1 > 0) {
+    int hint_result = wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint1),
                                             config.to.heap_type(), module_)
                           ? 1
                           : 0;
 
-    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint)), &end_label,
+    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint1)), &end_label,
                  BranchHint::kTrue, gasm_.Int32Constant(hint_result));
+
+    if (config.hint2 > 0) {
+      if (static_cast<uint32_t>(config.hint2) == config.to.ref_index()) {
+        self++;
+      } else {
+        other++;
+      }
+      int hint_result = wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint2),
+                                              config.to.heap_type(), module_)
+                            ? 1
+                            : 0;
+
+      gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint2)), &end_label,
+                   BranchHint::kTrue, gasm_.Int32Constant(hint_result));
+    }
   } else {
     // In absence of explicit hint, use self-type as hint.
     gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue,
@@ -200,13 +214,19 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
 
   Node* map = gasm_.LoadMap(object);
 
-  if (config.hint > 0) {
-    // First, check if the type happens to be equal to the hinted type.
-    // This holds, otherwise the program would have trapped.
-    DCHECK(wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint),
+  if (config.hint1 > 0) {
+    // Otherwise, the program would have trapped.
+    DCHECK(wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint1),
                                  config.to.heap_type(), module_));
-    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint)), &end_label,
+    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint1)), &end_label,
                  BranchHint::kTrue);
+    if (config.hint2 > 0) {
+      // Otherwise, the program would have trapped.
+      DCHECK(wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint2),
+                                   config.to.heap_type(), module_));
+      gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint2)), &end_label,
+                   BranchHint::kTrue);
+    }
   } else {
     // In absence of explicit hint, use self-type as hint.
     gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue);

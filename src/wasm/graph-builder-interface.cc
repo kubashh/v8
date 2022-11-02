@@ -1229,14 +1229,17 @@ class WasmGraphBuildingInterface {
       // TODO(7748): Use this.
       feedback = &next_call_feedback();
     }
-    int hint = feedback != nullptr && feedback->num_cases() > 0
-                   ? feedback->function_index(0)
-                   : -1;
+    int hint1 = feedback != nullptr && feedback->num_cases() >= 1
+                    ? feedback->function_index(0)
+                    : -1;
+    int hint2 = feedback != nullptr && feedback->num_cases() >= 2
+                    ? feedback->function_index(1)
+                    : -1;
     WasmTypeCheckConfig config = {
         object.type,
         ValueType::RefMaybeNull(rtt.type.ref_index(),
                                 null_succeeds ? kNullable : kNonNullable),
-        hint};
+        hint1, hint2};
     SetAndTypeNode(result, builder_->RefTest(object.node, rtt.node, config));
   }
 
@@ -1253,15 +1256,18 @@ class WasmGraphBuildingInterface {
       // TODO(7748): Use this.
       feedback = &next_call_feedback();
     }
-    int hint = feedback != nullptr && feedback->num_cases() > 0
-                   ? feedback->function_index(0)
-                   : -1;
+    int hint1 = feedback != nullptr && feedback->num_cases() >= 1
+                    ? feedback->function_index(0)
+                    : -1;
+    int hint2 = feedback != nullptr && feedback->num_cases() >= 2
+                    ? feedback->function_index(0)
+                    : -1;
 
     WasmTypeCheckConfig config = {
         object.type,
         ValueType::RefMaybeNull(rtt.type.ref_index(),
                                 null_succeeds ? kNullable : kNonNullable),
-        hint};
+        hint1, hint2};
     TFNode* cast_node = v8_flags.experimental_wasm_assume_ref_cast_succeeds
                             ? builder_->TypeGuard(object.node, result->type)
                             : builder_->RefCast(object.node, rtt.node, config,
@@ -1290,7 +1296,7 @@ class WasmGraphBuildingInterface {
                                   !rtt.type.is_bottom()
                                       ? ValueType::Ref(rtt.type.ref_index())
                                       : kWasmBottom,
-                                  -1};
+                                  -1, -1};
     SsaEnv* branch_env = Split(decoder->zone(), ssa_env_);
     SsaEnv* no_branch_env = Steal(decoder->zone(), ssa_env_);
     no_branch_env->SetNotMerged();
