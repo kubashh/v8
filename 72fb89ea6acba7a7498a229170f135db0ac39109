@@ -68,6 +68,24 @@
       "parentUuid": "338e0adf_d5638234",
       "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "470345f8_e940e5ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-02T11:42:14Z",
+      "side": 1,
+      "message": "No worries, I got preoccupied by reviewing re-vectorization 😄 (and travelling, I shouldn\u0027t really complain).\n\nThe BigInt gets created in the builtin in builtins-internal-gen.cc, in `TF_BUILTIN(AllocateJSExternalObject,...)` calling `BigIntFromInt64`. Still, this is basically the same you\u0027re doing, except from the runtime within V8. Tbh I don\u0027t know why ExternalReferences are not supposed to return Handles, maybe it\u0027s just that nobody needed this until now. So maybe we can add support in the external-reference macro? (I think already suggested this earlier, please ping me if you find any obstacles).",
+      "parentUuid": "670d1063_1c8fc76e",
+      "revId": "72fb89ea6acba7a7498a229170f135db0ac39109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

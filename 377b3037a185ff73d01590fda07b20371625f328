@@ -271,6 +271,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a462616_e7d18372",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-02T11:42:14Z",
+      "side": 1,
+      "message": "Sounds good. So we\u0027re trying to do steps 2 and 4 at the same call right now, am I holding this correctly? If so, then we can do 1 in ECL and 2-4 in ML I think.",
+      "parentUuid": "84b842c4_a0966c8b",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
