@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b9379a_bd98d1ae",
+        "filename": "src/objects/keys.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-02T08:50:49Z",
+      "side": 0,
+      "message": "Grab a fresh enume cache from the memory shoppe.",
+      "range": {
+        "startLine": 371,
+        "startChar": 40,
+        "endLine": 371,
+        "endChar": 45
+      },
+      "revId": "34a948bcd3e96783ff3dfea91d363b65d4af0c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

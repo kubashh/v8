@@ -16,6 +16,69 @@
       "message": "PTAL Camillo, as you seem to have written a lot of the enumeration code. Please redirect if there\u0027s a better reviewer. Most of this CL is factoring out some code so builtins-struct can call it.",
       "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d21e0a_c62f8712",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-02T08:50:49Z",
+      "side": 1,
+      "message": "LGTM with some comments",
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7006f93b_42ab7b85",
+        "filename": "src/builtins/builtins-struct.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-02T08:50:49Z",
+      "side": 1,
+      "message": "perf-comment: I guess this is too early to worry about these things: but for memory reasons we initialize the enum cache lazily in most cases. This might slow-down struct creation needlessly.\n\nCould we use some sentinel to given the `KeyAccumulator` a hint to lazily allocate the enum-cache in the shared old space. I guess you cannot directly figure this out from the map?",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 58
+      },
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e87af3d_7a3370a2",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-02T08:50:49Z",
+      "side": 1,
+      "message": "Should this be `DCHECK_EQ`?\nIs is ok to have shared-heap indices or keys and allocate in the enum-cache in normal old space?",
+      "range": {
+        "startLine": 422,
+        "startChar": 2,
+        "endLine": 422,
+        "endChar": 16
+      },
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
