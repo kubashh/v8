@@ -22,6 +22,30 @@
       },
       "revId": "81320852e9d0c348b1a648203d525ee762d2a23b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0708af09_99f58d77",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 4886,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-02T14:10:14Z",
+      "side": 1,
+      "message": "I don\u0027t think so. Say the SkipRoot options contain `kStackConservative` but not `kStack`. The scope at `heap.cc:4652` will set `scan_stack_mode_` to `kNone`. Then, at heap.cc:4707 we\u0027re calling `Heap::IterateRoots` and this will get us here.",
+      "parentUuid": "27f7711c_2154a294",
+      "range": {
+        "startLine": 4886,
+        "startChar": 24,
+        "endLine": 4886,
+        "endChar": 29
+      },
+      "revId": "81320852e9d0c348b1a648203d525ee762d2a23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
