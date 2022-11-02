@@ -70,6 +70,30 @@
       },
       "revId": "81320852e9d0c348b1a648203d525ee762d2a23b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1320e439_869db2a2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 4886,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-02T20:02:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a8c54d6e_b07778e3",
+      "range": {
+        "startLine": 4886,
+        "startChar": 24,
+        "endLine": 4886,
+        "endChar": 29
+      },
+      "revId": "81320852e9d0c348b1a648203d525ee762d2a23b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

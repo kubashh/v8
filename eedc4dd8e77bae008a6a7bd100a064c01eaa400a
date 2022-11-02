@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69b9a578_eeb6be49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-02T20:02:31Z",
+      "side": 1,
+      "message": "I think you\u0027ll like this version better.\nNo saved mode, except for testing, and no internal scope.\nLet\u0027s go with this one.",
+      "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
