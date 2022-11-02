@@ -152,8 +152,10 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
 };
 
 void MarkingVerifier::VerifyRoots() {
-  heap_->IterateRootsIncludingClients(this,
-                                      base::EnumSet<SkipRoot>{SkipRoot::kWeak});
+  // When verifying marking, we never want to scan conservatively the top of the
+  // stack.
+  heap_->IterateRootsIncludingClients(
+      this, base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kTopOfStack});
 }
 
 void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
@@ -5186,7 +5188,8 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
     PointersUpdatingVisitor updating_visitor(heap());
     heap_->IterateRootsIncludingClients(
         &updating_visitor,
-        base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable});
+        base::EnumSet<SkipRoot>{SkipRoot::kExternalStringTable,
+                                SkipRoot::kConservativeStack});
   }
 
   {

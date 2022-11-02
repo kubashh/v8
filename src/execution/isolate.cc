@@ -602,6 +602,11 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
         FullObjectSlot(reinterpret_cast<Address>(&(block->message_obj_))));
   }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  DCHECK_EQ(heap()->isolate(), this);
+  heap()->IterateStackConservatively(v);
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
   // Iterate over pointers on native execution stack.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope wasm_code_ref_scope;
