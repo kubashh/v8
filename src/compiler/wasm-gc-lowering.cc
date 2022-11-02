@@ -91,11 +91,15 @@ Reduction WasmGCLowering::ReduceWasmTypeCheck(Node* node) {
   bool object_can_be_null = config.from.is_nullable();
   bool object_can_be_i31 =
       wasm::IsSubtypeOf(wasm::kWasmI31Ref.AsNonNull(), config.from, module_);
+  bool is_cast_from_any = config.from.is_reference_to(wasm::HeapType::kAny);
 
   gasm_.InitializeEffectControl(effect_input, control_input);
 
   auto end_label = gasm_.MakeLabel(MachineRepresentation::kWord32);
-  bool is_cast_from_any = config.from.is_reference_to(wasm::HeapType::kAny);
+
+  if (object_can_be_i31) {
+    gasm_.GotoIf(gasm_.IsI31(object), &end_label, gasm_.Int32Constant(0));
+  }
 
   // Skip the null check if casting from any and if null results in check
   // failure. In that case the instance type check will identify null as not
@@ -106,16 +110,22 @@ Reduction WasmGCLowering::ReduceWasmTypeCheck(Node* node) {
                  BranchHint::kFalse, gasm_.Int32Constant(kResult));
   }
 
-  if (object_can_be_i31) {
-    gasm_.GotoIf(gasm_.IsI31(object), &end_label, gasm_.Int32Constant(0));
-  }
-
   Node* map = gasm_.LoadMap(object);
 
-  // First, check if types happen to be equal. This has been shown to give large
-  // speedups.
-  gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue,
-               gasm_.Int32Constant(1));
+  if (config.hint > 0) {
+    // First, check if the type happens to be equal to the hinted type.
+    int hint_result = wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint),
+                                            config.to.heap_type(), module_)
+                          ? 1
+                          : 0;
+
+    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint)), &end_label,
+                 BranchHint::kTrue, gasm_.Int32Constant(hint_result));
+  } else {
+    // In absence of explicit hint, use self-type as hint.
+    gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue,
+                 gasm_.Int32Constant(1));
+  }
 
   // Check if map instance type identifies a wasm object.
   if (is_cast_from_any) {
@@ -166,11 +176,15 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
   bool object_can_be_null = config.from.is_nullable();
   bool object_can_be_i31 =
       wasm::IsSubtypeOf(wasm::kWasmI31Ref.AsNonNull(), config.from, module_);
+  bool is_cast_from_any = config.from.is_reference_to(wasm::HeapType::kAny);
 
   gasm_.InitializeEffectControl(effect_input, control_input);
 
   auto end_label = gasm_.MakeLabel();
-  bool is_cast_from_any = config.from.is_reference_to(wasm::HeapType::kAny);
+
+  if (object_can_be_i31) {
+    gasm_.TrapIf(gasm_.IsI31(object), TrapId::kTrapIllegalCast);
+  }
 
   // Skip the null check if casting from any and if null results in check
   // failure. In that case the instance type check will identify null as not
@@ -184,15 +198,19 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
     }
   }
 
-  if (object_can_be_i31) {
-    gasm_.TrapIf(gasm_.IsI31(object), TrapId::kTrapIllegalCast);
-  }
-
   Node* map = gasm_.LoadMap(object);
 
-  // First, check if types happen to be equal. This has been shown to give large
-  // speedups.
-  gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue);
+  if (config.hint > 0) {
+    // First, check if the type happens to be equal to the hinted type.
+    // This holds, otherwise the program would have trapped.
+    DCHECK(wasm::IsHeapSubtypeOf(wasm::HeapType(config.hint),
+                                 config.to.heap_type(), module_));
+    gasm_.GotoIf(gasm_.TaggedEqual(map, RttCanon(config.hint)), &end_label,
+                 BranchHint::kTrue);
+  } else {
+    // In absence of explicit hint, use self-type as hint.
+    gasm_.GotoIf(gasm_.TaggedEqual(map, rtt), &end_label, BranchHint::kTrue);
+  }
 
   // Check if map instance type identifies a wasm object.
   if (is_cast_from_any) {
@@ -266,15 +284,19 @@ Reduction WasmGCLowering::ReduceIsNotNull(Node* node) {
                                    gasm_.Int32Constant(0)));
 }
 
-Reduction WasmGCLowering::ReduceRttCanon(Node* node) {
-  DCHECK_EQ(node->opcode(), IrOpcode::kRttCanon);
-  int type_index = OpParameter<int>(node->op());
+Node* WasmGCLowering::RttCanon(int type_index) {
   Node* maps_list = gasm_.LoadImmutable(
       MachineType::TaggedPointer(), instance_node_,
       WasmInstanceObject::kManagedObjectMapsOffset - kHeapObjectTag);
-  return Replace(gasm_.LoadImmutable(
+  return gasm_.LoadImmutable(
       MachineType::TaggedPointer(), maps_list,
-      wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(type_index)));
+      wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(type_index));
+}
+
+Reduction WasmGCLowering::ReduceRttCanon(Node* node) {
+  DCHECK_EQ(node->opcode(), IrOpcode::kRttCanon);
+  int type_index = OpParameter<int>(node->op());
+  return Replace(RttCanon(type_index));
 }
 
 Reduction WasmGCLowering::ReduceTypeGuard(Node* node) {

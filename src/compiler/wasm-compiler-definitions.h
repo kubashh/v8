@@ -26,6 +26,7 @@ namespace compiler {
 struct WasmTypeCheckConfig {
   wasm::ValueType from;
   const wasm::ValueType to;
+  int hint;
 };
 
 V8_INLINE std::ostream& operator<<(std::ostream& os,
@@ -34,12 +35,13 @@ V8_INLINE std::ostream& operator<<(std::ostream& os,
 }
 
 V8_INLINE size_t hash_value(WasmTypeCheckConfig const& p) {
-  return base::hash_combine(p.from.raw_bit_field(), p.to.raw_bit_field());
+  return base::hash_combine(p.from.raw_bit_field(), p.to.raw_bit_field(),
+                            p.hint);
 }
 
 V8_INLINE bool operator==(const WasmTypeCheckConfig& p1,
                           const WasmTypeCheckConfig& p2) {
-  return p1.from == p2.from && p1.to == p2.to;
+  return p1.from == p2.from && p1.to == p2.to && p1.hint == p2.hint;
 }
 
 }  // namespace compiler

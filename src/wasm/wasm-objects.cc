@@ -1104,7 +1104,7 @@ void WasmInstanceObject::SetRawMemory(byte* mem_start, size_t mem_size) {
   set_memory_size(mem_size);
 }
 
-const WasmModule* WasmInstanceObject::module() {
+const WasmModule* WasmInstanceObject::module() const {
   return module_object().module();
 }
 

@@ -291,8 +291,9 @@ Reduction WasmGCOperatorReducer::ReduceWasmTypeCast(Node* node) {
   // Update the from-type in the type cast.
   WasmTypeCheckConfig current_config =
       OpParameter<WasmTypeCheckConfig>(node->op());
-  NodeProperties::ChangeOp(node, gasm_.simplified()->WasmTypeCast(
-                                     {object_type.type, current_config.to}));
+  NodeProperties::ChangeOp(
+      node, gasm_.simplified()->WasmTypeCast(
+                {object_type.type, current_config.to, current_config.hint}));
 
   wasm::TypeInModule new_type = wasm::Intersection(
       object_type,
@@ -354,8 +355,9 @@ Reduction WasmGCOperatorReducer::ReduceWasmTypeCheck(Node* node) {
   // Update the from-type in the type cast.
   WasmTypeCheckConfig current_config =
       OpParameter<WasmTypeCheckConfig>(node->op());
-  NodeProperties::ChangeOp(node, gasm_.simplified()->WasmTypeCheck(
-                                     {object_type.type, current_config.to}));
+  NodeProperties::ChangeOp(
+      node, gasm_.simplified()->WasmTypeCheck(
+                {object_type.type, current_config.to, current_config.hint}));
 
   return TakeStatesFromFirstControl(node);
 }

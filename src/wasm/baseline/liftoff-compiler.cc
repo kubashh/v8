@@ -5,17 +5,15 @@
 #include "src/wasm/baseline/liftoff-compiler.h"
 
 #include "src/base/enum-set.h"
-#include "src/base/optional.h"
-#include "src/codegen/assembler-inl.h"
 // TODO(clemensb): Remove dependences on compiler stuff.
 #include "src/codegen/external-reference.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/machine-type.h"
-#include "src/codegen/macro-assembler-inl.h"
+#include "src/codegen/source-position-table.h"
+#include "src/codegen/source-position.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/logging/counters.h"
-#include "src/logging/log.h"
 #include "src/objects/smi.h"
 #include "src/tracing/trace-event.h"
 #include "src/utils/ostreams.h"
@@ -31,6 +29,7 @@
 #include "src/wasm/wasm-debug.h"
 #include "src/wasm/wasm-engine.h"
 #include "src/wasm/wasm-linkage.h"
+#include "src/wasm/wasm-objects-inl.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-opcodes-inl.h"
 
@@ -5905,8 +5904,7 @@ class LiftoffCompiler {
     __ LoadMap(tmp1, obj_reg);
     // {tmp1} now holds the object's map.
 
-    // Check for rtt equality, and if not, check if the rtt is a struct/array
-    // rtt.
+    // First, check for rtt equality.
     __ emit_cond_jump(kEqual, &match, rtt_type.kind(), tmp1, rtt_reg, frozen);
 
     if (is_cast_from_any) {
@@ -5948,32 +5946,76 @@ class LiftoffCompiler {
     __ bind(&match);
   }
 
+  void RecordTypecheckFeedback(FullDecoder* decoder, LiftoffRegister obj_reg,
+                               LiftoffRegister rtt_reg, ValueType rtt_type,
+                               bool null_succeeds, LiftoffRegList pinned) {
+    LiftoffRegister index = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    size_t vector_slot = encountered_call_instructions_.size() * 2;
+    encountered_call_instructions_.push_back(FunctionTypeFeedback::kTypecheck);
+    __ LoadConstant(index, WasmValue::ForUintPtr(vector_slot));
+    LiftoffAssembler::VarState index_var(kRef, index, 0);
+
+    LiftoffRegister rtt_depth =
+        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    __ LoadConstant(rtt_depth, WasmValue(GetSubtypingDepth(
+                                   decoder->module_, rtt_type.ref_index())));
+    LiftoffAssembler::VarState rtt_depth_var(kRef, rtt_depth, 0);
+
+    LiftoffRegister null_succeeds_reg =
+        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    __ LoadConstant(null_succeeds_reg, WasmValue(null_succeeds ? 1 : 0));
+    LiftoffAssembler::VarState null_succeeds_var(kRef, null_succeeds_reg, 0);
+
+    LiftoffRegister vector = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    __ Fill(vector, liftoff::kFeedbackVectorOffset, kPointerKind);
+    LiftoffAssembler::VarState vector_var(kPointerKind, vector, 0);
+
+    LiftoffAssembler::VarState obj_var(kRef, obj_reg, 0);
+    LiftoffAssembler::VarState rtt_var(kRef, rtt_reg, 0);
+
+    // FeedbackIC(vector: FixedArray, index: intptr, rtt: Map)
+    CallRuntimeStub(WasmCode::kRefTestIC,
+                    MakeSig::Returns(kRef).Params(kPointerKind, kI32, kI32,
+                                                  kRef, kRef, kRef),
+                    {index_var, rtt_depth_var, null_succeeds_var, vector_var,
+                     obj_var, rtt_var},
+                    decoder->position());
+  }
+
   void RefTest(FullDecoder* decoder, const Value& obj, const Value& rtt,
                Value* /* result_val */, bool null_succeeds) {
     Label return_false, done;
     LiftoffRegList pinned;
     LiftoffRegister rtt_reg = pinned.set(__ PopToRegister(pinned));
     LiftoffRegister obj_reg = pinned.set(__ PopToRegister(pinned));
+
+    if (v8_flags.wasm_typecheck_feedback) {
+      RecordTypecheckFeedback(decoder, obj_reg, rtt_reg, rtt.type,
+                              null_succeeds, pinned);
+      __ PushRegister(kI32, LiftoffRegister(kReturnRegister0));
+      return;
+    }
+
     Register scratch_null =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    LiftoffRegister result = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    LiftoffRegister scratch2 = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     if (obj.type.is_nullable()) LoadNullValue(scratch_null, pinned);
 
     {
       FREEZE_STATE(frozen);
       SubtypeCheck(decoder->module_, obj_reg.gp(), obj.type, rtt_reg.gp(),
-                   rtt.type, scratch_null, result.gp(), &return_false,
+                   rtt.type, scratch_null, scratch2.gp(), &return_false,
                    null_succeeds ? kNullSucceeds : kNullFails, frozen);
 
-      __ LoadConstant(result, WasmValue(1));
+      __ LoadConstant(scratch2, WasmValue(1));
       // TODO(jkummerow): Emit near jumps on platforms that have them.
       __ emit_jump(&done);
 
       __ bind(&return_false);
-      __ LoadConstant(result, WasmValue(0));
+      __ LoadConstant(scratch2, WasmValue(0));
       __ bind(&done);
     }
-    __ PushRegister(kI32, result);
+    __ PushRegister(kI32, scratch2);
   }
 
   void RefTestAbstract(FullDecoder* decoder, const Value& obj, HeapType type,
@@ -6006,20 +6048,25 @@ class LiftoffCompiler {
         AddOutOfLineTrap(decoder, WasmCode::kThrowWasmTrapIllegalCast);
     LiftoffRegList pinned;
     LiftoffRegister rtt_reg = pinned.set(__ PopToRegister(pinned));
-    LiftoffRegister obj_reg = pinned.set(__ PopToRegister(pinned));
-    Register scratch_null =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    Register scratch2 = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
-    if (obj.type.is_nullable()) LoadNullValue(scratch_null, pinned);
+    LiftoffRegister obj_reg = pinned.set(__ PeekToRegister(0, pinned));
+    if (v8_flags.wasm_typecheck_feedback) {
+      RecordTypecheckFeedback(decoder, obj_reg, rtt_reg, rtt.type,
+                              null_succeeds, pinned);
+      FREEZE_STATE(frozen);
+      __ emit_cond_jump(kEqualZero, trap_label, kI32, kReturnRegister0, no_reg,
+                        frozen);
+    } else {
+      Register scratch_null =
+          pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
+      Register scratch2 = pinned.set(__ GetUnusedRegister(kGpReg, pinned)).gp();
+      if (obj.type.is_nullable()) LoadNullValue(scratch_null, pinned);
 
-    {
       FREEZE_STATE(frozen);
       NullSucceeds on_null = null_succeeds ? kNullSucceeds : kNullFails;
       SubtypeCheck(decoder->module_, obj_reg.gp(), obj.type, rtt_reg.gp(),
                    rtt.type, scratch_null, scratch2, trap_label, on_null,
                    frozen);
     }
-    __ PushRegister(obj.type.kind(), obj_reg);
   }
 
   void RefCastAbstract(FullDecoder* decoder, const Value& obj, HeapType type,
@@ -6047,6 +6094,11 @@ class LiftoffCompiler {
     if (depth != decoder->control_depth() - 1) {
       __ PrepareForBranch(decoder->control_at(depth)->br_merge()->arity, {});
     }
+    if (v8_flags.wasm_typecheck_feedback) {
+      // TODO(7748): Complete this.
+      encountered_call_instructions_.push_back(
+          FunctionTypeFeedback::kTypecheck);
+    }
 
     Label cont_false;
     LiftoffRegList pinned;
@@ -6072,6 +6124,12 @@ class LiftoffCompiler {
     // Avoid having sequences of branches do duplicate work.
     if (depth != decoder->control_depth() - 1) {
       __ PrepareForBranch(decoder->control_at(depth)->br_merge()->arity, {});
+    }
+
+    if (v8_flags.wasm_typecheck_feedback) {
+      // TODO(7748): Complete this.
+      encountered_call_instructions_.push_back(
+          FunctionTypeFeedback::kTypecheck);
     }
 
     Label cont_branch, fallthrough;
