@@ -172,7 +172,9 @@ enum class SkipRoot {
   kStack,
   kMainThreadHandles,
   kUnserializable,
-  kWeak
+  kWeak,
+  kTopOfStack,
+  kConservativeStack,
 };
 
 enum UnprotectMemoryOrigin {
@@ -1024,11 +1026,16 @@ class Heap {
   // garbage collection and is usually only performed as part of
   // (de)serialization or heap verification.
 
+  // The order of this enumeration's elements is important: they should go from
+  // more precise to more conservative modes for stack scanning, so that we can
+  // use std::min to override for testing purposes.
+  enum class ScanStackMode { kNone, kFromMarker, kComplete };
+
   // Iterates over the strong roots and the weak roots.
   void IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
   void IterateRootsIncludingClients(RootVisitor* v,
                                     base::EnumSet<SkipRoot> options);
-  void IterateRootsFromStackIncludingClient(RootVisitor* v);
+  void IterateRootsFromStackIncludingClient(RootVisitor* v, ScanStackMode mode);
 
   // Iterates over entries in the smi roots list.  Only interesting to the
   // serializer/deserializer, since GC does not care about smis.
@@ -1037,7 +1044,7 @@ class Heap {
   void IterateWeakRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
   void IterateWeakGlobalHandles(RootVisitor* v);
   void IterateBuiltins(RootVisitor* v);
-  void IterateStackRoots(RootVisitor* v);
+  void IterateStackRoots(RootVisitor* v, ScanStackMode mode);
 
   // ===========================================================================
   // Remembered set API. =======================================================
@@ -1644,7 +1651,7 @@ class Heap {
 
   // Ensure that we have swept all spaces in such a way that we can iterate
   // over all objects.
-  void MakeHeapIterable();
+  V8_EXPORT_PRIVATE void MakeHeapIterable();
 
   V8_EXPORT_PRIVATE bool CanPromoteYoungAndExpandOldGeneration(size_t size);
   V8_EXPORT_PRIVATE bool CanExpandOldGeneration(size_t size);
@@ -1789,10 +1796,9 @@ class Heap {
 
   // Performs garbage collection in a safepoint.
   // Returns the number of freed global handles.
-  size_t PerformGarbageCollection(
-      GarbageCollector collector, GarbageCollectionReason gc_reason,
-      const char* collector_reason,
-      const GCCallbackFlags gc_callback_flags = kNoGCCallbackFlags);
+  size_t PerformGarbageCollection(GarbageCollector collector,
+                                  GarbageCollectionReason gc_reason,
+                                  const char* collector_reason);
 
   // Performs garbage collection in the shared heap.
   void PerformSharedGarbageCollection(Isolate* initiator,
@@ -2380,6 +2386,7 @@ class Heap {
   bool force_oom_ = false;
   bool force_gc_on_next_allocation_ = false;
   bool delay_sweeper_tasks_for_testing_ = false;
+  ScanStackMode scan_stack_mode_for_testing_ = ScanStackMode::kComplete;
 
   std::unordered_map<HeapObject, HeapObject, Object::Hasher> retainer_;
   std::unordered_map<HeapObject, Root, Object::Hasher> retaining_root_;
@@ -2442,6 +2449,7 @@ class Heap {
   friend class PagedSpaceBase;
   friend class PretenturingHandler;
   friend class ReadOnlyRoots;
+  friend class ScanStackModeScopeForTesting;
   friend class Scavenger;
   friend class ScavengerCollector;
   friend class StressConcurrentAllocationObserver;
@@ -2659,6 +2667,23 @@ class V8_NODISCARD IgnoreLocalGCRequests {
 
  private:
   Heap* heap_;
+};
+
+class V8_NODISCARD ScanStackModeScopeForTesting {
+ public:
+  explicit inline ScanStackModeScopeForTesting(Heap* heap,
+                                               Heap::ScanStackMode mode)
+      : heap_(heap), old_value_(heap_->scan_stack_mode_for_testing_) {
+    heap_->scan_stack_mode_for_testing_ = mode;
+  }
+
+  inline ~ScanStackModeScopeForTesting() {
+    heap_->scan_stack_mode_for_testing_ = old_value_;
+  }
+
+ protected:
+  Heap* heap_;
+  Heap::ScanStackMode old_value_;
 };
 
 // Visitor class to verify interior pointers in spaces that do not contain
