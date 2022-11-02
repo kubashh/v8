@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d45d9144_7bbed02d",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Nope, I\u0027ve removed it ;)",
+      "parentUuid": "63f2c7ff_98e73d84",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 24
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a56da651_5433bab6",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b33c900_78c49f61",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "`input_graph` and `output_graph` are now only in GraphVisitor (the old OptimizationPhaseImpl), which Assembler inherits from before inheriting from ReducerStack.\nAnd I\u0027ve also removed `phase_zone` from the Reducers\u0027 constructor, since most of them don\u0027t need it, and were just forwarding it to the next reducer. It\u0027s now accessible through `Asm().phase_zone()`.",
+      "parentUuid": "a56da651_5433bab6",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2bcb497_34d2a711",
         "filename": "src/compiler/turboshaft/optimization-phase.h",
         "patchSetId": 3
@@ -77,6 +125,30 @@
       "writtenOn": "2022-10-28T16:57:23Z",
       "side": 1,
       "message": "leftover?",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 28
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abb7633a_5922b578",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Removed ;)",
+      "parentUuid": "f2bcb497_34d2a711",
       "range": {
         "startLine": 103,
         "startChar": 0,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ed235f1_0db481c2",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "The idea was to extract non-templatized parts of OptimizationPhaseImpl into a separate class, so the Assemblers could use it. \nWith the new Assembler/Reducers architecture, Reducers have access to the Assembler, which has access to OptimizationPhaseImplm (well, GraphVisitor now), so it makes probably sense to put all of this stuff back into GraphVisitor, which is what I\u0027ve done.",
+      "parentUuid": "a90f5d00_4c790284",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 6
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f42d0e8_b10b58c7",
         "filename": "src/compiler/turboshaft/optimization-phase.h",
         "patchSetId": 3
@@ -123,6 +219,30 @@
       "writtenOn": "2022-10-28T16:57:23Z",
       "side": 1,
       "message": "By convention, private members end in an underscore.",
+      "range": {
+        "startLine": 148,
+        "startChar": 9,
+        "endLine": 148,
+        "endChar": 20
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a72ba1_ab458d4a",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f42d0e8_b10b58c7",
       "range": {
         "startLine": 148,
         "startChar": 9,
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8764e835_2c958a06",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44cb55ee_b4715138",
+      "range": {
+        "startLine": 194,
+        "startChar": 30,
+        "endLine": 194,
+        "endChar": 37
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ccb01d4_ed331445",
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0768ad0c_d844283c",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Yeah, good point. I\u0027ve added a TODO for that.",
+      "parentUuid": "9ccb01d4_ed331445",
+      "range": {
+        "startLine": 445,
+        "startChar": 11,
+        "endLine": 445,
+        "endChar": 22
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9697453b_fe207e3f",
@@ -192,6 +360,30 @@
       "writtenOn": "2022-10-28T16:57:23Z",
       "side": 1,
       "message": "I don\u0027t think we want a `LivenessAnalyzer` by default. How about removing this for now?",
+      "range": {
+        "startLine": 620,
+        "startChar": 2,
+        "endLine": 620,
+        "endChar": 28
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ebad134_cf84e31e",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-02T15:36:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9697453b_fe207e3f",
       "range": {
         "startLine": 620,
         "startChar": 2,
