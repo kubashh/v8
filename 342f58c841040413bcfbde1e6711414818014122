@@ -16,6 +16,23 @@
       "message": "Thanks for the comments! I addressed them (in particular using wami instead of xxd), removed TODOs, and explained my reasoning below.",
       "revId": "342f58c841040413bcfbde1e6711414818014122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cd17103_2c943fa8",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2022-11-02T11:15:07Z",
+      "side": 1,
+      "message": "Minor question: It is correct that I don\u0027t add the .inc files here, because they are not a separate translation unit, right?",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
