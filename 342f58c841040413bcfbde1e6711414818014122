@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb66c100_4e5cf01f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2022-11-02T09:20:33Z",
+      "side": 1,
+      "message": "Thanks for the comments! I addressed them (in particular using wami instead of xxd), removed TODOs, and explained my reasoning below.",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
