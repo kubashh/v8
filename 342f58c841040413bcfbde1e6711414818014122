@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d9480f_3277078a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cd17103_2c943fa8",
@@ -31,6 +48,47 @@
       "writtenOn": "2022-11-02T11:15:07Z",
       "side": 1,
       "message": "Minor question: It is correct that I don\u0027t add the .inc files here, because they are not a separate translation unit, right?",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "178c5fb3_4579e893",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "Good point, I think you should add them. We also add *.h files. (I\u0027m not sure what exactly would break if they\u0027re missing -- maybe recompilation if only the .inc file has changed?)",
+      "parentUuid": "8cd17103_2c943fa8",
+      "revId": "342f58c841040413bcfbde1e6711414818014122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5a5ac99_263f758d",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "`wami` is fully pipe-capable, so you can keep `--output\u003d-` here, and don\u0027t need `module.wasm` on the next line. (I\u0027m kinda surprised that the current form even works; I guess I\u0027ve accidentally made the mechanism more flexible than I intended 😊)",
+      "range": {
+        "startLine": 28,
+        "startChar": 53,
+        "endLine": 28,
+        "endChar": 67
+      },
       "revId": "342f58c841040413bcfbde1e6711414818014122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

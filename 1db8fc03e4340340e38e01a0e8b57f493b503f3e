@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7547c6b7_0087ebed",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wasm.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "Re hidden bugs: we may assume that our disassembler is correct right now, because we\u0027ve tested it (using a manual workflow) against `wasmparser` before it landed. So these tests are largely \"change detector tests\": we don\u0027t want established functionality to regress when we make changes.\n\nRe .wasm.inc: I understand that that setup eases test development, especially as you need to iterate. But that phase ends when this CL lands, so you could inline the file before that happens. I don\u0027t feel strongly about it though.",
+      "parentUuid": "c796ea6a_b1ddc7dd",
+      "range": {
+        "startLine": 1,
+        "startChar": 2,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "068a5585_4b89dfdc",
@@ -142,6 +166,24 @@
       "writtenOn": "2022-11-02T09:20:33Z",
       "side": 1,
       "message": "In these cases marked here, I am not sure what the correct expected output from the disassembler shall be. Is it specified somewhere, or do we always follow, e.g., the output of wasm2wat?",
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebd86a67_54fbc3f9",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "The spec is at https://webassembly.github.io/spec/core/text/index.html, but it leaves some freedom as there\u0027s more than one way to format modules as text.\nFor now, we follow what https://github.com/wasdk/wasmparser does, because that\u0027s what DevTools used to use. Generally, anything we find readable/useful is fine, as long as it\u0027s covered by the official text format spec. In particular, we can change what our disassembler produces, as long as we believe that it is an improvement.",
+      "parentUuid": "ca8e3699_f04ddab4",
       "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -300,6 +342,24 @@
       "writtenOn": "2022-11-02T09:20:33Z",
       "side": 1,
       "message": "These I plan on adding in a separate CL.\nFor the non-MVP features, I would use separate module(s).",
+      "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68deb9a_f3f00ecc",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-mvp.wat.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-02T15:11:06Z",
+      "side": 1,
+      "message": "OK.\n\nModules that use a name section would also be good to include eventually. They don\u0027t necessarily need to be separate: the name section can provide partial coverage to test both cases in a single module.\n\nSpecs for things that can be named:\n- https://webassembly.github.io/spec/core/appendix/custom.html#name-section \n- https://github.com/WebAssembly/extended-name-section/blob/main/proposals/extended-name-section/Overview.md \n- https://github.com/WebAssembly/exception-handling/blob/main/proposals/exception-handling/Exceptions.md#name-section \n- https://github.com/WebAssembly/gc/issues/193",
+      "parentUuid": "96eb61cb_f2ae2035",
       "revId": "1db8fc03e4340340e38e01a0e8b57f493b503f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
