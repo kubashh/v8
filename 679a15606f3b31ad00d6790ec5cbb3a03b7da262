@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8218367_c2abd212",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-02T19:41:05Z",
+      "side": 0,
+      "message": "This connection is not clear yet. We can use compilators as stand-alone bots and as part of orchestrators. The bot alone doesn\u0027t know this, therefore we can\u0027t add it to the static description. We could set a property at runtime so that the build could emit this extra information?\n\nIn general, on the compilator build there is a link already to the parent build that triggered it. That\u0027s a generic LUCI feature by now.",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 65
+      },
+      "revId": "679a15606f3b31ad00d6790ec5cbb3a03b7da262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
