@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8083162f_54dc5c37",
+        "filename": "src/builtins/builtins-struct.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-02T18:09:41Z",
+      "side": 1,
+      "message": "Thanks for the comment.\n\nYeah I think we\u0027ve been careful with the enum cache mostly since it\u0027s not directly user-visible when we create maps. SharedStructs are quite explicit.",
+      "parentUuid": "e72d4233_3ea24936",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 58
+      },
+      "revId": "a3b5fd1479c3d9d141f162b5e2b9ee71802df72a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e87af3d_7a3370a2",
