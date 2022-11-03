@@ -56,6 +56,30 @@
       },
       "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17e69c22_412bf97b",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-03T08:21:21Z",
+      "side": 1,
+      "message": "I have done it for the name, but is it actually better now? The more descriptive variable gives some more meaning here within the function, but it also adds boilerplate at the call sites, since orchestrator_name is more to read and write at each definition.\n\nWith description I think it\u0027s an implementation detail that we use this \"common\" description for the compilator. It could very well be that we also there add some details at some point. At the call site it\u0027d be confusing to call the argument compilator_description and then internally also use it for orchestrators.",
+      "parentUuid": "98cdb78a_9ec9885c",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
