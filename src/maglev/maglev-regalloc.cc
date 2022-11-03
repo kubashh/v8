@@ -1315,6 +1315,14 @@ void StraightForwardRegisterAllocator::SaveRegisterSnapshot(NodeBase* node) {
       snapshot.live_tagged_registers.clear(reg);
     }
   }
+  // Remove clobbered registers as well.
+  for (Register reg : general_registers_.clobbered()) {
+    snapshot.live_registers.clear(reg);
+    snapshot.live_tagged_registers.clear(reg);
+  }
+  for (DoubleRegister reg : double_registers_.clobbered()) {
+    snapshot.live_double_registers.clear(reg);
+  }
   node->set_register_snapshot(snapshot);
 }
 

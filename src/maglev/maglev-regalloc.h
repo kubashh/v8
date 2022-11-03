@@ -60,6 +60,7 @@ class RegisterFrameState {
   void AddToFree(RegisterT reg) { free_.set(reg); }
   void AddToFree(RegTList list) { free_ |= list; }
 
+  RegTList clobbered() const { return clobbered_; }
   void Clobber(RegisterT reg) {
     DCHECK(!free_.has(reg));
     clobbered_.set(reg);
