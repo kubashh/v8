@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17988c60_1407c69e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-11-03T05:30:43Z",
+      "side": 1,
+      "message": "lgtm \u0026 thanks",
+      "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98cdb78a_9ec9885c",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-11-03T05:30:43Z",
+      "side": 1,
+      "message": "nit: While this is also the name for the pair, we might want to be more specific (e.g. `orchestrator_name`) as we have multiple builder names in this method.\n\nSame for the `description` below, which used as the `compilator_description`.",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
