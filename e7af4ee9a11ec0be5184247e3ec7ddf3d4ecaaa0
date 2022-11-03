@@ -104,6 +104,30 @@
       },
       "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f7f7f7_d7ce26fd",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-03T10:33:43Z",
+      "side": 1,
+      "message": "ok - I rolled it back to the state before with just name. I\u0027ll keep thinking about clean-ups that make it nicer in the future.",
+      "parentUuid": "762d96a2_6e26973e",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
