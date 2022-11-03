@@ -16,6 +16,23 @@
       "message": "ptal\n\nThis was an interesting bug; the spec says we first convert the incoming value to the correct type ( in https://tc39.es/ecma262/#sec-integerindexedelementset ) and then do the bounds check. But the v8 implementation converts the incoming value relatively late; especially, we first look up the value with LookupIterator etc. This is why this is a bit messy, since we need to revalidate afterwards.",
       "revId": "e854b4024f5fe88e7cd798b728cfad41425f84ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6687f3_3284f9b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-03T23:27:51Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e854b4024f5fe88e7cd798b728cfad41425f84ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
