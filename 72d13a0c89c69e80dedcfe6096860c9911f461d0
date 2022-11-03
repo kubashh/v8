@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ef7344_7bf2b77e",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-03T09:36:09Z",
+      "side": 1,
+      "message": "maybe this could be implicit by saving the snapshot after clobbering?",
+      "range": {
+        "startLine": 1318,
+        "startChar": 5,
+        "endLine": 1318,
+        "endChar": 40
+      },
+      "revId": "72d13a0c89c69e80dedcfe6096860c9911f461d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
