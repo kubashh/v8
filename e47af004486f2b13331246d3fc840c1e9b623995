@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51ec4060_0cf27a23",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1612,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-03T10:46:21Z",
+      "side": 0,
+      "message": "Can you add a DisallowGCScope to this whole block?",
+      "range": {
+        "startLine": 1612,
+        "startChar": 2,
+        "endLine": 1612,
+        "endChar": 3
+      },
+      "revId": "e47af004486f2b13331246d3fc840c1e9b623995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
