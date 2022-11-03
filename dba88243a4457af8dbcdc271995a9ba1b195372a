@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d019f0d_823f9ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-03T15:44:32Z",
+      "side": 1,
+      "message": "This unifies BuildCall from registers and register list. PTAL!",
+      "revId": "dba88243a4457af8dbcdc271995a9ba1b195372a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
