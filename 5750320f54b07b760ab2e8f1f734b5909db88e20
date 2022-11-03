@@ -252,6 +252,30 @@
       },
       "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a368b16_100cac46",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-03T12:08:55Z",
+      "side": 1,
+      "message": "This will be considered in a subsequent CL.",
+      "parentUuid": "c6d9e2ac_e558cece",
+      "range": {
+        "startLine": 503,
+        "startChar": 25,
+        "endLine": 503,
+        "endChar": 48
+      },
+      "revId": "5750320f54b07b760ab2e8f1f734b5909db88e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
