@@ -74,6 +74,30 @@
       },
       "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9e8e560_64b8ce4c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-03T10:28:39Z",
+      "side": 1,
+      "message": "Yes, I agree, for now a `PreciseStackScanningScopeForTesting` would suffice. I considered that, but I thought that it would be a good idea to be able to test CCS from the marker up (we don\u0027t have such tests now). This is the only advantage of how it is now.",
+      "parentUuid": "1299d636_af8cf333",
+      "range": {
+        "startLine": 2674,
+        "startChar": 18,
+        "endLine": 2674,
+        "endChar": 46
+      },
+      "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
