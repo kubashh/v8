@@ -16,6 +16,64 @@
       "message": "I think you\u0027ll like this version better.\nNo saved mode, except for testing, and no internal scope.\nLet\u0027s go with this one.",
       "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1f56ef_7dbf316f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-03T10:19:51Z",
+      "side": 1,
+      "message": "I agree. I think this is much cleaner and I like it.",
+      "parentUuid": "69b9a578_eeb6be49",
+      "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a59834c_3f3f5ea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-03T10:19:51Z",
+      "side": 1,
+      "message": "Code looks good. Just one more suggestion.",
+      "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1299d636_af8cf333",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 2674,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-03T10:19:51Z",
+      "side": 1,
+      "message": "We only need this scope for disabling CSS for testing. I don\u0027t think we need to take a ScanStackMode here. This flag can set a simple boolean flag in Heap stating that CSS is disabled for testing. IterateStackRoots and IterateRootsFromStackIncludingClient can them bailout if that flag is set.\nThe testing utils can use a base::optional\u003cScanStackModeScopeForTesting\u003e and emplace it only when it wants to disable CSS.\nWdyt?",
+      "range": {
+        "startLine": 2674,
+        "startChar": 18,
+        "endLine": 2674,
+        "endChar": 46
+      },
+      "revId": "eedc4dd8e77bae008a6a7bd100a064c01eaa400a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
