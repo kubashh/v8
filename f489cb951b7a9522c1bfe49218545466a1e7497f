@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "f489cb951b7a9522c1bfe49218545466a1e7497f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09410d96_7458e2ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-03T10:56:23Z",
+      "side": 1,
+      "message": "One comment, and can we add a regression test, similar to the existing inspector/debugger/wasm-* tests (but hopefully smaller)?",
+      "revId": "f489cb951b7a9522c1bfe49218545466a1e7497f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "287fb018_71d3460a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4929,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-03T10:56:23Z",
+      "side": 1,
+      "message": "I think this will violate invariants in the cache state; in particular, the register use counters will not match any more. If you add {LiftoffAssembler::ValidateCacheState} after this line, it would fail. Not sure if it can lead to a crash or other issue, since we will spill all registers afterwards anyway, but we should adjust the use counters accordingly anyway, like:\n  if (full_index !\u003d index_plus_offset) {\n    __ cache_state()-\u003edec_used(full_index);\n    __ cache_state()-\u003einc_used(index_plus_offset);\n  }",
+      "revId": "f489cb951b7a9522c1bfe49218545466a1e7497f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
