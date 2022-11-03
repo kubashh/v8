@@ -22,6 +22,30 @@
       },
       "revId": "72d13a0c89c69e80dedcfe6096860c9911f461d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c8cff9_c695439b",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-03T09:45:11Z",
+      "side": 1,
+      "message": "Nice idea! I also put before eager deopt marking, so that it uses the spilled value.",
+      "parentUuid": "b2ef7344_7bf2b77e",
+      "range": {
+        "startLine": 1318,
+        "startChar": 5,
+        "endLine": 1318,
+        "endChar": 40
+      },
+      "revId": "72d13a0c89c69e80dedcfe6096860c9911f461d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
