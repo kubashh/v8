@@ -274,7 +274,11 @@ DebugEvaluate::ContextBuilder::ContextBuilder(Isolate* isolate,
     scope_info->SetIsDebugEvaluateScope();
 
     if (v8_flags.experimental_reuse_locals_blocklists) {
-      if (rit == context_chain_.rbegin()) {
+      // It is possible that the context chain is non-empty when not inside a
+      // closure, in which case there is no need for blocklists.
+      const bool current_scope_is_inside_closure =
+          !scope_iterator_.Done() && !scope_iterator_.InInnerScope();
+      if (rit == context_chain_.rbegin() && current_scope_is_inside_closure) {
         // The DebugEvaluateContext we create for the closure scope is the only
         // DebugEvaluateContext with a block list. This means we'll retrieve
         // the existing block list from the paused function scope
