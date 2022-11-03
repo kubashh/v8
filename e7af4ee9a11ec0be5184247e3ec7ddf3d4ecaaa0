@@ -80,6 +80,30 @@
       },
       "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "762d96a2_6e26973e",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2022-11-03T09:17:48Z",
+      "side": 1,
+      "message": "I didn\u0027t pay attention to the fact that we use it as named arguments.\n\nI\u0027d have a slight preference if we it\u0027s actually used as an argument only, e.g.\n\n```\ntrybot_pair(\n    \"v8_linux64_cfi_rel\",\n    cq_properties \u003d CQ.OPTIONAL,\n    dimensions \u003d {\"os\": \"Ubuntu-18.04\", \"cpu\": \"x86-64\"},\n    use_goma \u003d GOMA.DEFAULT,\n)\n```\n\nBut since we use it as a keyword argument, I\u0027d withdraw my comment.\n\nThe same reasoning for the description might apply to the name too: Coincedantally",
+      "parentUuid": "17e69c22_412bf97b",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 12
+      },
+      "revId": "e7af4ee9a11ec0be5184247e3ec7ddf3d4ecaaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
