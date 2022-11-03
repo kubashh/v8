@@ -12,6 +12,7 @@
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 #include "src/compiler/backend/instruction.h"
+#include "src/maglev/maglev-code-gen-state.h"
 #include "src/maglev/maglev-compilation-info.h"
 #include "src/maglev/maglev-compilation-unit.h"
 #include "src/maglev/maglev-graph-labeller.h"
@@ -530,8 +531,7 @@ void StraightForwardRegisterAllocator::UpdateUse(
 void StraightForwardRegisterAllocator::UpdateUse(
     const EagerDeoptInfo& deopt_info) {
   detail::DeepForEachInput(
-      &deopt_info,
-      [&](ValueNode* node, interpreter::Register reg, InputLocation* input) {
+      &deopt_info, [&](ValueNode* node, InputLocation* input) {
         if (v8_flags.trace_maglev_regalloc) {
           printing_visitor_->os()
               << "- using " << PrintNodeLabel(graph_labeller(), node) << "\n";
@@ -548,8 +548,7 @@ void StraightForwardRegisterAllocator::UpdateUse(
 void StraightForwardRegisterAllocator::UpdateUse(
     const LazyDeoptInfo& deopt_info) {
   detail::DeepForEachInput(
-      &deopt_info,
-      [&](ValueNode* node, interpreter::Register reg, InputLocation* input) {
+      &deopt_info, [&](ValueNode* node, InputLocation* input) {
         if (v8_flags.trace_maglev_regalloc) {
           printing_visitor_->os()
               << "- using " << PrintNodeLabel(graph_labeller(), node) << "\n";
@@ -635,6 +634,9 @@ void StraightForwardRegisterAllocator::AllocateNode(Node* node) {
     PrintLiveRegs();
     printing_visitor_->os() << "\n";
   }
+
+  general_registers_.FreeClobbered();
+  double_registers_.FreeClobbered();
 
   // All the temporaries should be free by the end. The exception is the node
   // result, which could be written into a register that was previously
@@ -1070,6 +1072,17 @@ void StraightForwardRegisterAllocator::AssignFixedInput(Input& input) {
   }
 }
 
+void StraightForwardRegisterAllocator::AddToClobbered(
+    ValueNode* node, const compiler::AllocatedOperand& location) {
+  // Ensure node is available on the stack.
+  Spill(node);
+  if (node->use_double_register()) {
+    double_registers_.Clobber(location.GetDoubleRegister());
+  } else {
+    general_registers_.Clobber(location.GetRegister());
+  }
+}
+
 void StraightForwardRegisterAllocator::AssignArbitraryRegisterInput(
     Input& input) {
   // Already assigned in AssignFixedInput
@@ -1100,9 +1113,15 @@ void StraightForwardRegisterAllocator::AssignArbitraryRegisterInput(
         node->use_double_register()
             ? double_registers_.ChooseInputRegister(node)
             : general_registers_.ChooseInputRegister(node);
+    if (input.Cloberred()) {
+      AddToClobbered(node, location);
+    }
     input.SetAllocated(location);
   } else {
     compiler::AllocatedOperand allocation = AllocateRegister(node);
+    if (input.Cloberred()) {
+      AddToClobbered(node, allocation);
+    }
     input.SetAllocated(allocation);
     DCHECK_NE(location, allocation);
     AddMoveBeforeCurrentNode(node, location, allocation);
@@ -1285,6 +1304,17 @@ void StraightForwardRegisterAllocator::SaveRegisterSnapshot(NodeBase* node) {
   });
   snapshot.live_registers = general_registers_.used();
   snapshot.live_double_registers = double_registers_.used();
+  // If a value node, then the result register is removed from the snapshot.
+  if (ValueNode* value_node = node->TryCast<ValueNode>()) {
+    if (value_node->use_double_register()) {
+      snapshot.live_double_registers.clear(
+          ToDoubleRegister(value_node->result()));
+    } else {
+      Register reg = ToRegister(value_node->result());
+      snapshot.live_registers.clear(reg);
+      snapshot.live_tagged_registers.clear(reg);
+    }
+  }
   node->set_register_snapshot(snapshot);
 }
 

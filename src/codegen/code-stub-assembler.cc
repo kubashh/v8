@@ -845,6 +845,20 @@ TNode<IntPtrT> CodeStubAssembler::TryIntPtrMul(TNode<IntPtrT> a,
   return Projection<0>(pair);
 }
 
+TNode<IntPtrT> CodeStubAssembler::TryIntPtrDiv(TNode<IntPtrT> a,
+                                               TNode<IntPtrT> b,
+                                               Label* if_div_zero) {
+  GotoIf(IntPtrEqual(b, IntPtrConstant(0)), if_div_zero);
+  return IntPtrDiv(a, b);
+}
+
+TNode<IntPtrT> CodeStubAssembler::TryIntPtrMod(TNode<IntPtrT> a,
+                                               TNode<IntPtrT> b,
+                                               Label* if_div_zero) {
+  GotoIf(IntPtrEqual(b, IntPtrConstant(0)), if_div_zero);
+  return IntPtrMod(a, b);
+}
+
 TNode<Int32T> CodeStubAssembler::TryInt32Mul(TNode<Int32T> a, TNode<Int32T> b,
                                              Label* if_overflow) {
   TNode<PairT<Int32T, BoolT>> pair = Int32MulWithOverflow(a, b);
@@ -3090,9 +3104,14 @@ void CodeStubAssembler::UnsafeStoreObjectFieldNoWriteBarrier(
                                           object, offset, value);
 }
 
-void CodeStubAssembler::StoreJSSharedStructInObjectField(
-    TNode<HeapObject> object, TNode<IntPtrT> offset, TNode<Object> value) {
-  CSA_DCHECK(this, IsJSSharedStruct(object));
+void CodeStubAssembler::StoreSharedObjectField(TNode<HeapObject> object,
+                                               TNode<IntPtrT> offset,
+                                               TNode<Object> value) {
+  CSA_DCHECK(
+      this,
+      WordNotEqual(WordAnd(LoadBasicMemoryChunkFlags(object),
+                           IntPtrConstant(BasicMemoryChunk::IN_SHARED_HEAP)),
+                   IntPtrConstant(0)));
   // JSSharedStructs are allocated in the shared old space, which is currently
   // collected by stopping the world, so the incremental write barrier is not
   // needed. They can only store Smis and other HeapObjects in the shared old

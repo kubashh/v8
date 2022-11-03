@@ -28,7 +28,6 @@
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/allocation-result.h"
-#include "src/heap/base/stack.h"
 #include "src/heap/gc-callbacks.h"
 #include "src/heap/heap-allocator.h"
 #include "src/heap/marking-state.h"
@@ -143,6 +142,8 @@ enum ArrayStorageAllocationMode {
 
 enum class ClearRecordedSlots { kYes, kNo };
 
+enum class UpdateInvalidatedObjectSize { kYes, kNo };
+
 enum class InvalidateRecordedSlots { kYes, kNo };
 
 enum class ClearFreedMemoryMode { kClearFreedMemory, kDontClearFreedMemory };
@@ -210,6 +211,12 @@ struct CommentStatistic {
 using EphemeronRememberedSet =
     std::unordered_map<EphemeronHashTable, std::unordered_set<int>,
                        Object::Hasher>;
+
+// An alias for std::unordered_map<HeapObject, T> which also sets proper
+// Hash and KeyEqual functions.
+template <typename T>
+using UnorderedHeapObjectMap =
+    std::unordered_map<HeapObject, T, Object::Hasher, Object::KeyEqualSafe>;
 
 class Heap {
  public:
@@ -835,8 +842,6 @@ class Heap {
   OldSpace* old_space() const { return old_space_; }
   CodeSpace* code_space() const { return code_space_; }
   SharedSpace* shared_space() const { return shared_space_; }
-  MapSpace* map_space() const { return map_space_; }
-  inline PagedSpace* space_for_maps();
   OldLargeObjectSpace* lo_space() const { return lo_space_; }
   CodeLargeObjectSpace* code_lo_space() const { return code_lo_space_; }
   SharedLargeObjectSpace* shared_lo_space() const { return shared_lo_space_; }
@@ -863,8 +868,6 @@ class Heap {
   const MemoryAllocator* memory_allocator() const {
     return memory_allocator_.get();
   }
-
-  inline ConcurrentAllocator* concurrent_allocator_for_maps();
 
   inline Isolate* isolate() const;
 
@@ -1121,8 +1124,11 @@ class Heap {
   // The runtime uses this function to inform the GC of object size changes. The
   // GC will fill this area with a filler object and might clear recorded slots
   // in that area.
-  void NotifyObjectSizeChange(HeapObject, int old_size, int new_size,
-                              ClearRecordedSlots clear_recorded_slots);
+  void NotifyObjectSizeChange(
+      HeapObject, int old_size, int new_size,
+      ClearRecordedSlots clear_recorded_slots,
+      UpdateInvalidatedObjectSize update_invalidated_object_size =
+          UpdateInvalidatedObjectSize::kYes);
 
   // ===========================================================================
   // Deoptimization support API. ===============================================
@@ -1589,6 +1595,7 @@ class Heap {
   // Note: Can only be called safely from main thread.
   V8_EXPORT_PRIVATE void EnsureSweepingCompleted(
       SweepingForcedFinalizationMode mode);
+  void PauseSweepingAndEnsureYoungSweepingCompleted();
 
   void DrainSweepingWorklistForSpace(AllocationSpace space);
 
@@ -1775,6 +1782,9 @@ class Heap {
 
   // Free all shared LABs.
   void FreeSharedLinearAllocationAreas();
+
+  // Makes all shared LABs iterable.
+  void MakeSharedLinearAllocationAreasIterable();
 
   // Free all shared LABs of main thread.
   void FreeMainThreadSharedLinearAllocationAreas();
@@ -2161,7 +2171,6 @@ class Heap {
   NewSpace* new_space_ = nullptr;
   OldSpace* old_space_ = nullptr;
   CodeSpace* code_space_ = nullptr;
-  MapSpace* map_space_ = nullptr;
   SharedSpace* shared_space_ = nullptr;
   OldLargeObjectSpace* lo_space_ = nullptr;
   CodeLargeObjectSpace* code_lo_space_ = nullptr;
@@ -2173,11 +2182,9 @@ class Heap {
   // in another isolate.
   PagedSpace* shared_allocation_space_ = nullptr;
   OldLargeObjectSpace* shared_lo_allocation_space_ = nullptr;
-  PagedSpace* shared_map_allocation_space_ = nullptr;
 
   // Allocators for the shared spaces.
   std::unique_ptr<ConcurrentAllocator> shared_space_allocator_;
-  std::unique_ptr<ConcurrentAllocator> shared_map_allocator_;
 
   // Map from the space id to the space.
   std::unique_ptr<Space> space_[LAST_SPACE + 1];
@@ -2298,7 +2305,6 @@ class Heap {
   std::unique_ptr<LocalEmbedderHeapTracer> local_embedder_heap_tracer_;
   std::unique_ptr<AllocationTrackerForDebugging>
       allocation_tracker_for_debugging_;
-  std::unique_ptr<::heap::base::Stack> stack_;
 
   // This object controls virtual space reserved for code on the V8 heap. This
   // is only valid for 64-bit architectures where kRequiresCodeRange.
@@ -2381,14 +2387,11 @@ class Heap {
   bool force_gc_on_next_allocation_ = false;
   bool delay_sweeper_tasks_for_testing_ = false;
 
-  HeapObject pending_layout_change_object_;
-
-  std::unordered_map<HeapObject, HeapObject, Object::Hasher> retainer_;
-  std::unordered_map<HeapObject, Root, Object::Hasher> retaining_root_;
+  UnorderedHeapObjectMap<HeapObject> retainer_;
+  UnorderedHeapObjectMap<Root> retaining_root_;
   // If an object is retained by an ephemeron, then the retaining key of the
   // ephemeron is stored in this map.
-  std::unordered_map<HeapObject, HeapObject, Object::Hasher>
-      ephemeron_retainer_;
+  UnorderedHeapObjectMap<HeapObject> ephemeron_retainer_;
   // For each index in the retaining_path_targets_ array this map
   // stores the option of the corresponding target.
   std::unordered_map<int, RetainingPathOption> retaining_path_target_option_;

@@ -27,6 +27,23 @@ FieldAccess AccessBuilder::ForExternalIntPtr() {
   return access;
 }
 
+FieldAccess AccessBuilder::ForJSExternalObjectValue() {
+  FieldAccess access = {
+      kTaggedBase,
+      JSExternalObject::kValueOffset,
+      MaybeHandle<Name>(),
+      MaybeHandle<Map>(),
+      Type::ExternalPointer(),
+      MachineType::Pointer(),
+      kNoWriteBarrier,
+      "JSExternalObjectValue",
+      ConstFieldInfo::None(),
+      false,
+      kExternalObjectValueTag,
+  };
+  return access;
+}
+
 // static
 FieldAccess AccessBuilder::ForMap(WriteBarrierKind write_barrier) {
   FieldAccess access = {kTaggedBase,           HeapObject::kMapOffset,
@@ -152,6 +169,15 @@ FieldAccess AccessBuilder::ForJSCollectionIteratorIndex() {
                         MachineType::TaggedSigned(),
                         kNoWriteBarrier,
                         "JSCollectionIteratorIndex"};
+  return access;
+}
+
+FieldAccess AccessBuilder::ForJSExternalObjectInstanceSizeInWords() {
+  FieldAccess access = {
+      kTaggedBase,          Map::kInstanceSizeInWordsOffset,
+      MaybeHandle<Name>(),  MaybeHandle<Map>(),
+      Type::Signed32(),     MachineType::Uint8(),
+      kPointerWriteBarrier, "JSExternalObjectInstanceSizeInWords"};
   return access;
 }
 
@@ -365,6 +391,22 @@ FieldAccess AccessBuilder::ForJSArrayBufferBitField() {
 }
 
 // static
+FieldAccess AccessBuilder::ForJSArrayBufferByteLength() {
+  FieldAccess access = {kTaggedBase,
+                        JSArrayBuffer::kRawByteLengthOffset,
+                        MaybeHandle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kJSArrayBufferByteLengthType,
+                        MachineType::UintPtr(),
+                        kNoWriteBarrier,
+                        "JSArrayBufferByteLength"};
+#ifdef V8_ENABLE_SANDBOX
+  access.is_bounded_size_access = true;
+#endif
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForJSArrayBufferViewBuffer() {
   FieldAccess access = {kTaggedBase,           JSArrayBufferView::kBufferOffset,
                         MaybeHandle<Name>(),   MaybeHandle<Map>(),
@@ -402,6 +444,19 @@ FieldAccess AccessBuilder::ForJSArrayBufferViewByteOffset() {
 #ifdef V8_ENABLE_SANDBOX
   access.is_bounded_size_access = true;
 #endif
+  return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForJSArrayBufferViewBitField() {
+  FieldAccess access = {kTaggedBase,
+                        JSArrayBufferView::kBitFieldOffset,
+                        MaybeHandle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kUint32,
+                        MachineType::Uint32(),
+                        kNoWriteBarrier,
+                        "JSArrayBufferViewBitField"};
   return access;
 }
 

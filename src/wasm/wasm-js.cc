@@ -1293,27 +1293,22 @@ void WebAssemblyMemory(const v8::FunctionCallbackInfo<v8::Value>& args) {
   }
 
   auto shared = i::SharedFlag::kNotShared;
-  auto enabled_features = i::wasm::WasmFeatures::FromIsolate(i_isolate);
-  if (enabled_features.has_threads()) {
-    // Shared property of descriptor
-    Local<String> shared_key = v8_str(isolate, "shared");
-    v8::MaybeLocal<v8::Value> maybe_value =
-        descriptor->Get(context, shared_key);
-    v8::Local<v8::Value> value;
-    if (maybe_value.ToLocal(&value)) {
-      shared = value->BooleanValue(isolate) ? i::SharedFlag::kShared
-                                            : i::SharedFlag::kNotShared;
-    } else {
-      DCHECK(i_isolate->has_scheduled_exception());
-      return;
-    }
+  // Shared property of descriptor
+  Local<String> shared_key = v8_str(isolate, "shared");
+  v8::MaybeLocal<v8::Value> maybe_value = descriptor->Get(context, shared_key);
+  v8::Local<v8::Value> value;
+  if (maybe_value.ToLocal(&value)) {
+    shared = value->BooleanValue(isolate) ? i::SharedFlag::kShared
+                                          : i::SharedFlag::kNotShared;
+  } else {
+    DCHECK(i_isolate->has_scheduled_exception());
+    return;
+  }
 
-    // Throw TypeError if shared is true, and the descriptor has no "maximum"
-    if (shared == i::SharedFlag::kShared && maximum == -1) {
-      thrower.TypeError(
-          "If shared is true, maximum property should be defined.");
-      return;
-    }
+  // Throw TypeError if shared is true, and the descriptor has no "maximum"
+  if (shared == i::SharedFlag::kShared && maximum == -1) {
+    thrower.TypeError("If shared is true, maximum property should be defined.");
+    return;
   }
 
   i::Handle<i::JSObject> memory_obj;
@@ -2267,15 +2262,6 @@ void WasmObjectToJSReturnValue(v8::ReturnValue<v8::Value>& return_value,
     case i::wasm::HeapType::kArray:
     case i::wasm::HeapType::kEq:
     case i::wasm::HeapType::kAny: {
-      if (!i::v8_flags.wasm_gc_js_interop && value->IsWasmObject()) {
-        // Transform wasm object into JS-compliant representation.
-        i::Handle<i::JSObject> wrapper =
-            isolate->factory()->NewJSObject(isolate->object_function());
-        i::JSObject::AddProperty(
-            isolate, wrapper, isolate->factory()->wasm_wrapped_object_symbol(),
-            value, i::NONE);
-        value = wrapper;
-      }
       return_value.Set(Utils::ToLocal(value));
       return;
     }
@@ -2287,17 +2273,6 @@ void WasmObjectToJSReturnValue(v8::ReturnValue<v8::Value>& return_value,
               i::Handle<i::WasmInternalFunction>::cast(value)->external(),
               isolate);
         }
-        return_value.Set(Utils::ToLocal(value));
-        return;
-      }
-      if (!i::v8_flags.wasm_gc_js_interop && value->IsWasmObject()) {
-        // Transform wasm object into JS-compliant representation.
-        i::Handle<i::JSObject> wrapper =
-            isolate->factory()->NewJSObject(isolate->object_function());
-        i::JSObject::AddProperty(
-            isolate, wrapper, isolate->factory()->wasm_wrapped_object_symbol(),
-            value, i::NONE);
-        value = wrapper;
       }
       return_value.Set(Utils::ToLocal(value));
       return;

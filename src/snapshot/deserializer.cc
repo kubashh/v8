@@ -410,7 +410,7 @@ void Deserializer<Isolate>::PostProcessNewJSReceiver(Map map,
       ResizableFlag resizable = bs && bs->is_resizable_by_js()
                                     ? ResizableFlag::kResizable
                                     : ResizableFlag::kNotResizable;
-      buffer.Setup(shared, resizable, bs);
+      buffer.Setup(shared, resizable, bs, main_thread_isolate());
     }
   }
 }
@@ -462,7 +462,11 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
         String result = *isolate()->string_table()->LookupKey(isolate(), &key);
 
         if (result != raw_obj) {
-          String::cast(raw_obj).MakeThin(isolate(), result);
+          // Updating invalidated object size from a background thread would
+          // race. We are allowed to skip this here since this string hasn't
+          // transitioned so far.
+          String::cast(raw_obj).MakeThin(isolate(), result,
+                                         UpdateInvalidatedObjectSize::kNo);
           // Mutate the given object handle so that the backreference entry is
           // also updated.
           obj.PatchValue(result);
@@ -499,7 +503,7 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
     code_data_container.init_code_entry_point(main_thread_isolate(),
                                               kNullAddress);
 #ifdef V8_EXTERNAL_CODE_SPACE
-    if (V8_REMOVE_BUILTINS_CODE_OBJECTS &&
+    if (V8_EXTERNAL_CODE_SPACE_BOOL &&
         code_data_container.is_off_heap_trampoline()) {
       Address entry = OffHeapInstructionStart(code_data_container,
                                               code_data_container.builtin_id());
@@ -580,8 +584,6 @@ AllocationType SpaceToAllocation(SnapshotSpace space) {
   switch (space) {
     case SnapshotSpace::kCode:
       return AllocationType::kCode;
-    case SnapshotSpace::kMap:
-      return AllocationType::kMap;
     case SnapshotSpace::kOld:
       return AllocationType::kOld;
     case SnapshotSpace::kReadOnlyHeap:
@@ -868,11 +870,12 @@ constexpr byte VerifyBytecodeCount(byte bytecode) {
 #define CASE_R32(byte_code) CASE_R16(byte_code) : case CASE_R16(byte_code + 16)
 
 // This generates a case range for all the spaces.
-#define CASE_RANGE_ALL_SPACES(bytecode)                           \
-  SpaceEncoder<bytecode>::Encode(SnapshotSpace::kOld)             \
-      : case SpaceEncoder<bytecode>::Encode(SnapshotSpace::kCode) \
-      : case SpaceEncoder<bytecode>::Encode(SnapshotSpace::kMap)  \
-      : case SpaceEncoder<bytecode>::Encode(SnapshotSpace::kReadOnlyHeap)
+// clang-format off
+#define CASE_RANGE_ALL_SPACES(bytecode)                               \
+  SpaceEncoder<bytecode>::Encode(SnapshotSpace::kOld):                \
+    case SpaceEncoder<bytecode>::Encode(SnapshotSpace::kCode):        \
+    case SpaceEncoder<bytecode>::Encode(SnapshotSpace::kReadOnlyHeap)
+// clang-format on
 
 template <typename IsolateT>
 void Deserializer<IsolateT>::ReadData(Handle<HeapObject> object,

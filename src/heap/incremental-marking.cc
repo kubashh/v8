@@ -272,6 +272,7 @@ void IncrementalMarking::MarkRoots() {
 
     heap()->isolate()->global_handles()->IterateYoungStrongAndDependentRoots(
         &visitor);
+    heap()->isolate()->traced_handles()->IterateYoungRoots(&visitor);
 
     std::vector<PageMarkingItem> marking_items;
     RememberedSet<OLD_TO_NEW>::IterateMemoryChunks(
@@ -333,7 +334,7 @@ void IncrementalMarking::StartMarkingMajor() {
 
   MarkingBarrier::ActivateAll(heap(), is_compacting_,
                               MarkingBarrierType::kMajor);
-  GlobalHandles::EnableMarkingBarrier(heap()->isolate());
+  heap()->isolate()->traced_handles()->SetIsMarking(true);
 
   heap_->isolate()->compilation_cache()->MarkCompactPrologue();
 
@@ -402,7 +403,6 @@ void IncrementalMarking::StartBlackAllocation() {
   DCHECK(IsMarking());
   black_allocation_ = true;
   heap()->old_space()->MarkLinearAllocationAreaBlack();
-  if (heap()->map_space()) heap()->map_space()->MarkLinearAllocationAreaBlack();
   {
     CodePageHeaderModificationScope rwx_write_scope(
         "Marking Code objects requires write access to the Code page header");
@@ -427,7 +427,6 @@ void IncrementalMarking::StartBlackAllocation() {
 void IncrementalMarking::PauseBlackAllocation() {
   DCHECK(IsMarking());
   heap()->old_space()->UnmarkLinearAllocationArea();
-  if (heap()->map_space()) heap()->map_space()->UnmarkLinearAllocationArea();
   {
     CodePageHeaderModificationScope rwx_write_scope(
         "Marking Code objects requires write access to the Code page header");

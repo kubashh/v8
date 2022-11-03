@@ -544,7 +544,10 @@ NumberOperationHint NumberOperationHintOf(const Operator* op) {
 
 BigIntOperationHint BigIntOperationHintOf(const Operator* op) {
   // TODO(panq): Expand the DCHECK when more BigInt operations are supported.
-  DCHECK(op->opcode() == IrOpcode::kSpeculativeBigIntAdd);
+  DCHECK(op->opcode() == IrOpcode::kSpeculativeBigIntAdd ||
+         op->opcode() == IrOpcode::kSpeculativeBigIntSubtract ||
+         op->opcode() == IrOpcode::kSpeculativeBigIntMultiply ||
+         op->opcode() == IrOpcode::kSpeculativeBigIntDivide);
   return OpParameter<BigIntOperationHint>(op);
 }
 
@@ -809,7 +812,9 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(StringCodePointAt, Operator::kNoProperties, 2, 1)     \
   V(StringFromCodePointAt, Operator::kNoProperties, 2, 1) \
   V(StringSubstring, Operator::kNoProperties, 3, 1)       \
-  V(DateNow, Operator::kNoProperties, 0, 1)
+  V(DateNow, Operator::kNoProperties, 0, 1)               \
+  V(DoubleArrayMax, Operator::kNoProperties, 1, 1)        \
+  V(DoubleArrayMin, Operator::kNoProperties, 1, 1)
 
 #define SPECULATIVE_NUMBER_BINOP_LIST(V)      \
   SIMPLIFIED_SPECULATIVE_NUMBER_BINOP_LIST(V) \
@@ -832,14 +837,17 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(CheckedInt32Sub, 2, 1)                \
   V(CheckedUint32Div, 2, 1)               \
   V(CheckedUint32Mod, 2, 1)               \
-  V(CheckedBigInt64Add, 2, 1)
+  V(CheckedBigInt64Add, 2, 1)             \
+  V(CheckedBigInt64Sub, 2, 1)             \
+  V(CheckedBigInt64Mul, 2, 1)             \
+  V(CheckedBigInt64Div, 2, 1)
 
 #define CHECKED_WITH_FEEDBACK_OP_LIST(V) \
   V(CheckNumber, 1, 1)                   \
   V(CheckSmi, 1, 1)                      \
   V(CheckString, 1, 1)                   \
   V(CheckBigInt, 1, 1)                   \
-  V(CheckBigInt64, 1, 1)                 \
+  V(CheckedBigIntToBigInt64, 1, 1)       \
   V(CheckedInt32ToTaggedSigned, 1, 1)    \
   V(CheckedInt64ToInt32, 1, 1)           \
   V(CheckedInt64ToTaggedSigned, 1, 1)    \

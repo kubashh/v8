@@ -21,8 +21,8 @@
 
 namespace v8::internal::compiler::turboshaft {
 
+template <template <class> class... Reducers>
 class Assembler;
-class VarAssembler;
 
 // `OperationBuffer` is a growable, Zone-allocated buffer to store Turboshaft
 // operations. It is part of a `Graph`.
@@ -384,7 +384,7 @@ class Graph {
     next_block_ = 0;
   }
 
-  const Operation& Get(OpIndex i) const {
+  V8_INLINE const Operation& Get(OpIndex i) const {
     // `Operation` contains const fields and can be overwritten with placement
     // new. Therefore, std::launder is necessary to avoid undefined behavior.
     const Operation* ptr =
@@ -393,7 +393,7 @@ class Graph {
     DCHECK_LT(OpcodeIndex(ptr->opcode), kNumberOfOpcodes);
     return *ptr;
   }
-  Operation& Get(OpIndex i) {
+  V8_INLINE Operation& Get(OpIndex i) {
     // `Operation` contains const fields and can be overwritten with placement
     // new. Therefore, std::launder is necessary to avoid undefined behavior.
     Operation* ptr =

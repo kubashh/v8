@@ -640,7 +640,7 @@ class ModuleDecoderTemplate : public Decoder {
 
   TypeDefinition consume_subtype_definition() {
     DCHECK(enabled_features_.has_gc());
-    uint8_t kind = read_u8<Decoder::kFullValidation>(pc(), "type kind");
+    uint8_t kind = read_u8<Decoder::FullValidationTag>(pc(), "type kind");
     if (kind == kWasmSubtypeCode) {
       consume_bytes(1, " subtype, ", tracer_);
       constexpr uint32_t kMaximumSupertypes = 1;
@@ -672,7 +672,8 @@ class ModuleDecoderTemplate : public Decoder {
       for (uint32_t i = 0; i < types_count; ++i) {
         TRACE("DecodeSignature[%d] module+%d\n", i,
               static_cast<int>(pc_ - start_));
-        uint8_t opcode = read_u8<kFullValidation>(pc(), "signature definition");
+        uint8_t opcode =
+            read_u8<FullValidationTag>(pc(), "signature definition");
         tracer_.Bytes(pc_, 1);
         tracer_.TypeOffset(pc_offset());
         tracer_.Description(" kind: ");
@@ -706,7 +707,7 @@ class ModuleDecoderTemplate : public Decoder {
 
     for (uint32_t i = 0; ok() && i < types_count; ++i) {
       TRACE("DecodeType[%d] module+%d\n", i, static_cast<int>(pc_ - start_));
-      uint8_t kind = read_u8<Decoder::kFullValidation>(pc(), "type kind");
+      uint8_t kind = read_u8<Decoder::FullValidationTag>(pc(), "type kind");
       if (kind == kWasmRecursiveTypeGroupCode) {
         consume_bytes(1, "rec. group definition", tracer_);
         tracer_.NextLine();
@@ -809,30 +810,32 @@ class ModuleDecoderTemplate : public Decoder {
             break;
           }
           table->type = type;
-          uint8_t flags = validate_table_flags("element count");
+          consume_table_flags("element count", &table->has_maximum_size);
           consume_resizable_limits(
               "element count", "elements", std::numeric_limits<uint32_t>::max(),
-              &table->initial_size, &table->has_maximum_size,
+              &table->initial_size, table->has_maximum_size,
               std::numeric_limits<uint32_t>::max(), &table->maximum_size,
-              flags);
+              k32BitLimits);
           break;
         }
         case kExternalMemory: {
           // ===== Imported memory =============================================
           if (!AddMemory(module_.get())) break;
-          uint8_t flags = validate_memory_flags(&module_->has_shared_memory,
-                                                &module_->is_memory64);
+          consume_memory_flags(&module_->has_shared_memory,
+                               &module_->is_memory64,
+                               &module_->has_maximum_pages);
           uint32_t max_pages = module_->is_memory64 ? kSpecMaxMemory64Pages
                                                     : kSpecMaxMemory32Pages;
-          consume_resizable_limits("memory", "pages", max_pages,
-                                   &module_->initial_pages,
-                                   &module_->has_maximum_pages, max_pages,
-                                   &module_->maximum_pages, flags);
+          consume_resizable_limits(
+              "memory", "pages", max_pages, &module_->initial_pages,
+              module_->has_maximum_pages, max_pages, &module_->maximum_pages,
+              module_->is_memory64 ? k64BitLimits : k32BitLimits);
           break;
         }
         case kExternalGlobal: {
           // ===== Imported global =============================================
           import->index = static_cast<uint32_t>(module_->globals.size());
+          module_->num_imported_globals++;
           module_->globals.push_back({kWasmVoid, false, {}, {0}, true, false});
           WasmGlobal* global = &module_->globals.back();
           global->type = consume_value_type();
@@ -850,6 +853,7 @@ class ModuleDecoderTemplate : public Decoder {
             break;
           }
           import->index = static_cast<uint32_t>(module_->tags.size());
+          module_->num_imported_tags++;
           const WasmTagSig* tag_sig = nullptr;
           consume_exception_attribute();  // Attribute ignored for now.
           consume_tag_sig_index(module_.get(), &tag_sig);
@@ -901,7 +905,7 @@ class ModuleDecoderTemplate : public Decoder {
 
       bool has_initializer = false;
       if (enabled_features_.has_typed_funcref() &&
-          read_u8<Decoder::kFullValidation>(
+          read_u8<Decoder::FullValidationTag>(
               pc(), "table-with-initializer byte") == 0x40) {
         consume_bytes(1, "table-with-initializer byte");
         has_initializer = true;
@@ -920,11 +924,12 @@ class ModuleDecoderTemplate : public Decoder {
       }
       table->type = table_type;
 
-      uint8_t flags = validate_table_flags("table elements");
-      consume_resizable_limits(
-          "table elements", "elements", std::numeric_limits<uint32_t>::max(),
-          &table->initial_size, &table->has_maximum_size,
-          std::numeric_limits<uint32_t>::max(), &table->maximum_size, flags);
+      consume_table_flags("table elements", &table->has_maximum_size);
+      consume_resizable_limits("table elements", "elements",
+                               std::numeric_limits<uint32_t>::max(),
+                               &table->initial_size, table->has_maximum_size,
+                               std::numeric_limits<uint32_t>::max(),
+                               &table->maximum_size, k32BitLimits);
 
       if (has_initializer) {
         table->initial_value = consume_init_expr(module_.get(), table_type);
@@ -938,14 +943,14 @@ class ModuleDecoderTemplate : public Decoder {
     for (uint32_t i = 0; ok() && i < memory_count; i++) {
       tracer_.MemoryOffset(pc_offset());
       if (!AddMemory(module_.get())) break;
-      uint8_t flags = validate_memory_flags(&module_->has_shared_memory,
-                                            &module_->is_memory64);
+      consume_memory_flags(&module_->has_shared_memory, &module_->is_memory64,
+                           &module_->has_maximum_pages);
       uint32_t max_pages =
           module_->is_memory64 ? kSpecMaxMemory64Pages : kSpecMaxMemory32Pages;
-      consume_resizable_limits("memory", "pages", max_pages,
-                               &module_->initial_pages,
-                               &module_->has_maximum_pages, max_pages,
-                               &module_->maximum_pages, flags);
+      consume_resizable_limits(
+          "memory", "pages", max_pages, &module_->initial_pages,
+          module_->has_maximum_pages, max_pages, &module_->maximum_pages,
+          module_->is_memory64 ? k64BitLimits : k32BitLimits);
     }
   }
 
@@ -1915,74 +1920,65 @@ class ModuleDecoderTemplate : public Decoder {
     return index;
   }
 
-  uint8_t validate_table_flags(const char* name) {
+  void consume_table_flags(const char* name, bool* has_maximum_out) {
     tracer_.Bytes(pc_, 1);
     uint8_t flags = consume_u8("table limits flags");
     tracer_.Description(flags == kNoMaximum ? " no maximum" : " with maximum");
     tracer_.NextLine();
-    static_assert(kNoMaximum < kWithMaximum);
+    static_assert(kNoMaximum == 0 && kWithMaximum == 1);
+    *has_maximum_out = flags == kWithMaximum;
     if (V8_UNLIKELY(flags > kWithMaximum)) {
       errorf(pc() - 1, "invalid %s limits flags", name);
     }
-    return flags;
   }
 
-  uint8_t validate_memory_flags(bool* has_shared_memory, bool* is_memory64) {
+  void consume_memory_flags(bool* is_shared_out, bool* is_memory64_out,
+                            bool* has_maximum_out) {
     tracer_.Bytes(pc_, 1);
     uint8_t flags = consume_u8("memory limits flags");
-    *has_shared_memory = false;
-    switch (flags) {
-      case kNoMaximum:
-      case kWithMaximum:
-        break;
-      case kSharedNoMaximum:
-      case kSharedWithMaximum:
-        if (!enabled_features_.has_threads()) {
-          errorf(pc() - 1,
-                 "invalid memory limits flags 0x%x (enable via "
-                 "--experimental-wasm-threads)",
-                 flags);
-        }
-        *has_shared_memory = true;
-        // V8 does not support shared memory without a maximum.
-        if (flags == kSharedNoMaximum) {
-          errorf(pc() - 1,
-                 "memory limits flags must have maximum defined if shared is "
-                 "true");
-        }
-        break;
-      case kMemory64NoMaximum:
-      case kMemory64WithMaximum:
-        if (!enabled_features_.has_memory64()) {
-          errorf(pc() - 1,
-                 "invalid memory limits flags 0x%x (enable via "
-                 "--experimental-wasm-memory64)",
-                 flags);
-        }
-        *is_memory64 = true;
-        break;
-      default:
-        errorf(pc() - 1, "invalid memory limits flags 0x%x", flags);
-        break;
+    // Flags 0..7 are valid (3 bits).
+    if (flags & ~0x7) {
+      errorf(pc() - 1, "invalid memory limits flags 0x%x", flags);
     }
-    if (*has_shared_memory) tracer_.Description(" shared");
-    if (*is_memory64) tracer_.Description(" mem64");
-    tracer_.Description((flags & 1) ? " with maximum" : " no maximum");
+    // Decode the three bits.
+    bool has_maximum = flags & 0x1;
+    bool is_shared = flags & 0x2;
+    bool is_memory64 = flags & 0x4;
+    // Store into output parameters.
+    *has_maximum_out = has_maximum;
+    *is_shared_out = is_shared;
+    *is_memory64_out = is_memory64;
+
+    // V8 does not support shared memory without a maximum.
+    if (is_shared && !has_maximum) {
+      errorf(pc() - 1, "shared memory must have a maximum defined");
+    }
+
+    if (is_memory64 && !enabled_features_.has_memory64()) {
+      errorf(pc() - 1,
+             "invalid memory limits flags 0x%x (enable via "
+             "--experimental-wasm-memory64)",
+             flags);
+    }
+
+    // Tracing.
+    if (is_shared) tracer_.Description(" shared");
+    if (is_memory64) tracer_.Description(" mem64");
+    tracer_.Description(has_maximum ? " with maximum" : " no maximum");
     tracer_.NextLine();
-    return flags;
   }
 
+  enum ResizableLimitsType : bool { k32BitLimits, k64BitLimits };
   void consume_resizable_limits(const char* name, const char* units,
                                 uint32_t max_initial, uint32_t* initial,
-                                bool* has_max, uint32_t max_maximum,
-                                uint32_t* maximum, uint8_t flags) {
+                                bool has_maximum, uint32_t max_maximum,
+                                uint32_t* maximum, ResizableLimitsType type) {
     const byte* pos = pc();
-    // For memory64 we need to read the numbers as LEB-encoded 64-bit unsigned
-    // integer. All V8 limits are still within uint32_t range though.
-    const bool is_memory64 =
-        flags == kMemory64NoMaximum || flags == kMemory64WithMaximum;
-    uint64_t initial_64 = is_memory64 ? consume_u64v("initial size", tracer_)
-                                      : consume_u32v("initial size", tracer_);
+    // Note that even if we read the values as 64-bit value, all V8 limits are
+    // still within uint32_t range.
+    uint64_t initial_64 = type == k64BitLimits
+                              ? consume_u64v("initial size", tracer_)
+                              : consume_u32v("initial size", tracer_);
     if (initial_64 > max_initial) {
       errorf(pos,
              "initial %s size (%" PRIu64
@@ -1992,11 +1988,11 @@ class ModuleDecoderTemplate : public Decoder {
     *initial = static_cast<uint32_t>(initial_64);
     tracer_.Description(*initial);
     tracer_.NextLine();
-    if (flags & 1) {
-      *has_max = true;
+    if (has_maximum) {
       pos = pc();
-      uint64_t maximum_64 = is_memory64 ? consume_u64v("maximum size", tracer_)
-                                        : consume_u32v("maximum size", tracer_);
+      uint64_t maximum_64 = type == k64BitLimits
+                                ? consume_u64v("maximum size", tracer_)
+                                : consume_u32v("maximum size", tracer_);
       if (maximum_64 > max_maximum) {
         errorf(pos,
                "maximum %s size (%" PRIu64
@@ -2012,7 +2008,6 @@ class ModuleDecoderTemplate : public Decoder {
       tracer_.Description(*maximum);
       tracer_.NextLine();
     } else {
-      *has_max = false;
       *maximum = max_initial;
     }
   }
@@ -2054,7 +2049,7 @@ class ModuleDecoderTemplate : public Decoder {
     switch (static_cast<WasmOpcode>(*pc())) {
       case kExprI32Const: {
         int32_t value =
-            read_i32v<kFullValidation>(pc() + 1, &length, "i32.const");
+            read_i32v<FullValidationTag>(pc() + 1, &length, "i32.const");
         if (V8_UNLIKELY(failed())) return {};
         if (V8_LIKELY(lookahead(1 + length, kExprEnd))) {
           TYPE_CHECK(kWasmI32)
@@ -2066,7 +2061,7 @@ class ModuleDecoderTemplate : public Decoder {
       }
       case kExprRefFunc: {
         uint32_t index =
-            read_u32v<kFullValidation>(pc() + 1, &length, "ref.func");
+            read_u32v<FullValidationTag>(pc() + 1, &length, "ref.func");
         if (V8_UNLIKELY(failed())) return {};
         if (V8_LIKELY(lookahead(1 + length, kExprEnd))) {
           if (V8_UNLIKELY(index >= module_->functions.size())) {
@@ -2086,7 +2081,7 @@ class ModuleDecoderTemplate : public Decoder {
         break;
       }
       case kExprRefNull: {
-        HeapType type = value_type_reader::read_heap_type<kFullValidation>(
+        HeapType type = value_type_reader::read_heap_type<FullValidationTag>(
             this, pc() + 1, &length, module_.get(), enabled_features_);
         if (V8_UNLIKELY(failed())) return {};
         if (V8_LIKELY(lookahead(1 + length, kExprEnd))) {
@@ -2106,7 +2101,7 @@ class ModuleDecoderTemplate : public Decoder {
     auto sig = FixedSizeSignature<ValueType>::Returns(expected);
     FunctionBody body(&sig, buffer_offset_, pc_, end_);
     WasmFeatures detected;
-    WasmFullDecoder<Decoder::kFullValidation, ConstantExpressionInterface,
+    WasmFullDecoder<Decoder::FullValidationTag, ConstantExpressionInterface,
                     kConstantExpression>
         decoder(&init_expr_zone_, module, enabled_features_, &detected, body,
                 module);
@@ -2145,7 +2140,7 @@ class ModuleDecoderTemplate : public Decoder {
 
   ValueType consume_value_type() {
     uint32_t type_length;
-    ValueType result = value_type_reader::read_value_type<kFullValidation>(
+    ValueType result = value_type_reader::read_value_type<FullValidationTag>(
         this, pc_, &type_length, module_.get(),
         origin_ == kWasmOrigin ? enabled_features_ : WasmFeatures::None());
     tracer_.Bytes(pc_, type_length);
@@ -2156,7 +2151,7 @@ class ModuleDecoderTemplate : public Decoder {
 
   HeapType consume_super_type() {
     uint32_t type_length;
-    HeapType result = value_type_reader::read_heap_type<kFullValidation>(
+    HeapType result = value_type_reader::read_heap_type<FullValidationTag>(
         this, pc_, &type_length, module_.get(), enabled_features_);
     tracer_.Bytes(pc_, type_length);
     tracer_.Description(result);
@@ -2165,7 +2160,7 @@ class ModuleDecoderTemplate : public Decoder {
   }
 
   ValueType consume_storage_type() {
-    uint8_t opcode = read_u8<kFullValidation>(this->pc());
+    uint8_t opcode = read_u8<FullValidationTag>(this->pc());
     switch (opcode) {
       case kI8Code:
         consume_bytes(1, " i8", tracer_);

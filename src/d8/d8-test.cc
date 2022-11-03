@@ -471,6 +471,19 @@ class FastCApiObject {
   }
 
 #ifdef V8_USE_SIMULATOR_WITH_GENERIC_C_CALLS
+  static AnyCType AddAll32BitIntFastCallback_8ArgsPatch(
+      AnyCType receiver, AnyCType should_fallback, AnyCType arg1_i32,
+      AnyCType arg2_i32, AnyCType arg3_i32, AnyCType arg4_u32,
+      AnyCType arg5_u32, AnyCType arg6_u32, AnyCType arg7_u32,
+      AnyCType arg8_u32, AnyCType options) {
+    AnyCType ret;
+    ret.int32_value = AddAll32BitIntFastCallback_8Args(
+        receiver.object_value, should_fallback.bool_value, arg1_i32.int32_value,
+        arg2_i32.int32_value, arg3_i32.int32_value, arg4_u32.uint32_value,
+        arg5_u32.uint32_value, arg6_u32.uint32_value, arg7_u32.uint32_value,
+        arg8_u32.uint32_value, *options.options_value);
+    return ret;
+  }
   static AnyCType AddAll32BitIntFastCallback_6ArgsPatch(
       AnyCType receiver, AnyCType should_fallback, AnyCType arg1_i32,
       AnyCType arg2_i32, AnyCType arg3_i32, AnyCType arg4_u32,
@@ -494,6 +507,26 @@ class FastCApiObject {
   }
 #endif  //  V8_USE_SIMULATOR_WITH_GENERIC_C_CALLS
 
+  static int AddAll32BitIntFastCallback_8Args(
+      Local<Object> receiver, bool should_fallback, int32_t arg1_i32,
+      int32_t arg2_i32, int32_t arg3_i32, uint32_t arg4_u32, uint32_t arg5_u32,
+      uint32_t arg6_u32, uint32_t arg7_u32, uint32_t arg8_u32,
+      FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(0);
+    self->fast_call_count_++;
+
+    if (should_fallback) {
+      options.fallback = true;
+      return 0;
+    }
+
+    int64_t result = static_cast<int64_t>(arg1_i32) + arg2_i32 + arg3_i32 +
+                     arg4_u32 + arg5_u32 + arg6_u32 + arg7_u32 + arg8_u32;
+    if (result > INT_MAX) return INT_MAX;
+    if (result < INT_MIN) return INT_MIN;
+    return static_cast<int>(result);
+  }
   static int AddAll32BitIntFastCallback_6Args(
       Local<Object> receiver, bool should_fallback, int32_t arg1_i32,
       int32_t arg2_i32, int32_t arg3_i32, uint32_t arg4_u32, uint32_t arg5_u32,
@@ -531,24 +564,29 @@ class FastCApiObject {
 
     HandleScope handle_scope(isolate);
 
+    Local<Context> context = isolate->GetCurrentContext();
     double sum = 0;
     if (args.Length() > 1 && args[1]->IsNumber()) {
-      sum += args[1]->Int32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[1]->Int32Value(context).FromJust();
     }
     if (args.Length() > 2 && args[2]->IsNumber()) {
-      sum += args[2]->Int32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[2]->Int32Value(context).FromJust();
     }
     if (args.Length() > 3 && args[3]->IsNumber()) {
-      sum += args[3]->Int32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[3]->Int32Value(context).FromJust();
     }
     if (args.Length() > 4 && args[4]->IsNumber()) {
-      sum += args[4]->Uint32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[4]->Uint32Value(context).FromJust();
     }
     if (args.Length() > 5 && args[5]->IsNumber()) {
-      sum += args[5]->Uint32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[5]->Uint32Value(context).FromJust();
     }
     if (args.Length() > 6 && args[6]->IsNumber()) {
-      sum += args[6]->Uint32Value(isolate->GetCurrentContext()).FromJust();
+      sum += args[6]->Uint32Value(context).FromJust();
+    }
+    if (args.Length() > 7 && args[7]->IsNumber() && args[8]->IsNumber()) {
+      sum += args[7]->Uint32Value(context).FromJust();
+      sum += args[8]->Uint32Value(context).FromJust();
     }
 
     args.GetReturnValue().Set(Number::New(isolate, sum));
@@ -850,8 +888,17 @@ class FastCApiObject {
       if (std::isnan(checked_arg_dbl)) {
         clamped = 0;
       } else {
-        clamped = std::clamp(checked_arg, std::numeric_limits<IntegerT>::min(),
-                             std::numeric_limits<IntegerT>::max());
+        IntegerT lower_bound = std::numeric_limits<IntegerT>::min();
+        IntegerT upper_bound = std::numeric_limits<IntegerT>::max();
+        if (lower_bound < internal::kMinSafeInteger) {
+          lower_bound = static_cast<IntegerT>(internal::kMinSafeInteger);
+        }
+        if (upper_bound > internal::kMaxSafeInteger) {
+          upper_bound = static_cast<IntegerT>(internal::kMaxSafeInteger);
+        }
+
+        clamped = std::clamp(real_arg, static_cast<double>(lower_bound),
+                             static_cast<double>(upper_bound));
       }
       args.GetReturnValue().Set(Number::New(isolate, clamped));
     }
@@ -943,6 +990,148 @@ class FastCApiObject {
     self->slow_call_count_++;
 
     args.GetIsolate()->ThrowError("should be unreachable from wasm");
+  }
+
+  static void AssertIsExternal(const FunctionCallbackInfo<Value>& args) {
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+
+    Local<Value> value = args[0];
+
+    if (!value->IsExternal()) {
+      args.GetIsolate()->ThrowError("Did not get an external.");
+      return;
+    }
+
+    Local<External> external_a = value.As<External>();
+    uintptr_t ext_value = reinterpret_cast<uintptr_t>(external_a->Value());
+
+    printf("Got pointer with value %p\n", reinterpret_cast<void*>(ext_value));
+  }
+
+  static void* GetPointerFastCallback(Local<Object> receiver,
+                                      FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(nullptr);
+    self->fast_call_count_++;
+
+    printf("FAST: Returning pointer of value: %p\n",
+           reinterpret_cast<void*>(self));
+
+    return static_cast<void*>(self);
+  }
+
+  static void GetPointerSlowCallback(const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    printf("SLOW: Returning pointer of value: %p\n",
+           reinterpret_cast<void*>(self));
+
+    args.GetReturnValue().Set(External::New(isolate, static_cast<void*>(self)));
+  }
+
+  static void* GetOtherPointerFastCallback(Local<Object> receiver,
+                                           FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(nullptr);
+    self->fast_call_count_++;
+
+    printf("FAST: Returning pointer of value: %p\n", nullptr);
+
+    return nullptr;
+  }
+
+  static void GetOtherPointerSlowCallback(
+      const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    printf("SLOW: Returning pointer of value: %p\n", nullptr);
+
+    args.GetReturnValue().Set(v8::Null(isolate));
+  }
+
+  static void* PassPointerFastCallback(Local<Object> receiver, void* pointer,
+                                       FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(nullptr);
+    self->fast_call_count_++;
+
+    printf("FAST: Passing pointer of value: %p\n",
+           reinterpret_cast<void*>(pointer));
+
+    return pointer;
+  }
+
+  static void PassPointerSlowCallback(const FunctionCallbackInfo<Value>& args) {
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    Local<Value> maybe_external = args[0].As<Value>();
+
+    if (maybe_external->IsNull()) {
+      args.GetReturnValue().Set(maybe_external);
+      printf("SLOW: Passing pointer of value: %p\n", nullptr);
+      args.GetReturnValue().Set(maybe_external);
+      return;
+    }
+    if (!maybe_external->IsExternal()) {
+      args.GetIsolate()->ThrowError("Did not get an external.");
+      return;
+    }
+
+    Local<External> external = args[0].As<External>();
+
+    printf("SLOW: Passing pointer of value: %p\n",
+           reinterpret_cast<void*>(external->Value()));
+
+    args.GetReturnValue().Set(external);
+  }
+
+  static bool ComparePointersFastCallback(Local<Object> receiver,
+                                          void* pointer_a, void* pointer_b,
+                                          FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(false);
+    self->fast_call_count_++;
+
+    printf("FAST: Comparing pointers: %p == %p\n", pointer_a, pointer_b);
+
+    return pointer_a == pointer_b;
+  }
+
+  static void ComparePointersSlowCallback(
+      const FunctionCallbackInfo<Value>& args) {
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    Local<Value> value_a = args[0];
+    Local<Value> value_b = args[1];
+
+    void* pointer_a;
+    if (value_a->IsNull()) {
+      pointer_a = nullptr;
+    } else {
+      pointer_a = value_a.As<External>()->Value();
+    }
+
+    void* pointer_b;
+    if (value_b->IsNull()) {
+      pointer_b = nullptr;
+    } else {
+      pointer_b = value_b.As<External>()->Value();
+    }
+
+    printf("SLOW: Comparing pointers: %p == %p\n", pointer_a, pointer_b);
+
+    args.GetReturnValue().Set(pointer_a == pointer_b);
   }
 
   static void FastCallCount(const FunctionCallbackInfo<Value>& args) {
@@ -1163,6 +1352,9 @@ Local<FunctionTemplate> Shell::CreateTestFastCApiTemplate(Isolate* isolate) {
             signature, 1, ConstructorBehavior::kThrow,
             SideEffectType::kHasSideEffect, {add_all_invalid_overloads, 2}));
 
+    CFunction add_all_32bit_int_8args_c_func = CFunction::Make(
+        FastCApiObject::AddAll32BitIntFastCallback_8Args V8_IF_USE_SIMULATOR(
+            FastCApiObject::AddAll32BitIntFastCallback_8ArgsPatch));
     CFunction add_all_32bit_int_6args_c_func = CFunction::Make(
         FastCApiObject::AddAll32BitIntFastCallback_6Args V8_IF_USE_SIMULATOR(
             FastCApiObject::AddAll32BitIntFastCallback_6ArgsPatch));
@@ -1178,6 +1370,13 @@ Local<FunctionTemplate> Shell::CreateTestFastCApiTemplate(Isolate* isolate) {
             isolate, FastCApiObject::AddAll32BitIntSlowCallback, Local<Value>(),
             signature, 1, ConstructorBehavior::kThrow,
             SideEffectType::kHasSideEffect, {c_function_overloads, 2}));
+
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "overloaded_add_all_8args",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::AddAll32BitIntSlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &add_all_32bit_int_8args_c_func));
 
     api_obj_ctor->PrototypeTemplate()->Set(
         isolate, "overloaded_add_all_32bit_int_no_sig",
@@ -1359,6 +1558,46 @@ Local<FunctionTemplate> Shell::CreateTestFastCApiTemplate(Isolate* isolate) {
             isolate, FastCApiObject::TestWasmMemorySlowCallback, Local<Value>(),
             Local<Signature>(), 1, ConstructorBehavior::kThrow,
             SideEffectType::kHasSideEffect, &test_wasm_memory_c_func));
+
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "assert_is_external",
+        FunctionTemplate::New(isolate, FastCApiObject::AssertIsExternal,
+                              Local<Value>(), signature, 1,
+                              ConstructorBehavior::kThrow,
+                              SideEffectType::kHasSideEffect, nullptr));
+
+    CFunction get_pointer_c_func =
+        CFunction::Make(FastCApiObject::GetPointerFastCallback);
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "get_pointer",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::GetPointerSlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &get_pointer_c_func));
+    CFunction get_other_pointer_c_func =
+        CFunction::Make(FastCApiObject::GetOtherPointerFastCallback);
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "get_other_pointer",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::GetOtherPointerSlowCallback,
+            Local<Value>(), signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &get_other_pointer_c_func));
+    CFunction pass_pointer_c_func =
+        CFunction::Make(FastCApiObject::PassPointerFastCallback);
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "pass_pointer",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::PassPointerSlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &pass_pointer_c_func));
+    CFunction compare_pointers_c_func =
+        CFunction::Make(FastCApiObject::ComparePointersFastCallback);
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "compare_pointers",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::ComparePointersSlowCallback,
+            Local<Value>(), signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &compare_pointers_c_func));
 
     api_obj_ctor->PrototypeTemplate()->Set(
         isolate, "fast_call_count",

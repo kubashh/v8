@@ -210,7 +210,7 @@ static StartupBlobs Serialize(v8::Isolate* isolate) {
   Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
   CcTest::CollectAllAvailableGarbage(i_isolate);
 
-  SafepointScope safepoint(i_isolate->heap());
+  IsolateSafepointScope safepoint(i_isolate->heap());
   HandleScope scope(i_isolate);
 
   DisallowGarbageCollection no_gc;
@@ -403,7 +403,7 @@ static void SerializeContext(base::Vector<const byte>* startup_blob_out,
 
     env.Reset();
 
-    SafepointScope safepoint(heap);
+    IsolateSafepointScope safepoint(heap);
 
     DisallowGarbageCollection no_gc;
     SnapshotByteSink read_only_sink;
@@ -572,7 +572,7 @@ static void SerializeCustomContext(
 
     env.Reset();
 
-    SafepointScope safepoint(isolate->heap());
+    IsolateSafepointScope safepoint(isolate->heap());
 
     DisallowGarbageCollection no_gc;
     SnapshotByteSink read_only_sink;
@@ -5113,8 +5113,15 @@ UNINITIALIZED_TEST(SharedStrings) {
   Isolate* i_isolate2 = reinterpret_cast<Isolate*>(isolate2);
 
   CHECK_EQ(i_isolate1->string_table(), i_isolate2->string_table());
-  CheckObjectsAreInSharedHeap(i_isolate1);
-  CheckObjectsAreInSharedHeap(i_isolate2);
+  {
+    ParkedScope parked(i_isolate2->main_thread_local_heap());
+    CheckObjectsAreInSharedHeap(i_isolate1);
+  }
+
+  {
+    ParkedScope parked(i_isolate1->main_thread_local_heap());
+    CheckObjectsAreInSharedHeap(i_isolate2);
+  }
 
   {
     // Because both isolate1 and isolate2 are considered running on the main

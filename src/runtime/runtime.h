@@ -592,7 +592,8 @@ namespace internal {
   I(DeoptimizeNow, 0, 1)
 
 #define FOR_EACH_INTRINSIC_TYPEDARRAY(F, I)    \
-  F(ArrayBufferDetach, 1, 1)                   \
+  F(ArrayBufferDetach, -1, 1)                  \
+  F(ArrayBufferSetDetachKey, 2, 1)             \
   F(GrowableSharedArrayBufferByteLength, 1, 1) \
   F(TypedArrayCopyElements, 3, 1)              \
   F(TypedArrayGetBuffer, 1, 1)                 \
@@ -619,7 +620,8 @@ namespace internal {
   F(WasmTableGrow, 3, 1)              \
   F(WasmTableFill, 5, 1)              \
   F(WasmJSToWasmObject, 3, 1)         \
-  F(WasmCompileLazy, 3, 1)            \
+  F(WasmCompileLazy, 2, 1)            \
+  F(WasmAllocateFeedbackVector, 3, 1) \
   F(WasmCompileWrapper, 2, 1)         \
   F(WasmTriggerTierUp, 1, 1)          \
   F(WasmDebugBreak, 0, 1)             \

@@ -36,7 +36,7 @@ struct GraphBuilder {
   Zone* graph_zone;
   Zone* phase_zone;
   Schedule& schedule;
-  Assembler assembler;
+  Assembler<> assembler;
   SourcePositionTable* source_positions;
   NodeOriginTable* origins;
 
@@ -373,6 +373,7 @@ OpIndex GraphBuilder::Process(
       BINOP_CASE(Int32AddWithOverflow, Int32AddCheckOverflow)
       BINOP_CASE(Int64AddWithOverflow, Int64AddCheckOverflow)
       BINOP_CASE(Int32MulWithOverflow, Int32MulCheckOverflow)
+      BINOP_CASE(Int64MulWithOverflow, Int64MulCheckOverflow)
       BINOP_CASE(Int32SubWithOverflow, Int32SubCheckOverflow)
       BINOP_CASE(Int64SubWithOverflow, Int64SubCheckOverflow)
 
@@ -817,7 +818,7 @@ base::Optional<BailoutReason> BuildGraph(Schedule* schedule, Zone* graph_zone,
                                          SourcePositionTable* source_positions,
                                          NodeOriginTable* origins) {
   GraphBuilder builder{graph_zone,       phase_zone,
-                       *schedule,        Assembler(graph, phase_zone),
+                       *schedule,        Assembler<>(graph, phase_zone),
                        source_positions, origins};
   return builder.Run();
 }

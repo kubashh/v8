@@ -60,9 +60,9 @@ bool V8_EXPORT_PRIVATE IsJSCompatibleSignature(const FunctionSig* sig,
   V(CallIndirect, 0x11, _, "call_indirect")                                  \
   V(ReturnCall, 0x12, _, "return_call")                                      \
   V(ReturnCallIndirect, 0x13, _, "return_call_indirect")                     \
-  V(CallRefDeprecated, 0x14, _, "call_ref")    /* typed_funcref prototype */ \
+  V(CallRef, 0x14, _, "call_ref")              /* typed_funcref prototype */ \
   V(ReturnCallRef, 0x15, _, "return_call_ref") /* typed_funcref prototype */ \
-  V(CallRef, 0x17, _, "call_ref")              /* temporary, for compat.*/   \
+  V(CallRefDeprecated, 0x17, _, "call_ref")    /* temporary, for compat.*/   \
   V(Drop, 0x1a, _, "drop")                                                   \
   V(Select, 0x1b, _, "select")                                               \
   V(SelectWithType, 0x1c, _, "select")                                       \
@@ -711,6 +711,7 @@ bool V8_EXPORT_PRIVATE IsJSCompatibleSignature(const FunctionSig* sig,
   V(RefTestNull, 0xfb48, _, "ref.test null")                                   \
   V(RefTestDeprecated, 0xfb44, _, "ref.test")                                  \
   V(RefCast, 0xfb41, _, "ref.cast")                                            \
+  V(RefCastNull, 0xfb49, _, "ref.cast null")                                   \
   V(RefCastDeprecated, 0xfb45, _, "ref.cast")                                  \
   V(BrOnCast, 0xfb46, _, "br_on_cast")                                         \
   V(BrOnCastFail, 0xfb47, _, "br_on_cast_fail")                                \

@@ -864,10 +864,8 @@ class WasmGenerator {
       bool can_be_defaultable = std::all_of(
           struct_gen->fields().begin(), struct_gen->fields().end(),
           [](ValueType type) -> bool { return type.is_defaultable(); });
-      bool is_mutable = std::all_of(
-          struct_gen->mutabilities().begin(), struct_gen->mutabilities().end(),
-          [](bool mutability) -> bool { return mutability; });
-      if (new_default && can_be_defaultable && is_mutable) {
+
+      if (new_default && can_be_defaultable) {
         builder_->EmitWithPrefix(kExprStructNewDefault);
         builder_->EmitU32V(index);
       } else {
@@ -2614,7 +2612,6 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   constexpr bool require_valid = true;
   EXPERIMENTAL_FLAG_SCOPE(typed_funcref);
   EXPERIMENTAL_FLAG_SCOPE(gc);
-  EXPERIMENTAL_FLAG_SCOPE(simd);
   EXPERIMENTAL_FLAG_SCOPE(eh);
   WasmCompileFuzzer().FuzzWasmModule({data, size}, require_valid);
   return 0;

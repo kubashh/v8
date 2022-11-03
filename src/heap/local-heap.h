@@ -130,6 +130,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
   // iterable heap.
   void MakeLinearAllocationAreaIterable();
 
+  // Makes the shared LAB iterable.
+  void MakeSharedLinearAllocationAreaIterable();
+
   // Fetches a pointer to the local heap from the thread local storage.
   // It is intended to be used in handle and write barrier code where it is
   // difficult to get a pointer to the current instance of local heap otherwise.
@@ -154,8 +157,11 @@ class V8_EXPORT_PRIVATE LocalHeap {
       AllocationOrigin origin = AllocationOrigin::kRuntime,
       AllocationAlignment alignment = kTaggedAligned);
 
-  void NotifyObjectSizeChange(HeapObject object, int old_size, int new_size,
-                              ClearRecordedSlots clear_recorded_slots);
+  void NotifyObjectSizeChange(
+      HeapObject object, int old_size, int new_size,
+      ClearRecordedSlots clear_recorded_slots,
+      UpdateInvalidatedObjectSize update_invalidated_object_size =
+          UpdateInvalidatedObjectSize::kYes);
 
   bool is_main_thread() const { return is_main_thread_; }
   bool deserialization_complete() const {
@@ -332,11 +338,11 @@ class V8_EXPORT_PRIVATE LocalHeap {
   friend class CollectionBarrier;
   friend class ConcurrentAllocator;
   friend class GlobalSafepoint;
-  friend class IsolateSafepoint;
   friend class Heap;
   friend class Isolate;
+  friend class IsolateSafepoint;
+  friend class IsolateSafepointScope;
   friend class ParkedScope;
-  friend class SafepointScope;
   friend class UnparkedScope;
 };
 

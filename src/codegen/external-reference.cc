@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/codegen/external-reference.h"
+#include <type_traits>
 
 #include "include/v8-fast-api-calls.h"
 #include "src/api/api-inl.h"
@@ -25,7 +26,9 @@
 #include "src/logging/log.h"
 #include "src/numbers/hash-seed-inl.h"
 #include "src/numbers/math-random.h"
+#include "src/objects/elements-kind.h"
 #include "src/objects/elements.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/object-type.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/ordered-hash-table.h"
@@ -300,7 +303,8 @@ constexpr bool AllScalar() {
 
 template <typename T1, typename T2, typename... Rest>
 constexpr bool AllScalar() {
-  return AllScalar<T1>() && AllScalar<T2, Rest...>();
+  // Specifically allow returning JSObjects
+  return (std::is_same<T1, JSObject>() || AllScalar<T1>()) && AllScalar<T2, Rest...>();
 }
 
 // Checks a function pointer's type for compatibility with the
@@ -348,6 +352,15 @@ FUNCTION_REFERENCE(delete_handle_scope_extensions,
 
 FUNCTION_REFERENCE(ephemeron_key_write_barrier_function,
                    Heap::EphemeronKeyWriteBarrierFromCode)
+
+JSObject AllocateAndInitializeExternalPointerTableEntry(
+    Isolate* isolate, Address pointer) {
+  HandleScope handle_scope(isolate);
+  return *isolate->factory()->NewExternal(reinterpret_cast<void*>(pointer));
+}
+
+FUNCTION_REFERENCE(allocate_and_initialize_external_pointer_table_entry,
+                   AllocateAndInitializeExternalPointerTableEntry)
 
 FUNCTION_REFERENCE(get_date_field_function, JSDate::GetField)
 
@@ -454,8 +467,8 @@ IF_WASM(FUNCTION_REFERENCE, wasm_float64_pow, wasm::float64_pow_wrapper)
 IF_WASM(FUNCTION_REFERENCE, wasm_call_trap_callback_for_testing,
         wasm::call_trap_callback_for_testing)
 IF_WASM(FUNCTION_REFERENCE, wasm_array_copy, wasm::array_copy_wrapper)
-IF_WASM(FUNCTION_REFERENCE, wasm_array_fill_with_zeroes,
-        wasm::array_fill_with_zeroes_wrapper)
+IF_WASM(FUNCTION_REFERENCE, wasm_array_fill_with_number_or_null,
+        wasm::array_fill_with_number_or_null_wrapper)
 
 static void f64_acos_wrapper(Address data) {
   double input = ReadUnalignedValue<double>(data);
@@ -948,6 +961,20 @@ ExternalReference ExternalReference::search_string_raw_two_one() {
 
 ExternalReference ExternalReference::search_string_raw_two_two() {
   return search_string_raw<const base::uc16, const base::uc16>();
+}
+
+ExternalReference
+ExternalReference::typed_array_and_rab_gsab_typed_array_elements_kind_shifts() {
+  uint8_t* ptr =
+      const_cast<uint8_t*>(TypedArrayAndRabGsabTypedArrayElementsKindShifts());
+  return ExternalReference(reinterpret_cast<Address>(ptr));
+}
+
+ExternalReference
+ExternalReference::typed_array_and_rab_gsab_typed_array_elements_kind_sizes() {
+  uint8_t* ptr =
+      const_cast<uint8_t*>(TypedArrayAndRabGsabTypedArrayElementsKindSizes());
+  return ExternalReference(reinterpret_cast<Address>(ptr));
 }
 
 namespace {
