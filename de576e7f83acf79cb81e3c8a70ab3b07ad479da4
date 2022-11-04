@@ -16,6 +16,24 @@
       "message": "Hello,\n\nWe are skipping these binaries on ppc/s390 as they are not available for these platforms: crrev.com/c/3992966\nI also wanted double check on what \"re-client\" is used for and if it also needs to be built for ppc/s390, is it part of the chromium build tools? We don not support chromium and only use V8 on Node.js.",
       "revId": "de576e7f83acf79cb81e3c8a70ab3b07ad479da4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b6f0818_2aaa75fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1151126
+      },
+      "writtenOn": "2022-11-04T08:21:44Z",
+      "side": 1,
+      "message": "reclient is replacement of goma. And I don\u0027t think ppc and s390 need to use that as goma doesn\u0027t support ppc and s390 too.",
+      "parentUuid": "47d37219_0ac26b60",
+      "revId": "de576e7f83acf79cb81e3c8a70ab3b07ad479da4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
