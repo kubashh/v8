@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df579b82_2ee3e18a",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-04T22:04:00Z",
+      "side": 1,
+      "message": "Technically not needed, the `Get` below will fail if it\u0027s empty.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 60
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba00cdb_2e448fbc",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-04T22:04:00Z",
+      "side": 1,
+      "message": "nit: same here\n```\nif (m_terminateExecutionCallback) {\n ...\n} else {\n  DCHECK(m_terminateExecutionCallbackContext_.IsEmpty());\n}\n```",
+      "range": {
+        "startLine": 93,
+        "startChar": 1,
+        "endLine": 93,
+        "endChar": 3
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02aadf05_4aa6b681",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-04T22:04:00Z",
+      "side": 1,
+      "message": "As in the destructor this is not needed since we read the value and deref it in this branch.",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 58
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
