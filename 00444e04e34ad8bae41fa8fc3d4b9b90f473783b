@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe6f44cf_f9e3868d",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4664,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-11-04T19:19:20Z",
+      "side": 1,
+      "message": "Looks like this got swapped around, should be \u00278\u0027 here and \u00276\u0027 below?",
+      "range": {
+        "startLine": 4664,
+        "startChar": 50,
+        "endLine": 4664,
+        "endChar": 68
+      },
+      "revId": "00444e04e34ad8bae41fa8fc3d4b9b90f473783b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
