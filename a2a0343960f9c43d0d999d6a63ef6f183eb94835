@@ -16,6 +16,46 @@
       "message": "PTAL, thanks!",
       "revId": "a2a0343960f9c43d0d999d6a63ef6f183eb94835",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1062d71e_30d07a7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-11-04T07:02:54Z",
+      "side": 1,
+      "message": "Thanks for the fix! Especially since the debug-evaluate/blocklist code is rather tricky.",
+      "revId": "a2a0343960f9c43d0d999d6a63ef6f183eb94835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc1b3ba0_484ff3d6",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-11-04T07:02:54Z",
+      "side": 1,
+      "message": "I suggest we reformulate this a bit and maybe rename the variable:\n\n```\n// In the case where the \"paused function scope\" is the script scope itself, we\n// don\u0027t need (and don\u0027t have) a blocklist.\nconst bool paused_scope_is_script_scope \u003d\n    !scope_iterator_.Done() \u0026\u0026 !scope_iterator_.InInnerScope();\n```",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 69
+      },
+      "revId": "a2a0343960f9c43d0d999d6a63ef6f183eb94835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
