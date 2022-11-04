@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fab73ea_9be0458b",
+        "filename": "src/objects/js-temporal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4682,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2022-11-04T17:41:22Z",
+      "side": 1,
+      "message": "Rather than switching on byte length, can you use FlatContent::Get() and AsciiAlphaToLower() below?",
+      "revId": "faa0a75772e85f962473187788c7c42500d1a438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
