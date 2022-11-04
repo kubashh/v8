@@ -82,10 +82,15 @@ V8Debugger::V8Debugger(v8::Isolate* isolate, V8InspectorImpl* inspector)
       m_pauseOnExceptionsState(v8::debug::NoBreakOnException) {}
 
 V8Debugger::~V8Debugger() {
-  m_isolate->RemoveCallCompletedCallback(
-      &V8Debugger::terminateExecutionCompletedCallback);
-  m_isolate->RemoveMicrotasksCompletedCallback(
-      &V8Debugger::terminateExecutionCompletedCallbackIgnoringData);
+  if (m_terminateExecutionCallback) {
+    DCHECK(!m_terminateExecutionCallbackContext_.IsEmpty());
+    m_isolate->RemoveCallCompletedCallback(
+        &V8Debugger::terminateExecutionCompletedCallback);
+    m_terminateExecutionCallbackContext_.Get(m_isolate)
+        ->GetMicrotaskQueue()
+        ->RemoveMicrotasksCompletedCallback(
+            &V8Debugger::terminateExecutionCompletedCallbackIgnoringData);
+  }
 }
 
 void V8Debugger::enable() {
@@ -275,6 +280,7 @@ void V8Debugger::stepOutOfFunction(int targetContextGroupId) {
 }
 
 void V8Debugger::terminateExecution(
+    v8::Local<v8::Context> context,
     std::unique_ptr<TerminateExecutionCallback> callback) {
   if (m_terminateExecutionCallback) {
     if (callback) {
@@ -284,22 +290,27 @@ void V8Debugger::terminateExecution(
     return;
   }
   m_terminateExecutionCallback = std::move(callback);
+  m_terminateExecutionCallbackContext_.Reset(m_isolate, context);
   m_isolate->AddCallCompletedCallback(
       &V8Debugger::terminateExecutionCompletedCallback);
-  m_isolate->AddMicrotasksCompletedCallback(
+  context->GetMicrotaskQueue()->AddMicrotasksCompletedCallback(
       &V8Debugger::terminateExecutionCompletedCallbackIgnoringData);
   m_isolate->TerminateExecution();
 }
 
 void V8Debugger::reportTermination() {
   if (!m_terminateExecutionCallback) return;
+  DCHECK(!m_terminateExecutionCallbackContext_.IsEmpty());
   m_isolate->RemoveCallCompletedCallback(
       &V8Debugger::terminateExecutionCompletedCallback);
-  m_isolate->RemoveMicrotasksCompletedCallback(
-      &V8Debugger::terminateExecutionCompletedCallbackIgnoringData);
+  m_terminateExecutionCallbackContext_.Get(m_isolate)
+      ->GetMicrotaskQueue()
+      ->RemoveMicrotasksCompletedCallback(
+          &V8Debugger::terminateExecutionCompletedCallbackIgnoringData);
   m_isolate->CancelTerminateExecution();
   m_terminateExecutionCallback->sendSuccess();
   m_terminateExecutionCallback.reset();
+  m_terminateExecutionCallbackContext_.Reset();
 }
 
 void V8Debugger::terminateExecutionCompletedCallback(v8::Isolate* isolate) {
