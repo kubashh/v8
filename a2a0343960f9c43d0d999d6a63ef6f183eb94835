@@ -56,6 +56,30 @@
       },
       "revId": "a2a0343960f9c43d0d999d6a63ef6f183eb94835",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "670fa88a_043a481e",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-04T15:10:15Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. I imagine you meant the negation of that if the variable is named \"is script scope\" (i.e. `scope_iterator_.Done() || scope_iterator_.InInnerScope()`)?",
+      "parentUuid": "fc1b3ba0_484ff3d6",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 69
+      },
+      "revId": "a2a0343960f9c43d0d999d6a63ef6f183eb94835",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
