@@ -4,6 +4,11 @@
 
 #include "src/d8/d8-console.h"
 
+#include <stdio.h>
+
+#include <fstream>
+
+#include "include/v8-profiler.h"
 #include "src/execution/isolate.h"
 
 namespace v8 {
@@ -31,10 +36,34 @@ void WriteToFile(const char* prefix, FILE* file, Isolate* isolate,
   }
   fprintf(file, "\n");
 }
+
+class FileOutputStream : public v8::OutputStream {
+ public:
+  explicit FileOutputStream(const char* filename)
+      : os_(filename, std::ios_base::out | std::ios_base::app) {}
+  ~FileOutputStream() override { os_.close(); }
+
+  WriteResult WriteAsciiChunk(char* data, int size) override {
+    os_.write(data, size);
+    return kContinue;
+  }
+
+  void EndOfStream() override { os_.close(); }
+
+ private:
+  std::ofstream os_;
+};
+
+static constexpr const char* kCpuProfileOutputFilename = "v8.prof";
+
 }  // anonymous namespace
 
 D8Console::D8Console(Isolate* isolate) : isolate_(isolate) {
   default_timer_ = base::TimeTicks::Now();
+}
+
+D8Console::~D8Console() {
+  if (profiler_) profiler_->Dispose();
 }
 
 void D8Console::Assert(const debug::ConsoleCallArguments& args,
@@ -69,6 +98,25 @@ void D8Console::Info(const debug::ConsoleCallArguments& args,
 void D8Console::Debug(const debug::ConsoleCallArguments& args,
                       const v8::debug::ConsoleContext&) {
   WriteToFile("console.debug", stdout, isolate_, args);
+}
+
+void D8Console::Profile(const debug::ConsoleCallArguments& args,
+                        const v8::debug::ConsoleContext&) {
+  if (!profiler_) {
+    // Avoid appending to old files: delete them.
+    remove(kCpuProfileOutputFilename);
+    profiler_ = CpuProfiler::New(isolate_);
+  }
+  profiler_->StartProfiling(String::Empty(isolate_), CpuProfilingOptions{});
+}
+
+void D8Console::ProfileEnd(const debug::ConsoleCallArguments& args,
+                           const v8::debug::ConsoleContext&) {
+  if (!profiler_) return;
+  CpuProfile* profile = profiler_->StopProfiling(String::Empty(isolate_));
+  FileOutputStream out(kCpuProfileOutputFilename);
+  profile->Serialize(&out);
+  profile->Delete();
 }
 
 void D8Console::Time(const debug::ConsoleCallArguments& args,
