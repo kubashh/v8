@@ -7,7 +7,6 @@
 #include "src/api/api-inl.h"
 #include "src/asmjs/asm-js.h"
 #include "src/base/atomicops.h"
-#include "src/logging/counters-scopes.h"
 #include "src/logging/metrics.h"
 #include "src/numbers/conversions-inl.h"
 #include "src/objects/descriptor-array-inl.h"
@@ -161,7 +160,7 @@ Handle<Map> CreateArrayMap(Isolate* isolate, const WasmModule* module,
 }
 
 Handle<Map> CreateFuncRefMap(Isolate* isolate, const WasmModule* module,
-                             Handle<Map> opt_rtt_parent,
+                             int signature_index, Handle<Map> opt_rtt_parent,
                              Handle<WasmInstanceObject> instance) {
   const int inobject_properties = 0;
   const int instance_size =
@@ -169,9 +168,8 @@ Handle<Map> CreateFuncRefMap(Isolate* isolate, const WasmModule* module,
           .instance_size();
   const InstanceType instance_type = WASM_INTERNAL_FUNCTION_TYPE;
   const ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND;
-  constexpr uint32_t kNoIndex = ~0u;
   Handle<WasmTypeInfo> type_info = isolate->factory()->NewWasmTypeInfo(
-      kNullAddress, opt_rtt_parent, instance_size, instance, kNoIndex);
+      kNullAddress, opt_rtt_parent, instance_size, instance, signature_index);
   Handle<Map> map = isolate->factory()->NewMap(
       instance_type, instance_size, elements_kind, inobject_properties);
   map->set_wasm_type_info(*type_info);
@@ -219,9 +217,15 @@ void CreateMapForType(Isolate* isolate, const WasmModule* module,
       map = CreateArrayMap(isolate, module, type_index, rtt_parent, instance);
       break;
     case TypeDefinition::kFunction:
-      map = CreateFuncRefMap(isolate, module, rtt_parent, instance);
+      map = CreateFuncRefMap(isolate, module, type_index, rtt_parent, instance);
       break;
   }
+  int depth = GetSubtypingDepth(module, type_index);
+
+  // Patch in {map} as the last of its own supertypes.
+  DCHECK(map->wasm_type_info().supertypes(depth).IsUndefined());
+  map->wasm_type_info().set_supertypes(depth, *map);
+
   canonical_rtts->Set(canonical_type_index, HeapObjectReference::Weak(*map));
   maps->set(type_index, *map);
 }

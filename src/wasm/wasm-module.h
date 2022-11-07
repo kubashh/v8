@@ -387,10 +387,16 @@ class CallSiteFeedback {
   // Regular constructor: uninitialized/unknown, monomorphic, or polymorphic.
   CallSiteFeedback() : index_or_count_(-1), frequency_or_ool_(0) {}
   CallSiteFeedback(int function_index, int call_count)
-      : index_or_count_(function_index), frequency_or_ool_(call_count) {}
+      : index_or_count_(function_index), frequency_or_ool_(call_count) {
+    DCHECK_GE(function_index, 0);
+    DCHECK_GE(call_count, 0);
+  }
   CallSiteFeedback(PolymorphicCase* polymorphic_cases, int num_cases)
       : index_or_count_(-num_cases),
-        frequency_or_ool_(reinterpret_cast<intptr_t>(polymorphic_cases)) {}
+        frequency_or_ool_(reinterpret_cast<intptr_t>(polymorphic_cases)) {
+    DCHECK_NOT_NULL(polymorphic_cases);
+    DCHECK_NE(frequency_or_ool_, 0);
+  }
 
   // Copying and assignment: prefer moving, as it's cheaper.
   // The code below makes sure external polymorphic storage is copied and/or
@@ -432,12 +438,29 @@ class CallSiteFeedback {
   }
   int function_index(int i) const {
     DCHECK(!is_invalid());
-    if (is_monomorphic()) return index_or_count_;
+    if (is_monomorphic()) {
+      DCHECK_EQ(i, 0);
+      return index_or_count_;
+    }
     return polymorphic_storage()[i].function_index;
   }
   int call_count(int i) const {
     if (index_or_count_ >= 0) return static_cast<int>(frequency_or_ool_);
     return polymorphic_storage()[i].absolute_call_frequency;
+  }
+
+  void Print() const {
+    if (is_invalid()) {
+      PrintF("- <Invalid>\n");
+    } else if (is_monomorphic()) {
+      PrintF("- id %d: count %d\n", function_index(0), call_count(0));
+    } else {
+      DCHECK(is_polymorphic());
+      PrintF("- Polymorphic:\n");
+      for (int i = 0; i < num_cases(); i++) {
+        PrintF("  - id %d: count %d\n", function_index(i), call_count(i));
+      }
+    }
   }
 
  private:
@@ -467,6 +490,7 @@ struct FunctionTypeFeedback {
   // TODO(clemensb): This does not belong here; find a better place.
   int tierup_priority = 0;
 
+  static constexpr uint32_t kTypecheck = 0xFFFFFFFE;
   static constexpr uint32_t kNonDirectCall = 0xFFFFFFFF;
 };
 

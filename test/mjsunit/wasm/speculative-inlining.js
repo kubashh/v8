@@ -3,12 +3,12 @@
 // found in the LICENSE file.
 
 // Flags: --wasm-speculative-inlining --experimental-wasm-return-call
-// Flags: --experimental-wasm-typed-funcref --experimental-wasm-type-reflection
+// Flags: --experimental-wasm-gc --experimental-wasm-type-reflection
 // Flags: --no-wasm-tier-up --wasm-dynamic-tiering --allow-natives-syntax
 
 // These tests check if functions are speculatively inlined as expected. We do
 // not check automatically which functions are inlined. To get more insight, run
-// with --trace-wasm-speculative-inlining, --trace-turbo, --trace-wasm and (for
+// with --trace-wasm-type-feedback, --trace-turbo, --trace-wasm and (for
 // the last test only) --trace.
 
 d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
@@ -132,6 +132,135 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   // g(x, y) = if (y) { h(x) } else { f(x) }
   let main = builder.addFunction("main", kSig_i_ii)
     .addBody([
+      kExprLocalGet, 0, kExprLocalGet, 1,
+      kExprIf, kWasmRef, sig_index,
+        kExprGlobalGet, global0.index,
+      kExprElse,
+        kExprGlobalGet, global1.index,
+      kExprEnd,
+      kExprReturnCallRef, sig_index])
+    .exportAs("main");
+
+  let instance = builder.instantiate();
+
+  assertEquals(9, instance.exports.main(10, 1));
+  %WasmTierUpFunction(instance, main.index);
+  // After tier-up, {callee0} should be inlined in the trace.
+  assertEquals(9, instance.exports.main(10, 1))
+
+  // Now, run main with {callee1} instead. The correct reference should still be
+  // called.
+  assertEquals(8, instance.exports.main(10, 0));
+})();
+
+(function CallReturnRefSpecPolymorphicTest() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+
+  let sig_index = builder.addType(kSig_i_i);
+
+  // h(x) = x - 1
+  let callee0 = builder.addFunction("callee0", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Sub]);
+
+  // f(x) = x - 2
+  let callee1 = builder.addFunction("callee1", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 2, kExprI32Sub]);
+
+  let global0 = builder.addGlobal(wasmRefType(sig_index), false,
+                                 [kExprRefFunc, callee0.index]);
+  let global1 = builder.addGlobal(wasmRefType(sig_index), false,
+                                 [kExprRefFunc, callee1.index]);
+
+  // g(x, y) = if (y) { h(x) } else { f(x) }
+  let main = builder.addFunction("main", kSig_i_ii)
+    .addBody([
+      kExprLocalGet, 0, kExprLocalGet, 1,
+      kExprIf, kWasmRef, sig_index,
+        kExprGlobalGet, global0.index,
+      kExprElse,
+        kExprGlobalGet, global1.index,
+      kExprEnd,
+      kExprReturnCallRef, sig_index])
+    .exportAs("main");
+
+  let instance = builder.instantiate();
+
+  assertEquals(8, instance.exports.main(10, 0));
+  assertEquals(9, instance.exports.main(10, 1));
+  %WasmTierUpFunction(instance, main.index);
+
+  // Both {callee0} and {callee1} should be inlined in the trace.
+  assertEquals(8, instance.exports.main(10, 0));
+  assertEquals(9, instance.exports.main(10, 1))
+})();
+
+(function CallReturnRefSpecPolymorphicWithCastsTest() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+
+  let sig_index = builder.addType(kSig_i_i);
+
+  // h(x) = x - 1
+  let callee0 = builder.addFunction("callee0", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Sub]);
+
+  // f(x) = x - 2
+  let callee1 = builder.addFunction("callee1", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 2, kExprI32Sub]);
+
+  let global0 = builder.addGlobal(kWasmFuncRef, false,
+                                 [kExprRefFunc, callee0.index]);
+  let global1 = builder.addGlobal(kWasmFuncRef, false,
+                                 [kExprRefFunc, callee1.index]);
+
+  // g(x, y) = if (y) { h(x) } else { f(x) }
+  let main = builder.addFunction("main", kSig_i_ii)
+    .addBody([
+      kExprLocalGet, 0, kExprLocalGet, 1,
+      kExprIf, kWasmRef, sig_index,
+        kExprGlobalGet, global0.index,
+        kGCPrefix, kExprRefCast, sig_index,
+      kExprElse,
+        kExprGlobalGet, global1.index,
+        kGCPrefix, kExprRefCast, sig_index,
+      kExprEnd,
+      kExprReturnCallRef, sig_index])
+    .exportAs("main");
+
+  let instance = builder.instantiate();
+
+  assertEquals(8, instance.exports.main(10, 0));
+  assertEquals(9, instance.exports.main(10, 1));
+  %WasmTierUpFunction(instance, main.index);
+
+  // Both {callee0} and {callee1} should be inlined in the trace.
+  assertEquals(8, instance.exports.main(10, 0));
+  assertEquals(9, instance.exports.main(10, 1))
+})();
+
+(function CallReturnUnititializedTest() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+
+  let sig_index = builder.addType(kSig_i_i);
+
+  // h(x) = x - 1
+  let callee0 = builder.addFunction("callee0", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Sub]);
+
+  // f(x) = x - 2
+  let callee1 = builder.addFunction("callee1", sig_index)
+    .addBody([kExprLocalGet, 0, kExprI32Const, 2, kExprI32Sub]);
+
+  let global0 = builder.addGlobal(wasmRefType(sig_index), false,
+                                 [kExprRefFunc, callee0.index]);
+  let global1 = builder.addGlobal(wasmRefType(sig_index), false,
+                                 [kExprRefFunc, callee1.index]);
+
+  // g(x, y) = if (y) { h(x) } else { f(x) }
+  let main = builder.addFunction("main", kSig_i_ii)
+    .addBody([
       kExprLocalGet, 1,
       kExprIf, kWasmI32,
         kExprLocalGet, 0, kExprGlobalGet, global0.index,
@@ -146,11 +275,11 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
 
   assertEquals(9, instance.exports.main(10, 1));
   %WasmTierUpFunction(instance, main.index);
-  // After tier-up, {callee0} should be inlined in the trace.
+  // After tier-up, {callee0} should be inlined in the trace. There were no
+  // calls to the second call_ref, so {callee1} should not be inlined.
   assertEquals(9, instance.exports.main(10, 1))
 
-  // Now, run main with {callee1} instead. The correct reference should still be
-  // called.
+  // Now, run main and take {callee1}'s path instead.
   assertEquals(8, instance.exports.main(10, 0));
 })();
 

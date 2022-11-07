@@ -1299,22 +1299,31 @@ class TransitiveTypeFeedbackProcessor {
 
   void ProcessFunction(int func_index);
 
-  void EnqueueCallees(const std::vector<CallSiteFeedback>& feedback) {
-    for (size_t i = 0; i < feedback.size(); i++) {
-      const CallSiteFeedback& csf = feedback[i];
-      for (int j = 0; j < csf.num_cases(); j++) {
-        int func = csf.function_index(j);
-        // Don't spend time on calls that have never been executed.
-        if (csf.call_count(j) == 0) continue;
-        // Don't recompute feedback that has already been processed.
-        auto existing = feedback_for_function_.find(func);
-        if (existing != feedback_for_function_.end() &&
-            existing->second.feedback_vector.size() > 0) {
-          continue;
-        }
-        queue_.insert(func);
-      }
+  void EnqueueCallee(int func, int call_count, int current_func) {
+    // Don't spend time on calls that have never been executed.
+    if (call_count == 0) return;
+    // Don't recompute feedback for the current function.
+    if (func == current_func) return;
+    // Don't recompute feedback that has already been processed.
+    auto existing = feedback_for_function_.find(func);
+    if (existing != feedback_for_function_.end() &&
+        existing->second.feedback_vector.size() > 0) {
+      return;
     }
+    if (v8_flags.trace_wasm_type_feedback) {
+      PrintF("[Adding callee function #%d to the queue for processing]\n",
+             func);
+    }
+    queue_.insert(func);
+  }
+
+  void EnqueueCallee(WasmInternalFunction func, int call_count,
+                     int current_func) {
+    if (!WasmExportedFunction::IsWasmExportedFunction(func.external())) {
+      return;
+    }
+    WasmExportedFunction target = WasmExportedFunction::cast(func.external());
+    EnqueueCallee(target.function_index(), call_count, current_func);
   }
 
   DisallowGarbageCollection no_gc_scope_;
@@ -1335,9 +1344,35 @@ class FeedbackMaker {
     result_.reserve(num_calls);
   }
 
-  void AddCandidate(Object maybe_function, int count) {
-    if (!maybe_function.IsWasmInternalFunction()) return;
-    WasmInternalFunction function = WasmInternalFunction::cast(maybe_function);
+  void MaybeAddTypecheckEntry(Map object_map, int count) {
+    WasmTypeInfo info = object_map.wasm_type_info();
+    // We have to find the type index in the current module.
+    uint32_t type_index_in_current_module = -1;
+    if (info.instance().module() == instance_.module()) {
+      type_index_in_current_module = info.type_index();
+    } else {
+      // In this case, we have to go through the canonical type, and then lookup
+      // the canonical type in the module.
+      // TODO(7748): Improve this.
+      uint32_t canonical_type_index =
+          info.instance()
+              .module()
+              ->isorecursive_canonical_type_ids[info.type_index()];
+      auto canonical_ids = instance_.module()->isorecursive_canonical_type_ids;
+      uint32_t i = 0;
+      for (; i < canonical_ids.size(); i++) {
+        if (canonical_ids[i] == canonical_type_index) {
+          break;
+        }
+      }
+      DCHECK_LT(i, canonical_ids.size());
+      type_index_in_current_module = i;
+    }
+
+    AddEntry(type_index_in_current_module, count);
+  }
+
+  void MaybeAddCallEntry(WasmInternalFunction function, int count) {
     if (!WasmExportedFunction::IsWasmExportedFunction(function.external())) {
       return;
     }
@@ -1345,10 +1380,11 @@ class FeedbackMaker {
         WasmExportedFunction::cast(function.external());
     if (target.instance() != instance_) return;
     if (target.function_index() < num_imported_functions_) return;
-    AddCall(target.function_index(), count);
+    AddEntry(target.function_index(), count);
   }
 
-  void AddCall(int target, int count) {
+  void AddEntry(int function_or_rtt_index, int count) {
+    DCHECK_GE(function_or_rtt_index, 0);
     // Keep the cache sorted (using insertion-sort), highest count first.
     int insertion_index = 0;
     while (insertion_index < cache_usage_ &&
@@ -1360,24 +1396,29 @@ class FeedbackMaker {
       targets_cache_[shifted_index + 1] = targets_cache_[shifted_index];
       counts_cache_[shifted_index + 1] = counts_cache_[shifted_index];
     }
-    targets_cache_[insertion_index] = target;
+    targets_cache_[insertion_index] = function_or_rtt_index;
     counts_cache_[insertion_index] = count;
     cache_usage_++;
   }
 
-  void FinalizeCall() {
+  void FinalizeEntries(uint32_t target) {
     if (cache_usage_ == 0) {
       result_.emplace_back();
     } else if (cache_usage_ == 1) {
-      if (v8_flags.trace_wasm_speculative_inlining) {
-        PrintF("[Function #%d call_ref #%zu inlineable (monomorphic)]\n",
-               func_index_, result_.size());
+      if (v8_flags.trace_wasm_type_feedback) {
+        PrintF("[Function #%d %s #%zu inlineable (monomorphic)]\n", func_index_,
+               target == FunctionTypeFeedback::kTypecheck ? "typecheck"
+                                                          : "call_ref",
+               result_.size());
       }
       result_.emplace_back(targets_cache_[0], counts_cache_[0]);
     } else {
-      if (v8_flags.trace_wasm_speculative_inlining) {
-        PrintF("[Function #%d call_ref #%zu inlineable (polymorphic %d)]\n",
-               func_index_, result_.size(), cache_usage_);
+      if (v8_flags.trace_wasm_type_feedback) {
+        PrintF("[Function #%d %s #%zu inlineable (polymorphic %d)]\n",
+               func_index_,
+               target == FunctionTypeFeedback::kTypecheck ? "typecheck"
+                                                          : "call_ref",
+               result_.size(), cache_usage_);
       }
       CallSiteFeedback::PolymorphicCase* polymorphic =
           new CallSiteFeedback::PolymorphicCase[cache_usage_];
@@ -1416,36 +1457,64 @@ void TransitiveTypeFeedbackProcessor::ProcessFunction(int func_index) {
   FeedbackMaker fm(instance_, func_index, feedback.length() / 2);
   for (int i = 0; i < feedback.length(); i += 2) {
     Object value = feedback.get(i);
+    uint32_t target = call_direct_targets[i / 2];
     if (value.IsWasmInternalFunction()) {
-      // Monomorphic.
+      // Monomorphic function.
+      DCHECK_NE(target, FunctionTypeFeedback::kTypecheck);
       int count = Smi::cast(feedback.get(i + 1)).value();
-      fm.AddCandidate(value, count);
+      fm.MaybeAddCallEntry(WasmInternalFunction::cast(value), count);
+      EnqueueCallee(WasmInternalFunction::cast(value), count, func_index);
+    } else if (value.IsMap()) {
+      DCHECK_EQ(target, FunctionTypeFeedback::kTypecheck);
+      int count = Smi::cast(feedback.get(i + 1)).value();
+      fm.MaybeAddTypecheckEntry(Map::cast(value), count);
     } else if (value.IsFixedArray()) {
       // Polymorphic.
       FixedArray polymorphic = FixedArray::cast(value);
       for (int j = 0; j < polymorphic.length(); j += 2) {
-        Object function = polymorphic.get(j);
+        Object element = polymorphic.get(j);
         int count = Smi::cast(polymorphic.get(j + 1)).value();
-        fm.AddCandidate(function, count);
+        if (target == FunctionTypeFeedback::kTypecheck) {
+          fm.MaybeAddTypecheckEntry(Map::cast(element), count);
+        } else {
+          fm.MaybeAddCallEntry(WasmInternalFunction::cast(element), count);
+          EnqueueCallee(WasmInternalFunction::cast(element), count, func_index);
+        }
       }
     } else if (value.IsSmi()) {
       // Uninitialized, or a direct call collecting call count.
-      uint32_t target = call_direct_targets[i / 2];
-      if (target != FunctionTypeFeedback::kNonDirectCall) {
+      if (target != FunctionTypeFeedback::kNonDirectCall &&
+          target != FunctionTypeFeedback::kTypecheck) {
         int count = Smi::cast(value).value();
-        fm.AddCall(static_cast<int>(target), count);
-      } else if (v8_flags.trace_wasm_speculative_inlining) {
-        PrintF("[Function #%d call #%d: uninitialized]\n", func_index, i / 2);
+        fm.AddEntry(static_cast<int>(target), count);
+        EnqueueCallee(target, count, func_index);
+      } else {
+        DCHECK_EQ(Smi::cast(value).value(), 0);
+        if (v8_flags.trace_wasm_type_feedback) {
+          PrintF(
+              "[Function #%d %s #%d: uninitialized]\n", func_index,
+              target == FunctionTypeFeedback::kTypecheck ? "typecheck" : "call",
+              i / 2);
+        }
       }
-    } else if (v8_flags.trace_wasm_speculative_inlining) {
-      if (value == ReadOnlyRoots(instance_.GetIsolate()).megamorphic_symbol()) {
-        PrintF("[Function #%d call #%d: megamorphic]\n", func_index, i / 2);
+    } else {
+      DCHECK_EQ(value,
+                ReadOnlyRoots(instance_.GetIsolate()).megamorphic_symbol());
+      if (v8_flags.trace_wasm_type_feedback) {
+        PrintF(
+            "[Function #%d %s #%d: megamorphic]\n", func_index,
+            target == FunctionTypeFeedback::kTypecheck ? "typecheck" : "call",
+            i / 2);
       }
     }
-    fm.FinalizeCall();
+    fm.FinalizeEntries(target);
   }
   std::vector<CallSiteFeedback> result = std::move(fm).GetResult();
-  EnqueueCallees(result);
+  if (v8_flags.trace_wasm_type_feedback) {
+    PrintF("[Type feedback vector for function %d:\n", func_index);
+    for (auto& elem : result) elem.Print();
+    PrintF("]\n");
+  }
   feedback_for_function_[func_index].feedback_vector = std::move(result);
 }
 

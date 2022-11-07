@@ -1155,11 +1155,16 @@ DEFINE_SIZE_T(wasm_inlining_budget, 9000,
 DEFINE_BOOL(wasm_speculative_inlining, false,
             "enable speculative inlining of call_ref targets (experimental)")
 DEFINE_BOOL(trace_wasm_inlining, false, "trace wasm inlining")
-DEFINE_BOOL(trace_wasm_speculative_inlining, false,
-            "trace wasm speculative inlining")
+DEFINE_BOOL(trace_wasm_type_feedback, false,
+            "trace wasm speculative inlining and typecheck feedback")
 DEFINE_BOOL(trace_wasm_typer, false, "trace wasm typer")
 DEFINE_IMPLICATION(wasm_speculative_inlining, wasm_inlining)
 DEFINE_WEAK_IMPLICATION(experimental_wasm_gc, wasm_speculative_inlining)
+
+DEFINE_BOOL(wasm_typecheck_feedback, false,
+            "enable feedback collection for wasm-gc type checks and casts "
+            "(experimental)")
+DEFINE_WEAK_IMPLICATION(experimental_wasm_gc, wasm_typecheck_feedback)
 
 DEFINE_BOOL(wasm_loop_unrolling, true,
             "enable loop unrolling for wasm functions")

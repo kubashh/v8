@@ -88,6 +88,7 @@ struct WasmModule;
   V(BigIntToI32Pair)                     \
   V(BigIntToI64)                         \
   V(CallRefIC)                           \
+  V(RefTestIC)                           \
   V(DoubleToI)                           \
   V(I32PairToBigInt)                     \
   V(I64ToBigInt)                         \
@@ -119,7 +120,6 @@ struct WasmModule;
   V(WasmArrayCopyWithChecks)             \
   V(WasmArrayNewSegment)                 \
   V(WasmAllocateStructWithRtt)           \
-  V(WasmSubtypeCheck)                    \
   V(WasmOnStackReplace)                  \
   V(WasmSuspend)                         \
   V(WasmStringNewWtf8)                   \

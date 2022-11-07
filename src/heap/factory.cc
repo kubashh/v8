@@ -1614,10 +1614,9 @@ Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
       }
       supertypes.emplace_back(supertype);
     }
-    if (first_undefined_index >= 0) {
-      supertypes[first_undefined_index] = opt_parent;
-    } else {
-      supertypes.emplace_back(opt_parent);
+    if (first_undefined_index == -1) {
+      // Make space to patch up the self-type as last supertype.
+      supertypes.emplace_back(undefined_value());
     }
   }
   Map map = *wasm_type_info_map();

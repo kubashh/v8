@@ -725,7 +725,7 @@ class WasmGraphBuildingInterface {
     for (int i = 0; i < num_cases; i++) {
       const uint32_t expected_function_index = feedback->function_index(i);
 
-      if (v8_flags.trace_wasm_speculative_inlining) {
+      if (v8_flags.trace_wasm_type_feedback) {
         PrintF("[Function #%d call #%d: graph support for inlining #%d]\n",
                func_index_, feedback_instruction_index_ - 1,
                expected_function_index);
@@ -817,7 +817,7 @@ class WasmGraphBuildingInterface {
     for (int i = 0; i < num_cases; i++) {
       const uint32_t expected_function_index = feedback->function_index(i);
 
-      if (v8_flags.trace_wasm_speculative_inlining) {
+      if (v8_flags.trace_wasm_type_feedback) {
         PrintF("[Function #%d call #%d: graph support for inlining #%d]\n",
                func_index_, feedback_instruction_index_ - 1,
                expected_function_index);
@@ -1218,10 +1218,19 @@ class WasmGraphBuildingInterface {
 
   void RefTest(FullDecoder* decoder, const Value& object, const Value& rtt,
                Value* result, bool null_succeeds) {
+    const CallSiteFeedback* feedback = nullptr;
+    if (v8_flags.wasm_typecheck_feedback && type_feedback_.size() > 0) {
+      // TODO(7748): Use this.
+      feedback = &next_call_feedback();
+    }
+    int hint = feedback != nullptr && feedback->num_cases() > 0
+                   ? feedback->function_index(0)
+                   : -1;
     WasmTypeCheckConfig config = {
         object.type,
         ValueType::RefMaybeNull(rtt.type.ref_index(),
-                                null_succeeds ? kNullable : kNonNullable)};
+                                null_succeeds ? kNullable : kNonNullable),
+        hint};
     SetAndTypeNode(result, builder_->RefTest(object.node, rtt.node, config));
   }
 
@@ -1233,10 +1242,20 @@ class WasmGraphBuildingInterface {
 
   void RefCast(FullDecoder* decoder, const Value& object, const Value& rtt,
                Value* result, bool null_succeeds) {
+    const CallSiteFeedback* feedback = nullptr;
+    if (v8_flags.wasm_typecheck_feedback && type_feedback_.size() > 0) {
+      // TODO(7748): Use this.
+      feedback = &next_call_feedback();
+    }
+    int hint = feedback != nullptr && feedback->num_cases() > 0
+                   ? feedback->function_index(0)
+                   : -1;
+
     WasmTypeCheckConfig config = {
         object.type,
         ValueType::RefMaybeNull(rtt.type.ref_index(),
-                                null_succeeds ? kNullable : kNonNullable)};
+                                null_succeeds ? kNullable : kNonNullable),
+        hint};
     TFNode* cast_node = v8_flags.experimental_wasm_assume_ref_cast_succeeds
                             ? builder_->TypeGuard(object.node, result->type)
                             : builder_->RefCast(object.node, rtt.node, config,
@@ -1264,7 +1283,8 @@ class WasmGraphBuildingInterface {
     WasmTypeCheckConfig config = {object.type,
                                   !rtt.type.is_bottom()
                                       ? ValueType::Ref(rtt.type.ref_index())
-                                      : kWasmBottom};
+                                      : kWasmBottom,
+                                  -1};
     SsaEnv* branch_env = Split(decoder->zone(), ssa_env_);
     SsaEnv* no_branch_env = Steal(decoder->zone(), ssa_env_);
     no_branch_env->SetNotMerged();
@@ -1285,12 +1305,20 @@ class WasmGraphBuildingInterface {
 
   void BrOnCast(FullDecoder* decoder, const Value& object, const Value& rtt,
                 Value* value_on_branch, uint32_t br_depth) {
+    if (v8_flags.wasm_typecheck_feedback && type_feedback_.size() > 0) {
+      // TODO(7748): Use this.
+      next_call_feedback();
+    }
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnCast>(
         decoder, object, rtt, value_on_branch, br_depth, true);
   }
 
   void BrOnCastFail(FullDecoder* decoder, const Value& object, const Value& rtt,
                     Value* value_on_fallthrough, uint32_t br_depth) {
+    if (v8_flags.wasm_typecheck_feedback && type_feedback_.size() > 0) {
+      // TODO(7748): Use this.
+      next_call_feedback();
+    }
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnCast>(
         decoder, object, rtt, value_on_fallthrough, br_depth, false);
   }
@@ -1615,7 +1643,7 @@ class WasmGraphBuildingInterface {
   std::vector<compiler::WasmLoopInfo> loop_infos_;
   InlinedStatus inlined_status_;
   // The entries in {type_feedback_} are indexed by the position of feedback-
-  // consuming instructions (currently only calls).
+  // consuming instructions (calls and type checks/casts).
   int feedback_instruction_index_ = 0;
   std::vector<CallSiteFeedback> type_feedback_;
 

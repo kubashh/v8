@@ -463,7 +463,7 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
       kDataSegmentSizesOffset,
       kDroppedElemSegmentsOffset};
 
-  const wasm::WasmModule* module();
+  const wasm::WasmModule* module() const;
 
   static bool EnsureIndirectFunctionTableWithMinimumSize(
       Handle<WasmInstanceObject> instance, int table_index,
