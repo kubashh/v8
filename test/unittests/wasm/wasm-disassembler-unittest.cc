@@ -18,22 +18,13 @@ namespace wasm {
 
 class WasmDisassemblerTest : public ::v8::TestWithPlatform {};
 
-TEST_F(WasmDisassemblerTest, Mvp) {
-  // If you want to extend this test:
-  // 1. Modify the .wat.inc file included below, e.g., add more instructions.
-  // 2. Convert the Wasm text file to a Wasm binary with `wat2wasm`.
-  // 3. Convert the Wasm binary to an array init expression with
-  // `wami --full-hexdump` and paste it into the included file below.
-  // One liner (Linux):
-  // wat2wasm wasm-disassembler-unittest-mvp.wat.inc --output=-
-  // | wami --full-hexdump
-  // | head -n-1 | tail -n+2 > wasm-disassembler-unittest-mvp.wasm.inc
-
-  constexpr byte module_bytes_array[] = {
-#include "wasm-disassembler-unittest-mvp.wasm.inc"
-  };
+// Code that is shared for all tests, the only difference is the input module
+// and expected disassembler output.
+template <size_t N>
+void CheckDisassemblerOutput(const byte (&module_bytes)[N],
+                             std::string expected_output) {
   base::Vector<const byte> module_bytes_vector =
-      base::ArrayVector(module_bytes_array);
+      base::ArrayVector(module_bytes);
 
   AccountingAllocator allocator;
 
@@ -53,6 +44,29 @@ TEST_F(WasmDisassemblerTest, Mvp) {
   std::ostringstream output;
   output_sb.WriteTo(output);
 
+  // Remove comment lines from expected output since they cannot be recovered
+  // by a disassembler.
+  // They were also used as part of the C++/WAT polyglot trick described below.
+  expected_output =
+      std::regex_replace(expected_output, std::regex(" *;;[^\\n]*\\n?"), "");
+
+  EXPECT_EQ(output.str(), expected_output);
+}
+
+TEST_F(WasmDisassemblerTest, Mvp) {
+  // If you want to extend this test (and the other tests below):
+  // 1. Modify the included .wat.inc file(s), e.g., add more instructions.
+  // 2. Convert the Wasm text file to a Wasm binary with `wat2wasm`.
+  // 3. Convert the Wasm binary to an array init expression with
+  // `wami --full-hexdump` and paste it into the included file below.
+  // One liner example (Linux):
+  // wat2wasm wasm-disassembler-unittest-mvp.wat.inc --output=-
+  // | wami --full-hexdump
+  // | head -n-1 | tail -n+2 > wasm-disassembler-unittest-mvp.wasm.inc
+  constexpr byte module_bytes[] = {
+#include "wasm-disassembler-unittest-mvp.wasm.inc"
+  };
+
   // Little trick: polyglot C++/WebAssembly text file.
   // We want to include the expected disassembler text output as a string into
   // this test (instead of reading it from the file at runtime, which would make
@@ -64,11 +78,19 @@ TEST_F(WasmDisassemblerTest, Mvp) {
   // harm when including the file here either.
   std::string expected;
 #include "wasm-disassembler-unittest-mvp.wat.inc"
-  // Remove comment lines which cannot be recovered by a disassembler.
-  // They were also used as part of the C++/WAT polyglot trick above.
-  expected = std::regex_replace(expected, std::regex(" *;;[^\\n]*\\n?"), "");
 
-  EXPECT_EQ(output.str(), expected);
+  CheckDisassemblerOutput(module_bytes, expected);
+}
+
+TEST_F(WasmDisassemblerTest, Names) {
+  // You can create a binary with a custom name section from the text format via
+  // `wat2wasm --debug-names`.
+  constexpr byte module_bytes[] = {
+#include "wasm-disassembler-unittest-names.wasm.inc"
+  };
+  std::string expected;
+#include "wasm-disassembler-unittest-names.wat.inc"
+  CheckDisassemblerOutput(module_bytes, expected);
 }
 
 }  // namespace wasm
