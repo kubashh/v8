@@ -4936,7 +4936,7 @@ class TypeReaderTest : public TestWithZone {
     Decoder decoder(start, end);
     uint32_t length;
     return value_type_reader::read_value_type<Decoder::FullValidationTag>(
-        &decoder, start, &length, module, enabled_features_);
+        &decoder, start, &length, enabled_features_);
   }
 
   HeapType DecodeHeapType(const byte* start, const byte* end,
@@ -4944,7 +4944,7 @@ class TypeReaderTest : public TestWithZone {
     Decoder decoder(start, end);
     uint32_t length;
     return value_type_reader::read_heap_type<Decoder::FullValidationTag>(
-        &decoder, start, &length, module, enabled_features_);
+        &decoder, start, &length, enabled_features_);
   }
 
   // This variable is modified by WASM_FEATURE_SCOPE.
