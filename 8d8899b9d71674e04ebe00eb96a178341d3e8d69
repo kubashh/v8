@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06cbb2ac_52a4c71d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-07T15:35:40Z",
+      "side": 1,
+      "message": "Alright, I think we are ready for this CL to finally split decoding from validation again.",
+      "revId": "8d8899b9d71674e04ebe00eb96a178341d3e8d69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
