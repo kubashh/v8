@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e26c760_af4513d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "LGTM with one actionable comment.",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d96f863_c0470b0a",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-11-07T12:35:59Z",
       "side": 1,
       "message": "I think if we print a elem/data segment name, we should also print the index (for consistency with functions/globals/tables etc.)",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c7f666_34ea8ba6",
+        "filename": "src/wasm/names-provider.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8d96f863_c0470b0a",
       "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb33e444_be4eb8e7",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-names.wat.inc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "Ack.\nThis is intentional legacy behavior for now: we only print struct/array types, not function types. See `kSkipFunctionTypesInTypeSection` in `wasm-disassembler-impl.h`.",
+      "parentUuid": "fcf7b068_a00b2ca9",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e132006_e0d1de6d",
@@ -69,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5eabae5_4601f6de",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-names.wat.inc",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "Ack.\n(It\u0027s not clear that changing this would ease debugging. Imagine having to scroll up hundreds of thousands of lines from a function definition just to find the named signature definition in the type section!)",
+      "parentUuid": "4e132006_e0d1de6d",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1711729d_249ecc60",
@@ -82,6 +153,47 @@
       "writtenOn": "2022-11-07T12:35:59Z",
       "side": 1,
       "message": "Is this still working as intended, i.e., not printing data segment names?",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa126591_12d29b3c",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest-names.wat.inc",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "We haven\u0027t made a decision to change it. Arguably having tests is a prerequisite for making such decisions 😊",
+      "parentUuid": "1711729d_249ecc60",
+      "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c85260a0_24ba8f21",
+        "filename": "test/unittests/wasm/wasm-disassembler-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-07T13:33:17Z",
+      "side": 1,
+      "message": "I think it would make sense to use `base::Vector\u003cconst byte\u003e` as the type here (and move the `base::ArrayVector` call to the callers), then you don\u0027t need the templatization and this unsightly type definition.",
+      "range": {
+        "startLine": 24,
+        "startChar": 29,
+        "endLine": 24,
+        "endChar": 58
+      },
       "revId": "ccd91fe9bc3ee7dd198d5d14c042a43393850fa6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
