@@ -56,6 +56,30 @@
       },
       "revId": "124018b3c01a36780740fe792c13c4a50b20581f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6acb8876_f98e765a",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-07T10:11:55Z",
+      "side": 1,
+      "message": "As discussed offline, `input_graph` can\u0027t be `const` because of SwapWithCompanion. Still, I\u0027ve made the getter `const`, and made all places of the code use it rather than the raw field.",
+      "parentUuid": "02041427_8c93e1b0",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 22
+      },
+      "revId": "124018b3c01a36780740fe792c13c4a50b20581f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
