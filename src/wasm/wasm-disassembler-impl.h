@@ -32,6 +32,7 @@ using IndexAsComment = NamesProvider::IndexAsComment;
 constexpr bool kSkipFunctionTypesInTypeSection = true;
 constexpr IndexAsComment kIndicesAsComments = NamesProvider::kIndexAsComment;
 constexpr bool kSkipDataSegmentNames = true;
+constexpr bool kSkipElementSegmentNames = true;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Helpers.
