@@ -16,6 +16,29 @@
       "message": "Thanks. Could you please +1 one more time please? I\u0027ve modified src/compiler/turboshaft/sidetable.h, which has reset your +1 :/",
       "revId": "cbd606563a8aab7bfe3c2822890d653822d10229",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb475a7_d3b12bd7",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-07T11:21:35Z",
+      "side": 1,
+      "message": "Why not just use `\u0026` at the callsite instead of having this method?",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 419,
+        "endChar": 3
+      },
+      "revId": "cbd606563a8aab7bfe3c2822890d653822d10229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
