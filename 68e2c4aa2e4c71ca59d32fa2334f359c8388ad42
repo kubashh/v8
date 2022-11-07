@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b3a51af_32809262",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-07T19:42:18Z",
+      "side": 1,
+      "message": "I thought about the following: \n`AddMicrotasksCompletedCallback` takes a data argument. you could pass along the `MicrotaskQueue` in a malloced struct with a weakref and consume it in  `V8Debugger::terminateExecution`.\n\nThat would probably not work with removing the callback in the destructor.\n\nI\u0027m also not 100% certain if the current approach works if a Context\u0027s MicrotaskQueue changes between calling terminateExecution and getting the callback on reportTermination.",
+      "parentUuid": "b69ce042_97ac5149",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 65
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02aadf05_4aa6b681",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 4
