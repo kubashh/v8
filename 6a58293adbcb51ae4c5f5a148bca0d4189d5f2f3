@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eed6c587_c1bf135a",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-07T08:48:54Z",
+      "side": 1,
+      "message": "Nice! Makes a lot of sense to only store one pointer to `phase_zone` :)",
+      "parentUuid": "3b33c900_78c49f61",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2bcb497_34d2a711",
@@ -196,6 +220,30 @@
       "side": 1,
       "message": "The idea was to extract non-templatized parts of OptimizationPhaseImpl into a separate class, so the Assemblers could use it. \nWith the new Assembler/Reducers architecture, Reducers have access to the Assembler, which has access to OptimizationPhaseImplm (well, GraphVisitor now), so it makes probably sense to put all of this stuff back into GraphVisitor, which is what I\u0027ve done.",
       "parentUuid": "a90f5d00_4c790284",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 6
+      },
+      "revId": "6a58293adbcb51ae4c5f5a148bca0d4189d5f2f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7921b5bd_c42a9161",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-07T08:48:54Z",
+      "side": 1,
+      "message": "Cool, thanks!",
+      "parentUuid": "8ed235f1_0db481c2",
       "range": {
         "startLine": 125,
         "startChar": 0,
