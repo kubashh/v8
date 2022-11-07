@@ -33,6 +33,24 @@
       "message": "LTGM\n\nLooks like mb_config now contains mostly just compilers. Could we reach a point where \u0027compiler\u0027 particle does not appear in the name?",
       "revId": "80513005f9347840fdd779adca7626e3f9386e73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29035597_c5996163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-07T11:47:25Z",
+      "side": 1,
+      "message": "Also before orchestrator, it were nearly only compile-only bots. I still prefer having the real bot name appear in the config and not something that is constructed, since then it can be found on code-search, which is often really important if someone wants to tidy something up.\n\nA real improvement could be to not reference the configs by bot name at all, but to e.g. directly reference the config values in infra/config. But that\u0027s orthogonal and not really thought through yet.",
+      "parentUuid": "cd87377d_7cdd1e82",
+      "revId": "80513005f9347840fdd779adca7626e3f9386e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
