@@ -16,6 +16,52 @@
       "message": "ptal",
       "revId": "1f782657e163db9bee384b7430f84dbdfb315b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "851ac772_d41ba8eb",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-07T12:11:28Z",
+      "side": 1,
+      "message": "this is a bit of a confusing flag name, could we consider changing to e.g. `--maglev-as-toptier` and switching the bot config to use that? I\u0027m esp. concerned that this will have an impact on debugging, e.g. trying to reproduce an error by running with `--no-turbofan` and forgetting to also run `--no-toptier`.",
+      "range": {
+        "startLine": 449,
+        "startChar": 12,
+        "endLine": 449,
+        "endChar": 19
+      },
+      "revId": "1f782657e163db9bee384b7430f84dbdfb315b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42f63acf_3b57b248",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-07T12:11:28Z",
+      "side": 1,
+      "message": "nit: is_toptier",
+      "range": {
+        "startLine": 83,
+        "startChar": 7,
+        "endLine": 83,
+        "endChar": 14
+      },
+      "revId": "1f782657e163db9bee384b7430f84dbdfb315b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
