@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b230d284_6d46c901",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-07T15:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df579b82_2ee3e18a",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 60
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ba00cdb_2e448fbc",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-04T22:04:00Z",
       "side": 1,
       "message": "nit: same here\n```\nif (m_terminateExecutionCallback) {\n ...\n} else {\n  DCHECK(m_terminateExecutionCallbackContext_.IsEmpty());\n}\n```",
+      "range": {
+        "startLine": 93,
+        "startChar": 1,
+        "endLine": 93,
+        "endChar": 3
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "516239a3_a4ff659e",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-07T15:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ba00cdb_2e448fbc",
       "range": {
         "startLine": 93,
         "startChar": 1,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae943fd8_19e56506",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-07T15:26:16Z",
+      "side": 1,
+      "message": "So the problem I had with it being a weak handle (and I did think about it) is that how the callback would get removed. Since Context doesn\u0027t own the microtask queue (and it could just be the default one on the isolate) if the Context goes away we might not necessarily remove the callback from the microtask queue. I wasn\u0027t certain if we could store a handle to the microtask queue instead of the Context.. Camillo?",
+      "parentUuid": "b69ce042_97ac5149",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 65
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02aadf05_4aa6b681",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 4
@@ -83,6 +155,30 @@
       "writtenOn": "2022-11-04T22:04:00Z",
       "side": 1,
       "message": "As in the destructor this is not needed since we read the value and deref it in this branch.",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 58
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b60ebe3_7051cf08",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-07T15:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02aadf05_4aa6b681",
       "range": {
         "startLine": 303,
         "startChar": 0,
@@ -106,6 +202,30 @@
       "writtenOn": "2022-11-07T06:06:11Z",
       "side": 1,
       "message": "nit: Remove the underscore. The V8 inspector still uses the old convention from when it was imported. Let\u0027s stay consistent inside the inspector files.",
+      "range": {
+        "startLine": 297,
+        "startChar": 61,
+        "endLine": 297,
+        "endChar": 62
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88f91f5b_47e81b03",
+        "filename": "src/inspector/v8-debugger.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-07T15:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef172bfb_f7ad8b09",
       "range": {
         "startLine": 297,
         "startChar": 61,
