@@ -446,6 +446,8 @@ DEFINE_BOOL(future, FUTURE_BOOL,
             "Implies all staged features that we want to ship in the "
             "not-too-far future")
 
+DEFINE_BOOL(toptier, true, "remove tier-up logic from the top tier")
+
 #ifdef V8_ENABLE_MAGLEV
 #define V8_ENABLE_MAGLEV_BOOL true
 DEFINE_BOOL(maglev, false, "enable the maglev optimizing compiler")

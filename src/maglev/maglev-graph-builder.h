@@ -80,6 +80,7 @@ class MaglevGraphBuilder {
   bool CheckType(ValueNode* node, NodeType type);
   NodeInfo* CreateInfoIfNot(ValueNode* node, NodeType type);
   bool EnsureType(ValueNode* node, NodeType type, NodeType* old = nullptr);
+  bool toptier() { return v8_flags.toptier && !v8_flags.turbofan; }
   BasicBlock* CreateEdgeSplitBlock(int offset,
                                    int interrupt_budget_correction) {
     if (v8_flags.trace_maglev_graph_building) {
@@ -90,7 +91,7 @@ class MaglevGraphBuilder {
     // Add an interrupt budget correction if necessary. This makes the edge
     // split block no longer empty, which is unexpected, but we're not changing
     // interpreter frame state, so that's ok.
-    if (interrupt_budget_correction != 0) {
+    if (!toptier() && interrupt_budget_correction != 0) {
       DCHECK_GT(interrupt_budget_correction, 0);
       AddNewNode<IncreaseInterruptBudget>({}, interrupt_budget_correction);
     }
@@ -956,7 +957,7 @@ class MaglevGraphBuilder {
       jump_target_refs_head =
           jump_target_refs_head->SetToBlockAndReturnNext(block);
     }
-    if (interrupt_budget_correction != 0) {
+    if (!toptier() && interrupt_budget_correction != 0) {
       DCHECK_GT(interrupt_budget_correction, 0);
       AddNewNode<IncreaseInterruptBudget>({}, interrupt_budget_correction);
     }
