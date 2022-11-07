@@ -3167,6 +3167,10 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   pipeline.RunPrintAndVerify(DecompressionOptimizationPhase::phase_name(),
                              true);
 
+  pipeline.Run<EffectControlLinearizationPhase>();
+  pipeline.RunPrintAndVerify(EffectControlLinearizationPhase::phase_name(),
+                             true);
+
   pipeline.Run<BranchConditionDuplicationPhase>();
   pipeline.RunPrintAndVerify(BranchConditionDuplicationPhase::phase_name(),
                              true);
