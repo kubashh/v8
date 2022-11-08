@@ -216,6 +216,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee520bbe_9fb792c1",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-08T09:13:49Z",
+      "side": 1,
+      "message": "Ah you\u0027re right, in that case you\u0027d only be able to hold a raw pointer to the MicrotaskQueue.",
+      "parentUuid": "3d03337e_ddc28ad8",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 65
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02aadf05_4aa6b681",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 4
