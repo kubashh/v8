@@ -240,6 +240,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4202b06_31003a03",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2022-11-08T22:39:40Z",
+      "side": 1,
+      "message": "Ok. Switched to a Weak handle (as per offline discussion with Camillo). We also added removing the callback always (by passing in the microtask queue as the data member of the callback). This protects us against if the microtask queue changes on the Context or if the Context is destroyed before the microtask callback completes.",
+      "parentUuid": "ee520bbe_9fb792c1",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 65
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02aadf05_4aa6b681",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 4
