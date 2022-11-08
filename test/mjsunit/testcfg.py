@@ -40,6 +40,7 @@ FILES_PATTERN = re.compile(r"//\s+Files:(.*)")
 ENV_PATTERN = re.compile(r"//\s+Environment Variables:(.*)")
 SELF_SCRIPT_PATTERN = re.compile(r"//\s+Env: TEST_FILE_NAME")
 NO_HARNESS_PATTERN = re.compile(r"^// NO HARNESS$", flags=re.MULTILINE)
+PREPARE_FUN_FOR_OPT_PATTERN = re.compile(r"%PrepareFunctionForOptimization\(")
 
 
 # Flags known to misbehave when combining arbitrary mjsunit tests. Can also
@@ -113,6 +114,10 @@ class TestCase(testcase.D8TestCase):
     self._mjsunit_files = mjsunit_files
     self._files_suffix = [testfilename]
     self._env = self._parse_source_env(source)
+
+    if self.suite.statusfile.variables[
+        'gc_stress'] and PREPARE_FUN_FOR_OPT_PATTERN.search(source):
+      self.expected_outcomes.append(statusfile.FAIL)
 
   def _parse_source_env(self, source):
     env_match = ENV_PATTERN.search(source)
