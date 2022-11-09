@@ -354,7 +354,9 @@ Reduction CsaLoadElimination::ReduceLoadFromObject(Node* node,
   if (!(is_mutable ? &state->immutable_state : &state->mutable_state)
            ->Lookup(object, offset)
            .IsEmpty()) {
-    return AssertUnreachable(node);
+    // We cannot use an Unreachable node here, as it is not allowed to flow into
+    // any node as value.
+    return NoChange();
   }
   HalfState const* half_state =
       is_mutable ? &state->mutable_state : &state->immutable_state;
