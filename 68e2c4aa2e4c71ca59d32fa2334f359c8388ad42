@@ -264,6 +264,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "39d620ab_9bfba23b",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2022-11-09T06:44:31Z",
+      "side": 1,
+      "message": "Thanks! lgtm, but please also wait for Camillos lgtm.",
+      "parentUuid": "f4202b06_31003a03",
+      "range": {
+        "startLine": 293,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 65
+      },
+      "revId": "68e2c4aa2e4c71ca59d32fa2334f359c8388ad42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02aadf05_4aa6b681",
         "filename": "src/inspector/v8-debugger.cc",
         "patchSetId": 4
