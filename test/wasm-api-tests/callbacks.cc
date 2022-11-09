@@ -31,7 +31,7 @@ own<Trap> Stage4_GC(void* env, const Val args[], Val results[]) {
   printf("Stage4...\n");
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(env);
   ScanStackModeScopeForTesting no_stack_scanning(isolate->heap(),
-                                                 Heap::ScanStackMode::kNone);
+                                                 Heap::ScanStackMode::kPrecise);
   isolate->heap()->PreciseCollectAllGarbage(Heap::kForcedGC,
                                             GarbageCollectionReason::kTesting);
   results[0] = Val::i32(args[0].i32() + 1);

@@ -189,7 +189,7 @@ class WithIsolateScopeMixin : public TMixin {
   // By default, the GC methods do not scan the stack conservatively.
   void CollectGarbage(
       i::AllocationSpace space, i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone) {
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise) {
     i::Isolate* iso = isolate ? isolate : i_isolate();
     i::ScanStackModeScopeForTesting scope(iso->heap(), mode);
     iso->heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting);
@@ -197,7 +197,7 @@ class WithIsolateScopeMixin : public TMixin {
 
   void CollectAllGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone) {
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise) {
     i::Isolate* iso = isolate ? isolate : i_isolate();
     i::ScanStackModeScopeForTesting scope(iso->heap(), mode);
     iso->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
@@ -206,7 +206,7 @@ class WithIsolateScopeMixin : public TMixin {
 
   void CollectAllAvailableGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone) {
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise) {
     i::Isolate* iso = isolate ? isolate : i_isolate();
     i::ScanStackModeScopeForTesting scope(iso->heap(), mode);
     iso->heap()->CollectAllAvailableGarbage(
@@ -215,7 +215,7 @@ class WithIsolateScopeMixin : public TMixin {
 
   void PreciseCollectAllGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone) {
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise) {
     i::Isolate* iso = isolate ? isolate : i_isolate();
     i::ScanStackModeScopeForTesting scope(iso->heap(), mode);
     iso->heap()->PreciseCollectAllGarbage(i::Heap::kNoGCFlags,

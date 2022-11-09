@@ -360,7 +360,7 @@ class MergeDeserializedCodeTest : public DeserializeTest {
     }
 
     i::ScanStackModeScopeForTesting no_stack_scanning(
-        i_isolate->heap(), i::Heap::ScanStackMode::kNone);
+        i_isolate->heap(), i::Heap::ScanStackMode::kPrecise);
     i_isolate->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
                                          i::GarbageCollectionReason::kTesting);
 
@@ -510,7 +510,7 @@ class MergeDeserializedCodeTest : public DeserializeTest {
     // some old discarded content, such as UncompiledData from flushed
     // functions. GC again to clear it all out.
     i::ScanStackModeScopeForTesting no_stack_scanning(
-        i_isolate->heap(), i::Heap::ScanStackMode::kNone);
+        i_isolate->heap(), i::Heap::ScanStackMode::kPrecise);
     i_isolate->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
                                          i::GarbageCollectionReason::kTesting);
 
