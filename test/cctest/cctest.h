@@ -173,19 +173,19 @@ class CcTest {
   // By default, the GC methods do not scan the stack conservatively.
   static void CollectGarbage(
       i::AllocationSpace space, i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone);
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise);
   static void CollectAllGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone);
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise);
   static void CollectAllAvailableGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone);
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise);
   static void PreciseCollectAllGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone);
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise);
   static void CollectSharedGarbage(
       i::Isolate* isolate = nullptr,
-      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kNone);
+      i::Heap::ScanStackMode mode = i::Heap::ScanStackMode::kPrecise);
 
   static i::Handle<i::String> MakeString(const char* str);
   static i::Handle<i::String> MakeName(const char* str, int suffix);
