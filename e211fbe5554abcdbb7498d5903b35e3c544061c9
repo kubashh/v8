@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "080d0e97_8590cceb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-11-09T16:15:57Z",
+      "side": 1,
+      "message": "Tobias, can you review this? I am not sure if my assumptions are correct here, but I was able to verify that this fixes the crbug repro.",
+      "revId": "e211fbe5554abcdbb7498d5903b35e3c544061c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
