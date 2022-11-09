@@ -16,6 +16,24 @@
       "message": "I implemented an escape hatch to allow ExternalReferences to return JSObjects, and used that to call the `factory()-\u003eNewExternal(pointer)` to create the external. This works, now the for-in loop does not cause an assert.\n\nThe downside here is that I needed to create a handle scope to get the allocation done. I considered trying to do the allocation manually on my own but the necessary factory API is private and I also couldn\u0027t figure out what the AllocationSite should be. (Ah, maybe it should be nullptr?)\n\nLooking at the `Factory::InitializeJSObjectFromMap` function (`factory.cc:2678`) I start wondering if somehow the Turbofan allocation and storing of the JSExternalObject was just somehow missing the object properties initialization? ie. Were we missing `obj.set_raw_properties_or_hash(properties, kRelaxedStore)` or `obj.initialize_elements()` call?\n\nOther map creations do not seem to be doing anything like that, so either Turbofan created BigInts are currently exploding on `for-in` iterations out there in the world (unlikely), or perhaps there is code somewhere in eg. ML that takes care of doing that sort of stuff automatically for known Object Maps, and the code is just missing a branch for ExternalMap?\n\nI guess one thing to do would be to try the manually allocated Fast call version and compare an External allocated by that to an External allocated by a Slow call, read the JSObject and see what sort of differences do they have.",
       "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d79fd897_94d0f262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-09T14:48:05Z",
+      "side": 1,
+      "message": "Hi, sorry for the super late reply and thanks for continuing on this!\n\nI think the change to ExternalReference sounds reasonable. Btw, it\u0027s possible that your latest change contains a rebase too, and now we see many unrelated changes in the CL. Could you try doing another rebase and possibly checking if you haven\u0027t (by mistake) added some of the rebase code twice?\n\nRe: Creating a HandleScope sounds okay to me.\nRe: Not fully initializing the object on the Turbofan side - highly probable. Do you want to debug this further, e.g. in ML or should we stay with the current solution?\n\nIf you\u0027re on board with this approach, let\u0027s try to clean the CL up and make sure we have all tests necessary (how about extracting them to a separate file or function in the same file?), and I\u0027ll hunt for additional reviewers.",
+      "parentUuid": "fe05060b_6905ecbd",
+      "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
