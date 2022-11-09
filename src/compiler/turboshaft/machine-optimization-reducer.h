@@ -1525,6 +1525,44 @@ class MachineOptimizationReducer : public Next {
     }
   }
 
+  OpIndex ReduceTrapIf(OpIndex condition, bool negated, TrapId trap_id) {
+    if (ShouldSkipOptimizationStep()) {
+      return Next::ReduceTrapIf(condition, negated, trap_id);
+    }
+    if (base::Optional<bool> decision = DecideBranchCondition(condition)) {
+      if (*decision != negated) {
+        Asm().Unreachable();
+      }
+      // `TrapIf` doesn't produce a value.
+      return OpIndex::Invalid();
+    }
+    if (base::Optional<OpIndex> new_condition =
+            ReduceBranchCondition(condition, &negated)) {
+      return Asm().ReduceTrapIf(new_condition.value(), negated, trap_id);
+    } else {
+      return Next::ReduceTrapIf(condition, negated, trap_id);
+    }
+  }
+
+  OpIndex ReduceSwitch(OpIndex input, base::Vector<const SwitchOp::Case> cases,
+                       Block* default_case) {
+    if (ShouldSkipOptimizationStep()) {
+      return Next::ReduceSwitch(input, cases, default_case);
+    }
+    if (int32_t value; Asm().MatchWord32Constant(input, &value)) {
+      for (size_t i = 0; i < cases.size(); ++i) {
+        const SwitchOp::Case if_value = cases[i];
+        if (if_value.value == value) {
+          Asm().Goto(if_value.destination);
+          return OpIndex::Invalid();
+        }
+      }
+      Asm().Goto(default_case);
+      return OpIndex::Invalid();
+    }
+    return Next::ReduceSwitch(input, cases, default_case);
+  }
+
   OpIndex ReduceStore(OpIndex base, OpIndex index, OpIndex value,
                       StoreOp::Kind kind, MemoryRepresentation stored_rep,
                       WriteBarrierKind write_barrier, int32_t offset,
