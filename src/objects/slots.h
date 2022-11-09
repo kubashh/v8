@@ -92,6 +92,11 @@ class SlotBase {
 // The slot's contents can be read and written using operator* and store().
 class FullObjectSlot : public SlotBase<FullObjectSlot, Address> {
  public:
+#ifdef V8_EXTERNAL_CODE_SPACE
+  using TCompressionScheme = V8HeapCompressionScheme;
+#else
+  using TCompressionScheme = void;
+#endif
   using TObject = Object;
   using THeapObjectSlot = FullHeapObjectSlot;
 
@@ -136,6 +141,11 @@ class FullObjectSlot : public SlotBase<FullObjectSlot, Address> {
 class FullMaybeObjectSlot
     : public SlotBase<FullMaybeObjectSlot, Address, kSystemPointerSize> {
  public:
+#ifdef V8_EXTERNAL_CODE_SPACE
+  using TCompressionScheme = V8HeapCompressionScheme;
+#else
+  using TCompressionScheme = void;
+#endif
   using TObject = MaybeObject;
   using THeapObjectSlot = FullHeapObjectSlot;
 

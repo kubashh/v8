@@ -4268,14 +4268,17 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   }
 #ifdef V8_EXTERNAL_CODE_SPACE
   if (heap_.code_range()) {
-    code_cage_base_ = ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
-        heap_.code_range()->base());
+    code_cage_base_ = heap_.code_range()->base() + heap_.code_range()->size() -
+                      size_t{4} * GB;
+    Address rnd = static_cast<uint32_t>(random_number_generator()->NextInt());
+    Address max = heap_.code_range()->base() - code_cage_base_;
+    code_cage_base_ += RoundDown<kMinExpectedOSPageSize>(rnd % max);
+
   } else {
     CHECK(jitless_);
     // In jitless mode the code space pages will be allocated in the main
     // pointer compression cage.
-    code_cage_base_ =
-        ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(cage_base());
+    code_cage_base_ = cage_base();
   }
 #endif  // V8_EXTERNAL_CODE_SPACE
 
