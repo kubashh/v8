@@ -70,6 +70,24 @@
       "parentUuid": "724b11cf_af788c71",
       "revId": "bc2c2d3217aca50417b504f8c2da9cfdce24adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d5a4ed8_56567fa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-10T12:01:33Z",
+      "side": 1,
+      "message": "In CI we have a lot of time, but on tryservers, it\u0027d be nice to speed things up more. I think the expiration is only needed because of https://crbug.com/1378027 - once we have more bots in the pool again, this won\u0027t be needed. The hard_timeout increase must go together with an increase on the infra/config side... otherwise the outer build is just killed early.",
+      "parentUuid": "62e15ad4_65a21d43",
+      "revId": "bc2c2d3217aca50417b504f8c2da9cfdce24adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

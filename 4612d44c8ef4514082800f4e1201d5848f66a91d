@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6639609b_a59f0d82",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-10T12:01:33Z",
+      "side": 1,
+      "message": "I\u0027d try with 14 right away. simulator is significantly slower than normal native debug builds.",
+      "range": {
+        "startLine": 957,
+        "startChar": 38,
+        "endLine": 957,
+        "endChar": 40
+      },
+      "revId": "4612d44c8ef4514082800f4e1201d5848f66a91d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
