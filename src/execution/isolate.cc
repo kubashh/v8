@@ -246,6 +246,8 @@ void SetStickyEmbeddedBlob(const uint8_t* code, uint32_t code_size,
   sticky_embedded_blob_data_size_ = data_size;
 }
 
+SetupIsolateDelegate default_setup_isolate_delegate;
+
 }  // namespace
 
 void DisableEmbeddedBlobRefcounting() {
@@ -3399,6 +3401,7 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator,
       allocator_(new TracingAccountingAllocator(this)),
       traced_handles_(this),
       builtins_(this),
+      setup_delegate_(&default_setup_isolate_delegate),
 #if defined(DEBUG) || defined(VERIFY_HEAP)
       num_active_deserializers_(0),
 #endif
@@ -4305,13 +4308,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   }
 #endif  // defined(V8_OS_WIN)
 
-  if (setup_delegate_ == nullptr) {
-    setup_delegate_ = new SetupIsolateDelegate(create_heap_objects);
-  }
-
   if (!v8_flags.inline_new) heap_.DisableInlineAllocation();
 
-  if (!setup_delegate_->SetupHeap(&heap_)) {
+  if (create_heap_objects && !setup_delegate_->SetupHeap(&heap_)) {
     V8::FatalProcessOutOfMemory(this, "heap object creation");
   }
 
@@ -4340,7 +4339,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
     CreateAndSetEmbeddedBlob();
   } else {
-    setup_delegate_->SetupBuiltins(this);
+    setup_delegate_->SetupFromSnapshot(this);
     MaybeRemapEmbeddedBuiltinsIntoCodeRange();
   }
 
@@ -4389,9 +4388,6 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     HeapVerifier::VerifyReadOnlyHeap(&heap_);
   }
 #endif
-
-  delete setup_delegate_;
-  setup_delegate_ = nullptr;
 
   Builtins::InitializeIsolateDataTables(this);
 

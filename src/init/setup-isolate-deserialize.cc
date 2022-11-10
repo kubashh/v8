@@ -2,22 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/init/setup-isolate.h"
-
 #include "src/base/logging.h"
+#include "src/execution/isolate.h"
+#include "src/init/setup-isolate.h"
 
 namespace v8 {
 namespace internal {
 
 void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate) {
-  CHECK(!create_heap_objects_);
-  // No actual work to be done; builtins will be deserialized from the snapshot.
+  FATAL("Builtin compilation supported only in mksnapshot");
 }
 
 bool SetupIsolateDelegate::SetupHeap(Heap* heap) {
-  CHECK(!create_heap_objects_);
-  // No actual work to be done; heap will be deserialized from the snapshot.
-  return true;
+  FATAL("Heap setup supported only in mksnapshot");
+}
+
+void SetupIsolateDelegate::SetupFromSnapshot(Isolate* isolate) {
+  DCHECK(isolate->snapshot_available());
 }
 
 }  // namespace internal

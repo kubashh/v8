@@ -660,6 +660,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void InitializeLoggingAndCounters();
   bool InitializeCounters();  // Returns false if already initialized.
 
+  // For testing
+  SetupIsolateDelegate* setup_delegate() { return setup_delegate_; }
+  void set_setup_delegate(SetupIsolateDelegate* setup_delegate) {
+    setup_delegate_ = setup_delegate;
+  }
+
   bool InitWithoutSnapshot();
   bool InitWithSnapshot(SnapshotData* startup_snapshot_data,
                         SnapshotData* read_only_snapshot_data,
@@ -2221,7 +2227,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   bigint::Processor* bigint_processor_ = nullptr;
   RuntimeState runtime_state_;
   Builtins builtins_;
-  SetupIsolateDelegate* setup_delegate_ = nullptr;
+  SetupIsolateDelegate* setup_delegate_;
 #if defined(DEBUG) || defined(VERIFY_HEAP)
   std::atomic<int> num_active_deserializers_;
 #endif

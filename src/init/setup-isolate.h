@@ -31,13 +31,11 @@ class Isolate;
 // linked in by the latter two Delegate implementations.
 class V8_EXPORT_PRIVATE SetupIsolateDelegate {
  public:
-  explicit SetupIsolateDelegate(bool create_heap_objects)
-      : create_heap_objects_(create_heap_objects) {}
-  virtual ~SetupIsolateDelegate() = default;
+  SetupIsolateDelegate() = default;
 
   virtual void SetupBuiltins(Isolate* isolate);
-
   virtual bool SetupHeap(Heap* heap);
+  virtual void SetupFromSnapshot(Isolate* isolate);
 
  protected:
   static void SetupBuiltinsInternal(Isolate* isolate);
@@ -46,8 +44,6 @@ class V8_EXPORT_PRIVATE SetupIsolateDelegate {
   static void ReplacePlaceholders(Isolate* isolate);
 
   static bool SetupHeapInternal(Heap* heap);
-
-  const bool create_heap_objects_;
 };
 
 }  // namespace internal

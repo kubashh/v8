@@ -9,6 +9,7 @@
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/compiler/code-assembler.h"
+#include "src/debug/debug-evaluate.h"
 #include "src/execution/isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-inl.h"
@@ -368,6 +369,10 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
 
   BUILTIN_PROMISE_REJECTION_PREDICTION_LIST(SET_PROMISE_REJECTION_PREDICTION)
 #undef SET_PROMISE_REJECTION_PREDICTION
+
+#ifdef DEBUG
+  DebugEvaluate::VerifyTransitiveBuiltins(isolate);
+#endif  // DEBUG
 
   builtins->MarkInitialized();
 }
