@@ -516,6 +516,12 @@ class RootsTable {
            static_cast<unsigned>(RootIndex::kLastImmortalImmovableRoot);
   }
 
+  static constexpr bool IsReadOnly(RootIndex root_index) {
+    static_assert(static_cast<int>(RootIndex::kFirstReadOnlyRoot) == 0);
+    return static_cast<unsigned>(root_index) <=
+           static_cast<unsigned>(RootIndex::kLastReadOnlyRoot);
+  }
+
  private:
   FullObjectSlot begin() {
     return FullObjectSlot(&roots_[static_cast<size_t>(RootIndex::kFirstRoot)]);

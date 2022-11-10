@@ -3909,7 +3909,7 @@ void Isolate::InitializeDefaultEmbeddedBlob() {
   }
 }
 
-void Isolate::CreateAndSetEmbeddedBlob() {
+void Isolate::CreateAndSetEmbeddedBlob(bool recompile_builtins) {
   base::MutexGuard guard(current_embedded_blob_refcount_mutex_.Pointer());
 
   PrepareBuiltinSourcePositionMap();
@@ -3917,7 +3917,7 @@ void Isolate::CreateAndSetEmbeddedBlob() {
   PrepareBuiltinLabelInfoMap();
 
   // If a sticky blob has been set, we reuse it.
-  if (StickyEmbeddedBlobCode() != nullptr) {
+  if (!recompile_builtins && StickyEmbeddedBlobCode() != nullptr) {
     CHECK_EQ(embedded_blob_code(), StickyEmbeddedBlobCode());
     CHECK_EQ(embedded_blob_data(), StickyEmbeddedBlobData());
     CHECK_EQ(CurrentEmbeddedBlobCode(), StickyEmbeddedBlobCode());
@@ -3931,7 +3931,7 @@ void Isolate::CreateAndSetEmbeddedBlob() {
     OffHeapInstructionStream::CreateOffHeapOffHeapInstructionStream(
         this, &code, &code_size, &data, &data_size);
 
-    CHECK_EQ(0, current_embedded_blob_refs_);
+    CHECK(recompile_builtins || current_embedded_blob_refs_ == 0);
     const uint8_t* const_code = const_cast<const uint8_t*>(code);
     const uint8_t* const_data = const_cast<const uint8_t*>(data);
     SetEmbeddedBlob(const_code, code_size, const_data, data_size);
@@ -3992,8 +3992,20 @@ void Isolate::TearDownEmbeddedBlob() {
 }
 
 bool Isolate::InitWithoutSnapshot() {
-  return Init(nullptr, nullptr, nullptr, false);
+  return Init(InitMode::kSetupFull, nullptr, nullptr, nullptr);
 }
+
+#ifdef V8_STATIC_ROOTS
+bool Isolate::InitWithoutSnapshotStableConstantsStage1() {
+  return Init(InitMode::kOnlyHeapObjects, nullptr, nullptr, nullptr);
+}
+bool Isolate::InitWithoutSnapshotStableConstantsStage2(
+    SnapshotData* startup_snapshot_data, SnapshotData* read_only_snapshot_data,
+    SnapshotData* shared_heap_snapshot_data) {
+  return Init(InitMode::kCompileBuiltins, startup_snapshot_data,
+              read_only_snapshot_data, shared_heap_snapshot_data);
+}
+#endif
 
 bool Isolate::InitWithSnapshot(SnapshotData* startup_snapshot_data,
                                SnapshotData* read_only_snapshot_data,
@@ -4002,8 +4014,10 @@ bool Isolate::InitWithSnapshot(SnapshotData* startup_snapshot_data,
   DCHECK_NOT_NULL(startup_snapshot_data);
   DCHECK_NOT_NULL(read_only_snapshot_data);
   DCHECK_NOT_NULL(shared_heap_snapshot_data);
-  return Init(startup_snapshot_data, read_only_snapshot_data,
-              shared_heap_snapshot_data, can_rehash);
+  return Init(
+      can_rehash ? InitMode::kFromSnapshot : InitMode::kFromSnapshotNoRehash,
+      startup_snapshot_data, read_only_snapshot_data,
+      shared_heap_snapshot_data);
 }
 
 namespace {
@@ -4098,19 +4112,20 @@ VirtualMemoryCage* Isolate::GetPtrComprCodeCageForTesting() {
   return V8_EXTERNAL_CODE_SPACE_BOOL ? heap_.code_range() : GetPtrComprCage();
 }
 
-bool Isolate::Init(SnapshotData* startup_snapshot_data,
+bool Isolate::Init(const InitMode mode, SnapshotData* startup_snapshot_data,
                    SnapshotData* read_only_snapshot_data,
-                   SnapshotData* shared_heap_snapshot_data, bool can_rehash) {
+                   SnapshotData* shared_heap_snapshot_data) {
   TRACE_ISOLATE(init);
-  const bool create_heap_objects = (read_only_snapshot_data == nullptr);
+
   // We either have all or none.
-  DCHECK_EQ(create_heap_objects, startup_snapshot_data == nullptr);
-  DCHECK_EQ(create_heap_objects, shared_heap_snapshot_data == nullptr);
+  DCHECK_EQ(mode.create_heap_objects(), startup_snapshot_data == nullptr);
+  DCHECK_EQ(mode.create_heap_objects(), shared_heap_snapshot_data == nullptr);
 
   // Code space setup requires the permissions to be set to default state.
   RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
   base::ElapsedTimer timer;
-  if (create_heap_objects && v8_flags.profile_deserialization) timer.Start();
+  if (!mode.initialize_all_from_snapshot() && v8_flags.profile_deserialization)
+    timer.Start();
 
   time_millis_at_init_ = heap_.MonotonicallyIncreasingTimeInMs();
 
@@ -4227,7 +4242,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   // SetUp the object heap.
   DCHECK(!heap_.HasBeenSetUp());
   heap_.SetUp(main_thread_local_heap());
-  ReadOnlyHeap::SetUp(this, read_only_snapshot_data, can_rehash);
+  ReadOnlyHeap::SetUp(this, read_only_snapshot_data, mode.can_rehash());
   heap_.SetUpSpaces(isolate_data_.new_allocation_info_,
                     isolate_data_.old_allocation_info_);
 
@@ -4310,11 +4325,11 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
   if (!v8_flags.inline_new) heap_.DisableInlineAllocation();
 
-  if (create_heap_objects && !setup_delegate_->SetupHeap(&heap_)) {
+  if (mode.create_heap_objects() && !setup_delegate_->SetupHeap(&heap_)) {
     V8::FatalProcessOutOfMemory(this, "heap object creation");
   }
 
-  if (create_heap_objects) {
+  if (mode.create_heap_objects()) {
     // Terminate the startup and shared heap object caches so we can iterate.
     startup_object_cache_.push_back(ReadOnlyRoots(this).undefined_value());
     shared_heap_object_cache_.push_back(ReadOnlyRoots(this).undefined_value());
@@ -4326,18 +4341,42 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   // because it makes use of interrupts.
   tracing_cpu_profiler_.reset(new TracingCpuProfilerImpl(this));
 
-  bootstrapper_->Initialize(create_heap_objects);
+  bootstrapper_->Initialize(mode.create_any_objects());
 
-  if (create_heap_objects) {
+  // For creating a heap snapshot in two steps we need to load the constants
+  // from the previous step for compiling builtins.
+  if (mode.compile_builtins() && !mode.create_heap_objects()) {
+    DCHECK(mode.initialize_heap_objecst_from_snapshot());
+
+    CodePageCollectionMemoryModificationScope modification_scope(heap());
+
+    SharedHeapDeserializer shared_heap_deserializer(
+        this, shared_heap_snapshot_data, mode.can_rehash());
+    shared_heap_deserializer.DeserializeIntoIsolate();
+
+    StartupDeserializer startup_deserializer(this, startup_snapshot_data,
+                                             mode.can_rehash());
+    startup_deserializer.DeserializeIntoIsolate(true);
+
+    snapshot_blob_ = nullptr;
+    shared_heap_snapshot_data = startup_snapshot_data = nullptr;
+  }
+
+  if (mode.create_any_objects()) {
+    DCHECK(mode.compile_builtins() || !mode.have_builtins());
     builtins_constants_table_builder_ = new BuiltinsConstantsTableBuilder(this);
 
-    setup_delegate_->SetupBuiltins(this);
+    if (mode.compile_builtins()) {
+      setup_delegate_->CompileBuiltins(this);
+    } else {
+      setup_delegate_->SetupBuiltinPlaceholders(this);
+    }
 
     builtins_constants_table_builder_->Finalize();
     delete builtins_constants_table_builder_;
     builtins_constants_table_builder_ = nullptr;
 
-    CreateAndSetEmbeddedBlob();
+    CreateAndSetEmbeddedBlob(mode.initialize_heap_objecst_from_snapshot());
   } else {
     setup_delegate_->SetupFromSnapshot(this);
     MaybeRemapEmbeddedBuiltinsIntoCodeRange();
@@ -4366,20 +4405,20 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   {
     CodePageCollectionMemoryModificationScope modification_scope(heap());
 
-    if (create_heap_objects) {
+    if (mode.create_heap_objects()) {
       read_only_heap_->OnCreateHeapObjectsComplete(this);
-    } else {
+    } else if (!mode.compile_builtins()) {
       SharedHeapDeserializer shared_heap_deserializer(
-          this, shared_heap_snapshot_data, can_rehash);
+          this, shared_heap_snapshot_data, mode.can_rehash());
       shared_heap_deserializer.DeserializeIntoIsolate();
 
       StartupDeserializer startup_deserializer(this, startup_snapshot_data,
-                                               can_rehash);
-      startup_deserializer.DeserializeIntoIsolate();
+                                               mode.can_rehash());
+      startup_deserializer.DeserializeIntoIsolate(false);
     }
     load_stub_cache_->Initialize();
     store_stub_cache_->Initialize();
-    interpreter_->Initialize();
+    if (mode.have_builtins()) interpreter_->Initialize();
     heap_.NotifyDeserializationComplete();
   }
 
@@ -4417,7 +4456,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   clear_scheduled_exception();
 
   // Quiet the heap NaN if needed on target platform.
-  if (!create_heap_objects)
+  if (!mode.create_heap_objects())
     Assembler::QuietNaN(ReadOnlyRoots(this).nan_value());
 
   if (v8_flags.trace_turbo) {
@@ -4430,7 +4469,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     ast_string_constants_ = new AstStringConstants(this, HashSeed(this));
   }
 
-  initialized_from_snapshot_ = !create_heap_objects;
+  initialized_from_snapshot_ = mode.initialize_all_from_snapshot();
 
   if (v8_flags.stress_sampling_allocation_profiler > 0) {
     uint64_t sample_interval = v8_flags.stress_sampling_allocation_profiler;
@@ -4451,9 +4490,15 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   }
 #endif  // V8_OS_WIN64
 
-  if (create_heap_objects && v8_flags.profile_deserialization) {
+  if (!mode.initialize_all_from_snapshot() &&
+      v8_flags.profile_deserialization) {
     double ms = timer.Elapsed().InMillisecondsF();
-    PrintF("[Initializing isolate from scratch took %0.3f ms]\n", ms);
+    auto action =
+        mode == InitMode::kOnlyHeapObjects
+            ? "Setting up initial heap objects for"
+            : (mode == InitMode::kCompileBuiltins ? "Compiling builtins for"
+                                                  : "Initializing");
+    PrintF("[%s isolate from scratch took %0.3f ms]\n", action, ms);
   }
 
 #ifdef V8_ENABLE_WEBASSEMBLY
@@ -4483,7 +4528,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   DCHECK_IMPLIES(heap()->new_space(), (heap()->new_space()->Size() == 0) &&
                                           (heap()->gc_count() == 0));
 
-  initialized_ = true;
+  if (mode.have_builtins()) initialized_ = true;
 
   return true;
 }

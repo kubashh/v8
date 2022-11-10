@@ -9,8 +9,12 @@
 namespace v8 {
 namespace internal {
 
-void SetupIsolateDelegateForTests::SetupBuiltins(Isolate* isolate) {
-  SetupBuiltinsInternal(isolate);
+void SetupIsolateDelegateForTests::CompileBuiltins(Isolate* isolate) {
+  CompileBuiltinsInternal(isolate);
+}
+
+void SetupIsolateDelegateForTests::SetupBuiltinPlaceholders(Isolate* isolate) {
+  SetupBuiltinPlaceholdersInternal(isolate);
 }
 
 bool SetupIsolateDelegateForTests::SetupHeap(Heap* heap) {

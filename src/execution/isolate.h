@@ -40,6 +40,7 @@
 #include "src/objects/contexts.h"
 #include "src/objects/debug-objects.h"
 #include "src/objects/js-objects.h"
+#include "src/roots/roots.h"
 #include "src/runtime/runtime.h"
 #include "src/sandbox/external-pointer.h"
 #include "src/utils/allocation.h"
@@ -671,6 +672,16 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
                         SnapshotData* read_only_snapshot_data,
                         SnapshotData* shared_heap_snapshot_data,
                         bool can_rehash);
+#ifdef V8_STATIC_ROOTS
+  // To build a snapshot with known constants we generate the heap in two
+  // stages, first setting up heap objects and in the second stage compiling
+  // builtins
+  bool InitWithoutSnapshotStableConstantsStage1();
+  bool InitWithoutSnapshotStableConstantsStage2(
+      SnapshotData* startup_snapshot_data,
+      SnapshotData* read_only_snapshot_data,
+      SnapshotData* shared_heap_snapshot_data);
+#endif
 
   // True if at least one thread Enter'ed this isolate.
   bool IsInUse() { return entry_stack_ != nullptr; }
@@ -2048,9 +2059,50 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   static Isolate* Allocate(bool is_shared);
 
-  bool Init(SnapshotData* startup_snapshot_data,
+  // Internally used to keep track of different ways of initializing an Isolate
+  class InitMode {
+   public:
+    enum Mode {
+      // Create heap objects and builtins from scratch
+      kSetupFull,
+      // To get static r/o root pointers we can setup the isolate in two steps,
+      // first creating only heap objects and later compiling builtins.
+      kOnlyHeapObjects,
+      kCompileBuiltins,
+      // Initialize the isolate from a given snapshot, either allowing or
+      // disallowing rehashing.
+      kFromSnapshot,
+      kFromSnapshotNoRehash
+    };
+    InitMode(Mode mode) : mode_(mode) {}
+
+    bool operator==(const InitMode& other) const {
+      return other.mode_ == mode_;
+    }
+    bool create_heap_objects() const {
+      return mode_ == kSetupFull || mode_ == kOnlyHeapObjects;
+    }
+    bool compile_builtins() const {
+      return mode_ == kSetupFull || mode_ == kCompileBuiltins;
+    }
+    bool create_any_objects() const {
+      return create_heap_objects() || compile_builtins();
+    }
+    bool have_builtins() const { return mode_ != kOnlyHeapObjects; }
+    bool can_rehash() const { return mode_ != kFromSnapshotNoRehash; }
+    bool initialize_heap_objecst_from_snapshot() const {
+      return mode_ == kCompileBuiltins;
+    }
+    bool initialize_all_from_snapshot() const {
+      return mode_ == kFromSnapshot || mode_ == kFromSnapshotNoRehash;
+    }
+
+   private:
+    const Mode mode_;
+  };
+  bool Init(const InitMode init_method, SnapshotData* startup_snapshot_data,
             SnapshotData* read_only_snapshot_data,
-            SnapshotData* shared_heap_snapshot_data, bool can_rehash);
+            SnapshotData* shared_heap_snapshot_data);
 
   void CheckIsolateLayout();
 
@@ -2427,7 +2479,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   BuiltinsConstantsTableBuilder* builtins_constants_table_builder_ = nullptr;
 
   void InitializeDefaultEmbeddedBlob();
-  void CreateAndSetEmbeddedBlob();
+  void CreateAndSetEmbeddedBlob(bool recompile_builtins);
   void MaybeRemapEmbeddedBuiltinsIntoCodeRange();
   void TearDownEmbeddedBlob();
   void SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,

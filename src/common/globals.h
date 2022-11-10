@@ -91,6 +91,7 @@ namespace internal {
 
 #ifdef V8_COMPRESS_POINTERS
 #define COMPRESS_POINTERS_BOOL true
+#define V8_STATIC_ROOTS 1
 #else
 #define COMPRESS_POINTERS_BOOL false
 #endif
