@@ -88,6 +88,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c75de14_85be0242",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2503,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:05:25Z",
+      "side": 1,
+      "message": "Declaration should generally be ordered like described here: https://google.github.io/styleguide/cppguide.html#Declaration_Order.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f33d04c_6e02afa6",
         "filename": "src/heap/heap.h",
         "patchSetId": 9
@@ -116,6 +133,40 @@
       "writtenOn": "2022-11-10T11:00:44Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b9e0815_fb2ff63c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2515,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:05:25Z",
+      "side": 1,
+      "message": "Nit: please split this line here.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80616b78_381b3ce9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:05:25Z",
+      "side": 1,
+      "message": "Please add const and choose a more descriptive name. Constants in V8 are usually named kSomething.",
       "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
