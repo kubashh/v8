@@ -5931,9 +5931,14 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   unsigned DecodeNumericOpcode(WasmOpcode opcode, uint32_t opcode_length) {
-    // This assumption avoids a dynamic check in signature lookup, and might
-    // also help the big switch below.
-    V8_ASSUME(opcode >> 8 == kNumericPrefix);
+    // Fast check for out-of-range opcodes (only allow 0xfcXX).
+    // This avoids a dynamic check in signature lookup, and might also help the
+    // big switch below.
+    if (!VALIDATE((opcode >> 8) == kNumericPrefix)) {
+      this->DecodeError("invalid numeric opcode");
+      return 0;
+    }
+
     const FunctionSig* sig = WasmOpcodes::Signature(opcode);
     switch (opcode) {
       case kExprI32SConvertSatF32:
