@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d46025_81a68485",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "Nit: Please remove line wrapping here (just add explicit newlines)",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b48ef9fc_9ae24b24",
@@ -14,6 +31,91 @@
       "writtenOn": "2022-10-21T12:40:51Z",
       "side": 1,
       "message": "Dominik, since this affects GC scheduling, can you also have a look here?",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b260093_a2c72867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "Sorry for taking so long... This will be a first quick review.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0eb0280_7fe43658",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "I guess we want that for RunMajor as well? (RunMinor is only used for Minor MC which isn\u0027t used in production yet)",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0556b76_28734ba1",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "Nit: We have constants for that, I think you can write 2 * MB instead.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f33d04c_6e02afa6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "Nit: I guess we can just directly use v8_flags.memory_balancer instead. That seems more common in V8.",
+      "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bbc781e_0210230c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2508,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-10T11:00:44Z",
+      "side": 1,
+      "message": "Same here.",
       "revId": "f8e734add259507d1f6f27b2f0449a6fabb3ad1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
