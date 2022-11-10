@@ -52,6 +52,24 @@
       "parentUuid": "2a8c3799_f626ea0f",
       "revId": "bc2c2d3217aca50417b504f8c2da9cfdce24adfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62e15ad4_65a21d43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2022-11-10T11:31:14Z",
+      "side": 1,
+      "message": "I made the number of shards similar to `V8 Mac - arm64 - sim - debug`, should I also change the `swarming_task_attrs` to be the same as well?",
+      "parentUuid": "724b11cf_af788c71",
+      "revId": "bc2c2d3217aca50417b504f8c2da9cfdce24adfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
