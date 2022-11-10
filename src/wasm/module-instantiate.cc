@@ -66,6 +66,7 @@ class CompileImportWrapperJob final : public JobTask {
   }
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "wasm::CompileImportWrapperJob");
     TRACE_EVENT0("v8.wasm", "wasm.CompileImportWrapperJob.Run");
     while (base::Optional<std::pair<const WasmImportWrapperCache::CacheKey,
                                     const FunctionSig*>>

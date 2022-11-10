@@ -1954,6 +1954,8 @@ class BackgroundCompileJob final : public JobTask {
         async_counters_(std::move(async_counters)) {}
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "wasm::BackgroundCompileJob");
+
     auto engine_scope = engine_barrier_->TryLock();
     if (!engine_scope) return;
     ExecuteCompilationUnits(native_module_, async_counters_.get(), delegate,
@@ -3983,6 +3985,8 @@ class CompileJSToWasmWrapperJob final : public JobTask {
         outstanding_units_(queue->size()) {}
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "wasm::CompileJSToWasmWrapperJob");
+
     while (base::Optional<std::pair<JSToWasmWrapperKey, std::nullptr_t>> key =
                queue_->pop()) {
       JSToWasmWrapperCompilationUnit* unit =
