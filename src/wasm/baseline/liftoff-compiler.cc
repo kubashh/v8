@@ -97,7 +97,7 @@ struct assert_field_size {
 constexpr LoadType::LoadTypeValue kPointerLoadType =
     kSystemPointerSize == 8 ? LoadType::kI64Load : LoadType::kI32Load;
 
-constexpr ValueKind kPointerKind = LiftoffAssembler::kPointerKind;
+constexpr ValueKind kIntPtrKind = LiftoffAssembler::kIntPtrKind;
 constexpr ValueKind kSmiKind = LiftoffAssembler::kSmiKind;
 constexpr ValueKind kTaggedKind = LiftoffAssembler::kTaggedKind;
 
@@ -1267,12 +1267,12 @@ class LiftoffCompiler {
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LOAD_TAGGED_PTR_INSTANCE_FIELD(context_reg.gp(), NativeContext, pinned);
 
-    LiftoffAssembler::VarState tag_symbol(kPointerKind, tag_symbol_reg, 0);
-    LiftoffAssembler::VarState context(kPointerKind, context_reg, 0);
+    LiftoffAssembler::VarState tag_symbol(kIntPtrKind, tag_symbol_reg, 0);
+    LiftoffAssembler::VarState context(kIntPtrKind, context_reg, 0);
 
     CallRuntimeStub(WasmCode::kWasmGetOwnProperty,
-                    MakeSig::Returns(kPointerKind)
-                        .Params(kPointerKind, kPointerKind, kPointerKind),
+                    MakeSig::Returns(kIntPtrKind)
+                        .Params(kIntPtrKind, kIntPtrKind, kIntPtrKind),
                     {exception, tag_symbol, context}, kNoSourcePosition);
 
     return LiftoffRegister(kReturnRegister0);
@@ -1335,7 +1335,7 @@ class LiftoffCompiler {
   void Rethrow(FullDecoder* decoder,
                const LiftoffAssembler::VarState& exception) {
     DCHECK_EQ(exception.kind(), kRef);
-    CallRuntimeStub(WasmCode::kWasmRethrow, MakeSig::Params(kPointerKind),
+    CallRuntimeStub(WasmCode::kWasmRethrow, MakeSig::Params(kIntPtrKind),
                     {exception}, decoder->position());
   }
 
@@ -2570,7 +2570,7 @@ class LiftoffCompiler {
     LiftoffRegister table_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     __ LoadConstant(table_index_reg, WasmValue(imm.index));
-    LiftoffAssembler::VarState table_index(kPointerKind, table_index_reg, 0);
+    LiftoffAssembler::VarState table_index(kIntPtrKind, table_index_reg, 0);
 
     LiftoffAssembler::VarState index = __ cache_state()->stack_state.back();
 
@@ -2597,7 +2597,7 @@ class LiftoffCompiler {
     LiftoffRegister table_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     __ LoadConstant(table_index_reg, WasmValue(imm.index));
-    LiftoffAssembler::VarState table_index(kPointerKind, table_index_reg, 0);
+    LiftoffAssembler::VarState table_index(kIntPtrKind, table_index_reg, 0);
 
     LiftoffAssembler::VarState value = __ cache_state()->stack_state.end()[-1];
     LiftoffAssembler::VarState index = __ cache_state()->stack_state.end()[-2];
@@ -3009,7 +3009,7 @@ class LiftoffCompiler {
     // the end offset against the actual memory size, which is not known at
     // compile time. Otherwise, only one check is required (see below).
     if (end_offset > env_->min_memory_size) {
-      __ emit_cond_jump(kUnsignedGreaterEqual, trap_label, kPointerKind,
+      __ emit_cond_jump(kUnsignedGreaterEqual, trap_label, kIntPtrKind,
                         end_offset_reg.gp(), mem_size.gp(), trapping);
     }
 
@@ -3019,7 +3019,7 @@ class LiftoffCompiler {
     __ emit_ptrsize_sub(effective_size_reg.gp(), mem_size.gp(),
                         end_offset_reg.gp());
 
-    __ emit_cond_jump(kUnsignedGreaterEqual, trap_label, kPointerKind,
+    __ emit_cond_jump(kUnsignedGreaterEqual, trap_label, kIntPtrKind,
                       index_ptrsize, effective_size_reg.gp(), trapping);
     return index_ptrsize;
   }
@@ -3100,7 +3100,7 @@ class LiftoffCompiler {
     DCHECK_EQ(1, descriptor.GetRegisterParameterCount());
     Register param_reg = descriptor.GetRegisterParameter(0);
     if (info.gp() != param_reg) {
-      __ Move(param_reg, info.gp(), kPointerKind);
+      __ Move(param_reg, info.gp(), kIntPtrKind);
     }
 
     source_position_table_builder_.AddPosition(__ pc_offset(),
@@ -4684,7 +4684,7 @@ class LiftoffCompiler {
 
     // Call the WasmAllocateFixedArray builtin to create the values array.
     CallRuntimeStub(WasmCode::kWasmAllocateFixedArray,
-                    MakeSig::Returns(kPointerKind).Params(kPointerKind),
+                    MakeSig::Returns(kIntPtrKind).Params(kIntPtrKind),
                     {LiftoffAssembler::VarState{
                         kSmiKind, LiftoffRegister{encoded_size_reg}, 0}},
                     decoder->position());
@@ -4718,9 +4718,9 @@ class LiftoffCompiler {
 
     // Finally, call WasmThrow.
     CallRuntimeStub(WasmCode::kWasmThrow,
-                    MakeSig::Params(kPointerKind, kPointerKind),
-                    {LiftoffAssembler::VarState{kPointerKind, exception_tag, 0},
-                     LiftoffAssembler::VarState{kPointerKind, values_array, 0}},
+                    MakeSig::Params(kIntPtrKind, kIntPtrKind),
+                    {LiftoffAssembler::VarState{kIntPtrKind, exception_tag, 0},
+                     LiftoffAssembler::VarState{kIntPtrKind, values_array, 0}},
                     decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
@@ -4946,12 +4946,12 @@ class LiftoffCompiler {
           __ cache_state()->stack_state.back();
       CallRuntimeStub(
           kNeedI64RegPair ? WasmCode::kI32PairToBigInt : WasmCode::kI64ToBigInt,
-          MakeSig::Returns(kPointerKind).Params(kI64), {i64_timeout},
+          MakeSig::Returns(kIntPtrKind).Params(kI64), {i64_timeout},
           decoder->position());
       __ DropValues(1);
       // We put the result on the value stack so that it gets preserved across
       // a potential GC that may get triggered by the BigInt allocation below.
-      __ PushRegister(kPointerKind, LiftoffRegister(kReturnRegister0));
+      __ PushRegister(kIntPtrKind, LiftoffRegister(kReturnRegister0));
     }
 
     Register expected_reg = no_reg;
@@ -4962,7 +4962,7 @@ class LiftoffCompiler {
           __ cache_state()->stack_state.end()[-2];
       CallRuntimeStub(
           kNeedI64RegPair ? WasmCode::kI32PairToBigInt : WasmCode::kI64ToBigInt,
-          MakeSig::Returns(kPointerKind).Params(kI64), {i64_expected},
+          MakeSig::Returns(kIntPtrKind).Params(kI64), {i64_expected},
           decoder->position());
       expected_reg = kReturnRegister0;
     }
@@ -4970,7 +4970,7 @@ class LiftoffCompiler {
 
     LiftoffAssembler::VarState timeout =
         __ cache_state()->stack_state.end()[-1];
-    LiftoffAssembler::VarState expected_value(kPointerKind, expected, 0);
+    LiftoffAssembler::VarState expected_value(kIntPtrKind, expected, 0);
     LiftoffAssembler::VarState index = __ cache_state()->stack_state.end()[-3];
 
     auto target = kind == kI32 ? WasmCode::kWasmI32AtomicWait
@@ -4978,8 +4978,8 @@ class LiftoffCompiler {
 
     CallRuntimeStub(
         target,
-        MakeSig::Params(kPointerKind, kind == kI32 ? kI32 : kPointerKind,
-                        kPointerKind),
+        MakeSig::Params(kIntPtrKind, kind == kI32 ? kI32 : kIntPtrKind,
+                        kIntPtrKind),
         {index, expected_value, timeout}, decoder->position());
     // Pop parameters from the value stack.
     __ DropValues(3);
@@ -5013,7 +5013,7 @@ class LiftoffCompiler {
     index.MakeRegister(LiftoffRegister(index_plus_offset));
 
     CallRuntimeStub(WasmCode::kWasmAtomicNotify,
-                    MakeSig::Returns(kI32).Params(kPointerKind, kI32),
+                    MakeSig::Returns(kI32).Params(kIntPtrKind, kI32),
                     {index, count}, decoder->position());
     // Pop parameters from the value stack.
     __ DropValues(2);
@@ -5229,7 +5229,7 @@ class LiftoffCompiler {
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     __ LoadConstant(segment_index, WasmValue(imm.data_segment.index));
 
-    auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind, kI32,
+    auto sig = MakeSig::Returns(kI32).Params(kIntPtrKind, kIntPtrKind, kI32,
                                              kI32, kI32);
     LiftoffRegister args[] = {LiftoffRegister(instance), dst, src,
                               segment_index, size};
@@ -5292,8 +5292,8 @@ class LiftoffCompiler {
                         no_reg, trapping);
     }
 
-    auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind,
-                                             kPointerKind, kPointerKind);
+    auto sig = MakeSig::Returns(kI32).Params(kIntPtrKind, kIntPtrKind,
+                                             kIntPtrKind, kIntPtrKind);
     LiftoffRegister args[] = {LiftoffRegister(instance), dst, src, size};
     // We don't need the instance anymore after the call. We can use the
     // register for the result.
@@ -5331,8 +5331,8 @@ class LiftoffCompiler {
                         no_reg, trapping);
     }
 
-    auto sig = MakeSig::Returns(kI32).Params(kPointerKind, kPointerKind, kI32,
-                                             kPointerKind);
+    auto sig = MakeSig::Returns(kI32).Params(kIntPtrKind, kIntPtrKind, kI32,
+                                             kIntPtrKind);
     LiftoffRegister args[] = {LiftoffRegister(instance), dst, value, size};
     // We don't need the instance anymore after the call. We can use the
     // register for the result.
@@ -5356,13 +5356,12 @@ class LiftoffCompiler {
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
 
     LoadSmi(table_index_reg, imm.table.index);
-    LiftoffAssembler::VarState table_index(kPointerKind, table_index_reg, 0);
+    LiftoffAssembler::VarState table_index(kIntPtrKind, table_index_reg, 0);
 
     LiftoffRegister segment_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(segment_index_reg, imm.element_segment.index);
-    LiftoffAssembler::VarState segment_index(kPointerKind, segment_index_reg,
-                                             0);
+    LiftoffAssembler::VarState segment_index(kIntPtrKind, segment_index_reg, 0);
 
     LiftoffAssembler::VarState size = __ cache_state()->stack_state.end()[-1];
     LiftoffAssembler::VarState src = __ cache_state()->stack_state.end()[-2];
@@ -5408,14 +5407,14 @@ class LiftoffCompiler {
     LiftoffRegister table_dst_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(table_dst_index_reg, imm.table_dst.index);
-    LiftoffAssembler::VarState table_dst_index(kPointerKind,
-                                               table_dst_index_reg, 0);
+    LiftoffAssembler::VarState table_dst_index(kIntPtrKind, table_dst_index_reg,
+                                               0);
 
     LiftoffRegister table_src_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(table_src_index_reg, imm.table_src.index);
-    LiftoffAssembler::VarState table_src_index(kPointerKind,
-                                               table_src_index_reg, 0);
+    LiftoffAssembler::VarState table_src_index(kIntPtrKind, table_src_index_reg,
+                                               0);
 
     LiftoffAssembler::VarState size = __ cache_state()->stack_state.end()[-1];
     LiftoffAssembler::VarState src = __ cache_state()->stack_state.end()[-2];
@@ -5439,7 +5438,7 @@ class LiftoffCompiler {
     LiftoffRegister table_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(table_index_reg, imm.index);
-    LiftoffAssembler::VarState table_index(kPointerKind, table_index_reg, 0);
+    LiftoffAssembler::VarState table_index(kIntPtrKind, table_index_reg, 0);
 
     LiftoffAssembler::VarState delta = __ cache_state()->stack_state.end()[-1];
     LiftoffAssembler::VarState value = __ cache_state()->stack_state.end()[-2];
@@ -5489,7 +5488,7 @@ class LiftoffCompiler {
     LiftoffRegister table_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(table_index_reg, imm.index);
-    LiftoffAssembler::VarState table_index(kPointerKind, table_index_reg, 0);
+    LiftoffAssembler::VarState table_index(kIntPtrKind, table_index_reg, 0);
 
     LiftoffAssembler::VarState count = __ cache_state()->stack_state.end()[-1];
     LiftoffAssembler::VarState value = __ cache_state()->stack_state.end()[-2];
@@ -7197,7 +7196,7 @@ class LiftoffCompiler {
       // feedback vector currently depends on this flag.
       if (v8_flags.wasm_speculative_inlining) {
         LiftoffRegister vector = __ GetUnusedRegister(kGpReg, {});
-        __ Fill(vector, liftoff::kFeedbackVectorOffset, kPointerKind);
+        __ Fill(vector, liftoff::kFeedbackVectorOffset, kIntPtrKind);
         __ IncrementSmi(vector,
                         wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(
                             static_cast<int>(vector_slot)));
@@ -7297,7 +7296,7 @@ class LiftoffCompiler {
     __ DropValues(1);
     {
       FREEZE_STATE(trapping);
-      __ emit_cond_jump(kUnequal, sig_mismatch_label, kPointerKind, scratch,
+      __ emit_cond_jump(kUnequal, sig_mismatch_label, kIntPtrKind, scratch,
                         tmp_const, trapping);
     }
 
@@ -7367,16 +7366,14 @@ class LiftoffCompiler {
     Register target_reg = no_reg, instance_reg = no_reg;
 
     if (v8_flags.wasm_speculative_inlining) {
-      ValueKind kIntPtrKind = kPointerKind;
-
       LiftoffRegList pinned;
       LiftoffRegister func_ref = pinned.set(__ PopToRegister(pinned));
       LiftoffRegister vector = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
       MaybeEmitNullCheck(decoder, func_ref.gp(), pinned, func_ref_type);
       LiftoffAssembler::VarState func_ref_var(kRef, func_ref, 0);
 
-      __ Fill(vector, liftoff::kFeedbackVectorOffset, kPointerKind);
-      LiftoffAssembler::VarState vector_var(kPointerKind, vector, 0);
+      __ Fill(vector, liftoff::kFeedbackVectorOffset, kIntPtrKind);
+      LiftoffAssembler::VarState vector_var(kIntPtrKind, vector, 0);
       LiftoffRegister index = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
       size_t vector_slot = encountered_call_instructions_.size() * 2;
       encountered_call_instructions_.push_back(
@@ -7387,8 +7384,8 @@ class LiftoffCompiler {
       // CallRefIC(vector: FixedArray, index: intptr,
       //           funcref: WasmInternalFunction)
       CallRuntimeStub(WasmCode::kCallRefIC,
-                      MakeSig::Returns(kPointerKind, kPointerKind)
-                          .Params(kPointerKind, kIntPtrKind, kPointerKind),
+                      MakeSig::Returns(kIntPtrKind, kIntPtrKind)
+                          .Params(kIntPtrKind, kIntPtrKind, kIntPtrKind),
                       {vector_var, index_var, func_ref_var},
                       decoder->position());
 
