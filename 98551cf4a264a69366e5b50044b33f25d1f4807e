@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d354343_21893777",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-10T11:41:55Z",
+      "side": 1,
+      "message": "This one was hard to spot... but I think it was already broken before. Will create a fix.",
+      "range": {
+        "startLine": 287,
+        "startChar": 7,
+        "endLine": 287,
+        "endChar": 40
+      },
+      "revId": "98551cf4a264a69366e5b50044b33f25d1f4807e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
