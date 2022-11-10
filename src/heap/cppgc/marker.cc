@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "src/tracing/trace-event.h"
 #include "include/cppgc/heap-consistency.h"
 #include "include/cppgc/platform.h"
 #include "src/base/platform/time.h"
@@ -331,6 +332,8 @@ class WeakCallbackJobTask final : public cppgc::JobTask {
         broker_(broker) {}
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "cppgc::WeakCallbackJobTask");
+
     StatsCollector::EnabledConcurrentScope stats_scope(
         marker_->heap().stats_collector(),
         StatsCollector::kConcurrentWeakCallback);

@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 
+#include "src/tracing/trace-event.h"
 #include "include/cppgc/platform.h"
 #include "src/base/optional.h"
 #include "src/base/platform/mutex.h"
@@ -636,6 +637,8 @@ class ConcurrentSweepTask final : public cppgc::JobTask,
   }
 
   void Run(cppgc::JobDelegate* delegate) final {
+    TRACE_EVENT0("v8.job", "cppgc::ConcurrentSweepTask");
+
     StatsCollector::EnabledConcurrentScope stats_scope(
         heap_.stats_collector(), StatsCollector::kConcurrentSweep);
 

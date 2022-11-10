@@ -4,6 +4,7 @@
 
 #include "src/heap/scavenger.h"
 
+#include "src/tracing/trace-event.h"
 #include "src/common/globals.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/array-buffer-sweeper.h"
@@ -200,6 +201,8 @@ ScavengerCollector::JobTask::JobTask(
       promotion_list_(promotion_list) {}
 
 void ScavengerCollector::JobTask::Run(JobDelegate* delegate) {
+  TRACE_EVENT0("v8.job", "ScavengerCollector::JobTask");
+
   // The task accesses code pages and thus the permissions must be set to
   // default state.
   RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
