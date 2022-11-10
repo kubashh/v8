@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "a075a52fda21433c83bc2a98357329b39592367e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e231e1b_a8324910",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-10T15:08:41Z",
+      "side": 1,
+      "message": "can you add a TODO for optimizing this on 64-bit archs?",
+      "range": {
+        "startLine": 2150,
+        "startChar": 24,
+        "endLine": 2150,
+        "endChar": 53
+      },
+      "revId": "a075a52fda21433c83bc2a98357329b39592367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
