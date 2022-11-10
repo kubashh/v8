@@ -1662,20 +1662,7 @@ bool Heap::CollectGarbage(AllocationSpace space,
         this, IsYoungGenerationCollector(collector) ? "MinorGC" : "MajorGC",
         GarbageCollectionReasonToString(gc_reason));
 
-    auto stack_marker = v8::base::Stack::GetCurrentStackPosition();
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-    stack().set_marker(stack_marker);
-#endif
-    if (collector == GarbageCollector::MARK_COMPACTOR && cpp_heap()) {
-      // CppHeap needs a stack marker at the top of all entry points to allow
-      // deterministic passes over the stack. E.g., a verifier that should only
-      // find a subset of references of the marker.
-      //
-      // TODO(chromium:1056170): Consider adding a component that keeps track
-      // of relevant GC stack regions where interesting pointers can be found.
-      static_cast<v8::internal::CppHeap*>(cpp_heap())
-          ->SetStackEndOfCurrentGC(stack_marker);
-    }
+    stack().SaveContext();
 
     GarbageCollectionPrologue(gc_reason, gc_callback_flags);
     {
@@ -1760,9 +1747,7 @@ bool Heap::CollectGarbage(AllocationSpace space,
       tracer()->StopFullCycleIfNeeded();
     }
 
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-    stack().clear_marker();
-#endif
+    stack().ClearContext();
   }
 
   // Part 3: Invoke all callbacks which should happen after the actual garbage
@@ -2352,9 +2337,7 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   DCHECK(incremental_marking_->IsStopped());
   DCHECK_NOT_NULL(isolate()->global_safepoint());
 
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  stack().set_marker(v8::base::Stack::GetCurrentStackPosition());
-#endif
+  stack().SaveContext();
 
   isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
     client->heap()->FreeSharedLinearAllocationAreas();
@@ -2387,9 +2370,7 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   tracer()->UpdateStatistics(collector);
   tracer()->StopFullCycleIfNeeded();
 
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  stack().clear_marker();
-#endif
+  stack().ClearContext();
 }
 
 void Heap::CompleteSweepingYoung(GarbageCollector collector) {
@@ -4694,10 +4675,9 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
     v->Synchronize(VisitorSynchronization::kGlobalHandles);
 
     if (!options.contains(SkipRoot::kStack)) {
-      ScanStackMode mode =
-          options.contains(SkipRoot::kConservativeStack) ? ScanStackMode::kNone
-          : options.contains(SkipRoot::kTopOfStack) ? ScanStackMode::kFromMarker
-                                                    : ScanStackMode::kComplete;
+      ScanStackMode mode = options.contains(SkipRoot::kConservativeStack)
+                               ? ScanStackMode::kPrecise
+                               : ScanStackMode::kConservative;
       IterateStackRoots(v, mode);
       v->Synchronize(VisitorSynchronization::kStackRoots);
     }
@@ -4839,7 +4819,7 @@ void Heap::IterateRootsFromStackIncludingClient(RootVisitor* v,
         [v = &client_root_visitor](Isolate* client) {
           // TODO(v8:13257): We cannot run CSS on client isolates now, as the
           // stack markers will not be correct.
-          client->heap()->IterateStackRoots(v, ScanStackMode::kNone);
+          client->heap()->IterateStackRoots(v, ScanStackMode::kPrecise);
         });
   }
 }
@@ -4871,20 +4851,10 @@ void Heap::IterateStackRoots(RootVisitor* v, ScanStackMode mode) {
   isolate_->Iterate(v);
 
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  switch (std::min(mode, scan_stack_mode_for_testing_)) {
-    case ScanStackMode::kNone: {
-      break;
-    }
-    case ScanStackMode::kComplete: {
-      ConservativeStackVisitor stack_visitor(isolate(), v);
-      stack().IteratePointers(&stack_visitor);
-      break;
-    }
-    case ScanStackMode::kFromMarker: {
-      ConservativeStackVisitor stack_visitor(isolate(), v);
-      stack().IteratePointersUnsafe(&stack_visitor, stack().get_marker());
-      break;
-    }
+  if (mode == ScanStackMode::kConservative &&
+      scan_stack_mode_for_testing_ != ScanStackMode::kPrecise) {
+    ConservativeStackVisitor stack_visitor(isolate(), v);
+    stack().IteratePointers(&stack_visitor);
   }
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 }
@@ -6474,6 +6444,7 @@ HeapObjectIterator::HeapObjectIterator(
       space_iterator_(nullptr),
       object_iterator_(nullptr) {
   heap_->MakeHeapIterable();
+  heap_->stack().SaveContext();
   // Start the iteration.
   space_iterator_ = new SpaceIterator(heap_);
   switch (filtering_) {
@@ -6496,6 +6467,7 @@ HeapObjectIterator::~HeapObjectIterator() {
     DCHECK_NULL(object_iterator_);
   }
 #endif
+  heap_->stack().ClearContext();
   delete space_iterator_;
   delete filter_;
 }

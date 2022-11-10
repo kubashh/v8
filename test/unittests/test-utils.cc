@@ -89,8 +89,8 @@ ManualGCScope::ManualGCScope(i::Isolate* isolate) {
   // running by the time a ManualGCScope is created. Finalizing existing marking
   // prevents any undefined/unexpected behavior.
   if (isolate && isolate->heap()->incremental_marking()->IsMarking()) {
-    ScanStackModeScopeForTesting no_stack_scanning(isolate->heap(),
-                                                   Heap::ScanStackMode::kNone);
+    ScanStackModeScopeForTesting no_stack_scanning(
+        isolate->heap(), Heap::ScanStackMode::kPrecise);
     isolate->heap()->CollectGarbage(OLD_SPACE,
                                     GarbageCollectionReason::kTesting);
     // Make sure there is no concurrent sweeping running in the background.

@@ -110,9 +110,10 @@ void IterateUnsafeStackIfNecessary(StackVisitor* visitor) {
 #endif  // defined(__has_feature)
 }
 
-// Called by the trampoline that pushes registers on the stack. This method
-// should never be inlined to ensure that a possible redzone cannot contain
-// any data that needs to be scanned.
+}  // namespace
+
+// This method should never be inlined to ensure that a possible redzone cannot
+// contain any data that needs to be scanned.
 V8_NOINLINE
 // No ASAN support as method accesses redzones while walking the stack.
 DISABLE_ASAN
@@ -120,36 +121,36 @@ DISABLE_ASAN
 // thread, e.g., for interrupt handling. Atomic reads are not enough as the
 // other thread may use a lock to synchronize the access.
 DISABLE_TSAN
-void IteratePointersImpl(StackVisitor* visitor, const void* stack_start,
-                         const void* stack_end,
-                         const Stack::CalleeSavedRegisters* registers) {
+void Stack::IteratePointers(StackVisitor* visitor) const {
+  DCHECK_NOT_NULL(stack_start_);
+  DCHECK(context_);
+  DCHECK_NOT_NULL(context_->stack_marker_);
+
 #ifdef V8_USE_ADDRESS_SANITIZER
   const void* asan_fake_stack = __asan_get_current_fake_stack();
 #endif  // V8_USE_ADDRESS_SANITIZER
 
   // Iterate through the registers.
-  if (registers != nullptr) {
-    for (intptr_t value : registers->buffer) {
-      const void* address = reinterpret_cast<const void*>(value);
-      MSAN_MEMORY_IS_INITIALIZED(&address, sizeof(address));
-      if (address == nullptr) continue;
-      visitor->VisitPointer(address);
+  for (intptr_t value : context_->registers_) {
+    const void* address = reinterpret_cast<const void*>(value);
+    MSAN_MEMORY_IS_INITIALIZED(&address, sizeof(address));
+    if (address == nullptr) continue;
+    visitor->VisitPointer(address);
 #ifdef V8_USE_ADDRESS_SANITIZER
-      IterateAsanFakeFrameIfNecessary(visitor, asan_fake_stack, stack_start,
-                                      stack_end, address);
+    IterateAsanFakeFrameIfNecessary(visitor, asan_fake_stack, stack_start_,
+                                    context_->stack_marker_, address);
 #endif  // V8_USE_ADDRESS_SANITIZER
-    }
   }
 
   // Iterate through the stack.
   // All supported platforms should have their stack aligned to at least
   // sizeof(void*).
   constexpr size_t kMinStackAlignment = sizeof(void*);
-  CHECK_EQ(0u,
-           reinterpret_cast<uintptr_t>(stack_end) & (kMinStackAlignment - 1));
+  CHECK_EQ(0u, reinterpret_cast<uintptr_t>(context_->stack_marker_) &
+                   (kMinStackAlignment - 1));
   for (const void* const* current =
-           reinterpret_cast<const void* const*>(stack_end);
-       current < stack_start; ++current) {
+           reinterpret_cast<const void* const*>(context_->stack_marker_);
+       current < stack_start_; ++current) {
     // MSAN: Instead of unpoisoning the whole stack, the slot's value is copied
     // into a local which is unpoisoned.
     const void* address = *current;
@@ -157,44 +158,18 @@ void IteratePointersImpl(StackVisitor* visitor, const void* stack_start,
     if (address == nullptr) continue;
     visitor->VisitPointer(address);
 #ifdef V8_USE_ADDRESS_SANITIZER
-    IterateAsanFakeFrameIfNecessary(visitor, asan_fake_stack, stack_start,
-                                    stack_end, address);
+    IterateAsanFakeFrameIfNecessary(visitor, asan_fake_stack, stack_start_,
+                                    context_->stack_marker_, address);
 #endif  // V8_USE_ADDRESS_SANITIZER
   }
-}
 
-}  // namespace
-
-void Stack::IteratePointers(StackVisitor* visitor) const {
-  DCHECK_NOT_NULL(stack_start_);
-  PushAllRegistersAndInvokeCallback(visitor, stack_start_,
-                                    &IteratePointersImpl);
-  // No need to deal with callee-saved registers as they will be kept alive by
-  // the regular conservative stack iteration.
-  // TODO(chromium:1056170): Add support for SIMD and/or filtering.
   IterateUnsafeStackIfNecessary(visitor);
-}
-
-void Stack::IteratePointersUnsafe(StackVisitor* visitor,
-                                  const void* stack_end) const {
-  IteratePointersImpl(visitor, stack_start_, stack_end, nullptr);
 }
 
 namespace {
 // Function with architecture-specific implementation:
 // Saves all callee-saved registers in the specified buffer.
 extern "C" void SaveCalleeSavedRegisters(intptr_t* buffer);
-}  // namespace
-
-V8_NOINLINE void Stack::PushAllRegistersAndInvokeCallback(
-    StackVisitor* visitor, const void* stack_start, Callback callback) {
-  Stack::CalleeSavedRegisters registers;
-  SaveCalleeSavedRegisters(registers.buffer.data());
-  callback(visitor, stack_start, v8::base::Stack::GetCurrentStackPosition(),
-           &registers);
-}
-
-namespace {
 
 #ifdef DEBUG
 
@@ -214,25 +189,34 @@ bool IsValidMarker(const void* stack_start, const void* stack_marker) {
 
 }  // namespace
 
-// In the following three methods, the stored stack start needs not coincide
-// with the current (actual) stack start (e.g., in case it was explicitly set to
-// a lower address, in tests) but has to be inside the current stack.
-
-void Stack::set_marker(const void* stack_marker) {
+void Stack::SaveContext() {
   DCHECK(IsOnCurrentStack(stack_start_));
-  DCHECK_NOT_NULL(stack_marker);
-  DCHECK(IsValidMarker(stack_start_, stack_marker));
-  stack_marker_ = stack_marker;
+  // Contexts can be nested but the marker and the registers are only saved on
+  // the first invocation.
+  if (context_) {
+    ++context_->nesting_counter_;
+    return;
+  }
+  // Allocate the context.
+  context_ = std::make_unique<Context>();
+  // Set the marker.
+  const void* stack_top = v8::base::Stack::GetCurrentStackPosition();
+  DCHECK_NOT_NULL(stack_top);
+  DCHECK(IsValidMarker(stack_start_, stack_top));
+  context_->stack_marker_ = stack_top;
+  // Save the registers.
+  SaveCalleeSavedRegisters(context_->registers_.data());
 }
 
-void Stack::clear_marker() {
+void Stack::ClearContext() {
   DCHECK(IsOnCurrentStack(stack_start_));
-  stack_marker_ = nullptr;
-}
-
-const void* Stack::get_marker() const {
-  DCHECK_NOT_NULL(stack_marker_);
-  return stack_marker_;
+  DCHECK(context_);
+  // Skip clearing the context if that was a nested invocation.
+  if (context_->nesting_counter_ > 0) {
+    --context_->nesting_counter_;
+    return;
+  }
+  context_.reset();
 }
 
 }  // namespace heap::base
