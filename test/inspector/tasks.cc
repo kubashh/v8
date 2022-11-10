@@ -58,8 +58,9 @@ void RunSimpleAsyncTask(TaskRunner* task_runner,
       v8::MicrotasksScope microtasks_scope(context,
                                            v8::MicrotasksScope::kRunMicrotasks);
       v8::Context::Scope context_scope(context);
-      (void)client_callback_.Get(data->isolate())
-          ->Call(context, context->Global(), 0, nullptr);
+      auto result = client_callback_.Get(data->isolate())
+                        ->Call(context, context->Global(), 0, nullptr);
+      USE(result);
     }
     v8::Global<v8::Context> context_;
     v8::Global<v8::Function> client_callback_;
