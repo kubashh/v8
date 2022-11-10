@@ -22,6 +22,30 @@
       },
       "revId": "aec5beeb49cd0e4edb482e7cd57e3592e72bd76d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d37e61_af68bac3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-10T12:02:46Z",
+      "side": 1,
+      "message": "Yep, optimization levels. It\u0027s a compiler flag - O0 is no optimizations. Then there are O1, O2 and O3. The latter two are defaults on various platforms.",
+      "parentUuid": "82c30891_83525d29",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "aec5beeb49cd0e4edb482e7cd57e3592e72bd76d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
