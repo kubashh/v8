@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c2cb428_ed8da429",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-10T20:29:19Z",
+      "side": 1,
+      "message": "There is one shard still timing out. I\u0027d still not just extend timeouts further, please rather have a look at the durations list from CI debug:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8797859875686331873/+/u/Check/durations\n\nThe first 10 should all be marked SLOW in the status file and the first 2-3 should probably be skipped in their respective variants. All on mac arm64 with simulator and debug only. In the status file there are some example for all this. Usually arm64 simulator, but not mac specific...",
+      "revId": "c05f9846790226d3aeb8ca20c8407d2820268b40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
