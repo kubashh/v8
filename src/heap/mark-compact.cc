@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "src/tracing/trace-event.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/platform/platform.h"
@@ -2792,6 +2793,8 @@ class ParallelClearingJob final : public v8::JobTask {
 
   // v8::JobTask overrides.
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "ParallelClearingJob");
+
     std::unique_ptr<ClearingItem> item;
     {
       base::MutexGuard guard(&items_mutex_);
@@ -2820,6 +2823,8 @@ class ClearStringTableJobItem final : public ParallelClearingJob::ClearingItem {
   explicit ClearStringTableJobItem(Isolate* isolate) : isolate_(isolate) {}
 
   void Run(JobDelegate* delegate) final {
+    TRACE_EVENT0("v8.job", "ClearStringTableJobItem");
+
     if (isolate_->OwnsStringTables()) {
       TRACE_GC1(isolate_->heap()->tracer(),
                 GCTracer::Scope::MC_CLEAR_STRING_TABLE,
@@ -4300,6 +4305,8 @@ class PageEvacuationJob : public v8::JobTask {
         tracer_(isolate->heap()->tracer()) {}
 
   void Run(JobDelegate* delegate) override {
+    TRACE_EVENT0("v8.job", "PageEvacuationJob");
+
     RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
     Evacuator* evacuator = (*evacuators_)[delegate->GetTaskId()].get();
     if (delegate->IsJoiningThread()) {

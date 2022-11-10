@@ -4,6 +4,7 @@
 
 #include "src/heap/cppgc/concurrent-marker.h"
 
+#include "src/tracing/trace-event.h"
 #include "include/cppgc/platform.h"
 #include "src/heap/cppgc/heap-object-header.h"
 #include "src/heap/cppgc/heap.h"
@@ -72,6 +73,8 @@ ConcurrentMarkingTask::ConcurrentMarkingTask(
     : concurrent_marker_(concurrent_marker) {}
 
 void ConcurrentMarkingTask::Run(JobDelegate* job_delegate) {
+  TRACE_EVENT0("v8.job", "oncurrentMarkingTask");
+
   StatsCollector::EnabledConcurrentScope stats_scope(
       concurrent_marker_.heap().stats_collector(),
       StatsCollector::kConcurrentMark);
