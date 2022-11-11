@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ab5e20_8bce54a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-11-11T13:04:31Z",
+      "side": 1,
+      "message": "Can you please split this CL up into 2 pieces, one which refactors the existing code, and one which adds the new (performance) feature? That would make it easier to review the overall change.",
+      "revId": "94c9cf97441af5711ecbf1809704b0c200f9a4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
