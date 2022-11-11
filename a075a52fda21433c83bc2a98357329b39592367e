@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f1d9ebf_f0913e12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-11-11T09:23:12Z",
+      "side": 1,
+      "message": "Addressed comments, thanks!",
+      "revId": "a075a52fda21433c83bc2a98357329b39592367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff6472fb_d3c9d763",
@@ -48,6 +65,24 @@
       "writtenOn": "2022-11-10T15:37:22Z",
       "side": 1,
       "message": "If the bit pattern is the same here we can skip the StoreHeapNumber and just `Goto(\u0026done)`.",
+      "revId": "a075a52fda21433c83bc2a98357329b39592367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d6a9a4_e8fb7ee9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-11-11T09:23:12Z",
+      "side": 1,
+      "message": "Good catch :)",
+      "parentUuid": "ff6472fb_d3c9d763",
       "revId": "a075a52fda21433c83bc2a98357329b39592367e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bbeb8a5_f3fbff06",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-11-11T09:23:12Z",
+      "side": 1,
+      "message": "good catch :)",
+      "parentUuid": "5c78560d_2782be90",
+      "revId": "a075a52fda21433c83bc2a98357329b39592367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e231e1b_a8324910",
@@ -82,6 +135,30 @@
       "writtenOn": "2022-11-10T15:08:41Z",
       "side": 1,
       "message": "can you add a TODO for optimizing this on 64-bit archs?",
+      "range": {
+        "startLine": 2150,
+        "startChar": 24,
+        "endLine": 2150,
+        "endChar": 53
+      },
+      "revId": "a075a52fda21433c83bc2a98357329b39592367e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea7de4c9_fb26c01c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2150,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2022-11-11T09:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e231e1b_a8324910",
       "range": {
         "startLine": 2150,
         "startChar": 24,
