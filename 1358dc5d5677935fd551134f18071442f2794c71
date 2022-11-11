@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51cb7f6_09ea0eee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-11T13:13:44Z",
+      "side": 1,
+      "message": "In MachineOptimizationReducer::ReduceComparison (machine-optimization-reducer.h line 1193), foldable comparisons were performed on 64-bit rather than 32-bit. My initial fix was to add a cast there (something like `if (rep \u003d\u003d Word32) { k1 \u003d static_cast\u003cint32_t\u003e(k1); k2 \u003d static_cast\u003cint32_t\u003e(k2); }`.\nBut I actually think that it\u0027s more the responsability of MatchWordConstant to return 32-bit values when `rep` is Word32.",
+      "revId": "1358dc5d5677935fd551134f18071442f2794c71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
