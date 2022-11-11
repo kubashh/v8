@@ -248,6 +248,7 @@ class CTypeInfo {
     kFloat32,
     kFloat64,
     kV8Value,
+    kPointer,
     kApiObject,  // This will be deprecated once all users have
                  // migrated from v8::ApiObject to v8::Local<v8::Value>.
     kAny,        // This is added to enable untyped representation of fast
@@ -429,6 +430,7 @@ struct AnyCType {
     uint64_t uint64_value;
     float float_value;
     double double_value;
+    void* pointer_value;
     Local<Object> object_value;
     Local<Array> sequence_value;
     const FastApiTypedArray<uint8_t>* uint8_ta_value;
@@ -613,6 +615,7 @@ class CFunctionInfoImpl : public CFunctionInfo {
                       kReturnType == CTypeInfo::Type::kUint32 ||
                       kReturnType == CTypeInfo::Type::kFloat32 ||
                       kReturnType == CTypeInfo::Type::kFloat64 ||
+                      kReturnType == CTypeInfo::Type::kPointer ||
                       kReturnType == CTypeInfo::Type::kAny,
                   "64-bit int and api object values are not currently "
                   "supported return types.");
@@ -651,13 +654,14 @@ struct CTypeInfoTraits {};
 
 #define PRIMITIVE_C_TYPES(V) \
   V(bool, kBool)             \
+  V(uint8_t, kUint8)         \
   V(int32_t, kInt32)         \
   V(uint32_t, kUint32)       \
   V(int64_t, kInt64)         \
   V(uint64_t, kUint64)       \
   V(float, kFloat32)         \
   V(double, kFloat64)        \
-  V(uint8_t, kUint8)
+  V(void*, kPointer)
 
 // Same as above, but includes deprecated types for compatibility.
 #define ALL_C_TYPES(V)               \
@@ -691,13 +695,13 @@ PRIMITIVE_C_TYPES(DEFINE_TYPE_INFO_TRAITS)
   };
 
 #define TYPED_ARRAY_C_TYPES(V) \
+  V(uint8_t, kUint8)           \
   V(int32_t, kInt32)           \
   V(uint32_t, kUint32)         \
   V(int64_t, kInt64)           \
   V(uint64_t, kUint64)         \
   V(float, kFloat32)           \
-  V(double, kFloat64)          \
-  V(uint8_t, kUint8)
+  V(double, kFloat64)
 
 TYPED_ARRAY_C_TYPES(SPECIALIZE_GET_TYPE_INFO_HELPER_FOR_TA)
 
