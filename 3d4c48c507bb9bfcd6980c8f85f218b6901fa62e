@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "3d4c48c507bb9bfcd6980c8f85f218b6901fa62e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b327e9e5_be6a3ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-11T14:37:08Z",
+      "side": 1,
+      "message": "LGTM; don\u0027t forget to also flip the flag on the chromium side.",
+      "revId": "3d4c48c507bb9bfcd6980c8f85f218b6901fa62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
