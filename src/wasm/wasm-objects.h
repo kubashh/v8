@@ -365,6 +365,8 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
   DECL_ACCESSORS(data_segment_starts, FixedAddressArray)
   DECL_ACCESSORS(data_segment_sizes, FixedUInt32Array)
   DECL_ACCESSORS(dropped_elem_segments, FixedUInt8Array)
+  DECL_PRIMITIVE_ACCESSORS(atomic_wait_timeout, int64_t)
+  DECL_PRIMITIVE_ACCESSORS(atomic_wait_expected, int64_t)
   DECL_PRIMITIVE_ACCESSORS(break_on_entry, uint8_t)
 
   // Clear uninitialized padding space. This ensures that the snapshot content
@@ -421,6 +423,8 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
   V(kWasmInternalFunctionsOffset, kTaggedSize)                            \
   V(kManagedObjectMapsOffset, kTaggedSize)                                \
   V(kFeedbackVectorsOffset, kTaggedSize)                                  \
+  V(kAtomicWaitTimeoutOffset, kInt64Size)                                 \
+  V(kAtomicWaitExpectedOffset, kInt64Size)                                \
   V(kBreakOnEntryOffset, kUInt8Size)                                      \
   /* More padding to make the header pointer-size aligned */              \
   V(kHeaderPaddingOffset, POINTER_SIZE_PADDING(kHeaderPaddingOffset))     \
