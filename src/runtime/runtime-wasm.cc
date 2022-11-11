@@ -399,12 +399,13 @@ RUNTIME_FUNCTION(Runtime_WasmAtomicNotify) {
 RUNTIME_FUNCTION(Runtime_WasmI32AtomicWait) {
   ClearThreadInWasmScope clear_wasm_flag(isolate);
   HandleScope scope(isolate);
-  DCHECK_EQ(4, args.length());
+  DCHECK_EQ(2, args.length());
   WasmInstanceObject instance = WasmInstanceObject::cast(args[0]);
   double offset_double = args.number_value_at(1);
   uintptr_t offset = static_cast<uintptr_t>(offset_double);
-  int32_t expected_value = NumberToInt32(args[2]);
-  BigInt timeout_ns = BigInt::cast(args[3]);
+  int32_t expected_value =
+      static_cast<int32_t>(instance.atomic_wait_expected());
+  int64_t timeout = instance.atomic_wait_timeout();
 
   Handle<JSArrayBuffer> array_buffer{instance.memory_object().array_buffer(),
                                      isolate};
@@ -418,18 +419,18 @@ RUNTIME_FUNCTION(Runtime_WasmI32AtomicWait) {
         isolate->factory()->NewStringFromAsciiChecked("Atomics.wait"));
   }
   return FutexEmulation::WaitWasm32(isolate, array_buffer, offset,
-                                    expected_value, timeout_ns.AsInt64());
+                                    expected_value, timeout);
 }
 
 RUNTIME_FUNCTION(Runtime_WasmI64AtomicWait) {
   ClearThreadInWasmScope clear_wasm_flag(isolate);
   HandleScope scope(isolate);
-  DCHECK_EQ(4, args.length());
+  DCHECK_EQ(2, args.length());
   WasmInstanceObject instance = WasmInstanceObject::cast(args[0]);
   double offset_double = args.number_value_at(1);
   uintptr_t offset = static_cast<uintptr_t>(offset_double);
-  BigInt expected_value = BigInt::cast(args[2]);
-  BigInt timeout_ns = BigInt::cast(args[3]);
+  int64_t expected_value = instance.atomic_wait_expected();
+  int64_t timeout_ns = instance.atomic_wait_timeout();
 
   Handle<JSArrayBuffer> array_buffer{instance.memory_object().array_buffer(),
                                      isolate};
@@ -443,8 +444,7 @@ RUNTIME_FUNCTION(Runtime_WasmI64AtomicWait) {
         isolate->factory()->NewStringFromAsciiChecked("Atomics.wait"));
   }
   return FutexEmulation::WaitWasm64(isolate, array_buffer, offset,
-                                    expected_value.AsInt64(),
-                                    timeout_ns.AsInt64());
+                                    expected_value, timeout_ns);
 }
 
 namespace {

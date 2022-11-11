@@ -30,10 +30,8 @@ extern runtime WasmTraceEnter(Context): JSAny;
 extern runtime WasmTraceExit(Context, Smi): JSAny;
 extern runtime WasmAtomicNotify(
     Context, WasmInstanceObject, Number, Number): Smi;
-extern runtime WasmI32AtomicWait(
-    Context, WasmInstanceObject, Number, Number, BigInt): Smi;
-extern runtime WasmI64AtomicWait(
-    Context, WasmInstanceObject, Number, BigInt, BigInt): Smi;
+extern runtime WasmI32AtomicWait(Context, WasmInstanceObject, Number): Smi;
+extern runtime WasmI64AtomicWait(Context, WasmInstanceObject, Number): Smi;
 extern runtime WasmArrayCopy(
     Context, WasmArray, Smi, WasmArray, Smi, Smi): JSAny;
 extern runtime WasmArrayNewSegment(
@@ -484,21 +482,17 @@ builtin WasmAtomicNotify(offset: uintptr, count: uint32): uint32 {
   return Unsigned(SmiToInt32(result));
 }
 
-builtin WasmI32AtomicWait(
-    offset: uintptr, expectedValue: int32, timeout: BigInt): uint32 {
+builtin WasmI32AtomicWait(offset: uintptr): uint32 {
   const instance: WasmInstanceObject = LoadInstanceFromFrame();
   const result: Smi = runtime::WasmI32AtomicWait(
-      LoadContextFromInstance(instance), instance, UintPtr53ToNumber(offset),
-      WasmInt32ToNumber(expectedValue), timeout);
+      LoadContextFromInstance(instance), instance, UintPtr53ToNumber(offset));
   return Unsigned(SmiToInt32(result));
 }
 
-builtin WasmI64AtomicWait(
-    offset: uintptr, expectedValue: BigInt, timeout: BigInt): uint32 {
+builtin WasmI64AtomicWait(offset: uintptr): uint32 {
   const instance: WasmInstanceObject = LoadInstanceFromFrame();
   const result: Smi = runtime::WasmI64AtomicWait(
-      LoadContextFromInstance(instance), instance, UintPtr53ToNumber(offset),
-      expectedValue, timeout);
+      LoadContextFromInstance(instance), instance, UintPtr53ToNumber(offset));
   return Unsigned(SmiToInt32(result));
 }
 
