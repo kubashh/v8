@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "defa835e_74dcee04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-11T09:12:44Z",
+      "side": 1,
+      "message": "Many of these jobs already have a trace event. Why can\u0027t we make use of the existing ones or add new ones with the infra we have?",
+      "revId": "3b24f5ed13288e038948f324b6769f92afb06d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae0e08c7_93841214",
