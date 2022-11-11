@@ -52,6 +52,24 @@
       "parentUuid": "d79fd897_94d0f262",
       "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "294c8147_9cfdbcf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-11T18:40:04Z",
+      "side": 1,
+      "message": "I manually re-copied all the changes from the _previous_ patch set onto current main branch and uploaded the changes. Not the most pleasant thing, but not too bad.\n\nSo, now the branch once again has the issue where the Fast API created External objects are usable but trying to iterate their properties causes V8 to crash. Should we setup a debugging session, or do you think the debugging is something I could try do on my own with some instructions from you?",
+      "parentUuid": "89cfc1d8_e916699c",
+      "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
