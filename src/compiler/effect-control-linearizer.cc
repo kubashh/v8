@@ -317,6 +317,8 @@ class EffectControlLinearizer {
   // Pass {bitfield} = {digit} = nullptr to construct the canoncial 0n BigInt.
   Node* BuildAllocateBigInt(Node* bitfield, Node* digit);
 
+  Node* BuildAllocateJSExternalObject(Node* pointer);
+
   void TransitionElementsTo(Node* node, Node* array, ElementsKind from,
                             ElementsKind to);
 
@@ -5441,6 +5443,38 @@ Node* EffectControlLinearizer::AdaptFastCallArgument(
           case CTypeInfo::Type::kFloat32: {
             return __ TruncateFloat64ToFloat32(node);
           }
+          case CTypeInfo::Type::kPointer: {
+            // Check that the value is a HeapObject.
+            Node* const value_is_smi = ObjectIsSmi(node);
+            __ GotoIf(value_is_smi, if_error);
+
+            auto if_null = __ MakeDeferredLabel();
+            auto done = __ MakeLabel(MachineRepresentation::kWord64);
+
+            // Check if the value is null
+            __ GotoIf(__ TaggedEqual(node, __ NullConstant()), &if_null);
+
+            {
+              // Check that the value is a JSExternalObject.
+              Node* const is_external =
+                  __ TaggedEqual(__ LoadField(AccessBuilder::ForMap(), node),
+                                 __ ExternalObjectMapConstant());
+
+              __ GotoIfNot(is_external, if_error);
+
+              Node* external_pointer =
+                  __ LoadField(AccessBuilder::ForJSExternalObjectValue(), node);
+
+              __ Goto(&done, external_pointer);
+            }
+
+            // Value is null, signifying a null pointer.
+            __ Bind(&if_null);
+            { __ Goto(&done, __ IntPtrConstant(0)); }
+
+            __ Bind(&done);
+            return done.PhiAt(0);
+          }
           default: {
             return node;
           }
@@ -5646,6 +5680,8 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
           case CTypeInfo::Type::kFloat64:
             return ChangeFloat64ToTagged(
                 c_call_result, CheckForMinusZeroMode::kCheckForMinusZero);
+          case CTypeInfo::Type::kPointer:
+            return BuildAllocateJSExternalObject(c_call_result);
           case CTypeInfo::Type::kV8Value:
           case CTypeInfo::Type::kApiObject:
           case CTypeInfo::Type::kUint8:
@@ -7058,6 +7094,58 @@ Node* EffectControlLinearizer::BuildAllocateBigInt(Node* bitfield,
                   digit);
   }
   return result;
+}
+
+Node* EffectControlLinearizer::BuildAllocateJSExternalObject(Node* pointer) {
+  auto if_null = __ MakeDeferredLabel();
+  auto done = __ MakeLabel(MachineRepresentation::kTagged);
+
+  // Check if the pointer is a null pointer
+  __ GotoIf(__ WordEqual(pointer, __ IntPtrConstant(0)), &if_null);
+
+  {
+    Node* map = __ ExternalObjectMapConstant();
+
+    Node* size_in_words = ChangeInt32ToIntPtr(__ LoadField(
+        AccessBuilder::ForJSExternalObjectInstanceSizeInWords(), map));
+
+    Node* size =
+        __ IntAdd(__ WordShl(size_in_words, __ IntPtrConstant(kTaggedSizeLog2)),
+                  __ IntPtrConstant(JSExternalObject::kHeaderSize));
+
+    Node* external = __ Allocate(AllocationType::kYoung, size);
+    __ StoreField(AccessBuilder::ForMap(), external, map);
+
+#ifdef V8_ENABLE_SANDBOX
+    Node* const isolate_ptr =
+        __ ExternalConstant(ExternalReference::isolate_address(isolate()));
+    MachineSignature::Builder builder(graph()->zone(), 1, 2);
+    builder.AddReturn(MachineType::Uint32());
+    builder.AddParam(MachineType::Pointer());
+    builder.AddParam(MachineType::Pointer());
+    Node* allocate_and_initialize_external_pointer_table_entry =
+        __ ExternalConstant(
+            ExternalReference::
+                allocate_and_initialize_external_pointer_table_entry());
+    auto call_descriptor =
+        Linkage::GetSimplifiedCDescriptor(graph()->zone(), builder.Build());
+    Node* handle = __ Call(common()->Call(call_descriptor),
+                           allocate_and_initialize_external_pointer_table_entry,
+                           isolate_ptr, pointer);
+
+    __ StoreField(AccessBuilder::ForJSExternalObjectValue(), external, handle);
+#else
+    __ StoreField(AccessBuilder::ForJSExternalObjectValue(), external, pointer);
+#endif  // V8_ENABLE_SANDBOX
+    __ Goto(&done, external);
+  }
+
+  // Pointer is null, convert to a null
+  __ Bind(&if_null);
+  { __ Goto(&done, __ NullConstant()); }
+
+  __ Bind(&done);
+  return done.PhiAt(0);
 }
 
 #undef __
