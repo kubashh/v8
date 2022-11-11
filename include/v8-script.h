@@ -488,6 +488,36 @@ class V8_EXPORT ScriptCompiler {
     StreamedSource(const StreamedSource&) = delete;
     StreamedSource& operator=(const StreamedSource&) = delete;
 
+    /**
+     * Provides the source text string and origin information, after streaming
+     * has completed. May be called before, during, or after
+     * ScriptStreamingTask::Run(). This step checks whether the script matches
+     * an existing script in the Isolate's compilation cache. To check whether
+     * such a script was found, call ShouldMergeWithExistingScript.
+     *
+     * The Isolate provided must be the same one used during StartStreaming and
+     * must be currently entered on the thread that calls this function. The
+     * source text and origin provided in this step must precisely match those
+     * used later in the compilation that uses this StreamedSource.
+     */
+    void SourceTextAvailable(Isolate* isolate, Local<String> source_text,
+                             const ScriptOrigin& origin);
+
+    /**
+     * Returns whether the embedder should call MergeWithExistingScript. This
+     * function may be called from any thread, any number of times, but its
+     * return value is only meaningful after SourceTextAvailable has completed.
+     */
+    bool ShouldMergeWithExistingScript() const;
+
+    /**
+     * Merges newly streamed data into an existing script which was found during
+     * SourceTextAvailable. May be called only after ScriptStreamingTask::Run()
+     * has completed. Can execute on any thread, like
+     * ScriptStreamingTask::Run().
+     */
+    void MergeWithExistingScript();
+
    private:
     std::unique_ptr<internal::ScriptStreamingData> impl_;
   };

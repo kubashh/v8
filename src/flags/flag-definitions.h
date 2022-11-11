@@ -1588,6 +1588,10 @@ DEFINE_BOOL(
     merge_background_deserialized_script_with_compilation_cache, true,
     "After deserializing code cache data on a background thread, merge it into "
     "an existing Script if one is found in the Isolate compilation cache")
+DEFINE_BOOL(
+    merge_streamed_script_with_compilation_cache, false,
+    "After parsing and compiling a script on a background thread, merge it "
+    "into an existing Script if one is found in the Isolate compilation cache")
 DEFINE_BOOL(disable_old_api_accessors, false,
             "Disable old-style API accessors whose setters trigger through the "
             "prototype chain")

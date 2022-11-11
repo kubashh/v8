@@ -2777,6 +2777,19 @@ void ScriptCompiler::ConsumeCodeCacheTask::SourceTextAvailable(
   impl_->SourceTextAvailable(i_isolate, str, script_details);
 }
 
+void ScriptCompiler::StreamedSource::SourceTextAvailable(
+    Isolate* v8_isolate, Local<String> source_text,
+    const ScriptOrigin& origin) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  DCHECK_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+  i::Handle<i::String> str = Utils::OpenHandle(*(source_text));
+  i::ScriptDetails script_details =
+      GetScriptDetails(i_isolate, origin.ResourceName(), origin.LineOffset(),
+                       origin.ColumnOffset(), origin.SourceMapUrl(),
+                       origin.GetHostDefinedOptions(), origin.Options());
+  impl_->task->SourceTextAvailable(i_isolate, str, script_details);
+}
+
 bool ScriptCompiler::ConsumeCodeCacheTask::ShouldMergeWithExistingScript()
     const {
   if (!i::v8_flags
@@ -2786,10 +2799,22 @@ bool ScriptCompiler::ConsumeCodeCacheTask::ShouldMergeWithExistingScript()
   return impl_->ShouldMergeWithExistingScript();
 }
 
+bool ScriptCompiler::StreamedSource::ShouldMergeWithExistingScript() const {
+  if (!i::v8_flags.merge_streamed_script_with_compilation_cache) {
+    return false;
+  }
+  return impl_->task->ShouldMergeWithExistingScript();
+}
+
 void ScriptCompiler::ConsumeCodeCacheTask::MergeWithExistingScript() {
   DCHECK(
       i::v8_flags.merge_background_deserialized_script_with_compilation_cache);
   impl_->MergeWithExistingScript();
+}
+
+void ScriptCompiler::StreamedSource::MergeWithExistingScript() {
+  DCHECK(i::v8_flags.merge_streamed_script_with_compilation_cache);
+  impl_->task->MergeWithExistingScript();
 }
 
 ScriptCompiler::ConsumeCodeCacheTask* ScriptCompiler::StartConsumingCodeCache(
