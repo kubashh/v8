@@ -86,7 +86,7 @@ class MaglevGraphVerifier {
         str << "#" << graph_labeller_->NodeId(node) << " : ";
       }
       str << node->opcode() << " (input @" << i << " = " << input->opcode()
-          << ") type " << got << " is not Int32 or Uint32";
+          << ") type " << got << " is not Word32 (Int32 or Uint32)";
       FATAL("%s", str.str().c_str());
     }
   }
@@ -143,6 +143,7 @@ class MaglevGraphVerifier {
       case Opcode::kCheckSymbol:
       case Opcode::kCheckedInternalizedString:
       case Opcode::kCheckedObjectToIndex:
+      case Opcode::kCheckedNumberToWord32:
       case Opcode::kConvertReceiver:
       case Opcode::kConvertHoleToUndefined:
       // TODO(victorgomes): Can we check that the input is Boolean?
@@ -195,6 +196,7 @@ class MaglevGraphVerifier {
       case Opcode::kFloat64Box:
       case Opcode::kHoleyFloat64Box:
       case Opcode::kCheckedTruncateFloat64ToInt32:
+      case Opcode::kTruncateFloat64ToWord32:
         DCHECK_EQ(node->input_count(), 1);
         CheckValueInputIs(node, 0, ValueRepresentation::kFloat64);
         break;
@@ -262,14 +264,8 @@ class MaglevGraphVerifier {
       case Opcode::kInt32SubtractWithOverflow:
       case Opcode::kInt32MultiplyWithOverflow:
       case Opcode::kInt32DivideWithOverflow:
-      // case Opcode::kInt32ExponentiateWithOverflow:
       case Opcode::kInt32ModulusWithOverflow:
-      case Opcode::kInt32BitwiseAnd:
-      case Opcode::kInt32BitwiseOr:
-      case Opcode::kInt32BitwiseXor:
-      case Opcode::kInt32ShiftLeft:
-      case Opcode::kInt32ShiftRight:
-      case Opcode::kInt32ShiftRightLogical:
+      // case Opcode::kInt32ExponentiateWithOverflow:
       case Opcode::kInt32Equal:
       case Opcode::kInt32StrictEqual:
       case Opcode::kInt32LessThan:
@@ -281,6 +277,16 @@ class MaglevGraphVerifier {
         DCHECK_EQ(node->input_count(), 2);
         CheckValueInputIs(node, 0, ValueRepresentation::kInt32);
         CheckValueInputIs(node, 1, ValueRepresentation::kInt32);
+        break;
+      case Opcode::kInt32BitwiseAnd:
+      case Opcode::kInt32BitwiseOr:
+      case Opcode::kInt32BitwiseXor:
+      case Opcode::kInt32ShiftLeft:
+      case Opcode::kInt32ShiftRight:
+      case Opcode::kInt32ShiftRightLogical:
+        DCHECK_EQ(node->input_count(), 2);
+        CheckValueInputIsWord32(node, 0);
+        CheckValueInputIsWord32(node, 1);
         break;
       case Opcode::kBranchIfReferenceCompare:
         DCHECK_EQ(node->input_count(), 2);
