@@ -22,6 +22,30 @@
       },
       "revId": "feaabdf0e19f30c909cb2d300aba08526c67b4f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea0649b_b8d7228e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-11T12:34:54Z",
+      "side": 1,
+      "message": "Yes, we have an *byte* index in the array. We don\u0027t have a constructor for `Operand` that receives two registers like that. Only `reg+displ(integer)` or `reg1+reg2*scale+displ`.",
+      "parentUuid": "1efdb697_b464a3ed",
+      "range": {
+        "startLine": 1837,
+        "startChar": 56,
+        "endLine": 1837,
+        "endChar": 63
+      },
+      "revId": "feaabdf0e19f30c909cb2d300aba08526c67b4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
