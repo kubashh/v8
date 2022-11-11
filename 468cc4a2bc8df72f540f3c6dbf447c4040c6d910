@@ -34,6 +34,24 @@
       "parentUuid": "fe05060b_6905ecbd",
       "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89cfc1d8_e916699c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-11T13:22:06Z",
+      "side": 1,
+      "message": "No worries, a leisurely pace fits me fine right now 😊\n\nI\u0027ll try doing some sort of magics with whatever branch I have at home, maybe today or during the weekend. I\u0027m probably misusing the CL system somehow, as I\u0027m not even really sure if I have a separate branch, and if I should have a separate branch for the CL? I\u0027m much more used to having a custom branch and manually doing rebases from main, and the `git cl` commands, patch sets and whatnot are really throwing me for a loop.\n\nI think I\u0027d like to debug this further still, since I expect that the HandleScope creation etc. will all do quite a lot of work that is 90% unnecessary. If I can just figure out how to get the properties saved into the object (and if that fixes the issue) then I think the resulting code should be truly Fast! :)",
+      "parentUuid": "d79fd897_94d0f262",
+      "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
