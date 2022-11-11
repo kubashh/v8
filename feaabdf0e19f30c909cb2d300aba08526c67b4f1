@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1efdb697_b464a3ed",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1837,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-11T12:26:58Z",
+      "side": 1,
+      "message": "so not multiply? Can this be `Operand(data_pointer, index)`?",
+      "range": {
+        "startLine": 1837,
+        "startChar": 56,
+        "endLine": 1837,
+        "endChar": 63
+      },
+      "revId": "feaabdf0e19f30c909cb2d300aba08526c67b4f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
