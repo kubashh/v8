@@ -16,6 +16,69 @@
       "message": "Please take another look. Thanks!",
       "revId": "3b24f5ed13288e038948f324b6769f92afb06d12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "817a8687_293982d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-11-11T07:46:28Z",
+      "side": 1,
+      "message": "Thank you! Two small nits.",
+      "revId": "3b24f5ed13288e038948f324b6769f92afb06d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae0e08c7_93841214",
+        "filename": "src/heap/cppgc/marker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-11-11T07:46:28Z",
+      "side": 1,
+      "message": "Let\u0027s drop \" (marking)\". It should be clear from the class name what is going on.",
+      "range": {
+        "startLine": 335,
+        "startChar": 56,
+        "endLine": 335,
+        "endChar": 63
+      },
+      "revId": "3b24f5ed13288e038948f324b6769f92afb06d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25dd520_a3d4e40b",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2022-11-11T07:46:28Z",
+      "side": 1,
+      "message": "We already have a trace event here. Let\u0027s drop TRACE_EVENT0(\"v8.wasm\", \"wasm.CompileImportWrapperJob.Run\");",
+      "range": {
+        "startLine": 70,
+        "startChar": 21,
+        "endLine": 70,
+        "endChar": 25
+      },
+      "revId": "3b24f5ed13288e038948f324b6769f92afb06d12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
