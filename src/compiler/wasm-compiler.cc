@@ -4986,31 +4986,33 @@ Node* WasmGraphBuilder::AtomicOp(wasm::WasmOpcode opcode, Node* const* inputs,
                                     inputs[1]);
 
     case wasm::kExprI32AtomicWait: {
-      constexpr StubCallMode kStubMode = StubCallMode::kCallWasmRuntimeStub;
-      auto* call_descriptor = GetBuiltinCallDescriptor(
-          Builtin::kWasmI32AtomicWait, zone_, kStubMode);
+      auto access = ObjectAccess(MachineType::Int64(), kNoWriteBarrier);
+      gasm_->StoreToObject(access, GetInstance(),
+                           wasm::ObjectAccess::ToTagged(
+                               WasmInstanceObject::kAtomicWaitTimeoutOffset),
+                           inputs[2]);
+      gasm_->StoreToObject(access, GetInstance(),
+                           wasm::ObjectAccess::ToTagged(
+                               WasmInstanceObject::kAtomicWaitExpectedOffset),
+                           gasm_->ChangeUint32ToUint64(inputs[1]));
 
-      intptr_t target = wasm::WasmCode::kWasmI32AtomicWait;
-      Node* call_target = mcgraph()->RelocatableIntPtrConstant(
-          target, RelocInfo::WASM_STUB_CALL);
-
-      return gasm_->Call(call_descriptor, call_target, effective_offset,
-                         inputs[1],
-                         BuildChangeInt64ToBigInt(inputs[2], kStubMode));
+      return gasm_->CallRuntimeStub(wasm::WasmCode::kWasmI32AtomicWait,
+                                    Operator::kNoProperties, effective_offset);
     }
 
     case wasm::kExprI64AtomicWait: {
-      constexpr StubCallMode kStubMode = StubCallMode::kCallWasmRuntimeStub;
-      auto* call_descriptor = GetBuiltinCallDescriptor(
-          Builtin::kWasmI64AtomicWait, zone_, kStubMode);
+      auto access = ObjectAccess(MachineType::Int64(), kNoWriteBarrier);
+      gasm_->StoreToObject(access, GetInstance(),
+                           wasm::ObjectAccess::ToTagged(
+                               WasmInstanceObject::kAtomicWaitTimeoutOffset),
+                           inputs[2]);
+      gasm_->StoreToObject(access, GetInstance(),
+                           wasm::ObjectAccess::ToTagged(
+                               WasmInstanceObject::kAtomicWaitExpectedOffset),
+                           inputs[1]);
 
-      intptr_t target = wasm::WasmCode::kWasmI64AtomicWait;
-      Node* call_target = mcgraph()->RelocatableIntPtrConstant(
-          target, RelocInfo::WASM_STUB_CALL);
-
-      return gasm_->Call(call_descriptor, call_target, effective_offset,
-                         BuildChangeInt64ToBigInt(inputs[1], kStubMode),
-                         BuildChangeInt64ToBigInt(inputs[2], kStubMode));
+      return gasm_->CallRuntimeStub(wasm::WasmCode::kWasmI32AtomicWait,
+                                    Operator::kNoProperties, effective_offset);
     }
 
     default:

@@ -215,6 +215,10 @@ ACCESSORS(WasmInstanceObject, data_segment_sizes, FixedUInt32Array,
           kDataSegmentSizesOffset)
 ACCESSORS(WasmInstanceObject, dropped_elem_segments, FixedUInt8Array,
           kDroppedElemSegmentsOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, atomic_wait_timeout, int64_t,
+                    kAtomicWaitTimeoutOffset)
+PRIMITIVE_ACCESSORS(WasmInstanceObject, atomic_wait_expected, int64_t,
+                    kAtomicWaitExpectedOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, break_on_entry, uint8_t,
                     kBreakOnEntryOffset)
 
