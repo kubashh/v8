@@ -852,6 +852,7 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
         "Major task %d concurrently marked %dKB in %.2fms\n", task_id,
         static_cast<int>(marked_bytes / KB), time_ms);
   }
+  heap_->concurrent_gc_time += time_ms;
 }
 
 void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
