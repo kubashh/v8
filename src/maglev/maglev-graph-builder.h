@@ -1053,6 +1053,8 @@ class MaglevGraphBuilder {
                                 CallArguments& args);
 
 #define MAGLEV_REDUCED_BUILTIN(V) \
+  V(DataViewPrototypeGetFloat64)  \
+  V(DataViewPrototypeSetFloat64)  \
   V(FunctionPrototypeCall)        \
   V(StringFromCharCode)           \
   V(StringPrototypeCharCodeAt)
