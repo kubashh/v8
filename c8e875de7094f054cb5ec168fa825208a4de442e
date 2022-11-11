@@ -16,6 +16,24 @@
       "message": "Hi Clemens,\n\nAfter this CL we started getting intermittent failure on this mjsunit `wasm/streaming-trap-location.js` with this fatal error:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/factory-base.cc;l\u003d1112\nseems to be a racing condition which causes `capacity` to become a garbage value. Issue goes away with `--single-threaded`. I\u0027m assuming this CL is for fixing this issue? crrev.com/c/4020244",
       "revId": "c8e875de7094f054cb5ec168fa825208a4de442e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed736a97_d049f2e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-11T15:37:13Z",
+      "side": 1,
+      "message": "Exactly. The fix is just about to land.",
+      "parentUuid": "5ba2dd6e_220c349a",
+      "revId": "c8e875de7094f054cb5ec168fa825208a4de442e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
