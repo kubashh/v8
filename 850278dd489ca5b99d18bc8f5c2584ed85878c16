@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d49b24e_c58f28b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-11T11:28:36Z",
+      "side": 1,
+      "message": "src/execution/ and src/wasm/ LGTM with a few questions.",
+      "revId": "850278dd489ca5b99d18bc8f5c2584ed85878c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c99959_a9fb4699",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-11T11:28:36Z",
+      "side": 1,
+      "message": "Don\u0027t we need an Isolate::Scope here as well?",
+      "range": {
+        "startLine": 1005,
+        "startChar": 2,
+        "endLine": 1005,
+        "endChar": 39
+      },
+      "revId": "850278dd489ca5b99d18bc8f5c2584ed85878c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11ba0d8f_78b5bd98",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-11T11:28:36Z",
+      "side": 1,
+      "message": "Don\u0027t we need an Isolate::Scope here too?",
+      "range": {
+        "startLine": 2045,
+        "startChar": 2,
+        "endLine": 2045,
+        "endChar": 32
+      },
+      "revId": "850278dd489ca5b99d18bc8f5c2584ed85878c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
