@@ -30,7 +30,11 @@ class ThreadLocalTop {
   // TODO(all): This is not particularly beautiful. We should probably
   // refactor this to really consist of just Addresses and 32-bit
   // integer fields.
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
   static constexpr uint32_t kSizeInBytes = 27 * kSystemPointerSize;
+#else
+  static constexpr uint32_t kSizeInBytes = 26 * kSystemPointerSize;
+#endif
 
   // Does early low-level initialization that does not depend on the
   // isolate being present.

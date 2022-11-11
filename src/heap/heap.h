@@ -173,7 +173,6 @@ enum class SkipRoot {
   kMainThreadHandles,
   kUnserializable,
   kWeak,
-  kTopOfStack,
   kConservativeStack,
 };
 
@@ -1029,10 +1028,7 @@ class Heap {
   // garbage collection and is usually only performed as part of
   // (de)serialization or heap verification.
 
-  // The order of this enumeration's elements is important: they should go from
-  // more precise to more conservative modes for stack scanning, so that we can
-  // use std::min to override for testing purposes.
-  enum class ScanStackMode { kNone, kFromMarker, kComplete };
+  enum class ScanStackMode { kPrecise, kConservative };
 
   // Iterates over the strong roots and the weak roots.
   void IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
@@ -2391,7 +2387,7 @@ class Heap {
   bool force_oom_ = false;
   bool force_gc_on_next_allocation_ = false;
   bool delay_sweeper_tasks_for_testing_ = false;
-  ScanStackMode scan_stack_mode_for_testing_ = ScanStackMode::kComplete;
+  ScanStackMode scan_stack_mode_for_testing_ = ScanStackMode::kConservative;
 
   UnorderedHeapObjectMap<HeapObject> retainer_;
   UnorderedHeapObjectMap<Root> retaining_root_;

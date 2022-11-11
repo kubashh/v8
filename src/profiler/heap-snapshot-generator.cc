@@ -2062,6 +2062,7 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   // Make sure builtin code objects get their builtin tags
   // first. Otherwise a particular JSFunction object could set
   // its custom name to a generic builtin.
+  heap_->stack().SaveContext();
   RootsReferencesExtractor extractor(this);
   ReadOnlyRoots(heap_).Iterate(&extractor);
   heap_->IterateRoots(&extractor, base::EnumSet<SkipRoot>{SkipRoot::kWeak});
@@ -2071,6 +2072,7 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   heap_->IterateWeakRoots(&extractor, {});
   extractor.SetVisitingWeakRoots();
   heap_->IterateWeakGlobalHandles(&extractor);
+  heap_->stack().ClearContext();
 
   bool interrupted = false;
 
