@@ -88,6 +88,24 @@
       "parentUuid": "294c8147_9cfdbcf8",
       "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a93395_1b9c0746",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-13T10:23:04Z",
+      "side": 1,
+      "message": "Hm, okay, I\u0027ve then just been trying to use too fancy ways to update the branch, where I should\u0027ve just kept it simple 😎\n\nThat timing sounds fine, can you send a GMeets invite for a timing that fits you?",
+      "parentUuid": "5e1483f7_49ce9e70",
+      "revId": "468cc4a2bc8df72f540f3c6dbf447c4040c6d910",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
