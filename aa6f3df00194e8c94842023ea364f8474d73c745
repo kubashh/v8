@@ -87,6 +87,30 @@
       },
       "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0213c3_d34f3b09",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-11-14T16:48:59Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t think I\u0027m understanding your suggestion. If we can\u0027t call SourceTextAvailable until after the streaming task has ended, does that mean it\u0027s not worth posting a second background task to run MergeWithExistingScript? ScriptCompiler::Compile returns a MaybeLocal\u003cScript\u003e, which the embedder can immediately run, so we can\u0027t easily hide background processing within it. Should ScriptCompiler::Compile do any necessary merging synchronously before it returns? I like the simplicity of merging on the main thread, but you advised in [1] to put the merge work on a background thread.\n\n[1] https://docs.google.com/document/d/1UksB5Vm7TT1-f3S9W1dK_rP9jKn_ly0WVm_UDPpWuBw/edit#",
+      "parentUuid": "3995c4f7_ef93facb",
+      "range": {
+        "startLine": 503,
+        "startChar": 9,
+        "endLine": 503,
+        "endChar": 28
+      },
+      "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
