@@ -111,6 +111,30 @@
       },
       "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c21001a1_41725136",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-14T16:56:27Z",
+      "side": 1,
+      "message": "For deserialization, yes, because the source text is available independently of the deserialization completing. Here, it\u0027s dependent on the streaming completeing.\n\nIt might be good for interactivity reasons to post a BG task for merging, but it introduces some amount of latency because at this point Blink is waiting for that script to be compiled and executed.\n\nMaybe we could access the V8 Isolate cache from the background thread, to keep the merge part of the BG streaming task?",
+      "parentUuid": "6f0213c3_d34f3b09",
+      "range": {
+        "startLine": 503,
+        "startChar": 9,
+        "endLine": 503,
+        "endChar": 28
+      },
+      "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
