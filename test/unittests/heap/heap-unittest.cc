@@ -151,7 +151,11 @@ TEST_F(HeapTest, HeapLayout) {
   EXPECT_TRUE(IsAligned(cage_base, size_t{4} * GB));
 
   Address code_cage_base = i_isolate()->code_cage_base();
-  EXPECT_TRUE(IsAligned(code_cage_base, size_t{4} * GB));
+  // Compression scheme for external code space doesn't require alignment of
+  // the cage base.
+  if (!V8_EXTERNAL_CODE_SPACE_BOOL) {
+    EXPECT_TRUE(IsAligned(code_cage_base, size_t{4} * GB));
+  }
 
 #ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
   Address isolate_root = i_isolate()->isolate_root();
