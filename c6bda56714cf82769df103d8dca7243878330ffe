@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1949465c_b1610fee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-14T21:56:17Z",
+      "side": 1,
+      "message": "Apart from `SaveStackContextScope` which unfortunately is in `src/heap/heap.h` instead of `src/heap/base/stack.h`, this looks good. PTAL.",
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
