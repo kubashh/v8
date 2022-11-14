@@ -16,6 +16,29 @@
       "message": "Jakob, PTAL.",
       "revId": "741e5c51b0dd4653c12ef51441f5981318e343af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "999bde24_04ee1677",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-14T11:42:28Z",
+      "side": 1,
+      "message": "Any reason to do it this way, and not just pass the top `VarState` from the stack? That would avoid an unnecessary register move if the top value is spilled, because it would be loaded to the right register directly.",
+      "range": {
+        "startLine": 1844,
+        "startChar": 0,
+        "endLine": 1845,
+        "endChar": 67
+      },
+      "revId": "741e5c51b0dd4653c12ef51441f5981318e343af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
