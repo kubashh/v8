@@ -63,6 +63,30 @@
       },
       "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3995c4f7_ef93facb",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-14T16:00:39Z",
+      "side": 1,
+      "message": "Right, the issue with doing this in ClassicPendingScript is that the ScriptResource is not considered to have finished loading until the streaming completes, so in practice you won\u0027t call SourceTextAvailable until the streaming task has ended.",
+      "parentUuid": "2845af49_37bc9be9",
+      "range": {
+        "startLine": 503,
+        "startChar": 9,
+        "endLine": 503,
+        "endChar": 28
+      },
+      "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
