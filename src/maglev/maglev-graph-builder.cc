@@ -107,8 +107,8 @@ class CallArguments {
   }
 
   CallArguments(ConvertReceiverMode receiver_mode,
-                std::initializer_list<ValueNode*> args)
-      : receiver_mode_(receiver_mode), args_(args), has_spread_(false) {}
+                std::initializer_list<ValueNode*> args, bool has_spread = false)
+      : receiver_mode_(receiver_mode), args_(args), has_spread_(has_spread) {}
 
   ValueNode* receiver() const {
     if (receiver_mode_ == ConvertReceiverMode::kNullOrUndefined) {
@@ -2926,6 +2926,10 @@ ValueNode* MaglevGraphBuilder::TryBuildCallKnownJSFunction(
   if (function.native_context() != broker()->target_native_context()) {
     return nullptr;
   }
+  if (args.has_spread()) {
+    // TODO(victorgomes): Maybe inline the spread stub?
+    return nullptr;
+  }
   ValueNode* receiver = GetConvertReceiver(function, args);
   size_t input_count = args.count() + CallKnownJSFunction::kFixedInputCount;
   CallKnownJSFunction* call =
@@ -2976,42 +2980,55 @@ ValueNode* MaglevGraphBuilder::ReduceCall(compiler::ObjectRef object,
 
 void MaglevGraphBuilder::BuildCall(ValueNode* target_node, CallArguments& args,
                                    compiler::FeedbackSource& feedback_source) {
-  Call::TargetType target_type = Call::TargetType::kAny;
   const compiler::ProcessedFeedback& processed_feedback =
       broker()->GetFeedbackForCall(feedback_source);
-  switch (processed_feedback.kind()) {
-    case compiler::ProcessedFeedback::kInsufficient:
-      EmitUnconditionalDeopt(
-          DeoptimizeReason::kInsufficientTypeFeedbackForCall);
-      return;
-
-    case compiler::ProcessedFeedback::kCall: {
-      const compiler::CallFeedback& call_feedback = processed_feedback.AsCall();
-      CallFeedbackContent content = call_feedback.call_feedback_content();
-      if (content != CallFeedbackContent::kTarget) break;
-
-      base::Optional<compiler::HeapObjectRef> maybe_target =
-          call_feedback.target();
-      if (!maybe_target.has_value()) break;
-
-      compiler::HeapObjectRef target = maybe_target.value();
-      if (!target.IsJSFunction()) break;
-      compiler::JSFunctionRef function = target.AsJSFunction();
-
-      if (!BuildCheckValue(target_node, target)) return;
-
-      SetAccumulator(ReduceCall(function, args));
-      return;
-    }
-
-    default:
-      break;
+  if (processed_feedback.IsInsufficient()) {
+    EmitUnconditionalDeopt(DeoptimizeReason::kInsufficientTypeFeedbackForCall);
+    return;
   }
 
-  // On fallthrough, create a generic call.
-  ValueNode* context = GetContext();
-  SetAccumulator(BuildGenericCall(target_node, context, target_type, args,
-                                  feedback_source));
+  DCHECK_EQ(processed_feedback.kind(), compiler::ProcessedFeedback::kCall);
+
+  const compiler::CallFeedback& call_feedback = processed_feedback.AsCall();
+  if (!call_feedback.target().has_value() ||
+      !call_feedback.target()->IsJSFunction()) {
+    SetAccumulator(BuildGenericCall(target_node, GetContext(),
+                                    Call::TargetType::kAny, args,
+                                    feedback_source));
+    return;
+  }
+
+  CallFeedbackContent content = call_feedback.call_feedback_content();
+  if (content == CallFeedbackContent::kTarget) {
+    compiler::JSFunctionRef target = call_feedback.target()->AsJSFunction();
+    if (!BuildCheckValue(target_node, target)) return;
+    SetAccumulator(ReduceCall(target, args));
+  } else {
+    DCHECK_EQ(content, CallFeedbackContent::kReceiver);
+    compiler::NativeContextRef native_context =
+        broker()->target_native_context();
+    compiler::JSFunctionRef target = native_context.function_prototype_apply();
+    if (!BuildCheckValue(target_node, target)) return;
+    compiler::JSFunctionRef receiver = call_feedback.target()->AsJSFunction();
+    ValueNode* receiver_node = GetTaggedOrUndefined(args.receiver());
+    if (!BuildCheckValue(receiver_node, receiver)) return;
+    ValueNode* call;
+    if (args.count() == 0) {
+      // No need for spread.
+      CallArguments empty_args(ConvertReceiverMode::kNullOrUndefined);
+      call = ReduceCall(receiver, empty_args);
+    } else if (args.count() == 1) {
+      // No need for spread. We have only the new receiver.
+      CallArguments new_args(ConvertReceiverMode::kAny, {args[0]});
+      call = ReduceCall(receiver, new_args);
+    } else {
+      // We ignore the other arguments if > 2.
+      CallArguments new_args(ConvertReceiverMode::kAny, {args[0], args[1]},
+                             true);
+      call = ReduceCall(receiver, new_args);
+    }
+    SetAccumulator(call);
+  }
 }
 
 void MaglevGraphBuilder::BuildCallFromRegisterList(
