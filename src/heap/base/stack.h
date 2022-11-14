@@ -5,6 +5,8 @@
 #ifndef V8_HEAP_BASE_STACK_H_
 #define V8_HEAP_BASE_STACK_H_
 
+#include <memory>
+
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
 
@@ -20,6 +22,9 @@ class StackVisitor {
 // - native stack;
 // - ASAN/MSAN;
 // - SafeStack: https://releases.llvm.org/10.0.0/tools/clang/docs/SafeStack.html
+//
+// TODO(chromium:1056170): Consider adding a component that keeps track
+// of relevant GC stack regions where interesting pointers can be found.
 class V8_EXPORT_PRIVATE Stack final {
  public:
   // The following constant is architecture-specific. The size of the buffer
@@ -70,54 +75,39 @@ class V8_EXPORT_PRIVATE Stack final {
 
   explicit Stack(const void* stack_start = nullptr);
 
+  // Returns true if the stack is used.
+  bool IsUsed() const { return stack_start_ != nullptr; }
+
   // Sets the start of the stack.
   void SetStackStart(const void* stack_start);
 
   // Returns true if |slot| is part of the stack and false otherwise.
   bool IsOnStack(const void* slot) const;
 
-  // Word-aligned iteration of the stack. Callee-saved registers are pushed to
-  // the stack before iterating pointers. Slot values are passed on to
-  // `visitor`.
-  void IteratePointers(StackVisitor* visitor) const;
+  // Word-aligned iteration of the stack and the saved registers.
+  // Slot values are passed on to `visitor`.
+  V8_NOINLINE void IteratePointers(StackVisitor* visitor) const;
 
-  // Word-aligned iteration of the stack, starting at `stack_end`. Slot values
-  // are passed on to `visitor`. This is intended to be used with verifiers that
-  // only visit a subset of the stack of IteratePointers().
-  //
-  // **Ignores:**
-  // - Callee-saved registers.
-  // - SafeStack.
-  void IteratePointersUnsafe(StackVisitor* visitor,
-                             const void* stack_end) const;
+  // Saves and clears the stack context, i.e., it sets the stack marker and
+  // saves the registers.
+  // TODO(v8:13257): The parameter is for suppressing the invariant check in
+  // the case of WASM stack switching. It will be removed as soon as context
+  // saving becomes compatible with stack switching.
+  void SaveContext(bool check_invariant = true);
+  void ClearContext(bool check_invariant = true);
 
-  // Returns the start of the stack.
-  const void* stack_start() const { return stack_start_; }
-
-  // Sets, clears and gets the stack marker.
-  void set_marker(const void* stack_marker);
-  void clear_marker();
-  const void* get_marker() const;
-
-  // Mechanism for saving the callee-saved registers, required for conservative
-  // stack scanning.
-
-  struct CalleeSavedRegisters {
+ private:
+  struct Context {
+    int nesting_counter_ = 0;
+    const void* stack_marker_ = nullptr;
     // We always double-align this buffer, to support for longer registers,
     // e.g., 128-bit registers in WIN64.
     alignas(2 * sizeof(intptr_t))
-        std::array<intptr_t, NumberOfCalleeSavedRegisters> buffer;
+        std::array<intptr_t, NumberOfCalleeSavedRegisters> registers_;
   };
 
-  using Callback = void (*)(StackVisitor*, const void*, const void*,
-                            const CalleeSavedRegisters* registers);
-
-  static V8_NOINLINE void PushAllRegistersAndInvokeCallback(
-      StackVisitor* visitor, const void* stack_start, Callback callback);
-
- private:
   const void* stack_start_;
-  const void* stack_marker_ = nullptr;
+  std::unique_ptr<Context> context_;
 };
 
 }  // namespace heap::base

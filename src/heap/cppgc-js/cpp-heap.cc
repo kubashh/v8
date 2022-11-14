@@ -16,7 +16,6 @@
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 #include "src/base/optional.h"
-#include "src/base/platform/platform.h"
 #include "src/base/platform/time.h"
 #include "src/execution/isolate-inl.h"
 #include "src/flags/flags.h"
@@ -835,7 +834,7 @@ void CppHeap::TraceEpilogue() {
   const size_t bytes_allocated_in_prefinalizers = ExecutePreFinalizers();
 #if CPPGC_VERIFY_HEAP
   UnifiedHeapMarkingVerifier verifier(*this, *collection_type_);
-  verifier.Run(stack_state_of_prev_gc(), stack_end_of_current_gc(),
+  verifier.Run(stack_state_of_prev_gc(),
                stats_collector()->marked_bytes_on_current_cycle() +
                    bytes_allocated_in_prefinalizers);
 #endif  // CPPGC_VERIFY_HEAP
@@ -887,7 +886,7 @@ void CppHeap::RunMinorGCIfNeeded() {
   // Notify GC tracer that CppGC started young GC cycle.
   isolate_->heap()->tracer()->NotifyYoungCppGCRunning();
 
-  SetStackEndOfCurrentGC(v8::base::Stack::GetCurrentStackPosition());
+  stack()->SaveContext(!v8_flags.experimental_wasm_stack_switching);
 
   // Perform an atomic GC, with starting incremental/concurrent marking and
   // immediately finalizing the garbage collection.
@@ -901,6 +900,8 @@ void CppHeap::RunMinorGCIfNeeded() {
     CHECK(AdvanceTracing(std::numeric_limits<double>::infinity()));
   }
   TraceEpilogue();
+
+  stack()->ClearContext(!v8_flags.experimental_wasm_stack_switching);
 }
 
 void CppHeap::AllocatedObjectSizeIncreased(size_t bytes) {
@@ -944,7 +945,7 @@ void CppHeap::CollectGarbageForTesting(CollectionType collection_type,
   // Finish sweeping in case it is still running.
   sweeper().FinishIfRunning();
 
-  SetStackEndOfCurrentGC(v8::base::Stack::GetCurrentStackPosition());
+  stack()->SaveContext(!v8_flags.experimental_wasm_stack_switching);
 
   if (isolate_) {
     reinterpret_cast<v8::Isolate*>(isolate_)
@@ -964,6 +965,8 @@ void CppHeap::CollectGarbageForTesting(CollectionType collection_type,
     }
     TraceEpilogue();
   }
+
+  stack()->ClearContext(!v8_flags.experimental_wasm_stack_switching);
 }
 
 void CppHeap::EnableDetachedGarbageCollectionsForTesting() {
