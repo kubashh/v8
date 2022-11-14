@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6857f930_dec8586d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-14T19:57:16Z",
+      "side": 1,
+      "message": "After some debugging today it seems like the `JSExternalObject` created in a fast call might be entirely correct, the only issue is just that it gets tagged with the `kWeakObjectTag` somewhere somehow, after ECL. Manually adding a `kObjectTag` tagging to the end of the ECL code creating the `JSExternalObject` did not help the issue.\n\nWould @Samuel Groß have any idea where I should look to figure out why / how / where the tagging happens?",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
