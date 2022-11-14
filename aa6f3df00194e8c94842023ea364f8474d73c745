@@ -39,6 +39,30 @@
       },
       "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2845af49_37bc9be9",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-11-14T15:49:59Z",
+      "side": 1,
+      "message": "Interesting idea! Are you suggesting merging on the main thread during ScriptCompiler::Compile, or starting a background task at that time? If it\u0027s a background task, how would the embedder know when it\u0027s done?\n\nMy goal here was to avoid main-thread work as much as possible. Merging new content into an existing Script\u0027s object graph is cheap compared to parsing or deserialization, but it can still take multiple milliseconds for large scripts. If the embedder is to do something useful on the main thread during that time, then I think this API must expose a lot of detail so that the embedder knows what is going on. Otherwise, if we tried to hide the background work internally within V8, then we might end up blocking the main thread anyway if the embedder tries to call something which requires the result from the background thread.\n\nHere\u0027s a CL which implements the Blink side for using this API: https://chromium-review.googlesource.com/c/chromium/src/+/4023989 . It makes ScriptStreamer act like ScriptCacheConsumer from the perspective of ClassicPendingScript, which calls NotifyClientWaiting and awaits a callback to NotifyScriptProcessingFinished. As you mentioned, the script streaming task is already complete by the time we get to the point that calls ScriptStreamer::NotifyClientWaiting, so the state management in ScriptStreamer is rather simpler than ScriptCacheConsumer.",
+      "parentUuid": "ee31c335_f9ad1270",
+      "range": {
+        "startLine": 503,
+        "startChar": 9,
+        "endLine": 503,
+        "endChar": 28
+      },
+      "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
