@@ -135,6 +135,30 @@
       },
       "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e1b94d_758c6050",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2022-11-14T20:05:17Z",
+      "side": 1,
+      "message": "\u003e Maybe we could access the V8 Isolate cache from the background thread, to keep the merge part of the BG streaming task?\n\nI think that this API would become much more complex if we wanted to support compilation cache lookup from a background thread. This CL\u0027s version of SourceTextAvailable takes a `Local\u003cString\u003e source_text`, but to get such a string, the embedder must call `String::NewFromOneByte`, `String::NewFromTwoByte`, or some similar allocation function. As far as I understand, those allocation functions must be called on the main thread. So if we wanted to avoid any main-thread activity after the resource has finished loading, this API would have to expose ways for the embedder to directly pass the underlying string data (in various possible formats) rather than a Local\u003cString\u003e object.\n\nFurthermore, lookup in the Isolate compilation cache requires some other data about the script, which is encapsulated in ScriptOrigin. Currently, ClassicScript is responsible for creating the ScriptOrigin, but we\u0027d have to create it before starting the streaming task, if the background thread accesses the Isolate cache. I think the necessary data is all available by then, but I\u0027m not sure where to produce the ScriptOrigin without introducing layering violations in Blink.\n\nGiven the level of complexity involved in background lookup, and the extra latency introduced by a main-thread lookup which then posts a second background task, I prefer your original recommendation of doing the extra work within `ScriptCompiler::Compile`. This requires some main-thread time to perform the merge, but merging is pretty fast and the vast majority of compilations don\u0027t require merging. Thanks a lot for the advice! 😊",
+      "parentUuid": "c21001a1_41725136",
+      "range": {
+        "startLine": 503,
+        "startChar": 9,
+        "endLine": 503,
+        "endChar": 28
+      },
+      "revId": "aa6f3df00194e8c94842023ea364f8474d73c745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
