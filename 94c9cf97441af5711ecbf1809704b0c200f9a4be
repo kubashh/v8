@@ -16,6 +16,24 @@
       "message": "Can you please split this CL up into 2 pieces, one which refactors the existing code, and one which adds the new (performance) feature? That would make it easier to review the overall change.",
       "revId": "94c9cf97441af5711ecbf1809704b0c200f9a4be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e319ad33_9f0945a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2022-11-14T20:21:30Z",
+      "side": 1,
+      "message": "I\u0027ve added the refactoring part by itself to https://chromium-review.googlesource.com/c/v8/v8/+/4024866.",
+      "parentUuid": "88ab5e20_8bce54a4",
+      "revId": "94c9cf97441af5711ecbf1809704b0c200f9a4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
