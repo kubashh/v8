@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9577c996_36136e0a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 7510,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T15:59:30Z",
+      "side": 1,
+      "message": "I find this setup still weird as it essentially means we are doing the wrong thing.(Stack invariants don\u0027t hold).We shouldn\u0027t commit broken code to make tests pass.\n\nSince this is behind the CSS build time flag, why not just fix the scope and invariant and have the tests fail?",
+      "range": {
+        "startLine": 7510,
+        "startChar": 10,
+        "endLine": 7510,
+        "endChar": 21
+      },
+      "revId": "8ba732e7ea41b92c6ab6ce70deb2f75256345d6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
