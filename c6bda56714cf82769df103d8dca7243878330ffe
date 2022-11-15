@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db61cfb_5ef1c5a0",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T12:21:01Z",
+      "side": 1,
+      "message": "sg",
+      "parentUuid": "e5f88033_4e798aa4",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 21
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aa990fd_2287b556",
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "`stack_start` is used in line 2026 of `src/heap/mark-compact.cc`, via the `IsUsed` method, to do something related to cppgc. I cannot follow the logic there and I am not sure how it\u0027s possible for the stack not to have been initialized at that point. But if we move it to the context, we\u0027ll affect this.\n\nOutside `IteratePointers`, it\u0027s also used in `IsOnStack`, which is used in a couple of unit tests.\n\nI think `stack_start` should be set when the stack is created (and updated by stack switching, when/if we get to that) and not when the context is saved or (worse) when `IteratePointers` is called, because this allows us to do sanity checks. Being on the wrong stack is an indication that we\u0027re using the heap from the wrong thread without the `v8::Locker` and these sanity checks is exactly how I\u0027m planning to spot and fix such issues.",
       "parentUuid": "dd4f8477_f55fbd54",
+      "range": {
+        "startLine": 109,
+        "startChar": 14,
+        "endLine": 109,
+        "endChar": 26
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77ff5862_2f8d4f91",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T12:21:01Z",
+      "side": 1,
+      "message": "I\u0027ve split off the comment. This one doesn\u0027t need addressing for the curren CL.\n\n\u003e `stack_start` is used in line 2026 of `src/heap/mark-compact.cc`, via the `IsUsed` method, to do something related to cppgc. I cannot follow the logic there and I am not sure how it\u0027s possible for the stack not to have been initialized at that point. But if we move it to the context, we\u0027ll affect this.\n\u003e \n\nReplied below.\n\n\u003e Outside `IteratePointers`, it\u0027s also used in `IsOnStack`, which is used in a couple of unit tests.\n\u003e \n\nFor unittests we can get the current stack as needed.\n\n\u003e I think `stack_start` should be set when the stack is created (and updated by stack switching, when/if we get to that) and not when the context is saved or (worse) when `IteratePointers` is called, because this allows us to do sanity checks. Being on the wrong stack is an indication that we\u0027re using the heap from the wrong thread without the `v8::Locker` and these sanity checks is exactly how I\u0027m planning to spot and fix such issues.\n\n Given that the stack may change, I don\u0027t see why we would record it upfront. You don\u0027t need to make Stack a verifier for v8::Locker.",
+      "parentUuid": "21e54404_045d318d",
       "range": {
         "startLine": 109,
         "startChar": 14,

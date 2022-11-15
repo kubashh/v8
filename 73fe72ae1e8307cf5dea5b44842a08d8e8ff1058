@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76962c2_1a3de936",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T12:21:01Z",
+      "side": 1,
+      "message": "Since we set this up before entering an Isolate, I don\u0027t see why we need to check this. Essentially, you made sure that whenever we trigger a GC, we have a valid stack.\n\n(All of this logic will only trigger when using v8::TracedReference from stack while no CppHeap is attached to an Isolate. We need this for testing afaik.)",
+      "range": {
+        "startLine": 2026,
+        "startChar": 14,
+        "endLine": 2026,
+        "endChar": 20
+      },
+      "revId": "73fe72ae1e8307cf5dea5b44842a08d8e8ff1058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
