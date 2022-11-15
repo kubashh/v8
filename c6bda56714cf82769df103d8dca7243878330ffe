@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f88033_4e798aa4",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "Yes but, in order to keep `Context` private, I\u0027ll have to add a getter method here, to be used in the static asserts from the assembly files.\n\nDone.",
+      "parentUuid": "413318fe_1f8cb4c8",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 21
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aa990fd_2287b556",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-11-15T09:29:46Z",
       "side": 1,
       "message": "nit: This should be `k....`",
+      "range": {
+        "startLine": 36,
+        "startChar": 23,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdc8685_0632afa1",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aa990fd_2287b556",
       "range": {
         "startLine": 36,
         "startChar": 23,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab707d9e_c41d68c4",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb7e3dd8_b06533e4",
+      "range": {
+        "startLine": 100,
+        "startChar": 9,
+        "endLine": 100,
+        "endChar": 16
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71d91ddd_0fd105af",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-11-15T08:47:29Z",
       "side": 1,
       "message": "No need for `_` in public fields in structs.",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 24
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7b46436_dcdb88b0",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d91ddd_0fd105af",
       "range": {
         "startLine": 101,
         "startChar": 8,
@@ -152,6 +248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21e54404_045d318d",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "`stack_start` is used in line 2026 of `src/heap/mark-compact.cc`, via the `IsUsed` method, to do something related to cppgc. I cannot follow the logic there and I am not sure how it\u0027s possible for the stack not to have been initialized at that point. But if we move it to the context, we\u0027ll affect this.\n\nOutside `IteratePointers`, it\u0027s also used in `IsOnStack`, which is used in a couple of unit tests.\n\nI think `stack_start` should be set when the stack is created (and updated by stack switching, when/if we get to that) and not when the context is saved or (worse) when `IteratePointers` is called, because this allows us to do sanity checks. Being on the wrong stack is an indication that we\u0027re using the heap from the wrong thread without the `v8::Locker` and these sanity checks is exactly how I\u0027m planning to spot and fix such issues.",
+      "parentUuid": "dd4f8477_f55fbd54",
+      "range": {
+        "startLine": 109,
+        "startChar": 14,
+        "endLine": 109,
+        "endChar": 26
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c37e43e1_37858f6e",
         "filename": "test/unittests/heap/heap-utils.h",
         "patchSetId": 9
@@ -163,6 +283,30 @@
       "writtenOn": "2022-11-15T08:47:29Z",
       "side": 1,
       "message": "When are we going to inverse the default?",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0d1ada_501be708",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T11:11:11Z",
+      "side": 1,
+      "message": "Not in this CL, it\u0027s next in my todo list.",
+      "parentUuid": "c37e43e1_37858f6e",
       "range": {
         "startLine": 36,
         "startChar": 4,
