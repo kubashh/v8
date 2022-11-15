@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ca3609_37f1138d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3006,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-15T08:50:41Z",
+      "side": 1,
+      "message": "I wanted to avoid many nested ifs, but since we added a new method as your suggesting in the next comment, it is easier to flip the logic.",
+      "parentUuid": "a11e4094_96a37e3f",
+      "range": {
+        "startLine": 2999,
+        "startChar": 0,
+        "endLine": 3006,
+        "endChar": 0
+      },
+      "revId": "06cb3054c2dc3b17f248743e5d108d285309854d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1ca40ad_8555a1b6",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-11-14T16:34:52Z",
       "side": 1,
       "message": "maybe worth wrapping these in ReduceCallForTarget and ReduceFunctionPrototypeApplyCallWithReceiver or something like that",
+      "range": {
+        "startLine": 3008,
+        "startChar": 2,
+        "endLine": 3008,
+        "endChar": 4
+      },
+      "revId": "06cb3054c2dc3b17f248743e5d108d285309854d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "995fd049_9414f2b7",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-15T08:50:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1ca40ad_8555a1b6",
       "range": {
         "startLine": 3008,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7128cf44_5e436511",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-15T08:50:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fb07ffc_b9466fc5",
+      "range": {
+        "startLine": 3016,
+        "startChar": 4,
+        "endLine": 3016,
+        "endChar": 79
+      },
+      "revId": "06cb3054c2dc3b17f248743e5d108d285309854d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cea7ba7_abfe8b2d",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-11-14T16:34:52Z",
       "side": 1,
       "message": "this needs a comment around why it\u0027s safe",
+      "range": {
+        "startLine": 3031,
+        "startChar": 12,
+        "endLine": 3031,
+        "endChar": 18
+      },
+      "revId": "06cb3054c2dc3b17f248743e5d108d285309854d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bbf9d07_41507638",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3031,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-15T08:50:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cea7ba7_abfe8b2d",
       "range": {
         "startLine": 3031,
         "startChar": 12,
