@@ -1080,12 +1080,8 @@ void MaglevGraphBuilder::VisitTestUndetectable() {
 
 void MaglevGraphBuilder::VisitTestNull() {
   ValueNode* value = GetAccumulatorTagged();
-  if (RootConstant* constant = value->TryCast<RootConstant>()) {
-    if (constant->index() == RootIndex::kNullValue) {
-      SetAccumulator(GetRootConstant(RootIndex::kTrueValue));
-    } else {
-      SetAccumulator(GetRootConstant(RootIndex::kFalseValue));
-    }
+  if (IsConstantNode(value->opcode())) {
+    SetAccumulator(GetBooleanConstant(IsNullValue(value)));
     return;
   }
   ValueNode* null_constant = GetRootConstant(RootIndex::kNullValue);
@@ -1094,12 +1090,8 @@ void MaglevGraphBuilder::VisitTestNull() {
 
 void MaglevGraphBuilder::VisitTestUndefined() {
   ValueNode* value = GetAccumulatorTagged();
-  if (RootConstant* constant = value->TryCast<RootConstant>()) {
-    if (constant->index() == RootIndex::kUndefinedValue) {
-      SetAccumulator(GetRootConstant(RootIndex::kTrueValue));
-    } else {
-      SetAccumulator(GetRootConstant(RootIndex::kFalseValue));
-    }
+  if (IsConstantNode(value->opcode())) {
+    SetAccumulator(GetBooleanConstant(IsUndefinedValue(value)));
     return;
   }
   ValueNode* undefined_constant = GetRootConstant(RootIndex::kUndefinedValue);
@@ -4399,7 +4391,7 @@ void MaglevGraphBuilder::VisitThrowReferenceErrorIfHole() {
   ValueNode* value = GetAccumulatorTagged();
   // Avoid the check if we know it is not the hole.
   if (IsConstantNode(value->opcode())) {
-    if (IsConstantNodeTheHole(value)) {
+    if (IsTheHoleValue(value)) {
       ValueNode* constant = GetConstant(name);
       BuildCallRuntime(Runtime::kThrowAccessedUninitializedVariable,
                        {constant});
@@ -4414,7 +4406,7 @@ void MaglevGraphBuilder::VisitThrowSuperNotCalledIfHole() {
   ValueNode* value = GetAccumulatorTagged();
   // Avoid the check if we know it is not the hole.
   if (IsConstantNode(value->opcode())) {
-    if (IsConstantNodeTheHole(value)) {
+    if (IsTheHoleValue(value)) {
       BuildCallRuntime(Runtime::kThrowSuperNotCalled, {});
       BuildAbort(AbortReason::kUnexpectedReturnFromThrow);
     }
@@ -4427,7 +4419,7 @@ void MaglevGraphBuilder::VisitThrowSuperAlreadyCalledIfNotHole() {
   ValueNode* value = GetAccumulatorTagged();
   // Avoid the check if we know it is the hole.
   if (IsConstantNode(value->opcode())) {
-    if (!IsConstantNodeTheHole(value)) {
+    if (!IsTheHoleValue(value)) {
       BuildCallRuntime(Runtime::kThrowSuperAlreadyCalledError, {});
       BuildAbort(AbortReason::kUnexpectedReturnFromThrow);
     }
