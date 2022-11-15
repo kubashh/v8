@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4685baeb_ffc17f75",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-11-15T19:54:12Z",
+      "side": 0,
+      "message": "leftover from previous CL (duplicated from lines above)",
+      "revId": "dd92fe999b27ef216ceb642fc109ad4676668953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
