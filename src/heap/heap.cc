@@ -2334,6 +2334,8 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
   DCHECK_NOT_NULL(isolate()->global_safepoint());
 
   SaveStackContextScope stack_context_scope(&stack());
+  SaveStackContextScope initiator_stack_context_scope(
+      &initiator->thread_local_top()->stack_);
 
   isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
     client->heap()->FreeSharedLinearAllocationAreas();
@@ -4793,9 +4795,6 @@ void Heap::IterateRootsIncludingClients(RootVisitor* v,
 
   if (isolate()->is_shared_heap_isolate()) {
     ClientRootVisitor client_root_visitor(v);
-    // TODO(v8:13257): We cannot run CSS on client isolates now, as the
-    // stack markers will not be correct.
-    options.Add(SkipRoot::kConservativeStack);
     isolate()->global_safepoint()->IterateClientIsolates(
         [v = &client_root_visitor, options](Isolate* client) {
           client->heap()->IterateRoots(v, options);
@@ -4810,10 +4809,8 @@ void Heap::IterateRootsFromStackIncludingClients(RootVisitor* v,
   if (isolate()->is_shared_heap_isolate()) {
     ClientRootVisitor client_root_visitor(v);
     isolate()->global_safepoint()->IterateClientIsolates(
-        [v = &client_root_visitor](Isolate* client) {
-          // TODO(v8:13257): We cannot run CSS on client isolates now, as the
-          // stack markers will not be correct.
-          client->heap()->IterateStackRoots(v, StackState::kNoHeapPointers);
+        [v = &client_root_visitor, stack_state](Isolate* client) {
+          client->heap()->IterateStackRoots(v, stack_state);
         });
   }
 }
