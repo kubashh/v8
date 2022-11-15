@@ -2984,44 +2984,78 @@ ValueNode* MaglevGraphBuilder::ReduceCall(compiler::ObjectRef object,
                           Call::TargetType::kJSFunction, args);
 }
 
+ValueNode* MaglevGraphBuilder::ReduceCallForTarget(
+    ValueNode* target_node, compiler::JSFunctionRef target,
+    CallArguments& args) {
+  if (!BuildCheckValue(target_node, target)) return nullptr;
+  return ReduceCall(target, args);
+}
+
+ValueNode* MaglevGraphBuilder::ReduceFunctionPrototypeApplyCallWithReceiver(
+    ValueNode* target_node, compiler::JSFunctionRef receiver,
+    CallArguments& args) {
+  compiler::NativeContextRef native_context = broker()->target_native_context();
+  if (!BuildCheckValue(target_node,
+                       native_context.function_prototype_apply())) {
+    return nullptr;
+  }
+  ValueNode* receiver_node = GetTaggedOrUndefined(args.receiver());
+  if (!BuildCheckValue(receiver_node, receiver)) {
+    return nullptr;
+  }
+  ValueNode* call;
+  if (args.count() == 0) {
+    // No need for spread.
+    CallArguments empty_args(ConvertReceiverMode::kNullOrUndefined);
+    call = ReduceCall(receiver, empty_args);
+  } else if (args.count() == 1) {
+    // No need for spread. We have only the new receiver.
+    CallArguments new_args(ConvertReceiverMode::kAny, {args[0]});
+    call = ReduceCall(receiver, new_args);
+  } else {
+    // FunctionPrototypeApply only consider two arguments: the new receiver and
+    // an array-like spread argument. All others shall be ignored.
+    CallArguments new_args(ConvertReceiverMode::kAny, {args[0], args[1]}, true);
+    call = ReduceCall(receiver, new_args);
+  }
+  return call;
+}
+
 void MaglevGraphBuilder::BuildCall(ValueNode* target_node, CallArguments& args,
                                    compiler::FeedbackSource& feedback_source) {
-  Call::TargetType target_type = Call::TargetType::kAny;
   const compiler::ProcessedFeedback& processed_feedback =
       broker()->GetFeedbackForCall(feedback_source);
-  switch (processed_feedback.kind()) {
-    case compiler::ProcessedFeedback::kInsufficient:
-      EmitUnconditionalDeopt(
-          DeoptimizeReason::kInsufficientTypeFeedbackForCall);
-      return;
+  if (processed_feedback.IsInsufficient()) {
+    EmitUnconditionalDeopt(DeoptimizeReason::kInsufficientTypeFeedbackForCall);
+    return;
+  }
 
-    case compiler::ProcessedFeedback::kCall: {
-      const compiler::CallFeedback& call_feedback = processed_feedback.AsCall();
-      CallFeedbackContent content = call_feedback.call_feedback_content();
-      if (content != CallFeedbackContent::kTarget) break;
-
-      base::Optional<compiler::HeapObjectRef> maybe_target =
-          call_feedback.target();
-      if (!maybe_target.has_value()) break;
-
-      compiler::HeapObjectRef target = maybe_target.value();
-      if (!target.IsJSFunction()) break;
-      compiler::JSFunctionRef function = target.AsJSFunction();
-
-      if (!BuildCheckValue(target_node, target)) return;
-
-      SetAccumulator(ReduceCall(function, args));
-      return;
+  DCHECK_EQ(processed_feedback.kind(), compiler::ProcessedFeedback::kCall);
+  const compiler::CallFeedback& call_feedback = processed_feedback.AsCall();
+  if (call_feedback.target().has_value() &&
+      call_feedback.target()->IsJSFunction()) {
+    CallFeedbackContent content = call_feedback.call_feedback_content();
+    compiler::JSFunctionRef function = call_feedback.target()->AsJSFunction();
+    ValueNode* call;
+    if (content == CallFeedbackContent::kTarget) {
+      call = ReduceCallForTarget(target_node, function, args);
+    } else {
+      DCHECK_EQ(content, CallFeedbackContent::kReceiver);
+      // We only collect receiver feedback for FunctionPrototypeApply.
+      // See CollectCallFeedback in ic-callable.tq
+      call = ReduceFunctionPrototypeApplyCallWithReceiver(target_node, function,
+                                                          args);
     }
-
-    default:
-      break;
+    // If {call} is null, we hit an unconditional deopt.
+    if (!call) return;
+    SetAccumulator(call);
+    return;
   }
 
   // On fallthrough, create a generic call.
   ValueNode* context = GetContext();
-  SetAccumulator(BuildGenericCall(target_node, context, target_type, args,
-                                  feedback_source));
+  SetAccumulator(BuildGenericCall(target_node, context, Call::TargetType::kAny,
+                                  args, feedback_source));
 }
 
 void MaglevGraphBuilder::BuildCallFromRegisterList(
