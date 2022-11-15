@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fd131e2_d38e8592",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310973
+      },
+      "writtenOn": "2022-11-15T12:54:35Z",
+      "side": 1,
+      "message": "Thanks Maya. I have rebased the code and updated the url in description.",
+      "revId": "4a8d512d0eb4e58263c9e6025cd7338c1fb1662e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
