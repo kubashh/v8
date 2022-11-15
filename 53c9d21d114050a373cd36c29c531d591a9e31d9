@@ -62,6 +62,30 @@
       },
       "revId": "53c9d21d114050a373cd36c29c531d591a9e31d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23fae022_455f6bec",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4222,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-15T16:48:42Z",
+      "side": 1,
+      "message": "Yeah, I think we need to do the other call. TF creates a diamond-shape check: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/js-call-reducer.cc;drc\u003daac94d6548d5f061b9681a1de52b9c443363b303;l\u003d2633\nBut we cannot do that in Maglev. Unfortunately the builtin does not check for null/undefined and just call the runtime if it cannot optimize:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/builtins-call-gen.cc;drc\u003d49f9d9415a5616b6061daa80eb3c737f5e2e8253;l\u003d265\n\nMaybe we should create a new entry for the builtin that does these checks? \n\nI haven\u0027t checked if that breaks lazy deopt, but I don\u0027t see how.",
+      "parentUuid": "1ff0af3d_a93fbe94",
+      "range": {
+        "startLine": 4222,
+        "startChar": 8,
+        "endLine": 4222,
+        "endChar": 47
+      },
+      "revId": "53c9d21d114050a373cd36c29c531d591a9e31d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
