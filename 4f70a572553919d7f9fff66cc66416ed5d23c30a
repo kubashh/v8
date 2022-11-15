@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcfcfa56_475cdf19",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T18:47:37Z",
+      "side": 1,
+      "message": "Here and elsewhere related: Let\u0027s use v8:13493 for tracking the exceptions for Wasm.",
+      "range": {
+        "startLine": 193,
+        "startChar": 13,
+        "endLine": 193,
+        "endChar": 18
+      },
+      "revId": "4f70a572553919d7f9fff66cc66416ed5d23c30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
