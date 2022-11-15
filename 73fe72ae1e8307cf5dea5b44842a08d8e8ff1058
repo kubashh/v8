@@ -22,6 +22,30 @@
       },
       "revId": "73fe72ae1e8307cf5dea5b44842a08d8e8ff1058",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "494beb6f_447531f9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T15:02:47Z",
+      "side": 1,
+      "message": "OK, then I\u0027m removing this check and the method.",
+      "parentUuid": "f76962c2_1a3de936",
+      "range": {
+        "startLine": 2026,
+        "startChar": 14,
+        "endLine": 2026,
+        "endChar": 20
+      },
+      "revId": "73fe72ae1e8307cf5dea5b44842a08d8e8ff1058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
