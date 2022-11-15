@@ -37,6 +37,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "413318fe_1f8cb4c8",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T09:29:46Z",
+      "side": 1,
+      "message": "Can we move this block into the context struct?",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 21
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa990fd_2287b556",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T09:29:46Z",
+      "side": 1,
+      "message": "nit: This should be `k....`",
+      "range": {
+        "startLine": 36,
+        "startChar": 23,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb7e3dd8_b06533e4",
         "filename": "src/heap/base/stack.h",
         "patchSetId": 9
@@ -76,6 +122,29 @@
         "startChar": 8,
         "endLine": 101,
         "endChar": 24
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd4f8477_f55fbd54",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T09:29:46Z",
+      "side": 1,
+      "message": "I wonder if we should just get `stack_start_` in the context or when we call `IteratePointers()`. \n\nThat should also mitigate the Wasm issue as the DCHECK is trivially correct. Performance wise I don\u0027t see a problem.",
+      "range": {
+        "startLine": 109,
+        "startChar": 14,
+        "endLine": 109,
+        "endChar": 26
       },
       "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
