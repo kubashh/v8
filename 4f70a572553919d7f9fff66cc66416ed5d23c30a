@@ -22,6 +22,30 @@
       },
       "revId": "4f70a572553919d7f9fff66cc66416ed5d23c30a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "452a6367_b4815ec5",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T19:57:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcfcfa56_475cdf19",
+      "range": {
+        "startLine": 193,
+        "startChar": 13,
+        "endLine": 193,
+        "endChar": 18
+      },
+      "revId": "4f70a572553919d7f9fff66cc66416ed5d23c30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
