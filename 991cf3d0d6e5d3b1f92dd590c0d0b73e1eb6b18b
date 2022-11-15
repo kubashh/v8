@@ -50,6 +50,24 @@
       "message": "Would it be good to document the compression scheme here (give a quick overview)?",
       "revId": "991cf3d0d6e5d3b1f92dd590c0d0b73e1eb6b18b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190e5213_acc3d9a8",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-11-15T12:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63b44dc6_42fa4662",
+      "revId": "991cf3d0d6e5d3b1f92dd590c0d0b73e1eb6b18b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
