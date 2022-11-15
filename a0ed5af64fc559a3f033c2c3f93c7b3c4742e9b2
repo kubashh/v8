@@ -16,6 +16,29 @@
       "message": "PTAL again!",
       "revId": "a0ed5af64fc559a3f033c2c3f93c7b3c4742e9b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9b9efc8_af24f311",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3019,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-15T10:22:07Z",
+      "side": 1,
+      "message": "Thinking about this a bit more, I don\u0027t think we\u0027re actually allowed to use call-with-spread for FunctionPrototypeApply -- the spec says it uses \u0027CreateListFromArrayLike\u0027 (https://tc39.es/ecma262/multipage/fundamental-objects.html#sec-function.prototype.apply), which does indexed iteration, while call-with-spread uses the iterator protocol of GetIterator/IteratorStep (https://tc39.es/ecma262/multipage/ecmascript-language-expressions.html#sec-runtime-semantics-argumentlistevaluation).\n\nWhat does turbofan do?",
+      "range": {
+        "startLine": 3019,
+        "startChar": 11,
+        "endLine": 3019,
+        "endChar": 21
+      },
+      "revId": "a0ed5af64fc559a3f033c2c3f93c7b3c4742e9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
