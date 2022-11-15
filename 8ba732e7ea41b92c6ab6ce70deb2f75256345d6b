@@ -22,6 +22,30 @@
       },
       "revId": "8ba732e7ea41b92c6ab6ce70deb2f75256345d6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38cda844_36d15ce5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 7510,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-15T16:38:16Z",
+      "side": 1,
+      "message": "I don\u0027t like this temporary solution either but I could not find a better one.\n\nSaving the stack context is not behind the CSS flag anymore. Using it from V8 is behind the flag; using it from Oilpan is not. Thus, the stack context is saved anyway and Oilpan expects to read the stack marker from it. We cannot put it behind the CSS flag unless we delay the integration of stack context between V8 and Oilpan.\n\nI don\u0027t think we\u0027re committing broken code. We already have code that is somehow problematic and we are trying to restore an invariant that should hold: that we\u0027re on the correct stack when trying to save the context, just before scanning it. Oilpan already scans the stack and, in the presence of stack switching, it currently scans the wrong stack. We just don\u0027t have tests to see it happening.\n\nInstead of hiding this invariant behind the CSS flag (which means that new code would be free to continue violating the invariant), I opted for disabling the invariant in the (rare) case when stack switching is enabled. Unfortunately, this issue cannot be really resolved until stack switching becomes compatible with stack scanning.",
+      "parentUuid": "9577c996_36136e0a",
+      "range": {
+        "startLine": 7510,
+        "startChar": 10,
+        "endLine": 7510,
+        "endChar": 21
+      },
+      "revId": "8ba732e7ea41b92c6ab6ce70deb2f75256345d6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
