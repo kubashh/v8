@@ -16,6 +16,92 @@
       "message": "Apart from `SaveStackContextScope` which unfortunately is in `src/heap/heap.h` instead of `src/heap/base/stack.h`, this looks good. PTAL.",
       "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "661884fd_fa9269ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T08:47:29Z",
+      "side": 1,
+      "message": "Already looking good.",
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb7e3dd8_b06533e4",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T08:47:29Z",
+      "side": 1,
+      "message": "Even though it\u0027s a struct, I\u0027d still add a constructor taking the `stack_marker`.",
+      "range": {
+        "startLine": 100,
+        "startChar": 9,
+        "endLine": 100,
+        "endChar": 16
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d91ddd_0fd105af",
+        "filename": "src/heap/base/stack.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T08:47:29Z",
+      "side": 1,
+      "message": "No need for `_` in public fields in structs.",
+      "range": {
+        "startLine": 101,
+        "startChar": 8,
+        "endLine": 101,
+        "endChar": 24
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c37e43e1_37858f6e",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T08:47:29Z",
+      "side": 1,
+      "message": "When are we going to inverse the default?",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "c6bda56714cf82769df103d8dca7243878330ffe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
