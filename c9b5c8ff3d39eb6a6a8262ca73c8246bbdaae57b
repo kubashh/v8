@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66fde10c_4b67b840",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T13:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3472a53b_2d6519e8",
+      "revId": "c9b5c8ff3d39eb6a6a8262ca73c8246bbdaae57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5632f393_e01959ea",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-11-15T13:31:19Z",
       "side": 1,
       "message": "Typo: Marking",
+      "revId": "c9b5c8ff3d39eb6a6a8262ca73c8246bbdaae57b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8744239c_eb833b0f",
+        "filename": "src/heap/traced-handles-marking-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-15T13:56:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5632f393_e01959ea",
       "revId": "c9b5c8ff3d39eb6a6a8262ca73c8246bbdaae57b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
