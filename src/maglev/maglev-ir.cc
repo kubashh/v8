@@ -4178,6 +4178,50 @@ void CallWithSpread::GenerateCode(MaglevAssembler* masm,
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
 }
 
+void CallWithArrayLike::AllocateVreg(MaglevVregAllocationState* vreg_state) {
+  using D = CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike>::type;
+  UseFixed(function(), D::GetRegisterParameter(D::kTarget));
+  UseAny(receiver());
+  UseFixed(arguments_list(), D::GetRegisterParameter(D::kArgumentsList));
+  UseFixed(context(), kContextRegister);
+  DefineAsFixed(vreg_state, this, kReturnRegister0);
+}
+void CallWithArrayLike::GenerateCode(MaglevAssembler* masm,
+                                     const ProcessingState& state) {
+#ifdef DEBUG
+  using D = CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike>::type;
+  DCHECK_EQ(ToRegister(function()), D::GetRegisterParameter(D::kTarget));
+  DCHECK_EQ(ToRegister(arguments_list()),
+            D::GetRegisterParameter(D::kArgumentsList));
+  DCHECK_EQ(ToRegister(context()), kContextRegister);
+#endif
+
+  Label do_a_simple_call, do_a_call_with_array_like, done;
+  Register arguments = ToRegister(arguments_list());
+  __ CompareRoot(arguments, RootIndex::kNullValue);
+  __ j(equal, &do_a_simple_call);
+  __ CompareRoot(arguments, RootIndex::kUndefinedValue);
+  __ j(not_equal, &do_a_call_with_array_like);
+
+  __ bind(&do_a_simple_call);
+  {
+    using CD = CallTrampolineDescriptor;
+    __ Move(CD::GetRegisterParameter(CD::kFunction), ToRegister(function()));
+    __ PushInput(arguments_list());
+    __ PushInput(receiver());
+    __ Move(CD::GetRegisterParameter(CD::kActualArgumentsCount), Immediate(1));
+    __ CallBuiltin(Builtin::kCall_ReceiverIsAny);
+    __ jmp(&done, Label::kNear);
+  }
+
+  __ bind(&do_a_call_with_array_like);
+  __ PushInput(receiver());
+  __ CallBuiltin(Builtin::kCallWithArrayLike);
+
+  __ bind(&done);
+  masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
+}
+
 void ConstructWithSpread::AllocateVreg(MaglevVregAllocationState* vreg_state) {
   using D = CallInterfaceDescriptorFor<
       Builtin::kConstructWithSpread_WithFeedback>::type;
