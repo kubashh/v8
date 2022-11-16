@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec78de77_1616dcd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-16T09:14:09Z",
+      "side": 1,
+      "message": "Maybe you can add:\nCq-Include-Trybots: luci.v8.try:v8_linux64_msan_rel\n\nto the CL footers? Manually triggered the bot now. It\u0027s opt-in.",
+      "revId": "d7eab0f40c5d17c439c39d468ee2a132f6d7e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cb4be13_4610a956",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-16T09:14:09Z",
+      "side": 1,
+      "message": "nit: To be consistent, no spaces around \u003d",
+      "range": {
+        "startLine": 804,
+        "startChar": 82,
+        "endLine": 804,
+        "endChar": 85
+      },
+      "revId": "d7eab0f40c5d17c439c39d468ee2a132f6d7e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04e9328e_bf07bc64",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-16T09:14:09Z",
+      "side": 1,
+      "message": "Could you also add this here?",
+      "revId": "d7eab0f40c5d17c439c39d468ee2a132f6d7e2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
