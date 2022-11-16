@@ -51,6 +51,24 @@
       "message": "Sorry for the slow response!",
       "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "953f8adf_d6bb4244",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-16T18:19:21Z",
+      "side": 1,
+      "message": "Hey, not that node specifically (manually tagging it with the strong object tag does not work), but indeed somehow the pointer gets tagged at a later point somewhere.\n\nTrying to access the properties of the object (eg. trying to iterate properties or print the object) triggers a DCHECK for checking\n1. If the object can be weak, OR\n2. If the object is an SMI\n3. If the object is strong object tagged.\n(Actual code is `kCanBeWeak || IsSmi() !\u003d HAS_STRONG_OBJECT_TAG()` IIRC)\n\nThis check fails, as the object cannot be weak but it is weak object tagged.",
+      "parentUuid": "4b3db399_4dc4f70f",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
