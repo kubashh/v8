@@ -86,6 +86,24 @@
       "parentUuid": "27671845_8af85541",
       "revId": "6f1cc3c14573d97aeeb775a8d299bc1999d9b3c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98c8fa02_459f7328",
+        "filename": "src/wasm/stacks.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:03:09Z",
+      "side": 1,
+      "message": "You don\u0027t need the `.value`, there\u0027s an implicit conversion for that:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/base/platform/platform.h;drc\u003d6dc39d60fea45c003424272efdb4c366119a9d7f;l\u003d621",
+      "parentUuid": "08413ca8_2eddf12e",
+      "revId": "6f1cc3c14573d97aeeb775a8d299bc1999d9b3c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
