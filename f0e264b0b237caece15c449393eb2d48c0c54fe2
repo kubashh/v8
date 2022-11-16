@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc496548_df592057",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4221,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-16T12:38:32Z",
+      "side": 1,
+      "message": "as discussed offline, we can\u0027t register a lazy deopt twice; as you suggested, a trampoline builtin that tail-calls one of the two call builtins would make sense here.",
+      "range": {
+        "startLine": 4221,
+        "startChar": 8,
+        "endLine": 4221,
+        "endChar": 47
+      },
+      "revId": "f0e264b0b237caece15c449393eb2d48c0c54fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
