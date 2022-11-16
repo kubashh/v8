@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0dff1193_5e3c9992",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T15:30:12Z",
+      "side": 1,
+      "message": "`HeapObjectIterator` is used from a total of 31 places. I think its functionality requires that the stack context (if any) be saved when it is used.\n\nIt is just one test in which we actually see nesting. In all other cases, the stack context is saved independently by `HeapObjectIterator` and by the GC.\n\nThe last paragraph refers to this CL. I\u0027m not sure what changes in crrev.com/c/4027210 and, as the structure of contexts will be decided there, I suggest we continue this discussion there too.",
+      "parentUuid": "a1feb181_3f163e15",
+      "range": {
+        "startLine": 196,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e4cc8af_55680e3a",
         "filename": "src/heap/base/stack.cc",
         "patchSetId": 16
