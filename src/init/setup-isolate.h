@@ -33,12 +33,15 @@ class V8_EXPORT_PRIVATE SetupIsolateDelegate {
  public:
   SetupIsolateDelegate() = default;
 
-  virtual void SetupBuiltins(Isolate* isolate);
-  virtual bool SetupHeap(Heap* heap);
+  virtual void SetupBuiltinPlaceholders(Isolate* isolate);
+  virtual void CompileBuiltins(Isolate* isolate);
+  virtual bool SetupHeaps(Heap* heap);
+  virtual bool SetupReadOnlyHeap(Heap* heap);
   virtual void SetupFromSnapshot(Isolate* isolate);
 
  protected:
-  static void SetupBuiltinsInternal(Isolate* isolate);
+  static void CompileBuiltinsInternal(Isolate* isolate);
+  static void SetupBuiltinPlaceholdersInternal(Isolate* isolate);
   static void AddBuiltin(Builtins* builtins, Builtin builtin, Code code);
   static void PopulateWithPlaceholders(Isolate* isolate);
   static void ReplacePlaceholders(Isolate* isolate);

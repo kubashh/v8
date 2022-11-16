@@ -20,6 +20,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
 #include "src/snapshot/read-only-deserializer.h"
+#include "src/snapshot/snapshot.h"
 #include "src/utils/allocation.h"
 
 namespace v8 {
@@ -68,6 +69,19 @@ void ReadOnlyHeap::SetUp(Isolate* isolate,
 
   if (IsReadOnlySpaceShared()) {
     ReadOnlyHeap* ro_heap;
+
+    // Enforce loading the default ro roots in static roots mode
+    if (V8_STATIC_ROOTS_BOOL && !read_only_snapshot_data &&
+        i::Snapshot::HasDefaultSnapshotBlob()) {
+      Snapshot::DecompressSnapshot(
+          isolate, Snapshot::DefaultSnapshotBlob(),
+          [&](SnapshotData*, SnapshotData* ro_data, SnapshotData*, size_t) {
+            SetUp(isolate, ro_data, false);
+            return true;
+          });
+      return;
+    }
+
     if (read_only_snapshot_data != nullptr) {
       bool read_only_heap_created = false;
       base::MutexGuard guard(read_only_heap_creation_mutex_.Pointer());

@@ -221,6 +221,7 @@ class Symbol;
   V(ScopeInfo, global_this_binding_scope_info, GlobalThisBindingScopeInfo)     \
   V(ScopeInfo, empty_function_scope_info, EmptyFunctionScopeInfo)              \
   V(ScopeInfo, native_scope_info, NativeScopeInfo)                             \
+  V(RegisteredSymbolTable, empty_symbol_table, EmptySymbolTable)               \
   /* Hash seed */                                                              \
   V(ByteArray, hash_seed, HashSeed)
 
@@ -516,6 +517,12 @@ class RootsTable {
            static_cast<unsigned>(RootIndex::kLastImmortalImmovableRoot);
   }
 
+  static constexpr bool IsReadOnly(RootIndex root_index) {
+    static_assert(static_cast<int>(RootIndex::kFirstReadOnlyRoot) == 0);
+    return static_cast<unsigned>(root_index) <=
+           static_cast<unsigned>(RootIndex::kLastReadOnlyRoot);
+  }
+
  private:
   FullObjectSlot begin() {
     return FullObjectSlot(&roots_[static_cast<size_t>(RootIndex::kFirstRoot)]);
@@ -621,6 +628,8 @@ class ReadOnlyRoots {
   // collection and is usually only performed as part of (de)serialization or
   // heap verification.
   void Iterate(RootVisitor* visitor);
+  typedef std::function<void(FullObjectSlot)> InlineRootIterator;
+  void Iterate(const InlineRootIterator& visitor);
 
  private:
   V8_INLINE Address first_name_for_protector() const;

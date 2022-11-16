@@ -79,6 +79,9 @@ class Snapshot : public AllStatic {
       const SafepointScope& safepoint_scope,
       const DisallowGarbageCollection& no_gc,
       SerializerFlags flags = kDefaultSerializerFlags);
+#ifdef V8_STATIC_ROOTS
+  static bool InitializeStage1(Isolate* isolate);
+#endif
 
   // ---------------- Deserialization -----------------------------------------
 
@@ -115,11 +118,18 @@ class Snapshot : public AllStatic {
 
   // To be implemented by the snapshot source.
   static const v8::StartupData* DefaultSnapshotBlob();
+  static bool HasDefaultSnapshotBlob();
   static bool ShouldVerifyChecksum(const v8::StartupData* data);
 
 #ifdef DEBUG
   static bool SnapshotIsValid(const v8::StartupData* snapshot_blob);
 #endif  // DEBUG
+  static bool DecompressSnapshot(
+      Isolate* isolate, const v8::StartupData* data,
+      const std::function<bool(SnapshotData* startup_snapshot_data,
+                               SnapshotData* read_only_snapshot_data,
+                               SnapshotData* shared_heap_snapshot_data,
+                               size_t bytes_read)>& initialization_function);
 };
 
 // Convenience wrapper around snapshot data blob creation used e.g. by tests and

@@ -15,7 +15,7 @@
 namespace v8 {
 namespace internal {
 
-void StartupDeserializer::DeserializeIntoIsolate() {
+void StartupDeserializer::DeserializeIntoIsolate(bool recompile_builtins) {
   HandleScope scope(isolate());
 
   // No active threads.
@@ -44,9 +44,11 @@ void StartupDeserializer::DeserializeIntoIsolate() {
       RestoreExternalReferenceRedirector(isolate(), *info);
     }
 
-    // Flush the instruction cache for the entire code-space. Must happen after
-    // builtins deserialization.
-    FlushICache();
+    if (!recompile_builtins) {
+      // Flush the instruction cache for the entire code-space. Must happen
+      // after builtins deserialization.
+      FlushICache();
+    }
   }
 
   isolate()->heap()->set_native_contexts_list(
@@ -62,7 +64,7 @@ void StartupDeserializer::DeserializeIntoIsolate() {
   isolate()->heap()->set_dirty_js_finalization_registries_list_tail(
       ReadOnlyRoots(isolate()).undefined_value());
 
-  isolate()->builtins()->MarkInitialized();
+  if (!recompile_builtins) isolate()->builtins()->MarkInitialized();
 
   LogNewMapEvents();
   WeakenDescriptorArrays();

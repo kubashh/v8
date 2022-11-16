@@ -670,6 +670,7 @@ class Heap {
   // Support for the API.
   //
 
+  void CreateReadOnlyApiObjects();
   void CreateApiObjects();
 
   // Implements the corresponding V8 API function.
@@ -813,7 +814,8 @@ class Heap {
 
   // Bootstraps the object heap with the core set of objects required to run.
   // Returns whether it succeeded.
-  bool CreateHeapObjects();
+  bool CreateReadOnlyHeapObjects();
+  bool CreateOtherHeapObjects();
 
   // Create ObjectStats if live_object_stats_ or dead_object_stats_ are nullptr.
   void CreateObjectStats();
@@ -1810,8 +1812,10 @@ class Heap {
   inline void UpdateOldSpaceLimits();
 
   bool CreateInitialMaps();
+  bool CreateInitialReadOnlyMaps();
   void CreateInternalAccessorInfoObjects();
   void CreateInitialObjects();
+  void CreateInitialReadOnlyObjects();
 
   // Zaps the memory of a code object.
   V8_EXPORT_PRIVATE void ZapCodeObject(Address start_address,

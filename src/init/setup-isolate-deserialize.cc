@@ -9,11 +9,19 @@
 namespace v8 {
 namespace internal {
 
-void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate) {
+void SetupIsolateDelegate::SetupBuiltinPlaceholders(Isolate* isolate) {
   FATAL("Builtin compilation supported only in mksnapshot");
 }
 
-bool SetupIsolateDelegate::SetupHeap(Heap* heap) {
+void SetupIsolateDelegate::CompileBuiltins(Isolate* isolate) {
+  FATAL("Builtin compilation supported only in mksnapshot");
+}
+
+bool SetupIsolateDelegate::SetupReadOnlyHeap(Heap* heap) {
+  FATAL("Heap setup supported only in mksnapshot");
+}
+
+bool SetupIsolateDelegate::SetupHeaps(Heap* heap) {
   FATAL("Heap setup supported only in mksnapshot");
 }
 

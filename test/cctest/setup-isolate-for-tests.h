@@ -14,8 +14,10 @@ class SetupIsolateDelegateForTests : public SetupIsolateDelegate {
  public:
   SetupIsolateDelegateForTests() = default;
 
-  void SetupBuiltins(Isolate* isolate) override;
-  bool SetupHeap(Heap* heap) override;
+  void SetupBuiltinPlaceholders(Isolate* isolate) override;
+  void CompileBuiltins(Isolate* isolate) override;
+  bool SetupReadOnlyHeap(Heap* heap) override;
+  bool SetupHeaps(Heap* heap) override;
   void SetupFromSnapshot(Isolate* isolate) override;
 };
 

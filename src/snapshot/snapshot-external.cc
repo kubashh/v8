@@ -57,5 +57,9 @@ const v8::StartupData* Snapshot::DefaultSnapshotBlob() {
   base::MutexGuard lock_guard(external_startup_data_mutex.Pointer());
   return &external_startup_blob;
 }
+
+bool Snapshot::HasDefaultSnapshotBlob() {
+  return DefaultSnapshotBlob() && DefaultSnapshotBlob()->raw_size != 0;
+}
 }  // namespace internal
 }  // namespace v8

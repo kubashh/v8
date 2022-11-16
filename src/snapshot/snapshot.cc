@@ -6,6 +6,7 @@
 
 #include "src/snapshot/snapshot.h"
 
+#include "src/baseline/baseline-batch-compiler.h"
 #include "src/common/assert-scope.h"
 #include "src/heap/parked-scope.h"
 #include "src/heap/safepoint.h"
@@ -153,14 +154,57 @@ bool Snapshot::VersionIsValid(const v8::StartupData* data) {
                  SnapshotImpl::kVersionStringLength) == 0;
 }
 
+#ifdef V8_STATIC_ROOTS
+bool Snapshot::InitializeStage1(Isolate* isolate) {
+  if (!isolate->snapshot_available()) return false;
+
+  return DecompressSnapshot(
+      isolate, isolate->snapshot_blob(),
+      [isolate](SnapshotData* startup_snapshot_data,
+                SnapshotData* read_only_snapshot_data,
+                SnapshotData* shared_heap_snapshot_data, size_t) {
+        return isolate->InitWithoutSnapshotStableConstantsStage2(
+            startup_snapshot_data, read_only_snapshot_data,
+            shared_heap_snapshot_data);
+      });
+}
+#endif
+
 bool Snapshot::Initialize(Isolate* isolate) {
   if (!isolate->snapshot_available()) return false;
   TRACE_EVENT0("v8", "V8.DeserializeIsolate");
   RCS_SCOPE(isolate, RuntimeCallCounterId::kDeserializeIsolate);
   base::ElapsedTimer timer;
   if (v8_flags.profile_deserialization) timer.Start();
+  size_t bytes_read;
 
-  const v8::StartupData* blob = isolate->snapshot_blob();
+  bool success = DecompressSnapshot(
+      isolate, isolate->snapshot_blob(),
+      [isolate, &bytes_read](SnapshotData* startup_snapshot_data,
+                             SnapshotData* read_only_snapshot_data,
+                             SnapshotData* shared_heap_snapshot_data,
+                             size_t bytes) {
+        bytes_read = bytes;
+        return isolate->InitWithSnapshot(
+            startup_snapshot_data, read_only_snapshot_data,
+            shared_heap_snapshot_data,
+            ExtractRehashability(isolate->snapshot_blob()));
+      });
+
+  if (v8_flags.profile_deserialization) {
+    double ms = timer.Elapsed().InMillisecondsF();
+    PrintF("[Deserializing isolate (%ld bytes) took %0.3f ms]\n", bytes_read,
+           ms);
+  }
+  return success;
+}
+
+bool Snapshot::DecompressSnapshot(
+    Isolate* isolate, const v8::StartupData* blob,
+    const std::function<bool(SnapshotData* startup_snapshot_data,
+                             SnapshotData* read_only_snapshot_data,
+                             SnapshotData* shared_heap_snapshot_data,
+                             size_t bytes_read)>& initialization_function) {
   SnapshotImpl::CheckVersion(blob);
   if (Snapshot::ShouldVerifyChecksum(blob)) {
     CHECK(VerifyChecksum(blob));
@@ -179,15 +223,11 @@ bool Snapshot::Initialize(Isolate* isolate) {
   SnapshotData shared_heap_snapshot_data(
       MaybeDecompress(isolate, shared_heap_data));
 
-  bool success = isolate->InitWithSnapshot(
+  return initialization_function(
       &startup_snapshot_data, &read_only_snapshot_data,
-      &shared_heap_snapshot_data, ExtractRehashability(blob));
-  if (v8_flags.profile_deserialization) {
-    double ms = timer.Elapsed().InMillisecondsF();
-    int bytes = startup_data.length();
-    PrintF("[Deserializing isolate (%d bytes) took %0.3f ms]\n", bytes, ms);
-  }
-  return success;
+      &shared_heap_snapshot_data,
+      startup_data.length() + read_only_data.length() +
+          shared_heap_data.length());
 }
 
 MaybeHandle<Context> Snapshot::NewContextFromSnapshot(
@@ -742,6 +782,28 @@ bool RunExtraCode(v8::Isolate* isolate, v8::Local<v8::Context> context,
   return true;
 }
 
+#ifdef V8_STATIC_ROOTS
+class InitialTwoStageSnapshotCreator : public SnapshotCreator {
+ public:
+  explicit InitialTwoStageSnapshotCreator(v8::Isolate* v8_isolate)
+      : SnapshotCreator(v8_isolate, nullptr, nullptr, false) {
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+    i_isolate->InitWithoutSnapshotStableConstantsStage1();
+  }
+  InitialTwoStageSnapshotCreator(v8::Isolate* v8_isolate, StartupData* stage1)
+      : SnapshotCreator(v8_isolate, nullptr, stage1, false) {
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+    DCHECK(!i_isolate->snapshot_available());
+    i_isolate->set_snapshot_blob(stage1);
+    i::Snapshot::InitializeStage1(i_isolate);
+    // Disable batch compilation during snapshot creation.
+    i_isolate->baseline_batch_compiler()->set_enabled(false);
+  }
+};
+
+static_assert(ReadOnlyHeap::IsReadOnlySpaceShared());
+#endif
+
 }  // namespace
 
 v8::StartupData CreateSnapshotDataBlobInternal(
@@ -750,8 +812,36 @@ v8::StartupData CreateSnapshotDataBlobInternal(
   // If no isolate is passed in, create it (and a new context) from scratch.
   if (isolate == nullptr) isolate = v8::Isolate::Allocate();
 
+#ifdef V8_STATIC_ROOTS
+  const bool create_full_snapshot = !i::Snapshot::HasDefaultSnapshotBlob();
+
+  v8::StartupData stage1;
+  if (create_full_snapshot) {
+    auto isolate1 = v8::Isolate::Allocate();
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+    i::Isolate* i_isolate1 = reinterpret_cast<i::Isolate*>(isolate1);
+    i_isolate1->set_setup_delegate(i_isolate->setup_delegate());
+    InitialTwoStageSnapshotCreator snapshot_creator(isolate1);
+    {
+      v8::HandleScope scope(isolate1);
+      v8::Local<v8::Context> context = v8::Context::New(isolate1);
+      snapshot_creator.SetDefaultContext(context);
+    }
+    stage1 = snapshot_creator.CreateBlob(function_code_handling);
+  }
+
+  std::unique_ptr<v8::SnapshotCreator> snapshot_creator;
+  if (create_full_snapshot) {
+    snapshot_creator =
+        std::make_unique<InitialTwoStageSnapshotCreator>(isolate, &stage1);
+  } else {
+    snapshot_creator = std::make_unique<SnapshotCreator>(isolate);
+  }
+#else
+  auto snapshot_creator = std::make_unique<SnapshotCreator>(isolate);
+#endif
+
   // Optionally run a script to embed, and serialize to create a snapshot blob.
-  v8::SnapshotCreator snapshot_creator(isolate);
   {
     v8::HandleScope scope(isolate);
     v8::Local<v8::Context> context = v8::Context::New(isolate);
@@ -759,9 +849,9 @@ v8::StartupData CreateSnapshotDataBlobInternal(
         !RunExtraCode(isolate, context, embedded_source, "<embedded>")) {
       return {};
     }
-    snapshot_creator.SetDefaultContext(context);
+    snapshot_creator->SetDefaultContext(context);
   }
-  return snapshot_creator.CreateBlob(function_code_handling);
+  return snapshot_creator->CreateBlob(function_code_handling);
 }
 
 v8::StartupData WarmUpSnapshotDataBlobInternal(

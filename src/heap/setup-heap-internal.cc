@@ -69,10 +69,23 @@ Handle<SharedFunctionInfo> CreateSharedFunctionInfo(
 }  // namespace
 
 bool SetupIsolateDelegate::SetupHeapInternal(Heap* heap) {
-  return heap->CreateHeapObjects();
+  if (!heap->isolate()->read_only_heap()->init_complete()) {
+    if (!heap->CreateReadOnlyHeapObjects()) return false;
+  }
+  return heap->CreateOtherHeapObjects();
 }
 
-bool Heap::CreateHeapObjects() {
+bool Heap::CreateReadOnlyHeapObjects() {
+  // Create initial maps.
+  if (!CreateInitialReadOnlyMaps()) return false;
+
+  CreateReadOnlyApiObjects();
+  CreateInitialReadOnlyObjects();
+
+  return true;
+}
+
+bool Heap::CreateOtherHeapObjects() {
   // Create initial maps.
   if (!CreateInitialMaps()) return false;
 
@@ -129,11 +142,8 @@ const Heap::StructTable Heap::struct_table[] = {
 #undef DATA_HANDLER_ELEMENT
 };
 
-AllocationResult Heap::AllocateMap(InstanceType instance_type,
-                                   int instance_size,
-                                   ElementsKind elements_kind,
-                                   int inobject_properties) {
-  static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
+bool IsMutable(InstanceType instance_type,
+               ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND) {
   bool is_js_object = InstanceTypeChecker::IsJSObject(instance_type);
   bool is_wasm_object = false;
 #if V8_ENABLE_WEBASSEMBLY
@@ -144,10 +154,20 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
                      !Map::CanHaveFastTransitionableElementsKind(instance_type),
                  IsDictionaryElementsKind(elements_kind) ||
                      IsTerminalElementsKind(elements_kind));
+  // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
+  // go in RO_SPACE. Maps for managed Wasm objects have mutable subtype lists.
+  return is_js_object || is_wasm_object;
+}
+
+AllocationResult Heap::AllocateMap(InstanceType instance_type,
+                                   int instance_size,
+                                   ElementsKind elements_kind,
+                                   int inobject_properties) {
+  static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
   HeapObject result;
   // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
   // go in RO_SPACE. Maps for managed Wasm objects have mutable subtype lists.
-  bool is_mutable = is_js_object || is_wasm_object;
+  bool is_mutable = IsMutable(instance_type, elements_kind);
   AllocationResult allocation =
       AllocateRaw(Map::kSize, is_mutable ? AllocationType::kMap
                                          : AllocationType::kReadOnly);
@@ -218,7 +238,8 @@ AllocationResult Heap::Allocate(Handle<Map> map,
   return AllocationResult::FromObject(result);
 }
 
-bool Heap::CreateInitialMaps() {
+bool Heap::CreateInitialReadOnlyMaps() {
+  ReadOnlyRoots roots(this);
   HeapObject obj;
   {
     AllocationResult allocation = AllocatePartialMap(MAP_TYPE, Map::kSize);
@@ -229,15 +250,15 @@ bool Heap::CreateInitialMaps() {
   set_meta_map(new_meta_map);
   new_meta_map.set_map_after_allocation(new_meta_map);
 
-  ReadOnlyRoots roots(this);
-  {  // Partial map allocation
 #define ALLOCATE_PARTIAL_MAP(instance_type, size, field_name)                \
   {                                                                          \
     Map map;                                                                 \
+    DCHECK(!IsMutable(instance_type));                                       \
     if (!AllocatePartialMap((instance_type), (size)).To(&map)) return false; \
     set_##field_name##_map(map);                                             \
   }
 
+  {  // Partial map allocation
     ALLOCATE_PARTIAL_MAP(FIXED_ARRAY_TYPE, kVariableSizeSentinel, fixed_array);
     ALLOCATE_PARTIAL_MAP(WEAK_FIXED_ARRAY_TYPE, kVariableSizeSentinel,
                          weak_fixed_array);
@@ -360,10 +381,10 @@ bool Heap::CreateInitialMaps() {
     FinalizePartialMap(Map::cast(Object(roots_table()[entry.index])));
   }
 
-  {  // Map allocation
 #define ALLOCATE_MAP(instance_type, size, field_name)               \
   {                                                                 \
     Map map;                                                        \
+    DCHECK(!IsMutable(instance_type));                              \
     if (!AllocateMap((instance_type), size).To(&map)) return false; \
     set_##field_name##_map(map);                                    \
   }
@@ -379,6 +400,7 @@ bool Heap::CreateInitialMaps() {
         (constructor_function_index));                          \
   }
 
+  {  // Map allocation
     ALLOCATE_VARSIZE_MAP(SCOPE_INFO_TYPE, scope_info)
     ALLOCATE_VARSIZE_MAP(FIXED_ARRAY_TYPE, module_info)
     ALLOCATE_VARSIZE_MAP(CLOSURE_FEEDBACK_CELL_ARRAY_TYPE,
@@ -522,26 +544,22 @@ bool Heap::CreateInitialMaps() {
             WasmExportedFunctionData::kSize, wasm_exported_function_data)
     IF_WASM(ALLOCATE_MAP, WASM_INTERNAL_FUNCTION_TYPE,
             WasmInternalFunction::kSize, wasm_internal_function)
+
     IF_WASM(ALLOCATE_MAP, WASM_JS_FUNCTION_DATA_TYPE, WasmJSFunctionData::kSize,
             wasm_js_function_data)
     IF_WASM(ALLOCATE_MAP, WASM_RESUME_DATA_TYPE, WasmResumeData::kSize,
             wasm_resume_data)
-    IF_WASM(ALLOCATE_MAP, WASM_TYPE_INFO_TYPE, kVariableSizeSentinel,
-            wasm_type_info)
     IF_WASM(ALLOCATE_MAP, WASM_CONTINUATION_OBJECT_TYPE,
             WasmContinuationObject::kSize, wasm_continuation_object)
+    IF_WASM(ALLOCATE_MAP, WASM_TYPE_INFO_TYPE, kVariableSizeSentinel,
+            wasm_type_info)
 
     ALLOCATE_MAP(WEAK_CELL_TYPE, WeakCell::kSize, weak_cell)
-
-    ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kHeaderSize,
-                 message_object)
-    ALLOCATE_MAP(JS_EXTERNAL_OBJECT_TYPE, JSExternalObject::kHeaderSize,
-                 external)
-    external_map().set_is_extensible(false);
+  }
 #undef ALLOCATE_PRIMITIVE_MAP
 #undef ALLOCATE_VARSIZE_MAP
 #undef ALLOCATE_MAP
-  }
+
   {
     AllocationResult alloc = AllocateRaw(
         ArrayList::SizeFor(ArrayList::kFirstIndex), AllocationType::kReadOnly);
@@ -655,20 +673,45 @@ bool Heap::CreateInitialMaps() {
   return true;
 }
 
+bool Heap::CreateInitialMaps() {
+  ReadOnlyRoots roots(this);
+
+#define ALLOCATE_MAP(instance_type, size, field_name)               \
+  {                                                                 \
+    Map map;                                                        \
+    DCHECK(IsMutable(instance_type));                               \
+    if (!AllocateMap((instance_type), size).To(&map)) return false; \
+    set_##field_name##_map(map);                                    \
+  }
+
+  {  // Map allocation
+    ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kHeaderSize,
+                 message_object)
+    ALLOCATE_MAP(JS_EXTERNAL_OBJECT_TYPE, JSExternalObject::kHeaderSize,
+                 external)
+    external_map().set_is_extensible(false);
+  }
+
+  return true;
+}
+
 void Heap::CreateApiObjects() {
   Isolate* isolate = this->isolate();
   HandleScope scope(isolate);
 
   set_message_listeners(*TemplateList::New(isolate, 2));
+}
 
+void Heap::CreateReadOnlyApiObjects() {
+  HandleScope scope(isolate());
   Handle<InterceptorInfo> info =
-      Handle<InterceptorInfo>::cast(isolate->factory()->NewStruct(
+      Handle<InterceptorInfo>::cast(isolate()->factory()->NewStruct(
           INTERCEPTOR_INFO_TYPE, AllocationType::kReadOnly));
   info->set_flags(0);
   set_noop_interceptor_info(*info);
 }
 
-void Heap::CreateInitialObjects() {
+void Heap::CreateInitialReadOnlyObjects() {
   HandleScope initial_objects_handle_scope(isolate());
   Factory* factory = isolate()->factory();
   ReadOnlyRoots roots(this);
@@ -689,11 +732,6 @@ void Heap::CreateInitialObjects() {
 
   set_hash_seed(*factory->NewByteArray(kInt64Size, AllocationType::kReadOnly));
   InitializeHashSeed();
-
-  // There's no "current microtask" in the beginning.
-  set_current_microtask(roots.undefined_value());
-
-  set_weak_refs_keep_during_job(roots.undefined_value());
 
   // Allocate and initialize table for single character one byte strings.
   int table_size = String::kMaxOneByteCharCode + 1;
@@ -841,64 +879,24 @@ void Heap::CreateInitialObjects() {
 #undef INTERNALIZED_STRING_INIT
 #undef PUBLIC_SYMBOL_INIT
 #undef WELL_KNOWN_SYMBOL_INIT
+
+    Handle<NameDictionary> empty_property_dictionary = NameDictionary::New(
+        isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
+    DCHECK(!empty_property_dictionary->HasSufficientCapacityToAdd(1));
+
+    set_empty_property_dictionary(*empty_property_dictionary);
+
+    Handle<RegisteredSymbolTable> empty_symbol_table =
+        RegisteredSymbolTable::New(isolate(), 1, AllocationType::kReadOnly,
+                                   USE_CUSTOM_MINIMUM_CAPACITY);
+    DCHECK(!empty_symbol_table->HasSufficientCapacityToAdd(1));
+    roots_table()[RootIndex::kEmptySymbolTable] = empty_symbol_table->ptr();
   }
-
-  Handle<NameDictionary> empty_property_dictionary = NameDictionary::New(
-      isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
-  DCHECK(!empty_property_dictionary->HasSufficientCapacityToAdd(1));
-
-  set_empty_property_dictionary(*empty_property_dictionary);
-
-  Handle<RegisteredSymbolTable> empty_symbol_table = RegisteredSymbolTable::New(
-      isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
-  DCHECK(!empty_symbol_table->HasSufficientCapacityToAdd(1));
-  set_public_symbol_table(*empty_symbol_table);
-  set_api_symbol_table(*empty_symbol_table);
-  set_api_private_symbol_table(*empty_symbol_table);
-
-  set_number_string_cache(*factory->NewFixedArray(
-      kInitialNumberStringCacheSize * 2, AllocationType::kOld));
-
-  set_basic_block_profiling_data(roots.empty_array_list());
-
-  // Allocate cache for string split and regexp-multiple.
-  set_string_split_cache(*factory->NewFixedArray(
-      RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
-  set_regexp_multiple_cache(*factory->NewFixedArray(
-      RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
-
-  // Allocate FeedbackCell for builtins.
-  Handle<FeedbackCell> many_closures_cell =
-      factory->NewManyClosuresCell(factory->undefined_value());
-  set_many_closures_cell(*many_closures_cell);
-
-  set_detached_contexts(roots.empty_weak_array_list());
-  set_retaining_path_targets(roots.empty_weak_array_list());
-
-  set_feedback_vectors_for_profiling_tools(roots.undefined_value());
-  set_functions_marked_for_manual_optimization(roots.undefined_value());
-  set_shared_wasm_memories(roots.empty_weak_array_list());
-  set_locals_block_list_cache(roots.undefined_value());
-#ifdef V8_ENABLE_WEBASSEMBLY
-  set_active_continuation(roots.undefined_value());
-  set_active_suspender(roots.undefined_value());
-  set_js_to_wasm_wrappers(roots.empty_weak_array_list());
-  set_wasm_canonical_rtts(roots.empty_weak_array_list());
-#endif  // V8_ENABLE_WEBASSEMBLY
-
-  set_script_list(roots.empty_weak_array_list());
 
   Handle<NumberDictionary> slow_element_dictionary = NumberDictionary::New(
       isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
   DCHECK(!slow_element_dictionary->HasSufficientCapacityToAdd(1));
   set_empty_slow_element_dictionary(*slow_element_dictionary);
-
-  set_materialized_objects(*factory->NewFixedArray(0, AllocationType::kOld));
-
-  // Handling of script id generation is in Heap::NextScriptId().
-  set_last_script_id(Smi::FromInt(v8::UnboundScript::kNoScriptId));
-  set_last_debugging_id(Smi::FromInt(DebugInfo::kNoDebuggingId));
-  set_next_template_serial_number(Smi::zero());
 
   // Allocate the empty OrderedHashMap.
   Handle<OrderedHashMap> empty_ordered_hash_map =
@@ -941,6 +939,87 @@ void Heap::CreateInitialObjects() {
       ScopeInfo::CreateForNativeContext(isolate());
   set_native_scope_info(*native_scope_info);
 
+  /* Canonical off-heap trampoline data */
+  set_off_heap_trampoline_relocation_info(
+      *Builtins::GenerateOffHeapTrampolineRelocInfo(isolate_));
+
+  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+    // These roots will not be used.
+    HeapObject no_container = *isolate()->factory()->undefined_value();
+    set_trampoline_trivial_code_data_container(no_container);
+    set_trampoline_promise_rejection_code_data_container(no_container);
+
+  } else {
+    set_trampoline_trivial_code_data_container(
+        *isolate()->factory()->NewCodeDataContainer(0,
+                                                    AllocationType::kReadOnly));
+
+    set_trampoline_promise_rejection_code_data_container(
+        *isolate()->factory()->NewCodeDataContainer(
+            Code::IsPromiseRejectionField::encode(true),
+            AllocationType::kReadOnly));
+  }
+}
+
+void Heap::CreateInitialObjects() {
+  HandleScope initial_objects_handle_scope(isolate());
+  Factory* factory = isolate()->factory();
+  ReadOnlyRoots roots(this);
+
+  // There's no "current microtask" in the beginning.
+  set_current_microtask(roots.undefined_value());
+
+  set_weak_refs_keep_during_job(roots.undefined_value());
+
+  for (unsigned i = 0; i < arraysize(constant_string_table); i++) {
+    Handle<String> str =
+        factory->InternalizeUtf8String(constant_string_table[i].contents);
+    roots_table()[constant_string_table[i].index] = str->ptr();
+  }
+
+  set_public_symbol_table(roots.empty_symbol_table());
+  set_api_symbol_table(roots.empty_symbol_table());
+  set_api_private_symbol_table(roots.empty_symbol_table());
+
+  set_number_string_cache(*factory->NewFixedArray(
+      kInitialNumberStringCacheSize * 2, AllocationType::kOld));
+
+  set_basic_block_profiling_data(roots.empty_array_list());
+
+  // Allocate cache for string split and regexp-multiple.
+  set_string_split_cache(*factory->NewFixedArray(
+      RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
+  set_regexp_multiple_cache(*factory->NewFixedArray(
+      RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
+
+  // Allocate FeedbackCell for builtins.
+  Handle<FeedbackCell> many_closures_cell =
+      factory->NewManyClosuresCell(factory->undefined_value());
+  set_many_closures_cell(*many_closures_cell);
+
+  set_detached_contexts(roots.empty_weak_array_list());
+  set_retaining_path_targets(roots.empty_weak_array_list());
+
+  set_feedback_vectors_for_profiling_tools(roots.undefined_value());
+  set_functions_marked_for_manual_optimization(roots.undefined_value());
+  set_shared_wasm_memories(roots.empty_weak_array_list());
+  set_locals_block_list_cache(roots.undefined_value());
+#ifdef V8_ENABLE_WEBASSEMBLY
+  set_active_continuation(roots.undefined_value());
+  set_active_suspender(roots.undefined_value());
+  set_js_to_wasm_wrappers(roots.empty_weak_array_list());
+  set_wasm_canonical_rtts(roots.empty_weak_array_list());
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+  set_script_list(roots.empty_weak_array_list());
+
+  set_materialized_objects(*factory->NewFixedArray(0, AllocationType::kOld));
+
+  // Handling of script id generation is in Heap::NextScriptId().
+  set_last_script_id(Smi::FromInt(v8::UnboundScript::kNoScriptId));
+  set_last_debugging_id(Smi::FromInt(DebugInfo::kNoDebuggingId));
+  set_next_template_serial_number(Smi::zero());
+
   // Allocate the empty script.
   Handle<Script> script = factory->NewScript(factory->empty_string());
   script->set_type(Script::TYPE_NATIVE);
@@ -970,27 +1049,6 @@ void Heap::CreateInitialObjects() {
 
   set_serialized_objects(roots.empty_fixed_array());
   set_serialized_global_proxy_sizes(roots.empty_fixed_array());
-
-  /* Canonical off-heap trampoline data */
-  set_off_heap_trampoline_relocation_info(
-      *Builtins::GenerateOffHeapTrampolineRelocInfo(isolate_));
-
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    // These roots will not be used.
-    HeapObject no_container = *isolate()->factory()->undefined_value();
-    set_trampoline_trivial_code_data_container(no_container);
-    set_trampoline_promise_rejection_code_data_container(no_container);
-
-  } else {
-    set_trampoline_trivial_code_data_container(
-        *isolate()->factory()->NewCodeDataContainer(0,
-                                                    AllocationType::kReadOnly));
-
-    set_trampoline_promise_rejection_code_data_container(
-        *isolate()->factory()->NewCodeDataContainer(
-            Code::IsPromiseRejectionField::encode(true),
-            AllocationType::kReadOnly));
-  }
 
   // Evaluate the hash values which will then be cached in the strings.
   isolate()->factory()->zero_string()->EnsureHash();

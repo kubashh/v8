@@ -11,11 +11,19 @@
 namespace v8 {
 namespace internal {
 
-void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate) {
-  SetupBuiltinsInternal(isolate);
+void SetupIsolateDelegate::CompileBuiltins(Isolate* isolate) {
+  CompileBuiltinsInternal(isolate);
 }
 
-bool SetupIsolateDelegate::SetupHeap(Heap* heap) {
+void SetupIsolateDelegate::SetupBuiltinPlaceholders(Isolate* isolate) {
+  SetupBuiltinPlaceholdersInternal(isolate);
+}
+
+bool SetupIsolateDelegate::SetupReadOnlyHeap(Heap* heap) {
+  return heap->CreateReadOnlyHeapObjects();
+}
+
+bool SetupIsolateDelegate::SetupHeaps(Heap* heap) {
   return SetupHeapInternal(heap);
 }
 

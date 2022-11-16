@@ -4,16 +4,26 @@
 
 #include "test/cctest/setup-isolate-for-tests.h"
 
+#include "src/heap/heap.h"
+
 // Almost identical to setup-isolate-full.cc
 
 namespace v8 {
 namespace internal {
 
-void SetupIsolateDelegateForTests::SetupBuiltins(Isolate* isolate) {
-  SetupBuiltinsInternal(isolate);
+void SetupIsolateDelegateForTests::CompileBuiltins(Isolate* isolate) {
+  CompileBuiltinsInternal(isolate);
 }
 
-bool SetupIsolateDelegateForTests::SetupHeap(Heap* heap) {
+void SetupIsolateDelegateForTests::SetupBuiltinPlaceholders(Isolate* isolate) {
+  SetupBuiltinPlaceholdersInternal(isolate);
+}
+
+bool SetupIsolateDelegateForTests::SetupReadOnlyHeap(Heap* heap) {
+  return heap->CreateReadOnlyHeapObjects();
+}
+
+bool SetupIsolateDelegateForTests::SetupHeaps(Heap* heap) {
   return SetupHeapInternal(heap);
 }
 
