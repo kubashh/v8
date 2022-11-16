@@ -36,6 +36,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e33d40_b0bd278d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-16T12:31:39Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "1bc29d4ff7339cb349c7038ad64d8baee31e0cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49b43d29_7f1b66b2",
@@ -73,6 +90,30 @@
       "side": 1,
       "message": "I added `pending_empty_ \u003d false` to all methods that actually add something now. I think it is easier to understand that way.",
       "parentUuid": "49b43d29_7f1b66b2",
+      "range": {
+        "startLine": 2798,
+        "startChar": 0,
+        "endLine": 2798,
+        "endChar": 33
+      },
+      "revId": "1bc29d4ff7339cb349c7038ad64d8baee31e0cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4a6573_8c5eea20",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2798,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-16T12:31:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de3cac4e_5c37da15",
       "range": {
         "startLine": 2798,
         "startChar": 0,
