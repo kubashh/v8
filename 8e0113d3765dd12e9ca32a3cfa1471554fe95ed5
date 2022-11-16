@@ -16,6 +16,41 @@
       "message": "After some debugging today it seems like the `JSExternalObject` created in a fast call might be entirely correct, the only issue is just that it gets tagged with the `kWeakObjectTag` somewhere somehow, after ECL. Manually adding a `kObjectTag` tagging to the end of the ECL code creating the `JSExternalObject` did not help the issue.\n\nWould @Samuel Groß have any idea where I should look to figure out why / how / where the tagging happens?",
       "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3db399_4dc4f70f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-16T10:44:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the issue. You mean the value that contains the pointer to the `JSExternalObject` (so `Node* external \u003d __ Allocate(AllocationType::kYoung, size);`) has the wrong tag (i.e. not https://source.chromium.org/chromium/chromium/src/+/main:v8/include/v8-internal.h;drc\u003d6dc39d60fea45c003424272efdb4c366119a9d7f;l\u003d51)? TF is not my area of expertise, so I wouldn\u0027t know off the top of my head why something like that would happen, sorry!",
+      "parentUuid": "6857f930_dec8586d",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "264fb558_7b2078b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-16T10:44:28Z",
+      "side": 1,
+      "message": "Sorry for the slow response!",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

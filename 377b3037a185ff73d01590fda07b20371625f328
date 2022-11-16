@@ -295,6 +295,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "14ae272d_03cdb13c",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-16T10:44:28Z",
+      "side": 1,
+      "message": "I think we should do 1 - 3 at the same place where the `JSExternalObject` is allocated. These steps are the equivalent of what Factory::NewExternal does: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/factory.cc;l\u003d2480;drc\u003d6dc39d60fea45c003424272efdb4c366119a9d7f;bpv\u003d1;bpt\u003d1\nWe could do 4 at the same time as well (typically, when you allocate an ExternalPointerTable entry you can already set the pointer), or we could do it in ML. Tt would be the equivalent to `ReadField` of type ExternalPointer, which is also handled in ML.",
+      "parentUuid": "6a462616_e7d18372",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46480391_57d81af5",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 5
@@ -546,6 +570,30 @@
       "side": 1,
       "message": "\u003e Re: External Pointer Table and GC\n\nFor ownership including pointers this is definitely reasonable, `External` is just a notable exception to this as it does not carry ownership (at a language level) and does not require or offer any means of bolting into the GC of its own.\n\nSo, sounds reasonable to me to add comments about this as an \"escape hatch\" of sorts. The `kExternalObjectValueTag` is definitely a risk compared to compile-time constexpr tags \"built to purpose\" but it is also possibly the only thing available under some circumstances. Any ideas where such comments should be added? Would this extend all the way to the `External` class\u0027 public API documents?",
       "parentUuid": "45d17fc4_0b15c4a8",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14be433a_2607f4c1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-16T10:44:28Z",
+      "side": 1,
+      "message": "I think there should be a comment where `kExternalObjectValueTag` is defined (v8-internals.h) that it\u0027s the Embedders responsibility to ensure type safetey, and probably also for the `External` class regarding the lifetime of these objects. WDYT?",
+      "parentUuid": "0ec2d66e_445e3505",
       "range": {
         "startLine": 6900,
         "startChar": 7,
