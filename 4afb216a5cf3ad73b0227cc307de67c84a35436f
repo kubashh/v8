@@ -170,6 +170,24 @@
       "parentUuid": "c900e16b_94f2f2e9",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79bc8299_31036c25",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T15:29:45Z",
+      "side": 1,
+      "message": "`ParkedScope` and `UnparkedScope` are implemented by calling `Park` and `Unpark`; their nesting is not important. If the former saves the context and the latter clears it, I think we\u0027re good.\n\nIn your scenario:\n1. A enters a `ParkedScope`, saves the context and parks.\n2. A enters an `UnparkedScope`, unparks and clears the context.\n3. B triggers a shared GC.\n4. A is forced into a safepoint and saves the context.\n\nCSS will see the second saved context, which is the right one.\nThe first one is obsolete anyway and will never be needed.\n\nI don\u0027t think we need a stack.",
+      "parentUuid": "0ed06e70_c92b7665",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
