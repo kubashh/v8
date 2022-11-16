@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c74b24b_6029f002",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-16T08:26:22Z",
+      "side": 1,
+      "message": "Why only main thread?",
+      "range": {
+        "startLine": 376,
+        "startChar": 8,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
