@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad3b7f75_f2511a34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:10:18Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29f479f6_6a65473f",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:10:18Z",
+      "side": 1,
+      "message": "When/why does this happen? Is it avoidable?",
+      "range": {
+        "startLine": 196,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e4cc8af_55680e3a",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:10:18Z",
+      "side": 1,
+      "message": "nit: This seems redundant seeing as we just set stack_top. I think it should suffice to just check stack_top \u003c\u003d stack_start_.",
+      "range": {
+        "startLine": 208,
+        "startChar": 34,
+        "endLine": 208,
+        "endChar": 47
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5436353a_cddac56e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:10:18Z",
+      "side": 1,
+      "message": "Why is this an optional? You always set it in the ctor.",
+      "range": {
+        "startLine": 2803,
+        "startChar": 2,
+        "endLine": 2803,
+        "endChar": 16
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d8abd8_5e8f9daf",
+        "filename": "test/unittests/heap/conservative-stack-visitor-unittest.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:10:18Z",
+      "side": 1,
+      "message": "Why do some tests use the scope and other use explicit calls to SaveContext and ClearContext?",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 25
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
