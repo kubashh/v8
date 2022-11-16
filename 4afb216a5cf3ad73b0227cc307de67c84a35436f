@@ -134,6 +134,24 @@
       "parentUuid": "b4e73d71_0afecb5a",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c900e16b_94f2f2e9",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:56:13Z",
+      "side": 1,
+      "message": "I\u0027m copying here Omer\u0027s comment from crrev.com/c/4017512.\nI think he\u0027s right and possibly the solution is what Dominik already suggested.\n\n\u003e I think this implementation needs revising. Specifically, I think you need to maintain a stack of contexts, such that each call to SaveContext pushes a new context to the stack, and calling ClearContext restores the previous context.\n\u003e\n\u003e Assume the following scenario: Thread A enters a ParkedScope and saves a context. It then enters an UnparkedScope and is allowed to touch the heap again. While thread A is in the UnparkedScope, thread B triggers a shared GC and forces thread A into a safepoint.\n\u003e In the current implementation, CSS would miss anything written to stack after thread A entered the UnparkedScope.",
+      "parentUuid": "2f153d8f_127a821a",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
