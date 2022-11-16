@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad9b951_b91c5cef",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:55:18Z",
+      "side": 1,
+      "message": "I think you are right.\n\nAs this CL hasn\u0027t touched `ParkedScope`, I suggest we discuss this on crrev.com/c/4027210. Dominik has also suggested something different (saving the context in Park/Unpark). I\u0027m moving this comment there.",
+      "parentUuid": "538aedac_21f157d6",
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29f479f6_6a65473f",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-11-16T12:10:18Z",
       "side": 1,
       "message": "When/why does this happen? Is it avoidable?",
+      "range": {
+        "startLine": 196,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f03b5b5_a428bfc9",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:55:18Z",
+      "side": 1,
+      "message": "In this CL, this can happen when the `HeapObjectIterator` is used during GC. The GC has saved the context and the iterator (whose lifetime is nested in the GC) saves it again. The iterator should save the context because it can be used independently of GC. (Weirdly enough, this occurs only in one test.)\n\nIn crrev.com/c/4027210 there will be more instances of such nesting. E.g., the context will be saved from the `ParkedScope` and this can be nested.",
+      "parentUuid": "29f479f6_6a65473f",
       "range": {
         "startLine": 196,
         "startChar": 5,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1601c97c_758a2496",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:55:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e4cc8af_55680e3a",
+      "range": {
+        "startLine": 208,
+        "startChar": 34,
+        "endLine": 208,
+        "endChar": 47
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5436353a_cddac56e",
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5055f0b3_36acfe11",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:55:18Z",
+      "side": 1,
+      "message": "I set it after the call to `MakeHeapIterable`, before starting the iteration.\nIt probably doesn\u0027t make a difference, so I\u0027m changing it as you suggest.",
+      "parentUuid": "5436353a_cddac56e",
+      "range": {
+        "startLine": 2803,
+        "startChar": 2,
+        "endLine": 2803,
+        "endChar": 16
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80d8abd8_5e8f9daf",
@@ -117,6 +207,30 @@
       "writtenOn": "2022-11-16T12:10:18Z",
       "side": 1,
       "message": "Why do some tests use the scope and other use explicit calls to SaveContext and ClearContext?",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 25
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bac9076_53d07744",
+        "filename": "test/unittests/heap/conservative-stack-visitor-unittest.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:55:18Z",
+      "side": 1,
+      "message": "V8 tests use the scope, which disables the `DCHECK` if stack switching is enabled.\n\nOilpan tests use `SaveContext` and `ClearContext`, never disabling the `DCHECK`. This is because the scope lives in `src/heap/heap.h` and we don\u0027t want to include that in Oilpan (we talked about it offline).\n\nWhen the scope will no longer require the V8 flag for stack switching, the scope object will move to `src/heap/base/stack.h` and all tests will use the scope.",
+      "parentUuid": "80d8abd8_5e8f9daf",
       "range": {
         "startLine": 89,
         "startChar": 4,
