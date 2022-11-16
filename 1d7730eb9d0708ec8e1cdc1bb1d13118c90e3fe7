@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72657553_96b1f435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T13:39:09Z",
+      "side": 1,
+      "message": "lgtm % comment",
+      "revId": "1d7730eb9d0708ec8e1cdc1bb1d13118c90e3fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb0afbf2_e5f7c810",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5653,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T13:39:09Z",
+      "side": 1,
+      "message": "I think this one doesn\u0027t need to be an if branch anymore. You already bailed out if InUse is false, so it should be fine to call Trace unconditionally imo.",
+      "range": {
+        "startLine": 5653,
+        "startChar": 2,
+        "endLine": 5653,
+        "endChar": 52
+      },
+      "revId": "1d7730eb9d0708ec8e1cdc1bb1d13118c90e3fe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
