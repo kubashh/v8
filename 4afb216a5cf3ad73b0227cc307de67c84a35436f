@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5958c7b7_6e707e72",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-16T10:01:18Z",
+      "side": 1,
+      "message": "I think it\u0027s safer to do this before setting the Parked state above. Otherwise there is no guarantee that the thread that requests the safepoint sees the most up-to-date context after seeing that this thread is Parked.",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c74b24b_6029f002",
         "filename": "src/heap/local-heap.cc",
         "patchSetId": 2
@@ -44,6 +61,23 @@
         "endLine": 376,
         "endChar": 22
       },
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45fe447_a79d2c2f",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-16T10:01:18Z",
+      "side": 1,
+      "message": "Would be nice if we could do this as part of Park(). In most cases we invoke Park() from ParkedScope but I know of a manual Unpark() as well, so it would feel more future-proof to me when ParkedScope would only invoke Park()/Unpark() without doing anything else.",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
