@@ -46,6 +46,30 @@
       },
       "revId": "ef0d2f5ca168f6f343cd513f8503e68780e47d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9d218a2_6aac0844",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-11-16T11:47:48Z",
+      "side": 0,
+      "message": "This is now OK, since we flush pending surrogates when we add `Empty` and everything that potentially adds pending surrogates sets `pending_empty_ \u003d false` (as it should be).",
+      "parentUuid": "ca954fa8_ef5d3abf",
+      "range": {
+        "startLine": 2746,
+        "startChar": 0,
+        "endLine": 2750,
+        "endChar": 3
+      },
+      "revId": "ef0d2f5ca168f6f343cd513f8503e68780e47d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
