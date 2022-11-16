@@ -21,6 +21,9 @@ class V8_NODISCARD ParkedScope {
   explicit ParkedScope(LocalIsolate* local_isolate)
       : ParkedScope(local_isolate->heap()) {}
   explicit ParkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+    if (local_heap_->is_main_thread()) {
+      stack_context_scope_.emplace(&local_heap_->heap_->stack());
+    }
     local_heap_->Park();
   }
 
@@ -28,6 +31,7 @@ class V8_NODISCARD ParkedScope {
 
  private:
   LocalHeap* const local_heap_;
+  base::Optional<SaveStackContextScope> stack_context_scope_;
 };
 
 // Scope that explicitly unparks a thread, allowing access to the heap and the
