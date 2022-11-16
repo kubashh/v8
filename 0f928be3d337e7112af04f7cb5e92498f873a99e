@@ -33,6 +33,24 @@
       "message": "These functions are used in tests to test internals of the profiler. I don\u0027t think not being used elsewhere is a good reason to expose them through the API.\n\nDo you have a reason why you need these functions?",
       "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f49ae45_62174788",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2022-11-16T15:01:56Z",
+      "side": 1,
+      "message": "Testing what exactly? That code is not being used somewhere else. I mean, the mentioned tests are just making sure that the private API supports those \"features\", but the profiler itself is not using them. What\u0027s the reason that code exists?\n\nI think it is better to expose them as the HeapProfiler does for more granular control of the profiler itself. Maybe it makes more sense in the HeapProfiler cuz\u0027 of the possible size of a heap snapshot and the memory usage concerns.\n\nWhere I work, we are heavy CPU profile users, we tend to trigger profilers in different circumstances, sometimes our tools may trigger another profile while there is one currently running (which is possible according to the docs); having something like `DeleteAllProfiles` exposed is way way easier than deleting profiles one by one; having a `GetProfile` makes each profile handier, instead of trying to guess which is the exact profile I need by keeping a reference somewhere else, why? I could have that in the profiler itself and it is already implemented.",
+      "parentUuid": "c625af73_262963bd",
+      "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
