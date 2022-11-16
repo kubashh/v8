@@ -10152,6 +10152,19 @@ void CpuProfiler::CollectSample(Isolate* v8_isolate) {
   i::CpuProfiler::CollectSample(reinterpret_cast<i::Isolate*>(v8_isolate));
 }
 
+int CpuProfiler::GetProfilesCount() {
+  return reinterpret_cast<i::CpuProfiler*>(this)->GetProfilesCount();
+}
+
+CpuProfile* CpuProfiler::GetProfile(int index) {
+  i::CpuProfiler* profiler = reinterpret_cast<i::CpuProfiler*>(this);
+  return reinterpret_cast<CpuProfile*>(profiler->GetProfile(index));
+}
+
+void CpuProfiler::DeleteAllProfiles() {
+  reinterpret_cast<i::CpuProfiler*>(this)->DeleteAllProfiles();
+}
+
 void CpuProfiler::SetSamplingInterval(int us) {
   DCHECK_GE(us, 0);
   return reinterpret_cast<i::CpuProfiler*>(this)->set_sampling_interval(

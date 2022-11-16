@@ -4707,6 +4707,38 @@ TEST(SkipEstimatedSizeWhenActiveProfiling) {
   CHECK_GT(profiler.GetEstimatedMemoryUsage(), 0);
 }
 
+TEST(CpuProfilesGetters) {
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::CpuProfiler* cpu_profiler = v8::CpuProfiler::New(env->GetIsolate());
+  CHECK_EQ(0, cpu_profiler->GetProfilesCount());
+
+  v8::Local<v8::String> p1 = v8_str("0");
+  cpu_profiler->StartProfiling(p1);
+  v8::CpuProfile* profile = cpu_profiler->StopProfiling(p1);
+  CHECK(profile);
+  // Profiler should increase the number of profiles
+  CHECK_EQ(1, cpu_profiler->GetProfilesCount());
+
+  v8::Local<v8::String> p2 = v8_str("1");
+  cpu_profiler->StartProfiling(p2);
+  v8::CpuProfile* profile2 = cpu_profiler->StopProfiling(p2);
+  CHECK(profile2);
+  CHECK_EQ(2, cpu_profiler->GetProfilesCount());
+
+  // The profiler should be able to get profiles
+  for (int i = 0; i < cpu_profiler->GetProfilesCount(); i++) {
+    v8::CpuProfile* profile = cpu_profiler->GetProfile(i);
+    CHECK(profile);
+    v8::String::Utf8Value profileTitle(env->GetIsolate(), profile->GetTitle());
+    CHECK_EQ(0, strcmp(std::to_string(i).c_str(), *profileTitle));
+  }
+
+  // The profiler should be able to clean all the associated profiles
+  cpu_profiler->DeleteAllProfiles();
+  CHECK_EQ(0, cpu_profiler->GetProfilesCount());
+}
+
 TEST(CpuProfileJSONSerialization) {
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());

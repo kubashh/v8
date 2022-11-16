@@ -441,6 +441,18 @@ class V8_EXPORT CpuProfiler {
    */
   void SetUsePreciseSampling(bool);
 
+  /** Returns the number of cpuprofiles taken. */
+  int GetProfilesCount();
+
+  /**
+   * Deletes all cpuprofiles taken. All previously returned pointers to
+   * profiles and their contents become invalid after this call.
+   */
+  void DeleteAllProfiles();
+
+  /** Returns a cpuprofile by index. */
+  CpuProfile* GetProfile(int);
+
   /**
    * Starts collecting a CPU profile. Several profiles may be collected at once.
    * Generates an anonymous profiler, without a String identifier.
