@@ -22,6 +22,30 @@
       },
       "revId": "f0e264b0b237caece15c449393eb2d48c0c54fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b26f6fee_6a265fbb",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4221,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-16T15:27:54Z",
+      "side": 1,
+      "message": "Right. I don\u0027t think a stub makes sense for the general case.\nSo if we know we don\u0027t have a null/undefined argument list, we call CallWithArrayLike builtin. Otherwise we fall back to apply stub, but dropping all extra arguments.",
+      "parentUuid": "cc496548_df592057",
+      "range": {
+        "startLine": 4221,
+        "startChar": 8,
+        "endLine": 4221,
+        "endChar": 47
+      },
+      "revId": "f0e264b0b237caece15c449393eb2d48c0c54fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
