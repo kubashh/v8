@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc7b0dd_796e70cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-11-16T08:43:24Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "77bbf06c88d1bcb4ae43d71ee512b6dbaef98445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d4ca903_14d27ae8",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-11-15T19:57:32Z",
       "side": 1,
       "message": "I doubt we need all includes :)",
+      "range": {
+        "startLine": 8,
+        "startChar": 24,
+        "endLine": 8,
+        "endChar": 32
+      },
+      "revId": "77bbf06c88d1bcb4ae43d71ee512b6dbaef98445",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f84a33ea_30bf6619",
+        "filename": "test/unittests/heap/cppgc-js/young-unified-heap-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-11-16T08:43:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d4ca903_14d27ae8",
       "range": {
         "startLine": 8,
         "startChar": 24,
