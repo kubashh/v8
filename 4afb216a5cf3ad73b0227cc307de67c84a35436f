@@ -116,6 +116,24 @@
       "parentUuid": "f45fe447_a79d2c2f",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f153d8f_127a821a",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-16T13:45:34Z",
+      "side": 1,
+      "message": "When it\u0027s need, I think having that argument would be nice in order to not forget about that in the future.",
+      "parentUuid": "b4e73d71_0afecb5a",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
