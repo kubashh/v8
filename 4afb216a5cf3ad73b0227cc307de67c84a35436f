@@ -206,6 +206,24 @@
       "parentUuid": "79bc8299_31036c25",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95edddcf_a64adabc",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T15:42:26Z",
+      "side": 1,
+      "message": "Yes, because the destructor calls `Park`:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/parked-scope.h;drc\u003d6dc39d60fea45c003424272efdb4c366119a9d7f;l\u003d43\nI\u0027m trying this now and we\u0027ll see how it goes.",
+      "parentUuid": "3acf1afe_66bbea38",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
