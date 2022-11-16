@@ -5647,6 +5647,14 @@ void MinorMarkCompactCollector::SweepArrayBufferExtensions() {
       ArrayBufferSweeper::SweepingType::kYoung);
 }
 
+void MinorMarkCompactCollector::PerformWrapperTracing() {
+  TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_EMBEDDER_TRACING);
+  if (local_marking_worklists()->PublishWrapper()) {
+    heap_->local_embedder_heap_tracer()->Trace(
+        std::numeric_limits<double>::infinity());
+  }
+}
+
 class YoungGenerationMigrationObserver final : public MigrationObserver {
  public:
   YoungGenerationMigrationObserver(Heap* heap,
@@ -6317,6 +6325,10 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
   MarkRootSetInParallel(&root_visitor, was_marked_incrementally);
 
+  if (auto* cpp_heap = CppHeap::From(heap_->cpp_heap())) {
+    cpp_heap->FinishConcurrentMarkingIfNeeded();
+  }
+
   // Mark rest on the main thread.
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_CLOSURE);
@@ -6343,15 +6355,20 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
 void MinorMarkCompactCollector::DrainMarkingWorklist() {
   PtrComprCageBase cage_base(isolate());
-  HeapObject object;
-  while (local_marking_worklists_->Pop(&object)) {
-    DCHECK(!object.IsFreeSpaceOrFiller(cage_base));
-    DCHECK(object.IsHeapObject());
-    DCHECK(heap()->Contains(object));
-    DCHECK(!non_atomic_marking_state()->IsWhite(object));
-    main_marking_visitor_->Visit(object);
-  }
-  DCHECK(local_marking_worklists_->IsEmpty());
+  do {
+    PerformWrapperTracing();
+
+    HeapObject object;
+    while (local_marking_worklists_->Pop(&object)) {
+      DCHECK(!object.IsFreeSpaceOrFiller(cage_base));
+      DCHECK(object.IsHeapObject());
+      DCHECK(heap()->Contains(object));
+      DCHECK(!non_atomic_marking_state()->IsWhite(object));
+      main_marking_visitor_->Visit(object);
+    }
+  } while (!local_marking_worklists_->IsEmpty() ||
+           !local_marking_worklists_->IsWrapperEmpty() ||
+           !heap()->local_embedder_heap_tracer()->IsRemoteTracingDone());
 }
 
 void MinorMarkCompactCollector::TraceFragmentation() {
