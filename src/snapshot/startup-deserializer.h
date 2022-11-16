@@ -21,7 +21,7 @@ class StartupDeserializer final : public Deserializer<Isolate> {
                      startup_data->GetMagicNumber(), false, can_rehash) {}
 
   // Deserialize the snapshot into an empty heap.
-  void DeserializeIntoIsolate();
+  void DeserializeIntoIsolate(bool recompile_builtins);
 
  private:
   void FlushICache();

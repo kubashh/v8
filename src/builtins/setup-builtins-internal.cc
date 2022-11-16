@@ -291,7 +291,17 @@ Code GenerateBytecodeHandler(Isolate* isolate, Builtin builtin,
 }  // namespace
 
 // static
-void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
+void SetupIsolateDelegate::SetupBuiltinPlaceholdersInternal(Isolate* isolate) {
+  Builtins* builtins = isolate->builtins();
+  DCHECK(!builtins->initialized_);
+
+  PopulateWithPlaceholders(isolate);
+
+  builtins->MarkInitialized();
+}
+
+// static
+void SetupIsolateDelegate::CompileBuiltinsInternal(Isolate* isolate) {
   Builtins* builtins = isolate->builtins();
   DCHECK(!builtins->initialized_);
 

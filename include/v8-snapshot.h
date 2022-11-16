@@ -170,6 +170,10 @@ class V8_EXPORT SnapshotCreator {
   SnapshotCreator(const SnapshotCreator&) = delete;
   void operator=(const SnapshotCreator&) = delete;
 
+ protected:
+  SnapshotCreator(Isolate* isolate, const intptr_t* external_references,
+                  StartupData* existing_blob, bool init_isolate);
+
  private:
   size_t AddData(Local<Context> context, internal::Address object);
   size_t AddData(internal::Address object);

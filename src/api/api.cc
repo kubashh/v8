@@ -429,25 +429,34 @@ struct SnapshotCreatorData {
 
 SnapshotCreator::SnapshotCreator(Isolate* v8_isolate,
                                  const intptr_t* external_references,
-                                 StartupData* existing_snapshot) {
+                                 StartupData* existing_snapshot)
+    : SnapshotCreator(v8_isolate, external_references, existing_snapshot,
+                      true) {}
+
+SnapshotCreator::SnapshotCreator(Isolate* v8_isolate,
+                                 const intptr_t* external_references,
+                                 StartupData* existing_snapshot,
+                                 bool init_isolate) {
   SnapshotCreatorData* data = new SnapshotCreatorData(v8_isolate);
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   i_isolate->set_array_buffer_allocator(&data->allocator_);
   i_isolate->set_api_external_references(external_references);
   i_isolate->enable_serializer();
   v8_isolate->Enter();
-  const StartupData* blob = existing_snapshot
-                                ? existing_snapshot
-                                : i::Snapshot::DefaultSnapshotBlob();
-  if (blob && blob->raw_size > 0) {
-    i_isolate->set_snapshot_blob(blob);
-    i::Snapshot::Initialize(i_isolate);
-  } else {
-    i_isolate->InitWithoutSnapshot();
-  }
   data_ = data;
-  // Disable batch compilation during snapshot creation.
-  i_isolate->baseline_batch_compiler()->set_enabled(false);
+  if (init_isolate) {
+    if (i::Snapshot::HasDefaultSnapshotBlob() || existing_snapshot) {
+      i_isolate->set_snapshot_blob(existing_snapshot
+                                       ? existing_snapshot
+                                       : i::Snapshot::DefaultSnapshotBlob());
+      DCHECK(i_isolate->snapshot_blob()->raw_size > 0);
+      i::Snapshot::Initialize(i_isolate);
+    } else {
+      i_isolate->InitWithoutSnapshot();
+    }
+    // Disable batch compilation during snapshot creation.
+    i_isolate->baseline_batch_compiler()->set_enabled(false);
+  }
 }
 
 SnapshotCreator::SnapshotCreator(const intptr_t* external_references,

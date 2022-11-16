@@ -122,6 +122,14 @@ namespace internal {
 #define V8_CAN_CREATE_SHARED_HEAP_BOOL false
 #endif
 
+#if defined(V8_SHARED_RO_HEAP) && defined(V8_COMPRESS_POINTERS) && \
+    defined(COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL)
+#define V8_STATIC_ROOTS
+#define V8_STATIC_ROOTS_BOOL true
+#else
+#define V8_STATIC_ROOTS_BOOL false
+#endif
+
 #ifdef V8_ENABLE_SANDBOX
 #define V8_ENABLE_SANDBOX_BOOL true
 #else

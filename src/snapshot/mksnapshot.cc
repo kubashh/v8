@@ -80,6 +80,7 @@ class SnapshotFileWriter {
   }
 
   static void WriteSnapshotFileSuffix(FILE* fp) {
+    fprintf(fp, "bool Snapshot::HasDefaultSnapshotBlob() { return true; }\n");
     fprintf(fp, "const v8::StartupData* Snapshot::DefaultSnapshotBlob() {\n");
     fprintf(fp, "  return &blob;\n");
     fprintf(fp, "}\n");

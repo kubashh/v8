@@ -9,7 +9,11 @@
 namespace v8 {
 namespace internal {
 
-void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate) {
+void SetupIsolateDelegate::SetupBuiltinPlaceholders(Isolate* isolate) {
+  FATAL("Builtin compilation supported only in mksnapshot");
+}
+
+void SetupIsolateDelegate::CompileBuiltins(Isolate* isolate) {
   FATAL("Builtin compilation supported only in mksnapshot");
 }
 

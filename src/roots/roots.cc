@@ -28,6 +28,20 @@ void ReadOnlyRoots::Iterate(RootVisitor* visitor) {
   visitor->Synchronize(VisitorSynchronization::kReadOnlyRootList);
 }
 
+void ReadOnlyRoots::Iterate(const InlineRootIterator& apply) {
+  struct TheRootVisitor : public RootVisitor {
+    explicit TheRootVisitor(const InlineRootIterator& apply) : apply_(apply) {}
+    const InlineRootIterator& apply_;
+    void VisitRootPointers(Root root, const char* description,
+                           FullObjectSlot start, FullObjectSlot end) final {
+      for (auto i = start; i != end; ++i) {
+        apply_(i);
+      }
+    }
+  } visit(apply);
+  Iterate(&visit);
+}
+
 #ifdef DEBUG
 void ReadOnlyRoots::VerifyNameForProtectors() {
   DisallowGarbageCollection no_gc;

@@ -648,10 +648,15 @@ UNINITIALIZED_TEST(ContextSerializerCustomContext) {
       Handle<JSObject> global_object(context->global_object(), isolate);
       Handle<Object> property =
           JSReceiver::GetDataProperty(isolate, global_object, o);
-      CHECK(property.is_identical_to(global_proxy));
+
+      HeapObject::cast(*global_object).Print();
+      HeapObject::cast(*global_proxy).Print();
+      HeapObject::cast(*property).Print();
+       CHECK(property.is_identical_to(global_proxy));
 
       v8::Local<v8::Context> v8_context = v8::Utils::ToLocal(context);
       v8::Context::Scope context_scope(v8_context);
+
       double r = CompileRun("r")
                      ->ToNumber(v8_isolate->GetCurrentContext())
                      .ToLocalChecked()

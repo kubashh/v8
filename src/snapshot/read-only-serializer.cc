@@ -9,6 +9,7 @@
 #include "src/heap/read-only-heap.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots.h"
+#include "src/roots/roots.h"
 #include "src/snapshot/serializer-inl.h"
 
 namespace v8 {

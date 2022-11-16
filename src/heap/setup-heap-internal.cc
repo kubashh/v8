@@ -129,11 +129,8 @@ const Heap::StructTable Heap::struct_table[] = {
 #undef DATA_HANDLER_ELEMENT
 };
 
-AllocationResult Heap::AllocateMap(InstanceType instance_type,
-                                   int instance_size,
-                                   ElementsKind elements_kind,
-                                   int inobject_properties) {
-  static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
+bool IsMutable(InstanceType instance_type,
+               ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND) {
   bool is_js_object = InstanceTypeChecker::IsJSObject(instance_type);
   bool is_wasm_object = false;
 #if V8_ENABLE_WEBASSEMBLY
@@ -144,10 +141,20 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
                      !Map::CanHaveFastTransitionableElementsKind(instance_type),
                  IsDictionaryElementsKind(elements_kind) ||
                      IsTerminalElementsKind(elements_kind));
+  // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
+  // go in RO_SPACE. Maps for managed Wasm objects have mutable subtype lists.
+  return is_js_object || is_wasm_object;
+}
+
+AllocationResult Heap::AllocateMap(InstanceType instance_type,
+                                   int instance_size,
+                                   ElementsKind elements_kind,
+                                   int inobject_properties) {
+  static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
   HeapObject result;
   // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
   // go in RO_SPACE. Maps for managed Wasm objects have mutable subtype lists.
-  bool is_mutable = is_js_object || is_wasm_object;
+  bool is_mutable = IsMutable(instance_type, elements_kind);
   AllocationResult allocation =
       AllocateRaw(Map::kSize, is_mutable ? AllocationType::kMap
                                          : AllocationType::kReadOnly);
@@ -219,18 +226,25 @@ AllocationResult Heap::Allocate(Handle<Map> map,
 }
 
 bool Heap::CreateInitialMaps() {
+  const bool kCreateReadOnly =
+      !V8_STATIC_ROOTS_BOOL || read_only_space()->writable();
+
   HeapObject obj;
-  {
-    AllocationResult allocation = AllocatePartialMap(MAP_TYPE, Map::kSize);
-    if (!allocation.To(&obj)) return false;
+  if (kCreateReadOnly) {
+    {
+      AllocationResult allocation = AllocatePartialMap(MAP_TYPE, Map::kSize);
+      if (!allocation.To(&obj)) return false;
+    }
+    // Map::cast cannot be used due to uninitialized map field.
+    Map new_meta_map = Map::unchecked_cast(obj);
+    set_meta_map(new_meta_map);
+    new_meta_map.set_map_after_allocation(new_meta_map);
   }
-  // Map::cast cannot be used due to uninitialized map field.
-  Map new_meta_map = Map::unchecked_cast(obj);
-  set_meta_map(new_meta_map);
-  new_meta_map.set_map_after_allocation(new_meta_map);
 
   ReadOnlyRoots roots(this);
-  {  // Partial map allocation
+
+  if (kCreateReadOnly) {
+    {  // Partial map allocation
 #define ALLOCATE_PARTIAL_MAP(instance_type, size, field_name)                \
   {                                                                          \
     Map map;                                                                 \
@@ -359,21 +373,23 @@ bool Heap::CreateInitialMaps() {
     const StructTable& entry = struct_table[i];
     FinalizePartialMap(Map::cast(Object(roots_table()[entry.index])));
   }
+  }
 
   {  // Map allocation
 #define ALLOCATE_MAP(instance_type, size, field_name)               \
-  {                                                                 \
+  if (kCreateReadOnly || IsMutable(instance_type)) {                \
     Map map;                                                        \
     if (!AllocateMap((instance_type), size).To(&map)) return false; \
     set_##field_name##_map(map);                                    \
   }
 
 #define ALLOCATE_VARSIZE_MAP(instance_type, field_name) \
+  if (kCreateReadOnly || IsMutable(instance_type))      \
   ALLOCATE_MAP(instance_type, kVariableSizeSentinel, field_name)
 
 #define ALLOCATE_PRIMITIVE_MAP(instance_type, size, field_name, \
                                constructor_function_index)      \
-  {                                                             \
+  if (kCreateReadOnly || IsMutable(instance_type)) {            \
     ALLOCATE_MAP((instance_type), (size), field_name);          \
     roots.field_name##_map().SetConstructorFunctionIndex(       \
         (constructor_function_index));                          \
@@ -406,6 +422,7 @@ bool Heap::CreateInitialMaps() {
     for (unsigned i = 0; i < arraysize(string_type_table); i++) {
       const StringTypeTable& entry = string_type_table[i];
       Map map;
+      if (!kCreateReadOnly && !IsMutable(entry.type)) continue;
       if (!AllocateMap(entry.type, entry.size).To(&map)) return false;
       map.SetConstructorFunctionIndex(Context::STRING_FUNCTION_INDEX);
       // Mark cons string maps as unstable, because their objects can change
@@ -415,7 +432,8 @@ bool Heap::CreateInitialMaps() {
     }
 
     ALLOCATE_VARSIZE_MAP(FIXED_DOUBLE_ARRAY_TYPE, fixed_double_array)
-    roots.fixed_double_array_map().set_elements_kind(HOLEY_DOUBLE_ELEMENTS);
+    if (kCreateReadOnly)
+      roots.fixed_double_array_map().set_elements_kind(HOLEY_DOUBLE_ELEMENTS);
     ALLOCATE_VARSIZE_MAP(FEEDBACK_METADATA_TYPE, feedback_metadata)
     ALLOCATE_VARSIZE_MAP(BYTE_ARRAY_TYPE, byte_array)
     ALLOCATE_VARSIZE_MAP(BYTECODE_ARRAY_TYPE, bytecode_array)
@@ -460,10 +478,10 @@ bool Heap::CreateInitialMaps() {
     // to be marked unstable because their objects can change maps.
     ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
                  no_closures_cell)
-    roots.no_closures_cell_map().mark_unstable();
+    if (kCreateReadOnly) roots.no_closures_cell_map().mark_unstable();
     ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
                  one_closure_cell)
-    roots.one_closure_cell_map().mark_unstable();
+    if (kCreateReadOnly) roots.one_closure_cell_map().mark_unstable();
     ALLOCATE_MAP(FEEDBACK_CELL_TYPE, FeedbackCell::kAlignedSize,
                  many_closures_cell)
 
@@ -542,115 +560,122 @@ bool Heap::CreateInitialMaps() {
 #undef ALLOCATE_VARSIZE_MAP
 #undef ALLOCATE_MAP
   }
-  {
-    AllocationResult alloc = AllocateRaw(
-        ArrayList::SizeFor(ArrayList::kFirstIndex), AllocationType::kReadOnly);
-    if (!alloc.To(&obj)) return false;
-    obj.set_map_after_allocation(roots.array_list_map(), SKIP_WRITE_BARRIER);
-    ArrayList::cast(obj).set_length(ArrayList::kFirstIndex);
-    ArrayList::cast(obj).SetLength(0);
-  }
-  set_empty_array_list(ArrayList::cast(obj));
 
-  {
-    AllocationResult alloc =
-        AllocateRaw(ScopeInfo::SizeFor(ScopeInfo::kVariablePartIndex),
-                    AllocationType::kReadOnly);
-    if (!alloc.To(&obj)) return false;
-    obj.set_map_after_allocation(roots.scope_info_map(), SKIP_WRITE_BARRIER);
-    int flags = ScopeInfo::IsEmptyBit::encode(true);
-    DCHECK_EQ(ScopeInfo::LanguageModeBit::decode(flags), LanguageMode::kSloppy);
-    DCHECK_EQ(ScopeInfo::ReceiverVariableBits::decode(flags),
-              VariableAllocationInfo::NONE);
-    DCHECK_EQ(ScopeInfo::FunctionVariableBits::decode(flags),
-              VariableAllocationInfo::NONE);
-    ScopeInfo::cast(obj).set_flags(flags);
-    ScopeInfo::cast(obj).set_context_local_count(0);
-    ScopeInfo::cast(obj).set_parameter_count(0);
-  }
-  set_empty_scope_info(ScopeInfo::cast(obj));
-
-  {
-    // Empty boilerplate needs a field for literal_flags
-    AllocationResult alloc =
-        AllocateRaw(FixedArray::SizeFor(1), AllocationType::kReadOnly);
-    if (!alloc.To(&obj)) return false;
-    obj.set_map_after_allocation(roots.object_boilerplate_description_map(),
-                                 SKIP_WRITE_BARRIER);
-
-    FixedArray::cast(obj).set_length(1);
-    FixedArray::cast(obj).set(ObjectBoilerplateDescription::kLiteralTypeOffset,
-                              Smi::zero());
-  }
-  set_empty_object_boilerplate_description(
-      ObjectBoilerplateDescription::cast(obj));
-
-  {
-    // Empty array boilerplate description
-    AllocationResult alloc =
-        Allocate(roots.array_boilerplate_description_map_handle(),
-                 AllocationType::kReadOnly);
-    if (!alloc.To(&obj)) return false;
-
-    ArrayBoilerplateDescription::cast(obj).set_constant_elements(
-        roots.empty_fixed_array());
-    ArrayBoilerplateDescription::cast(obj).set_elements_kind(
-        ElementsKind::PACKED_SMI_ELEMENTS);
-  }
-  set_empty_array_boilerplate_description(
-      ArrayBoilerplateDescription::cast(obj));
-
-  {
-    AllocationResult allocation =
-        Allocate(roots.boolean_map_handle(), AllocationType::kReadOnly);
-    if (!allocation.To(&obj)) return false;
-  }
-  set_true_value(Oddball::cast(obj));
-  Oddball::cast(obj).set_kind(Oddball::kTrue);
-
-  {
-    AllocationResult allocation =
-        Allocate(roots.boolean_map_handle(), AllocationType::kReadOnly);
-    if (!allocation.To(&obj)) return false;
-  }
-  set_false_value(Oddball::cast(obj));
-  Oddball::cast(obj).set_kind(Oddball::kFalse);
-
-  // Empty arrays.
-  {
-    if (!AllocateRaw(ByteArray::SizeFor(0), AllocationType::kReadOnly).To(&obj))
-      return false;
-    obj.set_map_after_allocation(roots.byte_array_map(), SKIP_WRITE_BARRIER);
-    ByteArray::cast(obj).set_length(0);
-    set_empty_byte_array(ByteArray::cast(obj));
-  }
-
-  {
-    if (!AllocateRaw(FixedArray::SizeFor(0), AllocationType::kReadOnly)
-             .To(&obj)) {
-      return false;
+  if (kCreateReadOnly) {
+    {
+      AllocationResult alloc =
+          AllocateRaw(ArrayList::SizeFor(ArrayList::kFirstIndex),
+                      AllocationType::kReadOnly);
+      if (!alloc.To(&obj)) return false;
+      obj.set_map_after_allocation(roots.array_list_map(), SKIP_WRITE_BARRIER);
+      ArrayList::cast(obj).set_length(ArrayList::kFirstIndex);
+      ArrayList::cast(obj).SetLength(0);
     }
-    obj.set_map_after_allocation(roots.property_array_map(),
-                                 SKIP_WRITE_BARRIER);
-    PropertyArray::cast(obj).initialize_length(0);
-    set_empty_property_array(PropertyArray::cast(obj));
-  }
+    set_empty_array_list(ArrayList::cast(obj));
 
-  {
-    if (!AllocateRaw(FixedArray::SizeFor(0), AllocationType::kReadOnly)
-             .To(&obj)) {
-      return false;
+    {
+      AllocationResult alloc =
+          AllocateRaw(ScopeInfo::SizeFor(ScopeInfo::kVariablePartIndex),
+                      AllocationType::kReadOnly);
+      if (!alloc.To(&obj)) return false;
+      obj.set_map_after_allocation(roots.scope_info_map(), SKIP_WRITE_BARRIER);
+      int flags = ScopeInfo::IsEmptyBit::encode(true);
+      DCHECK_EQ(ScopeInfo::LanguageModeBit::decode(flags),
+                LanguageMode::kSloppy);
+      DCHECK_EQ(ScopeInfo::ReceiverVariableBits::decode(flags),
+                VariableAllocationInfo::NONE);
+      DCHECK_EQ(ScopeInfo::FunctionVariableBits::decode(flags),
+                VariableAllocationInfo::NONE);
+      ScopeInfo::cast(obj).set_flags(flags);
+      ScopeInfo::cast(obj).set_context_local_count(0);
+      ScopeInfo::cast(obj).set_parameter_count(0);
     }
-    obj.set_map_after_allocation(roots.closure_feedback_cell_array_map(),
-                                 SKIP_WRITE_BARRIER);
-    FixedArray::cast(obj).set_length(0);
-    set_empty_closure_feedback_cell_array(ClosureFeedbackCellArray::cast(obj));
+    set_empty_scope_info(ScopeInfo::cast(obj));
+
+    {
+      // Empty boilerplate needs a field for literal_flags
+      AllocationResult alloc =
+          AllocateRaw(FixedArray::SizeFor(1), AllocationType::kReadOnly);
+      if (!alloc.To(&obj)) return false;
+      obj.set_map_after_allocation(roots.object_boilerplate_description_map(),
+                                   SKIP_WRITE_BARRIER);
+
+      FixedArray::cast(obj).set_length(1);
+      FixedArray::cast(obj).set(
+          ObjectBoilerplateDescription::kLiteralTypeOffset, Smi::zero());
+    }
+    set_empty_object_boilerplate_description(
+        ObjectBoilerplateDescription::cast(obj));
+
+    {
+      // Empty array boilerplate description
+      AllocationResult alloc =
+          Allocate(roots.array_boilerplate_description_map_handle(),
+                   AllocationType::kReadOnly);
+      if (!alloc.To(&obj)) return false;
+
+      ArrayBoilerplateDescription::cast(obj).set_constant_elements(
+          roots.empty_fixed_array());
+      ArrayBoilerplateDescription::cast(obj).set_elements_kind(
+          ElementsKind::PACKED_SMI_ELEMENTS);
+    }
+    set_empty_array_boilerplate_description(
+        ArrayBoilerplateDescription::cast(obj));
+
+    {
+      AllocationResult allocation =
+          Allocate(roots.boolean_map_handle(), AllocationType::kReadOnly);
+      if (!allocation.To(&obj)) return false;
+    }
+    set_true_value(Oddball::cast(obj));
+    Oddball::cast(obj).set_kind(Oddball::kTrue);
+
+    {
+      AllocationResult allocation =
+          Allocate(roots.boolean_map_handle(), AllocationType::kReadOnly);
+      if (!allocation.To(&obj)) return false;
+    }
+    set_false_value(Oddball::cast(obj));
+    Oddball::cast(obj).set_kind(Oddball::kFalse);
+
+    // Empty arrays.
+    {
+      if (!AllocateRaw(ByteArray::SizeFor(0), AllocationType::kReadOnly)
+               .To(&obj))
+        return false;
+      obj.set_map_after_allocation(roots.byte_array_map(), SKIP_WRITE_BARRIER);
+      ByteArray::cast(obj).set_length(0);
+      set_empty_byte_array(ByteArray::cast(obj));
+    }
+
+    {
+      if (!AllocateRaw(FixedArray::SizeFor(0), AllocationType::kReadOnly)
+               .To(&obj)) {
+        return false;
+      }
+      obj.set_map_after_allocation(roots.property_array_map(),
+                                   SKIP_WRITE_BARRIER);
+      PropertyArray::cast(obj).initialize_length(0);
+      set_empty_property_array(PropertyArray::cast(obj));
+    }
+
+    {
+      if (!AllocateRaw(FixedArray::SizeFor(0), AllocationType::kReadOnly)
+               .To(&obj)) {
+        return false;
+      }
+      obj.set_map_after_allocation(roots.closure_feedback_cell_array_map(),
+                                   SKIP_WRITE_BARRIER);
+      FixedArray::cast(obj).set_length(0);
+      set_empty_closure_feedback_cell_array(
+          ClosureFeedbackCellArray::cast(obj));
+    }
+
+    DCHECK(!InYoungGeneration(roots.empty_fixed_array()));
+
+    roots.bigint_map().SetConstructorFunctionIndex(
+        Context::BIGINT_FUNCTION_INDEX);
   }
-
-  DCHECK(!InYoungGeneration(roots.empty_fixed_array()));
-
-  roots.bigint_map().SetConstructorFunctionIndex(
-      Context::BIGINT_FUNCTION_INDEX);
 
   return true;
 }
@@ -661,11 +686,15 @@ void Heap::CreateApiObjects() {
 
   set_message_listeners(*TemplateList::New(isolate, 2));
 
-  Handle<InterceptorInfo> info =
-      Handle<InterceptorInfo>::cast(isolate->factory()->NewStruct(
-          INTERCEPTOR_INFO_TYPE, AllocationType::kReadOnly));
-  info->set_flags(0);
-  set_noop_interceptor_info(*info);
+  const bool kCreateReadOnly =
+      !V8_STATIC_ROOTS_BOOL || read_only_space()->writable();
+  if (kCreateReadOnly) {
+    Handle<InterceptorInfo> info =
+        Handle<InterceptorInfo>::cast(isolate->factory()->NewStruct(
+            INTERCEPTOR_INFO_TYPE, AllocationType::kReadOnly));
+    info->set_flags(0);
+    set_noop_interceptor_info(*info);
+  }
 }
 
 void Heap::CreateInitialObjects() {
@@ -673,105 +702,113 @@ void Heap::CreateInitialObjects() {
   Factory* factory = isolate()->factory();
   ReadOnlyRoots roots(this);
 
-  // The -0 value must be set before NewNumber works.
-  set_minus_zero_value(
-      *factory->NewHeapNumber<AllocationType::kReadOnly>(-0.0));
-  DCHECK(std::signbit(roots.minus_zero_value().Number()));
+  const bool kCreateReadOnly =
+      !V8_STATIC_ROOTS_BOOL || read_only_space()->writable();
+  if (kCreateReadOnly) {
+    // The -0 value must be set before NewNumber works.
+    set_minus_zero_value(
+        *factory->NewHeapNumber<AllocationType::kReadOnly>(-0.0));
+    DCHECK(std::signbit(roots.minus_zero_value().Number()));
 
-  set_nan_value(*factory->NewHeapNumber<AllocationType::kReadOnly>(
-      std::numeric_limits<double>::quiet_NaN()));
-  set_hole_nan_value(*factory->NewHeapNumberFromBits<AllocationType::kReadOnly>(
-      kHoleNanInt64));
-  set_infinity_value(
-      *factory->NewHeapNumber<AllocationType::kReadOnly>(V8_INFINITY));
-  set_minus_infinity_value(
-      *factory->NewHeapNumber<AllocationType::kReadOnly>(-V8_INFINITY));
+    set_nan_value(*factory->NewHeapNumber<AllocationType::kReadOnly>(
+        std::numeric_limits<double>::quiet_NaN()));
+    set_hole_nan_value(
+        *factory->NewHeapNumberFromBits<AllocationType::kReadOnly>(
+            kHoleNanInt64));
+    set_infinity_value(
+        *factory->NewHeapNumber<AllocationType::kReadOnly>(V8_INFINITY));
+    set_minus_infinity_value(
+        *factory->NewHeapNumber<AllocationType::kReadOnly>(-V8_INFINITY));
 
-  set_hash_seed(*factory->NewByteArray(kInt64Size, AllocationType::kReadOnly));
-  InitializeHashSeed();
+    set_hash_seed(
+        *factory->NewByteArray(kInt64Size, AllocationType::kReadOnly));
+    InitializeHashSeed();
+  }
 
   // There's no "current microtask" in the beginning.
   set_current_microtask(roots.undefined_value());
 
   set_weak_refs_keep_during_job(roots.undefined_value());
 
-  // Allocate and initialize table for single character one byte strings.
-  int table_size = String::kMaxOneByteCharCode + 1;
-  set_single_character_string_table(
-      *factory->NewFixedArray(table_size, AllocationType::kReadOnly));
-  for (int i = 0; i < table_size; ++i) {
-    uint8_t code = static_cast<uint8_t>(i);
-    Handle<String> str =
-        factory->InternalizeString(base::Vector<const uint8_t>(&code, 1));
-    DCHECK(ReadOnlyHeap::Contains(*str));
-    single_character_string_table().set(i, *str);
-  }
+  if (kCreateReadOnly) {
+    // Allocate and initialize table for single character one byte strings.
+    int table_size = String::kMaxOneByteCharCode + 1;
+    set_single_character_string_table(
+        *factory->NewFixedArray(table_size, AllocationType::kReadOnly));
+    for (int i = 0; i < table_size; ++i) {
+      uint8_t code = static_cast<uint8_t>(i);
+      Handle<String> str =
+          factory->InternalizeString(base::Vector<const uint8_t>(&code, 1));
+      DCHECK(ReadOnlyHeap::Contains(*str));
+      single_character_string_table().set(i, *str);
+    }
 
-  for (unsigned i = 0; i < arraysize(constant_string_table); i++) {
-    Handle<String> str =
-        factory->InternalizeUtf8String(constant_string_table[i].contents);
-    roots_table()[constant_string_table[i].index] = str->ptr();
-  }
+    for (unsigned i = 0; i < arraysize(constant_string_table); i++) {
+      Handle<String> str =
+          factory->InternalizeUtf8String(constant_string_table[i].contents);
+      roots_table()[constant_string_table[i].index] = str->ptr();
+    }
 
-  // Allocate
+    // Allocate
 
-  // Finish initializing oddballs after creating the string table.
-  Oddball::Initialize(isolate(), factory->undefined_value(), "undefined",
-                      factory->nan_value(), "undefined", Oddball::kUndefined);
+    // Finish initializing oddballs after creating the string table.
+    Oddball::Initialize(isolate(), factory->undefined_value(), "undefined",
+                        factory->nan_value(), "undefined", Oddball::kUndefined);
 
-  // Initialize the null_value.
-  Oddball::Initialize(isolate(), factory->null_value(), "null",
-                      handle(Smi::zero(), isolate()), "object", Oddball::kNull);
+    // Initialize the null_value.
+    Oddball::Initialize(isolate(), factory->null_value(), "null",
+                        handle(Smi::zero(), isolate()), "object",
+                        Oddball::kNull);
 
-  // Initialize the_hole_value.
-  Oddball::Initialize(isolate(), factory->the_hole_value(), "hole",
-                      factory->hole_nan_value(), "undefined",
-                      Oddball::kTheHole);
+    // Initialize the_hole_value.
+    Oddball::Initialize(isolate(), factory->the_hole_value(), "hole",
+                        factory->hole_nan_value(), "undefined",
+                        Oddball::kTheHole);
 
-  // Initialize the true_value.
-  Oddball::Initialize(isolate(), factory->true_value(), "true",
-                      handle(Smi::FromInt(1), isolate()), "boolean",
-                      Oddball::kTrue);
+    // Initialize the true_value.
+    Oddball::Initialize(isolate(), factory->true_value(), "true",
+                        handle(Smi::FromInt(1), isolate()), "boolean",
+                        Oddball::kTrue);
 
-  // Initialize the false_value.
-  Oddball::Initialize(isolate(), factory->false_value(), "false",
-                      handle(Smi::zero(), isolate()), "boolean",
-                      Oddball::kFalse);
+    // Initialize the false_value.
+    Oddball::Initialize(isolate(), factory->false_value(), "false",
+                        handle(Smi::zero(), isolate()), "boolean",
+                        Oddball::kFalse);
 
-  set_uninitialized_value(
-      *factory->NewOddball(factory->uninitialized_map(), "uninitialized",
-                           handle(Smi::FromInt(-1), isolate()), "undefined",
-                           Oddball::kUninitialized));
+    set_uninitialized_value(
+        *factory->NewOddball(factory->uninitialized_map(), "uninitialized",
+                             handle(Smi::FromInt(-1), isolate()), "undefined",
+                             Oddball::kUninitialized));
 
-  set_arguments_marker(
-      *factory->NewOddball(factory->arguments_marker_map(), "arguments_marker",
-                           handle(Smi::FromInt(-4), isolate()), "undefined",
-                           Oddball::kArgumentsMarker));
+    set_arguments_marker(*factory->NewOddball(
+        factory->arguments_marker_map(), "arguments_marker",
+        handle(Smi::FromInt(-4), isolate()), "undefined",
+        Oddball::kArgumentsMarker));
 
-  set_termination_exception(*factory->NewOddball(
-      factory->termination_exception_map(), "termination_exception",
-      handle(Smi::FromInt(-3), isolate()), "undefined", Oddball::kOther));
+    set_termination_exception(*factory->NewOddball(
+        factory->termination_exception_map(), "termination_exception",
+        handle(Smi::FromInt(-3), isolate()), "undefined", Oddball::kOther));
 
-  set_exception(*factory->NewOddball(factory->exception_map(), "exception",
-                                     handle(Smi::FromInt(-5), isolate()),
-                                     "undefined", Oddball::kException));
+    set_exception(*factory->NewOddball(factory->exception_map(), "exception",
+                                       handle(Smi::FromInt(-5), isolate()),
+                                       "undefined", Oddball::kException));
 
-  set_optimized_out(*factory->NewOddball(factory->optimized_out_map(),
-                                         "optimized_out",
-                                         handle(Smi::FromInt(-6), isolate()),
-                                         "undefined", Oddball::kOptimizedOut));
+    set_optimized_out(
+        *factory->NewOddball(factory->optimized_out_map(), "optimized_out",
+                             handle(Smi::FromInt(-6), isolate()), "undefined",
+                             Oddball::kOptimizedOut));
 
-  set_stale_register(
-      *factory->NewOddball(factory->stale_register_map(), "stale_register",
-                           handle(Smi::FromInt(-7), isolate()), "undefined",
-                           Oddball::kStaleRegister));
+    set_stale_register(
+        *factory->NewOddball(factory->stale_register_map(), "stale_register",
+                             handle(Smi::FromInt(-7), isolate()), "undefined",
+                             Oddball::kStaleRegister));
 
-  // Initialize marker objects used during compilation.
-  set_self_reference_marker(*factory->NewSelfReferenceMarker());
-  set_basic_block_counters_marker(*factory->NewBasicBlockCountersMarker());
+    // Initialize marker objects used during compilation.
+    set_self_reference_marker(*factory->NewSelfReferenceMarker());
+    set_basic_block_counters_marker(*factory->NewBasicBlockCountersMarker());
 
-  {
-    HandleScope handle_scope(isolate());
+    {
+      HandleScope handle_scope(isolate());
 #define SYMBOL_INIT(_, name)                                                \
   {                                                                         \
     Handle<Symbol> symbol(                                                  \
@@ -780,7 +817,7 @@ void Heap::CreateInitialObjects() {
   }
     PRIVATE_SYMBOL_LIST_GENERATOR(SYMBOL_INIT, /* not used */)
 #undef SYMBOL_INIT
-  }
+    }
 
   {
     HandleScope handle_scope(isolate());
@@ -841,20 +878,27 @@ void Heap::CreateInitialObjects() {
 #undef INTERNALIZED_STRING_INIT
 #undef PUBLIC_SYMBOL_INIT
 #undef WELL_KNOWN_SYMBOL_INIT
+
+    Handle<NameDictionary> empty_property_dictionary = NameDictionary::New(
+        isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
+    DCHECK(!empty_property_dictionary->HasSufficientCapacityToAdd(1));
+
+    set_empty_property_dictionary(*empty_property_dictionary);
+
+    Handle<RegisteredSymbolTable> empty_symbol_table =
+        RegisteredSymbolTable::New(isolate(), 1, AllocationType::kReadOnly,
+                                   USE_CUSTOM_MINIMUM_CAPACITY);
+    DCHECK(!empty_symbol_table->HasSufficientCapacityToAdd(1));
+    set_public_symbol_table(*empty_symbol_table);
+    set_api_symbol_table(*empty_symbol_table);
+    set_api_private_symbol_table(*empty_symbol_table);
+    roots_table()[RootIndex::kEmptySymbolTable] = empty_symbol_table->ptr();
   }
-
-  Handle<NameDictionary> empty_property_dictionary = NameDictionary::New(
-      isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
-  DCHECK(!empty_property_dictionary->HasSufficientCapacityToAdd(1));
-
-  set_empty_property_dictionary(*empty_property_dictionary);
-
-  Handle<RegisteredSymbolTable> empty_symbol_table = RegisteredSymbolTable::New(
-      isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
-  DCHECK(!empty_symbol_table->HasSufficientCapacityToAdd(1));
-  set_public_symbol_table(*empty_symbol_table);
-  set_api_symbol_table(*empty_symbol_table);
-  set_api_private_symbol_table(*empty_symbol_table);
+  } else {
+    set_public_symbol_table(roots.empty_symbol_table());
+    set_api_symbol_table(roots.empty_symbol_table());
+    set_api_private_symbol_table(roots.empty_symbol_table());
+  }
 
   set_number_string_cache(*factory->NewFixedArray(
       kInitialNumberStringCacheSize * 2, AllocationType::kOld));
@@ -888,10 +932,12 @@ void Heap::CreateInitialObjects() {
 
   set_script_list(roots.empty_weak_array_list());
 
-  Handle<NumberDictionary> slow_element_dictionary = NumberDictionary::New(
-      isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
-  DCHECK(!slow_element_dictionary->HasSufficientCapacityToAdd(1));
-  set_empty_slow_element_dictionary(*slow_element_dictionary);
+  if (kCreateReadOnly) {
+    Handle<NumberDictionary> slow_element_dictionary = NumberDictionary::New(
+        isolate(), 1, AllocationType::kReadOnly, USE_CUSTOM_MINIMUM_CAPACITY);
+    DCHECK(!slow_element_dictionary->HasSufficientCapacityToAdd(1));
+    set_empty_slow_element_dictionary(*slow_element_dictionary);
+  }
 
   set_materialized_objects(*factory->NewFixedArray(0, AllocationType::kOld));
 
@@ -900,46 +946,49 @@ void Heap::CreateInitialObjects() {
   set_last_debugging_id(Smi::FromInt(DebugInfo::kNoDebuggingId));
   set_next_template_serial_number(Smi::zero());
 
-  // Allocate the empty OrderedHashMap.
-  Handle<OrderedHashMap> empty_ordered_hash_map =
-      OrderedHashMap::AllocateEmpty(isolate(), AllocationType::kReadOnly)
-          .ToHandleChecked();
-  set_empty_ordered_hash_map(*empty_ordered_hash_map);
+  if (kCreateReadOnly) {
+    // Allocate the empty OrderedHashMap.
+    Handle<OrderedHashMap> empty_ordered_hash_map =
+        OrderedHashMap::AllocateEmpty(isolate(), AllocationType::kReadOnly)
+            .ToHandleChecked();
+    set_empty_ordered_hash_map(*empty_ordered_hash_map);
 
-  // Allocate the empty OrderedHashSet.
-  Handle<OrderedHashSet> empty_ordered_hash_set =
-      OrderedHashSet::AllocateEmpty(isolate(), AllocationType::kReadOnly)
-          .ToHandleChecked();
-  set_empty_ordered_hash_set(*empty_ordered_hash_set);
+    // Allocate the empty OrderedHashSet.
+    Handle<OrderedHashSet> empty_ordered_hash_set =
+        OrderedHashSet::AllocateEmpty(isolate(), AllocationType::kReadOnly)
+            .ToHandleChecked();
+    set_empty_ordered_hash_set(*empty_ordered_hash_set);
 
-  // Allocate the empty OrderedNameDictionary
-  Handle<OrderedNameDictionary> empty_ordered_property_dictionary =
-      OrderedNameDictionary::AllocateEmpty(isolate(), AllocationType::kReadOnly)
-          .ToHandleChecked();
-  set_empty_ordered_property_dictionary(*empty_ordered_property_dictionary);
+    // Allocate the empty OrderedNameDictionary
+    Handle<OrderedNameDictionary> empty_ordered_property_dictionary =
+        OrderedNameDictionary::AllocateEmpty(isolate(),
+                                             AllocationType::kReadOnly)
+            .ToHandleChecked();
+    set_empty_ordered_property_dictionary(*empty_ordered_property_dictionary);
 
-  // Allocate the empty SwissNameDictionary
-  Handle<SwissNameDictionary> empty_swiss_property_dictionary =
-      factory->CreateCanonicalEmptySwissNameDictionary();
-  set_empty_swiss_property_dictionary(*empty_swiss_property_dictionary);
+    // Allocate the empty SwissNameDictionary
+    Handle<SwissNameDictionary> empty_swiss_property_dictionary =
+        factory->CreateCanonicalEmptySwissNameDictionary();
+    set_empty_swiss_property_dictionary(*empty_swiss_property_dictionary);
 
-  // Allocate the empty FeedbackMetadata.
-  Handle<FeedbackMetadata> empty_feedback_metadata =
-      factory->NewFeedbackMetadata(0, 0, AllocationType::kReadOnly);
-  set_empty_feedback_metadata(*empty_feedback_metadata);
+    // Allocate the empty FeedbackMetadata.
+    Handle<FeedbackMetadata> empty_feedback_metadata =
+        factory->NewFeedbackMetadata(0, 0, AllocationType::kReadOnly);
+    set_empty_feedback_metadata(*empty_feedback_metadata);
 
-  // Canonical scope arrays.
-  Handle<ScopeInfo> global_this_binding =
-      ScopeInfo::CreateGlobalThisBinding(isolate());
-  set_global_this_binding_scope_info(*global_this_binding);
+    // Canonical scope arrays.
+    Handle<ScopeInfo> global_this_binding =
+        ScopeInfo::CreateGlobalThisBinding(isolate());
+    set_global_this_binding_scope_info(*global_this_binding);
 
-  Handle<ScopeInfo> empty_function =
-      ScopeInfo::CreateForEmptyFunction(isolate());
-  set_empty_function_scope_info(*empty_function);
+    Handle<ScopeInfo> empty_function =
+        ScopeInfo::CreateForEmptyFunction(isolate());
+    set_empty_function_scope_info(*empty_function);
 
-  Handle<ScopeInfo> native_scope_info =
-      ScopeInfo::CreateForNativeContext(isolate());
-  set_native_scope_info(*native_scope_info);
+    Handle<ScopeInfo> native_scope_info =
+        ScopeInfo::CreateForNativeContext(isolate());
+    set_native_scope_info(*native_scope_info);
+  }
 
   // Allocate the empty script.
   Handle<Script> script = factory->NewScript(factory->empty_string());
@@ -971,25 +1020,27 @@ void Heap::CreateInitialObjects() {
   set_serialized_objects(roots.empty_fixed_array());
   set_serialized_global_proxy_sizes(roots.empty_fixed_array());
 
-  /* Canonical off-heap trampoline data */
-  set_off_heap_trampoline_relocation_info(
-      *Builtins::GenerateOffHeapTrampolineRelocInfo(isolate_));
+  if (kCreateReadOnly) {
+    /* Canonical off-heap trampoline data */
+    set_off_heap_trampoline_relocation_info(
+        *Builtins::GenerateOffHeapTrampolineRelocInfo(isolate_));
 
-  if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    // These roots will not be used.
-    HeapObject no_container = *isolate()->factory()->undefined_value();
-    set_trampoline_trivial_code_data_container(no_container);
-    set_trampoline_promise_rejection_code_data_container(no_container);
+    if (V8_EXTERNAL_CODE_SPACE_BOOL) {
+      // These roots will not be used.
+      HeapObject no_container = *isolate()->factory()->undefined_value();
+      set_trampoline_trivial_code_data_container(no_container);
+      set_trampoline_promise_rejection_code_data_container(no_container);
 
-  } else {
-    set_trampoline_trivial_code_data_container(
-        *isolate()->factory()->NewCodeDataContainer(0,
-                                                    AllocationType::kReadOnly));
+    } else {
+      set_trampoline_trivial_code_data_container(
+          *isolate()->factory()->NewCodeDataContainer(
+              0, AllocationType::kReadOnly));
 
-    set_trampoline_promise_rejection_code_data_container(
-        *isolate()->factory()->NewCodeDataContainer(
-            Code::IsPromiseRejectionField::encode(true),
-            AllocationType::kReadOnly));
+      set_trampoline_promise_rejection_code_data_container(
+          *isolate()->factory()->NewCodeDataContainer(
+              Code::IsPromiseRejectionField::encode(true),
+              AllocationType::kReadOnly));
+    }
   }
 
   // Evaluate the hash values which will then be cached in the strings.
