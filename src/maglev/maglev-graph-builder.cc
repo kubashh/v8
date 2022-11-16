@@ -3108,6 +3108,15 @@ void MaglevGraphBuilder::BuildCall(ValueNode* target_node, CallArguments& args,
       if (!target.IsJSFunction()) break;
       compiler::JSFunctionRef function = target.AsJSFunction();
 
+      if (v8_flags.maglev_inlining) {
+        base::Optional<compiler::FeedbackVectorRef> maybe_feedback_vector =
+            function.feedback_vector(broker()->dependencies());
+        if (maybe_feedback_vector.has_value()) {
+          return InlineCallFromRegisters(static_cast<int>(args.count()),
+                                         args.receiver_mode(), function);
+        }
+      }
+
       if (!BuildCheckValue(target_node, target)) return;
 
       SetAccumulator(ReduceCall(function, args));
