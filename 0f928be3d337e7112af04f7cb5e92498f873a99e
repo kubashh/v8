@@ -69,6 +69,24 @@
       "parentUuid": "2f49ae45_62174788",
       "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e365d83_407ad86c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2022-11-16T17:31:31Z",
+      "side": 1,
+      "message": "\"I get that it could make your project more convenient, but I\u0027m very reluctant to change V8\u0027s API as this could mean future maintenance burden.\"\n\nI completely agree with that.\n\n\"They pose stricter, implementation-dependent expectations than necessary\"\n\nI have some feelings about this one. If I agree with the \"future API maintenance burden\", this change is not pretending to break the \" internal abstractions\" made for the CPU profiler, the opposite, take advantage of this \"stricter pose\" and make the abstraction almost equal to the exposed abstraction for the \"HeapProfiler\".",
+      "parentUuid": "71fe973e_d6f4dc52",
+      "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
