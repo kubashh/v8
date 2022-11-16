@@ -51,6 +51,24 @@
       "parentUuid": "c625af73_262963bd",
       "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71fe973e_d6f4dc52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2022-11-16T15:55:20Z",
+      "side": 1,
+      "message": "These tests test the internal implementation of the CpuProfiler. They pose stricter, implementation-dependent expectations than necessary, and it is debatable whether that\u0027s good style. But these tests exist and there is no point in making any changes here.\n\nI can be persuaded that DeleteAllProfiles is useful. Then again, why not just delete the entire CpuProfiler and create a new one?\n\nI don\u0027t think exposing GetProfile makes sense. If you are running multiple profiles at once, you should already have the logic to keep track of these profiles. The integer index also does not match the ProfilerId that you would pass to CpuProfiler::Stop. It breaks abstractions.\n\nThat also makes GetProfilesCount also somewhat useless.\n\nI get that it could make your project more convenient, but I\u0027m very reluctant to change V8\u0027s API as this could mean future maintenance burden. It\u0027s very hard to take things back once they are exposed as part of the API. There are good ways of keeping track of profiles by the embedder, and this is this neither performance nor memory sensitive. So I don\u0027t see a need to add this to the API.\n\nOf course, if Camillo feels differently, I would be happy to defer this decision.",
+      "parentUuid": "2f49ae45_62174788",
+      "revId": "0f928be3d337e7112af04f7cb5e92498f873a99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
