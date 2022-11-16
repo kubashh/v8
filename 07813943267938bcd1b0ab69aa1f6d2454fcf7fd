@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "538aedac_21f157d6",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T13:34:56Z",
+      "side": 1,
+      "message": "I think this implementation needs revising. Specifically, I think you need to maintain a stack of contexts, such that each call to SaveContext pushes a new context to the stack, and calling ClearContext restores the previous context.\n\nAssume the following scenario: Thread A enters a ParkedScope and saves a context. It then enters an UnparkedScope and is allowed to touch the heap again. While thread A is in the UnparkedScope, thread B triggers a shared GC and forces thread A into a safepoint.\nIn the current implementation, CSS would miss anything written to stack after thread A entered the UnparkedScope.",
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29f479f6_6a65473f",
         "filename": "src/heap/base/stack.cc",
         "patchSetId": 16
