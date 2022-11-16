@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10449869_0c7419a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-11-16T12:56:40Z",
+      "side": 1,
+      "message": "Exactly.",
+      "parentUuid": "71cf4072_7f7021fd",
+      "revId": "6f1cc3c14573d97aeeb775a8d299bc1999d9b3c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27671845_8af85541",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-11-16T12:46:41Z",
       "side": 1,
       "message": "This is probably nit but, as the type of `auto` here is not obvious and there\u0027s pointer arithmetic involved, I suggest:\n\n```\nuintptr_t limit \u003d isolate-\u003estack_guard()-\u003ereal_jslimit();\nuintptr_t stack_start \u003d base::Stack::GetStackStart();\nDCHECK_LE(limit, stack_start);\nsize_t size \u003d stack_start - limit;\nreturn new StackMemory(isolate, reinterpret_cast\u003cbyte*\u003e(limit), size);\n```",
+      "revId": "6f1cc3c14573d97aeeb775a8d299bc1999d9b3c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08413ca8_2eddf12e",
+        "filename": "src/wasm/stacks.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2022-11-16T12:56:40Z",
+      "side": 1,
+      "message": "Done. I assume you meant:\n\n    uintptr_t stack_start \u003d base::Stack::GetStackStart().value;\n  \nfor the second line to actually get the inner uintptr_t.",
+      "parentUuid": "27671845_8af85541",
       "revId": "6f1cc3c14573d97aeeb775a8d299bc1999d9b3c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
