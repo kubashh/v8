@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6397b7e2_40f1efe1",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5652,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:44:03Z",
+      "side": 1,
+      "message": "I find it confusing that we gate wrapper tracing behind publishing. Can we keep it separate and use InUse like we do for major mc?",
+      "range": {
+        "startLine": 5652,
+        "startChar": 33,
+        "endLine": 5652,
+        "endChar": 47
+      },
+      "revId": "1721915e165d0df33c68933591a60139d4f97177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "323df93f_99cc956f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6326,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:44:03Z",
+      "side": 1,
+      "message": "This is the method that implements parallel marking for MinorMC. I think we should call PerformWrapperTracing from here as well like we do for major GCs. Otherwise I suspect we miss out on parallel marking for minor GCs.",
+      "range": {
+        "startLine": 6326,
+        "startChar": 2,
+        "endLine": 6326,
+        "endChar": 23
+      },
+      "revId": "1721915e165d0df33c68933591a60139d4f97177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49e05583_6f574564",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6369,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T12:44:03Z",
+      "side": 1,
+      "message": "nit: I think this one should always be empty.",
+      "range": {
+        "startLine": 6369,
+        "startChar": 12,
+        "endLine": 6369,
+        "endChar": 47
+      },
+      "revId": "1721915e165d0df33c68933591a60139d4f97177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
