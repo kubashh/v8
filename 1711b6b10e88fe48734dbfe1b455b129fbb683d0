@@ -22,6 +22,30 @@
       },
       "revId": "1711b6b10e88fe48734dbfe1b455b129fbb683d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d777726_a11183bd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2337,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T13:45:24Z",
+      "side": 1,
+      "message": "The initiator is the isolate whose main thread is running the shared GC. It is one of the client isolates. Its stack should be the current stack (and if it was not, we\u0027d get a `DCHECK` failure).\n\nHere we\u0027re setting the marker on two stack objects: the one corresponding to the shared isolate (that we are here migrating to the main thread of the initiator isolate) and the one corresponding to the initiator isolate.",
+      "parentUuid": "662ae1c1_9d812da9",
+      "range": {
+        "startLine": 2337,
+        "startChar": 24,
+        "endLine": 2337,
+        "endChar": 53
+      },
+      "revId": "1711b6b10e88fe48734dbfe1b455b129fbb683d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
