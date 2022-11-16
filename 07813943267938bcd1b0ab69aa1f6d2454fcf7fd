@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b72080_1a61986a",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T14:43:22Z",
+      "side": 1,
+      "message": "Up to you, but since this CL implements SaveContext and ClearContext and the next CL would already need to completely revise the implementation, I thought it makes sense to revise it now.",
+      "parentUuid": "aad9b951_b91c5cef",
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29f479f6_6a65473f",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "In this CL, this can happen when the `HeapObjectIterator` is used during GC. The GC has saved the context and the iterator (whose lifetime is nested in the GC) saves it again. The iterator should save the context because it can be used independently of GC. (Weirdly enough, this occurs only in one test.)\n\nIn crrev.com/c/4027210 there will be more instances of such nesting. E.g., the context will be saved from the `ParkedScope` and this can be nested.",
       "parentUuid": "29f479f6_6a65473f",
+      "range": {
+        "startLine": 196,
+        "startChar": 5,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1feb181_3f163e15",
+        "filename": "src/heap/base/stack.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T14:43:22Z",
+      "side": 1,
+      "message": "If `HeapObjectIterator` is only used from either GC or a single test, can we instead use a SaveStackContextScope in the the test and let `HeapObjectIterator` assume there is a saved context already?",
+      "parentUuid": "4f03b5b5_a428bfc9",
       "range": {
         "startLine": 196,
         "startChar": 5,
@@ -231,6 +273,30 @@
       "side": 1,
       "message": "V8 tests use the scope, which disables the `DCHECK` if stack switching is enabled.\n\nOilpan tests use `SaveContext` and `ClearContext`, never disabling the `DCHECK`. This is because the scope lives in `src/heap/heap.h` and we don\u0027t want to include that in Oilpan (we talked about it offline).\n\nWhen the scope will no longer require the V8 flag for stack switching, the scope object will move to `src/heap/base/stack.h` and all tests will use the scope.",
       "parentUuid": "80d8abd8_5e8f9daf",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 25
+      },
+      "revId": "07813943267938bcd1b0ab69aa1f6d2454fcf7fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "130c046c_e3025b04",
+        "filename": "test/unittests/heap/conservative-stack-visitor-unittest.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T14:43:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1bac9076_53d07744",
       "range": {
         "startLine": 89,
         "startChar": 4,
