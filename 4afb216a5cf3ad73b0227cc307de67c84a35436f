@@ -152,6 +152,24 @@
       "parentUuid": "2f153d8f_127a821a",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed06e70_c92b7665",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-16T14:47:38Z",
+      "side": 1,
+      "message": "The solution is not just to move the call to SaveContext into Park. Instead of keeping a single context (without updating it on nested calls to SaveContext) you need to maintain a stack of contexts, push a new one on SaveContext and restore the previous one on ClearContext. A single context would not suffice imo.\nCSS can always use the top context in that stack.",
+      "parentUuid": "c900e16b_94f2f2e9",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
