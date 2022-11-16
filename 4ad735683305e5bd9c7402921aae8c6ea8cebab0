@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a029b400_80a035b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2022-11-16T08:54:46Z",
+      "side": 1,
+      "message": "Sorry for the delay was OOO on a mini-vacation",
+      "revId": "4ad735683305e5bd9c7402921aae8c6ea8cebab0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
