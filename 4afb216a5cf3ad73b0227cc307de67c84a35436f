@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a8e33c_3b4a2b9a",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T11:25:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5958c7b7_6e707e72",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c74b24b_6029f002",
@@ -78,6 +96,24 @@
       "writtenOn": "2022-11-16T10:01:18Z",
       "side": 1,
       "message": "Would be nice if we could do this as part of Park(). In most cases we invoke Park() from ParkedScope but I know of a manual Unpark() as well, so it would feel more future-proof to me when ParkedScope would only invoke Park()/Unpark() without doing anything else.",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e73d71_0afecb5a",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-16T11:25:45Z",
+      "side": 1,
+      "message": "The main reason it\u0027s in the constructor of `ParkedScope` (which is inlined) is that this will set the marker inside the frame that contains the `ParkedScope` object (assuming such objects are stack-allocated). If we move it to `ParkSlowPath`, this will return and unroll the stack after we set the marker. I don\u0027t think we want that. We could explicitly pass the intended value of the marker as a parameter, for the case of manual `Park`.\n\nAlternatively, for the time being, there are no manual `Park/Unpark` invocations, just from `ParkedScope` and `UnparkedScope`. Given that the methods are private, we could probably add a comment saying that a `SaveStackContextScope` should be used around `Park/Unpark`, if they are ever used manually.",
+      "parentUuid": "f45fe447_a79d2c2f",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
