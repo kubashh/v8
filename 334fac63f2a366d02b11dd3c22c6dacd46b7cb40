@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "334fac63f2a366d02b11dd3c22c6dacd46b7cb40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f43e3f_d3b7a0ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-17T12:13:42Z",
+      "side": 1,
+      "message": "LGTM with a nit.\n\nFWIW, I tried replacing the WasmModuleBuilder entirely, and write into a Uint8Array directly. That yielded a ~2x speedup, which probably isn\u0027t worth the trouble.",
+      "revId": "334fac63f2a366d02b11dd3c22c6dacd46b7cb40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "386c5ffc_bbe513d5",
+        "filename": "test/mjsunit/wasm/code-space-overflow.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-17T12:13:42Z",
+      "side": 1,
+      "message": "I don\u0027t think we need the `print` statements (here and in lines 29, 31, 35, 37) any more.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 34
+      },
+      "revId": "334fac63f2a366d02b11dd3c22c6dacd46b7cb40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
