@@ -241,6 +241,10 @@ Handle<Code> Assembler::relative_code_target_object_handle_at(
   DCHECK(IsAuipc(instr1));
   DCHECK(IsJalr(instr2));
   int32_t code_target_index = BrachlongOffset(instr1, instr2);
+  DEBUG_PRINTF("0x%lx(%lu)", pc, pc - Address(buffer_start_));
+  disassembleInstr(instr1);
+  DEBUG_PRINTF("%lx(%lu)", pc + kInstrSize, pc + kInstrSize - Address(buffer_start_));
+  disassembleInstr(instr2);
   return Handle<Code>::cast(GetEmbeddedObject(code_target_index));
 }
 
