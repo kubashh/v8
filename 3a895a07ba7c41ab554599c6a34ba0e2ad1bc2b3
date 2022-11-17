@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85a5c434_76577842",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-17T16:44:15Z",
+      "side": 1,
+      "message": "WDYT of this approach for fixing the linked bug? The crashing testcase manages to allocate an ArrayBuffer at the very end of the sandbox, then creates a DataView with offset\u003dbuffer.byteLength. In that case, the data pointer is set to buffer + offset, which is just outside of the sandbox, causing a CHECK failure. This approach should prevent similar issues and may have the nice side effect of guaranteed access violation to special objects like the empty backing store buffer.",
+      "revId": "3a895a07ba7c41ab554599c6a34ba0e2ad1bc2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
