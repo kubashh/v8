@@ -128,7 +128,6 @@ void Sandbox::Initialize(v8::VirtualAddressSpace* vas) {
   } else {
     constexpr bool use_guard_regions = true;
     bool success = Initialize(vas, kSandboxSize, use_guard_regions);
-#ifdef V8_ENABLE_SANDBOX
     // If sandboxed pointers are enabled, we need the sandbox to be initialized,
     // so fall back to creating a partially reserved sandbox.
     if (!success) {
@@ -142,7 +141,6 @@ void Sandbox::Initialize(v8::VirtualAddressSpace* vas) {
         next_reservation_size /= 2;
       }
     }
-#endif  // V8_ENABLE_SANDBOX
   }
 
   if (!initialized_) {
@@ -266,11 +264,24 @@ bool Sandbox::InitializeAsPartiallyReservedSandbox(v8::VirtualAddressSpace* vas,
 }
 
 void Sandbox::InitializeConstants() {
-#ifdef V8_ENABLE_SANDBOX
+  // Reserve the last page in the sandbox. This way, we can place
+  // inaccessible "objects" there that are guaranteed to cause a fault on any
+  // accidental access (e.g. the empty backing store buffer).
+  // Further, this also prevents the accidental construction of invalid
+  // SandboxedPointers: if an ArrayBuffer is placed right at the end of the
+  // sandbox, a view could be constructed with byteLength=0 and
+  // offset=buffer.byteLength, which would lead to a pointer that points just
+  // outside of the sandbox.
+  size_t allocation_granularity = address_space_->allocation_granularity();
+  bool success = address_space_->AllocateGuardRegion(
+      end_ - allocation_granularity, allocation_granularity);
+  // If the sandbox is partially-reserved, this operation may fail, for example
+  // if the last page is outside of the mappable address space of the process.
+  DCHECK(success || is_partially_reserved());
+
   // Place the empty backing store buffer at the end of the sandbox, so that any
   // accidental access to it will most likely hit a guard page.
-  constants_.set_empty_backing_store_buffer(base_ + size_ - 1);
-#endif
+  constants_.set_empty_backing_store_buffer(end_ - 1);
 }
 
 void Sandbox::TearDown() {
@@ -284,17 +295,13 @@ void Sandbox::TearDown() {
     reservation_base_ = kNullAddress;
     reservation_size_ = 0;
     initialized_ = false;
-#ifdef V8_ENABLE_SANDBOX
     constants_.Reset();
-#endif
   }
 }
 
-#endif  // V8_ENABLE_SANDBOX
-
-#ifdef V8_ENABLE_SANDBOX
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(Sandbox, GetProcessWideSandbox)
-#endif
+
+#endif  // V8_ENABLE_SANDBOX
 
 }  // namespace internal
 }  // namespace v8
