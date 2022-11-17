@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8187ba15_02062a80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-17T12:00:34Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "4bd1140fdbccab9d4d40b84769852dfd77052131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5b2c83b6_614d6248",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 2
@@ -31,6 +48,30 @@
       "writtenOn": "2022-11-17T11:54:20Z",
       "side": 1,
       "message": "That\u0027s where it moved..",
+      "range": {
+        "startLine": 6278,
+        "startChar": 0,
+        "endLine": 6281,
+        "endChar": 57
+      },
+      "revId": "4bd1140fdbccab9d4d40b84769852dfd77052131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24abcea7_73e1ee3f",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6281,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-17T12:00:34Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "5b2c83b6_614d6248",
       "range": {
         "startLine": 6278,
         "startChar": 0,
