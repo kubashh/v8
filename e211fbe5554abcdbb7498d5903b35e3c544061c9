@@ -16,6 +16,23 @@
       "message": "Tobias, can you review this? I am not sure if my assumptions are correct here, but I was able to verify that this fixes the crbug repro.",
       "revId": "e211fbe5554abcdbb7498d5903b35e3c544061c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53907543_b314e126",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-17T09:19:12Z",
+      "side": 1,
+      "message": "LGTM, although maybe we should consider changing the Scheduler/rpo computation to always put the end-block last. It\u0027s always dangerous to have almost-invariants.",
+      "revId": "e211fbe5554abcdbb7498d5903b35e3c544061c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
