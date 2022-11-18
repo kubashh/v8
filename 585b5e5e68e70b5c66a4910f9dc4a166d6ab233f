@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23364d9c_b0db0440",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-18T14:11:29Z",
+      "side": 1,
+      "message": "Thanks, please hold off with landing this for now. Let\u0027s land this as soon as the ticket about the first 2 bot upgrades is resolved. Then let\u0027s be around after landing.",
+      "revId": "585b5e5e68e70b5c66a4910f9dc4a166d6ab233f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
