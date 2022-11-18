@@ -59,30 +59,38 @@ std::unique_ptr<StringForwardingTable::Block> StringForwardingTable::Block::New(
 }
 
 void StringForwardingTable::Block::UpdateAfterEvacuation(
-    PtrComprCageBase cage_base) {
-  UpdateAfterEvacuation(cage_base, capacity_);
+    PtrComprCageBase cage_base, GarbageCollector collector) {
+  UpdateAfterEvacuation(cage_base, collector, capacity_);
 }
 
 void StringForwardingTable::Block::UpdateAfterEvacuation(
-    PtrComprCageBase cage_base, int up_to_index) {
-  // This is only used for Scavenger.
-  DCHECK(!v8_flags.minor_mc);
-  DCHECK(v8_flags.always_use_string_forwarding_table);
+    PtrComprCageBase cage_base, GarbageCollector collector, int up_to_index) {
   for (int index = 0; index < up_to_index; ++index) {
     Object original = record(index)->OriginalStringObject(cage_base);
-    if (!original.IsHeapObject()) continue;
-    HeapObject object = HeapObject::cast(original);
-    if (Heap::InFromPage(object)) {
-      DCHECK(!object.InSharedWritableHeap());
+    if (original.IsHeapObject()) {
+      HeapObject object = HeapObject::cast(original);
       MapWord map_word = object.map_word(kRelaxedLoad);
       if (map_word.IsForwardingAddress()) {
         HeapObject forwarded_object = map_word.ToForwardingAddress(object);
         record(index)->set_original_string(forwarded_object);
-      } else {
+      } else if (Heap::InFromPage(object)) {
+        // The object died in young space.
+        DCHECK_EQ(collector, GarbageCollector::SCAVENGER);
+        DCHECK(!object.InSharedWritableHeap());
         record(index)->set_original_string(deleted_element());
       }
-    } else {
-      DCHECK(!object.map_word(kRelaxedLoad).IsForwardingAddress());
+    }
+    // During mark compact the forwarded (internalized) string may have been
+    // evacuated.
+    if (collector == GarbageCollector::MARK_COMPACTOR) {
+      Object forward = record(index)->ForwardStringObjectOrHash(cage_base);
+      if (!forward.IsHeapObject()) continue;
+      HeapObject object = HeapObject::cast(forward);
+      MapWord map_word = object.map_word(kRelaxedLoad);
+      if (map_word.IsForwardingAddress()) {
+        HeapObject forwarded_object = map_word.ToForwardingAddress(object);
+        record(index)->set_forward_string(forwarded_object);
+      }
     }
   }
 }
@@ -295,8 +303,9 @@ void StringForwardingTable::Reset() {
   next_free_index_ = 0;
 }
 
-void StringForwardingTable::UpdateAfterEvacuation() {
-  DCHECK(v8_flags.always_use_string_forwarding_table);
+void StringForwardingTable::UpdateAfterEvacuation(GarbageCollector collector) {
+  DCHECK(collector == GarbageCollector::MARK_COMPACTOR ||
+         collector == GarbageCollector::SCAVENGER);
 
   if (empty()) return;
 
@@ -306,12 +315,12 @@ void StringForwardingTable::UpdateAfterEvacuation() {
   for (unsigned int block_index = 0; block_index < last_block_index;
        ++block_index) {
     Block* block = blocks->LoadBlock(block_index, kAcquireLoad);
-    block->UpdateAfterEvacuation(isolate_);
+    block->UpdateAfterEvacuation(isolate_, collector);
   }
   // Handle last block separately, as it is not filled to capacity.
   const int max_index = IndexInBlock(size() - 1, last_block_index) + 1;
   blocks->LoadBlock(last_block_index, kAcquireLoad)
-      ->UpdateAfterEvacuation(isolate_, max_index);
+      ->UpdateAfterEvacuation(isolate_, collector, max_index);
 }
 
 }  // namespace internal

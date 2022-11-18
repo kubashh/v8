@@ -248,8 +248,10 @@ class StringForwardingTable::Block {
     return &elements_[index];
   }
 
-  void UpdateAfterEvacuation(PtrComprCageBase cage_base);
-  void UpdateAfterEvacuation(PtrComprCageBase cage_base, int up_to_index);
+  void UpdateAfterEvacuation(PtrComprCageBase cage_base,
+                             GarbageCollector collector);
+  void UpdateAfterEvacuation(PtrComprCageBase cage_base,
+                             GarbageCollector collector, int up_to_index);
 
  private:
   const int capacity_;
