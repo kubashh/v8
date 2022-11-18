@@ -246,7 +246,7 @@ in_category(
     main_multibranch_builder(
         name = "V8 Mac64 - builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
         properties = {"binary_size_tracking": {"category": "mac64", "binary": "d8"}},
         use_goma = GOMA.NO,
         use_remoteexec = RECLIENT.DEFAULT,
@@ -258,7 +258,7 @@ in_category(
     main_multibranch_builder(
         name = "V8 Mac64 - debug builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
     ),
     main_multibranch_builder(
         name = "V8 Mac64 - debug",
@@ -267,7 +267,7 @@ in_category(
     main_multibranch_builder(
         name = "V8 Mac - arm64 - release builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
     ),
     #TODO(liviurau): Naming pattern mismatch prevents the use of `_pair` here
     main_multibranch_builder(
@@ -281,7 +281,7 @@ in_category(
     main_multibranch_builder(
         name = "V8 Mac - arm64 - debug builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
     ),
     #TODO(liviurau): Naming pattern mismatch prevents the use of `_pair` here
     main_multibranch_builder(
@@ -295,16 +295,16 @@ in_category(
     main_multibranch_builder(
         name = "V8 Mac - arm64 - sim - release builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
     ),
     main_multibranch_builder(
         name = "V8 Mac - arm64 - sim - debug builder",
         triggered_by_gitiles = True,
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
     ),
     main_multibranch_builder_pair(
         name = "V8 Mac - arm64 - no pointer compression debug",
-        dimensions = {"os": "Mac-10.15", "cpu": "x86-64"},
+        dimensions = {"os": "Mac", "cpu": "x86-64"},
         use_goma = GOMA.NO,
         use_remoteexec = RECLIENT.DEFAULT,
     ),

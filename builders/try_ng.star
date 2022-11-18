@@ -459,7 +459,7 @@ trybot_pair(
     name = "v8_mac64_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -470,7 +470,7 @@ trybot_pair(
     # TODO(almuthanna): add this to Branch CQ after current milestone + 3
     # (i.e. M100).
     cq_compile_only_properties = CQ.EXP_100_PERCENT,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -478,7 +478,7 @@ trybot_pair(
     name = "v8_mac64_gc_stress_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -486,7 +486,7 @@ trybot_pair(
     name = "v8_mac64_noopt_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -495,7 +495,7 @@ trybot_pair(
     total_timeout = 7200,
     cq_properties = CQ.BLOCK,
     cq_branch_properties = CQ.BLOCK,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -505,7 +505,7 @@ trybot_pair(
     cq_properties = CQ.BLOCK,
     # TODO(https://crbug.com/v8/13008): Promote to blocking after M110.
     cq_branch_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -513,7 +513,7 @@ trybot_pair(
     name = "v8_mac_arm64_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -521,7 +521,7 @@ trybot_pair(
     name = "v8_mac_arm64_full_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -529,7 +529,7 @@ trybot_pair(
     name = "v8_mac_arm64_no_pointer_compression_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -537,7 +537,7 @@ trybot_pair(
     name = "v8_mac_arm64_sim_rel",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -545,7 +545,7 @@ trybot_pair(
     name = "v8_mac_arm64_sim_dbg",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
@@ -553,7 +553,7 @@ trybot_pair(
     name = "v8_mac_arm64_sim_nodcheck_rel",
     total_timeout = 7200,
     cq_properties = CQ.OPTIONAL,
-    dimensions = {"os": "Mac-10.15"},
+    dimensions = {"os": "Mac"},
     use_goma = GOMA.DEFAULT,
 )
 
