@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b316bc0_7c13ed0c",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-18T08:06:46Z",
+      "side": 1,
+      "message": "I remember I was worried about the use of local handles (which would likely also become direct pointers) on background threads. Not sure what the conclusion was then though.",
+      "parentUuid": "aac13ea9_53151045",
+      "range": {
+        "startLine": 376,
+        "startChar": 8,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f45fe447_a79d2c2f",
         "filename": "src/heap/parked-scope.h",
         "patchSetId": 2
