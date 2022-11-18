@@ -396,6 +396,20 @@ void StoreOp::PrintOptions(std::ostream& os) const {
   os << "]";
 }
 
+void AllocateOp::PrintOptions(std::ostream& os) const {
+  os << "[";
+  os << type << ", ";
+  os << (allow_large_objects == AllowLargeObjects::kTrue ? "allow large objects"
+                                                         : "no large objects");
+  os << "]";
+}
+
+void DecodeExternalPointerOp::PrintOptions(std::ostream& os) const {
+  os << "[";
+  os << "tag: " << std::hex << tag << std::dec;
+  os << "]";
+}
+
 void FrameStateOp::PrintOptions(std::ostream& os) const {
   os << "[";
   os << (inlined ? "inlined" : "not inlined");
@@ -561,8 +575,10 @@ std::ostream& operator<<(std::ostream& os, const Block* b) {
 }
 
 std::ostream& operator<<(std::ostream& os, OpProperties opProperties) {
-  if (opProperties == OpProperties::Pure()) {
-    os << "Pure";
+  if (opProperties == OpProperties::PureMayAllocate()) {
+    os << "PureMayAllocate";
+  } else if (opProperties == OpProperties::PureNoAllocation()) {
+    os << "PureNoAllocation";
   } else if (opProperties == OpProperties::Reading()) {
     os << "Reading";
   } else if (opProperties == OpProperties::Writing()) {
