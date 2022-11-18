@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00cbc0a8_3f9e8c91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-18T21:54:00Z",
+      "side": 1,
+      "message": "lgtm, but more of a rubber stamp.",
+      "revId": "682f0bf0176286232096299b7ce17102dae45d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
