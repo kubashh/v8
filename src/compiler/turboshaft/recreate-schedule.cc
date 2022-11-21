@@ -1018,12 +1018,6 @@ Node* ScheduleBuilder::ProcessOperation(const FrameConstantOp& op) {
       return AddNode(machine.LoadParentFramePointer(), {});
   }
 }
-Node* ScheduleBuilder::ProcessOperation(const CheckLazyDeoptOp& op) {
-  Node* call = GetNode(op.call());
-  Node* frame_state = GetNode(op.frame_state());
-  call->AppendInput(graph_zone, frame_state);
-  return nullptr;
-}
 Node* ScheduleBuilder::ProcessOperation(const DeoptimizeIfOp& op) {
   Node* condition = GetNode(op.condition());
   Node* frame_state = GetNode(op.frame_state());
@@ -1207,8 +1201,35 @@ Node* ScheduleBuilder::ProcessOperation(const CallOp& op) {
   for (OpIndex i : op.arguments()) {
     inputs.push_back(GetNode(i));
   }
+  if (op.NeedsFrameState()) {
+    inputs.push_back(GetNode(op.frame_state()));
+  }
   return AddNode(common.Call(op.descriptor->descriptor),
                  base::VectorOf(inputs));
+}
+Node* ScheduleBuilder::ProcessOperation(const CallAndCatchExceptionOp& op) {
+  // Re-building the call
+  base::SmallVector<Node*, 16> inputs;
+  inputs.push_back(GetNode(op.callee()));
+  for (OpIndex i : op.arguments()) {
+    inputs.push_back(GetNode(i));
+  }
+  if (op.NeedsFrameState()) {
+    inputs.push_back(GetNode(op.frame_state()));
+  }
+
+  Node* call =
+      AddNode(common.Call(op.descriptor->descriptor), base::VectorOf(inputs));
+  BasicBlock* success_block = GetBlock(*op.if_success);
+  BasicBlock* exception_block = GetBlock(*op.if_exception);
+  schedule->AddCall(current_block, call, success_block, exception_block);
+  Node* if_success = MakeNode(common.IfSuccess(), {call});
+  Node* if_exception = MakeNode(common.IfException(), {call, call});
+  schedule->AddNode(success_block, if_success);
+  // Pass `call` as both the effect and control input of `IfException`.
+  schedule->AddNode(exception_block, if_exception);
+  current_block = nullptr;
+  return nullptr;
 }
 Node* ScheduleBuilder::ProcessOperation(const TailCallOp& op) {
   base::SmallVector<Node*, 16> inputs;
@@ -1250,19 +1271,6 @@ Node* ScheduleBuilder::ProcessOperation(const BranchOp& op) {
   schedule->AddNode(false_block, MakeNode(common.IfFalse(), {branch}));
   current_block = nullptr;
   return nullptr;
-}
-Node* ScheduleBuilder::ProcessOperation(const CatchExceptionOp& op) {
-  Node* call = GetNode(op.call());
-  BasicBlock* success_block = GetBlock(*op.if_success);
-  BasicBlock* exception_block = GetBlock(*op.if_exception);
-  schedule->AddCall(current_block, call, success_block, exception_block);
-  Node* if_success = MakeNode(common.IfSuccess(), {call});
-  Node* if_exception = MakeNode(common.IfException(), {call, call});
-  schedule->AddNode(success_block, if_success);
-  // Pass `call` as both the effect and control input of `IfException`.
-  schedule->AddNode(exception_block, if_exception);
-  current_block = nullptr;
-  return if_exception;
 }
 Node* ScheduleBuilder::ProcessOperation(const SwitchOp& op) {
   size_t succ_count = op.cases.size() + 1;

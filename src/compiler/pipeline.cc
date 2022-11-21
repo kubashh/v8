@@ -1971,7 +1971,8 @@ struct LateOptimizationPhase {
       // CommonOperatorReducer) to turboshaft.
       // TODO(dmercadier, tebbi): re-enable BranchElimination in turboshaft.
       turboshaft::OptimizationPhase<
-          turboshaft::VariableReducer, turboshaft::SelectLoweringReducer,
+          turboshaft::VariableReducer, turboshaft::BranchEliminationReducer,
+          turboshaft::SelectLoweringReducer,
           turboshaft::MachineOptimizationReducerSignallingNanImpossible,
           turboshaft::ValueNumberingReducer>::Run(&data->turboshaft_graph(),
                                                   temp_zone,
