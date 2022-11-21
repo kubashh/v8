@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "253d4d39_18146d99",
+        "filename": "builders/multibranch/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-21T09:48:13Z",
+      "side": 1,
+      "message": "nit: This is the default. See other builders...",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 26
+      },
+      "revId": "7848d4dc9940c622ea736190989566f9fc7fb573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
