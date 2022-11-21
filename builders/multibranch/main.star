@@ -311,8 +311,7 @@ in_category(
     main_multibranch_builder(
         name = "V8 Linux64 - gc stress",
         parent_builder = "V8 Linux64 - debug builder",
-        first_branch_version = "10.6",
-        close_tree = False,
+        close_tree = True,
     ),
     main_multibranch_builder(
         name = "V8 Linux64 GC Stress - custom snapshot",
