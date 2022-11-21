@@ -69,6 +69,24 @@
       "parentUuid": "4b3db399_4dc4f70f",
       "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc1f0a48_8d6b6e9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-21T18:02:50Z",
+      "side": 1,
+      "message": "I\u0027ll ask around the team, thanks for the discussion! Additionally we could start a thread on the v8-dev@ mailing list, but let me first see if I get replies from e.g. Tobias directly.",
+      "parentUuid": "953f8adf_d6bb4244",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
