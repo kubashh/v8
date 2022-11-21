@@ -248,6 +248,24 @@
       "parentUuid": "3acf1afe_66bbea38",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d1c699a_c7c1d994",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-21T14:50:54Z",
+      "side": 1,
+      "message": "I was thinking about this a bit more. I\u0027m sorry but I think you may need a stack of contexts after all. Setting the marker when you leave the UnparkedScope will set it to an address that may be out of the start stack to stack top range. For example, you set a ParkedScope, call a few methods and then set an UnparkedScope. You set the marker when the UnparkedScope dies, return from the method, unroll their stack frames then trigger a GC while the initial ParkedScope is still live. Your marker will refer to one of the unrolled frames and should be invalid at that point.\n\n(I\u0027m also concerned about in-register reference that are spilled to stack between the parking calls and whether that may lead to missing references, but I don\u0027t have anything concrete there.)",
+      "parentUuid": "95edddcf_a64adabc",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
