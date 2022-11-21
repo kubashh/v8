@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f375537_d27863df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-21T20:06:34Z",
+      "side": 1,
+      "message": "PTAL as suggested in the other CL. I will land this CL not before tomorrow.",
+      "revId": "463110904146e6254c1fe7bf68748e3f1076e4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
