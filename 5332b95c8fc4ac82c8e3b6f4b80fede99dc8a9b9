@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6c3891f_9d49fe4b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-22T12:04:25Z",
+      "side": 1,
+      "message": "Are you sure that this is the case? To me this reads like allocating only the header part, but reserving no area for the value (external pointer table handle).\n\nNote that the external created this way works as an external perfectly well, only trying to access its properties causes an error to occur.",
+      "parentUuid": "8ef94373_419f17c1",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71979fcb_edf55739",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 13
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-22T10:19:29Z",
       "side": 1,
       "message": "Since `JSExternalObject` derives from `JSObject`, you\u0027ll also have to initialize the \"elements\" and \"properties\" fields (to the empty fixed array).",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6170069c_5f5c8d3c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-22T12:04:25Z",
+      "side": 1,
+      "message": "Do you know if there is any good place to copy from with regards to this? I\u0027m not sure what offset / access builder I should use to init them.",
+      "parentUuid": "71979fcb_edf55739",
       "range": {
         "startLine": 7117,
         "startChar": 4,
