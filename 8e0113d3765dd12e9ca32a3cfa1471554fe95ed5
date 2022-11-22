@@ -87,6 +87,24 @@
       "parentUuid": "953f8adf_d6bb4244",
       "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd47e73_e1f6cf77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-22T08:05:05Z",
+      "side": 1,
+      "message": "Okay, jkummerow@ replied \"sounds like a bogus pointer to me. Weakness is a property of the pointer, not of the object, and I\u0027m pretty sure that __ Allocate(...) returns a regular strong pointer\". Maybe we\u0027re messing up with the returned pointer somehow?",
+      "parentUuid": "bc1f0a48_8d6b6e9f",
+      "revId": "8e0113d3765dd12e9ca32a3cfa1471554fe95ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
