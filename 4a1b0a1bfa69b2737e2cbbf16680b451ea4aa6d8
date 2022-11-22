@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc3e6e69_75cfa30c",
+        "filename": "builders/clusterfuzz.star",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-11-22T14:39:28Z",
+      "side": 1,
+      "message": "#1",
+      "range": {
+        "startLine": 18,
+        "startChar": 38,
+        "endLine": 18,
+        "endChar": 41
+      },
+      "revId": "4a1b0a1bfa69b2737e2cbbf16680b451ea4aa6d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

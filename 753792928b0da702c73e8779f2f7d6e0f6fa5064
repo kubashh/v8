@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a04e732_a5af80fa",
+        "filename": "builders/experiments.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-11-22T14:39:28Z",
+      "side": 0,
+      "message": "#3",
+      "range": {
+        "startLine": 163,
+        "startChar": 8,
+        "endLine": 163,
+        "endChar": 18
+      },
+      "revId": "753792928b0da702c73e8779f2f7d6e0f6fa5064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "299bb202_b63d28cd",
+        "filename": "builders/try.star",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-11-22T14:39:28Z",
+      "side": 0,
+      "message": "#4",
+      "range": {
+        "startLine": 18,
+        "startChar": 31,
+        "endLine": 18,
+        "endChar": 41
+      },
+      "revId": "753792928b0da702c73e8779f2f7d6e0f6fa5064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3cc8fca_840de300",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 23148,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2022-11-22T14:39:28Z",
+      "side": 0,
+      "message": "this and below: #4",
+      "range": {
+        "startLine": 23148,
+        "startChar": 8,
+        "endLine": 23148,
+        "endChar": 18
+      },
+      "revId": "753792928b0da702c73e8779f2f7d6e0f6fa5064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
