@@ -189,6 +189,10 @@ BUILTIN(TypedArrayPrototypeFill) {
           isolate->factory()->NewStringFromAsciiChecked(method_name);
       THROW_NEW_ERROR_RETURN_FAILURE(isolate, NewTypeError(message, operation));
     }
+    int64_t new_len = array->GetLength();
+    if (end > new_len) {
+      end = new_len;
+    }
   }
 
   int64_t count = end - start;
