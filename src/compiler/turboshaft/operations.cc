@@ -573,6 +573,8 @@ std::ostream& operator<<(std::ostream& os, OpProperties opProperties) {
     os << "AnySideEffects";
   } else if (opProperties == OpProperties::BlockTerminator()) {
     os << "BlockTerminator";
+  } else if (opProperties == OpProperties::BlockTerminatorWithAnySideEffect()) {
+    os << "BlockTerminatorWithAnySideEffects";
   } else {
     UNREACHABLE();
   }

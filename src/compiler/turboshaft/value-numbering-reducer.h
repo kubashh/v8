@@ -88,7 +88,10 @@ class ValueNumberingReducer : public Next {
     OpIndex next_index = Asm().output_graph().next_operation_index(); \
     USE(next_index);                                                  \
     OpIndex result = Next::Reduce##Name(args...);                     \
-    DCHECK_EQ(next_index, result);                                    \
+    constexpr bool is_projection =                                    \
+        std::is_same<Name##Op, ProjectionOp>::value;                  \
+    USE(is_projection);                                               \
+    DCHECK((next_index == result) || is_projection);                  \
     return AddOrFind<Name##Op>(result);                               \
   }
   TURBOSHAFT_OPERATION_LIST(EMIT_OP)
@@ -131,6 +134,14 @@ class ValueNumberingReducer : public Next {
 
   template <class Op>
   OpIndex AddOrFind(OpIndex op_idx) {
+    if constexpr (std::is_same<Op, ProjectionOp>::value) {
+      if (!Asm().output_graph().Get(op_idx).template Is<ProjectionOp>()) {
+        // The current Operation is a projection that was removed because it was
+        // projecting to a Tuple. Value numbering should have already optimized
+        // the projection's replacement.
+        return op_idx;
+      }
+    }
     const Op& op = Asm().output_graph().Get(op_idx).template Cast<Op>();
     if (std::is_same<Op, PendingLoopPhiOp>::value ||
         !op.Properties().can_be_eliminated) {
