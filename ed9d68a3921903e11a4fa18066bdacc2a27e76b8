@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "ed9d68a3921903e11a4fa18066bdacc2a27e76b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f941c8e_3e490b12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-22T21:02:18Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ed9d68a3921903e11a4fa18066bdacc2a27e76b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e61a4e7_681f29b2",
+        "filename": "src/builtins/builtins-typed-array.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-11-22T21:02:18Z",
+      "side": 1,
+      "message": "Style nit: `end \u003d min(end, array-\u003eGetLength())`?",
+      "revId": "ed9d68a3921903e11a4fa18066bdacc2a27e76b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
