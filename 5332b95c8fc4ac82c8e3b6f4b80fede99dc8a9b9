@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ef94373_419f17c1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-22T10:19:29Z",
+      "side": 1,
+      "message": "Just use `__ IntPtrConstant(JSExternalObject::kHeaderSize)`.\n\nLoading a constant dynamically is unnecessary, and the addition is also incorrect. You\u0027re allocating too much here, which probably explains the \"broken\" pointers you see later.",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71979fcb_edf55739",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-22T10:19:29Z",
+      "side": 1,
+      "message": "Since `JSExternalObject` derives from `JSObject`, you\u0027ll also have to initialize the \"elements\" and \"properties\" fields (to the empty fixed array).",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
