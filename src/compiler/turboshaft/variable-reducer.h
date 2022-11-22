@@ -188,7 +188,6 @@ class VariableReducer : public Next {
         case Opcode::kStore:
         case Opcode::kRetain:
         case Opcode::kStackSlot:
-        case Opcode::kCheckLazyDeopt:
         case Opcode::kDeoptimize:
         case Opcode::kDeoptimizeIf:
         case Opcode::kTrapIf:
@@ -200,7 +199,6 @@ class VariableReducer : public Next {
         case Opcode::kReturn:
         case Opcode::kGoto:
         case Opcode::kBranch:
-        case Opcode::kCatchException:
         case Opcode::kSwitch:
         case Opcode::kTuple:
         case Opcode::kProjection:

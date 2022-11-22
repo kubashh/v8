@@ -82,14 +82,21 @@ class ValueNumberingReducer : public Next {
     mask_ = table_.size() - 1;
   }
 
-#define EMIT_OP(Name)                                                 \
-  template <class... Args>                                            \
-  OpIndex Reduce##Name(Args... args) {                                \
-    OpIndex next_index = Asm().output_graph().next_operation_index(); \
-    USE(next_index);                                                  \
-    OpIndex result = Next::Reduce##Name(args...);                     \
-    DCHECK_EQ(next_index, result);                                    \
-    return AddOrFind<Name##Op>(result);                               \
+#define EMIT_OP(Name)                                                          \
+  template <class... Args>                                                     \
+  OpIndex Reduce##Name(Args... args) {                                         \
+    OpIndex next_index = Asm().output_graph().next_operation_index();          \
+    USE(next_index);                                                           \
+    OpIndex result = Next::Reduce##Name(args...);                              \
+    if (std::is_same<Name##Op, ProjectionOp>::value && next_index != result) { \
+      /* Projections to Tuples are short-circuited, which means that           \
+       * Next::Reduce could return a previous Operation of the graph. In that  \
+       * case, we don't want to GVN this value, as we can only remove the last \
+       * operation from the graph, not older ones. */                          \
+      return result;                                                           \
+    }                                                                          \
+    DCHECK_EQ(next_index, result);                                             \
+    return AddOrFind<Name##Op>(result);                                        \
   }
   TURBOSHAFT_OPERATION_LIST(EMIT_OP)
 #undef EMIT_OP
