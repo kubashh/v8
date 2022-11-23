@@ -28,6 +28,7 @@
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/allocation-result.h"
+#include "src/heap/code-range.h"
 #include "src/heap/gc-callbacks.h"
 #include "src/heap/heap-allocator.h"
 #include "src/heap/marking-state.h"
@@ -120,6 +121,7 @@ class ObjectStats;
 class Page;
 class PagedSpace;
 class PagedNewSpace;
+class ProcessWideCodeRange;
 class ReadOnlyHeap;
 class RootVisitor;
 class RwxMemoryWriteScope;
@@ -893,7 +895,13 @@ class Heap {
   // range if it exists or empty region otherwise.
   const base::AddressRegion& code_region();
 
-  CodeRange* code_range() { return code_range_.get(); }
+  CodeRange* code_range() {
+#if V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+    return code_range_;
+#else
+    return code_range_.get();
+#endif
+  }
 
   // The base of the code range if it exists or null address.
   inline Address code_range_base();
@@ -2311,7 +2319,11 @@ class Heap {
   //
   // Owned by the heap when !V8_COMPRESS_POINTERS_IN_SHARED_CAGE, otherwise is
   // process-wide.
-  std::shared_ptr<CodeRange> code_range_;
+#if V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+  CodeRange* code_range_ = nullptr;
+#else
+  std::unique_ptr<CodeRange> code_range_;
+#endif
 
   // The embedder owns the C++ heap.
   v8::CppHeap* cpp_heap_ = nullptr;
