@@ -595,8 +595,6 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
                                            AllocationState const* state) {
   DCHECK_EQ(IrOpcode::kStoreField, node->opcode());
   FieldAccess const& access = FieldAccessOf(node->op());
-  // External pointer must never be stored by optimized code.
-  DCHECK(!access.type.Is(Type::ExternalPointer()));
   // SandboxedPointers are not currently stored by optimized code.
   DCHECK(!access.type.Is(Type::SandboxedPointer()));
   // Bounded size fields are not currently stored by optimized code.
