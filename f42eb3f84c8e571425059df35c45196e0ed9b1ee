@@ -94,6 +94,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7d25954_caa7a54b",
+        "filename": "src/init/isolate-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-11-23T14:55:35Z",
+      "side": 1,
+      "message": "We seem to use this in SequentialUnmapperTest to make it use tracking page allocator instead of the default one.",
+      "parentUuid": "162b6885_5c8ae03d",
+      "range": {
+        "startLine": 66,
+        "startChar": 23,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b347e934_33551db9",
         "filename": "src/snapshot/embedded/embedded-data.h",
         "patchSetId": 2
@@ -105,6 +129,30 @@
       "writtenOn": "2022-11-23T14:35:45Z",
       "side": 1,
       "message": "Why do we have these checks here? Don\u0027t we always expect a code range when we can compile with one?",
+      "range": {
+        "startLine": 112,
+        "startChar": 10,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007342b9_364ce929",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-11-23T14:55:35Z",
+      "side": 1,
+      "message": "Because of EmbeddedDataWithMaybeRemappedEmbeddedBuiltins it\u0027s possible that even jitless Isolate can use the re-embedded builtins from the code range (if it was created for another Isolate).\nGiven that the --jitless flag is not supposed to be changed after process creation we can clean this up. But let\u0027s do that in a follow-up CL.",
+      "parentUuid": "b347e934_33551db9",
       "range": {
         "startLine": 112,
         "startChar": 10,
