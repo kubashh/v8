@@ -505,6 +505,13 @@ void MaglevGraphBuilder::BuildInt32UnaryOperationNode() {
   SetAccumulator(result);
 }
 
+void MaglevGraphBuilder::BuildTruncatingInt32BitwiseNotForNumber() {
+  // TODO(v8:7700): Do constant folding.
+  ValueNode* value =
+      GetTruncatedInt32FromNumber(current_interpreter_frame_.accumulator());
+  SetAccumulator(AddNewNode<Int32BitwiseNot>({value}));
+}
+
 template <Operation kOperation>
 ValueNode* MaglevGraphBuilder::TryFoldInt32BinaryOperation(ValueNode* left,
                                                            ValueNode* right) {
@@ -692,6 +699,12 @@ void MaglevGraphBuilder::VisitUnaryOperation() {
           DeoptimizeReason::kInsufficientTypeFeedbackForBinaryOperation);
     case BinaryOperationHint::kSignedSmall:
       return BuildInt32UnaryOperationNode<kOperation>();
+    case BinaryOperationHint::kSignedSmallInputs:
+    case BinaryOperationHint::kNumber:
+      if constexpr (kOperation == Operation::kBitwiseNot) {
+        return BuildTruncatingInt32BitwiseNotForNumber();
+      }
+      break;
     default:
       // Fallback to generic node.
       break;
