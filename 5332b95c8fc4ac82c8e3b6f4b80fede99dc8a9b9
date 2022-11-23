@@ -137,6 +137,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "262f032d_44ce11bc",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f1ef78b_b97f08ce",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71979fcb_edf55739",
@@ -246,6 +270,30 @@
       "side": 1,
       "message": "And these fixed the failure in property iteration. Thank you very much, this was the one missing link that I needed! \u003c3",
       "parentUuid": "f48da2d6_97a9de8e",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "687ed4ed_60b38bb7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c78feaac_0f4eed84",
       "range": {
         "startLine": 7117,
         "startChar": 4,

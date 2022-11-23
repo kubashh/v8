@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cab3a46_90db53d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a36751b_286a8216",
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fd1ccb5_6eef8b37",
@@ -331,6 +349,30 @@
       "side": 1,
       "message": "Sounds good to me, thanks for the suggestion, Samuel!",
       "parentUuid": "14ae272d_03cdb13c",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de50a756_887e18be",
+        "filename": "src/compiler/access-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4e3f163_9d574050",
       "range": {
         "startLine": 36,
         "startChar": 12,
@@ -642,6 +684,30 @@
       "side": 1,
       "message": "I added a comment explaining the special case.",
       "parentUuid": "14be433a_2607f4c1",
+      "range": {
+        "startLine": 6900,
+        "startChar": 7,
+        "endLine": 6900,
+        "endChar": 24
+      },
+      "revId": "377b3037a185ff73d01590fda07b20371625f328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c38b0812_f73a02d9",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60e171c9_10724f26",
       "range": {
         "startLine": 6900,
         "startChar": 7,
