@@ -92,18 +92,17 @@ class Graph;
   V(StackPointerGreaterThan)         \
   V(StackSlot)                       \
   V(FrameConstant)                   \
-  V(CheckLazyDeopt)                  \
   V(Deoptimize)                      \
   V(DeoptimizeIf)                    \
   V(TrapIf)                          \
   V(Phi)                             \
   V(FrameState)                      \
   V(Call)                            \
+  V(CallAndCatchException)           \
   V(TailCall)                        \
   V(Unreachable)                     \
   V(Return)                          \
   V(Branch)                          \
-  V(CatchException)                  \
   V(Switch)                          \
   V(Tuple)                           \
   V(Projection)                      \
@@ -1619,21 +1618,6 @@ struct FrameStateOp : OperationT<FrameStateOp> {
   auto options() const { return std::tuple{inlined, data}; }
 };
 
-// CheckLazyDeoptOp should always immediately follow a call.
-// Semantically, it deopts if the current code object has been
-// deoptimized. But this might also be implemented differently.
-struct CheckLazyDeoptOp : FixedArityOperationT<2, CheckLazyDeoptOp> {
-  static constexpr OpProperties properties = OpProperties::CanAbort();
-  base::Vector<const RegisterRepresentation> outputs_rep() const { return {}; }
-
-  OpIndex call() const { return input(0); }
-  OpIndex frame_state() const { return input(1); }
-
-  CheckLazyDeoptOp(OpIndex call, OpIndex frame_state)
-      : Base(call, frame_state) {}
-  auto options() const { return std::tuple{}; }
-};
-
 struct DeoptimizeOp : FixedArityOperationT<1, DeoptimizeOp> {
   const DeoptimizeParameters* parameters;
 
@@ -1728,7 +1712,15 @@ struct CallOp : OperationT<CallOp> {
     return descriptor->out_reps;
   }
 
+  bool NeedsFrameState() const {
+    return descriptor->descriptor->NeedsFrameState();
+  }
+
   OpIndex callee() const { return input(0); }
+  OpIndex frame_state() const {
+    DCHECK(descriptor->descriptor->NeedsFrameState());
+    return input(input_count - 1);
+  }
   base::Vector<const OpIndex> arguments() const {
     return inputs().SubVector(1, input_count);
   }
@@ -1747,6 +1739,56 @@ struct CallOp : OperationT<CallOp> {
                      descriptor);
   }
   auto options() const { return std::tuple{descriptor}; }
+};
+
+struct CallAndCatchExceptionOp : OperationT<CallAndCatchExceptionOp> {
+  const TSCallDescriptor* descriptor;
+  Block* if_success;
+  Block* if_exception;
+
+  static constexpr OpProperties properties =
+      OpProperties::BlockTerminatorWithAnySideEffect();
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return descriptor->out_reps;
+  }
+  size_t ExceptionOffset() const { return outputs_rep().size() - 1; }
+
+  bool NeedsFrameState() const {
+    return descriptor->descriptor->NeedsFrameState();
+  }
+
+  OpIndex callee() const { return input(0); }
+  OpIndex frame_state() const {
+    DCHECK(descriptor->descriptor->NeedsFrameState());
+    return input(input_count - 1);
+  }
+  base::Vector<const OpIndex> arguments() const {
+    return inputs().SubVector(1, input_count);
+  }
+
+  CallAndCatchExceptionOp(OpIndex callee, Block* if_success,
+                          Block* if_exception,
+                          base::Vector<const OpIndex> arguments,
+                          const TSCallDescriptor* descriptor)
+      : Base(1 + arguments.size()),
+        descriptor(descriptor),
+        if_success(if_success),
+        if_exception(if_exception) {
+    base::Vector<OpIndex> inputs = this->inputs();
+    inputs[0] = callee;
+    inputs.SubVector(1, inputs.size()).OverwriteWith(arguments);
+  }
+  static CallAndCatchExceptionOp& New(Graph* graph, OpIndex callee,
+                                      Block* if_success, Block* if_exception,
+                                      base::Vector<const OpIndex> arguments,
+                                      const TSCallDescriptor* descriptor) {
+    return Base::New(graph, 1 + arguments.size(), callee, if_success,
+                     if_exception, arguments, descriptor);
+  }
+
+  auto options() const {
+    return std::tuple{descriptor, if_success, if_exception};
+  }
 };
 
 struct TailCallOp : OperationT<TailCallOp> {
@@ -1834,26 +1876,6 @@ struct BranchOp : FixedArityOperationT<1, BranchOp> {
   BranchOp(OpIndex condition, Block* if_true, Block* if_false)
       : Base(condition), if_true(if_true), if_false(if_false) {}
   auto options() const { return std::tuple{if_true, if_false}; }
-};
-
-// `CatchExceptionOp` has to follow a `CallOp` with a subsequent
-// `CheckLazyDeoptOp`. It provides the exception value, which might only be used
-// from the `if_exception` successor.
-struct CatchExceptionOp : FixedArityOperationT<1, CatchExceptionOp> {
-  Block* if_success;
-  Block* if_exception;
-
-  static constexpr OpProperties properties = OpProperties::BlockTerminator();
-  base::Vector<const RegisterRepresentation> outputs_rep() const {
-    return RepVector<RegisterRepresentation::Tagged()>();
-  }
-
-  OpIndex call() const { return input(0); }
-
-  explicit CatchExceptionOp(OpIndex call, Block* if_success,
-                            Block* if_exception)
-      : Base(call), if_success(if_success), if_exception(if_exception) {}
-  auto options() const { return std::tuple{if_success, if_exception}; }
 };
 
 struct SwitchOp : FixedArityOperationT<1, SwitchOp> {
@@ -2000,9 +2022,11 @@ inline size_t Operation::StorageSlotCount(Opcode opcode, size_t input_count) {
 // Operation, but a Goto cannot.
 template <class Op>
 constexpr inline bool CanBeUsedAsInput() {
-  // CatchException is the only block terminator that can be used as input.
-  if (std::is_same<Op, CatchExceptionOp>::value) return true;
-
+  if (Op::opcode == Opcode::kCallAndCatchException) {
+    // kCallAndCatchException is the only block terminator that can be used as
+    // an input.
+    return true;
+  }
   if (kOperationPropertiesTable[static_cast<uint8_t>(Op::opcode)].has_value() &&
       kOperationPropertiesTable[static_cast<uint8_t>(Op::opcode)]
           ->is_block_terminator) {
@@ -2015,7 +2039,6 @@ constexpr inline bool CanBeUsedAsInput() {
   }
   FALSE_CASE(StoreOp);
   FALSE_CASE(RetainOp);
-  FALSE_CASE(CheckLazyDeoptOp);
   FALSE_CASE(DeoptimizeIfOp);
   FALSE_CASE(TrapIfOp);
 #undef FALSE_CASE
