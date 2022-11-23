@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "4e38a33b522a17017045b9dc225cde4c924110a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123e885b_071bb2f7",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3040,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-23T15:43:45Z",
+      "side": 1,
+      "message": "Shall we DCHECK this for traced handles somehow?",
+      "revId": "4e38a33b522a17017045b9dc225cde4c924110a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
