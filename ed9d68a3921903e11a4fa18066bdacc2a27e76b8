@@ -50,6 +50,24 @@
       "message": "Style nit: `end \u003d min(end, array-\u003eGetLength())`?",
       "revId": "ed9d68a3921903e11a4fa18066bdacc2a27e76b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e2635a_fe862ec1",
+        "filename": "src/builtins/builtins-typed-array.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-11-23T07:53:41Z",
+      "side": 1,
+      "message": "I\u0027ll need to go with a slightly uglier\n\nend \u003d std::min(end, static_cast\u003cint64_t\u003e(array-\u003eGetLength()));\n\nbut OK :)",
+      "parentUuid": "1e61a4e7_681f29b2",
+      "revId": "ed9d68a3921903e11a4fa18066bdacc2a27e76b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
