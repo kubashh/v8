@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81e606ad_a63bf395",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-23T12:35:46Z",
+      "side": 1,
+      "message": "\u003e Are you sure that this is the case?\n\nFeel free to check out how `JSExternalObject::kHeaderSize` is defined. I agree that the name is a bit confusing (`kSize` would be more intuitive), but my reading of the code is that it\u0027s the constant that\u0027s appropriate to use here.",
+      "parentUuid": "f6c3891f_9d49fe4b",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71979fcb_edf55739",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 13
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Do you know if there is any good place to copy from with regards to this? I\u0027m not sure what offset / access builder I should use to init them.",
       "parentUuid": "71979fcb_edf55739",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5a0ca1_ae8a2778",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2022-11-23T12:35:46Z",
+      "side": 1,
+      "message": "The access builders are `ForJSObjectPropertiesOrHash` and `ForJSObjectElements`. You can look for existing uses to find samples.",
+      "parentUuid": "6170069c_5f5c8d3c",
       "range": {
         "startLine": 7117,
         "startChar": 4,
