@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70ea27e7_ec5ea09a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:34:17Z",
+      "side": 1,
+      "message": "I think this CL is now ready to... ready to be CI tested, I think :) The only thing that hasn\u0027t really been tested is if the non-sandbox code path also works properly.",
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ef94373_419f17c1",
@@ -98,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f1ef78b_b97f08ce",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:34:17Z",
+      "side": 1,
+      "message": "Indeed this worked fine, thank you!",
+      "parentUuid": "596767a3_dcdff775",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71979fcb_edf55739",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 13
@@ -181,6 +222,30 @@
       "side": 1,
       "message": "Ah, well those are fairly obvious names, I\u0027m sorry I hadn\u0027t somehow found those earlier :D Thank you, I expect with these I\u0027ll end up with properly initialized externals!",
       "parentUuid": "dd5a0ca1_ae8a2778",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c78feaac_0f4eed84",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T18:34:17Z",
+      "side": 1,
+      "message": "And these fixed the failure in property iteration. Thank you very much, this was the one missing link that I needed! \u003c3",
+      "parentUuid": "f48da2d6_97a9de8e",
       "range": {
         "startLine": 7117,
         "startChar": 4,
