@@ -384,6 +384,10 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
 // When adding new tags, please ensure that the code using these tags is
 // "substitution-safe", i.e. still operate safely if external pointers of the
 // same type are swapped by an attacker. See comment above for more details.
+// The one exception to this is the kExternalObjectValueTag: As it stands for
+// a `void*` pointer in the V8 API, it is up to the Embedder's responsibility
+// to ensure type safety (against substitution) and lifetime validity of these
+// objects.
 
 // Shared external pointers are owned by the shared Isolate and stored in the
 // shared external pointer table associated with that Isolate, where they can

@@ -1402,7 +1402,7 @@ Reduction JSCreateLowering::ReduceJSCreateObject(Node* node) {
   AllocationBuilder a(jsgraph(), effect, control);
   a.Allocate(instance_size, AllocationType::kYoung, Type::Any());
   a.Store(AccessBuilder::ForMap(), instance_map);
-  a.Store(AccessBuilder::ForJSObjectPropertiesOrHash(), properties);
+  a.Store(AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer(), properties);
   a.Store(AccessBuilder::ForJSObjectElements(),
           jsgraph()->EmptyFixedArrayConstant());
   // Initialize Object fields.
