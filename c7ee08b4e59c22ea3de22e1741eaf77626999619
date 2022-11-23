@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "c7ee08b4e59c22ea3de22e1741eaf77626999619",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "032357de_3423ab87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-11-23T09:06:56Z",
+      "side": 1,
+      "message": "This is blocking LKGR, so landing now.",
+      "revId": "c7ee08b4e59c22ea3de22e1741eaf77626999619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
