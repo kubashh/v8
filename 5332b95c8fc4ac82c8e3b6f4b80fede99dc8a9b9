@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "596767a3_dcdff775",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7114,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T14:47:09Z",
+      "side": 1,
+      "message": "Alright, thank you very much! I\u0027ll try and verify that this works as expected later today.",
+      "parentUuid": "81e606ad_a63bf395",
+      "range": {
+        "startLine": 7113,
+        "startChar": 8,
+        "endLine": 7114,
+        "endChar": 68
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71979fcb_edf55739",
         "filename": "src/compiler/effect-control-linearizer.cc",
         "patchSetId": 13
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "The access builders are `ForJSObjectPropertiesOrHash` and `ForJSObjectElements`. You can look for existing uses to find samples.",
       "parentUuid": "6170069c_5f5c8d3c",
+      "range": {
+        "startLine": 7117,
+        "startChar": 4,
+        "endLine": 7117,
+        "endChar": 58
+      },
+      "revId": "5332b95c8fc4ac82c8e3b6f4b80fede99dc8a9b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f48da2d6_97a9de8e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 7117,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-23T14:47:09Z",
+      "side": 1,
+      "message": "Ah, well those are fairly obvious names, I\u0027m sorry I hadn\u0027t somehow found those earlier :D Thank you, I expect with these I\u0027ll end up with properly initialized externals!",
+      "parentUuid": "dd5a0ca1_ae8a2778",
       "range": {
         "startLine": 7117,
         "startChar": 4,
