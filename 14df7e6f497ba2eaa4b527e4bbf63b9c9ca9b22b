@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de918d22_54bf3a14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1260090
+      },
+      "writtenOn": "2022-11-23T18:36:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c2d1b1_d192dbf7",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "14df7e6f497ba2eaa4b527e4bbf63b9c9ca9b22b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a611a93_eef02582",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-23T16:49:19Z",
       "side": 1,
       "message": "Why is SKIP the right solution here? Can you add a comment about it?\nAfaict, the bug you mention relates to another test and suggests a potential fix. Is this SKIP just a temporary measure until the bug is fixed?",
+      "range": {
+        "startLine": 1198,
+        "startChar": 48,
+        "endLine": 1198,
+        "endChar": 52
+      },
+      "revId": "14df7e6f497ba2eaa4b527e4bbf63b9c9ca9b22b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6efbdc1_fad3086d",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1260090
+      },
+      "writtenOn": "2022-11-23T18:36:14Z",
+      "side": 1,
+      "message": "The test itself is `test/mjsunit/tools/processor.mjs`. It tests \"class Processor\" and related code imported from `tools/system-analyzer/processor.mjs` (different file). Skipping this is a temporary measure until the issue is resolved.",
+      "parentUuid": "8a611a93_eef02582",
       "range": {
         "startLine": 1198,
         "startChar": 48,
