@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e9b9619_4fc9a1d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-11-23T14:36:11Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a155e116_5fd0db33",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-11-23T14:36:11Z",
+      "side": 1,
+      "message": "This class doesn\u0027t seem to be needed.",
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "162b6885_5c8ae03d",
