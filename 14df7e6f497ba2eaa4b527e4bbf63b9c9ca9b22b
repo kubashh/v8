@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97c2d1b1_d192dbf7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-23T16:49:19Z",
+      "side": 1,
+      "message": "Bug:",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "14df7e6f497ba2eaa4b527e4bbf63b9c9ca9b22b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a611a93_eef02582",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-11-23T16:49:19Z",
+      "side": 1,
+      "message": "Why is SKIP the right solution here? Can you add a comment about it?\nAfaict, the bug you mention relates to another test and suggests a potential fix. Is this SKIP just a temporary measure until the bug is fixed?",
+      "range": {
+        "startLine": 1198,
+        "startChar": 48,
+        "endLine": 1198,
+        "endChar": 52
+      },
+      "revId": "14df7e6f497ba2eaa4b527e4bbf63b9c9ca9b22b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
