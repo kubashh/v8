@@ -1935,16 +1935,21 @@ class WasmModuleBuilder {
         section.emit_u32v(wasm.functions.length);
         let header = new Binary;
         for (let func of wasm.functions) {
-          header.reset();
-          // Function body length will be patched later.
-          let local_decls = func.locals || [];
-          header.emit_u32v(local_decls.length);
-          for (let decl of local_decls) {
-            header.emit_u32v(decl.count);
-            header.emit_type(decl.type);
+          if (func.locals.length == 0) {
+            // Fast path for functions without locals.
+            section.emit_u32v(func.body.length + 1);
+            section.emit_u8(0);  // 0 locals.
+          } else {
+            header.reset();
+            // Function body length will be patched later.
+            header.emit_u32v(func.locals.length);
+            for (let decl of func.locals) {
+              header.emit_u32v(decl.count);
+              header.emit_type(decl.type);
+            }
+            section.emit_u32v(header.length + func.body.length);
+            section.emit_bytes(header.trunc_buffer());
           }
-          section.emit_u32v(header.length + func.body.length);
-          section.emit_bytes(header.trunc_buffer());
           // Set to section offset for now, will update.
           func.body_offset = section.length;
           section.emit_bytes(func.body);
