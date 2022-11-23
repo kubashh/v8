@@ -1089,6 +1089,15 @@ std::pair<Node*, MachineType> ScheduleBuilder::BuildDeoptInput(
       MachineType type;
       OpIndex input;
       it->ConsumeInput(&type, &input);
+      const Operation& op = input_graph.Get(input);
+      if (op.outputs_rep()[0] == RegisterRepresentation::Word64() &&
+          type.representation() == MachineRepresentation::kWord32) {
+        // 64 to 32-bit convertion is implicit in turboshaft, but explicit in
+        // turbofan, so we insert this convertion.
+        Node* convertion =
+            AddNode(machine.TruncateInt64ToInt32(), {GetNode(input)});
+        return {convertion, type};
+      }
       return {GetNode(input), type};
     }
     case Instr::kDematerializedObject: {
