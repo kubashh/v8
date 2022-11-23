@@ -27,6 +27,23 @@ FieldAccess AccessBuilder::ForExternalIntPtr() {
   return access;
 }
 
+FieldAccess AccessBuilder::ForJSExternalObjectValue() {
+  FieldAccess access = {
+      kTaggedBase,
+      JSExternalObject::kValueOffset,
+      MaybeHandle<Name>(),
+      MaybeHandle<Map>(),
+      Type::ExternalPointer(),
+      MachineType::Pointer(),
+      kNoWriteBarrier,
+      "JSExternalObjectValue",
+      ConstFieldInfo::None(),
+      false,
+      kExternalObjectValueTag,
+  };
+  return access;
+}
+
 // static
 FieldAccess AccessBuilder::ForMap(WriteBarrierKind write_barrier) {
   FieldAccess access = {kTaggedBase,           HeapObject::kMapOffset,
