@@ -1811,5 +1811,20 @@ void GCTracer::ReportYoungCycleToRecorder() {
   recorder->AddMainThreadEvent(event, GetContextId(heap_->isolate()));
 }
 
+GarbageCollector GCTracer::GetCurrentCollector() const {
+  switch (current_.type) {
+    case Event::Type::SCAVENGER:
+      return GarbageCollector::SCAVENGER;
+    case Event::Type::MARK_COMPACTOR:
+    case Event::Type::INCREMENTAL_MARK_COMPACTOR:
+      return GarbageCollector::MARK_COMPACTOR;
+    case Event::Type::MINOR_MARK_COMPACTOR:
+    case Event::Type::INCREMENTAL_MINOR_MARK_COMPACTOR:
+      return GarbageCollector::MINOR_MARK_COMPACTOR;
+    case Event::Type::START:
+      UNREACHABLE();
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
