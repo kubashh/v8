@@ -16,6 +16,69 @@
       "message": "Igor, Michi, both PTAL overall",
       "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a26d99_7f7d33a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-23T14:35:45Z",
+      "side": 1,
+      "message": "Generally looks good. Just questions around the setup seeing if there\u0027s more to simplify.",
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "162b6885_5c8ae03d",
+        "filename": "src/init/isolate-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-23T14:35:45Z",
+      "side": 1,
+      "message": "Does this still make sense?",
+      "range": {
+        "startLine": 66,
+        "startChar": 23,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b347e934_33551db9",
+        "filename": "src/snapshot/embedded/embedded-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-23T14:35:45Z",
+      "side": 1,
+      "message": "Why do we have these checks here? Don\u0027t we always expect a code range when we can compile with one?",
+      "range": {
+        "startLine": 112,
+        "startChar": 10,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
