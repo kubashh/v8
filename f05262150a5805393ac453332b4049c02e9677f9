@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af129e95_a4af3f75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-24T12:31:05Z",
+      "side": 1,
+      "message": "Hi Tobias, ptal at this CL which we discussed already. Thanks!",
+      "revId": "f05262150a5805393ac453332b4049c02e9677f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
