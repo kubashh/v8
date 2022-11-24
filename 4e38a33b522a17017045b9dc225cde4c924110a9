@@ -68,6 +68,24 @@
       "parentUuid": "123e885b_071bb2f7",
       "revId": "4e38a33b522a17017045b9dc225cde4c924110a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f50de416_c0bff2b0",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3040,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-11-24T07:22:25Z",
+      "side": 1,
+      "message": "I am not sure. It feels like we need that for using --shared-string-table with Blink and supporting it doesn\u0027t seem super tricky. I think the DCHECK I asked for should be handled by heap verification anyways.",
+      "parentUuid": "7f20afa9_2c49a24b",
+      "revId": "4e38a33b522a17017045b9dc225cde4c924110a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
