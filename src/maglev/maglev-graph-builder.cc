@@ -3038,6 +3038,10 @@ ValueNode* MaglevGraphBuilder::TryReduceDataViewPrototypeSetFloat64(
 
 ValueNode* MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
     compiler::JSFunctionRef target, CallArguments& args) {
+  // We can't reduce Function#call when there is no receiver function.
+  if (args.receiver_mode() == ConvertReceiverMode::kNullOrUndefined) {
+    return nullptr;
+  }
   // Use Function.prototype.call context, to ensure any exception is thrown in
   // the correct context.
   ValueNode* context = GetConstant(target.context());
