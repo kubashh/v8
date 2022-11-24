@@ -110,34 +110,37 @@ void AccessorAssembler::HandlePolymorphicCase(
   const int kEntrySize = 2;
 
   // Load the {feedback} array length.
-  TNode<IntPtrT> length = LoadAndUntagWeakFixedArrayLength(feedback);
-  CSA_DCHECK(this, IntPtrLessThanOrEqual(IntPtrConstant(kEntrySize), length));
+  TNode<Uint32T> length = LoadAndUntagWeakFixedArrayLength(feedback);
+  CSA_DCHECK(this, Uint32LessThanOrEqual(Uint32Constant(kEntrySize), length));
 
   // This is a hand-crafted loop that iterates backwards and only compares
   // against zero at the end, since we already know that we will have at least a
   // single entry in the {feedback} array anyways.
-  TVARIABLE(IntPtrT, var_index, IntPtrSub(length, IntPtrConstant(kEntrySize)));
+  TNode<WordT> weak_lookup_start_object_map =
+      MakeWeakForComparison(lookup_start_object_map);
+  TVARIABLE(Uint32T, var_index, length);
   Label loop(this, &var_index), loop_next(this);
   Goto(&loop);
   BIND(&loop);
   {
-    TNode<MaybeObject> maybe_cached_map =
-        LoadWeakFixedArrayElement(feedback, var_index.value());
+    var_index = Uint32Sub(var_index.value(), Uint32Constant(kEntrySize));
+    TNode<MaybeObject> maybe_cached_map = LoadWeakFixedArrayElement(
+        feedback,
+        ReinterpretCast<IntPtrT>(ChangeUint32ToWord(var_index.value())));
     CSA_DCHECK(this, IsWeakOrCleared(maybe_cached_map));
-    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, lookup_start_object_map),
+    GotoIfNot(IsWeakReferenceTo(maybe_cached_map, weak_lookup_start_object_map),
               &loop_next);
 
     // Found, now call handler.
-    TNode<MaybeObject> handler =
-        LoadWeakFixedArrayElement(feedback, var_index.value(), kTaggedSize);
+    TNode<MaybeObject> handler = LoadWeakFixedArrayElement(
+        feedback,
+        ReinterpretCast<IntPtrT>(ChangeUint32ToWord(var_index.value())),
+        kTaggedSize);
     *var_handler = handler;
     Goto(if_handler);
 
     BIND(&loop_next);
-    var_index =
-        Signed(IntPtrSub(var_index.value(), IntPtrConstant(kEntrySize)));
-    Branch(IntPtrGreaterThanOrEqual(var_index.value(), IntPtrConstant(0)),
-           &loop, if_miss);
+    Branch(Word32Equal(var_index.value(), Uint32Constant(0)), if_miss, &loop);
   }
 }
 

@@ -603,6 +603,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Smi> SmiFromUint32(TNode<Uint32T> value);
   TNode<IntPtrT> SmiToIntPtr(TNode<Smi> value) { return SmiUntag(value); }
   TNode<Int32T> SmiToInt32(TNode<Smi> value);
+  TNode<Uint32T> SmiToUint32(TNode<Smi> value);
 
   // Smi operations.
 #define SMI_ARITHMETIC_BINOP(SmiOpName, IntPtrOpName, Int32OpName)          \
@@ -1295,6 +1296,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Load a SMI field, untag it, and convert to Word32.
   TNode<Int32T> LoadAndUntagToWord32ObjectField(TNode<HeapObject> object,
                                                 int offset);
+  // Load a SMI field, untag it, and convert to Uint32.
+  TNode<Uint32T> LoadAndUntagToUint32ObjectField(TNode<HeapObject> object,
+                                                 int offset);
 
   TNode<MaybeObject> LoadMaybeWeakObjectField(TNode<HeapObject> object,
                                               int offset) {
@@ -1429,7 +1433,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<IntPtrT> LoadAndUntagFixedArrayBaseLength(TNode<FixedArrayBase> array);
   // Load the length of a WeakFixedArray.
   TNode<Smi> LoadWeakFixedArrayLength(TNode<WeakFixedArray> array);
-  TNode<IntPtrT> LoadAndUntagWeakFixedArrayLength(TNode<WeakFixedArray> array);
+  TNode<Uint32T> LoadAndUntagWeakFixedArrayLength(TNode<WeakFixedArray> array);
   // Load the number of descriptors in DescriptorArray.
   TNode<Int32T> LoadNumberOfDescriptors(TNode<DescriptorArray> array);
   // Load the number of own descriptors of a map.
@@ -1533,6 +1537,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works for both any tagged |maybe_object| values.
   TNode<BoolT> IsWeakReferenceTo(TNode<MaybeObject> maybe_object,
                                  TNode<HeapObject> heap_object);
+  // Checks if |maybe_object| is a weak reference to given |weak_reference|.
+  // Works for both any tagged |maybe_object| values.
+  TNode<BoolT> IsWeakReferenceTo(TNode<MaybeObject> maybe_object,
+                                 TNode<WordT> weak_reference);
   // Returns true if the |object| is a HeapObject and |maybe_object| is a weak
   // reference to |object|.
   // The |maybe_object| must not be a Smi.
@@ -1540,6 +1548,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                        TNode<Object> object);
 
   TNode<MaybeObject> MakeWeak(TNode<HeapObject> value);
+  // Convert |value| to weak reference form but only keep significant bits.
+  TNode<WordT> MakeWeakForComparison(TNode<HeapObject> value);
   TNode<MaybeObject> ClearedValue();
 
   void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, TNode<Smi> index,
