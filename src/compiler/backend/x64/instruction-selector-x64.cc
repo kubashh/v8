@@ -860,6 +860,14 @@ void InstructionSelector::VisitWord64And(Node* node) {
 }
 
 void InstructionSelector::VisitWord32Or(Node* node) {
+  Node* left = node->InputAt(0);
+  Node* right = node->InputAt(1);
+  if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+    node->ReplaceInput(0, left->InputAt(0));
+  }
+  if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
+    node->ReplaceInput(1, right->InputAt(0));
+  }
   VisitBinop(this, node, kX64Or32);
 }
 
