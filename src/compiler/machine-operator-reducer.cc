@@ -2525,7 +2525,8 @@ Reduction MachineOperatorReducer::ReduceWord32Equal(Node* node) {
   if (m.IsFoldable()) {  // K == K => K  (K stands for arbitrary constants)
     return ReplaceBool(m.left().ResolvedValue() == m.right().ResolvedValue());
   }
-  if (m.left().IsInt32Sub() && m.right().Is(0)) {  // x - y == 0 => x == y
+  if (m.left().IsInt32Sub() && m.right().Is(0) &&
+      m.left().node()->OwnedBy(node)) {  // x - y == 0 => x == y
     Int32BinopMatcher msub(m.left().node());
     node->ReplaceInput(0, msub.left().node());
     node->ReplaceInput(1, msub.right().node());
