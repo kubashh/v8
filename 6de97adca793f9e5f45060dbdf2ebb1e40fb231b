@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccd4ef0f_7b5d9d40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:08:11Z",
+      "side": 1,
+      "message": "While the externals now work as expected as both JSExternalObjects and as JS objects with properties and all, I found a bug that happens when more than a million of these objects are allocated in a for-loop without any GC allowed in between. https://bugs.chromium.org/p/v8/issues/detail?id\u003d13531",
+      "revId": "6de97adca793f9e5f45060dbdf2ebb1e40fb231b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
