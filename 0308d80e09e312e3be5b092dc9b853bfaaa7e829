@@ -16,6 +16,29 @@
       "message": "PTAL!",
       "revId": "0308d80e09e312e3be5b092dc9b853bfaaa7e829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b5ba450_6526deef",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-24T09:56:50Z",
+      "side": 1,
+      "message": "similar to the other CL, use IsBitwiseInt32 (and maybe static_assert here that `kOperation \u003d\u003d Operation::kBitwiseNot` for documentation that you don\u0027t need a templated helper)",
+      "range": {
+        "startLine": 704,
+        "startChar": 20,
+        "endLine": 704,
+        "endChar": 56
+      },
+      "revId": "0308d80e09e312e3be5b092dc9b853bfaaa7e829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
