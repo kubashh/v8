@@ -22,6 +22,30 @@
       },
       "revId": "68ded922a8dce5bc95597577542ecd5c016319fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d4b00f_ca6c4923",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T16:42:29Z",
+      "side": 1,
+      "message": "My attempt to slowly introduce French variable names in V8 failed :/",
+      "parentUuid": "a42e30bf_895697ac",
+      "range": {
+        "startLine": 1097,
+        "startChar": 14,
+        "endLine": 1097,
+        "endChar": 24
+      },
+      "revId": "68ded922a8dce5bc95597577542ecd5c016319fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
